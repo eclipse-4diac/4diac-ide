@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.LwordType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.NumericValueConverter
 
 class LWordValue implements AnyBitValue {
 	final long value;
@@ -28,7 +29,7 @@ class LWordValue implements AnyBitValue {
 
 	def static toLWordValue(Number value) { new LWordValue(value.longValue) }
 
-	def static toLWordValue(String value) { new LWordValue(Long.parseUnsignedLong(value)) }
+	def static toLWordValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toLWordValue }
 
 	def static toLWordValue(AnyBitValue value) { value.longValue.toLWordValue }
 

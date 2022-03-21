@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.RealType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.NumericValueConverter
 
 class RealValue implements AnyRealValue {
 	final float value;
@@ -28,7 +29,7 @@ class RealValue implements AnyRealValue {
 
 	def static toRealValue(Number value) { new RealValue(value.floatValue) }
 
-	def static toRealValue(String value) { new RealValue(Float.parseFloat(value)) }
+	def static toRealValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toRealValue }
 
 	def static toRealValue(AnyMagnitudeValue value) { value.floatValue.toRealValue }
 

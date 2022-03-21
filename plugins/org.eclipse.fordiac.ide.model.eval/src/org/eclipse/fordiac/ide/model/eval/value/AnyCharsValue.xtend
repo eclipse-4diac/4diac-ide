@@ -16,4 +16,8 @@ import org.eclipse.fordiac.ide.model.data.AnyCharsType
 
 interface AnyCharsValue extends AnyElementaryValue {
 	override AnyCharsType getType()
+	
+	def char charValue()
+	
+	def String stringValue()
 }

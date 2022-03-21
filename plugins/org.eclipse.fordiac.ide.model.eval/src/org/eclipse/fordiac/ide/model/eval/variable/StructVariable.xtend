@@ -34,6 +34,16 @@ class StructVariable extends AbstractVariable {
 		value = new StructValue(type, members)
 	}
 
+	new(String name, StructuredType type, String value) {
+		this(name, type)
+		if(!value.nullOrEmpty) this.value = value
+	}
+
+	new(String name, StructuredType type, Value value) {
+		this(name, type)
+		if(value !== null) this.value = value
+	}
+
 	override setValue(Value value) {
 		if (value instanceof StructValue) {
 			if (value.type != type) {

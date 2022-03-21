@@ -16,6 +16,7 @@ import java.nio.charset.StandardCharsets
 import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import java.util.Arrays
+import org.eclipse.fordiac.ide.model.value.StringValueConverter
 
 class StringValue implements AnyStringValue {
 	final byte[] value;
@@ -28,9 +29,13 @@ class StringValue implements AnyStringValue {
 
 	def static toStringValue(byte[] value) { new StringValue(value) }
 
-	def static toStringValue(String value) { new StringValue(value.getBytes(StandardCharsets.UTF_8)) }
+	def static toStringValue(String value) { value.getBytes(StandardCharsets.UTF_8).toStringValue }
 
-	def static toStringValue(AnyCharsValue value) { value.toString.toStringValue }
+	def static toStringValue(AnyCharsValue value) { value.stringValue.toStringValue }
+
+	override charValue() { if(value.length > 0) value.get(0) as char else '\u0000' }
+
+	override stringValue() { new String(value, StandardCharsets.UTF_8) }
 
 	override StringType getType() { ElementaryTypes.STRING }
 
@@ -38,5 +43,5 @@ class StringValue implements AnyStringValue {
 
 	override hashCode() { toString.hashCode }
 
-	override toString() { new String(value, StandardCharsets.UTF_8) }
+	override toString() { StringValueConverter.INSTANCE.toString(stringValue, false) }
 }

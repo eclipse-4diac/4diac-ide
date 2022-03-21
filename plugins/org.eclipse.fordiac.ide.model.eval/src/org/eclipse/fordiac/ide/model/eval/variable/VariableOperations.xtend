@@ -16,6 +16,7 @@ import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
+import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 import static extension org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable.*
@@ -25,18 +26,31 @@ final class VariableOperations {
 	}
 
 	def static Variable newVariable(String name, DataType type) {
+		newVariable(name, type, null as Value)
+	}
+	
+	def static Variable newVariable(String name, DataType type, String value) {
 		switch (type) {
-			AnyElementaryType: new ElementaryVariable(name, type)
-			ArrayType: new ArrayVariable(name, type)
-			StructuredType: new StructVariable(name, type)
+			AnyElementaryType: new ElementaryVariable(name, type, value)
+			ArrayType: new ArrayVariable(name, type, value)
+			StructuredType: new StructVariable(name, type, value)
+			default: throw new UnsupportedOperationException('''Cannot instanciate variable «name» of type «type.name»''')
+		}
+	}
+
+	def static Variable newVariable(String name, DataType type, Value value) {
+		switch (type) {
+			AnyElementaryType: new ElementaryVariable(name, type, value)
+			ArrayType: new ArrayVariable(name, type, value)
+			StructuredType: new StructVariable(name, type, value)
 			default: throw new UnsupportedOperationException('''Cannot instanciate variable «name» of type «type.name»''')
 		}
 	}
 
 	def static Variable newVariable(VarDeclaration decl) {
 		if (decl.array)
-			newVariable(decl.name, decl.type.newArrayType(newSubrange(0, decl.arraySize - 1)))
+			newVariable(decl.name, decl.type.newArrayType(newSubrange(0, decl.arraySize - 1)), decl.value?.value)
 		else
-			newVariable(decl.name, decl.type)
+			newVariable(decl.name, decl.type, decl.value?.value)
 	}
 }

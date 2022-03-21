@@ -68,7 +68,7 @@ class ValueOperationsTest {
 		null.defaultValue.assertNull
 		null.wrapValue(null).assertNull
 		0.wrapValue(null).assertNull
-		"0".parseValue(null).assertNull
+		UnsupportedOperationException.assertThrows["0".parseValue(null)]
 	}
 
 	@ParameterizedTest(name="{index}: {0}")

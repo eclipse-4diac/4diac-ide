@@ -18,8 +18,9 @@ import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 import org.eclipse.fordiac.ide.model.data.LdtType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.DateAndTimeValueConverter
 
-class LDateAndTimeValue extends AnyDateValue {
+class LDateAndTimeValue implements AnyDateValue {
 	final long value;
 
 	public static final LDateAndTimeValue DEFAULT = new LDateAndTimeValue(0)
@@ -36,7 +37,7 @@ class LDateAndTimeValue extends AnyDateValue {
 		new LDateAndTimeValue(LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(value, ChronoUnit.NANOS))
 	}
 
-	def static toLDateAndTimeValue(String value) { LocalDateTime.parse(value, DATE_AND_TIME_FORMATTER).toLDateAndTimeValue }
+	def static toLDateAndTimeValue(String value) { DateAndTimeValueConverter.INSTANCE.toValue(value).toLDateAndTimeValue }
 
 	def static toLDateAndTimeValue(AnyDateValue value) { value.toNanos.toLDateAndTimeValue }
 
@@ -49,7 +50,7 @@ class LDateAndTimeValue extends AnyDateValue {
 	override hashCode() { Long.hashCode(value) }
 
 	override toString() {
-		DATE_AND_TIME_FORMATTER.format(
+		DateAndTimeValueConverter.INSTANCE.toString(
 			LocalDateTime.ofEpochSecond(value / 1000000000L, (value % 1000000000L) as int, ZoneOffset.UTC))
 	}
 }

@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes
+import org.eclipse.fordiac.ide.model.value.BoolValueConverter
 
 class BoolValue implements AnyBitValue {
 	final boolean value;
@@ -30,7 +31,7 @@ class BoolValue implements AnyBitValue {
 
 	def static toBoolValue(Boolean value) { new BoolValue(value.booleanValue) }
 
-	def static toBoolValue(String value) { new BoolValue(Boolean.parseBoolean(value)) }
+	def static toBoolValue(String value) { BoolValueConverter.INSTANCE.toValue(value).toBoolValue }
 
 	def static toBoolValue(AnyBitValue value) { value.boolValue.toBoolValue }
 
@@ -50,5 +51,5 @@ class BoolValue implements AnyBitValue {
 
 	override hashCode() { Boolean.hashCode(value) }
 
-	override toString() { Boolean.toString(value) }
+	override toString() { BoolValueConverter.INSTANCE.toString(value) }
 }

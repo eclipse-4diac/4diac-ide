@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.DwordType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.NumericValueConverter
 
 class DWordValue implements AnyBitValue {
 	final int value;
@@ -28,7 +29,7 @@ class DWordValue implements AnyBitValue {
 
 	def static toDWordValue(Number value) { new DWordValue(value.intValue) }
 
-	def static toDWordValue(String value) { new DWordValue(Integer.parseUnsignedInt(value)) }
+	def static toDWordValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toDWordValue }
 
 	def static toDWordValue(AnyBitValue value) { value.intValue.toDWordValue }
 

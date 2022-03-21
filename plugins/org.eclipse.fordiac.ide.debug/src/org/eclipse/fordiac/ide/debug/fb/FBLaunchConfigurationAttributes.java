@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -26,10 +26,10 @@ public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttr
 	String EVENT = "org.eclipse.fordiac.ide.debug.event";
 	String ARGUMENTS = "org.eclipse.fordiac.ide.debug.arguments";
 
-	static Event getEvent(ILaunchConfiguration configuration, FBType type, Event defaultEvent) throws CoreException {
+	static Event getEvent(final ILaunchConfiguration configuration, final FBType type, final Event defaultEvent) throws CoreException {
 		final String eventAttribute = configuration.getAttribute(EVENT, "");
 		if (eventAttribute != null && !eventAttribute.isEmpty()) {
-			var event = type.getInterfaceList().getEvent(eventAttribute);
+			final var event = type.getInterfaceList().getEvent(eventAttribute);
 			if (event != null && event.isIsInput()) {
 				return event;
 			}
@@ -37,14 +37,17 @@ public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttr
 		return defaultEvent;
 	}
 
-	static List<Variable> getArguments(ILaunchConfiguration configuration, List<Variable> defaultArguments)
+	static List<Variable> getArguments(final ILaunchConfiguration configuration, final List<Variable> defaultArguments)
 			throws CoreException {
-		var argumentsAttribute = configuration.getAttribute(ARGUMENTS, Collections.emptyMap());
+		final var argumentsAttribute = configuration.getAttribute(ARGUMENTS, Collections.emptyMap());
 		if (argumentsAttribute != null && defaultArguments != null) {
 			defaultArguments.forEach(arg -> {
+				final var argumentValue = argumentsAttribute.get(arg.getName());
 				try {
-					arg.setValue(argumentsAttribute.get(arg.getName()));
-				} catch (Exception e) {
+					if (argumentValue != null) {
+						arg.setValue(argumentValue);
+					}
+				} catch (final Exception e) {
 					// ignore
 				}
 			});

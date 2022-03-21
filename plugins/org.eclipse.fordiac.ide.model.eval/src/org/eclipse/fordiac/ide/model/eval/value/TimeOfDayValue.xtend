@@ -15,8 +15,9 @@ package org.eclipse.fordiac.ide.model.eval.value
 import java.time.LocalTime
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.TimeOfDayValueConverter
 
-class TimeOfDayValue extends AnyDateValue {
+class TimeOfDayValue implements AnyDateValue {
 	final long value;
 
 	public static final TimeOfDayValue DEFAULT = new TimeOfDayValue(0)
@@ -31,7 +32,7 @@ class TimeOfDayValue extends AnyDateValue {
 
 	def static toTimeOfDayValue(LocalTime value) { value.toNanoOfDay.toTimeOfDayValue }
 
-	def static toTimeOfDayValue(String value) { LocalTime.parse(value, TIME_OF_DAY_FORMATTER).toTimeOfDayValue }
+	def static toTimeOfDayValue(String value) { TimeOfDayValueConverter.INSTANCE.toValue(value).toTimeOfDayValue }
 
 	def static toTimeOfDayValue(AnyDateValue value) { value.toNanos.toTimeOfDayValue }
 
@@ -43,5 +44,5 @@ class TimeOfDayValue extends AnyDateValue {
 
 	override hashCode() { Long.hashCode(value) }
 	
-	override toString() { TIME_OF_DAY_FORMATTER.format(LocalTime.ofNanoOfDay(value)) }
+	override toString() { TimeOfDayValueConverter.INSTANCE.toString(LocalTime.ofNanoOfDay(value)) }
 }
