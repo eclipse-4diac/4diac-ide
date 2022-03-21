@@ -208,6 +208,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 			[indent]
 		)
 		repeatStatement.condition.format
+		repeatStatement.regionFor.keyword(STRepeatStatementAccess.END_REPEATKeyword_4).prepend[newLine noSpace]
 		repeatStatement.statements.forEach[format]
 		repeatStatement.statements.forEach[surround[newLine]]
 		repeatStatement.regionFor.keyword(";").surround[noSpace]

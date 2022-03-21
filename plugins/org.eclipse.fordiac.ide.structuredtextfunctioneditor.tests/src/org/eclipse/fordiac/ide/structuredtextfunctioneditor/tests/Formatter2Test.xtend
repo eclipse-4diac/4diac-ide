@@ -163,7 +163,8 @@ class Formatter2Test {
 				REPEAT
 					bol1 := TRUE;
 					bol7 := FALSE;
-				UNTIL bol8 END_REPEAT;
+				UNTIL bol8
+				END_REPEAT;
 				END_FUNCTION
 			'''
 		]
@@ -513,7 +514,8 @@ class Formatter2Test {
 				END_WHILE;
 				REPEAT
 					bol7 := FALSE;
-				UNTIL bol8 END_REPEAT;
+				UNTIL bol8
+				END_REPEAT;
 				END_FUNCTION
 			'''
 		]
@@ -585,7 +587,7 @@ class Formatter2Test {
 					END_WHILE;
 					REPEAT
 					bol7 := FALSE;
-				UNTIL bol8>bol6 END_REPEAT;
+				UNTIL bol8>bol6		END_REPEAT;
 				END_FUNCTION
 			'''
 			expectation = '''
@@ -602,7 +604,8 @@ class Formatter2Test {
 				END_WHILE;
 				REPEAT
 					bol7 := FALSE;
-				UNTIL bol8 > bol6 END_REPEAT;
+				UNTIL bol8 > bol6
+				END_REPEAT;
 				END_FUNCTION
 			'''
 		]
