@@ -43,6 +43,58 @@ public class ForceHandler extends AbstractMonitoringHandler {
 		return null;
 	}
 
+	public static void showDialogAndProcess(final VarDeclaration variable, final IInterfaceElement interfaceElement) {
+		if (interfaceElement == null) {
+			showDialogAndProcess(variable);
+		}
+		final MonitoringManager manager = MonitoringManager.getInstance();
+		final MonitoringBaseElement element = manager.getMonitoringElement(variable);
+		if (element instanceof MonitoringElement) {
+			final MonitoringElement monitoringElement = (MonitoringElement) element;
+			String oldValue = "";
+			if (monitoringElement.isForce() && monitoringElement.getForceValue() != null) {
+				oldValue = monitoringElement.getForceValue().substring(
+						monitoringElement.getForceValue().toLowerCase().indexOf(
+								interfaceElement.getName().toLowerCase()) + interfaceElement.getName().length() + 2,
+						monitoringElement.getForceValue().toLowerCase().indexOf(',',
+								monitoringElement.getForceValue().toLowerCase()
+								.indexOf(interfaceElement.getName().toLowerCase())) == -1
+								? monitoringElement.getForceValue().toLowerCase().indexOf(')',
+										monitoringElement.getForceValue().toLowerCase()
+										.indexOf(interfaceElement.getName().toLowerCase()))
+										: monitoringElement.getForceValue().toLowerCase().indexOf(',',
+												monitoringElement.getForceValue().toLowerCase()
+												.indexOf(interfaceElement.getName().toLowerCase())));
+
+			}
+			final InputDialog input = new InputDialog(Display.getDefault().getActiveShell(),
+					Messages.MonitoringWatchesView_ForceValue, Messages.MonitoringWatchesView_Value,
+					oldValue,
+					(newValue -> {
+						if (interfaceElement instanceof VarDeclaration) {
+							return ForceHandler.validateForceInput((VarDeclaration) interfaceElement, newValue);
+						}
+						return null;
+					}));
+			final int ret = input.open();
+			if (ret == org.eclipse.jface.window.Window.OK) {
+				final int startIndex = monitoringElement.getCurrentValue().toLowerCase()
+						.indexOf(interfaceElement.getName().toLowerCase());
+				int endIndex = monitoringElement.getCurrentValue().toLowerCase().indexOf(',', startIndex);
+				if(endIndex == -1 ) {
+					endIndex = monitoringElement.getCurrentValue().toLowerCase().indexOf(')', startIndex);
+				}
+				final String newValue = monitoringElement.getCurrentValue().substring(0, startIndex)
+						+ interfaceElement.getName() + ":=" + input.getValue() //$NON-NLS-1$
+						+ monitoringElement.getCurrentValue().substring(endIndex);
+				manager.forceValue(monitoringElement, interfaceElement, newValue);
+
+			}
+
+		}
+
+	}
+
 	public static void showDialogAndProcess(final VarDeclaration variable) {
 		if (null != variable) {
 			final MonitoringManager manager = MonitoringManager.getInstance();
@@ -63,7 +115,7 @@ public class ForceHandler extends AbstractMonitoringHandler {
 								}));
 				final int ret = input.open();
 				if (ret == org.eclipse.jface.window.Window.OK) {
-					manager.forceValue(monitoringElement, input.getValue());
+					manager.forceValue(monitoringElement, null, input.getValue());
 				}
 			}
 		}
