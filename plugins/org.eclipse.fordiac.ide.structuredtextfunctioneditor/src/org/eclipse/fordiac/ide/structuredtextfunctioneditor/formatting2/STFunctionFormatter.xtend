@@ -40,6 +40,8 @@ class STFunctionFormatter extends STCoreFormatter {
 		].forEach [
 			document.addReplacer(new KeywordCaseTextReplacer(document, it))
 		]
+		stFunctionSource.allRegionsFor.keywords(STPrimaryExpressionAccess.leftParenthesisKeyword_0_0).forEach[append[noSpace]]
+		stFunctionSource.allRegionsFor.keywords(STPrimaryExpressionAccess.rightParenthesisKeyword_0_2).forEach[prepend[noSpace]]
 		for (stFunction : stFunctionSource.functions) {
 			stFunction.format
 		}

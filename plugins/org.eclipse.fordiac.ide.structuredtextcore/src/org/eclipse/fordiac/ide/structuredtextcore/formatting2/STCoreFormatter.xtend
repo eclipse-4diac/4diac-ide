@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
@@ -47,14 +48,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlo
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.xtext.formatting2.AbstractFormatter2
 import org.eclipse.xtext.formatting2.IFormattableDocument
+import org.eclipse.xtext.formatting2.ITextReplacerContext
+import org.eclipse.xtext.formatting2.internal.AbstractTextReplacer
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage.Literals.*
-import org.eclipse.xtext.formatting2.internal.AbstractTextReplacer
-import org.eclipse.xtext.formatting2.ITextReplacerContext
-import org.eclipse.xtext.RuleCall
-import org.eclipse.fordiac.ide.model.data.ElementaryType
-import org.eclipse.fordiac.ide.model.data.DataType
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
 class STCoreFormatter extends AbstractFormatter2 {
 

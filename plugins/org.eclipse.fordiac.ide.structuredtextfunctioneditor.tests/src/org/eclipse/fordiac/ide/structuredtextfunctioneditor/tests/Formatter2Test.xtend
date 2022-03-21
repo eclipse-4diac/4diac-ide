@@ -607,5 +607,41 @@ class Formatter2Test {
 			'''
 		]
 	}
+	
+	@Test
+	def void testParanthesesSpacing(){
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION CHECK : INT
+				VAR_INPUT
+					IN: INT;
+				END_VAR
+				END_FUNCTION
+				FUNCTION hubert
+				VAR
+					value : INT;
+					MAX : INT;
+					MIN : INT;
+				END_VAR
+					LIMIT_CHECK := CHECK( ( MAX ) + ( value * 1 ), MIN, 1 * (MAX ) );
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION CHECK : INT
+				VAR_INPUT
+					IN : INT;
+				END_VAR
+				END_FUNCTION
+				FUNCTION hubert
+				VAR
+					value : INT;
+					MAX : INT;
+					MIN : INT;
+				END_VAR
+				LIMIT_CHECK := CHECK((MAX) + (value * 1), MIN, 1 * (MAX));
+				END_FUNCTION
+			'''
+		]
+	}
 
 }
