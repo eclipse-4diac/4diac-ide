@@ -36,6 +36,7 @@ import org.eclipse.debug.core.model.IStreamsProxy;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorExitException;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadGroup;
+import org.eclipse.fordiac.ide.model.eval.value.Value;
 
 public class EvaluatorProcess extends PlatformObject implements IProcess, Callable<IStatus> {
 
@@ -65,10 +66,14 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 		try {
 			this.evaluator.prepare();
 			final long start = System.nanoTime();
+			Value result = null;
 			try {
-				this.evaluator.evaluate();
+				result = this.evaluator.evaluate();
 			} catch (final EvaluatorExitException e) {
 				// exit
+			}
+			if (result != null) {
+				this.streamsProxy.getOutputStreamMonitor().info(String.format("Result: %s", result)); //$NON-NLS-1$
 			}
 			final long finish = System.nanoTime();
 			final Duration elapsed = Duration.ofNanos(finish - start);

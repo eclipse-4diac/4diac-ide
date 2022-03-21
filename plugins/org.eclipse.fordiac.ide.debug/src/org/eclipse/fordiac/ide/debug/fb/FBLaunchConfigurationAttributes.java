@@ -12,22 +12,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.fb;
 
-import java.util.Collections;
-import java.util.List;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
-import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttributes {
-	String EVENT = "org.eclipse.fordiac.ide.debug.event";
-	String ARGUMENTS = "org.eclipse.fordiac.ide.debug.arguments";
+	String EVENT = "org.eclipse.fordiac.ide.debug.event"; //$NON-NLS-1$
 
 	static Event getEvent(final ILaunchConfiguration configuration, final FBType type, final Event defaultEvent) throws CoreException {
-		final String eventAttribute = configuration.getAttribute(EVENT, "");
+		final String eventAttribute = configuration.getAttribute(EVENT, ""); //$NON-NLS-1$
 		if (eventAttribute != null && !eventAttribute.isEmpty()) {
 			final var event = type.getInterfaceList().getEvent(eventAttribute);
 			if (event != null && event.isIsInput()) {
@@ -35,23 +30,5 @@ public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttr
 			}
 		}
 		return defaultEvent;
-	}
-
-	static List<Variable> getArguments(final ILaunchConfiguration configuration, final List<Variable> defaultArguments)
-			throws CoreException {
-		final var argumentsAttribute = configuration.getAttribute(ARGUMENTS, Collections.emptyMap());
-		if (argumentsAttribute != null && defaultArguments != null) {
-			defaultArguments.forEach(arg -> {
-				final var argumentValue = argumentsAttribute.get(arg.getName());
-				try {
-					if (argumentValue != null) {
-						arg.setValue(argumentValue);
-					}
-				} catch (final Exception e) {
-					// ignore
-				}
-			});
-		}
-		return defaultArguments;
 	}
 }

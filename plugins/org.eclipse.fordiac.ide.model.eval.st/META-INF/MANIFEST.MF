@@ -16,4 +16,5 @@ Require-Bundle: org.eclipse.xtext.xbase.lib,
  org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor
-Export-Package: org.eclipse.fordiac.ide.model.eval.st
+Export-Package: org.eclipse.fordiac.ide.model.eval.st,
+ org.eclipse.fordiac.ide.model.eval.st.variable

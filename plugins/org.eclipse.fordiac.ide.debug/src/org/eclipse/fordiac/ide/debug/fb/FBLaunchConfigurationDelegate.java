@@ -47,7 +47,7 @@ public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationD
 			final FBType type = (FBType) TypeLibrary.getPaletteEntryForFile((IFile) resource).getType();
 			final var event = FBLaunchConfigurationAttributes.getEvent(configuration, type, getDefaultEvent(type));
 			final var defaultArguments = getDefaultArguments(type);
-			final var variables = FBLaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
+			final var variables = LaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
 			launch(type, event, variables, configuration, mode, launch, monitor);
 		}
 	}
@@ -64,18 +64,20 @@ public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationD
 			final EvaluatorDebugTarget debugTarget = new EvaluatorDebugTarget(configuration.getName(), evaluator, launch);
 			debugTarget.start();
 		} else {
-			throw new CoreException(Status.error("Illegal launch mode: " + mode));
+			throw new CoreException(Status.error("Illegal launch mode: " + mode)); //$NON-NLS-1$
 		}
 	}
 
 	public abstract FBEvaluator<? extends FBType> createEvaluator(FBType type, Queue<Event> queue,
 			List<Variable> variables) throws CoreException;
 
+	@SuppressWarnings("static-method")
 	protected List<Variable> getDefaultArguments(final FBType type) {
 		return type.getInterfaceList().getInputVars().stream().map(VariableOperations::newVariable)
 				.collect(Collectors.toList());
 	}
 
+	@SuppressWarnings("static-method")
 	protected Event getDefaultEvent(final FBType type) {
 		final var eventInputs = type.getInterfaceList().getEventInputs();
 		if (!eventInputs.isEmpty()) {

@@ -34,10 +34,14 @@ final class STFunctionParseUtil {
 	}
 
 	def static STFunctionSource parse(String source, String name, List<String> errors) {
-		source.parse(name, null, errors)?.rootASTElement as STFunctionSource
+		source.parseInternal(name, null, errors)?.rootASTElement as STFunctionSource
 	}
 
-	def private static IParseResult parse(String text, String name, ParserRule entryPoint, List<String> errors) {
+	def static STFunctionSource parse(URI uri, List<String> errors) {
+		uri.parseInternal(null, errors)?.rootASTElement as STFunctionSource
+	}
+
+	def private static IParseResult parseInternal(String text, String name, ParserRule entryPoint, List<String> errors) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		val resource = SERVICE_PROVIDER.get(XtextResource)
 		resource.URI = URI.createPlatformResourceURI(SYNTHETIC_URI, true)
@@ -48,6 +52,20 @@ final class STFunctionParseUtil {
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
 		if (!issues.empty) {
 			errors?.addAll(issues.map['''«name» at «lineNumber»: «message» '''])
+			return null
+		}
+		return resource.parseResult
+	}
+
+	def private static IParseResult parseInternal(URI uri, ParserRule entryPoint, List<String> errors) {
+		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
+		val resource = resourceSet.createResource(uri) as XtextResource
+		resource.entryPoint = entryPoint
+		resource.load(#{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
+		val validator = resource.resourceServiceProvider.resourceValidator
+		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
+		if (!issues.empty) {
+			errors?.addAll(issues.map['''«uri.toString» at «lineNumber»: «message» '''])
 			return null
 		}
 		return resource.parseResult
