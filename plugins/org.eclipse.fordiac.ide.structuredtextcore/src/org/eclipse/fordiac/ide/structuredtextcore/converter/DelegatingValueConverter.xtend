@@ -1,4 +1,4 @@
-/*******************************************************************************
+/**
  * Copyright (c) 2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
@@ -9,25 +9,29 @@
  * 
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
- *******************************************************************************/
+ */
 package org.eclipse.fordiac.ide.structuredtextcore.converter
 
-import java.time.LocalDate
-import org.eclipse.xtext.conversion.ValueConverterException
 import org.eclipse.xtext.conversion.impl.AbstractNullSafeConverter
 import org.eclipse.xtext.nodemodel.INode
+import org.eclipse.xtext.conversion.ValueConverterException
+import org.eclipse.fordiac.ide.model.value.ValueConverter
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
-class STDateValueConverter extends AbstractNullSafeConverter<LocalDate> {
+@FinalFieldsConstructor
+class DelegatingValueConverter<T> extends AbstractNullSafeConverter<T> {
 
-	override protected internalToString(LocalDate value) {
-		value.toString
+	final ValueConverter<T> delegate
+
+	override protected internalToString(T value) {
+		delegate.toString(value)
 	}
 
 	override protected internalToValue(String string, INode node) throws ValueConverterException {
 		try {
-			LocalDate.parse(string)
+			delegate.toValue(string)
 		} catch (Exception e) {
-			throw new ValueConverterException("Invalid date literal", node, e)
+			throw new ValueConverterException(e.message, node, e.cause as Exception)
 		}
 	}
 }
