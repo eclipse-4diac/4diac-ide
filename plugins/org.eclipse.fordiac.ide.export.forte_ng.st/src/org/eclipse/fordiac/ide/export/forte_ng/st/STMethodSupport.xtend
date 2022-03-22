@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlo
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 
 @FinalFieldsConstructor

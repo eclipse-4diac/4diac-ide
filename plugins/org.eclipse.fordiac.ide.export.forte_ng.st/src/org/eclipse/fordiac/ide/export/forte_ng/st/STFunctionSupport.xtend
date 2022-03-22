@@ -25,6 +25,8 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 @FinalFieldsConstructor
 class STFunctionSupport extends StructuredTextSupport {
 	final STFunctionSource source

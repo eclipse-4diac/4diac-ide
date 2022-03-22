@@ -28,9 +28,9 @@ public abstract class ExportTemplate implements IExportTemplate {
 	private final String name;
 	private final Path path;
 
-	private final List<String> errors = new ArrayList<>();
-	private final List<String> warnings = new ArrayList<>();
-	private final List<String> infos = new ArrayList<>();
+	protected final List<String> errors = new ArrayList<>();
+	protected final List<String> warnings = new ArrayList<>();
+	protected final List<String> infos = new ArrayList<>();
 
 	protected ExportTemplate(final String name) {
 		this(name, Paths.get("")); //$NON-NLS-1$
