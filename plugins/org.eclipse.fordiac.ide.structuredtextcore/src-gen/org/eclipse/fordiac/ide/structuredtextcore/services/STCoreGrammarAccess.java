@@ -2616,8 +2616,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cTRUEKeyword_0 = (Keyword)cAlternatives.eContents().get(0);
 		private final Keyword cFALSEKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
 		
-		//// BOOLs are internally always stored as numerical value. 0 = FALSE, 1 = TRUE
-		//BoolLiteral returns ecore::EBigDecimal:
+		//BoolLiteral returns ecore::EJavaObject:
 		//    'TRUE' | 'FALSE'
 		//;
 		@Override public ParserRule getRule() { return rule; }
@@ -2644,7 +2643,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cEXT_INTTerminalRuleCall_2_1_0 = (RuleCall)cAlternatives_2_1.eContents().get(0);
 		private final RuleCall cINTTerminalRuleCall_2_1_1 = (RuleCall)cAlternatives_2_1.eContents().get(1);
 		
-		//Number returns ecore::EBigDecimal:
+		//Number returns ecore::EJavaObject:
 		//    ('+' | '-')? INT (=> '.' (EXT_INT | INT))?;
 		@Override public ParserRule getRule() { return rule; }
 		
@@ -4135,8 +4134,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getQualifiedNameAccess().getRule();
 	}
 	
-	//// BOOLs are internally always stored as numerical value. 0 = FALSE, 1 = TRUE
-	//BoolLiteral returns ecore::EBigDecimal:
+	//BoolLiteral returns ecore::EJavaObject:
 	//    'TRUE' | 'FALSE'
 	//;
 	public BoolLiteralElements getBoolLiteralAccess() {
@@ -4147,7 +4145,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getBoolLiteralAccess().getRule();
 	}
 	
-	//Number returns ecore::EBigDecimal:
+	//Number returns ecore::EJavaObject:
 	//    ('+' | '-')? INT (=> '.' (EXT_INT | INT))?;
 	public NumberElements getNumberAccess() {
 		return pNumber;
@@ -4203,7 +4201,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return tHEX_DIGIT;
 	}
 	
-	//terminal NON_DECIMAL returns ecore::EBigDecimal:
+	//terminal NON_DECIMAL returns ecore::EJavaObject:
 	//    ('2#' | '8#' | '16#') HEX_DIGIT+;
 	public TerminalRule getNON_DECIMALRule() {
 		return tNON_DECIMAL;

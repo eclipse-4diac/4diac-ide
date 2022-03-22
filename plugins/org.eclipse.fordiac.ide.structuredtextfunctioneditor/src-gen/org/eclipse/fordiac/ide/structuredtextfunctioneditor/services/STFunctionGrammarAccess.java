@@ -979,8 +979,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getQualifiedNameAccess().getRule();
 	}
 	
-	//// BOOLs are internally always stored as numerical value. 0 = FALSE, 1 = TRUE
-	//BoolLiteral returns ecore::EBigDecimal:
+	//BoolLiteral returns ecore::EJavaObject:
 	//    'TRUE' | 'FALSE'
 	//;
 	public STCoreGrammarAccess.BoolLiteralElements getBoolLiteralAccess() {
@@ -991,7 +990,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getBoolLiteralAccess().getRule();
 	}
 	
-	//Number returns ecore::EBigDecimal:
+	//Number returns ecore::EJavaObject:
 	//    ('+' | '-')? INT (=> '.' (EXT_INT | INT))?;
 	public STCoreGrammarAccess.NumberElements getNumberAccess() {
 		return gaSTCore.getNumberAccess();
@@ -1047,7 +1046,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return gaSTCore.getHEX_DIGITRule();
 	}
 	
-	//terminal NON_DECIMAL returns ecore::EBigDecimal:
+	//terminal NON_DECIMAL returns ecore::EJavaObject:
 	//    ('2#' | '8#' | '16#') HEX_DIGIT+;
 	public TerminalRule getNON_DECIMALRule() {
 		return gaSTCore.getNON_DECIMALRule();

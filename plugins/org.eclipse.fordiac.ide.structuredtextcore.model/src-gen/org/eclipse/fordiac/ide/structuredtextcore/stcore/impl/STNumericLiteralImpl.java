@@ -65,7 +65,7 @@ public class STNumericLiteralImpl extends STExpressionImpl implements STNumericL
 	 * @generated
 	 * @ordered
 	 */
-	protected static final BigDecimal VALUE_EDEFAULT = null;
+	protected static final Object VALUE_EDEFAULT = null;
 
 	/**
 	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
@@ -75,7 +75,7 @@ public class STNumericLiteralImpl extends STExpressionImpl implements STNumericL
 	 * @generated
 	 * @ordered
 	 */
-	protected BigDecimal value = VALUE_EDEFAULT;
+	protected Object value = VALUE_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -142,7 +142,7 @@ public class STNumericLiteralImpl extends STExpressionImpl implements STNumericL
 	 * @generated
 	 */
 	@Override
-	public BigDecimal getValue() {
+	public Object getValue() {
 		return value;
 	}
 
@@ -152,8 +152,8 @@ public class STNumericLiteralImpl extends STExpressionImpl implements STNumericL
 	 * @generated
 	 */
 	@Override
-	public void setValue(BigDecimal newValue) {
-		BigDecimal oldValue = value;
+	public void setValue(Object newValue) {
+		Object oldValue = value;
 		value = newValue;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_NUMERIC_LITERAL__VALUE, oldValue, value));
@@ -199,7 +199,7 @@ public class STNumericLiteralImpl extends STExpressionImpl implements STNumericL
 				setType((DataType)newValue);
 				return;
 			case STCorePackage.ST_NUMERIC_LITERAL__VALUE:
-				setValue((BigDecimal)newValue);
+				setValue(newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);

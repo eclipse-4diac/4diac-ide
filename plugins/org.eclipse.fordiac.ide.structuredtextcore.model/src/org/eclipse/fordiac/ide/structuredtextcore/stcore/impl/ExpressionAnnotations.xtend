@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl
 
 import java.math.BigDecimal
+import java.math.BigInteger
 import java.util.Map
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataFactory
@@ -119,7 +120,7 @@ final package class ExpressionAnnotations {
 
 	def private static int asConstantInt(STExpression expr) {
 		switch (expr) {
-			STNumericLiteral: expr.value.intValue
+			STNumericLiteral: (expr.value as BigInteger).intValueExact
 			default: 0
 		}
 	}
@@ -155,24 +156,26 @@ final package class ExpressionAnnotations {
 
 	def package static INamedElement getResultType(STNumericLiteral expr) {
 		expr.type ?: switch (it : expr.value) {
-			case scale > 0: ElementaryTypes.LREAL
-			case checkRange(Byte.MIN_VALUE, Byte.MAX_VALUE): ElementaryTypes.SINT
-			case checkRangeUnsigned(0xff): ElementaryTypes.USINT
-			case checkRange(Short.MIN_VALUE, Short.MAX_VALUE): ElementaryTypes.INT
-			case checkRangeUnsigned(0xffff): ElementaryTypes.UINT
-			case checkRange(Integer.MIN_VALUE, Integer.MAX_VALUE): ElementaryTypes.DINT
-			case checkRangeUnsigned(0xffffffff): ElementaryTypes.UDINT
-			case checkRange(Long.MIN_VALUE, Long.MAX_VALUE): ElementaryTypes.LINT
-			default: ElementaryTypes.LINT
+			Boolean: ElementaryTypes.BOOL
+			BigDecimal: ElementaryTypes.LREAL
+			BigInteger case checkRange(Byte.MIN_VALUE, Byte.MAX_VALUE): ElementaryTypes.SINT
+			BigInteger case checkRangeUnsigned(0xff#bi): ElementaryTypes.USINT
+			BigInteger case checkRange(Short.MIN_VALUE, Short.MAX_VALUE): ElementaryTypes.INT
+			BigInteger case checkRangeUnsigned(0xffff#bi): ElementaryTypes.UINT
+			BigInteger case checkRange(Integer.MIN_VALUE, Integer.MAX_VALUE): ElementaryTypes.DINT
+			BigInteger case checkRangeUnsigned(0xffffffff#bi): ElementaryTypes.UDINT
+			BigInteger case checkRange(Long.MIN_VALUE, Long.MAX_VALUE): ElementaryTypes.LINT
+			BigInteger case checkRangeUnsigned(0xffffffffffffffff#bi): ElementaryTypes.ULINT
+			default: null
 		}
 	}
 
-	def private static checkRange(BigDecimal value, long lower, long upper) {
-		value.scale <= 0 && value.longValue >= lower && value.longValue <= upper
+	def private static checkRange(BigInteger value, long lower, long upper) {
+		value >= BigInteger.valueOf(lower) && value <= BigInteger.valueOf(upper)
 	}
 
-	def private static checkRangeUnsigned(BigDecimal value, long upper) {
-		value.scale <= 0 && Long.compareUnsigned(value.longValue, upper) < 0
+	def private static checkRangeUnsigned(BigInteger value, BigInteger upper) {
+		value.signum >= 0 && value <= upper
 	}
 
 	def package static INamedElement getResultType(STDateLiteral expr) { expr.type }

@@ -14,23 +14,19 @@
 package org.eclipse.fordiac.ide.structuredtextcore.converter
 
 import com.google.inject.Inject
-import java.math.BigDecimal
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
 import org.eclipse.xtext.conversion.IValueConverter
 import org.eclipse.xtext.conversion.ValueConverter
 import org.eclipse.xtext.conversion.impl.AbstractDeclarativeValueConverterService
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
 
 class STCoreValueConverters extends AbstractDeclarativeValueConverterService {
 	
 	@Inject
-	BoolLiteralValueConverter boolLiteralValueConverter
-	
-	@Inject
-	NonDecimalValueConverter nonDecimalValueConverter
+	NumericValueConverter numericValueConverter
 	
 	@Inject
 	STTimeValueConverter timeValueConverter
@@ -47,14 +43,19 @@ class STCoreValueConverters extends AbstractDeclarativeValueConverterService {
 	@Inject
 	STStringValueConverter stringValueConverter
 	
+	@ValueConverter(rule="Number")
+	def IValueConverter<Object> Number() {
+		return numericValueConverter;
+	}
+	
 	@ValueConverter(rule="BoolLiteral")
-	def IValueConverter<BigDecimal> BOOL_LITERAL() {
-		return boolLiteralValueConverter;
+	def IValueConverter<Object> BOOL_LITERAL() {
+		return numericValueConverter;
 	}
 	
 	@ValueConverter(rule="NON_DECIMAL")
-	def IValueConverter<BigDecimal> NON_DECIMAL() {
-		return nonDecimalValueConverter;
+	def IValueConverter<Object> NON_DECIMAL() {
+		return numericValueConverter;
 	}
 	
 	@ValueConverter(rule="Time")

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
+import java.math.BigInteger
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -367,7 +368,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected int getIntegerFromConstantExpression(STExpression expr) {
 		try {
-			(expr as STNumericLiteral).value.intValueExact
+			((expr as STNumericLiteral).value as BigInteger).intValueExact
 		} catch (Exception e) {
 			errors.add("Not a constant integer expression")
 			1
