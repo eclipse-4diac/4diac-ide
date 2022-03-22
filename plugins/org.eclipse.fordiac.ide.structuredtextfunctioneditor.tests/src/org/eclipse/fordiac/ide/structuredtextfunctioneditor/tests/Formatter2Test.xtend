@@ -163,7 +163,8 @@ class Formatter2Test {
 				REPEAT
 					bol1 := TRUE;
 					bol7 := FALSE;
-				UNTIL bol8 END_REPEAT;
+				UNTIL bol8
+				END_REPEAT;
 				END_FUNCTION
 			'''
 		]
@@ -513,7 +514,8 @@ class Formatter2Test {
 				END_WHILE;
 				REPEAT
 					bol7 := FALSE;
-				UNTIL bol8 END_REPEAT;
+				UNTIL bol8
+				END_REPEAT;
 				END_FUNCTION
 			'''
 		]
@@ -585,7 +587,7 @@ class Formatter2Test {
 					END_WHILE;
 					REPEAT
 					bol7 := FALSE;
-				UNTIL bol8>bol6 END_REPEAT;
+				UNTIL bol8>bol6		END_REPEAT;
 				END_FUNCTION
 			'''
 			expectation = '''
@@ -602,7 +604,44 @@ class Formatter2Test {
 				END_WHILE;
 				REPEAT
 					bol7 := FALSE;
-				UNTIL bol8 > bol6 END_REPEAT;
+				UNTIL bol8 > bol6
+				END_REPEAT;
+				END_FUNCTION
+			'''
+		]
+	}
+	
+	@Test
+	def void testParanthesesSpacing(){
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION CHECK : INT
+				VAR_INPUT
+					IN: INT;
+				END_VAR
+				END_FUNCTION
+				FUNCTION hubert
+				VAR
+					value : INT;
+					MAX : INT;
+					MIN : INT;
+				END_VAR
+					LIMIT_CHECK := CHECK( ( MAX ) + ( value * 1 ), MIN, 1 * (MAX ) );
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION CHECK : INT
+				VAR_INPUT
+					IN : INT;
+				END_VAR
+				END_FUNCTION
+				FUNCTION hubert
+				VAR
+					value : INT;
+					MAX : INT;
+					MIN : INT;
+				END_VAR
+				LIMIT_CHECK := CHECK((MAX) + (value * 1), MIN, 1 * (MAX));
 				END_FUNCTION
 			'''
 		]

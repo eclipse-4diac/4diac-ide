@@ -122,7 +122,7 @@ public class TypeSelectionWidget {
 		});
 	}
 
-	public void setEnabled(final boolean enabled) {
+	public void setEditable(final boolean enabled) {
 		typeChangeEnabled = enabled;
 	}
 

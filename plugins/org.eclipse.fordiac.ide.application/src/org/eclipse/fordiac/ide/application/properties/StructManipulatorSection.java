@@ -108,6 +108,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 
 		typeSelectionWidget = new TypeSelectionWidget(getWidgetFactory(), this::handleStructSelectionChanged);
 		typeSelectionWidget.createControls(structComp);
+		typeSelectionWidget.setEditable(true);
 	}
 
 	protected void refreshStructTypeTable() {
