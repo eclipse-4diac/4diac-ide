@@ -108,7 +108,7 @@ public class PinInfoBasicWidget implements CommandExecutor {
 	}
 
 	protected void checkFieldEnablements() {
-		typeSelectionWidget.setEnabled(isTypeChangeable());
+		typeSelectionWidget.setEditable(isTypeChangeable());
 	}
 
 	protected boolean isTypeChangeable() {
