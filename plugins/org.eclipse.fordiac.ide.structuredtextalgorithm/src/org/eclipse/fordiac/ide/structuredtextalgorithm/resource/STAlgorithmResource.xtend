@@ -30,4 +30,12 @@ class STAlgorithmResource extends LazyLinkingResource {
 			contents.add(fbType)
 		}
 	}
+	
+	def setFbType(FBType fbType) {
+		this.fbType = fbType
+		contents?.removeIf[it instanceof FBType]
+		if (!contents.nullOrEmpty && fbType !== null) {
+			contents.add(fbType)
+		}
+	}
 }
