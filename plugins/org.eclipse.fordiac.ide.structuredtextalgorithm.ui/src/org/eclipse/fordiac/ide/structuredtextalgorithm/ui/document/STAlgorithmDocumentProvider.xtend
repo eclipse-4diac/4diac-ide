@@ -20,13 +20,11 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmReconciler
 import org.eclipse.jface.text.IDocument
+import org.eclipse.swt.widgets.Display
 import org.eclipse.ui.IEditorInput
 import org.eclipse.ui.IFileEditorInput
 import org.eclipse.xtext.ui.editor.model.XtextDocument
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider
-import org.eclipse.xtext.util.CancelIndicator
-
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 
 class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 	@Inject
@@ -78,7 +76,7 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 			val partition = document.partition
 			monitor.worked(1)
 			monitor.subTask("Reconciling")
-			element.callables.reconcile(partition)
+			Display.^default.syncExec[element.callables.reconcile(partition)]
 		} catch (Exception e) {
 			Platform.getLog(class).error("Error saving algorithms to FB type", e)
 		} finally {
@@ -102,8 +100,8 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 
 					document.internalModify [ resource |
 						if (resource instanceof STAlgorithmResource) {
-							resource.fbType = libraryElement.copy
-							resource.resolveLazyCrossReferences(CancelIndicator.NullImpl)
+							resource.fbType = libraryElement
+							resource.relink
 						}
 						null
 					]
