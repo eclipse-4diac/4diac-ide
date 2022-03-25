@@ -60,6 +60,7 @@ Workflow {
 	        fragment = scoping.ImportNamespacesScopingFragment2 {
 				ignoreCase = true
 	        }
+	        fragment = exporting.QualifiedNamesFragment2 {}
 	        fragment = index.ResourceDescriptionStrategyFragment {}
 	        fragment = ui.labeling.LabelProviderFragment2 {}
 	        fragment = ui.outline.QuickOutlineFragment2 {}

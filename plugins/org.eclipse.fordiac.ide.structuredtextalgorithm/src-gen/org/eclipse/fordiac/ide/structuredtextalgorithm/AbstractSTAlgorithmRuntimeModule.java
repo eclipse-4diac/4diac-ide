@@ -23,6 +23,8 @@ import org.eclipse.xtext.conversion.impl.IgnoreCaseIDValueConverter;
 import org.eclipse.xtext.formatting2.FormatterPreferenceValuesProvider;
 import org.eclipse.xtext.formatting2.FormatterPreferences;
 import org.eclipse.xtext.formatting2.IFormatter2;
+import org.eclipse.xtext.naming.DefaultDeclarativeQualifiedNameProvider;
+import org.eclipse.xtext.naming.IQualifiedNameProvider;
 import org.eclipse.xtext.parser.IParser;
 import org.eclipse.xtext.parser.ITokenToStringConverter;
 import org.eclipse.xtext.parser.antlr.AntlrTokenDefProvider;
@@ -173,6 +175,11 @@ public abstract class AbstractSTAlgorithmRuntimeModule extends DefaultRuntimeMod
 	// contributed by org.eclipse.xtext.xtext.generator.scoping.ImportNamespacesScopingFragment2
 	public void configureIgnoreCaseLinking(Binder binder) {
 		binder.bindConstant().annotatedWith(IgnoreCaseLinking.class).to(true);
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.exporting.QualifiedNamesFragment2
+	public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
+		return DefaultDeclarativeQualifiedNameProvider.class;
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.formatting.Formatter2Fragment2

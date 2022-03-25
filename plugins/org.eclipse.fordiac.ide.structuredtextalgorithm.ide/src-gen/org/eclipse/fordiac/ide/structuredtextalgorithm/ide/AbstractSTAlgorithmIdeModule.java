@@ -9,6 +9,8 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ide.contentassist.antlr.S
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ide.contentassist.antlr.lexer.InternalSTAlgorithmLexer;
 import org.eclipse.xtext.ide.DefaultIdeModule;
 import org.eclipse.xtext.ide.LexerIdeBindings;
+import org.eclipse.xtext.ide.editor.contentassist.FQNPrefixMatcher;
+import org.eclipse.xtext.ide.editor.contentassist.IPrefixMatcher;
 import org.eclipse.xtext.ide.editor.contentassist.IProposalConflictHelper;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.AntlrProposalConflictHelper;
 import org.eclipse.xtext.ide.editor.contentassist.antlr.IContentAssistParser;
@@ -38,6 +40,11 @@ public abstract class AbstractSTAlgorithmIdeModule extends DefaultIdeModule {
 	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public Class<? extends IProposalConflictHelper> bindIProposalConflictHelper() {
 		return AntlrProposalConflictHelper.class;
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.exporting.QualifiedNamesFragment2
+	public Class<? extends IPrefixMatcher> bindIPrefixMatcher() {
+		return FQNPrefixMatcher.class;
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.ui.refactoring.RefactorElementNameFragment2

@@ -36,8 +36,10 @@ import org.eclipse.xtext.ui.codetemplates.ui.registry.LanguageRegistrar;
 import org.eclipse.xtext.ui.codetemplates.ui.registry.LanguageRegistry;
 import org.eclipse.xtext.ui.compare.DefaultViewerCreator;
 import org.eclipse.xtext.ui.editor.contentassist.ContentAssistContext;
+import org.eclipse.xtext.ui.editor.contentassist.FQNPrefixMatcher;
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalProvider;
 import org.eclipse.xtext.ui.editor.contentassist.IProposalConflictHelper;
+import org.eclipse.xtext.ui.editor.contentassist.PrefixMatcher;
 import org.eclipse.xtext.ui.editor.contentassist.antlr.AntlrProposalConflictHelper;
 import org.eclipse.xtext.ui.editor.contentassist.antlr.DelegatingContentAssistContextFactory;
 import org.eclipse.xtext.ui.editor.formatting.IContentFormatterFactory;
@@ -45,9 +47,11 @@ import org.eclipse.xtext.ui.editor.formatting2.ContentFormatterFactory;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer;
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionProvider;
 import org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage;
+import org.eclipse.xtext.ui.refactoring.IDependentElementsCalculator;
 import org.eclipse.xtext.ui.refactoring.IReferenceUpdater;
 import org.eclipse.xtext.ui.refactoring.IRenameRefactoringProvider;
 import org.eclipse.xtext.ui.refactoring.IRenameStrategy;
+import org.eclipse.xtext.ui.refactoring.impl.DefaultDependentElementsCalculator;
 import org.eclipse.xtext.ui.refactoring.impl.DefaultReferenceUpdater;
 import org.eclipse.xtext.ui.refactoring.impl.DefaultRenameRefactoringProvider;
 import org.eclipse.xtext.ui.refactoring.impl.DefaultRenameStrategy;
@@ -111,6 +115,16 @@ public abstract class AbstractSTAlgorithmUiModule extends DefaultUiModule {
 	// contributed by org.eclipse.xtext.xtext.generator.parser.antlr.XtextAntlrGeneratorFragment2
 	public void configureContentAssistLexerProvider(Binder binder) {
 		binder.bind(InternalSTAlgorithmLexer.class).toProvider(LexerProvider.create(InternalSTAlgorithmLexer.class));
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.exporting.QualifiedNamesFragment2
+	public Class<? extends PrefixMatcher> bindPrefixMatcher() {
+		return FQNPrefixMatcher.class;
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.exporting.QualifiedNamesFragment2
+	public Class<? extends IDependentElementsCalculator> bindIDependentElementsCalculator() {
+		return DefaultDependentElementsCalculator.class;
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.ui.labeling.LabelProviderFragment2
