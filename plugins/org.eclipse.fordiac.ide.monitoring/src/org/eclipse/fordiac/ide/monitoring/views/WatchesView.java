@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueLabelProvider;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -210,7 +211,8 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 	 *
 	 * @param manager the manager */
 	private void fillLocalToolBar(final IToolBarManager manager) {
-		toggleSelection = new Action(Messages.MonitoringManagerUtils_SelectionFilteringActive, Action.AS_RADIO_BUTTON) {
+		toggleSelection = new Action(Messages.MonitoringManagerUtils_SelectionFilteringActive,
+				IAction.AS_RADIO_BUTTON) {
 			@Override
 			public void run() {
 				selectionActive = !selectionActive;
@@ -383,11 +385,10 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 			if (viewer.getSelection() instanceof StructuredSelection) {
 				final StructuredSelection sel = (StructuredSelection) viewer.getSelection();
 				if (sel.getFirstElement() instanceof WatchValueTreeNode) {
-					if (((WatchValueTreeNode) sel.getFirstElement()).getMonitoringBaseElement().getPort()
-							.getInterfaceElement() instanceof VarDeclaration) {
-						final VarDeclaration variable = (VarDeclaration) ((WatchValueTreeNode) sel
-								.getFirstElement())
-								.getMonitoringBaseElement().getPort().getInterfaceElement();
+					final WatchValueTreeNode treeNode = (WatchValueTreeNode) sel.getFirstElement();
+					if (treeNode.getMonitoringBaseElement().getPort().getInterfaceElement() instanceof VarDeclaration) {
+						final VarDeclaration variable = (VarDeclaration) treeNode.getMonitoringBaseElement().getPort()
+								.getInterfaceElement();
 						ForceHandler.showDialogAndProcess(variable);
 						viewer.refresh();
 					}
@@ -405,10 +406,9 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 			if (viewer.getSelection() instanceof StructuredSelection) {
 				final StructuredSelection sel = (StructuredSelection) viewer.getSelection();
 				if (sel.getFirstElement() instanceof WatchValueTreeNode) {
-					if (((WatchValueTreeNode) sel.getFirstElement()).getMonitoringBaseElement().getPort()
-							.getInterfaceElement() instanceof VarDeclaration) {
-						final VarDeclaration variable = (VarDeclaration) ((WatchValueTreeNode) sel
-								.getFirstElement()).getMonitoringBaseElement().getPort().getInterfaceElement();
+					final WatchValueTreeNode treeNode = (WatchValueTreeNode) sel.getFirstElement();
+					if (treeNode.getMonitoringBaseElement().getPort().getInterfaceElement() instanceof VarDeclaration) {
+						final VarDeclaration variable = (VarDeclaration) treeNode.getMonitoringBaseElement().getPort().getInterfaceElement();
 						ClearForceHandler.processHandler(variable);
 						viewer.refresh();
 					}

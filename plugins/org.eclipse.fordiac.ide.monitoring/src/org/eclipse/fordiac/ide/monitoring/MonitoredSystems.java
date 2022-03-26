@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.monitoring;
 import java.util.ArrayList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.action.ContributionItem;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.swt.SWT;
@@ -65,16 +64,6 @@ public class MonitoredSystems extends CompoundContributionItem {
 		@Override
 		public void fill(final Menu menu, final int index) {
 			createSystemMonitoringMenuEntry(system, menu, index);
-		}
-	}
-
-	private static class EmptyMonitoringContribution extends ContributionItem {
-
-		@Override
-		public void fill(final Menu menu, final int index) {
-			final MenuItem item = (index == -1) ? new MenuItem(menu, SWT.None) : new MenuItem(menu, SWT.None, index);
-			item.setText(FordiacMessages.EmptyField);
-			item.setEnabled(false); // indicate that this item is not clickable
 		}
 	}
 

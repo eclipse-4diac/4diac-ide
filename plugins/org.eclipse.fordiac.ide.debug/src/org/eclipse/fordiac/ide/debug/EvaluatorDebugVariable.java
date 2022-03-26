@@ -97,4 +97,23 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 	public int compareTo(final EvaluatorDebugVariable o) {
 		return this.variable.getName().compareTo(o.variable.getName());
 	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() == obj.getClass()) {
+			return this.variable.getName().equals(((EvaluatorDebugVariable) obj).variable.getName());
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return this.variable.getName().hashCode();
+	}
 }

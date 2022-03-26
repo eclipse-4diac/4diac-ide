@@ -26,6 +26,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
+@SuppressWarnings("squid:S5960")
 class ValueValidatorTest {
 
 	private static final String NO_ERROR = ""; //$NON-NLS-1$

@@ -38,7 +38,7 @@ public class ToggleConnectionsHandler extends AbstractHandler {
 		if (selection != null) {
 			@SuppressWarnings("unchecked")
 			final List<ConnectionEditPart> connections = (List<ConnectionEditPart>) ((IStructuredSelection) selection)
-			.toList().stream().filter(sel -> sel instanceof ConnectionEditPart).collect(Collectors.toList());
+					.toList().stream().filter(ConnectionEditPart.class::isInstance).collect(Collectors.toList());
 
 			final CompoundCommand commands = new CompoundCommand();
 			final IEditorPart editor = HandlerUtil.getActiveEditor(event);

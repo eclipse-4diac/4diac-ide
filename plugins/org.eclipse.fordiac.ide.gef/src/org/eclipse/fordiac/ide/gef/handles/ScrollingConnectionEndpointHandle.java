@@ -137,10 +137,10 @@ public class ScrollingConnectionEndpointHandle extends ConnectionEndpointHandle 
 	private List<ConnectionEditPart> getCoSelectedConnections() {
 		final EditPart refEndPoint = getEndPoint(getOwner());
 		final List<Object> selectedEditParts = getOwner().getViewer().getSelectedEditParts();
-		final List coSelectedConnections = selectedEditParts.stream()
+		return selectedEditParts.stream()
 				.filter(ConnectionEditPart.class::isInstance)
-				.filter(ep -> sameTarget((ConnectionEditPart) ep, refEndPoint)).collect(Collectors.toList());
-		return coSelectedConnections;
+				.map(ConnectionEditPart.class::cast).filter(ep -> sameTarget(ep, refEndPoint))
+				.collect(Collectors.toList());
 
 	}
 

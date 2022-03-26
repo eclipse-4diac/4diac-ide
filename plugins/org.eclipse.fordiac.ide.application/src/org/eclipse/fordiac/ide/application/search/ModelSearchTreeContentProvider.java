@@ -28,7 +28,7 @@ public class ModelSearchTreeContentProvider implements ITreeContentProvider, IMo
 	private final AbstractTreeViewer treeViewer;
 	private Map<Object, Set<Object>> childrenMap;
 
-	private final static Object[] EMPTY_ARR = new Object[0];
+	private static final Object[] EMPTY_ARR = new Object[0];
 
 	public ModelSearchTreeContentProvider(final ModelSearchResultPage resultPage,
 			final AbstractTreeViewer abstractTreeViewer) {

@@ -147,7 +147,7 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 	public IVariable[] getVariables() throws DebugException {
 		final CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
 		final List<EvaluatorDebugVariable> variables = this.evaluator.getVariables().values().stream()
-				.map(variable -> debugger.getVariable(variable)).sorted().collect(Collectors.toList());
+				.map(debugger::getVariable).sorted().collect(Collectors.toList());
 		return variables.toArray(new IVariable[variables.size()]);
 	}
 
