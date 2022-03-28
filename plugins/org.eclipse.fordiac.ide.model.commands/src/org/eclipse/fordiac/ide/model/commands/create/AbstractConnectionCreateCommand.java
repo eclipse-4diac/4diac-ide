@@ -18,14 +18,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 
 public abstract class AbstractConnectionCreateCommand extends Command {
@@ -87,7 +85,11 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		return destination;
 	}
 
-	protected FBNetwork getParent() {
+	public void setParent(final FBNetwork parent) {
+		this.parent = parent;
+	}
+
+	public FBNetwork getParent() {
 		return parent;
 	}
 
@@ -104,50 +106,11 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 			return false;
 		}
 
-		// ensure the right parent
-		checkParent();
-
-		if (checkUnfoldedSubAppConnections()) {
-			return false;
-		}
-
 		return canExecuteConType();
-	}
-
-	private boolean checkUnfoldedSubAppConnections() {
-		// returns false for typed subapps & cfbs
-		if (getSource().getFBNetworkElement() == null
-				|| getDestination().getFBNetworkElement() == null) {
-			return false;
-		}
-		// prevents connections across unfolded subapp borders
-		if (getSource().getFBNetworkElement().getFbNetwork() != getDestination().getFBNetworkElement().getFbNetwork()) {
-			EObject srcContainer = null;
-			EObject destContainer = null;
-			if (getSource().eContainer().eContainer() instanceof SubApp) {
-				srcContainer = getSource().eContainer().eContainer();
-			}
-			if (getDestination().eContainer().eContainer() instanceof SubApp) {
-				destContainer = getDestination().eContainer().eContainer();
-			}
-			if ((srcContainer == null) && (destContainer == null)) {
-				return true;
-			}
-			if ((destContainer == null)
-					&& (srcContainer != getDestination().eContainer().eContainer().eContainer().eContainer())) {
-				return true;
-			}
-			if ((srcContainer == null)
-					&& (destContainer != getSource().eContainer().eContainer().eContainer().eContainer())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	@Override
 	public void execute() {
-		checkParent();
 		checkSourceAndTarget();
 
 		connection = createConnectionElement();
@@ -194,29 +157,6 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 			final IInterfaceElement buf = destination;
 			destination = source;
 			source = buf;
-		}
-	}
-
-	private void checkParent() {
-		final FBNetworkElement srcElement = getSource().getFBNetworkElement();
-		final FBNetworkElement dstElement = getDestination().getFBNetworkElement();
-
-		if ((srcElement != null) && (dstElement != null)
-				&& ((srcElement instanceof SubApp) || (dstElement instanceof SubApp))) {
-			// we only need to check the parent if both ends are subapps
-			final FBNetwork srcNetwork = srcElement.getFbNetwork();
-			final FBNetwork dstNetwork = dstElement.getFbNetwork();
-
-			if (srcNetwork != dstNetwork) {
-				// we have a connection from an interface element to an internal element
-				if ((srcElement instanceof SubApp) && (((SubApp) srcElement).getSubAppNetwork() == dstNetwork)) {
-					// the destination subapp is contained in the source subapp
-					parent = dstNetwork;
-				} else if ((dstElement instanceof SubApp) && (((SubApp) dstElement).getSubAppNetwork() == srcNetwork)) {
-					// the source subapp is contained in the destination subapp
-					parent = srcNetwork;
-				}
-			}
 		}
 	}
 
