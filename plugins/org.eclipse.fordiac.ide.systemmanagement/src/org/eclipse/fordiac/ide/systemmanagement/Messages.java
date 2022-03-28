@@ -30,6 +30,7 @@ public final class Messages extends NLS {
 	public static String FordiacResourceChangeListener_4;
 	public static String FordiacResourceChangeListener_5;
 	public static String FordiacResourceChangeListener_7;
+	public static String ValidateTypeLibrary;
 
 	static {
 		// initialize resource bundle
