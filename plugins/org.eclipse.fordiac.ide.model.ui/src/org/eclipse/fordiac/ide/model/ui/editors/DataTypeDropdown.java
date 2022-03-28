@@ -340,8 +340,7 @@ public class DataTypeDropdown extends TextCellEditor {
 				if (element instanceof TypeNode) {
 					final TypeNode node = (TypeNode) element;
 					if (node.isDirectory()) {
-						return PlatformUI.getWorkbench().getSharedImages()
-								.getImageDescriptor(ISharedImages.IMG_OBJ_FOLDER).createImage();
+						return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
 					}
 					return FordiacImage.ICON_DATA_TYPE.getImage();
 				}
