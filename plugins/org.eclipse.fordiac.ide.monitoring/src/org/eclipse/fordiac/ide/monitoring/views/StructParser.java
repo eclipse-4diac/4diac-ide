@@ -123,6 +123,24 @@ public final class StructParser {
 		}
 	}
 
+	public static String changeStructNodeValue(final MonitoringElement monitoringElement,
+			final IInterfaceElement interfaceElement, final String newNodeValue) {
+		if(monitoringElement.getCurrentValue() != null && !monitoringElement.getCurrentValue().equals("N/A"))//$NON-NLS-1$
+		{
+			final int startIndex = monitoringElement.getCurrentValue().toLowerCase()
+					.indexOf(interfaceElement.getName().toLowerCase());
+			int endIndex = monitoringElement.getCurrentValue().toLowerCase().indexOf(',', startIndex);
+			if(endIndex == -1 ) {
+				endIndex = monitoringElement.getCurrentValue().toLowerCase().indexOf(')', startIndex);
+			}
+			return monitoringElement.getCurrentValue().substring(0, startIndex)
+					+ interfaceElement.getName() + ":=" + newNodeValue //$NON-NLS-1$
+					+ monitoringElement.getCurrentValue().substring(endIndex);
+		}
+		return "";
+
+	}
+
 	private StructParser() {
 		throw new UnsupportedOperationException("Helper class should not be instantiated!"); //$NON-NLS-1$
 	}

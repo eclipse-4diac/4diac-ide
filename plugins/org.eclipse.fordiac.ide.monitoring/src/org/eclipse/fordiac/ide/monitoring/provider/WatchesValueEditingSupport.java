@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
+import org.eclipse.fordiac.ide.monitoring.views.StructParser;
 import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNode;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.jface.viewers.ColumnViewer;
@@ -40,7 +41,15 @@ public class WatchesValueEditingSupport extends EditingSupport {
 			final MonitoringBaseElement monitoringBaseElement = ((WatchValueTreeNode) element)
 					.getMonitoringBaseElement();
 			if (isValid((String) value, monitoringBaseElement)) {
-				MonitoringManager.getInstance().writeValue((MonitoringElement) monitoringBaseElement, (String) value);
+				if (((WatchValueTreeNode) element).isStructNode()
+						&& ((WatchValueTreeNode) element).getVariable() != null) {
+					MonitoringManager.getInstance().writeValue((MonitoringElement) monitoringBaseElement,
+							StructParser.changeStructNodeValue((MonitoringElement) monitoringBaseElement,
+									((WatchValueTreeNode) element).getVariable(), (String) value));
+				} else {
+					MonitoringManager.getInstance().writeValue((MonitoringElement) monitoringBaseElement,
+							(String) value);
+				}
 			}
 		}
 	}
@@ -62,11 +71,8 @@ public class WatchesValueEditingSupport extends EditingSupport {
 	protected boolean canEdit(final Object element) {
 		if (element instanceof WatchValueTreeNode) {
 			final WatchValueTreeNode watchNode = (WatchValueTreeNode) element;
-			// TODO REMOVE that check after forcing is possible
-			if (watchNode.isStructNode()) {
-				return watchNode.isStructRootNode();
-			}
-			return !(watchNode.getMonitoringBaseElement().getPort().getInterfaceElement() instanceof Event);
+			return !(watchNode.getMonitoringBaseElement().getPort().getInterfaceElement() instanceof Event)
+					&& !watchNode.isStructRootNode();
 		}
 		return false;
 	}

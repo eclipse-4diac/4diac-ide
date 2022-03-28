@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.monitoring.Messages;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart;
+import org.eclipse.fordiac.ide.monitoring.views.StructParser;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Display;
@@ -46,6 +47,7 @@ public class ForceHandler extends AbstractMonitoringHandler {
 	public static void showDialogAndProcess(final VarDeclaration variable, final IInterfaceElement interfaceElement) {
 		if (interfaceElement == null) {
 			showDialogAndProcess(variable);
+			return;
 		}
 		final MonitoringManager manager = MonitoringManager.getInstance();
 		final MonitoringBaseElement element = manager.getMonitoringElement(variable);
@@ -78,17 +80,8 @@ public class ForceHandler extends AbstractMonitoringHandler {
 					}));
 			final int ret = input.open();
 			if (ret == org.eclipse.jface.window.Window.OK) {
-				final int startIndex = monitoringElement.getCurrentValue().toLowerCase()
-						.indexOf(interfaceElement.getName().toLowerCase());
-				int endIndex = monitoringElement.getCurrentValue().toLowerCase().indexOf(',', startIndex);
-				if(endIndex == -1 ) {
-					endIndex = monitoringElement.getCurrentValue().toLowerCase().indexOf(')', startIndex);
-				}
-				final String newValue = monitoringElement.getCurrentValue().substring(0, startIndex)
-						+ interfaceElement.getName() + ":=" + input.getValue() //$NON-NLS-1$
-						+ monitoringElement.getCurrentValue().substring(endIndex);
-				manager.forceValue(monitoringElement, interfaceElement, newValue);
-
+				manager.forceValue(monitoringElement, interfaceElement,
+						StructParser.changeStructNodeValue(monitoringElement, interfaceElement, input.getValue()));
 			}
 
 		}

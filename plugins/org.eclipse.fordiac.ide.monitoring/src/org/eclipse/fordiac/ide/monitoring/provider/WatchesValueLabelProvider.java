@@ -54,7 +54,7 @@ public class WatchesValueLabelProvider extends ColumnLabelProvider {
 					.getMonitoringElement(
 							((WatchValueTreeNode) element).getMonitoringBaseElement().getPort().getInterfaceElement());
 			if (monitoringElement != null && monitoringElement.isForce()
-					&& !(((WatchValueTreeNode) element).isStructNode())) {
+					&& !(((WatchValueTreeNode) element).isStructRootNode())) {
 				return PreferenceGetter.getColor(Activator.getDefault().getPreferenceStore(),
 						org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants.P_FORCE_COLOR);
 			}
