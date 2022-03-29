@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.UsintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.NumericValueConverter
 
 class USIntValue implements AnyUnsignedValue {
 	final byte value;
@@ -28,7 +29,7 @@ class USIntValue implements AnyUnsignedValue {
 
 	def static toUSIntValue(Number value) { new USIntValue(value.byteValue) }
 
-	def static toUSIntValue(String value) { new USIntValue(Integer.parseUnsignedInt(value) as byte) }
+	def static toUSIntValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toUSIntValue }
 
 	def static toUSIntValue(AnyMagnitudeValue value) { value.byteValue.toUSIntValue }
 

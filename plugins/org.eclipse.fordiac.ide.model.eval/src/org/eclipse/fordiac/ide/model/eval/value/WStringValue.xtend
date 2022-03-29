@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.StringValueConverter
 
 class WStringValue implements AnyStringValue {
 	final String value;
@@ -26,7 +27,11 @@ class WStringValue implements AnyStringValue {
 
 	def static toWStringValue(String value) { new WStringValue(value) }
 
-	def static toWStringValue(AnyCharsValue value) { value.toString.toWStringValue }
+	def static toWStringValue(AnyCharsValue value) { new WStringValue(value.stringValue) }
+
+	override charValue() { if(value.length > 0) value.charAt(0) else '\u0000' }
+	
+	override stringValue() { value }
 
 	override WstringType getType() { ElementaryTypes.WSTRING }
 
@@ -34,5 +39,5 @@ class WStringValue implements AnyStringValue {
 
 	override hashCode() { value.hashCode }
 
-	override toString() { value }
+	override toString() { StringValueConverter.INSTANCE.toString(stringValue, true) }
 }

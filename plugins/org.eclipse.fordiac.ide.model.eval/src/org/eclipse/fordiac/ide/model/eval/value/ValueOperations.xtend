@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.data.UsintType
 import org.eclipse.fordiac.ide.model.data.WcharType
 import org.eclipse.fordiac.ide.model.data.WordType
 import org.eclipse.fordiac.ide.model.data.WstringType
+import org.eclipse.fordiac.ide.model.value.ValueConverterFactory
 
 final class ValueOperations {
 
@@ -448,7 +449,7 @@ final class ValueOperations {
 	}
 
 	def static dispatch boolean equals(AnyCharsValue first, AnyCharsValue second) {
-		first.toString == second.toString
+		first.stringValue == second.stringValue
 	}
 
 	def static dispatch boolean equals(AnyDateValue first, AnyDateValue second) {
@@ -490,7 +491,7 @@ final class ValueOperations {
 	}
 
 	def static dispatch int compareTo(AnyCharsValue first, AnyCharsValue second) {
-		first.toString.compareTo(second.toString)
+		first.stringValue.compareTo(second.stringValue)
 	}
 
 	def static dispatch int compareTo(AnyDateValue first, AnyDateValue second) {
@@ -928,67 +929,13 @@ final class ValueOperations {
 	def static Value parseValue(String value, DataType type) {
 		if (value.nullOrEmpty)
 			type.defaultValue
-		else
-			switch (type) {
-				case null:
-					null
-				LrealType:
-					LRealValue.toLRealValue(value)
-				RealType:
-					RealValue.toRealValue(value)
-				LintType:
-					LIntValue.toLIntValue(value)
-				DintType:
-					DIntValue.toDIntValue(value)
-				IntType:
-					IntValue.toIntValue(value)
-				SintType:
-					SIntValue.toSIntValue(value)
-				UlintType:
-					ULIntValue.toULIntValue(value)
-				UdintType:
-					UDIntValue.toUDIntValue(value)
-				UintType:
-					UIntValue.toUIntValue(value)
-				UsintType:
-					USIntValue.toUSIntValue(value)
-				TimeType:
-					TimeValue.toTimeValue(value)
-				LtimeType:
-					LTimeValue.toLTimeValue(value)
-				LwordType:
-					LWordValue.toLWordValue(value)
-				DwordType:
-					DWordValue.toDWordValue(value)
-				WordType:
-					WordValue.toWordValue(value)
-				ByteType:
-					ByteValue.toByteValue(value)
-				BoolType:
-					BoolValue.toBoolValue(value)
-				WstringType:
-					WStringValue.toWStringValue(value)
-				StringType:
-					StringValue.toStringValue(value)
-				WcharType:
-					WCharValue.toWCharValue(value)
-				CharType:
-					CharValue.toCharValue(value)
-				LdtType:
-					LDateAndTimeValue.toLDateAndTimeValue(value)
-				DateAndTimeType:
-					DateAndTimeValue.toDateAndTimeValue(value)
-				LtodType:
-					LTimeOfDayValue.toLTimeOfDayValue(value)
-				TimeOfDayType:
-					TimeOfDayValue.toTimeOfDayValue(value)
-				LdateType:
-					LDateValue.toLDateValue(value)
-				DateType:
-					DateValue.toDateValue(value)
-				default:
-					throw new UnsupportedOperationException('''The type «type.name» is not supported''')
+		else {
+			val converter = ValueConverterFactory.createValueConverter(type)
+			if (converter === null) {
+				throw new UnsupportedOperationException('''The type «type?.name» is not supported''')
 			}
+			converter.toValue(value).wrapValue(type)
+		}
 	}
 
 	def static asBoolean(Value value) {
@@ -996,7 +943,7 @@ final class ValueOperations {
 	}
 
 	def static int asInteger(Value value) {
-		switch(value) {
+		switch (value) {
 			AnyMagnitudeValue: value.intValue
 			AnyBitValue: value.intValue
 			default: throw new UnsupportedOperationException('''The type «value.type.name» is not supported''')

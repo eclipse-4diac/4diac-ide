@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.debug.core.launchConfigurationTypes">
+      <launchConfigurationType
+            delegate="org.eclipse.fordiac.ide.debug.st.STLaunchConfigurationDelegate"
+            delegateName="Evaluate ST Function"
+            id="org.eclipse.fordiac.ide.debug.stFunctionLaunch"
+            modes="run, debug"
+            name="Evaluate ST Function"
+            sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
+      </launchConfigurationType>
+   </extension>
+
+</plugin>

@@ -2,6 +2,7 @@
  * Copyright (c) 2019 fortiss GmbH
  * 				 2020 Johannes Kepler Unviersity Linz
  * 				 2020 TU Wien
+ *               2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,16 +17,12 @@
  *   Martin Melik Merkumians - adds generation of initial value assignment
  *   Martin Jobst - add event accessors
  *                - add constructor calls for initial value assignments
+ *                - add value conversion for initial value assignments
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
 import java.util.List
-import org.eclipse.fordiac.ide.model.data.AnyBitType
-import org.eclipse.fordiac.ide.model.data.AnyCharType
-import org.eclipse.fordiac.ide.model.data.AnyNumType
-import org.eclipse.fordiac.ide.model.data.AnyStringType
-import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -34,6 +31,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
+
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
 abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 
@@ -249,21 +248,18 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 		void FORTE_«type.name»::setInitialValues() {
 		  «FOR variable : declarationList»
 		  	«IF null !== variable.value && !variable.value.value.isEmpty »
-		  		«EXPORT_PREFIX»«generateInitialAssignment(variable)»
+		  		«variable.generateInitialAssignment»
 		  	«ENDIF»
 		  «ENDFOR»
 		}
 	'''
 
 	def protected CharSequence generateInitialAssignment(VarDeclaration variable) {
-		switch (type : variable.type) {
-			case variable.array,
-			ArrayType: '''«variable.name»().fromString("«variable.value.value»");'''
-			AnyNumType,
-			AnyBitType: '''«variable.name»() = «type.generateTypeName»(«variable.value.value»);'''
-			AnyCharType: '''«variable.name»() = «type.generateTypeName»('«variable.value.value.substring(1, variable.value.value.length - 1)»');'''
-			AnyStringType: '''«variable.name»() = «type.generateTypeName»("«variable.value.value.substring(1, variable.value.value.length - 1)»");'''
-			default: '''«variable.name»().fromString("«variable.value.value»");'''
+		try {
+			'''«EXPORT_PREFIX»«variable.name»() = «variable.generateDefaultValue»;'''
+		} catch (Exception e) {
+			errors.add(e.message)
+			'''// «e.message»'''
 		}
 	}
 

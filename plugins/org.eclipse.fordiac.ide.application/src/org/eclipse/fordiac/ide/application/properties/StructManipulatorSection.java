@@ -65,9 +65,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class StructManipulatorSection extends AbstractSection implements CommandStackEventListener {
@@ -130,7 +130,8 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	}
 
 	protected static void updateStructManipulatorFB(final StructManipulator newMux) {
-		final IEditorPart activeEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+		final EditorPart activeEditor = (EditorPart) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
+				.getActivePage()
 				.getActiveEditor();
 		final GraphicalViewer viewer = activeEditor.getAdapter(GraphicalViewer.class);
 		if (null != viewer) {
@@ -138,7 +139,6 @@ public class StructManipulatorSection extends AbstractSection implements Command
 			EditorUtils.refreshPropertySheetWithSelection(activeEditor, viewer,
 					viewer.getEditPartRegistry().get(newMux));
 		}
-
 	}
 
 	@Override

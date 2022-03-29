@@ -408,7 +408,6 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		if ((fbType != null) && fbType.eAdapters().contains(adapter)) {
 			fbType.eAdapters().remove(adapter);
 		}
-		paletteEntry.setTypeEditable(null);  // purge the editable instance from the palette entry, ensures reload
 		fbType = (FBType) paletteEntry.getTypeEditable();
 		editors.stream().forEach(e -> e.reloadType(fbType));
 		final IEditorPart activeEditor = getActiveEditor();

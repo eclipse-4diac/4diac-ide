@@ -13,27 +13,8 @@
 package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.AnyDateType
-import java.time.format.DateTimeFormatter
-import java.time.format.DateTimeFormatterBuilder
-import java.time.temporal.ChronoField
 
-abstract class AnyDateValue implements AnyElementaryValue {
-	protected static final DateTimeFormatter TIME_OF_DAY_FORMATTER = new DateTimeFormatterBuilder() //
-	.appendValue(ChronoField.HOUR_OF_DAY, 2) // HH
-	.appendLiteral(':') // :
-	.appendValue(ChronoField.MINUTE_OF_HOUR, 2) // mm
-	.appendLiteral(':') // :
-	.appendValue(ChronoField.SECOND_OF_MINUTE, 2) // ss
-	.optionalStart() // optional fraction
-	.appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true) // .SSSSSSSSS
-	.toFormatter
-
-	protected static final DateTimeFormatter DATE_AND_TIME_FORMATTER = new DateTimeFormatterBuilder() //
-	.append(DateTimeFormatter.ISO_LOCAL_DATE) // YYYY-MM-dd
-	.appendLiteral('-') // -
-	.append(TIME_OF_DAY_FORMATTER) // HH:mm:ss(.SSSSSSSSS)
-	.toFormatter()
-
+interface AnyDateValue extends AnyElementaryValue {
 	override AnyDateType getType()
 
 	def long toNanos()

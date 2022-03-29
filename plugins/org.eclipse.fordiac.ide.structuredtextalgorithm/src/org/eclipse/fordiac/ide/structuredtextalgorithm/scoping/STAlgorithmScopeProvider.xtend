@@ -52,7 +52,9 @@ class STAlgorithmScopeProvider extends AbstractSTAlgorithmScopeProvider {
 		val clazz = description.EClass
 		super.isApplicableForFeatureReference(description) &&
 			!(LibraryElementPackage.eINSTANCE.getVarDeclaration().isSuperTypeOf(clazz) &&
-				description.EObjectOrProxy.eContainer?.eContainer instanceof FB); // ensure the VarDeclaration is not in an internal FB
+				description.EObjectOrProxy.eContainer?.eContainer instanceof FB) && // ensure the VarDeclaration is not in an internal FB
+			!LibraryElementPackage.eINSTANCE.algorithm.isSuperTypeOf(clazz) && // reject Algorithm from library element
+			!LibraryElementPackage.eINSTANCE.method.isSuperTypeOf(clazz); // reject Method from library element
 	}
 
 	def protected STMethod getMethod(EObject context) {

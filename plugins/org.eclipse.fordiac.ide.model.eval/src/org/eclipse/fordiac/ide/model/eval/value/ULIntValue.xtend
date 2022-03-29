@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.UlintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.NumericValueConverter
 
 class ULIntValue implements AnyUnsignedValue {
 	final long value;
@@ -28,7 +29,7 @@ class ULIntValue implements AnyUnsignedValue {
 
 	def static toULIntValue(Number value) { new ULIntValue(value.longValue) }
 
-	def static toULIntValue(String value) { new ULIntValue(Long.parseUnsignedLong(value)) }
+	def static toULIntValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toULIntValue }
 
 	def static toULIntValue(AnyMagnitudeValue value) { value.longValue.toULIntValue }
 

@@ -15,8 +15,11 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm
 import com.google.inject.Binder
 import com.google.inject.name.Names
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
+import org.eclipse.fordiac.ide.structuredtextalgorithm.scoping.STAlgorithmImportedNamespaceAwareLocalScopeProvider
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidatorRegistry
+import org.eclipse.xtext.scoping.IScopeProvider
+import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
 import org.eclipse.xtext.validation.CompositeEValidator
 
 /**
@@ -30,7 +33,7 @@ class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 	override bindXtextResource() {
 		return STAlgorithmResource
 	}
-	
+
 	override bindEValidatorRegistry() {
 		// ignore dangling reference errors (until Palette vs. Resource issues have been addressed)
 		return STCoreValidatorRegistry.INSTANCE
@@ -39,5 +42,10 @@ class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 	def void configureCompositeEValidator(Binder binder) {
 		// ignore dangling reference errors (until Palette vs. Resource issues have been addressed)
 		binder.bindConstant.annotatedWith(Names.named(CompositeEValidator.USE_EOBJECT_VALIDATOR)).to(false)
+	}
+
+	override configureIScopeProviderDelegate(Binder binder) {
+		binder.bind(IScopeProvider).annotatedWith(Names.named(AbstractDeclarativeScopeProvider.NAMED_DELEGATE)).to(
+			STAlgorithmImportedNamespaceAwareLocalScopeProvider)
 	}
 }

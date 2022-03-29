@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.DintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.NumericValueConverter
 
 final class DIntValue implements AnySignedValue {
 	final int value;
@@ -28,7 +29,7 @@ final class DIntValue implements AnySignedValue {
 
 	def static toDIntValue(Number value) { new DIntValue(value.intValue) }
 
-	def static toDIntValue(String value) { new DIntValue(Integer.parseInt(value)) }
+	def static toDIntValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toDIntValue }
 
 	def static toDIntValue(AnyMagnitudeValue value) { value.intValue.toDIntValue }
 

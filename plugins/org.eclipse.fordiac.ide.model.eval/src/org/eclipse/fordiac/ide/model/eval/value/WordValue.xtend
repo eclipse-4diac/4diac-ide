@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.WordType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.NumericValueConverter
 
 class WordValue implements AnyBitValue {
 	final short value;
@@ -28,7 +29,7 @@ class WordValue implements AnyBitValue {
 
 	def static toWordValue(Number value) { new WordValue(value.shortValue) }
 
-	def static toWordValue(String value) { new WordValue(Integer.parseUnsignedInt(value) as short) }
+	def static toWordValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toWordValue }
 
 	def static toWordValue(AnyBitValue value) { value.shortValue.toWordValue }
 

@@ -254,13 +254,26 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PalettePackage.PALETTE_ENTRY__TYPE, oldType, type));
 				}
 			}
-		}else if (((null == type) && (null != getFile()))
-				|| (getFile() != null && getFile().getModificationStamp() != IResource.NULL_STAMP
-				&& getFile().getModificationStamp() != lastModificationTimestamp)) {
-			lastModificationTimestamp = getFile().getModificationStamp();
-			setType(loadType());
+		} else if (getFile() != null) {
+			if (type == null) {
+				reloadType();
+			} else if (isFileContentChanged()) {
+				reloadType();
+				// reset editable type
+				setTypeEditable(null);
+			}
 		}
 		return type;
+	}
+
+	private void reloadType() {
+		lastModificationTimestamp = getFile().getModificationStamp();
+		setType(loadType());
+	}
+
+	private boolean isFileContentChanged() {
+		return getFile().getModificationStamp() != IResource.NULL_STAMP
+				&& getFile().getModificationStamp() != lastModificationTimestamp;
 	}
 
 	/**
@@ -350,7 +363,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE, oldTypeEditable, typeEditable));
 				}
 			}
-		} else if (typeEditable == null) {
+		} else if ((getFile() != null) && (typeEditable == null || isFileContentChanged())) {
 			// if the editable type is null load it from the file and set a copy
 			setTypeEditable(EcoreUtil.copy(getType()));
 		}

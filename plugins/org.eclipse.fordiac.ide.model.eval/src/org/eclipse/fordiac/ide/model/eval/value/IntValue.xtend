@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.IntType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.NumericValueConverter
 
 class IntValue implements AnySignedValue {
 	final short value;
@@ -28,7 +29,7 @@ class IntValue implements AnySignedValue {
 
 	def static toIntValue(Number value) { new IntValue(value.shortValue) }
 
-	def static toIntValue(String value) { new IntValue(Short.parseShort(value)) }
+	def static toIntValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toIntValue }
 
 	def static toIntValue(AnyMagnitudeValue value) { value.shortValue.toIntValue }
 

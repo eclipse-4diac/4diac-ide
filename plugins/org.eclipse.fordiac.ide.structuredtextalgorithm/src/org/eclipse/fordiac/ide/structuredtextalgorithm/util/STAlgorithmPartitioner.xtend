@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.util
 
 import com.google.inject.Inject
 import java.io.ByteArrayOutputStream
+import java.math.BigInteger
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -47,6 +48,8 @@ class STAlgorithmPartitioner {
 	def String combine(EList<? extends ICallable> callables) {
 		callables.map[toSTText].join
 	}
+
+	def dispatch String toSTText(org.eclipse.fordiac.ide.model.libraryElement.ICallable callable) { "" }
 
 	def dispatch String toSTText(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm) {
 		val text = algorithm.text
@@ -144,7 +147,7 @@ class STAlgorithmPartitioner {
 			STBinaryExpression case expression.op == STBinaryOperator.RANGE:
 				expression.right.convertArrayRange - expression.left.convertArrayRange
 			STNumericLiteral:
-				expression.value.intValueExact
+				(expression.value as BigInteger).intValueExact
 			default:
 				throw new IllegalArgumentException("Unsupported array range expression")
 		}

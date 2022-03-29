@@ -45,6 +45,16 @@ class ArrayVariable extends AbstractVariable {
 		value = new ArrayValue(type, elements)
 	}
 
+	new(String name, ArrayType type, String value) {
+		this(name, type)
+		if(!value.nullOrEmpty) this.value = value
+	}
+
+	new(String name, ArrayType type, Value value) {
+		this(name, type)
+		if(value !== null) this.value = value
+	}
+
 	override setValue(Value value) {
 		if (value instanceof ArrayValue) {
 			if (value.elements.size != elements.size) {

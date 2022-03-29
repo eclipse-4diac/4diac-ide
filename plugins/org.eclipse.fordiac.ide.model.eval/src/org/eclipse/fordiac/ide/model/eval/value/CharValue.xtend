@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.StringValueConverter
 
 class CharValue implements AnyCharValue {
 	final byte value;
@@ -26,9 +27,13 @@ class CharValue implements AnyCharValue {
 
 	def static toCharValue(byte value) { new CharValue(value) }
 
-	def static toCharValue(String value) { new CharValue((if(value.length > 0) value.charAt(0) else 0) as byte) }
+	def static toCharValue(String value) { ((if(value.length > 0) value.charAt(0) else 0) as byte).toCharValue }
 
-	def static toCharValue(AnyCharsValue value) { value.toString.toCharValue }
+	def static toCharValue(AnyCharsValue value) { (value.charValue as byte).toCharValue }
+	
+	override charValue() { value as char }
+	
+	override stringValue() { Character.toString(value) }
 
 	override CharType getType() { ElementaryTypes.CHAR }
 
@@ -36,5 +41,5 @@ class CharValue implements AnyCharValue {
 
 	override hashCode() { Byte.hashCode(value) }
 
-	override toString() { Character.toString(value) }
+	override toString() { StringValueConverter.INSTANCE.toString(stringValue) }
 }

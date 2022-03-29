@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.LintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.NumericValueConverter
 
 class LIntValue implements AnySignedValue {
 	final long value;
@@ -28,7 +29,7 @@ class LIntValue implements AnySignedValue {
 
 	def static toLIntValue(Number value) { new LIntValue(value.longValue) }
 
-	def static toLIntValue(String value) { new LIntValue(Long.parseLong(value)) }
+	def static toLIntValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toLIntValue }
 
 	def static toLIntValue(AnyMagnitudeValue value) { value.longValue.toLIntValue }
 

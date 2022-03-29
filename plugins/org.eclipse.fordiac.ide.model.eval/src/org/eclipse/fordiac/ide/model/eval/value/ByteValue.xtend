@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.ByteType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.NumericValueConverter
 
 class ByteValue implements AnyBitValue {
 	final byte value;
@@ -28,7 +29,7 @@ class ByteValue implements AnyBitValue {
 
 	def static toByteValue(Number value) { new ByteValue(value.byteValue) }
 
-	def static toByteValue(String value) { new ByteValue(Integer.parseUnsignedInt(value) as byte) }
+	def static toByteValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toByteValue }
 
 	def static toByteValue(AnyBitValue value) { value.byteValue.toByteValue }
 

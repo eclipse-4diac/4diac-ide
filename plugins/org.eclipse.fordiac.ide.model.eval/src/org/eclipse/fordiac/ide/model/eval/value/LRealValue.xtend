@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.LrealType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.NumericValueConverter
 
 class LRealValue implements AnyRealValue {
 	final double value;
@@ -28,7 +29,7 @@ class LRealValue implements AnyRealValue {
 
 	def static toLRealValue(Number value) { new LRealValue(value.doubleValue) }
 
-	def static toLRealValue(String value) { new LRealValue(Double.parseDouble(value)) }
+	def static toLRealValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toLRealValue }
 
 	def static toLRealValue(AnyMagnitudeValue value) { value.doubleValue.toLRealValue }
 

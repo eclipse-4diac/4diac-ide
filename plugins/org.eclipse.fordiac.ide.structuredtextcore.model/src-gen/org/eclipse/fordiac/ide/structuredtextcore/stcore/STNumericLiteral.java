@@ -67,12 +67,12 @@ public interface STNumericLiteral extends STExpression {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Value</em>' attribute.
-	 * @see #setValue(BigDecimal)
+	 * @see #setValue(Object)
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTNumericLiteral_Value()
 	 * @model
 	 * @generated
 	 */
-	BigDecimal getValue();
+	Object getValue();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral#getValue <em>Value</em>}' attribute.
@@ -82,7 +82,7 @@ public interface STNumericLiteral extends STExpression {
 	 * @see #getValue()
 	 * @generated
 	 */
-	void setValue(BigDecimal value);
+	void setValue(Object value);
 
 	/**
 	 * <!-- begin-user-doc -->

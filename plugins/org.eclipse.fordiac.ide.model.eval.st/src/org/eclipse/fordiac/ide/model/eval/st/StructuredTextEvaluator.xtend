@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.model.eval.st
 import java.util.List
 import java.util.Map
 import org.eclipse.fordiac.ide.model.data.DataType
-import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
@@ -33,7 +32,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
@@ -59,10 +57,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.xtend.lib.annotations.Accessors
 
+import static org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations.*
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
-import static extension org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable.*
 
 abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	@Accessors final String name
@@ -83,12 +81,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected void evaluateVariableInitialization(STVarDeclaration variable) {
-		val type = if (variable.array)
-				(variable.type as DataType).newArrayType(variable.ranges.map[evaluateSubrange])
-			else
-				variable.type as DataType
-		variables.put(variable.name,
-			newVariable(variable.name, type).evaluateInitializerExpression(variable.defaultValue))
+		variables.put(variable.name, newVariable(variable).evaluateInitializerExpression(variable.defaultValue))
 	}
 
 	def protected dispatch Variable evaluateInitializerExpression(Variable variable, Void expression) {
@@ -424,15 +417,6 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def protected dispatch Variable evaluateVariable(STMultibitPartialExpression expr, Variable receiver) {
 		new PartialVariable(receiver, expr.resultType as DataType,
 			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
-	}
-
-	def protected Subrange evaluateSubrange(STExpression expr) {
-		switch (expr) {
-			STBinaryExpression case expr.op === STBinaryOperator.RANGE:
-				newSubrange(expr.left.evaluateExpression.asInteger, expr.right.evaluateExpression.asInteger)
-			default:
-				newSubrange(0, expr.evaluateExpression.asInteger)
-		}
 	}
 
 	def protected dispatch INamedElement getType(VarDeclaration v) { v.type }

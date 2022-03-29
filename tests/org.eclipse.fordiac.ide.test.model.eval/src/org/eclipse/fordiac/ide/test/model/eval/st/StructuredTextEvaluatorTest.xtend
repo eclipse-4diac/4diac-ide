@@ -287,6 +287,57 @@ class StructuredTextEvaluatorTest {
 		"abc".toWStringValue.assertEquals("WSTRING#\"abc\"".evaluateExpression)
 	}
 
+	@Test
+	def void testUntypedNumericLiterals() {
+		// BOOL
+		true.toBoolValue.assertEquals("TRUE".evaluateExpression)
+		false.toBoolValue.assertEquals("FALSE".evaluateExpression)
+		// SINT
+		0.toSIntValue.assertEquals("0".evaluateExpression)
+		17.toSIntValue.assertEquals("17".evaluateExpression)
+		17.toSIntValue.assertEquals("16#11".evaluateExpression)
+		(-4).toSIntValue.assertEquals("-4".evaluateExpression)
+		Byte.MIN_VALUE.toSIntValue.assertEquals("-128".evaluateExpression)
+		Byte.MAX_VALUE.toSIntValue.assertEquals("127".evaluateExpression)
+		Byte.MAX_VALUE.toSIntValue.assertEquals("16#7f".evaluateExpression)
+		// USINT
+		128.toUSIntValue.assertEquals("128".evaluateExpression)
+		128.toUSIntValue.assertEquals("16#80".evaluateExpression)
+		255.toUSIntValue.assertEquals("255".evaluateExpression)
+		255.toUSIntValue.assertEquals("16#ff".evaluateExpression)
+		// INT
+		Short.MIN_VALUE.toIntValue.assertEquals("-32768".evaluateExpression)
+		Short.MAX_VALUE.toIntValue.assertEquals("32767".evaluateExpression)
+		Short.MAX_VALUE.toIntValue.assertEquals("16#7fff".evaluateExpression)
+		// UINT
+		32768.toUIntValue.assertEquals("32768".evaluateExpression)
+		32768.toUIntValue.assertEquals("16#8000".evaluateExpression)
+		65535.toUIntValue.assertEquals("65535".evaluateExpression)
+		65535.toUIntValue.assertEquals("16#ffff".evaluateExpression)
+		// DINT
+		Integer.MIN_VALUE.toDIntValue.assertEquals("-2147483648".evaluateExpression)
+		Integer.MAX_VALUE.toDIntValue.assertEquals("2147483647".evaluateExpression)
+		Integer.MAX_VALUE.toDIntValue.assertEquals("16#7fffffff".evaluateExpression)
+		// UDINT
+		0x80000000.toUDIntValue.assertEquals("2147483648".evaluateExpression)
+		0x80000000.toUDIntValue.assertEquals("16#80000000".evaluateExpression)
+		0xffffffff.toUDIntValue.assertEquals("4294967295".evaluateExpression)
+		0xffffffff.toUDIntValue.assertEquals("16#ffffffff".evaluateExpression)
+		// LINT
+		Long.MAX_VALUE.toLIntValue.assertEquals("9223372036854775807".evaluateExpression)
+		Long.MAX_VALUE.toLIntValue.assertEquals("16#7fffffffffffffff".evaluateExpression)
+		// ULINT
+		0x8000000000000000#L.toULIntValue.assertEquals("9223372036854775808".evaluateExpression)
+		0x8000000000000000#L.toULIntValue.assertEquals("16#8000000000000000".evaluateExpression)
+		0xffffffffffffffff#L.toULIntValue.assertEquals("18446744073709551615".evaluateExpression)
+		0xffffffffffffffff#L.toULIntValue.assertEquals("16#ffffffffffffffff".evaluateExpression)
+		// LREAL
+		0.toLRealValue.assertEquals("0.0".evaluateExpression)
+		17.toLRealValue.assertEquals("17.0".evaluateExpression)
+		(-4).toLRealValue.assertEquals("-4.0".evaluateExpression)
+		(3.1415).toLRealValue.assertEquals("3.1415".evaluateExpression)
+	}
+
 	@ParameterizedTest(name="{index}: {0} {1}#{2}")
 	@MethodSource("testUnaryExpressionArgumentsProvider")
 	def void testUnaryExpression(STUnaryOperator operator, String typeName, BigDecimal value) {

@@ -26,7 +26,7 @@ final class ElementaryVariable extends AbstractVariable {
 	}
 
 	new(String name, AnyElementaryType type, String value) {
-		this(name, type, value.parseValue(type))
+		this(name, type, value?.parseValue(type))
 	}
 
 	new(String name, AnyElementaryType type, Value value) {
@@ -39,7 +39,7 @@ final class ElementaryVariable extends AbstractVariable {
 	}
 
 	override setValue(String value) {
-		setValue(value.parseValue(type))
+		setValue(value?.parseValue(type))
 	}
 
 	override validateValue(String value) {

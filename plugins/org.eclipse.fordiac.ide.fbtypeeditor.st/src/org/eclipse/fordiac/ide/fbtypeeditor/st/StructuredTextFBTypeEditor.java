@@ -17,12 +17,15 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocument;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentFBTypeUpdater;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmMapper;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
@@ -44,6 +47,9 @@ public class StructuredTextFBTypeEditor extends XtextEditor implements IFBTEdito
 	@Inject
 	private ILocationInFileProvider locationProvider;
 
+	@Inject
+	private STAlgorithmDocumentFBTypeUpdater fbTypeUpdater;
+
 	public StructuredTextFBTypeEditor() {
 	}
 
@@ -56,13 +62,36 @@ public class StructuredTextFBTypeEditor extends XtextEditor implements IFBTEdito
 	}
 
 	@Override
+	public void createPartControl(final Composite parent) {
+		super.createPartControl(parent);
+		installFBTypeUpdater();
+	}
+
+	@Override
 	protected void doSetInput(IEditorInput input) throws CoreException {
 		if (input instanceof FBTypeEditorInput) {
 			input = new FileEditorInput(((FBTypeEditorInput) input).getPaletteEntry().getFile());
 		}
+		removeFBTypeUpdater();
 		super.doSetInput(input);
 		setPartName(FordiacMessages.Algorithm);
 		setTitleImage(FordiacImage.ICON_ALGORITHM.getImage());
+	}
+
+	@Override
+	public void dispose() {
+		removeFBTypeUpdater();
+		super.dispose();
+	}
+
+	protected void installFBTypeUpdater() {
+		if (getDocument() instanceof STAlgorithmDocument) {
+			fbTypeUpdater.install((STAlgorithmDocument) getDocument());
+		}
+	}
+
+	protected void removeFBTypeUpdater() {
+		fbTypeUpdater.uninstall();
 	}
 
 	@Override

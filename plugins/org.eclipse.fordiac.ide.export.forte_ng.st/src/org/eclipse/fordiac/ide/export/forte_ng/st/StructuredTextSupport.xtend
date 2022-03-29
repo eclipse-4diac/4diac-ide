@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
+import java.math.BigInteger
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -21,19 +22,7 @@ import java.util.List
 import java.util.Set
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
-import org.eclipse.fordiac.ide.model.data.AnyElementaryType
-import org.eclipse.fordiac.ide.model.data.AnyStringType
-import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
-import org.eclipse.fordiac.ide.model.data.DateAndTimeType
-import org.eclipse.fordiac.ide.model.data.DateType
-import org.eclipse.fordiac.ide.model.data.LdateType
-import org.eclipse.fordiac.ide.model.data.LdtType
-import org.eclipse.fordiac.ide.model.data.LtimeType
-import org.eclipse.fordiac.ide.model.data.LtodType
-import org.eclipse.fordiac.ide.model.data.StructuredType
-import org.eclipse.fordiac.ide.model.data.TimeOfDayType
-import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
@@ -46,10 +35,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
@@ -80,6 +66,7 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
@@ -241,23 +228,20 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument) {
-		if(argument === null) parameter.type.generateDefaultValue else argument.generateExpression
+		if(argument === null) parameter.generateDefaultInputCallArgument else argument.generateExpression
 	}
 
 	def protected CharSequence generateOutputCallArgument(INamedElement parameter, INamedElement argument) {
-		if(argument === null) parameter.type.generateDefaultValue else argument.generateFeatureName
+		if(argument === null) (parameter.type as DataType).generateDefaultValue else argument.generateFeatureName
 	}
 
-	def protected dispatch CharSequence generateCallArgument(STCallUnnamedArgument arg) {
-		arg.arg.generateExpression
+	def protected dispatch CharSequence generateDefaultInputCallArgument(VarDeclaration parameter) {
+		parameter.generateDefaultValue
 	}
 
-	def protected dispatch CharSequence generateCallArgument(STCallNamedInputArgument arg) {
-		arg.source.generateExpression
+	def protected dispatch CharSequence generateDefaultInputCallArgument(STVarDeclaration parameter) {
+		parameter.defaultValue?.generateInitializerExpression ?: (parameter.type as DataType).generateDefaultValue
 	}
-
-	def protected dispatch CharSequence generateCallArgument(STCallNamedOutputArgument arg) //
-	'''«IF arg.not»ST_NOT_ARG(«ENDIF»«arg.target.generateFeatureName»«IF arg.not»)«ENDIF»'''
 
 	def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //
 	'''partial<«expr.specifier.generateMultiBitAccessSpecifier»>(«IF expr.expression !== null»«expr.expression.generateExpression»«ELSE»«expr.index»«ENDIF»)'''
@@ -304,17 +288,6 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateTemplateExpression(STNumericLiteral expr) { expr.value.toString }
 
-	def protected CharSequence generateDefaultValue(INamedElement type) {
-		switch (type) {
-			AnyStringType: '''«type.generateTypeName»("")'''
-			AnyElementaryType: '''«type.generateTypeName»(0)'''
-			ArrayType: '''«type.generateTypeName»()'''
-			StructuredType: '''«type.generateTypeName»{}'''
-			default:
-				"0"
-		}
-	}
-
 	def protected dispatch CharSequence generateFeatureName(INamedElement feature) {
 		errors.add('''The feature «feature.eClass.name» is not supported''')
 		""
@@ -351,23 +324,9 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		]
 	}
 
-	def protected CharSequence generateTypeName(DataType type) {
-		switch (type) {
-			TimeType,
-			LtimeType: "CIEC_TIME"
-			DateType,
-			LdateType: "CIEC_DATE"
-			TimeOfDayType,
-			LtodType: "CIEC_TIME_OF_DAY"
-			DateAndTimeType,
-			LdtType: "CIEC_DATE_AND_TIME"
-			default: '''CIEC_«type.name»'''
-		}
-	}
-
 	def protected int getIntegerFromConstantExpression(STExpression expr) {
 		try {
-			(expr as STNumericLiteral).value.intValueExact
+			((expr as STNumericLiteral).value as BigInteger).intValueExact
 		} catch (Exception e) {
 			errors.add("Not a constant integer expression")
 			1

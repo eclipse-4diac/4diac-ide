@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.SintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.value.NumericValueConverter
 
 class SIntValue implements AnySignedValue {
 	final byte value;
@@ -28,7 +29,7 @@ class SIntValue implements AnySignedValue {
 
 	def static toSIntValue(Number value) { new SIntValue(value.byteValue) }
 
-	def static toSIntValue(String value) { new SIntValue(Byte.parseByte(value)) }
+	def static toSIntValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toSIntValue }
 
 	def static toSIntValue(AnyMagnitudeValue value) { value.byteValue.toSIntValue }
 

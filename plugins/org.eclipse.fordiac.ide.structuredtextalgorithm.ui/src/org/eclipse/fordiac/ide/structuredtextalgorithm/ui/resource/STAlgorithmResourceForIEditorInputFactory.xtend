@@ -20,8 +20,6 @@ import org.eclipse.ui.IFileEditorInput
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.ui.editor.model.ResourceForIEditorInputFactory
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
-
 class STAlgorithmResourceForIEditorInputFactory extends ResourceForIEditorInputFactory {
 	override createResource(IEditorInput editorInput) {
 		val resource = super.createResource(editorInput)
@@ -32,7 +30,7 @@ class STAlgorithmResourceForIEditorInputFactory extends ResourceForIEditorInputF
 					val libraryElement = paletteEntry.typeEditable
 					if (libraryElement instanceof FBType) {
 						if (resource instanceof STAlgorithmResource) {
-							resource.fbType = libraryElement.copy
+							resource.fbType = libraryElement
 						}
 					}
 				}
