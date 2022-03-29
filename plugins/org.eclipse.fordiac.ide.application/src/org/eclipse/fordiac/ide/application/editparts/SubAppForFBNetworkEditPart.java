@@ -211,7 +211,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		super.createEditPolicies();
 		// Add policy to handle drag&drop of fbs
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBAddToSubAppLayoutEditPolicy());
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new SubappCommentRenameEditPolicy());
+		if (getModel().isUnfolded()) {
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new SubappCommentRenameEditPolicy());
+		}
 	}
 
 	@Override
@@ -231,18 +233,23 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 
 	@Override
 	public void performDirectEdit() {
-		new TextDirectEditManager(this, new FigureCellEditorLocator(getCommentFigure())) {
-			@Override
-			protected CellEditor createCellEditorOn(final Composite composite) {
-				return new TextCellEditor(composite, SWT.MULTI | SWT.WRAP);
-			}
+		if (getModel().isUnfolded()) {
+			// if unfolded edit comment
+			new TextDirectEditManager(this, new FigureCellEditorLocator(getCommentFigure())) {
+				@Override
+				protected CellEditor createCellEditorOn(final Composite composite) {
+					return new TextCellEditor(composite, SWT.MULTI | SWT.WRAP);
+				}
 
-			@Override
-			protected void initCellEditor() {
-				super.initCellEditor();
-				getCellEditor().setValue(getModel().getComment());
-			}
-		}.show();
+				@Override
+				protected void initCellEditor() {
+					super.initCellEditor();
+					getCellEditor().setValue(getModel().getComment());
+				}
+			}.show();
+		} else {
+			super.performDirectEdit();
+		}
 	}
 
 	protected InstanceCommentFigure getCommentFigure() {
@@ -264,9 +271,25 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
+		updateDirectEditPolicies();
 		final SubAppForFbNetworkFigure figure = getFigure();
 		figure.updateTypeLabel(getModel());
 		figure.updateExpandedFigure();
+		if (getModel().isUnfolded()) {
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new SubappCommentRenameEditPolicy());
+		}
+	}
+
+	private void updateDirectEditPolicies() {
+		if (getModel().isUnfolded()) {
+			if (getFigure().getExpandedMainFigure() == null) {
+				installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new SubappCommentRenameEditPolicy());
+			}
+		} else {
+			if (getFigure().getExpandedMainFigure() != null) {
+				installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new TypeDirectEditPolicy());
+			}
+		}
 	}
 
 	@Override

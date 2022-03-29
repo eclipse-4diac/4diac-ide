@@ -74,6 +74,27 @@ import org.eclipse.swt.graphics.Point;
 /** This class implements an EditPart for a FunctionBlock. */
 public abstract class AbstractFBNElementEditPart extends AbstractPositionableElementEditPart {
 
+	protected static final class TypeDirectEditPolicy extends DirectEditPolicy {
+		@Override
+		protected Command getDirectEditCommand(final DirectEditRequest request) {
+			final Object value = request.getCellEditor().getValue();
+			if (value instanceof PaletteEntry) {
+				return new UpdateFBTypeCommand(getHost().getModel(), (PaletteEntry) value);
+			}
+			return null;
+		}
+
+		@Override
+		protected void showCurrentEditValue(final DirectEditRequest request) {
+			// as we want to change the type we will not show the new type
+		}
+
+		@Override
+		public AbstractFBNElementEditPart getHost() {
+			return (AbstractFBNElementEditPart) super.getHost();
+		}
+	}
+
 	private Device referencedDevice;
 
 	private DiagramFontChangeListener fontChangeListener;
@@ -221,23 +242,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		// FBNetwork elements renaming is done in a dedicated editpart
 		removeEditPolicy(EditPolicy.DIRECT_EDIT_ROLE);
 
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new DirectEditPolicy() {
-
-			@Override
-			protected Command getDirectEditCommand(final DirectEditRequest request) {
-				final Object value = request.getCellEditor().getValue();
-				if (value instanceof PaletteEntry) {
-					return new UpdateFBTypeCommand(getModel(), (PaletteEntry) value);
-				}
-				return null;
-			}
-
-			@Override
-			protected void showCurrentEditValue(final DirectEditRequest request) {
-				// as we want to change the type we will not show the new type
-			}
-
-		});
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new TypeDirectEditPolicy());
 
 		// show cross mouse cursor on hover to indicate that an FB can be draged around
 		installEditPolicy(EditPolicy.SELECTION_FEEDBACK_ROLE, new DragHighlightEditPolicy());
