@@ -49,6 +49,8 @@ class STAlgorithmPartitioner {
 		callables.map[toSTText].join
 	}
 
+	def dispatch String toSTText(org.eclipse.fordiac.ide.model.libraryElement.ICallable callable) { "" }
+
 	def dispatch String toSTText(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm) {
 		val text = algorithm.text
 		if (text.contains(STAlgorithmAccess.ALGORITHMKeyword_0.value) ||
