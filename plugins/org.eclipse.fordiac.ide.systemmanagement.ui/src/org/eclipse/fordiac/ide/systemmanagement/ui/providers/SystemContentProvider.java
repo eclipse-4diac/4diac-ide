@@ -153,7 +153,7 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	private static boolean projectToShow(final IProject proj) {
 		// if the project is closed or a 4diac project return true
 		try {
-			return !proj.isOpen() || proj.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID);
+			return !proj.isOpen() || proj.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID) || proj.hasNature(SystemManager.ROBOT_PROJECT_NATURE_ID);
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError("Could not read project nature", e); //$NON-NLS-1$
 		}
