@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -24,6 +25,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
@@ -44,6 +46,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STSourceImpl;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmSourceImpl#getElements <em>Elements</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmSourceImpl#getName <em>Name</em>}</li>
  * </ul>
  *
  * @generated
@@ -58,6 +61,24 @@ public class STAlgorithmSourceImpl extends STSourceImpl implements STAlgorithmSo
 	 * @ordered
 	 */
 	protected EList<STAlgorithmSourceElement> elements;
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = "st"; //$NON-NLS-1$
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -96,6 +117,29 @@ public class STAlgorithmSourceImpl extends STSourceImpl implements STAlgorithmSo
 	 * @generated
 	 */
 	@Override
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, STAlgorithmPackage.ST_ALGORITHM_SOURCE__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ELEMENTS:
@@ -115,6 +159,8 @@ public class STAlgorithmSourceImpl extends STSourceImpl implements STAlgorithmSo
 		switch (featureID) {
 			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ELEMENTS:
 				return getElements();
+			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__NAME:
+				return getName();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -133,6 +179,9 @@ public class STAlgorithmSourceImpl extends STSourceImpl implements STAlgorithmSo
 				getElements().clear();
 				getElements().addAll((Collection<? extends STAlgorithmSourceElement>)newValue);
 				return;
+			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__NAME:
+				setName((String)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -150,6 +199,9 @@ public class STAlgorithmSourceImpl extends STSourceImpl implements STAlgorithmSo
 			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ELEMENTS:
 				getElements().clear();
 				return;
+			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__NAME:
+				setName(NAME_EDEFAULT);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -166,9 +218,27 @@ public class STAlgorithmSourceImpl extends STSourceImpl implements STAlgorithmSo
 		switch (featureID) {
 			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__ELEMENTS:
 				return elements != null && !elements.isEmpty();
+			case STAlgorithmPackage.ST_ALGORITHM_SOURCE__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			default:
 				return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String toString() {
+		if (eIsProxy()) return super.toString();
+
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (name: "); //$NON-NLS-1$
+		result.append(name);
+		result.append(')');
+		return result.toString();
 	}
 
 } //STAlgorithmSourceImpl

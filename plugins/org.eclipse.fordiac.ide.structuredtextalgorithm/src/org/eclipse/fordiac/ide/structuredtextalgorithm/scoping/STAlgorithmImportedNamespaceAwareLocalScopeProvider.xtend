@@ -32,4 +32,6 @@ class STAlgorithmImportedNamespaceAwareLocalScopeProvider extends ImportedNamesp
 		}
 		return result
 	}
+
+	override isRelativeImport() { false }
 }
