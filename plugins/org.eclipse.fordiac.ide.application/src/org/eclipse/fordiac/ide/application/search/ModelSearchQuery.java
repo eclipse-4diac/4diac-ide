@@ -159,7 +159,9 @@ public class ModelSearchQuery implements ISearchQuery {
 	}
 
 	private boolean compareStrings(final String toTest) {
-		// TODO implement also case-sensitive search
+		if (modelQuerySpec.isCheckCaseSensitive()) {
+			return toTest.contains(modelQuerySpec.getSearchString());
+		}
 		return toTest.toLowerCase().contains(modelQuerySpec.getSearchString().toLowerCase());
 	}
 
