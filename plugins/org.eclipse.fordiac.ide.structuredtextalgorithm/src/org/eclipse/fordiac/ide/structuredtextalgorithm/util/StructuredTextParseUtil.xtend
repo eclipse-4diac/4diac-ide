@@ -32,6 +32,7 @@ import org.eclipse.xtext.resource.XtextResourceSet
 import org.eclipse.xtext.util.CancelIndicator
 import org.eclipse.xtext.util.LazyStringInputStream
 import org.eclipse.xtext.validation.CheckMode
+import org.eclipse.xtext.validation.Issue
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
@@ -45,7 +46,8 @@ class StructuredTextParseUtil {
 	private new() {
 	}
 
-	def static org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm parse(STAlgorithm algorithm, List<String> errors) {
+	def static org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm parse(STAlgorithm algorithm,
+		List<String> errors) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		extension val partitioner = SERVICE_PROVIDER.get(STAlgorithmPartitioner)
 		switch (root : algorithm.rootContainer) {
@@ -85,6 +87,14 @@ class StructuredTextParseUtil {
 			rootASTElement as STAlgorithmSource
 	}
 
+	def static List<Issue> validate(BaseFBType fbType) {
+		val issues = newArrayList
+		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
+		extension val partitioner = SERVICE_PROVIDER.get(STAlgorithmPartitioner)
+		fbType.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, fbType, issues)
+		return issues
+	}
+
 	def static STExpression parse(String expression, FBType fbType, List<String> errors) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		expression.parse(parser.grammarAccess.STExpressionRule, EXPRESSION_DEFAULT_NAME, fbType, errors)?.
@@ -93,6 +103,16 @@ class StructuredTextParseUtil {
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, String name, FBType fbType,
 		List<String> errors) {
+		val issues = newArrayList
+		val parseResult = text.parse(entryPoint, fbType, issues)
+		if (!issues.empty) {
+			errors?.addAll(issues.map['''«name» at «lineNumber»: «message» '''])
+			return null
+		}
+		return parseResult
+	}
+
+	def private static IParseResult parse(String text, ParserRule entryPoint, FBType fbType, List<Issue> issues) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		val resource = SERVICE_PROVIDER.get(XtextResource) as STAlgorithmResource
 		resource.URI = URI.createPlatformResourceURI(fbType?.paletteEntry?.file?.fullPath?.toString ?: SYNTHETIC_URI,
@@ -102,11 +122,7 @@ class StructuredTextParseUtil {
 		resource.fbType = fbType?.copy
 		resource.load(new LazyStringInputStream(text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
 		val validator = resource.resourceServiceProvider.resourceValidator
-		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
-		if (!issues.empty) {
-			errors?.addAll(issues.map['''«name» at «lineNumber»: «message» '''])
-			return null
-		}
+		issues.addAll(validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl))
 		return resource.parseResult
 	}
 }
