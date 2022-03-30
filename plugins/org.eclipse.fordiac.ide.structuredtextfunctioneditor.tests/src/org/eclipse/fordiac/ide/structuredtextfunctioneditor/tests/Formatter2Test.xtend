@@ -646,5 +646,35 @@ class Formatter2Test {
 			'''
 		]
 	}
+	
+	@Test
+	def void testBooleanOperatorsCasing() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR
+				   bool1 : BOOL;
+				   bool2 : BOOL;
+				   bool3 : BOOL;
+				END_VAR
+				    bool1 := bool2 and bool3;
+				    bool1 := bool2 Or bool3;
+				    bool1 := bool2 xoR bool3;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR
+					bool1 : BOOL;
+					bool2 : BOOL;
+					bool3 : BOOL;
+				END_VAR
+				bool1 := bool2 AND bool3;
+				bool1 := bool2 OR bool3;
+				bool1 := bool2 XOR bool3;
+				END_FUNCTION
+			'''
+		]
+	}
 
 }

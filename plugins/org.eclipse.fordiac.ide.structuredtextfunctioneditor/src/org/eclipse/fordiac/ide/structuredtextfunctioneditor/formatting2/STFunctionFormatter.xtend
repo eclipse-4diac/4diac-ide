@@ -35,6 +35,8 @@ class STFunctionFormatter extends STCoreFormatter {
 				RuleCall case element.rule == STNumericLiteralTypeRule: true
 				RuleCall case element.rule == STDateLiteralTypeRule: true
 				RuleCall case element.rule == STTimeLiteralTypeRule: true
+				RuleCall case element.rule == orOperatorRule : true
+				RuleCall case element.rule == xorOperatorRule : true
 				default: false
 			}
 		].forEach [

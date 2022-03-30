@@ -290,6 +290,8 @@ class STCoreFormatter extends AbstractFormatter2 {
 					}
 
 				})
+		} else if (binaryExpression.op == STBinaryOperator.AND) {
+			document.addReplacer(new KeywordCaseTextReplacer(document, binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP)))
 		}
 		binaryExpression.left.format
 		binaryExpression.right.format
