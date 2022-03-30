@@ -405,19 +405,23 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 
 	@Override
 	public void reloadFile() {
-		if ((fbType != null) && fbType.eAdapters().contains(adapter)) {
-			fbType.eAdapters().remove(adapter);
+		final FBType newFBType = (FBType) paletteEntry.getTypeEditable();
+		if (newFBType != fbType) {
+			if ((fbType != null) && fbType.eAdapters().contains(adapter)) {
+				fbType.eAdapters().remove(adapter);
+			}
+			fbType = newFBType;
+			editors.stream().forEach(e -> e.reloadType(fbType));
+			final IEditorPart activeEditor = getActiveEditor();
+			if (activeEditor instanceof IFBTEditorPart) {
+				Display.getDefault()
+						.asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
+								activeEditor.getAdapter(GraphicalViewer.class),
+								((IFBTEditorPart) activeEditor).getSelectableEditPart()));
+			}
+			getCommandStack().flush();
+			fbType.eAdapters().add(adapter);
 		}
-		fbType = (FBType) paletteEntry.getTypeEditable();
-		editors.stream().forEach(e -> e.reloadType(fbType));
-		final IEditorPart activeEditor = getActiveEditor();
-		if (activeEditor instanceof IFBTEditorPart) {
-			Display.getDefault().asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
-					activeEditor.getAdapter(GraphicalViewer.class),
-					((IFBTEditorPart) activeEditor).getSelectableEditPart()));
-		}
-		getCommandStack().flush();
-		fbType.eAdapters().add(adapter);
 	}
 
 	@Override
