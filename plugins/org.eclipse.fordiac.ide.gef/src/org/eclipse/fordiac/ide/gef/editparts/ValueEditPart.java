@@ -333,6 +333,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/** performs the directEdit. */
 	public void performDirectEdit() {
+		getFigure().setText(getModel().getValue()); // Shows the current initial value when editing
 		createDirectEditManager().show();
 	}
 
