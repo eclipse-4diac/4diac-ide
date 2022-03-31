@@ -41,9 +41,9 @@ final class ForteNgExportUtil {
 	private new() {
 	}
 
-	def static CharSequence generateDefaultValue(VarDeclaration decl) {
+	def static CharSequence generateVariableDefaultValue(VarDeclaration decl) {
 		if (decl.value?.value.nullOrEmpty) {
-			decl.type.generateDefaultValue
+			decl.type.generateTypeDefaultValue
 		} else {
 			val converter = ValueConverterFactory.createValueConverter(decl.type)
 			if (converter !== null) {
@@ -61,7 +61,7 @@ final class ForteNgExportUtil {
 		}
 	}
 
-	def static CharSequence generateDefaultValue(DataType type) {
+	def static CharSequence generateTypeDefaultValue(DataType type) {
 		switch (type) {
 			AnyStringType: '''«type.generateTypeName»("")'''
 			AnyElementaryType: '''«type.generateTypeName»(0)'''
