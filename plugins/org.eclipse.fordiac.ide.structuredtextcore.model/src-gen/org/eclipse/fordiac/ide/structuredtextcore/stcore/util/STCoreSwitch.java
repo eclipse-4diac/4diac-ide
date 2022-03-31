@@ -122,6 +122,13 @@ public class STCoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case STCorePackage.ST_VAR_IN_OUT_DECLARATION_BLOCK: {
+				STVarInOutDeclarationBlock stVarInOutDeclarationBlock = (STVarInOutDeclarationBlock)theEObject;
+				T result = caseSTVarInOutDeclarationBlock(stVarInOutDeclarationBlock);
+				if (result == null) result = caseSTVarDeclarationBlock(stVarInOutDeclarationBlock);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case STCorePackage.ST_VAR_TEMP_DECLARATION_BLOCK: {
 				STVarTempDeclarationBlock stVarTempDeclarationBlock = (STVarTempDeclarationBlock)theEObject;
 				T result = caseSTVarTempDeclarationBlock(stVarTempDeclarationBlock);
@@ -471,6 +478,21 @@ public class STCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSTVarOutputDeclarationBlock(STVarOutputDeclarationBlock object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Var In Out Declaration Block</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Var In Out Declaration Block</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTVarInOutDeclarationBlock(STVarInOutDeclarationBlock object) {
 		return null;
 	}
 

@@ -108,6 +108,10 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTVarOutputDeclarationBlockAdapter();
 			}
 			@Override
+			public Adapter caseSTVarInOutDeclarationBlock(STVarInOutDeclarationBlock object) {
+				return createSTVarInOutDeclarationBlockAdapter();
+			}
+			@Override
 			public Adapter caseSTVarTempDeclarationBlock(STVarTempDeclarationBlock object) {
 				return createSTVarTempDeclarationBlockAdapter();
 			}
@@ -364,6 +368,20 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTVarOutputDeclarationBlockAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock <em>ST Var In Out Declaration Block</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
+	 * @generated
+	 */
+	public Adapter createSTVarInOutDeclarationBlockAdapter() {
 		return null;
 	}
 

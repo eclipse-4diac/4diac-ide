@@ -82,6 +82,14 @@ public interface STAlgorithm extends STAlgorithmSourceElement, ICallable {
 	 * @model kind="operation"
 	 * @generated
 	 */
+	EList<INamedElement> getInOutParameters();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
 	DataType getReturnType();
 
 } // STAlgorithm

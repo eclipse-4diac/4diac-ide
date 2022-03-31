@@ -34,6 +34,10 @@ final class CallableAnnotations {
 		return ECollections.emptyEList(); // algorithms may not have parameters
 	}
 
+	static EList<INamedElement> getInOutParameters(final Algorithm algorithm) {
+		return ECollections.emptyEList(); // algorithms may not have parameters
+	}
+
 	static DataType getReturnType(final Algorithm algorithm) {
 		return null; // algorithms may not have a return type
 	}
@@ -44,6 +48,10 @@ final class CallableAnnotations {
 
 	static EList<INamedElement> getOutputParameters(final FBType type) {
 		return ECollections.unmodifiableEList(type.getInterfaceList().getOutputVars());
+	}
+
+	static EList<INamedElement> getInOutParameters(final FBType type) {
+		return ECollections.emptyEList(); // FB types may not have in/out parameters
 	}
 
 	static DataType getReturnType(final FBType type) {
@@ -62,6 +70,10 @@ final class CallableAnnotations {
 			return ECollections.unmodifiableEList(((InterfaceList) event.eContainer()).getOutputVars());
 		}
 		return ECollections.emptyEList();
+	}
+
+	static EList<INamedElement> getInOutParameters(final Event event) {
+		return ECollections.emptyEList(); // events may not have in/out parameters
 	}
 
 	static DataType getReturnType(final Event event) {

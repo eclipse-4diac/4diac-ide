@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.st
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
@@ -29,7 +30,9 @@ class STMethodEvaluator extends StructuredTextEvaluator {
 	new(STMethod method, Variable context, Iterable<Variable> variables, Evaluator parent) {
 		super(method.name, context, variables, parent)
 		this.method = method
-		method.body.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].reject [
+		method.body.varDeclarations.filter [
+			it instanceof STVarInputDeclarationBlock || it instanceof STVarInputDeclarationBlock
+		].flatMap[varDeclarations].reject [
 			this.variables.containsKey(name)
 		].forEach [
 			evaluateVariableInitialization
@@ -52,7 +55,9 @@ class STMethodEvaluator extends StructuredTextEvaluator {
 	}
 
 	def protected void evaluateStructuredTextMethod(STMethod method) {
-		method.body.varDeclarations.reject(STVarInputDeclarationBlock).flatMap[varDeclarations].forEach [
+		method.body.varDeclarations.reject(STVarInputDeclarationBlock).reject(STVarInOutDeclarationBlock).flatMap [
+			varDeclarations
+		].forEach [
 			evaluateVariableInitialization
 		]
 		try {

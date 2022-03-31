@@ -15,6 +15,7 @@
  *       - access expressions and assignment lvalues
  *       - literal data types
  *       - enhanced partial access
+ *       - input/output variable blocks
  *******************************************************************************/
 grammar org.eclipse.fordiac.ide.structuredtextcore.STCore hidden(WS, ML_COMMENT, SL_COMMENT)
 
@@ -44,6 +45,11 @@ STVarInputDeclarationBlock returns STVarInputDeclarationBlock:
 
 STVarOutputDeclarationBlock returns STVarOutputDeclarationBlock:
 	{STVarOutputDeclarationBlock} 'VAR_OUTPUT' (constant?='CONSTANT')?
+	varDeclarations+=STVarDeclaration*
+	'END_VAR';
+
+STVarInOutDeclarationBlock returns STVarInOutDeclarationBlock:
+	{STVarInOutDeclarationBlock} 'VAR_IN_OUT' (constant?='CONSTANT')?
 	varDeclarations+=STVarDeclaration*
 	'END_VAR';
 

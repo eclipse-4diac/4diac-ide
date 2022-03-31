@@ -82,6 +82,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 			case STCorePackage.ST_VAR_PLAIN_DECLARATION_BLOCK: return createSTVarPlainDeclarationBlock();
 			case STCorePackage.ST_VAR_INPUT_DECLARATION_BLOCK: return createSTVarInputDeclarationBlock();
 			case STCorePackage.ST_VAR_OUTPUT_DECLARATION_BLOCK: return createSTVarOutputDeclarationBlock();
+			case STCorePackage.ST_VAR_IN_OUT_DECLARATION_BLOCK: return createSTVarInOutDeclarationBlock();
 			case STCorePackage.ST_VAR_TEMP_DECLARATION_BLOCK: return createSTVarTempDeclarationBlock();
 			case STCorePackage.ST_INITIALIZER_EXPRESSION: return createSTInitializerExpression();
 			case STCorePackage.ST_ELEMENTARY_INITIALIZER_EXPRESSION: return createSTElementaryInitializerExpression();
@@ -247,6 +248,17 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	public STVarOutputDeclarationBlock createSTVarOutputDeclarationBlock() {
 		STVarOutputDeclarationBlockImpl stVarOutputDeclarationBlock = new STVarOutputDeclarationBlockImpl();
 		return stVarOutputDeclarationBlock;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STVarInOutDeclarationBlock createSTVarInOutDeclarationBlock() {
+		STVarInOutDeclarationBlockImpl stVarInOutDeclarationBlock = new STVarInOutDeclarationBlockImpl();
+		return stVarInOutDeclarationBlock;
 	}
 
 	/**

@@ -83,6 +83,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBlock;
@@ -137,6 +138,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EClass stVarOutputDeclarationBlockEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stVarInOutDeclarationBlockEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -614,6 +622,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	@Override
 	public EClass getSTVarOutputDeclarationBlock() {
 		return stVarOutputDeclarationBlockEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSTVarInOutDeclarationBlock() {
+		return stVarInOutDeclarationBlockEClass;
 	}
 
 	/**
@@ -1800,6 +1818,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		stVarOutputDeclarationBlockEClass = createEClass(ST_VAR_OUTPUT_DECLARATION_BLOCK);
 
+		stVarInOutDeclarationBlockEClass = createEClass(ST_VAR_IN_OUT_DECLARATION_BLOCK);
+
 		stVarTempDeclarationBlockEClass = createEClass(ST_VAR_TEMP_DECLARATION_BLOCK);
 
 		stInitializerExpressionEClass = createEClass(ST_INITIALIZER_EXPRESSION);
@@ -1993,6 +2013,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stVarPlainDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
 		stVarInputDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
 		stVarOutputDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
+		stVarInOutDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
 		stVarTempDeclarationBlockEClass.getESuperTypes().add(this.getSTVarDeclarationBlock());
 		stElementaryInitializerExpressionEClass.getESuperTypes().add(this.getSTInitializerExpression());
 		stArrayInitializerExpressionEClass.getESuperTypes().add(this.getSTInitializerExpression());
@@ -2039,6 +2060,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEClass(stVarInputDeclarationBlockEClass, STVarInputDeclarationBlock.class, "STVarInputDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(stVarOutputDeclarationBlockEClass, STVarOutputDeclarationBlock.class, "STVarOutputDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(stVarInOutDeclarationBlockEClass, STVarInOutDeclarationBlock.class, "STVarInOutDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(stVarTempDeclarationBlockEClass, STVarTempDeclarationBlock.class, "STVarTempDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
@@ -2212,6 +2235,14 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEOperation(op, g1);
 
 		op = addEOperation(stFeatureExpressionEClass, null, "getMappedOutputArguments", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g1.getETypeArguments().add(g2);
+		initEOperation(op, g1);
+
+		op = addEOperation(stFeatureExpressionEClass, null, "getMappedInOutArguments", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		g1 = createEGenericType(ecorePackage.getEMap());
 		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
 		g1.getETypeArguments().add(g2);

@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.st
 
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
@@ -29,7 +30,9 @@ class STFunctionEvaluator extends StructuredTextEvaluator {
 	new(STFunction function, Variable context, Iterable<Variable> variables, Evaluator parent) {
 		super(function.name, null, variables, parent)
 		this.function = function
-		function.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].reject [
+		function.varDeclarations.filter [
+			it instanceof STVarInputDeclarationBlock || it instanceof STVarInputDeclarationBlock
+		].flatMap[varDeclarations].reject [
 			this.variables.containsKey(name)
 		].forEach [
 			evaluateVariableInitialization
@@ -52,7 +55,9 @@ class STFunctionEvaluator extends StructuredTextEvaluator {
 	}
 
 	def protected void evaluateStructuredTextFunction(STFunction function) {
-		function.varDeclarations.reject(STVarInputDeclarationBlock).flatMap[varDeclarations].forEach [
+		function.varDeclarations.reject(STVarInputDeclarationBlock).reject(STVarInOutDeclarationBlock).flatMap [
+			varDeclarations
+		].forEach [
 			evaluateVariableInitialization
 		]
 		try {

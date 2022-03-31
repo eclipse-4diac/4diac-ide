@@ -60,6 +60,7 @@
     <genClasses ecoreClass="STCore.ecore#//STVarPlainDeclarationBlock"/>
     <genClasses ecoreClass="STCore.ecore#//STVarInputDeclarationBlock"/>
     <genClasses ecoreClass="STCore.ecore#//STVarOutputDeclarationBlock"/>
+    <genClasses ecoreClass="STCore.ecore#//STVarInOutDeclarationBlock"/>
     <genClasses ecoreClass="STCore.ecore#//STVarTempDeclarationBlock"/>
     <genClasses ecoreClass="STCore.ecore#//STInitializerExpression"/>
     <genClasses ecoreClass="STCore.ecore#//STElementaryInitializerExpression">
@@ -215,6 +216,8 @@
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedInputArguments(this);"/>
       <genOperations ecoreOperation="STCore.ecore#//STFeatureExpression/getMappedOutputArguments"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedOutputArguments(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STFeatureExpression/getMappedInOutArguments"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedInOutArguments(this);"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STMultibitPartialExpression">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STMultibitPartialExpression/specifier"/>

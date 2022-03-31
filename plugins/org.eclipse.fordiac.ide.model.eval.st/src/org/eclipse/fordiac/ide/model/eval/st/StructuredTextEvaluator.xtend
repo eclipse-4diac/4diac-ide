@@ -332,11 +332,15 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			ICallable case !expr.call:
 				feature.findVariable.value
 			ICallable case expr.call: {
-				val arguments = expr.mappedInputArguments.entrySet.filter[value !== null].map [
+				val arguments = (expr.mappedInputArguments.entrySet.filter[value !== null].map [
 					val parameter = newVariable(key.name, key.type as DataType)
 					parameter.value = value.evaluateExpression
 					parameter
-				].toList
+				] + expr.mappedInOutArguments.entrySet.filter[value !== null].map [
+					val parameter = newVariable(key.name, key.type as DataType)
+					parameter.value = value.findVariable.value
+					parameter
+				]).toList
 				val eval = EvaluatorFactory.createEvaluator(feature,
 					feature.eClass.instanceClass as Class<? extends ICallable>, context, arguments, this)
 				if (eval === null) {
@@ -344,6 +348,9 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 					throw new UnsupportedOperationException('''Cannot create evaluator for callable «feature.eClass.name»''')
 				}
 				val result = eval.evaluate
+				expr.mappedInOutArguments.forEach [ parameter, argument |
+					argument.findVariable.value = eval.variables.get(parameter.name).value
+				]
 				expr.mappedOutputArguments.forEach [ parameter, argument |
 					argument.findVariable.value = eval.variables.get(parameter.name).value
 				]

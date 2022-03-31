@@ -115,7 +115,8 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET) {
 			final var feature = getFeature(context);
 			if (feature instanceof ICallable) {
-				return Scopes.scopeFor(((ICallable) feature).getInputParameters());
+				final ICallable callable = (ICallable) feature;
+				return Scopes.scopeFor(Iterables.concat(callable.getInputParameters(), callable.getInOutParameters()));
 			}
 		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_OUTPUT_ARGUMENT__SOURCE) {
 			final var feature = getFeature(context);

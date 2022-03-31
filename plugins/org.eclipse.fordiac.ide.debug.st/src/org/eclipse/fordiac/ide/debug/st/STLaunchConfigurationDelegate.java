@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.debug.st;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -86,7 +87,8 @@ public class STLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 
 	@SuppressWarnings("static-method")
 	protected List<Variable> getDefaultArguments(final STFunction function) {
-		return function.getInputParameters().stream().map(STVarDeclaration.class::cast)
+		return Stream.concat(function.getInputParameters().stream(), function.getInOutParameters().stream())
+				.map(STVarDeclaration.class::cast)
 				.map(STVariableOperations::newVariable).collect(Collectors.toList());
 	}
 }

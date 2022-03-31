@@ -120,4 +120,12 @@ public interface STFeatureExpression extends STExpression {
 	 */
 	Map<INamedElement, INamedElement> getMappedOutputArguments();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	Map<INamedElement, INamedElement> getMappedInOutArguments();
+
 } // STFeatureExpression

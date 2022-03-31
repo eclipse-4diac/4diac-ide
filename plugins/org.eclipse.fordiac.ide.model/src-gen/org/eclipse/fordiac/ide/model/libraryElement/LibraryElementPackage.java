@@ -6377,13 +6377,22 @@ public interface LibraryElementPackage extends EPackage {
 	int TEXT_METHOD__OUTPUT_PARAMETERS = METHOD_FEATURE_COUNT + 1;
 
 	/**
+	 * The feature id for the '<em><b>In Out Parameters</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int TEXT_METHOD__IN_OUT_PARAMETERS = METHOD_FEATURE_COUNT + 2;
+
+	/**
 	 * The feature id for the '<em><b>Return Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_METHOD__RETURN_TYPE = METHOD_FEATURE_COUNT + 2;
+	int TEXT_METHOD__RETURN_TYPE = METHOD_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Text</b></em>' attribute.
@@ -6392,7 +6401,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_METHOD__TEXT = METHOD_FEATURE_COUNT + 3;
+	int TEXT_METHOD__TEXT = METHOD_FEATURE_COUNT + 4;
 
 	/**
 	 * The number of structural features of the '<em>Text Method</em>' class.
@@ -6401,7 +6410,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int TEXT_METHOD_FEATURE_COUNT = METHOD_FEATURE_COUNT + 4;
+	int TEXT_METHOD_FEATURE_COUNT = METHOD_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.OtherMethodImpl <em>Other Method</em>}' class.
@@ -6448,6 +6457,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int OTHER_METHOD__OUTPUT_PARAMETERS = TEXT_METHOD__OUTPUT_PARAMETERS;
+
+	/**
+	 * The feature id for the '<em><b>In Out Parameters</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int OTHER_METHOD__IN_OUT_PARAMETERS = TEXT_METHOD__IN_OUT_PARAMETERS;
 
 	/**
 	 * The feature id for the '<em><b>Return Type</b></em>' reference.
@@ -6530,6 +6548,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ST_METHOD__OUTPUT_PARAMETERS = TEXT_METHOD__OUTPUT_PARAMETERS;
+
+	/**
+	 * The feature id for the '<em><b>In Out Parameters</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_METHOD__IN_OUT_PARAMETERS = TEXT_METHOD__IN_OUT_PARAMETERS;
 
 	/**
 	 * The feature id for the '<em><b>Return Type</b></em>' reference.
@@ -9265,6 +9292,17 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getTextMethod_OutputParameters();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getInOutParameters <em>In Out Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>In Out Parameters</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getInOutParameters()
+	 * @see #getTextMethod()
+	 * @generated
+	 */
+	EReference getTextMethod_InOutParameters();
+
+	/**
 	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getReturnType <em>Return Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11552,6 +11590,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference TEXT_METHOD__OUTPUT_PARAMETERS = eINSTANCE.getTextMethod_OutputParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>In Out Parameters</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference TEXT_METHOD__IN_OUT_PARAMETERS = eINSTANCE.getTextMethod_InOutParameters();
 
 		/**
 		 * The meta object literal for the '<em><b>Return Type</b></em>' reference feature.

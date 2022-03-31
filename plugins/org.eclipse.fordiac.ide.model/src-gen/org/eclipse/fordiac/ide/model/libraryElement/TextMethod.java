@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getInputParameters <em>Input Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getOutputParameters <em>Output Parameters</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getInOutParameters <em>In Out Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.TextMethod#getText <em>Text</em>}</li>
  * </ul>
@@ -62,6 +63,18 @@ public interface TextMethod extends Method {
 	 * @generated
 	 */
 	EList<INamedElement> getOutputParameters();
+
+	/**
+	 * Returns the value of the '<em><b>In Out Parameters</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>In Out Parameters</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getTextMethod_InOutParameters()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	EList<INamedElement> getInOutParameters();
 
 	/**
 	 * Returns the value of the '<em><b>Return Type</b></em>' reference.

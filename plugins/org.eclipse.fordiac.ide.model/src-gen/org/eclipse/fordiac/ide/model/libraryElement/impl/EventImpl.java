@@ -282,6 +282,16 @@ public class EventImpl extends ConfigurableObjectImpl implements Event {
 	 * @generated
 	 */
 	@Override
+	public EList<INamedElement> getInOutParameters() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public DataType getReturnType() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);
 	}

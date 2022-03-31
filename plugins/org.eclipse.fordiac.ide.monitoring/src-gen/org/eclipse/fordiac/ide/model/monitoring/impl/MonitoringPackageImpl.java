@@ -447,6 +447,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 
 		addEOperation(adapterMonitoringEventEClass, theLibraryElementPackage.getINamedElement(), "getOutputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		addEOperation(adapterMonitoringEventEClass, theLibraryElementPackage.getINamedElement(), "getInOutParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		addEOperation(adapterMonitoringEventEClass, theDataPackage.getDataType(), "getReturnType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(adapterMonitoringVarDeclarationEClass, AdapterMonitoringVarDeclaration.class, "AdapterMonitoringVarDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

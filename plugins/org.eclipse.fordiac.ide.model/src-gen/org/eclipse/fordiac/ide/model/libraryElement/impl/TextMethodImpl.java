@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextMethodImpl#getInputParameters <em>Input Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextMethodImpl#getOutputParameters <em>Output Parameters</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextMethodImpl#getInOutParameters <em>In Out Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextMethodImpl#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TextMethodImpl#getText <em>Text</em>}</li>
  * </ul>
@@ -72,6 +73,16 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 	 * @ordered
 	 */
 	protected EList<INamedElement> outputParameters;
+
+	/**
+	 * The cached value of the '{@link #getInOutParameters() <em>In Out Parameters</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInOutParameters()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<INamedElement> inOutParameters;
 
 	/**
 	 * The cached value of the '{@link #getReturnType() <em>Return Type</em>}' reference.
@@ -154,6 +165,19 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 	 * @generated
 	 */
 	@Override
+	public EList<INamedElement> getInOutParameters() {
+		if (inOutParameters == null) {
+			inOutParameters = new EObjectContainmentEList.Resolving<INamedElement>(INamedElement.class, this, LibraryElementPackage.TEXT_METHOD__IN_OUT_PARAMETERS);
+		}
+		return inOutParameters;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public DataType getReturnType() {
 		if (returnType != null && returnType.eIsProxy()) {
 			InternalEObject oldReturnType = (InternalEObject)returnType;
@@ -223,6 +247,8 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 				return ((InternalEList<?>)getInputParameters()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.TEXT_METHOD__OUTPUT_PARAMETERS:
 				return ((InternalEList<?>)getOutputParameters()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.TEXT_METHOD__IN_OUT_PARAMETERS:
+				return ((InternalEList<?>)getInOutParameters()).basicRemove(otherEnd, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -240,6 +266,8 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 				return getInputParameters();
 			case LibraryElementPackage.TEXT_METHOD__OUTPUT_PARAMETERS:
 				return getOutputParameters();
+			case LibraryElementPackage.TEXT_METHOD__IN_OUT_PARAMETERS:
+				return getInOutParameters();
 			case LibraryElementPackage.TEXT_METHOD__RETURN_TYPE:
 				if (resolve) return getReturnType();
 				return basicGetReturnType();
@@ -267,6 +295,10 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 				getOutputParameters().clear();
 				getOutputParameters().addAll((Collection<? extends INamedElement>)newValue);
 				return;
+			case LibraryElementPackage.TEXT_METHOD__IN_OUT_PARAMETERS:
+				getInOutParameters().clear();
+				getInOutParameters().addAll((Collection<? extends INamedElement>)newValue);
+				return;
 			case LibraryElementPackage.TEXT_METHOD__RETURN_TYPE:
 				setReturnType((DataType)newValue);
 				return;
@@ -293,6 +325,9 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 			case LibraryElementPackage.TEXT_METHOD__OUTPUT_PARAMETERS:
 				getOutputParameters().clear();
 				return;
+			case LibraryElementPackage.TEXT_METHOD__IN_OUT_PARAMETERS:
+				getInOutParameters().clear();
+				return;
 			case LibraryElementPackage.TEXT_METHOD__RETURN_TYPE:
 				setReturnType((DataType)null);
 				return;
@@ -317,6 +352,8 @@ public abstract class TextMethodImpl extends MethodImpl implements TextMethod {
 				return inputParameters != null && !inputParameters.isEmpty();
 			case LibraryElementPackage.TEXT_METHOD__OUTPUT_PARAMETERS:
 				return outputParameters != null && !outputParameters.isEmpty();
+			case LibraryElementPackage.TEXT_METHOD__IN_OUT_PARAMETERS:
+				return inOutParameters != null && !inOutParameters.isEmpty();
 			case LibraryElementPackage.TEXT_METHOD__RETURN_TYPE:
 				return returnType != null;
 			case LibraryElementPackage.TEXT_METHOD__TEXT:

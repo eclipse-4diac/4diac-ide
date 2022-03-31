@@ -52,6 +52,7 @@ import org.eclipse.xtext.formatting2.ITextReplacerContext
 import org.eclipse.xtext.formatting2.internal.AbstractTextReplacer
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage.Literals.*
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
 
 class STCoreFormatter extends AbstractFormatter2 {
 
@@ -132,6 +133,25 @@ class STCoreFormatter extends AbstractFormatter2 {
 		interior(
 			varDeclarationBlock.regionFor.keyword(STVarOutputDeclarationBlockAccess.VAR_OUTPUTKeyword_1),
 			varDeclarationBlock.regionFor.keyword(STVarOutputDeclarationBlockAccess.END_VARKeyword_4),
+			[indent]
+		)
+		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
+			varDeclaration.format
+		}
+		varDeclarationBlock.append[newLine]
+	}
+
+	def dispatch void format(STVarInOutDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
+		if (varDeclarationBlock.constant) {
+			varDeclarationBlock.regionFor.keyword(STVarInOutDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
+				oneSpace
+			].append[newLine]
+		} else {
+			varDeclarationBlock.regionFor.keyword(STVarInOutDeclarationBlockAccess.VAR_IN_OUTKeyword_1).append[newLine]
+		}
+		interior(
+			varDeclarationBlock.regionFor.keyword(STVarInOutDeclarationBlockAccess.VAR_IN_OUTKeyword_1),
+			varDeclarationBlock.regionFor.keyword(STVarInOutDeclarationBlockAccess.END_VARKeyword_4),
 			[indent]
 		)
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {

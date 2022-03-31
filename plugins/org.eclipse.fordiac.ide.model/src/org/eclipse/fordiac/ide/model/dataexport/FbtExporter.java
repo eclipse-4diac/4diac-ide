@@ -329,6 +329,9 @@ class FbtExporter extends AbstractBlockTypeExporter {
 		for (final INamedElement element : method.getOutputParameters()) {
 			addParameter(element);
 		}
+		for (final INamedElement element : method.getInOutParameters()) {
+			addParameter(element);
+		}
 	}
 
 	private void addParameter(final INamedElement element) throws XMLStreamException {

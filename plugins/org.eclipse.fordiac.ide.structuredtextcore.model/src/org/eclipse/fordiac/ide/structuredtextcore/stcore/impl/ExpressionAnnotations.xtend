@@ -218,14 +218,36 @@ final package class ExpressionAnnotations {
 			val parameters = feature.outputParameters
 			if (expr.parameters.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
 				val inputCount = feature.inputParameters.size
+				val inOutCount = feature.inOutParameters.size
 				parameters.toInvertedMap [ parameter |
-					((expr.parameters.get(inputCount + parameters.indexOf(parameter)) as STCallUnnamedArgument).
+					((expr.parameters.get(inputCount + inOutCount + parameters.indexOf(parameter)) as STCallUnnamedArgument).
 						arg as STFeatureExpression).feature
 				].unmodifiableView
 			} else { // named arguments
 				val namedArguments = expr.parameters.filter(STCallNamedOutputArgument).toMap[source]
 				parameters.toInvertedMap [ parameter |
 					namedArguments.get(parameter)?.target
+				].unmodifiableView
+			}
+		} else
+			emptyMap
+	}
+
+	def package static Map<INamedElement, INamedElement> getMappedInOutArguments(STFeatureExpression expr) {
+		val feature = expr.feature
+		if (feature instanceof ICallable) {
+			val parameters = feature.inOutParameters
+			if (expr.parameters.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
+				val inputCount = feature.inputParameters.size
+				parameters.toInvertedMap [ parameter |
+					((expr.parameters.get(inputCount + parameters.indexOf(parameter)) as STCallUnnamedArgument).
+						arg as STFeatureExpression).feature
+				].unmodifiableView
+			} else { // named arguments
+				val namedArguments = expr.parameters.filter(STCallNamedInputArgument).toMap[target]
+				parameters.toInvertedMap [ parameter |
+					val source = namedArguments.get(parameter)?.source
+					if(source instanceof STFeatureExpression) source.feature else null
 				].unmodifiableView
 			}
 		} else

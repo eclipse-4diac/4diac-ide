@@ -400,6 +400,16 @@ public class AdapterMonitoringEventImpl extends EObjectImpl implements AdapterMo
 	 * @generated
 	 */
 	@Override
+	public EList<INamedElement> getInOutParameters() {
+		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public DataType getReturnType() {
 		return null;
 	}

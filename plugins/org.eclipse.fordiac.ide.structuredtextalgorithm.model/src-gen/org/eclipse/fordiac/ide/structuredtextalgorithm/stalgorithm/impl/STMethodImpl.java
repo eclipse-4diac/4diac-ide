@@ -196,6 +196,16 @@ public class STMethodImpl extends STAlgorithmSourceElementImpl implements STMeth
 	 * @generated
 	 */
 	@Override
+	public EList<INamedElement> getInOutParameters() {
+		return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInOutParameters(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case STAlgorithmPackage.ST_METHOD__BODY:

@@ -85,14 +85,18 @@ public class STMethodItemProvider extends TextMethodItemProvider {
 	public String getText(final Object object) {
 		final STMethod method = (STMethod) object;
 		return getString("_UI_STMethod_type", //$NON-NLS-1$
-				new Object[] { method.getName(), Stream.concat(
+				new Object[] { method.getName(), Stream.concat(Stream.concat(
 						method.getInputParameters().stream().filter(VarDeclaration.class::isInstance)
-								.map(VarDeclaration.class::cast).map(VarDeclaration::getType)
-								.filter(Predicate.not(Objects::isNull)).map(DataType::getName),
+						.map(VarDeclaration.class::cast).map(VarDeclaration::getType)
+						.filter(Predicate.not(Objects::isNull)).map(DataType::getName),
+						method.getInOutParameters().stream().filter(VarDeclaration.class::isInstance)
+						.map(VarDeclaration.class::cast).map(VarDeclaration::getType)
+						.filter(Predicate.not(Objects::isNull)).map(DataType::getName)
+						.filter(Predicate.not(Objects::isNull)).map(name -> "&" + name)),
 						method.getOutputParameters().stream().filter(VarDeclaration.class::isInstance)
-								.map(VarDeclaration.class::cast).map(VarDeclaration::getType)
-								.filter(Predicate.not(Objects::isNull)).map(DataType::getName)
-								.filter(Predicate.not(Objects::isNull)).map(name -> "&" + name))
+						.map(VarDeclaration.class::cast).map(VarDeclaration::getType)
+						.filter(Predicate.not(Objects::isNull)).map(DataType::getName)
+						.filter(Predicate.not(Objects::isNull)).map(name -> "&" + name))
 						.collect(Collectors.joining(", ")),
 						method.getReturnType() != null ? method.getReturnType().getName() : "VOID" });
 	}
