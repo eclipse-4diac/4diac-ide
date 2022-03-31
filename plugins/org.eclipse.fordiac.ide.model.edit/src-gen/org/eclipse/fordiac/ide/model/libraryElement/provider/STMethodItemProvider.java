@@ -19,6 +19,8 @@ package org.eclipse.fordiac.ide.model.libraryElement.provider;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -85,10 +87,12 @@ public class STMethodItemProvider extends TextMethodItemProvider {
 		return getString("_UI_STMethod_type", //$NON-NLS-1$
 				new Object[] { method.getName(), Stream.concat(
 						method.getInputParameters().stream().filter(VarDeclaration.class::isInstance)
-						.map(VarDeclaration.class::cast).map(VarDeclaration::getType).map(DataType::getName),
+								.map(VarDeclaration.class::cast).map(VarDeclaration::getType)
+								.filter(Predicate.not(Objects::isNull)).map(DataType::getName),
 						method.getOutputParameters().stream().filter(VarDeclaration.class::isInstance)
-						.map(VarDeclaration.class::cast).map(VarDeclaration::getType).map(DataType::getName)
-						.map(name -> "&" + name))
+								.map(VarDeclaration.class::cast).map(VarDeclaration::getType)
+								.filter(Predicate.not(Objects::isNull)).map(DataType::getName)
+								.filter(Predicate.not(Objects::isNull)).map(name -> "&" + name))
 						.collect(Collectors.joining(", ")),
 						method.getReturnType() != null ? method.getReturnType().getName() : "VOID" });
 	}
