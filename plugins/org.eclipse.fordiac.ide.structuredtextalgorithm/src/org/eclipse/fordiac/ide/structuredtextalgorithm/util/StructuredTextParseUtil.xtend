@@ -34,13 +34,14 @@ import org.eclipse.xtext.util.LazyStringInputStream
 import org.eclipse.xtext.validation.CheckMode
 import org.eclipse.xtext.validation.Issue
 
+import static extension org.eclipse.emf.common.util.URI.createPlatformResourceURI
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 
 class StructuredTextParseUtil {
-	static final String SYNTHETIC_URI = "__synthetic.stalg"
+	static final URI SYNTHETIC_URI = URI.createURI("__synthetic.stalg")
 	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.
-		getResourceServiceProvider(URI.createURI(SYNTHETIC_URI))
+		getResourceServiceProvider(SYNTHETIC_URI)
 	static final String EXPRESSION_DEFAULT_NAME = "anonymous"
 
 	private new() {
@@ -115,8 +116,7 @@ class StructuredTextParseUtil {
 	def private static IParseResult parse(String text, ParserRule entryPoint, FBType fbType, List<Issue> issues) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		val resource = SERVICE_PROVIDER.get(XtextResource) as STAlgorithmResource
-		resource.URI = URI.createPlatformResourceURI(fbType?.paletteEntry?.file?.fullPath?.toString ?: SYNTHETIC_URI,
-			true)
+		resource.URI = fbType?.paletteEntry?.file?.fullPath?.toString?.createPlatformResourceURI(true) ?: SYNTHETIC_URI
 		resourceSet.resources.add(resource)
 		resource.entryPoint = entryPoint
 		resource.fbType = fbType?.copy
