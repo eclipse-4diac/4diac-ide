@@ -329,9 +329,6 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch INamedElement getType(STVarDeclaration feature) { feature.type }
 
 	def protected CharSequence generateTypeName(STVarDeclaration variable) {
-		if (variable.locatedAt !== null && variable.array) {
-			return '''ARRAY_AT<«(variable.type as DataType).generateTypeName», «((variable.locatedAt as STVarDeclaration).type as DataType).generateTypeName», «variable.ranges.head.generateTemplateExpression»>'''
-		}
 		variable.ranges.reverseView.fold((variable.type as DataType).generateTypeName) [ type, range |
 			'''ST_ARRAY<«type», «range.generateTemplateExpression»>'''
 		]

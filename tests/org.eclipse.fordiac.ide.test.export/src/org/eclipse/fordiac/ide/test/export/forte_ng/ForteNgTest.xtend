@@ -218,7 +218,6 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 					#include "basicfb.h"
 					#include "forte_array.h"
-					#include "forte_array_at.h"
 
 
 					class «EXPORTED_FUNCTIONBLOCK_NAME»: public CBasicFB {
