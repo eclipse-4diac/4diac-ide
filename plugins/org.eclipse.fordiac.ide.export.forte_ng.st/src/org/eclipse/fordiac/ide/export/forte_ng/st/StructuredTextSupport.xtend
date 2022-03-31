@@ -232,7 +232,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected CharSequence generateOutputCallArgument(INamedElement parameter, INamedElement argument) {
-		if(argument === null) (parameter.type as DataType).generateDefaultValue else argument.generateFeatureName
+		if(argument === null) '''ST_IGNORE_OUT_PARAM(«(parameter.type as DataType).generateDefaultValue»)''' else argument.generateFeatureName
 	}
 
 	def protected dispatch CharSequence generateDefaultInputCallArgument(VarDeclaration parameter) {
