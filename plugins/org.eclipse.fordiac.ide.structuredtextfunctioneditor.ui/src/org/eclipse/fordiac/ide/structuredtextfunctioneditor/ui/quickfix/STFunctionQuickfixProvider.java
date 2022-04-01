@@ -10,27 +10,30 @@
  * Contributors:
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
+ *   Ulzii Jargalsaikhan
+ *		 - quickfix for WRONG_NAME_CASE warnings
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.quickfix;
 
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.STCoreQuickfixProvider;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation.STFunctionValidator;
+import org.eclipse.xtext.ui.editor.model.IXtextDocument;
+import org.eclipse.xtext.ui.editor.model.edit.IModification;
+import org.eclipse.xtext.ui.editor.quickfix.Fix;
+import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionAcceptor;
+import org.eclipse.xtext.validation.Issue;
 
-/**
- * Custom quickfixes.
- *
- * See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#quick-fixes
- */
+@SuppressWarnings("nls")
 public class STFunctionQuickfixProvider extends STCoreQuickfixProvider {
 
-	//	@Fix(STFunctionValidator.INVALID_NAME)
-	//	public void capitalizeName(final Issue issue, IssueResolutionAcceptor acceptor) {
-	//		acceptor.accept(issue, "Capitalize name", "Capitalize the name.", "upcase.png", new IModification() {
-	//			public void apply(IModificationContext context) throws BadLocationException {
-	//				IXtextDocument xtextDocument = context.getXtextDocument();
-	//				String firstLetter = xtextDocument.get(issue.getOffset(), 1);
-	//				xtextDocument.replace(issue.getOffset(), 1, firstLetter.toUpperCase());
-	//			}
-	//		});
-	//	}
+	@SuppressWarnings("boxing")
+	@Fix(STFunctionValidator.WRONG_NAME_CASE)
+	public static void variableNameCasing(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		acceptor.accept(issue, "Change variable name case as declared",
+				"Changes " + issue.getData()[0] + "to " + issue.getData()[1], "upcase.png", (IModification) context -> {
+					final IXtextDocument xtextDocument = context.getXtextDocument();
+					xtextDocument.replace(issue.getOffset(), issue.getLength(), issue.getData()[1]);
+				});
+	}
 
 }

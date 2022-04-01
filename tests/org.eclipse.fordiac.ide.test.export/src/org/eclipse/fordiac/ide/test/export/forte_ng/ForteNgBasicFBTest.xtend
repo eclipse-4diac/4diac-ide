@@ -59,7 +59,6 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 
 					#include "basicfb.h"
 					#include "forte_array.h"
-					#include "forte_array_at.h"
 
 
 					class «EXPORTED_FUNCTIONBLOCK_NAME»: public CBasicFB {
@@ -118,7 +117,6 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 
 					#include "forte_dword.h"
 					#include "forte_array.h"
-					#include "forte_array_at.h"
 
 					DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringId«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»)
 

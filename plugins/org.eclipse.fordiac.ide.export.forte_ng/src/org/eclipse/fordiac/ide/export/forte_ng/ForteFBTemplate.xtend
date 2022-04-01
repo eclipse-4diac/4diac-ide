@@ -256,7 +256,7 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 
 	def protected CharSequence generateInitialAssignment(VarDeclaration variable) {
 		try {
-			'''«EXPORT_PREFIX»«variable.name»() = «variable.generateDefaultValue»;'''
+			'''«EXPORT_PREFIX»«variable.name»() = «variable.generateVariableDefaultValue»;'''
 		} catch (Exception e) {
 			errors.add(e.message)
 			'''// «e.message»'''

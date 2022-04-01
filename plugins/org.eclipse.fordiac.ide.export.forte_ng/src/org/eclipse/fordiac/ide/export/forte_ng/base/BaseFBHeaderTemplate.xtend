@@ -138,14 +138,14 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 	'''
 
 	override getErrors() {
-		(super.errors + methodLanguageSupport.values.filterNull.flatMap[errors].toSet).toList
+		(errors + methodLanguageSupport.values.filterNull.flatMap[getErrors].toSet).toList
 	}
 
 	override getWarnings() {
-		(super.warnings + methodLanguageSupport.values.filterNull.flatMap[warnings].toSet).toList
+		(warnings + methodLanguageSupport.values.filterNull.flatMap[getWarnings].toSet).toList
 	}
 
 	override getInfos() {
-		(super.infos + methodLanguageSupport.values.filterNull.flatMap[infos].toSet).toList
+		(infos + methodLanguageSupport.values.filterNull.flatMap[getInfos].toSet).toList
 	}
 }

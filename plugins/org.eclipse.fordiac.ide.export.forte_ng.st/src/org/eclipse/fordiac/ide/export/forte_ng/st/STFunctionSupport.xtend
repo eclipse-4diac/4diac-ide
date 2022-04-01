@@ -87,9 +87,10 @@ class STFunctionSupport extends StructuredTextSupport {
 	}
 
 	def private CharSequence generateStructuredTextFunctionBody(STFunction func) '''
-		«IF func.returnType !== null»«func.returnType.generateTypeName» st_ret_val = «func.returnType.generateDefaultValue»;«ENDIF»
-		«func.varDeclarations.filter(STVarPlainDeclarationBlock).generateLocalVariables(true)»
-		«func.varDeclarations.filter(STVarTempDeclarationBlock).generateLocalVariables(true)»
+		«IF func.returnType !== null»«func.returnType.generateTypeName» st_ret_val = «func.returnType.generateTypeDefaultValue»;«ENDIF»
+		«func.varDeclarations.filter(STVarOutputDeclarationBlock).generateVariables(false)»
+		«func.varDeclarations.filter(STVarPlainDeclarationBlock).generateVariables(true)»
+		«func.varDeclarations.filter(STVarTempDeclarationBlock).generateVariables(true)»
 		
 		«func.code.generateStatementList»
 		

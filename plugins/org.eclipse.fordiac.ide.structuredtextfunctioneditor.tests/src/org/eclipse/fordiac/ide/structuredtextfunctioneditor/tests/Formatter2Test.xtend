@@ -17,10 +17,9 @@ import com.google.inject.Inject
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
 import org.eclipse.xtext.testing.formatter.FormatterTestHelper
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.BeforeAll
 
 @ExtendWith(InjectionExtension)
 @InjectWith(STFunctionInjectorProvider)
@@ -642,6 +641,36 @@ class Formatter2Test {
 					MIN : INT;
 				END_VAR
 				LIMIT_CHECK := CHECK((MAX) + (value * 1), MIN, 1 * (MAX));
+				END_FUNCTION
+			'''
+		]
+	}
+	
+	@Test
+	def void testBooleanOperatorsCasing() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR
+				   bool1 : BOOL;
+				   bool2 : BOOL;
+				   bool3 : BOOL;
+				END_VAR
+				    bool1 := bool2 and bool3;
+				    bool1 := bool2 Or bool3;
+				    bool1 := bool2 xoR bool3;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR
+					bool1 : BOOL;
+					bool2 : BOOL;
+					bool3 : BOOL;
+				END_VAR
+				bool1 := bool2 AND bool3;
+				bool1 := bool2 OR bool3;
+				bool1 := bool2 XOR bool3;
 				END_FUNCTION
 			'''
 		]

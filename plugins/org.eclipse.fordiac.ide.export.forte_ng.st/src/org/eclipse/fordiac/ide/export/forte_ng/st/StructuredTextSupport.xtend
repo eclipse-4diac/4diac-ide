@@ -21,6 +21,7 @@ import java.time.temporal.ChronoUnit
 import java.util.List
 import java.util.Set
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -78,24 +79,23 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	override getWarnings() { emptyList }
 
-	def protected CharSequence generateLocalVariables(Iterable<? extends STVarDeclarationBlock> blocks,
-		boolean temp) '''
+	def protected CharSequence generateVariables(Iterable<? extends STVarDeclarationBlock> blocks, boolean decl) '''
 		«FOR block : blocks»
-			«block.generateLocalVariableBlock(temp)»
+			«block.generateVariableBlock(decl)»
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateLocalVariableBlock(STVarDeclarationBlock block, boolean temp) '''
+	def protected CharSequence generateVariableBlock(STVarDeclarationBlock block, boolean decl) '''
 		«FOR variable : block.varDeclarations.filter(STVarDeclaration)»
-			«variable.generateLocalVariable(temp, block.constant)»
+			«variable.generateVariable(decl, block.constant)»
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateLocalVariable(STVarDeclaration variable, boolean temp, boolean const) {
+	def protected CharSequence generateVariable(STVarDeclaration variable, boolean decl, boolean const) {
 		if (variable.locatedAt !== null)
-			'''«IF !temp»static «ENDIF»«IF const»const «ENDIF»«variable.generateTypeName» «IF !variable.array»&«ENDIF»«variable.generateFeatureName» = «variable.locatedAt.generateFeatureName»;'''
+			'''«IF decl»«IF const»const «ENDIF»«variable.generateTypeName» «IF !variable.array»&«ENDIF»«ENDIF»«variable.generateFeatureName» = «variable.locatedAt.generateFeatureName»;'''
 		else
-			'''«IF !temp»static «ENDIF»«IF const»const «ENDIF»«variable.generateTypeName» «variable.generateFeatureName»«IF variable.defaultValue !== null» = «variable.defaultValue.generateInitializerExpression»«ENDIF»;'''
+			'''«IF decl»«IF const»const «ENDIF»«variable.generateTypeName» «ENDIF»«variable.generateFeatureName» = «variable.generateVariableDefaultValue»;'''
 	}
 
 	def protected dispatch CharSequence generateInitializerExpression(STElementaryInitializerExpression expr) {
@@ -228,19 +228,14 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument) {
-		if(argument === null) parameter.generateDefaultInputCallArgument else argument.generateExpression
+		if(argument === null) parameter.generateVariableDefaultValue else argument.generateExpression
 	}
 
 	def protected CharSequence generateOutputCallArgument(INamedElement parameter, INamedElement argument) {
-		if(argument === null) (parameter.type as DataType).generateDefaultValue else argument.generateFeatureName
-	}
-
-	def protected dispatch CharSequence generateDefaultInputCallArgument(VarDeclaration parameter) {
-		parameter.generateDefaultValue
-	}
-
-	def protected dispatch CharSequence generateDefaultInputCallArgument(STVarDeclaration parameter) {
-		parameter.defaultValue?.generateInitializerExpression ?: (parameter.type as DataType).generateDefaultValue
+		if (argument === null)
+			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
+		else
+			argument.generateFeatureName
 	}
 
 	def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //
@@ -288,6 +283,24 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateTemplateExpression(STNumericLiteral expr) { expr.value.toString }
 
+	def protected dispatch CharSequence generateVariableDefaultValue(INamedElement feature) {
+		errors.add('''The variable «feature.eClass.name» is not supported''')
+		"0"
+	}
+
+	def protected dispatch CharSequence generateVariableDefaultValue(VarDeclaration variable) {
+		ForteNgExportUtil.generateVariableDefaultValue(variable)
+	}
+
+	def protected dispatch CharSequence generateVariableDefaultValue(STVarDeclaration variable) {
+		if (variable.defaultValue !== null)
+			variable.defaultValue.generateInitializerExpression
+		else if (variable.array)
+			"{}"
+		else
+			(variable.type as DataType).generateTypeDefaultValue
+	}
+
 	def protected dispatch CharSequence generateFeatureName(INamedElement feature) {
 		errors.add('''The feature «feature.eClass.name» is not supported''')
 		""
@@ -316,9 +329,6 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch INamedElement getType(STVarDeclaration feature) { feature.type }
 
 	def protected CharSequence generateTypeName(STVarDeclaration variable) {
-		if (variable.locatedAt !== null && variable.array) {
-			return '''ARRAY_AT<«(variable.type as DataType).generateTypeName», «((variable.locatedAt as STVarDeclaration).type as DataType).generateTypeName», «variable.ranges.head.generateTemplateExpression»>'''
-		}
 		variable.ranges.reverseView.fold((variable.type as DataType).generateTypeName) [ type, range |
 			'''ST_ARRAY<«type», «range.generateTemplateExpression»>'''
 		]

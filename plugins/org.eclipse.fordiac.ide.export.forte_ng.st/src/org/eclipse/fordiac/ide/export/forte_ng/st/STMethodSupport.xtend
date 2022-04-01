@@ -72,8 +72,9 @@ class STMethodSupport extends StructuredTextSupport {
 	}
 
 	def private CharSequence generateStructuredTextMethodBody(STMethod method) '''
-		«IF method.returnType !== null»«method.returnType.generateTypeName» st_ret_val = «method.returnType.generateDefaultValue»;«ENDIF»
-		«method.body.varDeclarations.filter(STVarTempDeclarationBlock).generateLocalVariables(true)»
+		«IF method.returnType !== null»«method.returnType.generateTypeName» st_ret_val = «method.returnType.generateTypeDefaultValue»;«ENDIF»
+		«method.body.varDeclarations.filter(STVarOutputDeclarationBlock).generateVariables(false)»
+		«method.body.varDeclarations.filter(STVarTempDeclarationBlock).generateVariables(true)»
 		
 		«method.body.statements.generateStatementList»
 		

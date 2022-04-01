@@ -43,7 +43,6 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 			#include "«include»"
 		«ENDFOR»
 		#include "forte_array.h"
-		#include "forte_array_at.h"
 	'''
 
 	def protected generateTypeInclude(DataType type) {
