@@ -186,7 +186,7 @@ class STFunctionEvaluatorTest {
 		val source = text.toString.parse("anonymous", errors)
 		source.assertNotNull("Parse error: " + errors.join(", "))
 		source.functions.head.assertNotNull("Must be at least one function")
-		val eval = new STFunctionEvaluator(source.functions.head, variables, null)
+		val eval = new STFunctionEvaluator(source.functions.head, null, variables, null)
 		return eval.evaluate
 	}
 }

@@ -12,30 +12,25 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.fb
 
-import java.util.Map
 import java.util.Queue
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
+import org.eclipse.fordiac.ide.model.eval.variable.FBVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.xtend.lib.annotations.Accessors
 
-import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
-
 abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	@Accessors final T type
 	@Accessors final Queue<Event> queue
-	final Map<String, Variable> variables
+	@Accessors final FBVariable instance
 
-	new(T type, Queue<Event> queue, Iterable<Variable> variables, Evaluator parent) {
-		super(parent)
+	new(T type, Variable context, Iterable<Variable> variables, Queue<Event> queue, Evaluator parent) {
+		super(context, parent)
 		this.type = type
 		this.queue = queue
-		this.variables = variables?.toMap[name] ?: newHashMap;
-		(type.interfaceList.inputVars + type.interfaceList.outputVars).forEach [ variable |
-			this.variables.computeIfAbsent(variable.name)[newVariable(variable)]
-		]
+		this.instance = new FBVariable(CONTEXT_NAME, type, variables)
 	}
 
 	override evaluate() {
@@ -52,12 +47,8 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	override getSourceElement() {
 		this.type
 	}
-
+	
 	override getVariables() {
-		variables.unmodifiableView
-	}
-
-	def protected getVariablesInternal() {
-		variables
+		instance.value.members
 	}
 }

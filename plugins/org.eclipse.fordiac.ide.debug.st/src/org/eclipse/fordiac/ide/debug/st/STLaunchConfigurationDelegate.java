@@ -81,7 +81,7 @@ public class STLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 
 	@SuppressWarnings("static-method")
 	public Evaluator createEvaluator(final STFunction function, final List<Variable> variables) {
-		return new STFunctionEvaluator(function, variables, null);
+		return new STFunctionEvaluator(function, null, variables, null);
 	}
 
 	@SuppressWarnings("static-method")

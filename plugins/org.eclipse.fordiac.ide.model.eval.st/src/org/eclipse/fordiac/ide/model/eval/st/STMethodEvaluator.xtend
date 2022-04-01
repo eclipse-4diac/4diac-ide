@@ -26,8 +26,8 @@ class STMethodEvaluator extends StructuredTextEvaluator {
 
 	final Variable returnVariable
 
-	new(STMethod method, Iterable<Variable> variables, Evaluator parent) {
-		super(method.name, variables, parent)
+	new(STMethod method, Variable context, Iterable<Variable> variables, Evaluator parent) {
+		super(method.name, context, variables, parent)
 		this.method = method
 		method.body.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].reject [
 			this.variables.containsKey(name)

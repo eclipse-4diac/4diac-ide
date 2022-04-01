@@ -26,8 +26,8 @@ class STFunctionEvaluator extends StructuredTextEvaluator {
 
 	final Variable returnVariable
 
-	new(STFunction function, Iterable<Variable> variables, Evaluator parent) {
-		super(function.name, variables, parent)
+	new(STFunction function, Variable context, Iterable<Variable> variables, Evaluator parent) {
+		super(function.name, null, variables, parent)
 		this.function = function
 		function.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].reject [
 			this.variables.containsKey(name)

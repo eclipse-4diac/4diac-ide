@@ -12,14 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable
 
-import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 @FinalFieldsConstructor
 abstract class AbstractVariable implements Variable {
 	@Accessors final String name
-	@Accessors final DataType type
+	@Accessors final INamedElement type
 	
 	override toString() {
 		value.toString

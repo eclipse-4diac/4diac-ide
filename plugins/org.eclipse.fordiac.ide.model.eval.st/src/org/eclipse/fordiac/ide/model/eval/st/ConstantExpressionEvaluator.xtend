@@ -22,7 +22,7 @@ final class ConstantExpressionEvaluator extends StructuredTextEvaluator {
 	static final ConstantExpressionEvaluator INSTANCE = new ConstantExpressionEvaluator
 
 	private new() {
-		super("anonymous", emptyList, null)
+		super("anonymous", null, emptyList, null)
 	}
 	
 	def static Value evaluate(STExpression expression) {

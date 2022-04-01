@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.data.WcharType
 import org.eclipse.fordiac.ide.model.data.WordType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.value.ValueConverterFactory
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
 final class ValueOperations {
 
@@ -607,7 +608,7 @@ final class ValueOperations {
 		(0xffffffffffffffff#L >>> (64 - type.bitSize))
 	}
 
-	def static Value defaultValue(DataType type) {
+	def static Value defaultValue(INamedElement type) {
 		switch (type) {
 			case null:
 				null
@@ -670,16 +671,16 @@ final class ValueOperations {
 		}
 	}
 
-	def static dispatch Value castValue(Value value, DataType type) {
+	def static dispatch Value castValue(Value value, INamedElement type) {
 		if (value.type != type) {
 			throw new ClassCastException('''The value «value» with type «value.type.name» cannot be cast to «type.name»''')
 		}
 		return value
 	}
 
-	def static dispatch Value castValue(Void value, DataType type) { null }
+	def static dispatch Value castValue(Void value, INamedElement type) { null }
 
-	def static dispatch Value castValue(BoolValue value, DataType type) {
+	def static dispatch Value castValue(BoolValue value, INamedElement type) {
 		switch (type) {
 			case null,
 			case value.type:
@@ -697,7 +698,7 @@ final class ValueOperations {
 		}
 	}
 
-	def static dispatch Value castValue(AnyMagnitudeValue value, DataType type) {
+	def static dispatch Value castValue(AnyMagnitudeValue value, INamedElement type) {
 		switch (type) {
 			case null,
 			case value.type:
@@ -739,7 +740,7 @@ final class ValueOperations {
 		}
 	}
 
-	def static dispatch Value castValue(AnyBitValue value, DataType type) {
+	def static dispatch Value castValue(AnyBitValue value, INamedElement type) {
 		switch (type) {
 			case null,
 			case value.type:
@@ -777,7 +778,7 @@ final class ValueOperations {
 		}
 	}
 
-	def static dispatch Value castValue(AnyCharsValue value, DataType type) {
+	def static dispatch Value castValue(AnyCharsValue value, INamedElement type) {
 		switch (type) {
 			case null,
 			case value.type:
@@ -795,7 +796,7 @@ final class ValueOperations {
 		}
 	}
 
-	def static dispatch Value castValue(AnyDateValue value, DataType type) {
+	def static dispatch Value castValue(AnyDateValue value, INamedElement type) {
 		switch (type) {
 			case null,
 			case value.type:
@@ -817,7 +818,7 @@ final class ValueOperations {
 		}
 	}
 
-	def static Value wrapValue(Object value, DataType type) {
+	def static Value wrapValue(Object value, INamedElement type) {
 		if (value === null)
 			type.defaultValue
 		else
@@ -926,16 +927,17 @@ final class ValueOperations {
 			}
 	}
 
-	def static Value parseValue(String value, DataType type) {
+	def static Value parseValue(String value, INamedElement type) {
 		if (value.nullOrEmpty)
 			type.defaultValue
-		else {
+		else if (type instanceof DataType) {
 			val converter = ValueConverterFactory.createValueConverter(type)
 			if (converter === null) {
 				throw new UnsupportedOperationException('''The type «type?.name» is not supported''')
 			}
 			converter.toValue(value).wrapValue(type)
-		}
+		} else
+			throw new UnsupportedOperationException('''The type «type?.name» is not supported''')
 	}
 
 	def static asBoolean(Value value) {

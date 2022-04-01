@@ -22,26 +22,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.xtend.lib.annotations.Accessors
 
-import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
-
 abstract class BaseFBEvaluator<T extends BaseFBType> extends FBEvaluator<T> {
 	@Accessors final Map<Algorithm, Evaluator> algorithmEvaluators
 
-	new(T type, Queue<Event> queue, Iterable<Variable> variables, Evaluator parent) {
-		super(type, queue, variables, parent)
-		type.internalVars.forEach [ variable |
-			this.variablesInternal.computeIfAbsent(variable.name)[newVariable(variable)]
-		]
+	new(T type, Variable context, Iterable<Variable> variables, Queue<Event> queue, Evaluator parent) {
+		super(type, context, variables, queue, parent)
 		algorithmEvaluators = type.algorithm.toInvertedMap [
-			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends Algorithm>,
-				getVariables.values, this)
+			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends Algorithm>, instance, emptySet,
+				this)
 		]
 	}
-	
+
 	override prepare() {
 		algorithmEvaluators.values.forEach[prepare]
 	}
-	
+
 	override getChildren() {
 		algorithmEvaluators
 	}

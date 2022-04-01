@@ -17,10 +17,10 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.eval.impl.EvaluatorFactoryRegistryImpl
 
 interface EvaluatorFactory {
-	def Evaluator createEvaluator(Object source, Iterable<Variable> variables, Evaluator parent)
+	def Evaluator createEvaluator(Object source, Variable context, Iterable<Variable> variables, Evaluator parent)
 	
-	def static <T> Evaluator createEvaluator(T source, Class<? extends T> sourceClass, Iterable<Variable> variables, Evaluator parent) {
-		Registry.INSTANCE.getFactory(sourceClass)?.createEvaluator(source, variables, parent)
+	def static <T> Evaluator createEvaluator(T source, Class<? extends T> sourceClass, Variable context, Iterable<Variable> variables, Evaluator parent) {
+		Registry.INSTANCE.getFactory(sourceClass)?.createEvaluator(source, context, variables, parent)
 	}
 
 	interface Registry {

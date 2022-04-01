@@ -25,8 +25,8 @@ class STAlgorithmEvaluator extends StructuredTextEvaluator {
 
 	STAlgorithm parseResult
 
-	new(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm, Iterable<Variable> variables, Evaluator parent) {
-		super(algorithm.name, variables, parent)
+	new(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm, Variable context, Iterable<Variable> variables, Evaluator parent) {
+		super(algorithm.name, context, variables, parent)
 		this.algorithm = algorithm
 	}
 

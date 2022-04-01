@@ -19,16 +19,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 
 class SimpleFBEvaluator extends BaseFBEvaluator<SimpleFBType> {
-	new(SimpleFBType type, Evaluator parent) {
-		this(type, null, parent)
+	new(SimpleFBType type, Variable context, Iterable<Variable> variables, Evaluator parent) {
+		this(type, context, variables, null, parent)
 	}
 
-	new(SimpleFBType type, Iterable<Variable> variables, Evaluator parent) {
-		this(type, null, variables, parent)
-	}
-
-	new(SimpleFBType type, Queue<Event> queue, Iterable<Variable> variables, Evaluator parent) {
-		super(type, queue, variables, parent)
+	new(SimpleFBType type, Variable context, Iterable<Variable> variables, Queue<Event> queue, Evaluator parent) {
+		super(type, context, variables, queue, parent)
 	}
 
 	override evaluate(Event event) {

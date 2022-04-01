@@ -61,15 +61,16 @@ import static org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperation
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
+import org.eclipse.fordiac.ide.model.eval.variable.FBVariable
 
 abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	@Accessors final String name
 	protected final Map<String, Variable> variables
 
-	new(String name, Iterable<Variable> variables, Evaluator parent) {
-		super(parent)
+	new(String name, Variable context, Iterable<Variable> variables, Evaluator parent) {
+		super(context, parent)
 		this.name = name
-		this.variables = variables.toMap[getName]
+		this.variables = (variables + #[context]).filterNull.toMap[getName]
 	}
 
 	override getChildren() {
@@ -78,6 +79,18 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 
 	override getVariables() {
 		variables.unmodifiableView
+	}
+
+	def protected dispatch Variable findVariable(VarDeclaration variable) {
+		(context as FBVariable).value.members.get(variable.name)
+	}
+
+	def protected dispatch Variable findVariable(STVarDeclaration variable) {
+		variables.get(variable.name)
+	}
+
+	def protected dispatch Variable findVariable(ICallable variable) {
+		variables.get(variable.name)
 	}
 
 	def protected void evaluateVariableInitialization(STVarDeclaration variable) {
@@ -141,7 +154,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch void evaluateStatement(STForStatement stmt) {
-		val variable = variables.get(stmt.variable.name)
+		val variable = stmt.variable.findVariable
 		// from
 		variable.value = stmt.from.trap.evaluateExpression
 		// to
@@ -317,7 +330,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			VarDeclaration,
 			STVarDeclaration,
 			ICallable case !expr.call:
-				variables.get(feature.name).value
+				feature.findVariable.value
 			ICallable case expr.call: {
 				val arguments = expr.mappedInputArguments.entrySet.filter[value !== null].map [
 					val parameter = newVariable(key.name, key.type as DataType)
@@ -325,14 +338,14 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 					parameter
 				].toList
 				val eval = EvaluatorFactory.createEvaluator(feature,
-					feature.eClass.instanceClass as Class<? extends ICallable>, arguments, this)
+					feature.eClass.instanceClass as Class<? extends ICallable>, context, arguments, this)
 				if (eval === null) {
 					error('''Cannot create evaluator for callable «feature.eClass.name»''')
 					throw new UnsupportedOperationException('''Cannot create evaluator for callable «feature.eClass.name»''')
 				}
 				val result = eval.evaluate
 				expr.mappedOutputArguments.forEach [ parameter, argument |
-					variables.get(argument.name).value = eval.variables.get(parameter.name).value
+					argument.findVariable.value = eval.variables.get(parameter.name).value
 				]
 				result
 			}
@@ -382,7 +395,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			VarDeclaration,
 			STVarDeclaration,
 			ICallable case !expr.call:
-				variables.get(feature.name)
+				feature.findVariable
 			default: {
 				error('''The feature «feature.eClass.name» is not supported''')
 				throw new UnsupportedOperationException('''The feature «feature.eClass.name» is not supported''')
