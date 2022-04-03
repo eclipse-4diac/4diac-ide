@@ -95,17 +95,6 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 	}
 
 	@Override
-	public EditPart getTargetEditPart(final Request request) {
-		final Object type = request.getType();
-		if ((type == RequestConstants.REQ_SELECTION || type == RequestConstants.REQ_SELECTION_HOVER)
-				&& (getParent() != null)) {
-			// forward selection requests to the parent
-			return getParent().getTargetEditPart(request);
-		}
-		return super.getTargetEditPart(request);
-	}
-
-	@Override
 	public void setLayoutConstraint(final EditPart child, final IFigure childFigure, final Object constraint) {
 		if ((constraint instanceof Rectangle)  && (child instanceof ValueEditPart)){
 			final Rectangle rectConstraint = (Rectangle) constraint;
@@ -118,11 +107,7 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 	@Override
 	public void performRequest(final Request request) {
 		final Object type = request.getType();
-		if (type == RequestConstants.REQ_SELECTION || type == RequestConstants.REQ_SELECTION_HOVER) {
-			if (getParent() != null) {
-				getParent().performRequest(request);
-			}
-		} else if ((type == RequestConstants.REQ_DIRECT_EDIT || type == RequestConstants.REQ_OPEN)
+		if ((type == RequestConstants.REQ_DIRECT_EDIT || type == RequestConstants.REQ_OPEN)
 				&& (request instanceof SelectionRequest)) {
 			performDirectEdit((SelectionRequest) request);
 		} else {

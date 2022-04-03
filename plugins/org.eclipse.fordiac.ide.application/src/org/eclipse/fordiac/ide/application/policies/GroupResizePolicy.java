@@ -13,9 +13,14 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.ToolbarLayout;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
+import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
+import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -29,8 +34,8 @@ public class GroupResizePolicy extends ModifiedResizeablePolicy {
 	}
 
 	@Override
-	public GraphicalEditPart getHost() {
-		return (GraphicalEditPart) super.getHost();
+	public GroupEditPart getHost() {
+		return (GroupEditPart) super.getHost();
 	}
 
 	public static GraphicalEditPart getGroupContent(final EditPart groupEP) {
@@ -60,4 +65,35 @@ public class GroupResizePolicy extends ModifiedResizeablePolicy {
 	static Rectangle getDefaultGroupContentBounds() {
 		return new Rectangle(new Point(0, 0), IFigure.MIN_DIMENSION);
 	}
+
+	@Override
+	protected IFigure createSelectionFeedbackFigure() {
+		final RoundedRectangle figure = (RoundedRectangle) super.createSelectionFeedbackFigure();
+		figure.setFill(false);
+		figure.setOutline(true);
+		figure.setLineWidth(2 * ModifiedMoveHandle.SELECTION_BORDER_WIDTH);
+		figure.setLayoutManager(new ToolbarLayout());
+		figure.add(createCommentAreaFBFigure(figure));
+		return figure;
+	}
+
+	private RoundedRectangle createCommentAreaFBFigure(final RoundedRectangle figure) {
+		final RoundedRectangle commentArea = new RoundedRectangle() {
+			@Override
+			public void setBounds(final Rectangle rect) {
+				// the layouter is putting us on the same position as the outer figure which is to high and left
+				// correct this here
+				rect.translate(figure.getLineWidth(), figure.getLineWidth());
+				super.setBounds(rect);
+			}
+		};
+		commentArea.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
+		commentArea.setOutline(false);
+		commentArea.setBounds(getHost().getCommentBounds().getCopy());
+		commentArea.setCornerDimensions(new Dimension(2, 2));
+		commentArea.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
+		commentArea.setBackgroundColor(ModifiedMoveHandle.getSelectionColor());
+		return commentArea;
+	}
+
 }
