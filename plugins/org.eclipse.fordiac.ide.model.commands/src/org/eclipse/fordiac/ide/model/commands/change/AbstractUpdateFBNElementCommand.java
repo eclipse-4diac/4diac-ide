@@ -98,6 +98,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		}
 
 		createNewFB();
+		checkGroup(oldElement, newElement);  // needs to be done before anything is changed on the old element Bug
+											  // 579570
 
 		network.getNetworkElements().add(newElement);
 
@@ -109,7 +111,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		network.getNetworkElements().remove(oldElement);
 
 		newElement.setName(oldElement.getName());
-		checkGroup(oldElement, newElement);
 
 		// Map FB
 		if (resource != null) {
@@ -126,6 +127,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		if (unmapCmd != null) {
 			unmapCmd.redo();
 		}
+		checkGroup(oldElement, newElement);
 
 		// deletion has to be done before old element is removed
 		if (errorMarkerBuilder != null && onlyOldElementIsErrorMarker()) {
@@ -143,7 +145,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 			errorMarkerBuilder.createMarkerInFile();
 		}
 
-		checkGroup(oldElement, newElement);
 
 		if (mapCmd != null) {
 			mapCmd.redo();
@@ -480,7 +481,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		}
 	}
 
-	protected AbstractReconnectConnectionCommand createReconnCMD(final Connection connection,
+	protected static AbstractReconnectConnectionCommand createReconnCMD(final Connection connection,
 			final IInterfaceElement interfaceElement, final boolean isSourceReconnect, final FBNetwork fbn) {
 		final DataType type = interfaceElement.getType();
 		if (type instanceof EventType) {

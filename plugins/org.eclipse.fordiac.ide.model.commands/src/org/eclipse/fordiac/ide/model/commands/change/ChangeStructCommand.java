@@ -64,18 +64,17 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	// recursively update the struct's members because the lib only reloads them on startup
-	private void updateStruct(StructuredType struct) {
+	private static void updateStruct(final StructuredType struct) {
 		if (struct.getTypeLibrary() != null) {
 			final DataTypeLibrary lib = struct.getTypeLibrary().getDataTypeLibrary();
-			struct.getMemberVariables().stream()
-					.filter(varDecl -> varDecl.getType() instanceof StructuredType)
+			struct.getMemberVariables().stream().filter(varDecl -> varDecl.getType() instanceof StructuredType)
 					.forEach(varDecl -> {
-						final StructuredType updatedStruct = lib.getStructuredType(varDecl.getTypeName());
-						if (updatedStruct != null) {
-							varDecl.setType(updatedStruct);
-						}
-						updateStruct(updatedStruct);
-					});
+				final StructuredType updatedStruct = lib.getStructuredType(varDecl.getTypeName());
+				if (updatedStruct != null) {
+					varDecl.setType(updatedStruct);
+				}
+				updateStruct(updatedStruct);
+			});
 		}
 	}
 }
