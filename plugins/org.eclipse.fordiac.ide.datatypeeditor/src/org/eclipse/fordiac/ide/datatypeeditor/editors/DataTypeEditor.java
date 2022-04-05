@@ -123,11 +123,18 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 
 	@Override
 	public void dispose() {
+		// get these values here before calling super dispose
+		final boolean dirty = isDirty();
+
 		getCommandStack().removeCommandStackEventListener(this);
 		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
 		getActionRegistry().dispose();
 		removeListenerFromDataTypeObj();
 		super.dispose();
+		if (dirty && dataTypePaletteEntry != null) {
+			// purge editable type from palette after super.dispose() so that no notifiers will be called
+			dataTypePaletteEntry.setTypeEditable(null);
+		}
 	}
 
 	@Override
