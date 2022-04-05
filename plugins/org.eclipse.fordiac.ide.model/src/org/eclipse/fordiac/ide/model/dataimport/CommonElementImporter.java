@@ -215,15 +215,17 @@ public abstract class CommonElementImporter {
 	}
 
 	private void buildErrorMarker(final IFile file) {
-		final WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) { //$NON-NLS-1$
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				errorMarkerAttributes.stream().forEach(a -> a.createMarkerInFile(file));
-				return Status.OK_STATUS;
-			}
-		};
-		job.setRule(file.getProject());
-		job.schedule();
+		if (!errorMarkerAttributes.isEmpty()) {
+			final WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) { //$NON-NLS-1$
+				@Override
+				public IStatus runInWorkspace(final IProgressMonitor monitor) {
+					errorMarkerAttributes.stream().forEach(a -> a.createMarkerInFile(file));
+					return Status.OK_STATUS;
+				}
+			};
+			job.setRule(file.getProject());
+			job.schedule();
+		}
 	}
 
 	protected abstract LibraryElement createRootModelElement();
