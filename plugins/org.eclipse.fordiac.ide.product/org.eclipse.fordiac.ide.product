@@ -54,6 +54,12 @@
 
    <features>
       <feature id="org.eclipse.fordiac.ide.comgeneration.feature"/>
+      <feature id="org.eclipse.fordiac.ide.deployment.feature"/>
+      <feature id="org.eclipse.fordiac.ide.export.feature"/>
+      <feature id="org.eclipse.fordiac.ide.runtime.feature"/>
+      <feature id="org.eclipse.fordiac.ide.structuredtext.feature"/>
+      <feature id="org.eclipse.fordiac.ide.typeeditor.feature"/>
+      <feature id="org.eclipse.fordiac.ide.workbench.feature"/>
       <feature id="org.eclipse.equinox.p2.user.ui"/>
       <feature id="org.eclipse.equinox.p2.extras.feature"/>
       <feature id="org.eclipse.equinox.p2.core.feature"/>
@@ -83,11 +89,6 @@
       <feature id="org.eclipse.xtext.ui"/>
       <feature id="org.eclipse.emf.databinding"/>
       <feature id="org.eclipse.xtext.redist"/>
-      <feature id="org.eclipse.fordiac.ide.deployment.feature"/>
-      <feature id="org.eclipse.fordiac.ide.export.feature"/>
-      <feature id="org.eclipse.fordiac.ide.runtime.feature"/>
-      <feature id="org.eclipse.fordiac.ide.typeeditor.feature"/>
-      <feature id="org.eclipse.fordiac.ide.workbench.feature"/>
       <feature id="org.eclipse.xtext.xbase.lib"/>
       <feature id="org.eclipse.emf.mwe2.runtime.sdk"/>
       <feature id="org.eclipse.xtext.runtime"/>
@@ -102,7 +103,6 @@
       <feature id="org.eclipse.jgit.gpg.bc" installMode="root"/>
       <feature id="org.eclipse.jgit.ssh.jsch" installMode="root"/>
       <feature id="org.eclipse.elk.algorithms.feature" installMode="root"/>
-      <feature id="org.eclipse.fordiac.ide.structuredtext.feature" installMode="root"/>
    </features>
 
    <configurations>

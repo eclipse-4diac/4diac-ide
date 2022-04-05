@@ -16,7 +16,6 @@ import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RectangleFigure;
-import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractConnectableEditPart;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
@@ -28,7 +27,7 @@ public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 
 	private final Insets insets = new Insets(2);
 
-	private RoundedRectangle selectionFeedback;
+	private IFigure selectionFeedback;
 
 	@Override
 	public void deactivate() {
@@ -60,11 +59,15 @@ public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 
 		if (isFeedbackRequest(request) && (null == selectionFeedback) && (null == handles)) {
 			// we don't have already a feedback showing and we are not selected
-			selectionFeedback = ModifiedNonResizeableEditPolicy.createSelectionFeedbackFigure(getHost(), 2);
+			selectionFeedback = createSelectionFeedbackFigure();
 			if (null != selectionFeedback) {
 				addFeedback(selectionFeedback);
 			}
 		}
+	}
+
+	protected IFigure createSelectionFeedbackFigure() {
+		return ModifiedNonResizeableEditPolicy.createSelectionFeedbackFigure(getHost(), 2);
 	}
 
 	@Override

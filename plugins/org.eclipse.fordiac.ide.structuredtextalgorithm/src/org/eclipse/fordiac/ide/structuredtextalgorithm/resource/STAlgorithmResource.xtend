@@ -46,4 +46,13 @@ class STAlgorithmResource extends LazyLinkingResource {
 	def protected void clearInternalFBType() {
 		contents?.removeIf[it instanceof FBType]
 	}
+
+	override synchronized getEObject(String uriFragment) {
+		try {
+			super.getEObject(uriFragment)
+		} catch (IllegalArgumentException e) {
+			null
+		}
+	}
+
 }
