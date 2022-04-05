@@ -53,6 +53,8 @@ public final class Messages extends NLS {
 
 	public static String CreateConnectionSection_CreateConnection;
 
+	public static String CreateGroupPasteCommand;
+
 	/** The Create sub app command_ label create sub app command. */
 	public static String CreateSubAppCommand_LABELCreateSubAppCommand;
 

@@ -289,4 +289,13 @@ public class PasteCommand extends Command {
 		this.cutPasteCmd = cutPasteCmd;
 	}
 
+	// Added by me, probably will delete it
+	public Collection<? extends Object> getTemplates() {
+		return templates;
+	}
+
+	public Collection<FBNetworkElement> getCopiedFBs() {
+		return copiedElements.values();
+	}
+
 }
