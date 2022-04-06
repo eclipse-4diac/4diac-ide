@@ -1274,6 +1274,10 @@ public interface StandardFunctions extends Functions {
 		return BoolValue.toBoolValue(value);
 	}
 
+	static CharValue BYTE_TO_CHAR(final ByteValue value) {
+		return CharValue.toCharValue(value.byteValue());
+	}
+
 	/* BOOL_TO */
 	static LIntValue BOOL_TO_LINT(final BoolValue value) {
 		return LIntValue.toLIntValue(value.longValue());
