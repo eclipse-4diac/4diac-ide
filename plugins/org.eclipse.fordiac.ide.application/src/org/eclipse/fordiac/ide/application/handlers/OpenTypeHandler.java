@@ -37,17 +37,9 @@ public class OpenTypeHandler extends AbstractHandler {
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection sel = HandlerUtil.getCurrentStructuredSelection(event);
-		if (sel != null) {
-			Object obj = sel.getFirstElement();
-			if (obj instanceof EditPart) {
-				obj = ((EditPart) obj).getModel();
-			}
-			if (obj instanceof FBNetworkElement) {
-				final FBType type = ((FBNetworkElement) obj).getType();
-				if (type != null) {
-					openTypeEditor(type.getPaletteEntry().getFile());
-				}
-			}
+		final IFile typeFile = getSelectedTypeFile(sel);
+		if (typeFile != null) {
+			openTypeEditor(typeFile);
 		}
 		return Status.OK_STATUS;
 	}
@@ -72,14 +64,23 @@ public class OpenTypeHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final ISelection sel = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		if ((sel instanceof IStructuredSelection) && !sel.isEmpty()) {
+		setBaseEnabled(getSelectedTypeFile(sel) != null);
+	}
+
+	private static IFile getSelectedTypeFile(final ISelection sel) {
+		if ((sel instanceof IStructuredSelection) && !sel.isEmpty() && (((IStructuredSelection) sel).size() == 1)) {
 			Object obj = ((IStructuredSelection) sel).getFirstElement();
 			if (obj instanceof EditPart) {
 				obj = ((EditPart) obj).getModel();
 			}
 			if (obj instanceof FBNetworkElement) {
-				setBaseEnabled(((FBNetworkElement) obj).getType() != null);
+				final FBType type = ((FBNetworkElement) obj).getType();
+				if ((type != null) && (type.getPaletteEntry() != null)) {
+					return type.getPaletteEntry().getFile();
+				}
 			}
 		}
+		return null;
 	}
+
 }
