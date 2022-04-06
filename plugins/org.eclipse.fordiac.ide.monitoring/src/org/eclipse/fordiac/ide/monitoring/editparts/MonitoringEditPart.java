@@ -58,6 +58,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Text;
 
 public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 
@@ -236,9 +237,20 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 			@Override
 			protected void initCellEditor() {
 				super.initCellEditor();
-				final String model = getModel().getCurrentValue();
-				getCellEditor().setValue(StructMonitoringHelper.format(model));
+				final String model = StructMonitoringHelper.format(getModel().getCurrentValue());
+				// is null if forte has been turned off
+				if (model != null) {
+					getCellEditor().setValue(model);					
+				}
 			}
+
+			@Override
+			public void show() {
+				super.show();
+				final Text textControl = (Text) getCellEditor().getControl();
+				textControl.setSelection(SELECTED_NONE);
+			}
+			
 		}.show();
 	}
 

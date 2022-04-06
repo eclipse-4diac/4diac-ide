@@ -20,7 +20,7 @@ public class StructMonitoringHelper {
 	
 	public static String format(final String model) {
 		if (model == null || model.length() < 2) {
-			throw new IllegalArgumentException();
+			return null;
 		}
 		
 		final StringBuilder builder = new StringBuilder(model);
