@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.model.data.WordType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.value.ValueConverterFactory
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 
 final class ValueOperations {
 
@@ -938,6 +939,72 @@ final class ValueOperations {
 			converter.toValue(value).wrapValue(type)
 		} else
 			throw new UnsupportedOperationException('''The type «type?.name» is not supported''')
+	}
+
+	def static Class<? extends Value> valueType(INamedElement type) {
+		switch (type) {
+			LrealType: LRealValue
+			RealType: RealValue
+			LintType: LIntValue
+			DintType: DIntValue
+			IntType: IntValue
+			SintType: SIntValue
+			UlintType: ULIntValue
+			UdintType: UDIntValue
+			UintType: UIntValue
+			UsintType: USIntValue
+			LtimeType: LTimeValue
+			TimeType: TimeValue
+			LwordType: LWordValue
+			DwordType: DWordValue
+			WordType: WordValue
+			ByteType: ByteValue
+			BoolType: BoolValue
+			WstringType: WStringValue
+			StringType: StringValue
+			WcharType: WCharValue
+			CharType: CharValue
+			LdtType: LDateAndTimeValue
+			DateAndTimeType: DateAndTimeValue
+			LtodType: LTimeOfDayValue
+			TimeOfDayType: TimeOfDayValue
+			LdateType: LDateValue
+			DateType: DateValue
+			default: null
+		}
+	}
+
+	def static DataType dataType(Class<? extends Value> type) {
+		switch (type) {
+			case LRealValue: ElementaryTypes.LREAL
+			case RealValue: ElementaryTypes.REAL
+			case LIntValue: ElementaryTypes.LINT
+			case DIntValue: ElementaryTypes.DINT
+			case IntValue: ElementaryTypes.INT
+			case SIntValue: ElementaryTypes.SINT
+			case ULIntValue: ElementaryTypes.ULINT
+			case UDIntValue: ElementaryTypes.UDINT
+			case UIntValue: ElementaryTypes.UINT
+			case USIntValue: ElementaryTypes.USINT
+			case LTimeValue: ElementaryTypes.LTIME
+			case TimeValue: ElementaryTypes.TIME
+			case LWordValue: ElementaryTypes.LWORD
+			case DWordValue: ElementaryTypes.DWORD
+			case WordValue: ElementaryTypes.WORD
+			case ByteValue: ElementaryTypes.BYTE
+			case BoolValue: ElementaryTypes.BOOL
+			case WStringValue: ElementaryTypes.WSTRING
+			case StringValue: ElementaryTypes.STRING
+			case WCharValue: ElementaryTypes.WCHAR
+			case CharValue: ElementaryTypes.CHAR
+			case LDateAndTimeValue: ElementaryTypes.LDATE_AND_TIME
+			case DateAndTimeValue: ElementaryTypes.DATE_AND_TIME
+			case LTimeOfDayValue: ElementaryTypes.LTIME_OF_DAY
+			case TimeOfDayValue: ElementaryTypes.TIME_OF_DAY
+			case LDateValue: ElementaryTypes.LDATE
+			case DateValue: ElementaryTypes.DATE
+			default: null
+		}
 	}
 
 	def static asBoolean(Value value) {
