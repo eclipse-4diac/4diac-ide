@@ -16,6 +16,8 @@ import java.util.Map
 import java.util.Queue
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
+import org.eclipse.fordiac.ide.model.eval.value.ECStateValue
+import org.eclipse.fordiac.ide.model.eval.variable.ECStateVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECState
@@ -25,7 +27,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.asBoolean
 
 class BasicFBEvaluator extends BaseFBEvaluator<BasicFBType> {
-	ECState state
 	final Map<ECTransition, Evaluator> transitionEvaluators
 
 	new(BasicFBType type, Variable context, Iterable<Variable> variables, Evaluator parent) {
@@ -34,7 +35,6 @@ class BasicFBEvaluator extends BaseFBEvaluator<BasicFBType> {
 
 	new(BasicFBType type, Variable context, Iterable<Variable> variables, Queue<Event> queue, Evaluator parent) {
 		super(type, context, variables, queue, parent)
-		state = type.ECC.start
 		transitionEvaluators = type.ECC.ECTransition.filter[!it.conditionExpression.nullOrEmpty].toInvertedMap [
 			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends ECTransition>, instance,
 				emptySet, this)
@@ -61,5 +61,13 @@ class BasicFBEvaluator extends BaseFBEvaluator<BasicFBType> {
 			algorithmEvaluators.get(algorithm)?.evaluate
 			if(output !== null) queue?.add(output)
 		]
+	}
+
+	def ECState getState() {
+		(instance.members.get(ECStateVariable.NAME) as ECStateVariable).value.state
+	}
+
+	def void setState(ECState state) {
+		(instance.members.get(ECStateVariable.NAME) as ECStateVariable).value = new ECStateValue(state)
 	}
 }

@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.fb.BasicFBEvaluator
+import org.eclipse.fordiac.ide.model.eval.variable.ECStateVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
@@ -49,6 +50,26 @@ class BasicFBEvaluatorTest extends FBEvaluatorTest {
 		val ecc = newECC(#[init, state], #[newTransition(init, state, inputEvent, null)])
 		21.toIntValue.assertTrace(#[outputEvent], #[state],
 			evaluateBasicFB(ecc, #[inputEvent], #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
+				"DO1".newVarDeclaration(ElementaryTypes.INT, false)))
+	}
+
+	@Test
+	def void testBasicFBInitialState() {
+		val inputEvent = "REQ".newEvent(true)
+		val outputEvent = "CNF".newEvent(false)
+		val alg = '''DO1 := 0;'''.newSTAlgorithm("REQ")
+		val alg2 = '''DO1 := DI1 + DI2;'''.newSTAlgorithm("REQ2")
+		val init = newState("INIT")
+		val state = newState("STATE", newAction(alg, outputEvent))
+		val state2 = newState("STATE2", newAction(alg2, outputEvent))
+		val ecc = newECC(#[init, state, state2],
+			#[newTransition(init, state, inputEvent, null), newTransition(state, state2, inputEvent, null)])
+		0.toIntValue.assertTrace(#[outputEvent], #[state],
+			evaluateBasicFB(ecc, #[inputEvent], #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
+				"DO1".newVarDeclaration(ElementaryTypes.INT, false)))
+		21.toIntValue.assertTrace(#[outputEvent], #[state2],
+			evaluateBasicFB(ecc, #[inputEvent],
+				#[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2"), new ECStateVariable(state)],
 				"DO1".newVarDeclaration(ElementaryTypes.INT, false)))
 	}
 
@@ -119,7 +140,7 @@ class BasicFBEvaluatorTest extends FBEvaluatorTest {
 		VarDeclaration output) {
 		val fbType = LibraryElementFactory.eINSTANCE.createBasicFBType
 		fbType.name = "Test"
-		fbType.interfaceList = newInterfaceList(ecc.containedEvents, variables.map [
+		fbType.interfaceList = newInterfaceList(ecc.containedEvents, variables.filter[type instanceof DataType].map [
 			newVarDeclaration(name, type as DataType, true)
 		] + #[output])
 		fbType.ECC = ecc

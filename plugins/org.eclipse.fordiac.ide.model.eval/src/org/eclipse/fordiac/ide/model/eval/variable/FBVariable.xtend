@@ -16,10 +16,11 @@ import java.util.Map
 import org.eclipse.fordiac.ide.model.eval.value.FBValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.xtend.lib.annotations.Accessors
 
-import static extension org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
+import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 class FBVariable extends AbstractVariable {
 	@Accessors final Map<String, Variable> members
@@ -47,6 +48,9 @@ class FBVariable extends AbstractVariable {
 			(type.internalFbs).forEach [ variable |
 				members.computeIfAbsent(variable.name)[newVariable(variable)]
 			]
+		}
+		if (type instanceof BasicFBType) {
+			members.computeIfAbsent(ECStateVariable.NAME)[new ECStateVariable(type)]
 		}
 		this.members = members.immutableCopy
 		value = new FBValue(type, this.members)
