@@ -21,6 +21,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.scoping;
 
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
@@ -42,6 +43,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.EObjectDescription;
 import org.eclipse.xtext.resource.IEObjectDescription;
@@ -53,6 +55,7 @@ import org.eclipse.xtext.util.SimpleAttributeResolver;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import com.google.inject.Inject;
 
 /** This class contains custom scoping description.
  *
@@ -73,6 +76,9 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 				|| reference == STCorePackage.Literals.ST_DATE_AND_TIME_LITERAL__TYPE
 				|| reference == STCorePackage.Literals.ST_STRING_LITERAL__TYPE);
 	}
+
+	@Inject
+	STStandardFunctionProvider standardFunctionProvider;
 
 	@Override
 	public IScope getScope(final EObject context, final EReference reference) {
@@ -110,8 +116,19 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 					}
 				}
 				return IScope.NULLSCOPE;
+			} else if (context instanceof STFeatureExpression) {
+				final STFeatureExpression expression = (STFeatureExpression) context;
+				if (expression.isCall()) {
+					final List<DataType> argumentTypes = expression.getParameters().stream()
+							.map(STCallArgument::getResultType).map(DataType.class::cast).collect(Collectors.toList());
+					final Iterable<STStandardFunction> standardFunctions = standardFunctionProvider.get(argumentTypes);
+					return scopeFor(standardFunctions,
+							filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference));
+				}
 			}
-			return filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference);
+			final Iterable<STStandardFunction> standardFunctions = standardFunctionProvider.get();
+			return scopeFor(standardFunctions,
+					filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference));
 		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET) {
 			final var feature = getFeature(context);
 			if (feature instanceof ICallable) {

@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EPackage;
 
 import org.eclipse.emf.ecore.util.Switch;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.*;
@@ -384,6 +385,14 @@ public class STCoreSwitch<T> extends Switch<T> {
 				STMultibitPartialExpression stMultibitPartialExpression = (STMultibitPartialExpression)theEObject;
 				T result = caseSTMultibitPartialExpression(stMultibitPartialExpression);
 				if (result == null) result = caseSTExpression(stMultibitPartialExpression);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case STCorePackage.ST_STANDARD_FUNCTION: {
+				STStandardFunction stStandardFunction = (STStandardFunction)theEObject;
+				T result = caseSTStandardFunction(stStandardFunction);
+				if (result == null) result = caseICallable(stStandardFunction);
+				if (result == null) result = caseINamedElement(stStandardFunction);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1067,6 +1076,21 @@ public class STCoreSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Standard Function</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Standard Function</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTStandardFunction(STStandardFunction object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>INamed Element</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -1078,6 +1102,21 @@ public class STCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseINamedElement(INamedElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ICallable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ICallable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseICallable(ICallable object) {
 		return null;
 	}
 

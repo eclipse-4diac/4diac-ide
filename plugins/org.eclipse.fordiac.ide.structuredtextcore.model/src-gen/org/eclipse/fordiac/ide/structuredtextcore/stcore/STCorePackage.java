@@ -1676,6 +1676,79 @@ public interface STCorePackage extends EPackage {
 	int ST_MULTIBIT_PARTIAL_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl <em>ST Standard Function</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTStandardFunction()
+	 * @generated
+	 */
+	int ST_STANDARD_FUNCTION = 45;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_STANDARD_FUNCTION__NAME = LibraryElementPackage.ICALLABLE__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_STANDARD_FUNCTION__COMMENT = LibraryElementPackage.ICALLABLE__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Return Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_STANDARD_FUNCTION__RETURN_TYPE = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Input Parameters</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_STANDARD_FUNCTION__INPUT_PARAMETERS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Output Parameters</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_STANDARD_FUNCTION__OUTPUT_PARAMETERS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>In Out Parameters</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 3;
+
+	/**
+	 * The number of structural features of the '<em>ST Standard Function</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_STANDARD_FUNCTION_FEATURE_COUNT = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 4;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1683,7 +1756,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBinaryOperator()
 	 * @generated
 	 */
-	int ST_BINARY_OPERATOR = 45;
+	int ST_BINARY_OPERATOR = 46;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator <em>ST Unary Operator</em>}' enum.
@@ -1693,7 +1766,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTUnaryOperator()
 	 * @generated
 	 */
-	int ST_UNARY_OPERATOR = 46;
+	int ST_UNARY_OPERATOR = 47;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifier <em>ST Multi Bit Access Specifier</em>}' enum.
@@ -1703,7 +1776,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTMultiBitAccessSpecifier()
 	 * @generated
 	 */
-	int ST_MULTI_BIT_ACCESS_SPECIFIER = 47;
+	int ST_MULTI_BIT_ACCESS_SPECIFIER = 48;
 
 	/**
 	 * The meta object id for the '<em>ST Date</em>' data type.
@@ -1713,7 +1786,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDate()
 	 * @generated
 	 */
-	int ST_DATE = 48;
+	int ST_DATE = 49;
 
 	/**
 	 * The meta object id for the '<em>ST Time</em>' data type.
@@ -1723,7 +1796,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTime()
 	 * @generated
 	 */
-	int ST_TIME = 49;
+	int ST_TIME = 50;
 
 	/**
 	 * The meta object id for the '<em>ST Time Of Day</em>' data type.
@@ -1733,7 +1806,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTimeOfDay()
 	 * @generated
 	 */
-	int ST_TIME_OF_DAY = 50;
+	int ST_TIME_OF_DAY = 51;
 
 	/**
 	 * The meta object id for the '<em>ST Date And Time</em>' data type.
@@ -1743,7 +1816,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDateAndTime()
 	 * @generated
 	 */
-	int ST_DATE_AND_TIME = 51;
+	int ST_DATE_AND_TIME = 52;
 
 	/**
 	 * The meta object id for the '<em>ST String</em>' data type.
@@ -1753,7 +1826,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTString()
 	 * @generated
 	 */
-	int ST_STRING = 52;
+	int ST_STRING = 53;
 
 
 	/**
@@ -2988,6 +3061,60 @@ public interface STCorePackage extends EPackage {
 	EReference getSTMultibitPartialExpression_Expression();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction <em>ST Standard Function</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ST Standard Function</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
+	 * @generated
+	 */
+	EClass getSTStandardFunction();
+
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getReturnType <em>Return Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Return Type</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getReturnType()
+	 * @see #getSTStandardFunction()
+	 * @generated
+	 */
+	EReference getSTStandardFunction_ReturnType();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getInputParameters <em>Input Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Input Parameters</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getInputParameters()
+	 * @see #getSTStandardFunction()
+	 * @generated
+	 */
+	EReference getSTStandardFunction_InputParameters();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getOutputParameters <em>Output Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Output Parameters</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getOutputParameters()
+	 * @see #getSTStandardFunction()
+	 * @generated
+	 */
+	EReference getSTStandardFunction_OutputParameters();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getInOutParameters <em>In Out Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>In Out Parameters</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getInOutParameters()
+	 * @see #getSTStandardFunction()
+	 * @generated
+	 */
+	EReference getSTStandardFunction_InOutParameters();
+
+	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4111,6 +4238,48 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION = eINSTANCE.getSTMultibitPartialExpression_Expression();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl <em>ST Standard Function</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTStandardFunction()
+		 * @generated
+		 */
+		EClass ST_STANDARD_FUNCTION = eINSTANCE.getSTStandardFunction();
+
+		/**
+		 * The meta object literal for the '<em><b>Return Type</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_STANDARD_FUNCTION__RETURN_TYPE = eINSTANCE.getSTStandardFunction_ReturnType();
+
+		/**
+		 * The meta object literal for the '<em><b>Input Parameters</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_STANDARD_FUNCTION__INPUT_PARAMETERS = eINSTANCE.getSTStandardFunction_InputParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Output Parameters</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_STANDARD_FUNCTION__OUTPUT_PARAMETERS = eINSTANCE.getSTStandardFunction_OutputParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>In Out Parameters</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS = eINSTANCE.getSTStandardFunction_InOutParameters();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}' enum.

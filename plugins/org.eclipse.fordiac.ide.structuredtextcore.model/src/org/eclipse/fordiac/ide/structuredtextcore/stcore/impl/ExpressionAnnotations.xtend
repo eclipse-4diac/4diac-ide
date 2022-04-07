@@ -194,6 +194,17 @@ final package class ExpressionAnnotations {
 		}
 	}
 
+	def package static INamedElement getResultType(STCallUnnamedArgument arg) { arg.arg?.resultType }
+
+	def package static INamedElement getResultType(STCallNamedInputArgument arg) { arg.source?.resultType }
+
+	def package static INamedElement getResultType(STCallNamedOutputArgument arg) {
+		switch (target :arg.target) {
+			VarDeclaration: target.type
+			STVarDeclaration: target.type
+		}
+	}
+
 	def package static Map<INamedElement, STExpression> getMappedInputArguments(STFeatureExpression expr) {
 		val feature = expr.feature
 		if (feature instanceof ICallable) {
@@ -220,8 +231,8 @@ final package class ExpressionAnnotations {
 				val inputCount = feature.inputParameters.size
 				val inOutCount = feature.inOutParameters.size
 				parameters.toInvertedMap [ parameter |
-					((expr.parameters.get(inputCount + inOutCount + parameters.indexOf(parameter)) as STCallUnnamedArgument).
-						arg as STFeatureExpression).feature
+					((expr.parameters.get(inputCount + inOutCount +
+						parameters.indexOf(parameter)) as STCallUnnamedArgument).arg as STFeatureExpression).feature
 				].unmodifiableView
 			} else { // named arguments
 				val namedArguments = expr.parameters.filter(STCallNamedOutputArgument).toMap[source]

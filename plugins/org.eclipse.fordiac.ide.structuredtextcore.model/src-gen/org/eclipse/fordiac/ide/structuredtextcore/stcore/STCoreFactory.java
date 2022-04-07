@@ -441,6 +441,15 @@ public interface STCoreFactory extends EFactory {
 	STMultibitPartialExpression createSTMultibitPartialExpression();
 
 	/**
+	 * Returns a new object of class '<em>ST Standard Function</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Standard Function</em>'.
+	 * @generated
+	 */
+	STStandardFunction createSTStandardFunction();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

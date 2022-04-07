@@ -175,6 +175,16 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	 * @generated
 	 */
 	@Override
+	public INamedElement getResultType() {
+		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE:
