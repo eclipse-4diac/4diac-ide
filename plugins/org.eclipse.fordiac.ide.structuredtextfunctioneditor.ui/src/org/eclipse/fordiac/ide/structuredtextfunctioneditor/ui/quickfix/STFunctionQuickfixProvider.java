@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.quickfix;
 
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.STCoreQuickfixProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation.STFunctionValidator;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.ui.editor.model.edit.IModification;
@@ -28,11 +29,33 @@ public class STFunctionQuickfixProvider extends STCoreQuickfixProvider {
 
 	@SuppressWarnings("boxing")
 	@Fix(STFunctionValidator.WRONG_NAME_CASE)
-	public static void variableNameCasing(final Issue issue, final IssueResolutionAcceptor acceptor) {
+	public static void fixVariableNameCasing(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, "Change variable name case as declared",
 				"Changes " + issue.getData()[0] + "to " + issue.getData()[1], "upcase.png", (IModification) context -> {
 					final IXtextDocument xtextDocument = context.getXtextDocument();
 					xtextDocument.replace(issue.getOffset(), issue.getLength(), issue.getData()[1]);
+				});
+	}
+
+	@Fix(STCoreValidator.TRAILING_UNDERSCORE_IN_IDENTIFIER_ERROR)
+	public static void fixTrailingUnderscore(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		acceptor.accept(issue, "Remove trailing '_' from identifier",
+				"Remove trailing underscore from name: " + issue.getData()[0], "upcase.png",
+				(IModification) context -> {
+					final IXtextDocument xtextDocument = context.getXtextDocument();
+					xtextDocument.replace(issue.getOffset(), issue.getLength(),
+							issue.getData()[0].substring(0, issue.getData()[0].length() - 1));
+				});
+	}
+
+	@Fix(STCoreValidator.CONSECUTIVE_UNDERSCORE_IN_IDENTIFIER_ERROR)
+	public static void fixConsecutiveUnderscore(final Issue issue, final IssueResolutionAcceptor acceptor) {
+		acceptor.accept(issue, "Replace consecutive undersocres with one underscore from identifier",
+				"Remove consecutive underscore from name: " + issue.getData()[0],
+				"upcase.png", (IModification) context -> {
+					final IXtextDocument xtextDocument = context.getXtextDocument();
+					xtextDocument.replace(issue.getOffset(), issue.getLength(),
+							issue.getData()[0].replaceAll("_(_)+", "_"));
 				});
 	}
 

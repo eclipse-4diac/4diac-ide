@@ -60,7 +60,18 @@ class STFunctionValidatorTest {
 		    bo__l1 : BOOL := FALSE;
 		    bol2 : BOOL := TRUE;
 		END_VAR
-		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.INVALID_ID_FORMAT)
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.CONSECUTIVE_UNDERSCORE_IN_IDENTIFIER_ERROR)
+	}
+	
+	@Test
+	def void testTrailingUnderscoreErrorValidator() {
+		'''
+		FUNCTION hubert
+		VAR
+		    bol1_ : BOOL := FALSE;
+		    bol2 : BOOL := TRUE;
+		END_VAR
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.TRAILING_UNDERSCORE_IN_IDENTIFIER_ERROR)
 	}
 
 	def private assertIssuesInvalidNameWarning(STFunctionSource source) {
