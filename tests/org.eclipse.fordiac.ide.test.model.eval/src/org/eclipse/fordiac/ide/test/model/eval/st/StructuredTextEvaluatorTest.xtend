@@ -470,6 +470,12 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testStandardFunctions() {
+		21.toSIntValue.assertEquals("ADD(17, 4)".evaluateExpression)
+		42.toSIntValue.assertEquals("ADD(17, 4, 21)".evaluateExpression)
+	}
+
+	@Test
 	def void testVariable() {
 		21.toIntValue.assertTrace(#[STBinaryExpression], '''
 			VAR_TEMP

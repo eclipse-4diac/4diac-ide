@@ -18,10 +18,12 @@ import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
+import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.value.StructValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
+import org.eclipse.fordiac.ide.model.eval.variable.FBVariable
 import org.eclipse.fordiac.ide.model.eval.variable.PartialVariable
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
@@ -48,6 +50,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpres
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral
@@ -60,8 +63,8 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import static org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations.*
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
+import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
-import org.eclipse.fordiac.ide.model.eval.variable.FBVariable
 
 abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	@Accessors final String name
@@ -331,6 +334,12 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			STVarDeclaration,
 			ICallable case !expr.call:
 				feature.findVariable.value
+			STStandardFunction case expr.call: {
+				val arguments = expr.mappedInputArguments.entrySet.filter[value !== null].map [
+					value.evaluateExpression
+				].toList
+				StandardFunctions.invoke(feature.name, arguments)
+			}
 			ICallable case expr.call: {
 				val arguments = (expr.mappedInputArguments.entrySet.filter[value !== null].map [
 					val parameter = newVariable(key.name, key.type as DataType)
