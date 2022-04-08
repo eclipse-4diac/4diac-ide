@@ -86,7 +86,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		comment = WidgetFactory.button(SWT.CHECK).text("Comment").create(checkboxComposite);
 
 		instanceName.setSelection(true);
-		pinName.setSelection(true);
+		pinName.setSelection(false);
 		type.setSelection(true);
 		comment.setSelection(true);
 
