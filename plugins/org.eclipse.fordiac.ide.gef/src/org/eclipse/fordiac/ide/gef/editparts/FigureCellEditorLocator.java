@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.editparts;
 
-import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.tools.CellEditorLocator;
 import org.eclipse.jface.viewers.CellEditor;
@@ -21,14 +21,14 @@ import org.eclipse.swt.widgets.Scrollable;
 
 public class FigureCellEditorLocator implements CellEditorLocator {
 
-	private final Figure figure;
+	private final IFigure figure;
 
 	/**
 	 * Instantiates a new name cell editor locator.
 	 *
 	 * @param label the label
 	 */
-	public FigureCellEditorLocator(final Figure figure) {
+	public FigureCellEditorLocator(final IFigure figure) {
 		this.figure = figure;
 	}
 
@@ -53,6 +53,10 @@ public class FigureCellEditorLocator implements CellEditorLocator {
 			}
 			control.setBounds(rect.x, rect.y, rect.width, rect.height);
 		}
+	}
+
+	protected IFigure getFigure() {
+		return figure;
 	}
 
 }

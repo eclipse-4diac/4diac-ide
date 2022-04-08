@@ -20,9 +20,8 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.application.editors.InstanceCommentDEManager;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
-import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
-import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -34,10 +33,6 @@ import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.requests.DirectEditRequest;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
 
 public class InstanceCommentEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
@@ -132,18 +127,7 @@ public class InstanceCommentEditPart extends AbstractGraphicalEditPart implement
 	}
 
 	private void performDirectEdit() {
-		new TextDirectEditManager(this, new FigureCellEditorLocator(getFigure())) {
-			@Override
-			protected CellEditor createCellEditorOn(final Composite composite) {
-				return new TextCellEditor(composite, SWT.MULTI | SWT.WRAP);
-			}
-
-			@Override
-			protected void initCellEditor() {
-				super.initCellEditor();
-				getCellEditor().setValue(getModel().getInstanceComment());
-			}
-		}.show();
+		new InstanceCommentDEManager(this).show();
 	}
 
 	@Override
