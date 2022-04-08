@@ -66,9 +66,7 @@ class STFunctionFormatter extends STCoreFormatter {
 
 		stFunction.code.forEach[format]
 
-		stFunction.regionFor.keyword("END_FUNCTION").prepend[noIndentation]
-
-		stFunction.regionFor.keyword("END_FUNCTION").append[newLine]
+		stFunction.regionFor.keyword("END_FUNCTION").prepend[noIndentation].append[newLine]
 	}
 
 }
