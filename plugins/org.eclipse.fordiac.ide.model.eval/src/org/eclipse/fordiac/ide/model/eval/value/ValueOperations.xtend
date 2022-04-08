@@ -49,6 +49,7 @@ import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.value.ValueConverterFactory
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 
 final class ValueOperations {
 
@@ -1003,6 +1004,20 @@ final class ValueOperations {
 			case TimeOfDayValue: ElementaryTypes.TIME_OF_DAY
 			case LDateValue: ElementaryTypes.LDATE
 			case DateValue: ElementaryTypes.DATE
+			case AnySignedValue: GenericTypes.ANY_SIGNED
+			case AnyUnsignedValue: GenericTypes.ANY_UNSIGNED
+			case AnyIntValue: GenericTypes.ANY_INT
+			case AnyRealValue: GenericTypes.ANY_REAL
+			case AnyNumValue: GenericTypes.ANY_NUM
+			case AnyDurationValue: GenericTypes.ANY_DURATION
+			case AnyMagnitudeValue: GenericTypes.ANY_MAGNITUDE
+			case AnyBitValue: GenericTypes.ANY_BIT
+			case AnyCharValue: GenericTypes.ANY_CHAR
+			case AnyStringValue: GenericTypes.ANY_STRING
+			case AnyCharsValue: GenericTypes.ANY_CHARS
+			case AnyDateValue: GenericTypes.ANY_DATE
+			case AnyElementaryValue: GenericTypes.ANY_ELEMENTARY
+			case AnyValue: GenericTypes.ANY
 			default: null
 		}
 	}

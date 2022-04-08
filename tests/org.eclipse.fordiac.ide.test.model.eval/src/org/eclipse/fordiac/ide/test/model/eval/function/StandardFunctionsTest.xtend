@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.model.eval.function
 
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
 import org.junit.jupiter.api.Test
 
@@ -25,30 +24,12 @@ import static extension org.junit.jupiter.api.Assertions.*
 class StandardFunctionsTest {
 
 	@Test
-	def void testNotFound() {
-		NoSuchMethodError.assertThrows[StandardFunctions.findMethodFromDataTypes("ILLEGAL_NAME", ElementaryTypes.INT)]
-		NoSuchMethodError.assertThrows[StandardFunctions.findMethodFromDataTypes("LEN", ElementaryTypes.INT)]
-		NoSuchMethodError.assertThrows [
-			StandardFunctions.findMethodFromDataTypes("ADD", ElementaryTypes.INT, ElementaryTypes.STRING)
-		]
-	}
-
-	@Test
 	def void testAdd() {
-		StandardFunctions.inferReturnTypeFromDataTypes("ADD").assertNull
-		ElementaryTypes.INT.assertEquals(
-			StandardFunctions.inferReturnTypeFromDataTypes("ADD", ElementaryTypes.SINT, ElementaryTypes.INT))
-		StandardFunctions.findMethodFromDataTypes("ADD", ElementaryTypes.INT, ElementaryTypes.INT).assertNotNull
-		StandardFunctions.findMethodFromDataTypes("ADD", ElementaryTypes.INT, ElementaryTypes.INT, ElementaryTypes.INT).
-			assertNotNull
 		4.toIntValue.assertEquals(StandardFunctions.invoke("ADD", "2".toIntValue, "2".toIntValue))
 	}
 
 	@Test
 	def void testLen() {
-		ElementaryTypes.ULINT.assertEquals(
-			StandardFunctions.inferReturnTypeFromDataTypes("LEN", ElementaryTypes.STRING))
-		StandardFunctions.findMethodFromDataTypes("LEN", ElementaryTypes.STRING).assertNotNull
-		4.toULIntValue.assertEquals(StandardFunctions.invoke("LEN", "abcd".toStringValue))
+		4.toULIntValue.assertEquals(StandardFunctions.invoke("LEN", "Test".toStringValue))
 	}
 }

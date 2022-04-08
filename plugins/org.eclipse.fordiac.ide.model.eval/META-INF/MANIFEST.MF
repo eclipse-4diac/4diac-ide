@@ -14,6 +14,7 @@ Require-Bundle: org.eclipse.xtext.xbase.lib,
  org.eclipse.fordiac.ide.model
 Export-Package: org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.model.eval.fb,
+ org.eclipse.fordiac.ide.model.eval.function,
  org.eclipse.fordiac.ide.model.eval.value,
  org.eclipse.fordiac.ide.model.eval.variable
 Bundle-Activator: org.eclipse.fordiac.ide.model.eval.plugin.EvaluatorPlugin
