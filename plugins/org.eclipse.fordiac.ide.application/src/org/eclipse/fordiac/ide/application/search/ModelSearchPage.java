@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.search;
 
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -23,14 +24,18 @@ import org.eclipse.search.ui.ISearchPage;
 import org.eclipse.search.ui.ISearchPageContainer;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 
 public class ModelSearchPage extends DialogPage implements ISearchPage {
 
 	public static final String EXTENSION_POINT_ID = "org.eclipse.fordiac.ide.application.search.ModelSearchPage"; //$NON-NLS-1$
 	public static final String ID = "ModelSearchPage"; //$NON-NLS-1$
+	public static final int NUMBER_OF_SEARCH_OPTIONS = 4;
 
 	private ISearchPageContainer container;
 	private Button instanceName;
@@ -66,24 +71,21 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 
 	@Override
 	public void createControl(final Composite parent) {
-
 		GridLayoutFactory.fillDefaults().numColumns(1).margins(LayoutConstants.getMargins()).generateLayout(parent);
 
 		// Factory for the big composite
 		final Composite composite = WidgetFactory.composite(NONE).create(parent);
 		GridLayoutFactory.fillDefaults().numColumns(1).generateLayout(composite);
 
-		final LabelFactory labelFactory = LabelFactory.newLabel(SWT.NONE);
-		labelFactory.text("Search for: ").create(composite);
+		final Group group = new Group(composite, SWT.NONE);
+		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		group.setLayout(new GridLayout(NUMBER_OF_SEARCH_OPTIONS, false));
+		group.setText(Messages.SearchFor);
 
-		// Factory for the checkbox composite (to have them side by side)
-		final Composite checkboxComposite = WidgetFactory.composite(NONE).create(composite);
-		GridLayoutFactory.fillDefaults().numColumns(4).generateLayout(checkboxComposite);
-
-		instanceName = WidgetFactory.button(SWT.CHECK).text("Instance Name").create(checkboxComposite);
-		pinName = WidgetFactory.button(SWT.CHECK).text("Pin Name").create(checkboxComposite);
-		type = WidgetFactory.button(SWT.CHECK).text("Type").create(checkboxComposite);
-		comment = WidgetFactory.button(SWT.CHECK).text("Comment").create(checkboxComposite);
+		instanceName = WidgetFactory.button(SWT.CHECK).text(Messages.InstanceName).create(group);
+		pinName = WidgetFactory.button(SWT.CHECK).text(Messages.PinName).create(group);
+		type = WidgetFactory.button(SWT.CHECK).text(Messages.Type).create(group);
+		comment = WidgetFactory.button(SWT.CHECK).text(Messages.Comment).create(group);
 
 		instanceName.setSelection(true);
 		pinName.setSelection(false);
@@ -91,12 +93,13 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		comment.setSelection(true);
 
 		// Text box for the actual search
-		labelFactory.text("Containing Text:").create(composite);
-		query = WidgetFactory.text(SWT.BORDER).message("Type query").create(composite);
+		final LabelFactory labelFactory = LabelFactory.newLabel(SWT.NONE);
+		labelFactory.text(Messages.ContainingText).create(composite);
+		query = WidgetFactory.text(SWT.BORDER).message(Messages.TypeQuery).create(composite);
 		query.setFocus();
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(query);
 
-		caseSensitive = WidgetFactory.button(SWT.CHECK).text("Case sensitive").create(composite);
+		caseSensitive = WidgetFactory.button(SWT.CHECK).text(Messages.CaseSensitive).create(composite);
 
 		setControl(composite);
 	}
@@ -134,8 +137,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 	}
 
 	private void errorDialogDisplay() {
-		MessageDialog.openWarning(getShell(), "Warning",
-				"The search box is empty or none of the checkboxes are ticked! Please correct that and try to search again.");
+		MessageDialog.openWarning(getShell(), Messages.Warning, Messages.ErrorMessageSearch);
 	}
 
 	@Override
