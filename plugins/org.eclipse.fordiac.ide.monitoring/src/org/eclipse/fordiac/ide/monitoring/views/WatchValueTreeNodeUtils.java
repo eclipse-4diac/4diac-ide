@@ -111,7 +111,7 @@ public final class WatchValueTreeNodeUtils {
 		return value;
 	}
 
-	private static String buildTreeString(final WatchValueTreeNode dbgStruct) {
+	public static String buildTreeString(final WatchValueTreeNode dbgStruct) {
 		return buildSubTreeString(dbgStruct.getChildren());
 	}
 

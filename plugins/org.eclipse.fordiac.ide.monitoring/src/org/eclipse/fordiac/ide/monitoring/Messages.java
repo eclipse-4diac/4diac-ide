@@ -40,6 +40,9 @@ public final class Messages extends NLS {
 	public static String MonitoringWatchesView_ClearForce;
 	public static String MonitoringWatchesView_ForceValue;
 	public static String MonitoringWatchesView_TriggerEvent;
+	
+	public static String StructForceDialog_Title;
+	public static String StructForceDialog_Force_Button_Text;
 
 	static {
 		// initialize resource bundle

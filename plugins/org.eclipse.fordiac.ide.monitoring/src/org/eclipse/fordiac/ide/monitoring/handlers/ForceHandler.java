@@ -12,6 +12,7 @@
  *   Gerd Kainz, Alois Zoitl - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
  *   			 - Added value validation for the force input dialog
+ *   Daniel Lindhuber - struct force dialog
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.handlers;
 
@@ -19,12 +20,14 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.monitoring.Messages;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
+import org.eclipse.fordiac.ide.monitoring.dialogs.StructForceDialog;
 import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart;
 import org.eclipse.fordiac.ide.monitoring.views.StructParser;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -95,23 +98,40 @@ public class ForceHandler extends AbstractMonitoringHandler {
 			if (element instanceof MonitoringElement) {
 				final MonitoringElement monitoringElement = (MonitoringElement) element;
 				final IInterfaceElement interfaceElement = monitoringElement.getPort().getInterfaceElement();
-
-				final InputDialog input = new InputDialog(Display.getDefault().getActiveShell(),
-						Messages.MonitoringWatchesView_ForceValue,
-						Messages.MonitoringWatchesView_Value,
-						monitoringElement.isForce() ? monitoringElement.getForceValue() : "", //$NON-NLS-1$
-								(newValue -> {
-									if (interfaceElement instanceof VarDeclaration) {
-										return ForceHandler.validateForceInput((VarDeclaration) interfaceElement, newValue);
-									}
-									return null;
-								}));
-				final int ret = input.open();
-				if (ret == org.eclipse.jface.window.Window.OK) {
-					manager.forceValue(monitoringElement, input.getValue());
+				
+				final String input; 
+				if (variable.getType() instanceof StructuredType) {
+					input = showStructForceDialog((StructuredType) variable.getType(), monitoringElement);
+				} else {
+					input = showForceDialog(monitoringElement, interfaceElement);
+				}
+				
+				if (input != null) {
+					manager.forceValue(monitoringElement, input);
 				}
 			}
 		}
+	}
+	
+	private static String showStructForceDialog(final StructuredType type, final MonitoringElement monitoringElement) {
+		final StructForceDialog dialog = new StructForceDialog(Display.getDefault().getActiveShell(), type, monitoringElement);
+		final int ret = dialog.open();
+		return ret == org.eclipse.jface.window.Window.OK ? dialog.getValue() : null;
+	}
+
+	private static String showForceDialog(final MonitoringElement monitoringElement, final IInterfaceElement interfaceElement) {
+		final InputDialog input = new InputDialog(Display.getDefault().getActiveShell(),
+				Messages.MonitoringWatchesView_ForceValue,
+				Messages.MonitoringWatchesView_Value,
+				monitoringElement.isForce() ? monitoringElement.getForceValue() : "", //$NON-NLS-1$
+						(newValue -> {
+							if (interfaceElement instanceof VarDeclaration) {
+								return ForceHandler.validateForceInput((VarDeclaration) interfaceElement, newValue);
+							}
+							return null;
+						}));
+		final int ret = input.open();
+		return ret == org.eclipse.jface.window.Window.OK ? input.getValue() : null;
 	}
 
 	private static String validateForceInput(final VarDeclaration varDeclaration, final String newValue) {
