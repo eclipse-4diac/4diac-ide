@@ -167,7 +167,7 @@ public class ModelSearchQuery implements ISearchQuery {
 
 	@Override
 	public String getLabel() {
-		return modelQuerySpec.toString();
+		return modelQuerySpec.getSearchString();
 	}
 
 	@Override

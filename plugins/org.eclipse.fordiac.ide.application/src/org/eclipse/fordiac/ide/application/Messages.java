@@ -151,6 +151,8 @@ public final class Messages extends NLS {
 
 	public static String SaveAsSubApplicationTypeAction_TemplateMissingErrorMessage;
 
+	public static String SearchHeaderName;
+
 	public static String StructManipulatorSection_MEMBERVAR_COLUMN_COMMENT;
 
 	public static String StructManipulatorSection_MEMBERVAR_COLUMN_NAME;

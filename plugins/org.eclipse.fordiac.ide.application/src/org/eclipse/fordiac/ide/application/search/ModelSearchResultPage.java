@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.application.search;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -77,7 +78,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 	@Override
 	public String getLabel() {
-		return null != searchDescription ? searchDescription : "IEC 61499 Model Search";
+		return null != searchDescription ? searchDescription : Messages.SearchHeaderName;
 	}
 
 	@Override
