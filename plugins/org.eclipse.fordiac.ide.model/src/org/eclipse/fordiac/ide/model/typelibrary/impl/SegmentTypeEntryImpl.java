@@ -15,60 +15,33 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-/**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Segment Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
- *
- * @generated
- */
-public class SegmentTypePaletteEntryImpl extends AbstractTypeEntryImpl implements SegmentTypeEntry {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected SegmentTypePaletteEntryImpl() {
-		super();
-	}
+public class SegmentTypeEntryImpl extends AbstractTypeEntryImpl implements SegmentTypeEntry {
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
-	protected EClass eStaticClass() {
-		return PalettePackage.Literals.SEGMENT_TYPE_PALETTE_ENTRY;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public SegmentType getSegmentType() {
+	public SegmentType getType() {
 		final LibraryElement type = getType();
+		if (type instanceof SegmentType) {
+			return (SegmentType) type;
+		}
+		return null;
+	}
+
+	@Override
+	public SegmentType getTypeEditable() {
+		final LibraryElement type = getTypeEditable();
 		if(type instanceof SegmentType){
 			return (SegmentType) type;
 		}
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public void setType(final LibraryElement type) {
 		if(type instanceof SegmentType){
@@ -81,14 +54,9 @@ public class SegmentTypePaletteEntryImpl extends AbstractTypeEntryImpl implement
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
-	public CommonElementImporter getImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.SEGImporter(getFile());
+	protected CommonElementImporter getImporter() {
+		return new SEGImporter(getFile());
 	}
 
-} //SegmentTypePaletteEntryImpl
+}

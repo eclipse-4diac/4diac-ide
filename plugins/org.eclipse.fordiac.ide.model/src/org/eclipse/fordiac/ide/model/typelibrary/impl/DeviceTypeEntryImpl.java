@@ -15,60 +15,33 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-/**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Device Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
- *
- * @generated
- */
-public class DeviceTypePaletteEntryImpl extends AbstractTypeEntryImpl implements DeviceTypeEntry {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected DeviceTypePaletteEntryImpl() {
-		super();
-	}
+public class DeviceTypeEntryImpl extends AbstractTypeEntryImpl implements DeviceTypeEntry {
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
-	protected EClass eStaticClass() {
-		return PalettePackage.Literals.DEVICE_TYPE_PALETTE_ENTRY;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public DeviceType getDeviceType() {
+	public DeviceType getType() {
 		final LibraryElement type = super.getType();
+		if (type instanceof DeviceType) {
+			return (DeviceType) type;
+		}
+		return null;
+	}
+
+	@Override
+	public DeviceType getTypeEditable() {
+		final LibraryElement type = super.getTypeEditable();
 		if(type instanceof DeviceType){
 			return (DeviceType) type;
 		}
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public void setType(final LibraryElement type) {
 		if(type instanceof DeviceType){
@@ -81,14 +54,9 @@ public class DeviceTypePaletteEntryImpl extends AbstractTypeEntryImpl implements
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
-	public CommonElementImporter getImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.DEVImporter(getFile());
+	protected CommonElementImporter getImporter() {
+		return new DEVImporter(getFile());
 	}
 
-} //DeviceTypePaletteEntryImpl
+}

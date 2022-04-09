@@ -15,36 +15,15 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Device Type Palette Entry</b></em>'. <!--
- * end-user-doc -->
- *
- *
- * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getDeviceTypePaletteEntry()
- * @model
- * @generated */
 public interface DeviceTypeEntry extends TypeEntry {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" required="true"
-	 * @generated */
-	DeviceType getDeviceType();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model
-	 * @generated */
+
 	@Override
-	void setType(LibraryElement type);
+	DeviceType getType();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.CommonElementImporter"
-	 * @generated */
 	@Override
-	CommonElementImporter getImporter();
+	DeviceType getTypeEditable();
 
-} // DeviceTypePaletteEntry
+}

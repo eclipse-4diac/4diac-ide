@@ -15,44 +15,14 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Sub Application Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
- *
- *
- * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getSubApplicationTypePaletteEntry()
- * @model
- * @generated */
 public interface SubAppTypeEntry extends TypeEntry {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" required="true"
-	 * @generated */
+
 	@Override
 	SubAppType getType();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model
-	 * @generated */
-	@Override
-	void setType(LibraryElement type);
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.CommonElementImporter"
-	 * @generated */
-	@Override
-	CommonElementImporter getImporter();
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" required="true"
-	 * @generated */
 	@Override
 	SubAppType getTypeEditable();
 
-} // SubApplicationTypePaletteEntry
+}

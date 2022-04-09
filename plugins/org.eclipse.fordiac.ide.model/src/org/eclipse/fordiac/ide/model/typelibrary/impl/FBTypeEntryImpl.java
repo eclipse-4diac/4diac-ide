@@ -15,37 +15,15 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>FB Type Palette Entry</b></em>'. <!--
- * end-user-doc -->
- *
- * @generated */
-public class FBTypePaletteEntryImpl extends AbstractTypeEntryImpl implements FBTypeEntry {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	protected FBTypePaletteEntryImpl() {
-		super();
-	}
+public class FBTypeEntryImpl extends AbstractTypeEntryImpl implements FBTypeEntry {
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	protected EClass eStaticClass() {
-		return PalettePackage.Literals.FB_TYPE_PALETTE_ENTRY;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
 	@Override
 	public FBType getType() {
 		final LibraryElement type = super.getType();
@@ -55,9 +33,15 @@ public class FBTypePaletteEntryImpl extends AbstractTypeEntryImpl implements FBT
 		return null;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	@Override
+	public FBType getTypeEditable() {
+		final LibraryElement type = super.getTypeEditable();
+		if (type instanceof FBType) {
+			return (FBType) type;
+		}
+		return null;
+	}
+
 	@Override
 	public void setType(final LibraryElement type) {
 		if (type instanceof FBType) {
@@ -70,24 +54,9 @@ public class FBTypePaletteEntryImpl extends AbstractTypeEntryImpl implements FBT
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
 	@Override
-	public CommonElementImporter getImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.FBTImporter(getFile());
+	protected CommonElementImporter getImporter() {
+		return new FBTImporter(getFile());
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public FBType getTypeEditable() {
-		final LibraryElement type = super.getTypeEditable();
-		if (type instanceof FBType) {
-			return (FBType) type;
-		}
-		return null;
-	}
-
-} // FBTypePaletteEntryImpl
+}

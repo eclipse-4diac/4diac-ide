@@ -15,46 +15,15 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-/**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Data Type Palette Entry</b></em>'.
- * <!-- end-user-doc -->
- *
- * @generated
- */
-public class DataTypePaletteEntryImpl extends AbstractTypeEntryImpl implements DataTypeEntry {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected DataTypePaletteEntryImpl() {
-		super();
-	}
+public class DataTypeEntryImpl extends AbstractTypeEntryImpl implements DataTypeEntry {
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EClass eStaticClass() {
-		return PalettePackage.Literals.DATA_TYPE_PALETTE_ENTRY;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public AnyDerivedType getType() {
 		final LibraryElement type = super.getType();
@@ -64,11 +33,15 @@ public class DataTypePaletteEntryImpl extends AbstractTypeEntryImpl implements D
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+	@Override
+	public AnyDerivedType getTypeEditable() {
+		final LibraryElement type = super.getTypeEditable();
+		if (type instanceof AnyDerivedType) {
+			return (AnyDerivedType) type;
+		}
+		return null;
+	}
+
 	@Override
 	public void setType(final LibraryElement type) {
 		if (type instanceof AnyDerivedType) {
@@ -81,14 +54,9 @@ public class DataTypePaletteEntryImpl extends AbstractTypeEntryImpl implements D
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
-	public CommonElementImporter getImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter(getFile());
+	protected CommonElementImporter getImporter() {
+		return new DataTypeImporter(getFile());
 	}
 
-} //DataTypePaletteEntryImpl
+}

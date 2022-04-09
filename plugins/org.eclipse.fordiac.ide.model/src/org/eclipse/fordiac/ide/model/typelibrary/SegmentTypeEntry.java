@@ -15,36 +15,15 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Segment Type Palette Entry</b></em>'. <!--
- * end-user-doc -->
- *
- *
- * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getSegmentTypePaletteEntry()
- * @model
- * @generated */
 public interface SegmentTypeEntry extends TypeEntry {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" required="true"
-	 * @generated */
-	SegmentType getSegmentType();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model
-	 * @generated */
 	@Override
-	void setType(LibraryElement type);
+	SegmentType getType();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.CommonElementImporter"
-	 * @generated */
 	@Override
-	CommonElementImporter getImporter();
+	SegmentType getTypeEditable();
 
-} // SegmentTypePaletteEntry
+
+}

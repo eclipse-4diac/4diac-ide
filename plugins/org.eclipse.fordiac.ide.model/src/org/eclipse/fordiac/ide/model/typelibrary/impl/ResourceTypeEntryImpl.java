@@ -15,60 +15,33 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-/**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>Resource Type Entry</b></em>'.
- * <!-- end-user-doc -->
- *
- * @generated
- */
 public class ResourceTypeEntryImpl extends AbstractTypeEntryImpl implements ResourceTypeEntry {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected ResourceTypeEntryImpl() {
-		super();
-	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
-	protected EClass eStaticClass() {
-		return PalettePackage.Literals.RESOURCE_TYPE_ENTRY;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceType getResourceType() {
+	public ResourceType getType() {
 		final LibraryElement type = getType();
+		if (type instanceof ResourceType) {
+			return (ResourceType) type;
+		}
+		return null;
+	}
+
+	@Override
+	public ResourceType getTypeEditable() {
+		final LibraryElement type = getTypeEditable();
 		if(type instanceof ResourceType){
 			return (ResourceType) type;
 		}
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public void setType(final LibraryElement type) {
 		if(type instanceof ResourceType){
@@ -81,14 +54,9 @@ public class ResourceTypeEntryImpl extends AbstractTypeEntryImpl implements Reso
 		}
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
-	public CommonElementImporter getImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.RESImporter(getFile());
+	protected CommonElementImporter getImporter() {
+		return new RESImporter(getFile());
 	}
 
-} //ResourceTypeEntryImpl
+}

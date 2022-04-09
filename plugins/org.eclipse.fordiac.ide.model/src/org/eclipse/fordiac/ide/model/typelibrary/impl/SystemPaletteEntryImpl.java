@@ -15,56 +15,15 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
+import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-/**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>System Palette Entry</b></em>'.
- * <!-- end-user-doc -->
- *
- * @generated
- */
 public class SystemPaletteEntryImpl extends AbstractTypeEntryImpl implements SystemEntry {
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected SystemPaletteEntryImpl() {
-		super();
-	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	protected EClass eStaticClass() {
-		return PalettePackage.Literals.SYSTEM_PALETTE_ENTRY;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public CommonElementImporter getImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.SystemImporter(getFile());
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public AutomationSystem getSystem() {
 		final LibraryElement type = getType();
@@ -74,11 +33,6 @@ public class SystemPaletteEntryImpl extends AbstractTypeEntryImpl implements Sys
 		return null;
 	}
 
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public void setSystem(final LibraryElement system) {
 		if(system instanceof AutomationSystem){
@@ -91,4 +45,9 @@ public class SystemPaletteEntryImpl extends AbstractTypeEntryImpl implements Sys
 		}
 	}
 
-} //SystemPaletteEntryImpl
+	@Override
+	protected CommonElementImporter getImporter() {
+		return new SystemImporter(getFile());
+	}
+
+}

@@ -15,35 +15,13 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>System Palette Entry</b></em>'. <!--
- * end-user-doc -->
- *
- *
- * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getSystemPaletteEntry()
- * @model
- * @generated */
 public interface SystemEntry extends TypeEntry {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.CommonElementImporter"
-	 * @generated */
-	@Override
-	CommonElementImporter getImporter();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" required="true"
-	 * @generated */
 	AutomationSystem getSystem();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model
-	 * @generated */
 	void setSystem(LibraryElement system);
 
-} // SystemPaletteEntry
+}

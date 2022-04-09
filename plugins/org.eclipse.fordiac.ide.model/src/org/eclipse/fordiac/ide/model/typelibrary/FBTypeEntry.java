@@ -15,44 +15,14 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
-import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>FB Type Palette Entry</b></em>'. <!--
- * end-user-doc -->
- *
- *
- * @see org.eclipse.fordiac.ide.model.Palette.PalettePackage#getFBTypePaletteEntry()
- * @model
- * @generated */
 public interface FBTypeEntry extends TypeEntry {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" required="true"
-	 * @generated */
+
 	@Override
 	FBType getType();
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model
-	 * @generated */
-	@Override
-	void setType(LibraryElement type);
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.CommonElementImporter"
-	 * @generated */
-	@Override
-	CommonElementImporter getImporter();
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" required="true"
-	 * @generated */
 	@Override
 	FBType getTypeEditable();
 
-} // FBTypePaletteEntry
+}

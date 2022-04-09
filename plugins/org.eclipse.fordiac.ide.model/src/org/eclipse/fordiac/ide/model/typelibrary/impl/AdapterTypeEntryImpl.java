@@ -15,37 +15,15 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
-import org.eclipse.emf.ecore.EClass;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
+import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Adapter Type Palette Entry</b></em>'. <!--
- * end-user-doc -->
- *
- * @generated */
-public class AdapterTypePaletteEntryImpl extends AbstractTypeEntryImpl implements AdapterTypeEntry {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	protected AdapterTypePaletteEntryImpl() {
-		super();
-	}
+public class AdapterTypeEntryImpl extends AbstractTypeEntryImpl implements AdapterTypeEntry {
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	protected EClass eStaticClass() {
-		return PalettePackage.Literals.ADAPTER_TYPE_PALETTE_ENTRY;
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
 	@Override
 	public AdapterType getType() {
 		final LibraryElement type = super.getType();
@@ -55,9 +33,15 @@ public class AdapterTypePaletteEntryImpl extends AbstractTypeEntryImpl implement
 		return null;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	@Override
+	public AdapterType getTypeEditable() {
+		final LibraryElement type = super.getTypeEditable();
+		if (type instanceof AdapterType) {
+			return (AdapterType) type;
+		}
+		return null;
+	}
+
 	@Override
 	public void setType(final LibraryElement type) {
 		if (type instanceof AdapterType) {
@@ -70,24 +54,9 @@ public class AdapterTypePaletteEntryImpl extends AbstractTypeEntryImpl implement
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
 	@Override
-	public CommonElementImporter getImporter() {
-		return new org.eclipse.fordiac.ide.model.dataimport.ADPImporter(getFile());
+	protected CommonElementImporter getImporter() {
+		return new ADPImporter(getFile());
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public AdapterType getTypeEditable() {
-		final LibraryElement type = super.getTypeEditable();
-		if (type instanceof AdapterType) {
-			return (AdapterType) type;
-		}
-		return null;
-	}
-
-} // AdapterTypePaletteEntryImpl
+}
