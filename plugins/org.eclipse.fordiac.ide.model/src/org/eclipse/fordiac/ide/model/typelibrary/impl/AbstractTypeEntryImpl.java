@@ -39,11 +39,6 @@ public abstract class AbstractTypeEntryImpl implements TypeEntry {
 	protected TypeLibrary typeLibray;
 
 	@Override
-	public String getTypeName() {
-		return (file != null) ? TypeLibrary.getTypeNameFromFile(getFile()) : ""; //$NON-NLS-1$
-	}
-
-	@Override
 	public IFile getFile() {
 		return file;
 	}

@@ -20,8 +20,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
 public interface TypeEntry {
 
-	String getTypeName();
-
 	IFile getFile();
 
 	void setFile(IFile value);
@@ -41,5 +39,22 @@ public interface TypeEntry {
 	TypeLibrary getTypeLibrary();
 
 	void setTypeLibrary(TypeLibrary typeLib);
+
+	default String getTypeName() {
+		return (getFile() != null) ? TypeEntry.getTypeNameFromFile(getFile()) : ""; //$NON-NLS-1$
+	}
+
+	static String getTypeNameFromFile(final IFile element) {
+		return getTypeNameFromFileName(element.getName());
+	}
+
+	static String getTypeNameFromFileName(final String fileName) {
+		String name = fileName;
+		final int index = fileName.lastIndexOf('.');
+		if (-1 != index) {
+			name = fileName.substring(0, index);
+		}
+		return name;
+	}
 
 }

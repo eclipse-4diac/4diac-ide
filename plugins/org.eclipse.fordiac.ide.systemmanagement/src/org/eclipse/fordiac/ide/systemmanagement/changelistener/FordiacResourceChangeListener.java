@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.fordiac.ide.systemmanagement.Messages;
@@ -413,7 +414,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) {
 				boolean wrongName = false;
-				final String newTypeName = TypeLibrary.getTypeNameFromFile(file);
+				final String newTypeName = TypeEntry.getTypeNameFromFile(file);
 				try (Scanner scanner = new Scanner(file.getContents())) {
 					final String name = scanner.findWithinHorizon(systemNamePattern, 0);
 					wrongName = (null != name) && (!name.endsWith("\"" + newTypeName)); //$NON-NLS-1$
@@ -423,7 +424,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				if (wrongName) {
 					final AutomationSystem system = systemManager.getSystem(file);
 					if ((null != system) && (!newTypeName.equals(system.getName()))) {
-						system.setName(TypeLibrary.getTypeNameFromFile(file));
+						system.setName(TypeEntry.getTypeNameFromFile(file));
 						SystemManager.saveSystem(system);
 					}
 				}
@@ -523,9 +524,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			public IStatus runInWorkspace(final IProgressMonitor monitor) {
 				final AutomationSystem system = systemManager.getSystem(file);
 				if (null != system) {
-					final String newTypeName = TypeLibrary.getTypeNameFromFile(file);
+					final String newTypeName = TypeEntry.getTypeNameFromFile(file);
 					if (!newTypeName.equals(system.getName())) {
-						system.setName(TypeLibrary.getTypeNameFromFile(file));
+						system.setName(TypeEntry.getTypeNameFromFile(file));
 						SystemManager.saveSystem(system);
 					}
 				}
@@ -538,7 +539,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private static void updatePaletteEntry(final IFile newFile, final PaletteEntry entry) {
 		if (null != entry) {
-			final String newTypeName = TypeLibrary.getTypeNameFromFile(newFile);
+			final String newTypeName = TypeEntry.getTypeNameFromFile(newFile);
 			entry.getTypeLibrary().removePaletteEntry(entry);
 			entry.setLabel(newTypeName);
 			entry.setFile(newFile);

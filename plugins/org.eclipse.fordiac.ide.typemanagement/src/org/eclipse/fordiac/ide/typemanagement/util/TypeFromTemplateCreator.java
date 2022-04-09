@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
 
@@ -57,7 +58,7 @@ public class TypeFromTemplateCreator {
 		if (importer != null) {
 			importer.loadElement();
 			final LibraryElement type = importer.getElement();
-			type.setName(TypeLibrary.getTypeNameFromFile(targetTypeFile));
+			type.setName(TypeEntry.getTypeNameFromFile(targetTypeFile));
 			setupIdentifcationAndVersionInfo(type);
 			performTypeSpecificSetup(type);
 			entry.setLastModificationTimestamp(targetTypeFile.getModificationStamp());

@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -78,7 +79,7 @@ public class RenameType extends RenameParticipant {
 					if (nameExistsInTypeLibrary(resourceDelta, newName)) {
 						result.addFatalError(MessageFormat.format(Messages.RenameType_TypeExists, newName));
 					}
-					final String name = TypeLibrary.getTypeNameFromFileName(newName);
+					final String name = TypeEntry.getTypeNameFromFileName(newName);
 					if (name != null && !IdentifierVerifyer.isValidIdentifier(name)) {
 						getWrongIdentifierErrorStatus(result);
 					}
@@ -125,7 +126,7 @@ public class RenameType extends RenameParticipant {
 				MessageDialog.QUESTION, shell, "Rename of Type with unsaved changes!",
 				MessageFormat.format(
 						"There are unsaved changes for type \"{0}\". Do you want to save them before renaming?",
-						TypeLibrary.getTypeNameFromFileName(getOldName())),
+						TypeEntry.getTypeNameFromFileName(getOldName())),
 				SWT.NONE, "Save", "Cancel");
 		return result == 0;
 	}

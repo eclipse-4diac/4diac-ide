@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
@@ -43,7 +44,7 @@ import org.eclipse.ltk.core.refactoring.participants.ResourceChangeChecker;
 public class DeleteFBTypeParticipant extends DeleteParticipant {
 
 	@Override
-	protected boolean initialize(Object element) {
+	protected boolean initialize(final Object element) {
 		return (element instanceof IFile);
 	}
 
@@ -53,23 +54,23 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 	}
 
 	@Override
-	public RefactoringStatus checkConditions(IProgressMonitor pm, CheckConditionsContext context)
+	public RefactoringStatus checkConditions(final IProgressMonitor pm, final CheckConditionsContext context)
 			throws OperationCanceledException {
-		ResourceChangeChecker resChecker = context.getChecker(ResourceChangeChecker.class);
-		IResourceChangeDescriptionFactory deltaFactory = resChecker.getDeltaFactory();
-		IResourceDelta[] affectedChildren = deltaFactory.getDelta().getAffectedChildren();
+		final ResourceChangeChecker resChecker = context.getChecker(ResourceChangeChecker.class);
+		final IResourceChangeDescriptionFactory deltaFactory = resChecker.getDeltaFactory();
+		final IResourceDelta[] affectedChildren = deltaFactory.getDelta().getAffectedChildren();
 
 		return verifyAffectedChildren(affectedChildren);
 	}
 
-	private static RefactoringStatus verifyAffectedChildren(IResourceDelta[] affectedChildren) {
-		for (IResourceDelta resourceDelta : affectedChildren) {
+	private static RefactoringStatus verifyAffectedChildren(final IResourceDelta[] affectedChildren) {
+		for (final IResourceDelta resourceDelta : affectedChildren) {
 			if (resourceDelta.getResource() instanceof IFile) {
-				Palette palette = TypeLibrary.getTypeLibrary(resourceDelta.getResource().getProject())
+				final Palette palette = TypeLibrary.getTypeLibrary(resourceDelta.getResource().getProject())
 						.getBlockTypeLib();
 
-				String typeNameToDelete = TypeLibrary.getTypeNameFromFile((IFile) resourceDelta.getResource());
-				List<String> typeNames = checkTypeContainment(palette, typeNameToDelete);
+				final String typeNameToDelete = TypeEntry.getTypeNameFromFile((IFile) resourceDelta.getResource());
+				final List<String> typeNames = checkTypeContainment(palette, typeNameToDelete);
 
 				if (!typeNames.isEmpty()) {
 					return RefactoringStatus.createWarningStatus(MessageFormat.format(
@@ -82,14 +83,14 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 		return new RefactoringStatus();
 	}
 
-	private static List<String> checkTypeContainment(Palette palette, String searchTypeName) {
-		List<String> retVal = new ArrayList<>();
-		Stream<Entry<String, ? extends PaletteEntry>> stream = Stream.concat(
+	private static List<String> checkTypeContainment(final Palette palette, final String searchTypeName) {
+		final List<String> retVal = new ArrayList<>();
+		final Stream<Entry<String, ? extends PaletteEntry>> stream = Stream.concat(
 				Stream.concat(palette.getFbTypes().entrySet().stream(), palette.getSubAppTypes().entrySet().stream()),
 				palette.getResourceTypes().entrySet().stream());
 
 		stream.forEach(entry -> {
-			FBNetwork network = getNetwork(entry);
+			final FBNetwork network = getNetwork(entry);
 			if ((null != network) && (containsElementWithType(searchTypeName, network))) {
 				retVal.add(entry.getValue().getLabel());
 			}
@@ -98,9 +99,9 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 		return retVal;
 	}
 
-	private static FBNetwork getNetwork(Entry<String, ? extends PaletteEntry> entry) {
+	private static FBNetwork getNetwork(final Entry<String, ? extends PaletteEntry> entry) {
 		FBNetwork network = null;
-		LibraryElement type = entry.getValue().getType();
+		final LibraryElement type = entry.getValue().getType();
 
 		if (type instanceof CompositeFBType) {
 			network = ((CompositeFBType) type).getFBNetwork();
@@ -112,8 +113,8 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 		return network;
 	}
 
-	private static boolean containsElementWithType(String searchTypeName, FBNetwork network) {
-		for (FBNetworkElement element : network.getNetworkElements()) {
+	private static boolean containsElementWithType(final String searchTypeName, final FBNetwork network) {
+		for (final FBNetworkElement element : network.getNetworkElements()) {
 			if (searchTypeName.equals(element.getTypeName())) {
 				return true;
 			}
@@ -122,7 +123,7 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 	}
 
 	@Override
-	public Change createChange(IProgressMonitor pm) throws CoreException, OperationCanceledException {
+	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		return null;
 	}
 

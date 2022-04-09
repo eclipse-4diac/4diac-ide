@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.CommandStack;
 
@@ -72,7 +73,7 @@ public class SystemImporter extends CommonElementImporter {
 	 * @return the automation system model with its basic setup */
 	public static AutomationSystem createAutomationSystem(final IFile systemFile) {
 		final AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
-		system.setName(TypeLibrary.getTypeNameFromFile(systemFile));
+		system.setName(TypeEntry.getTypeNameFromFile(systemFile));
 		system.setSystemFile(systemFile);
 
 		system.setCommandStack(new CommandStack());

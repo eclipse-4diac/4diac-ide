@@ -85,19 +85,6 @@ public final class TypeLibrary implements TypeLibraryTags {
 	/** An array of palette entry creators */
 	private static IPaletteEntryCreator[] paletteCreators = null;
 
-	public static String getTypeNameFromFile(final IFile element) {
-		return getTypeNameFromFileName(element.getName());
-	}
-
-	public static String getTypeNameFromFileName(final String fileName) {
-		String name = fileName;
-		final int index = fileName.lastIndexOf('.');
-		if (-1 != index) {
-			name = fileName.substring(0, index);
-		}
-		return name;
-	}
-
 	public static PaletteEntry getPaletteEntryForFile(final IFile typeFile) {
 		final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(typeFile.getProject());
 		return typeLib.getPaletteEntry(typeFile);
@@ -105,11 +92,11 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	public PaletteEntry getPaletteEntry(final IFile typeFile) {
 		if (isDataTypeFile(typeFile)) {
-			return dataTypeLib.getDerivedDataTypes().get(TypeLibrary.getTypeNameFromFile(typeFile));
+			return dataTypeLib.getDerivedDataTypes().get(TypeEntry.getTypeNameFromFile(typeFile));
 		}
 		final EMap<String, ? extends PaletteEntry> typeEntryList = getTypeList(typeFile);
 		if (null != typeEntryList) {
-			return typeEntryList.get(TypeLibrary.getTypeNameFromFile(typeFile));
+			return typeEntryList.get(TypeEntry.getTypeNameFromFile(typeFile));
 		}
 		return null;
 	}
@@ -277,7 +264,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 
 	private static void configurePaletteEntry(final PaletteEntry entry, final IFile file) {
 		entry.setType(null);
-		entry.setLabel(TypeLibrary.getTypeNameFromFile(file));
+		entry.setLabel(TypeEntry.getTypeNameFromFile(file));
 		entry.setFile(file);
 	}
 
