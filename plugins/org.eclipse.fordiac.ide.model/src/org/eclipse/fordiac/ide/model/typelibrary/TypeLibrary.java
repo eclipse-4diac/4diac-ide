@@ -19,8 +19,10 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
+import java.text.Collator;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IContainer;
@@ -45,6 +47,7 @@ import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.BlockTypeLibraryImpl;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class TypeLibrary {
@@ -81,6 +84,62 @@ public final class TypeLibrary {
 	private final Palette errorTypeLib = PaletteFactory.eINSTANCE.createPalette();
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	private IProject project;
+
+	private final BlockTypeLibrary newBlockTypeLib = new BlockTypeLibraryImpl();
+	private final BlockTypeLibrary newErrorTypeLib = new BlockTypeLibraryImpl();
+
+	public Map<String, AdapterTypeEntry> getAdapterTypes() {
+		return newBlockTypeLib.getAdapterTypes();
+	}
+
+	public List<AdapterTypeEntry> getAdapterTypesSorted() {
+		return getAdapterTypes().values().stream()
+				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getTypeName(), o2.getTypeName())).toList();
+	}
+
+	Map<String, DeviceTypeEntry> getDeviceTypes() {
+		return newBlockTypeLib.getDeviceTypes();
+	}
+
+	Map<String, FBTypeEntry> getFbTypes() {
+		return newBlockTypeLib.getFbTypes();
+	}
+
+	Map<String, ResourceTypeEntry> getResourceTypes() {
+		return newBlockTypeLib.getResourceTypes();
+	}
+
+	Map<String, SegmentTypeEntry> getSegmentTypes() {
+		return newBlockTypeLib.getSegmentTypes();
+	}
+
+	Map<String, SubAppTypeEntry> getSubAppTypes() {
+		return newBlockTypeLib.getSubAppTypes();
+	}
+
+	AdapterTypeEntry getAdapterTypeEntry(final String typeName) {
+		return getAdapterTypes().get(typeName);
+	}
+
+	DeviceTypeEntry getDeviceTypeEntry(final String typeName) {
+		return getDeviceTypes().get(typeName);
+	}
+
+	FBTypeEntry getFBTypeEntry(final String typeName) {
+		return getFbTypes().get(typeName);
+	}
+
+	ResourceTypeEntry getResourceTypeEntry(final String typeName) {
+		return getResourceTypes().get(typeName);
+	}
+
+	SegmentTypeEntry getSegmentTypeEntry(final String typeName) {
+		return getSegmentTypes().get(typeName);
+	}
+
+	SubAppTypeEntry getSubAppTypeEntry(final String typeName) {
+		return getSubAppTypes().get(typeName);
+	}
 
 	/** An array of palette entry creators */
 	private static IPaletteEntryCreator[] paletteCreators = null;
