@@ -31,7 +31,6 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
-import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -44,7 +43,7 @@ public final class DataTypeLibrary extends ResourceImpl {
 
 	private static final String DATA_LIB = "data.lib"; //$NON-NLS-1$
 	private final Map<String, DataType> typeMap = new HashMap<>();
-	private final Map<String, DataTypePaletteEntry> derivedTypeMap = new HashMap<>();
+	private final Map<String, DataTypeEntry> derivedTypes = new HashMap<>();
 
 	/** Instantiates a new data type library. */
 	public DataTypeLibrary() {
@@ -53,13 +52,12 @@ public final class DataTypeLibrary extends ResourceImpl {
 		initGenericTypes();
 	}
 
-
-	public void addPaletteEntry(final DataTypePaletteEntry entry) {
-		derivedTypeMap.put(entry.getLabel(), entry);
+	public void addTypeEntry(final DataTypeEntry entry) {
+		derivedTypes.put(entry.getTypeName(), entry);
 	}
 
-	public void removePaletteEntry(final DataTypePaletteEntry entry) {
-		derivedTypeMap.remove(entry.getLabel());
+	public void removeTypeEntry(final DataTypeEntry entry) {
+		derivedTypes.remove(entry.getTypeName());
 	}
 
 	private void addToTypeMap(final DataType type) {
@@ -77,17 +75,17 @@ public final class DataTypeLibrary extends ResourceImpl {
 		GenericTypes.getAllGenericTypes().forEach(this::addToTypeMap);
 	}
 
-	public Map<String, DataTypePaletteEntry> getDerivedDataTypes() {
-		return derivedTypeMap;
+	public Map<String, DataTypeEntry> getDerivedDataTypes() {
+		return derivedTypes;
 	}
 
 	/** Gets the data types.
 	 *
 	 * @return the data types */
 	public List<DataType> getDataTypes() {
-		final List<DataType> dataTypes = new ArrayList<>(typeMap.size() + derivedTypeMap.size());
+		final List<DataType> dataTypes = new ArrayList<>(typeMap.size() + derivedTypes.size());
 		dataTypes.addAll(typeMap.values());
-		dataTypes.addAll(derivedTypeMap.values().stream().map(DataTypePaletteEntry::getType).filter(Objects::nonNull)
+		dataTypes.addAll(derivedTypes.values().stream().map(DataTypeEntry::getType).filter(Objects::nonNull)
 				.collect(Collectors.toList()));
 		return dataTypes;
 	}
@@ -154,7 +152,7 @@ public final class DataTypeLibrary extends ResourceImpl {
 	}
 
 	private DataType getDerivedType(final String name) {
-		final DataTypePaletteEntry entry = derivedTypeMap.get(name);
+		final DataTypeEntry entry = derivedTypes.get(name);
 		if (null != entry) {
 			return entry.getType();
 		}

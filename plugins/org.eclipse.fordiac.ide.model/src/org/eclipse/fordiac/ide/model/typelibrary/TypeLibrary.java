@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.text.Collator;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,20 +35,14 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.BlockTypeLibraryImpl;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class TypeLibrary {
@@ -80,8 +75,6 @@ public final class TypeLibrary {
 		}
 	}
 
-	private final Palette blockTypeLib = PaletteFactory.eINSTANCE.createPalette();
-	private final Palette errorTypeLib = PaletteFactory.eINSTANCE.createPalette();
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	private IProject project;
 
@@ -141,19 +134,16 @@ public final class TypeLibrary {
 		return getSubAppTypes().get(typeName);
 	}
 
-	/** An array of palette entry creators */
-	private static IPaletteEntryCreator[] paletteCreators = null;
-
-	public static PaletteEntry getPaletteEntryForFile(final IFile typeFile) {
+	public static TypeEntry getTypeEntryForFile(final IFile typeFile) {
 		final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(typeFile.getProject());
-		return typeLib.getPaletteEntry(typeFile);
+		return typeLib.getTypeEntry(typeFile);
 	}
 
-	public PaletteEntry getPaletteEntry(final IFile typeFile) {
+	public TypeEntry getTypeEntry(final IFile typeFile) {
 		if (isDataTypeFile(typeFile)) {
 			return dataTypeLib.getDerivedDataTypes().get(TypeEntry.getTypeNameFromFile(typeFile));
 		}
-		final EMap<String, ? extends PaletteEntry> typeEntryList = getTypeList(typeFile);
+		final Map<String, ? extends TypeEntry> typeEntryList = getTypeList(typeFile);
 		if (null != typeEntryList) {
 			return typeEntryList.get(TypeEntry.getTypeNameFromFile(typeFile));
 		}
@@ -164,10 +154,6 @@ public final class TypeLibrary {
 		return TypeLibraryTags.DATA_TYPE_FILE_ENDING.equalsIgnoreCase(typeFile.getFileExtension());
 	}
 
-	public Palette getBlockTypeLib() {
-		return blockTypeLib;
-	}
-
 	public DataTypeLibrary getDataTypeLibrary() {
 		return dataTypeLib;
 	}
@@ -176,27 +162,27 @@ public final class TypeLibrary {
 		return project;
 	}
 
-	private EMap<String, ? extends PaletteEntry> getTypeList(final IFile typeFile) {
+	private Map<String, ? extends TypeEntry> getTypeList(final IFile typeFile) {
 		final String extension = typeFile.getFileExtension();
 		if (null != extension) {
 			switch (extension.toUpperCase()) {
 			case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING:
-				return blockTypeLib.getAdapterTypes();
+				return getAdapterTypes();
 			case TypeLibraryTags.DEVICE_TYPE_FILE_ENDING:
-				return blockTypeLib.getDeviceTypes();
+				return getDeviceTypes();
 			case TypeLibraryTags.FB_TYPE_FILE_ENDING:
-				return blockTypeLib.getFbTypes();
+				return getFbTypes();
 			case TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING:
-				return blockTypeLib.getResourceTypes();
+				return getResourceTypes();
 			case TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING:
-				return blockTypeLib.getSegmentTypes();
+				return getSegmentTypes();
 			case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING:
-				return blockTypeLib.getSubAppTypes();
+				return getSubAppTypes();
 			default:
 				break;
 			}
 		}
-		return null;
+		return Collections.emptyMap();
 	}
 
 	/**
@@ -204,8 +190,6 @@ public final class TypeLibrary {
 	 */
 	private TypeLibrary(final IProject project) {
 		this.project = project;
-		blockTypeLib.setTypeLibrary(this);
-		errorTypeLib.setTypeLibrary(this);
 		if (project != null && project.exists()) {
 			loadPaletteFolderMembers(project);
 		}
@@ -243,7 +227,7 @@ public final class TypeLibrary {
 					loadPaletteFolderMembers((IFolder) iResource);
 				}
 				if (iResource instanceof IFile) {
-					createPaletteEntry((IFile) iResource);
+					createTypeEntry((IFile) iResource);
 				}
 			}
 		} catch (final CoreException e) {
@@ -251,80 +235,33 @@ public final class TypeLibrary {
 		}
 	}
 
-	/**
-	 *
-	 * @param palette
-	 * @param file
-	 * @return
-	 */
-	public PaletteEntry createPaletteEntry(final IFile file) {
-		PaletteEntry entry = null;
-		for (final IPaletteEntryCreator in : getPaletteCreators()) {
-			if (in.canHandle(file)) {
-				entry = in.createPaletteEntry();
-				configurePaletteEntry(entry, file);
-				addPaletteEntry(entry);
-			}
+	public TypeEntry createTypeEntry(final IFile file) {
+		final TypeEntry entry = TypeEntryFactory.INSTANCE.createTypeEntry(file);
+		if (null != entry) {
+			addTypeEntry(entry);
 		}
 		return entry;
 	}
 
-	public void addPaletteEntry(final PaletteEntry entry) {
-
-		final FBTypePaletteEntry errorEntry = errorTypeLib.getFBTypeEntry(entry.getLabel());
+	public void addTypeEntry(final TypeEntry entry) {
+		final FBTypeEntry errorEntry = newErrorTypeLib.getFbTypes().get(entry.getTypeName());
 		if (errorEntry != null) {
-			errorTypeLib.removePaletteEntry(errorEntry);
+			newErrorTypeLib.removeTypeEntry(errorEntry);
 		}
-
+		entry.setTypeLibrary(this);
 		if (entry instanceof DataTypePaletteEntry) {
-			entry.setPalette(blockTypeLib); // for data type entries the palette will not be automatically set
-			dataTypeLib.addPaletteEntry((DataTypePaletteEntry) entry);
+			dataTypeLib.addTypeEntry((DataTypeEntry) entry);
 		} else {
-			blockTypeLib.addPaletteEntry(entry);
+			newBlockTypeLib.addTypeEntry(entry);
 		}
 	}
 
-	public void removePaletteEntry(final PaletteEntry entry) {
+	public void removeTypeEntry(final TypeEntry entry) {
 		if (entry instanceof DataTypePaletteEntry) {
-			dataTypeLib.removePaletteEntry((DataTypePaletteEntry) entry);
+			dataTypeLib.removeTypeEntry((DataTypeEntry) entry);
 		} else {
-			blockTypeLib.removePaletteEntry(entry);
+			newBlockTypeLib.removeTypeEntry(entry);
 		}
-	}
-
-	/**
-	 *
-	 */
-	private static void setPaletteCreators() {
-		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IConfigurationElement[] elems = registry.getConfigurationElementsFor(PLUGIN_ID, "PaletteEntryCreator"); //$NON-NLS-1$
-		int countPaletteCreater = 0;
-		paletteCreators = new IPaletteEntryCreator[elems.length];
-
-		for (final IConfigurationElement elem : elems) {
-			try {
-				final Object object = elem.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof IPaletteEntryCreator) {
-					paletteCreators[countPaletteCreater] = (IPaletteEntryCreator) object;
-					countPaletteCreater++;
-				}
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
-		}
-	}
-
-	private static IPaletteEntryCreator[] getPaletteCreators() {
-		if (null == paletteCreators) {
-			setPaletteCreators();
-		}
-		return paletteCreators;
-	}
-
-	private static void configurePaletteEntry(final PaletteEntry entry, final IFile file) {
-		entry.setType(null);
-		entry.setLabel(TypeEntry.getTypeNameFromFile(file));
-		entry.setFile(file);
 	}
 
 	public static void refreshTypeLib(final IFile file) {
@@ -344,16 +281,16 @@ public final class TypeLibrary {
 	}
 
 	private void checkDeletions() {
-		checkDeletionsForTypeGroup(blockTypeLib.getAdapterTypes().values());
-		checkDeletionsForTypeGroup(blockTypeLib.getDeviceTypes().values());
-		checkDeletionsForTypeGroup(blockTypeLib.getFbTypes().values());
-		checkDeletionsForTypeGroup(blockTypeLib.getResourceTypes().values());
-		checkDeletionsForTypeGroup(blockTypeLib.getSegmentTypes().values());
-		checkDeletionsForTypeGroup(blockTypeLib.getSubAppTypes().values());
+		checkDeletionsForTypeGroup(getAdapterTypes().values());
+		checkDeletionsForTypeGroup(getDeviceTypes().values());
+		checkDeletionsForTypeGroup(getFbTypes().values());
+		checkDeletionsForTypeGroup(getResourceTypes().values());
+		checkDeletionsForTypeGroup(getSegmentTypes().values());
+		checkDeletionsForTypeGroup(getSubAppTypes().values());
 		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes().values());
 	}
 
-	private static void checkDeletionsForTypeGroup(final Collection<? extends PaletteEntry> typeEntries) {
+	private static void checkDeletionsForTypeGroup(final Collection<? extends TypeEntry> typeEntries) {
 		typeEntries.removeIf(e -> (!e.getFile().exists()));
 	}
 
@@ -367,7 +304,7 @@ public final class TypeLibrary {
 				}
 				if ((resource instanceof IFile) && (!containsType((IFile) resource))) {
 					// only add new entry if it does not exist
-					createPaletteEntry((IFile) resource);
+					createTypeEntry((IFile) resource);
 				}
 			}
 		} catch (final CoreException e) {
@@ -377,7 +314,7 @@ public final class TypeLibrary {
 	}
 
 	public boolean containsType(final IFile file) {
-		return (null != getPaletteEntry(file));
+		return (null != getTypeEntry(file));
 	}
 
 	/**
@@ -446,19 +383,19 @@ public final class TypeLibrary {
 		}
 	}
 
-	public Palette getErrorTypeLib() {
-		return errorTypeLib;
+	public BlockTypeLibrary getErrorTypeLib() {
+		return newErrorTypeLib;
 	}
 
-	public PaletteEntry find(final String name) {
+	public TypeEntry find(final String name) {
 
-		PaletteEntry entry = blockTypeLib.getSubAppTypeEntry(name);
+		TypeEntry entry = getSubAppTypeEntry(name);
 
 		if (entry != null) {
 			return entry;
 		}
 
-		entry = blockTypeLib.getFBTypeEntry(name);
+		entry = getFBTypeEntry(name);
 
 		if (entry != null) {
 			return entry;
@@ -470,7 +407,7 @@ public final class TypeLibrary {
 			return entry;
 		}
 
-		return blockTypeLib.getAdapterTypeEntry(name);
+		return getAdapterTypeEntry(name);
 	}
 
 }
