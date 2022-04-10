@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeFBNetwork
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateRequest;
 
@@ -31,7 +32,7 @@ public class SubAppTypeFBNetworkLayoutEditPolicy extends CompositeFBNetworkLayou
 		final Object childClass = request.getNewObjectType();
 		final Rectangle constraint = (Rectangle) getConstraintFor(request);
 		if (childClass instanceof SubApplicationTypePaletteEntry) {
-			final SubApplicationTypePaletteEntry type = (SubApplicationTypePaletteEntry) request.getNewObjectType();
+			final SubAppTypeEntry type = (SubAppTypeEntry) request.getNewObjectType();
 
 			if (getHost().getModel() instanceof FBNetwork) {
 				final FBNetwork fbNetwork = (FBNetwork) getHost().getModel();
