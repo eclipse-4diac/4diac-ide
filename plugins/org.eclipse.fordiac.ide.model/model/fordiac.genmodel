@@ -189,9 +189,10 @@
     <genDataTypes ecoreDataType="lib.ecore#//IFile"/>
     <genDataTypes ecoreDataType="lib.ecore#//CommandStack"/>
     <genDataTypes ecoreDataType="lib.ecore#//Point"/>
+    <genDataTypes ecoreDataType="lib.ecore#//TypeEntry"/>
     <genClasses ecoreClass="lib.ecore#//AdapterDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterFB"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/paletteEntry"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AdapterDeclaration/typeEntry"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterDeclaration/getType" body="//this code can not be moved to a model annotations class&#xA;return (AdapterType)super.getType();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterType">
@@ -517,8 +518,8 @@
     <genClasses ecoreClass="lib.ecore#//LibraryElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/versionInfo"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/identification"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/paletteEntry"/>
-      <genOperations ecoreOperation="lib.ecore#//LibraryElement/getTypeLibrary" body="if (null != getPaletteEntry()) {&#xA;&#x9;return getPaletteEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LibraryElement/typeEntry"/>
+      <genOperations ecoreOperation="lib.ecore#//LibraryElement/getTypeLibrary" body="if (null != getTypeEntry()) {&#xA;&#x9;return getTypeEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//CompilableType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilableType/compilerInfo"/>
@@ -625,7 +626,7 @@
       <genOperations ecoreOperation="lib.ecore#//Service/getFBType" body="return (FBType) this.eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//TypedConfigureableObject">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//TypedConfigureableObject/paletteEntry"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TypedConfigureableObject/typeEntry"/>
       <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getTypeName"
           body="return org.eclipse.fordiac.ide.model.Annotations.getTypeName(this);"/>
       <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getType"

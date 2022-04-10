@@ -91,23 +91,23 @@ public class LibraryElementItemProvider extends ItemProviderAdapter implements I
 	}
 
 	/**
-	 * This adds a property descriptor for the Palette Entry feature.
+	 * This adds a property descriptor for the Type Entry feature.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addPaletteEntryPropertyDescriptor(Object object) {
+	protected void addTypeEntryPropertyDescriptor(Object object) {
 		itemPropertyDescriptors.add
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_LibraryElement_paletteEntry_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_LibraryElement_paletteEntry_feature", "_UI_LibraryElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.LIBRARY_ELEMENT__PALETTE_ENTRY,
+				 getString("_UI_LibraryElement_typeEntry_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_LibraryElement_typeEntry_feature", "_UI_LibraryElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.LIBRARY_ELEMENT__TYPE_ENTRY,
 				 true,
 				 false,
-				 true,
-				 null,
+				 false,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}

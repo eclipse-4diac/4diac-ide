@@ -87,7 +87,7 @@ public final class PaletteAnnotations {
 		if (null == retval) {
 			FordiacLogHelper.logError("Error loading type: " + paletteEntryImpl.getFile().getName()); //$NON-NLS-1$
 		} else {
-			retval.setPaletteEntry(paletteEntryImpl);
+			// retval.setPaletteEntry(paletteEntryImpl);
 		}
 		return retval;
 	}

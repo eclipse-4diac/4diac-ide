@@ -1,13 +1,14 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *
+ *               2022 Martin Erich Jobst
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -20,52 +21,71 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/** <!-- begin-user-doc --> The <b>Package</b> for the model. It contains accessors for the meta objects to represent
+/**
+ * <!-- begin-user-doc -->
+ * The <b>Package</b> for the model.
+ * It contains accessors for the meta objects to represent
  * <ul>
- * <li>each class,</li>
- * <li>each feature of each class,</li>
- * <li>each enum,</li>
- * <li>and each data type</li>
+ *   <li>each class,</li>
+ *   <li>each feature of each class,</li>
+ *   <li>each enum,</li>
+ *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- *
  * @see org.eclipse.fordiac.ide.model.data.DataFactory
  * @model kind="package"
- * @generated */
+ * @generated
+ */
 public interface DataPackage extends EPackage {
-	/** The package name. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * The package name.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	String eNAME = "data"; //$NON-NLS-1$
 
-	/** The package namespace URI. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * The package namespace URI.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	String eNS_URI = "org.eclipse.fordiac.ide.model.datatype"; //$NON-NLS-1$
 
-	/** The package namespace name. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * The package namespace name.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	String eNS_PREFIX = "data"; //$NON-NLS-1$
 
-	/** The singleton instance of the package. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * The singleton instance of the package.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	DataPackage eINSTANCE = org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl.init();
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DataTypeImpl <em>Type</em>}' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DataTypeImpl <em>Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDataType()
-	 * @generated */
+	 * @generated
+	 */
 	int DATA_TYPE = 2;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -73,7 +93,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -81,8 +102,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -90,41 +111,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int DATA_TYPE__IDENTIFICATION = LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DATA_TYPE__PALETTE_ENTRY = LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY;
+	int DATA_TYPE__TYPE_ENTRY = LibraryElementPackage.LIBRARY_ELEMENT__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Type</em>' class.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int DATA_TYPE_FEATURE_COUNT = LibraryElementPackage.LIBRARY_ELEMENT_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyTypeImpl <em>Any Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyTypeImpl <em>Any Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_TYPE = 13;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -132,7 +157,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -140,8 +166,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -149,40 +175,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_TYPE__PALETTE_ENTRY = DATA_TYPE__PALETTE_ENTRY;
+	int ANY_TYPE__TYPE_ENTRY = DATA_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Any Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Any Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ANY_TYPE_FEATURE_COUNT = DATA_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDerivedTypeImpl <em>Any Derived
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDerivedTypeImpl <em>Any Derived Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyDerivedTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyDerivedType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_DERIVED_TYPE = 0;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -190,7 +221,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -198,8 +230,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -207,26 +239,26 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_DERIVED_TYPE__IDENTIFICATION = ANY_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_DERIVED_TYPE__PALETTE_ENTRY = ANY_TYPE__PALETTE_ENTRY;
+	int ANY_DERIVED_TYPE__TYPE_ENTRY = ANY_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -234,24 +266,27 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The number of structural features of the '<em>Any Derived Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_DERIVED_TYPE_FEATURE_COUNT = ANY_TYPE_FEATURE_COUNT + 1;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl <em>Array Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl <em>Array Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getArrayType()
-	 * @generated */
+	 * @generated
+	 */
 	int ARRAY_TYPE = 1;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -259,7 +294,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -267,8 +303,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -276,26 +312,26 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ARRAY_TYPE__IDENTIFICATION = ANY_DERIVED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ARRAY_TYPE__PALETTE_ENTRY = ANY_DERIVED_TYPE__PALETTE_ENTRY;
+	int ARRAY_TYPE__TYPE_ENTRY = ANY_DERIVED_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -303,8 +339,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Subranges</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -312,7 +348,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Initial Values</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -320,30 +357,36 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Base Type</b></em>' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ARRAY_TYPE__BASE_TYPE = ANY_DERIVED_TYPE_FEATURE_COUNT + 2;
 
-	/** The number of structural features of the '<em>Array Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Array Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ARRAY_TYPE_FEATURE_COUNT = ANY_DERIVED_TYPE_FEATURE_COUNT + 3;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.ValueTypeImpl <em>Value Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.ValueTypeImpl <em>Value Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.ValueTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getValueType()
-	 * @generated */
+	 * @generated
+	 */
 	int VALUE_TYPE = 9;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -351,7 +394,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -359,8 +403,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -368,40 +412,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int VALUE_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int VALUE_TYPE__PALETTE_ENTRY = DATA_TYPE__PALETTE_ENTRY;
+	int VALUE_TYPE__TYPE_ENTRY = DATA_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Value Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Value Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int VALUE_TYPE_FEATURE_COUNT = DATA_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DerivedTypeImpl <em>Derived
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DerivedTypeImpl <em>Derived Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DerivedTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDerivedType()
-	 * @generated */
+	 * @generated
+	 */
 	int DERIVED_TYPE = 11;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -409,7 +458,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -417,8 +467,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -426,25 +476,26 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int DERIVED_TYPE__IDENTIFICATION = VALUE_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DERIVED_TYPE__PALETTE_ENTRY = VALUE_TYPE__PALETTE_ENTRY;
+	int DERIVED_TYPE__TYPE_ENTRY = VALUE_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The feature id for the '<em><b>Base Type</b></em>' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -452,24 +503,27 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The number of structural features of the '<em>Derived Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int DERIVED_TYPE_FEATURE_COUNT = VALUE_TYPE_FEATURE_COUNT + 1;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DirectlyDerivedTypeImpl <em>Directly
-	 * Derived Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DirectlyDerivedTypeImpl <em>Directly Derived Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DirectlyDerivedTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDirectlyDerivedType()
-	 * @generated */
+	 * @generated
+	 */
 	int DIRECTLY_DERIVED_TYPE = 3;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -477,7 +531,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -485,8 +540,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -494,25 +549,26 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int DIRECTLY_DERIVED_TYPE__IDENTIFICATION = DERIVED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DIRECTLY_DERIVED_TYPE__PALETTE_ENTRY = DERIVED_TYPE__PALETTE_ENTRY;
+	int DIRECTLY_DERIVED_TYPE__TYPE_ENTRY = DERIVED_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The feature id for the '<em><b>Base Type</b></em>' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -520,24 +576,27 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The number of structural features of the '<em>Directly Derived Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int DIRECTLY_DERIVED_TYPE_FEATURE_COUNT = DERIVED_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl <em>Enumerated
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl <em>Enumerated Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getEnumeratedType()
-	 * @generated */
+	 * @generated
+	 */
 	int ENUMERATED_TYPE = 4;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -545,7 +604,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -553,8 +613,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -562,21 +622,21 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ENUMERATED_TYPE__IDENTIFICATION = VALUE_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ENUMERATED_TYPE__PALETTE_ENTRY = VALUE_TYPE__PALETTE_ENTRY;
+	int ENUMERATED_TYPE__TYPE_ENTRY = VALUE_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The feature id for the '<em><b>Enumerated Value</b></em>' containment reference list.
@@ -589,24 +649,27 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The number of structural features of the '<em>Enumerated Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ENUMERATED_TYPE_FEATURE_COUNT = VALUE_TYPE_FEATURE_COUNT + 1;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedValueImpl <em>Enumerated
-	 * Value</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedValueImpl <em>Enumerated Value</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.EnumeratedValueImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getEnumeratedValue()
-	 * @generated */
+	 * @generated
+	 */
 	int ENUMERATED_VALUE = 5;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -614,7 +677,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -622,24 +686,27 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The number of structural features of the '<em>Enumerated Value</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ENUMERATED_VALUE_FEATURE_COUNT = 2;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl <em>Structured
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl <em>Structured Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getStructuredType()
-	 * @generated */
+	 * @generated
+	 */
 	int STRUCTURED_TYPE = 6;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -647,7 +714,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -655,8 +723,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -664,26 +732,26 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int STRUCTURED_TYPE__IDENTIFICATION = ANY_DERIVED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STRUCTURED_TYPE__PALETTE_ENTRY = ANY_DERIVED_TYPE__PALETTE_ENTRY;
+	int STRUCTURED_TYPE__TYPE_ENTRY = ANY_DERIVED_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The feature id for the '<em><b>Compiler Info</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -700,24 +768,27 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The number of structural features of the '<em>Structured Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int STRUCTURED_TYPE_FEATURE_COUNT = ANY_DERIVED_TYPE_FEATURE_COUNT + 1;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl <em>Subrange</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl <em>Subrange</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getSubrange()
-	 * @generated */
+	 * @generated
+	 */
 	int SUBRANGE = 7;
 
 	/**
 	 * The feature id for the '<em><b>Lower Limit</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -725,30 +796,36 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Upper Limit</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int SUBRANGE__UPPER_LIMIT = 1;
 
-	/** The number of structural features of the '<em>Subrange</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Subrange</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SUBRANGE_FEATURE_COUNT = 2;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeTypeImpl <em>Subrange
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeTypeImpl <em>Subrange Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.SubrangeTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getSubrangeType()
-	 * @generated */
+	 * @generated
+	 */
 	int SUBRANGE_TYPE = 8;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -756,7 +833,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -764,8 +842,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -773,25 +851,26 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int SUBRANGE_TYPE__IDENTIFICATION = DERIVED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUBRANGE_TYPE__PALETTE_ENTRY = DERIVED_TYPE__PALETTE_ENTRY;
+	int SUBRANGE_TYPE__TYPE_ENTRY = DERIVED_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The feature id for the '<em><b>Base Type</b></em>' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -799,8 +878,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Subrange</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -808,24 +887,27 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The number of structural features of the '<em>Subrange Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int SUBRANGE_TYPE_FEATURE_COUNT = DERIVED_TYPE_FEATURE_COUNT + 1;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.ElementaryTypeImpl <em>Elementary
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.ElementaryTypeImpl <em>Elementary Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.ElementaryTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getElementaryType()
-	 * @generated */
+	 * @generated
+	 */
 	int ELEMENTARY_TYPE = 10;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -833,7 +915,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -841,8 +924,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -850,42 +933,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ELEMENTARY_TYPE__IDENTIFICATION = VALUE_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ELEMENTARY_TYPE__PALETTE_ENTRY = VALUE_TYPE__PALETTE_ENTRY;
+	int ELEMENTARY_TYPE__TYPE_ENTRY = VALUE_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Elementary Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ELEMENTARY_TYPE_FEATURE_COUNT = VALUE_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.EventTypeImpl <em>Event Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.EventTypeImpl <em>Event Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.EventTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getEventType()
-	 * @generated */
+	 * @generated
+	 */
 	int EVENT_TYPE = 12;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -893,7 +979,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -901,8 +988,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -910,40 +997,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int EVENT_TYPE__IDENTIFICATION = DATA_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int EVENT_TYPE__PALETTE_ENTRY = DATA_TYPE__PALETTE_ENTRY;
+	int EVENT_TYPE__TYPE_ENTRY = DATA_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Event Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Event Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int EVENT_TYPE_FEATURE_COUNT = DATA_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyElementaryTypeImpl <em>Any
-	 * Elementary Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyElementaryTypeImpl <em>Any Elementary Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyElementaryTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyElementaryType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_ELEMENTARY_TYPE = 14;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -951,7 +1043,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -959,8 +1052,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -968,42 +1061,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_ELEMENTARY_TYPE__IDENTIFICATION = ANY_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_ELEMENTARY_TYPE__PALETTE_ENTRY = ANY_TYPE__PALETTE_ENTRY;
+	int ANY_ELEMENTARY_TYPE__TYPE_ENTRY = ANY_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Any Elementary Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_ELEMENTARY_TYPE_FEATURE_COUNT = ANY_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyMagnitudeTypeImpl <em>Any
-	 * Magnitude Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyMagnitudeTypeImpl <em>Any Magnitude Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyMagnitudeTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyMagnitudeType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_MAGNITUDE_TYPE = 15;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1011,7 +1107,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1019,8 +1116,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1028,42 +1125,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_MAGNITUDE_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_MAGNITUDE_TYPE__PALETTE_ENTRY = ANY_ELEMENTARY_TYPE__PALETTE_ENTRY;
+	int ANY_MAGNITUDE_TYPE__TYPE_ENTRY = ANY_ELEMENTARY_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Any Magnitude Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_MAGNITUDE_TYPE_FEATURE_COUNT = ANY_ELEMENTARY_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyNumTypeImpl <em>Any Num
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyNumTypeImpl <em>Any Num Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyNumTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyNumType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_NUM_TYPE = 16;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1071,7 +1171,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1079,8 +1180,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1088,42 +1189,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_NUM_TYPE__IDENTIFICATION = ANY_MAGNITUDE_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_NUM_TYPE__PALETTE_ENTRY = ANY_MAGNITUDE_TYPE__PALETTE_ENTRY;
+	int ANY_NUM_TYPE__TYPE_ENTRY = ANY_MAGNITUDE_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Any Num Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_NUM_TYPE_FEATURE_COUNT = ANY_MAGNITUDE_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyRealTypeImpl <em>Any Real
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyRealTypeImpl <em>Any Real Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyRealTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyRealType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_REAL_TYPE = 17;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1131,7 +1235,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1139,8 +1244,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1148,42 +1253,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_REAL_TYPE__IDENTIFICATION = ANY_NUM_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_REAL_TYPE__PALETTE_ENTRY = ANY_NUM_TYPE__PALETTE_ENTRY;
+	int ANY_REAL_TYPE__TYPE_ENTRY = ANY_NUM_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Any Real Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_REAL_TYPE_FEATURE_COUNT = ANY_NUM_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.RealTypeImpl <em>Real Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.RealTypeImpl <em>Real Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.RealTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getRealType()
-	 * @generated */
+	 * @generated
+	 */
 	int REAL_TYPE = 18;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1191,7 +1299,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1199,8 +1308,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1208,40 +1317,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int REAL_TYPE__IDENTIFICATION = ANY_REAL_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int REAL_TYPE__PALETTE_ENTRY = ANY_REAL_TYPE__PALETTE_ENTRY;
+	int REAL_TYPE__TYPE_ENTRY = ANY_REAL_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Real Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Real Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int REAL_TYPE_FEATURE_COUNT = ANY_REAL_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LrealTypeImpl <em>Lreal Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LrealTypeImpl <em>Lreal Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.LrealTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLrealType()
-	 * @generated */
+	 * @generated
+	 */
 	int LREAL_TYPE = 19;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1249,7 +1363,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1257,8 +1372,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1266,40 +1381,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int LREAL_TYPE__IDENTIFICATION = ANY_REAL_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LREAL_TYPE__PALETTE_ENTRY = ANY_REAL_TYPE__PALETTE_ENTRY;
+	int LREAL_TYPE__TYPE_ENTRY = ANY_REAL_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Lreal Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Lreal Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LREAL_TYPE_FEATURE_COUNT = ANY_REAL_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyIntTypeImpl <em>Any Int
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyIntTypeImpl <em>Any Int Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyIntTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyIntType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_INT_TYPE = 20;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1307,7 +1427,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1315,8 +1436,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1324,42 +1445,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_INT_TYPE__IDENTIFICATION = ANY_NUM_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_INT_TYPE__PALETTE_ENTRY = ANY_NUM_TYPE__PALETTE_ENTRY;
+	int ANY_INT_TYPE__TYPE_ENTRY = ANY_NUM_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Any Int Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_INT_TYPE_FEATURE_COUNT = ANY_NUM_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyUnsignedTypeImpl <em>Any Unsigned
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyUnsignedTypeImpl <em>Any Unsigned Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyUnsignedTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyUnsignedType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_UNSIGNED_TYPE = 21;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1367,7 +1491,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1375,8 +1500,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1384,42 +1509,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_UNSIGNED_TYPE__IDENTIFICATION = ANY_INT_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_UNSIGNED_TYPE__PALETTE_ENTRY = ANY_INT_TYPE__PALETTE_ENTRY;
+	int ANY_UNSIGNED_TYPE__TYPE_ENTRY = ANY_INT_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Any Unsigned Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_UNSIGNED_TYPE_FEATURE_COUNT = ANY_INT_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.UsintTypeImpl <em>Usint Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.UsintTypeImpl <em>Usint Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.UsintTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getUsintType()
-	 * @generated */
+	 * @generated
+	 */
 	int USINT_TYPE = 22;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1427,7 +1555,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1435,8 +1564,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1444,40 +1573,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int USINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int USINT_TYPE__PALETTE_ENTRY = ANY_UNSIGNED_TYPE__PALETTE_ENTRY;
+	int USINT_TYPE__TYPE_ENTRY = ANY_UNSIGNED_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Usint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Usint Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int USINT_TYPE_FEATURE_COUNT = ANY_UNSIGNED_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.UintTypeImpl <em>Uint Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.UintTypeImpl <em>Uint Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.UintTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getUintType()
-	 * @generated */
+	 * @generated
+	 */
 	int UINT_TYPE = 23;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1485,7 +1619,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1493,8 +1628,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1502,40 +1637,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int UINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int UINT_TYPE__PALETTE_ENTRY = ANY_UNSIGNED_TYPE__PALETTE_ENTRY;
+	int UINT_TYPE__TYPE_ENTRY = ANY_UNSIGNED_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Uint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Uint Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int UINT_TYPE_FEATURE_COUNT = ANY_UNSIGNED_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.UdintTypeImpl <em>Udint Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.UdintTypeImpl <em>Udint Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.UdintTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getUdintType()
-	 * @generated */
+	 * @generated
+	 */
 	int UDINT_TYPE = 24;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1543,7 +1683,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1551,8 +1692,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1560,40 +1701,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int UDINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int UDINT_TYPE__PALETTE_ENTRY = ANY_UNSIGNED_TYPE__PALETTE_ENTRY;
+	int UDINT_TYPE__TYPE_ENTRY = ANY_UNSIGNED_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Udint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Udint Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int UDINT_TYPE_FEATURE_COUNT = ANY_UNSIGNED_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.UlintTypeImpl <em>Ulint Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.UlintTypeImpl <em>Ulint Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.UlintTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getUlintType()
-	 * @generated */
+	 * @generated
+	 */
 	int ULINT_TYPE = 25;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1601,7 +1747,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1609,8 +1756,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1618,40 +1765,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ULINT_TYPE__IDENTIFICATION = ANY_UNSIGNED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ULINT_TYPE__PALETTE_ENTRY = ANY_UNSIGNED_TYPE__PALETTE_ENTRY;
+	int ULINT_TYPE__TYPE_ENTRY = ANY_UNSIGNED_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Ulint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Ulint Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int ULINT_TYPE_FEATURE_COUNT = ANY_UNSIGNED_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnySignedTypeImpl <em>Any Signed
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnySignedTypeImpl <em>Any Signed Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnySignedTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnySignedType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_SIGNED_TYPE = 26;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1659,7 +1811,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1667,8 +1820,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1676,42 +1829,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_SIGNED_TYPE__IDENTIFICATION = ANY_INT_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_SIGNED_TYPE__PALETTE_ENTRY = ANY_INT_TYPE__PALETTE_ENTRY;
+	int ANY_SIGNED_TYPE__TYPE_ENTRY = ANY_INT_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Any Signed Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_SIGNED_TYPE_FEATURE_COUNT = ANY_INT_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.SintTypeImpl <em>Sint Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.SintTypeImpl <em>Sint Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.SintTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getSintType()
-	 * @generated */
+	 * @generated
+	 */
 	int SINT_TYPE = 27;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1719,7 +1875,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1727,8 +1884,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1736,40 +1893,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int SINT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SINT_TYPE__PALETTE_ENTRY = ANY_SIGNED_TYPE__PALETTE_ENTRY;
+	int SINT_TYPE__TYPE_ENTRY = ANY_SIGNED_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Sint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Sint Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int SINT_TYPE_FEATURE_COUNT = ANY_SIGNED_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.IntTypeImpl <em>Int Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.IntTypeImpl <em>Int Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.IntTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getIntType()
-	 * @generated */
+	 * @generated
+	 */
 	int INT_TYPE = 28;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1777,7 +1939,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1785,8 +1948,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1794,40 +1957,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int INT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int INT_TYPE__PALETTE_ENTRY = ANY_SIGNED_TYPE__PALETTE_ENTRY;
+	int INT_TYPE__TYPE_ENTRY = ANY_SIGNED_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Int Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Int Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int INT_TYPE_FEATURE_COUNT = ANY_SIGNED_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DintTypeImpl <em>Dint Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DintTypeImpl <em>Dint Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DintTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDintType()
-	 * @generated */
+	 * @generated
+	 */
 	int DINT_TYPE = 29;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1835,7 +2003,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1843,8 +2012,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1852,40 +2021,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int DINT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DINT_TYPE__PALETTE_ENTRY = ANY_SIGNED_TYPE__PALETTE_ENTRY;
+	int DINT_TYPE__TYPE_ENTRY = ANY_SIGNED_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Dint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Dint Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DINT_TYPE_FEATURE_COUNT = ANY_SIGNED_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LintTypeImpl <em>Lint Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LintTypeImpl <em>Lint Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.LintTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLintType()
-	 * @generated */
+	 * @generated
+	 */
 	int LINT_TYPE = 30;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1893,7 +2067,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1901,8 +2076,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1910,40 +2085,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int LINT_TYPE__IDENTIFICATION = ANY_SIGNED_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LINT_TYPE__PALETTE_ENTRY = ANY_SIGNED_TYPE__PALETTE_ENTRY;
+	int LINT_TYPE__TYPE_ENTRY = ANY_SIGNED_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Lint Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Lint Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LINT_TYPE_FEATURE_COUNT = ANY_SIGNED_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDurationTypeImpl <em>Any Duration
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDurationTypeImpl <em>Any Duration Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyDurationTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyDurationType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_DURATION_TYPE = 31;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1951,7 +2131,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1959,8 +2140,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -1968,42 +2149,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_DURATION_TYPE__IDENTIFICATION = ANY_MAGNITUDE_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_DURATION_TYPE__PALETTE_ENTRY = ANY_MAGNITUDE_TYPE__PALETTE_ENTRY;
+	int ANY_DURATION_TYPE__TYPE_ENTRY = ANY_MAGNITUDE_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Any Duration Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_DURATION_TYPE_FEATURE_COUNT = ANY_MAGNITUDE_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.TimeTypeImpl <em>Time Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.TimeTypeImpl <em>Time Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.TimeTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getTimeType()
-	 * @generated */
+	 * @generated
+	 */
 	int TIME_TYPE = 32;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2011,7 +2195,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2019,8 +2204,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2028,40 +2213,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int TIME_TYPE__IDENTIFICATION = ANY_DURATION_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TIME_TYPE__PALETTE_ENTRY = ANY_DURATION_TYPE__PALETTE_ENTRY;
+	int TIME_TYPE__TYPE_ENTRY = ANY_DURATION_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Time Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Time Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int TIME_TYPE_FEATURE_COUNT = ANY_DURATION_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LtimeTypeImpl <em>Ltime Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LtimeTypeImpl <em>Ltime Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.LtimeTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLtimeType()
-	 * @generated */
+	 * @generated
+	 */
 	int LTIME_TYPE = 33;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2069,7 +2259,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2077,8 +2268,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2086,40 +2277,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int LTIME_TYPE__IDENTIFICATION = ANY_DURATION_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LTIME_TYPE__PALETTE_ENTRY = ANY_DURATION_TYPE__PALETTE_ENTRY;
+	int LTIME_TYPE__TYPE_ENTRY = ANY_DURATION_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Ltime Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Ltime Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LTIME_TYPE_FEATURE_COUNT = ANY_DURATION_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyBitTypeImpl <em>Any Bit
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyBitTypeImpl <em>Any Bit Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyBitTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyBitType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_BIT_TYPE = 34;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2127,7 +2323,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2135,8 +2332,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2144,42 +2341,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_BIT_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_BIT_TYPE__PALETTE_ENTRY = ANY_ELEMENTARY_TYPE__PALETTE_ENTRY;
+	int ANY_BIT_TYPE__TYPE_ENTRY = ANY_ELEMENTARY_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Any Bit Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_BIT_TYPE_FEATURE_COUNT = ANY_ELEMENTARY_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.BoolTypeImpl <em>Bool Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.BoolTypeImpl <em>Bool Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.BoolTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getBoolType()
-	 * @generated */
+	 * @generated
+	 */
 	int BOOL_TYPE = 35;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2187,7 +2387,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2195,8 +2396,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2204,40 +2405,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int BOOL_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BOOL_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
+	int BOOL_TYPE__TYPE_ENTRY = ANY_BIT_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Bool Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Bool Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int BOOL_TYPE_FEATURE_COUNT = ANY_BIT_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.ByteTypeImpl <em>Byte Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.ByteTypeImpl <em>Byte Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.ByteTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getByteType()
-	 * @generated */
+	 * @generated
+	 */
 	int BYTE_TYPE = 36;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2245,7 +2451,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2253,8 +2460,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2262,40 +2469,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int BYTE_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BYTE_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
+	int BYTE_TYPE__TYPE_ENTRY = ANY_BIT_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Byte Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Byte Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int BYTE_TYPE_FEATURE_COUNT = ANY_BIT_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.WordTypeImpl <em>Word Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.WordTypeImpl <em>Word Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.WordTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getWordType()
-	 * @generated */
+	 * @generated
+	 */
 	int WORD_TYPE = 37;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2303,7 +2515,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2311,8 +2524,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2320,40 +2533,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int WORD_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WORD_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
+	int WORD_TYPE__TYPE_ENTRY = ANY_BIT_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Word Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Word Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WORD_TYPE_FEATURE_COUNT = ANY_BIT_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DwordTypeImpl <em>Dword Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DwordTypeImpl <em>Dword Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DwordTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDwordType()
-	 * @generated */
+	 * @generated
+	 */
 	int DWORD_TYPE = 38;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2361,7 +2579,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2369,8 +2588,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2378,40 +2597,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int DWORD_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DWORD_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
+	int DWORD_TYPE__TYPE_ENTRY = ANY_BIT_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Dword Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Dword Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DWORD_TYPE_FEATURE_COUNT = ANY_BIT_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LwordTypeImpl <em>Lword Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LwordTypeImpl <em>Lword Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.LwordTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLwordType()
-	 * @generated */
+	 * @generated
+	 */
 	int LWORD_TYPE = 39;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2419,7 +2643,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2427,8 +2652,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2436,40 +2661,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int LWORD_TYPE__IDENTIFICATION = ANY_BIT_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LWORD_TYPE__PALETTE_ENTRY = ANY_BIT_TYPE__PALETTE_ENTRY;
+	int LWORD_TYPE__TYPE_ENTRY = ANY_BIT_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Lword Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Lword Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LWORD_TYPE_FEATURE_COUNT = ANY_BIT_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyCharsTypeImpl <em>Any Chars
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyCharsTypeImpl <em>Any Chars Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyCharsTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyCharsType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_CHARS_TYPE = 40;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2477,7 +2707,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2485,8 +2716,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2494,42 +2725,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_CHARS_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_CHARS_TYPE__PALETTE_ENTRY = ANY_ELEMENTARY_TYPE__PALETTE_ENTRY;
+	int ANY_CHARS_TYPE__TYPE_ENTRY = ANY_ELEMENTARY_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Any Chars Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_CHARS_TYPE_FEATURE_COUNT = ANY_ELEMENTARY_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyStringTypeImpl <em>Any String
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyStringTypeImpl <em>Any String Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyStringTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyStringType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_STRING_TYPE = 41;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2537,7 +2771,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2545,8 +2780,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2554,42 +2789,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_STRING_TYPE__IDENTIFICATION = ANY_CHARS_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_STRING_TYPE__PALETTE_ENTRY = ANY_CHARS_TYPE__PALETTE_ENTRY;
+	int ANY_STRING_TYPE__TYPE_ENTRY = ANY_CHARS_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Any String Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_STRING_TYPE_FEATURE_COUNT = ANY_CHARS_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.StringTypeImpl <em>String Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.StringTypeImpl <em>String Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.StringTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getStringType()
-	 * @generated */
+	 * @generated
+	 */
 	int STRING_TYPE = 42;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2597,7 +2835,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2605,8 +2844,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2614,40 +2853,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int STRING_TYPE__IDENTIFICATION = ANY_STRING_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STRING_TYPE__PALETTE_ENTRY = ANY_STRING_TYPE__PALETTE_ENTRY;
+	int STRING_TYPE__TYPE_ENTRY = ANY_STRING_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>String Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>String Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int STRING_TYPE_FEATURE_COUNT = ANY_STRING_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.WstringTypeImpl <em>Wstring
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.WstringTypeImpl <em>Wstring Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.WstringTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getWstringType()
-	 * @generated */
+	 * @generated
+	 */
 	int WSTRING_TYPE = 43;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2655,7 +2899,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2663,8 +2908,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2672,42 +2917,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int WSTRING_TYPE__IDENTIFICATION = ANY_STRING_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WSTRING_TYPE__PALETTE_ENTRY = ANY_STRING_TYPE__PALETTE_ENTRY;
+	int WSTRING_TYPE__TYPE_ENTRY = ANY_STRING_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Wstring Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int WSTRING_TYPE_FEATURE_COUNT = ANY_STRING_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyCharTypeImpl <em>Any Char
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyCharTypeImpl <em>Any Char Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyCharTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyCharType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_CHAR_TYPE = 44;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2715,7 +2963,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2723,8 +2972,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2732,42 +2981,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_CHAR_TYPE__IDENTIFICATION = ANY_CHARS_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_CHAR_TYPE__PALETTE_ENTRY = ANY_CHARS_TYPE__PALETTE_ENTRY;
+	int ANY_CHAR_TYPE__TYPE_ENTRY = ANY_CHARS_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Any Char Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_CHAR_TYPE_FEATURE_COUNT = ANY_CHARS_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.CharTypeImpl <em>Char Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.CharTypeImpl <em>Char Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.CharTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getCharType()
-	 * @generated */
+	 * @generated
+	 */
 	int CHAR_TYPE = 45;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2775,7 +3027,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2783,8 +3036,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2792,40 +3045,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int CHAR_TYPE__IDENTIFICATION = ANY_CHAR_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CHAR_TYPE__PALETTE_ENTRY = ANY_CHAR_TYPE__PALETTE_ENTRY;
+	int CHAR_TYPE__TYPE_ENTRY = ANY_CHAR_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Char Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Char Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int CHAR_TYPE_FEATURE_COUNT = ANY_CHAR_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.WcharTypeImpl <em>Wchar Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.WcharTypeImpl <em>Wchar Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.WcharTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getWcharType()
-	 * @generated */
+	 * @generated
+	 */
 	int WCHAR_TYPE = 46;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2833,7 +3091,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2841,8 +3100,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2850,40 +3109,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int WCHAR_TYPE__IDENTIFICATION = ANY_CHAR_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int WCHAR_TYPE__PALETTE_ENTRY = ANY_CHAR_TYPE__PALETTE_ENTRY;
+	int WCHAR_TYPE__TYPE_ENTRY = ANY_CHAR_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Wchar Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Wchar Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int WCHAR_TYPE_FEATURE_COUNT = ANY_CHAR_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDateTypeImpl <em>Any Date
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDateTypeImpl <em>Any Date Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.AnyDateTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyDateType()
-	 * @generated */
+	 * @generated
+	 */
 	int ANY_DATE_TYPE = 47;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2891,7 +3155,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2899,8 +3164,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2908,42 +3173,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_DATE_TYPE__IDENTIFICATION = ANY_ELEMENTARY_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_DATE_TYPE__PALETTE_ENTRY = ANY_ELEMENTARY_TYPE__PALETTE_ENTRY;
+	int ANY_DATE_TYPE__TYPE_ENTRY = ANY_ELEMENTARY_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Any Date Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int ANY_DATE_TYPE_FEATURE_COUNT = ANY_ELEMENTARY_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DateAndTimeTypeImpl <em>Date And Time
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DateAndTimeTypeImpl <em>Date And Time Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DateAndTimeTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDateAndTimeType()
-	 * @generated */
+	 * @generated
+	 */
 	int DATE_AND_TIME_TYPE = 48;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2951,7 +3219,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2959,8 +3228,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -2968,42 +3237,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int DATE_AND_TIME_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DATE_AND_TIME_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
+	int DATE_AND_TIME_TYPE__TYPE_ENTRY = ANY_DATE_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Date And Time Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int DATE_AND_TIME_TYPE_FEATURE_COUNT = ANY_DATE_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LdtTypeImpl <em>Ldt Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LdtTypeImpl <em>Ldt Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.LdtTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLdtType()
-	 * @generated */
+	 * @generated
+	 */
 	int LDT_TYPE = 49;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3011,7 +3283,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3019,8 +3292,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3028,40 +3301,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int LDT_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LDT_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
+	int LDT_TYPE__TYPE_ENTRY = ANY_DATE_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Ldt Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Ldt Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LDT_TYPE_FEATURE_COUNT = ANY_DATE_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DateTypeImpl <em>Date Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.DateTypeImpl <em>Date Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DateTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDateType()
-	 * @generated */
+	 * @generated
+	 */
 	int DATE_TYPE = 50;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3069,7 +3347,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3077,8 +3356,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3086,40 +3365,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int DATE_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int DATE_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
+	int DATE_TYPE__TYPE_ENTRY = ANY_DATE_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Date Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Date Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int DATE_TYPE_FEATURE_COUNT = ANY_DATE_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.TimeOfDayTypeImpl <em>Time Of Day
-	 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.TimeOfDayTypeImpl <em>Time Of Day Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.TimeOfDayTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getTimeOfDayType()
-	 * @generated */
+	 * @generated
+	 */
 	int TIME_OF_DAY_TYPE = 51;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3127,7 +3411,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3135,8 +3420,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3144,42 +3429,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int TIME_OF_DAY_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int TIME_OF_DAY_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
+	int TIME_OF_DAY_TYPE__TYPE_ENTRY = ANY_DATE_TYPE__TYPE_ENTRY;
 
 	/**
 	 * The number of structural features of the '<em>Time Of Day Type</em>' class.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int TIME_OF_DAY_TYPE_FEATURE_COUNT = ANY_DATE_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LtodTypeImpl <em>Ltod Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LtodTypeImpl <em>Ltod Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.LtodTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLtodType()
-	 * @generated */
+	 * @generated
+	 */
 	int LTOD_TYPE = 52;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3187,7 +3475,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3195,8 +3484,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3204,40 +3493,45 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int LTOD_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LTOD_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
+	int LTOD_TYPE__TYPE_ENTRY = ANY_DATE_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Ltod Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Ltod Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LTOD_TYPE_FEATURE_COUNT = ANY_DATE_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LdateTypeImpl <em>Ldate Type</em>}'
-	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.LdateTypeImpl <em>Ldate Type</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.impl.LdateTypeImpl
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLdateType()
-	 * @generated */
+	 * @generated
+	 */
 	int LDATE_TYPE = 53;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3245,7 +3539,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3253,8 +3548,8 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Version Info</b></em>' containment reference list.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
@@ -3262,1119 +3557,1392 @@ public interface DataPackage extends EPackage {
 
 	/**
 	 * The feature id for the '<em><b>Identification</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
 	int LDATE_TYPE__IDENTIFICATION = ANY_DATE_TYPE__IDENTIFICATION;
 
 	/**
-	 * The feature id for the '<em><b>Palette Entry</b></em>' reference.
+	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int LDATE_TYPE__PALETTE_ENTRY = ANY_DATE_TYPE__PALETTE_ENTRY;
+	int LDATE_TYPE__TYPE_ENTRY = ANY_DATE_TYPE__TYPE_ENTRY;
 
-	/** The number of structural features of the '<em>Ldate Type</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Ldate Type</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int LDATE_TYPE_FEATURE_COUNT = ANY_DATE_TYPE_FEATURE_COUNT + 0;
 
-	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.BaseType1 <em>Base Type1</em>}' enum. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.BaseType1 <em>Base Type1</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.fordiac.ide.model.data.BaseType1
 	 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getBaseType1()
-	 * @generated */
+	 * @generated
+	 */
 	int BASE_TYPE1 = 54;
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyDerivedType <em>Any Derived
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyDerivedType <em>Any Derived Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Derived Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyDerivedType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyDerivedType();
 
-	/** Returns the meta object for the containment reference
-	 * '{@link org.eclipse.fordiac.ide.model.data.AnyDerivedType#getCompilerInfo <em>Compiler Info</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.data.AnyDerivedType#getCompilerInfo <em>Compiler Info</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference '<em>Compiler Info</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyDerivedType#getCompilerInfo()
 	 * @see #getAnyDerivedType()
-	 * @generated */
+	 * @generated
+	 */
 	EReference getAnyDerivedType_CompilerInfo();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.ArrayType <em>Array Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.ArrayType <em>Array Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Array Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.ArrayType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getArrayType();
 
-	/** Returns the meta object for the containment reference list
-	 * '{@link org.eclipse.fordiac.ide.model.data.ArrayType#getSubranges <em>Subranges</em>}'. <!-- begin-user-doc -->
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.data.ArrayType#getSubranges <em>Subranges</em>}'.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for the containment reference list '<em>Subranges</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.ArrayType#getSubranges()
 	 * @see #getArrayType()
-	 * @generated */
+	 * @generated
+	 */
 	EReference getArrayType_Subranges();
 
-	/** Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.ArrayType#getInitialValues
-	 * <em>Initial Values</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.ArrayType#getInitialValues <em>Initial Values</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Initial Values</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.ArrayType#getInitialValues()
 	 * @see #getArrayType()
-	 * @generated */
+	 * @generated
+	 */
 	EAttribute getArrayType_InitialValues();
 
-	/** Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.data.ArrayType#getBaseType
-	 * <em>Base Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.data.ArrayType#getBaseType <em>Base Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Base Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.ArrayType#getBaseType()
 	 * @see #getArrayType()
-	 * @generated */
+	 * @generated
+	 */
 	EReference getArrayType_BaseType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DataType <em>Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DataType <em>Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.DataType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getDataType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DirectlyDerivedType <em>Directly
-	 * Derived Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DirectlyDerivedType <em>Directly Derived Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Directly Derived Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.DirectlyDerivedType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getDirectlyDerivedType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.EnumeratedType <em>Enumerated
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.EnumeratedType <em>Enumerated Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Enumerated Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getEnumeratedType();
 
-	/** Returns the meta object for the containment reference list
-	 * '{@link org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValue <em>Enumerated Value</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValue <em>Enumerated Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Enumerated Value</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedType#getEnumeratedValue()
 	 * @see #getEnumeratedType()
-	 * @generated */
+	 * @generated
+	 */
 	EReference getEnumeratedType_EnumeratedValue();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue <em>Enumerated
-	 * Value</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue <em>Enumerated Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Enumerated Value</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedValue
-	 * @generated */
+	 * @generated
+	 */
 	EClass getEnumeratedValue();
 
-	/** Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getComment
-	 * <em>Comment</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getComment <em>Comment</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Comment</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedValue#getComment()
 	 * @see #getEnumeratedValue()
-	 * @generated */
+	 * @generated
+	 */
 	EAttribute getEnumeratedValue_Comment();
 
-	/** Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getName
-	 * <em>Name</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.EnumeratedValue#getName <em>Name</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.EnumeratedValue#getName()
 	 * @see #getEnumeratedValue()
-	 * @generated */
+	 * @generated
+	 */
 	EAttribute getEnumeratedValue_Name();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.StructuredType <em>Structured
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.StructuredType <em>Structured Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Structured Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.StructuredType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getStructuredType();
 
-	/** Returns the meta object for the containment reference list
-	 * '{@link org.eclipse.fordiac.ide.model.data.StructuredType#getMemberVariables <em>Member Variables</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.data.StructuredType#getMemberVariables <em>Member Variables</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for the containment reference list '<em>Member Variables</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.StructuredType#getMemberVariables()
 	 * @see #getStructuredType()
-	 * @generated */
+	 * @generated
+	 */
 	EReference getStructuredType_MemberVariables();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.Subrange <em>Subrange</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.Subrange <em>Subrange</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Subrange</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.Subrange
-	 * @generated */
+	 * @generated
+	 */
 	EClass getSubrange();
 
-	/** Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.Subrange#getLowerLimit
-	 * <em>Lower Limit</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.Subrange#getLowerLimit <em>Lower Limit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Lower Limit</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.Subrange#getLowerLimit()
 	 * @see #getSubrange()
-	 * @generated */
+	 * @generated
+	 */
 	EAttribute getSubrange_LowerLimit();
 
-	/** Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.Subrange#getUpperLimit
-	 * <em>Upper Limit</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.Subrange#getUpperLimit <em>Upper Limit</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for the attribute '<em>Upper Limit</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.Subrange#getUpperLimit()
 	 * @see #getSubrange()
-	 * @generated */
+	 * @generated
+	 */
 	EAttribute getSubrange_UpperLimit();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.SubrangeType <em>Subrange
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.SubrangeType <em>Subrange Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Subrange Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.SubrangeType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getSubrangeType();
 
-	/** Returns the meta object for the containment reference
-	 * '{@link org.eclipse.fordiac.ide.model.data.SubrangeType#getSubrange <em>Subrange</em>}'. <!-- begin-user-doc -->
+	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.data.SubrangeType#getSubrange <em>Subrange</em>}'.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 *
 	 * @return the meta object for the containment reference '<em>Subrange</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.SubrangeType#getSubrange()
 	 * @see #getSubrangeType()
-	 * @generated */
+	 * @generated
+	 */
 	EReference getSubrangeType_Subrange();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.ValueType <em>Value Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.ValueType <em>Value Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Value Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.ValueType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getValueType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.ElementaryType <em>Elementary
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.ElementaryType <em>Elementary Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Elementary Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.ElementaryType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getElementaryType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DerivedType <em>Derived
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DerivedType <em>Derived Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Derived Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.DerivedType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getDerivedType();
 
-	/** Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.data.DerivedType#getBaseType
-	 * <em>Base Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.data.DerivedType#getBaseType <em>Base Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for the reference '<em>Base Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.DerivedType#getBaseType()
 	 * @see #getDerivedType()
-	 * @generated */
+	 * @generated
+	 */
 	EReference getDerivedType_BaseType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.EventType <em>Event Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.EventType <em>Event Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Event Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.EventType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getEventType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyType <em>Any Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyType <em>Any Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyElementaryType <em>Any
-	 * Elementary Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyElementaryType <em>Any Elementary Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Elementary Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyElementaryType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyElementaryType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyMagnitudeType <em>Any Magnitude
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyMagnitudeType <em>Any Magnitude Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Magnitude Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyMagnitudeType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyNumType <em>Any Num Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyNumType <em>Any Num Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Num Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyNumType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyNumType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyRealType <em>Any Real
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyRealType <em>Any Real Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Real Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyRealType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyRealType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.RealType <em>Real Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.RealType <em>Real Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Real Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.RealType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getRealType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LrealType <em>Lreal Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LrealType <em>Lreal Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Lreal Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.LrealType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getLrealType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyIntType <em>Any Int Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyIntType <em>Any Int Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Int Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyIntType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyIntType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyUnsignedType <em>Any Unsigned
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyUnsignedType <em>Any Unsigned Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Unsigned Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyUnsignedType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyUnsignedType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.UsintType <em>Usint Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.UsintType <em>Usint Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Usint Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.UsintType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getUsintType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.UintType <em>Uint Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.UintType <em>Uint Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Uint Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.UintType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getUintType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.UdintType <em>Udint Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.UdintType <em>Udint Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Udint Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.UdintType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getUdintType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.UlintType <em>Ulint Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.UlintType <em>Ulint Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Ulint Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.UlintType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getUlintType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnySignedType <em>Any Signed
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnySignedType <em>Any Signed Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Signed Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnySignedType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnySignedType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.SintType <em>Sint Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.SintType <em>Sint Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Sint Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.SintType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getSintType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.IntType <em>Int Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.IntType <em>Int Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Int Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.IntType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getIntType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DintType <em>Dint Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DintType <em>Dint Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Dint Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.DintType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getDintType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LintType <em>Lint Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LintType <em>Lint Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Lint Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.LintType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getLintType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyDurationType <em>Any Duration
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyDurationType <em>Any Duration Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Duration Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyDurationType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyDurationType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.TimeType <em>Time Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.TimeType <em>Time Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Time Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.TimeType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getTimeType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LtimeType <em>Ltime Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LtimeType <em>Ltime Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Ltime Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.LtimeType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getLtimeType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyBitType <em>Any Bit Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyBitType <em>Any Bit Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Bit Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyBitType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyBitType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.BoolType <em>Bool Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.BoolType <em>Bool Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Bool Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.BoolType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getBoolType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.ByteType <em>Byte Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.ByteType <em>Byte Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Byte Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.ByteType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getByteType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.WordType <em>Word Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.WordType <em>Word Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Word Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.WordType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getWordType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DwordType <em>Dword Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DwordType <em>Dword Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Dword Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.DwordType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getDwordType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LwordType <em>Lword Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LwordType <em>Lword Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Lword Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.LwordType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getLwordType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyCharsType <em>Any Chars
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyCharsType <em>Any Chars Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Chars Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyCharsType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyCharsType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyStringType <em>Any String
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyStringType <em>Any String Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any String Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyStringType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyStringType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.StringType <em>String Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.StringType <em>String Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>String Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.StringType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getStringType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.WstringType <em>Wstring
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.WstringType <em>Wstring Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Wstring Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.WstringType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getWstringType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyCharType <em>Any Char
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyCharType <em>Any Char Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Char Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyCharType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyCharType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.CharType <em>Char Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.CharType <em>Char Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Char Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.CharType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getCharType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.WcharType <em>Wchar Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.WcharType <em>Wchar Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Wchar Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.WcharType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getWcharType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyDateType <em>Any Date
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.AnyDateType <em>Any Date Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Any Date Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.AnyDateType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getAnyDateType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DateAndTimeType <em>Date And Time
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DateAndTimeType <em>Date And Time Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Date And Time Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.DateAndTimeType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getDateAndTimeType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LdtType <em>Ldt Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LdtType <em>Ldt Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Ldt Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.LdtType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getLdtType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DateType <em>Date Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.DateType <em>Date Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Date Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.DateType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getDateType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.TimeOfDayType <em>Time Of Day
-	 * Type</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.TimeOfDayType <em>Time Of Day Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Time Of Day Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.TimeOfDayType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getTimeOfDayType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LtodType <em>Ltod Type</em>}'. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LtodType <em>Ltod Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Ltod Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.LtodType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getLtodType();
 
-	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LdateType <em>Ldate Type</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.LdateType <em>Ldate Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for class '<em>Ldate Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.LdateType
-	 * @generated */
+	 * @generated
+	 */
 	EClass getLdateType();
 
-	/** Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.data.BaseType1 <em>Base Type1</em>}'.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.data.BaseType1 <em>Base Type1</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the meta object for enum '<em>Base Type1</em>'.
 	 * @see org.eclipse.fordiac.ide.model.data.BaseType1
-	 * @generated */
+	 * @generated
+	 */
 	EEnum getBaseType1();
 
-	/** Returns the factory that creates the instances of the model. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the factory that creates the instances of the model.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the factory that creates the instances of the model.
-	 * @generated */
+	 * @generated
+	 */
 	DataFactory getDataFactory();
 
-	/** <!-- begin-user-doc --> Defines literals for the meta objects that represent
+	/**
+	 * <!-- begin-user-doc -->
+	 * Defines literals for the meta objects that represent
 	 * <ul>
-	 * <li>each class,</li>
-	 * <li>each feature of each class,</li>
-	 * <li>each enum,</li>
-	 * <li>and each data type</li>
+	 *   <li>each class,</li>
+	 *   <li>each feature of each class,</li>
+	 *   <li>each enum,</li>
+	 *   <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
-	 *
-	 * @generated */
+	 * @generated
+	 */
 	interface Literals {
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDerivedTypeImpl <em>Any
-		 * Derived Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDerivedTypeImpl <em>Any Derived Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyDerivedTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyDerivedType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_DERIVED_TYPE = eINSTANCE.getAnyDerivedType();
 
-		/** The meta object literal for the '<em><b>Compiler Info</b></em>' containment reference feature. <!--
-		 * begin-user-doc --> <!-- end-user-doc -->
-		 *
-		 * @generated */
+		/**
+		 * The meta object literal for the '<em><b>Compiler Info</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
 		EReference ANY_DERIVED_TYPE__COMPILER_INFO = eINSTANCE.getAnyDerivedType_CompilerInfo();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl <em>Array
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl <em>Array Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.ArrayTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getArrayType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ARRAY_TYPE = eINSTANCE.getArrayType();
 
-		/** The meta object literal for the '<em><b>Subranges</b></em>' containment reference list feature. <!--
-		 * begin-user-doc --> <!-- end-user-doc -->
-		 *
-		 * @generated */
+		/**
+		 * The meta object literal for the '<em><b>Subranges</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
 		EReference ARRAY_TYPE__SUBRANGES = eINSTANCE.getArrayType_Subranges();
 
-		/** The meta object literal for the '<em><b>Initial Values</b></em>' attribute feature. <!-- begin-user-doc -->
+		/**
+		 * The meta object literal for the '<em><b>Initial Values</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
-		 * @generated */
+		 * @generated
+		 */
 		EAttribute ARRAY_TYPE__INITIAL_VALUES = eINSTANCE.getArrayType_InitialValues();
 
-		/** The meta object literal for the '<em><b>Base Type</b></em>' reference feature. <!-- begin-user-doc --> <!--
-		 * end-user-doc -->
-		 *
-		 * @generated */
+		/**
+		 * The meta object literal for the '<em><b>Base Type</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
 		EReference ARRAY_TYPE__BASE_TYPE = eINSTANCE.getArrayType_BaseType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DataTypeImpl <em>Type</em>}'
-		 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DataTypeImpl <em>Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDataType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass DATA_TYPE = eINSTANCE.getDataType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DirectlyDerivedTypeImpl
-		 * <em>Directly Derived Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DirectlyDerivedTypeImpl <em>Directly Derived Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DirectlyDerivedTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDirectlyDerivedType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass DIRECTLY_DERIVED_TYPE = eINSTANCE.getDirectlyDerivedType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl
-		 * <em>Enumerated Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl <em>Enumerated Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.EnumeratedTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getEnumeratedType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ENUMERATED_TYPE = eINSTANCE.getEnumeratedType();
 
-		/** The meta object literal for the '<em><b>Enumerated Value</b></em>' containment reference list feature. <!--
-		 * begin-user-doc --> <!-- end-user-doc -->
-		 *
-		 * @generated */
+		/**
+		 * The meta object literal for the '<em><b>Enumerated Value</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
 		EReference ENUMERATED_TYPE__ENUMERATED_VALUE = eINSTANCE.getEnumeratedType_EnumeratedValue();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedValueImpl
-		 * <em>Enumerated Value</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.EnumeratedValueImpl <em>Enumerated Value</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.EnumeratedValueImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getEnumeratedValue()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ENUMERATED_VALUE = eINSTANCE.getEnumeratedValue();
 
-		/** The meta object literal for the '<em><b>Comment</b></em>' attribute feature. <!-- begin-user-doc --> <!--
-		 * end-user-doc -->
-		 *
-		 * @generated */
+		/**
+		 * The meta object literal for the '<em><b>Comment</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
 		EAttribute ENUMERATED_VALUE__COMMENT = eINSTANCE.getEnumeratedValue_Comment();
 
-		/** The meta object literal for the '<em><b>Name</b></em>' attribute feature. <!-- begin-user-doc --> <!--
-		 * end-user-doc -->
-		 *
-		 * @generated */
+		/**
+		 * The meta object literal for the '<em><b>Name</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
 		EAttribute ENUMERATED_VALUE__NAME = eINSTANCE.getEnumeratedValue_Name();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl
-		 * <em>Structured Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl <em>Structured Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.StructuredTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getStructuredType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass STRUCTURED_TYPE = eINSTANCE.getStructuredType();
 
-		/** The meta object literal for the '<em><b>Member Variables</b></em>' containment reference list feature. <!--
-		 * begin-user-doc --> <!-- end-user-doc -->
-		 *
-		 * @generated */
+		/**
+		 * The meta object literal for the '<em><b>Member Variables</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
 		EReference STRUCTURED_TYPE__MEMBER_VARIABLES = eINSTANCE.getStructuredType_MemberVariables();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl
-		 * <em>Subrange</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl <em>Subrange</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.SubrangeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getSubrange()
-		 * @generated */
+		 * @generated
+		 */
 		EClass SUBRANGE = eINSTANCE.getSubrange();
 
-		/** The meta object literal for the '<em><b>Lower Limit</b></em>' attribute feature. <!-- begin-user-doc -->
+		/**
+		 * The meta object literal for the '<em><b>Lower Limit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
-		 * @generated */
+		 * @generated
+		 */
 		EAttribute SUBRANGE__LOWER_LIMIT = eINSTANCE.getSubrange_LowerLimit();
 
-		/** The meta object literal for the '<em><b>Upper Limit</b></em>' attribute feature. <!-- begin-user-doc -->
+		/**
+		 * The meta object literal for the '<em><b>Upper Limit</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 *
-		 * @generated */
+		 * @generated
+		 */
 		EAttribute SUBRANGE__UPPER_LIMIT = eINSTANCE.getSubrange_UpperLimit();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeTypeImpl
-		 * <em>Subrange Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.SubrangeTypeImpl <em>Subrange Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.SubrangeTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getSubrangeType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass SUBRANGE_TYPE = eINSTANCE.getSubrangeType();
 
-		/** The meta object literal for the '<em><b>Subrange</b></em>' containment reference feature. <!--
-		 * begin-user-doc --> <!-- end-user-doc -->
-		 *
-		 * @generated */
+		/**
+		 * The meta object literal for the '<em><b>Subrange</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
 		EReference SUBRANGE_TYPE__SUBRANGE = eINSTANCE.getSubrangeType_Subrange();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.ValueTypeImpl <em>Value
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.ValueTypeImpl <em>Value Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.ValueTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getValueType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass VALUE_TYPE = eINSTANCE.getValueType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.ElementaryTypeImpl
-		 * <em>Elementary Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.ElementaryTypeImpl <em>Elementary Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.ElementaryTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getElementaryType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ELEMENTARY_TYPE = eINSTANCE.getElementaryType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DerivedTypeImpl <em>Derived
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DerivedTypeImpl <em>Derived Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DerivedTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDerivedType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass DERIVED_TYPE = eINSTANCE.getDerivedType();
 
-		/** The meta object literal for the '<em><b>Base Type</b></em>' reference feature. <!-- begin-user-doc --> <!--
-		 * end-user-doc -->
-		 *
-		 * @generated */
+		/**
+		 * The meta object literal for the '<em><b>Base Type</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
 		EReference DERIVED_TYPE__BASE_TYPE = eINSTANCE.getDerivedType_BaseType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.EventTypeImpl <em>Event
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.EventTypeImpl <em>Event Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.EventTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getEventType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass EVENT_TYPE = eINSTANCE.getEventType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyTypeImpl <em>Any
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyTypeImpl <em>Any Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_TYPE = eINSTANCE.getAnyType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyElementaryTypeImpl
-		 * <em>Any Elementary Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyElementaryTypeImpl <em>Any Elementary Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyElementaryTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyElementaryType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_ELEMENTARY_TYPE = eINSTANCE.getAnyElementaryType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyMagnitudeTypeImpl <em>Any
-		 * Magnitude Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyMagnitudeTypeImpl <em>Any Magnitude Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyMagnitudeTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyMagnitudeType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_MAGNITUDE_TYPE = eINSTANCE.getAnyMagnitudeType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyNumTypeImpl <em>Any Num
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyNumTypeImpl <em>Any Num Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyNumTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyNumType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_NUM_TYPE = eINSTANCE.getAnyNumType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyRealTypeImpl <em>Any Real
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyRealTypeImpl <em>Any Real Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyRealTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyRealType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_REAL_TYPE = eINSTANCE.getAnyRealType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.RealTypeImpl <em>Real
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.RealTypeImpl <em>Real Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.RealTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getRealType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass REAL_TYPE = eINSTANCE.getRealType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LrealTypeImpl <em>Lreal
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LrealTypeImpl <em>Lreal Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.LrealTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLrealType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass LREAL_TYPE = eINSTANCE.getLrealType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyIntTypeImpl <em>Any Int
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyIntTypeImpl <em>Any Int Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyIntTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyIntType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_INT_TYPE = eINSTANCE.getAnyIntType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyUnsignedTypeImpl <em>Any
-		 * Unsigned Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyUnsignedTypeImpl <em>Any Unsigned Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyUnsignedTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyUnsignedType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_UNSIGNED_TYPE = eINSTANCE.getAnyUnsignedType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.UsintTypeImpl <em>Usint
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.UsintTypeImpl <em>Usint Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.UsintTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getUsintType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass USINT_TYPE = eINSTANCE.getUsintType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.UintTypeImpl <em>Uint
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.UintTypeImpl <em>Uint Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.UintTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getUintType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass UINT_TYPE = eINSTANCE.getUintType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.UdintTypeImpl <em>Udint
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.UdintTypeImpl <em>Udint Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.UdintTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getUdintType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass UDINT_TYPE = eINSTANCE.getUdintType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.UlintTypeImpl <em>Ulint
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.UlintTypeImpl <em>Ulint Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.UlintTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getUlintType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ULINT_TYPE = eINSTANCE.getUlintType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnySignedTypeImpl <em>Any
-		 * Signed Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnySignedTypeImpl <em>Any Signed Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnySignedTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnySignedType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_SIGNED_TYPE = eINSTANCE.getAnySignedType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.SintTypeImpl <em>Sint
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.SintTypeImpl <em>Sint Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.SintTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getSintType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass SINT_TYPE = eINSTANCE.getSintType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.IntTypeImpl <em>Int
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.IntTypeImpl <em>Int Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.IntTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getIntType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass INT_TYPE = eINSTANCE.getIntType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DintTypeImpl <em>Dint
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DintTypeImpl <em>Dint Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DintTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDintType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass DINT_TYPE = eINSTANCE.getDintType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LintTypeImpl <em>Lint
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LintTypeImpl <em>Lint Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.LintTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLintType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass LINT_TYPE = eINSTANCE.getLintType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDurationTypeImpl <em>Any
-		 * Duration Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDurationTypeImpl <em>Any Duration Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyDurationTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyDurationType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_DURATION_TYPE = eINSTANCE.getAnyDurationType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.TimeTypeImpl <em>Time
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.TimeTypeImpl <em>Time Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.TimeTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getTimeType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass TIME_TYPE = eINSTANCE.getTimeType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LtimeTypeImpl <em>Ltime
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LtimeTypeImpl <em>Ltime Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.LtimeTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLtimeType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass LTIME_TYPE = eINSTANCE.getLtimeType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyBitTypeImpl <em>Any Bit
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyBitTypeImpl <em>Any Bit Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyBitTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyBitType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_BIT_TYPE = eINSTANCE.getAnyBitType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.BoolTypeImpl <em>Bool
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.BoolTypeImpl <em>Bool Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.BoolTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getBoolType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass BOOL_TYPE = eINSTANCE.getBoolType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.ByteTypeImpl <em>Byte
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.ByteTypeImpl <em>Byte Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.ByteTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getByteType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass BYTE_TYPE = eINSTANCE.getByteType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.WordTypeImpl <em>Word
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.WordTypeImpl <em>Word Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.WordTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getWordType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass WORD_TYPE = eINSTANCE.getWordType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DwordTypeImpl <em>Dword
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DwordTypeImpl <em>Dword Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DwordTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDwordType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass DWORD_TYPE = eINSTANCE.getDwordType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LwordTypeImpl <em>Lword
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LwordTypeImpl <em>Lword Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.LwordTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLwordType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass LWORD_TYPE = eINSTANCE.getLwordType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyCharsTypeImpl <em>Any
-		 * Chars Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyCharsTypeImpl <em>Any Chars Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyCharsTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyCharsType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_CHARS_TYPE = eINSTANCE.getAnyCharsType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyStringTypeImpl <em>Any
-		 * String Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyStringTypeImpl <em>Any String Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyStringTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyStringType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_STRING_TYPE = eINSTANCE.getAnyStringType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.StringTypeImpl <em>String
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.StringTypeImpl <em>String Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.StringTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getStringType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass STRING_TYPE = eINSTANCE.getStringType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.WstringTypeImpl <em>Wstring
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.WstringTypeImpl <em>Wstring Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.WstringTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getWstringType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass WSTRING_TYPE = eINSTANCE.getWstringType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyCharTypeImpl <em>Any Char
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyCharTypeImpl <em>Any Char Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyCharTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyCharType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_CHAR_TYPE = eINSTANCE.getAnyCharType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.CharTypeImpl <em>Char
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.CharTypeImpl <em>Char Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.CharTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getCharType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass CHAR_TYPE = eINSTANCE.getCharType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.WcharTypeImpl <em>Wchar
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.WcharTypeImpl <em>Wchar Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.WcharTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getWcharType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass WCHAR_TYPE = eINSTANCE.getWcharType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDateTypeImpl <em>Any Date
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.AnyDateTypeImpl <em>Any Date Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.AnyDateTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getAnyDateType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass ANY_DATE_TYPE = eINSTANCE.getAnyDateType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DateAndTimeTypeImpl <em>Date
-		 * And Time Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DateAndTimeTypeImpl <em>Date And Time Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DateAndTimeTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDateAndTimeType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass DATE_AND_TIME_TYPE = eINSTANCE.getDateAndTimeType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LdtTypeImpl <em>Ldt
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LdtTypeImpl <em>Ldt Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.LdtTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLdtType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass LDT_TYPE = eINSTANCE.getLdtType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DateTypeImpl <em>Date
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.DateTypeImpl <em>Date Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DateTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getDateType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass DATE_TYPE = eINSTANCE.getDateType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.TimeOfDayTypeImpl <em>Time
-		 * Of Day Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.TimeOfDayTypeImpl <em>Time Of Day Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.TimeOfDayTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getTimeOfDayType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass TIME_OF_DAY_TYPE = eINSTANCE.getTimeOfDayType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LtodTypeImpl <em>Ltod
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LtodTypeImpl <em>Ltod Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.LtodTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLtodType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass LTOD_TYPE = eINSTANCE.getLtodType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LdateTypeImpl <em>Ldate
-		 * Type</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.LdateTypeImpl <em>Ldate Type</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.impl.LdateTypeImpl
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getLdateType()
-		 * @generated */
+		 * @generated
+		 */
 		EClass LDATE_TYPE = eINSTANCE.getLdateType();
 
-		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.BaseType1 <em>Base Type1</em>}'
-		 * enum. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.BaseType1 <em>Base Type1</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
 		 * @see org.eclipse.fordiac.ide.model.data.BaseType1
 		 * @see org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl#getBaseType1()
-		 * @generated */
+		 * @generated
+		 */
 		EEnum BASE_TYPE1 = eINSTANCE.getBaseType1();
 
 	}
 
-} // DataPackage
+} //DataPackage

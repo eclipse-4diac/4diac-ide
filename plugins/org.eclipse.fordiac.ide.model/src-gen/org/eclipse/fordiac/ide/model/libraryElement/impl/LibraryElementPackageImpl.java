@@ -129,6 +129,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+
 import org.eclipse.gef.commands.CommandStack;
 
 /**
@@ -776,6 +778,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	private EDataType pointEDataType = null;
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType typeEntryEDataType = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -875,8 +884,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EReference getAdapterDeclaration_PaletteEntry() {
-		return (EReference)adapterDeclarationEClass.getEStructuralFeatures().get(1);
+	public EAttribute getAdapterDeclaration_TypeEntry() {
+		return (EAttribute)adapterDeclarationEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -2385,8 +2394,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EReference getLibraryElement_PaletteEntry() {
-		return (EReference)libraryElementEClass.getEStructuralFeatures().get(2);
+	public EAttribute getLibraryElement_TypeEntry() {
+		return (EAttribute)libraryElementEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -2785,8 +2794,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EReference getTypedConfigureableObject_PaletteEntry() {
-		return (EReference)typedConfigureableObjectEClass.getEStructuralFeatures().get(0);
+	public EAttribute getTypedConfigureableObject_TypeEntry() {
+		return (EAttribute)typedConfigureableObjectEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -3455,6 +3464,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EDataType getTypeEntry() {
+		return typeEntryEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public LibraryElementFactory getLibraryElementFactory() {
 		return (LibraryElementFactory)getEFactoryInstance();
 	}
@@ -3480,7 +3499,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		// Create classes and their features
 		adapterDeclarationEClass = createEClass(ADAPTER_DECLARATION);
 		createEReference(adapterDeclarationEClass, ADAPTER_DECLARATION__ADAPTER_FB);
-		createEReference(adapterDeclarationEClass, ADAPTER_DECLARATION__PALETTE_ENTRY);
+		createEAttribute(adapterDeclarationEClass, ADAPTER_DECLARATION__TYPE_ENTRY);
 
 		adapterTypeEClass = createEClass(ADAPTER_TYPE);
 		createEReference(adapterTypeEClass, ADAPTER_TYPE__ADAPTER_FB_TYPE);
@@ -3673,7 +3692,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		libraryElementEClass = createEClass(LIBRARY_ELEMENT);
 		createEReference(libraryElementEClass, LIBRARY_ELEMENT__VERSION_INFO);
 		createEReference(libraryElementEClass, LIBRARY_ELEMENT__IDENTIFICATION);
-		createEReference(libraryElementEClass, LIBRARY_ELEMENT__PALETTE_ENTRY);
+		createEAttribute(libraryElementEClass, LIBRARY_ELEMENT__TYPE_ENTRY);
 
 		compilableTypeEClass = createEClass(COMPILABLE_TYPE);
 		createEReference(compilableTypeEClass, COMPILABLE_TYPE__COMPILER_INFO);
@@ -3731,7 +3750,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(serviceEClass, SERVICE__SERVICE_SEQUENCE);
 
 		typedConfigureableObjectEClass = createEClass(TYPED_CONFIGUREABLE_OBJECT);
-		createEReference(typedConfigureableObjectEClass, TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY);
+		createEAttribute(typedConfigureableObjectEClass, TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY);
 
 		adapterFBEClass = createEClass(ADAPTER_FB);
 		createEReference(adapterFBEClass, ADAPTER_FB__ADAPTER_DECL);
@@ -3827,6 +3846,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		iFileEDataType = createEDataType(IFILE);
 		commandStackEDataType = createEDataType(COMMAND_STACK);
 		pointEDataType = createEDataType(POINT);
+		typeEntryEDataType = createEDataType(TYPE_ENTRY);
 	}
 
 	/**
@@ -3853,9 +3873,9 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		PalettePackage thePalettePackage = (PalettePackage)EPackage.Registry.INSTANCE.getEPackage(PalettePackage.eNS_URI);
 		DataPackage theDataPackage = (DataPackage)EPackage.Registry.INSTANCE.getEPackage(DataPackage.eNS_URI);
 		XMLTypePackage theXMLTypePackage = (XMLTypePackage)EPackage.Registry.INSTANCE.getEPackage(XMLTypePackage.eNS_URI);
+		PalettePackage thePalettePackage = (PalettePackage)EPackage.Registry.INSTANCE.getEPackage(PalettePackage.eNS_URI);
 
 		// Create type parameters
 
@@ -3943,7 +3963,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterDeclarationEClass, AdapterDeclaration.class, "AdapterDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getAdapterDeclaration_AdapterFB(), this.getAdapterFB(), this.getAdapterFB_AdapterDecl(), "adapterFB", null, 0, 1, AdapterDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getAdapterDeclaration_PaletteEntry(), thePalettePackage.getAdapterTypePaletteEntry(), null, "paletteEntry", null, 0, 1, AdapterDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getAdapterDeclaration_TypeEntry(), this.getTypeEntry(), "typeEntry", null, 0, 1, AdapterDeclaration.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(adapterDeclarationEClass, this.getAdapterType(), "getType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -4322,7 +4342,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(libraryElementEClass, LibraryElement.class, "LibraryElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getLibraryElement_VersionInfo(), this.getVersionInfo(), null, "versionInfo", null, 1, -1, LibraryElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getLibraryElement_Identification(), this.getIdentification(), null, "identification", null, 0, 1, LibraryElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getLibraryElement_PaletteEntry(), thePalettePackage.getPaletteEntry(), null, "paletteEntry", null, 0, 1, LibraryElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getLibraryElement_TypeEntry(), this.getTypeEntry(), "typeEntry", null, 0, 1, LibraryElement.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(libraryElementEClass, thePalettePackage.getTypeLibrary(), "getTypeLibrary", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -4431,7 +4451,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(serviceEClass, this.getFBType(), "getFBType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(typedConfigureableObjectEClass, TypedConfigureableObject.class, "TypedConfigureableObject", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getTypedConfigureableObject_PaletteEntry(), thePalettePackage.getPaletteEntry(), null, "paletteEntry", null, 1, 1, TypedConfigureableObject.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getTypedConfigureableObject_TypeEntry(), this.getTypeEntry(), "typeEntry", null, 0, 1, TypedConfigureableObject.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(typedConfigureableObjectEClass, ecorePackage.getEString(), "getTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -4578,6 +4598,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEDataType(iFileEDataType, IFile.class, "IFile", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEDataType(commandStackEDataType, CommandStack.class, "CommandStack", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEDataType(pointEDataType, Point.class, "Point", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEDataType(typeEntryEDataType, TypeEntry.class, "TypeEntry", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);
