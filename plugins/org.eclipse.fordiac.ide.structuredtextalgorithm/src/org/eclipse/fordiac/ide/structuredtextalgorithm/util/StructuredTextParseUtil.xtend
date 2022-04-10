@@ -116,7 +116,7 @@ class StructuredTextParseUtil {
 	def private static IParseResult parse(String text, ParserRule entryPoint, FBType fbType, List<Issue> issues) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		val resource = SERVICE_PROVIDER.get(XtextResource) as STAlgorithmResource
-		resource.URI = fbType?.paletteEntry?.file?.fullPath?.toString?.createPlatformResourceURI(true) ?: SYNTHETIC_URI
+		resource.URI = fbType?.typeEntry?.file?.fullPath?.toString?.createPlatformResourceURI(true) ?: SYNTHETIC_URI
 		resourceSet.resources.add(resource)
 		resource.entryPoint = entryPoint
 		resource.fbType = fbType?.copy

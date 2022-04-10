@@ -25,9 +25,9 @@ class STAlgorithmResourceForIEditorInputFactory extends ResourceForIEditorInputF
 		val resource = super.createResource(editorInput)
 		if (resource instanceof XtextResource) {
 			if (editorInput instanceof IFileEditorInput) {
-				val paletteEntry = TypeLibrary.getPaletteEntryForFile(editorInput.file)
-				if (paletteEntry !== null) {
-					val libraryElement = paletteEntry.typeEditable
+				val typeEntry = TypeLibrary.getTypeEntryForFile(editorInput.file)
+				if (typeEntry !== null) {
+					val libraryElement = typeEntry.typeEditable
 					if (libraryElement instanceof FBType) {
 						if (resource instanceof STAlgorithmResource) {
 							resource.fbType = libraryElement
