@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import java.util.stream.Collectors;
 
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 
 public class PinAdapterInfoSection extends PinEventInfoSection {
@@ -22,8 +22,8 @@ public class PinAdapterInfoSection extends PinEventInfoSection {
 
 	@Override
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
-		return () -> getTypeLibrary().getBlockTypeLib().getAdapterTypesSorted().stream()
-				.map(AdapterTypePaletteEntry::getType).collect(Collectors.toList());
+		return () -> getTypeLibrary().getAdapterTypesSorted().stream().map(AdapterTypeEntry::getType)
+				.collect(Collectors.toList());
 	}
 
 }

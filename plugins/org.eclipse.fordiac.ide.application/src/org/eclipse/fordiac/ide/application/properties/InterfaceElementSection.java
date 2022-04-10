@@ -107,7 +107,7 @@ public class InterfaceElementSection extends AbstractSection {
 		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
 
 		openEditorButton.addListener(SWT.Selection, ev -> OpenStructMenu
-				.openStructEditor(((VarDeclaration) getType()).getType().getPaletteEntry().getFile()));
+				.openStructEditor(((VarDeclaration) getType()).getType().getTypeEntry().getFile()));
 
 		parameterTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.DefaultValue + ":"); //$NON-NLS-1$
 		parameterText = createGroupText(composite, false);

@@ -17,7 +17,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -41,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -73,7 +73,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	protected final List<ErrorMarkerBuilder> errorPins;
 	protected ErrorMarkerBuilder errorMarkerBuilder;
-	protected PaletteEntry entry;
+	protected TypeEntry entry;
 
 	protected AbstractUpdateFBNElementCommand(final FBNetworkElement oldElement) {
 		this.oldElement = oldElement;
@@ -99,7 +99,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 		createNewFB();
 		checkGroup(oldElement, newElement);  // needs to be done before anything is changed on the old element Bug
-											  // 579570
+		// 579570
 
 		network.getNetworkElements().add(newElement);
 
@@ -328,8 +328,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	private void moveEntryToErrorLib() {
 		final TypeLibrary typeLibrary = oldElement.getTypeLibrary();
-		typeLibrary.removePaletteEntry(entry);
-		typeLibrary.getErrorTypeLib().addPaletteEntry(entry);
+		typeLibrary.removeTypeEntry(entry);
+		typeLibrary.getErrorTypeLib().addTypeEntry(entry);
 
 	}
 

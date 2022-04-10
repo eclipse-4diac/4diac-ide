@@ -265,7 +265,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	}
 
 	private boolean subAppIsMapped(final SubApp subApp) {
-		return null == getModel().getPaletteEntry() && (null == subApp.getSubAppNetwork()) && subApp.isMapped();
+		return null == getModel().getTypeEntry() && (null == subApp.getSubAppNetwork()) && subApp.isMapped();
 	}
 
 	@Override

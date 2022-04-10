@@ -34,7 +34,7 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 			final int type = notification.getEventType();
 			final int featureId = notification.getFeatureID(Application.class);
 
-			if ((LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__PALETTE_ENTRY == featureId)
+			if ((LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY == featureId)
 					&& (getSubApp().isTyped())) {
 				// undo of detached from the subapp type
 				closeEditor();

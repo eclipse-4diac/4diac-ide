@@ -18,7 +18,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.editors.NewInstanceCellEditor;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.requests.DirectEditRequest;
@@ -69,13 +69,14 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 		}
 	}
 
-	private final Palette palette;
+	private final TypeLibrary typeLib;
 	private final boolean useChangeFBType;
 	private String initialValue;
 
-	public NewInstanceDirectEditManager(final GraphicalEditPart source, final Palette palette, final boolean useChangeFBType) {
+	public NewInstanceDirectEditManager(final GraphicalEditPart source, final TypeLibrary typeLib,
+			final boolean useChangeFBType) {
 		super(source, new NewInstanceCellEditorLocator());
-		this.palette = palette;
+		this.typeLib = typeLib;
 		this.useChangeFBType = useChangeFBType;
 	}
 
@@ -103,7 +104,7 @@ public class NewInstanceDirectEditManager extends TextDirectEditManager {
 	@Override
 	protected void initCellEditor() {
 		getCellEditor().getMenuButton().addListener(SWT.Selection, event -> showFBInsertPopUpMenu());
-		getCellEditor().setPalette(palette);
+		getCellEditor().setTypeLibrary(typeLib);
 		super.initCellEditor();
 		if (null != initialValue) {
 			getCellEditor().setValue(initialValue);

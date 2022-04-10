@@ -26,8 +26,8 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
 import org.eclipse.fordiac.ide.gef.figures.FBShape;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.IEditorDescriptor;
@@ -69,7 +69,7 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 	// TODO model refactoring - look for a better place for this function
 	public static void openTypeInEditor(final FBNetworkElement element) {
 		// open the default editor for the adapter file
-		final PaletteEntry entry = element.getPaletteEntry();
+		final TypeEntry entry = element.getTypeEntry();
 		if (null != entry) {
 			final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 					.getDefaultEditor(entry.getFile().getName());

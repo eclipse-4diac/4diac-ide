@@ -25,13 +25,13 @@ import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
@@ -62,13 +62,13 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	}
 
 	private final FBNetwork fbNetwork;
-	private final Palette palette;
+	private final TypeLibrary typeLib;
 
-	public FBNetworkRootEditPart(final FBNetwork fbNetwork, final Palette palette, final IWorkbenchPartSite site,
+	public FBNetworkRootEditPart(final FBNetwork fbNetwork, final TypeLibrary typeLib, final IWorkbenchPartSite site,
 			final ActionRegistry actionRegistry) {
 		super(site, actionRegistry);
 		this.fbNetwork = fbNetwork;
-		this.palette = palette;
+		this.typeLib = typeLib;
 	}
 
 	@Override
@@ -92,7 +92,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	}
 
 	private NewInstanceDirectEditManager createDirectEditManager() {
-		return new NewInstanceDirectEditManager(this, palette, false);
+		return new NewInstanceDirectEditManager(this, typeLib, false);
 	}
 
 	void performDirectEdit(final SelectionRequest request) {
@@ -147,7 +147,7 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	}
 
 	@Override
-	public Object getAdapter(Class adapter) {
+	public Object getAdapter(final Class adapter) {
 		if (adapter == FBNetwork.class) {
 			return fbNetwork;
 		}

@@ -18,14 +18,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
-import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
@@ -36,6 +28,13 @@ import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
@@ -50,9 +49,8 @@ public class TypeFromTemplateCreator {
 		this.typeTemplate = typeTemplate;
 	}
 
-	public PaletteEntry createTypeFromTemplate() {
-		final PaletteEntry entry = TypeLibrary.getTypeLibrary(targetTypeFile.getProject())
-				.createPaletteEntry(targetTypeFile);
+	public TypeEntry createTypeFromTemplate() {
+		final TypeEntry entry = TypeLibrary.getTypeLibrary(targetTypeFile.getProject()).createTypeEntry(targetTypeFile);
 
 		final TypeImporter importer = getTypeImporter(entry);
 		if (importer != null) {
@@ -73,29 +71,29 @@ public class TypeFromTemplateCreator {
 		// hook for subclasses to perform any type specific setup, e.g., saveassubapptype -> setup interface and network
 	}
 
-	private TypeImporter getTypeImporter(final PaletteEntry entry) {
-		if (entry instanceof AdapterTypePaletteEntry) {
+	private TypeImporter getTypeImporter(final TypeEntry entry) {
+		if (entry instanceof AdapterTypeEntry) {
 			return new ADPImporter(entry.getFile()) {
 				@Override
 				protected InputStream getInputStream() throws IOException {
 					return Files.newInputStream(typeTemplate.toPath());
 				}
 			};
-		} else if (entry instanceof DataTypePaletteEntry) {
+		} else if (entry instanceof DataTypeEntry) {
 			return new DataTypeImporter(entry.getFile()) {
 				@Override
 				protected InputStream getInputStream() throws IOException {
 					return Files.newInputStream(typeTemplate.toPath());
 				}
 			};
-		} else if (entry instanceof DeviceTypePaletteEntry) {
+		} else if (entry instanceof DeviceTypeEntry) {
 			return new DEVImporter(entry.getFile()) {
 				@Override
 				protected InputStream getInputStream() throws IOException {
 					return Files.newInputStream(typeTemplate.toPath());
 				}
 			};
-		} else if (entry instanceof FBTypePaletteEntry) {
+		} else if (entry instanceof FBTypeEntry) {
 			return new FBTImporter(entry.getFile()) {
 				@Override
 				protected InputStream getInputStream() throws IOException {
@@ -109,14 +107,14 @@ public class TypeFromTemplateCreator {
 					return Files.newInputStream(typeTemplate.toPath());
 				}
 			};
-		} else if (entry instanceof SegmentTypePaletteEntry) {
+		} else if (entry instanceof SegmentTypeEntry) {
 			return new SEGImporter(entry.getFile()) {
 				@Override
 				protected InputStream getInputStream() throws IOException {
 					return Files.newInputStream(typeTemplate.toPath());
 				}
 			};
-		} else if (entry instanceof SubApplicationTypePaletteEntry) {
+		} else if (entry instanceof SubAppTypeEntry) {
 			return new SubAppTImporter(entry.getFile()) {
 				@Override
 				protected InputStream getInputStream() throws IOException {

@@ -33,7 +33,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.CommandUtil;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -41,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.util.TypeFromTemplateCreator;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
@@ -77,7 +77,7 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 		IProject project = null;
 		final EObject obj = EcoreUtil.getRootContainer(subApp);
 		if (obj instanceof SubAppType) {
-			project = ((SubAppType) obj).getPaletteEntry().getFile().getProject();
+			project = ((SubAppType) obj).getTypeEntry().getFile().getProject();
 		} else {
 			project = getSystem().getSystemFile().getProject();
 		}
@@ -102,7 +102,7 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 						performTypeSetup((SubAppType) type);
 					}
 				};
-				final PaletteEntry entry = creator.createTypeFromTemplate();
+				final TypeEntry entry = creator.createTypeFromTemplate();
 				if (entry != null) {
 					// replace needs to be called before opening the type editor so that we get the correct command
 					// stack
@@ -138,13 +138,13 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 		return templateFolder.listFiles();
 	}
 
-	private static void openTypeEditor(final PaletteEntry entry) {
+	private static void openTypeEditor(final TypeEntry entry) {
 		final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 				.getDefaultEditor(entry.getFile().getName());
 		EditorUtils.openEditor(new FileEditorInput(entry.getFile()), desc.getId());
 	}
 
-	private void replaceWithType(final PaletteEntry entry) {
+	private void replaceWithType(final TypeEntry entry) {
 		CommandUtil.closeOpenedSubApp(subApp.getSubAppNetwork());
 		final CommandStack commandStack = EditorUtils.getCurrentActiveEditor().getAdapter(CommandStack.class);
 		commandStack.execute(new UpdateFBTypeCommand(subApp, entry));

@@ -24,7 +24,6 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
@@ -56,7 +55,7 @@ public class SaveAsStructWizard extends AbstractSaveAsWizard {
 	public boolean performFinish() {
 		if (perform()) {
 			final IFile targetFile = getTargetTypeFile();
-			final PaletteEntry entry = createPaletteEntry(targetFile);
+			final TypeEntry entry = createPaletteEntry(targetFile);
 			final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
 			entry.setType(type);
 			InterfaceListCopier.copyVarList(type.getMemberVariables(), varDecl, true);
@@ -79,8 +78,8 @@ public class SaveAsStructWizard extends AbstractSaveAsWizard {
 		return true;
 	}
 
-	private PaletteEntry createPaletteEntry(final IFile targetTypeFile) {
-		return TypeLibrary.getTypeLibrary(project).createPaletteEntry(targetTypeFile);
+	private TypeEntry createPaletteEntry(final IFile targetTypeFile) {
+		return TypeLibrary.getTypeLibrary(project).createTypeEntry(targetTypeFile);
 	}
 
 	public boolean replaceSource() {

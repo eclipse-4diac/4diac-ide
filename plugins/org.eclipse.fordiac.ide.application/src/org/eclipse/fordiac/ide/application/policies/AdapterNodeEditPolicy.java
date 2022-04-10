@@ -15,13 +15,13 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectAdapterConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateConnectionRequest;
@@ -50,7 +50,7 @@ public class AdapterNodeEditPolicy extends InterfaceElementEditPolicy {
 	}
 
 	private static void openAdapterType(final InterfaceEditPart host) {
-		final AdapterTypePaletteEntry entry = ((AdapterDeclaration) host.getModel()).getPaletteEntry();
+		final AdapterTypeEntry entry = (AdapterTypeEntry) ((AdapterDeclaration) host.getModel()).getTypeEntry();
 		if (null != entry) {
 			final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 					.getDefaultEditor(entry.getFile().getName());

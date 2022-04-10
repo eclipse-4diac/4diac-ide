@@ -43,8 +43,6 @@ import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
 import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.policies.DragHighlightEditPolicy;
 import org.eclipse.fordiac.ide.gef.tools.ScrollingDragEditPartsTracker;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -56,6 +54,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -78,8 +78,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		@Override
 		protected Command getDirectEditCommand(final DirectEditRequest request) {
 			final Object value = request.getCellEditor().getValue();
-			if (value instanceof PaletteEntry) {
-				return new UpdateFBTypeCommand(getHost().getModel(), (PaletteEntry) value);
+			if (value instanceof TypeEntry) {
+				return new UpdateFBTypeCommand(getHost().getModel(), (TypeEntry) value);
 			}
 			return null;
 		}
@@ -459,15 +459,15 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	@Override
 	protected NewInstanceDirectEditManager createDirectEditManager() {
-		return new NewInstanceDirectEditManager(this, getPalette(), true);
+		return new NewInstanceDirectEditManager(this, getTypeLibrary(), true);
 	}
 
-	private Palette getPalette() {
+	private TypeLibrary getTypeLibrary() {
 		if (getModel().eContainer().eContainer() instanceof FBType) {
-			return ((FBType) getModel().eContainer().eContainer()).getPaletteEntry().getPalette();
+			return ((FBType) getModel().eContainer().eContainer()).getTypeEntry().getTypeLibrary();
 		}
 		// we are in an app or supp
-		return getModel().getFbNetwork().getAutomationSystem().getPalette();
+		return getModel().getFbNetwork().getAutomationSystem().getTypeLibrary();
 	}
 
 	@Override

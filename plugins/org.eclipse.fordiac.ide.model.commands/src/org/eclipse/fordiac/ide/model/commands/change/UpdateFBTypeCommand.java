@@ -18,8 +18,6 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.impl.FBTypePaletteEntryImpl;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -34,17 +32,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /** UpdateFBTypeCommand triggers an update of the type for an FB instance */
 public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 
-	public UpdateFBTypeCommand(final FBNetworkElement fbnElement, final PaletteEntry entry) {
+	public UpdateFBTypeCommand(final FBNetworkElement fbnElement, final TypeEntry entry) {
 		super(fbnElement);
-		if ((entry instanceof FBTypePaletteEntry) || (entry instanceof SubApplicationTypePaletteEntry)) {
+		if ((entry instanceof FBTypeEntry) || (entry instanceof SubAppTypeEntry)) {
 			this.entry = entry;
 		} else {
-			this.entry = fbnElement.getPaletteEntry();
+			this.entry = fbnElement.getTypeEntry();
 		}
 	}
 
@@ -68,12 +69,12 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 
 	private void transferInstanceComments() {
 		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getComment().isBlank())
-				.forEach(ie -> {
-					final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
-					if (newIE != null) {
-						newIE.setComment(ie.getComment());
-					}
-				});
+		.forEach(ie -> {
+			final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
+			if (newIE != null) {
+				newIE.setComment(ie.getComment());
+			}
+		});
 	}
 
 	public void setInterface() {
@@ -90,11 +91,11 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		}
 	}
 
-	protected void setEntry(final PaletteEntry entry) {
+	protected void setEntry(final TypeEntry entry) {
 		this.entry = entry;
 	}
 
-	protected PaletteEntry getEntry() {
+	protected TypeEntry getEntry() {
 		return entry;
 	}
 
@@ -115,7 +116,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 			copy = LibraryElementFactory.eINSTANCE.createFB();
 		}
 
-		copy.setPaletteEntry(entry);
+		copy.setTypeEntry(entry);
 		return copy;
 	}
 
@@ -141,9 +142,9 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 
 	public boolean reloadErrorType() {
 		final TypeLibrary typeLibrary = entry.getTypeLibrary();
-		final PaletteEntry reloadedType = typeLibrary.find(entry.getLabel());
+		final TypeEntry reloadedType = typeLibrary.find(entry.getTypeName());
 		if (reloadedType != null && reloadedType.getFile() != null && reloadedType.getFile().exists()) {
-			typeLibrary.getErrorTypeLib().removePaletteEntry(entry);
+			typeLibrary.getErrorTypeLib().removeTypeEntry(entry);
 			entry = reloadedType;
 			return true;
 		}
