@@ -24,13 +24,14 @@ import java.util.stream.Collectors;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -125,12 +126,11 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	private AbstractCreateFBNetworkElementCommand getDirectEditCommand(final DirectEditRequest request) {
 		final Object value = request.getCellEditor().getValue();
 		final Point refPoint = getInsertPos(request, getViewer(), getZoomManager().getZoom());
-		if (value instanceof FBTypePaletteEntry) {
-			return new FBCreateCommand((FBTypePaletteEntry) value, fbNetwork, refPoint.x, refPoint.y);
+		if (value instanceof FBTypeEntry) {
+			return new FBCreateCommand((FBTypeEntry) value, fbNetwork, refPoint.x, refPoint.y);
 		}
 		if (value instanceof SubApplicationTypePaletteEntry) {
-			return new CreateSubAppInstanceCommand((SubApplicationTypePaletteEntry) value, fbNetwork, refPoint.x,
-					refPoint.y);
+			return new CreateSubAppInstanceCommand((SubAppTypeEntry) value, fbNetwork, refPoint.x, refPoint.y);
 		}
 		return null;
 	}

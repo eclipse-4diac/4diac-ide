@@ -46,8 +46,6 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
 import org.eclipse.fordiac.ide.model.Annotations;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
@@ -71,6 +69,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
@@ -372,11 +372,11 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		int i = 0;
 		for (final org.eclipse.fordiac.ide.deployment.devResponse.FB fbresult : (object).getFblist().getFbs()) {
 			if (!"E_RESTART".equals(fbresult.getType())) { //$NON-NLS-1$
-				FBTypePaletteEntry entry = res.getDevice().getAutomationSystem().getPalette()
+				FBTypeEntry entry = res.getDevice().getAutomationSystem().getTypeLibrary()
 						.getFBTypeEntry(fbresult.getType());
 				if (null == entry) {
 					addTypeToTypelib(res, fbresult.getType(), TypeLibraryTags.FB_TYPE_FILE_ENDING, QUERY_FB_TYPE);
-					entry = res.getDevice().getAutomationSystem().getPalette().getFBTypeEntry(fbresult.getType());
+					entry = res.getDevice().getAutomationSystem().getTypeLibrary().getFBTypeEntry(fbresult.getType());
 				}
 				final FBCreateCommand fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
 				if (fbcmd.canExecute()) {
@@ -418,7 +418,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private static ResourceTypeEntry getResourceType(final Device device, final String resTypeName) {
-		return device.getPaletteEntry().getPalette().getResourceTypeEntry(resTypeName);
+		return device.getTypeEntry().getTypeLibrary().getResourceTypeEntry(resTypeName);
 	}
 
 	private void queryFBTypes() {

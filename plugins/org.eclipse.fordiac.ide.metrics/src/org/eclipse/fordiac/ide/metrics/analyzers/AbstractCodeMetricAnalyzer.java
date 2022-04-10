@@ -37,7 +37,7 @@ public abstract class AbstractCodeMetricAnalyzer {
 	public void calculateMetrics(INamedElement element) {
 
 		if (element instanceof FB) {
-			element = ((FB) element).getPaletteEntry().getType();
+			element = ((FB) element).getType();
 		}
 		if (element instanceof Application) {
 			data = analyzeFBNetwork(((Application) element).getFBNetwork(), true);

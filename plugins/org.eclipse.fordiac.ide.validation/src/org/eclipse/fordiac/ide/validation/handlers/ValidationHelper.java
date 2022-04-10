@@ -160,7 +160,7 @@ public final class ValidationHelper {
 
 		private static IResource getFile(final INamedElement element) {
 			if (element instanceof FBType) {
-				return ((FBType) element).getPaletteEntry().getFile();
+				return ((FBType) element).getTypeEntry().getFile();
 			}
 
 			if (element instanceof Application || element instanceof SubApp) {

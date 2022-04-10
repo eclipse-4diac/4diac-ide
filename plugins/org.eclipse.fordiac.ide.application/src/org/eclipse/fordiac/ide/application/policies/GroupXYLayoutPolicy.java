@@ -24,12 +24,12 @@ import org.eclipse.fordiac.ide.application.editparts.GroupContentNetwork;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
 import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateFBElementInGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
@@ -46,8 +46,8 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 		if (null != request) {
 			final Object childClass = request.getNewObjectType();
 			final Point refPoint = ((Rectangle) getConstraintFor(request)).getTopLeft();
-			if (childClass instanceof PaletteEntry) {
-				return new CreateFBElementInGroupCommand((PaletteEntry) childClass, getGroup(), refPoint.x,
+			if (childClass instanceof TypeEntry) {
+				return new CreateFBElementInGroupCommand((TypeEntry) childClass, getGroup(), refPoint.x,
 						refPoint.y);
 			}
 		}

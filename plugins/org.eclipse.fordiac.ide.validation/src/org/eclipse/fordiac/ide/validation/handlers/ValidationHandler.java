@@ -15,9 +15,9 @@ package org.eclipse.fordiac.ide.validation.handlers;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
@@ -40,9 +40,9 @@ public class ValidationHandler extends AbstractHandler {
 	}
 
 	private static INamedElement checkSelectedFile(final IFile file) {
-		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
-		if (entry instanceof FBTypePaletteEntry) {
-			return ((FBTypePaletteEntry) entry).getType();
+		final TypeEntry entry = TypeLibrary.getTypeEntryForFile(file);
+		if (entry instanceof FBTypeEntry) {
+			return ((FBTypeEntry) entry).getType();
 		}
 		return null;
 	}
