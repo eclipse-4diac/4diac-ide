@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -134,8 +133,8 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	@Override
-	protected Palette getPalette() {
-		return typeLib.getBlockTypeLib();
+	protected TypeLibrary getTypeLibrary() {
+		return typeLib;
 	}
 
 	@Override
@@ -175,7 +174,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(fbType.getPaletteEntry().getFile().getProject(), getEditDomain(),
+		return new FBTypePaletteViewerProvider(fbType.getTypeEntry().getFile().getProject(), getEditDomain(),
 				getPaletteNavigatorID());
 	}
 
@@ -193,7 +192,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
 		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(),
-				fbType.getPaletteEntry().getFile().getProject());
+				fbType.getTypeEntry().getFile().getProject());
 	}
 
 	@Override
