@@ -120,7 +120,7 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 			}
 			final UnTypedSubAppNetworkEditor editor = new UnTypedSubAppNetworkEditor();
 			editor.setCommonCommandStack(getCommandStack());
-			editor.setTypeLib(getEditorInput().getPaletteEntry().getTypeLibrary());
+			editor.setTypeLib(getEditorInput().getTypeEntry().getTypeLibrary());
 			return editor;
 		}
 

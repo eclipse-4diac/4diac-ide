@@ -15,9 +15,9 @@
 package org.eclipse.fordiac.ide.subapptypeeditor;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.FBTypeEditor;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.subapptypeeditor.editors.SubAppNetworkBreadCrumbEditor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
@@ -93,9 +93,9 @@ public class SubAppTypeEditor extends FBTypeEditor {
 	}
 
 	@Override
-	protected FBType getFBType(final PaletteEntry paletteEntry) {
-		if (paletteEntry instanceof SubApplicationTypePaletteEntry) {
-			return ((SubApplicationTypePaletteEntry) paletteEntry).getTypeEditable();
+	protected FBType getFBType(final TypeEntry typeEntry) {
+		if (typeEntry instanceof SubAppTypeEntry) {
+			return ((SubAppTypeEntry) typeEntry).getTypeEditable();
 		}
 		return null;
 	}

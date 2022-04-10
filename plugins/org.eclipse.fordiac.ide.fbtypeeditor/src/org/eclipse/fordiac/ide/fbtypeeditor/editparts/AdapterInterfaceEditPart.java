@@ -25,9 +25,9 @@ import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPolicy;
@@ -39,10 +39,10 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
 public class AdapterInterfaceEditPart extends InterfaceEditPart {
-	private final Palette systemPalette;
+	private final TypeLibrary typeLib;
 
-	AdapterInterfaceEditPart(final Palette systemPalette) {
-		this.systemPalette = systemPalette;
+	AdapterInterfaceEditPart(final TypeLibrary typeLib) {
+		this.typeLib = typeLib;
 	}
 
 	private class AdapterInterfaceFigure extends UnderlineAlphaLabel {
@@ -139,7 +139,7 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 			final SelectionRequest selRequest = (SelectionRequest) request;
 			if ((selRequest.getLastButtonPressed() == 1) && (selRequest.isControlKeyPressed())) {
 				// open the default editor for the adapter file
-				final PaletteEntry entry = systemPalette.getAdapterTypeEntry(getAdapter().getType().getName());
+				final TypeEntry entry = typeLib.getAdapterTypeEntry(getAdapter().getType().getName());
 				if (null != entry) {
 					final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 							.getDefaultEditor(entry.getFile().getName());

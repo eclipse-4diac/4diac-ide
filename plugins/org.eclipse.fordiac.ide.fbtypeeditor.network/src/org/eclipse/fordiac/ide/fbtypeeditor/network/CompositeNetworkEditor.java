@@ -164,7 +164,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	protected void configurePalette(final FBTypeEditorInput fbTypeEditorInput) {
-		typeLib = fbTypeEditorInput.getPaletteEntry().getTypeLibrary();
+		typeLib = fbTypeEditorInput.getTypeEntry().getTypeLibrary();
 	}
 
 	@Override

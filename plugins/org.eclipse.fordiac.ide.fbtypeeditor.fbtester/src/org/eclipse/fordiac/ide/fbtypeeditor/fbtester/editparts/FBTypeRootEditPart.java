@@ -26,11 +26,11 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
@@ -92,15 +92,15 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 		return (FBTypeEditorInput) getModel();
 	}
 
-	private PaletteEntry getPaletteEntry() {
-		return getEditorInput().getPaletteEntry();
+	private TypeEntry getTypeEntry() {
+		return getEditorInput().getTypeEntry();
 	}
 
 	@Override
 	protected List<?> getModelChildren() {
 		final ArrayList<Object> children = new ArrayList<>();
 		final FB fB = LibraryElementFactory.eINSTANCE.createFB();
-		fB.setPaletteEntry(getPaletteEntry());
+		fB.setTypeEntry(getTypeEntry());
 		fB.setInterface(EcoreUtil.copy(getCastedFBTypeModel().getInterfaceList()));
 		fB.setName(getCastedFBTypeModel().getName());
 		fB.updatePosition(10, 10);
@@ -129,6 +129,6 @@ public class FBTypeRootEditPart extends AbstractDiagramEditPart {
 
 	protected static void createValues(final FB fB) {
 		fB.getInterface().getInputVars()
-				.forEach(inputVar -> inputVar.setValue(LibraryElementFactory.eINSTANCE.createValue()));
+		.forEach(inputVar -> inputVar.setValue(LibraryElementFactory.eINSTANCE.createValue()));
 	}
 }

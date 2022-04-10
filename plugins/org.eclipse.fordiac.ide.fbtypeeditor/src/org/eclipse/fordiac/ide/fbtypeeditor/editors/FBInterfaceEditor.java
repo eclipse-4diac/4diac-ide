@@ -72,7 +72,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 		if (input instanceof FBTypeEditorInput) {
 			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			fbType = untypedInput.getContent();
-			typeLib = untypedInput.getPaletteEntry().getTypeLibrary();
+			typeLib = untypedInput.getTypeEntry().getTypeLibrary();
 		}
 		super.init(site, input);
 		setPartName(FordiacMessages.Interface);
@@ -191,7 +191,7 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	public void reloadType(final FBType type) {
 		fbType = type;
 		try {
-			init(getEditorSite(), new FBTypeEditorInput(type, type.getPaletteEntry()));
+			init(getEditorSite(), new FBTypeEditorInput(type, type.getTypeEntry()));
 		} catch (final PartInitException e) {
 			FordiacLogHelper.logError(PROPERTY_CONTRIBUTOR_ID, e);
 		}

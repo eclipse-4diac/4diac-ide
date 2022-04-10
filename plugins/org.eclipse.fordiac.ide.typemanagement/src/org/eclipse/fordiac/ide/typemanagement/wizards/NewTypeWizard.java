@@ -110,4 +110,7 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 		EditorUtils.openEditor(new FileEditorInput(file), desc.getId());
 	}
 
+	public TypeEntry getTypeEntry() {
+		return entry;
+	}
 }

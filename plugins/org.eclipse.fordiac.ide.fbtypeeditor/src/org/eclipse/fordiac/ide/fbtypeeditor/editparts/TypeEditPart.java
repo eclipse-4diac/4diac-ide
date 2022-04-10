@@ -157,7 +157,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 						if (getCastedModel() instanceof AdapterDeclaration) {
 							// TODO change to own command in order to update cfb internals
 							cmd = new ChangeDataTypeCommand((VarDeclaration) getCastedModel(),
-									typeLib.getBlockTypeLib().getAdapterTypeEntry(typeName).getType());
+									typeLib.getAdapterTypeEntry(typeName).getType());
 						} else {
 							cmd = new ChangeDataTypeCommand((VarDeclaration) getCastedModel(),
 									typeLib.getDataTypeLibrary().getType(typeName));
@@ -198,8 +198,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 		// First update the list of available types
 		final ArrayList<String> dataTypeNames = new ArrayList<>();
 		if (getCastedModel() instanceof AdapterDeclaration) {
-			typeLib.getBlockTypeLib().getAdapterTypesSorted()
-			.forEach(adapterType -> dataTypeNames.add(adapterType.getLabel()));
+			typeLib.getAdapterTypesSorted().forEach(adapterType -> dataTypeNames.add(adapterType.getTypeName()));
 		} else {
 			for (final DataType dataType : typeLib.getDataTypeLibrary().getDataTypesSorted()) {
 				dataTypeNames.add(dataType.getName());
