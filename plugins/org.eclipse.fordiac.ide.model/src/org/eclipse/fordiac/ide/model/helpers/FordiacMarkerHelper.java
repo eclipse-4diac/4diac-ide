@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public final class FordiacMarkerHelper {
@@ -189,14 +190,14 @@ public final class FordiacMarkerHelper {
 		final ErrorMarkerFBNElement errorFb = FordiacMarkerHelper.createErrorMarkerFB(typeFbElement);
 
 		final FBType fbType = (FBType) LibraryElementFactory.eINSTANCE.create(typeClass);
-		final PaletteEntry entry = (PaletteEntry) PaletteFactory.eINSTANCE.create(entryClass);
+		final TypeEntry entry = (PaletteEntry) PaletteFactory.eINSTANCE.create(entryClass);
 		entry.setType(fbType);
 		entry.setLabel(typeFbElement);
 		fbType.setName(typeFbElement);
 		fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		errorFb.setInterface(fbType.getInterfaceList().copy());
-		errorFb.setPaletteEntry(entry);
-		typeLibrary.getErrorTypeLib().addPaletteEntry(entry);
+		errorFb.setTypeEntry(entry);
+		typeLibrary.getErrorTypeLib().addTypeEntry(entry);
 		return errorFb;
 	}
 

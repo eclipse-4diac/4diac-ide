@@ -47,8 +47,6 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class TypeLibrary {
 
-	private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.model"; //$NON-NLS-1$
-
 	// !> Holds type libraries of all open 4diac IDE projects
 	private static Map<IProject, TypeLibrary> typeLibraryList = new HashMap<>();
 
@@ -90,47 +88,47 @@ public final class TypeLibrary {
 				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getTypeName(), o2.getTypeName())).toList();
 	}
 
-	Map<String, DeviceTypeEntry> getDeviceTypes() {
+	public Map<String, DeviceTypeEntry> getDeviceTypes() {
 		return newBlockTypeLib.getDeviceTypes();
 	}
 
-	Map<String, FBTypeEntry> getFbTypes() {
+	public Map<String, FBTypeEntry> getFbTypes() {
 		return newBlockTypeLib.getFbTypes();
 	}
 
-	Map<String, ResourceTypeEntry> getResourceTypes() {
+	public Map<String, ResourceTypeEntry> getResourceTypes() {
 		return newBlockTypeLib.getResourceTypes();
 	}
 
-	Map<String, SegmentTypeEntry> getSegmentTypes() {
+	public Map<String, SegmentTypeEntry> getSegmentTypes() {
 		return newBlockTypeLib.getSegmentTypes();
 	}
 
-	Map<String, SubAppTypeEntry> getSubAppTypes() {
+	public Map<String, SubAppTypeEntry> getSubAppTypes() {
 		return newBlockTypeLib.getSubAppTypes();
 	}
 
-	AdapterTypeEntry getAdapterTypeEntry(final String typeName) {
+	public AdapterTypeEntry getAdapterTypeEntry(final String typeName) {
 		return getAdapterTypes().get(typeName);
 	}
 
-	DeviceTypeEntry getDeviceTypeEntry(final String typeName) {
+	public DeviceTypeEntry getDeviceTypeEntry(final String typeName) {
 		return getDeviceTypes().get(typeName);
 	}
 
-	FBTypeEntry getFBTypeEntry(final String typeName) {
+	public FBTypeEntry getFBTypeEntry(final String typeName) {
 		return getFbTypes().get(typeName);
 	}
 
-	ResourceTypeEntry getResourceTypeEntry(final String typeName) {
+	public ResourceTypeEntry getResourceTypeEntry(final String typeName) {
 		return getResourceTypes().get(typeName);
 	}
 
-	SegmentTypeEntry getSegmentTypeEntry(final String typeName) {
+	public SegmentTypeEntry getSegmentTypeEntry(final String typeName) {
 		return getSegmentTypes().get(typeName);
 	}
 
-	SubAppTypeEntry getSubAppTypeEntry(final String typeName) {
+	public SubAppTypeEntry getSubAppTypeEntry(final String typeName) {
 		return getSubAppTypes().get(typeName);
 	}
 

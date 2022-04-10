@@ -17,11 +17,11 @@
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 
 class AdapterExporter extends AbstractBlockTypeExporter {
 
-	public AdapterExporter(final AdapterTypePaletteEntry entry) {
+	public AdapterExporter(final AdapterTypeEntry entry) {
 		super(entry.getTypeEditable().getAdapterFBType());
 	}
 

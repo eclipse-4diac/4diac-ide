@@ -33,15 +33,15 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractTypeExporter extends CommonElementExporter {
@@ -69,7 +69,7 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		addEndElement();
 	}
 
-	public static void saveType(final PaletteEntry entry) {
+	public static void saveType(final TypeEntry entry) {
 		final AbstractTypeExporter exporter = getTypeExporter(entry);
 
 		if (null != exporter) {
@@ -97,7 +97,7 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	}
 
 	//Save the model using the Outputstream
-	public static void saveType(final PaletteEntry entry, final OutputStream outputStream) {
+	public static void saveType(final TypeEntry entry, final OutputStream outputStream) {
 		final AbstractTypeExporter exporter = getTypeExporter(entry);
 		if (exporter != null) {
 			try {
@@ -115,9 +115,9 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 	 * can not be used as it may need to be created.
 	 *
 	 *
-	 * @param entry the palette entry for which we need the scope
+	 * @param entry the type entry for which we need the scope
 	 * @return the current folder or workspace root */
-	private static IContainer getRuleScope(final PaletteEntry entry) {
+	private static IContainer getRuleScope(final TypeEntry entry) {
 		IContainer parent = entry.getFile().getParent();
 		while(parent != null && !parent.exists()) {
 			parent = parent.getParent();
@@ -125,14 +125,14 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		return (parent != null) ? parent : ResourcesPlugin.getWorkspace().getRoot();
 	}
 
-	private static AbstractTypeExporter getTypeExporter(final PaletteEntry entry) {
-		if (entry instanceof FBTypePaletteEntry) {
-			return new FbtExporter((FBTypePaletteEntry) entry);
-		} else if (entry instanceof AdapterTypePaletteEntry) {
-			return new AdapterExporter((AdapterTypePaletteEntry) entry);
-		} else if (entry instanceof SubApplicationTypePaletteEntry) {
-			return new SubApplicationTypeExporter((SubApplicationTypePaletteEntry) entry);
-		} else if (entry instanceof DataTypePaletteEntry) {
+	private static AbstractTypeExporter getTypeExporter(final TypeEntry entry) {
+		if (entry instanceof FBTypeEntry) {
+			return new FbtExporter((FBTypeEntry) entry);
+		} else if (entry instanceof AdapterTypeEntry) {
+			return new AdapterExporter((AdapterTypeEntry) entry);
+		} else if (entry instanceof SubAppTypeEntry) {
+			return new SubApplicationTypeExporter((SubAppTypeEntry) entry);
+		} else if (entry instanceof DataTypeEntry) {
 			return new DataTypeExporter((AnyDerivedType) entry.getTypeEditable());
 		}
 		return null;

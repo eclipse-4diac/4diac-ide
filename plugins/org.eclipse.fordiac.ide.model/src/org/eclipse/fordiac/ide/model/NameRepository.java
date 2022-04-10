@@ -25,7 +25,6 @@ import java.util.stream.Collectors;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -59,7 +58,6 @@ public final class NameRepository {
 
 	public static String createUniqueTypeName(final LibraryElement type) {
 		final TypeLibrary typeLibrary = type.getTypeLibrary();
-		final Palette blockTypeLib = typeLibrary.getBlockTypeLib();
 		String typeName = type.getName();
 
 		if (type instanceof DataType) {
@@ -71,21 +69,21 @@ public final class NameRepository {
 		}
 
 		if (type instanceof FBType) {
-			while (blockTypeLib.getFBTypeEntry(typeName) != null) {
+			while (typeLibrary.getFBTypeEntry(typeName) != null) {
 				typeName = createUniqueName(type.getName(), typeName);
 			}
 			return typeName;
 		}
 
 		if (type instanceof SubAppType) {
-			while (blockTypeLib.getSubAppTypeEntry(typeName) != null) {
+			while (typeLibrary.getSubAppTypeEntry(typeName) != null) {
 				typeName = createUniqueName(type.getName(), typeName);
 			}
 			return typeName;
 		}
 
 		if (type instanceof AdapterType) {
-			while (blockTypeLib.getAdapterTypeEntry(typeName) != null) {
+			while (typeLibrary.getAdapterTypeEntry(typeName) != null) {
 				typeName = createUniqueName(type.getName(), typeName);
 			}
 			return typeName;

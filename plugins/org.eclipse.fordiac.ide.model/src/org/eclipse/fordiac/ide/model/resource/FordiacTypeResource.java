@@ -38,9 +38,9 @@ public class FordiacTypeResource extends ResourceImpl {
 	@Override
 	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
 		final IFile fbtFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(this.uri.toPlatformString(true)));
-		final var paletteEntryForFile = TypeLibrary.getPaletteEntryForFile(fbtFile);
+		final var typeEntryForFile = TypeLibrary.getTypeEntryForFile(fbtFile);
 		//Load the Type
-		final var lib = EcoreUtil.copy(paletteEntryForFile.getType());
+		final var lib = EcoreUtil.copy(typeEntryForFile.getType());
 		//Do not modify any fordiac element
 		getContents().add(lib);
 	}
@@ -48,13 +48,13 @@ public class FordiacTypeResource extends ResourceImpl {
 	@Override
 	protected void doSave(final OutputStream outputStream, final Map<?, ?> options) throws IOException {
 		final var fbtFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(this.uri.toPlatformString(true)));
-		var paletteEntryForFile = TypeLibrary.getPaletteEntryForFile(fbtFile);
-		if (paletteEntryForFile == null) {
-			paletteEntryForFile = TypeLibrary.getTypeLibrary(fbtFile.getProject()).createPaletteEntry(fbtFile);
+		var typeEntryForFile = TypeLibrary.getTypeEntryForFile(fbtFile);
+		if (typeEntryForFile == null) {
+			typeEntryForFile = TypeLibrary.getTypeLibrary(fbtFile.getProject()).createTypeEntry(fbtFile);
 		}
-		paletteEntryForFile.setTypeEditable((LibraryElement) getContents().get(0));
-		paletteEntryForFile.setLastModificationTimestamp(paletteEntryForFile.getFile().getModificationStamp());
-		AbstractTypeExporter.saveType(paletteEntryForFile, outputStream);
+		typeEntryForFile.setTypeEditable((LibraryElement) getContents().get(0));
+		typeEntryForFile.setLastModificationTimestamp(typeEntryForFile.getFile().getModificationStamp());
+		AbstractTypeExporter.saveType(typeEntryForFile, outputStream);
 	}
 
 	@Override

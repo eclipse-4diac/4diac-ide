@@ -159,7 +159,7 @@ public class ErrorMarkerBuilder {
 		if (rootContainer instanceof AutomationSystem) {
 			systemFile = ((AutomationSystem) rootContainer).getSystemFile();
 		} else if (rootContainer instanceof FBType) {
-			systemFile = ((FBType) rootContainer).getPaletteEntry().getFile();
+			systemFile = ((FBType) rootContainer).getTypeEntry().getFile();
 		}
 		Assert.isNotNull(systemFile);
 		return systemFile;

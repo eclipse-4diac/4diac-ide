@@ -42,10 +42,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
@@ -76,6 +72,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -106,7 +105,7 @@ public abstract class CommonElementImporter {
 
 		if (interfaceList.eContainer() instanceof FB) {
 			// only if it is an FB check if it is typed
-			hasType = (null != ((FB) interfaceList.eContainer()).getPaletteEntry());
+			hasType = (null != ((FB) interfaceList.eContainer()).getTypeEntry());
 		}
 
 		if (hasType) {
@@ -149,13 +148,9 @@ public abstract class CommonElementImporter {
 		return typeLibrary;
 	}
 
-	protected Palette getPalette() {
-		return getTypeLibrary().getBlockTypeLib();
-	}
-
-	protected FBTypePaletteEntry getTypeEntry(final String typeFbElement) {
+	protected FBTypeEntry getTypeEntry(final String typeFbElement) {
 		if (null != typeFbElement) {
-			return getPalette().getFBTypeEntry(typeFbElement);
+			return getTypeLibrary().getFBTypeEntry(typeFbElement);
 		}
 		return null;
 	}
@@ -683,9 +678,9 @@ public abstract class CommonElementImporter {
 	private void parseResourceType(final Resource resource) {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (typeName != null) {
-			final ResourceTypeEntry entry = getPalette().getResourceTypeEntry(typeName);
+			final ResourceTypeEntry entry = getTypeLibrary().getResourceTypeEntry(typeName);
 			if (null != entry) {
-				resource.setPaletteEntry(entry);
+				resource.setTypeEntry(entry);
 				createParamters(resource);
 			}
 		}
@@ -694,14 +689,14 @@ public abstract class CommonElementImporter {
 	/** Creates the values. */
 	public static void createParamters(final IVarElement element) {
 		if (element instanceof Device) {
-			element.getVarDeclarations().addAll(
-					EcoreUtil.copyAll(((DeviceTypePaletteEntry) ((TypedConfigureableObject) element).getPaletteEntry())
-							.getDeviceType().getVarDeclaration()));
+			element.getVarDeclarations()
+					.addAll(EcoreUtil.copyAll(((DeviceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+							.getType().getVarDeclaration()));
 		}
 		if (element instanceof Resource) {
-			element.getVarDeclarations().addAll(
-					EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getPaletteEntry())
-							.getResourceType().getVarDeclaration()));
+			element.getVarDeclarations()
+					.addAll(EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+							.getType().getVarDeclaration()));
 		}
 		for (final VarDeclaration varDecl : element.getVarDeclarations()) {
 			final Value value = LibraryElementFactory.eINSTANCE.createValue();

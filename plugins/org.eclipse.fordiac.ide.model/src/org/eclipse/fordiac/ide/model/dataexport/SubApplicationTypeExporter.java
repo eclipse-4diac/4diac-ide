@@ -18,12 +18,12 @@ package org.eclipse.fordiac.ide.model.dataexport;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 
 class SubApplicationTypeExporter extends AbstractBlockTypeExporter {
 
-	SubApplicationTypeExporter(final SubApplicationTypePaletteEntry entry) {
+	SubApplicationTypeExporter(final SubAppTypeEntry entry) {
 		super(entry.getTypeEditable());
 	}
 

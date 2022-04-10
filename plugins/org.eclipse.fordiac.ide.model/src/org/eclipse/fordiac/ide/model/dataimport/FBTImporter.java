@@ -32,9 +32,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -75,7 +72,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 /**
  * Managing class for importing *.fbt files
@@ -375,14 +374,14 @@ public class FBTImporter extends TypeImporter {
 	private void parseFBNetwork(final CompositeFBType type) throws TypeImportException, XMLStreamException {
 		final FBNetwork fbNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		type.setFBNetwork(fbNetwork);
-		adapters.values().forEach(adapter -> addAdapterFB(fbNetwork, adapter, getPalette()));
+		adapters.values().forEach(adapter -> addAdapterFB(fbNetwork, adapter));
 		final FBNetworkImporter fbnInmporter = new FBNetworkImporter(this, fbNetwork, type.getInterfaceList());
 		fbnInmporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 	}
 
-	private void addAdapterFB(final FBNetwork fbNetwork, final AdapterDeclaration adapter, final Palette palette) {
+	private void addAdapterFB(final FBNetwork fbNetwork, final AdapterDeclaration adapter) {
 		final AdapterFB aFB = LibraryElementFactory.eINSTANCE.createAdapterFB();
-		aFB.setPaletteEntry(palette.getAdapterTypeEntry(adapter.getTypeName()));
+		aFB.setTypeEntry(getTypeLibrary().getAdapterTypeEntry(adapter.getTypeName()));
 		aFB.setAdapterDecl(adapter);
 
 		aFB.setName(adapter.getName());
@@ -872,9 +871,9 @@ public class FBTImporter extends TypeImporter {
 				final FB fb = LibraryElementFactory.eINSTANCE.createFB();
 				readNameCommentAttributes(fb);
 				final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-				final FBTypePaletteEntry entry = getTypeEntry(typeFbElement);
+				final FBTypeEntry entry = getTypeEntry(typeFbElement);
 				if (null != entry) {
-					fb.setPaletteEntry(entry);
+					fb.setTypeEntry(entry);
 					fb.setInterface(fb.getType().getInterfaceList().copy());
 					parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 					type.getInternalFbs().add(fb);
@@ -1052,8 +1051,8 @@ public class FBTImporter extends TypeImporter {
 		readNameCommentAttributes(a);
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
-			final AdapterTypePaletteEntry entry = getPalette().getAdapterTypeEntry(typeName);
-			a.setPaletteEntry(entry);
+			final AdapterTypeEntry entry = getTypeLibrary().getAdapterTypeEntry(typeName);
+			a.setTypeEntry(entry);
 			AdapterType dataType = null;
 			if (null != entry) {
 				dataType = entry.getType();
