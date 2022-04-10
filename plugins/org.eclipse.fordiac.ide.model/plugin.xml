@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-  <extension-point id="PaletteEntryCreator" name="PaletteEntryCreator" schema="schema/PaletteEntryCreator.exsd"/>
   <extension-point id="TypeEntryCreator" name="TypeEntryCreator" schema="schema/TypeEntryCreator.exsd"/>
 
    <extension point="org.eclipse.emf.ecore.generated_package">
@@ -27,50 +26,6 @@
             genModel="model/fordiac.genmodel"/>
    </extension>
 
-   <extension
-         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
-      <PaletteEntryCreator
-            class="org.eclipse.fordiac.ide.model.typelibrary.CreateAdapterTypePaletteEntry">
-      </PaletteEntryCreator>
-   </extension>
-   <extension
-         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
-      <PaletteEntryCreator
-            class="org.eclipse.fordiac.ide.model.typelibrary.CreateDeviceTypePaletteEntry">
-      </PaletteEntryCreator>
-   </extension>
-   <extension
-         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
-      <PaletteEntryCreator
-            class="org.eclipse.fordiac.ide.model.typelibrary.CreateDataTypePaletteEntry">
-      </PaletteEntryCreator>
-   </extension>
-   <extension
-         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
-      <PaletteEntryCreator
-            class="org.eclipse.fordiac.ide.model.typelibrary.CreateFBTypePaletteEntry">
-      </PaletteEntryCreator>
-   </extension>
-   <extension
-         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
-      <PaletteEntryCreator
-            class="org.eclipse.fordiac.ide.model.typelibrary.CreateResourceTypePaletteEntry">
-      </PaletteEntryCreator>
-   </extension>
-   <extension
-         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
-      <PaletteEntryCreator
-            class="org.eclipse.fordiac.ide.model.typelibrary.CreateSegmentTypePaletteEntry">
-      </PaletteEntryCreator>
-   </extension>
-   <extension
-         point="org.eclipse.fordiac.ide.model.PaletteEntryCreator">
-      <PaletteEntryCreator
-            class="org.eclipse.fordiac.ide.model.typelibrary.CreateSubapplicationTypePaletteEntry">
-      </PaletteEntryCreator>
-   </extension>
-   
-   <!--New type creators -->
    <extension point="org.eclipse.fordiac.ide.model.TypeEntryCreator">
       <TypeEntryCreator
             class="org.eclipse.fordiac.ide.model.typelibrary.impl.CreateAdapterTypeEntry">
