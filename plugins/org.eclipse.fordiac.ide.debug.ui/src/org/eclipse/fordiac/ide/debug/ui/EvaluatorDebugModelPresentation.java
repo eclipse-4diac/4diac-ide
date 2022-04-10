@@ -41,7 +41,7 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 			final EObject root = EcoreUtil.getRootContainer((EObject) element);
 			if (root instanceof FBType) {
 				final FBType fbType = (FBType) root;
-				return new FileEditorInput(fbType.getPaletteEntry().getFile());
+				return new FileEditorInput(fbType.getTypeEntry().getFile());
 			}
 			return getEditorInput(((EObject) element).eResource());
 		} else if (element instanceof Resource) {

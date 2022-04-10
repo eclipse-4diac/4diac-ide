@@ -149,9 +149,9 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	protected boolean filterTargetResource(final IResource resource) throws CoreException {
 		if (resource instanceof IFile) {
 			if (resource.getFileExtension().equalsIgnoreCase(TypeLibraryTags.FB_TYPE_FILE_ENDING)) {
-				final var paletteEntry = TypeLibrary.getPaletteEntryForFile((IFile) resource);
-				if (paletteEntry != null) {
-					final var libraryElement = paletteEntry.getType();
+				final var typeEntry = TypeLibrary.getTypeEntryForFile((IFile) resource);
+				if (typeEntry != null) {
+					final var libraryElement = typeEntry.getType();
 					if (libraryElement instanceof FBType) {
 						return filterTargetFBType((FBType) libraryElement);
 					}
@@ -166,9 +166,9 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	protected FBType getFBType() {
 		final IResource resource = getResource();
 		if (resource instanceof IFile) {
-			final var paletteEntry = TypeLibrary.getPaletteEntryForFile((IFile) resource);
-			if (paletteEntry != null) {
-				final var libraryElement = paletteEntry.getType();
+			final var typeEntry = TypeLibrary.getTypeEntryForFile((IFile) resource);
+			if (typeEntry != null) {
+				final var libraryElement = typeEntry.getType();
 				if (libraryElement instanceof FBType) {
 					return (FBType) libraryElement;
 				}

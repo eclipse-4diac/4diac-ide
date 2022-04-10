@@ -44,7 +44,7 @@ public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationD
 			throws CoreException {
 		final IResource resource = LaunchConfigurationAttributes.getResource(configuration);
 		if (resource instanceof IFile) {
-			final FBType type = (FBType) TypeLibrary.getPaletteEntryForFile((IFile) resource).getType();
+			final FBType type = (FBType) TypeLibrary.getTypeEntryForFile((IFile) resource).getType();
 			final var event = FBLaunchConfigurationAttributes.getEvent(configuration, type, getDefaultEvent(type));
 			final var defaultArguments = getDefaultArguments(type);
 			final var variables = LaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
