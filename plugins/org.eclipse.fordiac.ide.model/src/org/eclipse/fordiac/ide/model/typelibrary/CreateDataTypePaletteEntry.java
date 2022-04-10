@@ -16,11 +16,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 
-public class CreateDataTypePaletteEntry implements IPaletteEntryCreator, TypeLibraryTags {
+public class CreateDataTypePaletteEntry implements IPaletteEntryCreator {
 
 	@Override
-	public boolean canHandle(IFile file) {
-		return (DATA_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
+	public boolean canHandle(final IFile file) {
+		return (TypeLibraryTags.DATA_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
 	}
 
 	@Override

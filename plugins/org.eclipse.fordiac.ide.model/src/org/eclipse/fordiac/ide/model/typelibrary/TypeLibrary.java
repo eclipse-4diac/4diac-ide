@@ -47,7 +47,7 @@ import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public final class TypeLibrary implements TypeLibraryTags {
+public final class TypeLibrary {
 
 	private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.model"; //$NON-NLS-1$
 
@@ -328,7 +328,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 	 */
 	private static IProject getToolLibProject() {
 		final IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-		return myWorkspaceRoot.getProject(TOOL_LIBRARY_PROJECT_NAME);
+		return myWorkspaceRoot.getProject(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME);
 	}
 
 	public static IFolder getToolLibFolder() {
@@ -339,10 +339,10 @@ public final class TypeLibrary implements TypeLibraryTags {
 			createToolLibProject(toolLibProject);
 		}
 
-		IFolder toolLibFolder = toolLibProject.getFolder(TOOL_LIBRARY_PROJECT_NAME);
+		IFolder toolLibFolder = toolLibProject.getFolder(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME);
 		if (!toolLibFolder.exists()) {
 			createToolLibLink(toolLibProject);
-			toolLibFolder = toolLibProject.getFolder(TOOL_LIBRARY_PROJECT_NAME);
+			toolLibFolder = toolLibProject.getFolder(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME);
 		}
 
 		return toolLibFolder;
@@ -364,7 +364,7 @@ public final class TypeLibrary implements TypeLibraryTags {
 	private static void createToolLibLink(final IProject toolLibProject) {
 		final IWorkspace workspace = ResourcesPlugin.getWorkspace();
 
-		final IFolder link = toolLibProject.getFolder(TOOL_LIBRARY_PROJECT_NAME);
+		final IFolder link = toolLibProject.getFolder(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME);
 
 		final String typeLibPath = System.getProperty("4diac.typelib.path"); //$NON-NLS-1$
 

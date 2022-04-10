@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2014 fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -17,11 +17,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 
-public class CreateSegmentTypePaletteEntry implements IPaletteEntryCreator, TypeLibraryTags {
+public class CreateSegmentTypePaletteEntry implements IPaletteEntryCreator {
 
 	@Override
-	public boolean canHandle(IFile file) {
-		return (SEGMENT_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
+	public boolean canHandle(final IFile file) {
+		return (TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING.equalsIgnoreCase(file.getFileExtension()));
 	}
 
 	@Override
