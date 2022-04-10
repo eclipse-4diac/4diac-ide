@@ -89,7 +89,7 @@ public class InterfaceElementSection extends AbstractSection {
 		typeCombo.addListener(SWT.Selection, event -> {
 			Command cmd = null;
 			if (getType() instanceof AdapterDeclaration) {
-				final DataType newType = getPalette().getAdapterTypeEntry(typeCombo.getText()).getType();
+				final DataType newType = getTypeLibrary().getAdapterTypeEntry(typeCombo.getText()).getType();
 				cmd = newChangeTypeCommand((VarDeclaration) getType(), newType);
 			} else {
 				if (getType() instanceof VarDeclaration) {
@@ -113,7 +113,7 @@ public class InterfaceElementSection extends AbstractSection {
 		if (getType() instanceof Event) {
 			EventTypeLibrary.getInstance().getEventTypes().forEach(eType -> typeCombo.add(eType.getName()));
 		} else if (getType() instanceof AdapterDeclaration) {
-			getPalette().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getType().getName()));
+			getTypeLibrary().getAdapterTypesSorted().forEach(adp -> typeCombo.add(adp.getType().getName()));
 		} else if (getType() instanceof VarDeclaration) {
 			getDataTypeLib().getDataTypesSorted().forEach(dataType -> typeCombo.add(dataType.getName()));
 		}

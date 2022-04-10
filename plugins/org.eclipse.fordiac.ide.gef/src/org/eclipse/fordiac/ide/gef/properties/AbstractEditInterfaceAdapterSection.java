@@ -41,8 +41,8 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	@Override
 	protected String[] fillTypeCombo() {
 		final List<String> list = new ArrayList<>();
-		if ((null != getType()) && (null != getPalette())) {
-			getPalette().getAdapterTypesSorted().forEach(adpType -> list.add(adpType.getLabel()));
+		if ((null != getType()) && (null != getTypeLibrary())) {
+			getTypeLibrary().getAdapterTypesSorted().forEach(adpType -> list.add(adpType.getTypeName()));
 		}
 		return list.toArray(new String[list.size()]);
 	}
@@ -56,7 +56,7 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		if (!adapterList.isEmpty()) {
 			return adapterList.get(adapterList.size() - 1).getType();
 		}
-		return getPalette().getAdapterTypes().get(0).getValue().getType();
+		return getTypeLibrary().getAdapterTypes().values().iterator().next().getType();
 	}
 
 	@Override
