@@ -15,18 +15,18 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.gef.commands.Command;
 
 public class ChangeFbTypeCommand extends Command {
 
 	final FB fb;
-	FBTypePaletteEntry oldFBTypePaletteEntry;
-	final FBTypePaletteEntry newType;
+	FBTypeEntry oldEntry;
+	final FBTypeEntry newType;
 
-	public ChangeFbTypeCommand(final FB fb, final FBTypePaletteEntry newType) {
+	public ChangeFbTypeCommand(final FB fb, final FBTypeEntry newType) {
 		super();
 		this.fb = fb;
 		this.newType = newType;
@@ -39,13 +39,13 @@ public class ChangeFbTypeCommand extends Command {
 
 	@Override
 	public void execute() {
-		oldFBTypePaletteEntry = (FBTypePaletteEntry) fb.getType().getPaletteEntry();
+		oldEntry = (FBTypeEntry) fb.getType().getTypeEntry();
 		setFBType(newType);
 	}
 
-	private void setFBType(final FBTypePaletteEntry paletteEntry) {
-		fb.setPaletteEntry(paletteEntry);
-		fb.setInterface(paletteEntry.getType().getInterfaceList().copy());
+	private void setFBType(final FBTypeEntry entry) {
+		fb.setTypeEntry(entry);
+		fb.setInterface(entry.getType().getInterfaceList().copy());
 	}
 
 	@Override
@@ -55,6 +55,6 @@ public class ChangeFbTypeCommand extends Command {
 
 	@Override
 	public void undo() {
-		setFBType(oldFBTypePaletteEntry);
+		setFBType(oldEntry);
 	}
 }

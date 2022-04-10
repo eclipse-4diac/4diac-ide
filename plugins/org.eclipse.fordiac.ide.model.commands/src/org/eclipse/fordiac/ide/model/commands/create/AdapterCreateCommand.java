@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2017 TU Wien ACIN, Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl, Gerhard Ebenhofer, Monika Wenger 
+ *   Alois Zoitl, Gerhard Ebenhofer, Monika Wenger
  *       - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
@@ -21,9 +21,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
 public class AdapterCreateCommand extends FBCreateCommand {
 
-	public AdapterCreateCommand(int x, int y, AdapterDeclaration adapterDecl, CompositeFBType parentComposite) {
+	public AdapterCreateCommand(final int x, final int y, final AdapterDeclaration adapterDecl, final CompositeFBType parentComposite) {
 		super(parentComposite.getFBNetwork(), LibraryElementFactory.eINSTANCE.createAdapterFB(), x, y);
-		getAdapterFB().setPaletteEntry(adapterDecl.getType().getPaletteEntry());
+		getAdapterFB().setTypeEntry(adapterDecl.getType().getTypeEntry());
 		getAdapterFB().setAdapterDecl(adapterDecl);
 	}
 

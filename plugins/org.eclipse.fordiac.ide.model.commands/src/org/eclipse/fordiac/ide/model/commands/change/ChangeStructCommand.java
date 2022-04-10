@@ -33,7 +33,7 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 	public ChangeStructCommand(final StructManipulator mux, final StructuredType newStruct) {
 		super(mux);
 		this.newStruct = newStruct;
-		entry = mux.getPaletteEntry();
+		entry = mux.getTypeEntry();
 	}
 
 	@Override
@@ -43,7 +43,7 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 		} else if (oldElement instanceof Demultiplexer) {
 			newElement = LibraryElementFactory.eINSTANCE.createDemultiplexer();
 		}
-		newElement.setPaletteEntry(entry);
+		newElement.setTypeEntry(entry);
 		newElement.setInterface(EcoreUtil.copy(oldElement.getType().getInterfaceList()));
 		newElement.setName(oldElement.getName());
 
@@ -68,7 +68,7 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 		if (struct.getTypeLibrary() != null) {
 			final DataTypeLibrary lib = struct.getTypeLibrary().getDataTypeLibrary();
 			struct.getMemberVariables().stream().filter(varDecl -> varDecl.getType() instanceof StructuredType)
-					.forEach(varDecl -> {
+			.forEach(varDecl -> {
 				final StructuredType updatedStruct = lib.getStructuredType(varDecl.getTypeName());
 				if (updatedStruct != null) {
 					varDecl.setType(updatedStruct);

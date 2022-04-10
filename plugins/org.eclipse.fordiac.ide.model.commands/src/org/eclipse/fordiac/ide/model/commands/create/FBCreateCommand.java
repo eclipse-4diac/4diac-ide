@@ -13,7 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -24,23 +23,24 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
-	private FBTypePaletteEntry paletteEntry;
+	private FBTypeEntry typeEntry;
 
-	public FBCreateCommand(final FBTypePaletteEntry paletteEntry, final FBNetwork fbNetwork, final int x, final int y) {
-		super(fbNetwork, createNewFb(paletteEntry), x, y);
-		this.paletteEntry = paletteEntry;
+	public FBCreateCommand(final FBTypeEntry typeEntry, final FBNetwork fbNetwork, final int x, final int y) {
+		super(fbNetwork, createNewFb(typeEntry), x, y);
+		this.typeEntry = typeEntry;
 		setLabel(Messages.FBCreateCommand_LABEL_CreateFunctionBlock);
-		getFB().setPaletteEntry(paletteEntry);
+		getFB().setTypeEntry(typeEntry);
 	}
 
-	private static FB createNewFb(final FBTypePaletteEntry paletteEntry) {
-		if (paletteEntry.getType().getName().equals("STRUCT_MUX")) { //$NON-NLS-1$
+	private static FB createNewFb(final FBTypeEntry typeEntry) {
+		if (typeEntry.getType().getName().equals("STRUCT_MUX")) { //$NON-NLS-1$
 			return LibraryElementFactory.eINSTANCE.createMultiplexer();
-		} else if (paletteEntry.getType().getName().equals("STRUCT_DEMUX")) { //$NON-NLS-1$
+		} else if (typeEntry.getType().getName().equals("STRUCT_DEMUX")) { //$NON-NLS-1$
 			return LibraryElementFactory.eINSTANCE.createDemultiplexer();
-		} else if (paletteEntry.getType() instanceof CompositeFBType) {
+		} else if (typeEntry.getType() instanceof CompositeFBType) {
 			return LibraryElementFactory.eINSTANCE.createCFBInstance();
 		} else {
 			return LibraryElementFactory.eINSTANCE.createFB();
@@ -50,21 +50,21 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	// constructor to reuse this command for adapter creation
 	protected FBCreateCommand(final FBNetwork fbNetwork, final FBNetworkElement adapter, final int x, final int y) {
 		super(fbNetwork, adapter, x, y);
-		this.paletteEntry = null;
+		this.typeEntry = null;
 		setLabel(Messages.FBCreateCommand_LABEL_CreateFunctionBlock);
-		getFB().setPaletteEntry(paletteEntry);
+		getFB().setTypeEntry(typeEntry);
 	}
 
 	public FB getFB() {
 		return (FB) getElement();
 	}
 
-	public FBTypePaletteEntry getPaletteEntry() {
-		return paletteEntry;
+	public FBTypeEntry getPaletteEntry() {
+		return typeEntry;
 	}
 
-	public void setPaletteEntry(final FBTypePaletteEntry paletteEntry) {
-		this.paletteEntry = paletteEntry;
+	public void setPaletteEntry(final FBTypeEntry typeEntry) {
+		this.typeEntry = typeEntry;
 	}
 
 	@Override
@@ -72,21 +72,21 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 		super.execute();
 		if (getFB() instanceof Multiplexer) {
 			((Multiplexer) getFB()).setStructTypeElementsAtInterface(
-					(StructuredType) paletteEntry.getType().getInterfaceList().getOutputVars().get(0).getType());
+					(StructuredType) typeEntry.getType().getInterfaceList().getOutputVars().get(0).getType());
 		} else if (getFB() instanceof Demultiplexer) {
 			((Demultiplexer) getFB()).setStructTypeElementsAtInterface(
-					(StructuredType) paletteEntry.getType().getInterfaceList().getInputVars().get(0).getType());
+					(StructuredType) typeEntry.getType().getInterfaceList().getInputVars().get(0).getType());
 		}
 	}
 
 	@Override
 	public boolean canExecute() {
-		return (paletteEntry != null) && super.canExecute();
+		return (typeEntry != null) && super.canExecute();
 	}
 
 	@Override
 	protected InterfaceList getTypeInterfaceList() {
-		return paletteEntry.getType().getInterfaceList();
+		return typeEntry.getType().getInterfaceList();
 	}
 
 }

@@ -12,20 +12,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.gef.commands.Command;
 
 public class UntypeSubAppCommand extends Command {
 	private final SubApp subapp;
-	private final SubApplicationTypePaletteEntry typeEntry;
+	private final SubAppTypeEntry typeEntry;
 
 	public UntypeSubAppCommand(final SubApp subapp) {
 		super(Messages.UntypeSubappCommand_Label);
 		this.subapp = subapp;
-		typeEntry = (SubApplicationTypePaletteEntry) subapp.getPaletteEntry();
+		typeEntry = (SubAppTypeEntry) subapp.getTypeEntry();
 	}
 
 	public SubApp getSubapp() {
@@ -54,11 +54,11 @@ public class UntypeSubAppCommand extends Command {
 
 	@Override
 	public void undo() {
-		subapp.setPaletteEntry(typeEntry);
+		subapp.setTypeEntry(typeEntry);
 	}
 
 	private void removeType() {
-		subapp.setPaletteEntry(null);
+		subapp.setTypeEntry(null);
 	}
 
 }
