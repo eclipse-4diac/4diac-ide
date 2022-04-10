@@ -20,9 +20,10 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -41,16 +42,10 @@ public class ValidateTypeLibrary {
 
 					if (isFordiacProject(project)) {
 						final TypeLibrary typeLibrary = TypeLibrary.getTypeLibrary(project);
-						typeLibrary.getBlockTypeLib().getSubAppTypes().values()
-						.forEach(SubApplicationTypePaletteEntry::getType);
-						typeLibrary.getBlockTypeLib().getAdapterTypes().values()
-						.forEach(AdapterTypePaletteEntry::getType);
-						typeLibrary.getBlockTypeLib().getFbTypes().values().forEach(FBTypePaletteEntry::getType);
-						typeLibrary.getDataTypeLibrary().getStructuredTypes().forEach(s -> {
-							if (s.getPaletteEntry() != null) {
-								s.getPaletteEntry().getType();
-							}
-						});
+						typeLibrary.getSubAppTypes().values().forEach(SubAppTypeEntry::getType);
+						typeLibrary.getAdapterTypes().values().forEach(AdapterTypeEntry::getType);
+						typeLibrary.getFbTypes().values().forEach(FBTypeEntry::getType);
+						typeLibrary.getDataTypeLibrary().getDerivedDataTypes().values().forEach(DataTypeEntry::getType);
 					}
 				}
 				return Status.OK_STATUS;

@@ -48,12 +48,12 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.Palette.SystemPaletteEntry;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
@@ -260,8 +260,8 @@ public enum SystemManager {
 	}
 
 	public static void saveSystem(final AutomationSystem system, final IFile file) {
-		Assert.isNotNull(system.getPaletteEntry()); // there should be no system without palette entry
-		system.getPaletteEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
+		Assert.isNotNull(system.getTypeEntry()); // there should be no system without palette entry
+		system.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
 		final SystemExporter systemExporter = new SystemExporter(system);
 		systemExporter.saveSystem(file);
 	}
@@ -365,7 +365,7 @@ public enum SystemManager {
 		}
 	}
 
-	public PaletteEntry getPaletteEntry(final IFile file) {
+	public TypeEntry getTypeEntry(final IFile file) {
 		final Map<IFile, AutomationSystem> map = allSystemsInWS.get(file.getProject());
 
 		if (map == null) {
@@ -377,7 +377,7 @@ public enum SystemManager {
 			return null;
 		}
 
-		return automationSystem.getPaletteEntry();
+		return automationSystem.getTypeEntry();
 
 	}
 
