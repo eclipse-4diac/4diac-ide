@@ -95,7 +95,7 @@ class ExportXMIHandler extends AbstractHandler {
 		m.put(XMI_EXTENSION, new XMIResourceFactoryImpl);
 
 		if (fbFile.fileExtension.equalsIgnoreCase(TypeLibraryTags.FB_TYPE_FILE_ENDING)) {
-			val entry = TypeLibrary::getPaletteEntryForFile(fbFile)
+			val entry = TypeLibrary::getTypeEntryForFile(fbFile)
 			val simpleType = entry?.getType() as SimpleFBType
 			val List<String> errors = new ArrayList
 			simpleType.callables.forEach [
@@ -124,17 +124,17 @@ class ExportXMIHandler extends AbstractHandler {
 	}
 
 	override void setEnabled(Object evaluationContext) {
-		var ISelection selection = (HandlerUtil::getVariable(evaluationContext,
+		val selection = (HandlerUtil::getVariable(evaluationContext,
 			ISources::ACTIVE_CURRENT_SELECTION_NAME) as ISelection)
 		if (!selection.isEmpty() && selection instanceof IStructuredSelection) {
-			var IStructuredSelection structuredSelection = (selection as IStructuredSelection)
+			val structuredSelection = (selection as IStructuredSelection)
 			if (structuredSelection.size() === 1 && (structuredSelection.getFirstElement() instanceof IFile)) {
-				var IFile fbFile = (structuredSelection.getFirstElement() as IFile)
+				val fbFile = (structuredSelection.getFirstElement() as IFile)
 				if (fbFile.fullPath.fileExtension.equals(STFUNC_FILE_EXTENSION)) {
 					setBaseEnabled(true)
 					return
 				}
-				var PaletteEntry entry = TypeLibrary::getPaletteEntryForFile(fbFile)
+				val entry = TypeLibrary::getTypeEntryForFile(fbFile)
 				if (null !== entry) {
 					setBaseEnabled(entry.getType() instanceof SimpleFBType)
 					return;

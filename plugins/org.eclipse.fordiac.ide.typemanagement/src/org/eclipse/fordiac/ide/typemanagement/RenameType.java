@@ -92,7 +92,7 @@ public class RenameType extends RenameParticipant {
 
 	protected boolean nameExistsInTypeLibrary(final IResourceDelta resourceDelta, final String newName) {
 		return !getOldName().equals(newName) && !newName.equals("a" + getOldName()) //$NON-NLS-1$
-				&& TypeLibrary.getPaletteEntryForFile(((IFile) resourceDelta.getResource())) != null;
+				&& TypeLibrary.getTypeEntryForFile(((IFile) resourceDelta.getResource())) != null;
 	}
 
 	@SuppressWarnings("static-method")  // allow child classes to overwrite

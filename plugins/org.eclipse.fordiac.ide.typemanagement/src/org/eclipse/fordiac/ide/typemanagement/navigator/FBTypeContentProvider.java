@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class FBTypeContentProvider extends AdapterFactoryContentProvider {
@@ -69,7 +70,7 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof IFile) {
 			final IFile element = (IFile) parentElement;
-			final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(element);
+			final TypeEntry entry = TypeLibrary.getTypeEntryForFile(element);
 			if (null != entry) {
 				hookToPaletteEntry(entry);
 				parentElement = entry.getTypeEditable();
@@ -87,7 +88,7 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 		return super.getChildren(parentElement);
 	}
 
-	private void hookToPaletteEntry(final PaletteEntry entry) {
+	private void hookToPaletteEntry(final TypeEntry entry) {
 		if (!entry.eAdapters().contains(palletteEntryAdapter)) {
 			entry.eAdapters().add(palletteEntryAdapter);
 			targets.add(entry);
@@ -108,7 +109,7 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 		}
 		final Object retval = super.getParent(element);
 		if (retval instanceof FBType) {
-			return ((FBType) retval).getPaletteEntry().getFile();
+			return ((FBType) retval).getTypeEntry().getFile();
 		}
 		return retval;
 	}
@@ -134,7 +135,7 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 			if (type instanceof AdapterFBType) {
 				type = ((AdapterFBType) type).getAdapterType();
 			}
-			super.notifyChanged(new ViewerNotification(notification, type.getPaletteEntry().getFile()));
+			super.notifyChanged(new ViewerNotification(notification, type.getTypeEntry().getFile()));
 		} else {
 			super.notifyChanged(notification);
 		}

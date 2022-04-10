@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -174,7 +173,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	private static FBType getAdapterTypeForFile(final IFile file) {
-		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
+		final TypeEntry entry = TypeLibrary.getTypeEntryForFile(file);
 		if (entry instanceof AdapterTypePaletteEntry) {
 			return ((AdapterTypePaletteEntry) entry).getType().getAdapterFBType();
 		}
@@ -182,7 +181,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	private static FBType getFBTypeFromFile(final IFile file) {
-		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
+		final TypeEntry entry = TypeLibrary.getTypeEntryForFile(file);
 		if (entry instanceof FBTypePaletteEntry) {
 			return ((FBTypePaletteEntry) entry).getType();
 		}

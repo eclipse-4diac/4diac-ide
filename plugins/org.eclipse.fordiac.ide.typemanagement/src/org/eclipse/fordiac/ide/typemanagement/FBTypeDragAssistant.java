@@ -14,7 +14,7 @@
 package org.eclipse.fordiac.ide.typemanagement;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -30,9 +30,9 @@ public class FBTypeDragAssistant extends CommonDragAdapterAssistant {
 	}
 
 	@Override
-	public void dragStart(DragSourceEvent anEvent, IStructuredSelection aSelection) {
+	public void dragStart(final DragSourceEvent anEvent, final IStructuredSelection aSelection) {
 		if (aSelection.getFirstElement() instanceof IFile) {
-			PaletteEntry entry = TypeLibrary.getPaletteEntryForFile((IFile) aSelection.getFirstElement());
+			final TypeEntry entry = TypeLibrary.getTypeEntryForFile((IFile) aSelection.getFirstElement());
 			if (entry != null) {
 				TemplateTransfer.getInstance().setTemplate(entry);
 			} else {
@@ -43,9 +43,9 @@ public class FBTypeDragAssistant extends CommonDragAdapterAssistant {
 	}
 
 	@Override
-	public boolean setDragData(DragSourceEvent anEvent, IStructuredSelection aSelection) {
+	public boolean setDragData(final DragSourceEvent anEvent, final IStructuredSelection aSelection) {
 		if (aSelection.getFirstElement() instanceof IFile) {
-			PaletteEntry entry = TypeLibrary.getPaletteEntryForFile((IFile) aSelection.getFirstElement());
+			final TypeEntry entry = TypeLibrary.getTypeEntryForFile((IFile) aSelection.getFirstElement());
 			if (null != entry) {
 				anEvent.data = entry;
 				return true;
