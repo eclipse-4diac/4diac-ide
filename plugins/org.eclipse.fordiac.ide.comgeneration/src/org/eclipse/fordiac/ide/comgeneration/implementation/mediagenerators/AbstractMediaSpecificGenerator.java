@@ -17,10 +17,10 @@ import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.ChannelEnd;
 import org.eclipse.fordiac.ide.comgeneration.plugin.Messages;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGenerator {
@@ -33,19 +33,19 @@ public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGen
 	private static final String[] PALETTE_ENTRY_DESTINATION = { "SUBSCRIBE_0", "SUBSCRIBE_1", "UBSCRIBE_2", //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 			"SUBSCRIBE_3", "SUBSCRIBE_4" }; //$NON-NLS-1$ //$NON-NLS-2$
 
-	private final Palette palette;
+	private final TypeLibrary typeLib;
 
-	protected AbstractMediaSpecificGenerator(final Palette palette) {
+	protected AbstractMediaSpecificGenerator(final TypeLibrary typeLib) {
 		super();
-		this.palette = palette;
+		this.typeLib = typeLib;
 	}
 
-	public Palette getPalette() {
-		return palette;
+	public TypeLibrary getTypeLibrary() {
+		return typeLib;
 	}
 
 	@Override
-	public FBTypePaletteEntry getPaletteType(final ChannelEnd end, final int numDataPorts, final boolean local) {
+	public FBTypeEntry getPaletteType(final ChannelEnd end, final int numDataPorts, final boolean local) {
 		String[] paletteEntries;
 
 		if (local) {
@@ -54,7 +54,7 @@ public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGen
 			paletteEntries = (end == ChannelEnd.SOURCE) ? PALETTE_ENTRY_SOURCE : PALETTE_ENTRY_DESTINATION;
 		}
 
-		final FBTypePaletteEntry entry = getPalette().getFBTypeEntry(paletteEntries[numDataPorts]);
+		final FBTypeEntry entry = getTypeLibrary().getFBTypeEntry(paletteEntries[numDataPorts]);
 
 		if (null == entry) {
 			FordiacLogHelper.logError(MessageFormat.format(Messages.CommGenerator_FBTypePaletteEntryNotFound,

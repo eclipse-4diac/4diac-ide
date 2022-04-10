@@ -365,7 +365,7 @@ public enum SystemManager {
 		}
 	}
 
-	public TypeEntry getTypeEntry(final IFile file) {
+	public TypeEntry getPaletteEntry(final IFile file) {
 		final Map<IFile, AutomationSystem> map = allSystemsInWS.get(file.getProject());
 
 		if (map == null) {
