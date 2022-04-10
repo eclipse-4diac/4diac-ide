@@ -28,6 +28,8 @@ import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.DeviceCreateCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.SegmentCreateCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.SegmentSetConstraintCommand;
@@ -93,17 +95,15 @@ public class SystemConfXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		}
 		final Object childClass = request.getNewObjectType();
 		final Rectangle constraint = (Rectangle) getConstraintFor(request);
-		if (childClass instanceof org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry) {
-			final org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry type = (org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry) request
-					.getNewObjectType();
+		if (childClass instanceof DeviceTypeEntry) {
+			final DeviceTypeEntry type = (DeviceTypeEntry) request.getNewObjectType();
 			if (getHost().getModel() instanceof SystemConfiguration) {
 				return new DeviceCreateCommand(type, (SystemConfiguration) getHost().getModel(),
 						new Rectangle(constraint.getLocation().x, constraint.getLocation().y, -1, -1));
 			}
 		}
-		if (childClass instanceof org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry) {
-			final org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry type = (org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry) request
-					.getNewObjectType();
+		if (childClass instanceof SegmentTypeEntry) {
+			final SegmentTypeEntry type = (SegmentTypeEntry) request.getNewObjectType();
 			if (getHost().getModel() instanceof SystemConfiguration) {
 				return new SegmentCreateCommand(type, (SystemConfiguration) getHost().getModel(), constraint);
 			}

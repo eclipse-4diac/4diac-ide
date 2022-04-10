@@ -20,8 +20,6 @@ import java.util.List;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration;
@@ -30,6 +28,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.systemconfiguration.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -42,7 +42,7 @@ import org.eclipse.swt.graphics.RGB;
 
 public class DeviceCreateCommand extends Command {
 	private static final String CREATE_DEVICE_LABEL = Messages.DeviceCreateCommand_LABEL_CreateDevice;
-	private final DeviceTypePaletteEntry entry;
+	private final DeviceTypeEntry entry;
 	private final SystemConfiguration parent;
 	private final Rectangle bounds;
 	private Device device;
@@ -51,7 +51,7 @@ public class DeviceCreateCommand extends Command {
 		return device;
 	}
 
-	public DeviceCreateCommand(final DeviceTypePaletteEntry entry, final SystemConfiguration parent,
+	public DeviceCreateCommand(final DeviceTypeEntry entry, final SystemConfiguration parent,
 			final Rectangle bounds) {
 		this.entry = entry;
 		this.parent = parent;
@@ -67,21 +67,21 @@ public class DeviceCreateCommand extends Command {
 	@Override
 	public void execute() {
 		createDevice();
-		device.setPaletteEntry(entry);
+		device.setTypeEntry(entry);
 		CommonElementImporter.createParamters(device);
 		setDeviceProfile();
 		device.updatePosition(bounds.getTopLeft());
 		parent.getDevices().add(device);
 		// the name needs to be set after the device is added to the network
 		// so that name checking works correctly
-		device.setName(NameRepository.createUniqueName(device, entry.getDeviceType().getName()));
+		device.setName(NameRepository.createUniqueName(device, entry.getType().getName()));
 		setDeviceAttributes();
 		createResource();
 		SystemManager.INSTANCE.notifyListeners();
 	}
 
 	private void setDeviceAttributes() {
-		for (final AttributeDeclaration attributeDeclaration : entry.getDeviceType().getAttributeDeclarations()) {
+		for (final AttributeDeclaration attributeDeclaration : entry.getType().getAttributeDeclarations()) {
 			final Attribute attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 			attribute.setName(attributeDeclaration.getName());
 			attribute.setComment(attributeDeclaration.getComment());
@@ -108,17 +108,17 @@ public class DeviceCreateCommand extends Command {
 	}
 
 	private void createResource() {
-		for (final Resource res : entry.getDeviceType().getResource()) {
+		for (final Resource res : entry.getType().getResource()) {
 			ResourceCreateCommand cmd = null;
-			if (res.getPaletteEntry() != null) {
-				cmd = new ResourceCreateCommand((ResourceTypeEntry) res.getPaletteEntry(), device, true);
+			if (res.getTypeEntry() != null) {
+				cmd = new ResourceCreateCommand((ResourceTypeEntry) res.getTypeEntry(), device, true);
 				cmd.execute();
 				final Resource copy = cmd.getResource();
 				copy.setName(res.getName());
 			} else {
 				FordiacLogHelper.logInfo("Referenced Resource Type: " //$NON-NLS-1$
 						+ (res.getName() != null ? res.getName() : "N/A") //$NON-NLS-1$
-						+ (res.getPaletteEntry() != null ? " (" + res.getTypeName() + ") " : "(N/A)") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						+ (res.getTypeEntry() != null ? " (" + res.getTypeName() + ") " : "(N/A)") //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 						+ " not found. Please check whether your palette contains that type and add it manually to your device!"); //$NON-NLS-1$
 			}
 		}
@@ -140,7 +140,7 @@ public class DeviceCreateCommand extends Command {
 	}
 
 	private ResourceTypeEntry getResourceType(final String resTypeName) {
-		return device.getPaletteEntry().getPalette().getResourceTypeEntry(resTypeName);
+		return device.getTypeEntry().getTypeLibrary().getResourceTypeEntry(resTypeName);
 	}
 
 	private Color createRandomDeviceColor() {
