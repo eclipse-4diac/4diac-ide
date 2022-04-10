@@ -78,11 +78,11 @@ public abstract class OpenListener implements IOpenListener {
 	}
 
 	protected void openInSubappTypeEditor(final SubAppType root, final EObject element) {
-		openInBreadCrumbEditor(root.getPaletteEntry().getFile(), SUBAPP_TYPE_EDITOR, element);
+		openInBreadCrumbEditor(root.getTypeEntry().getFile(), SUBAPP_TYPE_EDITOR, element);
 	}
 
 	protected void openInFBTypeEditor(final FBType root, final EObject element) {
-		openInBreadCrumbEditor(root.getPaletteEntry().getFile(), FB_TYPE_EDITOR, element);
+		openInBreadCrumbEditor(root.getTypeEntry().getFile(), FB_TYPE_EDITOR, element);
 	}
 
 	private static AbstractBreadCrumbEditor getBreadCrumbEditor(final IEditorPart openedEditor) {

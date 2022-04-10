@@ -293,7 +293,7 @@ public class DataTypeDropdown extends TextCellEditor {
 				if (sel != null) {
 					handleShellCloseEvent();
 					setResult(null); // discard selection, do not update type
-					OpenStructMenu.openStructEditor(sel.getPaletteEntry().getFile());
+					OpenStructMenu.openStructEditor(sel.getTypeEntry().getFile());
 				}
 			});
 			openItem.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
@@ -372,8 +372,8 @@ public class DataTypeDropdown extends TextCellEditor {
 						if (type instanceof StructuredType) {
 							final StructuredType structuredType = (StructuredType) type;
 							// some files are created at runtime and do not have a path
-							if (null != structuredType.getPaletteEntry()) {
-								final String parentPath = structuredType.getPaletteEntry().getFile().getParent()
+							if (null != structuredType.getTypeEntry()) {
+								final String parentPath = structuredType.getTypeEntry().getFile().getParent()
 										.getProjectRelativePath().toOSString();
 								createSubdirectories(structures, structuredType, parentPath);
 							} else {

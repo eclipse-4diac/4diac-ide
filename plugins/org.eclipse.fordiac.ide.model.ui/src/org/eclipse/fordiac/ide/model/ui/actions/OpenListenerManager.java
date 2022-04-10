@@ -28,8 +28,8 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -127,7 +127,7 @@ public enum OpenListenerManager {
 	}
 
 	static IEditorPart openDefaultEditorForFile(final LibraryElement element) {
-		final PaletteEntry entry = element.getPaletteEntry();
+		final TypeEntry entry = element.getTypeEntry();
 		if (null != entry) {
 			final IFile file = entry.getFile();
 			final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
