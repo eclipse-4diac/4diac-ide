@@ -34,10 +34,10 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
-import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -87,7 +87,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	private final List<String> stackActions = new ArrayList<>();
 	private final List<String> propertyActions = new ArrayList<>();
 
-	private DataTypePaletteEntry dataTypePaletteEntry;
+	private DataTypeEntry dataTypeEntry;
 
 	private final Adapter adapter = new AdapterImpl() {
 
@@ -98,9 +98,9 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 			if (null != feature) {
 				if (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass())) {
 					Display.getDefault().asyncExec(() -> {
-						if (null != dataTypePaletteEntry) {
-							setPartName(dataTypePaletteEntry.getFile().getName());
-							setInput(new FileEditorInput(dataTypePaletteEntry.getFile()));
+						if (null != dataTypeEntry) {
+							setPartName(dataTypeEntry.getFile().getName());
+							setInput(new FileEditorInput(dataTypeEntry.getFile()));
 						}
 					});
 
@@ -131,9 +131,9 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		getActionRegistry().dispose();
 		removeListenerFromDataTypeObj();
 		super.dispose();
-		if (dirty && dataTypePaletteEntry != null) {
+		if (dirty && dataTypeEntry != null) {
 			// purge editable type from palette after super.dispose() so that no notifiers will be called
-			dataTypePaletteEntry.setTypeEditable(null);
+			dataTypeEntry.setTypeEditable(null);
 		}
 	}
 
@@ -146,7 +146,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		removeListenerFromDataTypeObj();
-		AbstractTypeExporter.saveType(dataTypePaletteEntry);
+		AbstractTypeExporter.saveType(dataTypeEntry);
 		addListenerToDataTypeObj();
 
 		commandStack.markSaveLocation();
@@ -172,15 +172,15 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	}
 
 	private void addListenerToDataTypeObj() {
-		if (dataTypePaletteEntry != null && dataTypePaletteEntry.getType() != null) {
-			dataTypePaletteEntry.getType().eAdapters().add(adapter);
+		if (dataTypeEntry != null && dataTypeEntry.getType() != null) {
+			dataTypeEntry.getType().eAdapters().add(adapter);
 		}
 	}
 
 	private void removeListenerFromDataTypeObj() {
-		if (dataTypePaletteEntry != null && dataTypePaletteEntry.getType() != null
-				&& dataTypePaletteEntry.getType().eAdapters().contains(adapter)) {
-			dataTypePaletteEntry.getType().eAdapters().remove(adapter);
+		if (dataTypeEntry != null && dataTypeEntry.getType() != null
+				&& dataTypeEntry.getType().eAdapters().contains(adapter)) {
+			dataTypeEntry.getType().eAdapters().remove(adapter);
 		}
 	}
 
@@ -203,9 +203,9 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		file.refreshLocal(IResource.DEPTH_ONE, new NullProgressMonitor());
 		// exist anymore!
 		if (file.exists()) {
-			dataTypePaletteEntry = (DataTypePaletteEntry) TypeLibrary.getPaletteEntryForFile(file);
-			setPartName(dataTypePaletteEntry.getFile().getName());
-			return !(dataTypePaletteEntry.getTypeEditable() instanceof StructuredType);
+			dataTypeEntry = (DataTypeEntry) TypeLibrary.getTypeEntryForFile(file);
+			setPartName(dataTypeEntry.getFile().getName());
+			return !(dataTypeEntry.getTypeEditable() instanceof StructuredType);
 		}
 		return true; // import failed
 	}
@@ -234,8 +234,8 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		if (dataTypePaletteEntry.getTypeEditable() != null && (!importFailed)) {
-			editComposite = new StructViewingComposite(parent, 1, commandStack, dataTypePaletteEntry, this);
+		if (dataTypeEntry.getTypeEditable() != null && (!importFailed)) {
+			editComposite = new StructViewingComposite(parent, 1, commandStack, dataTypeEntry, this);
 			editComposite.createPartControl(parent);
 			TableWidgetFactory.enableCopyPasteCut(this);
 		} else if (importFailed) {
@@ -337,7 +337,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	public void reloadFile() {
 		try {
 			removeListenerFromDataTypeObj();
-			dataTypePaletteEntry.setTypeEditable(null);
+			dataTypeEntry.setTypeEditable(null);
 			importType(getEditorInput());
 			editComposite.reload();
 			addListenerToDataTypeObj();
