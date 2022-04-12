@@ -26,7 +26,7 @@ public class ResourceTypeEntryImpl extends AbstractTypeEntryImpl implements Reso
 
 	@Override
 	public ResourceType getType() {
-		final LibraryElement type = getType();
+		final LibraryElement type = super.getType();
 		if (type instanceof ResourceType) {
 			return (ResourceType) type;
 		}
@@ -35,7 +35,7 @@ public class ResourceTypeEntryImpl extends AbstractTypeEntryImpl implements Reso
 
 	@Override
 	public ResourceType getTypeEditable() {
-		final LibraryElement type = getTypeEditable();
+		final LibraryElement type = super.getTypeEditable();
 		if(type instanceof ResourceType){
 			return (ResourceType) type;
 		}

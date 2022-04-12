@@ -26,7 +26,7 @@ public class SystemPaletteEntryImpl extends AbstractTypeEntryImpl implements Sys
 
 	@Override
 	public AutomationSystem getSystem() {
-		final LibraryElement type = getType();
+		final LibraryElement type = super.getType();
 		if(type instanceof AutomationSystem){
 			return (AutomationSystem)type;
 		}

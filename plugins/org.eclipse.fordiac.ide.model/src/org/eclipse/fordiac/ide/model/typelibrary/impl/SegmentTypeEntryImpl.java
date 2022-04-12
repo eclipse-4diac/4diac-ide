@@ -26,7 +26,7 @@ public class SegmentTypeEntryImpl extends AbstractTypeEntryImpl implements Segme
 
 	@Override
 	public SegmentType getType() {
-		final LibraryElement type = getType();
+		final LibraryElement type = super.getType();
 		if (type instanceof SegmentType) {
 			return (SegmentType) type;
 		}
@@ -35,7 +35,7 @@ public class SegmentTypeEntryImpl extends AbstractTypeEntryImpl implements Segme
 
 	@Override
 	public SegmentType getTypeEditable() {
-		final LibraryElement type = getTypeEditable();
+		final LibraryElement type = super.getTypeEditable();
 		if(type instanceof SegmentType){
 			return (SegmentType) type;
 		}
