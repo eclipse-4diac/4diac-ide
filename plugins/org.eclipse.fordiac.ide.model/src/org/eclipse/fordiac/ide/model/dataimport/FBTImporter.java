@@ -878,6 +878,8 @@ public class FBTImporter extends TypeImporter {
 					parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 					type.getInternalFbs().add(fb);
 					return true;
+				} else {
+					return false;
 				}
 			}
 			return false;

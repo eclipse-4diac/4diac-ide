@@ -144,7 +144,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		final TypeLibrary typeLibrary = entry.getTypeLibrary();
 		final TypeEntry reloadedType = typeLibrary.find(entry.getTypeName());
 		if (reloadedType != null && reloadedType.getFile() != null && reloadedType.getFile().exists()) {
-			typeLibrary.getErrorTypeLib().removeTypeEntry(entry);
+			typeLibrary.removeErrorTypeEntry(entry);
 			entry = reloadedType;
 			return true;
 		}

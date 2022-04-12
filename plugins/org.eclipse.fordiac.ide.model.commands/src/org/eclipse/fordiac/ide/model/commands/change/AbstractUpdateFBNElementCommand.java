@@ -329,7 +329,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 	private void moveEntryToErrorLib() {
 		final TypeLibrary typeLibrary = oldElement.getTypeLibrary();
 		typeLibrary.removeTypeEntry(entry);
-		typeLibrary.getErrorTypeLib().addTypeEntry(entry);
+		typeLibrary.addErrorTypeEntry(entry);
 
 	}
 

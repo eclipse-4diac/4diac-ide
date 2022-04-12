@@ -19,7 +19,6 @@ import java.text.MessageFormat;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
@@ -95,8 +94,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		final SubAppTypeEntry subEntry = getTypeLibrary().getSubAppTypeEntry(type);
 		if (subEntry == null) {
 			return FordiacMarkerHelper.createTypeErrorMarkerFB(type, getTypeLibrary(),
-					LibraryElementFactory.eINSTANCE.createSubAppType().eClass(),
-					PaletteFactory.eINSTANCE.createSubApplicationTypePaletteEntry().eClass());
+					LibraryElementFactory.eINSTANCE.createSubAppType());
 		}
 		subApp.setTypeEntry(subEntry);
 		subApp.setInterface(subEntry.getType().getInterfaceList().copy());

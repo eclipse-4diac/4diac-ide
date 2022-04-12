@@ -41,7 +41,12 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.BlockTypeLibraryImpl;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorFBTypeEntryImpl;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorSubAppTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -77,7 +82,7 @@ public final class TypeLibrary {
 	private IProject project;
 
 	private final BlockTypeLibrary newBlockTypeLib = new BlockTypeLibraryImpl();
-	private final BlockTypeLibrary newErrorTypeLib = new BlockTypeLibraryImpl();
+	private final Map<String, TypeEntry> errorTypes = new HashMap<>();
 
 	public Map<String, AdapterTypeEntry> getAdapterTypes() {
 		return newBlockTypeLib.getAdapterTypes();
@@ -241,10 +246,34 @@ public final class TypeLibrary {
 		return entry;
 	}
 
+	public TypeEntry createErrorTypeEntry(final String typeFbElement, final FBType fbType) {
+		final TypeEntry entry = createErrorTypeEntry(fbType);
+		entry.setType(fbType);
+		fbType.setName(typeFbElement);
+		fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		addErrorTypeEntry(entry);
+		return entry;
+	}
+
+	public void addErrorTypeEntry(final TypeEntry entry) {
+		errorTypes.put(entry.getTypeName(), entry);
+	}
+
+	public void removeErrorTypeEntry(final TypeEntry entry) {
+		errorTypes.remove(entry.getTypeName());
+	}
+
+	private static TypeEntry createErrorTypeEntry(final FBType fbType) {
+		if(fbType instanceof SubAppType) {
+			return new ErrorSubAppTypeEntryImpl();
+		}
+		return new ErrorFBTypeEntryImpl();
+	}
+
 	public void addTypeEntry(final TypeEntry entry) {
-		final FBTypeEntry errorEntry = newErrorTypeLib.getFbTypes().get(entry.getTypeName());
+		final TypeEntry errorEntry = errorTypes.get(entry.getTypeName());
 		if (errorEntry != null) {
-			newErrorTypeLib.removeTypeEntry(errorEntry);
+			removeErrorTypeEntry(errorEntry);
 		}
 		entry.setTypeLibrary(this);
 		if (entry instanceof DataTypePaletteEntry) {
@@ -379,10 +408,6 @@ public final class TypeLibrary {
 		} else {
 			// invalid location, throw an exception or warn user
 		}
-	}
-
-	public BlockTypeLibrary getErrorTypeLib() {
-		return newErrorTypeLib;
 	}
 
 	public TypeEntry find(final String name) {

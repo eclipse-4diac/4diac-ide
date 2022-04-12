@@ -14,10 +14,7 @@
 package org.eclipse.fordiac.ide.model.helpers;
 
 import org.eclipse.core.resources.IMarker;
-import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -186,18 +183,10 @@ public final class FordiacMarkerHelper {
 	}
 
 	public static FBNetworkElement createTypeErrorMarkerFB(final String typeFbElement, final TypeLibrary typeLibrary,
-			final EClass typeClass, final EClass entryClass) {
+			final FBType fbType) {
 		final ErrorMarkerFBNElement errorFb = FordiacMarkerHelper.createErrorMarkerFB(typeFbElement);
-
-		final FBType fbType = (FBType) LibraryElementFactory.eINSTANCE.create(typeClass);
-		final TypeEntry entry = (PaletteEntry) PaletteFactory.eINSTANCE.create(entryClass);
-		entry.setType(fbType);
-		entry.setLabel(typeFbElement);
-		fbType.setName(typeFbElement);
-		fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		errorFb.setInterface(fbType.getInterfaceList().copy());
+		final TypeEntry entry = typeLibrary.createErrorTypeEntry(typeFbElement, fbType);
 		errorFb.setTypeEntry(entry);
-		typeLibrary.getErrorTypeLib().addTypeEntry(entry);
 		return errorFb;
 	}
 
