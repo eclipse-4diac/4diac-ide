@@ -89,10 +89,11 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 	}
 
 	private void hookToPaletteEntry(final TypeEntry entry) {
-		if (!entry.eAdapters().contains(palletteEntryAdapter)) {
-			entry.eAdapters().add(palletteEntryAdapter);
-			targets.add(entry);
-		}
+		// FIXME Bug 579648 readd that when TypeEntry implements a notifier again
+		// if (!entry.eAdapters().contains(palletteEntryAdapter)) {
+		// entry.eAdapters().add(palletteEntryAdapter);
+		// targets.add(entry);
+		// }
 	}
 
 	@Override
