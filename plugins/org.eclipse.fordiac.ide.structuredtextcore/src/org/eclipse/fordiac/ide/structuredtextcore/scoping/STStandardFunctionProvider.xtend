@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.structuredtextcore.scoping
 
 import java.lang.reflect.Method
 import java.util.List
+import org.eclipse.emf.ecore.resource.Resource
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.eval.function.Functions
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
@@ -26,6 +28,7 @@ import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 class STStandardFunctionProvider {
 	static final List<Class<? extends Functions>> DEFAULT_FUNCTIONS = #[StandardFunctions]
 	final List<Class<? extends Functions>> functions
+	final Resource functionResource
 
 	/**
 	 * Create a new instance using the default set of standard functions
@@ -39,6 +42,7 @@ class STStandardFunctionProvider {
 	 */
 	new(List<Class<? extends Functions>> functions) {
 		this.functions = functions
+		this.functionResource = new ResourceImpl
 	}
 
 	/**
@@ -63,6 +67,7 @@ class STStandardFunctionProvider {
 		name = method.name
 		returnType = method.inferReturnTypeFromDataTypes(argumentTypes)
 		inputParameters.addAll(method.inferParameterVariables(argumentTypes))
+		functionResource.contents.add(it)
 	}
 
 	/**
