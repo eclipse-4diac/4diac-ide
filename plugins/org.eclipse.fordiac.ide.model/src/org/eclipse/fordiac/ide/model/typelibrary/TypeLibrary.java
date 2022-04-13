@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -90,7 +91,8 @@ public final class TypeLibrary {
 
 	public List<AdapterTypeEntry> getAdapterTypesSorted() {
 		return getAdapterTypes().values().stream()
-				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getTypeName(), o2.getTypeName())).toList();
+				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getTypeName(), o2.getTypeName()))
+				.collect(Collectors.toList());
 	}
 
 	public Map<String, DeviceTypeEntry> getDeviceTypes() {
