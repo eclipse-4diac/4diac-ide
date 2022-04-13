@@ -197,14 +197,14 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateExpression(STBinaryExpression expr) {
 		switch (expr.op) {
 			case RANGE: '''«expr.left.generateExpression», «expr.right.generateExpression»'''
-			case AMPERSAND: '''AND(«expr.left.generateExpression», «expr.right.generateExpression»)'''
-			case POWER: '''EXPT(«expr.left.generateExpression», «expr.right.generateExpression»)'''
-			default: '''«expr.op.getName»(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+			case AMPERSAND: '''func_AND(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+			case POWER: '''func_EXPT(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+			default: '''func_«expr.op.getName»(«expr.left.generateExpression», «expr.right.generateExpression»)'''
 		}
 	}
 
 	def protected dispatch CharSequence generateExpression(STUnaryExpression expr) //
-	'''«expr.op.getName»(«expr.expression.generateExpression»)'''
+	'''func_«expr.op.getName»(«expr.expression.generateExpression»)'''
 
 	def protected dispatch CharSequence generateExpression(STMemberAccessExpression expr) //
 	'''«expr.receiver.generateExpression».«expr.member.generateExpression»'''

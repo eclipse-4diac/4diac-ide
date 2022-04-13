@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement

@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 
 final package class ExpressionAnnotations {
@@ -81,7 +82,7 @@ final package class ExpressionAnnotations {
 			if (expr.index.size < arrayType.subranges.size) { // not consumed all dimensions
 				DataFactory.eINSTANCE.createArrayType => [
 					baseType = arrayType.baseType
-					subranges.addAll(arrayType.subranges.drop(expr.index.size))
+					subranges.addAll(arrayType.subranges.drop(expr.index.size).map[copy])
 				]
 			} else // consumed all dimensions
 				arrayType.baseType
