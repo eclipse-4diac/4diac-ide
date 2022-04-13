@@ -13,14 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor;
 
-import org.eclipse.emf.ecore.EValidator;
-import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidatorRegistry;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.converter.STFunctionValueConverters;
 import org.eclipse.xtext.conversion.IValueConverterService;
-import org.eclipse.xtext.validation.CompositeEValidator;
-
-import com.google.inject.Binder;
-import com.google.inject.name.Names;
 
 /** Use this class to register components to be used at runtime / without the Equinox extension registry. */
 public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
@@ -28,17 +22,5 @@ public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
 	@Override
 	public Class<? extends IValueConverterService> bindIValueConverterService() {
 		return STFunctionValueConverters.class;
-	}
-
-	@Override
-	public EValidator.Registry bindEValidatorRegistry() {
-		// ignore dangling reference errors (until Palette vs. Resource issues have been addressed)
-		return STCoreValidatorRegistry.INSTANCE;
-	}
-
-	@SuppressWarnings("static-method")
-	public void configureCompositeEValidator(final Binder binder) {
-		// ignore dangling reference errors (until Palette vs. Resource issues have been addressed)
-		binder.bindConstant().annotatedWith(Names.named(CompositeEValidator.USE_EOBJECT_VALIDATOR)).to(false);
 	}
 }

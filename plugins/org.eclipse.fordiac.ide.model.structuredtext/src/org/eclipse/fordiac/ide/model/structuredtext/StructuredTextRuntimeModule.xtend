@@ -62,10 +62,4 @@ class StructuredTextRuntimeModule extends AbstractStructuredTextRuntimeModule {
 	def void configureIgnoreCaseLinking(Binder binder) {
 		binder.bindConstant().annotatedWith(IgnoreCaseLinking).to(true)
 	}
-
-	@SuppressWarnings("static-method")
-	def void configureCompositeEValidator(Binder binder) {
-		// ignore dangling reference errors (until Palette vs. Resource issues have been addressed)
-		binder.bindConstant().annotatedWith(Names.named(CompositeEValidator.USE_EOBJECT_VALIDATOR)).to(false);
-	}
 }
