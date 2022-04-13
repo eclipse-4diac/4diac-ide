@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.test.model.eval.fb
 
 import java.util.concurrent.ArrayBlockingQueue
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
@@ -23,6 +24,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.fordiac.ide.model.typelibrary.testmocks.DataTypeEntryMock
 import org.junit.jupiter.api.Test
 
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
@@ -536,6 +538,9 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 			memberVariables += newVarDeclaration("a", ElementaryTypes.INT, false)
 			memberVariables += newVarDeclaration("b", ElementaryTypes.INT, false)
 		]
+		typeLib.addTypeEntry(new DataTypeEntryMock(structType, typeLib, null))
+		val structResource = new ResourceImpl
+		structResource.contents.add(structType)
 		val inputVarDecl = newVarDeclaration("DI1", structType, true)
 		val inputVar = newVariable(inputVarDecl) as StructVariable
 		inputVar.members.get("a").value = 17.toIntValue

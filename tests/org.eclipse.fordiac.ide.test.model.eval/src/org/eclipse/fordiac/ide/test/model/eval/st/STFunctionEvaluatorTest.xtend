@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.test.model.eval.st
 import org.eclipse.fordiac.ide.model.eval.st.STFunctionEvaluator
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunctionStandaloneSetup
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -26,6 +27,7 @@ import static extension org.junit.jupiter.api.Assertions.*
 class STFunctionEvaluatorTest {
 	@BeforeAll
 	def static void setupXtext() {
+		new DataTypeLibrary
 		STFunctionStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register
 	}

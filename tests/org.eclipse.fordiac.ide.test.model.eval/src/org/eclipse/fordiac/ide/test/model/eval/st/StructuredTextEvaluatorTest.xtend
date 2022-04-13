@@ -94,6 +94,7 @@ class StructuredTextEvaluatorTest {
 
 	@BeforeAll
 	def static void setupXtext() {
+		new DataTypeLibrary
 		STAlgorithmStandaloneSetup.doSetup
 	}
 
