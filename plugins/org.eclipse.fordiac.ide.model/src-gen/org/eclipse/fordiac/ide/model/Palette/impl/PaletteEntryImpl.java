@@ -178,12 +178,11 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * @generated
 	 */
 	@Override
-	public void setLabel(final String newLabel) {
-		final String oldLabel = label;
+	public void setLabel(String newLabel) {
+		String oldLabel = label;
 		label = newLabel;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_ENTRY__LABEL, oldLabel, label));
-		}
 	}
 
 	/**
@@ -202,12 +201,11 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * @generated
 	 */
 	@Override
-	public void setFile(final IFile newFile) {
-		final IFile oldFile = file;
+	public void setFile(IFile newFile) {
+		IFile oldFile = file;
 		file = newFile;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_ENTRY__FILE, oldFile, file));
-		}
 	}
 
 	/**
@@ -226,12 +224,11 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * @generated
 	 */
 	@Override
-	public void setLastModificationTimestamp(final long newLastModificationTimestamp) {
-		final long oldLastModificationTimestamp = lastModificationTimestamp;
+	public void setLastModificationTimestamp(long newLastModificationTimestamp) {
+		long oldLastModificationTimestamp = lastModificationTimestamp;
 		lastModificationTimestamp = newLastModificationTimestamp;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP, oldLastModificationTimestamp, lastModificationTimestamp));
-		}
 	}
 
 	/**
@@ -312,12 +309,11 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTypeGen(final LibraryElement newType) {
-		final LibraryElement oldType = type;
+	public void setTypeGen(LibraryElement newType) {
+		LibraryElement oldType = type;
 		type = newType;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_ENTRY__TYPE, oldType, type));
-		}
 	}
 
 	/**
@@ -336,12 +332,11 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * @generated
 	 */
 	@Override
-	public void setPalette(final Palette newPalette) {
-		final Palette oldPalette = palette;
+	public void setPalette(Palette newPalette) {
+		Palette oldPalette = palette;
 		palette = newPalette;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_ENTRY__PALETTE, oldPalette, palette));
-		}
 	}
 
 	/**
@@ -396,12 +391,11 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public void setTypeEditableGen(final LibraryElement newTypeEditable) {
-		final LibraryElement oldTypeEditable = typeEditable;
+	public void setTypeEditableGen(LibraryElement newTypeEditable) {
+		LibraryElement oldTypeEditable = typeEditable;
 		typeEditable = newTypeEditable;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE, oldTypeEditable, typeEditable));
-		}
 	}
 
 	/**
@@ -452,7 +446,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * @generated
 	 */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case PalettePackage.PALETTE_ENTRY__LABEL:
 				return getLabel();
@@ -461,16 +455,12 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 			case PalettePackage.PALETTE_ENTRY__LAST_MODIFICATION_TIMESTAMP:
 				return getLastModificationTimestamp();
 			case PalettePackage.PALETTE_ENTRY__TYPE:
-				if (resolve) {
-					return getType();
-				}
+				if (resolve) return getType();
 				return basicGetType();
 			case PalettePackage.PALETTE_ENTRY__PALETTE:
 				return getPalette();
 			case PalettePackage.PALETTE_ENTRY__TYPE_EDITABLE:
-				if (resolve) {
-					return getTypeEditable();
-				}
+				if (resolve) return getTypeEditable();
 				return basicGetTypeEditable();
 			default:
 				return super.eGet(featureID, resolve, coreType);
@@ -483,7 +473,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * @generated
 	 */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case PalettePackage.PALETTE_ENTRY__LABEL:
 				setLabel((String)newValue);
@@ -515,7 +505,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * @generated
 	 */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
 			case PalettePackage.PALETTE_ENTRY__LABEL:
 				setLabel(LABEL_EDEFAULT);
@@ -547,7 +537,7 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 * @generated
 	 */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case PalettePackage.PALETTE_ENTRY__LABEL:
 				return LABEL_EDEFAULT == null ? label != null : !LABEL_EDEFAULT.equals(label);
@@ -573,11 +563,9 @@ public abstract class PaletteEntryImpl extends EObjectImpl implements PaletteEnt
 	 */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
-			return super.toString();
-		}
+		if (eIsProxy()) return super.toString();
 
-		final StringBuilder result = new StringBuilder(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (label: "); //$NON-NLS-1$
 		result.append(label);
 		result.append(", file: "); //$NON-NLS-1$

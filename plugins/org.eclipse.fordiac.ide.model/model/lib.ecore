@@ -375,8 +375,8 @@
         <details key="name" value="Comment"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="conditionExpression" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String" defaultValueLiteral="1">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="conditionExpression" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"
+        defaultValueLiteral="1">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="Condition"/>
@@ -554,8 +554,8 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="service" lowerBound="1"
-        eType="#//Service" containment="true" resolveProxies="false">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="service" eType="#//Service"
+        containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="ServiceSequence"/>
@@ -1046,8 +1046,8 @@
         <details key="body" value="if (null != getTypeEntry()) {&#xA;&#x9;return getTypeEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="versionInfo" lowerBound="1"
-        upperBound="-1" eType="#//VersionInfo" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="versionInfo" upperBound="-1"
+        eType="#//VersionInfo" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="identification" eType="#//Identification"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeEntry" eType="#//TypeEntry"
@@ -1162,7 +1162,7 @@
         eType="#//Connection" eOpposite="#//Connection/destination"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputConnections" upperBound="-1"
         eType="#//Connection" eOpposite="#//Connection/source"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="type" lowerBound="1" eType="ecore:EClass data.ecore#//DataType"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="type" eType="ecore:EClass data.ecore#//DataType"
         transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
@@ -1346,8 +1346,8 @@
       </eAnnotations>
       <eParameters name="newPos" lowerBound="1" eType="#//Point"/>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="position" lowerBound="1"
-        eType="#//Position" containment="true">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="position" eType="#//Position"
+        containment="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="Position"/>

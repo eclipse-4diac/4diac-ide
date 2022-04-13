@@ -45,7 +45,7 @@ public interface LibraryElement extends INamedElement {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Version Info</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLibraryElement_VersionInfo()
-	 * @model containment="true" resolveProxies="true" required="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<VersionInfo> getVersionInfo();
