@@ -278,7 +278,7 @@ public final class TypeLibrary {
 			removeErrorTypeEntry(errorEntry);
 		}
 		entry.setTypeLibrary(this);
-		if (entry instanceof DataTypePaletteEntry) {
+		if (entry instanceof DataTypeEntry) {
 			dataTypeLib.addTypeEntry((DataTypeEntry) entry);
 		} else {
 			newBlockTypeLib.addTypeEntry(entry);
