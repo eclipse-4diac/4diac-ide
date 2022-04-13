@@ -17,7 +17,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeAlgorithmOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateInternalVariableCommandTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
@@ -25,6 +24,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.junit.jupiter.params.provider.Arguments;
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
@@ -45,7 +45,7 @@ public class InsertAlgorithmCommandTest extends CreateInternalVariableCommandTes
 		stAlg.setText(ALGORITHM_TEXT);
 		stAlg.setComment(ALGORITHM_COMMENT);
 
-		final PaletteEntry pe = state.getFunctionblock();
+		final TypeEntry pe = state.getFunctionblock();
 		tester.get().test(pe.getType() instanceof BasicFBType);
 		final BasicFBType fb = (BasicFBType) pe.getType();
 

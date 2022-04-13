@@ -18,16 +18,15 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.commands.NewSubAppCommandTest;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommandTest;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.testmocks.SubAppTypeEntryMock;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class UntypeSubAppCommandTest extends FBNetworkTestBase {
@@ -41,19 +40,13 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 		s = NewSubAppCommandTest.createEmptySubApp(s);
 		final SubApp subapp = (SubApp) s.getFbNetwork().getElementNamed(SUBAPP);
 
-		final SubApplicationTypePaletteEntry pe = PaletteFactory.eINSTANCE.createSubApplicationTypePaletteEntry();
-		final TypeLibrary typelib = TypeLibrary.getTypeLibrary(null);
 		final SubAppType subappType = LibraryElementFactory.eINSTANCE.createSubAppType();
-
 		subappType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		subappType.setName(SUBAPP);
 		subappType.setFBNetwork(subapp.getSubAppNetwork());
 		subapp.setSubAppNetwork(null);
 
-		pe.setLabel(SUBAPP);
-		pe.setPalette(typelib.getBlockTypeLib());
-		pe.setType(subappType);
-		subapp.setPaletteEntry(pe);
+		subapp.setTypeEntry(new SubAppTypeEntryMock(subappType, TypeLibrary.getTypeLibrary(null), null));
 
 		return s;
 	}
@@ -62,7 +55,7 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 		t.test(s.getFbNetwork().getNetworkElements().size(), 1);
 		final SubApp subapp = (SubApp) s.getFbNetwork().getElementNamed(SUBAPP);
 		t.test(subapp);
-		t.test(subapp.getPaletteEntry());
+		t.test(subapp.getTypeEntry());
 		t.test(subapp.getType());
 		t.test(subapp.isTyped());
 		t.test(subapp.getType().getFBNetwork().getNetworkElements().size(), 0);
@@ -86,7 +79,7 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 		t.test(s.getFbNetwork().getNetworkElements().size(), 1);
 		final SubApp subapp = (SubApp) s.getFbNetwork().getElementNamed(SUBAPP);
 		t.test(subapp);
-		t.test(subapp.getPaletteEntry());
+		t.test(subapp.getTypeEntry());
 		t.test(subapp.getType());
 		t.test(subapp.isTyped());
 		t.test(subapp.getType().getFBNetwork().getNetworkElements().size(), 2);
@@ -105,7 +98,7 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 		t.test(subapp.getSubAppNetwork());
 		t.test(subapp.getSubAppNetwork().getNetworkElements().size(), 0);
 		t.test(subapp.getType(), (SubAppType) null);
-		t.test(subapp.getPaletteEntry(), (PaletteEntry) null);
+		t.test(subapp.getTypeEntry(), (TypeEntry) null);
 	}
 
 	private static void verifyUntypeSubAppWithFilledSubAppNetwork(final State s, final State o, final TestFunction t) {
@@ -115,7 +108,7 @@ public class UntypeSubAppCommandTest extends FBNetworkTestBase {
 		t.test(subapp.getSubAppNetwork());
 		t.test(subapp.getSubAppNetwork().getNetworkElements().size(), 2);
 		t.test(subapp.getType(), (SubAppType) null);
-		t.test(subapp.getPaletteEntry(), (PaletteEntry) null);
+		t.test(subapp.getTypeEntry(), (TypeEntry) null);
 	}
 
 	// parameter creation function

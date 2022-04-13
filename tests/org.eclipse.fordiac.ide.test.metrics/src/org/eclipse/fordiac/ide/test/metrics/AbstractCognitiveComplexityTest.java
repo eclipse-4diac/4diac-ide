@@ -16,13 +16,13 @@ package org.eclipse.fordiac.ide.test.metrics;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import org.eclipse.fordiac.ide.metrics.analyzers.CognitiveComplexity;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetup;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.testmocks.FBTypeEntryMock;
 import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetup;
 import org.junit.jupiter.api.BeforeAll;
 
@@ -45,11 +45,8 @@ abstract class AbstractCognitiveComplexityTest {
 		assertEquals(expectedComplexity, CognitiveComplexity.analyzeAlgorithm(alg));
 	}
 
-	private static FBTypePaletteEntry preparePaletteWithTypeLib() {
-		final FBTypePaletteEntry pallEntry = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
-		final TypeLibrary typelib = TypeLibrary.getTypeLibrary(null);
-		pallEntry.setPalette(typelib.getBlockTypeLib());
-		return pallEntry;
+	private static FBTypeEntry preparePaletteWithTypeLib() {
+		return new FBTypeEntryMock(null, TypeLibrary.getTypeLibrary(null), null);
 	}
 
 	private static STAlgorithm createSTAlgorithm(final String algorithmName, final String algorithmText) {
@@ -61,7 +58,7 @@ abstract class AbstractCognitiveComplexityTest {
 
 		functionBlock.setECC(LibraryElementFactory.eINSTANCE.createECC());
 
-		functionBlock.setPaletteEntry(preparePaletteWithTypeLib());
+		functionBlock.setTypeEntry(preparePaletteWithTypeLib());
 
 		final STAlgorithm stAlg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		stAlg.setName(algorithmName);

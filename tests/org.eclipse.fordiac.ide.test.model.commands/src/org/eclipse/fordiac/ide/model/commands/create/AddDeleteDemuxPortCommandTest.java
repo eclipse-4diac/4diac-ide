@@ -23,9 +23,6 @@ import org.eclipse.fordiac.ide.model.CheckableStructTree;
 import org.eclipse.fordiac.ide.model.CheckableStructTreeNode;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.StructManipulation;
-import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteDemuxPortCommand;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CommandTestBase;
 import org.eclipse.fordiac.ide.model.commands.testinfra.CreateMemberVariableCommandTestBase.State;
@@ -38,6 +35,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.testmocks.DataTypeEntryMock;
+import org.eclipse.fordiac.ide.model.typelibrary.testmocks.FBTypeEntryMock;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
@@ -89,13 +88,11 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			d.getInterface().getEventOutputs().add(outputEvent);
 			d.getInterface().getInputVars().add(dataInput);
 
-			final PaletteEntry dummyEntry = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
-			dummyEntry.setLabel("Demux Palette Entry"); //$NON-NLS-1$
 			final FBType dummyType = LibraryElementFactory.eINSTANCE.createBasicFBType();
-			dummyEntry.setType(dummyType);
-
-			typeLib.addPaletteEntry(dummyEntry);
-			d.setPaletteEntry(dummyEntry);
+			dummyType.setName("Demux Palette Entry"); //$NON-NLS-1$
+			final FBTypeEntryMock te = new FBTypeEntryMock(dummyType, typeLib, null);
+			typeLib.addTypeEntry(te);
+			d.setTypeEntry(te);
 
 			d.setStructType(struct);
 			d.setStructTypeElementsAtInterface(struct);
@@ -148,10 +145,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			type.getMemberVariables().add(var4);
 			type.getMemberVariables().add(var5);
 			type.getMemberVariables().add(var6);
-			final DataTypePaletteEntry dataEntry = PaletteFactory.eINSTANCE.createDataTypePaletteEntry();
-			dataEntry.setType(type);
-			dataEntry.setLabel(name);
-			typeLib.getDataTypeLibrary().addPaletteEntry(dataEntry);
+			typeLib.addTypeEntry(new DataTypeEntryMock(type, typeLib, null));
 			return type;
 		}
 

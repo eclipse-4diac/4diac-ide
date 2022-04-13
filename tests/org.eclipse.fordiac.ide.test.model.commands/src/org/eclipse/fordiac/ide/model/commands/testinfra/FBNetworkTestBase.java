@@ -40,13 +40,13 @@ import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.testmocks.FBTypeEntryMock;
 import org.junit.jupiter.params.provider.Arguments;
 
 public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBase.State> {
@@ -566,33 +566,24 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 		}
 
 		private final FBNetwork net;
-		private final FBTypePaletteEntry functionblock;
+		private final FBTypeEntry functionblock;
 
 		public static final String FUNCTIONBLOCK_NAME = "functionblock"; //$NON-NLS-1$
 
-		private static FBTypePaletteEntry createFBType() {
-			final FBTypePaletteEntry pe = PaletteFactory.eINSTANCE.createFBTypePaletteEntry();
-			final TypeLibrary typelib = TypeLibrary.getTypeLibrary(null);
-			final BasicFBType functionBlock = LibraryElementFactory.eINSTANCE.createBasicFBType();
+		private static FBTypeEntry createFBType() {
+			final BasicFBType fbType = LibraryElementFactory.eINSTANCE.createBasicFBType();
+			fbType.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
+			fbType.setName(FUNCTIONBLOCK_NAME);
+			fbType.setECC(LibraryElementFactory.eINSTANCE.createECC());
 
-			functionBlock.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
-			functionBlock.setName(FUNCTIONBLOCK_NAME);
-			functionBlock.setECC(LibraryElementFactory.eINSTANCE.createECC());
-
-			pe.setLabel(FUNCTIONBLOCK_NAME);
-			pe.setPalette(typelib.getBlockTypeLib());
-			pe.setType(functionBlock);
-			pe.setFile(new IFileMock());
-
-			return pe;
-
+			return new FBTypeEntryMock(fbType, TypeLibrary.getTypeLibrary(null), new IFileMock());
 		}
 
 		public FBNetwork getFbNetwork() {
 			return net;
 		}
 
-		public FBTypePaletteEntry getFunctionblock() {
+		public FBTypeEntry getFunctionblock() {
 			return functionblock;
 		}
 
@@ -603,7 +594,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 
 		private State(final State s) {
 			net = EcoreUtil.copy(s.net);
-			functionblock = EcoreUtil.copy(s.functionblock);
+			functionblock = new FBTypeEntryMock(s.functionblock);
 			functionblock.setType(EcoreUtil.copy(s.functionblock.getType()));
 		}
 
