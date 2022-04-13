@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -105,8 +106,13 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 		handleErrorMarker();
 
+		// Find connectionless pins which should be saved
+		handleParameters();
+
 		// Find connections which should be reconnected
 		handleApplicationConnections();
+
+
 
 		network.getNetworkElements().remove(oldElement);
 
@@ -305,6 +311,27 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 			errorMarkerBuilder = ErrorMarkerBuilder.deleteErrorMarker((ErrorMarkerRef) oldElement);
 		}
 
+	}
+
+	// Ensure that connectionless pins with a value are saved as well
+	protected void handleParameters() {
+		for (final VarDeclaration input : oldElement.getInterface().getInputVars()) {
+			// No outside connections to a pin in oldElement and it has an initial value
+			if (input.getInputConnections().isEmpty() && hasValue(input)) {
+				updateSelectedInterface(input, newElement);
+			}
+		}
+
+		for (final VarDeclaration output : oldElement.getInterface().getOutputVars()) {
+			if (output.getOutputConnections().isEmpty() && hasValue(output)) {
+				updateSelectedInterface(output, newElement);
+			}
+		}
+	}
+
+	private static boolean hasValue(final VarDeclaration dataPin) {
+		final Value value = dataPin.getValue();
+		return value != null && value.getValue() != null && !value.getValue().isBlank();
 	}
 
 	private boolean onlyNewElementIsErrorMarker() {
