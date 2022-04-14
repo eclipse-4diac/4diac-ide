@@ -87,8 +87,7 @@ public abstract class AbstractTypeEntryImpl implements TypeEntry {
 		type = newType;
 		if (newType != null) {
 			encloseInResource(newType);
-			// FIXME when the model is update to the new typeentry system
-			// newType.setPaletteEntry(this);
+			newType.setTypeEntry(this);
 		}
 	}
 
@@ -117,8 +116,7 @@ public abstract class AbstractTypeEntryImpl implements TypeEntry {
 		typeEditable = newTypeEditable;
 		if (newTypeEditable != null) {
 			encloseInResource(newTypeEditable);
-			// FIXME when the model is update to the new typeentry system
-			// newTypeEditable.setPaletteEntry(this);
+			newTypeEditable.setTypeEntry(this);
 		}
 	}
 
@@ -130,8 +128,7 @@ public abstract class AbstractTypeEntryImpl implements TypeEntry {
 		if (null == retval) {
 			FordiacLogHelper.logError("Error loading type: " + getFile().getName()); //$NON-NLS-1$
 		} else {
-			// FIXME when the model is update to the new typeentry system
-			// retval.setPaletteEntry(paletteEntryImpl);
+			retval.setTypeEntry(this);
 		}
 		return retval;
 	}

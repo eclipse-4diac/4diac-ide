@@ -49,7 +49,7 @@ public class SegmentTypeEntryImpl extends AbstractTypeEntryImpl implements Segme
 		}else{
 			super.setType(null);
 			if(null != type){
-				FordiacLogHelper .logError("tried to set no SegmentType as type entry for SegmentTypePaletteEntry"); //$NON-NLS-1$
+				FordiacLogHelper.logError("tried to set no SegmentType as type entry for SegmentTypeEntry"); //$NON-NLS-1$
 			}
 		}
 	}

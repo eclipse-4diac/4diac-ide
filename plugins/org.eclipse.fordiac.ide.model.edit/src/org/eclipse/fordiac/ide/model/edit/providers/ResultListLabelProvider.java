@@ -15,7 +15,6 @@
 
 package org.eclipse.fordiac.ide.model.edit.providers;
 
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -95,8 +94,8 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 
 	@Override
 	public String getText(final Object element) {
-		return (element instanceof PaletteEntry) ? String.format("%s - %s", getStyledText(element).toString(), //$NON-NLS-1$
-				((PaletteEntry) element).getFile().getFullPath()) : "-"; //$NON-NLS-1$
+		return (element instanceof TypeEntry) ? String.format("%s - %s", getStyledText(element).toString(), //$NON-NLS-1$
+				((TypeEntry) element).getFile().getFullPath()) : "-"; //$NON-NLS-1$
 	}
 
 	public void setSearchString(final String searchString) {

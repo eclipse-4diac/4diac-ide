@@ -21,9 +21,9 @@ package org.eclipse.fordiac.ide.application.utilities;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.PrecisionPoint;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.SnapToHelper;
 import org.eclipse.gef.dnd.TemplateTransfer;
@@ -61,8 +61,8 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 			getCurrentEvent().operations = DND.DROP_NONE;
 
 		} else {
-			if (TemplateTransfer.getInstance().getTemplate() instanceof FBTypePaletteEntry) {
-				final FBTypePaletteEntry entry = (FBTypePaletteEntry) TemplateTransfer.getInstance().getTemplate();
+			if (TemplateTransfer.getInstance().getTemplate() instanceof FBTypeEntry) {
+				final FBTypeEntry entry = (FBTypeEntry) TemplateTransfer.getInstance().getTemplate();
 				final IProject srcProject = entry.getFile().getProject();
 
 				// Only allow drag from the same project
@@ -84,8 +84,7 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 	@Override
 	protected void handleDrop() {
 
-		if (!(getCurrentEvent().data instanceof FBTypePaletteEntry)
-				&& !(getCurrentEvent().data instanceof SubApplicationTypePaletteEntry)) {
+		if (!(getCurrentEvent().data instanceof FBTypeEntry) && !(getCurrentEvent().data instanceof SubAppTypeEntry)) {
 			// only allow FB type drops
 			return;
 		}
@@ -119,8 +118,7 @@ public class FbTypeTemplateTransferDropTargetListener extends TemplateTransferDr
 	protected CreationFactory getFactory(final Object template) {
 		getCurrentEvent().detail = DND.DROP_COPY;
 
-		if (template instanceof FBType || template instanceof FBTypePaletteEntry
-				|| template instanceof SubApplicationTypePaletteEntry) {
+		if (template instanceof FBType || template instanceof FBTypeEntry || template instanceof SubAppTypeEntry) {
 			return new FBTypeTemplateCreationFactory(template);
 		}
 		return null;

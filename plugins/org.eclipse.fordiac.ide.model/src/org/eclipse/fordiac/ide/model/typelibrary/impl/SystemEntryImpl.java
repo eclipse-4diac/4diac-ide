@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class SystemPaletteEntryImpl extends AbstractTypeEntryImpl implements SystemEntry {
+public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntry {
 
 	@Override
 	public AutomationSystem getSystem() {
@@ -40,7 +40,7 @@ public class SystemPaletteEntryImpl extends AbstractTypeEntryImpl implements Sys
 		}else{
 			super.setType(null);
 			if(null != type){
-				FordiacLogHelper .logError("tried to set no AutomationSystem as type entry for SystemPaletteEntry");//$NON-NLS-1$
+				FordiacLogHelper.logError("tried to set no AutomationSystem as type entry for SystemEntry");//$NON-NLS-1$
 			}
 		}
 	}

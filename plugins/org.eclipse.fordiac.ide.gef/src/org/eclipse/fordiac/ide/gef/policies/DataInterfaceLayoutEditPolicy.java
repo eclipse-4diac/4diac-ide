@@ -12,10 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.policies;
 
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -25,12 +25,12 @@ import org.eclipse.gef.requests.CreateRequest;
 
 public class DataInterfaceLayoutEditPolicy extends LayoutEditPolicy {
 	@Override
-	protected Command getMoveChildrenCommand(Request request) {
+	protected Command getMoveChildrenCommand(final Request request) {
 		return null;
 	}
 
 	@Override
-	protected Command getCreateCommand(CreateRequest request) {
+	protected Command getCreateCommand(final CreateRequest request) {
 		if ((getHost().getModel() instanceof VarDeclaration) && (!(getHost().getModel() instanceof AdapterDeclaration))
 				&& (!(request.getNewObjectType() instanceof ResourceTypeEntry))) {
 			return new ChangeValueCommand((VarDeclaration) getHost().getModel(),
@@ -40,7 +40,7 @@ public class DataInterfaceLayoutEditPolicy extends LayoutEditPolicy {
 	}
 
 	@Override
-	protected EditPolicy createChildEditPolicy(EditPart child) {
+	protected EditPolicy createChildEditPolicy(final EditPart child) {
 		return null;
 	}
 }

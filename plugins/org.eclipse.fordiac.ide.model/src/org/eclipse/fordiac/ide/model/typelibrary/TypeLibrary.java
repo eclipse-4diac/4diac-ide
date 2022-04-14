@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorFBTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorSubAppTypeEntryImpl;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.SystemEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -247,6 +248,13 @@ public final class TypeLibrary {
 		if (null != entry) {
 			addTypeEntry(entry);
 		}
+		return entry;
+	}
+
+	public SystemEntry createSystemEntry(final IFile sysFile) {
+		final SystemEntry entry = new SystemEntryImpl();
+		entry.setFile(sysFile);
+		entry.setTypeLibrary(this);
 		return entry;
 	}
 

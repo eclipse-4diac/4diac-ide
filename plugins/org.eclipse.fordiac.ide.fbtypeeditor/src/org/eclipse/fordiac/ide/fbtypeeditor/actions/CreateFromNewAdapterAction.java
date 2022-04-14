@@ -77,9 +77,8 @@ public abstract class CreateFromNewAdapterAction extends WorkbenchPartAction {
 
 	private IStructuredSelection getSelection() {
 		if (null != typeEntry) {
-			// if we have a paletteEntry we will use this to mark the place in the
-			// typelibrary
-			// to indicate the user where he might add the adapter
+			// if we have a TypeEntry we will use this to mark the place in the
+			// typelibrary to indicate the user where he might add the adapter
 			return new StructuredSelection(typeEntry.getFile().getParent());
 		}
 		return new StructuredSelection();

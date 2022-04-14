@@ -49,7 +49,7 @@ public class FBTypeEntryImpl extends AbstractTypeEntryImpl implements FBTypeEntr
 		} else {
 			super.setType(null);
 			if (null != type) {
-				FordiacLogHelper.logError("tried to set no FBType as type entry for FBTypePaletteEntry"); //$NON-NLS-1$
+				FordiacLogHelper.logError("tried to set no FBType as type entry for FBTypeEntry"); //$NON-NLS-1$
 			}
 		}
 	}

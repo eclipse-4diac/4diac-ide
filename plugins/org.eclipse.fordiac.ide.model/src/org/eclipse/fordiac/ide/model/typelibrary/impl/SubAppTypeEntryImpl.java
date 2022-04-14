@@ -49,8 +49,7 @@ public class SubAppTypeEntryImpl extends AbstractTypeEntryImpl implements SubApp
 		} else {
 			super.setType(null);
 			if (null != type) {
-				FordiacLogHelper
-				.logError("tried to set no SubAppType as type entry for SubApplicationTypePaletteEntry"); //$NON-NLS-1$
+				FordiacLogHelper.logError("tried to set no SubAppType as type entry for SubAppTypeEntry"); //$NON-NLS-1$
 			}
 		}
 	}

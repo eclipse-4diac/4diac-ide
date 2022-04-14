@@ -49,7 +49,7 @@ public class DeviceTypeEntryImpl extends AbstractTypeEntryImpl implements Device
 		}else{
 			super.setType(null);
 			if(null != type){
-				FordiacLogHelper .logError("tried to set no DeviceType as type entry for DeviceTypePaletteEntry");  //$NON-NLS-1$
+				FordiacLogHelper.logError("tried to set no DeviceType as type entry for DeviceTypeEntry");  //$NON-NLS-1$
 			}
 		}
 	}

@@ -48,11 +48,10 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
-import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
-import org.eclipse.fordiac.ide.model.Palette.SystemPaletteEntry;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
@@ -148,10 +147,8 @@ public enum SystemManager {
 		final Map<IFile, AutomationSystem> projectSystems = getProjectSystems(location.getProject());
 		final AutomationSystem system = projectSystems.computeIfAbsent(systemFile,
 				SystemImporter::createAutomationSystem);
-		final SystemPaletteEntry entry = PaletteFactory.eINSTANCE.createSystemPaletteEntry();
-		entry.setFile(systemFile);
+		final SystemEntry entry = TypeLibrary.getTypeLibrary(location.getProject()).createSystemEntry(systemFile);
 		entry.setType(system);
-		entry.setPalette(system.getPalette());
 		saveSystem(system);
 		return system;
 	}
@@ -224,11 +221,8 @@ public enum SystemManager {
 	 * @return the automation system */
 	private static AutomationSystem initSystem(final IFile systemFile) {
 		if (systemFile.exists()) {
-			final SystemPaletteEntry entry = PaletteFactory.eINSTANCE.createSystemPaletteEntry();
-			entry.setFile(systemFile);
-			final AutomationSystem system = entry.getSystem();
-			entry.setPalette(system.getPalette());
-			return system;
+			final SystemEntry entry = TypeLibrary.getTypeLibrary(systemFile.getProject()).createSystemEntry(systemFile);
+			return entry.getSystem();
 		}
 		return null;
 	}

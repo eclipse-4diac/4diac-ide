@@ -49,7 +49,7 @@ public class DataTypeEntryImpl extends AbstractTypeEntryImpl implements DataType
 		} else {
 			super.setType(null);
 			if (null != type) {
-				FordiacLogHelper .logError("tried to set no AnyDerivedType as type entry for DataTypePaletteEntry"); //$NON-NLS-1$
+				FordiacLogHelper.logError("tried to set no AnyDerivedType as type entry for DataTypeEntry"); //$NON-NLS-1$
 			}
 		}
 	}

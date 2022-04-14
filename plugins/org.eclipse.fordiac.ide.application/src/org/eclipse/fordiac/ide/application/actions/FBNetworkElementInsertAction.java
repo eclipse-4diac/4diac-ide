@@ -21,7 +21,6 @@ package org.eclipse.fordiac.ide.application.actions;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
@@ -62,7 +61,7 @@ public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 		final Point pt = getPositionInViewer((IEditorPart) getWorkbenchPart());
 		if (typeEntry instanceof FBTypeEntry) {
 			return new FBCreateCommand((FBTypeEntry) typeEntry, fbNetwork, pt.x, pt.y);
-		} else if (typeEntry instanceof SubApplicationTypePaletteEntry) {
+		} else if (typeEntry instanceof SubAppTypeEntry) {
 			return new CreateSubAppInstanceCommand((SubAppTypeEntry) typeEntry, fbNetwork, pt.x, pt.y);
 		}
 

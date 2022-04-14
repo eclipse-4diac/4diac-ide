@@ -59,11 +59,11 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 		return (FB) getElement();
 	}
 
-	public FBTypeEntry getPaletteEntry() {
+	public FBTypeEntry getTypeEntry() {
 		return typeEntry;
 	}
 
-	public void setPaletteEntry(final FBTypeEntry typeEntry) {
+	public void setTypeEntry(final FBTypeEntry typeEntry) {
 		this.typeEntry = typeEntry;
 	}
 

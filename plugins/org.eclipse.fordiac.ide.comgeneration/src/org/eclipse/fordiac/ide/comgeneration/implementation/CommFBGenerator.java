@@ -129,11 +129,11 @@ public class CommFBGenerator {
 		if (generatedFBInfo != null) {
 			generatedFBInfo.getDestinations().add(destination);
 		} else {
-			final FBTypeEntry paletteEntry = specificGenerator.getPaletteType(end, numberOfDataPorts,
+			final FBTypeEntry typeEntry = specificGenerator.getPaletteType(end, numberOfDataPorts,
 					destination.getCommunicationChannel().isLocal());
 			final Resource resource = (end == ChannelEnd.SOURCE) ? destination.getCommunicationChannel().getSourceResource()
 					: destination.getDestinationResource();
-			final FBCreateCommand command = new FBCreateCommand(paletteEntry, resource.getFBNetwork(), 10, 10);
+			final FBCreateCommand command = new FBCreateCommand(typeEntry, resource.getFBNetwork(), 10, 10);
 			command.execute();
 			final FB generatedFB = command.getFB();
 			generatedFB.setName(NameRepository.createUniqueName(generatedFB, "GENERATED_" + generatedFBIndex)); //$NON-NLS-1$

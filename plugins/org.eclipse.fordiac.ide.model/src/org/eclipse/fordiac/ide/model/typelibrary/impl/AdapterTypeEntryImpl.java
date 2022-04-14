@@ -49,7 +49,7 @@ public class AdapterTypeEntryImpl extends AbstractTypeEntryImpl implements Adapt
 		} else {
 			super.setType(null);
 			if (null != type) {
-				FordiacLogHelper.logError("tried to set no AdapterType as type entry for AdapterTypePaletteEntry");  //$NON-NLS-1$
+				FordiacLogHelper.logError("tried to set no AdapterType as type entry for AdapterTypeEntry");  //$NON-NLS-1$
 			}
 		}
 	}

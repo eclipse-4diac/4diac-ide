@@ -46,7 +46,7 @@ public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementC
 		return (SubApp) getElement();
 	}
 
-	public SubAppTypeEntry getPaletteEntry() {
+	public SubAppTypeEntry getTypeEntry() {
 		return typeEntry;
 	}
 

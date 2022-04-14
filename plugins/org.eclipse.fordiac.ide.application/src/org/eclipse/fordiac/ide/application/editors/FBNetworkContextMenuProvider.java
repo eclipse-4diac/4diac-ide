@@ -167,13 +167,13 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 	private void createFBMenuEntry(final IMenuManager submenu, final IFile typeFile) {
 		final TypeEntry entry = TypeLibrary.getTypeEntryForFile(typeFile);
 		if ((entry instanceof FBTypeEntry) || (entry instanceof SubAppTypeEntry)) {
-			final Action action = getActionForPaletteEntry(entry);
+			final Action action = getActionForTypeEntry(entry);
 			setActionIcon(action, entry);
 			submenu.add(action);
 		}
 	}
 
-	private Action getActionForPaletteEntry(final TypeEntry entry) {
+	private Action getActionForTypeEntry(final TypeEntry entry) {
 		Action action;
 		if (useChangeFBType) {
 			action = (Action) getRegistry().getAction(entry.getFile().getFullPath().toString().concat("_") //$NON-NLS-1$

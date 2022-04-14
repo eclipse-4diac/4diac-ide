@@ -205,11 +205,11 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 	}
 
 	@SuppressWarnings("static-method")  // allow children to override this method
-	protected FBType getFBType(final TypeEntry paletteEntry) {
-		if (paletteEntry instanceof FBTypeEntry) {
-			return ((FBTypeEntry) paletteEntry).getTypeEditable();
-		} else if (paletteEntry instanceof AdapterTypeEntry) {
-			return ((AdapterTypeEntry) paletteEntry).getTypeEditable().getAdapterFBType();
+	protected FBType getFBType(final TypeEntry typeEntry) {
+		if (typeEntry instanceof FBTypeEntry) {
+			return ((FBTypeEntry) typeEntry).getTypeEditable();
+		} else if (typeEntry instanceof AdapterTypeEntry) {
+			return ((AdapterTypeEntry) typeEntry).getTypeEditable().getAdapterFBType();
 		}
 		return null;
 	}

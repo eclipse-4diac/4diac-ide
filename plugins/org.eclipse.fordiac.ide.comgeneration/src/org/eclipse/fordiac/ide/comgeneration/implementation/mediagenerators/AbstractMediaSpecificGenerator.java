@@ -57,7 +57,7 @@ public abstract class AbstractMediaSpecificGenerator implements MediaSpecificGen
 		final FBTypeEntry entry = getTypeLibrary().getFBTypeEntry(paletteEntries[numDataPorts]);
 
 		if (null == entry) {
-			FordiacLogHelper.logError(MessageFormat.format(Messages.CommGenerator_FBTypePaletteEntryNotFound,
+			FordiacLogHelper.logError(MessageFormat.format(Messages.CommGenerator_FBTypeEntryNotFound,
 					paletteEntries[numDataPorts]));
 		}
 		return entry;

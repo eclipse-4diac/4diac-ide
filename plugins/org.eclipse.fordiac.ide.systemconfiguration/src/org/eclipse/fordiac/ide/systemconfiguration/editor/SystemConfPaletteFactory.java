@@ -20,12 +20,13 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.gef.utilities.TemplateCreationFactory;
-import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
-import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.palette.CombinedTemplateCreationEntry;
 import org.eclipse.gef.palette.PaletteDrawer;
@@ -58,7 +59,7 @@ public final class SystemConfPaletteFactory {
 	 */
 	public static PaletteRoot createPalette(final AutomationSystem system) {
 		final PaletteRoot palette = new PaletteRoot();
-		fillPalette(palette, system.getPalette());
+		fillPalette(palette, system.getTypeLibrary());
 
 		system.getPalette().eAdapters().add(new AdapterImpl() {
 
@@ -67,7 +68,7 @@ public final class SystemConfPaletteFactory {
 				Display.getDefault().syncExec(() -> {
 					palette.setVisible(false);
 					palette.getChildren().clear();
-					fillPalette(palette, system.getPalette());
+					fillPalette(palette, system.getTypeLibrary());
 					palette.setVisible(true);
 				});
 			}
@@ -83,20 +84,20 @@ public final class SystemConfPaletteFactory {
 	 * @param palette      the empty GEF palette
 	 * @param paletteModel the EMF model
 	 */
-	private static void fillPalette(final PaletteRoot palette, final Palette typePalette) {
-		createDevGroup(palette, typePalette);
-		createRESGroup(palette, typePalette);
-		createSEGGroup(palette, typePalette);
+	private static void fillPalette(final PaletteRoot palette, final TypeLibrary typelib) {
+		createDevGroup(palette, typelib);
+		createRESGroup(palette, typelib);
+		createSEGGroup(palette, typelib);
 	}
 
-	private static PaletteDrawer createDevGroup(final PaletteRoot palette, final Palette typePalette) {
+	private static PaletteDrawer createDevGroup(final PaletteRoot palette, final TypeLibrary typelib) {
 		final PaletteDrawer paletteContainer = new PaletteDrawer("Devices");
 
-		for (final Entry<String, DeviceTypePaletteEntry> entry : typePalette.getDeviceTypes().entrySet()) {
-			final PaletteEntry paletteEntry = createCreationEntry(entry.getValue(),
+		for (final Entry<String, DeviceTypeEntry> entry : typelib.getDeviceTypes().entrySet()) {
+			final PaletteEntry typeEntry = createCreationEntry(entry.getValue(),
 					FordiacImage.ICON_DEVICE.getImageDescriptor());
-			if (paletteEntry != null) {
-				paletteContainer.add(paletteEntry);
+			if (typeEntry != null) {
+				paletteContainer.add(typeEntry);
 			}
 		}
 
@@ -107,10 +108,10 @@ public final class SystemConfPaletteFactory {
 		return paletteContainer;
 	}
 
-	private static PaletteDrawer createRESGroup(final PaletteRoot palette, final Palette typePalette) {
+	private static PaletteDrawer createRESGroup(final PaletteRoot palette, final TypeLibrary typelib) {
 		final PaletteDrawer paletteContainer = new PaletteDrawer("Resources");
 
-		for (final Entry<String, ResourceTypeEntry> entry : typePalette.getResourceTypes().entrySet()) {
+		for (final Entry<String, ResourceTypeEntry> entry : typelib.getResourceTypes().entrySet()) {
 			final PaletteEntry paletteEntry = createCreationEntry(entry.getValue(),
 					FordiacImage.ICON_RESOURCE.getImageDescriptor());
 			if (paletteEntry != null) {
@@ -125,10 +126,10 @@ public final class SystemConfPaletteFactory {
 		return paletteContainer;
 	}
 
-	private static PaletteDrawer createSEGGroup(final PaletteRoot palette, final Palette typePalette) {
+	private static PaletteDrawer createSEGGroup(final PaletteRoot palette, final TypeLibrary typelib) {
 		final PaletteDrawer paletteContainer = new PaletteDrawer("Segments");
 
-		for (final Entry<String, SegmentTypePaletteEntry> entry : typePalette.getSegmentTypes().entrySet()) {
+		for (final Entry<String, SegmentTypeEntry> entry : typelib.getSegmentTypes().entrySet()) {
 			final PaletteEntry paletteEntry = createCreationEntry(entry.getValue(),
 					FordiacImage.ICON_SEGMENT.getImageDescriptor());
 			if (paletteEntry != null) {
@@ -148,8 +149,7 @@ public final class SystemConfPaletteFactory {
 	 * @param entry
 	 * @return a new PaletteEntry
 	 */
-	private static PaletteEntry createCreationEntry(final org.eclipse.fordiac.ide.model.Palette.PaletteEntry entry,
-			final ImageDescriptor desc) {
+	private static PaletteEntry createCreationEntry(final TypeEntry entry, final ImageDescriptor desc) {
 		final LibraryElement type = entry.getType();
 		if (type == null) {
 			return null;

@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.subapptypeeditor.policies;
 
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeFBNetworkLayoutEditPolicy;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
@@ -31,8 +30,8 @@ public class SubAppTypeFBNetworkLayoutEditPolicy extends CompositeFBNetworkLayou
 		}
 		final Object childClass = request.getNewObjectType();
 		final Rectangle constraint = (Rectangle) getConstraintFor(request);
-		if (childClass instanceof SubApplicationTypePaletteEntry) {
-			final SubAppTypeEntry type = (SubAppTypeEntry) request.getNewObjectType();
+		if (childClass instanceof SubAppTypeEntry) {
+			final SubAppTypeEntry type = (SubAppTypeEntry) childClass;
 
 			if (getHost().getModel() instanceof FBNetwork) {
 				final FBNetwork fbNetwork = (FBNetwork) getHost().getModel();
