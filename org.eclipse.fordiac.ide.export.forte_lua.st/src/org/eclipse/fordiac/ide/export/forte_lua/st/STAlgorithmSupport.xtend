@@ -15,17 +15,16 @@ package org.eclipse.fordiac.ide.export.forte_lua.st
 
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 
 @FinalFieldsConstructor
 class STAlgorithmSupport extends StructuredTextSupport {
-	final STAlgorithm algorithm
+	final org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm
 
-	STAlgorithmBody parseResult
+	STAlgorithm parseResult
 
 	override prepare(Map<?, ?> options) {
 		if (parseResult === null && errors.empty) {
@@ -39,10 +38,10 @@ class STAlgorithmSupport extends StructuredTextSupport {
 		parseResult?.generateStructuredTextAlgorithm
 	}
 
-	def private CharSequence generateStructuredTextAlgorithm(STAlgorithmBody alg) '''
-		«alg.varTempDeclarations.generateLocalVariables(true)»
+	def private CharSequence generateStructuredTextAlgorithm(STAlgorithm alg) '''
+		«alg.body.varTempDeclarations.generateLocalVariables(true)»
 		
-		«alg.statements.generateStatementList»
+		«alg.body.statements.generateStatementList»
 	'''
 
 	override getDependencies(Map<?, ?> options) {

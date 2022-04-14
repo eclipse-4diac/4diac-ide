@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
+
 @FinalFieldsConstructor
 class STFunctionSupport extends StructuredTextSupport {
 	final STFunctionSource source
@@ -75,10 +76,10 @@ class STFunctionSupport extends StructuredTextSupport {
 	'''
 
 	def private CharSequence generateStructuredTextFunctionDeclaration(STFunction func) //
-	'''«func.returnType?.generateTypeName ?: "void"» func_«func.name»(«func.generateStructuredTextFunctionParameters»)'''
+	'''local function func_«func.name»(«func.generateStructuredTextFunctionParameters»)'''
 
 	def private CharSequence generateStructuredTextFunctionParameters(STFunction func) //
-	'''«FOR param : func.structuredTextFunctionParameters SEPARATOR ", "»«param.key.generateTypeName» «IF param.value»&«ENDIF»«param.key.generateFeatureName»«ENDFOR»'''
+	'''«FOR param : func.structuredTextFunctionParameters SEPARATOR ", "» «IF param.value»&«ENDIF»«param.key.generateFeatureName»«ENDFOR»'''
 
 	def private getStructuredTextFunctionParameters(STFunction func) {
 		func.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].map[it -> false] +
