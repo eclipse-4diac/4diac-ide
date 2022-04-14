@@ -679,5 +679,27 @@ class Formatter2Test {
 			'''
 		]
 	}
+	
+	@Test
+	def void unaryNotForamtting() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR
+				   bool1 : BOOL;
+				END_VAR
+				bool1 := NOT  bool1;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR
+					bool1 : BOOL;
+				END_VAR
+				bool1 := NOT bool1;
+				END_FUNCTION
+			'''
+		]
+	}
 
 }

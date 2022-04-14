@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpres
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
@@ -310,14 +311,19 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 				})
 		} else if (binaryExpression.op == STBinaryOperator.AND) {
-			document.addReplacer(new KeywordCaseTextReplacer(document, binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP)))
+			document.addReplacer(
+				new KeywordCaseTextReplacer(document, binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP)))
 		}
 		binaryExpression.left.format
 		binaryExpression.right.format
 	}
 
 	def dispatch void format(STUnaryExpression unaryExpression, extension IFormattableDocument document) {
-		unaryExpression.regionFor.feature(ST_UNARY_EXPRESSION__OP).append[noSpace]
+		if (unaryExpression.op == STUnaryOperator.NOT) {
+			unaryExpression.regionFor.feature(ST_UNARY_EXPRESSION__OP).append[oneSpace]
+		} else {
+			unaryExpression.regionFor.feature(ST_UNARY_EXPRESSION__OP).append[noSpace]
+		}
 		unaryExpression.expression.format
 	}
 
