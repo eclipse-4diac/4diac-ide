@@ -27,11 +27,13 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -195,14 +197,22 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		if (getModel().getValue() != null) {
 			setVisible(true);
 			setBackground(getModel().hasError());
-			if (getIInterfaceElement().getInputConnections().isEmpty()
-					&& getIInterfaceElement().getOutputConnections().isEmpty()) {
+			if (getOuterConnections().isEmpty()) {
 				getFigure().setText(getModel().getValue());
 			} else {
 				getFigure().setText("");
 			}
 		} else {
 			setVisible(false);
+		}
+	}
+	
+	private EList<Connection> getOuterConnections() {
+		IInterfaceElement model = getIInterfaceElement();
+		if(model.isIsInput()) {
+			return model.getInputConnections();
+		} else {
+			return model.getOutputConnections();
 		}
 	}
 
