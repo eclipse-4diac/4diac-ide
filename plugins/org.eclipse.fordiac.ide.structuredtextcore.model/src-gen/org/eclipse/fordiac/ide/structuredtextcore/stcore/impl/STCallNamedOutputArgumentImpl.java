@@ -212,6 +212,16 @@ public class STCallNamedOutputArgumentImpl extends STCallArgumentImpl implements
 	 * @generated
 	 */
 	@Override
+	public INamedElement getResultType() {
+		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case STCorePackage.ST_CALL_NAMED_OUTPUT_ARGUMENT__NOT:

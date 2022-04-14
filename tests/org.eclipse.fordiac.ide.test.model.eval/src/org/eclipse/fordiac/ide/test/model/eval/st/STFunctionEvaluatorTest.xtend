@@ -181,12 +181,35 @@ class STFunctionEvaluatorTest {
 		'''.evaluateFunction(emptyList))
 	}
 
+	@Test
+	def void testCallInOutParam() {
+		21.toIntValue.assertEquals('''
+			FUNCTION TEST : INT
+			VAR_TEMP
+				X: INT := 17;
+			END_VAR
+			TEST_CALL(4, X);
+			TEST := X;
+			END_FUNCTION
+
+			FUNCTION TEST_CALL
+			VAR_IN_OUT
+				X: INT;
+			END_VAR
+			VAR_INPUT
+				A: INT := 4;
+			END_VAR
+			X := X + A;
+			END_FUNCTION
+		'''.evaluateFunction(emptyList))
+	}
+
 	def static evaluateFunction(CharSequence text, Iterable<Variable> variables) {
 		val errors = newArrayList
 		val source = text.toString.parse("anonymous", errors)
 		source.assertNotNull("Parse error: " + errors.join(", "))
 		source.functions.head.assertNotNull("Must be at least one function")
-		val eval = new STFunctionEvaluator(source.functions.head, variables, null)
+		val eval = new STFunctionEvaluator(source.functions.head, null, variables, null)
 		return eval.evaluate
 	}
 }

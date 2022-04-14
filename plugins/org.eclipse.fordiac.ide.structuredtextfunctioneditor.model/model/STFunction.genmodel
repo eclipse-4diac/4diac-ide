@@ -23,6 +23,8 @@
           body="return org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionAnnotations.getInputParameters(this);"/>
       <genOperations ecoreOperation="STFunction.ecore#//STFunction/getOutputParameters"
           body="return org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionAnnotations.getOutputParameters(this);"/>
+      <genOperations ecoreOperation="STFunction.ecore#//STFunction/getInOutParameters"
+          body="return org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.impl.STFunctionAnnotations.getInOutParameters(this);"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

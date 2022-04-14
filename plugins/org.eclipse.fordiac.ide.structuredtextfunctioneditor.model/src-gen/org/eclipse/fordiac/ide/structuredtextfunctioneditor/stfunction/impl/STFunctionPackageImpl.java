@@ -270,6 +270,8 @@ public class STFunctionPackageImpl extends EPackageImpl implements STFunctionPac
 
 		addEOperation(stFunctionEClass, theLibraryElementPackage.getINamedElement(), "getOutputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		addEOperation(stFunctionEClass, theLibraryElementPackage.getINamedElement(), "getInOutParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		// Create resource
 		createResource(eNS_URI);
 	}

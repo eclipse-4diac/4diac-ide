@@ -19,6 +19,7 @@ import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue;
+import org.eclipse.fordiac.ide.model.eval.value.FBValue;
 import org.eclipse.fordiac.ide.model.eval.value.StructValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 
@@ -61,13 +62,18 @@ public class EvaluatorDebugValue extends EvaluatorDebugElement implements IValue
 			final var members = ((StructValue) value).getMembers().values().stream().map(debugger::getVariable)
 					.collect(Collectors.toList());
 			return members.toArray(new IVariable[members.size()]);
+		} else if (value instanceof FBValue) {
+			final var debugger = getDebugTarget().getDebugger();
+			final var members = ((FBValue) value).getMembers().values().stream().map(debugger::getVariable)
+					.collect(Collectors.toList());
+			return members.toArray(new IVariable[members.size()]);
 		}
 		return new IVariable[0];
 	}
 
 	@Override
 	public boolean hasVariables() throws DebugException {
-		return value instanceof ArrayValue || value instanceof StructValue;
+		return value instanceof ArrayValue || value instanceof StructValue || value instanceof FBValue;
 	}
 
 	@Override

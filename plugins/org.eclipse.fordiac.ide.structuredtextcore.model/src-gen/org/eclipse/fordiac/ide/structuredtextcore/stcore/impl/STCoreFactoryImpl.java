@@ -82,6 +82,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 			case STCorePackage.ST_VAR_PLAIN_DECLARATION_BLOCK: return createSTVarPlainDeclarationBlock();
 			case STCorePackage.ST_VAR_INPUT_DECLARATION_BLOCK: return createSTVarInputDeclarationBlock();
 			case STCorePackage.ST_VAR_OUTPUT_DECLARATION_BLOCK: return createSTVarOutputDeclarationBlock();
+			case STCorePackage.ST_VAR_IN_OUT_DECLARATION_BLOCK: return createSTVarInOutDeclarationBlock();
 			case STCorePackage.ST_VAR_TEMP_DECLARATION_BLOCK: return createSTVarTempDeclarationBlock();
 			case STCorePackage.ST_INITIALIZER_EXPRESSION: return createSTInitializerExpression();
 			case STCorePackage.ST_ELEMENTARY_INITIALIZER_EXPRESSION: return createSTElementaryInitializerExpression();
@@ -120,6 +121,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 			case STCorePackage.ST_ARRAY_ACCESS_EXPRESSION: return createSTArrayAccessExpression();
 			case STCorePackage.ST_FEATURE_EXPRESSION: return createSTFeatureExpression();
 			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION: return createSTMultibitPartialExpression();
+			case STCorePackage.ST_STANDARD_FUNCTION: return createSTStandardFunction();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -247,6 +249,17 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	public STVarOutputDeclarationBlock createSTVarOutputDeclarationBlock() {
 		STVarOutputDeclarationBlockImpl stVarOutputDeclarationBlock = new STVarOutputDeclarationBlockImpl();
 		return stVarOutputDeclarationBlock;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STVarInOutDeclarationBlock createSTVarInOutDeclarationBlock() {
+		STVarInOutDeclarationBlockImpl stVarInOutDeclarationBlock = new STVarInOutDeclarationBlockImpl();
+		return stVarInOutDeclarationBlock;
 	}
 
 	/**
@@ -665,6 +678,17 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	public STMultibitPartialExpression createSTMultibitPartialExpression() {
 		STMultibitPartialExpressionImpl stMultibitPartialExpression = new STMultibitPartialExpressionImpl();
 		return stMultibitPartialExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STStandardFunction createSTStandardFunction() {
+		STStandardFunctionImpl stStandardFunction = new STStandardFunctionImpl();
+		return stStandardFunction;
 	}
 
 	/**

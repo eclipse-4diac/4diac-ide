@@ -31,8 +31,10 @@ class WCharValue implements AnyCharValue {
 
 	def static toWCharValue(AnyCharsValue value) { value.charValue.toWCharValue }
 
+	override length() { 1 }
+
 	override charValue() { value }
-	
+
 	override stringValue() { Character.toString(value) }
 
 	override WcharType getType() { ElementaryTypes.WCHAR }

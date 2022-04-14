@@ -48,6 +48,11 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getInOutParameters" upperBound="-1" eType="#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eOperations name="getReturnType" eType="ecore:EClass data.ecore#//DataType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
@@ -395,6 +400,11 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getInOutParameters" upperBound="-1" eType="#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eOperations name="getReturnType" eType="ecore:EClass data.ecore#//DataType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
@@ -523,6 +533,11 @@
     <eOperations name="getOutputParameters" upperBound="-1" eType="#//INamedElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInOutParameters" upperBound="-1" eType="#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getReturnType" eType="ecore:EClass data.ecore#//DataType">
@@ -1501,6 +1516,7 @@
       eSuperTypes="#//INamedElement">
     <eOperations name="getInputParameters" upperBound="-1" eType="#//INamedElement"/>
     <eOperations name="getOutputParameters" upperBound="-1" eType="#//INamedElement"/>
+    <eOperations name="getInOutParameters" upperBound="-1" eType="#//INamedElement"/>
     <eOperations name="getReturnType" eType="ecore:EClass data.ecore#//DataType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Method" abstract="true" eSuperTypes="#//ICallable"/>
@@ -1508,6 +1524,8 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputParameters" upperBound="-1"
         eType="#//INamedElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputParameters" upperBound="-1"
+        eType="#//INamedElement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inOutParameters" upperBound="-1"
         eType="#//INamedElement" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass data.ecore#//DataType"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="text" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>

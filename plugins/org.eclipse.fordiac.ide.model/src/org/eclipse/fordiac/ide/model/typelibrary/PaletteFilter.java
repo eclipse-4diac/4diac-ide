@@ -72,14 +72,14 @@ public class PaletteFilter {
 			matcher.setPattern(searchPattern);
 			if (matcher.matches(entry.getLabel())) {
 				exact.add(entry);
-				continue;
+			} else {
+				matcher.setPattern(searchPattern + "*"); //$NON-NLS-1$
+				if (matcher.matches(entry.getLabel())) {
+					right.add(entry);
+				} else {
+					rest.add(entry);
+				}
 			}
-			matcher.setPattern(searchPattern + "*"); //$NON-NLS-1$
-			if (matcher.matches(entry.getLabel())) {
-				right.add(entry);
-				continue;
-			}
-			rest.add(entry);
 		}
 		return Stream.of(exact, right, rest).flatMap(Collection::stream).collect(Collectors.toList());
 	}

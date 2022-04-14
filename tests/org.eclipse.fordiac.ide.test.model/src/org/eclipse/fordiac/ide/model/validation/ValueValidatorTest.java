@@ -26,7 +26,7 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
-@SuppressWarnings("static-method")
+@SuppressWarnings({ "static-method", "squid:S5960" })
 class ValueValidatorTest {
 
 	private static final String NO_ERROR = ""; //$NON-NLS-1$
@@ -62,26 +62,26 @@ class ValueValidatorTest {
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"1\"", //$NON-NLS-1$
 						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"FALSE\"", //$NON-NLS-1$
-								INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"TRUE\"", //$NON-NLS-1$
-										INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#0\"", //$NON-NLS-1$
-												INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#1\"", //$NON-NLS-1$
-														INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#FALSE\"", //$NON-NLS-1$
-																INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#TRUE\"", //$NON-NLS-1$
-																		INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "2", //$NON-NLS-1$
-																				INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "3.1415", //$NON-NLS-1$
-																						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "1970-01-30", //$NON-NLS-1$
-																								INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "16#AFFE", //$NON-NLS-1$
-																										BASE_SPECIFIER_INVALID_FOR_BOOL
-																										+ INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						BASE_SPECIFIER_INVALID_FOR_BOOL
+						+ INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "12:00:00", //$NON-NLS-1$
 						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE));
 	}

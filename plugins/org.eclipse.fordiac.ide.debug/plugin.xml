@@ -11,6 +11,14 @@
             name="Evaluate Simple FB"
             sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
       </launchConfigurationType>
+      <launchConfigurationType
+            delegate="org.eclipse.fordiac.ide.debug.basic.BasicFBLaunchConfigurationDelegate"
+            delegateName="Evaluate Basic FB"
+            id="org.eclipse.fordiac.ide.debug.basicFBLaunch"
+            modes="run, debug"
+            name="Evaluate Basic FB"
+            sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
+      </launchConfigurationType>
    </extension>
    <extension
          point="org.eclipse.debug.core.sourceLocators">

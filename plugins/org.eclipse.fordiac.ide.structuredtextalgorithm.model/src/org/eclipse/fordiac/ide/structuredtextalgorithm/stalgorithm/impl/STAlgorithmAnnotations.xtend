@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
 
@@ -30,6 +31,8 @@ final class STAlgorithmAnnotations {
 
 	def package static EList<INamedElement> getOutputParameters(STAlgorithm algorithm) { emptyEList }
 
+	def package static EList<INamedElement> getInOutParameters(STAlgorithm algorithm) { emptyEList }
+
 	def package static DataType getReturnType(STAlgorithm algorithm) { null }
 
 	def package static EList<INamedElement> getInputParameters(STMethod method) {
@@ -39,6 +42,11 @@ final class STAlgorithmAnnotations {
 
 	def package static EList<INamedElement> getOutputParameters(STMethod method) {
 		method.body.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations].toEList.
+			unmodifiableEList
+	}
+
+	def package static EList<INamedElement> getInOutParameters(STMethod method) {
+		method.body.varDeclarations.filter(STVarInOutDeclarationBlock).flatMap[varDeclarations].toEList.
 			unmodifiableEList
 	}
 }

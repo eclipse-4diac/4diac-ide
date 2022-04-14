@@ -30,6 +30,6 @@ STFunction:
 	{STFunction}
 	'FUNCTION' name=ID (':' returnType=[datatype::DataType|STAnyType])?
 		varDeclarations+=(STVarDeclarationBlock | STVarTempDeclarationBlock |
-		STVarInputDeclarationBlock | STVarOutputDeclarationBlock)*
+		STVarInputDeclarationBlock | STVarOutputDeclarationBlock | STVarInOutDeclarationBlock)*
 		code += STStatement*
 	'END_FUNCTION';

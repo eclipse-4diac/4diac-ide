@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import org.eclipse.draw2d.ConnectionAnchor;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -22,12 +23,14 @@ import org.eclipse.fordiac.ide.application.policies.AdapterNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.DeleteSubAppInterfaceElementPolicy;
 import org.eclipse.fordiac.ide.application.policies.EventNodeEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.VariableNodeEditPolicy;
+import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.figures.ToolTipFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.Request;
@@ -39,7 +42,7 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 
 	@Override
 	protected IFigure createFigure() {
-		final InterfaceFigure figure = new InterfaceFigure();
+		final IFigure figure = super.createFigure();
 		figure.setBorder(new ConnectorBorder(getModel()) {
 			@Override
 			public boolean isInput() {
@@ -135,6 +138,16 @@ public class SubAppInternalInterfaceEditPart extends UntypedSubAppInterfaceEleme
 
 	private FBNetwork getSubappNetwork() {
 		return ((SubApp) getModel().getFBNetworkElement()).getSubAppNetwork();
+	}
+
+	@Override
+	public ConnectionAnchor getSourceConnectionAnchor(final ConnectionEditPart connection) {
+		return new FixedAnchor(getFigure(), isInput());
+	}
+
+	@Override
+	public ConnectionAnchor getTargetConnectionAnchor(final ConnectionEditPart connection) {
+		return new FixedAnchor(getFigure(), isInput());
 	}
 
 }

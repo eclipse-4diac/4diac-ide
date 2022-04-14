@@ -470,6 +470,12 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testStandardFunctions() {
+		21.toSIntValue.assertEquals("ADD(17, 4)".evaluateExpression)
+		42.toSIntValue.assertEquals("ADD(17, 4, 21)".evaluateExpression)
+	}
+
+	@Test
 	def void testVariable() {
 		21.toIntValue.assertTrace(#[STBinaryExpression], '''
 			VAR_TEMP
@@ -1117,7 +1123,7 @@ class StructuredTextEvaluatorTest {
 	def static evaluateExpression(CharSequence expression, Collection<Variable> variables) {
 		val transition = LibraryElementFactory.eINSTANCE.createECTransition
 		transition.conditionExpression = expression.toString
-		new ECTransitionEvaluator(transition, variables, null).evaluate
+		new ECTransitionEvaluator(transition, null, variables, null).evaluate
 	}
 
 	def static evaluateAlgorithm(CharSequence algorithm) {
@@ -1128,7 +1134,7 @@ class StructuredTextEvaluatorTest {
 		val alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm
 		alg.name = "TEST_ALGORITHM"
 		alg.text = algorithm.toString
-		val eval = new TracingStructuredTextEvaluator(alg, variables, null)
+		val eval = new TracingStructuredTextEvaluator(alg, null, variables, null)
 		eval.evaluate
 		return eval
 	}
@@ -1163,8 +1169,8 @@ class StructuredTextEvaluatorTest {
 		@Accessors
 		final Queue<Object> trace = new ArrayBlockingQueue(1000)
 
-		new(STAlgorithm alg, Iterable<Variable> variables, Evaluator parent) {
-			super(alg, variables, parent)
+		new(STAlgorithm alg, Variable context, Iterable<Variable> variables, Evaluator parent) {
+			super(alg, context, variables, parent)
 		}
 
 		override protected <T> T trap(T context) {

@@ -80,4 +80,12 @@ public interface STCallNamedInputArgument extends STCallArgument {
 	 */
 	void setSource(STExpression value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getResultType();
+
 } // STCallNamedInputArgument

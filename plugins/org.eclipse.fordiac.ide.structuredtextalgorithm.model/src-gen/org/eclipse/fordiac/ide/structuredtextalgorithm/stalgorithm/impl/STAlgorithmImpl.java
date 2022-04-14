@@ -145,6 +145,16 @@ public class STAlgorithmImpl extends STAlgorithmSourceElementImpl implements STA
 	 * @generated
 	 */
 	@Override
+	public EList<INamedElement> getInOutParameters() {
+		return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInOutParameters(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public DataType getReturnType() {
 		return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getReturnType(this);
 	}

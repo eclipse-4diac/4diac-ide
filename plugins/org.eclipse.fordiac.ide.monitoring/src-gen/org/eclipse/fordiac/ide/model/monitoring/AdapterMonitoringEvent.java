@@ -55,5 +55,14 @@ public interface AdapterMonitoringEvent extends IEditPartCreator, Event {
 	 * @generated
 	 */
 	@Override
+	EList<INamedElement> getInOutParameters();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	@Override
 	DataType getReturnType();
 } // AdapterMonitoringEvent

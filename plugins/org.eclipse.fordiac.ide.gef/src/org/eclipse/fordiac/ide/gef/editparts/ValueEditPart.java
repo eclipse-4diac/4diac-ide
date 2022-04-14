@@ -193,9 +193,14 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	/** Refresh value. */
 	void refreshValue() {
 		if (getModel().getValue() != null) {
-			getFigure().setText(getModel().getValue());
 			setVisible(true);
 			setBackground(getModel().hasError());
+			if (getIInterfaceElement().getInputConnections().isEmpty()
+					&& getIInterfaceElement().getOutputConnections().isEmpty()) {
+				getFigure().setText(getModel().getValue());
+			} else {
+				getFigure().setText("");
+			}
 		} else {
 			setVisible(false);
 		}
@@ -328,6 +333,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	/** performs the directEdit. */
 	public void performDirectEdit() {
+		getFigure().setText(getModel().getValue()); // Shows the current initial value when editing
 		createDirectEditManager().show();
 	}
 

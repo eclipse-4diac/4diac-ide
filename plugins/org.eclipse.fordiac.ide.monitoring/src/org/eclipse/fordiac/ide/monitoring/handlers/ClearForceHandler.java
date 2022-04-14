@@ -38,7 +38,7 @@ public class ClearForceHandler extends AbstractMonitoringHandler {
 			final MonitoringManager manager = MonitoringManager.getInstance();
 			final MonitoringBaseElement element = manager.getMonitoringElement(variable);
 			if (element instanceof MonitoringElement) {
-				manager.forceValue((MonitoringElement) element, ""); //$NON-NLS-1$
+				manager.forceValue((MonitoringElement) element, null, ""); //$NON-NLS-1$
 			}
 		}
 	}

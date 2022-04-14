@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral
@@ -217,6 +218,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected Iterable<CharSequence> generateCallArguments(STFeatureExpression expr) {
 		try {
 			expr.mappedInputArguments.entrySet.map[key.generateInputCallArgument(value)] +
+				expr.mappedInOutArguments.entrySet.map[key.generateInOutCallArgument(value)] +
 				expr.mappedOutputArguments.entrySet.map[key.generateOutputCallArgument(value)]
 		} catch (IndexOutOfBoundsException e) {
 			errors.add('''Not enough arguments for «expr.feature.name»''')
@@ -229,6 +231,13 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument) {
 		if(argument === null) parameter.generateVariableDefaultValue else argument.generateExpression
+	}
+
+	def protected CharSequence generateInOutCallArgument(INamedElement parameter, INamedElement argument) {
+		if (argument === null)
+			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
+		else
+			argument.generateFeatureName
 	}
 
 	def protected CharSequence generateOutputCallArgument(INamedElement parameter, INamedElement argument) {
@@ -312,6 +321,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) '''st_lv_«feature.name»'''
 
 	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''func_«feature.name»'''
+
+	def protected dispatch CharSequence generateFeatureName(STStandardFunction feature) '''func_«feature.name»'''
 
 	def protected dispatch CharSequence generateFeatureName(STMethod feature) '''method_«feature.name»'''
 

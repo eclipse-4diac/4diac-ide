@@ -16,7 +16,10 @@ import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
+import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class EvaluatorDebugVariable extends EvaluatorDebugElement
 implements IVariable, Comparable<EvaluatorDebugVariable> {
@@ -60,7 +63,12 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 	@Override
 	public boolean verifyValue(final IValue value) throws DebugException {
 		if (value instanceof EvaluatorDebugValue) {
-			return ((EvaluatorDebugValue) value).getInternalValue().getType().isCompatibleWith(this.variable.getType());
+			final INamedElement variableType = ((EvaluatorDebugValue) value).getInternalValue().getType();
+			final INamedElement valueType = this.variable.getType();
+			if (variableType instanceof DataType && valueType instanceof DataType) {
+				return ((DataType) variableType).isCompatibleWith((DataType) valueType);
+			}
+			return variableType == valueType;
 		}
 		return this.verifyValue(value.getValueString());
 	}
@@ -95,6 +103,28 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 
 	@Override
 	public int compareTo(final EvaluatorDebugVariable o) {
+		if (Evaluator.CONTEXT_NAME.equals(this.variable.getName())) { // sort THIS always at top
+			return Evaluator.CONTEXT_NAME.equals(o.variable.getName()) ? 0 : -1;
+		}
 		return this.variable.getName().compareTo(o.variable.getName());
+	}
+
+	@Override
+	public boolean equals(final Object obj) {
+		if (obj == this) {
+			return true;
+		}
+		if (obj == null) {
+			return false;
+		}
+		if (this.getClass() == obj.getClass()) {
+			return this.variable.getName().equals(((EvaluatorDebugVariable) obj).variable.getName());
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return this.variable.getName().hashCode();
 	}
 }

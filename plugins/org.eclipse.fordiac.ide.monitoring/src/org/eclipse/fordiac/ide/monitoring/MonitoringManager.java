@@ -315,7 +315,8 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		elements.addAll(findElements);
 	}
 
-	public void forceValue(final MonitoringElement element, final String value) {
+	public void forceValue(final MonitoringElement element, final IInterfaceElement interfaceElement,
+			final String value) {
 		final AutomationSystem automationSystem = element.getPort().getSystem();
 
 		if (automationSystem == null) {
@@ -363,13 +364,13 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	}
 
 	private static void showDeviceNotFounderroMsg(final MonitoringElement element) {
-		MessageDialog.openError(Display.getDefault().getActiveShell(), "Error",
-				"Device could not be found for FB port: " + element.getPort() + ".");
+		MessageDialog.openError(Display.getDefault().getActiveShell(), "Error", //$NON-NLS-1$
+				"Device could not be found for FB port: " + element.getPort() + "."); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	private static void showSystemNotFoundErrorMsg(final MonitoringElement element) {
-		MessageDialog.openError(Display.getDefault().getActiveShell(), "Error",
-				"System could not be found for FB port: " + element.getPort() + ".");
+		MessageDialog.openError(Display.getDefault().getActiveShell(), "Error", //$NON-NLS-1$
+				"System could not be found for FB port: " + element.getPort() + ".");  //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 }

@@ -15,6 +15,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="STVarPlainDeclarationBlock" eSuperTypes="#//STVarDeclarationBlock"/>
   <eClassifiers xsi:type="ecore:EClass" name="STVarInputDeclarationBlock" eSuperTypes="#//STVarDeclarationBlock"/>
   <eClassifiers xsi:type="ecore:EClass" name="STVarOutputDeclarationBlock" eSuperTypes="#//STVarDeclarationBlock"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STVarInOutDeclarationBlock" eSuperTypes="#//STVarDeclarationBlock"/>
   <eClassifiers xsi:type="ecore:EClass" name="STVarTempDeclarationBlock" eSuperTypes="#//STVarDeclarationBlock"/>
   <eClassifiers xsi:type="ecore:EClass" name="STInitializerExpression"/>
   <eClassifiers xsi:type="ecore:EClass" name="STElementaryInitializerExpression" eSuperTypes="#//STInitializerExpression">
@@ -42,17 +43,38 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="call" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="STCallArgument"/>
+  <eClassifiers xsi:type="ecore:EClass" name="STCallArgument">
+    <eOperations name="getResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return null;"/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STCallUnnamedArgument" eSuperTypes="#//STCallArgument">
+    <eOperations name="getResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="arg" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STCallNamedInputArgument" eSuperTypes="#//STCallArgument">
+    <eOperations name="getResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="#//STExpression"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STCallNamedOutputArgument" eSuperTypes="#//STCallArgument">
+    <eOperations name="getResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="not" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="source" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
@@ -291,6 +313,15 @@
         <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
       </eGenericType>
     </eOperations>
+    <eOperations name="getMappedInOutArguments">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedInOutArguments(this);"/>
+      </eAnnotations>
+      <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
+        <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
+        <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
+      </eGenericType>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="feature" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="call" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameters" upperBound="-1"
@@ -305,6 +336,18 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="specifier" eType="#//STMultiBitAccessSpecifier"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="index" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBigInteger"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//STExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STStandardFunction" eSuperTypes="../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ICallable">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="returnType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/data.ecore#//DataType"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputParameters" upperBound="-1"
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputParameters" upperBound="-1"
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inOutParameters" upperBound="-1"
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="STDate" instanceClassName="java.time.LocalDate"/>

@@ -41,5 +41,5 @@ STMethod:
 
 STMethodBody:
 	{STMethodBody}
-	varDeclarations+=(STVarTempDeclarationBlock | STVarInputDeclarationBlock | STVarOutputDeclarationBlock)*
+	varDeclarations+=(STVarTempDeclarationBlock | STVarInputDeclarationBlock | STVarOutputDeclarationBlock | STVarInOutDeclarationBlock)*
 	statements+=STStatement*;

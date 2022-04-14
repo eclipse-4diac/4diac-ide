@@ -297,11 +297,19 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 			Rectangle bounds = null;
 			final Point p = calculatePos();
 			final int width = calculateWidth();
-			bounds = new Rectangle(p.x, p.y, width, -1);
+			final int height = getHeight();
+			bounds = new Rectangle(p.x, p.y, width, height);
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
 
 		}
 	}
+
+	private int getHeight() {
+		return FigureUtilities
+				.getFontMetrics(JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT))
+				.getHeight();
+	}
+
 
 	protected void setBackgroundColor(final IFigure l) {
 		l.setBackgroundColor(PreferenceGetter.getColor(Activator.getDefault().getPreferenceStore(),

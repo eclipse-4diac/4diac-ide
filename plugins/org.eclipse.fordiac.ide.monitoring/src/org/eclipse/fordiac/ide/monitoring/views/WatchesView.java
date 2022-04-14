@@ -25,10 +25,12 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.IMonitoringListener;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
@@ -45,6 +47,7 @@ import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueLabelProvider;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -210,7 +213,8 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 	 *
 	 * @param manager the manager */
 	private void fillLocalToolBar(final IToolBarManager manager) {
-		toggleSelection = new Action(Messages.MonitoringManagerUtils_SelectionFilteringActive, Action.AS_RADIO_BUTTON) {
+		toggleSelection = new Action(Messages.MonitoringManagerUtils_SelectionFilteringActive,
+				IAction.AS_RADIO_BUTTON) {
 			@Override
 			public void run() {
 				selectionActive = !selectionActive;
@@ -349,19 +353,18 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 					final MonitoringManager manager = MonitoringManager.getInstance();
 					final StructuredSelection selection = (StructuredSelection) filteredTree.getViewer().getSelection();
 					if (selection.getFirstElement() instanceof WatchValueTreeNode) {
+						final IInterfaceElement interfaceElement = ((WatchValueTreeNode) selection.getFirstElement()).getMonitoringBaseElement().getPort()
+								.getInterfaceElement();
 						final MonitoringBaseElement element = manager
-								.getMonitoringElement(((WatchValueTreeNode) selection.getFirstElement())
-										.getMonitoringBaseElement().getPort().getInterfaceElement());
-						forceMenuItem.setEnabled(
-								!(((WatchValueTreeNode) selection.getFirstElement()).getMonitoringBaseElement()
-										.getPort().getInterfaceElement().getType() instanceof EventType));
+								.getMonitoringElement(interfaceElement);
+						forceMenuItem
+						.setEnabled(!(interfaceElement.getType() instanceof EventType) && ((interfaceElement
+								.getType() instanceof StructuredType) == (((WatchValueTreeNode) selection
+										.getFirstElement()).getVariable() != null)));
 						clearForceMenuItem.setEnabled(
-								!(((WatchValueTreeNode) selection.getFirstElement()).getMonitoringBaseElement()
-										.getPort().getInterfaceElement().getType() instanceof EventType)
+								!(interfaceElement.getType() instanceof EventType)
 								&& ((MonitoringElement) element).isForce());
-						triggerMenuItem.setEnabled(
-								((WatchValueTreeNode) selection.getFirstElement()).getMonitoringBaseElement().getPort()
-								.getInterfaceElement().getType() instanceof EventType);
+						triggerMenuItem.setEnabled(interfaceElement.getType() instanceof EventType);
 					}
 				} else {
 					contextMenu.setVisible(false);
@@ -383,12 +386,16 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 			if (viewer.getSelection() instanceof StructuredSelection) {
 				final StructuredSelection sel = (StructuredSelection) viewer.getSelection();
 				if (sel.getFirstElement() instanceof WatchValueTreeNode) {
-					if (((WatchValueTreeNode) sel.getFirstElement()).getMonitoringBaseElement().getPort()
+					final WatchValueTreeNode treeNode = (WatchValueTreeNode) sel.getFirstElement();
+					if (treeNode.getMonitoringBaseElement().getPort()
 							.getInterfaceElement() instanceof VarDeclaration) {
-						final VarDeclaration variable = (VarDeclaration) ((WatchValueTreeNode) sel
-								.getFirstElement())
-								.getMonitoringBaseElement().getPort().getInterfaceElement();
-						ForceHandler.showDialogAndProcess(variable);
+						final VarDeclaration variable = (VarDeclaration) treeNode.getMonitoringBaseElement().getPort()
+								.getInterfaceElement();
+						if (treeNode.isStructNode()) {
+							ForceHandler.showDialogAndProcess(variable, treeNode.getVariable());
+						} else {
+							ForceHandler.showDialogAndProcess(variable);
+						}
 						viewer.refresh();
 					}
 				}
@@ -405,10 +412,9 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 			if (viewer.getSelection() instanceof StructuredSelection) {
 				final StructuredSelection sel = (StructuredSelection) viewer.getSelection();
 				if (sel.getFirstElement() instanceof WatchValueTreeNode) {
-					if (((WatchValueTreeNode) sel.getFirstElement()).getMonitoringBaseElement().getPort()
-							.getInterfaceElement() instanceof VarDeclaration) {
-						final VarDeclaration variable = (VarDeclaration) ((WatchValueTreeNode) sel
-								.getFirstElement()).getMonitoringBaseElement().getPort().getInterfaceElement();
+					final WatchValueTreeNode treeNode = (WatchValueTreeNode) sel.getFirstElement();
+					if (treeNode.getMonitoringBaseElement().getPort().getInterfaceElement() instanceof VarDeclaration) {
+						final VarDeclaration variable = (VarDeclaration) treeNode.getMonitoringBaseElement().getPort().getInterfaceElement();
 						ClearForceHandler.processHandler(variable);
 						viewer.refresh();
 					}

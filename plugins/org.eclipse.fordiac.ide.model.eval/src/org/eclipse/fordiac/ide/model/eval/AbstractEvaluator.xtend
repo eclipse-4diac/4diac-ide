@@ -15,9 +15,11 @@ package org.eclipse.fordiac.ide.model.eval
 import java.util.Set
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.eclipse.fordiac.ide.model.eval.variable.Variable
 
 @FinalFieldsConstructor
 abstract class AbstractEvaluator implements Evaluator {
+	@Accessors final Variable context
 	@Accessors final Evaluator parent
 
 	def protected <T> T trap(T context) {

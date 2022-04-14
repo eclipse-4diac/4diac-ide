@@ -99,4 +99,12 @@ public interface STMethod extends STAlgorithmSourceElement, ICallable {
 	 */
 	EList<INamedElement> getOutputParameters();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<INamedElement> getInOutParameters();
+
 } // STMethod

@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.test.model.eval.fb
 
 import java.util.concurrent.ArrayBlockingQueue
 import org.eclipse.fordiac.ide.model.data.DataFactory
+import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.fb.SimpleFBEvaluator
 import org.eclipse.fordiac.ide.model.eval.value.StructValue
@@ -62,6 +63,23 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 				C: INT;
 			END_VAR
 			C := A + B;
+			END_METHOD
+			'''.newSTMethod("TEST_METHOD")
+		].evaluateSimpleFB("REQ", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
+			"DO1".newVarDeclaration(ElementaryTypes.INT, false)).variables.get("DO1").value)
+	}
+
+	@Test
+	def void testMethodCallVariableAccess() {
+		21.toIntValue.assertEquals(#[
+			'''TEST_METHOD(A := DI1, B := DI2);'''.newSTAlgorithm("REQ"),
+			'''
+			METHOD TEST_METHOD
+			VAR_INPUT
+				A: INT;
+				B: INT;
+			END_VAR
+			DO1 := A + B;
 			END_METHOD
 			'''.newSTMethod("TEST_METHOD")
 		].evaluateSimpleFB("REQ", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
@@ -162,6 +180,50 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	}
 
 	@Test
+	def void testMethodCallWithInOut() {
+		42.toIntValue.assertEquals(#[
+			'''TEST_METHOD(X := DI1, A := DI2, O => DO1); DO1 := DO1 + DI1;'''.newSTAlgorithm("REQ"),
+			'''
+			METHOD TEST_METHOD
+			VAR_INPUT
+				A: INT;
+			END_VAR
+			VAR_OUTPUT
+				O: INT := 21;
+			END_VAR
+			VAR_IN_OUT
+				X: INT;
+			END_VAR
+			X := X + A;
+			END_METHOD
+			'''.newSTMethod("TEST_METHOD")
+		].evaluateSimpleFB("REQ", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
+			"DO1".newVarDeclaration(ElementaryTypes.INT, false)).variables.get("DO1").value)
+	}
+
+	@Test
+	def void testMethodCallNonFormalWithInOut() {
+		42.toIntValue.assertEquals(#[
+			'''TEST_METHOD(DI2, DI1, DO1); DO1 := DO1 + DI1;'''.newSTAlgorithm("REQ"),
+			'''
+			METHOD TEST_METHOD
+			VAR_INPUT
+				A: INT;
+			END_VAR
+			VAR_OUTPUT
+				O: INT := 21;
+			END_VAR
+			VAR_IN_OUT
+				X: INT;
+			END_VAR
+			X := X + A;
+			END_METHOD
+			'''.newSTMethod("TEST_METHOD")
+		].evaluateSimpleFB("REQ", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
+			"DO1".newVarDeclaration(ElementaryTypes.INT, false)).variables.get("DO1").value)
+	}
+
+	@Test
 	def void testMethod2MethodCall() {
 		21.toIntValue.assertEquals(#[
 			'''TEST_METHOD(A := DI1, B := DI2, C => DO1);'''.newSTAlgorithm("REQ"),
@@ -187,6 +249,32 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 				C: INT;
 			END_VAR
 			C := A + B;
+			END_METHOD
+			'''.newSTMethod("TEST_METHOD2")
+		].evaluateSimpleFB("REQ", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
+			"DO1".newVarDeclaration(ElementaryTypes.INT, false)).variables.get("DO1").value)
+	}
+
+	@Test
+	def void testMethod2MethodCallVariableAccess() {
+		21.toIntValue.assertEquals(#[
+			'''TEST_METHOD(A := DI1, B := DI2);'''.newSTAlgorithm("REQ"),
+			'''
+			METHOD TEST_METHOD
+			VAR_INPUT
+				A: INT;
+				B: INT;
+			END_VAR
+			TEST_METHOD2(A := A, B := B);
+			END_METHOD
+			'''.newSTMethod("TEST_METHOD"),
+			'''
+			METHOD TEST_METHOD2
+			VAR_INPUT
+				A: INT;
+				B: INT;
+			END_VAR
+			DO1 := A + B;
 			END_METHOD
 			'''.newSTMethod("TEST_METHOD2")
 		].evaluateSimpleFB("REQ", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
@@ -376,6 +464,72 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	}
 
 	@Test
+	def void testMethod2MethodCallWithInOut() {
+		42.toIntValue.assertEquals(#[
+			'''TEST_METHOD(X := DI1, A := DI2, O => DO1); DO1 := DO1 + DI1;'''.newSTAlgorithm("REQ"),
+			'''
+			METHOD TEST_METHOD
+			VAR_INPUT
+				A: INT;
+			END_VAR
+			VAR_OUTPUT
+				O: INT;
+			END_VAR
+			VAR_IN_OUT
+				X: INT;
+			END_VAR
+			TEST_METHOD2(A := A, X := X, O => O);
+			END_METHOD
+			'''.newSTMethod("TEST_METHOD"),
+			'''
+			METHOD TEST_METHOD2
+			VAR_INPUT
+				A: INT;
+			END_VAR
+			VAR_OUTPUT
+				O: INT := 21;
+			END_VAR
+			VAR_IN_OUT
+				X: INT;
+			END_VAR
+			X := X + A;
+			END_METHOD
+			'''.newSTMethod("TEST_METHOD2")
+		].evaluateSimpleFB("REQ", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
+			"DO1".newVarDeclaration(ElementaryTypes.INT, false)).variables.get("DO1").value)
+	}
+
+	@Test
+	def void testMethod2MethodCallNonFormalWithInOut() {
+		21.toIntValue.assertEquals(#[
+			'''TEST_METHOD(DI2, DI1); DO1 := DI1;'''.newSTAlgorithm("REQ"),
+			'''
+			METHOD TEST_METHOD
+			VAR_INPUT
+				A: INT;
+			END_VAR
+			VAR_IN_OUT
+				X: INT;
+			END_VAR
+			TEST_METHOD2(A, X);
+			END_METHOD
+			'''.newSTMethod("TEST_METHOD"),
+			'''
+			METHOD TEST_METHOD2
+			VAR_INPUT
+				A: INT;
+			END_VAR
+			VAR_IN_OUT
+				X: INT;
+			END_VAR
+			X := X + A;
+			END_METHOD
+			'''.newSTMethod("TEST_METHOD2")
+		].evaluateSimpleFB("REQ", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
+			"DO1".newVarDeclaration(ElementaryTypes.INT, false)).variables.get("DO1").value)
+	}
+
+	@Test
 	def void testSimpleWithStruct() {
 		val structType = DataFactory.eINSTANCE.createStructuredType => [
 			name = "TestStruct"
@@ -402,11 +556,11 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 		val fbType = LibraryElementFactory.eINSTANCE.createSimpleFBType
 		fbType.name = "Test"
 		fbType.interfaceList = newInterfaceList(#[inputEvent, outputEvent], variables.map [
-			newVarDeclaration(name, type, true)
+			newVarDeclaration(name, type as DataType, true)
 		] + #[output])
 		fbType.callables.addAll(callables)
 		val queue = new ArrayBlockingQueue(1000)
-		val eval = new SimpleFBEvaluator(fbType, queue, variables, null)
+		val eval = new SimpleFBEvaluator(fbType, null, variables, queue, null)
 		queue.add(inputEvent)
 		eval.evaluate
 		#[outputEvent].assertIterableEquals(queue)

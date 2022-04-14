@@ -12,128 +12,129 @@ import java.util.ArrayList;
 
 @SuppressWarnings("all")
 public class InternalSTAlgorithmLexer extends Lexer {
-    public static final int LWORD=34;
-    public static final int LessThanSignGreaterThanSign=76;
-    public static final int EqualsSignGreaterThanSign=77;
-    public static final int VAR=65;
-    public static final int END_IF=22;
-    public static final int ULINT=36;
-    public static final int END_CASE=17;
-    public static final int LessThanSign=104;
-    public static final int LeftParenthesis=94;
-    public static final int BYTE=42;
-    public static final int ELSE=47;
-    public static final int IF=83;
-    public static final int LINT=49;
-    public static final int GreaterThanSign=106;
-    public static final int WORD=57;
+    public static final int LWORD=35;
+    public static final int LessThanSignGreaterThanSign=77;
+    public static final int EqualsSignGreaterThanSign=78;
+    public static final int VAR=66;
+    public static final int END_IF=23;
+    public static final int ULINT=37;
+    public static final int END_CASE=18;
+    public static final int LessThanSign=105;
+    public static final int LeftParenthesis=95;
+    public static final int BYTE=43;
+    public static final int ELSE=48;
+    public static final int IF=84;
+    public static final int LINT=50;
+    public static final int GreaterThanSign=107;
+    public static final int WORD=58;
     public static final int DATE_AND_TIME=5;
-    public static final int RULE_ID=119;
-    public static final int TOD=64;
-    public static final int DINT=46;
-    public static final int UDINT=35;
-    public static final int CASE=43;
-    public static final int GreaterThanSignEqualsSign=78;
+    public static final int RULE_ID=120;
+    public static final int TOD=65;
+    public static final int DINT=47;
+    public static final int UDINT=36;
+    public static final int CASE=44;
+    public static final int GreaterThanSignEqualsSign=79;
     public static final int END_ALGORITHM=6;
-    public static final int AT=79;
-    public static final int PlusSign=97;
-    public static final int RULE_INT=117;
-    public static final int END_FOR=19;
-    public static final int RULE_ML_COMMENT=121;
-    public static final int THEN=53;
-    public static final int XOR=66;
-    public static final int LeftSquareBracket=112;
-    public static final int EXIT=48;
+    public static final int AT=80;
+    public static final int PlusSign=98;
+    public static final int RULE_INT=118;
+    public static final int END_FOR=20;
+    public static final int RULE_ML_COMMENT=122;
+    public static final int THEN=54;
+    public static final int XOR=67;
+    public static final int LeftSquareBracket=113;
+    public static final int EXIT=49;
     public static final int TIME_OF_DAY=8;
-    public static final int B=67;
+    public static final int B=68;
     public static final int LDATE_AND_TIME=4;
-    public static final int REPEAT=24;
-    public static final int D=107;
-    public static final int H=108;
-    public static final int CHAR=44;
-    public static final int L=69;
-    public static final int M=109;
-    public static final int LTIME=33;
-    public static final int Comma=98;
-    public static final int HyphenMinus=99;
-    public static final int S=110;
-    public static final int T=111;
-    public static final int W=70;
-    public static final int BY=80;
-    public static final int X=71;
-    public static final int ELSIF=29;
+    public static final int REPEAT=25;
+    public static final int D=108;
+    public static final int H=109;
+    public static final int CHAR=45;
+    public static final int L=70;
+    public static final int M=110;
+    public static final int LTIME=34;
+    public static final int Comma=99;
+    public static final int HyphenMinus=100;
+    public static final int S=111;
+    public static final int T=112;
+    public static final int W=71;
+    public static final int BY=81;
+    public static final int X=72;
+    public static final int ELSIF=30;
     public static final int END_REPEAT=10;
-    public static final int LessThanSignEqualsSign=75;
-    public static final int Solidus=101;
-    public static final int VAR_INPUT=14;
-    public static final int FullStop=100;
-    public static final int VAR_TEMP=18;
-    public static final int CONSTANT=15;
-    public static final int KW__=114;
-    public static final int CONTINUE=16;
-    public static final int Semicolon=103;
-    public static final int LD=84;
-    public static final int VAR_OUTPUT=11;
-    public static final int STRING=26;
-    public static final int RULE_HEX_DIGIT=115;
-    public static final int TO=90;
-    public static final int UINT=56;
-    public static final int LTOD=50;
-    public static final int ARRAY=27;
-    public static final int LT=85;
-    public static final int DO=81;
-    public static final int WSTRING=21;
-    public static final int DT=82;
-    public static final int END_VAR=20;
-    public static final int FullStopFullStop=73;
-    public static final int Ampersand=93;
-    public static final int US=91;
-    public static final int RightSquareBracket=113;
-    public static final int USINT=38;
-    public static final int MS=86;
-    public static final int DWORD=28;
-    public static final int FOR=59;
-    public static final int RightParenthesis=95;
-    public static final int TRUE=55;
-    public static final int ColonEqualsSign=74;
-    public static final int END_WHILE=13;
-    public static final int DATE=45;
-    public static final int NOT=63;
-    public static final int LDATE=31;
-    public static final int AND=58;
-    public static final int NumberSign=92;
-    public static final int REAL=51;
-    public static final int AsteriskAsterisk=72;
-    public static final int METHOD=23;
-    public static final int SINT=52;
+    public static final int LessThanSignEqualsSign=76;
+    public static final int Solidus=102;
+    public static final int VAR_INPUT=15;
+    public static final int FullStop=101;
+    public static final int VAR_TEMP=19;
+    public static final int CONSTANT=16;
+    public static final int KW__=115;
+    public static final int CONTINUE=17;
+    public static final int Semicolon=104;
+    public static final int LD=85;
+    public static final int VAR_OUTPUT=12;
+    public static final int STRING=27;
+    public static final int RULE_HEX_DIGIT=116;
+    public static final int TO=91;
+    public static final int UINT=57;
+    public static final int LTOD=51;
+    public static final int ARRAY=28;
+    public static final int LT=86;
+    public static final int DO=82;
+    public static final int WSTRING=22;
+    public static final int DT=83;
+    public static final int END_VAR=21;
+    public static final int FullStopFullStop=74;
+    public static final int Ampersand=94;
+    public static final int US=92;
+    public static final int RightSquareBracket=114;
+    public static final int USINT=39;
+    public static final int MS=87;
+    public static final int DWORD=29;
+    public static final int FOR=60;
+    public static final int RightParenthesis=96;
+    public static final int TRUE=56;
+    public static final int ColonEqualsSign=75;
+    public static final int END_WHILE=14;
+    public static final int DATE=46;
+    public static final int NOT=64;
+    public static final int LDATE=32;
+    public static final int AND=59;
+    public static final int NumberSign=93;
+    public static final int REAL=52;
+    public static final int AsteriskAsterisk=73;
+    public static final int METHOD=24;
+    public static final int SINT=53;
     public static final int LTIME_OF_DAY=7;
-    public static final int LREAL=32;
-    public static final int WCHAR=39;
-    public static final int NS=87;
-    public static final int ALGORITHM=12;
-    public static final int RULE_STRING=120;
-    public static final int INT=60;
-    public static final int RULE_SL_COMMENT=122;
-    public static final int RETURN=25;
-    public static final int EqualsSign=105;
-    public static final int OF=88;
+    public static final int LREAL=33;
+    public static final int WCHAR=40;
+    public static final int NS=88;
+    public static final int ALGORITHM=13;
+    public static final int RULE_STRING=121;
+    public static final int INT=61;
+    public static final int RULE_SL_COMMENT=123;
+    public static final int RETURN=26;
+    public static final int EqualsSign=106;
+    public static final int OF=89;
     public static final int END_METHOD=9;
-    public static final int Colon=102;
+    public static final int Colon=103;
     public static final int EOF=-1;
-    public static final int LDT=61;
-    public static final int Asterisk=96;
-    public static final int MOD=62;
-    public static final int OR=89;
-    public static final int RULE_WS=123;
-    public static final int RULE_EXT_INT=118;
-    public static final int TIME=54;
-    public static final int RULE_ANY_OTHER=124;
-    public static final int UNTIL=37;
-    public static final int BOOL=41;
-    public static final int D_1=68;
-    public static final int FALSE=30;
-    public static final int WHILE=40;
-    public static final int RULE_NON_DECIMAL=116;
+    public static final int LDT=62;
+    public static final int Asterisk=97;
+    public static final int MOD=63;
+    public static final int OR=90;
+    public static final int RULE_WS=124;
+    public static final int RULE_EXT_INT=119;
+    public static final int VAR_IN_OUT=11;
+    public static final int TIME=55;
+    public static final int RULE_ANY_OTHER=125;
+    public static final int UNTIL=38;
+    public static final int BOOL=42;
+    public static final int D_1=69;
+    public static final int FALSE=31;
+    public static final int WHILE=41;
+    public static final int RULE_NON_DECIMAL=117;
 
     // delegates
     // delegators
@@ -940,13 +941,106 @@ public class InternalSTAlgorithmLexer extends Lexer {
     }
     // $ANTLR end "END_REPEAT"
 
+    // $ANTLR start "VAR_IN_OUT"
+    public final void mVAR_IN_OUT() throws RecognitionException {
+        try {
+            int _type = VAR_IN_OUT;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // InternalSTAlgorithmLexer.g:28:12: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:28:14: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' )
+            {
+            if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
+                input.consume();
+
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;}
+
+            if ( input.LA(1)=='A'||input.LA(1)=='a' ) {
+                input.consume();
+
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;}
+
+            if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
+                input.consume();
+
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;}
+
+            match('_'); 
+            if ( input.LA(1)=='I'||input.LA(1)=='i' ) {
+                input.consume();
+
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;}
+
+            if ( input.LA(1)=='N'||input.LA(1)=='n' ) {
+                input.consume();
+
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;}
+
+            match('_'); 
+            if ( input.LA(1)=='O'||input.LA(1)=='o' ) {
+                input.consume();
+
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;}
+
+            if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
+                input.consume();
+
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;}
+
+            if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
+                input.consume();
+
+            }
+            else {
+                MismatchedSetException mse = new MismatchedSetException(null,input);
+                recover(mse);
+                throw mse;}
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "VAR_IN_OUT"
+
     // $ANTLR start "VAR_OUTPUT"
     public final void mVAR_OUTPUT() throws RecognitionException {
         try {
             int _type = VAR_OUTPUT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:28:12: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:28:14: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:30:12: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:30:14: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'O' | 'o' ) ( 'U' | 'u' ) ( 'T' | 't' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -1046,8 +1140,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = ALGORITHM;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:30:11: ( ( 'A' | 'a' ) ( 'L' | 'l' ) ( 'G' | 'g' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'M' | 'm' ) )
-            // InternalSTAlgorithmLexer.g:30:13: ( 'A' | 'a' ) ( 'L' | 'l' ) ( 'G' | 'g' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'M' | 'm' )
+            // InternalSTAlgorithmLexer.g:32:11: ( ( 'A' | 'a' ) ( 'L' | 'l' ) ( 'G' | 'g' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'M' | 'm' ) )
+            // InternalSTAlgorithmLexer.g:32:13: ( 'A' | 'a' ) ( 'L' | 'l' ) ( 'G' | 'g' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'M' | 'm' )
             {
             if ( input.LA(1)=='A'||input.LA(1)=='a' ) {
                 input.consume();
@@ -1146,8 +1240,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = END_WHILE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:32:11: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' ) )
-            // InternalSTAlgorithmLexer.g:32:13: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' )
+            // InternalSTAlgorithmLexer.g:34:11: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' ) )
+            // InternalSTAlgorithmLexer.g:34:13: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1238,8 +1332,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = VAR_INPUT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:34:11: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:34:13: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:36:11: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:36:13: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'P' | 'p' ) ( 'U' | 'u' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -1330,8 +1424,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = CONSTANT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:36:10: ( ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:36:12: ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:38:10: ( ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:38:12: ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='C'||input.LA(1)=='c' ) {
                 input.consume();
@@ -1421,8 +1515,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = CONTINUE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:38:10: ( ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'U' | 'u' ) ( 'E' | 'e' ) )
-            // InternalSTAlgorithmLexer.g:38:12: ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'U' | 'u' ) ( 'E' | 'e' )
+            // InternalSTAlgorithmLexer.g:40:10: ( ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'U' | 'u' ) ( 'E' | 'e' ) )
+            // InternalSTAlgorithmLexer.g:40:12: ( 'C' | 'c' ) ( 'O' | 'o' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'U' | 'u' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='C'||input.LA(1)=='c' ) {
                 input.consume();
@@ -1512,8 +1606,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = END_CASE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:40:10: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
-            // InternalSTAlgorithmLexer.g:40:12: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' )
+            // InternalSTAlgorithmLexer.g:42:10: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
+            // InternalSTAlgorithmLexer.g:42:12: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1595,8 +1689,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = VAR_TEMP;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:42:10: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'T' | 't' ) ( 'E' | 'e' ) ( 'M' | 'm' ) ( 'P' | 'p' ) )
-            // InternalSTAlgorithmLexer.g:42:12: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'T' | 't' ) ( 'E' | 'e' ) ( 'M' | 'm' ) ( 'P' | 'p' )
+            // InternalSTAlgorithmLexer.g:44:10: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'T' | 't' ) ( 'E' | 'e' ) ( 'M' | 'm' ) ( 'P' | 'p' ) )
+            // InternalSTAlgorithmLexer.g:44:12: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) '_' ( 'T' | 't' ) ( 'E' | 'e' ) ( 'M' | 'm' ) ( 'P' | 'p' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -1678,8 +1772,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = END_FOR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:44:9: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' ) )
-            // InternalSTAlgorithmLexer.g:44:11: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' )
+            // InternalSTAlgorithmLexer.g:46:9: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' ) )
+            // InternalSTAlgorithmLexer.g:46:11: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1752,8 +1846,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = END_VAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:46:9: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
-            // InternalSTAlgorithmLexer.g:46:11: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' )
+            // InternalSTAlgorithmLexer.g:48:9: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
+            // InternalSTAlgorithmLexer.g:48:11: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1826,8 +1920,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = WSTRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:48:9: ( ( 'W' | 'w' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) )
-            // InternalSTAlgorithmLexer.g:48:11: ( 'W' | 'w' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' )
+            // InternalSTAlgorithmLexer.g:50:9: ( ( 'W' | 'w' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) )
+            // InternalSTAlgorithmLexer.g:50:11: ( 'W' | 'w' ) ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' )
             {
             if ( input.LA(1)=='W'||input.LA(1)=='w' ) {
                 input.consume();
@@ -1908,8 +2002,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = END_IF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:50:8: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'I' | 'i' ) ( 'F' | 'f' ) )
-            // InternalSTAlgorithmLexer.g:50:10: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'I' | 'i' ) ( 'F' | 'f' )
+            // InternalSTAlgorithmLexer.g:52:8: ( ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'I' | 'i' ) ( 'F' | 'f' ) )
+            // InternalSTAlgorithmLexer.g:52:10: ( 'E' | 'e' ) ( 'N' | 'n' ) ( 'D' | 'd' ) '_' ( 'I' | 'i' ) ( 'F' | 'f' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -1973,8 +2067,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = METHOD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:52:8: ( ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
-            // InternalSTAlgorithmLexer.g:52:10: ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'O' | 'o' ) ( 'D' | 'd' )
+            // InternalSTAlgorithmLexer.g:54:8: ( ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
+            // InternalSTAlgorithmLexer.g:54:10: ( 'M' | 'm' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'H' | 'h' ) ( 'O' | 'o' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='M'||input.LA(1)=='m' ) {
                 input.consume();
@@ -2046,8 +2140,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = REPEAT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:54:8: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:54:10: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:56:8: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:56:10: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'P' | 'p' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -2119,8 +2213,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = RETURN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:56:8: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'N' | 'n' ) )
-            // InternalSTAlgorithmLexer.g:56:10: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'N' | 'n' )
+            // InternalSTAlgorithmLexer.g:58:8: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'N' | 'n' ) )
+            // InternalSTAlgorithmLexer.g:58:10: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'T' | 't' ) ( 'U' | 'u' ) ( 'R' | 'r' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -2192,8 +2286,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:58:8: ( ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) )
-            // InternalSTAlgorithmLexer.g:58:10: ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' )
+            // InternalSTAlgorithmLexer.g:60:8: ( ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' ) )
+            // InternalSTAlgorithmLexer.g:60:10: ( 'S' | 's' ) ( 'T' | 't' ) ( 'R' | 'r' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'G' | 'g' )
             {
             if ( input.LA(1)=='S'||input.LA(1)=='s' ) {
                 input.consume();
@@ -2265,8 +2359,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = ARRAY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:60:7: ( ( 'A' | 'a' ) ( 'R' | 'r' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'Y' | 'y' ) )
-            // InternalSTAlgorithmLexer.g:60:9: ( 'A' | 'a' ) ( 'R' | 'r' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'Y' | 'y' )
+            // InternalSTAlgorithmLexer.g:62:7: ( ( 'A' | 'a' ) ( 'R' | 'r' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'Y' | 'y' ) )
+            // InternalSTAlgorithmLexer.g:62:9: ( 'A' | 'a' ) ( 'R' | 'r' ) ( 'R' | 'r' ) ( 'A' | 'a' ) ( 'Y' | 'y' )
             {
             if ( input.LA(1)=='A'||input.LA(1)=='a' ) {
                 input.consume();
@@ -2329,8 +2423,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = DWORD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:62:7: ( ( 'D' | 'd' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' ) )
-            // InternalSTAlgorithmLexer.g:62:9: ( 'D' | 'd' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' )
+            // InternalSTAlgorithmLexer.g:64:7: ( ( 'D' | 'd' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' ) )
+            // InternalSTAlgorithmLexer.g:64:9: ( 'D' | 'd' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -2393,8 +2487,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = ELSIF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:64:7: ( ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'F' | 'f' ) )
-            // InternalSTAlgorithmLexer.g:64:9: ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'F' | 'f' )
+            // InternalSTAlgorithmLexer.g:66:7: ( ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'F' | 'f' ) )
+            // InternalSTAlgorithmLexer.g:66:9: ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'F' | 'f' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -2457,8 +2551,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = FALSE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:66:7: ( ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
-            // InternalSTAlgorithmLexer.g:66:9: ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' )
+            // InternalSTAlgorithmLexer.g:68:7: ( ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
+            // InternalSTAlgorithmLexer.g:68:9: ( 'F' | 'f' ) ( 'A' | 'a' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='F'||input.LA(1)=='f' ) {
                 input.consume();
@@ -2521,8 +2615,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LDATE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:68:7: ( ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
-            // InternalSTAlgorithmLexer.g:68:9: ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' )
+            // InternalSTAlgorithmLexer.g:70:7: ( ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
+            // InternalSTAlgorithmLexer.g:70:9: ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -2585,8 +2679,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LREAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:70:7: ( ( 'L' | 'l' ) ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
-            // InternalSTAlgorithmLexer.g:70:9: ( 'L' | 'l' ) ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' )
+            // InternalSTAlgorithmLexer.g:72:7: ( ( 'L' | 'l' ) ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
+            // InternalSTAlgorithmLexer.g:72:9: ( 'L' | 'l' ) ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -2649,8 +2743,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LTIME;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:72:7: ( ( 'L' | 'l' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) )
-            // InternalSTAlgorithmLexer.g:72:9: ( 'L' | 'l' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' )
+            // InternalSTAlgorithmLexer.g:74:7: ( ( 'L' | 'l' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) )
+            // InternalSTAlgorithmLexer.g:74:9: ( 'L' | 'l' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -2713,8 +2807,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LWORD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:74:7: ( ( 'L' | 'l' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' ) )
-            // InternalSTAlgorithmLexer.g:74:9: ( 'L' | 'l' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' )
+            // InternalSTAlgorithmLexer.g:76:7: ( ( 'L' | 'l' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' ) )
+            // InternalSTAlgorithmLexer.g:76:9: ( 'L' | 'l' ) ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -2777,8 +2871,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = UDINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:76:7: ( ( 'U' | 'u' ) ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:76:9: ( 'U' | 'u' ) ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:78:7: ( ( 'U' | 'u' ) ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:78:9: ( 'U' | 'u' ) ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -2841,8 +2935,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = ULINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:78:7: ( ( 'U' | 'u' ) ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:78:9: ( 'U' | 'u' ) ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:80:7: ( ( 'U' | 'u' ) ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:80:9: ( 'U' | 'u' ) ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -2905,8 +2999,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = UNTIL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:80:7: ( ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'L' | 'l' ) )
-            // InternalSTAlgorithmLexer.g:80:9: ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'L' | 'l' )
+            // InternalSTAlgorithmLexer.g:82:7: ( ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'L' | 'l' ) )
+            // InternalSTAlgorithmLexer.g:82:9: ( 'U' | 'u' ) ( 'N' | 'n' ) ( 'T' | 't' ) ( 'I' | 'i' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -2969,8 +3063,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = USINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:82:7: ( ( 'U' | 'u' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:82:9: ( 'U' | 'u' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:84:7: ( ( 'U' | 'u' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:84:9: ( 'U' | 'u' ) ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -3033,8 +3127,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = WCHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:84:7: ( ( 'W' | 'w' ) ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
-            // InternalSTAlgorithmLexer.g:84:9: ( 'W' | 'w' ) ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' )
+            // InternalSTAlgorithmLexer.g:86:7: ( ( 'W' | 'w' ) ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
+            // InternalSTAlgorithmLexer.g:86:9: ( 'W' | 'w' ) ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='W'||input.LA(1)=='w' ) {
                 input.consume();
@@ -3097,8 +3191,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = WHILE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:86:7: ( ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' ) )
-            // InternalSTAlgorithmLexer.g:86:9: ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' )
+            // InternalSTAlgorithmLexer.g:88:7: ( ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' ) )
+            // InternalSTAlgorithmLexer.g:88:9: ( 'W' | 'w' ) ( 'H' | 'h' ) ( 'I' | 'i' ) ( 'L' | 'l' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='W'||input.LA(1)=='w' ) {
                 input.consume();
@@ -3161,8 +3255,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = BOOL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:88:6: ( ( 'B' | 'b' ) ( 'O' | 'o' ) ( 'O' | 'o' ) ( 'L' | 'l' ) )
-            // InternalSTAlgorithmLexer.g:88:8: ( 'B' | 'b' ) ( 'O' | 'o' ) ( 'O' | 'o' ) ( 'L' | 'l' )
+            // InternalSTAlgorithmLexer.g:90:6: ( ( 'B' | 'b' ) ( 'O' | 'o' ) ( 'O' | 'o' ) ( 'L' | 'l' ) )
+            // InternalSTAlgorithmLexer.g:90:8: ( 'B' | 'b' ) ( 'O' | 'o' ) ( 'O' | 'o' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='B'||input.LA(1)=='b' ) {
                 input.consume();
@@ -3216,8 +3310,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = BYTE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:90:6: ( ( 'B' | 'b' ) ( 'Y' | 'y' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
-            // InternalSTAlgorithmLexer.g:90:8: ( 'B' | 'b' ) ( 'Y' | 'y' ) ( 'T' | 't' ) ( 'E' | 'e' )
+            // InternalSTAlgorithmLexer.g:92:6: ( ( 'B' | 'b' ) ( 'Y' | 'y' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
+            // InternalSTAlgorithmLexer.g:92:8: ( 'B' | 'b' ) ( 'Y' | 'y' ) ( 'T' | 't' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='B'||input.LA(1)=='b' ) {
                 input.consume();
@@ -3271,8 +3365,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = CASE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:92:6: ( ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
-            // InternalSTAlgorithmLexer.g:92:8: ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' )
+            // InternalSTAlgorithmLexer.g:94:6: ( ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
+            // InternalSTAlgorithmLexer.g:94:8: ( 'C' | 'c' ) ( 'A' | 'a' ) ( 'S' | 's' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='C'||input.LA(1)=='c' ) {
                 input.consume();
@@ -3326,8 +3420,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = CHAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:94:6: ( ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
-            // InternalSTAlgorithmLexer.g:94:8: ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' )
+            // InternalSTAlgorithmLexer.g:96:6: ( ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
+            // InternalSTAlgorithmLexer.g:96:8: ( 'C' | 'c' ) ( 'H' | 'h' ) ( 'A' | 'a' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='C'||input.LA(1)=='c' ) {
                 input.consume();
@@ -3381,8 +3475,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = DATE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:96:6: ( ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
-            // InternalSTAlgorithmLexer.g:96:8: ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' )
+            // InternalSTAlgorithmLexer.g:98:6: ( ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' ) )
+            // InternalSTAlgorithmLexer.g:98:8: ( 'D' | 'd' ) ( 'A' | 'a' ) ( 'T' | 't' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -3436,8 +3530,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = DINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:98:6: ( ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:98:8: ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:100:6: ( ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:100:8: ( 'D' | 'd' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -3491,8 +3585,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = ELSE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:100:6: ( ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
-            // InternalSTAlgorithmLexer.g:100:8: ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' )
+            // InternalSTAlgorithmLexer.g:102:6: ( ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' ) )
+            // InternalSTAlgorithmLexer.g:102:8: ( 'E' | 'e' ) ( 'L' | 'l' ) ( 'S' | 's' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -3546,8 +3640,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = EXIT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:102:6: ( ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'I' | 'i' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:102:8: ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'I' | 'i' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:104:6: ( ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'I' | 'i' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:104:8: ( 'E' | 'e' ) ( 'X' | 'x' ) ( 'I' | 'i' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
                 input.consume();
@@ -3601,8 +3695,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:104:6: ( ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:104:8: ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:106:6: ( ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:106:8: ( 'L' | 'l' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -3656,8 +3750,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LTOD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:106:6: ( ( 'L' | 'l' ) ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
-            // InternalSTAlgorithmLexer.g:106:8: ( 'L' | 'l' ) ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' )
+            // InternalSTAlgorithmLexer.g:108:6: ( ( 'L' | 'l' ) ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
+            // InternalSTAlgorithmLexer.g:108:8: ( 'L' | 'l' ) ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -3711,8 +3805,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = REAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:108:6: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
-            // InternalSTAlgorithmLexer.g:108:8: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' )
+            // InternalSTAlgorithmLexer.g:110:6: ( ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' ) )
+            // InternalSTAlgorithmLexer.g:110:8: ( 'R' | 'r' ) ( 'E' | 'e' ) ( 'A' | 'a' ) ( 'L' | 'l' )
             {
             if ( input.LA(1)=='R'||input.LA(1)=='r' ) {
                 input.consume();
@@ -3766,8 +3860,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = SINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:110:6: ( ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:110:8: ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:112:6: ( ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:112:8: ( 'S' | 's' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='S'||input.LA(1)=='s' ) {
                 input.consume();
@@ -3821,8 +3915,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = THEN;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:112:6: ( ( 'T' | 't' ) ( 'H' | 'h' ) ( 'E' | 'e' ) ( 'N' | 'n' ) )
-            // InternalSTAlgorithmLexer.g:112:8: ( 'T' | 't' ) ( 'H' | 'h' ) ( 'E' | 'e' ) ( 'N' | 'n' )
+            // InternalSTAlgorithmLexer.g:114:6: ( ( 'T' | 't' ) ( 'H' | 'h' ) ( 'E' | 'e' ) ( 'N' | 'n' ) )
+            // InternalSTAlgorithmLexer.g:114:8: ( 'T' | 't' ) ( 'H' | 'h' ) ( 'E' | 'e' ) ( 'N' | 'n' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -3876,8 +3970,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = TIME;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:114:6: ( ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) )
-            // InternalSTAlgorithmLexer.g:114:8: ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' )
+            // InternalSTAlgorithmLexer.g:116:6: ( ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' ) )
+            // InternalSTAlgorithmLexer.g:116:8: ( 'T' | 't' ) ( 'I' | 'i' ) ( 'M' | 'm' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -3931,8 +4025,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = TRUE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:116:6: ( ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'E' | 'e' ) )
-            // InternalSTAlgorithmLexer.g:116:8: ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'E' | 'e' )
+            // InternalSTAlgorithmLexer.g:118:6: ( ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'E' | 'e' ) )
+            // InternalSTAlgorithmLexer.g:118:8: ( 'T' | 't' ) ( 'R' | 'r' ) ( 'U' | 'u' ) ( 'E' | 'e' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -3986,8 +4080,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = UINT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:118:6: ( ( 'U' | 'u' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:118:8: ( 'U' | 'u' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:120:6: ( ( 'U' | 'u' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:120:8: ( 'U' | 'u' ) ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -4041,8 +4135,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = WORD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:120:6: ( ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' ) )
-            // InternalSTAlgorithmLexer.g:120:8: ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' )
+            // InternalSTAlgorithmLexer.g:122:6: ( ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' ) )
+            // InternalSTAlgorithmLexer.g:122:8: ( 'W' | 'w' ) ( 'O' | 'o' ) ( 'R' | 'r' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='W'||input.LA(1)=='w' ) {
                 input.consume();
@@ -4096,8 +4190,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = AND;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:122:5: ( ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' ) )
-            // InternalSTAlgorithmLexer.g:122:7: ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' )
+            // InternalSTAlgorithmLexer.g:124:5: ( ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' ) )
+            // InternalSTAlgorithmLexer.g:124:7: ( 'A' | 'a' ) ( 'N' | 'n' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='A'||input.LA(1)=='a' ) {
                 input.consume();
@@ -4142,8 +4236,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = FOR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:124:5: ( ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' ) )
-            // InternalSTAlgorithmLexer.g:124:7: ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' )
+            // InternalSTAlgorithmLexer.g:126:5: ( ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' ) )
+            // InternalSTAlgorithmLexer.g:126:7: ( 'F' | 'f' ) ( 'O' | 'o' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='F'||input.LA(1)=='f' ) {
                 input.consume();
@@ -4188,8 +4282,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:126:5: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:126:7: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:128:5: ( ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:128:7: ( 'I' | 'i' ) ( 'N' | 'n' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='I'||input.LA(1)=='i' ) {
                 input.consume();
@@ -4234,8 +4328,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LDT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:128:5: ( ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:128:7: ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:130:5: ( ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:130:7: ( 'L' | 'l' ) ( 'D' | 'd' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -4280,8 +4374,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = MOD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:130:5: ( ( 'M' | 'm' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
-            // InternalSTAlgorithmLexer.g:130:7: ( 'M' | 'm' ) ( 'O' | 'o' ) ( 'D' | 'd' )
+            // InternalSTAlgorithmLexer.g:132:5: ( ( 'M' | 'm' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
+            // InternalSTAlgorithmLexer.g:132:7: ( 'M' | 'm' ) ( 'O' | 'o' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='M'||input.LA(1)=='m' ) {
                 input.consume();
@@ -4326,8 +4420,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = NOT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:132:5: ( ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:132:7: ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:134:5: ( ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:134:7: ( 'N' | 'n' ) ( 'O' | 'o' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='N'||input.LA(1)=='n' ) {
                 input.consume();
@@ -4372,8 +4466,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = TOD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:134:5: ( ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
-            // InternalSTAlgorithmLexer.g:134:7: ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' )
+            // InternalSTAlgorithmLexer.g:136:5: ( ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' ) )
+            // InternalSTAlgorithmLexer.g:136:7: ( 'T' | 't' ) ( 'O' | 'o' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -4418,8 +4512,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = VAR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:136:5: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
-            // InternalSTAlgorithmLexer.g:136:7: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' )
+            // InternalSTAlgorithmLexer.g:138:5: ( ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' ) )
+            // InternalSTAlgorithmLexer.g:138:7: ( 'V' | 'v' ) ( 'A' | 'a' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='V'||input.LA(1)=='v' ) {
                 input.consume();
@@ -4464,8 +4558,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = XOR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:138:5: ( ( 'X' | 'x' ) ( 'O' | 'o' ) ( 'R' | 'r' ) )
-            // InternalSTAlgorithmLexer.g:138:7: ( 'X' | 'x' ) ( 'O' | 'o' ) ( 'R' | 'r' )
+            // InternalSTAlgorithmLexer.g:140:5: ( ( 'X' | 'x' ) ( 'O' | 'o' ) ( 'R' | 'r' ) )
+            // InternalSTAlgorithmLexer.g:140:7: ( 'X' | 'x' ) ( 'O' | 'o' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='X'||input.LA(1)=='x' ) {
                 input.consume();
@@ -4510,8 +4604,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = B;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:140:3: ( '%' ( 'B' | 'b' ) )
-            // InternalSTAlgorithmLexer.g:140:5: '%' ( 'B' | 'b' )
+            // InternalSTAlgorithmLexer.g:142:3: ( '%' ( 'B' | 'b' ) )
+            // InternalSTAlgorithmLexer.g:142:5: '%' ( 'B' | 'b' )
             {
             match('%'); 
             if ( input.LA(1)=='B'||input.LA(1)=='b' ) {
@@ -4539,8 +4633,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = D_1;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:142:5: ( '%' ( 'D' | 'd' ) )
-            // InternalSTAlgorithmLexer.g:142:7: '%' ( 'D' | 'd' )
+            // InternalSTAlgorithmLexer.g:144:5: ( '%' ( 'D' | 'd' ) )
+            // InternalSTAlgorithmLexer.g:144:7: '%' ( 'D' | 'd' )
             {
             match('%'); 
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
@@ -4568,8 +4662,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = L;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:144:3: ( '%' ( 'L' | 'l' ) )
-            // InternalSTAlgorithmLexer.g:144:5: '%' ( 'L' | 'l' )
+            // InternalSTAlgorithmLexer.g:146:3: ( '%' ( 'L' | 'l' ) )
+            // InternalSTAlgorithmLexer.g:146:5: '%' ( 'L' | 'l' )
             {
             match('%'); 
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
@@ -4597,8 +4691,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = W;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:146:3: ( '%' ( 'W' | 'w' ) )
-            // InternalSTAlgorithmLexer.g:146:5: '%' ( 'W' | 'w' )
+            // InternalSTAlgorithmLexer.g:148:3: ( '%' ( 'W' | 'w' ) )
+            // InternalSTAlgorithmLexer.g:148:5: '%' ( 'W' | 'w' )
             {
             match('%'); 
             if ( input.LA(1)=='W'||input.LA(1)=='w' ) {
@@ -4626,8 +4720,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = X;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:148:3: ( '%' ( 'X' | 'x' ) )
-            // InternalSTAlgorithmLexer.g:148:5: '%' ( 'X' | 'x' )
+            // InternalSTAlgorithmLexer.g:150:3: ( '%' ( 'X' | 'x' ) )
+            // InternalSTAlgorithmLexer.g:150:5: '%' ( 'X' | 'x' )
             {
             match('%'); 
             if ( input.LA(1)=='X'||input.LA(1)=='x' ) {
@@ -4655,8 +4749,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = AsteriskAsterisk;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:150:18: ( '*' '*' )
-            // InternalSTAlgorithmLexer.g:150:20: '*' '*'
+            // InternalSTAlgorithmLexer.g:152:18: ( '*' '*' )
+            // InternalSTAlgorithmLexer.g:152:20: '*' '*'
             {
             match('*'); 
             match('*'); 
@@ -4676,8 +4770,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = FullStopFullStop;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:152:18: ( '.' '.' )
-            // InternalSTAlgorithmLexer.g:152:20: '.' '.'
+            // InternalSTAlgorithmLexer.g:154:18: ( '.' '.' )
+            // InternalSTAlgorithmLexer.g:154:20: '.' '.'
             {
             match('.'); 
             match('.'); 
@@ -4697,8 +4791,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = ColonEqualsSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:154:17: ( ':' '=' )
-            // InternalSTAlgorithmLexer.g:154:19: ':' '='
+            // InternalSTAlgorithmLexer.g:156:17: ( ':' '=' )
+            // InternalSTAlgorithmLexer.g:156:19: ':' '='
             {
             match(':'); 
             match('='); 
@@ -4718,8 +4812,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LessThanSignEqualsSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:156:24: ( '<' '=' )
-            // InternalSTAlgorithmLexer.g:156:26: '<' '='
+            // InternalSTAlgorithmLexer.g:158:24: ( '<' '=' )
+            // InternalSTAlgorithmLexer.g:158:26: '<' '='
             {
             match('<'); 
             match('='); 
@@ -4739,8 +4833,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LessThanSignGreaterThanSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:158:29: ( '<' '>' )
-            // InternalSTAlgorithmLexer.g:158:31: '<' '>'
+            // InternalSTAlgorithmLexer.g:160:29: ( '<' '>' )
+            // InternalSTAlgorithmLexer.g:160:31: '<' '>'
             {
             match('<'); 
             match('>'); 
@@ -4760,8 +4854,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = EqualsSignGreaterThanSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:160:27: ( '=' '>' )
-            // InternalSTAlgorithmLexer.g:160:29: '=' '>'
+            // InternalSTAlgorithmLexer.g:162:27: ( '=' '>' )
+            // InternalSTAlgorithmLexer.g:162:29: '=' '>'
             {
             match('='); 
             match('>'); 
@@ -4781,8 +4875,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = GreaterThanSignEqualsSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:162:27: ( '>' '=' )
-            // InternalSTAlgorithmLexer.g:162:29: '>' '='
+            // InternalSTAlgorithmLexer.g:164:27: ( '>' '=' )
+            // InternalSTAlgorithmLexer.g:164:29: '>' '='
             {
             match('>'); 
             match('='); 
@@ -4802,8 +4896,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = AT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:164:4: ( ( 'A' | 'a' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:164:6: ( 'A' | 'a' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:166:4: ( ( 'A' | 'a' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:166:6: ( 'A' | 'a' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='A'||input.LA(1)=='a' ) {
                 input.consume();
@@ -4839,8 +4933,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = BY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:166:4: ( ( 'B' | 'b' ) ( 'Y' | 'y' ) )
-            // InternalSTAlgorithmLexer.g:166:6: ( 'B' | 'b' ) ( 'Y' | 'y' )
+            // InternalSTAlgorithmLexer.g:168:4: ( ( 'B' | 'b' ) ( 'Y' | 'y' ) )
+            // InternalSTAlgorithmLexer.g:168:6: ( 'B' | 'b' ) ( 'Y' | 'y' )
             {
             if ( input.LA(1)=='B'||input.LA(1)=='b' ) {
                 input.consume();
@@ -4876,8 +4970,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = DO;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:168:4: ( ( 'D' | 'd' ) ( 'O' | 'o' ) )
-            // InternalSTAlgorithmLexer.g:168:6: ( 'D' | 'd' ) ( 'O' | 'o' )
+            // InternalSTAlgorithmLexer.g:170:4: ( ( 'D' | 'd' ) ( 'O' | 'o' ) )
+            // InternalSTAlgorithmLexer.g:170:6: ( 'D' | 'd' ) ( 'O' | 'o' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -4913,8 +5007,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = DT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:170:4: ( ( 'D' | 'd' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:170:6: ( 'D' | 'd' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:172:4: ( ( 'D' | 'd' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:172:6: ( 'D' | 'd' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -4950,8 +5044,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = IF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:172:4: ( ( 'I' | 'i' ) ( 'F' | 'f' ) )
-            // InternalSTAlgorithmLexer.g:172:6: ( 'I' | 'i' ) ( 'F' | 'f' )
+            // InternalSTAlgorithmLexer.g:174:4: ( ( 'I' | 'i' ) ( 'F' | 'f' ) )
+            // InternalSTAlgorithmLexer.g:174:6: ( 'I' | 'i' ) ( 'F' | 'f' )
             {
             if ( input.LA(1)=='I'||input.LA(1)=='i' ) {
                 input.consume();
@@ -4987,8 +5081,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LD;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:174:4: ( ( 'L' | 'l' ) ( 'D' | 'd' ) )
-            // InternalSTAlgorithmLexer.g:174:6: ( 'L' | 'l' ) ( 'D' | 'd' )
+            // InternalSTAlgorithmLexer.g:176:4: ( ( 'L' | 'l' ) ( 'D' | 'd' ) )
+            // InternalSTAlgorithmLexer.g:176:6: ( 'L' | 'l' ) ( 'D' | 'd' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -5024,8 +5118,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:176:4: ( ( 'L' | 'l' ) ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:176:6: ( 'L' | 'l' ) ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:178:4: ( ( 'L' | 'l' ) ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:178:6: ( 'L' | 'l' ) ( 'T' | 't' )
             {
             if ( input.LA(1)=='L'||input.LA(1)=='l' ) {
                 input.consume();
@@ -5061,8 +5155,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = MS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:178:4: ( ( 'M' | 'm' ) ( 'S' | 's' ) )
-            // InternalSTAlgorithmLexer.g:178:6: ( 'M' | 'm' ) ( 'S' | 's' )
+            // InternalSTAlgorithmLexer.g:180:4: ( ( 'M' | 'm' ) ( 'S' | 's' ) )
+            // InternalSTAlgorithmLexer.g:180:6: ( 'M' | 'm' ) ( 'S' | 's' )
             {
             if ( input.LA(1)=='M'||input.LA(1)=='m' ) {
                 input.consume();
@@ -5098,8 +5192,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = NS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:180:4: ( ( 'N' | 'n' ) ( 'S' | 's' ) )
-            // InternalSTAlgorithmLexer.g:180:6: ( 'N' | 'n' ) ( 'S' | 's' )
+            // InternalSTAlgorithmLexer.g:182:4: ( ( 'N' | 'n' ) ( 'S' | 's' ) )
+            // InternalSTAlgorithmLexer.g:182:6: ( 'N' | 'n' ) ( 'S' | 's' )
             {
             if ( input.LA(1)=='N'||input.LA(1)=='n' ) {
                 input.consume();
@@ -5135,8 +5229,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = OF;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:182:4: ( ( 'O' | 'o' ) ( 'F' | 'f' ) )
-            // InternalSTAlgorithmLexer.g:182:6: ( 'O' | 'o' ) ( 'F' | 'f' )
+            // InternalSTAlgorithmLexer.g:184:4: ( ( 'O' | 'o' ) ( 'F' | 'f' ) )
+            // InternalSTAlgorithmLexer.g:184:6: ( 'O' | 'o' ) ( 'F' | 'f' )
             {
             if ( input.LA(1)=='O'||input.LA(1)=='o' ) {
                 input.consume();
@@ -5172,8 +5266,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = OR;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:184:4: ( ( 'O' | 'o' ) ( 'R' | 'r' ) )
-            // InternalSTAlgorithmLexer.g:184:6: ( 'O' | 'o' ) ( 'R' | 'r' )
+            // InternalSTAlgorithmLexer.g:186:4: ( ( 'O' | 'o' ) ( 'R' | 'r' ) )
+            // InternalSTAlgorithmLexer.g:186:6: ( 'O' | 'o' ) ( 'R' | 'r' )
             {
             if ( input.LA(1)=='O'||input.LA(1)=='o' ) {
                 input.consume();
@@ -5209,8 +5303,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = TO;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:186:4: ( ( 'T' | 't' ) ( 'O' | 'o' ) )
-            // InternalSTAlgorithmLexer.g:186:6: ( 'T' | 't' ) ( 'O' | 'o' )
+            // InternalSTAlgorithmLexer.g:188:4: ( ( 'T' | 't' ) ( 'O' | 'o' ) )
+            // InternalSTAlgorithmLexer.g:188:6: ( 'T' | 't' ) ( 'O' | 'o' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -5246,8 +5340,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = US;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:188:4: ( ( 'U' | 'u' ) ( 'S' | 's' ) )
-            // InternalSTAlgorithmLexer.g:188:6: ( 'U' | 'u' ) ( 'S' | 's' )
+            // InternalSTAlgorithmLexer.g:190:4: ( ( 'U' | 'u' ) ( 'S' | 's' ) )
+            // InternalSTAlgorithmLexer.g:190:6: ( 'U' | 'u' ) ( 'S' | 's' )
             {
             if ( input.LA(1)=='U'||input.LA(1)=='u' ) {
                 input.consume();
@@ -5283,8 +5377,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = NumberSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:190:12: ( '#' )
-            // InternalSTAlgorithmLexer.g:190:14: '#'
+            // InternalSTAlgorithmLexer.g:192:12: ( '#' )
+            // InternalSTAlgorithmLexer.g:192:14: '#'
             {
             match('#'); 
 
@@ -5303,8 +5397,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = Ampersand;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:192:11: ( '&' )
-            // InternalSTAlgorithmLexer.g:192:13: '&'
+            // InternalSTAlgorithmLexer.g:194:11: ( '&' )
+            // InternalSTAlgorithmLexer.g:194:13: '&'
             {
             match('&'); 
 
@@ -5323,8 +5417,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LeftParenthesis;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:194:17: ( '(' )
-            // InternalSTAlgorithmLexer.g:194:19: '('
+            // InternalSTAlgorithmLexer.g:196:17: ( '(' )
+            // InternalSTAlgorithmLexer.g:196:19: '('
             {
             match('('); 
 
@@ -5343,8 +5437,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = RightParenthesis;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:196:18: ( ')' )
-            // InternalSTAlgorithmLexer.g:196:20: ')'
+            // InternalSTAlgorithmLexer.g:198:18: ( ')' )
+            // InternalSTAlgorithmLexer.g:198:20: ')'
             {
             match(')'); 
 
@@ -5363,8 +5457,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = Asterisk;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:198:10: ( '*' )
-            // InternalSTAlgorithmLexer.g:198:12: '*'
+            // InternalSTAlgorithmLexer.g:200:10: ( '*' )
+            // InternalSTAlgorithmLexer.g:200:12: '*'
             {
             match('*'); 
 
@@ -5383,8 +5477,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = PlusSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:200:10: ( '+' )
-            // InternalSTAlgorithmLexer.g:200:12: '+'
+            // InternalSTAlgorithmLexer.g:202:10: ( '+' )
+            // InternalSTAlgorithmLexer.g:202:12: '+'
             {
             match('+'); 
 
@@ -5403,8 +5497,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = Comma;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:202:7: ( ',' )
-            // InternalSTAlgorithmLexer.g:202:9: ','
+            // InternalSTAlgorithmLexer.g:204:7: ( ',' )
+            // InternalSTAlgorithmLexer.g:204:9: ','
             {
             match(','); 
 
@@ -5423,8 +5517,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = HyphenMinus;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:204:13: ( '-' )
-            // InternalSTAlgorithmLexer.g:204:15: '-'
+            // InternalSTAlgorithmLexer.g:206:13: ( '-' )
+            // InternalSTAlgorithmLexer.g:206:15: '-'
             {
             match('-'); 
 
@@ -5443,8 +5537,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = FullStop;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:206:10: ( '.' )
-            // InternalSTAlgorithmLexer.g:206:12: '.'
+            // InternalSTAlgorithmLexer.g:208:10: ( '.' )
+            // InternalSTAlgorithmLexer.g:208:12: '.'
             {
             match('.'); 
 
@@ -5463,8 +5557,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = Solidus;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:208:9: ( '/' )
-            // InternalSTAlgorithmLexer.g:208:11: '/'
+            // InternalSTAlgorithmLexer.g:210:9: ( '/' )
+            // InternalSTAlgorithmLexer.g:210:11: '/'
             {
             match('/'); 
 
@@ -5483,8 +5577,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = Colon;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:210:7: ( ':' )
-            // InternalSTAlgorithmLexer.g:210:9: ':'
+            // InternalSTAlgorithmLexer.g:212:7: ( ':' )
+            // InternalSTAlgorithmLexer.g:212:9: ':'
             {
             match(':'); 
 
@@ -5503,8 +5597,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = Semicolon;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:212:11: ( ';' )
-            // InternalSTAlgorithmLexer.g:212:13: ';'
+            // InternalSTAlgorithmLexer.g:214:11: ( ';' )
+            // InternalSTAlgorithmLexer.g:214:13: ';'
             {
             match(';'); 
 
@@ -5523,8 +5617,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LessThanSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:214:14: ( '<' )
-            // InternalSTAlgorithmLexer.g:214:16: '<'
+            // InternalSTAlgorithmLexer.g:216:14: ( '<' )
+            // InternalSTAlgorithmLexer.g:216:16: '<'
             {
             match('<'); 
 
@@ -5543,8 +5637,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = EqualsSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:216:12: ( '=' )
-            // InternalSTAlgorithmLexer.g:216:14: '='
+            // InternalSTAlgorithmLexer.g:218:12: ( '=' )
+            // InternalSTAlgorithmLexer.g:218:14: '='
             {
             match('='); 
 
@@ -5563,8 +5657,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = GreaterThanSign;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:218:17: ( '>' )
-            // InternalSTAlgorithmLexer.g:218:19: '>'
+            // InternalSTAlgorithmLexer.g:220:17: ( '>' )
+            // InternalSTAlgorithmLexer.g:220:19: '>'
             {
             match('>'); 
 
@@ -5583,8 +5677,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = D;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:220:3: ( ( 'D' | 'd' ) )
-            // InternalSTAlgorithmLexer.g:220:5: ( 'D' | 'd' )
+            // InternalSTAlgorithmLexer.g:222:3: ( ( 'D' | 'd' ) )
+            // InternalSTAlgorithmLexer.g:222:5: ( 'D' | 'd' )
             {
             if ( input.LA(1)=='D'||input.LA(1)=='d' ) {
                 input.consume();
@@ -5611,8 +5705,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = H;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:222:3: ( ( 'H' | 'h' ) )
-            // InternalSTAlgorithmLexer.g:222:5: ( 'H' | 'h' )
+            // InternalSTAlgorithmLexer.g:224:3: ( ( 'H' | 'h' ) )
+            // InternalSTAlgorithmLexer.g:224:5: ( 'H' | 'h' )
             {
             if ( input.LA(1)=='H'||input.LA(1)=='h' ) {
                 input.consume();
@@ -5639,8 +5733,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = M;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:224:3: ( ( 'M' | 'm' ) )
-            // InternalSTAlgorithmLexer.g:224:5: ( 'M' | 'm' )
+            // InternalSTAlgorithmLexer.g:226:3: ( ( 'M' | 'm' ) )
+            // InternalSTAlgorithmLexer.g:226:5: ( 'M' | 'm' )
             {
             if ( input.LA(1)=='M'||input.LA(1)=='m' ) {
                 input.consume();
@@ -5667,8 +5761,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = S;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:226:3: ( ( 'S' | 's' ) )
-            // InternalSTAlgorithmLexer.g:226:5: ( 'S' | 's' )
+            // InternalSTAlgorithmLexer.g:228:3: ( ( 'S' | 's' ) )
+            // InternalSTAlgorithmLexer.g:228:5: ( 'S' | 's' )
             {
             if ( input.LA(1)=='S'||input.LA(1)=='s' ) {
                 input.consume();
@@ -5695,8 +5789,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = T;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:228:3: ( ( 'T' | 't' ) )
-            // InternalSTAlgorithmLexer.g:228:5: ( 'T' | 't' )
+            // InternalSTAlgorithmLexer.g:230:3: ( ( 'T' | 't' ) )
+            // InternalSTAlgorithmLexer.g:230:5: ( 'T' | 't' )
             {
             if ( input.LA(1)=='T'||input.LA(1)=='t' ) {
                 input.consume();
@@ -5723,8 +5817,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = LeftSquareBracket;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:230:19: ( '[' )
-            // InternalSTAlgorithmLexer.g:230:21: '['
+            // InternalSTAlgorithmLexer.g:232:19: ( '[' )
+            // InternalSTAlgorithmLexer.g:232:21: '['
             {
             match('['); 
 
@@ -5743,8 +5837,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = RightSquareBracket;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:232:20: ( ']' )
-            // InternalSTAlgorithmLexer.g:232:22: ']'
+            // InternalSTAlgorithmLexer.g:234:20: ( ']' )
+            // InternalSTAlgorithmLexer.g:234:22: ']'
             {
             match(']'); 
 
@@ -5763,8 +5857,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = KW__;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:234:6: ( '_' )
-            // InternalSTAlgorithmLexer.g:234:8: '_'
+            // InternalSTAlgorithmLexer.g:236:6: ( '_' )
+            // InternalSTAlgorithmLexer.g:236:8: '_'
             {
             match('_'); 
 
@@ -5781,8 +5875,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
     // $ANTLR start "RULE_HEX_DIGIT"
     public final void mRULE_HEX_DIGIT() throws RecognitionException {
         try {
-            // InternalSTAlgorithmLexer.g:236:25: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' | '_' ) )
-            // InternalSTAlgorithmLexer.g:236:27: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' | '_' )
+            // InternalSTAlgorithmLexer.g:238:25: ( ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' | '_' ) )
+            // InternalSTAlgorithmLexer.g:238:27: ( '0' .. '9' | 'a' .. 'f' | 'A' .. 'F' | '_' )
             {
             if ( (input.LA(1)>='0' && input.LA(1)<='9')||(input.LA(1)>='A' && input.LA(1)<='F')||input.LA(1)=='_'||(input.LA(1)>='a' && input.LA(1)<='f') ) {
                 input.consume();
@@ -5807,10 +5901,10 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = RULE_NON_DECIMAL;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:238:18: ( ( '2#' | '8#' | '16#' ) ( RULE_HEX_DIGIT )+ )
-            // InternalSTAlgorithmLexer.g:238:20: ( '2#' | '8#' | '16#' ) ( RULE_HEX_DIGIT )+
+            // InternalSTAlgorithmLexer.g:240:18: ( ( '2#' | '8#' | '16#' ) ( RULE_HEX_DIGIT )+ )
+            // InternalSTAlgorithmLexer.g:240:20: ( '2#' | '8#' | '16#' ) ( RULE_HEX_DIGIT )+
             {
-            // InternalSTAlgorithmLexer.g:238:20: ( '2#' | '8#' | '16#' )
+            // InternalSTAlgorithmLexer.g:240:20: ( '2#' | '8#' | '16#' )
             int alt1=3;
             switch ( input.LA(1) ) {
             case '2':
@@ -5837,7 +5931,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
 
             switch (alt1) {
                 case 1 :
-                    // InternalSTAlgorithmLexer.g:238:21: '2#'
+                    // InternalSTAlgorithmLexer.g:240:21: '2#'
                     {
                     match("2#"); 
 
@@ -5845,7 +5939,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // InternalSTAlgorithmLexer.g:238:26: '8#'
+                    // InternalSTAlgorithmLexer.g:240:26: '8#'
                     {
                     match("8#"); 
 
@@ -5853,7 +5947,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
                     }
                     break;
                 case 3 :
-                    // InternalSTAlgorithmLexer.g:238:31: '16#'
+                    // InternalSTAlgorithmLexer.g:240:31: '16#'
                     {
                     match("16#"); 
 
@@ -5863,7 +5957,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
 
             }
 
-            // InternalSTAlgorithmLexer.g:238:38: ( RULE_HEX_DIGIT )+
+            // InternalSTAlgorithmLexer.g:240:38: ( RULE_HEX_DIGIT )+
             int cnt2=0;
             loop2:
             do {
@@ -5877,7 +5971,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
 
                 switch (alt2) {
             	case 1 :
-            	    // InternalSTAlgorithmLexer.g:238:38: RULE_HEX_DIGIT
+            	    // InternalSTAlgorithmLexer.g:240:38: RULE_HEX_DIGIT
             	    {
             	    mRULE_HEX_DIGIT(); 
 
@@ -5909,8 +6003,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = RULE_EXT_INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:240:14: ( RULE_INT ( 'e' | 'E' ) ( '-' | '+' )? RULE_INT )
-            // InternalSTAlgorithmLexer.g:240:16: RULE_INT ( 'e' | 'E' ) ( '-' | '+' )? RULE_INT
+            // InternalSTAlgorithmLexer.g:242:14: ( RULE_INT ( 'e' | 'E' ) ( '-' | '+' )? RULE_INT )
+            // InternalSTAlgorithmLexer.g:242:16: RULE_INT ( 'e' | 'E' ) ( '-' | '+' )? RULE_INT
             {
             mRULE_INT(); 
             if ( input.LA(1)=='E'||input.LA(1)=='e' ) {
@@ -5922,7 +6016,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // InternalSTAlgorithmLexer.g:240:35: ( '-' | '+' )?
+            // InternalSTAlgorithmLexer.g:242:35: ( '-' | '+' )?
             int alt3=2;
             int LA3_0 = input.LA(1);
 
@@ -5965,11 +6059,11 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = RULE_INT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:242:10: ( '0' .. '9' ( ( '_' )? '0' .. '9' )* )
-            // InternalSTAlgorithmLexer.g:242:12: '0' .. '9' ( ( '_' )? '0' .. '9' )*
+            // InternalSTAlgorithmLexer.g:244:10: ( '0' .. '9' ( ( '_' )? '0' .. '9' )* )
+            // InternalSTAlgorithmLexer.g:244:12: '0' .. '9' ( ( '_' )? '0' .. '9' )*
             {
             matchRange('0','9'); 
-            // InternalSTAlgorithmLexer.g:242:21: ( ( '_' )? '0' .. '9' )*
+            // InternalSTAlgorithmLexer.g:244:21: ( ( '_' )? '0' .. '9' )*
             loop5:
             do {
                 int alt5=2;
@@ -5982,9 +6076,9 @@ public class InternalSTAlgorithmLexer extends Lexer {
 
                 switch (alt5) {
             	case 1 :
-            	    // InternalSTAlgorithmLexer.g:242:22: ( '_' )? '0' .. '9'
+            	    // InternalSTAlgorithmLexer.g:244:22: ( '_' )? '0' .. '9'
             	    {
-            	    // InternalSTAlgorithmLexer.g:242:22: ( '_' )?
+            	    // InternalSTAlgorithmLexer.g:244:22: ( '_' )?
             	    int alt4=2;
             	    int LA4_0 = input.LA(1);
 
@@ -5993,7 +6087,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
             	    }
             	    switch (alt4) {
             	        case 1 :
-            	            // InternalSTAlgorithmLexer.g:242:22: '_'
+            	            // InternalSTAlgorithmLexer.g:244:22: '_'
             	            {
             	            match('_'); 
 
@@ -6028,10 +6122,10 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = RULE_ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:244:9: ( ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
-            // InternalSTAlgorithmLexer.g:244:11: ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // InternalSTAlgorithmLexer.g:246:9: ( ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )* )
+            // InternalSTAlgorithmLexer.g:246:11: ( '^' )? ( 'a' .. 'z' | 'A' .. 'Z' | '_' ) ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             {
-            // InternalSTAlgorithmLexer.g:244:11: ( '^' )?
+            // InternalSTAlgorithmLexer.g:246:11: ( '^' )?
             int alt6=2;
             int LA6_0 = input.LA(1);
 
@@ -6040,7 +6134,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
             }
             switch (alt6) {
                 case 1 :
-                    // InternalSTAlgorithmLexer.g:244:11: '^'
+                    // InternalSTAlgorithmLexer.g:246:11: '^'
                     {
                     match('^'); 
 
@@ -6058,7 +6152,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
                 recover(mse);
                 throw mse;}
 
-            // InternalSTAlgorithmLexer.g:244:40: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
+            // InternalSTAlgorithmLexer.g:246:40: ( 'a' .. 'z' | 'A' .. 'Z' | '_' | '0' .. '9' )*
             loop7:
             do {
                 int alt7=2;
@@ -6107,10 +6201,10 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = RULE_STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:246:13: ( ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' ) )
-            // InternalSTAlgorithmLexer.g:246:15: ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' )
+            // InternalSTAlgorithmLexer.g:248:13: ( ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' ) )
+            // InternalSTAlgorithmLexer.g:248:15: ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' )
             {
-            // InternalSTAlgorithmLexer.g:246:15: ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' )
+            // InternalSTAlgorithmLexer.g:248:15: ( '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"' | '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\'' )
             int alt10=2;
             int LA10_0 = input.LA(1);
 
@@ -6128,10 +6222,10 @@ public class InternalSTAlgorithmLexer extends Lexer {
             }
             switch (alt10) {
                 case 1 :
-                    // InternalSTAlgorithmLexer.g:246:16: '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"'
+                    // InternalSTAlgorithmLexer.g:248:16: '\"' ( '$' . | ~ ( ( '$' | '\"' ) ) )* '\"'
                     {
                     match('\"'); 
-                    // InternalSTAlgorithmLexer.g:246:20: ( '$' . | ~ ( ( '$' | '\"' ) ) )*
+                    // InternalSTAlgorithmLexer.g:248:20: ( '$' . | ~ ( ( '$' | '\"' ) ) )*
                     loop8:
                     do {
                         int alt8=3;
@@ -6147,7 +6241,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
 
                         switch (alt8) {
                     	case 1 :
-                    	    // InternalSTAlgorithmLexer.g:246:21: '$' .
+                    	    // InternalSTAlgorithmLexer.g:248:21: '$' .
                     	    {
                     	    match('$'); 
                     	    matchAny(); 
@@ -6155,7 +6249,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // InternalSTAlgorithmLexer.g:246:27: ~ ( ( '$' | '\"' ) )
+                    	    // InternalSTAlgorithmLexer.g:248:27: ~ ( ( '$' | '\"' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||input.LA(1)=='#'||(input.LA(1)>='%' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -6180,10 +6274,10 @@ public class InternalSTAlgorithmLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // InternalSTAlgorithmLexer.g:246:46: '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\''
+                    // InternalSTAlgorithmLexer.g:248:46: '\\'' ( '$' . | ~ ( ( '$' | '\\'' ) ) )* '\\''
                     {
                     match('\''); 
-                    // InternalSTAlgorithmLexer.g:246:51: ( '$' . | ~ ( ( '$' | '\\'' ) ) )*
+                    // InternalSTAlgorithmLexer.g:248:51: ( '$' . | ~ ( ( '$' | '\\'' ) ) )*
                     loop9:
                     do {
                         int alt9=3;
@@ -6199,7 +6293,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
 
                         switch (alt9) {
                     	case 1 :
-                    	    // InternalSTAlgorithmLexer.g:246:52: '$' .
+                    	    // InternalSTAlgorithmLexer.g:248:52: '$' .
                     	    {
                     	    match('$'); 
                     	    matchAny(); 
@@ -6207,7 +6301,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
                     	    }
                     	    break;
                     	case 2 :
-                    	    // InternalSTAlgorithmLexer.g:246:58: ~ ( ( '$' | '\\'' ) )
+                    	    // InternalSTAlgorithmLexer.g:248:58: ~ ( ( '$' | '\\'' ) )
                     	    {
                     	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='#')||(input.LA(1)>='%' && input.LA(1)<='&')||(input.LA(1)>='(' && input.LA(1)<='\uFFFF') ) {
                     	        input.consume();
@@ -6250,10 +6344,10 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = RULE_ML_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:248:17: ( ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' ) )
-            // InternalSTAlgorithmLexer.g:248:19: ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' )
+            // InternalSTAlgorithmLexer.g:250:17: ( ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' ) )
+            // InternalSTAlgorithmLexer.g:250:19: ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' )
             {
-            // InternalSTAlgorithmLexer.g:248:19: ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' )
+            // InternalSTAlgorithmLexer.g:250:19: ( '/*' ( options {greedy=false; } : . )* '*/' | '(*' ( options {greedy=false; } : . )* '*)' )
             int alt13=2;
             int LA13_0 = input.LA(1);
 
@@ -6271,11 +6365,11 @@ public class InternalSTAlgorithmLexer extends Lexer {
             }
             switch (alt13) {
                 case 1 :
-                    // InternalSTAlgorithmLexer.g:248:20: '/*' ( options {greedy=false; } : . )* '*/'
+                    // InternalSTAlgorithmLexer.g:250:20: '/*' ( options {greedy=false; } : . )* '*/'
                     {
                     match("/*"); 
 
-                    // InternalSTAlgorithmLexer.g:248:25: ( options {greedy=false; } : . )*
+                    // InternalSTAlgorithmLexer.g:250:25: ( options {greedy=false; } : . )*
                     loop11:
                     do {
                         int alt11=2;
@@ -6300,7 +6394,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
 
                         switch (alt11) {
                     	case 1 :
-                    	    // InternalSTAlgorithmLexer.g:248:53: .
+                    	    // InternalSTAlgorithmLexer.g:250:53: .
                     	    {
                     	    matchAny(); 
 
@@ -6318,11 +6412,11 @@ public class InternalSTAlgorithmLexer extends Lexer {
                     }
                     break;
                 case 2 :
-                    // InternalSTAlgorithmLexer.g:248:62: '(*' ( options {greedy=false; } : . )* '*)'
+                    // InternalSTAlgorithmLexer.g:250:62: '(*' ( options {greedy=false; } : . )* '*)'
                     {
                     match("(*"); 
 
-                    // InternalSTAlgorithmLexer.g:248:67: ( options {greedy=false; } : . )*
+                    // InternalSTAlgorithmLexer.g:250:67: ( options {greedy=false; } : . )*
                     loop12:
                     do {
                         int alt12=2;
@@ -6347,7 +6441,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
 
                         switch (alt12) {
                     	case 1 :
-                    	    // InternalSTAlgorithmLexer.g:248:95: .
+                    	    // InternalSTAlgorithmLexer.g:250:95: .
                     	    {
                     	    matchAny(); 
 
@@ -6383,12 +6477,12 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = RULE_SL_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:250:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
-            // InternalSTAlgorithmLexer.g:250:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
+            // InternalSTAlgorithmLexer.g:252:17: ( '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )? )
+            // InternalSTAlgorithmLexer.g:252:19: '//' (~ ( ( '\\n' | '\\r' ) ) )* ( ( '\\r' )? '\\n' )?
             {
             match("//"); 
 
-            // InternalSTAlgorithmLexer.g:250:24: (~ ( ( '\\n' | '\\r' ) ) )*
+            // InternalSTAlgorithmLexer.g:252:24: (~ ( ( '\\n' | '\\r' ) ) )*
             loop14:
             do {
                 int alt14=2;
@@ -6401,7 +6495,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
 
                 switch (alt14) {
             	case 1 :
-            	    // InternalSTAlgorithmLexer.g:250:24: ~ ( ( '\\n' | '\\r' ) )
+            	    // InternalSTAlgorithmLexer.g:252:24: ~ ( ( '\\n' | '\\r' ) )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -6421,7 +6515,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
                 }
             } while (true);
 
-            // InternalSTAlgorithmLexer.g:250:40: ( ( '\\r' )? '\\n' )?
+            // InternalSTAlgorithmLexer.g:252:40: ( ( '\\r' )? '\\n' )?
             int alt16=2;
             int LA16_0 = input.LA(1);
 
@@ -6430,9 +6524,9 @@ public class InternalSTAlgorithmLexer extends Lexer {
             }
             switch (alt16) {
                 case 1 :
-                    // InternalSTAlgorithmLexer.g:250:41: ( '\\r' )? '\\n'
+                    // InternalSTAlgorithmLexer.g:252:41: ( '\\r' )? '\\n'
                     {
-                    // InternalSTAlgorithmLexer.g:250:41: ( '\\r' )?
+                    // InternalSTAlgorithmLexer.g:252:41: ( '\\r' )?
                     int alt15=2;
                     int LA15_0 = input.LA(1);
 
@@ -6441,7 +6535,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
                     }
                     switch (alt15) {
                         case 1 :
-                            // InternalSTAlgorithmLexer.g:250:41: '\\r'
+                            // InternalSTAlgorithmLexer.g:252:41: '\\r'
                             {
                             match('\r'); 
 
@@ -6473,10 +6567,10 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = RULE_WS;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:252:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
-            // InternalSTAlgorithmLexer.g:252:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // InternalSTAlgorithmLexer.g:254:9: ( ( ' ' | '\\t' | '\\r' | '\\n' )+ )
+            // InternalSTAlgorithmLexer.g:254:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             {
-            // InternalSTAlgorithmLexer.g:252:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
+            // InternalSTAlgorithmLexer.g:254:11: ( ' ' | '\\t' | '\\r' | '\\n' )+
             int cnt17=0;
             loop17:
             do {
@@ -6530,8 +6624,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
         try {
             int _type = RULE_ANY_OTHER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // InternalSTAlgorithmLexer.g:254:16: ( . )
-            // InternalSTAlgorithmLexer.g:254:18: .
+            // InternalSTAlgorithmLexer.g:256:16: ( . )
+            // InternalSTAlgorithmLexer.g:256:18: .
             {
             matchAny(); 
 
@@ -6546,8 +6640,8 @@ public class InternalSTAlgorithmLexer extends Lexer {
     // $ANTLR end "RULE_ANY_OTHER"
 
     public void mTokens() throws RecognitionException {
-        // InternalSTAlgorithmLexer.g:1:8: ( LDATE_AND_TIME | DATE_AND_TIME | END_ALGORITHM | LTIME_OF_DAY | TIME_OF_DAY | END_METHOD | END_REPEAT | VAR_OUTPUT | ALGORITHM | END_WHILE | VAR_INPUT | CONSTANT | CONTINUE | END_CASE | VAR_TEMP | END_FOR | END_VAR | WSTRING | END_IF | METHOD | REPEAT | RETURN | STRING | ARRAY | DWORD | ELSIF | FALSE | LDATE | LREAL | LTIME | LWORD | UDINT | ULINT | UNTIL | USINT | WCHAR | WHILE | BOOL | BYTE | CASE | CHAR | DATE | DINT | ELSE | EXIT | LINT | LTOD | REAL | SINT | THEN | TIME | TRUE | UINT | WORD | AND | FOR | INT | LDT | MOD | NOT | TOD | VAR | XOR | B | D_1 | L | W | X | AsteriskAsterisk | FullStopFullStop | ColonEqualsSign | LessThanSignEqualsSign | LessThanSignGreaterThanSign | EqualsSignGreaterThanSign | GreaterThanSignEqualsSign | AT | BY | DO | DT | IF | LD | LT | MS | NS | OF | OR | TO | US | NumberSign | Ampersand | LeftParenthesis | RightParenthesis | Asterisk | PlusSign | Comma | HyphenMinus | FullStop | Solidus | Colon | Semicolon | LessThanSign | EqualsSign | GreaterThanSign | D | H | M | S | T | LeftSquareBracket | RightSquareBracket | KW__ | RULE_NON_DECIMAL | RULE_EXT_INT | RULE_INT | RULE_ID | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER )
-        int alt18=120;
+        // InternalSTAlgorithmLexer.g:1:8: ( LDATE_AND_TIME | DATE_AND_TIME | END_ALGORITHM | LTIME_OF_DAY | TIME_OF_DAY | END_METHOD | END_REPEAT | VAR_IN_OUT | VAR_OUTPUT | ALGORITHM | END_WHILE | VAR_INPUT | CONSTANT | CONTINUE | END_CASE | VAR_TEMP | END_FOR | END_VAR | WSTRING | END_IF | METHOD | REPEAT | RETURN | STRING | ARRAY | DWORD | ELSIF | FALSE | LDATE | LREAL | LTIME | LWORD | UDINT | ULINT | UNTIL | USINT | WCHAR | WHILE | BOOL | BYTE | CASE | CHAR | DATE | DINT | ELSE | EXIT | LINT | LTOD | REAL | SINT | THEN | TIME | TRUE | UINT | WORD | AND | FOR | INT | LDT | MOD | NOT | TOD | VAR | XOR | B | D_1 | L | W | X | AsteriskAsterisk | FullStopFullStop | ColonEqualsSign | LessThanSignEqualsSign | LessThanSignGreaterThanSign | EqualsSignGreaterThanSign | GreaterThanSignEqualsSign | AT | BY | DO | DT | IF | LD | LT | MS | NS | OF | OR | TO | US | NumberSign | Ampersand | LeftParenthesis | RightParenthesis | Asterisk | PlusSign | Comma | HyphenMinus | FullStop | Solidus | Colon | Semicolon | LessThanSign | EqualsSign | GreaterThanSign | D | H | M | S | T | LeftSquareBracket | RightSquareBracket | KW__ | RULE_NON_DECIMAL | RULE_EXT_INT | RULE_INT | RULE_ID | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER )
+        int alt18=121;
         alt18 = dfa18.predict(input);
         switch (alt18) {
             case 1 :
@@ -6600,791 +6694,798 @@ public class InternalSTAlgorithmLexer extends Lexer {
                 }
                 break;
             case 8 :
-                // InternalSTAlgorithmLexer.g:1:100: VAR_OUTPUT
+                // InternalSTAlgorithmLexer.g:1:100: VAR_IN_OUT
+                {
+                mVAR_IN_OUT(); 
+
+                }
+                break;
+            case 9 :
+                // InternalSTAlgorithmLexer.g:1:111: VAR_OUTPUT
                 {
                 mVAR_OUTPUT(); 
 
                 }
                 break;
-            case 9 :
-                // InternalSTAlgorithmLexer.g:1:111: ALGORITHM
+            case 10 :
+                // InternalSTAlgorithmLexer.g:1:122: ALGORITHM
                 {
                 mALGORITHM(); 
 
                 }
                 break;
-            case 10 :
-                // InternalSTAlgorithmLexer.g:1:121: END_WHILE
+            case 11 :
+                // InternalSTAlgorithmLexer.g:1:132: END_WHILE
                 {
                 mEND_WHILE(); 
 
                 }
                 break;
-            case 11 :
-                // InternalSTAlgorithmLexer.g:1:131: VAR_INPUT
+            case 12 :
+                // InternalSTAlgorithmLexer.g:1:142: VAR_INPUT
                 {
                 mVAR_INPUT(); 
 
                 }
                 break;
-            case 12 :
-                // InternalSTAlgorithmLexer.g:1:141: CONSTANT
+            case 13 :
+                // InternalSTAlgorithmLexer.g:1:152: CONSTANT
                 {
                 mCONSTANT(); 
 
                 }
                 break;
-            case 13 :
-                // InternalSTAlgorithmLexer.g:1:150: CONTINUE
+            case 14 :
+                // InternalSTAlgorithmLexer.g:1:161: CONTINUE
                 {
                 mCONTINUE(); 
 
                 }
                 break;
-            case 14 :
-                // InternalSTAlgorithmLexer.g:1:159: END_CASE
+            case 15 :
+                // InternalSTAlgorithmLexer.g:1:170: END_CASE
                 {
                 mEND_CASE(); 
 
                 }
                 break;
-            case 15 :
-                // InternalSTAlgorithmLexer.g:1:168: VAR_TEMP
+            case 16 :
+                // InternalSTAlgorithmLexer.g:1:179: VAR_TEMP
                 {
                 mVAR_TEMP(); 
 
                 }
                 break;
-            case 16 :
-                // InternalSTAlgorithmLexer.g:1:177: END_FOR
+            case 17 :
+                // InternalSTAlgorithmLexer.g:1:188: END_FOR
                 {
                 mEND_FOR(); 
 
                 }
                 break;
-            case 17 :
-                // InternalSTAlgorithmLexer.g:1:185: END_VAR
+            case 18 :
+                // InternalSTAlgorithmLexer.g:1:196: END_VAR
                 {
                 mEND_VAR(); 
 
                 }
                 break;
-            case 18 :
-                // InternalSTAlgorithmLexer.g:1:193: WSTRING
+            case 19 :
+                // InternalSTAlgorithmLexer.g:1:204: WSTRING
                 {
                 mWSTRING(); 
 
                 }
                 break;
-            case 19 :
-                // InternalSTAlgorithmLexer.g:1:201: END_IF
+            case 20 :
+                // InternalSTAlgorithmLexer.g:1:212: END_IF
                 {
                 mEND_IF(); 
 
                 }
                 break;
-            case 20 :
-                // InternalSTAlgorithmLexer.g:1:208: METHOD
+            case 21 :
+                // InternalSTAlgorithmLexer.g:1:219: METHOD
                 {
                 mMETHOD(); 
 
                 }
                 break;
-            case 21 :
-                // InternalSTAlgorithmLexer.g:1:215: REPEAT
+            case 22 :
+                // InternalSTAlgorithmLexer.g:1:226: REPEAT
                 {
                 mREPEAT(); 
 
                 }
                 break;
-            case 22 :
-                // InternalSTAlgorithmLexer.g:1:222: RETURN
+            case 23 :
+                // InternalSTAlgorithmLexer.g:1:233: RETURN
                 {
                 mRETURN(); 
 
                 }
                 break;
-            case 23 :
-                // InternalSTAlgorithmLexer.g:1:229: STRING
+            case 24 :
+                // InternalSTAlgorithmLexer.g:1:240: STRING
                 {
                 mSTRING(); 
 
                 }
                 break;
-            case 24 :
-                // InternalSTAlgorithmLexer.g:1:236: ARRAY
+            case 25 :
+                // InternalSTAlgorithmLexer.g:1:247: ARRAY
                 {
                 mARRAY(); 
 
                 }
                 break;
-            case 25 :
-                // InternalSTAlgorithmLexer.g:1:242: DWORD
+            case 26 :
+                // InternalSTAlgorithmLexer.g:1:253: DWORD
                 {
                 mDWORD(); 
 
                 }
                 break;
-            case 26 :
-                // InternalSTAlgorithmLexer.g:1:248: ELSIF
+            case 27 :
+                // InternalSTAlgorithmLexer.g:1:259: ELSIF
                 {
                 mELSIF(); 
 
                 }
                 break;
-            case 27 :
-                // InternalSTAlgorithmLexer.g:1:254: FALSE
+            case 28 :
+                // InternalSTAlgorithmLexer.g:1:265: FALSE
                 {
                 mFALSE(); 
 
                 }
                 break;
-            case 28 :
-                // InternalSTAlgorithmLexer.g:1:260: LDATE
+            case 29 :
+                // InternalSTAlgorithmLexer.g:1:271: LDATE
                 {
                 mLDATE(); 
 
                 }
                 break;
-            case 29 :
-                // InternalSTAlgorithmLexer.g:1:266: LREAL
+            case 30 :
+                // InternalSTAlgorithmLexer.g:1:277: LREAL
                 {
                 mLREAL(); 
 
                 }
                 break;
-            case 30 :
-                // InternalSTAlgorithmLexer.g:1:272: LTIME
+            case 31 :
+                // InternalSTAlgorithmLexer.g:1:283: LTIME
                 {
                 mLTIME(); 
 
                 }
                 break;
-            case 31 :
-                // InternalSTAlgorithmLexer.g:1:278: LWORD
+            case 32 :
+                // InternalSTAlgorithmLexer.g:1:289: LWORD
                 {
                 mLWORD(); 
 
                 }
                 break;
-            case 32 :
-                // InternalSTAlgorithmLexer.g:1:284: UDINT
+            case 33 :
+                // InternalSTAlgorithmLexer.g:1:295: UDINT
                 {
                 mUDINT(); 
 
                 }
                 break;
-            case 33 :
-                // InternalSTAlgorithmLexer.g:1:290: ULINT
+            case 34 :
+                // InternalSTAlgorithmLexer.g:1:301: ULINT
                 {
                 mULINT(); 
 
                 }
                 break;
-            case 34 :
-                // InternalSTAlgorithmLexer.g:1:296: UNTIL
+            case 35 :
+                // InternalSTAlgorithmLexer.g:1:307: UNTIL
                 {
                 mUNTIL(); 
 
                 }
                 break;
-            case 35 :
-                // InternalSTAlgorithmLexer.g:1:302: USINT
+            case 36 :
+                // InternalSTAlgorithmLexer.g:1:313: USINT
                 {
                 mUSINT(); 
 
                 }
                 break;
-            case 36 :
-                // InternalSTAlgorithmLexer.g:1:308: WCHAR
+            case 37 :
+                // InternalSTAlgorithmLexer.g:1:319: WCHAR
                 {
                 mWCHAR(); 
 
                 }
                 break;
-            case 37 :
-                // InternalSTAlgorithmLexer.g:1:314: WHILE
+            case 38 :
+                // InternalSTAlgorithmLexer.g:1:325: WHILE
                 {
                 mWHILE(); 
 
                 }
                 break;
-            case 38 :
-                // InternalSTAlgorithmLexer.g:1:320: BOOL
+            case 39 :
+                // InternalSTAlgorithmLexer.g:1:331: BOOL
                 {
                 mBOOL(); 
 
                 }
                 break;
-            case 39 :
-                // InternalSTAlgorithmLexer.g:1:325: BYTE
+            case 40 :
+                // InternalSTAlgorithmLexer.g:1:336: BYTE
                 {
                 mBYTE(); 
 
                 }
                 break;
-            case 40 :
-                // InternalSTAlgorithmLexer.g:1:330: CASE
+            case 41 :
+                // InternalSTAlgorithmLexer.g:1:341: CASE
                 {
                 mCASE(); 
 
                 }
                 break;
-            case 41 :
-                // InternalSTAlgorithmLexer.g:1:335: CHAR
+            case 42 :
+                // InternalSTAlgorithmLexer.g:1:346: CHAR
                 {
                 mCHAR(); 
 
                 }
                 break;
-            case 42 :
-                // InternalSTAlgorithmLexer.g:1:340: DATE
+            case 43 :
+                // InternalSTAlgorithmLexer.g:1:351: DATE
                 {
                 mDATE(); 
 
                 }
                 break;
-            case 43 :
-                // InternalSTAlgorithmLexer.g:1:345: DINT
+            case 44 :
+                // InternalSTAlgorithmLexer.g:1:356: DINT
                 {
                 mDINT(); 
 
                 }
                 break;
-            case 44 :
-                // InternalSTAlgorithmLexer.g:1:350: ELSE
+            case 45 :
+                // InternalSTAlgorithmLexer.g:1:361: ELSE
                 {
                 mELSE(); 
 
                 }
                 break;
-            case 45 :
-                // InternalSTAlgorithmLexer.g:1:355: EXIT
+            case 46 :
+                // InternalSTAlgorithmLexer.g:1:366: EXIT
                 {
                 mEXIT(); 
 
                 }
                 break;
-            case 46 :
-                // InternalSTAlgorithmLexer.g:1:360: LINT
+            case 47 :
+                // InternalSTAlgorithmLexer.g:1:371: LINT
                 {
                 mLINT(); 
 
                 }
                 break;
-            case 47 :
-                // InternalSTAlgorithmLexer.g:1:365: LTOD
+            case 48 :
+                // InternalSTAlgorithmLexer.g:1:376: LTOD
                 {
                 mLTOD(); 
 
                 }
                 break;
-            case 48 :
-                // InternalSTAlgorithmLexer.g:1:370: REAL
+            case 49 :
+                // InternalSTAlgorithmLexer.g:1:381: REAL
                 {
                 mREAL(); 
 
                 }
                 break;
-            case 49 :
-                // InternalSTAlgorithmLexer.g:1:375: SINT
+            case 50 :
+                // InternalSTAlgorithmLexer.g:1:386: SINT
                 {
                 mSINT(); 
 
                 }
                 break;
-            case 50 :
-                // InternalSTAlgorithmLexer.g:1:380: THEN
+            case 51 :
+                // InternalSTAlgorithmLexer.g:1:391: THEN
                 {
                 mTHEN(); 
 
                 }
                 break;
-            case 51 :
-                // InternalSTAlgorithmLexer.g:1:385: TIME
+            case 52 :
+                // InternalSTAlgorithmLexer.g:1:396: TIME
                 {
                 mTIME(); 
 
                 }
                 break;
-            case 52 :
-                // InternalSTAlgorithmLexer.g:1:390: TRUE
+            case 53 :
+                // InternalSTAlgorithmLexer.g:1:401: TRUE
                 {
                 mTRUE(); 
 
                 }
                 break;
-            case 53 :
-                // InternalSTAlgorithmLexer.g:1:395: UINT
+            case 54 :
+                // InternalSTAlgorithmLexer.g:1:406: UINT
                 {
                 mUINT(); 
 
                 }
                 break;
-            case 54 :
-                // InternalSTAlgorithmLexer.g:1:400: WORD
+            case 55 :
+                // InternalSTAlgorithmLexer.g:1:411: WORD
                 {
                 mWORD(); 
 
                 }
                 break;
-            case 55 :
-                // InternalSTAlgorithmLexer.g:1:405: AND
+            case 56 :
+                // InternalSTAlgorithmLexer.g:1:416: AND
                 {
                 mAND(); 
 
                 }
                 break;
-            case 56 :
-                // InternalSTAlgorithmLexer.g:1:409: FOR
+            case 57 :
+                // InternalSTAlgorithmLexer.g:1:420: FOR
                 {
                 mFOR(); 
 
                 }
                 break;
-            case 57 :
-                // InternalSTAlgorithmLexer.g:1:413: INT
+            case 58 :
+                // InternalSTAlgorithmLexer.g:1:424: INT
                 {
                 mINT(); 
 
                 }
                 break;
-            case 58 :
-                // InternalSTAlgorithmLexer.g:1:417: LDT
+            case 59 :
+                // InternalSTAlgorithmLexer.g:1:428: LDT
                 {
                 mLDT(); 
 
                 }
                 break;
-            case 59 :
-                // InternalSTAlgorithmLexer.g:1:421: MOD
+            case 60 :
+                // InternalSTAlgorithmLexer.g:1:432: MOD
                 {
                 mMOD(); 
 
                 }
                 break;
-            case 60 :
-                // InternalSTAlgorithmLexer.g:1:425: NOT
+            case 61 :
+                // InternalSTAlgorithmLexer.g:1:436: NOT
                 {
                 mNOT(); 
 
                 }
                 break;
-            case 61 :
-                // InternalSTAlgorithmLexer.g:1:429: TOD
+            case 62 :
+                // InternalSTAlgorithmLexer.g:1:440: TOD
                 {
                 mTOD(); 
 
                 }
                 break;
-            case 62 :
-                // InternalSTAlgorithmLexer.g:1:433: VAR
+            case 63 :
+                // InternalSTAlgorithmLexer.g:1:444: VAR
                 {
                 mVAR(); 
 
                 }
                 break;
-            case 63 :
-                // InternalSTAlgorithmLexer.g:1:437: XOR
+            case 64 :
+                // InternalSTAlgorithmLexer.g:1:448: XOR
                 {
                 mXOR(); 
 
                 }
                 break;
-            case 64 :
-                // InternalSTAlgorithmLexer.g:1:441: B
+            case 65 :
+                // InternalSTAlgorithmLexer.g:1:452: B
                 {
                 mB(); 
 
                 }
                 break;
-            case 65 :
-                // InternalSTAlgorithmLexer.g:1:443: D_1
+            case 66 :
+                // InternalSTAlgorithmLexer.g:1:454: D_1
                 {
                 mD_1(); 
 
                 }
                 break;
-            case 66 :
-                // InternalSTAlgorithmLexer.g:1:447: L
+            case 67 :
+                // InternalSTAlgorithmLexer.g:1:458: L
                 {
                 mL(); 
 
                 }
                 break;
-            case 67 :
-                // InternalSTAlgorithmLexer.g:1:449: W
+            case 68 :
+                // InternalSTAlgorithmLexer.g:1:460: W
                 {
                 mW(); 
 
                 }
                 break;
-            case 68 :
-                // InternalSTAlgorithmLexer.g:1:451: X
+            case 69 :
+                // InternalSTAlgorithmLexer.g:1:462: X
                 {
                 mX(); 
 
                 }
                 break;
-            case 69 :
-                // InternalSTAlgorithmLexer.g:1:453: AsteriskAsterisk
+            case 70 :
+                // InternalSTAlgorithmLexer.g:1:464: AsteriskAsterisk
                 {
                 mAsteriskAsterisk(); 
 
                 }
                 break;
-            case 70 :
-                // InternalSTAlgorithmLexer.g:1:470: FullStopFullStop
+            case 71 :
+                // InternalSTAlgorithmLexer.g:1:481: FullStopFullStop
                 {
                 mFullStopFullStop(); 
 
                 }
                 break;
-            case 71 :
-                // InternalSTAlgorithmLexer.g:1:487: ColonEqualsSign
+            case 72 :
+                // InternalSTAlgorithmLexer.g:1:498: ColonEqualsSign
                 {
                 mColonEqualsSign(); 
 
                 }
                 break;
-            case 72 :
-                // InternalSTAlgorithmLexer.g:1:503: LessThanSignEqualsSign
+            case 73 :
+                // InternalSTAlgorithmLexer.g:1:514: LessThanSignEqualsSign
                 {
                 mLessThanSignEqualsSign(); 
 
                 }
                 break;
-            case 73 :
-                // InternalSTAlgorithmLexer.g:1:526: LessThanSignGreaterThanSign
+            case 74 :
+                // InternalSTAlgorithmLexer.g:1:537: LessThanSignGreaterThanSign
                 {
                 mLessThanSignGreaterThanSign(); 
 
                 }
                 break;
-            case 74 :
-                // InternalSTAlgorithmLexer.g:1:554: EqualsSignGreaterThanSign
+            case 75 :
+                // InternalSTAlgorithmLexer.g:1:565: EqualsSignGreaterThanSign
                 {
                 mEqualsSignGreaterThanSign(); 
 
                 }
                 break;
-            case 75 :
-                // InternalSTAlgorithmLexer.g:1:580: GreaterThanSignEqualsSign
+            case 76 :
+                // InternalSTAlgorithmLexer.g:1:591: GreaterThanSignEqualsSign
                 {
                 mGreaterThanSignEqualsSign(); 
 
                 }
                 break;
-            case 76 :
-                // InternalSTAlgorithmLexer.g:1:606: AT
+            case 77 :
+                // InternalSTAlgorithmLexer.g:1:617: AT
                 {
                 mAT(); 
 
                 }
                 break;
-            case 77 :
-                // InternalSTAlgorithmLexer.g:1:609: BY
+            case 78 :
+                // InternalSTAlgorithmLexer.g:1:620: BY
                 {
                 mBY(); 
 
                 }
                 break;
-            case 78 :
-                // InternalSTAlgorithmLexer.g:1:612: DO
+            case 79 :
+                // InternalSTAlgorithmLexer.g:1:623: DO
                 {
                 mDO(); 
 
                 }
                 break;
-            case 79 :
-                // InternalSTAlgorithmLexer.g:1:615: DT
+            case 80 :
+                // InternalSTAlgorithmLexer.g:1:626: DT
                 {
                 mDT(); 
 
                 }
                 break;
-            case 80 :
-                // InternalSTAlgorithmLexer.g:1:618: IF
+            case 81 :
+                // InternalSTAlgorithmLexer.g:1:629: IF
                 {
                 mIF(); 
 
                 }
                 break;
-            case 81 :
-                // InternalSTAlgorithmLexer.g:1:621: LD
+            case 82 :
+                // InternalSTAlgorithmLexer.g:1:632: LD
                 {
                 mLD(); 
 
                 }
                 break;
-            case 82 :
-                // InternalSTAlgorithmLexer.g:1:624: LT
+            case 83 :
+                // InternalSTAlgorithmLexer.g:1:635: LT
                 {
                 mLT(); 
 
                 }
                 break;
-            case 83 :
-                // InternalSTAlgorithmLexer.g:1:627: MS
+            case 84 :
+                // InternalSTAlgorithmLexer.g:1:638: MS
                 {
                 mMS(); 
 
                 }
                 break;
-            case 84 :
-                // InternalSTAlgorithmLexer.g:1:630: NS
+            case 85 :
+                // InternalSTAlgorithmLexer.g:1:641: NS
                 {
                 mNS(); 
 
                 }
                 break;
-            case 85 :
-                // InternalSTAlgorithmLexer.g:1:633: OF
+            case 86 :
+                // InternalSTAlgorithmLexer.g:1:644: OF
                 {
                 mOF(); 
 
                 }
                 break;
-            case 86 :
-                // InternalSTAlgorithmLexer.g:1:636: OR
+            case 87 :
+                // InternalSTAlgorithmLexer.g:1:647: OR
                 {
                 mOR(); 
 
                 }
                 break;
-            case 87 :
-                // InternalSTAlgorithmLexer.g:1:639: TO
+            case 88 :
+                // InternalSTAlgorithmLexer.g:1:650: TO
                 {
                 mTO(); 
 
                 }
                 break;
-            case 88 :
-                // InternalSTAlgorithmLexer.g:1:642: US
+            case 89 :
+                // InternalSTAlgorithmLexer.g:1:653: US
                 {
                 mUS(); 
 
                 }
                 break;
-            case 89 :
-                // InternalSTAlgorithmLexer.g:1:645: NumberSign
+            case 90 :
+                // InternalSTAlgorithmLexer.g:1:656: NumberSign
                 {
                 mNumberSign(); 
 
                 }
                 break;
-            case 90 :
-                // InternalSTAlgorithmLexer.g:1:656: Ampersand
+            case 91 :
+                // InternalSTAlgorithmLexer.g:1:667: Ampersand
                 {
                 mAmpersand(); 
 
                 }
                 break;
-            case 91 :
-                // InternalSTAlgorithmLexer.g:1:666: LeftParenthesis
+            case 92 :
+                // InternalSTAlgorithmLexer.g:1:677: LeftParenthesis
                 {
                 mLeftParenthesis(); 
 
                 }
                 break;
-            case 92 :
-                // InternalSTAlgorithmLexer.g:1:682: RightParenthesis
+            case 93 :
+                // InternalSTAlgorithmLexer.g:1:693: RightParenthesis
                 {
                 mRightParenthesis(); 
 
                 }
                 break;
-            case 93 :
-                // InternalSTAlgorithmLexer.g:1:699: Asterisk
+            case 94 :
+                // InternalSTAlgorithmLexer.g:1:710: Asterisk
                 {
                 mAsterisk(); 
 
                 }
                 break;
-            case 94 :
-                // InternalSTAlgorithmLexer.g:1:708: PlusSign
+            case 95 :
+                // InternalSTAlgorithmLexer.g:1:719: PlusSign
                 {
                 mPlusSign(); 
 
                 }
                 break;
-            case 95 :
-                // InternalSTAlgorithmLexer.g:1:717: Comma
+            case 96 :
+                // InternalSTAlgorithmLexer.g:1:728: Comma
                 {
                 mComma(); 
 
                 }
                 break;
-            case 96 :
-                // InternalSTAlgorithmLexer.g:1:723: HyphenMinus
+            case 97 :
+                // InternalSTAlgorithmLexer.g:1:734: HyphenMinus
                 {
                 mHyphenMinus(); 
 
                 }
                 break;
-            case 97 :
-                // InternalSTAlgorithmLexer.g:1:735: FullStop
+            case 98 :
+                // InternalSTAlgorithmLexer.g:1:746: FullStop
                 {
                 mFullStop(); 
 
                 }
                 break;
-            case 98 :
-                // InternalSTAlgorithmLexer.g:1:744: Solidus
+            case 99 :
+                // InternalSTAlgorithmLexer.g:1:755: Solidus
                 {
                 mSolidus(); 
 
                 }
                 break;
-            case 99 :
-                // InternalSTAlgorithmLexer.g:1:752: Colon
+            case 100 :
+                // InternalSTAlgorithmLexer.g:1:763: Colon
                 {
                 mColon(); 
 
                 }
                 break;
-            case 100 :
-                // InternalSTAlgorithmLexer.g:1:758: Semicolon
+            case 101 :
+                // InternalSTAlgorithmLexer.g:1:769: Semicolon
                 {
                 mSemicolon(); 
 
                 }
                 break;
-            case 101 :
-                // InternalSTAlgorithmLexer.g:1:768: LessThanSign
+            case 102 :
+                // InternalSTAlgorithmLexer.g:1:779: LessThanSign
                 {
                 mLessThanSign(); 
 
                 }
                 break;
-            case 102 :
-                // InternalSTAlgorithmLexer.g:1:781: EqualsSign
+            case 103 :
+                // InternalSTAlgorithmLexer.g:1:792: EqualsSign
                 {
                 mEqualsSign(); 
 
                 }
                 break;
-            case 103 :
-                // InternalSTAlgorithmLexer.g:1:792: GreaterThanSign
+            case 104 :
+                // InternalSTAlgorithmLexer.g:1:803: GreaterThanSign
                 {
                 mGreaterThanSign(); 
 
                 }
                 break;
-            case 104 :
-                // InternalSTAlgorithmLexer.g:1:808: D
+            case 105 :
+                // InternalSTAlgorithmLexer.g:1:819: D
                 {
                 mD(); 
 
                 }
                 break;
-            case 105 :
-                // InternalSTAlgorithmLexer.g:1:810: H
+            case 106 :
+                // InternalSTAlgorithmLexer.g:1:821: H
                 {
                 mH(); 
 
                 }
                 break;
-            case 106 :
-                // InternalSTAlgorithmLexer.g:1:812: M
+            case 107 :
+                // InternalSTAlgorithmLexer.g:1:823: M
                 {
                 mM(); 
 
                 }
                 break;
-            case 107 :
-                // InternalSTAlgorithmLexer.g:1:814: S
+            case 108 :
+                // InternalSTAlgorithmLexer.g:1:825: S
                 {
                 mS(); 
 
                 }
                 break;
-            case 108 :
-                // InternalSTAlgorithmLexer.g:1:816: T
+            case 109 :
+                // InternalSTAlgorithmLexer.g:1:827: T
                 {
                 mT(); 
 
                 }
                 break;
-            case 109 :
-                // InternalSTAlgorithmLexer.g:1:818: LeftSquareBracket
+            case 110 :
+                // InternalSTAlgorithmLexer.g:1:829: LeftSquareBracket
                 {
                 mLeftSquareBracket(); 
 
                 }
                 break;
-            case 110 :
-                // InternalSTAlgorithmLexer.g:1:836: RightSquareBracket
+            case 111 :
+                // InternalSTAlgorithmLexer.g:1:847: RightSquareBracket
                 {
                 mRightSquareBracket(); 
 
                 }
                 break;
-            case 111 :
-                // InternalSTAlgorithmLexer.g:1:855: KW__
+            case 112 :
+                // InternalSTAlgorithmLexer.g:1:866: KW__
                 {
                 mKW__(); 
 
                 }
                 break;
-            case 112 :
-                // InternalSTAlgorithmLexer.g:1:860: RULE_NON_DECIMAL
+            case 113 :
+                // InternalSTAlgorithmLexer.g:1:871: RULE_NON_DECIMAL
                 {
                 mRULE_NON_DECIMAL(); 
 
                 }
                 break;
-            case 113 :
-                // InternalSTAlgorithmLexer.g:1:877: RULE_EXT_INT
+            case 114 :
+                // InternalSTAlgorithmLexer.g:1:888: RULE_EXT_INT
                 {
                 mRULE_EXT_INT(); 
 
                 }
                 break;
-            case 114 :
-                // InternalSTAlgorithmLexer.g:1:890: RULE_INT
+            case 115 :
+                // InternalSTAlgorithmLexer.g:1:901: RULE_INT
                 {
                 mRULE_INT(); 
 
                 }
                 break;
-            case 115 :
-                // InternalSTAlgorithmLexer.g:1:899: RULE_ID
+            case 116 :
+                // InternalSTAlgorithmLexer.g:1:910: RULE_ID
                 {
                 mRULE_ID(); 
 
                 }
                 break;
-            case 116 :
-                // InternalSTAlgorithmLexer.g:1:907: RULE_STRING
+            case 117 :
+                // InternalSTAlgorithmLexer.g:1:918: RULE_STRING
                 {
                 mRULE_STRING(); 
 
                 }
                 break;
-            case 117 :
-                // InternalSTAlgorithmLexer.g:1:919: RULE_ML_COMMENT
+            case 118 :
+                // InternalSTAlgorithmLexer.g:1:930: RULE_ML_COMMENT
                 {
                 mRULE_ML_COMMENT(); 
 
                 }
                 break;
-            case 118 :
-                // InternalSTAlgorithmLexer.g:1:935: RULE_SL_COMMENT
+            case 119 :
+                // InternalSTAlgorithmLexer.g:1:946: RULE_SL_COMMENT
                 {
                 mRULE_SL_COMMENT(); 
 
                 }
                 break;
-            case 119 :
-                // InternalSTAlgorithmLexer.g:1:951: RULE_WS
+            case 120 :
+                // InternalSTAlgorithmLexer.g:1:962: RULE_WS
                 {
                 mRULE_WS(); 
 
                 }
                 break;
-            case 120 :
-                // InternalSTAlgorithmLexer.g:1:959: RULE_ANY_OTHER
+            case 121 :
+                // InternalSTAlgorithmLexer.g:1:970: RULE_ANY_OTHER
                 {
                 mRULE_ANY_OTHER(); 
 
@@ -7398,17 +7499,17 @@ public class InternalSTAlgorithmLexer extends Lexer {
 
     protected DFA18 dfa18 = new DFA18(this);
     static final String DFA18_eotS =
-        "\1\uffff\1\66\1\74\1\66\1\104\4\66\1\124\1\66\1\130\6\66\1\60\1\155\1\157\1\161\1\164\1\166\1\170\1\66\2\uffff\1\176\4\uffff\1\u0084\1\uffff\1\u0086\2\uffff\1\u0089\4\u008d\1\60\1\uffff\2\60\2\uffff\1\u0094\1\u0097\3\66\1\uffff\3\66\1\u009e\1\u009f\1\uffff\6\66\1\u00a7\1\uffff\4\66\1\u00ac\11\66\1\u00b6\1\uffff\3\66\1\uffff\5\66\1\u00c2\2\66\1\u00c6\1\66\1\u00c8\1\66\1\u00ca\1\66\22\uffff\1\u00cc\1\u00cd\21\uffff\1\u008d\2\uffff\1\u008d\2\uffff\1\66\1\u00cf\1\uffff\2\66\1\uffff\6\66\2\uffff\6\66\1\u00df\1\uffff\1\u00e1\2\66\1\u00e4\1\uffff\10\66\1\u00ee\1\uffff\6\66\1\u00f5\4\66\1\uffff\3\66\1\uffff\1\u00fd\1\uffff\1\u00fe\1\uffff\1\u00ff\2\uffff\1\66\1\uffff\1\66\1\u0102\2\66\1\u0105\1\u0107\1\66\1\u0109\2\66\1\u0113\1\u0114\1\u0116\1\u0117\1\u0118\1\uffff\1\66\1\uffff\2\66\1\uffff\2\66\1\u0120\1\u0121\3\66\1\u0125\1\66\1\uffff\2\66\1\u0129\1\66\1\u012b\1\66\1\uffff\4\66\1\u0131\1\u0132\1\u0133\3\uffff\1\u0135\1\u0137\1\uffff\1\u0138\1\u0139\1\uffff\1\66\1\uffff\1\u013b\1\uffff\10\66\1\u0144\2\uffff\1\66\3\uffff\4\66\1\u014a\2\66\2\uffff\1\66\1\u014e\1\u014f\1\uffff\3\66\1\uffff\1\66\1\uffff\1\u0154\1\u0155\1\u0156\1\u0157\1\u0158\3\uffff\1\66\1\uffff\1\66\3\uffff\1\66\1\uffff\7\66\1\u0163\1\uffff\5\66\1\uffff\3\66\2\uffff\1\u016c\1\u016d\1\u016e\1\u016f\5\uffff\10\66\1\u0178\1\u0179\1\uffff\7\66\1\u0181\4\uffff\7\66\1\u0189\2\uffff\3\66\1\u018d\1\66\1\u018f\1\u0190\1\uffff\6\66\1\u0197\1\uffff\2\66\1\u019a\1\uffff\1\u019b\2\uffff\4\66\1\u01a0\1\u01a1\1\uffff\1\66\1\u01a3\2\uffff\4\66\2\uffff\1\u01a8\1\uffff\1\66\1\u01aa\2\66\1\uffff\1\66\1\uffff\1\u01ae\1\u01af\1\u01b0\3\uffff";
+        "\1\uffff\1\66\1\74\1\66\1\104\4\66\1\124\1\66\1\130\6\66\1\60\1\155\1\157\1\161\1\164\1\166\1\170\1\66\2\uffff\1\176\4\uffff\1\u0084\1\uffff\1\u0086\2\uffff\1\u0089\4\u008d\1\60\1\uffff\2\60\2\uffff\1\u0094\1\u0097\3\66\1\uffff\3\66\1\u009e\1\u009f\1\uffff\6\66\1\u00a7\1\uffff\4\66\1\u00ac\11\66\1\u00b6\1\uffff\3\66\1\uffff\5\66\1\u00c2\2\66\1\u00c6\1\66\1\u00c8\1\66\1\u00ca\1\66\22\uffff\1\u00cc\1\u00cd\21\uffff\1\u008d\2\uffff\1\u008d\2\uffff\1\66\1\u00cf\1\uffff\2\66\1\uffff\6\66\2\uffff\6\66\1\u00df\1\uffff\1\u00e1\2\66\1\u00e4\1\uffff\10\66\1\u00ee\1\uffff\6\66\1\u00f5\4\66\1\uffff\3\66\1\uffff\1\u00fd\1\uffff\1\u00fe\1\uffff\1\u00ff\2\uffff\1\66\1\uffff\1\66\1\u0102\2\66\1\u0105\1\u0107\1\66\1\u0109\2\66\1\u0113\1\u0114\1\u0116\1\u0117\1\u0118\1\uffff\1\66\1\uffff\2\66\1\uffff\2\66\1\u0120\1\u0121\3\66\1\u0125\1\66\1\uffff\2\66\1\u0129\1\66\1\u012b\1\66\1\uffff\4\66\1\u0131\1\u0132\1\u0133\3\uffff\1\u0135\1\u0137\1\uffff\1\u0138\1\u0139\1\uffff\1\66\1\uffff\1\u013b\1\uffff\10\66\1\u0144\2\uffff\1\66\3\uffff\4\66\1\u014a\2\66\2\uffff\1\66\1\u014e\1\u014f\1\uffff\3\66\1\uffff\1\66\1\uffff\1\u0154\1\u0155\1\u0156\1\u0157\1\u0158\3\uffff\1\66\1\uffff\1\66\3\uffff\1\66\1\uffff\7\66\1\u0163\1\uffff\5\66\1\uffff\3\66\2\uffff\1\u016d\1\u016e\1\u016f\1\u0170\5\uffff\10\66\1\u0179\1\u017a\1\uffff\10\66\1\u0183\4\uffff\7\66\1\u018b\2\uffff\4\66\1\u0190\1\66\1\u0192\1\u0193\1\uffff\6\66\1\u019a\1\uffff\2\66\1\u019d\1\66\1\uffff\1\u019f\2\uffff\4\66\1\u01a4\1\u01a5\1\uffff\1\66\1\u01a7\1\uffff\1\u01a8\1\uffff\4\66\2\uffff\1\u01ad\2\uffff\1\66\1\u01af\2\66\1\uffff\1\66\1\uffff\1\u01b3\1\u01b4\1\u01b5\3\uffff";
     static final String DFA18_eofS =
-        "\u01b1\uffff";
+        "\u01b6\uffff";
     static final String DFA18_minS =
-        "\1\0\1\104\1\60\1\114\1\60\1\101\1\114\1\101\1\103\1\60\1\105\1\60\1\101\1\104\1\117\1\106\2\117\1\102\1\52\1\56\2\75\1\76\1\75\1\106\2\uffff\1\52\4\uffff\1\52\1\uffff\1\60\2\uffff\1\60\2\43\2\60\1\101\1\uffff\2\0\2\uffff\2\60\1\105\1\117\1\116\1\uffff\1\124\1\117\1\116\2\60\1\uffff\1\104\1\123\1\111\1\115\1\105\1\125\1\60\1\uffff\1\122\1\107\1\122\1\104\1\60\1\116\1\123\1\101\1\124\1\110\1\111\1\122\1\124\1\104\1\60\1\uffff\1\101\1\122\1\116\1\uffff\1\114\1\122\2\111\1\124\1\60\1\116\1\117\1\60\1\124\1\60\1\124\1\60\1\122\22\uffff\2\60\20\uffff\2\60\2\uffff\1\43\2\uffff\1\124\1\60\1\uffff\1\115\1\104\1\uffff\1\101\1\122\1\124\1\105\1\122\1\124\2\uffff\1\137\1\105\1\124\1\105\1\116\1\105\1\60\1\uffff\1\60\1\117\1\101\1\60\1\uffff\1\123\1\105\2\122\1\101\1\114\1\104\1\110\1\60\1\uffff\1\105\1\125\1\114\1\111\1\124\1\123\1\60\2\116\1\111\1\116\1\uffff\1\124\1\114\1\105\1\uffff\1\60\1\uffff\1\60\1\uffff\1\60\2\uffff\1\105\1\uffff\1\105\1\60\1\114\1\104\2\60\1\104\1\60\1\101\1\106\5\60\1\uffff\1\111\1\uffff\1\122\1\131\1\uffff\1\124\1\111\2\60\1\111\1\122\1\105\1\60\1\117\1\uffff\1\101\1\122\1\60\1\116\1\60\1\105\1\uffff\2\124\1\114\1\124\3\60\3\uffff\2\60\1\uffff\2\60\1\uffff\1\101\1\uffff\1\60\1\uffff\1\114\2\105\1\110\1\101\1\117\1\101\1\106\1\60\2\uffff\1\117\3\uffff\1\125\1\116\1\105\1\111\1\60\1\101\1\116\2\uffff\1\116\2\60\1\uffff\1\104\1\124\1\116\1\uffff\1\107\1\uffff\5\60\3\uffff\1\101\1\uffff\1\117\3\uffff\1\116\1\uffff\1\107\1\124\1\120\1\111\1\123\2\122\1\60\1\uffff\1\106\1\124\1\120\1\115\1\124\1\uffff\1\116\1\125\1\107\2\uffff\4\60\5\uffff\1\116\1\106\1\104\1\117\1\110\1\105\1\114\1\105\2\60\1\uffff\1\137\1\120\1\125\1\120\1\110\1\124\1\105\1\60\4\uffff\1\104\2\137\1\122\1\117\1\101\1\105\1\60\2\uffff\1\104\1\125\1\124\1\60\1\115\2\60\1\uffff\1\137\1\104\1\124\1\111\1\104\1\124\1\60\1\uffff\1\101\1\124\1\60\1\uffff\1\60\2\uffff\1\124\1\101\1\111\1\124\2\60\1\uffff\1\131\1\60\2\uffff\1\111\1\131\1\115\1\110\2\uffff\1\60\1\uffff\1\115\1\60\1\105\1\115\1\uffff\1\105\1\uffff\3\60\3\uffff";
+        "\1\0\1\104\1\60\1\114\1\60\1\101\1\114\1\101\1\103\1\60\1\105\1\60\1\101\1\104\1\117\1\106\2\117\1\102\1\52\1\56\2\75\1\76\1\75\1\106\2\uffff\1\52\4\uffff\1\52\1\uffff\1\60\2\uffff\1\60\2\43\2\60\1\101\1\uffff\2\0\2\uffff\2\60\1\105\1\117\1\116\1\uffff\1\124\1\117\1\116\2\60\1\uffff\1\104\1\123\1\111\1\115\1\105\1\125\1\60\1\uffff\1\122\1\107\1\122\1\104\1\60\1\116\1\123\1\101\1\124\1\110\1\111\1\122\1\124\1\104\1\60\1\uffff\1\101\1\122\1\116\1\uffff\1\114\1\122\2\111\1\124\1\60\1\116\1\117\1\60\1\124\1\60\1\124\1\60\1\122\22\uffff\2\60\20\uffff\2\60\2\uffff\1\43\2\uffff\1\124\1\60\1\uffff\1\115\1\104\1\uffff\1\101\1\122\1\124\1\105\1\122\1\124\2\uffff\1\137\1\105\1\124\1\105\1\116\1\105\1\60\1\uffff\1\60\1\117\1\101\1\60\1\uffff\1\123\1\105\2\122\1\101\1\114\1\104\1\110\1\60\1\uffff\1\105\1\125\1\114\1\111\1\124\1\123\1\60\2\116\1\111\1\116\1\uffff\1\124\1\114\1\105\1\uffff\1\60\1\uffff\1\60\1\uffff\1\60\2\uffff\1\105\1\uffff\1\105\1\60\1\114\1\104\2\60\1\104\1\60\1\101\1\106\5\60\1\uffff\1\111\1\uffff\1\122\1\131\1\uffff\1\124\1\111\2\60\1\111\1\122\1\105\1\60\1\117\1\uffff\1\101\1\122\1\60\1\116\1\60\1\105\1\uffff\2\124\1\114\1\124\3\60\3\uffff\2\60\1\uffff\2\60\1\uffff\1\101\1\uffff\1\60\1\uffff\1\114\2\105\1\110\1\101\1\117\1\101\1\106\1\60\2\uffff\1\117\3\uffff\1\116\1\125\1\105\1\111\1\60\1\101\1\116\2\uffff\1\116\2\60\1\uffff\1\104\1\124\1\116\1\uffff\1\107\1\uffff\5\60\3\uffff\1\101\1\uffff\1\117\3\uffff\1\116\1\uffff\1\107\1\124\1\120\1\111\1\123\2\122\1\60\1\uffff\1\106\1\120\1\124\1\115\1\124\1\uffff\1\116\1\125\1\107\2\uffff\4\60\5\uffff\1\116\1\106\1\104\1\117\1\110\1\105\1\114\1\105\2\60\1\uffff\1\137\1\117\1\125\2\120\1\110\1\124\1\105\1\60\4\uffff\1\104\2\137\1\122\1\117\1\101\1\105\1\60\2\uffff\1\104\1\125\1\124\1\125\1\60\1\115\2\60\1\uffff\1\137\1\104\1\124\1\111\1\104\1\124\1\60\1\uffff\1\101\1\124\1\60\1\124\1\uffff\1\60\2\uffff\1\124\1\101\1\111\1\124\2\60\1\uffff\1\131\1\60\1\uffff\1\60\1\uffff\1\111\1\131\1\115\1\110\2\uffff\1\60\2\uffff\1\115\1\60\1\105\1\115\1\uffff\1\105\1\uffff\3\60\3\uffff";
     static final String DFA18_maxS =
-        "\1\uffff\1\167\1\172\1\170\1\172\1\141\1\164\1\157\1\163\1\172\1\145\1\172\1\157\1\163\1\171\1\156\1\163\1\157\1\170\1\52\1\56\1\75\2\76\1\75\1\162\2\uffff\1\52\4\uffff\1\57\1\uffff\1\172\2\uffff\1\172\4\145\1\172\1\uffff\2\uffff\2\uffff\2\172\1\145\1\157\1\156\1\uffff\1\164\1\157\1\156\2\172\1\uffff\1\144\1\163\1\151\1\155\1\145\1\165\1\172\1\uffff\1\162\1\147\1\162\1\144\1\172\1\156\1\163\1\141\1\164\1\150\1\151\1\162\1\164\1\144\1\172\1\uffff\1\164\1\162\1\156\1\uffff\1\154\1\162\2\151\1\164\1\172\1\156\1\157\1\172\1\164\1\172\1\164\1\172\1\162\22\uffff\2\172\20\uffff\1\71\1\145\2\uffff\1\145\2\uffff\1\164\1\172\1\uffff\1\155\1\144\1\uffff\1\141\1\162\1\164\1\145\1\162\1\164\2\uffff\1\137\1\151\1\164\1\145\1\156\1\145\1\172\1\uffff\1\172\1\157\1\141\1\172\1\uffff\1\164\1\145\2\162\1\141\1\154\1\144\1\150\1\172\1\uffff\1\145\1\165\1\154\1\151\1\164\1\163\1\172\2\156\1\151\1\156\1\uffff\1\164\1\154\1\145\1\uffff\1\172\1\uffff\1\172\1\uffff\1\172\2\uffff\1\145\1\uffff\1\145\1\172\1\154\1\144\2\172\1\144\1\172\1\167\1\146\5\172\1\uffff\1\164\1\uffff\1\162\1\171\1\uffff\1\164\1\151\2\172\1\151\1\162\1\145\1\172\1\157\1\uffff\1\141\1\162\1\172\1\156\1\172\1\145\1\uffff\2\164\1\154\1\164\3\172\3\uffff\2\172\1\uffff\2\172\1\uffff\1\141\1\uffff\1\172\1\uffff\1\154\2\145\1\150\1\141\1\157\1\141\1\146\1\172\2\uffff\1\157\3\uffff\1\165\1\156\1\145\1\151\1\172\1\141\1\156\2\uffff\1\156\2\172\1\uffff\1\144\1\164\1\156\1\uffff\1\147\1\uffff\5\172\3\uffff\1\141\1\uffff\1\157\3\uffff\1\156\1\uffff\1\147\1\164\1\160\1\151\1\163\2\162\1\172\1\uffff\1\146\1\164\1\160\1\155\1\164\1\uffff\1\156\1\165\1\147\2\uffff\4\172\5\uffff\1\156\1\146\1\144\1\157\1\150\1\145\1\154\1\145\2\172\1\uffff\1\137\1\160\1\165\1\160\1\150\1\164\1\145\1\172\4\uffff\1\144\2\137\1\162\1\157\1\141\1\145\1\172\2\uffff\1\144\1\165\1\164\1\172\1\155\2\172\1\uffff\1\137\1\144\1\164\1\151\1\144\1\164\1\172\1\uffff\1\141\1\164\1\172\1\uffff\1\172\2\uffff\1\164\1\141\1\151\1\164\2\172\1\uffff\1\171\1\172\2\uffff\1\151\1\171\1\155\1\150\2\uffff\1\172\1\uffff\1\155\1\172\1\145\1\155\1\uffff\1\145\1\uffff\3\172\3\uffff";
+        "\1\uffff\1\167\1\172\1\170\1\172\1\141\1\164\1\157\1\163\1\172\1\145\1\172\1\157\1\163\1\171\1\156\1\163\1\157\1\170\1\52\1\56\1\75\2\76\1\75\1\162\2\uffff\1\52\4\uffff\1\57\1\uffff\1\172\2\uffff\1\172\4\145\1\172\1\uffff\2\uffff\2\uffff\2\172\1\145\1\157\1\156\1\uffff\1\164\1\157\1\156\2\172\1\uffff\1\144\1\163\1\151\1\155\1\145\1\165\1\172\1\uffff\1\162\1\147\1\162\1\144\1\172\1\156\1\163\1\141\1\164\1\150\1\151\1\162\1\164\1\144\1\172\1\uffff\1\164\1\162\1\156\1\uffff\1\154\1\162\2\151\1\164\1\172\1\156\1\157\1\172\1\164\1\172\1\164\1\172\1\162\22\uffff\2\172\20\uffff\1\71\1\145\2\uffff\1\145\2\uffff\1\164\1\172\1\uffff\1\155\1\144\1\uffff\1\141\1\162\1\164\1\145\1\162\1\164\2\uffff\1\137\1\151\1\164\1\145\1\156\1\145\1\172\1\uffff\1\172\1\157\1\141\1\172\1\uffff\1\164\1\145\2\162\1\141\1\154\1\144\1\150\1\172\1\uffff\1\145\1\165\1\154\1\151\1\164\1\163\1\172\2\156\1\151\1\156\1\uffff\1\164\1\154\1\145\1\uffff\1\172\1\uffff\1\172\1\uffff\1\172\2\uffff\1\145\1\uffff\1\145\1\172\1\154\1\144\2\172\1\144\1\172\1\167\1\146\5\172\1\uffff\1\164\1\uffff\1\162\1\171\1\uffff\1\164\1\151\2\172\1\151\1\162\1\145\1\172\1\157\1\uffff\1\141\1\162\1\172\1\156\1\172\1\145\1\uffff\2\164\1\154\1\164\3\172\3\uffff\2\172\1\uffff\2\172\1\uffff\1\141\1\uffff\1\172\1\uffff\1\154\2\145\1\150\1\141\1\157\1\141\1\146\1\172\2\uffff\1\157\3\uffff\1\156\1\165\1\145\1\151\1\172\1\141\1\156\2\uffff\1\156\2\172\1\uffff\1\144\1\164\1\156\1\uffff\1\147\1\uffff\5\172\3\uffff\1\141\1\uffff\1\157\3\uffff\1\156\1\uffff\1\147\1\164\1\160\1\151\1\163\2\162\1\172\1\uffff\1\146\1\160\1\164\1\155\1\164\1\uffff\1\156\1\165\1\147\2\uffff\4\172\5\uffff\1\156\1\146\1\144\1\157\1\150\1\145\1\154\1\145\2\172\1\uffff\1\137\1\157\1\165\2\160\1\150\1\164\1\145\1\172\4\uffff\1\144\2\137\1\162\1\157\1\141\1\145\1\172\2\uffff\1\144\1\165\1\164\1\165\1\172\1\155\2\172\1\uffff\1\137\1\144\1\164\1\151\1\144\1\164\1\172\1\uffff\1\141\1\164\1\172\1\164\1\uffff\1\172\2\uffff\1\164\1\141\1\151\1\164\2\172\1\uffff\1\171\1\172\1\uffff\1\172\1\uffff\1\151\1\171\1\155\1\150\2\uffff\1\172\2\uffff\1\155\1\172\1\145\1\155\1\uffff\1\145\1\uffff\3\172\3\uffff";
     static final String DFA18_acceptS =
-        "\32\uffff\1\131\1\132\1\uffff\1\134\1\136\1\137\1\140\1\uffff\1\144\1\uffff\1\155\1\156\6\uffff\1\163\2\uffff\1\167\1\170\5\uffff\1\163\5\uffff\1\150\7\uffff\1\154\17\uffff\1\152\3\uffff\1\153\16\uffff\1\100\1\101\1\102\1\103\1\104\1\105\1\135\1\106\1\141\1\107\1\143\1\110\1\111\1\145\1\112\1\146\1\113\1\147\2\uffff\1\131\1\132\1\165\1\133\1\134\1\136\1\137\1\140\1\166\1\142\1\144\1\151\1\155\1\156\1\157\1\160\2\uffff\1\162\1\161\1\uffff\1\164\1\167\2\uffff\1\121\2\uffff\1\122\6\uffff\1\116\1\117\7\uffff\1\127\4\uffff\1\114\11\uffff\1\123\13\uffff\1\130\3\uffff\1\115\1\uffff\1\120\1\uffff\1\124\1\uffff\1\125\1\126\1\uffff\1\72\17\uffff\1\75\1\uffff\1\76\2\uffff\1\67\11\uffff\1\73\6\uffff\1\70\7\uffff\1\71\1\74\1\77\2\uffff\1\57\2\uffff\1\56\1\uffff\1\52\1\uffff\1\53\11\uffff\1\54\1\55\1\uffff\1\63\1\62\1\64\7\uffff\1\50\1\51\3\uffff\1\66\3\uffff\1\60\1\uffff\1\61\5\uffff\1\65\1\46\1\47\1\uffff\1\34\1\uffff\1\36\1\35\1\37\1\uffff\1\31\10\uffff\1\32\5\uffff\1\30\3\uffff\1\44\1\45\4\uffff\1\33\1\40\1\41\1\42\1\43\12\uffff\1\23\10\uffff\1\24\1\25\1\26\1\27\10\uffff\1\20\1\21\7\uffff\1\22\7\uffff\1\16\3\uffff\1\17\1\uffff\1\14\1\15\6\uffff\1\12\2\uffff\1\13\1\11\4\uffff\1\6\1\7\1\uffff\1\10\4\uffff\1\5\1\uffff\1\4\3\uffff\1\2\1\3\1\1";
+        "\32\uffff\1\132\1\133\1\uffff\1\135\1\137\1\140\1\141\1\uffff\1\145\1\uffff\1\156\1\157\6\uffff\1\164\2\uffff\1\170\1\171\5\uffff\1\164\5\uffff\1\151\7\uffff\1\155\17\uffff\1\153\3\uffff\1\154\16\uffff\1\101\1\102\1\103\1\104\1\105\1\106\1\136\1\107\1\142\1\110\1\144\1\111\1\112\1\146\1\113\1\147\1\114\1\150\2\uffff\1\132\1\133\1\166\1\134\1\135\1\137\1\140\1\141\1\167\1\143\1\145\1\152\1\156\1\157\1\160\1\161\2\uffff\1\163\1\162\1\uffff\1\165\1\170\2\uffff\1\122\2\uffff\1\123\6\uffff\1\117\1\120\7\uffff\1\130\4\uffff\1\115\11\uffff\1\124\13\uffff\1\131\3\uffff\1\116\1\uffff\1\121\1\uffff\1\125\1\uffff\1\126\1\127\1\uffff\1\73\17\uffff\1\76\1\uffff\1\77\2\uffff\1\70\11\uffff\1\74\6\uffff\1\71\7\uffff\1\72\1\75\1\100\2\uffff\1\60\2\uffff\1\57\1\uffff\1\53\1\uffff\1\54\11\uffff\1\55\1\56\1\uffff\1\64\1\63\1\65\7\uffff\1\51\1\52\3\uffff\1\67\3\uffff\1\61\1\uffff\1\62\5\uffff\1\66\1\47\1\50\1\uffff\1\35\1\uffff\1\37\1\36\1\40\1\uffff\1\32\10\uffff\1\33\5\uffff\1\31\3\uffff\1\45\1\46\4\uffff\1\34\1\41\1\42\1\43\1\44\12\uffff\1\24\11\uffff\1\25\1\26\1\27\1\30\10\uffff\1\21\1\22\10\uffff\1\23\7\uffff\1\17\4\uffff\1\20\1\uffff\1\15\1\16\6\uffff\1\13\2\uffff\1\14\1\uffff\1\12\4\uffff\1\6\1\7\1\uffff\1\10\1\11\4\uffff\1\5\1\uffff\1\4\3\uffff\1\2\1\3\1\1";
     static final String DFA18_specialS =
-        "\1\0\54\uffff\1\1\1\2\u0182\uffff}>";
+        "\1\1\54\uffff\1\0\1\2\u0187\uffff}>";
     static final String[] DFA18_transitionS = {
             "\11\60\2\57\2\60\1\57\22\60\1\57\1\60\1\55\1\32\1\60\1\22\1\33\1\56\1\34\1\35\1\23\1\36\1\37\1\40\1\24\1\41\1\52\1\51\1\47\5\52\1\50\1\52\1\25\1\42\1\26\1\27\1\30\2\60\1\6\1\16\1\7\1\2\1\3\1\14\1\54\1\43\1\17\2\54\1\1\1\11\1\20\1\31\2\54\1\12\1\13\1\4\1\15\1\5\1\10\1\21\2\54\1\44\1\60\1\45\1\53\1\46\1\60\1\6\1\16\1\7\1\2\1\3\1\14\1\54\1\43\1\17\2\54\1\1\1\11\1\20\1\31\2\54\1\12\1\13\1\4\1\15\1\5\1\10\1\21\2\54\uff85\60",
             "\1\61\4\uffff\1\65\10\uffff\1\63\1\uffff\1\62\2\uffff\1\64\14\uffff\1\61\4\uffff\1\65\10\uffff\1\63\1\uffff\1\62\2\uffff\1\64",
@@ -7634,7 +7735,7 @@ public class InternalSTAlgorithmLexer extends Lexer {
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "",
-            "\1\u011a\5\uffff\1\u0119\4\uffff\1\u011b\24\uffff\1\u011a\5\uffff\1\u0119\4\uffff\1\u011b",
+            "\1\u0119\5\uffff\1\u011a\4\uffff\1\u011b\24\uffff\1\u0119\5\uffff\1\u011a\4\uffff\1\u011b",
             "",
             "\1\u011c\37\uffff\1\u011c",
             "\1\u011d\37\uffff\1\u011d",
@@ -7736,14 +7837,14 @@ public class InternalSTAlgorithmLexer extends Lexer {
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "",
             "\1\u0164\37\uffff\1\u0164",
-            "\1\u0165\37\uffff\1\u0165",
-            "\1\u0166\37\uffff\1\u0166",
+            "\1\u0166\16\uffff\1\u0165\20\uffff\1\u0166",
             "\1\u0167\37\uffff\1\u0167",
             "\1\u0168\37\uffff\1\u0168",
-            "",
             "\1\u0169\37\uffff\1\u0169",
+            "",
             "\1\u016a\37\uffff\1\u016a",
             "\1\u016b\37\uffff\1\u016b",
+            "\1\u016c\37\uffff\1\u016c",
             "",
             "",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
@@ -7755,7 +7856,6 @@ public class InternalSTAlgorithmLexer extends Lexer {
             "",
             "",
             "",
-            "\1\u0170\37\uffff\1\u0170",
             "\1\u0171\37\uffff\1\u0171",
             "\1\u0172\37\uffff\1\u0172",
             "\1\u0173\37\uffff\1\u0173",
@@ -7763,79 +7863,85 @@ public class InternalSTAlgorithmLexer extends Lexer {
             "\1\u0175\37\uffff\1\u0175",
             "\1\u0176\37\uffff\1\u0176",
             "\1\u0177\37\uffff\1\u0177",
+            "\1\u0178\37\uffff\1\u0178",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "",
-            "\1\u017a",
-            "\1\u017b\37\uffff\1\u017b",
+            "\1\u017b",
             "\1\u017c\37\uffff\1\u017c",
             "\1\u017d\37\uffff\1\u017d",
             "\1\u017e\37\uffff\1\u017e",
             "\1\u017f\37\uffff\1\u017f",
             "\1\u0180\37\uffff\1\u0180",
+            "\1\u0181\37\uffff\1\u0181",
+            "\1\u0182\37\uffff\1\u0182",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "",
             "",
             "",
             "",
-            "\1\u0182\37\uffff\1\u0182",
-            "\1\u0183",
-            "\1\u0184",
-            "\1\u0185\37\uffff\1\u0185",
-            "\1\u0186\37\uffff\1\u0186",
+            "\1\u0184\37\uffff\1\u0184",
+            "\1\u0185",
+            "\1\u0186",
             "\1\u0187\37\uffff\1\u0187",
             "\1\u0188\37\uffff\1\u0188",
-            "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
-            "",
-            "",
+            "\1\u0189\37\uffff\1\u0189",
             "\1\u018a\37\uffff\1\u018a",
-            "\1\u018b\37\uffff\1\u018b",
-            "\1\u018c\37\uffff\1\u018c",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
+            "",
+            "",
+            "\1\u018c\37\uffff\1\u018c",
+            "\1\u018d\37\uffff\1\u018d",
             "\1\u018e\37\uffff\1\u018e",
+            "\1\u018f\37\uffff\1\u018f",
+            "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
+            "\1\u0191\37\uffff\1\u0191",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "",
-            "\1\u0191",
-            "\1\u0192\37\uffff\1\u0192",
-            "\1\u0193\37\uffff\1\u0193",
-            "\1\u0194\37\uffff\1\u0194",
+            "\1\u0194",
             "\1\u0195\37\uffff\1\u0195",
             "\1\u0196\37\uffff\1\u0196",
-            "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
-            "",
+            "\1\u0197\37\uffff\1\u0197",
             "\1\u0198\37\uffff\1\u0198",
             "\1\u0199\37\uffff\1\u0199",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "",
-            "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
-            "",
-            "",
+            "\1\u019b\37\uffff\1\u019b",
             "\1\u019c\37\uffff\1\u019c",
-            "\1\u019d\37\uffff\1\u019d",
+            "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "\1\u019e\37\uffff\1\u019e",
-            "\1\u019f\37\uffff\1\u019f",
-            "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
+            "",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "",
+            "",
+            "\1\u01a0\37\uffff\1\u01a0",
+            "\1\u01a1\37\uffff\1\u01a1",
             "\1\u01a2\37\uffff\1\u01a2",
+            "\1\u01a3\37\uffff\1\u01a3",
+            "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "",
-            "",
-            "\1\u01a4\37\uffff\1\u01a4",
-            "\1\u01a5\37\uffff\1\u01a5",
             "\1\u01a6\37\uffff\1\u01a6",
-            "\1\u01a7\37\uffff\1\u01a7",
-            "",
+            "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "",
             "\1\u01a9\37\uffff\1\u01a9",
-            "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
+            "\1\u01aa\37\uffff\1\u01aa",
             "\1\u01ab\37\uffff\1\u01ab",
             "\1\u01ac\37\uffff\1\u01ac",
             "",
-            "\1\u01ad\37\uffff\1\u01ad",
+            "",
+            "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
+            "",
+            "",
+            "\1\u01ae\37\uffff\1\u01ae",
+            "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
+            "\1\u01b0\37\uffff\1\u01b0",
+            "\1\u01b1\37\uffff\1\u01b1",
+            "",
+            "\1\u01b2\37\uffff\1\u01b2",
             "",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
             "\12\66\7\uffff\32\66\4\uffff\1\66\1\uffff\32\66",
@@ -7875,13 +7981,23 @@ public class InternalSTAlgorithmLexer extends Lexer {
             this.transition = DFA18_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( LDATE_AND_TIME | DATE_AND_TIME | END_ALGORITHM | LTIME_OF_DAY | TIME_OF_DAY | END_METHOD | END_REPEAT | VAR_OUTPUT | ALGORITHM | END_WHILE | VAR_INPUT | CONSTANT | CONTINUE | END_CASE | VAR_TEMP | END_FOR | END_VAR | WSTRING | END_IF | METHOD | REPEAT | RETURN | STRING | ARRAY | DWORD | ELSIF | FALSE | LDATE | LREAL | LTIME | LWORD | UDINT | ULINT | UNTIL | USINT | WCHAR | WHILE | BOOL | BYTE | CASE | CHAR | DATE | DINT | ELSE | EXIT | LINT | LTOD | REAL | SINT | THEN | TIME | TRUE | UINT | WORD | AND | FOR | INT | LDT | MOD | NOT | TOD | VAR | XOR | B | D_1 | L | W | X | AsteriskAsterisk | FullStopFullStop | ColonEqualsSign | LessThanSignEqualsSign | LessThanSignGreaterThanSign | EqualsSignGreaterThanSign | GreaterThanSignEqualsSign | AT | BY | DO | DT | IF | LD | LT | MS | NS | OF | OR | TO | US | NumberSign | Ampersand | LeftParenthesis | RightParenthesis | Asterisk | PlusSign | Comma | HyphenMinus | FullStop | Solidus | Colon | Semicolon | LessThanSign | EqualsSign | GreaterThanSign | D | H | M | S | T | LeftSquareBracket | RightSquareBracket | KW__ | RULE_NON_DECIMAL | RULE_EXT_INT | RULE_INT | RULE_ID | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER );";
+            return "1:1: Tokens : ( LDATE_AND_TIME | DATE_AND_TIME | END_ALGORITHM | LTIME_OF_DAY | TIME_OF_DAY | END_METHOD | END_REPEAT | VAR_IN_OUT | VAR_OUTPUT | ALGORITHM | END_WHILE | VAR_INPUT | CONSTANT | CONTINUE | END_CASE | VAR_TEMP | END_FOR | END_VAR | WSTRING | END_IF | METHOD | REPEAT | RETURN | STRING | ARRAY | DWORD | ELSIF | FALSE | LDATE | LREAL | LTIME | LWORD | UDINT | ULINT | UNTIL | USINT | WCHAR | WHILE | BOOL | BYTE | CASE | CHAR | DATE | DINT | ELSE | EXIT | LINT | LTOD | REAL | SINT | THEN | TIME | TRUE | UINT | WORD | AND | FOR | INT | LDT | MOD | NOT | TOD | VAR | XOR | B | D_1 | L | W | X | AsteriskAsterisk | FullStopFullStop | ColonEqualsSign | LessThanSignEqualsSign | LessThanSignGreaterThanSign | EqualsSignGreaterThanSign | GreaterThanSignEqualsSign | AT | BY | DO | DT | IF | LD | LT | MS | NS | OF | OR | TO | US | NumberSign | Ampersand | LeftParenthesis | RightParenthesis | Asterisk | PlusSign | Comma | HyphenMinus | FullStop | Solidus | Colon | Semicolon | LessThanSign | EqualsSign | GreaterThanSign | D | H | M | S | T | LeftSquareBracket | RightSquareBracket | KW__ | RULE_NON_DECIMAL | RULE_EXT_INT | RULE_INT | RULE_ID | RULE_STRING | RULE_ML_COMMENT | RULE_SL_COMMENT | RULE_WS | RULE_ANY_OTHER );";
         }
         public int specialStateTransition(int s, IntStream _input) throws NoViableAltException {
             IntStream input = _input;
         	int _s = s;
             switch ( s ) {
                     case 0 : 
+                        int LA18_45 = input.LA(1);
+
+                        s = -1;
+                        if ( ((LA18_45>='\u0000' && LA18_45<='\uFFFF')) ) {s = 144;}
+
+                        else s = 48;
+
+                        if ( s>=0 ) return s;
+                        break;
+                    case 1 : 
                         int LA18_0 = input.LA(1);
 
                         s = -1;
@@ -7980,16 +8096,6 @@ public class InternalSTAlgorithmLexer extends Lexer {
                         else if ( ((LA18_0>='\t' && LA18_0<='\n')||LA18_0=='\r'||LA18_0==' ') ) {s = 47;}
 
                         else if ( ((LA18_0>='\u0000' && LA18_0<='\b')||(LA18_0>='\u000B' && LA18_0<='\f')||(LA18_0>='\u000E' && LA18_0<='\u001F')||LA18_0=='!'||LA18_0=='$'||(LA18_0>='?' && LA18_0<='@')||LA18_0=='\\'||LA18_0=='`'||(LA18_0>='{' && LA18_0<='\uFFFF')) ) {s = 48;}
-
-                        if ( s>=0 ) return s;
-                        break;
-                    case 1 : 
-                        int LA18_45 = input.LA(1);
-
-                        s = -1;
-                        if ( ((LA18_45>='\u0000' && LA18_45<='\uFFFF')) ) {s = 144;}
-
-                        else s = 48;
 
                         if ( s>=0 ) return s;
                         break;

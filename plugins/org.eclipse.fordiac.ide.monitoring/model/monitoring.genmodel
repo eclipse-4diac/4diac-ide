@@ -32,6 +32,8 @@
           body="return null;"/>
       <genOperations ecoreOperation="monitoring.ecore#//AdapterMonitoringEvent/getOutputParameters"
           body="return null;"/>
+      <genOperations ecoreOperation="monitoring.ecore#//AdapterMonitoringEvent/getInOutParameters"
+          body="return null;"/>
       <genOperations ecoreOperation="monitoring.ecore#//AdapterMonitoringEvent/getReturnType"
           body="return null;"/>
     </genClasses>

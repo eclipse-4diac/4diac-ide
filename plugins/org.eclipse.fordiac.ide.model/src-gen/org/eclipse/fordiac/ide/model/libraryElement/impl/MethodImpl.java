@@ -180,6 +180,18 @@ public abstract class MethodImpl extends EObjectImpl implements Method {
 	 * @generated
 	 */
 	@Override
+	public EList<INamedElement> getInOutParameters() {
+		// TODO: implement this method
+		// Ensure that you remove @generated or mark it @generated NOT
+		throw new UnsupportedOperationException();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public DataType getReturnType() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT

@@ -12,13 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable
 
-import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.eval.value.Value
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
 interface Variable {
 	def String getName()
 	
-	def DataType getType()
+	def INamedElement getType()
 	
 	def Value getValue()
 	

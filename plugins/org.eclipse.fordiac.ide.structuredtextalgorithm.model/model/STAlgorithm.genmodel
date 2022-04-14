@@ -17,6 +17,8 @@
           body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInputParameters(this);"/>
       <genOperations ecoreOperation="STAlgorithm.ecore#//STAlgorithm/getOutputParameters"
           body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getOutputParameters(this);"/>
+      <genOperations ecoreOperation="STAlgorithm.ecore#//STAlgorithm/getInOutParameters"
+          body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInOutParameters(this);"/>
       <genOperations ecoreOperation="STAlgorithm.ecore#//STAlgorithm/getReturnType"
           body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getReturnType(this);"/>
     </genClasses>
@@ -36,6 +38,8 @@
           body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInputParameters(this);"/>
       <genOperations ecoreOperation="STAlgorithm.ecore#//STMethod/getOutputParameters"
           body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getOutputParameters(this);"/>
+      <genOperations ecoreOperation="STAlgorithm.ecore#//STMethod/getInOutParameters"
+          body="return org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.impl.STAlgorithmAnnotations.getInOutParameters(this);"/>
     </genClasses>
     <genClasses ecoreClass="STAlgorithm.ecore#//STMethodBody">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STAlgorithm.ecore#//STMethodBody/varDeclarations"/>

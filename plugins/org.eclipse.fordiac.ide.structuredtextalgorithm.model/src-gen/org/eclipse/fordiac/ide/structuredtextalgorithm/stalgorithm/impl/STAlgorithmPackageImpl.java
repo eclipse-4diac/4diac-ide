@@ -404,6 +404,8 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 
 		addEOperation(stAlgorithmEClass, theLibraryElementPackage.getINamedElement(), "getOutputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		addEOperation(stAlgorithmEClass, theLibraryElementPackage.getINamedElement(), "getInOutParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		addEOperation(stAlgorithmEClass, theDataPackage.getDataType(), "getReturnType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stAlgorithmBodyEClass, STAlgorithmBody.class, "STAlgorithmBody", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -423,6 +425,8 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 		addEOperation(stMethodEClass, theLibraryElementPackage.getINamedElement(), "getInputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(stMethodEClass, theLibraryElementPackage.getINamedElement(), "getOutputParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stMethodEClass, theLibraryElementPackage.getINamedElement(), "getInOutParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stMethodBodyEClass, STMethodBody.class, "STMethodBody", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTMethodBody_VarDeclarations(), theSTCorePackage.getSTVarDeclarationBlock(), null, "varDeclarations", null, 0, -1, STMethodBody.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

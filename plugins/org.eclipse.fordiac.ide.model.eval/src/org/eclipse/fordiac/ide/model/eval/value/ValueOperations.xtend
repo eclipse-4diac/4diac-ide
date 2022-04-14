@@ -47,6 +47,9 @@ import org.eclipse.fordiac.ide.model.data.WcharType
 import org.eclipse.fordiac.ide.model.data.WordType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.value.ValueConverterFactory
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 
 final class ValueOperations {
 
@@ -607,7 +610,7 @@ final class ValueOperations {
 		(0xffffffffffffffff#L >>> (64 - type.bitSize))
 	}
 
-	def static Value defaultValue(DataType type) {
+	def static Value defaultValue(INamedElement type) {
 		switch (type) {
 			case null:
 				null
@@ -670,16 +673,16 @@ final class ValueOperations {
 		}
 	}
 
-	def static dispatch Value castValue(Value value, DataType type) {
+	def static dispatch Value castValue(Value value, INamedElement type) {
 		if (value.type != type) {
 			throw new ClassCastException('''The value «value» with type «value.type.name» cannot be cast to «type.name»''')
 		}
 		return value
 	}
 
-	def static dispatch Value castValue(Void value, DataType type) { null }
+	def static dispatch Value castValue(Void value, INamedElement type) { null }
 
-	def static dispatch Value castValue(BoolValue value, DataType type) {
+	def static dispatch Value castValue(BoolValue value, INamedElement type) {
 		switch (type) {
 			case null,
 			case value.type:
@@ -697,7 +700,7 @@ final class ValueOperations {
 		}
 	}
 
-	def static dispatch Value castValue(AnyMagnitudeValue value, DataType type) {
+	def static dispatch Value castValue(AnyMagnitudeValue value, INamedElement type) {
 		switch (type) {
 			case null,
 			case value.type:
@@ -739,7 +742,7 @@ final class ValueOperations {
 		}
 	}
 
-	def static dispatch Value castValue(AnyBitValue value, DataType type) {
+	def static dispatch Value castValue(AnyBitValue value, INamedElement type) {
 		switch (type) {
 			case null,
 			case value.type:
@@ -777,7 +780,7 @@ final class ValueOperations {
 		}
 	}
 
-	def static dispatch Value castValue(AnyCharsValue value, DataType type) {
+	def static dispatch Value castValue(AnyCharsValue value, INamedElement type) {
 		switch (type) {
 			case null,
 			case value.type:
@@ -795,7 +798,7 @@ final class ValueOperations {
 		}
 	}
 
-	def static dispatch Value castValue(AnyDateValue value, DataType type) {
+	def static dispatch Value castValue(AnyDateValue value, INamedElement type) {
 		switch (type) {
 			case null,
 			case value.type:
@@ -817,7 +820,7 @@ final class ValueOperations {
 		}
 	}
 
-	def static Value wrapValue(Object value, DataType type) {
+	def static Value wrapValue(Object value, INamedElement type) {
 		if (value === null)
 			type.defaultValue
 		else
@@ -926,20 +929,105 @@ final class ValueOperations {
 			}
 	}
 
-	def static Value parseValue(String value, DataType type) {
+	def static Value parseValue(String value, INamedElement type) {
 		if (value.nullOrEmpty)
 			type.defaultValue
-		else {
+		else if (type instanceof DataType) {
 			val converter = ValueConverterFactory.createValueConverter(type)
 			if (converter === null) {
 				throw new UnsupportedOperationException('''The type «type?.name» is not supported''')
 			}
 			converter.toValue(value).wrapValue(type)
+		} else
+			throw new UnsupportedOperationException('''The type «type?.name» is not supported''')
+	}
+
+	def static Class<? extends Value> valueType(INamedElement type) {
+		switch (type) {
+			LrealType: LRealValue
+			RealType: RealValue
+			LintType: LIntValue
+			DintType: DIntValue
+			IntType: IntValue
+			SintType: SIntValue
+			UlintType: ULIntValue
+			UdintType: UDIntValue
+			UintType: UIntValue
+			UsintType: USIntValue
+			LtimeType: LTimeValue
+			TimeType: TimeValue
+			LwordType: LWordValue
+			DwordType: DWordValue
+			WordType: WordValue
+			ByteType: ByteValue
+			BoolType: BoolValue
+			WstringType: WStringValue
+			StringType: StringValue
+			WcharType: WCharValue
+			CharType: CharValue
+			LdtType: LDateAndTimeValue
+			DateAndTimeType: DateAndTimeValue
+			LtodType: LTimeOfDayValue
+			TimeOfDayType: TimeOfDayValue
+			LdateType: LDateValue
+			DateType: DateValue
+			default: null
+		}
+	}
+
+	def static DataType dataType(Class<? extends Value> type) {
+		switch (type) {
+			case LRealValue: ElementaryTypes.LREAL
+			case RealValue: ElementaryTypes.REAL
+			case LIntValue: ElementaryTypes.LINT
+			case DIntValue: ElementaryTypes.DINT
+			case IntValue: ElementaryTypes.INT
+			case SIntValue: ElementaryTypes.SINT
+			case ULIntValue: ElementaryTypes.ULINT
+			case UDIntValue: ElementaryTypes.UDINT
+			case UIntValue: ElementaryTypes.UINT
+			case USIntValue: ElementaryTypes.USINT
+			case LTimeValue: ElementaryTypes.LTIME
+			case TimeValue: ElementaryTypes.TIME
+			case LWordValue: ElementaryTypes.LWORD
+			case DWordValue: ElementaryTypes.DWORD
+			case WordValue: ElementaryTypes.WORD
+			case ByteValue: ElementaryTypes.BYTE
+			case BoolValue: ElementaryTypes.BOOL
+			case WStringValue: ElementaryTypes.WSTRING
+			case StringValue: ElementaryTypes.STRING
+			case WCharValue: ElementaryTypes.WCHAR
+			case CharValue: ElementaryTypes.CHAR
+			case LDateAndTimeValue: ElementaryTypes.LDATE_AND_TIME
+			case DateAndTimeValue: ElementaryTypes.DATE_AND_TIME
+			case LTimeOfDayValue: ElementaryTypes.LTIME_OF_DAY
+			case TimeOfDayValue: ElementaryTypes.TIME_OF_DAY
+			case LDateValue: ElementaryTypes.LDATE
+			case DateValue: ElementaryTypes.DATE
+			case AnySignedValue: GenericTypes.ANY_SIGNED
+			case AnyUnsignedValue: GenericTypes.ANY_UNSIGNED
+			case AnyIntValue: GenericTypes.ANY_INT
+			case AnyRealValue: GenericTypes.ANY_REAL
+			case AnyNumValue: GenericTypes.ANY_NUM
+			case AnyDurationValue: GenericTypes.ANY_DURATION
+			case AnyMagnitudeValue: GenericTypes.ANY_MAGNITUDE
+			case AnyBitValue: GenericTypes.ANY_BIT
+			case AnyCharValue: GenericTypes.ANY_CHAR
+			case AnyStringValue: GenericTypes.ANY_STRING
+			case AnyCharsValue: GenericTypes.ANY_CHARS
+			case AnyDateValue: GenericTypes.ANY_DATE
+			case AnyElementaryValue: GenericTypes.ANY_ELEMENTARY
+			case AnyValue: GenericTypes.ANY
+			default: null
 		}
 	}
 
 	def static asBoolean(Value value) {
-		(value as BoolValue).boolValue
+		switch (value) {
+			AnyBitValue: value.boolValue
+			AnyMagnitudeValue: value.intValue != 0
+			default: throw new UnsupportedOperationException('''The type «value.type.name» is not supported''')
+		}
 	}
 
 	def static int asInteger(Value value) {

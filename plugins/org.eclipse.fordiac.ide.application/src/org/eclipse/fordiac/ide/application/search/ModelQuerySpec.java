@@ -20,17 +20,20 @@ public class ModelQuerySpec {
 	private boolean checkPinName;
 	private boolean checkType;
 	private boolean checkComments;
+	private boolean checkCaseSensitive;
 
 	public ModelQuerySpec() {
 	}
 
 	public ModelQuerySpec(final String searchString, final boolean isCheckedInstanceName,
-			final boolean isCheckedPinName, final boolean isCheckedType, final boolean isCheckedComment) {
+			final boolean isCheckedPinName, final boolean isCheckedType, final boolean isCheckedComment,
+			final boolean isCaseSensitive) {
 		this.searchString = searchString;
 		this.checkInstanceName = isCheckedInstanceName;
 		this.checkPinName = isCheckedPinName;
 		this.checkType = isCheckedType;
 		this.checkComments = isCheckedComment;
+		this.checkCaseSensitive = isCaseSensitive;
 	}
 
 	public String getSearchString() {
@@ -51,6 +54,14 @@ public class ModelQuerySpec {
 
 	public boolean isCheckedComment() {
 		return checkComments;
+	}
+
+	public boolean isCheckCaseSensitive() {
+		return checkCaseSensitive;
+	}
+
+	public void setCheckCaseSensitive(final boolean checkCaseSensitive) {
+		this.checkCaseSensitive = checkCaseSensitive;
 	}
 
 	public void setSearchString(final String searchString) {
@@ -75,8 +86,10 @@ public class ModelQuerySpec {
 
 	@Override
 	public String toString() {
-		return "searchString=" + searchString + ", in instance name=" + checkInstanceName + ", in pin name="
-				+ checkPinName + ", in type =" + checkType + ", in comment=" + checkComments;
+		return "ModelQuerySpec [searchString=" + searchString + ", checkInstanceName=" + checkInstanceName
+				+ ", checkPinName=" + checkPinName + ", checkType=" + checkType + ", checkComments=" + checkComments
+				+ ", checkCaseSensitive=" + checkCaseSensitive + "]";
 	}
+
 
 }

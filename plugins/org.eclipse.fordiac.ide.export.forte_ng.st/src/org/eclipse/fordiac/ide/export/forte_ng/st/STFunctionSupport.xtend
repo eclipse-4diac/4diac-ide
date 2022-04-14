@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.export.ExportException
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBlock
@@ -83,6 +84,7 @@ class STFunctionSupport extends StructuredTextSupport {
 
 	def private getStructuredTextFunctionParameters(STFunction func) {
 		func.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].map[it -> false] +
+		func.varDeclarations.filter(STVarInOutDeclarationBlock).flatMap[varDeclarations].map[it -> true] +
 			func.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations].map[it -> true]
 	}
 

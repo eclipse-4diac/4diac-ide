@@ -107,4 +107,12 @@ public interface STFunction extends ICallable {
 	 */
 	EList<INamedElement> getOutputParameters();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<INamedElement> getInOutParameters();
+
 } // STFunction

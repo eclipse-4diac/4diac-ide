@@ -47,6 +47,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.Palette.SystemPaletteEntry;
@@ -98,10 +99,12 @@ public enum SystemManager {
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
+		CoordinateConverter.INSTANCE.name();
 		// Correctly setup the tool library needs to be done before loading any systems
 		// and adding the resource change listener
 		TypeLibrary.loadToolLibrary();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FordiacResourceChangeListener(this));
+		ValidateTypeLibrary.validate();
 	}
 
 	public static boolean isSystemFile(final Object entry) {

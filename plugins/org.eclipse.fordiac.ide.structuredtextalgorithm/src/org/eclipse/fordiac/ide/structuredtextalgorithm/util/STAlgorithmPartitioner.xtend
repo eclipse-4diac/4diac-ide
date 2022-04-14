@@ -123,6 +123,7 @@ class STAlgorithmPartitioner {
 			comment = node.extractComments
 			inputParameters.addAll(method.inputParameters.filter(STVarDeclaration).map[convertParameter(true)])
 			outputParameters.addAll(method.outputParameters.filter(STVarDeclaration).map[convertParameter(false)])
+			inOutParameters.addAll(method.inOutParameters.filter(STVarDeclaration).map[convertParameter(false)])
 			returnType = method.returnType
 			text = node.text
 		]

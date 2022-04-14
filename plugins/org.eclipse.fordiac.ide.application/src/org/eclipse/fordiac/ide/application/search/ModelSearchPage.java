@@ -38,6 +38,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 	private Button type;
 	private Button comment;
 	private Text query;
+	private Button caseSensitive;
 
 	public Button getInstanceName() {
 		return instanceName;
@@ -57,6 +58,10 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 
 	public ISearchPageContainer getContainer() {
 		return container;
+	}
+
+	public Button getCaseSensitive() {
+		return caseSensitive;
 	}
 
 	@Override
@@ -90,6 +95,9 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		query = WidgetFactory.text(SWT.BORDER).message("Type query").create(composite);
 		query.setFocus();
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(query);
+
+		caseSensitive = WidgetFactory.button(SWT.CHECK).text("Case sensitive").create(composite);
+
 		setControl(composite);
 	}
 
@@ -100,6 +108,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		final boolean isCheckedPinName = pinName.getSelection();
 		final boolean isCheckedType = type.getSelection();
 		final boolean isCheckedComment = comment.getSelection();
+		final boolean isCaseSensitive = caseSensitive.getSelection();
 
 		// Search string aka the name of it
 		final String searchString = query.getText();
@@ -109,7 +118,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		if (!"".equals(searchString) && optionSelected) { //$NON-NLS-1$
 
 			final ModelQuerySpec modelQuerySpec = new ModelQuerySpec(searchString, isCheckedInstanceName,
-					isCheckedPinName, isCheckedType, isCheckedComment);
+					isCheckedPinName, isCheckedType, isCheckedComment, isCaseSensitive);
 
 			final ModelSearchQuery searchJob = new ModelSearchQuery(modelQuerySpec);
 			NewSearchUI.runQueryInBackground(searchJob, NewSearchUI.getSearchResultView());

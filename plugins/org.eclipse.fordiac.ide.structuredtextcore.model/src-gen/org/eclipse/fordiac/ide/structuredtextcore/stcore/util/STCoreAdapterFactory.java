@@ -23,6 +23,7 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 
 import org.eclipse.emf.ecore.EObject;
 
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.*;
@@ -106,6 +107,10 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseSTVarOutputDeclarationBlock(STVarOutputDeclarationBlock object) {
 				return createSTVarOutputDeclarationBlockAdapter();
+			}
+			@Override
+			public Adapter caseSTVarInOutDeclarationBlock(STVarInOutDeclarationBlock object) {
+				return createSTVarInOutDeclarationBlockAdapter();
 			}
 			@Override
 			public Adapter caseSTVarTempDeclarationBlock(STVarTempDeclarationBlock object) {
@@ -260,8 +265,16 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTMultibitPartialExpressionAdapter();
 			}
 			@Override
+			public Adapter caseSTStandardFunction(STStandardFunction object) {
+				return createSTStandardFunctionAdapter();
+			}
+			@Override
 			public Adapter caseINamedElement(INamedElement object) {
 				return createINamedElementAdapter();
+			}
+			@Override
+			public Adapter caseICallable(ICallable object) {
+				return createICallableAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -364,6 +377,20 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTVarOutputDeclarationBlockAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock <em>ST Var In Out Declaration Block</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
+	 * @generated
+	 */
+	public Adapter createSTVarInOutDeclarationBlockAdapter() {
 		return null;
 	}
 
@@ -900,6 +927,20 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction <em>ST Standard Function</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
+	 * @generated
+	 */
+	public Adapter createSTStandardFunctionAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -910,6 +951,20 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createINamedElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.ICallable <em>ICallable</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ICallable
+	 * @generated
+	 */
+	public Adapter createICallableAdapter() {
 		return null;
 	}
 

@@ -34,8 +34,8 @@ public class ConnectorBorder extends AbstractBorder {
 	private static final int CONNECTOR_SIZE = 5;
 	private static final int ADAPTER_SIZE = 9;
 
-	private static final int LR_MARGIN = CONNECTOR_SIZE + 1;
-	private static final int LR_ADAPTER_MARGIN = 11;
+	protected static final int LR_MARGIN = CONNECTOR_SIZE + 1;
+	protected static final int LR_ADAPTER_MARGIN = 11;
 
 	private final IInterfaceElement editPartModelOject;
 	private Color connectorColor;
@@ -44,6 +44,10 @@ public class ConnectorBorder extends AbstractBorder {
 		super();
 		this.editPartModelOject = editPartModelOject;
 		updateColor();
+	}
+
+	protected IInterfaceElement getEditPartModelOject() {
+		return editPartModelOject;
 	}
 
 	public final void updateColor() {

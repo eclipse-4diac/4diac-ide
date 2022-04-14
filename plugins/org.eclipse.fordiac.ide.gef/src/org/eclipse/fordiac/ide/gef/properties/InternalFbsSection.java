@@ -65,7 +65,6 @@ public class InternalFbsSection extends AbstractSection implements I4diacTableUt
 	private static final String FB_COMMENT = "COMMENT"; //$NON-NLS-1$
 
 	private TableViewer internalFbsViewer;
-	private NewInstanceCellEditor fbTypeEditor;
 
 	@Override
 	protected BaseFBType getType() {
@@ -148,7 +147,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacTableUt
 		final TextCellEditor fbNameEditor = new TextCellEditor(table);
 		((Text) fbNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
 
-		fbTypeEditor = new InternalFBNewInstanceCellEditor(table, SWT.ON_TOP, true);
+		final NewInstanceCellEditor fbTypeEditor = new InternalFBNewInstanceCellEditor(table, SWT.ON_TOP, true);
 		fbTypeEditor.setPalette(getPalette());
 		fbTypeEditor.getMenuButton().dispose();
 

@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.debug.ui.st;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -146,8 +147,9 @@ public class STLaunchConfigurationTab extends MainLaunchConfigurationTab {
 	protected List<Variable> getDefaultArguments() {
 		final STFunction function = getFunction();
 		if (function != null) {
-			return function.getInputParameters().stream().map(STVarDeclaration.class::cast)
-					.map(STVariableOperations::newVariable).collect(Collectors.toList());
+			return Stream.concat(function.getInputParameters().stream(), function.getInOutParameters().stream())
+					.map(STVarDeclaration.class::cast).map(STVariableOperations::newVariable)
+					.collect(Collectors.toList());
 		}
 		return Collections.emptyList();
 	}

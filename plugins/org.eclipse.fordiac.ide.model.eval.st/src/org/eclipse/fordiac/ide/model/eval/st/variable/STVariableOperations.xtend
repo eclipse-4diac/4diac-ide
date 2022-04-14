@@ -36,7 +36,7 @@ final class STVariableOperations {
 			newVariable(decl.name, newArrayType(decl.type as DataType, decl.ranges.map[newSubrange])).evaluate(
 				decl.defaultValue)
 		else
-			newVariable(decl.name, decl.type as DataType).evaluate(decl.defaultValue)
+			newVariable(decl.name, decl.type).evaluate(decl.defaultValue)
 	}
 
 	def private static Subrange newSubrange(STExpression expr) {

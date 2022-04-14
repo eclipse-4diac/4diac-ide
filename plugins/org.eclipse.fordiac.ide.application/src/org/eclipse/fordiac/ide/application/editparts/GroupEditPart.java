@@ -79,6 +79,11 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 			final String value = (String) request.getCellEditor().getValue();
 			commentFigure.setText(value);
 		}
+
+		@Override
+		protected void revertOldEditValue(final DirectEditRequest request) {
+			refreshComment();
+		}
 	}
 
 	@Override
@@ -106,7 +111,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 	protected void refreshName() {
 		// as we don't have a name label we don't want to do anything here
 	}
-	
+
 	public Rectangle getCommentBounds() {
 		if (commentFigure != null) {
 			return commentFigure.getBounds();

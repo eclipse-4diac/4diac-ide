@@ -33,11 +33,11 @@ class PartialVariable extends AbstractVariable {
 	}
 
 	override getValue() {
-		delegate.value.partial(type, index)
+		delegate.value.partial(type as DataType, index)
 	}
 
 	override setValue(Value value) {
-		delegate.value = delegate.value.partial(type, index, value)
+		delegate.value = delegate.value.partial(type as DataType, index, value)
 	}
 
 	override setValue(String value) {

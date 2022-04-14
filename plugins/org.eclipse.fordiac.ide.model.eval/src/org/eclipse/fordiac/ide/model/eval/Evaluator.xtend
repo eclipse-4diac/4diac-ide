@@ -18,11 +18,15 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 
 interface Evaluator {
+	String CONTEXT_NAME = "THIS"
+
 	def void prepare()
 
 	def Value evaluate() throws EvaluatorException, InterruptedException
 
 	def String getName()
+
+	def Variable getContext()
 
 	def Evaluator getParent()
 

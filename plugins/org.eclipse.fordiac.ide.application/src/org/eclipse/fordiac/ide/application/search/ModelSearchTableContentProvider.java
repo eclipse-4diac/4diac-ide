@@ -22,7 +22,7 @@ public class ModelSearchTableContentProvider implements IStructuredContentProvid
 
 	private final ModelSearchResultPage resultPage;
 	private ModelSearchResult result;
-	private final static Object[] EMPTY_ARR = new Object[0];
+	private static final Object[] EMPTY_ARR = new Object[0];
 
 	public ModelSearchTableContentProvider(final ModelSearchResultPage page) {
 		this.resultPage = page;

@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock
@@ -68,6 +69,7 @@ class STMethodSupport extends StructuredTextSupport {
 
 	def private getStructuredTextMethodParameters(STMethod method) {
 		method.body.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].map[it -> false] +
+		method.body.varDeclarations.filter(STVarInOutDeclarationBlock).flatMap[varDeclarations].map[it -> true] +
 			method.body.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations].map[it -> true]
 	}
 

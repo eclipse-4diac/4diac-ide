@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -27,8 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 public class SimpleFBLaunchConfigurationDelegate extends FBLaunchConfigurationDelegate {
 
 	@Override
-	public FBEvaluator<? extends FBType> createEvaluator(FBType type, Queue<Event> queue, List<Variable> variables)
+	public FBEvaluator<? extends FBType> createEvaluator(final FBType type, final Queue<Event> queue, final List<Variable> variables)
 			throws CoreException {
-		return new SimpleFBEvaluator((SimpleFBType) type, queue, variables, null);
+		return new SimpleFBEvaluator((SimpleFBType) type, null, variables, queue, null);
 	}
 }
