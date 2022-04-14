@@ -41,11 +41,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
-import org.eclipse.fordiac.ide.model.typelibrary.impl.BlockTypeLibraryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorFBTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorSubAppTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
@@ -81,12 +79,16 @@ public final class TypeLibrary {
 
 	private final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
 	private IProject project;
-
-	private final BlockTypeLibrary newBlockTypeLib = new BlockTypeLibraryImpl();
+	private final Map<String, AdapterTypeEntry> adapterTypes = new HashMap<>();
+	private final Map<String, DeviceTypeEntry> deviceTypes = new HashMap<>();
+	private final Map<String, FBTypeEntry> fbTypes = new HashMap<>();
+	private final Map<String, ResourceTypeEntry> resourceTypes = new HashMap<>();
+	private final Map<String, SegmentTypeEntry> segmentTypes = new HashMap<>();
+	private final Map<String, SubAppTypeEntry> subAppTypes = new HashMap<>();
 	private final Map<String, TypeEntry> errorTypes = new HashMap<>();
 
 	public Map<String, AdapterTypeEntry> getAdapterTypes() {
-		return newBlockTypeLib.getAdapterTypes();
+		return adapterTypes;
 	}
 
 	public List<AdapterTypeEntry> getAdapterTypesSorted() {
@@ -96,23 +98,23 @@ public final class TypeLibrary {
 	}
 
 	public Map<String, DeviceTypeEntry> getDeviceTypes() {
-		return newBlockTypeLib.getDeviceTypes();
+		return deviceTypes;
 	}
 
 	public Map<String, FBTypeEntry> getFbTypes() {
-		return newBlockTypeLib.getFbTypes();
+		return fbTypes;
 	}
 
 	public Map<String, ResourceTypeEntry> getResourceTypes() {
-		return newBlockTypeLib.getResourceTypes();
+		return resourceTypes;
 	}
 
 	public Map<String, SegmentTypeEntry> getSegmentTypes() {
-		return newBlockTypeLib.getSegmentTypes();
+		return segmentTypes;
 	}
 
 	public Map<String, SubAppTypeEntry> getSubAppTypes() {
-		return newBlockTypeLib.getSubAppTypes();
+		return subAppTypes;
 	}
 
 	public AdapterTypeEntry getAdapterTypeEntry(final String typeName) {
@@ -281,15 +283,15 @@ public final class TypeLibrary {
 		if (entry instanceof DataTypeEntry) {
 			dataTypeLib.addTypeEntry((DataTypeEntry) entry);
 		} else {
-			newBlockTypeLib.addTypeEntry(entry);
+			addBlockTypeEntry(entry);
 		}
 	}
 
 	public void removeTypeEntry(final TypeEntry entry) {
-		if (entry instanceof DataTypePaletteEntry) {
+		if (entry instanceof DataTypeEntry) {
 			dataTypeLib.removeTypeEntry((DataTypeEntry) entry);
 		} else {
-			newBlockTypeLib.removeTypeEntry(entry);
+			removeBlockTypeEntry(entry);
 		}
 	}
 
@@ -433,6 +435,42 @@ public final class TypeLibrary {
 		}
 
 		return getAdapterTypeEntry(name);
+	}
+
+	private void addBlockTypeEntry(final TypeEntry entry) {
+		if (entry instanceof AdapterTypeEntry) {
+			getAdapterTypes().put(entry.getTypeName(), (AdapterTypeEntry) entry);
+		} else if (entry instanceof DeviceTypeEntry) {
+			getDeviceTypes().put(entry.getTypeName(), (DeviceTypeEntry) entry);
+		} else if (entry instanceof FBTypeEntry) {
+			getFbTypes().put(entry.getTypeName(), (FBTypeEntry) entry);
+		} else if (entry instanceof ResourceTypeEntry) {
+			getResourceTypes().put(entry.getTypeName(), (ResourceTypeEntry) entry);
+		} else if (entry instanceof SegmentTypeEntry) {
+			getSegmentTypes().put(entry.getTypeName(), (SegmentTypeEntry) entry);
+		} else if (entry instanceof SubAppTypeEntry) {
+			getSubAppTypes().put(entry.getTypeName(), (SubAppTypeEntry) entry);
+		} else {
+			FordiacLogHelper.logError("Unknown type entry to be added to library: " + entry.getClass().getName()); //$NON-NLS-1$
+		}
+	}
+
+	private void removeBlockTypeEntry(final TypeEntry entry) {
+		if (entry instanceof AdapterTypeEntry) {
+			getAdapterTypes().remove(entry.getTypeName());
+		} else if (entry instanceof DeviceTypeEntry) {
+			getDeviceTypes().remove(entry.getTypeName());
+		} else if (entry instanceof FBTypeEntry) {
+			getFbTypes().remove(entry.getTypeName());
+		} else if (entry instanceof ResourceTypeEntry) {
+			getResourceTypes().remove(entry.getTypeName());
+		} else if (entry instanceof SegmentTypeEntry) {
+			getSegmentTypes().remove(entry.getTypeName());
+		} else if (entry instanceof SubAppTypeEntry) {
+			getSubAppTypes().remove(entry.getTypeName());
+		} else {
+			FordiacLogHelper.logError("Unknown type entry to be removed from library: " + entry.getClass().getName()); //$NON-NLS-1$
+		}
 	}
 
 }
