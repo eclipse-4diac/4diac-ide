@@ -109,6 +109,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 import org.eclipse.gef.commands.CommandStack;
 
@@ -256,6 +257,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return createPointFromString(eDataType, initialValue);
 			case LibraryElementPackage.TYPE_ENTRY:
 				return createTypeEntryFromString(eDataType, initialValue);
+			case LibraryElementPackage.TYPE_LIBRARY:
+				return createTypeLibraryFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -281,6 +284,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return convertPointToString(eDataType, instanceValue);
 			case LibraryElementPackage.TYPE_ENTRY:
 				return convertTypeEntryToString(eDataType, instanceValue);
+			case LibraryElementPackage.TYPE_LIBRARY:
+				return convertTypeLibraryToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -1218,6 +1223,24 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	public String convertTypeEntryToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TypeLibrary createTypeLibraryFromString(EDataType eDataType, String initialValue) {
+		return (TypeLibrary)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertTypeLibraryToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 

@@ -35,7 +35,7 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 
 	public static final String APPLICATION_NAME_POSTFIX = "App"; //$NON-NLS-1$
 
-	private boolean importDefaultPalette = true;
+	private boolean importDefaultTypeLib = true;
 	private boolean openApplication = true;
 
 	private Button advancedButton;
@@ -178,18 +178,18 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		advancedGroupContainer.setLayout(new GridLayout());
 		advancedGroupContainer.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 
-		Button importDefaultPaletteSB = new Button(advancedGroupContainer, SWT.CHECK);
-		importDefaultPaletteSB.setSelection(importDefaultPalette);
-		importDefaultPaletteSB.setText(Messages.PaletteManagementPage_LABEL_DefaultTypeLibrary);
-		importDefaultPaletteSB.addSelectionListener(new SelectionListener() {
+		Button importDefaultTypeLibButton = new Button(advancedGroupContainer, SWT.CHECK);
+		importDefaultTypeLibButton.setSelection(importDefaultTypeLib);
+		importDefaultTypeLibButton.setText(Messages.PaletteManagementPage_LABEL_DefaultTypeLibrary);
+		importDefaultTypeLibButton.addSelectionListener(new SelectionListener() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				importDefaultPalette = true;
+				importDefaultTypeLib = true;
 			}
 
 			@Override
 			public void widgetDefaultSelected(final SelectionEvent e) {
-				importDefaultPalette = false;
+				importDefaultTypeLib = false;
 			}
 		});
 
@@ -209,8 +209,8 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		});
 	}
 
-	public boolean importDefaultPalette() {
-		return importDefaultPalette;
+	public boolean importDefaultTypeLibrary() {
+		return importDefaultTypeLib;
 	}
 
 }

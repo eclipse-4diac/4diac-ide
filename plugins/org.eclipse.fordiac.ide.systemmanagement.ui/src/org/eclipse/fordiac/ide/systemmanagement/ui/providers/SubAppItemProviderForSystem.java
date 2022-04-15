@@ -96,7 +96,7 @@ public class SubAppItemProviderForSystem extends SubAppItemProvider {
 	public void notifyChanged(final Notification notification) {
 		if (LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY == notification
 				.getFeatureID(TypedConfigureableObject.class)) {
-			// if the palette entry get change inform viewer to update the parent's children, this ensures that any
+			// if the type entry get change inform viewer to update the parent's children, this ensures that any
 			// filters that may be enabled are applied
 			final SubApp subapp = (SubApp) notification.getNotifier();
 			final Notification wrappedNotification = ViewerNotification.wrapNotification(notification,

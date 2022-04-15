@@ -9,7 +9,7 @@
     testSuiteClass="org.eclipse.fordiac.ide.fbtester.model.testdata.tests.TestDataAllTests"
     importerID="org.eclipse.emf.importer.ecore" complianceLevel="6.0" copyrightFields="false"
     editPluginID="org.eclipse.fordiac.ide.fbtester.edit" editorPluginID="org.eclipse.fordiac.ide.fbtester.editor"
-    usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//Palette ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement"
+    usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement"
     importOrganizing="true" cleanup="true">
   <foreignModel>testData.ecore</foreignModel>
   <genPackages prefix="Testdata" basePackage="org.eclipse.fordiac.ide.fbtester.model"

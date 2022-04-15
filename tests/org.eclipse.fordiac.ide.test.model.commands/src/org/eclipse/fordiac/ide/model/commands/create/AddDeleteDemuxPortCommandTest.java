@@ -90,7 +90,7 @@ public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
 			d.getInterface().getInputVars().add(dataInput);
 
 			final FBType dummyType = LibraryElementFactory.eINSTANCE.createBasicFBType();
-			dummyType.setName("Demux Palette Entry"); //$NON-NLS-1$
+			dummyType.setName("Demux Type Entry"); //$NON-NLS-1$
 			final FBTypeEntryMock te = new FBTypeEntryMock(dummyType, typeLib, null);
 			typeLib.addTypeEntry(te);
 			d.setTypeEntry(te);

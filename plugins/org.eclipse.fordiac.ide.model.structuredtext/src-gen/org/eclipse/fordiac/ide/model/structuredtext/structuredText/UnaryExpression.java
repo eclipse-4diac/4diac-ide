@@ -24,50 +24,50 @@ package org.eclipse.fordiac.ide.model.structuredtext.structuredText;
 public interface UnaryExpression extends Expression
 {
   /**
-   * Returns the value of the '<em><b>Operator</b></em>' attribute.
-   * The literals are from the enumeration {@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator}.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Operator</b></em>' attribute.
+	 * The literals are from the enumeration {@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator}.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Operator</em>' attribute.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator
-   * @see #setOperator(UnaryOperator)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getUnaryExpression_Operator()
-   * @model
-   * @generated
-   */
+	 * @return the value of the '<em>Operator</em>' attribute.
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator
+	 * @see #setOperator(UnaryOperator)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getUnaryExpression_Operator()
+	 * @model
+	 * @generated
+	 */
   UnaryOperator getOperator();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression#getOperator <em>Operator</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression#getOperator <em>Operator</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Operator</em>' attribute.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator
-   * @see #getOperator()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Operator</em>' attribute.
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryOperator
+	 * @see #getOperator()
+	 * @generated
+	 */
   void setOperator(UnaryOperator value);
 
   /**
-   * Returns the value of the '<em><b>Expression</b></em>' containment reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Expression</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Expression</em>' containment reference.
-   * @see #setExpression(Expression)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getUnaryExpression_Expression()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Expression</em>' containment reference.
+	 * @see #setExpression(Expression)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getUnaryExpression_Expression()
+	 * @model containment="true"
+	 * @generated
+	 */
   Expression getExpression();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression#getExpression <em>Expression</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.UnaryExpression#getExpression <em>Expression</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Expression</em>' containment reference.
-   * @see #getExpression()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Expression</em>' containment reference.
+	 * @see #getExpression()
+	 * @generated
+	 */
   void setExpression(Expression value);
 
 } // UnaryExpression

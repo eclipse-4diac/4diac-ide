@@ -10,7 +10,7 @@
     commentFormatting="true" testSuiteClass="org.eclipse.fordiac.ide.structuredtextcore.model.stcore.tests.STCoreAllTests"
     complianceLevel="11.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.structuredtextcore.model.edit"
     editorPluginID="org.eclipse.fordiac.ide.structuredtextcore.model.editor" runtimeVersion="2.28"
-    usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//Palette">
+    usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement">
   <genPackages prefix="STCore" basePackage="org.eclipse.fordiac.ide.structuredtextcore"
       disposableProviderFactory="true" fileExtensions="stcore" ecorePackage="STCore.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//STBinaryOperator">

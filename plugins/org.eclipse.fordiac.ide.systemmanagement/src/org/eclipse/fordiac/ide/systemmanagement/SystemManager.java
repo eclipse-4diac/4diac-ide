@@ -112,7 +112,7 @@ public enum SystemManager {
 	}
 
 	public IProject createNew4diacProject(final String projectName, final IPath location,
-			final boolean importDefaultPalette, final IProgressMonitor monitor) throws CoreException {
+			final boolean importDefaultTypeLibrary, final IProgressMonitor monitor) throws CoreException {
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 		final IProject project = root.getProject(projectName);
@@ -134,8 +134,8 @@ public enum SystemManager {
 		project.create(description, monitor);
 		project.open(monitor);
 
-		// configure palette
-		if (importDefaultPalette) {
+		// configure type lib
+		if (importDefaultTypeLibrary) {
 			SystemPaletteManagement.copyToolTypeLibToDestination(project.getFolder(TYPE_LIB_FOLDER_NAME));
 		}
 		getProjectSystems(project); // insert the project into the project list
@@ -256,7 +256,7 @@ public enum SystemManager {
 	}
 
 	public static void saveSystem(final AutomationSystem system, final IFile file) {
-		Assert.isNotNull(system.getTypeEntry()); // there should be no system without palette entry
+		Assert.isNotNull(system.getTypeEntry()); // there should be no system without type entry
 		system.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
 		final SystemExporter systemExporter = new SystemExporter(system);
 		systemExporter.saveSystem(file);

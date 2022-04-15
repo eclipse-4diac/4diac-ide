@@ -26,11 +26,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
-
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
-
-import org.eclipse.fordiac.ide.model.Palette.impl.PalettePackageImpl;
-
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyCharType;
 import org.eclipse.fordiac.ide.model.data.AnyCharsType;
@@ -536,19 +531,15 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		XMLTypePackage.eINSTANCE.eClass();
 
 		// Obtain or create and register interdependencies
-		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(PalettePackage.eNS_URI);
-		PalettePackageImpl thePalettePackage = (PalettePackageImpl)(registeredPackage instanceof PalettePackageImpl ? registeredPackage : PalettePackage.eINSTANCE);
-		registeredPackage = EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
+		Object registeredPackage = EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
 		LibraryElementPackageImpl theLibraryElementPackage = (LibraryElementPackageImpl)(registeredPackage instanceof LibraryElementPackageImpl ? registeredPackage : LibraryElementPackage.eINSTANCE);
 
 		// Create package meta-data objects
 		theDataPackage.createPackageContents();
-		thePalettePackage.createPackageContents();
 		theLibraryElementPackage.createPackageContents();
 
 		// Initialize created meta-data
 		theDataPackage.initializePackageContents();
-		thePalettePackage.initializePackageContents();
 		theLibraryElementPackage.initializePackageContents();
 
 		// Mark meta-data to indicate it can't be changed

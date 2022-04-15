@@ -6,7 +6,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *          - initial implementation and/or documentation
  */
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem;

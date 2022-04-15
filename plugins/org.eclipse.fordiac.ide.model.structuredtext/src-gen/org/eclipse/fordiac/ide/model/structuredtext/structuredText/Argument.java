@@ -24,25 +24,25 @@ import org.eclipse.emf.ecore.EObject;
 public interface Argument extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Var</b></em>' attribute.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Var</b></em>' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Var</em>' attribute.
-   * @see #setVar(String)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getArgument_Var()
-   * @model
-   * @generated
-   */
+	 * @return the value of the '<em>Var</em>' attribute.
+	 * @see #setVar(String)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getArgument_Var()
+	 * @model
+	 * @generated
+	 */
   String getVar();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument#getVar <em>Var</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument#getVar <em>Var</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Var</em>' attribute.
-   * @see #getVar()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Var</em>' attribute.
+	 * @see #getVar()
+	 * @generated
+	 */
   void setVar(String value);
 
 } // Argument

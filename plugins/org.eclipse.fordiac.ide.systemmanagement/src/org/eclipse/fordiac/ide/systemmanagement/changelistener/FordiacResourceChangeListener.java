@@ -227,7 +227,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private boolean handleResourceChanged(final IResourceDelta delta) {
 
 		if (isFileChange(delta)) {
-			collectPaletteEntries(delta);
+			collectTypeEntries(delta);
 		} else if (IResourceDelta.OPEN == delta.getFlags()) {
 			// project is opened oder closed
 			if (0 != delta.getAffectedChildren(IResourceDelta.ADDED).length) {
@@ -255,16 +255,16 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return true;
 	}
 
-	private void collectPaletteEntries(final IResourceDelta delta) {
+	private void collectTypeEntries(final IResourceDelta delta) {
 		final IFile file = (IFile) delta.getResource();
 
-		TypeEntry paletteTypeForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-		if (paletteTypeForFile == null) {
-			paletteTypeForFile = systemManager.getTypeEntry(file);
+		TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		if (typeEntryForFile == null) {
+			typeEntryForFile = systemManager.getTypeEntry(file);
 		}
-		if (paletteTypeForFile != null
-				&& paletteTypeForFile.getLastModificationTimestamp() != file.getModificationStamp()) {
-			changedFiles.add(paletteTypeForFile);
+		if (typeEntryForFile != null
+				&& typeEntryForFile.getLastModificationTimestamp() != file.getModificationStamp()) {
+			changedFiles.add(typeEntryForFile);
 		}
 	}
 
@@ -333,7 +333,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				closeAllEditorsForFile(file);
 				final FileToRenameEntry rnEntry = getFileRenameEntry(entry);
 				if(rnEntry != null) {
-					// the file was moved to a new location update the palette entry and do not remove it from the
+					// the file was moved to a new location update the type entry and do not remove it from the
 					// rename list
 					entry.setFile(rnEntry.getFile());
 					filesToRename.remove(rnEntry);
@@ -366,7 +366,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 						updateTypeEntry(file, entry);
 					}
 				} else if (!file.equals(typeEntryForFile.getFile())) {
-					// After a file has been copied and the copied file is not the same as the founded palette entry
+					// After a file has been copied and the copied file is not the same as the founded type entry
 					// the file and the resulting type must be renamed with a unique name put it in the rename list
 					filesToRename.add(new FileToRenameEntry(file, typeEntryForFile));
 				}

@@ -16,8 +16,6 @@ package org.eclipse.fordiac.ide.systemconfiguration.editor;
 
 import java.util.Map.Entry;
 
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.gef.utilities.TemplateCreationFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -33,7 +31,6 @@ import org.eclipse.gef.palette.PaletteDrawer;
 import org.eclipse.gef.palette.PaletteEntry;
 import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.widgets.Display;
 
 /**
  * This class is used to create a GEF palette for the user interface. The
@@ -60,19 +57,6 @@ public final class SystemConfPaletteFactory {
 	public static PaletteRoot createPalette(final AutomationSystem system) {
 		final PaletteRoot palette = new PaletteRoot();
 		fillPalette(palette, system.getTypeLibrary());
-
-		system.getPalette().eAdapters().add(new AdapterImpl() {
-
-			@Override
-			public void notifyChanged(final Notification notification) {
-				Display.getDefault().syncExec(() -> {
-					palette.setVisible(false);
-					palette.getChildren().clear();
-					fillPalette(palette, system.getTypeLibrary());
-					palette.setVisible(true);
-				});
-			}
-		});
 		return palette;
 	}
 

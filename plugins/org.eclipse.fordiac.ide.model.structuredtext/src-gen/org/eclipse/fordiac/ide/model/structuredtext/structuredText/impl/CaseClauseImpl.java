@@ -41,205 +41,204 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class CaseClauseImpl extends MinimalEObjectImpl.Container implements CaseClause
 {
   /**
-   * The cached value of the '{@link #getCase() <em>Case</em>}' containment reference list.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getCase() <em>Case</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getCase()
-   * @generated
-   * @ordered
-   */
+	 * @see #getCase()
+	 * @generated
+	 * @ordered
+	 */
   protected EList<Constant> case_;
 
   /**
-   * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getStatements()
-   * @generated
-   * @ordered
-   */
+	 * @see #getStatements()
+	 * @generated
+	 * @ordered
+	 */
   protected StatementList statements;
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected CaseClauseImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.CASE_CLAUSE;
-  }
+		return StructuredTextPackage.Literals.CASE_CLAUSE;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public EList<Constant> getCase()
   {
-    if (case_ == null)
-    {
-      case_ = new EObjectContainmentEList<Constant>(Constant.class, this, StructuredTextPackage.CASE_CLAUSE__CASE);
-    }
-    return case_;
-  }
+		if (case_ == null) {
+			case_ = new EObjectContainmentEList<Constant>(Constant.class, this, StructuredTextPackage.CASE_CLAUSE__CASE);
+		}
+		return case_;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public StatementList getStatements()
   {
-    return statements;
-  }
+		return statements;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public NotificationChain basicSetStatements(StatementList newStatements, NotificationChain msgs)
   {
-    StatementList oldStatements = statements;
-    statements = newStatements;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CASE_CLAUSE__STATEMENTS, oldStatements, newStatements);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
+		StatementList oldStatements = statements;
+		statements = newStatements;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CASE_CLAUSE__STATEMENTS, oldStatements, newStatements);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setStatements(StatementList newStatements)
   {
-    if (newStatements != statements)
-    {
-      NotificationChain msgs = null;
-      if (statements != null)
-        msgs = ((InternalEObject)statements).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.CASE_CLAUSE__STATEMENTS, null, msgs);
-      if (newStatements != null)
-        msgs = ((InternalEObject)newStatements).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.CASE_CLAUSE__STATEMENTS, null, msgs);
-      msgs = basicSetStatements(newStatements, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CASE_CLAUSE__STATEMENTS, newStatements, newStatements));
-  }
+		if (newStatements != statements) {
+			NotificationChain msgs = null;
+			if (statements != null)
+				msgs = ((InternalEObject)statements).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.CASE_CLAUSE__STATEMENTS, null, msgs);
+			if (newStatements != null)
+				msgs = ((InternalEObject)newStatements).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.CASE_CLAUSE__STATEMENTS, null, msgs);
+			msgs = basicSetStatements(newStatements, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CASE_CLAUSE__STATEMENTS, newStatements, newStatements));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CASE_CLAUSE__CASE:
-        return ((InternalEList<?>)getCase()).basicRemove(otherEnd, msgs);
-      case StructuredTextPackage.CASE_CLAUSE__STATEMENTS:
-        return basicSetStatements(null, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CASE_CLAUSE__CASE:
+				return ((InternalEList<?>)getCase()).basicRemove(otherEnd, msgs);
+			case StructuredTextPackage.CASE_CLAUSE__STATEMENTS:
+				return basicSetStatements(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CASE_CLAUSE__CASE:
-        return getCase();
-      case StructuredTextPackage.CASE_CLAUSE__STATEMENTS:
-        return getStatements();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CASE_CLAUSE__CASE:
+				return getCase();
+			case StructuredTextPackage.CASE_CLAUSE__STATEMENTS:
+				return getStatements();
+			default:
+				return super.eGet(featureID, resolve, coreType);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CASE_CLAUSE__CASE:
-        getCase().clear();
-        getCase().addAll((Collection<? extends Constant>)newValue);
-        return;
-      case StructuredTextPackage.CASE_CLAUSE__STATEMENTS:
-        setStatements((StatementList)newValue);
-        return;
-    }
-    super.eSet(featureID, newValue);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CASE_CLAUSE__CASE:
+				getCase().clear();
+				getCase().addAll((Collection<? extends Constant>)newValue);
+				return;
+			case StructuredTextPackage.CASE_CLAUSE__STATEMENTS:
+				setStatements((StatementList)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eUnset(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CASE_CLAUSE__CASE:
-        getCase().clear();
-        return;
-      case StructuredTextPackage.CASE_CLAUSE__STATEMENTS:
-        setStatements((StatementList)null);
-        return;
-    }
-    super.eUnset(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CASE_CLAUSE__CASE:
+				getCase().clear();
+				return;
+			case StructuredTextPackage.CASE_CLAUSE__STATEMENTS:
+				setStatements((StatementList)null);
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CASE_CLAUSE__CASE:
-        return case_ != null && !case_.isEmpty();
-      case StructuredTextPackage.CASE_CLAUSE__STATEMENTS:
-        return statements != null;
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CASE_CLAUSE__CASE:
+				return case_ != null && !case_.isEmpty();
+			case StructuredTextPackage.CASE_CLAUSE__STATEMENTS:
+				return statements != null;
+			default:
+				return super.eIsSet(featureID);
+		}
+	}
 
 } //CaseClauseImpl

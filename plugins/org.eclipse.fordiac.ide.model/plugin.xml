@@ -3,14 +3,6 @@
 <plugin>
   <extension-point id="TypeEntryCreator" name="TypeEntryCreator" schema="schema/TypeEntryCreator.exsd"/>
 
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated fordiac -->
-      <package
-            uri="org.eclipse.fordiac.ide.model.Palette"
-            class="org.eclipse.fordiac.ide.model.Palette.PalettePackage"
-            genModel="model/fordiac.genmodel"/>
-   </extension>
-
   <extension point="org.eclipse.emf.ecore.generated_package">
     <package 
        uri = "org.eclipse.fordiac.ide.model" 

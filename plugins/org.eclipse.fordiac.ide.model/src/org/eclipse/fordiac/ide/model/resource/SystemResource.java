@@ -42,7 +42,7 @@ public class SystemResource extends ResourceImpl {
 	}
 
 	public void saveSystem(final AutomationSystem system, final IFile file) {
-		Assert.isNotNull(system.getTypeEntry()); // there should be no system without palette entry
+		Assert.isNotNull(system.getTypeEntry()); // there should be no system without type entry
 		system.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
 		final SystemExporter systemExporter = new SystemExporter(system);
 		systemExporter.saveSystem(file);

@@ -132,7 +132,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		removeListenerFromDataTypeObj();
 		super.dispose();
 		if (dirty && dataTypeEntry != null) {
-			// purge editable type from palette after super.dispose() so that no notifiers will be called
+			// purge editable type from type entry after super.dispose() so that no notifiers will be called
 			dataTypeEntry.setTypeEditable(null);
 		}
 	}

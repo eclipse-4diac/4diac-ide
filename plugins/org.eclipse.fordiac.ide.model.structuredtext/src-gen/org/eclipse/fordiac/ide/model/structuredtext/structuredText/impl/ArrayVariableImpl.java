@@ -40,205 +40,204 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
 public class ArrayVariableImpl extends VariableImpl implements ArrayVariable
 {
   /**
-   * The cached value of the '{@link #getArray() <em>Array</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getArray() <em>Array</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getArray()
-   * @generated
-   * @ordered
-   */
+	 * @see #getArray()
+	 * @generated
+	 * @ordered
+	 */
   protected Variable array;
 
   /**
-   * The cached value of the '{@link #getIndex() <em>Index</em>}' containment reference list.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getIndex() <em>Index</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getIndex()
-   * @generated
-   * @ordered
-   */
+	 * @see #getIndex()
+	 * @generated
+	 * @ordered
+	 */
   protected EList<Expression> index;
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected ArrayVariableImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.ARRAY_VARIABLE;
-  }
+		return StructuredTextPackage.Literals.ARRAY_VARIABLE;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Variable getArray()
   {
-    return array;
-  }
+		return array;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public NotificationChain basicSetArray(Variable newArray, NotificationChain msgs)
   {
-    Variable oldArray = array;
-    array = newArray;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.ARRAY_VARIABLE__ARRAY, oldArray, newArray);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
+		Variable oldArray = array;
+		array = newArray;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.ARRAY_VARIABLE__ARRAY, oldArray, newArray);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setArray(Variable newArray)
   {
-    if (newArray != array)
-    {
-      NotificationChain msgs = null;
-      if (array != null)
-        msgs = ((InternalEObject)array).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.ARRAY_VARIABLE__ARRAY, null, msgs);
-      if (newArray != null)
-        msgs = ((InternalEObject)newArray).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.ARRAY_VARIABLE__ARRAY, null, msgs);
-      msgs = basicSetArray(newArray, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.ARRAY_VARIABLE__ARRAY, newArray, newArray));
-  }
+		if (newArray != array) {
+			NotificationChain msgs = null;
+			if (array != null)
+				msgs = ((InternalEObject)array).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.ARRAY_VARIABLE__ARRAY, null, msgs);
+			if (newArray != null)
+				msgs = ((InternalEObject)newArray).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.ARRAY_VARIABLE__ARRAY, null, msgs);
+			msgs = basicSetArray(newArray, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.ARRAY_VARIABLE__ARRAY, newArray, newArray));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public EList<Expression> getIndex()
   {
-    if (index == null)
-    {
-      index = new EObjectContainmentEList<Expression>(Expression.class, this, StructuredTextPackage.ARRAY_VARIABLE__INDEX);
-    }
-    return index;
-  }
+		if (index == null) {
+			index = new EObjectContainmentEList<Expression>(Expression.class, this, StructuredTextPackage.ARRAY_VARIABLE__INDEX);
+		}
+		return index;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.ARRAY_VARIABLE__ARRAY:
-        return basicSetArray(null, msgs);
-      case StructuredTextPackage.ARRAY_VARIABLE__INDEX:
-        return ((InternalEList<?>)getIndex()).basicRemove(otherEnd, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.ARRAY_VARIABLE__ARRAY:
+				return basicSetArray(null, msgs);
+			case StructuredTextPackage.ARRAY_VARIABLE__INDEX:
+				return ((InternalEList<?>)getIndex()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.ARRAY_VARIABLE__ARRAY:
-        return getArray();
-      case StructuredTextPackage.ARRAY_VARIABLE__INDEX:
-        return getIndex();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.ARRAY_VARIABLE__ARRAY:
+				return getArray();
+			case StructuredTextPackage.ARRAY_VARIABLE__INDEX:
+				return getIndex();
+			default:
+				return super.eGet(featureID, resolve, coreType);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.ARRAY_VARIABLE__ARRAY:
-        setArray((Variable)newValue);
-        return;
-      case StructuredTextPackage.ARRAY_VARIABLE__INDEX:
-        getIndex().clear();
-        getIndex().addAll((Collection<? extends Expression>)newValue);
-        return;
-    }
-    super.eSet(featureID, newValue);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.ARRAY_VARIABLE__ARRAY:
+				setArray((Variable)newValue);
+				return;
+			case StructuredTextPackage.ARRAY_VARIABLE__INDEX:
+				getIndex().clear();
+				getIndex().addAll((Collection<? extends Expression>)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eUnset(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.ARRAY_VARIABLE__ARRAY:
-        setArray((Variable)null);
-        return;
-      case StructuredTextPackage.ARRAY_VARIABLE__INDEX:
-        getIndex().clear();
-        return;
-    }
-    super.eUnset(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.ARRAY_VARIABLE__ARRAY:
+				setArray((Variable)null);
+				return;
+			case StructuredTextPackage.ARRAY_VARIABLE__INDEX:
+				getIndex().clear();
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.ARRAY_VARIABLE__ARRAY:
-        return array != null;
-      case StructuredTextPackage.ARRAY_VARIABLE__INDEX:
-        return index != null && !index.isEmpty();
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.ARRAY_VARIABLE__ARRAY:
+				return array != null;
+			case StructuredTextPackage.ARRAY_VARIABLE__INDEX:
+				return index != null && !index.isEmpty();
+			default:
+				return super.eIsSet(featureID);
+		}
+	}
 
 } //ArrayVariableImpl

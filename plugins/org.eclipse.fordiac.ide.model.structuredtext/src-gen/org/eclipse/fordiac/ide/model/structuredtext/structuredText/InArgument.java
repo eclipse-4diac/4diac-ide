@@ -23,25 +23,25 @@ package org.eclipse.fordiac.ide.model.structuredtext.structuredText;
 public interface InArgument extends Argument
 {
   /**
-   * Returns the value of the '<em><b>Expr</b></em>' containment reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Expr</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Expr</em>' containment reference.
-   * @see #setExpr(Expression)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getInArgument_Expr()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Expr</em>' containment reference.
+	 * @see #setExpr(Expression)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getInArgument_Expr()
+	 * @model containment="true"
+	 * @generated
+	 */
   Expression getExpr();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument#getExpr <em>Expr</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.InArgument#getExpr <em>Expr</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Expr</em>' containment reference.
-   * @see #getExpr()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Expr</em>' containment reference.
+	 * @see #getExpr()
+	 * @generated
+	 */
   void setExpr(Expression value);
 
 } // InArgument

@@ -22,8 +22,6 @@ import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
-
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -139,7 +137,6 @@ public class STAlgorithmPackageImpl extends EPackageImpl implements STAlgorithmP
 		STCorePackage.eINSTANCE.eClass();
 		LibraryElementPackage.eINSTANCE.eClass();
 		DataPackage.eINSTANCE.eClass();
-		PalettePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theSTAlgorithmPackage.createPackageContents();

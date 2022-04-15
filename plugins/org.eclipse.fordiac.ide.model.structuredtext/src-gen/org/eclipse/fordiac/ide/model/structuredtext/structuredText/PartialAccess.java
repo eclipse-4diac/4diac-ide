@@ -28,113 +28,113 @@ import org.eclipse.emf.ecore.EObject;
 public interface PartialAccess extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Dwordaccess</b></em>' attribute.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Dwordaccess</b></em>' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Dwordaccess</em>' attribute.
-   * @see #setDwordaccess(boolean)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getPartialAccess_Dwordaccess()
-   * @model
-   * @generated
-   */
+	 * @return the value of the '<em>Dwordaccess</em>' attribute.
+	 * @see #setDwordaccess(boolean)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getPartialAccess_Dwordaccess()
+	 * @model
+	 * @generated
+	 */
   boolean isDwordaccess();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess#isDwordaccess <em>Dwordaccess</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess#isDwordaccess <em>Dwordaccess</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Dwordaccess</em>' attribute.
-   * @see #isDwordaccess()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Dwordaccess</em>' attribute.
+	 * @see #isDwordaccess()
+	 * @generated
+	 */
   void setDwordaccess(boolean value);
 
   /**
-   * Returns the value of the '<em><b>Index</b></em>' attribute.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Index</b></em>' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Index</em>' attribute.
-   * @see #setIndex(int)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getPartialAccess_Index()
-   * @model
-   * @generated
-   */
+	 * @return the value of the '<em>Index</em>' attribute.
+	 * @see #setIndex(int)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getPartialAccess_Index()
+	 * @model
+	 * @generated
+	 */
   int getIndex();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess#getIndex <em>Index</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess#getIndex <em>Index</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Index</em>' attribute.
-   * @see #getIndex()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Index</em>' attribute.
+	 * @see #getIndex()
+	 * @generated
+	 */
   void setIndex(int value);
 
   /**
-   * Returns the value of the '<em><b>Wordaccess</b></em>' attribute.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Wordaccess</b></em>' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Wordaccess</em>' attribute.
-   * @see #setWordaccess(boolean)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getPartialAccess_Wordaccess()
-   * @model
-   * @generated
-   */
+	 * @return the value of the '<em>Wordaccess</em>' attribute.
+	 * @see #setWordaccess(boolean)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getPartialAccess_Wordaccess()
+	 * @model
+	 * @generated
+	 */
   boolean isWordaccess();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess#isWordaccess <em>Wordaccess</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess#isWordaccess <em>Wordaccess</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Wordaccess</em>' attribute.
-   * @see #isWordaccess()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Wordaccess</em>' attribute.
+	 * @see #isWordaccess()
+	 * @generated
+	 */
   void setWordaccess(boolean value);
 
   /**
-   * Returns the value of the '<em><b>Byteaccess</b></em>' attribute.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Byteaccess</b></em>' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Byteaccess</em>' attribute.
-   * @see #setByteaccess(boolean)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getPartialAccess_Byteaccess()
-   * @model
-   * @generated
-   */
+	 * @return the value of the '<em>Byteaccess</em>' attribute.
+	 * @see #setByteaccess(boolean)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getPartialAccess_Byteaccess()
+	 * @model
+	 * @generated
+	 */
   boolean isByteaccess();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess#isByteaccess <em>Byteaccess</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess#isByteaccess <em>Byteaccess</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Byteaccess</em>' attribute.
-   * @see #isByteaccess()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Byteaccess</em>' attribute.
+	 * @see #isByteaccess()
+	 * @generated
+	 */
   void setByteaccess(boolean value);
 
   /**
-   * Returns the value of the '<em><b>Bitaccess</b></em>' attribute.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Bitaccess</b></em>' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Bitaccess</em>' attribute.
-   * @see #setBitaccess(boolean)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getPartialAccess_Bitaccess()
-   * @model
-   * @generated
-   */
+	 * @return the value of the '<em>Bitaccess</em>' attribute.
+	 * @see #setBitaccess(boolean)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getPartialAccess_Bitaccess()
+	 * @model
+	 * @generated
+	 */
   boolean isBitaccess();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess#isBitaccess <em>Bitaccess</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PartialAccess#isBitaccess <em>Bitaccess</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Bitaccess</em>' attribute.
-   * @see #isBitaccess()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Bitaccess</em>' attribute.
+	 * @see #isBitaccess()
+	 * @generated
+	 */
   void setBitaccess(boolean value);
 
 } // PartialAccess

@@ -45,7 +45,7 @@ abstract class AbstractCognitiveComplexityTest {
 		assertEquals(expectedComplexity, CognitiveComplexity.analyzeAlgorithm(alg));
 	}
 
-	private static FBTypeEntry preparePaletteWithTypeLib() {
+	private static FBTypeEntry prepareTypeEntryWithTypeLib() {
 		return new FBTypeEntryMock(null, TypeLibraryManager.INSTANCE.getTypeLibrary(null), null);
 	}
 
@@ -58,7 +58,7 @@ abstract class AbstractCognitiveComplexityTest {
 
 		functionBlock.setECC(LibraryElementFactory.eINSTANCE.createECC());
 
-		functionBlock.setTypeEntry(preparePaletteWithTypeLib());
+		functionBlock.setTypeEntry(prepareTypeEntryWithTypeLib());
 
 		final STAlgorithm stAlg = LibraryElementFactory.eINSTANCE.createSTAlgorithm();
 		stAlg.setName(algorithmName);

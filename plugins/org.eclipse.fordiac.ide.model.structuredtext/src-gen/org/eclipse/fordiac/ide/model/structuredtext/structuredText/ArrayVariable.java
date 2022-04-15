@@ -25,37 +25,37 @@ import org.eclipse.emf.common.util.EList;
 public interface ArrayVariable extends Variable
 {
   /**
-   * Returns the value of the '<em><b>Array</b></em>' containment reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Array</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Array</em>' containment reference.
-   * @see #setArray(Variable)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getArrayVariable_Array()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Array</em>' containment reference.
+	 * @see #setArray(Variable)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getArrayVariable_Array()
+	 * @model containment="true"
+	 * @generated
+	 */
   Variable getArray();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.ArrayVariable#getArray <em>Array</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.ArrayVariable#getArray <em>Array</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Array</em>' containment reference.
-   * @see #getArray()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Array</em>' containment reference.
+	 * @see #getArray()
+	 * @generated
+	 */
   void setArray(Variable value);
 
   /**
-   * Returns the value of the '<em><b>Index</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression}.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Index</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression}.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Index</em>' containment reference list.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getArrayVariable_Index()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Index</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getArrayVariable_Index()
+	 * @model containment="true"
+	 * @generated
+	 */
   EList<Expression> getIndex();
 
 } // ArrayVariable

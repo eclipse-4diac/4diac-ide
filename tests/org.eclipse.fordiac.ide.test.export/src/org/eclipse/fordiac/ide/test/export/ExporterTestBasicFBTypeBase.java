@@ -30,7 +30,7 @@ public class ExporterTestBasicFBTypeBase extends ExporterTestBase<BasicFBType> {
 
 		functionBlock.setECC(LibraryElementFactory.eINSTANCE.createECC());
 
-		functionBlock.setTypeEntry(preparePaletteWithTypeLib());
+		functionBlock.setTypeEntry(prepareTypeEntryWithTypeLib());
 	}
 
 }

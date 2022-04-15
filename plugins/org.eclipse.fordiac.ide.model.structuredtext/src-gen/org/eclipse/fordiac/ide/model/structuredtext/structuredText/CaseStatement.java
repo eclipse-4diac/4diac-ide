@@ -26,59 +26,59 @@ import org.eclipse.emf.common.util.EList;
 public interface CaseStatement extends Statement
 {
   /**
-   * Returns the value of the '<em><b>Expression</b></em>' containment reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Expression</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Expression</em>' containment reference.
-   * @see #setExpression(Expression)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getCaseStatement_Expression()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Expression</em>' containment reference.
+	 * @see #setExpression(Expression)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getCaseStatement_Expression()
+	 * @model containment="true"
+	 * @generated
+	 */
   Expression getExpression();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement#getExpression <em>Expression</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement#getExpression <em>Expression</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Expression</em>' containment reference.
-   * @see #getExpression()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Expression</em>' containment reference.
+	 * @see #getExpression()
+	 * @generated
+	 */
   void setExpression(Expression value);
 
   /**
-   * Returns the value of the '<em><b>Case</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseClause}.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Case</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseClause}.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Case</em>' containment reference list.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getCaseStatement_Case()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Case</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getCaseStatement_Case()
+	 * @model containment="true"
+	 * @generated
+	 */
   EList<CaseClause> getCase();
 
   /**
-   * Returns the value of the '<em><b>Else</b></em>' containment reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Else</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Else</em>' containment reference.
-   * @see #setElse(ElseClause)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getCaseStatement_Else()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Else</em>' containment reference.
+	 * @see #setElse(ElseClause)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getCaseStatement_Else()
+	 * @model containment="true"
+	 * @generated
+	 */
   ElseClause getElse();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement#getElse <em>Else</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.CaseStatement#getElse <em>Else</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Else</em>' containment reference.
-   * @see #getElse()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Else</em>' containment reference.
+	 * @see #getElse()
+	 * @generated
+	 */
   void setElse(ElseClause value);
 
 } // CaseStatement

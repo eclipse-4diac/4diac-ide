@@ -97,7 +97,7 @@ public interface LibraryElement extends INamedElement {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary" required="true"
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.TypeLibrary" required="true"
 	 * @generated
 	 */
 	TypeLibrary getTypeLibrary();

@@ -32,7 +32,7 @@ public class ExporterTestAdapterFBType extends ExporterTestBase<AdapterFBType> {
 		functionBlock = LibraryElementFactory.eINSTANCE.createAdapterFBType();
 		functionBlock.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		functionBlock.setName(ADAPTERFUNCTIONBLOCK_NAME);
-		functionBlock.setTypeEntry(preparePaletteWithTypeLib());
+		functionBlock.setTypeEntry(prepareTypeEntryWithTypeLib());
 
 		functionBlock.setInterfaceList(LibraryElementFactory.eINSTANCE.createInterfaceList());
 

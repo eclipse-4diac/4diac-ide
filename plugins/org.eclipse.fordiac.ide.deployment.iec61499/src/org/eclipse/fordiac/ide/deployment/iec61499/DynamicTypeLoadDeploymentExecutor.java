@@ -362,7 +362,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	private void createNotExistingAdapterTypes(final Resource res) {
 		for (final String entryName : getAdapterTypes()) {
-			if (null == res.getDevice().getAutomationSystem().getPalette().getAdapterTypeEntry(entryName)) {
+			if (null == res.getDevice().getAutomationSystem().getTypeLibrary().getAdapterTypeEntry(entryName)) {
 				addTypeToTypelib(res, entryName, "adp", QUERY_ADAPTER_TYPE); //$NON-NLS-1$
 			}
 		}

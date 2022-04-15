@@ -32,8 +32,6 @@ import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
-
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -526,7 +524,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		// Initialize simple dependencies
 		DataPackage.eINSTANCE.eClass();
 		LibraryElementPackage.eINSTANCE.eClass();
-		PalettePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theSTCorePackage.createPackageContents();

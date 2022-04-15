@@ -9,7 +9,7 @@
     updateClasspath="false" nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     commentFormatting="true" testSuiteClass="org.eclipse.fordiac.ide.structuredtextfunctioneditor.model.stfunction.tests.STFunctionAllTests"
     complianceLevel="11.0" copyrightFields="false" editorPluginID="org.eclipse.fordiac.ide.structuredtextfunctioneditor.model.editor"
-    runtimeVersion="2.28" usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel#//stcore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//Palette">
+    runtimeVersion="2.28" usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel#//stcore">
   <genPackages prefix="STFunction" basePackage="org.eclipse.fordiac.ide.structuredtextfunctioneditor"
       disposableProviderFactory="true" fileExtensions="stfunc" ecorePackage="STFunction.ecore#/">
     <genClasses ecoreClass="STFunction.ecore#//STFunctionSource">

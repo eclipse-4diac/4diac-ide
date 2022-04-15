@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseFactory;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -107,7 +106,6 @@ public class MonitoringBasePackageImpl extends EPackageImpl implements Monitorin
 
 		// Initialize simple dependencies
 		EcorePackage.eINSTANCE.eClass();
-		PalettePackage.eINSTANCE.eClass();
 		LibraryElementPackage.eINSTANCE.eClass();
 		DataPackage.eINSTANCE.eClass();
 		XMLTypePackage.eINSTANCE.eClass();

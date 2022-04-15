@@ -227,7 +227,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 
 	abstract void setupFunctionBlock();
 
-	protected static FBTypeEntry preparePaletteWithTypeLib() {
+	protected static FBTypeEntry prepareTypeEntryWithTypeLib() {
 		return new FBTypeEntryMock(null, TypeLibraryManager.INSTANCE.getTypeLibrary(null), null);
 	}
 
