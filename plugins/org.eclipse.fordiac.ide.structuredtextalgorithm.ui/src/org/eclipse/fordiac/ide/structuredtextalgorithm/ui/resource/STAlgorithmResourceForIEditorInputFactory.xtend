@@ -19,13 +19,14 @@ import org.eclipse.ui.IEditorInput
 import org.eclipse.ui.IFileEditorInput
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.ui.editor.model.ResourceForIEditorInputFactory
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 
 class STAlgorithmResourceForIEditorInputFactory extends ResourceForIEditorInputFactory {
 	override createResource(IEditorInput editorInput) {
 		val resource = super.createResource(editorInput)
 		if (resource instanceof XtextResource) {
 			if (editorInput instanceof IFileEditorInput) {
-				val typeEntry = TypeLibrary.getTypeEntryForFile(editorInput.file)
+				val typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(editorInput.file)
 				if (typeEntry !== null) {
 					val libraryElement = typeEntry.typeEditable
 					if (libraryElement instanceof FBType) {

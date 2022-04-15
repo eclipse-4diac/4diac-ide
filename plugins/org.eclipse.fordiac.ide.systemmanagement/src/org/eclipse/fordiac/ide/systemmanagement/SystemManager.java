@@ -53,7 +53,7 @@ import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
@@ -101,7 +101,7 @@ public enum SystemManager {
 		CoordinateConverter.INSTANCE.name();
 		// Correctly setup the tool library needs to be done before loading any systems
 		// and adding the resource change listener
-		TypeLibrary.loadToolLibrary();
+		TypeLibraryManager.INSTANCE.loadToolLibrary();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FordiacResourceChangeListener(this));
 		ValidateTypeLibrary.validate();
 	}
@@ -147,7 +147,8 @@ public enum SystemManager {
 		final Map<IFile, AutomationSystem> projectSystems = getProjectSystems(location.getProject());
 		final AutomationSystem system = projectSystems.computeIfAbsent(systemFile,
 				SystemImporter::createAutomationSystem);
-		final SystemEntry entry = TypeLibrary.getTypeLibrary(location.getProject()).createSystemEntry(systemFile);
+		final SystemEntry entry = TypeLibraryManager.INSTANCE.getTypeLibrary(location.getProject())
+				.createSystemEntry(systemFile);
 		entry.setType(system);
 		saveSystem(system);
 		return system;
@@ -221,7 +222,8 @@ public enum SystemManager {
 	 * @return the automation system */
 	private static AutomationSystem initSystem(final IFile systemFile) {
 		if (systemFile.exists()) {
-			final SystemEntry entry = TypeLibrary.getTypeLibrary(systemFile.getProject()).createSystemEntry(systemFile);
+			final SystemEntry entry = TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject())
+					.createSystemEntry(systemFile);
 			return entry.getSystem();
 		}
 		return null;

@@ -27,7 +27,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public class FordiacTypeResource extends ResourceImpl {
 
@@ -38,7 +38,7 @@ public class FordiacTypeResource extends ResourceImpl {
 	@Override
 	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
 		final IFile fbtFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(this.uri.toPlatformString(true)));
-		final var typeEntryForFile = TypeLibrary.getTypeEntryForFile(fbtFile);
+		final var typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fbtFile);
 		//Load the Type
 		final var lib = EcoreUtil.copy(typeEntryForFile.getType());
 		//Do not modify any fordiac element
@@ -48,9 +48,10 @@ public class FordiacTypeResource extends ResourceImpl {
 	@Override
 	protected void doSave(final OutputStream outputStream, final Map<?, ?> options) throws IOException {
 		final var fbtFile = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(this.uri.toPlatformString(true)));
-		var typeEntryForFile = TypeLibrary.getTypeEntryForFile(fbtFile);
+		var typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fbtFile);
 		if (typeEntryForFile == null) {
-			typeEntryForFile = TypeLibrary.getTypeLibrary(fbtFile.getProject()).createTypeEntry(fbtFile);
+			typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeLibrary(fbtFile.getProject())
+					.createTypeEntry(fbtFile);
 		}
 		typeEntryForFile.setTypeEditable((LibraryElement) getContents().get(0));
 		typeEntryForFile.setLastModificationTimestamp(typeEntryForFile.getFile().getModificationStamp());

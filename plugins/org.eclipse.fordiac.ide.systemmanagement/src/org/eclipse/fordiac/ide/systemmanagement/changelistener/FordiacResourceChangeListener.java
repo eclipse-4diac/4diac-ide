@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.fordiac.ide.systemmanagement.Messages;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -257,7 +258,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private void collectPaletteEntries(final IResourceDelta delta) {
 		final IFile file = (IFile) delta.getResource();
 
-		TypeEntry paletteTypeForFile = TypeLibrary.getTypeEntryForFile(file);
+		TypeEntry paletteTypeForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 		if (paletteTypeForFile == null) {
 			paletteTypeForFile = systemManager.getTypeEntry(file);
 		}
@@ -321,13 +322,13 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private void handleFileDelete(final IResourceDelta delta) {
-		final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(delta.getResource().getProject());
 		final IFile file = (IFile) delta.getResource();
 
 		if (isSystemFile(file)) {
 			systemManager.removeSystem(file);
 		} else {
-			final TypeEntry entry = TypeLibrary.getTypeEntryForFile(file);
+			final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			if (null != entry) {
 				closeAllEditorsForFile(file);
 				final FileToRenameEntry rnEntry = getFileRenameEntry(entry);
@@ -356,8 +357,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				// node
 				renameSystemFileCopy(file);
 			} else {
-				final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(delta.getResource().getProject());
-				final TypeEntry typeEntryForFile = TypeLibrary.getTypeEntryForFile(file);
+				final TypeLibrary typeLib = TypeLibraryManager.INSTANCE
+						.getTypeLibrary(delta.getResource().getProject());
+				final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 				if (typeEntryForFile == null) {
 					final TypeEntry entry = typeLib.createTypeEntry(file);
 					if (null != entry) {
@@ -438,7 +440,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		final IProject oldProject = ResourcesPlugin.getWorkspace().getRoot()
 				.getProject(delta.getMovedFromPath().lastSegment());
 		final IProject newProject = delta.getResource().getProject();
-		TypeLibrary.renameProject(oldProject, newProject);
+		TypeLibraryManager.INSTANCE.renameProject(oldProject, newProject);
 		systemManager.renameProject(oldProject, newProject);
 	}
 
@@ -457,7 +459,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				}
 			} else {
 				// file was moved update pallette entry
-				final TypeEntry entry = TypeLibrary.getTypeEntryForFile(src);
+				final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(src);
 				if (null != entry) {
 					entry.setFile(dst);
 				}
@@ -470,12 +472,12 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		if (isSystemFile(src)) {
 			systemManager.moveSystemToNewProject(src, dst);
 		} else {
-			final TypeLibrary srcTypeLib = TypeLibrary.getTypeLibrary(src.getProject());
+			final TypeLibrary srcTypeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(src.getProject());
 			final TypeEntry entry = srcTypeLib.getTypeEntry(src);
 			if (null != entry) {
 				srcTypeLib.removeTypeEntry(entry);
 				entry.setFile(dst);
-				final TypeLibrary dstTypeLib = TypeLibrary.getTypeLibrary(src.getProject());
+				final TypeLibrary dstTypeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(src.getProject());
 				dstTypeLib.addTypeEntry(entry);
 			}
 		}
@@ -486,7 +488,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			systemManager.updateSystemFile(dst.getProject(), src, dst);  // if loaded the system should already be in
 			// the list of the new project
 		} else {
-			final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(dst.getProject());
+			final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(dst.getProject());
 			final TypeEntry entry = typeLib.getTypeEntry(src);
 			if (entry == null) {
 				// we have to create the entry
@@ -508,8 +510,8 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private static void handleTypeRename(final IFile src, final IFile file) {
-		final TypeLibrary typeLibrary = TypeLibrary.getTypeLibrary(file.getProject());
-		final TypeEntry entry = TypeLibrary.getTypeEntryForFile(src);
+		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(src);
 		if (entry != null && src.equals(entry.getFile())) {
 			updateTypeEntry(file, entry);
 		} else {
@@ -567,7 +569,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		final IProject project = delta.getResource().getProject();
 		closeAllProjectRelatedEditors(project);
 		systemManager.removeProject(project);
-		TypeLibrary.removeProject(project);
+		TypeLibraryManager.INSTANCE.removeProject(project);
 	}
 
 	private static void closeAllProjectRelatedEditors(final IProject project) {

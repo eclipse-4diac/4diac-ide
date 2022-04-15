@@ -35,6 +35,7 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -158,7 +159,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 	private boolean isDuplicate() {
 		// here: getContainerFullPath().segment(0) --> name of the selected project
-		final TypeLibrary lib = TypeLibrary
+		final TypeLibrary lib = TypeLibraryManager.INSTANCE
 				.getTypeLibrary(ResourcesPlugin.getWorkspace().getRoot().getProject(getContainerFullPath().segment(0)));
 
 		final String[] s = getTemplate().getName().split("\\."); //$NON-NLS-1$

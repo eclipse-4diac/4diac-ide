@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /**
@@ -41,7 +41,7 @@ public final class SystemPaletteManagement {
 	 */
 	public static void copyToolTypeLibToDestination(final IContainer destination) {
 		try {
-			copyDirectory(TypeLibrary.getToolLibFolder(), destination);
+			copyDirectory(TypeLibraryManager.getToolLibFolder(), destination);
 		} catch (final Exception e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}

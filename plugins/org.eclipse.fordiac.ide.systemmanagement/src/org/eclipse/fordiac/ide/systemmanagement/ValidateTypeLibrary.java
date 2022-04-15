@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class ValidateTypeLibrary {
@@ -41,7 +42,7 @@ public class ValidateTypeLibrary {
 				for (final IProject project : projects) {
 
 					if (isFordiacProject(project)) {
-						final TypeLibrary typeLibrary = TypeLibrary.getTypeLibrary(project);
+						final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
 						typeLibrary.getSubAppTypes().values().forEach(SubAppTypeEntry::getType);
 						typeLibrary.getAdapterTypes().values().forEach(AdapterTypeEntry::getType);
 						typeLibrary.getFbTypes().values().forEach(FBTypeEntry::getType);

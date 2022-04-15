@@ -19,7 +19,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -41,10 +41,10 @@ public class ToolLibraryContentProvider implements ITreeContentProvider {
 	public Object[] getElements(final Object inputElement) {
 
 		if ((null == inputElement) || (inputElement instanceof IWorkspaceRoot)) {
-			// this content provider is only requried on the lowest level of the tree
+			// this content provider is only required on the lowest level of the tree
 			final IWorkspaceRoot myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
 
-			final IFolder toolLibFolder = TypeLibrary.getToolLibFolder();
+			final IFolder toolLibFolder = TypeLibraryManager.getToolLibFolder();
 
 			final IProject[] projects = myWorkspaceRoot.getProjects();
 

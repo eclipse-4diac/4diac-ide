@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.ltk.core.refactoring.Change;
 import org.eclipse.ltk.core.refactoring.RefactoringStatus;
 import org.eclipse.ltk.core.refactoring.participants.CheckConditionsContext;
@@ -64,7 +65,8 @@ public class DeleteFBTypeParticipant extends DeleteParticipant {
 	private static RefactoringStatus verifyAffectedChildren(final IResourceDelta[] affectedChildren) {
 		for (final IResourceDelta resourceDelta : affectedChildren) {
 			if (resourceDelta.getResource() instanceof IFile) {
-				final TypeLibrary typelib = TypeLibrary.getTypeLibrary(resourceDelta.getResource().getProject());
+				final TypeLibrary typelib = TypeLibraryManager.INSTANCE
+						.getTypeLibrary(resourceDelta.getResource().getProject());
 
 				final String typeNameToDelete = TypeEntry.getTypeNameFromFile((IFile) resourceDelta.getResource());
 				final List<String> typeNames = checkTypeContainment(typelib, typeNameToDelete);

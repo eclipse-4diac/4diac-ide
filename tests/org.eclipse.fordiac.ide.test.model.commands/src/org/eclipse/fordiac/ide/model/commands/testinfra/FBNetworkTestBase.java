@@ -45,7 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.testmocks.FBTypeEntryMock;
 import org.junit.jupiter.params.provider.Arguments;
 
@@ -576,7 +576,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 			fbType.setName(FUNCTIONBLOCK_NAME);
 			fbType.setECC(LibraryElementFactory.eINSTANCE.createECC());
 
-			return new FBTypeEntryMock(fbType, TypeLibrary.getTypeLibrary(null), new IFileMock());
+			return new FBTypeEntryMock(fbType, TypeLibraryManager.INSTANCE.getTypeLibrary(null), new IFileMock());
 		}
 
 		public FBNetwork getFbNetwork() {

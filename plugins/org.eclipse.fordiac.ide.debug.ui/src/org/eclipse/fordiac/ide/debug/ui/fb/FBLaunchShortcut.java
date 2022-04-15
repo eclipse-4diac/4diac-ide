@@ -17,13 +17,13 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.fordiac.ide.debug.ui.LaunchShortcut;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public abstract class FBLaunchShortcut extends LaunchShortcut {
 
 	@Override
 	public void launch(final IResource resource, final ILaunchConfiguration configuration, final String mode) {
-		final FBType type = (FBType) TypeLibrary.getTypeEntryForFile((IFile) resource).getType();
+		final FBType type = (FBType) TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource).getType();
 		launch(type, configuration, mode);
 	}
 

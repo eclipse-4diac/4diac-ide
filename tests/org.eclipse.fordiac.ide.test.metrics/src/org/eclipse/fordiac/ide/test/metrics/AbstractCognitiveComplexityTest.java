@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetup;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.testmocks.FBTypeEntryMock;
 import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetup;
 import org.junit.jupiter.api.BeforeAll;
@@ -46,7 +46,7 @@ abstract class AbstractCognitiveComplexityTest {
 	}
 
 	private static FBTypeEntry preparePaletteWithTypeLib() {
-		return new FBTypeEntryMock(null, TypeLibrary.getTypeLibrary(null), null);
+		return new FBTypeEntryMock(null, TypeLibraryManager.INSTANCE.getTypeLibrary(null), null);
 	}
 
 	private static STAlgorithm createSTAlgorithm(final String algorithmName, final String algorithmText) {

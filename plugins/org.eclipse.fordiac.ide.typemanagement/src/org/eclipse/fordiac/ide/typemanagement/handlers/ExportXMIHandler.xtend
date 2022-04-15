@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper
 import org.eclipse.jface.viewers.ISelection
@@ -90,7 +91,7 @@ class ExportXMIHandler extends AbstractHandler {
 		m.put(XMI_EXTENSION, new XMIResourceFactoryImpl);
 
 		if (fbFile.fileExtension.equalsIgnoreCase(TypeLibraryTags.FB_TYPE_FILE_ENDING)) {
-			val entry = TypeLibrary::getTypeEntryForFile(fbFile)
+			val entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fbFile)
 			val simpleType = entry?.getType() as SimpleFBType
 			val List<String> errors = new ArrayList
 			simpleType.callables.forEach [
@@ -129,7 +130,7 @@ class ExportXMIHandler extends AbstractHandler {
 					setBaseEnabled(true)
 					return
 				}
-				val entry = TypeLibrary::getTypeEntryForFile(fbFile)
+				val entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fbFile)
 				if (null !== entry) {
 					setBaseEnabled(entry.getType() instanceof SimpleFBType)
 					return;

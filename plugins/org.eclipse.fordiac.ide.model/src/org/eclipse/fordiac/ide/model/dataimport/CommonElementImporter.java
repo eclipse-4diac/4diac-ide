@@ -76,6 +76,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -170,7 +171,7 @@ public abstract class CommonElementImporter {
 	protected CommonElementImporter(final IFile file) {
 		Assert.isNotNull(file);
 		this.file = file;
-		typeLibrary = TypeLibrary.getTypeLibrary(file.getProject());
+		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
 		errorMarkerAttributes = new ArrayList<>();
 	}
 
@@ -690,13 +691,13 @@ public abstract class CommonElementImporter {
 	public static void createParamters(final IVarElement element) {
 		if (element instanceof Device) {
 			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((DeviceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
+			.addAll(EcoreUtil.copyAll(((DeviceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+					.getType().getVarDeclaration()));
 		}
 		if (element instanceof Resource) {
 			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
+			.addAll(EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+					.getType().getVarDeclaration()));
 		}
 		for (final VarDeclaration varDecl : element.getVarDeclarations()) {
 			final Value value = LibraryElementFactory.eINSTANCE.createValue();

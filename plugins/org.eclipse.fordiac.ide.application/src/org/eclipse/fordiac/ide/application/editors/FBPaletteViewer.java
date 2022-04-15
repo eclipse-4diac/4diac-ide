@@ -19,7 +19,7 @@ import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.util.TypeListPatternFilter;
 import org.eclipse.gef.ui.palette.PaletteViewer;
@@ -47,16 +47,16 @@ public class FBPaletteViewer extends PaletteViewer {
 	private final String navigatorId;
 	private Object[] expandedElements;
 
-	public FBPaletteViewer(String navigatorId) {
+	public FBPaletteViewer(final String navigatorId) {
 		super();
 		this.navigatorId = navigatorId;
 	}
 
-	public void createTypeLibTreeControl(Composite parent, IProject project) {
+	public void createTypeLibTreeControl(final Composite parent, final IProject project) {
 
-		Composite container = new Composite(parent, SWT.NONE);
+		final Composite container = new Composite(parent, SWT.NONE);
 
-		GridLayout layout = new GridLayout(1, false);
+		final GridLayout layout = new GridLayout(1, false);
 		layout.marginLeft = 0;
 		layout.marginRight = 0;
 		layout.marginBottom = 0;
@@ -69,7 +69,7 @@ public class FBPaletteViewer extends PaletteViewer {
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 				if (e.detail == SWT.CANCEL) {
 					setSearchFilter(""); //$NON-NLS-1$
 				} else {
@@ -87,18 +87,18 @@ public class FBPaletteViewer extends PaletteViewer {
 		setupResourceChangeListener(project);
 	}
 
-	private void createCommonViewer(Composite container, IProject project) {
+	private void createCommonViewer(final Composite container, final IProject project) {
 		commonViewer = new CommonViewer(navigatorId, container, SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL);
 
-		INavigatorContentService contentService = NavigatorContentServiceFactory.INSTANCE
+		final INavigatorContentService contentService = NavigatorContentServiceFactory.INSTANCE
 				.createContentService(navigatorId, commonViewer);
 
 		contentService.createCommonContentProvider();
 		contentService.createCommonLabelProvider();
 
-		INavigatorFilterService filterService = commonViewer.getNavigatorContentService().getFilterService();
-		ViewerFilter[] visibleFilters = filterService.getVisibleFilters(true);
-		for (ViewerFilter visibleFilter : visibleFilters) {
+		final INavigatorFilterService filterService = commonViewer.getNavigatorContentService().getFilterService();
+		final ViewerFilter[] visibleFilters = filterService.getVisibleFilters(true);
+		for (final ViewerFilter visibleFilter : visibleFilters) {
 			commonViewer.addFilter(visibleFilter);
 		}
 
@@ -108,33 +108,33 @@ public class FBPaletteViewer extends PaletteViewer {
 		commonViewer.getControl().addMouseListener(new MouseListener() {
 
 			@Override
-			public void mouseUp(MouseEvent e) {
+			public void mouseUp(final MouseEvent e) {
 				// currently nothing to do here
 			}
 
 			@Override
-			public void mouseDown(MouseEvent e) {
+			public void mouseDown(final MouseEvent e) {
 				// set the focus on this part on any mouse click, fixes issue in drag and drop
 				commonViewer.getControl().forceFocus();
 			}
 
 			@Override
-			public void mouseDoubleClick(MouseEvent e) {
+			public void mouseDoubleClick(final MouseEvent e) {
 				// currently nothing to do here
 			}
 		});
 
 		if (project.getName().equals(TypeLibraryTags.TOOL_LIBRARY_PROJECT_NAME)) {
-			commonViewer.setInput(TypeLibrary.getToolLibFolder());
+			commonViewer.setInput(TypeLibraryManager.getToolLibFolder());
 		} else {
 			commonViewer.setInput(project);
 		}
 
-		GridData fillBoth = new GridData(GridData.FILL, GridData.FILL, true, true);
+		final GridData fillBoth = new GridData(GridData.FILL, GridData.FILL, true, true);
 		commonViewer.getControl().setLayoutData(fillBoth);
 	}
 
-	private void setSearchFilter(String string) {
+	private void setSearchFilter(final String string) {
 		if (string.length() != 1) { // min. 2 search letters for performance
 			if (null == patternFilter) {
 				patternFilter = new TypeListPatternFilter();
@@ -146,7 +146,7 @@ public class FBPaletteViewer extends PaletteViewer {
 		}
 	}
 
-	private void handleTreeExpansion(String string) {
+	private void handleTreeExpansion(final String string) {
 		if (!string.isEmpty()) {
 			if (null == expandedElements) {
 				expandedElements = commonViewer.getExpandedElements();
@@ -168,8 +168,8 @@ public class FBPaletteViewer extends PaletteViewer {
 			if (event.getType() != IResourceChangeEvent.POST_CHANGE) {
 				return;
 			}
-			IResourceDelta rootDelta = event.getDelta();
-			IResourceDelta docDelta = rootDelta.findMember(project.getFullPath());
+			final IResourceDelta rootDelta = event.getDelta();
+			final IResourceDelta docDelta = rootDelta.findMember(project.getFullPath());
 			if (docDelta == null) {
 				return;
 			}

@@ -30,7 +30,7 @@ import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
@@ -79,7 +79,7 @@ public class SaveAsStructWizard extends AbstractSaveAsWizard {
 	}
 
 	private TypeEntry createTypeEntry(final IFile targetTypeFile) {
-		return TypeLibrary.getTypeLibrary(project).createTypeEntry(targetTypeFile);
+		return TypeLibraryManager.INSTANCE.getTypeLibrary(project).createTypeEntry(targetTypeFile);
 	}
 
 	public boolean replaceSource() {

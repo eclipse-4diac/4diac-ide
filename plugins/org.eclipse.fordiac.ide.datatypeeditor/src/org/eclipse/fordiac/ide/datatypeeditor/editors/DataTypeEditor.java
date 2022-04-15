@@ -38,7 +38,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
@@ -203,7 +203,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		file.refreshLocal(IResource.DEPTH_ONE, new NullProgressMonitor());
 		// exist anymore!
 		if (file.exists()) {
-			dataTypeEntry = (DataTypeEntry) TypeLibrary.getTypeEntryForFile(file);
+			dataTypeEntry = (DataTypeEntry) TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 			setPartName(dataTypeEntry.getFile().getName());
 			return !(dataTypeEntry.getTypeEditable() instanceof StructuredType);
 		}

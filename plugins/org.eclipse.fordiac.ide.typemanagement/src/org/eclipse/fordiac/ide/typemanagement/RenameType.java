@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -92,7 +92,7 @@ public class RenameType extends RenameParticipant {
 
 	protected boolean nameExistsInTypeLibrary(final IResourceDelta resourceDelta, final String newName) {
 		return !getOldName().equals(newName) && !newName.equals("a" + getOldName()) //$NON-NLS-1$
-				&& TypeLibrary.getTypeEntryForFile(((IFile) resourceDelta.getResource())) != null;
+				&& TypeLibraryManager.INSTANCE.getTypeEntryForFile(((IFile) resourceDelta.getResource())) != null;
 	}
 
 	@SuppressWarnings("static-method")  // allow child classes to overwrite

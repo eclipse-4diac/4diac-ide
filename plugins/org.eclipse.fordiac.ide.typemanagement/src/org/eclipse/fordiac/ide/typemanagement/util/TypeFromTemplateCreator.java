@@ -36,7 +36,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
 
 public class TypeFromTemplateCreator {
@@ -50,7 +50,8 @@ public class TypeFromTemplateCreator {
 	}
 
 	public TypeEntry createTypeFromTemplate() {
-		final TypeEntry entry = TypeLibrary.getTypeLibrary(targetTypeFile.getProject()).createTypeEntry(targetTypeFile);
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeLibrary(targetTypeFile.getProject())
+				.createTypeEntry(targetTypeFile);
 
 		final TypeImporter importer = getTypeImporter(entry);
 		if (importer != null) {

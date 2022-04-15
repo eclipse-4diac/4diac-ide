@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.typemanagement.navigator;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
@@ -45,7 +45,7 @@ public class TypeDecorator implements ILightweightLabelDecorator {
 	@Override
 	public void decorate(final Object element, final IDecoration decoration) {
 		if (element instanceof IFile) {
-			final TypeEntry entry = TypeLibrary.getTypeEntryForFile((IFile) element);
+			final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) element);
 			if (null != entry) {
 				decoration.addSuffix(" [" + entry.getTypeEditable().getComment() + "]"); //$NON-NLS-1$ //$NON-NLS-2$
 			}

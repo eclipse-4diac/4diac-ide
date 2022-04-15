@@ -55,7 +55,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -184,7 +184,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 								Messages.FBTypeEditor_TypeFileDoesnotExist));
 			}
 
-			typeEntry = TypeLibrary.getTypeEntryForFile(fbTypeFile);
+			typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fbTypeFile);
 		} else if (editorInput instanceof FBTypeEditorInput) {
 			typeEntry = ((FBTypeEditorInput) editorInput).getTypeEntry();
 		}

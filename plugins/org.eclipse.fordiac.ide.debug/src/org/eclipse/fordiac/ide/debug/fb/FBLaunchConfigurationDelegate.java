@@ -35,7 +35,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 
@@ -44,7 +44,7 @@ public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationD
 			throws CoreException {
 		final IResource resource = LaunchConfigurationAttributes.getResource(configuration);
 		if (resource instanceof IFile) {
-			final FBType type = (FBType) TypeLibrary.getTypeEntryForFile((IFile) resource).getType();
+			final FBType type = (FBType) TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource).getType();
 			final var event = FBLaunchConfigurationAttributes.getEvent(configuration, type, getDefaultEvent(type));
 			final var defaultArguments = getDefaultArguments(type);
 			final var variables = LaunchConfigurationAttributes.getArguments(configuration, defaultArguments);

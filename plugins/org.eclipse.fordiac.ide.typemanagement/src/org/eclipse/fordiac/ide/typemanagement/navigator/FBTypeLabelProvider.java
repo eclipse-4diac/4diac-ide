@@ -31,7 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -173,7 +173,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	private static FBType getAdapterTypeForFile(final IFile file) {
-		final TypeEntry entry = TypeLibrary.getTypeEntryForFile(file);
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 		if (entry instanceof AdapterTypeEntry) {
 			return ((AdapterTypeEntry) entry).getType().getAdapterFBType();
 		}
@@ -181,7 +181,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	private static FBType getFBTypeFromFile(final IFile file) {
-		final TypeEntry entry = TypeLibrary.getTypeEntryForFile(file);
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 		if (entry instanceof FBTypeEntry) {
 			return ((FBTypeEntry) entry).getType();
 		}

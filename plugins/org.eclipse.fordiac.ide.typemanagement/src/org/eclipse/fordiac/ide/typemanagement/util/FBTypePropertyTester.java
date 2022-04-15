@@ -17,7 +17,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public class FBTypePropertyTester extends PropertyTester {
 
@@ -37,11 +37,11 @@ public class FBTypePropertyTester extends PropertyTester {
 		if (type != null) {
 			return type.eClass().getName();
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	private static FBType getFBTypeFromFile(final IFile file) {
-		final TypeEntry entry = TypeLibrary.getTypeEntryForFile(file);
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 		if (entry instanceof FBTypeEntry) {
 			return ((FBTypeEntry) entry).getType();
 		}

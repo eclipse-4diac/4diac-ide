@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -149,7 +149,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	protected boolean filterTargetResource(final IResource resource) throws CoreException {
 		if (resource instanceof IFile) {
 			if (resource.getFileExtension().equalsIgnoreCase(TypeLibraryTags.FB_TYPE_FILE_ENDING)) {
-				final var typeEntry = TypeLibrary.getTypeEntryForFile((IFile) resource);
+				final var typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource);
 				if (typeEntry != null) {
 					final var libraryElement = typeEntry.getType();
 					if (libraryElement instanceof FBType) {
@@ -166,7 +166,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	protected FBType getFBType() {
 		final IResource resource = getResource();
 		if (resource instanceof IFile) {
-			final var typeEntry = TypeLibrary.getTypeEntryForFile((IFile) resource);
+			final var typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource);
 			if (typeEntry != null) {
 				final var libraryElement = typeEntry.getType();
 				if (libraryElement instanceof FBType) {

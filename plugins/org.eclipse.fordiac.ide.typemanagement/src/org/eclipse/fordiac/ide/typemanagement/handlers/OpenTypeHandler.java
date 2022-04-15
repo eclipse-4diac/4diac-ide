@@ -29,7 +29,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -167,7 +167,7 @@ public class OpenTypeHandler extends AbstractHandler {
 			if (member instanceof IContainer) {
 				processContainer((IContainer) member);
 			} else if (member instanceof IFile) {
-				entries.add(TypeLibrary.getTypeEntryForFile((IFile) member));
+				entries.add(TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) member));
 			}
 		}
 

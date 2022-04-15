@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.typemanagement;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.gef.dnd.TemplateTransfer;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.DragSourceEvent;
@@ -32,7 +32,8 @@ public class FBTypeDragAssistant extends CommonDragAdapterAssistant {
 	@Override
 	public void dragStart(final DragSourceEvent anEvent, final IStructuredSelection aSelection) {
 		if (aSelection.getFirstElement() instanceof IFile) {
-			final TypeEntry entry = TypeLibrary.getTypeEntryForFile((IFile) aSelection.getFirstElement());
+			final TypeEntry entry = TypeLibraryManager.INSTANCE
+					.getTypeEntryForFile((IFile) aSelection.getFirstElement());
 			if (entry != null) {
 				TemplateTransfer.getInstance().setTemplate(entry);
 			} else {
@@ -45,7 +46,8 @@ public class FBTypeDragAssistant extends CommonDragAdapterAssistant {
 	@Override
 	public boolean setDragData(final DragSourceEvent anEvent, final IStructuredSelection aSelection) {
 		if (aSelection.getFirstElement() instanceof IFile) {
-			final TypeEntry entry = TypeLibrary.getTypeEntryForFile((IFile) aSelection.getFirstElement());
+			final TypeEntry entry = TypeLibraryManager.INSTANCE
+					.getTypeEntryForFile((IFile) aSelection.getFirstElement());
 			if (null != entry) {
 				anEvent.data = entry;
 				return true;

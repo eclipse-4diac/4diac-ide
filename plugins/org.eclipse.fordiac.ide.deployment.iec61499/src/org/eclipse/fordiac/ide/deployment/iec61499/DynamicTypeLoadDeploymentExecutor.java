@@ -71,7 +71,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
 import org.eclipse.swt.widgets.Display;
@@ -402,7 +402,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 					final File file = new File(path.toString());
 					file.getParentFile().mkdirs();
 					Files.write(path, result.getBytes(), StandardOpenOption.CREATE);
-					TypeLibrary.refreshTypeLib(system.getSystemFile());
+					TypeLibraryManager.INSTANCE.refreshTypeLib(system.getSystemFile());
 				}
 			}
 		} catch (final Exception e) {

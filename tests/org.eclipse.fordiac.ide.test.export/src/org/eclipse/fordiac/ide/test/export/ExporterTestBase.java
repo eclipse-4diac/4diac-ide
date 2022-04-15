@@ -46,7 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetup;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.testmocks.FBTypeEntryMock;
 import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetup;
 import org.junit.jupiter.api.BeforeAll;
@@ -228,7 +228,7 @@ public abstract class ExporterTestBase<T extends FBType> {
 	abstract void setupFunctionBlock();
 
 	protected static FBTypeEntry preparePaletteWithTypeLib() {
-		return new FBTypeEntryMock(null, TypeLibrary.getTypeLibrary(null), null);
+		return new FBTypeEntryMock(null, TypeLibraryManager.INSTANCE.getTypeLibrary(null), null);
 	}
 
 	/** create a VarDeclaration with given name and data-type

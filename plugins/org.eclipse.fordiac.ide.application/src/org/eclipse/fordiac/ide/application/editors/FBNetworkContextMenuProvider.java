@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementAction;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -165,7 +166,7 @@ public class FBNetworkContextMenuProvider extends FordiacContextMenuProvider {
 	}
 
 	private void createFBMenuEntry(final IMenuManager submenu, final IFile typeFile) {
-		final TypeEntry entry = TypeLibrary.getTypeEntryForFile(typeFile);
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile);
 		if ((entry instanceof FBTypeEntry) || (entry instanceof SubAppTypeEntry)) {
 			final Action action = getActionForTypeEntry(entry);
 			setActionIcon(action, entry);

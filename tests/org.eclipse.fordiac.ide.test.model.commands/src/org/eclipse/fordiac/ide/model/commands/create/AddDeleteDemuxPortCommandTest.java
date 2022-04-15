@@ -35,12 +35,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.testmocks.DataTypeEntryMock;
 import org.eclipse.fordiac.ide.model.typelibrary.testmocks.FBTypeEntryMock;
 import org.junit.jupiter.params.provider.Arguments;
 
 public class AddDeleteDemuxPortCommandTest extends CommandTestBase<State> {
-	private static final TypeLibrary typeLib = TypeLibrary.getTypeLibrary(null);
+	private static final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(null);
 
 	private static final String OUTER_STRUCT_TYPE = "outerStruct"; //$NON-NLS-1$
 	private static final String INNER_STRUCT_TYPE = "innerStruct"; //$NON-NLS-1$
