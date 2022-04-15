@@ -18,6 +18,12 @@ package org.eclipse.fordiac.ide.model.typelibrary.impl;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
+import org.eclipse.emf.common.notify.impl.NotificationImpl;
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
@@ -27,7 +33,30 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public abstract class AbstractTypeEntryImpl implements TypeEntry {
+public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements TypeEntry {
+
+	private static class TypeEntryNotificationImpl extends NotificationImpl {
+		protected final TypeEntry notifier;
+		protected final String feature;
+
+		public TypeEntryNotificationImpl(final TypeEntry notifier, final int eventType, final String feature,
+				final Object oldValue, final Object newValue) {
+			super(eventType, oldValue, newValue, NO_INDEX);
+			this.notifier = notifier;
+			this.feature = feature;
+		}
+
+		@Override
+		public TypeEntry getNotifier() {
+			return notifier;
+		}
+
+		@Override
+		public Object getFeature() {
+			return feature;
+		}
+
+	}
 
 	protected IFile file;
 
@@ -38,6 +67,8 @@ public abstract class AbstractTypeEntryImpl implements TypeEntry {
 
 	protected TypeLibrary typeLibray;
 
+	private BasicEList<Adapter> eAdapters;
+
 	@Override
 	public IFile getFile() {
 		return file;
@@ -45,7 +76,12 @@ public abstract class AbstractTypeEntryImpl implements TypeEntry {
 
 	@Override
 	public void setFile(final IFile newFile) {
+		final IFile oldFile = file;
 		file = newFile;
+		if (eNotificationRequired()) {
+			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_FILE_FEATURE, oldFile,
+					file));
+		}
 	}
 
 	@Override
@@ -84,10 +120,15 @@ public abstract class AbstractTypeEntryImpl implements TypeEntry {
 
 	@Override
 	public void setType(final LibraryElement newType) {
+		final LibraryElement oldType = type;
 		type = newType;
 		if (newType != null) {
 			encloseInResource(newType);
 			newType.setTypeEntry(this);
+		}
+		if (eNotificationRequired()) {
+			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_TYPE_FEATURE, oldType,
+					type));
 		}
 	}
 
@@ -113,10 +154,15 @@ public abstract class AbstractTypeEntryImpl implements TypeEntry {
 
 	@Override
 	public void setTypeEditable(final LibraryElement newTypeEditable) {
+		final LibraryElement oldTypeEditable = typeEditable;
 		typeEditable = newTypeEditable;
 		if (newTypeEditable != null) {
 			encloseInResource(newTypeEditable);
 			newTypeEditable.setTypeEntry(this);
+		}
+		if (eNotificationRequired()) {
+			eNotify(new TypeEntryNotificationImpl(this, Notification.SET, TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE,
+					oldTypeEditable, type));
 		}
 	}
 
@@ -156,6 +202,19 @@ public abstract class AbstractTypeEntryImpl implements TypeEntry {
 		result.append(lastModificationTimestamp);
 		result.append(')');
 		return result.toString();
+	}
+
+	@Override
+	public EList<Adapter> eAdapters() {
+		if (eAdapters == null) {
+			eAdapters = new EAdapterList<>(this);
+		}
+		return eAdapters;
+	}
+
+	@Override
+	protected BasicEList<Adapter> eBasicAdapters() {
+		return eAdapters;
 	}
 
 }

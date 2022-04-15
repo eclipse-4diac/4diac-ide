@@ -16,9 +16,14 @@
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 
-public interface TypeEntry {
+public interface TypeEntry extends Notifier {
+
+	String TYPE_ENTRY_FILE_FEATURE = "TYPE_ENTRY_FILE_FEATURE"; //$NON-NLS-1$
+	String TYPE_ENTRY_TYPE_FEATURE = "TYPE_ENTRY_TYPE_FEATURE"; //$NON-NLS-1$
+	String TYPE_ENTRY_TYPE_EDITABLE_FEATURE = "TYPE_ENTRY_TYPE_EDITABLE_FEATURE"; //$NON-NLS-1$
 
 	IFile getFile();
 

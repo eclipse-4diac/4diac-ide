@@ -13,12 +13,13 @@
 package org.eclipse.fordiac.ide.model.typelibrary.testmocks;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-public final class SubAppTypeEntryMock implements SubAppTypeEntry {
+public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubAppTypeEntry {
 
 	private SubAppType subAppType;
 	private TypeLibrary typelib;

@@ -13,12 +13,13 @@
 package org.eclipse.fordiac.ide.model.typelibrary.testmocks;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
-public final class DataTypeEntryMock implements DataTypeEntry {
+public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTypeEntry {
 
 	private AnyDerivedType dataType;
 	private TypeLibrary typelib;
