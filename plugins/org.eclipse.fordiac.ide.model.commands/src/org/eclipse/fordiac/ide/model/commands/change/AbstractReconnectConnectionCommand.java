@@ -27,7 +27,7 @@ import org.eclipse.gef.requests.ReconnectRequest;
 public abstract class AbstractReconnectConnectionCommand extends Command {
 	private final FBNetwork parent;
 	private final Connection connection;
-	private final boolean isSourceReconect;
+	private final boolean isSourceReconnect;
 	private final IInterfaceElement newTarget;
 	private DeleteConnectionCommand deleteConnectionCmd;
 	private AbstractConnectionCreateCommand connectionCreateCmd;
@@ -42,7 +42,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 			final boolean isSourceReconnect, final IInterfaceElement newTarget, final FBNetwork parent) {
 		super(label);
 		this.connection = connection;
-		this.isSourceReconect = isSourceReconnect;
+		this.isSourceReconnect = isSourceReconnect;
 		this.newTarget = newTarget;
 		this.parent = parent;
 	}
@@ -62,14 +62,14 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 	}
 
 	public IInterfaceElement getNewSource() {
-		if (!isSourceReconect) {
+		if (!isSourceReconnect) {
 			return getConnnection().getSource();
 		}
 		return newTarget;
 	}
 
 	public IInterfaceElement getNewDestination() {
-		if (isSourceReconect) {
+		if (isSourceReconnect) {
 			return getConnnection().getDestination();
 		}
 		return newTarget;
@@ -101,7 +101,8 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 		connectionCreateCmd.setSource(getNewSource());
 		connectionCreateCmd.setDestination(getNewDestination());
 		connectionCreateCmd.setArrangementConstraints(con.getRoutingData());
-
+		connectionCreateCmd.setVisible(con.isVisible());
+		
 		connectionCreateCmd.execute();  // perform adding the connection first to preserve any error markers
 		deleteConnectionCmd.execute();
 		copyAttributes(connectionCreateCmd.getConnection(), deleteConnectionCmd.getConnection());

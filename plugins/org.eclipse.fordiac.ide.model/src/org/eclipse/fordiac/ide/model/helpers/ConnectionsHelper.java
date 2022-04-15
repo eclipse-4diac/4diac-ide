@@ -32,8 +32,10 @@ public final class ConnectionsHelper {
 		return null;
 	}
 
-	public static IInterfaceElement getOppositeInterfaceElement(final IInterfaceElement ie, final Connection connection) {
-		final IInterfaceElement fbOppostiteIE = ie.getFBNetworkElement().getOpposite().getInterfaceElement(ie.getName());
+	public static IInterfaceElement getOppositeInterfaceElement(final IInterfaceElement ie,
+			final Connection connection) {
+		final IInterfaceElement fbOppostiteIE = ie.getFBNetworkElement().getOpposite()
+				.getInterfaceElement(ie.getName());
 
 		if (null != fbOppostiteIE) {
 			final IInterfaceElement connectionOpposite = (fbOppostiteIE.isIsInput()) ? connection.getSource()
@@ -44,6 +46,34 @@ public final class ConnectionsHelper {
 				return mappedOppositeElement.getInterfaceElement(connectionOpposite.getName());
 			}
 
+		}
+		return null;
+	}
+
+	public static Connection getOppositeConnection(final Connection connection) {
+		if (null != connection) {
+			IInterfaceElement source = connection.getSource();
+			IInterfaceElement dest = connection.getDestination();
+			
+			if (null != source && null != source.getFBNetworkElement() && null != dest
+					&& null != dest.getFBNetworkElement()) {
+				final FBNetworkElement opSource = source.getFBNetworkElement().getOpposite();
+				final FBNetworkElement opDestination = dest.getFBNetworkElement().getOpposite();
+				if (null != opSource && null != opDestination
+						&& opSource.getFbNetwork() == opDestination.getFbNetwork()) {
+					return findConnection(opSource.getInterfaceElement(source.getName()),
+							opDestination.getInterfaceElement(dest.getName()));
+				}
+			}
+		}
+		return null;
+	}
+
+	private static Connection findConnection(final IInterfaceElement source, final IInterfaceElement destination) {
+		for (final Connection con : source.getOutputConnections()) {
+			if (con.getDestination() == destination) {
+				return con;
+			}
 		}
 		return null;
 	}

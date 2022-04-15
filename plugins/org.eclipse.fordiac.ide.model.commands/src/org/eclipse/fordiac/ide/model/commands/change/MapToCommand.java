@@ -48,7 +48,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 public class MapToCommand extends Command {
 	private final FBNetworkElement srcElement;
 	private final Resource resource;
-	private UnmapCommand unmappFromExistingTarget;
+	private UnmapCommand unmapFromExistingTarget;
 	private FBNetworkElement targetElement;
 	private final Mapping mapping = LibraryElementFactory.eINSTANCE.createMapping();
 	private final CompoundCommand createdConnections = new CompoundCommand();
@@ -79,14 +79,14 @@ public class MapToCommand extends Command {
 		return true;
 	}
 
-	/** Steps needed for the mapping command: 1. If already mapped create unmapp command and execute it 2. Create FB in
+	/** Steps needed for the mapping command: 1. If already mapped create unmap command and execute it 2. Create FB in
 	 * target FBNetwork (use FBnetwork create command) 3. Create Mapping entry 4. Determine list of connections that
 	 * need to be created in target FBNetwork 5. Execute the create connection command for these */
 	@Override
 	public void execute() {
 		if (srcElement.isMapped()) {
-			unmappFromExistingTarget = new UnmapCommand(srcElement.getOpposite());
-			unmappFromExistingTarget.execute();
+			unmapFromExistingTarget = new UnmapCommand(srcElement.getOpposite());
+			unmapFromExistingTarget.execute();
 		}
 
 		createTargetElement();
@@ -114,8 +114,8 @@ public class MapToCommand extends Command {
 		getTargetFBNetwork().getNetworkElements().remove(targetElement);
 		getAutomationSystem().getMapping().remove(mapping);
 
-		if (null != unmappFromExistingTarget) {
-			unmappFromExistingTarget.undo();
+		if (null != unmapFromExistingTarget) {
+			unmapFromExistingTarget.undo();
 		}
 	}
 
@@ -123,8 +123,8 @@ public class MapToCommand extends Command {
 	 * entry 3. for each connection create command -> execute redo 4. handle broken and unbroken connections */
 	@Override
 	public void redo() {
-		if (null != unmappFromExistingTarget) {
-			unmappFromExistingTarget.redo();
+		if (null != unmapFromExistingTarget) {
+			unmapFromExistingTarget.redo();
 		}
 		getTargetFBNetwork().getNetworkElements().add(targetElement);
 		srcElement.setMapping(mapping);
@@ -230,7 +230,8 @@ public class MapToCommand extends Command {
 				addConnectionCreateCommand(
 						connection.getSourceElement().getOpposite()
 								.getInterfaceElement(connection.getSource().getName()),
-						targetElement.getInterfaceElement(interfaceElement.getName()));
+						targetElement.getInterfaceElement(interfaceElement.getName()),
+						connection.isVisible());
 			}
 		}
 	}
@@ -245,7 +246,7 @@ public class MapToCommand extends Command {
 					final IInterfaceElement destination = connection.getDestinationElement().getOpposite()
 							.getInterfaceElement(connection.getDestination().getName());
 					addConnectionCreateCommand(targetElement.getInterfaceElement(interfaceElement.getName()),
-							destination);
+							destination, connection.isVisible());
 					if ((destination instanceof AdapterDeclaration) || (destination instanceof VarDeclaration)) {
 						checkForDeleteConnections(destination);
 					}
@@ -258,11 +259,12 @@ public class MapToCommand extends Command {
 		return connection.getSourceElement() == connection.getDestinationElement();
 	}
 
-	private void addConnectionCreateCommand(final IInterfaceElement source, final IInterfaceElement destination) {
+	private void addConnectionCreateCommand(final IInterfaceElement source, final IInterfaceElement destination, final boolean visible) {
 		final AbstractConnectionCreateCommand cmd = getConnectionCreatCMD(source);
 		if (null != cmd) {
 			cmd.setSource(source);
 			cmd.setDestination(destination);
+			cmd.setVisible(visible);
 			createdConnections.add(cmd);
 		}
 	}
