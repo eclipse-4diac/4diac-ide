@@ -2724,9 +2724,12 @@ ruleSTFeatureExpression returns [EObject current=null]
 						$current = createModelElement(grammarAccess.getSTFeatureExpressionRule());
 					}
 				}
-				otherlv_1=RULE_ID
 				{
-					newLeafNode(otherlv_1, grammarAccess.getSTFeatureExpressionAccess().getFeatureINamedElementCrossReference_1_0());
+					newCompositeNode(grammarAccess.getSTFeatureExpressionAccess().getFeatureINamedElementCrossReference_1_0());
+				}
+				ruleSTFeatureName
+				{
+					afterParserOrEnumRuleCall();
 				}
 			)
 		)
@@ -2800,6 +2803,68 @@ ruleSTFeatureExpression returns [EObject current=null]
 				newLeafNode(otherlv_6, grammarAccess.getSTFeatureExpressionAccess().getRightParenthesisKeyword_2_2());
 			}
 		)?
+	)
+;
+
+// Entry rule entryRuleSTFeatureName
+entryRuleSTFeatureName returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getSTFeatureNameRule()); }
+	iv_ruleSTFeatureName=ruleSTFeatureName
+	{ $current=$iv_ruleSTFeatureName.current.getText(); }
+	EOF;
+
+// Rule STFeatureName
+ruleSTFeatureName returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		this_ID_0=RULE_ID
+		{
+			$current.merge(this_ID_0);
+		}
+		{
+			newLeafNode(this_ID_0, grammarAccess.getSTFeatureNameAccess().getIDTerminalRuleCall_0());
+		}
+		    |
+		kw=LT
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getLTKeyword_1());
+		}
+		    |
+		kw=AND
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getANDKeyword_2());
+		}
+		    |
+		kw=OR
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getORKeyword_3());
+		}
+		    |
+		kw=XOR
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getXORKeyword_4());
+		}
+		    |
+		kw=NOT
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getNOTKeyword_5());
+		}
+		    |
+		kw=MOD
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getMODKeyword_6());
+		}
 	)
 ;
 

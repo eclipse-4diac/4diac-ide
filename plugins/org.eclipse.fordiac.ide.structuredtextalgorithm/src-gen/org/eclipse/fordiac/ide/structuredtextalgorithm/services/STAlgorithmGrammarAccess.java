@@ -891,13 +891,23 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STFeatureExpression returns STExpression:
-	//    {STFeatureExpression} feature=[libraryElement::INamedElement] ( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
+	//    {STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] ( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
 	public STCoreGrammarAccess.STFeatureExpressionElements getSTFeatureExpressionAccess() {
 		return gaSTCore.getSTFeatureExpressionAccess();
 	}
 	
 	public ParserRule getSTFeatureExpressionRule() {
 		return getSTFeatureExpressionAccess().getRule();
+	}
+	
+	//STFeatureName:
+	//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD';
+	public STCoreGrammarAccess.STFeatureNameElements getSTFeatureNameAccess() {
+		return gaSTCore.getSTFeatureNameAccess();
+	}
+	
+	public ParserRule getSTFeatureNameRule() {
+		return getSTFeatureNameAccess().getRule();
 	}
 	
 	//enum STMultiBitAccessSpecifier:

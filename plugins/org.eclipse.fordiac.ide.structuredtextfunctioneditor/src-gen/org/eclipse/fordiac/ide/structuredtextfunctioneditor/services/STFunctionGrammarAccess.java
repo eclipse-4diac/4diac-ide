@@ -76,7 +76,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		//    'FUNCTION' name=ID (':' returnType=[datatype::DataType|STAnyType])?
 		//        varDeclarations+=(STVarDeclarationBlock | STVarTempDeclarationBlock |
 		//        STVarInputDeclarationBlock | STVarOutputDeclarationBlock | STVarInOutDeclarationBlock)*
-		//        code +=STStatement*
+		//        code += STStatement*
 		//    'END_FUNCTION';
 		@Override public ParserRule getRule() { return rule; }
 		
@@ -84,7 +84,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		//'FUNCTION' name=ID (':' returnType=[datatype::DataType|STAnyType])?
 		//    varDeclarations+=(STVarDeclarationBlock | STVarTempDeclarationBlock |
 		//    STVarInputDeclarationBlock | STVarOutputDeclarationBlock | STVarInOutDeclarationBlock)*
-		//    code +=STStatement*
+		//    code += STStatement*
 		//'END_FUNCTION'
 		public Group getGroup() { return cGroup; }
 		
@@ -138,7 +138,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		//STVarInOutDeclarationBlock
 		public RuleCall getVarDeclarationsSTVarInOutDeclarationBlockParserRuleCall_4_0_4() { return cVarDeclarationsSTVarInOutDeclarationBlockParserRuleCall_4_0_4; }
 		
-		//code +=STStatement*
+		//code += STStatement*
 		public Assignment getCodeAssignment_5() { return cCodeAssignment_5; }
 		
 		//STStatement
@@ -207,7 +207,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	//    'FUNCTION' name=ID (':' returnType=[datatype::DataType|STAnyType])?
 	//        varDeclarations+=(STVarDeclarationBlock | STVarTempDeclarationBlock |
 	//        STVarInputDeclarationBlock | STVarOutputDeclarationBlock | STVarInOutDeclarationBlock)*
-	//        code +=STStatement*
+	//        code += STStatement*
 	//    'END_FUNCTION';
 	public STFunctionElements getSTFunctionAccess() {
 		return pSTFunction;
@@ -736,13 +736,23 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STFeatureExpression returns STExpression:
-	//    {STFeatureExpression} feature=[libraryElement::INamedElement] ( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
+	//    {STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] ( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
 	public STCoreGrammarAccess.STFeatureExpressionElements getSTFeatureExpressionAccess() {
 		return gaSTCore.getSTFeatureExpressionAccess();
 	}
 	
 	public ParserRule getSTFeatureExpressionRule() {
 		return getSTFeatureExpressionAccess().getRule();
+	}
+	
+	//STFeatureName:
+	//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD';
+	public STCoreGrammarAccess.STFeatureNameElements getSTFeatureNameAccess() {
+		return gaSTCore.getSTFeatureNameAccess();
+	}
+	
+	public ParserRule getSTFeatureNameRule() {
+		return getSTFeatureNameAccess().getRule();
 	}
 	
 	//enum STMultiBitAccessSpecifier:

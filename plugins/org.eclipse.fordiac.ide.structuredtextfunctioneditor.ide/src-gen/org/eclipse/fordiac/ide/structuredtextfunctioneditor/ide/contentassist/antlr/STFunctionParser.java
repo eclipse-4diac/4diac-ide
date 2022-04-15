@@ -41,6 +41,7 @@ public class STFunctionParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTAccessExpressionAccess().getAlternatives_1(), "rule__STAccessExpression__Alternatives_1");
 			builder.put(grammarAccess.getSTAccessExpressionAccess().getMemberAlternatives_1_0_2_0(), "rule__STAccessExpression__MemberAlternatives_1_0_2_0");
 			builder.put(grammarAccess.getSTPrimaryExpressionAccess().getAlternatives(), "rule__STPrimaryExpression__Alternatives");
+			builder.put(grammarAccess.getSTFeatureNameAccess().getAlternatives(), "rule__STFeatureName__Alternatives");
 			builder.put(grammarAccess.getSTMultibitPartialExpressionAccess().getAlternatives_2(), "rule__STMultibitPartialExpression__Alternatives_2");
 			builder.put(grammarAccess.getSTLiteralExpressionsAccess().getAlternatives(), "rule__STLiteralExpressions__Alternatives");
 			builder.put(grammarAccess.getSTNumericLiteralTypeAccess().getAlternatives(), "rule__STNumericLiteralType__Alternatives");

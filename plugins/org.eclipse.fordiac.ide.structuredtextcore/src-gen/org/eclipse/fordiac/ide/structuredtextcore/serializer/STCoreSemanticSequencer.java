@@ -665,7 +665,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STFeatureExpression returns STFeatureExpression
 	 *
 	 * Constraint:
-	 *     (feature=[INamedElement|ID] (call?='(' (parameters+=STCallArgument parameters+=STCallArgument*)?)?)
+	 *     (feature=[INamedElement|STFeatureName] (call?='(' (parameters+=STCallArgument parameters+=STCallArgument*)?)?)
 	 * </pre>
 	 */
 	protected void sequence_STFeatureExpression(ISerializationContext context, STFeatureExpression semanticObject) {
