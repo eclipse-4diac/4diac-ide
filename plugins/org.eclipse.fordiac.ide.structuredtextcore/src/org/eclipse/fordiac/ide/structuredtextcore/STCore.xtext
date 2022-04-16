@@ -191,7 +191,10 @@ STPrimaryExpression returns STExpression:
 	'(' STExpression ')' | STFeatureExpression | STLiteralExpressions;
 
 STFeatureExpression returns STExpression:
-	{STFeatureExpression} feature=[libraryElement::INamedElement] ( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
+	{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] ( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
+
+STFeatureName:
+	ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD';
 
 enum STMultiBitAccessSpecifier:
 	L='%L' | D='%D' | W='%W' | B='%B' | X='%X';
