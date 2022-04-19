@@ -109,7 +109,8 @@ public class AdvancedLineBorder extends LineBorder {
 	@Override
 	public void paint(final IFigure figure, final Graphics graphics, final Insets insets) {
 		graphics.setAlpha(alpha);
-		tempRect.setBounds(getPaintRectangle(figure, insets));
+		getPaintRectangle(figure, insets).width -= getWidth();
+		tempRect.height -= getWidth();
 
 		graphics.setLineWidth(getWidth());
 		if (getColor() != null) {
@@ -118,19 +119,17 @@ public class AdvancedLineBorder extends LineBorder {
 
 		graphics.setLineStyle(style);
 
-		final int yLowerBound = tempRect.y + tempRect.height - getWidth() / 4;
 		if ((side & PositionConstants.NORTH) != 0) {
-			graphics.drawLine(tempRect.x, tempRect.y, tempRect.x + tempRect.width, tempRect.y);
+			graphics.drawLine(tempRect.getTopLeft(), tempRect.getTopRight());
 		}
 		if ((side & PositionConstants.EAST) != 0) {
-			final int xRightBound = tempRect.x + tempRect.width - getWidth() / 4;
-			graphics.drawLine(xRightBound, tempRect.y, xRightBound, yLowerBound);
+			graphics.drawLine(tempRect.getTopRight(), tempRect.getBottomRight());
 		}
 		if ((side & PositionConstants.SOUTH) != 0) {
-			graphics.drawLine(tempRect.x, yLowerBound, tempRect.x + tempRect.width, yLowerBound);
+			graphics.drawLine(tempRect.getBottomLeft(), tempRect.getBottomRight());
 		}
 		if ((side & PositionConstants.WEST) != 0) {
-			graphics.drawLine(tempRect.x, tempRect.y, tempRect.x, yLowerBound);
+			graphics.drawLine(tempRect.getTopLeft(), tempRect.getBottomLeft());
 		}
 	}
 
