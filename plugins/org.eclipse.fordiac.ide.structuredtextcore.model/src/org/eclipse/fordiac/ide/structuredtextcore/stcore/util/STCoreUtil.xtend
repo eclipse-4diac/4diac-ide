@@ -12,7 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.util
 
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 
 final class STCoreUtil {
 
@@ -53,6 +58,16 @@ final class STCoreUtil {
 			case AND,
 			case OR,
 			case XOR: true
+			default: false
+		}
+	}
+
+	def static boolean isValidLeftAssignment(STExpression expression) {
+		switch (it : expression) {
+			STMultibitPartialExpression,
+			STFeatureExpression case !call,
+			STArrayAccessExpression case receiver.validLeftAssignment,
+			STMemberAccessExpression case receiver.validLeftAssignment && member.validLeftAssignment: true
 			default: false
 		}
 	}
