@@ -18,7 +18,6 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.draw2d.Figure;
@@ -47,7 +46,6 @@ import org.eclipse.swt.graphics.Point;
 public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart {
 	private static class ContainerMarqueeDragTracker extends FBNetworkRootEditPart.FBNetworkMarqueeDragTracker {
 		private final AbstractContainerContentEditPart host;
-		private boolean dragStarted = false;
 
 		public ContainerMarqueeDragTracker(final AbstractContainerContentEditPart host) {
 			super();
@@ -55,31 +53,8 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		}
 
 		@Override
-		protected boolean handleButtonDown(final int button) {
-			dragStarted = false;
-			return super.handleButtonDown(button);
-		}
-
-		@Override
-		protected boolean handleDragStarted() {
-			dragStarted = true;
-			return super.handleDragStarted();
-		}
-
-		@Override
-		protected Collection<EditPart> calculateMarqueeSelectedEditParts() {
-			if (!dragStarted) {
-				// we had just a click without drag provide the parent to make it feel like a background click selection
-				final ArrayList<EditPart> list = new ArrayList<>(1);
-				list.add(host.getParent());
-				return list;
-			}
-			return super.calculateMarqueeSelectedEditParts();
-		}
-
-		@Override
 		protected StructuredSelection getDefaultSelectionForRightMouseDown() {
-			return new StructuredSelection(host.getParent());
+			return new StructuredSelection(host);
 		}
 	}
 
