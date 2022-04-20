@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.fordiac.ide.model.helpers.ConnectionsHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.gef.commands.Command;
 
@@ -19,7 +20,8 @@ public class HideConnectionCommand extends Command {
 
 	private final Connection connection;
 	private final boolean isVisible;
-
+	private Connection resourceConn;
+	
 	public HideConnectionCommand(final Connection connection, final boolean isVisible) {
 		this.connection = connection;
 		this.isVisible = isVisible;
@@ -27,17 +29,24 @@ public class HideConnectionCommand extends Command {
 
 	@Override
 	public void execute() {
-		connection.setVisible(isVisible);
+		resourceConn = ConnectionsHelper.getOppositeConnection(connection);
+		setVisible(isVisible);
 	}
 
 	@Override
 	public void undo() {
-		connection.setVisible(!isVisible);
+		setVisible(!isVisible);
 	}
 
 	@Override
 	public void redo() {
-		connection.setVisible(isVisible);
+		setVisible(isVisible);
 	}
 
+	private void setVisible(boolean visible) {
+		connection.setVisible(visible);
+		if (null != resourceConn) {
+			resourceConn.setVisible(visible);
+		}
+	}
 }

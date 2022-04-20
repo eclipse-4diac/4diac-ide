@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.model.commands.delete;
 
 import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.helpers.ConnectionsHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -108,29 +109,12 @@ public class DeleteConnectionCommand extends Command {
 	}
 
 	private DeleteConnectionCommand checkAndDeleteMirroredConnection() {
-		if (null != source && null != source.getFBNetworkElement() && null != destination
-				&& null != destination.getFBNetworkElement()) {
-			final FBNetworkElement opSource = source.getFBNetworkElement().getOpposite();
-			final FBNetworkElement opDestination = destination.getFBNetworkElement().getOpposite();
-			if (null != opSource && null != opDestination && opSource.getFbNetwork() == opDestination.getFbNetwork()) {
-				final Connection con = findConnection(opSource.getInterfaceElement(source.getName()),
-						opDestination.getInterfaceElement(destination.getName()));
-				if (null != con) {
-					final DeleteConnectionCommand cmd = new DeleteConnectionCommand(con);
-					cmd.setPerformMappingCheck(false); // as this is the command for the mirrored connection we don't
-					// want again to check
-					return (cmd.canExecute()) ? cmd : null;
-				}
-			}
-		}
-		return null;
-	}
-
-	private static Connection findConnection(final IInterfaceElement source, final IInterfaceElement destination) {
-		for (final Connection con : source.getOutputConnections()) {
-			if (con.getDestination() == destination) {
-				return con;
-			}
+		Connection opposite = ConnectionsHelper.getOppositeConnection(connection);
+		if (null != opposite) {
+			final DeleteConnectionCommand cmd = new DeleteConnectionCommand(opposite);
+			cmd.setPerformMappingCheck(false); // as this is the command for the mirrored connection we don't
+			// want again to check
+			return (cmd.canExecute()) ? cmd : null;
 		}
 		return null;
 	}
@@ -140,12 +124,10 @@ public class DeleteConnectionCommand extends Command {
 	}
 
 	private void checkErrorMarker() {
-		if (source instanceof ErrorMarkerInterface
-				&& getConnectionCount(source) == 0) {
+		if (source instanceof ErrorMarkerInterface && getConnectionCount(source) == 0) {
 			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
 		}
-		if (destination instanceof ErrorMarkerInterface
-				&& getConnectionCount(destination) == 0) {
+		if (destination instanceof ErrorMarkerInterface && getConnectionCount(destination) == 0) {
 			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
 		}
 	}

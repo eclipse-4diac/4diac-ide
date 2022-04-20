@@ -241,6 +241,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 				// again to check
 				cmd.setSource(opSource.getInterfaceElement(source.getName()));
 				cmd.setDestination(opDestination.getInterfaceElement(destination.getName()));
+				cmd.setVisible(visible);
 				return (cmd.canExecute()) ? cmd : null;
 			}
 		}
@@ -267,6 +268,9 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 
 	public void setVisible(final boolean visible) {
 		this.visible = visible;
+		if (null != mirroredConnection) {
+			mirroredConnection.setVisible(visible);
+		}
 	}
 
 }

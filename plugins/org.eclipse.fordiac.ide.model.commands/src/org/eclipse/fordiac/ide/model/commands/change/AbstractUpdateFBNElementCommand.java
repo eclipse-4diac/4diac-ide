@@ -462,6 +462,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 				final AbstractConnectionCreateCommand dccc = createConnCreateCMD(source, fbn);
 				dccc.setSource(source);
 				dccc.setDestination(dest);
+				dccc.setVisible(oldConn.isVisible());
 				dccc.setArrangementConstraints(oldConn.getRoutingData());
 				if (dccc.canExecute()) {
 					dccc.execute();

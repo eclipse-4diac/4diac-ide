@@ -33,8 +33,10 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
+import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.Activator;
@@ -88,9 +90,9 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 		}
 
 	}
-	
+
 	private static class StructFigureCellEditorLocator implements CellEditorLocator {
-		
+
 		private static final int EDITOR_SIZE = 300;
 
 		private final Figure figure;
@@ -118,11 +120,30 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 		}
 	};
 
+
+
 	@Override
 	public void activate() {
 		if (!isActive()) {
 			super.activate();
+			showPinValues(false);
 			Activator.getDefault().getPreferenceStore().addPropertyChangeListener(propertyChangeListener);
+		}
+	}
+
+	private void showPinValues(final boolean show) {
+		if (getModel().getCurrentValue() != null && !"".equals(getModel().getCurrentValue())) { //$NON-NLS-1$
+			final IInterfaceElement ie = getInterfaceElement();
+			if (ie instanceof VarDeclaration) {
+				final VarDeclaration varDec = (VarDeclaration) ie;
+				if (null != getViewer()) {
+					final Object obj = getViewer().getEditPartRegistry().get(varDec.getValue());
+					if (obj instanceof ValueEditPart) {
+						final ValueEditPart valueEP = (ValueEditPart) obj;
+						valueEP.setVisible(show);
+					}
+				}
+			}
 		}
 	}
 
@@ -130,6 +151,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 	public void deactivate() {
 		if (isActive()) {
 			super.deactivate();
+			showPinValues(true);
 			Activator.getDefault().getPreferenceStore().removePropertyChangeListener(propertyChangeListener);
 		}
 	}
@@ -141,7 +163,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 	public boolean isVariable() {
 		return getInterfaceElement() instanceof VarDeclaration;
 	}
-	
+
 	public boolean isStruct() {
 		return getInterfaceElement().getType() instanceof StructuredType;
 	}
@@ -226,12 +248,13 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 			super.performDirectEdit();
 		}
 	}
-	
+
 	private void performStructDirectEdit() {
 		new TextDirectEditManager(this, new StructFigureCellEditorLocator((Figure) getFigure())) {
 			@Override
 			protected CellEditor createCellEditorOn(final Composite composite) {
-				return new TextCellEditor((Composite) getViewer().getControl(), SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
+				return new TextCellEditor((Composite) getViewer().getControl(),
+						SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
 			}
 
 			@Override
@@ -240,7 +263,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 				final String model = StructMonitoringHelper.format(getModel().getCurrentValue());
 				// is null if forte has been turned off
 				if (model != null) {
-					getCellEditor().setValue(model);					
+					getCellEditor().setValue(model);
 				}
 			}
 
@@ -250,7 +273,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 				final Text textControl = (Text) getCellEditor().getControl();
 				textControl.setSelection(SELECTED_NONE);
 			}
-			
+
 		}.show();
 	}
 
@@ -281,6 +304,12 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 			}
 			refreshVisuals();
 		}
+	}
+
+	@Override
+	protected void refreshVisuals() {
+		super.refreshVisuals();
+		showPinValues(false);
 	}
 
 	private boolean isForced() {
