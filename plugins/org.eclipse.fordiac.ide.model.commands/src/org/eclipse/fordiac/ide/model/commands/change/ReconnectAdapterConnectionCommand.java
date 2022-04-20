@@ -20,13 +20,8 @@ import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.gef.requests.ReconnectRequest;
 
 public class ReconnectAdapterConnectionCommand extends AbstractReconnectConnectionCommand {
-
-	public ReconnectAdapterConnectionCommand(final ReconnectRequest request, final FBNetwork parent) {
-		super(Messages.ReconnectAdapterConnectionCommand_LABEL, request, parent);
-	}
 
 	public ReconnectAdapterConnectionCommand(final Connection connection, final boolean isSourceReconnect,
 			final IInterfaceElement newTarget, final FBNetwork parent) {

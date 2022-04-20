@@ -17,11 +17,14 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy;
 import org.eclipse.gef.requests.CreateConnectionRequest;
@@ -45,19 +48,31 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 	@Override
 	protected Command getReconnectTargetCommand(final ReconnectRequest request) {
-		return createReconnectCommand(request);
+		return createReconnectCommand(request, false);
 	}
 
 	@Override
 	protected Command getReconnectSourceCommand(final ReconnectRequest request) {
-		return createReconnectCommand(request);
+		return createReconnectCommand(request, true);
+	}
+
+	private Command createReconnectCommand(final ReconnectRequest request, final boolean isSourceReconnect) {
+		final AbstractReconnectConnectionCommand cmd = createReconnectCommand(
+				(Connection) request.getConnectionEditPart().getModel(), isSourceReconnect, getRequestTarget(request));
+		final FBNetwork newParent = checkConnectionParent(cmd.getNewSource(), cmd.getNewDestination(), cmd.getParent());
+		if (newParent != null) {
+			cmd.setParent(newParent);
+			return cmd;
+		}
+		return null;
 	}
 
 	protected FBNetwork getParentNetwork() {
 		return getHost().getRoot().getAdapter(FBNetwork.class);
 	}
 
-	protected abstract Command createReconnectCommand(ReconnectRequest request);
+	protected abstract AbstractReconnectConnectionCommand createReconnectCommand(final Connection connection,
+			final boolean isSourceReconnect, final IInterfaceElement newTarget);
 
 	private static FBNetwork checkConnectionParent(final IInterfaceElement source, final IInterfaceElement destination,
 			final FBNetwork parent) {
@@ -104,6 +119,14 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 			if (pin.eContainer().eContainer() instanceof CompositeFBType) {
 				return ((CompositeFBType) pin.eContainer().eContainer()).getFBNetwork();
 			}
+		}
+		return null;
+	}
+
+	private static IInterfaceElement getRequestTarget(final ReconnectRequest request) {
+		final EditPart target = request.getTarget();
+		if (target.getModel() instanceof IInterfaceElement) {
+			return (IInterfaceElement) target.getModel();
 		}
 		return null;
 	}
