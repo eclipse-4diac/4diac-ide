@@ -103,7 +103,7 @@ public enum SystemManager {
 		// and adding the resource change listener
 		TypeLibraryManager.INSTANCE.loadToolLibrary();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FordiacResourceChangeListener(this));
-		ValidateTypeLibrary.validate();
+		ValidateProject.checkTypeLibraryInProjectsInWorkspaceJob();
 	}
 
 	public static boolean isSystemFile(final Object entry) {

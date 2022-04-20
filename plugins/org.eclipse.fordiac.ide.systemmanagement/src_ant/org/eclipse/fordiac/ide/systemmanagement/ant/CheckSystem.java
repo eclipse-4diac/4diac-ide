@@ -43,9 +43,9 @@ public class CheckSystem extends Task {
 		}
 
 		final IFile systemFile = getSystemFile();
-		if (systemFile == null || !systemFile.exists() || !SystemManager.isSystemFile(systemFile)) {
+		if (systemFile == null || !systemFile.exists() || !SystemManager.isSystemFile(systemFile)) { 
 			throw new BuildException(
-					MessageFormat.format("System path {0} does not is not a valid system in workspace!", //$NON-NLS-1$
+					MessageFormat.format("System path {0} is not a valid system in workspace!", //$NON-NLS-1$
 							systemPathString));
 		}
 
