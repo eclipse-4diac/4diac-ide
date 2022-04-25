@@ -92,4 +92,12 @@ public interface STDateAndTimeLiteral extends STExpression {
 	 */
 	INamedElement getResultType();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getDeclaredResultType();
+
 } // STDateAndTimeLiteral

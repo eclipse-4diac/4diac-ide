@@ -61,4 +61,14 @@ public class STCallArgumentImpl extends MinimalEObjectImpl.Container implements 
 		return null;
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public INamedElement getDeclaredResultType() {
+		return null;
+	}
+
 } //STCallArgumentImpl

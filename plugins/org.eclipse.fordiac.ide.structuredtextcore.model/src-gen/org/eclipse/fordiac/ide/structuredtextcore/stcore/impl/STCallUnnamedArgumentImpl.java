@@ -133,6 +133,16 @@ public class STCallUnnamedArgumentImpl extends STCallArgumentImpl implements STC
 	 * @generated
 	 */
 	@Override
+	public INamedElement getDeclaredResultType() {
+		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARG:

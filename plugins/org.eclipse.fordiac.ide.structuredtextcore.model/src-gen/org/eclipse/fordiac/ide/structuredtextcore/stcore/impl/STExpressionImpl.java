@@ -62,4 +62,14 @@ public class STExpressionImpl extends MinimalEObjectImpl.Container implements ST
 		return null;
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public INamedElement getDeclaredResultType() {
+		return null;
+	}
+
 } //STExpressionImpl

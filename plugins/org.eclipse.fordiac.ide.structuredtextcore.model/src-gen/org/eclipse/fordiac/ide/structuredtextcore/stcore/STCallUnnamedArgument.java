@@ -66,4 +66,12 @@ public interface STCallUnnamedArgument extends STCallArgument {
 	 */
 	INamedElement getResultType();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getDeclaredResultType();
+
 } // STCallUnnamedArgument

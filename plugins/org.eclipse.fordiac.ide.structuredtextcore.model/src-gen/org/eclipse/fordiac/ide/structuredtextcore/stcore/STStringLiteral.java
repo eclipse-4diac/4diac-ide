@@ -90,4 +90,12 @@ public interface STStringLiteral extends STExpression {
 	 */
 	INamedElement getResultType();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getDeclaredResultType();
+
 } // STStringLiteral

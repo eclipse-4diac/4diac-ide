@@ -38,4 +38,12 @@ public interface STCallArgument extends EObject {
 	 * @generated
 	 */
 	INamedElement getResultType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getDeclaredResultType();
 } // STCallArgument
