@@ -251,14 +251,7 @@
 <!--********************************************************************************************-->
 	
   <topic href="html/communication/communicationIndex.html" label="Supported Communication Protocols">
-    <topic label="OPC UA"  href="html/communication/opc_ua.html">
-      <topic label="Build FORTE with OPC UA" href="html/communication/opc_ua.html#build" />
-      <topic label="OPC UA Variables" href="html/communication/opc_ua.html#variables" />
-      <topic label="OPC UA Methods" href="html/communication/opc_ua.html#methods" />
-      <topic href="html/communication/opc_ua.html#client" label="OPC UA Client">
-      </topic>
-    </topic>
-    <topic label="OPC UA from 4diac 1.11.0"  href="html/communication/opc_ua_version1.html">
+    <topic label="OPC UA"  href="html/communication/opc_ua_version1.html">
       <topic label="Build FORTE with OPC UA" href="html/communication/opc_ua_version1.html#build" />
       <topic label="General Overview" href="html/communication/opc_ua_version1.html#general" />
       <topic label="OPC UA Variables" href="html/communication/opc_ua_version1.html#variables" />
