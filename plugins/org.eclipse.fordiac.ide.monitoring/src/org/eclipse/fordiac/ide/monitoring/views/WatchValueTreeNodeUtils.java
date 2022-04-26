@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 
 public final class WatchValueTreeNodeUtils {
 
+	private static final String HEX_PREFIX = "16#"; //$NON-NLS-1$
 	public static final String ASSIGN = ":="; //$NON-NLS-1$
 	public static final String CLAMP_OP = "("; //$NON-NLS-1$
 	public static final String CLAMP_CL = ")"; //$NON-NLS-1$
@@ -43,7 +44,7 @@ public final class WatchValueTreeNodeUtils {
 	 */
 	public static String decorateHexValue(final String value, final DataType type, final MonitoringElement model) {
 		// we want to convert every AnyBit type besides bool
-		if (isHexDecoractionNecessary(value, type)) {
+		if (isHexDecorationNecessary(value, type)) {
 			return decorateHexNumber(value);
 		} else if (isStruct(type)) {
 			final WatchValueTreeNode dbgStruct = StructParser.createStructFromString(value, (StructuredType) type,
@@ -61,8 +62,8 @@ public final class WatchValueTreeNodeUtils {
 	 * @param type  ... type of the online value
 	 * @return value datatype is inherited from ANY_BIT and not of datatype BOOL
 	 */
-	public static boolean isHexDecoractionNecessary(final String value, final DataType type) {
-		return isHexValue(type) && isNumeric(value);
+	public static boolean isHexDecorationNecessary(final String value, final DataType type) {
+		return isHexValue(type) && isNumeric(value) && !value.startsWith(HEX_PREFIX);
 	}
 
 	/**
@@ -78,7 +79,7 @@ public final class WatchValueTreeNodeUtils {
 			final VarDeclaration structTreeNodeVar = structTreeNode.getVariable();
 			final WatchValueTreeNode watchedValueTreeNode = (WatchValueTreeNode) structTreeNode;
 			if (structTreeNodeVar != null
-					&& isHexDecoractionNecessary(watchedValueTreeNode.getValue(), structTreeNodeVar.getType())) {
+					&& isHexDecorationNecessary(watchedValueTreeNode.getValue(), structTreeNodeVar.getType())) {
 				watchedValueTreeNode.setValue(decorateHexNumber(watchedValueTreeNode.getValue()));
 			}
 		}
@@ -125,7 +126,7 @@ public final class WatchValueTreeNodeUtils {
 	}
 
 	private static String convertIntegerToHexString(final long number) {
-		return "16#" + Long.toHexString(number).toUpperCase(); //$NON-NLS-1$
+		return HEX_PREFIX + Long.toHexString(number).toUpperCase(); //$NON-NLS-1$
 	}
 
 	private static boolean isNumeric(final String input) {
