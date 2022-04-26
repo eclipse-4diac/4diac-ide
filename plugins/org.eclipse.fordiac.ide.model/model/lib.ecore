@@ -419,7 +419,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FB" eSuperTypes="#//FBNetworkElement">
+  <eClassifiers xsi:type="ecore:EClass" name="FB" eSuperTypes="#//FBNetworkElement #//ICallable">
     <eOperations name="isResourceFB" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceFB(this);"/>
@@ -433,6 +433,26 @@
     <eOperations name="getType" lowerBound="1" eType="#//FBType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xA;if(type instanceof FBType){&#xA;   return (FBType) type; &#xA;}&#xA;return null;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInputParameters" upperBound="-1" eType="#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getOutputParameters" upperBound="-1" eType="#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getInOutParameters" upperBound="-1" eType="#//INamedElement">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getReturnType" eType="ecore:EClass data.ecore#//DataType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
       </eAnnotations>
     </eOperations>
   </eClassifiers>

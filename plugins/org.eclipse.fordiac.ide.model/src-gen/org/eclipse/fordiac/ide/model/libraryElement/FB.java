@@ -13,13 +13,16 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.data.DataType;
+
 /** <!-- begin-user-doc --> A representation of the model object ' <em><b>FB</b></em>'. <!-- end-user-doc -->
  *
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFB()
  * @model
  * @generated */
-public interface FB extends FBNetworkElement {
+public interface FB extends FBNetworkElement, ICallable {
 	/** <!-- begin-user-doc -->
 	 * <p>
 	 * If the meaning of the '<em>Resource Type FB</em>' attribute isn't clear, there really should be more of a
@@ -37,6 +40,38 @@ public interface FB extends FBNetworkElement {
 	 * @generated */
 	@Override
 	FBType getType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<INamedElement> getInputParameters();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<INamedElement> getOutputParameters();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<INamedElement> getInOutParameters();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	DataType getReturnType();
 
 	/** <!-- begin-user-doc -->
 	 * <p>

@@ -325,6 +325,10 @@
       <genOperations ecoreOperation="lib.ecore#//FB/isResourceFB" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceFB(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FB/isResourceTypeFB" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceTypeFB(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FB/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xA;if(type instanceof FBType){&#xA;   return (FBType) type; &#xA;}&#xA;return null;"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/getInputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/getInOutParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBNetworkElement">
       <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//FBNetworkElement/interface"/>

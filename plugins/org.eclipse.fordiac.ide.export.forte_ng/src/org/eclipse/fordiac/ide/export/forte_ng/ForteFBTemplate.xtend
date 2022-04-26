@@ -296,6 +296,7 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 		«FOR event : type.interfaceList.eventInputs»
 			«event.generateEventAccessorDeclaration»
 		«ENDFOR»
+		«type.interfaceList.eventInputs.head?.generateEventAccessorCallOperator»
 	'''
 
 	def protected generateEventAccessorDeclaration(Event event) '''
@@ -320,10 +321,22 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 		}
 	'''
 
+	def protected generateEventAccessorCallOperator(Event event) '''
+		void operator()(«event.generateEventAccessorForwardParameters») {
+			«event.generateEventAccessorName»(«event.generateEventAccessorForwardArguments»);
+		}
+	'''
+
 	def protected generateEventAccessorName(Event event) '''evt_«event.name»'''
 
 	def protected CharSequence generateEventAccessorParameters(Event event) //
 	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«param.generateTypeName» «IF !param.isIsInput»&«ENDIF»«param.generateName»«ENDFOR»'''
+
+	def protected CharSequence generateEventAccessorForwardParameters(Event event) //
+	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«IF param.isIsInput»const «ENDIF»«param.generateTypeName» &«param.generateName»«ENDFOR»'''
+
+	def protected CharSequence generateEventAccessorForwardArguments(Event event) //
+	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«param.generateName»«ENDFOR»'''
 
 	def protected getEventAccessorParameters(Event event) {
 		(event.inputParameters + event.outputParameters).filter(VarDeclaration)
