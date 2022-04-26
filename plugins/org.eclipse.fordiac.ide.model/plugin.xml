@@ -109,6 +109,28 @@
                type="dtp">
          </parser>
       </extension>
+      <extension
+            id="problem"
+            name="4diac IDE Problem"
+            point="org.eclipse.core.resources.markers">
+         <super
+               type="org.eclipse.core.resources.problemmarker">
+         </super>
+         <persistent
+               value="true">
+         </persistent>
+      </extension>
+      <extension
+            id="iec61499"
+            name="4diac IDE IEC 61499 Problem"
+            point="org.eclipse.core.resources.markers">
+         <super
+               type="org.eclipse.fordiac.ide.model.problem">
+         </super>
+         <persistent
+               value="true">
+         </persistent>
+      </extension>
    <!-- this is needed to load old pre eclipse version projects -->
 null
 </plugin>

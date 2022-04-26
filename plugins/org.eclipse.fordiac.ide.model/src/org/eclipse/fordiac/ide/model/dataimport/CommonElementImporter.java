@@ -29,11 +29,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -186,7 +183,7 @@ public abstract class CommonElementImporter {
 	public void loadElement() {
 		element = createRootModelElement();
 		try (ImporterStreams streams = createInputStreams(getInputStream())) {
-			deleteMarkers();
+			deleteErrorMarkers();
 			proceedToStartElementNamed(getStartElementName());
 			readNameCommentAttributes(element);
 			processChildren(getStartElementName(), getBaseChildrenHandler());
@@ -224,29 +221,15 @@ public abstract class CommonElementImporter {
 		}
 	}
 
+	protected void deleteErrorMarkers() {
+		ErrorMarkerBuilder.deleteErrorMarkers(file, ErrorMarkerBuilder.IEC61499_MARKER);
+	}
+
 	protected abstract LibraryElement createRootModelElement();
 
 	protected abstract String getStartElementName();
 
 	protected abstract IChildHandler getBaseChildrenHandler();
-
-	protected void deleteMarkers() {
-		if (file.exists()) {
-			final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + file.getName()) {
-				@Override
-				public IStatus runInWorkspace(final IProgressMonitor monitor) {
-					try {
-						file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-					} catch (final CoreException e) {
-						FordiacLogHelper.logError("Could not delete error marker", e); //$NON-NLS-1$
-					}
-					return Status.OK_STATUS;
-				}
-			};
-			job.setRule(file.getProject());
-			job.schedule();
-		}
-	}
 
 	private ImporterStreams createInputStreams(final InputStream fileInputStream) throws XMLStreamException {
 		final XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -443,8 +426,8 @@ public abstract class CommonElementImporter {
 		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if ((null != name) && (null != value)) {
-			confObject.setAttribute(name, null == type ? IecTypes.ElementaryTypes.STRING.getName() : type,
-					value, comment);
+			confObject.setAttribute(name, null == type ? IecTypes.ElementaryTypes.STRING.getName() : type, value,
+					comment);
 		}
 
 		if (confObject instanceof StructManipulator) {

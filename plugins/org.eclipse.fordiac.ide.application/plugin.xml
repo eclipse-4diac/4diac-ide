@@ -1133,23 +1133,16 @@
       </command>
     </menuContribution>
   </extension>
-  <extension id="org.eclipse.fordiac.ide.application.marker"
-             point="org.eclipse.core.resources.markers">
-    <persistent value="false">
-    </persistent>
-    <super type="org.eclipse.core.resources.marker">
-    </super>
-    <attribute name="org.eclipse.fordiac.ide.application.marker.fb">
-    </attribute>
-  </extension>
   <extension point="org.eclipse.ui.ide.markerSupport">
-    <markerContentGenerator id="org.eclipse.fordiac.ide.application.fordiacmarkerContentGenerator"
-                            name="4diac IDE Marker Generator">
-      <markerFieldReference id="org.eclipse.ui.ide.severityAndDescriptionField">
-      </markerFieldReference>
-      <markerTypeReference id="org.eclipse.core.resources.marker">
-      </markerTypeReference>
-    </markerContentGenerator>
+    <markerTypeCategory
+          name="4diac IDE Problem">
+       <markerTypeReference
+             id="org.eclipse.fordiac.ide.model.problem">
+       </markerTypeReference>
+       <markerTypeReference
+             id="org.eclipse.fordiac.ide.model.iec61499">
+       </markerTypeReference>
+    </markerTypeCategory>
   </extension>
   <extension point="org.eclipse.ui.elementFactories">
     <factory class="org.eclipse.fordiac.ide.application.editors.ApplicationEditorInputFactory"

@@ -327,23 +327,38 @@
 	<!-- marker definitions for org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm -->
 	<extension
 			id="stalgorithm.check.fast"
-			name="STAlgorithm Problem"
+			name="4diac IDE Structured Text Algorithm Problem"
 			point="org.eclipse.core.resources.markers">
-		<super type="org.eclipse.xtext.ui.check.fast"/>
+		<super type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.check.fast"/>
 		<persistent value="true"/>
 	</extension>
 	<extension
 			id="stalgorithm.check.normal"
-			name="STAlgorithm Problem"
+			name="4diac IDE Structured Text Algorithm Problem"
 			point="org.eclipse.core.resources.markers">
-		<super type="org.eclipse.xtext.ui.check.normal"/>
+		<super type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.check.normal"/>
 		<persistent value="true"/>
 	</extension>
 	<extension
 			id="stalgorithm.check.expensive"
-			name="STAlgorithm Problem"
+			name="4diac IDE Structured Text Algorithm Problem"
 			point="org.eclipse.core.resources.markers">
-		<super type="org.eclipse.xtext.ui.check.expensive"/>
+		<super type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.check.expensive"/>
 		<persistent value="true"/>
 	</extension>
+ <extension
+       point="org.eclipse.ui.ide.markerSupport">
+    <markerTypeCategory
+          name="4diac IDE Structured Text Problem">
+       <markerTypeReference
+             id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.stalgorithm.check.fast">
+       </markerTypeReference>
+       <markerTypeReference
+             id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.stalgorithm.check.normal">
+       </markerTypeReference>
+       <markerTypeReference
+             id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.stalgorithm.check.expensive">
+       </markerTypeReference>
+    </markerTypeCategory>
+ </extension>
 </plugin>

@@ -42,10 +42,14 @@ public class ErrorMarkerBuilder {
 
 	public static final String TARGET_TYPE = "Target.Type"; //$NON-NLS-1$
 
+	public static final String PROBLEM_MARKER = "org.eclipse.fordiac.ide.model.problem"; //$NON-NLS-1$
+
+	public static final String IEC61499_MARKER = "org.eclipse.fordiac.ide.model.iec61499"; //$NON-NLS-1$
+
 	private Map<String, Object> attributes;
 	private ErrorMarkerRef errorMarkerRef;
 
-	private String type = IMarker.PROBLEM;
+	private String type = IEC61499_MARKER;
 
 	private static final Map<Long, ErrorMarkerRef> markers = new ConcurrentHashMap<>();
 
@@ -201,6 +205,28 @@ public class ErrorMarkerBuilder {
 			Thread.currentThread().interrupt();
 		}
 		return errorMarkerAttribute;
+	}
+
+	public void deleteErrorMarkers(final IResource file) {
+		deleteErrorMarkers(file, type);
+	}
+
+	public static void deleteErrorMarkers(final IResource file, final String type) {
+		if (file.exists()) {
+			final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + file.getName()) { //$NON-NLS-1$
+				@Override
+				public IStatus runInWorkspace(final IProgressMonitor monitor) {
+					try {
+						file.deleteMarkers(type, true, IResource.DEPTH_INFINITE);
+					} catch (final CoreException e) {
+						FordiacLogHelper.logError("Could not delete error marker", e); //$NON-NLS-1$
+					}
+					return Status.OK_STATUS;
+				}
+			};
+			job.setRule(file.getProject());
+			job.schedule();
+		}
 	}
 
 	public void createMarkerInResource(final IResource iresource) {
