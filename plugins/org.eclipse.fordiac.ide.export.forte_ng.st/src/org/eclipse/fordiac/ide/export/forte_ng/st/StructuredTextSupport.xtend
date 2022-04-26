@@ -69,6 +69,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
@@ -194,17 +195,15 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		""
 	}
 
-	def protected dispatch CharSequence generateExpression(STBinaryExpression expr) {
-		switch (expr.op) {
-			case RANGE: '''«expr.left.generateExpression», «expr.right.generateExpression»'''
-			case AMPERSAND: '''func_AND(«expr.left.generateExpression», «expr.right.generateExpression»)'''
-			case POWER: '''func_EXPT(«expr.left.generateExpression», «expr.right.generateExpression»)'''
-			default: '''func_«expr.op.getName»(«expr.left.generateExpression», «expr.right.generateExpression»)'''
-		}
-	}
+	def protected dispatch CharSequence generateExpression(STBinaryExpression expr) //
+	'''«switch (expr.op) {
+			case AMPERSAND: "func_AND"
+			case POWER: "func_EXPT"
+			default: '''func_«expr.op.getName»'''
+		}»«IF expr.op.arithmetic»<«(expr.resultType as DataType).generateTypeName»>«ENDIF»(«expr.left.generateExpression», «expr.right.generateExpression»)'''
 
 	def protected dispatch CharSequence generateExpression(STUnaryExpression expr) //
-	'''func_«expr.op.getName»(«expr.expression.generateExpression»)'''
+	'''func_«expr.op.getName»<«(expr.resultType as DataType).generateTypeName»>(«expr.expression.generateExpression»)'''
 
 	def protected dispatch CharSequence generateExpression(STMemberAccessExpression expr) //
 	'''«expr.receiver.generateExpression».«expr.member.generateExpression»'''
