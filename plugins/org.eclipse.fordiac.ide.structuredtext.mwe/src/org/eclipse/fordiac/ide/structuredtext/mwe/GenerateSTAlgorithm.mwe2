@@ -61,6 +61,7 @@ Workflow {
 				ignoreCase = true
 	        }
 	        fragment = exporting.QualifiedNamesFragment2 {}
+	        fragment = builder.BuilderIntegrationFragment2 {}
 	        fragment = index.ResourceDescriptionStrategyFragment {}
 	        fragment = ui.labeling.LabelProviderFragment2 {}
 	        fragment = ui.outline.QuickOutlineFragment2 {}

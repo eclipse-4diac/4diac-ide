@@ -21,6 +21,7 @@ import org.eclipse.xtext.parser.IParseResult
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.resource.XtextResourceSet
+import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.eclipse.xtext.util.CancelIndicator
 import org.eclipse.xtext.util.LazyStringInputStream
 import org.eclipse.xtext.validation.CheckMode
@@ -41,13 +42,18 @@ final class STFunctionParseUtil {
 		uri.parseInternal(null, errors)?.rootASTElement as STFunctionSource
 	}
 
-	def private static IParseResult parseInternal(String text, String name, ParserRule entryPoint, List<String> errors) {
+	def private static IParseResult parseInternal(String text, String name, ParserRule entryPoint,
+		List<String> errors) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
+		resourceSet.loadOptions.putAll(#{
+			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
+			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE
+		})
 		val resource = SERVICE_PROVIDER.get(XtextResource)
 		resource.URI = URI.createPlatformResourceURI(SYNTHETIC_URI, true)
 		resourceSet.resources.add(resource)
 		resource.entryPoint = entryPoint
-		resource.load(new LazyStringInputStream(text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
+		resource.load(new LazyStringInputStream(text), resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
 		if (!issues.empty) {
@@ -59,9 +65,13 @@ final class STFunctionParseUtil {
 
 	def private static IParseResult parseInternal(URI uri, ParserRule entryPoint, List<String> errors) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
+		resourceSet.loadOptions.putAll(#{
+			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
+			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE
+		})
 		val resource = resourceSet.createResource(uri) as XtextResource
 		resource.entryPoint = entryPoint
-		resource.load(#{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
+		resource.load(resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
 		if (!issues.empty) {
