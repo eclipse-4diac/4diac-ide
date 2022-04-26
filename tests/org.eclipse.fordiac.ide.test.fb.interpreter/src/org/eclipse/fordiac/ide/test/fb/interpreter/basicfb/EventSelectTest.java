@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
@@ -23,7 +23,7 @@ public class EventSelectTest extends AbstractInterpreterTest {
 
 	@Override
 	public void test() {
-		final BasicFBType fb = loadFBType("E_SELECT"); //$NON-NLS-1$
+		final BasicFBType fb = (BasicFBType) loadFBType("E_SELECT"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "G", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$

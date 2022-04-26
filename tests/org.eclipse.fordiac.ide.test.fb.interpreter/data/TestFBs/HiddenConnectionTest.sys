@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<System Name="TestFBs" Comment="">
-	<VersionInfo Version="1.0" Author="Bianca Wiesmayr" Date="2022-04-26">
-	</VersionInfo>
-	<Application Name="TestApp" Comment="">
-	</Application>
-</System>

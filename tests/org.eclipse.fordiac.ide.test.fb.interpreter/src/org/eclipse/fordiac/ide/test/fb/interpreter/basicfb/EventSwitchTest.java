@@ -8,22 +8,37 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
+import static org.junit.Assert.assertNotNull;
+
+import java.io.IOException;
+import java.rmi.server.LoaderHandler;
+
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.systemmanagement.FordiacProjectLoader;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
+import org.osgi.framework.Bundle;
 
 public class EventSwitchTest extends AbstractInterpreterTest {
 
 	@Override
 	public void test() {
-		final BasicFBType fb = loadFBType("E_SWITCH"); //$NON-NLS-1$
+		final BasicFBType fb = (BasicFBType) loadFBType("E_SWITCH"); //$NON-NLS-1$
+		assertNotNull(fb);
+		fb.setService(ServiceSequenceUtils.createEmptyServiceModel());
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "G", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -35,8 +50,7 @@ public class EventSwitchTest extends AbstractInterpreterTest {
 		final ServiceSequence seq2 = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "G", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq2, new FBTransaction("EI", "EO0")); //$NON-NLS-1$ //$NON-NLS-2$
-
+ 
 		runTest(fb, seq2);
 	}
-
 }

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="StationCtrl" Comment="Template for a simple Basic Function Block Type">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK115394" Date="2020-08-10">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="INIT" Type="Event" Comment="Initialization Request">
+				<With Var="ErrorCode"/>
+			</Event>
+			<Event Name="NextPart" Type="Event" Comment="Next part is ready">
+				<With Var="PartID"/>
+				<With Var="ErrorCode"/>
+			</Event>
+			<Event Name="PartPicked" Type="Event" Comment="">
+			</Event>
+			<Event Name="Error" Type="Event" Comment="Error in system occurred">
+				<With Var="ErrorCode"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="INITO" Type="Event" Comment="Initialization Confirm">
+				<With Var="ConvSpeed"/>
+			</Event>
+			<Event Name="StartConv" Type="Event" Comment="Execution Confirmation">
+				<With Var="ConvSpeed"/>
+			</Event>
+			<Event Name="StopConv" Type="Event" Comment="">
+			</Event>
+			<Event Name="PickPart" Type="Event" Comment="">
+				<With Var="RobotID"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="ErrorCode" Type="BYTE" Comment="Origin and type of error"/>
+			<VarDeclaration Name="PartID" Type="INT" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="ConvSpeed" Type="INT" Comment="Output event qualifier" InitialValue="100"/>
+			<VarDeclaration Name="RobotID" Type="INT" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="2553.3333333333335" y="913.3333333333334">
+			</ECState>
+			<ECState Name="initialize" Comment="" x="3733.3333333333335" y="973.3333333333334">
+				<ECAction Algorithm="init" Output="INITO"/>
+			</ECState>
+			<ECState Name="processingPart" Comment="" x="3120.0" y="1966.6666666666667">
+				<ECAction Output="StopConv"/>
+				<ECAction Algorithm="chooseRobot" Output="PickPart"/>
+			</ECState>
+			<ECState Name="handleError" Comment="" x="1066.6666666666667" y="1533.3333333333335">
+			</ECState>
+			<ECState Name="conveyorError" Comment="" x="506.6666666666667" y="720.0">
+				<ECAction Algorithm="reduceSpeed" Output="StopConv"/>
+			</ECState>
+			<ECState Name="robotError" Comment="" x="606.6666666666667" y="2040.0">
+				<ECAction Output="StartConv"/>
+			</ECState>
+			<ECState Name="restart" Comment="" x="2033.3333333333335" y="1506.6666666666667">
+				<ECAction Output="StartConv"/>
+			</ECState>
+			<ECTransition Source="START" Destination="initialize" Condition="INIT" Comment="" x="3306.666666666667" y="853.3333333333334"/>
+			<ECTransition Source="initialize" Destination="START" Condition="1" Comment="" x="3280.0" y="1166.6666666666667"/>
+			<ECTransition Source="START" Destination="processingPart" Condition="NextPart[ErrorCode = 0]" Comment="" x="3266.666666666667" y="1413.3333333333335"/>
+			<ECTransition Source="processingPart" Destination="restart" Condition="PartPicked" Comment="" x="2633.3333333333335" y="1840.0"/>
+			<ECTransition Source="processingPart" Destination="handleError" Condition="Error" Comment="" x="2213.3333333333335" y="2013.3333333333335"/>
+			<ECTransition Source="handleError" Destination="robotError" Condition="[ErrorCode = 1]" Comment="" x="1240.0" y="1846.6666666666667"/>
+			<ECTransition Source="handleError" Destination="conveyorError" Condition="[ErrorCode = 2]" Comment="" x="1280.0" y="1293.3333333333335"/>
+			<ECTransition Source="conveyorError" Destination="START" Condition="1" Comment="" x="1673.3333333333335" y="1006.6666666666667"/>
+			<ECTransition Source="robotError" Destination="START" Condition="1" Comment="" x="746.6666666666667" y="1213.3333333333335"/>
+			<ECTransition Source="restart" Destination="START" Condition="1" Comment="" x="2360.0" y="1306.6666666666667"/>
+		</ECC>
+		<Algorithm Name="init" Comment="Initialization algorithm">
+			<ST><![CDATA[
+QO := QI;]]></ST>
+		</Algorithm>
+		<Algorithm Name="setSpeed" Comment="Normally executed algorithm">
+			<ST><![CDATA[
+QO := FALSE;]]></ST>
+		</Algorithm>
+		<Algorithm Name="chooseRobot" Comment="new algorithm">
+			<ST><![CDATA[QO := QI;
+
+IF TRUE  = QI THEN
+  (*  only perform normal operation of QI is true*)
+
+END_IF;
+]]></ST>
+		</Algorithm>
+		<Algorithm Name="reduceSpeed" Comment="">
+			<ST><![CDATA[]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

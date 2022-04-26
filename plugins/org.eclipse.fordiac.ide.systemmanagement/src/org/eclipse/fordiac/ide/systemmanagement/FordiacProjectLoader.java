@@ -13,13 +13,14 @@
 
 package org.eclipse.fordiac.ide.systemmanagement;
 
+import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.osgi.framework.Bundle;
 
 public class FordiacProjectLoader extends EclipseProjectLoader {
@@ -34,4 +35,5 @@ public class FordiacProjectLoader extends EclipseProjectLoader {
 	private IFile getSysFile(String systemName) {
 		return getEclipseProject().getFile(systemName + ".sys"); //$NON-NLS-1$
 	}
+
 }

@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
@@ -24,7 +24,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 
 	@Override
 	public void test() {
-		BasicFBType fb = loadFBType("E_CTUD"); //$NON-NLS-1$
+		BasicFBType fb = (BasicFBType) loadFBType("E_CTUD"); //$NON-NLS-1$
 		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$

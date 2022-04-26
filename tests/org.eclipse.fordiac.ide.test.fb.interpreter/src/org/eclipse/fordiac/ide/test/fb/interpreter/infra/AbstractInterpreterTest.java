@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -20,6 +21,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -47,29 +51,37 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.test.fb.interpreter.ModelDeserializer;
-import org.eclipse.fordiac.ide.test.fb.interpreter.ModelSerializer;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.systemmanagement.FordiacProjectLoader;
 import org.junit.Test;
+import org.osgi.framework.Bundle;
 
 public abstract class AbstractInterpreterTest {
 	public static final String START_STATE = "START"; //$NON-NLS-1$
 
-	static final ModelDeserializer deserializer = new ModelDeserializer();
-	static final ModelSerializer serializer = new ModelSerializer();
-
 	@Test
 	public abstract void test() throws IllegalArgumentException;
 
-	protected static BasicFBType loadFBType(final String name) {
+	protected static FBType loadFBType(final String name) {
 		return loadFBType(name, true);
 	}
 
-	protected static BasicFBType loadFBType(final String name, final boolean emptyService) {
-		//TODO First, implement the load of Fordiac projects for unit testing
-		//final BasicFBType fbt = (BasicFBType) deserializer
-		//			.loadModel("inputmodelsfbt/" + name + ".fbt"); //$NON-NLS-1$ //$NON-NLS-2$
-		final BasicFBType fbt = (BasicFBType) deserializer
-				.loadModel("inputmodels/" + name + ".xmi"); //$NON-NLS-1$ //$NON-NLS-2$
+	protected static FBType loadFBType(final String name, final boolean emptyService) {
+		Path projectPath = new Path("data/TestFBs");
+		Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.fb.interpreter");
+		FordiacProjectLoader loader;
+		try {
+			loader = new FordiacProjectLoader(bundle, projectPath);
+		} catch (CoreException | IOException e) {
+			return null;
+		} 
+		
+		TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(loader.getEclipseProject());
+		FBTypeEntry typeEntry = typeLib.getFBTypeEntry(name);
+		FBType fbt = typeEntry.getType();
+		
 		if (emptyService) {
 			fbt.setService(ServiceSequenceUtils.createEmptyServiceModel());
 		}
