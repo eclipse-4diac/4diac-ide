@@ -111,4 +111,12 @@ public interface STCallNamedOutputArgument extends STCallArgument {
 	 */
 	INamedElement getResultType();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getDeclaredResultType();
+
 } // STCallNamedOutputArgument

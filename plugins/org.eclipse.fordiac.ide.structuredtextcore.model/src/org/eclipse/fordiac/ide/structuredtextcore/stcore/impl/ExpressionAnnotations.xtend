@@ -51,9 +51,13 @@ final package class ExpressionAnnotations {
 	private new() {
 	}
 
-	def package static INamedElement getResultType(STBinaryExpression expr) {
-		val left = expr.left?.resultType
-		val right = expr.right?.resultType
+	def package static INamedElement getResultType(STBinaryExpression expr) { getResultType(expr, false) }
+
+	def package static INamedElement getDeclaredResultType(STBinaryExpression expr) { getResultType(expr, true) }
+
+	def package static INamedElement getResultType(STBinaryExpression expr, boolean declared) {
+		val left = declared ? expr.left?.declaredResultType : expr.left?.resultType
+		val right = declared ? expr.right?.declaredResultType : expr.right?.resultType
 		if (left instanceof DataType) {
 			if (right instanceof DataType) {
 				if (expr.op.isArithmetic) {
@@ -74,10 +78,22 @@ final package class ExpressionAnnotations {
 
 	def package static INamedElement getResultType(STUnaryExpression expr) { expr.expression?.resultType }
 
+	def package static INamedElement getDeclaredResultType(STUnaryExpression expr) {
+		expr.expression?.declaredResultType
+	}
+
 	def package static INamedElement getResultType(STMemberAccessExpression expr) { expr.member.resultType }
 
-	def package static INamedElement getResultType(STArrayAccessExpression expr) {
-		val arrayType = expr.receiver.resultType
+	def package static INamedElement getDeclaredResultType(STMemberAccessExpression expr) {
+		expr.member.declaredResultType
+	}
+
+	def package static INamedElement getResultType(STArrayAccessExpression expr) { getResultType(expr, false) }
+
+	def package static INamedElement getDeclaredResultType(STArrayAccessExpression expr) { getResultType(expr, true) }
+
+	def package static INamedElement getResultType(STArrayAccessExpression expr, boolean declared) {
+		val arrayType = declared ? expr.receiver.declaredResultType : expr.receiver.resultType
 		if (arrayType instanceof ArrayType) {
 			if (expr.index.size < arrayType.subranges.size) { // not consumed all dimensions
 				DataFactory.eINSTANCE.createArrayType => [
@@ -90,7 +106,9 @@ final package class ExpressionAnnotations {
 			null
 	}
 
-	def package static INamedElement getResultType(STFeatureExpression expr) {
+	def package static INamedElement getResultType(STFeatureExpression expr) { getDeclaredResultType(expr) }
+
+	def package static INamedElement getDeclaredResultType(STFeatureExpression expr) {
 		// mirror changes here in callaSTCoreScopeProvider.isApplicableForFeatureReference(IEObjectDescription)
 		switch (feature : expr.feature) {
 			VarDeclaration:
@@ -144,7 +162,9 @@ final package class ExpressionAnnotations {
 		]
 	}
 
-	def package static INamedElement getResultType(STMultibitPartialExpression expr) {
+	def package static INamedElement getResultType(STMultibitPartialExpression expr) { getDeclaredResultType(expr) }
+
+	def package static INamedElement getDeclaredResultType(STMultibitPartialExpression expr) {
 		switch (expr.specifier) {
 			case null,
 			case X: ElementaryTypes.BOOL
@@ -156,7 +176,7 @@ final package class ExpressionAnnotations {
 	}
 
 	def package static INamedElement getResultType(STNumericLiteral expr) {
-		expr.type ?: switch (it : expr.value) {
+		getDeclaredResultType(expr) ?: expr.expectedType ?: switch (it : expr.value) {
 			Boolean: ElementaryTypes.BOOL
 			BigDecimal: ElementaryTypes.LREAL
 			BigInteger case checkRange(Byte.MIN_VALUE, Byte.MAX_VALUE): ElementaryTypes.SINT
@@ -171,6 +191,8 @@ final package class ExpressionAnnotations {
 		}
 	}
 
+	def package static INamedElement getDeclaredResultType(STNumericLiteral expr) { expr.type }
+
 	def private static checkRange(BigInteger value, long lower, long upper) {
 		value >= BigInteger.valueOf(lower) && value <= BigInteger.valueOf(upper)
 	}
@@ -179,27 +201,45 @@ final package class ExpressionAnnotations {
 		value.signum >= 0 && value <= upper
 	}
 
-	def package static INamedElement getResultType(STDateLiteral expr) { expr.type }
+	def package static INamedElement getResultType(STDateLiteral expr) { getDeclaredResultType(expr) }
 
-	def package static INamedElement getResultType(STTimeLiteral expr) { expr.type }
+	def package static INamedElement getDeclaredResultType(STDateLiteral expr) { expr.type }
 
-	def package static INamedElement getResultType(STTimeOfDayLiteral expr) { expr.type }
+	def package static INamedElement getResultType(STTimeLiteral expr) { getDeclaredResultType(expr) }
 
-	def package static INamedElement getResultType(STDateAndTimeLiteral expr) { expr.type }
+	def package static INamedElement getDeclaredResultType(STTimeLiteral expr) { expr.type }
+
+	def package static INamedElement getResultType(STTimeOfDayLiteral expr) { getDeclaredResultType(expr) }
+
+	def package static INamedElement getDeclaredResultType(STTimeOfDayLiteral expr) { expr.type }
+
+	def package static INamedElement getResultType(STDateAndTimeLiteral expr) { getDeclaredResultType(expr) }
+
+	def package static INamedElement getDeclaredResultType(STDateAndTimeLiteral expr) { expr.type }
 
 	def package static INamedElement getResultType(STStringLiteral expr) {
-		expr.type ?: if (expr.value.length == 1) {
+		getDeclaredResultType(expr) ?: expr.expectedType ?: if (expr.value.length == 1) {
 			if(expr.value.wide) ElementaryTypes.WCHAR else ElementaryTypes.CHAR
 		} else {
 			if(expr.value.wide) ElementaryTypes.WSTRING else ElementaryTypes.STRING
 		}
 	}
 
+	def package static INamedElement getDeclaredResultType(STStringLiteral expr) { expr.type }
+
 	def package static INamedElement getResultType(STCallUnnamedArgument arg) { arg.arg?.resultType }
+
+	def package static INamedElement getDeclaredResultType(STCallUnnamedArgument arg) { arg.arg?.declaredResultType }
 
 	def package static INamedElement getResultType(STCallNamedInputArgument arg) { arg.source?.resultType }
 
-	def package static INamedElement getResultType(STCallNamedOutputArgument arg) {
+	def package static INamedElement getDeclaredResultType(STCallNamedInputArgument arg) {
+		arg.source?.declaredResultType
+	}
+
+	def package static INamedElement getResultType(STCallNamedOutputArgument arg) { getDeclaredResultType(arg) }
+
+	def package static INamedElement getDeclaredResultType(STCallNamedOutputArgument arg) {
 		switch (target :arg.target) {
 			VarDeclaration: target.type
 			STVarDeclaration: target.type

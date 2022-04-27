@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -78,5 +79,21 @@ final class CallableAnnotations {
 
 	static DataType getReturnType(final Event event) {
 		return null; // events may not have a return type
+	}
+
+	static EList<INamedElement> getInputParameters(final FB fb) {
+		return ECollections.unmodifiableEList(fb.getInterface().getInputVars());
+	}
+
+	static EList<INamedElement> getOutputParameters(final FB fb) {
+		return ECollections.unmodifiableEList(fb.getInterface().getOutputVars());
+	}
+
+	static EList<INamedElement> getInOutParameters(final FB fb) {
+		return ECollections.emptyEList(); // FBs may not have in/out parameters
+	}
+
+	static DataType getReturnType(final FB fb) {
+		return null; // FBs may not have a return type
 	}
 }

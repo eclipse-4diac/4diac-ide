@@ -39,4 +39,12 @@ public interface STExpression extends EObject {
 	 */
 	INamedElement getResultType();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getDeclaredResultType();
+
 } // STExpression

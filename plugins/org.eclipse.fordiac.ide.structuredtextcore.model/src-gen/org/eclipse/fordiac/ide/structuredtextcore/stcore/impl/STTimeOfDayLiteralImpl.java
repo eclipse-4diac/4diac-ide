@@ -175,6 +175,16 @@ public class STTimeOfDayLiteralImpl extends STExpressionImpl implements STTimeOf
 	 * @generated
 	 */
 	@Override
+	public INamedElement getDeclaredResultType() {
+		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case STCorePackage.ST_TIME_OF_DAY_LITERAL__TYPE:

@@ -36,6 +36,7 @@ class STAlgorithmFormatter extends STCoreFormatter {
 				RuleCall case element.rule == STTimeLiteralTypeRule: true
 				RuleCall case element.rule == orOperatorRule : true
 				RuleCall case element.rule == xorOperatorRule : true
+				RuleCall case element.rule == getUnaryOperatorRule : true
 				default: false
 			}
 		].forEach [

@@ -110,6 +110,14 @@ public interface STFeatureExpression extends STExpression {
 	 * @model kind="operation"
 	 * @generated
 	 */
+	INamedElement getDeclaredResultType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
 	Map<INamedElement, STExpression> getMappedInputArguments();
 
 	/**

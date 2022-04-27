@@ -303,6 +303,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				FB fb = (FB)theEObject;
 				T result = caseFB(fb);
 				if (result == null) result = caseFBNetworkElement(fb);
+				if (result == null) result = caseICallable(fb);
 				if (result == null) result = caseTypedConfigureableObject(fb);
 				if (result == null) result = casePositionableElement(fb);
 				if (result == null) result = caseConfigurableObject(fb);
@@ -627,6 +628,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseResourceTypeFB(resourceTypeFB);
 				if (result == null) result = caseFB(resourceTypeFB);
 				if (result == null) result = caseFBNetworkElement(resourceTypeFB);
+				if (result == null) result = caseICallable(resourceTypeFB);
 				if (result == null) result = caseTypedConfigureableObject(resourceTypeFB);
 				if (result == null) result = casePositionableElement(resourceTypeFB);
 				if (result == null) result = caseConfigurableObject(resourceTypeFB);
@@ -684,6 +686,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseAdapterFB(adapterFB);
 				if (result == null) result = caseFB(adapterFB);
 				if (result == null) result = caseFBNetworkElement(adapterFB);
+				if (result == null) result = caseICallable(adapterFB);
 				if (result == null) result = caseTypedConfigureableObject(adapterFB);
 				if (result == null) result = casePositionableElement(adapterFB);
 				if (result == null) result = caseConfigurableObject(adapterFB);
@@ -769,6 +772,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseStructManipulator(structManipulator);
 				if (result == null) result = caseFB(structManipulator);
 				if (result == null) result = caseFBNetworkElement(structManipulator);
+				if (result == null) result = caseICallable(structManipulator);
 				if (result == null) result = caseTypedConfigureableObject(structManipulator);
 				if (result == null) result = casePositionableElement(structManipulator);
 				if (result == null) result = caseConfigurableObject(structManipulator);
@@ -782,6 +786,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseStructManipulator(demultiplexer);
 				if (result == null) result = caseFB(demultiplexer);
 				if (result == null) result = caseFBNetworkElement(demultiplexer);
+				if (result == null) result = caseICallable(demultiplexer);
 				if (result == null) result = caseTypedConfigureableObject(demultiplexer);
 				if (result == null) result = casePositionableElement(demultiplexer);
 				if (result == null) result = caseConfigurableObject(demultiplexer);
@@ -795,6 +800,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseStructManipulator(multiplexer);
 				if (result == null) result = caseFB(multiplexer);
 				if (result == null) result = caseFBNetworkElement(multiplexer);
+				if (result == null) result = caseICallable(multiplexer);
 				if (result == null) result = caseTypedConfigureableObject(multiplexer);
 				if (result == null) result = casePositionableElement(multiplexer);
 				if (result == null) result = caseConfigurableObject(multiplexer);
@@ -839,6 +845,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseCFBInstance(cfbInstance);
 				if (result == null) result = caseFB(cfbInstance);
 				if (result == null) result = caseFBNetworkElement(cfbInstance);
+				if (result == null) result = caseICallable(cfbInstance);
 				if (result == null) result = caseTypedConfigureableObject(cfbInstance);
 				if (result == null) result = casePositionableElement(cfbInstance);
 				if (result == null) result = caseConfigurableObject(cfbInstance);
