@@ -688,7 +688,7 @@ class Formatter2Test {
 				VAR
 				   bool1 : BOOL;
 				END_VAR
-				bool1 := NOT  bool1;
+				bool1 := nOT  bool1;
 				END_FUNCTION
 			'''
 			expectation = '''
