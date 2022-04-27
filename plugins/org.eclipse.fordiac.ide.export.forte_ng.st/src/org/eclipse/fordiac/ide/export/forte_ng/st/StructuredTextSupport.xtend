@@ -344,9 +344,15 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch INamedElement getType(STVarDeclaration feature) { feature.type }
 
-	def protected CharSequence generateTypeName(STVarDeclaration variable) {
-		variable.ranges.reverseView.fold((variable.type as DataType).generateTypeName) [ type, range |
-			'''ST_ARRAY<«type», «range.generateTemplateExpression»>'''
+	def protected CharSequence generateTypeName(STVarDeclaration variable) { variable.generateTypeName(false) }
+
+	def protected CharSequence generateTypeName(STVarDeclaration variable, boolean output) {
+		variable.count.reverseView.fold(
+			variable.ranges.reverseView.fold((variable.type as DataType).generateTypeName) [ type, range |
+				'''«IF output»CIEC_ARRAY_COMMON«ELSE»CIEC_ARRAY_FIXED«ENDIF»<«type»«IF !output», «range.generateTemplateExpression»«ENDIF»>'''
+			].toString
+		) [ type, count |
+			'''«IF output»CIEC_ARRAY_COMMON«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«type»>'''
 		]
 	}
 

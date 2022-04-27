@@ -145,6 +145,8 @@ class STAlgorithmPartitioner {
 
 	def protected int convertArrayRange(STExpression expression) {
 		switch (expression) {
+			case null:
+				0
 			STBinaryExpression case expression.op == STBinaryOperator.RANGE:
 				expression.right.convertArrayRange - expression.left.convertArrayRange
 			STNumericLiteral:

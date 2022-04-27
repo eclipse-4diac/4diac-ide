@@ -39,10 +39,13 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 	'''
 
 	def protected generateTypeIncludes(Iterable<DataType> types) '''
-		«FOR include : types.map[generateTypeInclude].toSet»
+		«FOR include : types.map[generateTypeInclude.toString].toSet»
 			#include "«include»"
 		«ENDFOR»
+		#include "forte_array_common.h"
 		#include "forte_array.h"
+		#include "forte_array_fixed.h"
+		#include "forte_array_variable.h"
 	'''
 
 	def protected generateTypeInclude(DataType type) {
@@ -56,20 +59,6 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 			DateAndTimeType,
 			LdtType: "forte_date_and_time.h"
 			default: '''forte_«type.name.toLowerCase».h'''
-		}
-	}
-
-	def protected CharSequence generateTypeName(DataType type) {
-		switch (type) {
-			TimeType,
-			LtimeType: "CIEC_TIME"
-			DateType,
-			LdateType: "CIEC_DATE"
-			TimeOfDayType,
-			LtodType: "CIEC_TIME_OF_DAY"
-			DateAndTimeType,
-			LdtType: "CIEC_DATE_AND_TIME"
-			default: '''CIEC_«type.name»'''
 		}
 	}
 

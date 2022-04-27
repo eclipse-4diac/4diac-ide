@@ -95,7 +95,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		  «type.interfaceList.inputVars.generateAccessors("getDI")»
 		  «type.interfaceList.outputVars.generateAccessors("getDO")»
 		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
-		  «generateEventAccessorDeclarations»
+		  «generateEventAccessorDefinitions»
 		
 		};
 		
@@ -112,9 +112,9 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		«ENDIF»
 		«((type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).map[getType]
 			+ methodLanguageSupport.values.filterNull.flatMap[getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})]
+			+ type.internalFbs.map[getType]
 		).toSet.generateDependencyIncludes»
 		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
-		«type.internalFbs.map[getType].generateDependencyIncludes»
 		
 		«type.compilerInfo?.header»
 	'''

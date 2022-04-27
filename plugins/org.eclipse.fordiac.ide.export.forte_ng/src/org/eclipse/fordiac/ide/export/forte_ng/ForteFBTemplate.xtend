@@ -292,25 +292,15 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 		};
 	'''
 
-	def protected generateEventAccessorDeclarations() '''
-		«FOR event : type.interfaceList.eventInputs»
-			«event.generateEventAccessorDeclaration»
-		«ENDFOR»
-		«type.interfaceList.eventInputs.head?.generateEventAccessorCallOperator»
-	'''
-
-	def protected generateEventAccessorDeclaration(Event event) '''
-		void «event.generateEventAccessorName»(«event.generateEventAccessorParameters»);
-	'''
-
 	def protected generateEventAccessorDefinitions() '''
 		«FOR event : type.interfaceList.eventInputs»
 			«event.generateEventAccessorDefinition»
 		«ENDFOR»
+		«type.interfaceList.eventInputs.head?.generateEventAccessorCallOperator»
 	'''
 
 	def protected generateEventAccessorDefinition(Event event) '''
-		void «FBClassName»::«event.generateEventAccessorName»(«event.generateEventAccessorParameters») {
+		void «event.generateEventAccessorName»(«event.generateEventAccessorParameters») {
 		  «FOR variable : event.inputParameters.filter(VarDeclaration)»
 		  	«exportPrefix»«variable.name»() = «variable.generateName»;
 		  «ENDFOR»
@@ -322,7 +312,7 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 	'''
 
 	def protected generateEventAccessorCallOperator(Event event) '''
-		void operator()(«event.generateEventAccessorForwardParameters») {
+		void operator()(«event.generateEventAccessorParameters») {
 			«event.generateEventAccessorName»(«event.generateEventAccessorForwardArguments»);
 		}
 	'''
@@ -330,9 +320,6 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 	def protected generateEventAccessorName(Event event) '''evt_«event.name»'''
 
 	def protected CharSequence generateEventAccessorParameters(Event event) //
-	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«param.generateTypeName» «IF !param.isIsInput»&«ENDIF»«param.generateName»«ENDFOR»'''
-
-	def protected CharSequence generateEventAccessorForwardParameters(Event event) //
 	'''«FOR param : event.eventAccessorParameters SEPARATOR ", "»«IF param.isIsInput»const «ENDIF»«param.generateTypeName» &«param.generateName»«ENDFOR»'''
 
 	def protected CharSequence generateEventAccessorForwardArguments(Event event) //
@@ -356,13 +343,4 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 		  «FOR elem : type.internalFbs SEPARATOR ",\n"»{«elem.name.FORTEString», «elem.type.name.FORTEString»}«ENDFOR»
 		};
 	'''
-
-	def protected CharSequence generateTypeName(VarDeclaration variable) {
-		if (variable.array)
-			"CIEC_ARRAY"
-		else
-			variable.type.generateTypeName
-	}
-
-	def protected CharSequence generateName(VarDeclaration variable) '''var_«variable.name»'''
 }

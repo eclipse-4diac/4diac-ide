@@ -72,6 +72,9 @@ final class ForteNgExportUtil {
 		}
 	}
 
+	def static CharSequence generateTypeName(VarDeclaration variable) //
+	'''«IF variable.array»CIEC_ARRAY_COMMON<«ENDIF»«variable.type.generateTypeName»«IF variable.array»>«ENDIF»'''
+
 	def static CharSequence generateTypeName(DataType type) {
 		switch (type) {
 			TimeType,
