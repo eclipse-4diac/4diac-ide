@@ -617,6 +617,23 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testArrayCopyBounds() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(#[STBinaryExpression, STFeatureExpression] +
+			STArrayAccessExpression.repeat(3), '''
+			VAR_TEMP
+				test: ARRAY [ 0 .. 2 ] OF INT;
+				test2: ARRAY [ 1 .. 3 ] OF INT := [ 17, 4 ];
+			END_VAR
+			
+			test2[3] := test2[1] + test2[2];
+			test := test2;
+			test[0] := test[1];
+			test[1] := test[2];
+			test[2] := test2[3];
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
 	def void testArraySubrange() {
 		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(
 			STNumericLiteral.repeat(2) + #[STBinaryExpression], '''

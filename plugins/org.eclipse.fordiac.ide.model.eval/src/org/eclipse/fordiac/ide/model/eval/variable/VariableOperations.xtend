@@ -28,7 +28,12 @@ final class VariableOperations {
 	}
 
 	def static Variable newVariable(String name, INamedElement type) {
-		newVariable(name, type, null as Value)
+		switch (type) {
+			AnyElementaryType: new ElementaryVariable(name, type)
+			ArrayType: new ArrayVariable(name, type)
+			StructuredType: new StructVariable(name, type)
+			default: throw new UnsupportedOperationException('''Cannot instanciate variable «name» of type «type.name»''')
+		}
 	}
 
 	def static Variable newVariable(String name, INamedElement type, String value) {
@@ -40,8 +45,8 @@ final class VariableOperations {
 		}
 	}
 
-	def static Variable newVariable(String name, INamedElement type, Value value) {
-		switch (type) {
+	def static Variable newVariable(String name, Value value) {
+		switch (type : value.type) {
 			AnyElementaryType: new ElementaryVariable(name, type, value)
 			ArrayType: new ArrayVariable(name, type, value)
 			StructuredType: new StructVariable(name, type, value)
@@ -51,10 +56,18 @@ final class VariableOperations {
 	}
 
 	def static Variable newVariable(VarDeclaration decl) {
+		newVariable(decl, decl.value?.value)
+	}
+
+	def static Variable newVariable(VarDeclaration decl, String value) {
 		if (decl.array)
-			newVariable(decl.name, decl.type.newArrayType(newSubrange(0, decl.arraySize - 1)), decl.value?.value)
+			newVariable(decl.name, decl.type.newArrayType(newSubrange(0, decl.arraySize - 1)), value)
 		else
-			newVariable(decl.name, decl.type, decl.value?.value)
+			newVariable(decl.name, decl.type, value)
+	}
+
+	def static Variable newVariable(VarDeclaration decl, Value value) {
+		newVariable(decl.name, value)
 	}
 
 	def static Variable newVariable(FB fb) {

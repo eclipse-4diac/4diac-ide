@@ -596,7 +596,7 @@ public class FBTImporter extends TypeImporter {
 
 		DataType type = null;
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (null != typeName) {
+		if (null != typeName && !typeName.isEmpty()) {
 			type = getDataTypeLibrary().getType(typeName);
 		}
 

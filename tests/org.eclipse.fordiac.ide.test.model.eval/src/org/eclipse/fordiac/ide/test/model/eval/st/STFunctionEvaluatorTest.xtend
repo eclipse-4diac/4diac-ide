@@ -55,7 +55,7 @@ class STFunctionEvaluatorTest {
 			FUNCTION TEST : INT
 			TEST_CALL(A := 17, B := 4, C => TEST);
 			END_FUNCTION
-
+			
 			FUNCTION TEST_CALL
 			VAR_INPUT
 				A: INT;
@@ -75,7 +75,7 @@ class STFunctionEvaluatorTest {
 			FUNCTION TEST : INT
 			TEST_CALL(17, 4, TEST);
 			END_FUNCTION
-
+			
 			FUNCTION TEST_CALL
 			VAR_INPUT
 				A: INT;
@@ -95,7 +95,7 @@ class STFunctionEvaluatorTest {
 			FUNCTION TEST : INT
 			TEST_CALL(A := 17, C => TEST);
 			END_FUNCTION
-
+			
 			FUNCTION TEST_CALL
 			VAR_INPUT
 				A: INT := 17;
@@ -115,7 +115,7 @@ class STFunctionEvaluatorTest {
 			FUNCTION TEST : INT
 			TEST_CALL(A := 17, C => TEST);
 			END_FUNCTION
-
+			
 			FUNCTION TEST_CALL
 			VAR_INPUT
 				A: INT := 17;
@@ -134,7 +134,7 @@ class STFunctionEvaluatorTest {
 			FUNCTION TEST : INT
 			TEST := TEST_CALL(17, 4);
 			END_FUNCTION
-
+			
 			FUNCTION TEST_CALL : INT
 			VAR_INPUT
 				A: INT;
@@ -151,7 +151,7 @@ class STFunctionEvaluatorTest {
 			FUNCTION TEST : INT
 			TEST := TEST_CALL();
 			END_FUNCTION
-
+			
 			FUNCTION TEST_CALL : INT
 			VAR_INPUT
 				A: INT := 17;
@@ -168,7 +168,7 @@ class STFunctionEvaluatorTest {
 			FUNCTION TEST : INT
 			TEST := TEST_CALL();
 			END_FUNCTION
-
+			
 			FUNCTION TEST_CALL : INT
 			VAR_INPUT
 				A: INT := 17;
@@ -193,7 +193,7 @@ class STFunctionEvaluatorTest {
 			TEST_CALL(4, X);
 			TEST := X;
 			END_FUNCTION
-
+			
 			FUNCTION TEST_CALL
 			VAR_IN_OUT
 				X: INT;
@@ -202,6 +202,77 @@ class STFunctionEvaluatorTest {
 				A: INT := 4;
 			END_VAR
 			X := X + A;
+			END_FUNCTION
+		'''.evaluateFunction(emptyList))
+	}
+
+	@Test
+	def void testCallArray() {
+		42.toIntValue.assertEquals('''
+			FUNCTION TEST : INT
+			VAR_TEMP
+				X: ARRAY [0..2] OF INT := [17, 4, 21];
+			END_VAR
+			TEST := TEST_CALL(X);
+			END_FUNCTION
+			
+			FUNCTION TEST_CALL : INT
+			VAR_INPUT
+				X: ARRAY [0..2] OF INT;
+			END_VAR
+			TEST_CALL := ADD(X[0], X[1], X[2]);
+			END_FUNCTION
+		'''.evaluateFunction(emptyList))
+	}
+
+	@Test
+	def void testCallArrayOut() {
+		42.toIntValue.assertEquals('''
+			FUNCTION TEST : INT
+			VAR_TEMP
+				X: ARRAY [0..2] OF INT := [17, 4, 21];
+				Y: ARRAY [0..2] OF INT;
+			END_VAR
+			TEST_CALL(X, Y);
+			TEST := ADD(X[0], X[1], X[2]);
+			END_FUNCTION
+			
+			FUNCTION TEST_CALL
+			VAR_INPUT
+				X: ARRAY [0..2] OF INT;
+			END_VAR
+			VAR_OUTPUT
+				Y: ARRAY [0..2] OF INT;
+			END_VAR
+			Y[0] := X[2];
+			Y[1] := X[1];
+			Y[2] := X[0];
+			END_FUNCTION
+		'''.evaluateFunction(emptyList))
+	}
+
+	@Test
+	def void testCallArrayVariable() {
+		42.toIntValue.assertEquals('''
+			FUNCTION TEST : INT
+			VAR_TEMP
+				X: ARRAY [0..2] OF INT := [17, 4, 21];
+				Y: ARRAY [0..2] OF INT;
+			END_VAR
+			TEST_CALL(X, Y);
+			TEST := ADD(X[0], X[1], X[2]);
+			END_FUNCTION
+			
+			FUNCTION TEST_CALL
+			VAR_INPUT
+				X: ARRAY [*] OF INT;
+			END_VAR
+			VAR_OUTPUT
+				Y: ARRAY [0..2] OF INT;
+			END_VAR
+			Y[0] := X[2];
+			Y[1] := X[1];
+			Y[2] := X[0];
 			END_FUNCTION
 		'''.evaluateFunction(emptyList))
 	}

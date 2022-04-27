@@ -33,7 +33,7 @@ class STMethodEvaluator extends StructuredTextEvaluator {
 		method.body.varDeclarations.filter [
 			it instanceof STVarInputDeclarationBlock || it instanceof STVarInputDeclarationBlock
 		].flatMap[varDeclarations].reject [
-			this.variables.containsKey(name)
+			this.variables.containsKey(name) || !count.empty
 		].forEach [
 			evaluateVariableInitialization
 		]
@@ -59,6 +59,9 @@ class STMethodEvaluator extends StructuredTextEvaluator {
 			varDeclarations
 		].forEach [
 			evaluateVariableInitialization
+		]
+		method.body.varDeclarations.flatMap[varDeclarations].reject[this.variables.containsKey(name)].forEach [
+			throw new IllegalStateException('''Must pass variable «name» as argument to «method.name»''')
 		]
 		try {
 			method.body.statements.evaluateStatementList

@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.st.variable
 import java.math.BigInteger
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.Subrange
+import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
@@ -37,6 +38,10 @@ final class STVariableOperations {
 				decl.defaultValue)
 		else
 			newVariable(decl.name, decl.type).evaluate(decl.defaultValue)
+	}
+
+	def static Variable newVariable(STVarDeclaration decl, Value value) {
+		newVariable(decl.name, value)
 	}
 
 	def private static Subrange newSubrange(STExpression expr) {

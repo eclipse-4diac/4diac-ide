@@ -33,7 +33,7 @@ class STFunctionEvaluator extends StructuredTextEvaluator {
 		function.varDeclarations.filter [
 			it instanceof STVarInputDeclarationBlock || it instanceof STVarInputDeclarationBlock
 		].flatMap[varDeclarations].reject [
-			this.variables.containsKey(name)
+			this.variables.containsKey(name) || !count.empty
 		].forEach [
 			evaluateVariableInitialization
 		]
@@ -59,6 +59,9 @@ class STFunctionEvaluator extends StructuredTextEvaluator {
 			varDeclarations
 		].forEach [
 			evaluateVariableInitialization
+		]
+		function.varDeclarations.flatMap[varDeclarations].reject[this.variables.containsKey(name)].forEach [
+			throw new IllegalStateException('''Must pass variable «name» as argument to «function.name»''')
 		]
 		try {
 			function.code.evaluateStatementList

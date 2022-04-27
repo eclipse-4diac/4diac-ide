@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
+import org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.value.StructValue
@@ -27,8 +28,8 @@ import org.eclipse.fordiac.ide.model.eval.variable.FBVariable
 import org.eclipse.fordiac.ide.model.eval.variable.PartialVariable
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
@@ -61,7 +62,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations.*
-import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
@@ -342,13 +342,9 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			}
 			ICallable case expr.call: {
 				val arguments = (expr.mappedInputArguments.entrySet.filter[value !== null].map [
-					val parameter = newVariable(key.name, key.type as DataType)
-					parameter.value = value.evaluateExpression
-					parameter
+					newVariable(key, value.evaluateExpression)
 				] + expr.mappedInOutArguments.entrySet.filter[value !== null].map [
-					val parameter = newVariable(key.name, key.type as DataType)
-					parameter.value = value.findVariable.value
-					parameter
+					newVariable(key, value.findVariable.value)
 				]).toList
 				val eval = EvaluatorFactory.createEvaluator(feature,
 					feature.eClass.instanceClass as Class<? extends ICallable>, context, arguments, this)
@@ -448,9 +444,9 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
 	}
 
-	def protected dispatch INamedElement getType(VarDeclaration v) { v.type }
+	def protected static dispatch Variable newVariable(VarDeclaration v, Value value) { VariableOperations.newVariable(v, value) }
 
-	def protected dispatch INamedElement getType(STVarDeclaration v) { v.type }
+	def protected static dispatch Variable newVariable(STVarDeclaration v, Value value) { STVariableOperations.newVariable(v, value) }
 
 	static class StructuredTextException extends Exception {
 		new(STStatement statement) {
