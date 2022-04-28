@@ -70,7 +70,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 		// $NON-NLS-3$
 		addTransaction(seq, new FBTransaction("R", "RO", "QU:=TRUE;QD:=TRUE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		// $NON-NLS-3$
-		fb = runTest(fb, seq);
+		fb = (BasicFBType) runTest(fb, seq);
 		seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$

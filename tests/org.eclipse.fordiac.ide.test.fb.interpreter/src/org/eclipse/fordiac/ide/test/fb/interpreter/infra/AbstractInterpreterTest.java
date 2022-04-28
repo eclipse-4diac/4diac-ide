@@ -33,12 +33,15 @@ import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -50,11 +53,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.value.ValueConverter;
+import org.eclipse.fordiac.ide.model.value.ValueConverterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.FordiacProjectLoader;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
@@ -89,7 +95,8 @@ public abstract class AbstractInterpreterTest {
 		return fbt;
 	}
 
-	protected static ServiceTransaction addTransaction(final ServiceSequence seq, final org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction fbtrans) {
+	protected static ServiceTransaction addTransaction(final ServiceSequence seq,
+			final org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction fbtrans) {
 		final ServiceTransaction transaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
 		seq.getServiceTransaction().add(transaction);
 		if (fbtrans.getInputEvent() != null) {
@@ -122,30 +129,18 @@ public abstract class AbstractInterpreterTest {
 		if (val == null) {
 			((VarDeclaration) el).setValue(LibraryElementFactory.eINSTANCE.createValue());
 		}
-		((VarDeclaration) el).getValue().setValue(value);
+		ValueConverter conv = ValueConverterFactory.createValueConverter(el.getType());
+		Object convertedValue = conv.toValue(value);
+		((VarDeclaration) el).getValue().setValue(convertedValue.toString());
 	}
 
 	private static Collection<Transaction> createTransactions(final BasicFBType fb, final ServiceSequence seq,
 			final BasicFBTypeRuntime runtime) {
 		final List<Transaction> transactions = new ArrayList<>();
 		for (final ServiceTransaction st : seq.getServiceTransaction()) {
-			final String inputEvent = st.getInputPrimitive().getEvent();
-			if (inputEvent != null) {
-				final Event eventPin = (Event) fb.getInterfaceList().getInterfaceElement(inputEvent);
-				if (eventPin == null) {
-					throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist");  //$NON-NLS-1$//$NON-NLS-2$
-				}
-				final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
-				eventOccurrence.setEvent(eventPin);
-				final Transaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
-				transaction.setInputEventOccurrence(eventOccurrence);
-				// process parameter and set variables
-				final String inputParameters = st.getInputPrimitive().getParameters();
-				final var paramList = getParametersFromString(inputParameters);
-				for (final List<String> parameter : paramList) {
-					setVariable(fb, parameter.get(0), parameter.get(1));
-				}
-				transactions.add(transaction);
+			FBTransaction t = createTransaction(fb, st);
+			if (t != null) {
+				transactions.add(t);
 			}
 		}
 		// The first transaction has a copy of the BasicFBTypeRuntime
@@ -156,30 +151,74 @@ public abstract class AbstractInterpreterTest {
 		return transactions;
 	}
 
+	private static FBTransaction createTransaction(final FBType fb, final ServiceTransaction st) {
+		final String inputEvent = st.getInputPrimitive().getEvent();
+		if (inputEvent != null) {
+			final Event eventPin = (Event) fb.getInterfaceList().getInterfaceElement(inputEvent);
+			if (eventPin == null) {
+				throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist"); //$NON-NLS-1$//$NON-NLS-2$
+			}
+			final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
+			eventOccurrence.setEvent(eventPin);
+			final FBTransaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
+			transaction.setInputEventOccurrence(eventOccurrence);
+			// process parameter and set variables
+			final String inputParameters = st.getInputPrimitive().getParameters();
+			final var paramList = getParametersFromString(inputParameters);
+			for (final List<String> parameter : paramList) {
+				setVariable(fb, parameter.get(0), parameter.get(1));
+			}
+			return transaction;
+		}
+		return null;
+	}
 
-	public static BasicFBType runTest(final BasicFBType fb, final ServiceSequence seq) throws IllegalArgumentException {
-		return runTest(fb, seq, START_STATE);
+	public static BaseFBType runTest(final BaseFBType fb, final ServiceSequence seq) throws IllegalArgumentException {
+		if (fb instanceof BasicFBType) {
+			return runTest((BasicFBType) fb, seq, START_STATE);
+		}
+		return runSimpleFBTest((SimpleFBType) fb, seq);
+	}
+
+	private static BaseFBType runSimpleFBTest(SimpleFBType fb, ServiceSequence seq) {
+		final ResourceSet reset = new ResourceSetImpl();
+		final Resource resource = reset.createResource(URI.createURI("platform:/resource/" + fb.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
+		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
+		resource.getContents().add(eventManager);
+		final SimpleFBTypeRuntime simpleFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createSimpleFBTypeRuntime();
+		simpleFBTypeRT.setSimpleFBType(fb);
+		if (seq.getServiceTransaction().isEmpty()) {
+			seq.getServiceTransaction().add(LibraryElementFactory.eINSTANCE.createServiceTransaction());
+		}
+		FBTransaction transaction = createTransaction(fb, seq.getServiceTransaction().get(0));
+		transaction.getInputEventOccurrence().setFbRuntime(simpleFBTypeRT);
+		eventManager.getTransactions().add(transaction);
+
+		EventManagerUtils.process(eventManager);
+
+		checkResults(seq, eventManager);
+
+		return null;
 	}
 
 	public static BasicFBType runTest(final BasicFBType fb, final ServiceSequence seq, final String startStateName)
 			throws IllegalArgumentException {
 		final ResourceSet reset = new ResourceSetImpl();
-		final Resource resource = reset
-				.createResource(URI.createURI("platform:/resource/" + fb.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
+		final Resource resource = reset.createResource(URI.createURI("platform:/resource/" + fb.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
 		resource.getContents().add(eventManager);
 		final BasicFBTypeRuntime basicFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createBasicFBTypeRuntime();
 		basicFBTypeRT.setBasicfbtype(fb);
 		// set the start state
 		final EList<ECState> stateList = basicFBTypeRT.getBasicfbtype().getECC().getECState();
-		final ECState startState = stateList.stream()
-				.filter(s -> s.getName().equals(startStateName)).collect(Collectors.toList()).get(0);
+		final ECState startState = stateList.stream().filter(s -> s.getName().equals(startStateName))
+				.collect(Collectors.toList()).get(0);
 		basicFBTypeRT.setActiveState(startState);
 
 		eventManager.getTransactions().addAll(createTransactions(fb, seq, basicFBTypeRT));
 
 		EventManagerUtils.process(eventManager);
-		//TODO save the transactions
+		// TODO save the transactions
 
 		checkResults(seq, eventManager);
 
@@ -198,7 +237,6 @@ public abstract class AbstractInterpreterTest {
 		eventManager.getTransactions().clear();
 		return next;
 	}
-
 
 	private static void checkResults(final ServiceSequence seq, final EventManager eventManager)
 			throws IllegalArgumentException {
@@ -224,9 +262,8 @@ public abstract class AbstractInterpreterTest {
 		}
 
 		// no unwanted output event occurrences
-		final long outputEvents = expectedResult.getOutputPrimitive().stream()
-				.filter(p -> !p.getInterface().getName().toLowerCase()
-						.contains(ServiceSequenceUtils.INTERNAL_INTERFACE))
+		final long outputEvents = expectedResult.getOutputPrimitive().stream().filter(
+				p -> !p.getInterface().getName().toLowerCase().contains(ServiceSequenceUtils.INTERNAL_INTERFACE))
 				.count();
 		if (outputEvents != result.getOutputEventOccurrences().size()) {
 			throw new IllegalArgumentException("Unwanted output event occurrence"); //$NON-NLS-1$
@@ -257,15 +294,25 @@ public abstract class AbstractInterpreterTest {
 			return true;
 		}
 		final int length = result.getOutputEventOccurrences().size();
-		final BasicFBTypeRuntime captured = (BasicFBTypeRuntime) result.getOutputEventOccurrences().get(length - 1)
+		final FBRuntimeAbstract captured = result.getOutputEventOccurrences().get(length - 1)
 				.getFbRuntime();
 		final var parameterList = getParametersFromString(parameters);
 		for (final List<String> assumption : parameterList) {
-			if (!processParameter(assumption.get(0), assumption.get(1), captured.getBasicfbtype())) {
+			if (!processParameter(assumption.get(0), assumption.get(1), getFBType(captured))) {
 				return false;
 			}
 		}
 		return true;
+	}
+
+	private static FBType getFBType(final FBRuntimeAbstract captured) {
+		if (captured instanceof BasicFBTypeRuntime) {
+			return ((BasicFBTypeRuntime) captured).getBasicfbtype();
+		}
+		if (captured instanceof SimpleFBTypeRuntime) {
+			return ((SimpleFBTypeRuntime) captured).getSimpleFBType();
+		}
+		return null;
 	}
 
 	private static List<String> splitParameterList(final String parameters) {
@@ -285,11 +332,11 @@ public abstract class AbstractInterpreterTest {
 		return parameterList;
 	}
 
-	private static boolean processParameter(final String varName, String expectedValue, final BasicFBType basicfbtype) {
+	private static boolean processParameter(final String varName, String expectedValue, final FBType fbtype) {
 		if ((expectedValue == null) || expectedValue.isBlank()) {
 			return true;
 		}
-		final IInterfaceElement el = basicfbtype.getInterfaceList().getInterfaceElement(varName);
+		final IInterfaceElement el = fbtype.getInterfaceList().getInterfaceElement(varName);
 		if (el instanceof VarDeclaration) {
 			final Value val = ((VarDeclaration) el).getValue();
 			// special treatment for bools: 1 = TRUE, 0 = FALSE
@@ -314,4 +361,3 @@ public abstract class AbstractInterpreterTest {
 		return false;
 	}
 }
-

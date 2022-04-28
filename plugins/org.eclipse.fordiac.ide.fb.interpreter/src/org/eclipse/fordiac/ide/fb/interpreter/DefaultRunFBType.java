@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm;
@@ -97,17 +98,16 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		final var outputEvents = new BasicEList<EventOccurrence>();
 		for (final ECAction action : basicFBTypeRuntime.getActiveState().getECAction()) {
 			if (action.getAlgorithm() != null) {
-				processAlgorithm(action, fBTypeResource);
+				processAlgorithm((TextAlgorithm) action.getAlgorithm(), fBTypeResource);
 			}
 			if (action.getOutput() != null) {
-				processOutputEvent(basicFBTypeRuntime, action, outputEvents, fBTypeResource);
+				processOutputEvent(basicFBTypeRuntime, action.getOutput(), outputEvents, fBTypeResource);
 			}
 		}
 		return outputEvents;
 	}
 
-	private static void processAlgorithm(ECAction action, Resource fBTypeResource) {
-		final var textAlgorithm = (TextAlgorithm) action.getAlgorithm();
+	private static void processAlgorithm(TextAlgorithm textAlgorithm, Resource fBTypeResource) {
 		final var resource = new AlgorithmStXMI(fBTypeResource.getResourceSet()).
 				createXtextResourceFromAlgorithmSt(textAlgorithm.getText());
 		final var eObjectStructuredText = resource.getContents().get(0);
@@ -119,23 +119,29 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		new EvalStatementImpl().evaluateAllStatements(listOfStatements);
 	}
 
-	private static void processOutputEvent(BasicFBTypeRuntime basicFBTypeRuntime, ECAction action,
+	private static void processOutputEvent(FBRuntimeAbstract runtime, Event output,
 			BasicEList<EventOccurrence> outputEvents, Resource fBTypeResource) {
-		final var eventOcurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
+		final var newEventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 		// Copy FBTypeRuntime
 		final var copyRuntimeFBType = new Copier();
-		final var newBasicFBTypeRT = (BasicFBTypeRuntime) copyRuntimeFBType.copy(basicFBTypeRuntime);
+		final FBRuntimeAbstract newFBTypeRT = (FBRuntimeAbstract) copyRuntimeFBType.copy(runtime);
 		copyRuntimeFBType.copyReferences();
 		// Copy FBType
 		final var copyFBType = new Copier();
-		final var copyBasicfbtype = (BasicFBType) copyFBType.copy(fBTypeResource.getContents().get(0));
+		final var copyFbtype = copyFBType.copy(fBTypeResource.getContents().get(0));
 		copyFBType.copyReferences();
 		//Add copy FBType to the RuntimeFBType
-		newBasicFBTypeRT.setBasicfbtype(copyBasicfbtype);
-		eventOcurrence.setFbRuntime(newBasicFBTypeRT);
+		if (runtime instanceof BasicFBTypeRuntime) {
+			((BasicFBTypeRuntime) newFBTypeRT).setBasicfbtype((BasicFBType) copyFbtype);
+		} else if (runtime instanceof SimpleFBTypeRuntime) {
+			((SimpleFBTypeRuntime) newFBTypeRT).setSimpleFBType((SimpleFBType) copyFbtype);
+		} else {
+			throw new UnsupportedOperationException();
+		}
+		newEventOccurrence.setFbRuntime(newFBTypeRT);
 		// Event
-		eventOcurrence.setEvent(action.getOutput());
-		outputEvents.add(eventOcurrence);
+		newEventOccurrence.setEvent(output);
+		outputEvents.add(newEventOccurrence);
 	}
 
 	private ECTransition evaluateOutTransitions(BasicFBTypeRuntime basicFBTypeRuntime, Resource fBTypeResource) {
@@ -180,8 +186,18 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 	}
 
 	@Override
-	public EList<EventOccurrence> runFBType(SimpleFBTypeRuntime fBTypeRuntime) {
-		throw new UnsupportedOperationException("Not supported operation runFBType(FBTypeRuntime fBTypeRuntime)"); //$NON-NLS-1$
+	public EList<EventOccurrence> runFBType(SimpleFBTypeRuntime simpleFBTypeRuntime) {
+		// Initialization of variables
+		SimpleFBType simpleFBType = simpleFBTypeRuntime.getSimpleFBType();
+		VariableUtils.fBVariableInitialization(simpleFBType);
+		final var outputEvents = new BasicEList<EventOccurrence>();
+		//Create a resource if the BasicFBType does not have one
+		final var fBTypeResource = new DefaultParserXMI().createFBResource(simpleFBType);
+		processAlgorithm((TextAlgorithm) simpleFBType.getAlgorithm().get(0), fBTypeResource);
+		isConsumed();
+		Event event = simpleFBType.getInterfaceList().getEventOutputs().get(0);
+		processOutputEvent(simpleFBTypeRuntime, event, outputEvents, fBTypeResource);
+		return outputEvents;
 	}
 
 	@Override
