@@ -85,7 +85,13 @@ public class FordiacExportWizard extends Wizard implements IExportWizard {
 	public boolean performFinish() {
 		page.saveWidgetValues();
 
-		final Exporter exporter = new Exporter(page.getSelectedExportFilter(), collectExportees(), page.getDirectory(),
+		final List<IFile> exportees = collectExportees();
+
+		if (!IDE.saveAllEditors(exportees.toArray(new IResource[exportees.size()]), true)) {
+			return false;
+		}
+
+		final Exporter exporter = new Exporter(page.getSelectedExportFilter(), exportees, page.getDirectory(),
 				page.overwriteWithoutWarning(), page.enableCMakeLists());
 		try {
 			new ProgressMonitorDialog(getShell()).run(false, false, exporter);
