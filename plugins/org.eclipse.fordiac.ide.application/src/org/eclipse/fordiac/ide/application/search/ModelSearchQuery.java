@@ -159,6 +159,10 @@ public class ModelSearchQuery implements ISearchQuery {
 	}
 
 	private boolean compareStrings(final String toTest) {
+		// TODO: think what makes sense, this can be done in a couple of ways
+		if (modelQuerySpec.isCheckExactMatching()) {
+			return toTest.equals(modelQuerySpec.getSearchString());
+		}
 		if (modelQuerySpec.isCheckCaseSensitive()) {
 			return toTest.contains(modelQuerySpec.getSearchString());
 		}

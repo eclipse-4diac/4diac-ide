@@ -1340,7 +1340,7 @@
  <extension point="org.eclipse.search.searchPages">
 		<page
 			id="org.eclipse.fordiac.ide.application.search.ModelSearchPage"
-			label="Model Search"
+			label="IEC 61499 Model Search"
 			sizeHint="250,160"
 			tabPosition="1"
 			extensions="*:1"

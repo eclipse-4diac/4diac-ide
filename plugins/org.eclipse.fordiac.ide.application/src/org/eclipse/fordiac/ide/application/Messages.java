@@ -66,6 +66,8 @@ public final class Messages extends NLS {
 
 	public static String ErrorMessageSearch;
 
+	public static String ExactNameMatching;
+
 	/** The FB edit part_ erro r_ unsupported fb type. */
 	public static String FBEditPart_ERROR_UnsupportedFBType;
 
@@ -166,6 +168,8 @@ public final class Messages extends NLS {
 	public static String SearchFor;
 
 	public static String SearchHeaderName;
+
+	public static String SearchStringProperties;
 
 	public static String StructManipulatorSection_MEMBERVAR_COLUMN_COMMENT;
 

@@ -44,6 +44,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 	private Button comment;
 	private Text query;
 	private Button caseSensitive;
+	private Button exactNameMatching;
 
 	public Button getInstanceName() {
 		return instanceName;
@@ -77,20 +78,23 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		final Composite composite = WidgetFactory.composite(NONE).create(parent);
 		GridLayoutFactory.fillDefaults().numColumns(1).generateLayout(composite);
 
-		final Group group = new Group(composite, SWT.NONE);
-		group.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
-		group.setLayout(new GridLayout(NUMBER_OF_SEARCH_OPTIONS, false));
-		group.setText(Messages.SearchFor);
+		final Group fbInfoGroup = new Group(composite, SWT.NONE);
+		fbInfoGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		fbInfoGroup.setLayout(new GridLayout(NUMBER_OF_SEARCH_OPTIONS, false));
+		fbInfoGroup.setText(Messages.SearchFor);
 
-		instanceName = WidgetFactory.button(SWT.CHECK).text(Messages.InstanceName).create(group);
-		pinName = WidgetFactory.button(SWT.CHECK).text(Messages.PinName).create(group);
-		type = WidgetFactory.button(SWT.CHECK).text(Messages.Type).create(group);
-		comment = WidgetFactory.button(SWT.CHECK).text(Messages.Comment).create(group);
+		instanceName = WidgetFactory.button(SWT.CHECK).text(Messages.InstanceName).create(fbInfoGroup);
+		pinName = WidgetFactory.button(SWT.CHECK).text(Messages.PinName).create(fbInfoGroup);
+		type = WidgetFactory.button(SWT.CHECK).text(Messages.Type).create(fbInfoGroup);
+		comment = WidgetFactory.button(SWT.CHECK).text(Messages.Comment).create(fbInfoGroup);
 
 		instanceName.setSelection(true);
 		pinName.setSelection(false);
 		type.setSelection(true);
 		comment.setSelection(true);
+
+		final Composite searchBoxAndOptions = WidgetFactory.composite(NONE).create(composite);
+		GridLayoutFactory.fillDefaults().numColumns(1).generateLayout(searchBoxAndOptions);
 
 		// Text box for the actual search
 		final LabelFactory labelFactory = LabelFactory.newLabel(SWT.NONE);
@@ -100,6 +104,8 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(query);
 
 		caseSensitive = WidgetFactory.button(SWT.CHECK).text(Messages.CaseSensitive).create(composite);
+		exactNameMatching = WidgetFactory.button(SWT.CHECK).text(Messages.ExactNameMatching)
+				.create(composite);
 
 		setControl(composite);
 	}
@@ -112,6 +118,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		final boolean isCheckedType = type.getSelection();
 		final boolean isCheckedComment = comment.getSelection();
 		final boolean isCaseSensitive = caseSensitive.getSelection();
+		final boolean isExactNameMatching = exactNameMatching.getSelection();
 
 		// Search string aka the name of it
 		final String searchString = query.getText();
@@ -121,7 +128,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		if (!"".equals(searchString) && optionSelected) { //$NON-NLS-1$
 
 			final ModelQuerySpec modelQuerySpec = new ModelQuerySpec(searchString, isCheckedInstanceName,
-					isCheckedPinName, isCheckedType, isCheckedComment, isCaseSensitive);
+					isCheckedPinName, isCheckedType, isCheckedComment, isCaseSensitive, isExactNameMatching);
 
 			final ModelSearchQuery searchJob = new ModelSearchQuery(modelQuerySpec);
 			NewSearchUI.runQueryInBackground(searchJob, NewSearchUI.getSearchResultView());
