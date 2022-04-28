@@ -133,9 +133,9 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	}
 
 	private void encloseInResource(final LibraryElement newType) {
-		final IFile file = getFile();
-		if (file != null) {
-			final IPath path = file.getFullPath();
+		final IFile typeFile = getFile();
+		if (typeFile != null) {
+			final IPath path = typeFile.getFullPath();
 			if (path != null) {
 				new FordiacTypeResource(URI.createPlatformResourceURI(path.toString(), true)).getContents()
 				.add(newType);

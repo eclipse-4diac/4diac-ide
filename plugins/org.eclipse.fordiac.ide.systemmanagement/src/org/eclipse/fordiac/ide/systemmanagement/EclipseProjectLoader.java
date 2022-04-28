@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Lukas Wais, Alois Zoitl, Bianca Wiesmayr 
+ *   Lukas Wais, Alois Zoitl, Bianca Wiesmayr
  *   - initial API and implementation and/or initial documentation
  *******************************************************************************/
 
@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.osgi.framework.Bundle;
 
 public class EclipseProjectLoader {
@@ -51,27 +52,29 @@ public class EclipseProjectLoader {
 			final IPath projectFilePath = projectPath.append(File.separator + ".project"); //$NON-NLS-1$
 			return workspace.loadProjectDescription(projectFilePath);
 		} catch (final CoreException e) {
-			System.err.println("CoreException: " + e.getMessage()); //$NON-NLS-1$
+			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 		return null;
 	}
-	
-	private static IProject openProject(Bundle bundle, Path projectPath) throws IOException, CoreException  {
-		var workspace = ResourcesPlugin.getWorkspace();
-		var myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-		var url = FileLocator.toFileURL(FileLocator.find(bundle, projectPath));
-		var path = Path.fromOSString(url.getPath());
-		var description = loadProjectDescription(workspace,
-				path);
-		var eclipseProject = myWorkspaceRoot.getProject(description.getName());
 
-		if (validateProjectLocation(eclipseProject, path)) {
-			// the project is not already loaded in the workspace
-			loadProject(description, eclipseProject, path);
+	private static IProject openProject(final Bundle bundle, final Path projectPath) throws IOException, CoreException  {
+		final var workspace = ResourcesPlugin.getWorkspace();
+		final var myWorkspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+		final var url = FileLocator.toFileURL(FileLocator.find(bundle, projectPath));
+		final var path = Path.fromOSString(url.getPath());
+		final var description = loadProjectDescription(workspace,
+				path);
+		if (description != null) {
+			final var eclipseProject = myWorkspaceRoot.getProject(description.getName());
+			if (validateProjectLocation(eclipseProject, path)) {
+				// the project is not already loaded in the workspace
+				loadProject(description, eclipseProject, path);
+			}
+			return eclipseProject;
 		}
-		return eclipseProject;
+		return null;
 	}
-	
+
 	private static void loadProject(final IProjectDescription description, final IProject project, final IPath projectPath)
 			throws CoreException {
 		final IProgressMonitor monitor = new NullProgressMonitor();
@@ -79,7 +82,7 @@ public class EclipseProjectLoader {
 		project.create(description, monitor);
 		project.open(monitor);
 	}
-	
+
 	private static void setProjectLocation(final IProjectDescription description, final IPath projectPath) {
 		final IPath projectPathInWorkspace = ResourcesPlugin.getWorkspace().getRoot().getLocation()
 				.append(projectPath.lastSegment());

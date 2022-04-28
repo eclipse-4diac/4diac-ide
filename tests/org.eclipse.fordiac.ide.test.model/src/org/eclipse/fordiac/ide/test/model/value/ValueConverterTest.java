@@ -32,16 +32,14 @@ class ValueConverterTest {
 
 	@Test
 	void invalidNumericConverterTest() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			NumericValueConverter.INSTANCE.toValue("NoNumber"); //$NON-NLS-1$
-		}, NumericValueConverter.INVALID_NUMBER_LITERAL);
+		assertThrowsExactly(IllegalArgumentException.class, () -> NumericValueConverter.INSTANCE.toValue("NoNumber"), //$NON-NLS-1$
+				NumericValueConverter.INVALID_NUMBER_LITERAL);
 	}
 
 	@Test
 	void twoOrMoreConsecutiveUnderscoresForbiddenTest() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			NumericValueConverter.INSTANCE.toValue("1__00"); //$NON-NLS-1$
-		}, NumericValueConverter.CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
+		assertThrowsExactly(IllegalArgumentException.class, () -> NumericValueConverter.INSTANCE.toValue("1__00"), //$NON-NLS-1$
+				NumericValueConverter.CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
 	}
 
 }

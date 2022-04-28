@@ -15,22 +15,11 @@ package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
 import static org.junit.Assert.assertNotNull;
 
-import java.io.IOException;
-import java.rmi.server.LoaderHandler;
-
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.fordiac.ide.systemmanagement.FordiacProjectLoader;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
-import org.osgi.framework.Bundle;
 
 public class EventSwitchTest extends AbstractInterpreterTest {
 
