@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
@@ -75,7 +76,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 						events);
 				EventManagerUtils.process(eventManager);
 				for (final Transaction transaction : eventManager.getTransactions()) {
-					convertTransactionToServiceModel(seq, fbType, transaction);
+					convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
 				}
 			}
 		}
@@ -84,7 +85,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 
 
 	private static void convertTransactionToServiceModel(final ServiceSequence seq, final BasicFBType fbType,
-			final Transaction transaction) {
+			final FBTransaction transaction) {
 		final ServiceTransaction serviceTransaction = LibraryElementFactory.eINSTANCE
 				.createServiceTransaction();
 		seq.getServiceTransaction().add(serviceTransaction);
@@ -92,7 +93,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		inputPrimitive.setEvent(transaction.getInputEventOccurrence().getEvent().getName());
 		inputPrimitive.setInterface(fbType.getService().getLeftInterface());
 		serviceTransaction.setInputPrimitive(inputPrimitive);
-		for (final EventOccurrence outputEvent : transaction.getOutputEventOccurences()) {
+		for (final EventOccurrence outputEvent : transaction.getOutputEventOccurrences()) {
 			final OutputPrimitive outputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
 			outputPrimitive.setEvent(outputEvent.getEvent().getName());
 			outputPrimitive.setInterface(fbType.getService().getLeftInterface());
@@ -103,7 +104,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 
 	private static EventManager createEventManager(BasicFBType fb, List<String> events) {
 		if (fb.getService() == null) {
-			fb.setService(ServiceSequenceUtils.createEmptyServiceModel());			
+			fb.setService(ServiceSequenceUtils.createEmptyServiceModel());
 		}
 		final ResourceSet reset = new ResourceSetImpl();
 		final Resource resource = reset.createResource(URI.createURI("platform:/resource/" + fb.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -126,7 +127,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			}
 			eventOccurrence.setEvent(eventPin);
 
-			final Transaction transaction = OperationalSemanticsFactory.eINSTANCE.createTransaction();
+			final Transaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
 			transaction.setInputEventOccurrence(eventOccurrence);
 			eventManager.getTransactions().add(transaction);
 		}
@@ -155,7 +156,8 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	private static ServiceSequence getSequence(final Object selected) {
 		if (selected instanceof ServiceSequenceEditPart) {
 			return ((ServiceSequenceEditPart) selected).getModel();
-		} else if (selected instanceof ServiceSequence) {
+		}
+		if (selected instanceof ServiceSequence) {
 			return (ServiceSequence) selected;
 		}
 		return null;

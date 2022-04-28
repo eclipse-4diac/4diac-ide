@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
@@ -76,19 +77,19 @@ public abstract class AbstractInterpreterTest {
 			loader = new FordiacProjectLoader(bundle, projectPath);
 		} catch (CoreException | IOException e) {
 			return null;
-		} 
-		
+		}
+
 		TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(loader.getEclipseProject());
 		FBTypeEntry typeEntry = typeLib.getFBTypeEntry(name);
 		FBType fbt = typeEntry.getType();
-		
+
 		if (emptyService) {
 			fbt.setService(ServiceSequenceUtils.createEmptyServiceModel());
 		}
 		return fbt;
 	}
 
-	protected static ServiceTransaction addTransaction(final ServiceSequence seq, final FBTransaction fbtrans) {
+	protected static ServiceTransaction addTransaction(final ServiceSequence seq, final org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction fbtrans) {
 		final ServiceTransaction transaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
 		seq.getServiceTransaction().add(transaction);
 		if (fbtrans.getInputEvent() != null) {
@@ -114,15 +115,14 @@ public abstract class AbstractInterpreterTest {
 
 	public static void setVariable(final FBType fb, final String name, final String value) {
 		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name);
-		if (el instanceof VarDeclaration) {
-			final Value val = ((VarDeclaration) el).getValue();
-			if (val == null) {
-				((VarDeclaration) el).setValue(LibraryElementFactory.eINSTANCE.createValue());
-			}
-			((VarDeclaration) el).getValue().setValue(value);
-		} else {
+		if (!(el instanceof VarDeclaration)) {
 			throw new IllegalArgumentException("variable does not exist in FB"); //$NON-NLS-1$
 		}
+		final Value val = ((VarDeclaration) el).getValue();
+		if (val == null) {
+			((VarDeclaration) el).setValue(LibraryElementFactory.eINSTANCE.createValue());
+		}
+		((VarDeclaration) el).getValue().setValue(value);
 	}
 
 	private static Collection<Transaction> createTransactions(final BasicFBType fb, final ServiceSequence seq,
@@ -137,7 +137,7 @@ public abstract class AbstractInterpreterTest {
 				}
 				final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 				eventOccurrence.setEvent(eventPin);
-				final Transaction transaction = OperationalSemanticsFactory.eINSTANCE.createTransaction();
+				final Transaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
 				transaction.setInputEventOccurrence(eventOccurrence);
 				// process parameter and set variables
 				final String inputParameters = st.getInputPrimitive().getParameters();
@@ -184,11 +184,11 @@ public abstract class AbstractInterpreterTest {
 		checkResults(seq, eventManager);
 
 		final int nT = eventManager.getTransactions().size();
-		final Transaction t = eventManager.getTransactions().get(nT - 1);
+		final FBTransaction t = (FBTransaction) eventManager.getTransactions().get(nT - 1);
 		BasicFBType next = null;
-		if (!t.getOutputEventOccurences().isEmpty()) {
-			final int nEv = t.getOutputEventOccurences().size();
-			final BasicFBTypeRuntime last = (BasicFBTypeRuntime) (t.getOutputEventOccurences().get(nEv - 1)
+		if (!t.getOutputEventOccurrences().isEmpty()) {
+			final int nEv = t.getOutputEventOccurrences().size();
+			final BasicFBTypeRuntime last = (BasicFBTypeRuntime) (t.getOutputEventOccurrences().get(nEv - 1)
 					.getFbRuntime());
 			next = last.getBasicfbtype();
 		} else {
@@ -210,13 +210,13 @@ public abstract class AbstractInterpreterTest {
 		}
 
 		for (int i = 0; i < expectedResults.size(); i++) {
-			final Transaction result = results.get(i);
+			final FBTransaction result = (FBTransaction) results.get(i);
 			final ServiceTransaction expectedResult = expectedResults.get(i);
 			checkTransaction(result, expectedResult);
 		}
 	}
 
-	private static void checkTransaction(final Transaction result, final ServiceTransaction expectedResult) {
+	private static void checkTransaction(final FBTransaction result, final ServiceTransaction expectedResult) {
 		// input event was correctly generated
 		if (!result.getInputEventOccurrence().getEvent().getName()
 				.equals(expectedResult.getInputPrimitive().getEvent())) {
@@ -228,7 +228,7 @@ public abstract class AbstractInterpreterTest {
 				.filter(p -> !p.getInterface().getName().toLowerCase()
 						.contains(ServiceSequenceUtils.INTERNAL_INTERFACE))
 				.count();
-		if (outputEvents != result.getOutputEventOccurences().size()) {
+		if (outputEvents != result.getOutputEventOccurrences().size()) {
 			throw new IllegalArgumentException("Unwanted output event occurrence"); //$NON-NLS-1$
 		}
 
@@ -239,10 +239,10 @@ public abstract class AbstractInterpreterTest {
 		}
 	}
 
-	private static void checkOutputPrimitive(final Transaction result, final int j, final OutputPrimitive p) {
+	private static void checkOutputPrimitive(final FBTransaction result, final int j, final OutputPrimitive p) {
 		if (!p.getInterface().getName().toLowerCase().contains(ServiceSequenceUtils.INTERNAL_INTERFACE)) {
 			// generated output event is correct
-			if (!p.getEvent().equals(result.getOutputEventOccurences().get(j).getEvent().getName())) {
+			if (!p.getEvent().equals(result.getOutputEventOccurrences().get(j).getEvent().getName())) {
 				throw new IllegalArgumentException("Generated output event is incorrect"); //$NON-NLS-1$
 			}
 			// the associated data is correct
@@ -252,12 +252,12 @@ public abstract class AbstractInterpreterTest {
 		}
 	}
 
-	private static boolean processParameters(final String parameters, final Transaction result) {
+	private static boolean processParameters(final String parameters, final FBTransaction result) {
 		if ((parameters == null) || parameters.isBlank()) {
 			return true;
 		}
-		final int length = result.getOutputEventOccurences().size();
-		final BasicFBTypeRuntime captured = (BasicFBTypeRuntime) result.getOutputEventOccurences().get(length - 1)
+		final int length = result.getOutputEventOccurrences().size();
+		final BasicFBTypeRuntime captured = (BasicFBTypeRuntime) result.getOutputEventOccurrences().get(length - 1)
 				.getFbRuntime();
 		final var parameterList = getParametersFromString(parameters);
 		for (final List<String> assumption : parameterList) {

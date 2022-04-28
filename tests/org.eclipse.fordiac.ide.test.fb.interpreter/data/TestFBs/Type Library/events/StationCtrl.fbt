@@ -33,7 +33,7 @@
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="ErrorCode" Type="BYTE" Comment="Origin and type of error"/>
+			<VarDeclaration Name="ErrorCode" Type="INT" Comment="Origin and type of error"/>
 			<VarDeclaration Name="PartID" Type="INT" Comment=""/>
 		</InputVars>
 		<OutputVars>
@@ -76,20 +76,15 @@
 		</ECC>
 		<Algorithm Name="init" Comment="Initialization algorithm">
 			<ST><![CDATA[
-QO := QI;]]></ST>
+RobotID := 0;]]></ST>
 		</Algorithm>
 		<Algorithm Name="setSpeed" Comment="Normally executed algorithm">
 			<ST><![CDATA[
-QO := FALSE;]]></ST>
+ConvSpeed := 100;]]></ST>
 		</Algorithm>
 		<Algorithm Name="chooseRobot" Comment="new algorithm">
-			<ST><![CDATA[QO := QI;
-
-IF TRUE  = QI THEN
-  (*  only perform normal operation of QI is true*)
-
-END_IF;
-]]></ST>
+			<ST><![CDATA[
+RobotID := 50;]]></ST>
 		</Algorithm>
 		<Algorithm Name="reduceSpeed" Comment="">
 			<ST><![CDATA[]]></ST>

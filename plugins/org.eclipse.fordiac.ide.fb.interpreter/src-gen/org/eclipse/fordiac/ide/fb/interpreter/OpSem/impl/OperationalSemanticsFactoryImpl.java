@@ -1,4 +1,5 @@
 /**
+ * *******************************************************************************
  * Copyright (c) 2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at http://www.eclipse.org/legal/epl-2.0.
@@ -6,8 +7,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio GarmendÃ­a, Bianca Wiesmayr
  *          - initial implementation and/or documentation
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl;
 
@@ -19,18 +21,26 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData;
 
-/** <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
+ * end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements OperationalSemanticsFactory {
-	/** Creates the default factory implementation. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Creates the default factory implementation. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public static OperationalSemanticsFactory init() {
 		try {
 			OperationalSemanticsFactory theOperationalSemanticsFactory = (OperationalSemanticsFactory) EPackage.Registry.INSTANCE
@@ -44,16 +54,21 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 		return new OperationalSemanticsFactoryImpl();
 	}
 
-	/** Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Creates an instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public OperationalSemanticsFactoryImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
@@ -63,72 +78,112 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 			return createEventManager();
 		case OperationalSemanticsPackage.BASIC_FB_TYPE_RUNTIME:
 			return createBasicFBTypeRuntime();
-		case OperationalSemanticsPackage.FB_TYPE_RUNTIME:
-			return createFBTypeRuntime();
-		case OperationalSemanticsPackage.TRANSACTION:
-			return createTransaction();
+		case OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME:
+			return createSimpleFBTypeRuntime();
+		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME:
+			return createFBNetworkRuntime();
+		case OperationalSemanticsPackage.TRANSFER_DATA:
+			return createTransferData();
+		case OperationalSemanticsPackage.FB_TRANSACTION:
+			return createFBTransaction();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EventOccurrence createEventOccurrence() {
 		EventOccurrenceImpl eventOccurrence = new EventOccurrenceImpl();
 		return eventOccurrence;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EventManager createEventManager() {
 		EventManagerImpl eventManager = new EventManagerImpl();
 		return eventManager;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public BasicFBTypeRuntime createBasicFBTypeRuntime() {
 		BasicFBTypeRuntimeImpl basicFBTypeRuntime = new BasicFBTypeRuntimeImpl();
 		return basicFBTypeRuntime;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
-	public FBTypeRuntime createFBTypeRuntime() {
-		FBTypeRuntimeImpl fbTypeRuntime = new FBTypeRuntimeImpl();
-		return fbTypeRuntime;
+	public SimpleFBTypeRuntime createSimpleFBTypeRuntime() {
+		SimpleFBTypeRuntimeImpl simpleFBTypeRuntime = new SimpleFBTypeRuntimeImpl();
+		return simpleFBTypeRuntime;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
-	public Transaction createTransaction() {
-		TransactionImpl transaction = new TransactionImpl();
-		return transaction;
+	public FBNetworkRuntime createFBNetworkRuntime() {
+		FBNetworkRuntimeImpl fbNetworkRuntime = new FBNetworkRuntimeImpl();
+		return fbNetworkRuntime;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
+	@Override
+	public TransferData createTransferData() {
+		TransferDataImpl transferData = new TransferDataImpl();
+		return transferData;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public FBTransaction createFBTransaction() {
+		FBTransactionImpl fbTransaction = new FBTransactionImpl();
+		return fbTransaction;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
 	public OperationalSemanticsPackage getOperationalSemanticsPackage() {
 		return (OperationalSemanticsPackage) getEPackage();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @deprecated
-	 * @generated */
+	 * @generated
+	 */
 	@Deprecated
 	public static OperationalSemanticsPackage getPackage() {
 		return OperationalSemanticsPackage.eINSTANCE;

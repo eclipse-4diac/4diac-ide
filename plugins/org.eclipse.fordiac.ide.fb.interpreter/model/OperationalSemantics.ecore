@@ -58,7 +58,6 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="currentValue" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Value"
         containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="FBNetworkTransaction" eSuperTypes="#//Transaction"/>
   <eClassifiers xsi:type="ecore:EClass" name="FBTransaction" eSuperTypes="#//Transaction">
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputEventOccurrences"
         upperBound="-1" eType="#//EventOccurrence" containment="true"/>

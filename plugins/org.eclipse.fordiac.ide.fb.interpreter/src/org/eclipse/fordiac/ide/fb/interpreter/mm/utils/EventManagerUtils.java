@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 
 public class EventManagerUtils {
 
@@ -27,21 +28,24 @@ public class EventManagerUtils {
 		final var transactions = eventManager.getTransactions();
 		for (var i = 0; i < transactions.size(); i++) {
 			final var transaction = transactions.get(i);
-			final var result = transaction.getInputEventOccurrence().getFbRuntime().run();
-			transaction.getOutputEventOccurences().addAll(result);
-			if ((i + 1) < transactions.size()) {
-				final var copyfbRuntime = new Copier();
-				final FBRuntimeAbstract newfbRuntime;
-				// choose the latest: input event occurr. or last output event occurr.
-				if (transaction.getOutputEventOccurences().isEmpty()) {
-					newfbRuntime = (FBRuntimeAbstract) copyfbRuntime.copy(transaction.getInputEventOccurrence().getFbRuntime());
-				} else {
-					newfbRuntime = (FBRuntimeAbstract) copyfbRuntime.copy(
-							transaction.getOutputEventOccurences().get(transaction.getOutputEventOccurences().size() - 1).
-							getFbRuntime());
+			if (transaction instanceof FBTransaction) {
+				FBTransaction fbTransaction = (FBTransaction) transaction;
+				final var result = transaction.getInputEventOccurrence().getFbRuntime().run();
+				fbTransaction.getOutputEventOccurrences().addAll(result);
+				if ((i + 1) < transactions.size()) {
+					final var copyfbRuntime = new Copier();
+					final FBRuntimeAbstract newfbRuntime;
+					// choose the latest: input event occurr. or last output event occurr.
+					if (fbTransaction.getOutputEventOccurrences().isEmpty()) {
+						newfbRuntime = (FBRuntimeAbstract) copyfbRuntime.copy(transaction.getInputEventOccurrence().getFbRuntime());
+					} else {
+						newfbRuntime = (FBRuntimeAbstract) copyfbRuntime.copy(
+								fbTransaction.getOutputEventOccurrences().get(fbTransaction.getOutputEventOccurrences().size() - 1).
+								getFbRuntime());
+					}
+					copyfbRuntime.copyReferences();
+					transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(newfbRuntime);
 				}
-				copyfbRuntime.copyReferences();
-				transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(newfbRuntime);
 			}
 		}
 	}

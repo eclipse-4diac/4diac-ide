@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Johannes Kepler University Linz
+ * Copyright (c) 2021, 2022 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter;
@@ -21,9 +21,10 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.api.IRunFBTypeVisitor;
 import org.eclipse.fordiac.ide.fb.interpreter.api.LambdaVisitor;
 import org.eclipse.fordiac.ide.fb.interpreter.impl.EvalStatementImpl;
@@ -51,7 +52,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 	public static Function<Object,Object> of(IRunFBTypeVisitor runTypeVisitor) {
 		return new LambdaVisitor<>()
 				.on(BasicFBTypeRuntime.class).then(runTypeVisitor::runFBType)
-				.on(FBTypeRuntime.class).then(runTypeVisitor::runFBType)
+				.on(SimpleFBTypeRuntime.class).then(runTypeVisitor::runFBType)
+				.on(FBNetworkRuntime.class).then(runTypeVisitor::runFBType)
 				;
 	}
 
@@ -109,13 +111,12 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		final var resource = new AlgorithmStXMI(fBTypeResource.getResourceSet()).
 				createXtextResourceFromAlgorithmSt(textAlgorithm.getText());
 		final var eObjectStructuredText = resource.getContents().get(0);
-		if (eObjectStructuredText instanceof StructuredTextAlgorithm) {
-			final var structuredText = (StructuredTextAlgorithm) eObjectStructuredText;
-			final var listOfStatements = structuredText.getStatements().getStatements();
-			new EvalStatementImpl().evaluateAllStatements(listOfStatements);
-		} else {
+		if (!(eObjectStructuredText instanceof StructuredTextAlgorithm)) {
 			throw new IllegalArgumentException("StructuredTextAlgorithm object could not be found"); //$NON-NLS-1$
 		}
+		final var structuredText = (StructuredTextAlgorithm) eObjectStructuredText;
+		final var listOfStatements = structuredText.getStatements().getStatements();
+		new EvalStatementImpl().evaluateAllStatements(listOfStatements);
 	}
 
 	private static void processOutputEvent(BasicFBTypeRuntime basicFBTypeRuntime, ECAction action,
@@ -153,15 +154,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 			final var condExpression = outTransition.getConditionExpression();
 			if (condExpression.isEmpty() || "1".equals(condExpression)) { //$NON-NLS-1$
 				return true;
-			} else { // Run to condition
-				final var resource = new ConditionExpressionXMI(fBTypeResource.getResourceSet())
-						.createXtextResourceFromConditionExp(condExpression);
-				final var rootEObject = resource.getContents().get(0);
-				if (rootEObject instanceof Expression) {
-					final var evaluation = (Boolean) EvaluateExpressionImpl.of().apply(rootEObject);
-					if (Boolean.TRUE.equals(evaluation)) {
-						return true;
-					}
+			}
+			final var resource = new ConditionExpressionXMI(fBTypeResource.getResourceSet())
+					.createXtextResourceFromConditionExp(condExpression);
+			final var rootEObject = resource.getContents().get(0);
+			if (rootEObject instanceof Expression) {
+				final var evaluation = (Boolean) EvaluateExpressionImpl.of().apply(rootEObject);
+				if (Boolean.TRUE.equals(evaluation)) {
+					return true;
 				}
 			}
 		}
@@ -180,7 +180,12 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 	}
 
 	@Override
-	public EList<EventOccurrence> runFBType(FBTypeRuntime fBTypeRuntime) {
+	public EList<EventOccurrence> runFBType(SimpleFBTypeRuntime fBTypeRuntime) {
+		throw new UnsupportedOperationException("Not supported operation runFBType(FBTypeRuntime fBTypeRuntime)"); //$NON-NLS-1$
+	}
+
+	@Override
+	public EList<EventOccurrence> runFBType(FBNetworkRuntime fBNetworkRuntime) {
 		throw new UnsupportedOperationException("Not supported operation runFBType(FBTypeRuntime fBTypeRuntime)"); //$NON-NLS-1$
 	}
 }
