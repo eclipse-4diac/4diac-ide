@@ -46,6 +46,7 @@ public class AdapterTypeEntryImpl extends AbstractTypeEntryImpl implements Adapt
 	public void setType(final LibraryElement type) {
 		if (type instanceof AdapterType) {
 			super.setType(type);
+			((AdapterType) type).getAdapterFBType().setTypeEntry(this);
 		} else {
 			super.setType(null);
 			if (null != type) {
