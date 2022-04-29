@@ -36,8 +36,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
@@ -147,22 +147,27 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		«ENDIF»
 	'''
 
-	def protected dispatch generateStatement(STCaseStatement stmt) '''
-		switch («stmt.selector.generateExpression») {
-		«FOR clause : stmt.cases»«clause.generateCaseClause»«ENDFOR»
-			«IF stmt.^else !== null»
-				default:
-				  «stmt.^else.statements.generateStatementList»
-				  break;
-			«ENDIF»
+	def protected dispatch CharSequence generateStatement(STCaseStatement stmt) '''
+		«val variable = generateUniqueVariableName»
+		if (auto «variable» = «stmt.selector.generateExpression»; false) {
+		«FOR clause : stmt.cases»
+			} else if («FOR value : clause.conditions SEPARATOR ' || '»«value.generateCaseCondition(variable)»«ENDFOR») {
+			  «clause.statements.generateStatementList»
+		«ENDFOR»
+		«IF stmt.^else !== null»
+			} else {
+			  «stmt.^else.statements.generateStatementList»
+		«ENDIF»
 		}
 	'''
 
-	def protected generateCaseClause(STCaseCases clause) '''
-		case «FOR value : clause.conditions SEPARATOR ' case '»«value.generateExpression»:«ENDFOR»
-		  «clause.statements.generateStatementList»
-		  break;
-	'''
+	def protected CharSequence generateCaseCondition(STExpression expr, CharSequence variable) {
+		switch (expr) {
+			STBinaryExpression case expr.op.range: //
+			'''func_AND(func_GE(«variable», «expr.left.generateExpression»), func_LE(«variable», «expr.right.generateExpression»))'''
+			default: '''func_EQ(«variable», «expr.generateExpression»)'''
+		}
+	}
 
 	def protected dispatch generateStatement(STForStatement stmt) '''
 		for (auto «generateUniqueVariableName» : ST_FOR_ITER<«stmt.variable.generateTypeName»«IF stmt.by !== null», «(stmt.by.resultType as DataType).generateTypeName»«ENDIF»>(«stmt.variable.generateFeatureName», «stmt.from.generateExpression», «stmt.to.generateExpression»«IF stmt.by !== null», «stmt.by.generateExpression»«ENDIF»)) {
