@@ -65,6 +65,7 @@ import static org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperation
 
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
+import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 
 abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	@Accessors final String name
@@ -152,8 +153,17 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 
 	def protected dispatch void evaluateStatement(STCaseStatement stmt) {
 		val value = stmt.selector.trap.evaluateExpression;
-		(stmt.cases.findFirst[conditions.exists[trap.evaluateExpression == value]]?.statements ?:
+		(stmt.cases.findFirst[conditions.exists[trap.evaluateCaseCondition(value)]]?.statements ?:
 			stmt.^else?.statements)?.evaluateStatementList
+	}
+
+	def protected boolean evaluateCaseCondition(STExpression expr, Value value) {
+		switch (expr) {
+			STBinaryExpression case expr.op.range:
+				value >= expr.left.evaluateExpression && value <= expr.right.evaluateExpression
+			default:
+				value == expr.evaluateExpression
+		}
 	}
 
 	def protected dispatch void evaluateStatement(STForStatement stmt) {
@@ -444,9 +454,13 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
 	}
 
-	def protected static dispatch Variable newVariable(VarDeclaration v, Value value) { VariableOperations.newVariable(v, value) }
+	def protected static dispatch Variable newVariable(VarDeclaration v, Value value) {
+		VariableOperations.newVariable(v, value)
+	}
 
-	def protected static dispatch Variable newVariable(STVarDeclaration v, Value value) { STVariableOperations.newVariable(v, value) }
+	def protected static dispatch Variable newVariable(STVarDeclaration v, Value value) {
+		STVariableOperations.newVariable(v, value)
+	}
 
 	static class StructuredTextException extends Exception {
 		new(STStatement statement) {
