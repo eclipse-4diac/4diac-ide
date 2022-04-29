@@ -81,6 +81,10 @@ final class STCoreUtil {
 		}
 	}
 
+	def static boolean isRange(STBinaryOperator operator) {
+		operator == STBinaryOperator.RANGE
+	}
+
 	def static boolean isValidLeftAssignment(STExpression expression) {
 		switch (it : expression) {
 			STMultibitPartialExpression,
@@ -94,7 +98,7 @@ final class STCoreUtil {
 	def static INamedElement getExpectedType(STExpression expression) {
 		switch (it : expression.eContainer) {
 			STUnaryExpression,
-			STBinaryExpression case op.arithmetic:
+			STBinaryExpression case op.arithmetic || op.range:
 				expectedType
 			STBinaryExpression case op.comparison:
 				expression === left ? right.declaredResultType : left.declaredResultType
