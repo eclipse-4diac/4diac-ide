@@ -27,12 +27,15 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.ConnectionDisplayWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -140,7 +143,10 @@ public class InterfaceElementSection extends AbstractSection {
 		currentParameterText = createGroupText(composite, true);
 		currentParameterText.addModifyListener(e -> {
 			removeContentAdapter();
-			executeCommand(new ChangeValueCommand((VarDeclaration) getType(), currentParameterText.getText()));
+			if (getType() instanceof VarDeclaration) {
+				// only allow to change the parameter text if is a var declaration and not an error marker
+				executeCommand(new ChangeValueCommand((VarDeclaration) getType(), currentParameterText.getText()));
+			}
 			addContentAdapter();
 		});
 
@@ -162,7 +168,6 @@ public class InterfaceElementSection extends AbstractSection {
 				infoSection.setText(Messages.InterfaceElementSection_InterfaceElement);
 			}
 			typeCommentText.setText(getTypeComment());
-			String itype = ""; //$NON-NLS-1$
 
 			openEditorButton.setEnabled(
 					(getType().getType() instanceof StructuredType && !"ANY_STRUCT".equals(getType().getType().getName()))
@@ -171,11 +176,12 @@ public class InterfaceElementSection extends AbstractSection {
 			instanceCommentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 
 			if (getType() instanceof VarDeclaration) {
-				itype = setParameterAndType();
-			} else {
-				itype = FordiacMessages.Event;
+				setParameter();
+			} else if (getType() instanceof ErrorMarkerInterface) {
+				setErrorParam();
 			}
-			typeText.setText(itype);
+
+			typeText.setText(getPinTypeName());
 
 			connectionDisplayWidget.refreshConnectionsViewer(getType());
 
@@ -185,6 +191,13 @@ public class InterfaceElementSection extends AbstractSection {
 		}
 
 		commandStack = commandStackBuffer;
+	}
+
+	private String getPinTypeName() {
+		if (getType().getType() instanceof StructuredType) {
+			return getStructTypes((StructuredType) getType().getType());
+		}
+		return getType().getType() != null ? getType().getType().getName() : ""; //$NON-NLS-1$ ;
 	}
 
 	private String getTypeComment() {
@@ -204,11 +217,18 @@ public class InterfaceElementSection extends AbstractSection {
 	}
 
 	private void refreshParameterVisibility() {
-		final boolean isDataIO = (getType() instanceof VarDeclaration) && !(getType() instanceof AdapterDeclaration);
+		final boolean isDataIO = isDataIO();
 		parameterTextCLabel.setVisible(isDataIO);
 		parameterText.setVisible(isDataIO);
 		currentParameterTextCLabel.setVisible(isDataIO && getType().isIsInput());
 		currentParameterText.setVisible(isDataIO && getType().isIsInput());
+	}
+
+	private boolean isDataIO() {
+		if (getType() instanceof ErrorMarkerInterface) {
+			return !(getType().getType() instanceof EventType) && !(getType().getType() instanceof AdapterType);
+		}
+		return (getType() instanceof VarDeclaration) && !(getType() instanceof AdapterDeclaration);
 	}
 
 	private void setEditable(final boolean editable) {
@@ -219,30 +239,31 @@ public class InterfaceElementSection extends AbstractSection {
 		connectionDisplayWidget.setEditable(editable);
 	}
 
-	protected String setParameterAndType() {
-		String itype;
+	protected void setParameter() {
 		final VarDeclaration varDecl = (VarDeclaration) getType();
-		itype = varDecl.getType() != null ? varDecl.getType().getName() : ""; //$NON-NLS-1$
 		if (varDecl.isIsInput() && (varDecl.getFBNetworkElement() != null)) {
 			final FBType fbType = varDecl.getFBNetworkElement().getType();
 			if (null != fbType) {
-				final IInterfaceElement ie = fbType.getInterfaceList()
-						.getInterfaceElement(varDecl.getName());
+				final IInterfaceElement ie = fbType.getInterfaceList().getInterfaceElement(varDecl.getName());
 				if (ie instanceof VarDeclaration) {
-					parameterText.setText(
-							getValueFromVarDecl((VarDeclaration) ie));
-					if (varDecl.getType() instanceof StructuredType) {
-						itype = getStructTypes((StructuredType) getType().getType());
-					}
+					parameterText.setText(getValueFromVarDecl((VarDeclaration) ie));
 				}
 			}
 		}
 		currentParameterText.setText(getValueFromVarDecl(varDecl));
-		return itype;
+	}
+
+	private void setErrorParam() {
+		final ErrorMarkerInterface pin = (ErrorMarkerInterface) getType();
+		currentParameterText.setText(getValueText(pin.getValue()));
 	}
 
 	private static String getValueFromVarDecl(final VarDeclaration varDecl) {
-		return (varDecl.getValue() != null) ? varDecl.getValue().getValue() : ""; //$NON-NLS-1$
+		return getValueText(varDecl.getValue());
+	}
+
+	private static String getValueText(final Value value) {
+		return (value != null && value.getValue() != null) ? value.getValue() : ""; //$NON-NLS-1$
 	}
 
 	// this method will be removed as soon as there is a toString for StructType in
