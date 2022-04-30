@@ -3204,6 +3204,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EReference getErrorMarkerInterface_Value() {
+		return (EReference)errorMarkerInterfaceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCFBInstance() {
 		return cfbInstanceEClass;
 	}
@@ -3808,6 +3818,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		errorMarkerInterfaceEClass = createEClass(ERROR_MARKER_INTERFACE);
 		createEReference(errorMarkerInterfaceEClass, ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT);
+		createEReference(errorMarkerInterfaceEClass, ERROR_MARKER_INTERFACE__VALUE);
 
 		cfbInstanceEClass = createEClass(CFB_INSTANCE);
 		createEReference(cfbInstanceEClass, CFB_INSTANCE__CFB_NETWORK);
@@ -4550,6 +4561,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(errorMarkerInterfaceEClass, ErrorMarkerInterface.class, "ErrorMarkerInterface", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getErrorMarkerInterface_RepairedEndpoint(), this.getIInterfaceElement(), null, "repairedEndpoint", null, 0, 1, ErrorMarkerInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getErrorMarkerInterface_Value(), this.getValue(), null, "value", null, 0, 1, ErrorMarkerInterface.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(cfbInstanceEClass, CFBInstance.class, "CFBInstance", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getCFBInstance_CfbNetwork(), this.getFBNetwork(), null, "cfbNetwork", null, 0, 1, CFBInstance.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

@@ -365,14 +365,21 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		final boolean markerExists = newElement.getInterface().getErrorMarker().stream()
 				.anyMatch(e -> e.getName().equals(oldInterface.getName()) && e.isIsInput() == oldInterface.isIsInput());
 
-		IInterfaceElement interfaceElement;
-		interfaceElement = ConnectionHelper.createErrorMarkerInterface(oldInterface.getType(), oldInterface.getName(),
+		final ErrorMarkerInterface interfaceElement = ConnectionHelper.createErrorMarkerInterface(
+				oldInterface.getType(), oldInterface.getName(),
 				oldInterface.isIsInput(), newElement.getInterface());
+
+		if (oldInterface instanceof VarDeclaration
+				&& !((VarDeclaration) oldInterface).getValue().getValue().isBlank()) {
+			final Value value = LibraryElementFactory.eINSTANCE.createValue();
+			value.setValue(((VarDeclaration) oldInterface).getValue().getValue());
+			interfaceElement.setValue(value);
+		}
 
 		if (!markerExists) {
 			final ErrorMarkerBuilder createErrorMarker = FordiacMarkerHelper.createErrorMarker(errorMessage, newElement,
 					0);
-			createErrorMarker.setErrorMarkerRef((ErrorMarkerRef) interfaceElement);
+			createErrorMarker.setErrorMarkerRef(interfaceElement);
 			createErrorMarker.createMarkerInFile();
 			errorPins.add(createErrorMarker);
 		}

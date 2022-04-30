@@ -1494,6 +1494,8 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerInterface" eSuperTypes="#//IInterfaceElement #//ErrorMarkerRef">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repairedEndpoint" eType="#//IInterfaceElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//Value"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CFBInstance" eSuperTypes="#//FB">
     <eOperations name="loadCFBNetwork" eType="#//FBNetwork">

@@ -6058,13 +6058,22 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ERROR_MARKER_INTERFACE__VALUE = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
+
+	/**
 	 * The number of structural features of the '<em>Error Marker Interface</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
+	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl <em>CFB Instance</em>}' class.
@@ -6635,7 +6644,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	int TYPE_ENTRY = 91;
-
 
 	/**
 	 * The meta object id for the '<em>Type Library</em>' data type.
@@ -9145,6 +9153,17 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getErrorMarkerInterface_RepairedEndpoint();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface#getValue <em>Value</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface#getValue()
+	 * @see #getErrorMarkerInterface()
+	 * @generated
+	 */
+	EReference getErrorMarkerInterface_Value();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.CFBInstance <em>CFB Instance</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11481,6 +11500,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT = eINSTANCE.getErrorMarkerInterface_RepairedEndpoint();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ERROR_MARKER_INTERFACE__VALUE = eINSTANCE.getErrorMarkerInterface_Value();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl <em>CFB Instance</em>}' class.
