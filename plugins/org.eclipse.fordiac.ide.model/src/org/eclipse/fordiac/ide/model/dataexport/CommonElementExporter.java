@@ -47,10 +47,12 @@ import org.eclipse.fordiac.ide.model.PreferenceConstants;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -462,11 +464,21 @@ class CommonElementExporter {
 
 	protected void addParamsConfig(final EList<VarDeclaration> inputVars) throws XMLStreamException {
 		for (final VarDeclaration inVar : inputVars) {
-			if ((null != inVar.getValue()) && !inVar.getValue().getValue().isEmpty()) {
-				addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
-				addNameAttribute(inVar.getName());
-				writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, inVar.getValue().getValue());
-			}
+			addParam(inVar.getName(), inVar.getValue());
+		}
+	}
+
+	protected void addErrorMarkerParamsConfig(final EList<ErrorMarkerInterface> errorPins) throws XMLStreamException {
+		for (final ErrorMarkerInterface ep : errorPins) {
+			addParam(ep.getName(), ep.getValue());
+		}
+	}
+
+	private void addParam(final String pinName, final Value value) throws XMLStreamException {
+		if ((value != null) && (value.getValue() != null) && !value.getValue().isBlank()) {
+			addEmptyStartElement(LibraryElementTags.PARAMETER_ELEMENT);
+			addNameAttribute(pinName);
+			writer.writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value.getValue());
 		}
 	}
 

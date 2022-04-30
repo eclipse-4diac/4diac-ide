@@ -111,6 +111,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		if (!isUntypedSubapp(fbnElement)) {
 			// for untyped subapp initial values are stored in the vardeclarations
 			addParamsConfig(fbnElement.getInterface().getInputVars());
+			addErrorMarkerParamsConfig(fbnElement.getInterface().getErrorMarker());
 			addPinComments(fbnElement.getInterface().getAllInterfaceElements());
 		}
 
