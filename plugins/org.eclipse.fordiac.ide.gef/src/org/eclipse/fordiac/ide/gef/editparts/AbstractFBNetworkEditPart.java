@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart {
@@ -79,11 +78,10 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 	protected Collection<Value> getFBValues() {
 		final ArrayList<Value> valueElements = new ArrayList<>();
 		for (final FBNetworkElement element : getNetworkElements()) {
-			for (final VarDeclaration interfaceElement : element.getInterface().getInputVars()) {
-				if (null != interfaceElement.getValue()) {
-					valueElements.add(interfaceElement.getValue());
-				}
-			}
+			element.getInterface().getInputVars().stream().filter(di -> (di.getValue() != null))
+			.forEach(di -> valueElements.add(di.getValue()));
+			element.getInterface().getErrorMarker().stream().filter(er -> (er.getValue() != null))
+			.forEach(er -> valueElements.add(er.getValue()));
 		}
 		return valueElements;
 	}

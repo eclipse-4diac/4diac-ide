@@ -34,7 +34,7 @@ public class TypedInterfacePinFilter implements IFilter {
 			retval = ((EditPart) retval).getModel();
 		}
 		if (retval instanceof Value) {
-			retval = ((Value) retval).getVarDeclaration();
+			retval = ((Value) retval).getParentIE();
 		}
 		return isPinOfTypedElement(retval) ? (IInterfaceElement) retval : null;
 	}

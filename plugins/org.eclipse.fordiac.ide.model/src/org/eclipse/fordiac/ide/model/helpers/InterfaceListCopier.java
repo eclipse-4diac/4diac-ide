@@ -53,18 +53,27 @@ public final class InterfaceListCopier {
 		return copy;
 	}
 
-	private static void copyErrorMarkerList(final EList<IInterfaceElement> copy, final EList<IInterfaceElement> src,
+	private static void copyErrorMarkerList(final EList<ErrorMarkerInterface> copy,
+			final EList<ErrorMarkerInterface> src,
 			final boolean copyValues, final boolean copyComments) {
-		src.forEach(c -> copy.add(copyMarker((ErrorMarkerInterface) c, copyComments)));
+		src.forEach(c -> copy.add(copyMarker(c, copyValues, copyComments)));
 	}
 
-	private static ErrorMarkerInterface copyMarker(final ErrorMarkerInterface src, final boolean copyComments) {
+	private static ErrorMarkerInterface copyMarker(final ErrorMarkerInterface src, final boolean copyValues,
+			final boolean copyComments) {
 		final ErrorMarkerInterface copy = LibraryElementFactory.eINSTANCE.createErrorMarkerInterface();
 		copyInterfaceElement(src, copy, copyComments);
 		final IInterfaceElement repairedEndpoint = copy.getRepairedEndpoint();
 		if (repairedEndpoint != null) {
 			copy.setRepairedEndpoint(repairedEndpoint);
 		}
+
+		if ((copyValues) && (null != src.getValue())) {
+			final Value varInitialization = LibraryElementFactory.eINSTANCE.createValue();
+			varInitialization.setValue(src.getValue().getValue());
+			copy.setValue(varInitialization);
+		}
+
 		return copy;
 
 	}

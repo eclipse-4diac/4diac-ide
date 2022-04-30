@@ -719,7 +719,7 @@
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="errorMarker" upperBound="-1"
-        eType="#//IInterfaceElement" containment="true" resolveProxies="false">
+        eType="#//ErrorMarkerInterface" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="ErrorMarker"/>
@@ -1185,9 +1185,9 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeName" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Value" eSuperTypes="#//ErrorMarkerRef">
-    <eOperations name="getVarDeclaration" lowerBound="1" eType="#//VarDeclaration">
+    <eOperations name="getParentIE" lowerBound="1" eType="#//IInterfaceElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getVarDeclaration(this);"/>
+        <details key="body" value="return (IInterfaceElement) eContainer();"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"

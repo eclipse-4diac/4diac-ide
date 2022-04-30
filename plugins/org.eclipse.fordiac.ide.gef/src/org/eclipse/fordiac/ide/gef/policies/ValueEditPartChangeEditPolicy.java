@@ -25,7 +25,7 @@ public class ValueEditPartChangeEditPolicy extends DirectEditPolicy {
 
 	@Override
 	protected Command getDirectEditCommand(final DirectEditRequest request) {
-		VarDeclaration variable = getVarDecl();
+		final VarDeclaration variable = getVarDecl();
 		if (null != variable) {
 			return new ChangeValueCommand(variable, (String) request.getCellEditor().getValue());
 		}
@@ -34,8 +34,8 @@ public class ValueEditPartChangeEditPolicy extends DirectEditPolicy {
 
 	@Override
 	protected void showCurrentEditValue(final DirectEditRequest request) {
-		String value = (String) request.getCellEditor().getValue();
-		ValueEditPart valueEditPart = getValueEditPart();
+		final String value = (String) request.getCellEditor().getValue();
+		final ValueEditPart valueEditPart = getValueEditPart();
 		if (null != valueEditPart) {
 			valueEditPart.getFigure().setText(value);
 		}
@@ -54,12 +54,12 @@ public class ValueEditPartChangeEditPolicy extends DirectEditPolicy {
 	}
 
 	private VarDeclaration getVarDecl() {
-		Object model = getHost().getModel();
+		final Object model = getHost().getModel();
 		if (model instanceof VarDeclaration) {
 			return (VarDeclaration) model;
 		}
-		if (model instanceof Value) {
-			return ((Value) model).getVarDeclaration();
+		if (model instanceof Value && ((Value) model).getParentIE() instanceof VarDeclaration) {
+			return (VarDeclaration) ((Value) model).getParentIE();
 		}
 		return null;
 	}

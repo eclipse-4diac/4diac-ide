@@ -181,7 +181,7 @@ public class InterfaceElementSection extends AbstractSection {
 		if (input instanceof InterfaceEditPart) {
 			return ((InterfaceEditPart) input).getModel();
 		} else if (input instanceof ValueEditPart) {
-			return ((ValueEditPart) input).getModel().getVarDeclaration();
+			return ((ValueEditPart) input).getModel().getParentIE();
 		}
 		return null;
 	}

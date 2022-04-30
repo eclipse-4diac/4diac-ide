@@ -251,7 +251,7 @@ INavigationLocationProvider, IPersistableEditor {
 	protected void gotoValue(final IMarker marker) {
 		final ErrorMarkerRef errorRef = ErrorMarkerBuilder.getMarkerRef(marker);
 		final FBNetworkElement parent = errorRef instanceof Value
-				? ((Value) errorRef).getVarDeclaration().getFBNetworkElement()
+				? ((Value) errorRef).getParentIE().getFBNetworkElement()
 						: null;
 		selectErrorRef(errorRef, parent);
 	}

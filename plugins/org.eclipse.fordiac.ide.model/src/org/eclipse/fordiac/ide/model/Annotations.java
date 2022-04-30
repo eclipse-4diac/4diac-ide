@@ -62,7 +62,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -530,11 +529,6 @@ public final class Annotations {
 	public static FBNetworkElement getFBNetworkElement(final IInterfaceElement iie) {
 		return (iie.eContainer() instanceof InterfaceList) ? ((InterfaceList) iie.eContainer()).getFBNetworkElement()
 				: null;
-	}
-
-	// *** Value ***//
-	public static VarDeclaration getVarDeclaration(final Value v) {
-		return (VarDeclaration) v.eContainer();
 	}
 
 	// *** SystemConfiguration ***//

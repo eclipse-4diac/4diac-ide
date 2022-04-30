@@ -80,7 +80,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		super.activate();
 		getModel().eAdapters().add(contentAdapter);
 
-		final Object part = getViewer().getEditPartRegistry().get(getModel().getVarDeclaration());
+		final Object part = getViewer().getEditPartRegistry().get(getModel().getParentIE());
 		if (part instanceof InterfaceEditPart) {
 			parentPart = (InterfaceEditPart) part;
 			final IFigure parentFigure = parentPart.getFigure();
@@ -206,9 +206,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			setVisible(false);
 		}
 	}
-	
+
 	private EList<Connection> getOuterConnections() {
-		IInterfaceElement model = getIInterfaceElement();
+		final IInterfaceElement model = getIInterfaceElement();
 		if(model.isIsInput()) {
 			return model.getInputConnections();
 		} else {
@@ -274,7 +274,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	}
 
 	private IInterfaceElement getIInterfaceElement() {
-		return getModel().getVarDeclaration();
+		return getModel().getParentIE();
 	}
 
 	/* (non-Javadoc)
@@ -355,7 +355,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		final FBNetworkElement fb = getModel().getVarDeclaration().getFBNetworkElement();
+		final FBNetworkElement fb = getModel().getParentIE().getFBNetworkElement();
 		if (!isTypedInstance(fb)
 				&& ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 						|| (request.getType() == RequestConstants.REQ_OPEN))) {

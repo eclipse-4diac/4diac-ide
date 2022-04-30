@@ -418,7 +418,7 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Value">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Value/value"/>
-      <genOperations ecoreOperation="lib.ecore#//Value/getVarDeclaration" body="return org.eclipse.fordiac.ide.model.Annotations.getVarDeclaration(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Value/getParentIE" body="return (IInterfaceElement) eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//SystemConfiguration">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SystemConfiguration/devices"/>
