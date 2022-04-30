@@ -20,6 +20,7 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +50,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -596,7 +598,20 @@ public abstract class CommonElementImporter {
 		if (null != vInput) {
 			vInput.setValue(parameter.getValue());
 			validateValue(vInput);
+		} else {
+			createParameterErrorMarker(block, parameter);
 		}
+	}
+
+	protected void createParameterErrorMarker(final FBNetworkElement block, final VarDeclaration parameter) {
+		final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarker(
+				MessageFormat.format(Messages.CommonElementImporter_ERROR_MissingPinForParameter, parameter.getName(),
+						block.getName()),
+				block, getLineNumber());
+		errorMarkerAttributes.add(e);
+		final ErrorMarkerInterface errorMarkerInterface = ConnectionHelper.createErrorMarkerInterface(IecTypes.GenericTypes.ANY,parameter.getName(), true, block.getInterface());
+		e.setErrorMarkerRef(errorMarkerInterface);
+		errorMarkerInterface.setValue(parameter.getValue());
 	}
 
 	protected void validateValue(final VarDeclaration vInput) {
