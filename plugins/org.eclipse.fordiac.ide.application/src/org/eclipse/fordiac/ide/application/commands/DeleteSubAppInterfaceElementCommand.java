@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,8 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Monika Wenger 
- *       - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
@@ -21,11 +20,11 @@ public class DeleteSubAppInterfaceElementCommand extends DeleteInterfaceCommand 
 
 	private DeleteInterfaceCommand opposite = null;
 
-	public DeleteSubAppInterfaceElementCommand(IInterfaceElement interfaceElement) {
+	public DeleteSubAppInterfaceElementCommand(final IInterfaceElement interfaceElement) {
 		super(interfaceElement);
 		if (interfaceElement.getFBNetworkElement().isMapped()) {
-			FBNetworkElement fbE = interfaceElement.getFBNetworkElement().getOpposite();
-			IInterfaceElement element = fbE.getInterfaceElement(interfaceElement.getName());
+			final FBNetworkElement fbE = interfaceElement.getFBNetworkElement().getOpposite();
+			final IInterfaceElement element = fbE.getInterfaceElement(interfaceElement.getName());
 			if (null != element) {
 				opposite = new DeleteInterfaceCommand(element);
 			}

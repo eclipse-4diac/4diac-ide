@@ -32,7 +32,6 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
@@ -147,28 +146,6 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 			getFigure().refreshComment();
 		}
 
-	}
-
-	@Override
-	protected Adapter createInterfaceAdapter() {
-		return new EContentAdapter() {
-			@Override
-			public void notifyChanged(final Notification notification) {
-				super.notifyChanged(notification);
-				switch (notification.getEventType()) {
-				case Notification.ADD:
-				case Notification.ADD_MANY:
-				case Notification.MOVE:
-				case Notification.REMOVE:
-				case Notification.REMOVE_MANY:
-					refreshChildren();
-					getParent().refresh();
-					break;
-				default:
-					break;
-				}
-			}
-		};
 	}
 
 	@Override

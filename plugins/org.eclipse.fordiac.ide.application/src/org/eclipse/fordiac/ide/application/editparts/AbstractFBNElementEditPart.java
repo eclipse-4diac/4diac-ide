@@ -125,6 +125,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 				case Notification.REMOVE:
 				case Notification.REMOVE_MANY:
 					refreshChildren();
+					// this ensure that parameters are correctly updated when pins are added or removed (e.g.,
+					// errormarkerpins are deleted)
+					getParent().refresh();
 					break;
 				default:
 					break;
