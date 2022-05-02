@@ -326,6 +326,22 @@ public interface StandardFunctions extends Functions {
 		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
+	static LWordValue LINT_TO_LWORD(final LIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DWordValue LINT_TO_DWORD(final LIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WordValue LINT_TO_WORD(final LIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static USIntValue LINT_TO_BYTE(final LIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
 	/* DINT_TO */
 	static RealValue DINT_TO_REAL(final DIntValue value) {
 		return RealValue.toRealValue(value);
@@ -359,8 +375,20 @@ public interface StandardFunctions extends Functions {
 		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
+	static LWordValue DINT_TO_LWORD(final DIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
 	static DWordValue DINT_TO_DWORD(final DIntValue value) {
 		return DWordValue.toDWordValue(value.intValue());
+	}
+
+	static WordValue DINT_TO_WORD(final DIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ByteValue DINT_TO_BYTE(final DIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
 	/* INT_TO */
@@ -398,6 +426,10 @@ public interface StandardFunctions extends Functions {
 
 	static USIntValue INT_TO_USINT(final IntValue value) {
 		return USIntValue.toUSIntValue(value);
+	}
+
+	static LWordValue INT_TO_LWORD(final IntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
 	static DWordValue INT_TO_DWORD(final IntValue value) {
@@ -449,6 +481,22 @@ public interface StandardFunctions extends Functions {
 		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
+	static LWordValue SINT_TO_LWORD(final SIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DWordValue SINT_TO_DWORD(final SIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WordValue SINT_TO_WORD(final SIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ByteValue SINT_TO_BYTE(final SIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
 	/* ULINT_TO */
 
 	static LRealValue ULINT_TO_LREAL(final ULIntValue value) {
@@ -484,6 +532,22 @@ public interface StandardFunctions extends Functions {
 	}
 
 	static USIntValue ULINT_TO_USINT(final ULIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LWordValue ULINT_TO_LWORD(final ULIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DWordValue ULINT_TO_DWORD(final ULIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WordValue ULINT_TO_WORD(final ULIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ByteValue ULINT_TO_BYTE(final ULIntValue value) {
 		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
@@ -525,6 +589,22 @@ public interface StandardFunctions extends Functions {
 		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
+	static LWordValue UDINT_TO_LWORD(final UDIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DWordValue UDINT_TO_DWORD(final UDIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WordValue UDINT_TO_WORD(final UDIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ByteValue UDINT_TO_BYTE(final UDIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
 	/* UINT_TO */
 
 	static LRealValue UINT_TO_LREAL(final UIntValue value) {
@@ -560,6 +640,22 @@ public interface StandardFunctions extends Functions {
 	}
 
 	static USIntValue UINT_TO_USINT(final UIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LWordValue UINT_TO_LWORD(final UIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DWordValue UINT_TO_DWORD(final UIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WordValue UINT_TO_WORD(final UIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ByteValue UINT_TO_BYTE(final UIntValue value) {
 		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
@@ -601,7 +697,58 @@ public interface StandardFunctions extends Functions {
 		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
+	static LWordValue USINT_TO_LWORD(final USIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DWordValue USINT_TO_DWORD(final USIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WordValue USINT_TO_WORD(final USIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ByteValue USINT_TO_BYTE(final USIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
 	/* LWORD_TO */
+	static LRealValue LWORD_TO_LREAL(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LIntValue LWORD_TO_LINT(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DIntValue LWORD_TO_DINT(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static IntValue LWORD_TO_INT(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static SIntValue LWORD_TO_SINT(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ULIntValue LWORD_TO_ULINT(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static UDIntValue LWORD_TO_UDINT(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static UIntValue LWORD_TO_UINT(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static USIntValue LWORD_TO_USINT(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
 
 	static DWordValue LWORD_TO_DWORD(final LWordValue value) {
 		throw new UnsupportedOperationException("Not implemented yet!");
@@ -620,12 +767,40 @@ public interface StandardFunctions extends Functions {
 	}
 
 	/* DWORD_TO */
+	static RealValue DWORD_TO_REAL(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LIntValue DWORD_TO_LINT(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
 	static DIntValue DWORD_TO_DINT(final DWordValue value) {
 		return DIntValue.toDIntValue(value.intValue());
 	}
 
 	static IntValue DWORD_TO_INT(final DWordValue value) {
 		return IntValue.toIntValue(value.shortValue());
+	}
+
+	static SIntValue DWORD_TO_SINT(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ULIntValue DWORD_TO_ULINT(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static UDIntValue DWORD_TO_UDINT(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static UIntValue DWORD_TO_UINT(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static USIntValue DWORD_TO_USINT(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
 	static LWordValue DWORD_TO_LWORD(final DWordValue value) {
@@ -645,8 +820,36 @@ public interface StandardFunctions extends Functions {
 	}
 
 	/* WORD_TO */
+	static LIntValue WORD_TO_LINT(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DIntValue WORD_TO_DINT(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
 	static IntValue WORD_TO_INT(final WordValue value) {
 		return IntValue.toIntValue(value.shortValue());
+	}
+
+	static SIntValue WORD_TO_SINT(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ULIntValue WORD_TO_ULINT(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static UDIntValue WORD_TO_UDINT(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static UIntValue WORD_TO_UINT(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static USIntValue WORD_TO_USINT(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
 	static LWordValue WORD_TO_LWORD(final WordValue value) {
@@ -666,8 +869,36 @@ public interface StandardFunctions extends Functions {
 	}
 
 	/* BYTE_TO */
+	static LIntValue BYTE_TO_LINT(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DIntValue BYTE_TO_DINT(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
 	static IntValue BYTE_TO_INT(final ByteValue value) {
 		return IntValue.toIntValue(value.shortValue());
+	}
+
+	static SIntValue BYTE_TO_SINT(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ULIntValue BYTE_TO_ULINT(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static UDIntValue BYTE_TO_UDINT(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static UIntValue BYTE_TO_UINT(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static USIntValue BYTE_TO_USINT(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
 	static LWordValue BYTE_TO_LWORD(final ByteValue value) {
@@ -687,6 +918,37 @@ public interface StandardFunctions extends Functions {
 	}
 
 	/* BOOL_TO */
+	static LIntValue BOOL_TO_LINT(final BoolValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DIntValue BOOL_TO_DINT(final BoolValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static IntValue BOOL_TO_INT(final BoolValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static SIntValue BOOL_TO_SINT(final BoolValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ULIntValue BOOL_TO_ULINT(final BoolValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static UDIntValue BOOL_TO_UDINT(final BoolValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static UIntValue BOOL_TO_UINT(final BoolValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static USIntValue BOOL_TO_USINT(final BoolValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
 
 	static LWordValue BOOL_TO_LWORD(final BoolValue value) {
 		throw new UnsupportedOperationException("Not implemented yet!");
