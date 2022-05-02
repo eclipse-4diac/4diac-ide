@@ -317,20 +317,38 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 	protected void handleParameters() {
 		for (final VarDeclaration input : oldElement.getInterface().getInputVars()) {
 			// No outside connections to a pin in oldElement and it has an initial value
-			if (input.getInputConnections().isEmpty() && hasValue(input)) {
+			if (input.getInputConnections().isEmpty() && hasValue(input.getValue())) {
 				updateSelectedInterface(input, newElement);
 			}
 		}
 
 		for (final VarDeclaration output : oldElement.getInterface().getOutputVars()) {
-			if (output.getOutputConnections().isEmpty() && hasValue(output)) {
+			if (output.getOutputConnections().isEmpty() && hasValue(output.getValue())) {
 				updateSelectedInterface(output, newElement);
+			}
+		}
+
+		for (final ErrorMarkerInterface erroMarker : oldElement.getInterface().getErrorMarker()) {
+			if (hasValue(erroMarker.getValue())) {
+				final IInterfaceElement updatedSelected = newElement.getInterfaceElement(erroMarker.getName());
+				if (updatedSelected != null) {
+					// the new block has a pin with given name
+					if (updatedSelected instanceof VarDeclaration) {
+						final Value value = LibraryElementFactory.eINSTANCE.createValue();
+						value.setValue(erroMarker.getValue().getValue());
+						((VarDeclaration) updatedSelected).setValue(value);
+					}
+				} else if ((erroMarker.isIsInput() && erroMarker.getInputConnections().isEmpty())
+						|| (!erroMarker.isIsInput() && erroMarker.getOutputConnections().isEmpty())) {
+					// unconnected error pin create a new error pin
+					updateSelectedInterface(erroMarker, newElement);
+				}
 			}
 		}
 	}
 
-	private static boolean hasValue(final VarDeclaration dataPin) {
-		final Value value = dataPin.getValue();
+
+	private static boolean hasValue(final Value value) {
 		return value != null && value.getValue() != null && !value.getValue().isBlank();
 	}
 
