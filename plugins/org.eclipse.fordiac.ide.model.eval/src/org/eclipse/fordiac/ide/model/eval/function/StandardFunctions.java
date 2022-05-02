@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.eval.value.LTimeValue;
 import org.eclipse.fordiac.ide.model.eval.value.LWordValue;
 import org.eclipse.fordiac.ide.model.eval.value.RealValue;
 import org.eclipse.fordiac.ide.model.eval.value.SIntValue;
+import org.eclipse.fordiac.ide.model.eval.value.StringValue;
 import org.eclipse.fordiac.ide.model.eval.value.TimeOfDayValue;
 import org.eclipse.fordiac.ide.model.eval.value.TimeValue;
 import org.eclipse.fordiac.ide.model.eval.value.UDIntValue;
@@ -49,6 +50,7 @@ import org.eclipse.fordiac.ide.model.eval.value.ULIntValue;
 import org.eclipse.fordiac.ide.model.eval.value.USIntValue;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.eval.value.WCharValue;
+import org.eclipse.fordiac.ide.model.eval.value.WStringValue;
 import org.eclipse.fordiac.ide.model.eval.value.WordValue;
 
 @SuppressWarnings("squid:S100") // ST Name conventions must be used here
@@ -1074,6 +1076,40 @@ public interface StandardFunctions extends Functions {
 
 	static LRealValue TIME_IN_US_TO_LREAL(final AnyDurationValue value) {
 		return LRealValue.toLRealValue(value.toDuration().toNanos() / 1000.0);
+	}
+
+	/* ANY_CHARS conversions */
+
+	static StringValue WSTRING_TO_STRING(final WStringValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WCharValue WSTRING_TO_WCHAR(final WStringValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WStringValue STRING_TO_WSTRING(final StringValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static CharValue STRING_TO_CHAR(final StringValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WStringValue WCHAR_TO_WSTRING(final WCharValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static CharValue WCHAR_TO_CHAR(final WCharValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static StringValue CHAR_TO_STRING(final CharValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WCharValue CHAR_TO_WCHAR(final CharValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
 
