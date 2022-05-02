@@ -49,11 +49,13 @@ import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.DragTracker;
@@ -438,11 +440,22 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	public ValueEditPart getReferencedValueEditPart() {
-		if ((getModel() instanceof VarDeclaration)) {
-			final Object temp = getViewer().getEditPartRegistry().get(((VarDeclaration) getModel()).getValue());
+		final Value value = getValue();
+		if (value != null) {
+			final Object temp = getViewer().getEditPartRegistry().get(value);
 			if (temp instanceof ValueEditPart) {
 				return (ValueEditPart) temp;
 			}
+		}
+		return null;
+	}
+
+	private Value getValue() {
+		if (getModel() instanceof VarDeclaration) {
+			return ((VarDeclaration) getModel()).getValue();
+		}
+		if (getModel() instanceof ErrorMarkerInterface) {
+			return ((ErrorMarkerInterface) getModel()).getValue();
 		}
 		return null;
 	}
