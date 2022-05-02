@@ -30,12 +30,18 @@ import org.eclipse.fordiac.ide.model.eval.value.ByteValue;
 import org.eclipse.fordiac.ide.model.eval.value.CharValue;
 import org.eclipse.fordiac.ide.model.eval.value.DIntValue;
 import org.eclipse.fordiac.ide.model.eval.value.DWordValue;
+import org.eclipse.fordiac.ide.model.eval.value.DateAndTimeValue;
+import org.eclipse.fordiac.ide.model.eval.value.DateValue;
 import org.eclipse.fordiac.ide.model.eval.value.IntValue;
+import org.eclipse.fordiac.ide.model.eval.value.LDateAndTimeValue;
 import org.eclipse.fordiac.ide.model.eval.value.LIntValue;
 import org.eclipse.fordiac.ide.model.eval.value.LRealValue;
+import org.eclipse.fordiac.ide.model.eval.value.LTimeOfDayValue;
+import org.eclipse.fordiac.ide.model.eval.value.LTimeValue;
 import org.eclipse.fordiac.ide.model.eval.value.LWordValue;
 import org.eclipse.fordiac.ide.model.eval.value.RealValue;
 import org.eclipse.fordiac.ide.model.eval.value.SIntValue;
+import org.eclipse.fordiac.ide.model.eval.value.TimeOfDayValue;
 import org.eclipse.fordiac.ide.model.eval.value.TimeValue;
 import org.eclipse.fordiac.ide.model.eval.value.UDIntValue;
 import org.eclipse.fordiac.ide.model.eval.value.UIntValue;
@@ -1008,6 +1014,56 @@ public interface StandardFunctions extends Functions {
 		return TimeValue.toTimeValue(System.nanoTime());
 	}
 
+	/* Date and Time conversions */
+
+	static TimeValue LTIME_TO_TIME(final LTimeValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeValue TIME_TO_LTIME(final TimeValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DateAndTimeValue LDT_TO_DT(final LDateAndTimeValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DateValue LDT_TO_DATE(final LDateAndTimeValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeOfDayValue LDT_TO_LTOD(final LDateAndTimeValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeOfDayValue LDT_TO_TOD(final LDateAndTimeValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LDateAndTimeValue DT_TO_LDT(final DateAndTimeValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DateValue DT_TO_DATE(final DateAndTimeValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeOfDayValue DT_TO_LTOD(final DateAndTimeValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeOfDayValue DT_TO_TOD(final DateAndTimeValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeOfDayValue LTOD_TO_TOD(final LTimeOfDayValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeOfDayValue TOD_TO_LTOD(final TimeOfDayValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
 	static LIntValue TIME_IN_MS_TO_LINT(final AnyDurationValue value) {
 		return LIntValue.toLIntValue(value.toDuration().toMillis());
 	}
@@ -1019,6 +1075,7 @@ public interface StandardFunctions extends Functions {
 	static LRealValue TIME_IN_US_TO_LREAL(final AnyDurationValue value) {
 		return LRealValue.toLRealValue(value.toDuration().toNanos() / 1000.0);
 	}
+
 
 	// TODO: rest of string functions
 
