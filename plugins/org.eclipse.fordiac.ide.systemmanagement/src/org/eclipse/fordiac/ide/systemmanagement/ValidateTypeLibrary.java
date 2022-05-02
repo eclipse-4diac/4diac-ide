@@ -28,7 +28,11 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class ValidateTypeLibrary {
+public final class ValidateTypeLibrary {
+	
+	private ValidateTypeLibrary() {
+		//not called
+	}
 
 	public static void validate() {
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();

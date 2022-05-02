@@ -58,14 +58,14 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 
 	}
 
-	protected IFile file;
+	private IFile file;
 
-	protected long lastModificationTimestamp = IResource.NULL_STAMP;
+	private long lastModificationTimestamp = IResource.NULL_STAMP;
 
 	protected LibraryElement type;
-	protected LibraryElement typeEditable;
+	private LibraryElement typeEditable;
 
-	protected TypeLibrary typeLibray;
+	private TypeLibrary typeLibray;
 
 	private BasicEList<Adapter> eAdapters;
 
@@ -133,9 +133,8 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	}
 
 	private void encloseInResource(final LibraryElement newType) {
-		final IFile typeFile = getFile();
-		if (typeFile != null) {
-			final IPath path = typeFile.getFullPath();
+		if (getFile() != null) {
+			final IPath path = getFile().getFullPath();
 			if (path != null) {
 				new FordiacTypeResource(URI.createPlatformResourceURI(path.toString(), true)).getContents()
 				.add(newType);

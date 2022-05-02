@@ -117,7 +117,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		table.setLayout(createTableLayout(table));
+		table.setLayout(createTableLayout());
 
 		final TableViewerColumn colKind = new TableViewerColumn(viewer, SWT.LEAD);
 		colKind.getColumn().setText("Element Kind");
@@ -205,7 +205,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 	}
 
-	protected static TableLayout createTableLayout(final Table table) {
+	protected static TableLayout createTableLayout() {
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(TYPE_COLUMN_WIDTH));
 		layout.addColumnData(new ColumnPixelData(NAME_COMMENT_COLUMN_WIDTH));
