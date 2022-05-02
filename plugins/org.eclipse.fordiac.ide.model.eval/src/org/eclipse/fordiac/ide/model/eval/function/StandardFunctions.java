@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.eval.value.AnyRealValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyValue;
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue;
 import org.eclipse.fordiac.ide.model.eval.value.ByteValue;
+import org.eclipse.fordiac.ide.model.eval.value.CharValue;
 import org.eclipse.fordiac.ide.model.eval.value.DIntValue;
 import org.eclipse.fordiac.ide.model.eval.value.DWordValue;
 import org.eclipse.fordiac.ide.model.eval.value.IntValue;
@@ -41,6 +42,7 @@ import org.eclipse.fordiac.ide.model.eval.value.UIntValue;
 import org.eclipse.fordiac.ide.model.eval.value.ULIntValue;
 import org.eclipse.fordiac.ide.model.eval.value.USIntValue;
 import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
+import org.eclipse.fordiac.ide.model.eval.value.WCharValue;
 import org.eclipse.fordiac.ide.model.eval.value.WordValue;
 
 @SuppressWarnings("squid:S100") // ST Name conventions must be used here
@@ -601,6 +603,22 @@ public interface StandardFunctions extends Functions {
 
 	/* LWORD_TO */
 
+	static DWordValue LWORD_TO_DWORD(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WordValue LWORD_TO_WORD(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ByteValue LWORD_TO_BYTE(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static BoolValue LWORD_TO_BOOL(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
 	/* DWORD_TO */
 	static DIntValue DWORD_TO_DINT(final DWordValue value) {
 		return DIntValue.toDIntValue(value.intValue());
@@ -610,13 +628,115 @@ public interface StandardFunctions extends Functions {
 		return IntValue.toIntValue(value.shortValue());
 	}
 
+	static LWordValue DWORD_TO_LWORD(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WordValue DWORD_TO_WORD(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ByteValue DWORD_TO_BYTE(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static BoolValue DWORD_TO_BOOL(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	/* WORD_TO */
 	static IntValue WORD_TO_INT(final WordValue value) {
 		return IntValue.toIntValue(value.shortValue());
 	}
 
+	static LWordValue WORD_TO_LWORD(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DWordValue WORD_TO_DWORD(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ByteValue WORD_TO_BYTE(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static BoolValue WORD_TO_BOOL(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	/* BYTE_TO */
 	static IntValue BYTE_TO_INT(final ByteValue value) {
 		return IntValue.toIntValue(value.shortValue());
 	}
+
+	static LWordValue BYTE_TO_LWORD(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DWordValue BYTE_TO_DWORD(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WordValue BYTE_TO_WORD(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static BoolValue BYTE_TO_BOOL(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	/* BOOL_TO */
+
+	static LWordValue BOOL_TO_LWORD(final BoolValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DWordValue BOOL_TO_DWORD(final BoolValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WordValue BOOL_TO_WORD(final BoolValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ByteValue BOOL_TO_BYTE(final BoolValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	/* CHAR_TO */
+
+	static LWordValue CHAR_TO_LWORD(final CharValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DWordValue CHAR_TO_DWORD(final CharValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WordValue CHAR_TO_WORD(final CharValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static ByteValue CHAR_TO_BYTE(final CharValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	/* WCHAR_TO */
+
+	static LWordValue WCHAR_TO_LWORD(final WCharValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DWordValue WCHAR_TO_DWORD(final WCharValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static WordValue CWHAR_TO_WORD(final WCharValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	/***************************************/
 
 	static IntValue TRUNC(final RealValue value) {
 		return IntValue.toIntValue(value);
