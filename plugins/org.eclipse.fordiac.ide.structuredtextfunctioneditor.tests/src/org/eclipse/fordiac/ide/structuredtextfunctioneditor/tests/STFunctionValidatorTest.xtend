@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ *               2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Ulzii Jargalsaikhan
  *       - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *       - validation for reserved identifiers
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 
@@ -220,6 +223,16 @@ class STFunctionValidatorTest {
 				char1 := wchar1;
 			END_FUNCTION
 		'''.parse.assertNoErrors(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NO_CAST_AVAILABLE);
+	}
+
+	@Test
+	def void testReservedIdentifierErrorValidator() {
+		'''
+		FUNCTION hubert
+		VAR
+		    add : BOOL;
+		END_VAR
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.RESERVED_IDENTIFIER_ERROR)
 	}
 
 }

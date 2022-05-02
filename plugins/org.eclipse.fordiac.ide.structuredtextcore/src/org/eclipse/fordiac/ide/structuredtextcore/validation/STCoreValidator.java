@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2021 - 2022 Primetals Technologies Austria GmbH
+ *               2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,8 @@
  *
  *   Ulzii Jargalsaikhan
  *       - custom validation for identifiers
+ *   Martin Jobst
+ *       - validation for reserved identifiers
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.validation;
 
@@ -29,11 +32,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProv
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
-import org.eclipse.xtext.validation.Check;
-import com.google.inject.Inject;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
+import org.eclipse.xtext.validation.Check;
+
+import com.google.inject.Inject;
 
 public class STCoreValidator extends AbstractSTCoreValidator {
 
@@ -48,12 +52,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String ASSIGNMENT_INVALID_LEFT = ISSUE_CODE_PREFIX + "invalidLeftSide"; //$NON-NLS-1$
 	public static final String NON_COMPATIBLE_TYPES = ISSUE_CODE_PREFIX + "nonCompatibleTypes"; //$NON-NLS-1$
 	public static final String NO_CAST_AVAILABLE = ISSUE_CODE_PREFIX + "noCastAvailable"; //$NON-NLS-1$
-	public static final String WRONG_NAME_CASE = ISSUE_CODE_PREFIX + "wrongNameCase";
-
-	private static final String ASSIGNMENT_INVALID_LEFT_MESSAGE = Messages.STCoreValidator_Assignment_Invalid_Left_Side;
-	private static final String NON_COMPATIBLE_TYPES_MESSAGE = Messages.STCoreValidator_Non_Compatible_Types_In_Assignment;
-	private static final String NO_CAST_AVAILABLE_MESSAGE = Messages.STCoreValidator_No_Cast_Available;
-	private static final String WRONG_CASE_MESSAGE = Messages.STCoreValidator_Wrong_Name_Case;
+	public static final String WRONG_NAME_CASE = ISSUE_CODE_PREFIX + "wrongNameCase"; //$NON-NLS-1$
+	public static final String RESERVED_IDENTIFIER_ERROR = ISSUE_CODE_PREFIX + "reservedIdentifierError"; //$NON-NLS-1$
 
 	@Check
 	public void checkConsecutiveUnderscoresInIdentifier(final INamedElement iNamedElement) {
@@ -74,9 +74,20 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	@Check
+	public void checkReservedIdentifer(final INamedElement iNamedElement) {
+		if (StreamSupport.stream(standardFunctionProvider.get().spliterator(), true)
+				.anyMatch(func -> func.getName().equalsIgnoreCase(iNamedElement.getName()))) {
+			error(Messages.STCoreValidator_Identifier_Is_Reserved, iNamedElement,
+					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, RESERVED_IDENTIFIER_ERROR,
+					iNamedElement.getName());
+		}
+	}
+
+	@Check
 	public void checkValidLHS(final STAssignmentStatement statement) {
 		if (!STCoreUtil.isValidLeftAssignment(statement.getLeft())) {
-			error(ASSIGNMENT_INVALID_LEFT_MESSAGE, statement, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT,
+			error(Messages.STCoreValidator_Assignment_Invalid_Left_Side, statement,
+					STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT,
 					ASSIGNMENT_INVALID_LEFT);
 		}
 	}
@@ -93,7 +104,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			final String nameInText = node.getText().trim().substring(0, originalName.length());
 
 			if (originalName.equalsIgnoreCase(nameInText) && !originalName.equals(nameInText)) {
-				warning(WRONG_CASE_MESSAGE, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, WRONG_NAME_CASE,
+				warning(Messages.STCoreValidator_Wrong_Name_Case, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
+						WRONG_NAME_CASE,
 						nameInText, originalName);
 			}
 		}
@@ -110,26 +122,30 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				leftType = ((ArrayType) leftType).getBaseType();
 				rightType = ((ArrayType) rightType).getBaseType();
 			} else {
-				error(MessageFormat.format(NON_COMPATIBLE_TYPES_MESSAGE, rightType.getName(), rightType.getName()),
+				error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types_In_Assignment, rightType.getName(), rightType.getName()),
 						STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__RIGHT, NON_COMPATIBLE_TYPES,
 						rightType.getName(), leftType.getName());
 			}
 		}
 
-		if (leftType.getClass() == rightType.getClass())
+		if (leftType.getClass() == rightType.getClass()) {
 			return;
+		}
 
-		String castName = rightType.getName() + "_TO_" + leftType.getName();
-		boolean castPossible = StreamSupport.stream(standardFunctionProvider.get().spliterator(), true)
+		final String castName = rightType.getName() + "_TO_" + leftType.getName(); //$NON-NLS-1$
+		final boolean castPossible = StreamSupport.stream(standardFunctionProvider.get().spliterator(), true)
 				.anyMatch(func -> func.getName().equals(castName));
 
 		if (!rightType.isCompatibleWith(leftType)) {
 			if (!castPossible) {
-				error(MessageFormat.format(NO_CAST_AVAILABLE_MESSAGE, rightType.getName(), leftType.getName()),
+				error(MessageFormat.format(Messages.STCoreValidator_No_Cast_Available, rightType.getName(),
+						leftType.getName()),
 						STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__RIGHT, NO_CAST_AVAILABLE, rightType.getName(),
 						leftType.getName());
 			} else {
-				error(MessageFormat.format(NON_COMPATIBLE_TYPES_MESSAGE, rightType.getName(), leftType.getName()),
+				error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types_In_Assignment,
+						rightType.getName(),
+						leftType.getName()),
 						STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__RIGHT, NON_COMPATIBLE_TYPES,
 						rightType.getName(), leftType.getName(),
 						NodeModelUtils.getNode(statement.getRight()).getText().trim());

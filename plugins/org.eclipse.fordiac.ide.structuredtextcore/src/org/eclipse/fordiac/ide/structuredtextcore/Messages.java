@@ -20,6 +20,7 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextcore.messages"; //$NON-NLS-1$
 	public static String STCoreValidator_Consecutive_Underscores_In_Identifier;
+	public static String STCoreValidator_Identifier_Is_Reserved;
 	public static String STCoreValidator_Trailing_Underscore_In_Identifier;
 	public static String STCoreValidator_Assignment_Invalid_Left_Side;
 	public static String STCoreValidator_Non_Compatible_Types_In_Assignment;
