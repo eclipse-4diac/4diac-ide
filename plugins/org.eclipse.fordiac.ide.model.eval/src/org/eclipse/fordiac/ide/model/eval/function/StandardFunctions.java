@@ -17,13 +17,13 @@ package org.eclipse.fordiac.ide.model.eval.function;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.eval.value.AnyBitValue;
-import org.eclipse.fordiac.ide.model.eval.value.AnyCharsValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyDurationValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyIntValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyMagnitudeValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyNumValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyRealValue;
+import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyValue;
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue;
 import org.eclipse.fordiac.ide.model.eval.value.ByteValue;
@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.eval.value.DateAndTimeValue;
 import org.eclipse.fordiac.ide.model.eval.value.DateValue;
 import org.eclipse.fordiac.ide.model.eval.value.IntValue;
 import org.eclipse.fordiac.ide.model.eval.value.LDateAndTimeValue;
+import org.eclipse.fordiac.ide.model.eval.value.LDateValue;
 import org.eclipse.fordiac.ide.model.eval.value.LIntValue;
 import org.eclipse.fordiac.ide.model.eval.value.LRealValue;
 import org.eclipse.fordiac.ide.model.eval.value.LTimeOfDayValue;
@@ -56,7 +57,57 @@ import org.eclipse.fordiac.ide.model.eval.value.WordValue;
 @SuppressWarnings("squid:S100") // ST Name conventions must be used here
 public interface StandardFunctions extends Functions {
 
-	// Math functions
+	/* Numeric functions */
+	@SuppressWarnings("unchecked")
+	static <T extends AnyNumValue> T ABS(final T value) {
+		return (T) ValueOperations.abs(value);
+	}
+
+	@SuppressWarnings("unchecked")
+	static <T extends AnyRealValue> T SQRT(final T value) {
+		return (T) ValueOperations.sqrt(value);
+	}
+
+	static <T extends AnyRealValue> T LN(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyRealValue> T LOG(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyRealValue> T EXP(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyRealValue> T SIN(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyRealValue> T COS(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyRealValue> T TAN(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyRealValue> T ASIN(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyRealValue> T ACON(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyRealValue> T ATAN(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyRealValue> T ATAN2(final T x, final T y) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
 	@SuppressWarnings("unchecked")
 	static <T extends AnyMagnitudeValue> T ADD(final T... values) {
 		return Stream.of(values).reduce((a, b) -> (T) ValueOperations.add(a, b)).orElseThrow();
@@ -87,21 +138,7 @@ public interface StandardFunctions extends Functions {
 		return (T) ValueOperations.power(first, second);
 	}
 
-	@SuppressWarnings("unchecked")
-	static <T extends AnyNumValue> T ABS(final T value) {
-		return (T) ValueOperations.abs(value);
-	}
-
-	// Selection Functions
-	static <T extends AnyValue> T MOVE(final T value) {
-		return value;
-	}
-
-	static <T extends AnyValue> T SEL(final BoolValue g, final T in0, final T in1) {
-		return g.boolValue() ? in1 : in0;
-	}
-
-	// TODO: shift and rotation
+	/* Bit operations */
 
 	@SuppressWarnings("unchecked")
 	static <T extends AnyBitValue, U extends AnyIntValue> T SHL(final T value, final U moveby) {
@@ -111,6 +148,7 @@ public interface StandardFunctions extends Functions {
 	@SuppressWarnings("unchecked")
 	static <T extends AnyBitValue, U extends AnyIntValue> T SHR(final T value, final U moveby) {
 		return (T) ValueOperations.shiftRight(value, moveby);
+
 	}
 
 	@SuppressWarnings("unchecked")
@@ -143,7 +181,32 @@ public interface StandardFunctions extends Functions {
 		return (T) ValueOperations.bitwiseNot(first);
 	}
 
-	// TODO: selection functions
+	/* Selection and comparison */
+	static <T extends AnyValue> T MOVE(final T value) {
+		return value;
+	}
+
+	static <T extends AnyValue> T SEL(final BoolValue g, final T in0, final T in1) {
+		return g.boolValue() ? in1 : in0;
+	}
+
+	static <T extends AnyElementaryValue> T MAX(final T... values) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyElementaryValue> T MIN(final T... values) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyElementaryValue> T LIMIT(final T MN, final T IN, final T MX) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyIntValue, U extends AnyValue> U MUX(final T k, final U... values) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	/* Comparisons */
 
 	@SuppressWarnings("unchecked")
 	static <T extends AnyElementaryValue> BoolValue GT(final T... values) {
@@ -182,18 +245,6 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyElementaryValue> BoolValue LT(final T... values) {
-		T val = values[0];
-		for (int i = 1; i < values.length; ++i) {
-			if (!ValueOperations.operator_lessThan(val, values[i])) {
-				return BoolValue.FALSE;
-			}
-			val = values[i];
-		}
-		return BoolValue.TRUE;
-	}
-
-	@SuppressWarnings("unchecked")
 	static <T extends AnyElementaryValue> BoolValue LE(final T... values) {
 		T val = values[0];
 		for (int i = 1; i < values.length; ++i) {
@@ -205,20 +256,313 @@ public interface StandardFunctions extends Functions {
 		return BoolValue.TRUE;
 	}
 
+	@SuppressWarnings("unchecked")
+	static <T extends AnyElementaryValue> BoolValue LT(final T... values) {
+		T val = values[0];
+		for (int i = 1; i < values.length; ++i) {
+			if (!ValueOperations.operator_lessThan(val, values[i])) {
+				return BoolValue.FALSE;
+			}
+			val = values[i];
+		}
+		return BoolValue.TRUE;
+	}
+
 	static <T extends AnyElementaryValue> BoolValue NE(final T first, final T second) {
 		return ValueOperations.equals(first, second) ? BoolValue.FALSE : BoolValue.TRUE;
 	}
 
-	static <T extends AnyCharsValue> ULIntValue LEN(final T string) {
+	/* ANY_CHARS functions */
+	static <T extends AnyStringValue> ULIntValue LEN(final T string) {
 		return ULIntValue.toULIntValue(string.length());
 	}
 
-	@SuppressWarnings("unchecked")
-	static <T extends AnyRealValue> T SQRT(final T value) {
-		return (T) ValueOperations.sqrt(value);
+	static <T extends AnyStringValue, U extends AnyIntValue> T LEFT(final T string, final U L) {
+		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
-	// TODO: conversion functions
+	static <T extends AnyStringValue, U extends AnyIntValue> T RIGHT(final T string, final U L) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T MID(final T string, final U L,
+			final V P) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyStringValue> T CONCAT(final T... strings) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyStringValue, U extends AnyIntValue> T INSERT(final T IN1, final T IN2, final U P) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T DELETE(final T string, final U L,
+			final V P) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T REPLACE(final T IN1, final T IN2,
+			final U L, final V P) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyStringValue, U extends AnyIntValue> U FIND(final T IN1, final T IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	/* Numeric functions for time and date */
+
+	static <T extends AnyDurationValue> T ADD(final T IN1, final T IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeValue ADD_TIME(final TimeValue IN1, final TimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeValue ADD_LTIME(final LTimeValue IN1, final LTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeOfDayValue ADD(final TimeOfDayValue IN1, final TimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeOfDayValue ADD(final LTimeOfDayValue IN1, final LTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeOfDayValue ADD_TOD_TIME(final TimeOfDayValue IN1, final TimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeOfDayValue ADD_LTOD_LTIME(final LTimeOfDayValue IN1, final LTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DateAndTimeValue ADD(final DateAndTimeValue IN1, final TimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LDateAndTimeValue ADD(final LDateAndTimeValue IN1, final LTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DateAndTimeValue ADD_DT_TIME(final DateAndTimeValue IN1, final TimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LDateAndTimeValue ADD_LDT_LTIME(final LDateAndTimeValue IN1, final LTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyDurationValue> T SUB(final T IN1, final T IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeValue SUB_TIME(final TimeValue IN1, final TimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeValue SUB_LTIME(final LTimeValue IN1, final LTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeValue SUB(final DateValue IN1, final DateValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeValue SUB(final LDateValue IN1, final LDateValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeValue SUB_DATE_DATE(final DateValue IN1, final DateValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeValue SUB_LDATE_LDATE(final LDateValue IN1, final LDateValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeOfDayValue SUB(final TimeOfDayValue IN1, final TimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeOfDayValue SUB(final LTimeOfDayValue IN1, final LTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeOfDayValue SUB_TOD_TIME(final TimeOfDayValue IN1, final TimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeOfDayValue SUB_LTOD_LTIME(final LTimeOfDayValue IN1, final LTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeValue SUB(final TimeOfDayValue IN1, final TimeOfDayValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeValue SUB(final LTimeOfDayValue IN1, final LTimeOfDayValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeValue SUB_TOD_TOD(final TimeOfDayValue IN1, final TimeOfDayValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeValue SUB_LTOD_LTOD(final LTimeOfDayValue IN1, final LTimeOfDayValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DateAndTimeValue SUB(final DateAndTimeValue IN1, final TimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LDateAndTimeValue SUB(final LDateAndTimeValue IN1, final LTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DateAndTimeValue SUB_DT_TIME(final DateAndTimeValue IN1, final TimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LDateAndTimeValue SUB_LDT_LTIME(final LDateAndTimeValue IN1, final LTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeValue SUB(final DateAndTimeValue IN1, final DateAndTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeValue SUB(final LDateAndTimeValue IN1, final LDateAndTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static TimeValue SUB_DT_DT(final DateAndTimeValue IN1, final DateAndTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static LTimeValue SUB_LDT_LDT(final LDateAndTimeValue IN1, final LDateAndTimeValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyDurationValue, U extends AnyIntValue> T MUL(final T IN1, final U IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <U extends AnyIntValue> TimeValue MUL_TIME(final TimeValue IN1, final U IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <U extends AnyIntValue> LTimeValue MUL_LTIME(final LTimeValue IN1, final U IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyDurationValue, U extends AnyIntValue> T DIV(final T IN1, final U IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <U extends AnyIntValue> TimeValue DIV_TIME(final TimeValue IN1, final U IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <U extends AnyIntValue> LTimeValue DIV_LTIME(final LTimeValue IN1, final U IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	// Additional time functions CONCAT and SPLIT
+
+	static DateAndTimeValue CONCAT_DATE_TOD(final DateValue IN1, final TimeOfDayValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static DateAndTimeValue CONCAT_DATE_LTOD(final DateValue IN1, final LTimeOfDayValue IN2) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyIntValue> DateValue CONCAT_DATE(final T YEAR, final T MONTH, final T DAY) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyIntValue> TimeOfDayValue CONCAT_TOD(final T HOUR, final T MINUTE, final T SECOND,
+			final T MILLISECOND) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyIntValue> LTimeOfDayValue CONCAT_LTOD(final T HOUR, final T MINUTE, final T SECOND,
+			final T MILLISECOND) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyIntValue> DateAndTimeValue CONCAT_DT(final T YEAR, final T MONTH, final T DAY, final T HOUR,
+			final T MINUTE, final T SECOND, final T MILLISECOND) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyIntValue> LDateAndTimeValue CONCAT_LDT(final T YEAR, final T MONTH, final T DAY, final T HOUR,
+			final T MINUTE, final T SECOND, final T MILLISECOND) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyIntValue> void SPLIT_DATE(final DateValue IN, final T YEAR, final T MONTH, final T DAY) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyIntValue> void SPLIT_TOD(final TimeOfDayValue IN, final T HOUR, final T MINUTE, final T SECOND,
+			final T MILLISECOND) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyIntValue> void SPLIT_LTOD(final LTimeOfDayValue IN, final T HOUR, final T MINUTE,
+			final T SECOND, final T MILLISECOND) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyIntValue> void SPLIT_DT(final DateAndTimeValue IN, final T YEAR, final T MONTH, final T DAY,
+			final T HOUR, final T MINUTE, final T SECOND, final T MILLISECOND) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyIntValue> void SPLIT_LDT(final LDateAndTimeValue IN, final T YEAR, final T MONTH, final T DAY,
+			final T HOUR, final T MINUTE, final T SECOND, final T MILLISECOND) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyIntValue> T DAY_OF_WEEK(final DateValue IN) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyValue> T TO_BIG_ENDIAN(final T IN) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyValue> T TO_LITTLE_ENDIAN(final T IN) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyValue> T FROM_BIG_ENDIAN(final T IN) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyValue> T FROM_LITTLE_ENDIAN(final T IN) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	/* Validation functions */
+
+	static <T extends AnyRealValue> BoolValue IS_VALID(final T IN) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	static <T extends AnyBitValue> BoolValue IS_VALID_BCD(final T IN) {
+		throw new UnsupportedOperationException("Not implemented yet!");
+	}
+
+	/* conversion functions */
 
 	/* LREAL_TO */
 	static RealValue LREAL_TO_REAL(final LRealValue value) {
@@ -1121,10 +1465,8 @@ public interface StandardFunctions extends Functions {
 		return WCharValue.toWCharValue(value);
 	}
 
-
 	// TODO: rest of string functions
 
 	// TODO: date and duration functions
-
 
 }

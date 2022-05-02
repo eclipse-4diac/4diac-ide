@@ -620,31 +620,35 @@ class Formatter2Test {
 			toBeFormatted = '''
 				FUNCTION CHECK : INT
 				VAR_INPUT
-					IN: INT;
+					IN1: INT;
+					IN2: INT;
+					IN3: INT;
 				END_VAR
 				END_FUNCTION
 				FUNCTION hubert
 				VAR
 					value : INT;
-					MAX : INT;
-					MIN : INT;
+					maxval : INT;
+					minval : INT;
 				END_VAR
-					LIMIT_CHECK := CHECK( ( MAX ) + ( value * 1 ), MIN, 1 * (MAX ) );
+					value := CHECK( ( maxval ) + ( value * 1 ), minval, 1 * (maxval ) );
 				END_FUNCTION
 			'''
 			expectation = '''
 				FUNCTION CHECK : INT
 				VAR_INPUT
-					IN : INT;
+					IN1 : INT;
+					IN2 : INT;
+					IN3 : INT;
 				END_VAR
 				END_FUNCTION
 				FUNCTION hubert
 				VAR
 					value : INT;
-					MAX : INT;
-					MIN : INT;
+					maxval : INT;
+					minval : INT;
 				END_VAR
-				LIMIT_CHECK := CHECK((MAX) + (value * 1), MIN, 1 * (MAX));
+				value := CHECK((maxval) + (value * 1), minval, 1 * (maxval));
 				END_FUNCTION
 			'''
 		]

@@ -48,7 +48,7 @@ class STFunctionValidatorTest {
 			bol1 := FALSE;
 			bOl1 := FALSE;
 		END_IF;
-			bOl1 := 2;
+			bOl1 := 1;
 		END_FUNCTION'''.parse.assertIssuesInvalidNameWarning()
 	}
 
