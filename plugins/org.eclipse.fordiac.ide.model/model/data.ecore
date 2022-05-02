@@ -2,8 +2,8 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="data" nsURI="org.eclipse.fordiac.ide.model.datatype" nsPrefix="data">
   <eClassifiers xsi:type="ecore:EClass" name="AnyDerivedType" eSuperTypes="#//AnyType">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="compilerInfo" lowerBound="1"
-        eType="ecore:EClass lib.ecore#//CompilerInfo" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="compilerInfo" eType="ecore:EClass lib.ecore#//CompilerInfo"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArrayType" eSuperTypes="#//AnyDerivedType">
     <eStructuralFeatures xsi:type="ecore:EReference" name="subranges" lowerBound="1"

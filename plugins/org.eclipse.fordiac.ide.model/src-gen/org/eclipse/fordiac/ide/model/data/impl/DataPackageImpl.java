@@ -1460,7 +1460,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(anyDerivedTypeEClass, AnyDerivedType.class, "AnyDerivedType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getAnyDerivedType_CompilerInfo(), theLibraryElementPackage.getCompilerInfo(), null, "compilerInfo", null, 1, 1, AnyDerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getAnyDerivedType_CompilerInfo(), theLibraryElementPackage.getCompilerInfo(), null, "compilerInfo", null, 0, 1, AnyDerivedType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(arrayTypeEClass, ArrayType.class, "ArrayType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getArrayType_Subranges(), this.getSubrange(), null, "subranges", null, 1, -1, ArrayType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
