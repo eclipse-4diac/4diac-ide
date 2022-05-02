@@ -160,6 +160,17 @@ final class ValueOperations {
 		}
 	}
 
+	def static Value sqrt(Value value) {
+		switch (value) {
+			LRealValue:
+				LRealValue.toLRealValue(Math.sqrt(value.doubleValue))
+			RealValue:
+				RealValue.toRealValue(Math.sqrt(value.floatValue) as float)
+			default:
+				throw new UnsupportedOperationException('''The sqrt operation is not supported for type «value.type.name»''')
+		}
+	}
+
 	def static dispatch Value add(Value first, Value second) {
 		throw new UnsupportedOperationException('''The add operation is not supported for types «first.type.name» and «second.type.name»''')
 	}
@@ -400,6 +411,82 @@ final class ValueOperations {
 				BoolValue.toBoolValue(first.boolValue.xor(second.boolValue))
 			default:
 				throw new UnsupportedOperationException('''The xor operation is not supported for types «first.type.name» and «second.type.name»''')
+		}
+	}
+
+	def static dispatch Value shiftLeft(Value first, Value second) {
+		throw new UnsupportedOperationException('''The shift left operation is not supported for types «first.type.name» and «second.type.name»''')
+	}
+
+	def static dispatch AnyBitValue shiftLeft(AnyBitValue first, AnyIntValue second) {
+		switch (first) {
+			LWordValue:
+				LWordValue.toLWordValue(first.longValue << second.intValue)
+			DWordValue:
+				DWordValue.toDWordValue(first.intValue << second.intValue)
+			WordValue:
+				WordValue.toWordValue((first.shortValue << second.intValue) as short)
+			ByteValue:
+				ByteValue.toByteValue((first.byteValue << second.intValue) as byte)
+			default:
+				throw new UnsupportedOperationException('''The shift left operation is not supported for types «first.type.name» and «second.type.name»''')
+		}
+	}
+
+	def static dispatch Value shiftRight(Value first, Value second) {
+		throw new UnsupportedOperationException('''The shift left operation is not supported for types «first.type.name» and «second.type.name»''')
+	}
+
+	def static dispatch AnyBitValue shiftRight(AnyBitValue first, AnyIntValue second) {
+		switch (first) {
+			LWordValue:
+				LWordValue.toLWordValue(first.longValue >>> second.intValue)
+			DWordValue:
+				DWordValue.toDWordValue(first.intValue >>> second.intValue)
+			WordValue:
+				WordValue.toWordValue((first.shortValue >>> second.intValue) as short)
+			ByteValue:
+				ByteValue.toByteValue((first.byteValue >>> second.intValue) as byte)
+			default:
+				throw new UnsupportedOperationException('''The shift left operation is not supported for types «first.type.name» and «second.type.name»''')
+		}
+	}
+
+	def static dispatch Value rotateLeft(Value first, Value second) {
+		throw new UnsupportedOperationException('''The shift left operation is not supported for types «first.type.name» and «second.type.name»''')
+	}
+
+	def static dispatch AnyBitValue rotateLeft(AnyBitValue first, AnyIntValue second) {
+		switch (first) {
+			LWordValue:
+				LWordValue.toLWordValue(Long.rotateLeft(first.longValue, second.intValue))
+			DWordValue:
+				DWordValue.toDWordValue(Integer.rotateLeft(first.intValue, second.intValue))
+			WordValue:
+				WordValue.toWordValue(((first.intValue << second.intValue).bitwiseOr(first.intValue >>> (16 - second.intValue))) as short)
+			ByteValue:
+				ByteValue.toByteValue(((first.intValue << second.intValue).bitwiseOr(first.intValue >>> (8 - second.intValue))) as byte)
+			default:
+				throw new UnsupportedOperationException('''The shift left operation is not supported for types «first.type.name» and «second.type.name»''')
+		}
+	}
+
+	def static dispatch Value rotateRight(Value first, Value second) {
+		throw new UnsupportedOperationException('''The shift left operation is not supported for types «first.type.name» and «second.type.name»''')
+	}
+
+	def static dispatch AnyBitValue rotateRight(AnyBitValue first, AnyIntValue second) {
+		switch (first) {
+			LWordValue:
+				LWordValue.toLWordValue(Long.rotateRight(first.longValue, second.intValue))
+			DWordValue:
+				DWordValue.toDWordValue(Integer.rotateRight(first.intValue, second.intValue))
+			WordValue:
+				WordValue.toWordValue(((first.intValue >>> second.intValue).bitwiseOr(first.intValue << (16 - second.intValue))) as short)
+			ByteValue:
+				ByteValue.toByteValue(((first.intValue >>> second.intValue).bitwiseOr(first.intValue << (8 - second.intValue))) as byte)
+			default:
+				throw new UnsupportedOperationException('''The shift left operation is not supported for types «first.type.name» and «second.type.name»''')
 		}
 	}
 

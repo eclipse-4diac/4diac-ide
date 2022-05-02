@@ -103,20 +103,24 @@ public interface StandardFunctions extends Functions {
 
 	// TODO: shift and rotation
 
-	static <T extends AnyBitValue, U extends AnyIntValue> T SHR(final T value, final U moveby) {
-		throw new UnsupportedOperationException("Not implemented yet!");
-	}
-
+	@SuppressWarnings("unchecked")
 	static <T extends AnyBitValue, U extends AnyIntValue> T SHL(final T value, final U moveby) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return (T) ValueOperations.shiftLeft(value, moveby);
 	}
 
-	static <T extends AnyBitValue, U extends AnyIntValue> T ROR(final T value, final U moveby) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	@SuppressWarnings("unchecked")
+	static <T extends AnyBitValue, U extends AnyIntValue> T SHR(final T value, final U moveby) {
+		return (T) ValueOperations.shiftRight(value, moveby);
 	}
 
+	@SuppressWarnings("unchecked")
 	static <T extends AnyBitValue, U extends AnyIntValue> T ROL(final T value, final U moveby) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return (T) ValueOperations.rotateLeft(value, moveby);
+	}
+
+	@SuppressWarnings("unchecked")
+	static <T extends AnyBitValue, U extends AnyIntValue> T ROR(final T value, final U moveby) {
+		return (T) ValueOperations.rotateRight(value, moveby);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -209,8 +213,9 @@ public interface StandardFunctions extends Functions {
 		return ULIntValue.toULIntValue(string.length());
 	}
 
+	@SuppressWarnings("unchecked")
 	static <T extends AnyRealValue> T SQRT(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return (T) ValueOperations.sqrt(value);
 	}
 
 	// TODO: conversion functions
