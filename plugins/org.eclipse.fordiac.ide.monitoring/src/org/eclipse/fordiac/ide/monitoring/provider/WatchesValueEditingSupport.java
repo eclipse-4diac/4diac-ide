@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.views.StructParser;
 import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNode;
+import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNodeUtils;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
@@ -57,6 +58,13 @@ public class WatchesValueEditingSupport extends EditingSupport {
 	@Override
 	protected Object getValue(final Object element) {
 		if (element instanceof WatchValueTreeNode) {
+			final IInterfaceElement ie = ((WatchValueTreeNode) element).getMonitoringBaseElement().getPort()
+					.getInterfaceElement();
+			if (((WatchValueTreeNode) element).getValue() != null && ie.getType() != null
+					&& WatchValueTreeNodeUtils.isHexDecorationNecessary(((WatchValueTreeNode) element).getValue(),
+							ie.getType())) {
+				return WatchValueTreeNodeUtils.decorateHexNumber(((WatchValueTreeNode) element).getValue());
+			}
 			return ((WatchValueTreeNode) element).getValue();
 		}
 		return ""; //$NON-NLS-1$

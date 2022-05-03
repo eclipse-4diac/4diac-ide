@@ -47,7 +47,13 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 		this.structType = structType;
 		this.monitoringBaseElement = monitoringBaseElement;
 		this.varName = varName;
-		setValue(value);
+
+		if (value != null && variable != null && variable.getType() != null
+				&& WatchValueTreeNodeUtils.isHexDecorationNecessary(value, variable.getType())) {
+			this.value = WatchValueTreeNodeUtils.decorateHexNumber(value);
+		} else {
+			this.value = value;
+		}
 		setVariable(variable);
 		setParent(parent);
 	}
@@ -184,7 +190,7 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 	}
 
 	public void setValue(final String value) {
-		this.value = WatchValueTreeNodeUtils.decorateHexNumber(value);
+		this.value = value;
 	}
 
 	public boolean isStructRootNode() {
