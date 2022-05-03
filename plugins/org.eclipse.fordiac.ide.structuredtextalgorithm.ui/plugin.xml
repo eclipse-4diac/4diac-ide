@@ -361,4 +361,39 @@
        </markerTypeReference>
     </markerTypeCategory>
  </extension>
+ <extension
+       point="org.eclipse.ui.editorActions">
+    <!-- extension point is generally deprecated but still valid for rulerActions in the editor gutter, according to bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=455985 -->
+    <editorContribution
+          id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithm.rulerActions"
+          targetID="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm">
+       <action
+             actionID="RulerDoubleClick"
+             class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
+             id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithm.doubleClickBreakpointAction"
+             label="Toggle Breakpoint"
+             style="push">
+       </action>
+    </editorContribution>
+ </extension>
+ <extension
+       point="org.eclipse.ui.popupMenus">
+    <!-- extension point is generally deprecated but still valid for rulerActions in the editor gutter, according to bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=455985 -->
+    <viewerContribution
+          id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithm.RulerPopupActions"
+          targetID="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.RulerContext">
+       <action
+             class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
+             id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithm.rulerContextMenu.toggleBreakpointAction"
+             label="Toggle Breakpoint"
+             menubarPath="debug">
+       </action>
+       <action
+             class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerEnableDisableBreakpointActionDelegate"
+             id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithm.rulerContextMenu.enableDisableBreakpointAction"
+             label="Enable/Disable Breakpoint"
+             menubarPath="debug">
+       </action>
+    </viewerContribution>
+ </extension>
 </plugin>

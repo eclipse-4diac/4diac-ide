@@ -12,5 +12,25 @@
             sourceLocatorId="org.eclipse.fordiac.ide.debug.sourceLocator">
       </launchConfigurationType>
    </extension>
+   <extension
+         id="org.eclipse.fordiac.ide.debug.st.stLineBreakpointMarker"
+         name="ST Line Breakpoint"
+         point="org.eclipse.core.resources.markers">
+      <super
+            type="org.eclipse.debug.core.lineBreakpointMarker">
+      </super>
+      <persistent
+            value="true">
+      </persistent>
+   </extension>
+   <extension
+         point="org.eclipse.debug.core.breakpoints">
+      <breakpoint
+            class="org.eclipse.fordiac.ide.debug.st.breakpoint.STLineBreakpoint"
+            id="org.eclipse.fordiac.ide.debug.st.stLineBreakpoint"
+            markerType="org.eclipse.fordiac.ide.debug.st.stLineBreakpointMarker"
+            name="ST Line Breakpoint">
+      </breakpoint>
+   </extension>
 
 </plugin>

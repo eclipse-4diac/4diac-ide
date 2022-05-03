@@ -27,8 +27,7 @@ import org.eclipse.fordiac.ide.model.eval.Evaluator;
 public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThread {
 	private final Thread thread;
 
-	private final AtomicReference<DebugEvent> request = new AtomicReference<>(
-			new DebugEvent(this, DebugEvent.SUSPEND, DebugEvent.CLIENT_REQUEST));
+	private final AtomicReference<DebugEvent> request = new AtomicReference<>(null);
 	private final AtomicBoolean suspended = new AtomicBoolean();
 	private final AtomicReference<Evaluator> currentEvaluator = new AtomicReference<>();
 

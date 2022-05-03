@@ -21,10 +21,7 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IRegisterGroup;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IVariable;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
-import org.eclipse.xtext.nodemodel.ICompositeNode;
-import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 
 public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements IStackFrame {
 	private final Evaluator evaluator;
@@ -158,14 +155,9 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 
 	@Override
 	public int getLineNumber() throws DebugException {
+		final CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
 		final Object context = this.getCurrentContext();
-		if (context instanceof EObject) {
-			final ICompositeNode node = NodeModelUtils.findActualNodeFor((EObject) context);
-			if (node != null) {
-				return node.getEndLine();
-			}
-		}
-		return -1;
+		return debugger.getLineNumber(context);
 	}
 
 	@Override

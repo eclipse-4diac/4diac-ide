@@ -166,4 +166,9 @@ public class StructuredTextFBTypeEditor extends XtextEditor implements IFBTEdito
 	public Object getSelectableEditPart() {
 		return null;
 	}
+
+	@Override
+	public String getEditorId() {
+		return "org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"; //$NON-NLS-1$
+	}
 }

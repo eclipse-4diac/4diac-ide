@@ -450,4 +450,9 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		setInput(newInput);
 		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
 	}
+
+	@Override
+	protected IEditorSite createSite(final IEditorPart editor) {
+		return new FBTypeMultiPageEditorSite(this, editor);
+	}
 }
