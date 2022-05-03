@@ -32,6 +32,7 @@ final class VariableOperations {
 			AnyElementaryType: new ElementaryVariable(name, type)
 			ArrayType: new ArrayVariable(name, type)
 			StructuredType: new StructVariable(name, type)
+			FBType: new FBVariable(name, type)
 			default: throw new UnsupportedOperationException('''Cannot instanciate variable «name» of type «type.name»''')
 		}
 	}

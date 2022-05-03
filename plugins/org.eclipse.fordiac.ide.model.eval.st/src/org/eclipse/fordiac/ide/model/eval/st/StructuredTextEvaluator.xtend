@@ -18,10 +18,12 @@ import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
+import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
 import org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
+import org.eclipse.fordiac.ide.model.eval.value.FBValue
 import org.eclipse.fordiac.ide.model.eval.value.StructValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable
@@ -29,7 +31,10 @@ import org.eclipse.fordiac.ide.model.eval.variable.PartialVariable
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
+import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
@@ -86,6 +91,10 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch Variable findVariable(VarDeclaration variable) {
+		(context as FBVariable).value.members.get(variable.name)
+	}
+
+	def protected dispatch Variable findVariable(FB variable) {
 		(context as FBVariable).value.members.get(variable.name)
 	}
 
@@ -350,6 +359,11 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				].toList
 				StandardFunctions.invoke(feature.name, arguments)
 			}
+			FB case expr.call: {
+				val fb = feature.findVariable.value as FBValue
+				val event = fb.type.interfaceList.eventInputs.head
+				fb.evaluateFBCall(event, expr.mappedInputArguments, expr.mappedOutputArguments)
+			}
 			ICallable case expr.call: {
 				val arguments = (expr.mappedInputArguments.entrySet.filter[value !== null].map [
 					newVariable(key, value.evaluateExpression)
@@ -407,6 +421,13 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		receiver.get(expr.feature.name).value
 	}
 
+	def protected dispatch Value evaluateExpression(STFeatureExpression expr, FBValue receiver) {
+		if (expr.call)
+			receiver.evaluateFBCall(expr.feature as Event, expr.mappedInputArguments, expr.mappedOutputArguments)
+		else
+			receiver.get(expr.feature.name).value
+	}
+
 	def protected dispatch Variable evaluateVariable(STExpression expr) {
 		error('''The lvalue expression «expr.eClass.name» is not supported''')
 		throw new UnsupportedOperationException('''The lvalue expression «expr.eClass.name» is not supported''')
@@ -449,6 +470,10 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		receiver.value.get(expr.feature.name)
 	}
 
+	def protected dispatch Variable evaluateVariable(STFeatureExpression expr, FBVariable receiver) {
+		receiver.value.get(expr.feature.name)
+	}
+
 	def protected dispatch Variable evaluateVariable(STMultibitPartialExpression expr, Variable receiver) {
 		new PartialVariable(receiver, expr.resultType as DataType,
 			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
@@ -460,6 +485,25 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 
 	def protected static dispatch Variable newVariable(STVarDeclaration v, Value value) {
 		STVariableOperations.newVariable(v, value)
+	}
+
+	def protected Value evaluateFBCall(FBValue fb, Event event, Map<INamedElement, STExpression> inputs,
+		Map<INamedElement, INamedElement> outputs) {
+		inputs.forEach [ parameter, argument |
+			fb.get(parameter.name).value = argument?.evaluateExpression ?:
+				(parameter as VarDeclaration).type.defaultValue
+		]
+		val eval = EvaluatorFactory.createEvaluator(fb.type, fb.type.eClass.instanceClass as Class<? extends ICallable>,
+			context, fb.members.values, this) as FBEvaluator<?>
+		if (eval === null) {
+			error('''Cannot create evaluator for callable «fb.type.eClass.name»''')
+			throw new UnsupportedOperationException('''Cannot create evaluator for callable «fb.type.eClass.name»''')
+		}
+		eval.evaluate(event)
+		outputs.forEach [ parameter, argument |
+			if(argument !== null) argument.findVariable.value = eval.variables.get(parameter.name).value
+		]
+		null
 	}
 
 	static class StructuredTextException extends Exception {

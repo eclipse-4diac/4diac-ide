@@ -13,25 +13,37 @@
 package org.eclipse.fordiac.ide.test.model.eval.fb
 
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue
 import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
 import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
 import org.junit.jupiter.api.BeforeAll
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 
 class FBEvaluatorTest {
 	protected static TypeLibrary typeLib
-	
+
 	@BeforeAll
 	def static void setupXtext() {
 		typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(null)
 		STAlgorithmStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register
+		FBEvaluatorFactory.register
+	}
+
+	def static FB newFB(String instanceName, FBType instanceType) {
+		LibraryElementFactory.eINSTANCE.createFB => [
+			name = instanceName
+			typeEntry = instanceType.typeEntry
+			interface = instanceType.interfaceList.copy
+		]
 	}
 
 	def static newInterfaceList(Iterable<Event> events, Iterable<VarDeclaration> vars) {
