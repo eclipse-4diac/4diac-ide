@@ -218,8 +218,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		}
 	}
 
-	private static String getDefaultValue(final IInterfaceElement ie) {
-		if(ie instanceof VarDeclaration && !IecTypes.GenericTypes.isAnyType(ie.getType())) {
+	@SuppressWarnings("static-method")  // allow subclasses to overwrite this method
+	protected String getDefaultValue(final IInterfaceElement ie) {
+		if (ie instanceof VarDeclaration && !IecTypes.GenericTypes.isAnyType(ie.getType())) {
 			return VariableOperations.newVariable((VarDeclaration) ie).getValue().toString();
 		}
 		// we should only arrive here in case of an errormarker interface without value OR ANY type
