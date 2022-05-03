@@ -33,11 +33,14 @@ import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
@@ -198,22 +201,37 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			setVisible(true);
 			setBackground(getModel().hasError());
 			if (getOuterConnections().isEmpty()) {
-				getFigure().setText(getModel().getValue());
+				if(!getModel().getValue().isBlank()) {
+					getFigure().setText(getModel().getValue());
+					getFigure().setFont(null);
+					getFigure().setForegroundColor(ColorConstants.menuForeground);
+				} else {
+					getFigure().setText(getDefaultValue(getModel().getParentIE()));
+					getFigure().setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
+					getFigure().setForegroundColor(ColorConstants.gray);
+				}
 			} else {
-				getFigure().setText("");
+				getFigure().setText(""); //$NON-NLS-1$
 			}
 		} else {
 			setVisible(false);
 		}
 	}
 
+	private static String getDefaultValue(final IInterfaceElement ie) {
+		if(ie instanceof VarDeclaration && !IecTypes.GenericTypes.isAnyType(ie.getType())) {
+			return VariableOperations.newVariable((VarDeclaration) ie).getValue().toString();
+		}
+		// we should only arrive here in case of an errormarker interface without value OR ANY type
+		return ""; //$NON-NLS-1$
+	}
+
 	private EList<Connection> getOuterConnections() {
 		final IInterfaceElement model = getIInterfaceElement();
 		if(model.isIsInput()) {
 			return model.getInputConnections();
-		} else {
-			return model.getOutputConnections();
 		}
+		return model.getOutputConnections();
 	}
 
 	private void setBackground(final boolean hasError) {
