@@ -36,7 +36,7 @@ public class WatchesValueLabelProvider extends ColumnLabelProvider {
 				// of type ANY_BIT to 16#xx
 				WatchValueTreeNodeUtils.adaptAnyBitValues(tn.getChildren());
 			}
-			if (WatchValueTreeNodeUtils.isHexDecoractionNecessary(tn.getValue(), ie.getType())) {
+			if (WatchValueTreeNodeUtils.isHexDecorationNecessary(tn.getValue(), ie.getType())) {
 				return WatchValueTreeNodeUtils.decorateHexNumber(tn.getValue());
 			}
 			return (tn.isStructNode() && tn.hasChildren()) ? "" : tn.getValue(); // Hide struct-string in watches view,
