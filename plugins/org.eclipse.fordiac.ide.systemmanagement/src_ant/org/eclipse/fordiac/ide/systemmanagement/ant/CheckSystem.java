@@ -13,8 +13,6 @@
 package org.eclipse.fordiac.ide.systemmanagement.ant;
 
 import java.text.MessageFormat;
-import java.util.Arrays;
-import java.util.Optional;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -25,7 +23,6 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
 public class CheckSystem extends Task {
@@ -43,7 +40,7 @@ public class CheckSystem extends Task {
 		}
 
 		final IFile systemFile = getSystemFile();
-		if (systemFile == null || !systemFile.exists() || !SystemManager.isSystemFile(systemFile)) { 
+		if (systemFile == null || !systemFile.exists() || !SystemManager.isSystemFile(systemFile)) {
 			throw new BuildException(
 					MessageFormat.format("System path {0} is not a valid system in workspace!", //$NON-NLS-1$
 							systemPathString));
@@ -51,23 +48,20 @@ public class CheckSystem extends Task {
 
 		// load the system to get the error markers is place
 		SystemManager.INSTANCE.getSystem(systemFile);
-		waitMarkerJobsComplete();
+		CheckProject.waitMarkerJobsComplete();
 
 		try {
-			IMarker[] markers = systemFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO);
+			final IMarker[] markers = systemFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO);
+
+			// log Markers, only visible in console output
+			CheckProject.printMarkers(markers, this);
 			if (markers.length != 0) {
 				throw new BuildException(
-						MessageFormat.format("The system {0} has errors or warnings!", systemPathString)); //$NON-NLS-1$
-			}
-			markers = systemFile.getProject().findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-			if (markers.length != 0) {
-				throw new BuildException(MessageFormat
-						.format("One of the types used by system {0} has errors or warnings!", systemPathString)); //$NON-NLS-1$
+						String.format("The system %s has %d errors or warnings!", systemPathString, markers.length)); //$NON-NLS-1$
 			}
 		} catch (final CoreException e) {
 			throw new BuildException("Cannot get markers", e); //$NON-NLS-1$
 		}
-
 	}
 
 	private IFile getSystemFile() {
@@ -75,24 +69,6 @@ public class CheckSystem extends Task {
 		return workspace.getRoot().getFile(new Path(systemPathString));
 	}
 
-	private static void waitMarkerJobsComplete() {
-		Job[] jobs = Job.getJobManager().find(null); // get all current scheduled jobs
 
-		while (markerJobExists(jobs)) {
-			try {
-				Thread.sleep(50);
-			} catch (final InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-			jobs = Job.getJobManager().find(null); // update the job list
-		}
-	}
-
-	private static boolean markerJobExists(final Job[] jobs) {
-		final Optional<Job> findAny = Arrays.stream(jobs)
-				.filter(j -> (j.getState() != Job.NONE && j.getName().startsWith("Add error marker to file"))) //$NON-NLS-1$
-				.findAny();
-		return findAny.isPresent();
-	}
 
 }

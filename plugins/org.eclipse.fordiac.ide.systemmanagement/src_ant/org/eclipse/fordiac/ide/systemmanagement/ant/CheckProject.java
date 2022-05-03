@@ -52,7 +52,6 @@ public class CheckProject extends Task {
 			throw new BuildException("Project named '" + projectNameString + "' not in workspace in Workspace");//$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-		int markersCount = 0;
 
 		final IProject[] projectList = new IProject[] { project };
 		ValidateProject.clear(projectList);
@@ -63,23 +62,31 @@ public class CheckProject extends Task {
 
 		// log Markers, only visible in console output
 		try {
-			for (final IMarker marker : project.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE)) {
-				log("PROBLEM: " + marker.getAttribute("message").toString() + " | " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-						+ marker.getResource().getLocation().lastSegment() + " : " //$NON-NLS-1$
-						+ marker.getAttribute("lineNumber").toString()); //$NON-NLS-1$
-				markersCount++;
+			final IMarker[] markers = project.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+			printMarkers(markers, this);
+			if (markers.length > 0) {
+				throw new BuildException(
+						String.format("%d problems found in loaded project %s", markers.length, projectNameString)); //$NON-NLS-1$
 			}
 		} catch (final CoreException e) {
-			log("Could not create error marker: " + e.getMessage());//$NON-NLS-1$
+			throw new BuildException("Could not create error marker: " + e.getMessage());//$NON-NLS-1$
 		}
-
-		if(markersCount > 0) {
-			throw new BuildException(String.format("%d problems found in loaded projects", markersCount)); //$NON-NLS-1$
-		}
-
 	}
 
-	private static void waitMarkerJobsComplete() {
+
+	public static void printMarkers(final IMarker[] markers, final Task task) throws CoreException {
+		for (final IMarker marker : markers) {
+			task.log(markerToLogString(marker));
+		}
+	}
+
+	private static String markerToLogString(final IMarker marker) throws CoreException {
+		return "PROBLEM: " + marker.getAttribute("message").toString() + " | " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				+ marker.getResource().getLocation().lastSegment() + " : " //$NON-NLS-1$
+				+ marker.getAttribute("lineNumber").toString();
+	}
+
+	public static void waitMarkerJobsComplete() {
 		Job[] jobs = Job.getJobManager().find(null); // get all current scheduled jobs
 
 		while (markerJobExists(jobs)) {
