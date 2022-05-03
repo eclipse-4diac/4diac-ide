@@ -197,7 +197,7 @@ public class InterfaceElementSection extends AbstractSection {
 		if (getType().getType() instanceof StructuredType) {
 			return getStructTypes((StructuredType) getType().getType());
 		}
-		return getType().getType() != null ? getType().getType().getName() : ""; //$NON-NLS-1$ ;
+		return getType().getType() != null ? getType().getType().getName() : ""; //$NON-NLS-1$
 	}
 
 	private String getTypeComment() {
