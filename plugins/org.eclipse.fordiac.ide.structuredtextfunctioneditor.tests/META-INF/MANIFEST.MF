@@ -15,6 +15,7 @@ Import-Package: org.junit.jupiter.api,
 Require-Bundle: org.eclipse.fordiac.ide.structuredtextfunctioneditor,
  org.eclipse.xtext.testing,
  org.eclipse.xtext.xbase.testing,
- org.eclipse.xtext.xbase.lib;bundle-version="2.14.0"
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.fordiac.ide.model
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests;x-internal=true

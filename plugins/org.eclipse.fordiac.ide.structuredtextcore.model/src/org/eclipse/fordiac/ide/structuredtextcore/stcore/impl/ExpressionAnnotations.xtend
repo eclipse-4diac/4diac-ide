@@ -15,6 +15,9 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.Map
+import org.eclipse.fordiac.ide.model.data.AnyBitType
+import org.eclipse.fordiac.ide.model.data.AnyCharsType
+import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
@@ -176,7 +179,11 @@ final package class ExpressionAnnotations {
 	}
 
 	def package static INamedElement getResultType(STNumericLiteral expr) {
-		getDeclaredResultType(expr) ?: expr.expectedType ?: switch (it : expr.value) {
+		getDeclaredResultType(expr) ?: switch (result : expr.expectedType) {
+			AnyNumType,
+			AnyBitType: result
+			default: null
+		} ?: switch (it : expr.value) {
 			Boolean: ElementaryTypes.BOOL
 			BigDecimal: ElementaryTypes.LREAL
 			BigInteger case checkRange(Byte.MIN_VALUE, Byte.MAX_VALUE): ElementaryTypes.SINT
@@ -218,7 +225,10 @@ final package class ExpressionAnnotations {
 	def package static INamedElement getDeclaredResultType(STDateAndTimeLiteral expr) { expr.type }
 
 	def package static INamedElement getResultType(STStringLiteral expr) {
-		getDeclaredResultType(expr) ?: expr.expectedType ?: if (expr.value.length == 1) {
+		getDeclaredResultType(expr) ?: switch (result : expr.expectedType) {
+			AnyCharsType: result
+			default: null
+		} ?: if (expr.value.length == 1) {
 			if(expr.value.wide) ElementaryTypes.WCHAR else ElementaryTypes.CHAR
 		} else {
 			if(expr.value.wide) ElementaryTypes.WSTRING else ElementaryTypes.STRING

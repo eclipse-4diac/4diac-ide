@@ -20,6 +20,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
+import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+
 abstract class ForteLibraryElementTemplate extends ForteNgExportTemplate {
 
 	public static final CharSequence EXPORT_PREFIX = "st_"
@@ -60,19 +62,20 @@ abstract class ForteLibraryElementTemplate extends ForteNgExportTemplate {
 
 	def protected generateAccessors(List<VarDeclaration> vars, String function) '''
 		«FOR v : vars»
-			CIEC_«v.typeName» «IF v.array»*«ELSE»&«ENDIF»«exportPrefix»«v.name»() {
-			  «IF v.array»
-			  	return static_cast<CIEC_«v.typeName»*>((*static_cast<CIEC_ARRAY *>(«function»(«vars.indexOf(v)»)))[0]); //the first element marks the start of the array
-			  «ELSE»
-			  	return *static_cast<CIEC_«v.typeName»*>(«function»(«vars.indexOf(v)»));
-			  «ENDIF»
+			«v.generateInterfaceTypeName» &«exportPrefix»«v.name»() {
+			  return *static_cast<«v.generateInterfaceTypeName»*>(«function»(«vars.indexOf(v)»));
 			}
 			
 		«ENDFOR»
 	'''
 
+	def protected CharSequence generateInterfaceTypeName(VarDeclaration variable) //
+	'''«IF variable.array»CIEC_ARRAY<«ENDIF»«variable.type.generateTypeName»«IF variable.array»>«ENDIF»'''
+
+	def protected CharSequence generateName(VarDeclaration variable) '''var_«variable.name»'''
+
 	def protected getFORTEString(String s) '''g_nStringId«s»'''
-	
+
 	def protected getFORTENameList(List<? extends INamedElement> elements) {
 		elements.map[name.FORTEString].join(", ")
 	}

@@ -162,7 +162,7 @@ public interface Functions {
 		} catch (final Exception e) {
 			// ignore
 		}
-		return method.getReturnType().asSubclass(Value.class);
+		return method.getReturnType() != void.class ? method.getReturnType().asSubclass(Value.class) : null;
 	}
 
 	/** Infer the concrete parameter types (i.e., resolve generic types) for a standard function
