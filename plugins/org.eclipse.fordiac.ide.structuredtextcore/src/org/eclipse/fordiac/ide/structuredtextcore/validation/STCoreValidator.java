@@ -75,7 +75,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Check
 	public void checkReservedIdentifer(final INamedElement iNamedElement) {
-		if (StreamSupport.stream(standardFunctionProvider.get().spliterator(), true)
+		if (StreamSupport.stream(standardFunctionProvider.get().spliterator(), false)
 				.anyMatch(func -> func.getName().equalsIgnoreCase(iNamedElement.getName()))) {
 			error(Messages.STCoreValidator_Identifier_Is_Reserved, iNamedElement,
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, RESERVED_IDENTIFIER_ERROR,
