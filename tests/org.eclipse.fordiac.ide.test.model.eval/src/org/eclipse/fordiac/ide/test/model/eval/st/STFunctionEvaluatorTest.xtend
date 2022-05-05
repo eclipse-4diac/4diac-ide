@@ -279,7 +279,7 @@ class STFunctionEvaluatorTest {
 
 	def static evaluateFunction(CharSequence text, Iterable<Variable> variables) {
 		val errors = newArrayList
-		val source = text.toString.parse("anonymous", errors)
+		val source = text.toString.parse("anonymous", errors, null, null)
 		source.assertNotNull("Parse error: " + errors.join(", "))
 		source.functions.head.assertNotNull("Must be at least one function")
 		val eval = new STFunctionEvaluator(source.functions.head, null, variables, null)

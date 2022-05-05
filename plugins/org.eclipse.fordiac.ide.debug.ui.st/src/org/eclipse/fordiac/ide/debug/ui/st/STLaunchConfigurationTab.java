@@ -169,7 +169,7 @@ public class STLaunchConfigurationTab extends MainLaunchConfigurationTab {
 		final IResource resource = getResource();
 		if (resource instanceof IFile) {
 			return STFunctionParseUtil.parse(URI.createPlatformResourceURI(resource.getFullPath().toString(), true),
-					null);
+					null, null, null);
 		}
 		return null;
 	}

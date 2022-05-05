@@ -75,11 +75,9 @@ import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
 abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
+	@Accessors final List<String> warnings = newArrayList
+	@Accessors final List<String> infos = newArrayList
 	int uniqueVariableIndex = 0;
-
-	override getInfos() { emptyList }
-
-	override getWarnings() { emptyList }
 
 	def protected CharSequence generateVariables(Iterable<? extends STVarDeclarationBlock> blocks, boolean decl) '''
 		«FOR block : blocks»

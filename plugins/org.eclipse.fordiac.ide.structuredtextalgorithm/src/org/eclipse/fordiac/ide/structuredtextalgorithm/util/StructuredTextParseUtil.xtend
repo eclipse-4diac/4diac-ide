@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResou
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.xtext.ParserRule
+import org.eclipse.xtext.diagnostics.Severity
 import org.eclipse.xtext.parser.IParseResult
 import org.eclipse.xtext.parser.IParser
 import org.eclipse.xtext.resource.IResourceServiceProvider
@@ -49,43 +50,44 @@ class StructuredTextParseUtil {
 	}
 
 	def static org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm parse(STAlgorithm algorithm,
-		List<String> errors) {
+		List<String> errors, List<String> warnings, List<String> infos) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		extension val partitioner = SERVICE_PROVIDER.get(STAlgorithmPartitioner)
 		switch (root : algorithm.rootContainer) {
 			BaseFBType:
-				(root.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, root.name, root, errors)?.
-					rootASTElement as STAlgorithmSource)?.elements?.filter(
+				(root.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, root.name, root, errors, warnings,
+					infos)?.rootASTElement as STAlgorithmSource)?.elements?.filter(
 					org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm)?.findFirst [
 					name == algorithm.name
 				]
 			default:
-				(algorithm.toSTText.parse(parser.grammarAccess.STAlgorithmRule, algorithm.name, null, errors)?.
-					rootASTElement as org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm)
+				(algorithm.toSTText.parse(parser.grammarAccess.STAlgorithmRule, algorithm.name, null, errors, warnings,
+					infos)?.rootASTElement as org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm)
 		}
 	}
 
 	def static org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod parse(STMethod method,
-		List<String> errors) {
+		List<String> errors, List<String> warnings, List<String> infos) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		extension val partitioner = SERVICE_PROVIDER.get(STAlgorithmPartitioner)
 		switch (root : method.rootContainer) {
 			BaseFBType:
-				(root.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, root.name, root, errors)?.
-					rootASTElement as STAlgorithmSource)?.elements?.filter(
+				(root.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, root.name, root, errors, warnings,
+					infos)?.rootASTElement as STAlgorithmSource)?.elements?.filter(
 					org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod)?.findFirst [
 					name == method.name
 				]
 			default:
-				(method.toSTText.parse(parser.grammarAccess.STAlgorithmRule, method.name, null, errors)?.
-					rootASTElement as org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod)
+				(method.toSTText.parse(parser.grammarAccess.STAlgorithmRule, method.name, null, errors, warnings,
+					infos)?.rootASTElement as org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod)
 		}
 	}
 
-	def static STAlgorithmSource parse(BaseFBType fbType, List<String> errors) {
+	def static STAlgorithmSource parse(BaseFBType fbType, List<String> errors, List<String> warnings,
+		List<String> infos) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		extension val partitioner = SERVICE_PROVIDER.get(STAlgorithmPartitioner)
-		fbType.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, fbType.name, fbType, errors)?.
+		fbType.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, fbType.name, fbType, errors, warnings, infos)?.
 			rootASTElement as STAlgorithmSource
 	}
 
@@ -97,18 +99,21 @@ class StructuredTextParseUtil {
 		return issues
 	}
 
-	def static STExpression parse(String expression, FBType fbType, List<String> errors) {
+	def static STExpression parse(String expression, FBType fbType, List<String> errors, List<String> warnings,
+		List<String> infos) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
-		expression.parse(parser.grammarAccess.STExpressionRule, EXPRESSION_DEFAULT_NAME, fbType, errors)?.
-			rootASTElement as STExpression
+		expression.parse(parser.grammarAccess.STExpressionRule, EXPRESSION_DEFAULT_NAME, fbType, errors, warnings,
+			infos)?.rootASTElement as STExpression
 	}
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, String name, FBType fbType,
-		List<String> errors) {
+		List<String> errors, List<String> warnings, List<String> infos) {
 		val issues = newArrayList
 		val parseResult = text.parse(entryPoint, fbType, issues)
-		if (!issues.empty) {
-			errors?.addAll(issues.map['''«name» at «lineNumber»: «message» '''])
+		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''«name» at «lineNumber»: «message» '''])
+		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''«name» at «lineNumber»: «message» '''])
+		infos?.addAll(issues.filter[severity == Severity.INFO].map['''«name» at «lineNumber»: «message» '''])
+		if (issues.exists[severity == Severity.ERROR]) {
 			return null
 		}
 		return parseResult
