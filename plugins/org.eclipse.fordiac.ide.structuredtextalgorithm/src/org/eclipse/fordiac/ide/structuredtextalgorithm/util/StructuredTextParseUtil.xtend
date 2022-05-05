@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResou
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.xtext.ParserRule
+import org.eclipse.xtext.diagnostics.Severity
 import org.eclipse.xtext.parser.IParseResult
 import org.eclipse.xtext.parser.IParser
 import org.eclipse.xtext.resource.IResourceServiceProvider
@@ -106,7 +107,7 @@ class StructuredTextParseUtil {
 		List<String> errors) {
 		val issues = newArrayList
 		val parseResult = text.parse(entryPoint, fbType, issues)
-		if (!issues.empty) {
+		if (issues.exists[severity == Severity.ERROR]) {
 			errors?.addAll(issues.map['''«name» at «lineNumber»: «message» '''])
 			return null
 		}

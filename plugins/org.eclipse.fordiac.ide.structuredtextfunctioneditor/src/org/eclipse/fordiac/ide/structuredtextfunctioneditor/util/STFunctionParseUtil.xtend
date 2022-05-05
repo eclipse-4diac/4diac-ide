@@ -17,6 +17,7 @@ import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtext.ParserRule
+import org.eclipse.xtext.diagnostics.Severity
 import org.eclipse.xtext.parser.IParseResult
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
@@ -50,7 +51,7 @@ final class STFunctionParseUtil {
 		resource.load(new LazyStringInputStream(text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
-		if (!issues.empty) {
+		if (issues.exists[severity == Severity.ERROR]) {
 			errors?.addAll(issues.map['''«name» at «lineNumber»: «message» '''])
 			return null
 		}
@@ -64,7 +65,7 @@ final class STFunctionParseUtil {
 		resource.load(#{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
-		if (!issues.empty) {
+		if (issues.exists[severity == Severity.ERROR]) {
 			errors?.addAll(issues.map['''«uri.toString» at «lineNumber»: «message» '''])
 			return null
 		}
