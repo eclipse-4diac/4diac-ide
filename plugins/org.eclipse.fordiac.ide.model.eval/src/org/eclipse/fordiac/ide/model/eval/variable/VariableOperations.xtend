@@ -57,7 +57,7 @@ final class VariableOperations {
 	}
 
 	def static Variable newVariable(VarDeclaration decl) {
-		newVariable(decl, decl.value?.value)
+		newVariable(decl, decl.initialValue)
 	}
 
 	def static Variable newVariable(VarDeclaration decl, String value) {
@@ -73,5 +73,19 @@ final class VariableOperations {
 
 	def static Variable newVariable(FB fb) {
 		newVariable(fb.name, fb.type)
+	}
+
+	def static String getInitialValue(VarDeclaration decl) {
+		decl.declaredInitialValue ?: decl.inheritedInitialValue
+	}
+
+	def static String getDeclaredInitialValue(VarDeclaration decl) {
+		val result = decl.value?.value
+		if(result.nullOrEmpty) null else result
+	}
+
+	def static String getInheritedInitialValue(VarDeclaration decl) {
+		val result = decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name)?.value?.value
+		if(result.nullOrEmpty) null else result
 	}
 }
