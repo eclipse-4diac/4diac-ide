@@ -36,12 +36,18 @@ class ECTransitionEvaluator extends StructuredTextEvaluator {
 	override prepare() {
 		if (parseResult === null) {
 			val errors = newArrayList
+			val warnings = newArrayList
+			val infos = newArrayList
 			parseResult = transition.conditionExpression.parse(
 				switch (root : transition.rootContainer) { FBType: root },
-				errors
+				errors,
+				warnings,
+				infos
 			)
+			errors.forEach[error("Parse error: " + it)]
+			warnings.forEach[warn("Parse warning: " + it)]
+			infos.forEach[info("Parse info: " + it)]
 			if (parseResult === null) {
-				errors.forEach[error("Parse error: " + it)]
 				throw new Exception("Parse error: " + errors.join(", "))
 			}
 		}

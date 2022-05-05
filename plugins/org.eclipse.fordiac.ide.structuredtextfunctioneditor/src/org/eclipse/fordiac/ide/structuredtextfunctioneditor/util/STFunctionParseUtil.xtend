@@ -34,15 +34,16 @@ final class STFunctionParseUtil {
 	private new() {
 	}
 
-	def static STFunctionSource parse(String source, String name, List<String> errors) {
-		source.parseInternal(name, null, errors)?.rootASTElement as STFunctionSource
+	def static STFunctionSource parse(String source, String name, List<String> errors, List<String> warnings, List<String> infos) {
+		source.parseInternal(name, null, errors, warnings, infos)?.rootASTElement as STFunctionSource
 	}
 
-	def static STFunctionSource parse(URI uri, List<String> errors) {
-		uri.parseInternal(null, errors)?.rootASTElement as STFunctionSource
+	def static STFunctionSource parse(URI uri, List<String> errors, List<String> warnings, List<String> infos) {
+		uri.parseInternal(null, errors, warnings, infos)?.rootASTElement as STFunctionSource
 	}
 
-	def private static IParseResult parseInternal(String text, String name, ParserRule entryPoint, List<String> errors) {
+	def private static IParseResult parseInternal(String text, String name, ParserRule entryPoint,
+		List<String> errors, List<String> warnings, List<String> infos) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		val resource = SERVICE_PROVIDER.get(XtextResource)
 		resource.URI = URI.createPlatformResourceURI(SYNTHETIC_URI, true)
@@ -51,22 +52,26 @@ final class STFunctionParseUtil {
 		resource.load(new LazyStringInputStream(text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
+		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''«name» at «lineNumber»: «message» '''])
+		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''«name» at «lineNumber»: «message» '''])
+		infos?.addAll(issues.filter[severity == Severity.INFO].map['''«name» at «lineNumber»: «message» '''])
 		if (issues.exists[severity == Severity.ERROR]) {
-			errors?.addAll(issues.map['''«name» at «lineNumber»: «message» '''])
 			return null
 		}
 		return resource.parseResult
 	}
 
-	def private static IParseResult parseInternal(URI uri, ParserRule entryPoint, List<String> errors) {
+	def private static IParseResult parseInternal(URI uri, ParserRule entryPoint, List<String> errors, List<String> warnings, List<String> infos) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		val resource = resourceSet.createResource(uri) as XtextResource
 		resource.entryPoint = entryPoint
 		resource.load(#{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
+		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''«uri.toString» at «lineNumber»: «message» '''])
+		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''«uri.toString» at «lineNumber»: «message» '''])
+		infos?.addAll(issues.filter[severity == Severity.INFO].map['''«uri.toString» at «lineNumber»: «message» '''])
 		if (issues.exists[severity == Severity.ERROR]) {
-			errors?.addAll(issues.map['''«uri.toString» at «lineNumber»: «message» '''])
 			return null
 		}
 		return resource.parseResult

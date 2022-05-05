@@ -100,7 +100,7 @@ class ExportXMIHandler extends AbstractHandler {
 			val List<String> errors = new ArrayList
 			simpleType.callables.forEach [
 				if (it instanceof STAlgorithm) {
-					xmiRessource.contents.add(it.parse(errors))
+					xmiRessource.contents.add(it.parse(errors, null, null))
 				}
 			]
 		}

@@ -27,7 +27,7 @@ class STAlgorithmSupport extends StructuredTextSupport {
 
 	override prepare(Map<?, ?> options) {
 		if (parseResult === null && errors.empty) {
-			parseResult = algorithm.parse(errors)
+			parseResult = algorithm.parse(errors, warnings, infos)
 		}
 		return parseResult !== null
 	}

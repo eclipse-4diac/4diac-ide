@@ -25,7 +25,8 @@ class STAlgorithmEvaluator extends StructuredTextEvaluator {
 
 	STAlgorithm parseResult
 
-	new(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm, Variable context, Iterable<Variable> variables, Evaluator parent) {
+	new(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm, Variable context,
+		Iterable<Variable> variables, Evaluator parent) {
 		super(algorithm.name, context, variables, parent)
 		this.algorithm = algorithm
 	}
@@ -33,9 +34,13 @@ class STAlgorithmEvaluator extends StructuredTextEvaluator {
 	override prepare() {
 		if (parseResult === null) {
 			val errors = newArrayList
-			parseResult = algorithm.parse(errors)
+			val warnings = newArrayList
+			val infos = newArrayList
+			parseResult = algorithm.parse(errors, warnings, infos)
+			errors.forEach[error("Parse error: " + it)]
+			warnings.forEach[warn("Parse warning: " + it)]
+			infos.forEach[info("Parse info: " + it)]
 			if (parseResult === null) {
-				errors.forEach[error("Parse error: " + it)]
 				throw new Exception("Parse error: " + errors.join(", "))
 			}
 		}

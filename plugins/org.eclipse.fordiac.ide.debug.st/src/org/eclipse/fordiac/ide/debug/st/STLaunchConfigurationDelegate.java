@@ -48,7 +48,7 @@ public class STLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 		if (resource instanceof IFile) {
 			final var errors = new ArrayList<String>();
 			final STFunctionSource source = STFunctionParseUtil
-					.parse(URI.createPlatformResourceURI(resource.getFullPath().toString(), true), errors);
+					.parse(URI.createPlatformResourceURI(resource.getFullPath().toString(), true), errors, null, null);
 			if (source == null) {
 				throw new CoreException(Status.error(errors.stream().collect(Collectors.joining("\n")))); //$NON-NLS-1$
 			}
