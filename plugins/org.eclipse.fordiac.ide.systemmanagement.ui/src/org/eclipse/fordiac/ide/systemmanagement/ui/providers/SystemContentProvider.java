@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactor
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -111,8 +112,10 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 			super.notifyChanged(new ViewerNotification(notification, system.getSystemFile()));
 		} else {
 			super.notifyChanged(notification);
-			if (LibraryElementPackage.CONFIGURABLE_OBJECT__NAME == notification
-					.getFeatureID(ConfigurableObject.class)) {
+			final int featureID = notification.getFeatureID(ConfigurableObject.class);
+			if (LibraryElementPackage.CONFIGURABLE_OBJECT__NAME == featureID
+					|| (LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT == featureID
+							&& notification.getNotifier() instanceof Group)) {
 				// trigger a resorting
 				distributedSystemWorkspaceChanged();
 			}
