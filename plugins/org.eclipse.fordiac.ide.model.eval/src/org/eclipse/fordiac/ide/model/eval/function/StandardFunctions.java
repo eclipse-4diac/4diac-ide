@@ -17,6 +17,10 @@ package org.eclipse.fordiac.ide.model.eval.function;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.function.BinaryOperator;
+import java.util.function.DoubleBinaryOperator;
+import java.util.function.DoubleUnaryOperator;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.eval.value.AnyBitValue;
@@ -73,43 +77,43 @@ public interface StandardFunctions extends Functions {
 	}
 
 	static <T extends AnyRealValue> T LN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::log);
 	}
 
 	static <T extends AnyRealValue> T LOG(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::log10);
 	}
 
 	static <T extends AnyRealValue> T EXP(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::exp);
 	}
 
 	static <T extends AnyRealValue> T SIN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::sin);
 	}
 
 	static <T extends AnyRealValue> T COS(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::cos);
 	}
 
 	static <T extends AnyRealValue> T TAN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::tan);
 	}
 
 	static <T extends AnyRealValue> T ASIN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::asin);
 	}
 
 	static <T extends AnyRealValue> T ACON(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::acos);
 	}
 
 	static <T extends AnyRealValue> T ATAN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::atan);
 	}
 
 	static <T extends AnyRealValue> T ATAN2(final T x, final T y) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(x, y, Math::atan2);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -194,80 +198,89 @@ public interface StandardFunctions extends Functions {
 		return g.boolValue() ? in1 : in0;
 	}
 
+	@SafeVarargs
 	static <T extends AnyElementaryValue> T MAX(final T... values) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return Stream.of(values).max(ValueOperations::compareTo).orElseThrow();
 	}
 
+	@SafeVarargs
 	static <T extends AnyElementaryValue> T MIN(final T... values) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return Stream.of(values).min(ValueOperations::compareTo).orElseThrow();
 	}
 
 	static <T extends AnyElementaryValue> T LIMIT(final T MN, final T IN, final T MX) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		if (ValueOperations.operator_greaterThan(IN, MX)) {
+			return MX;
+		} else if (ValueOperations.operator_lessThan(IN, MN)) {
+			return MN;
+		} else {
+			return IN;
+		}
 	}
 
+	@SafeVarargs
 	static <T extends AnyIntValue, U extends AnyValue> U MUX(final T k, final U... values) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return values[k.intValue()];
 	}
 
 	/* Comparisons */
 
-	@SuppressWarnings("unchecked")
+	@SafeVarargs
 	static <T extends AnyElementaryValue> BoolValue GT(final T... values) {
-		T val = values[0];
-		for (int i = 1; i < values.length; ++i) {
-			if (!ValueOperations.operator_greaterThan(val, values[i])) {
+		T last = null;
+		for (final T element : values) {
+			if (last != null && !ValueOperations.operator_greaterThan(last, element)) {
 				return BoolValue.FALSE;
 			}
-			val = values[i];
+			last = element;
 		}
 		return BoolValue.TRUE;
 	}
 
 	@SuppressWarnings("unchecked")
 	static <T extends AnyElementaryValue> BoolValue GE(final T... values) {
-		T val = values[0];
-		for (int i = 1; i < values.length; ++i) {
-			if (!ValueOperations.operator_greaterEqualsThan(val, values[i])) {
+		T last = null;
+		for (final T element : values) {
+			if (last != null && !ValueOperations.operator_greaterEqualsThan(last, element)) {
 				return BoolValue.FALSE;
 			}
-			val = values[i];
+			last = element;
 		}
 		return BoolValue.TRUE;
 	}
 
 	@SuppressWarnings("unchecked")
 	static <T extends AnyElementaryValue> BoolValue EQ(final T... values) {
-		T val = values[0];
-		for (int i = 1; i < values.length; ++i) {
-			if (!ValueOperations.equals(val, values[i])) {
+		T last = null;
+		for (final T element : values) {
+			if (last != null && !ValueOperations.equals(last, element)) {
 				return BoolValue.FALSE;
 			}
-			val = values[i];
+			last = element;
 		}
 		return BoolValue.TRUE;
 	}
 
 	@SuppressWarnings("unchecked")
 	static <T extends AnyElementaryValue> BoolValue LE(final T... values) {
-		T val = values[0];
-		for (int i = 1; i < values.length; ++i) {
-			if (!ValueOperations.operator_lessEqualsThan(val, values[i])) {
+		T last = null;
+		for (final T element : values) {
+			if (last != null && !ValueOperations.operator_lessEqualsThan(last, element)) {
 				return BoolValue.FALSE;
 			}
-			val = values[i];
+			last = element;
 		}
 		return BoolValue.TRUE;
 	}
 
 	@SuppressWarnings("unchecked")
 	static <T extends AnyElementaryValue> BoolValue LT(final T... values) {
-		T val = values[0];
-		for (int i = 1; i < values.length; ++i) {
-			if (!ValueOperations.operator_lessThan(val, values[i])) {
+		T last = null;
+		for (final T element : values) {
+			if (last != null && !ValueOperations.operator_lessThan(last, element)) {
 				return BoolValue.FALSE;
 			}
-			val = values[i];
+			last = element;
 		}
 		return BoolValue.TRUE;
 	}
@@ -282,38 +295,42 @@ public interface StandardFunctions extends Functions {
 	}
 
 	static <T extends AnyStringValue, U extends AnyIntValue> T LEFT(final T string, final U L) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(string, value -> value.substring(0, L.intValue()));
 	}
 
 	static <T extends AnyStringValue, U extends AnyIntValue> T RIGHT(final T string, final U L) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(string, value -> value.substring(value.length() - L.intValue()));
 	}
 
 	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T MID(final T string, final U L,
 			final V P) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(string, value -> value.substring(P.intValue() - 1, P.intValue() + L.intValue() - 1));
 	}
 
+	@SafeVarargs
 	static <T extends AnyStringValue> T CONCAT(final T... strings) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return Stream.of(strings).reduce((value1, value2) -> apply(value1, value2, String::concat)).orElseThrow();
 	}
 
 	static <T extends AnyStringValue, U extends AnyIntValue> T INSERT(final T IN1, final T IN2, final U P) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(IN1, value -> value.substring(0, P.intValue()).concat(IN2.stringValue())
+				.concat(value.substring(P.intValue())));
 	}
 
 	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T DELETE(final T string, final U L,
 			final V P) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(string,
+				value -> value.substring(0, P.intValue() - 1).concat(value.substring(P.intValue() + L.intValue() - 1)));
 	}
 
 	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T REPLACE(final T IN1, final T IN2,
 			final U L, final V P) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(IN1, value -> value.substring(0, P.intValue() - 1).concat(IN2.stringValue())
+				.concat(value.substring(P.intValue() + L.intValue() - 1)));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue> U FIND(final T IN1, final T IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyStringValue> ULIntValue FIND(final T IN1, final T IN2) {
+		return ULIntValue.toULIntValue(IN1.stringValue().indexOf(IN2.stringValue()) + 1);
 	}
 
 	/* Numeric functions for time and date */
@@ -589,7 +606,7 @@ public interface StandardFunctions extends Functions {
 	/* Validation functions */
 
 	static <T extends AnyRealValue> BoolValue IS_VALID(final T IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return BoolValue.toBoolValue(Double.isFinite(IN.doubleValue()));
 	}
 
 	static <T extends AnyBitValue> BoolValue IS_VALID_BCD(final T IN) {
@@ -1668,5 +1685,40 @@ public interface StandardFunctions extends Functions {
 
 	static WCharValue CHAR_TO_WCHAR(final CharValue value) {
 		return WCharValue.toWCharValue(value);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T extends AnyRealValue> T apply(final T value, final DoubleUnaryOperator operator) {
+		if (value instanceof RealValue) {
+			return (T) RealValue.toRealValue((float) operator.applyAsDouble(value.doubleValue()));
+		}
+		return (T) LRealValue.toLRealValue(operator.applyAsDouble(value.doubleValue()));
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T extends AnyRealValue> T apply(final T value1, final T value2,
+			final DoubleBinaryOperator operator) {
+		if (value1 instanceof RealValue) {
+			return (T) RealValue
+					.toRealValue((float) operator.applyAsDouble(value1.doubleValue(), value2.doubleValue()));
+		}
+		return (T) LRealValue.toLRealValue(operator.applyAsDouble(value1.doubleValue(), value2.doubleValue()));
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T extends AnyStringValue> T apply(final T value, final UnaryOperator<String> operator) {
+		if (value instanceof StringValue) {
+			return (T) StringValue.toStringValue(operator.apply(value.stringValue()));
+		}
+		return (T) WStringValue.toWStringValue(operator.apply(value.stringValue()));
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T extends AnyStringValue> T apply(final T value1, final T value2,
+			final BinaryOperator<String> operator) {
+		if (value1 instanceof StringValue) {
+			return (T) StringValue.toStringValue(operator.apply(value1.stringValue(), value2.stringValue()));
+		}
+		return (T) WStringValue.toWStringValue(operator.apply(value1.stringValue(), value2.stringValue()));
 	}
 }

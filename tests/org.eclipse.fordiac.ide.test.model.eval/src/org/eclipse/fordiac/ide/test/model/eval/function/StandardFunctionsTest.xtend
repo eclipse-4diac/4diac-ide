@@ -16,7 +16,11 @@ import java.util.stream.Stream
 import org.eclipse.fordiac.ide.model.data.AnyCharType
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.eval.function.Functions
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
+import org.eclipse.fordiac.ide.model.eval.value.LRealValue
+import org.eclipse.fordiac.ide.model.eval.value.RealValue
+import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -26,28 +30,254 @@ import org.junit.jupiter.params.provider.MethodSource
 import static org.junit.jupiter.params.provider.Arguments.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.BoolValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ByteValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.DWordValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.IntValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.LRealValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.LWordValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.RealValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.StringValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ULIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.WStringValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.WordValue.*
 import static extension org.junit.jupiter.api.Assertions.*
 
 class StandardFunctionsTest {
 
+	static final double NUMERIC_DELTA = 0.0000001
+
 	@Test
-	def void testAdd() {
-		4.toIntValue.assertEquals(StandardFunctions.invoke("ADD", "2".toIntValue, "2".toIntValue))
+	def void testAbs() {
+		17.toIntValue.assertEquals(StandardFunctions.invoke("ABS", 17.toIntValue))
+		4.toIntValue.assertEquals(StandardFunctions.invoke("ABS", -4.toIntValue))
+		0.toLIntValue.assertEquals(StandardFunctions.invoke("ABS", 0.toLIntValue))
 	}
 
 	@Test
-	def void testLen() {
-		4.toULIntValue.assertEquals(StandardFunctions.invoke("LEN", "Test".toStringValue))
+	def void testSqrt() {
+		// REAL
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("SQRT", 1.toLRealValue), NUMERIC_DELTA)
+		2.assertEquals(StandardFunctions.invokeUnaryOperator("SQRT", 4.toLRealValue), NUMERIC_DELTA)
+		3.assertEquals(StandardFunctions.invokeUnaryOperator("SQRT", 9.toLRealValue), NUMERIC_DELTA)
+		// LREAL
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("SQRT", 1.toRealValue), NUMERIC_DELTA)
+		2.assertEquals(StandardFunctions.invokeUnaryOperator("SQRT", 4.toRealValue), NUMERIC_DELTA)
+		3.assertEquals(StandardFunctions.invokeUnaryOperator("SQRT", 9.toRealValue), NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testLn() {
+		// REAL
+		Float.NEGATIVE_INFINITY.assertEquals(StandardFunctions.invokeUnaryOperator("LN", 0.toRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("LN", 1.toRealValue), NUMERIC_DELTA)
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("LN", Math.E.toRealValue), NUMERIC_DELTA)
+		// LREAL
+		Double.NEGATIVE_INFINITY.assertEquals(StandardFunctions.invokeUnaryOperator("LN", 0.toLRealValue),
+			NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("LN", 1.toLRealValue), NUMERIC_DELTA)
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("LN", Math.E.toLRealValue), NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testLog() {
+		// REAL
+		Float.NEGATIVE_INFINITY.assertEquals(StandardFunctions.invokeUnaryOperator("LOG", 0.toRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("LOG", 1.toRealValue), NUMERIC_DELTA)
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("LOG", 10.toRealValue), NUMERIC_DELTA)
+		// LREAL
+		Double.NEGATIVE_INFINITY.assertEquals(StandardFunctions.invokeUnaryOperator("LOG", 0.toLRealValue),
+			NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("LOG", 1.toLRealValue), NUMERIC_DELTA)
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("LOG", 10.toLRealValue), NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testExp() {
+		// REAL
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("EXP", 0.toRealValue), NUMERIC_DELTA)
+		Math.E.assertEquals(StandardFunctions.invokeUnaryOperator("EXP", 1.toRealValue), NUMERIC_DELTA)
+		(1 / Math.E).assertEquals(StandardFunctions.invokeUnaryOperator("EXP", (-1).toRealValue), NUMERIC_DELTA)
+		// LREAL
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("EXP", 0.toLRealValue), NUMERIC_DELTA)
+		Math.E.assertEquals(StandardFunctions.invokeUnaryOperator("EXP", 1.toLRealValue), NUMERIC_DELTA)
+		(1 / Math.E).assertEquals(StandardFunctions.invokeUnaryOperator("EXP", (-1).toLRealValue), NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testSin() {
+		// REAL
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("SIN", 0.toRealValue), NUMERIC_DELTA)
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("SIN", (Math.PI / 2).toRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("SIN", Math.PI.toRealValue), NUMERIC_DELTA)
+		// LREAL
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("SIN", 0.toLRealValue), NUMERIC_DELTA)
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("SIN", (Math.PI / 2).toLRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("SIN", Math.PI.toLRealValue), NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testCos() {
+		// REAL
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("COS", 0.toRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("COS", (Math.PI / 2).toRealValue), NUMERIC_DELTA)
+		(-1).assertEquals(StandardFunctions.invokeUnaryOperator("COS", Math.PI.toRealValue), NUMERIC_DELTA)
+		// LREAL
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("COS", 0.toLRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("COS", (Math.PI / 2).toLRealValue), NUMERIC_DELTA)
+		(-1).assertEquals(StandardFunctions.invokeUnaryOperator("COS", Math.PI.toLRealValue), NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testTan() {
+		// REAL
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("TAN", 0.toRealValue), NUMERIC_DELTA)
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("TAN", (Math.PI / 4).toRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("TAN", Math.PI.toRealValue), NUMERIC_DELTA)
+		(-1).assertEquals(StandardFunctions.invokeUnaryOperator("TAN", (3 * (Math.PI / 4)).toRealValue), NUMERIC_DELTA)
+		// LREAL
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("TAN", 0.toLRealValue), NUMERIC_DELTA)
+		1.assertEquals(StandardFunctions.invokeUnaryOperator("TAN", (Math.PI / 4).toLRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("TAN", Math.PI.toLRealValue), NUMERIC_DELTA)
+		(-1).assertEquals(StandardFunctions.invokeUnaryOperator("TAN", (3 * (Math.PI / 4)).toLRealValue), NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testAsin() {
+		// REAL
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("ASIN", 0.toRealValue), NUMERIC_DELTA)
+		(Math.PI / 6).assertEquals(StandardFunctions.invokeUnaryOperator("ASIN", 0.5.toRealValue), NUMERIC_DELTA)
+		(Math.PI / 2).assertEquals(StandardFunctions.invokeUnaryOperator("ASIN", 1.toRealValue), NUMERIC_DELTA)
+		// LREAL
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("ASIN", 0.toLRealValue), NUMERIC_DELTA)
+		(Math.PI / 6).assertEquals(StandardFunctions.invokeUnaryOperator("ASIN", 0.5.toLRealValue), NUMERIC_DELTA)
+		(Math.PI / 2).assertEquals(StandardFunctions.invokeUnaryOperator("ASIN", 1.toLRealValue), NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testAcon() {
+		// REAL
+		(Math.PI / 2).assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 0.toRealValue), NUMERIC_DELTA)
+		(Math.PI / 3).assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 0.5.toRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 1.toRealValue), NUMERIC_DELTA)
+		// LREAL
+		(Math.PI / 2).assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 0.toLRealValue), NUMERIC_DELTA)
+		(Math.PI / 3).assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 0.5.toLRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 1.toLRealValue), NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testAtan() {
+		// REAL
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("ATAN", 0.toRealValue), NUMERIC_DELTA)
+		(Math.PI / 6).assertEquals(StandardFunctions.invokeUnaryOperator("ATAN", (1 / Math.sqrt(3)).toRealValue),
+			NUMERIC_DELTA)
+		(Math.PI / 4).assertEquals(StandardFunctions.invokeUnaryOperator("ATAN", 1.toRealValue), NUMERIC_DELTA)
+		// LREAL
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("ATAN", 0.toLRealValue), NUMERIC_DELTA)
+		(Math.PI / 6).assertEquals(StandardFunctions.invokeUnaryOperator("ATAN", (1 / Math.sqrt(3)).toLRealValue),
+			NUMERIC_DELTA)
+		(Math.PI / 4).assertEquals(StandardFunctions.invokeUnaryOperator("ATAN", 1.toLRealValue), NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testAtan2() {
+		// REAL
+		0.assertEquals(StandardFunctions.invokeBinaryOperator("ATAN2", 0.toRealValue, 0.toRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeBinaryOperator("ATAN2", 0.toRealValue, 1.toRealValue), NUMERIC_DELTA)
+		(Math.PI / 2).assertEquals(StandardFunctions.invokeBinaryOperator("ATAN2", 1.toRealValue, 0.toRealValue),
+			NUMERIC_DELTA)
+		// LREAL
+		0.assertEquals(StandardFunctions.invokeBinaryOperator("ATAN2", 0.toLRealValue, 0.toLRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeBinaryOperator("ATAN2", 0.toLRealValue, 1.toLRealValue), NUMERIC_DELTA)
+		(Math.PI / 2).assertEquals(StandardFunctions.invokeBinaryOperator("ATAN2", 1.toLRealValue, 0.toLRealValue),
+			NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testAdd() {
+		// INT
+		0.toIntValue.assertEquals(StandardFunctions.invoke("ADD", 0.toIntValue, 0.toIntValue))
+		4.toIntValue.assertEquals(StandardFunctions.invoke("ADD", 2.toIntValue, 2.toIntValue))
+		0.toIntValue.assertEquals(StandardFunctions.invoke("ADD", 2.toIntValue, (-2).toIntValue))
+		42.toIntValue.assertEquals(StandardFunctions.invoke("ADD", 17.toIntValue, 4.toIntValue, 21.toIntValue))
+		// LREAL
+		0.assertEquals(StandardFunctions.invokeBinaryOperator("ADD", 0.toLRealValue, 0.toLRealValue), NUMERIC_DELTA)
+		4.assertEquals(StandardFunctions.invokeBinaryOperator("ADD", 2.toLRealValue, 2.toLRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeBinaryOperator("ADD", 2.toLRealValue, (-2).toLRealValue), NUMERIC_DELTA)
+		42.assertEquals(StandardFunctions.invokeOperator("ADD", 17.toLRealValue, 4.toLRealValue, 21.toLRealValue),
+			NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testMul() {
+		// INT
+		0.toIntValue.assertEquals(StandardFunctions.invoke("MUL", 0.toIntValue, 0.toIntValue))
+		4.toIntValue.assertEquals(StandardFunctions.invoke("MUL", 2.toIntValue, 2.toIntValue))
+		(-4).toIntValue.assertEquals(StandardFunctions.invoke("MUL", 2.toIntValue, (-2).toIntValue))
+		24.toIntValue.assertEquals(StandardFunctions.invoke("MUL", 2.toIntValue, 3.toIntValue, 4.toIntValue))
+		// LREAL
+		0.assertEquals(StandardFunctions.invokeBinaryOperator("MUL", 0.toLRealValue, 0.toLRealValue), NUMERIC_DELTA)
+		4.assertEquals(StandardFunctions.invokeBinaryOperator("MUL", 2.toLRealValue, 2.toLRealValue), NUMERIC_DELTA)
+		(-4).assertEquals(StandardFunctions.invokeBinaryOperator("MUL", 2.toLRealValue, (-2).toLRealValue),
+			NUMERIC_DELTA)
+		24.assertEquals(StandardFunctions.invokeOperator("MUL", 2.toLRealValue, 3.toLRealValue, 4.toLRealValue),
+			NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testSub() {
+		// INT
+		0.toIntValue.assertEquals(StandardFunctions.invoke("SUB", 0.toIntValue, 0.toIntValue))
+		0.toIntValue.assertEquals(StandardFunctions.invoke("SUB", 2.toIntValue, 2.toIntValue))
+		4.toIntValue.assertEquals(StandardFunctions.invoke("SUB", 2.toIntValue, (-2).toIntValue))
+		// LREAL
+		0.assertEquals(StandardFunctions.invokeBinaryOperator("SUB", 0.toLRealValue, 0.toLRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeBinaryOperator("SUB", 2.toLRealValue, 2.toLRealValue), NUMERIC_DELTA)
+		4.assertEquals(StandardFunctions.invokeBinaryOperator("SUB", 2.toLRealValue, (-2).toLRealValue), NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testDiv() {
+		// INT
+		ArithmeticException.assertThrows[StandardFunctions.invoke("DIV", 0.toIntValue, 0.toIntValue)]
+		ArithmeticException.assertThrows[StandardFunctions.invoke("DIV", 2.toIntValue, 0.toIntValue)]
+		1.toIntValue.assertEquals(StandardFunctions.invoke("DIV", 2.toIntValue, 2.toIntValue))
+		(-1).toIntValue.assertEquals(StandardFunctions.invoke("DIV", 2.toIntValue, (-2).toIntValue))
+		// LREAL
+		Double.NaN.assertEquals(StandardFunctions.invokeBinaryOperator("DIV", 0.toLRealValue, 0.toLRealValue),
+			NUMERIC_DELTA)
+		Double.POSITIVE_INFINITY.assertEquals(
+			StandardFunctions.invokeBinaryOperator("DIV", 2.toLRealValue, 0.toLRealValue), NUMERIC_DELTA)
+		1.assertEquals(StandardFunctions.invokeBinaryOperator("DIV", 2.toLRealValue, 2.toLRealValue), NUMERIC_DELTA)
+		(-1).assertEquals(StandardFunctions.invokeBinaryOperator("DIV", 2.toLRealValue, (-2).toLRealValue),
+			NUMERIC_DELTA)
+	}
+
+	@Test
+	def void testMod() {
+		// INT
+		0.toIntValue.assertEquals(StandardFunctions.invoke("MOD", 0.toIntValue, 0.toIntValue))
+		0.toIntValue.assertEquals(StandardFunctions.invoke("MOD", 2.toIntValue, 2.toIntValue))
+		1.toIntValue.assertEquals(StandardFunctions.invoke("MOD", 3.toIntValue, 2.toIntValue))
+		0.toIntValue.assertEquals(StandardFunctions.invoke("MOD", 2.toIntValue, (-2).toIntValue))
+		1.toIntValue.assertEquals(StandardFunctions.invoke("MOD", 3.toIntValue, (-2).toIntValue))
+	}
+
+	@Test
+	def void testExpt() {
+		// REAL
+		1.assertEquals(StandardFunctions.invokeBinaryOperator("EXPT", 0.toRealValue, 0.toRealValue), NUMERIC_DELTA)
+		1.assertEquals(StandardFunctions.invokeBinaryOperator("EXPT", 1.toRealValue, 0.toRealValue), NUMERIC_DELTA)
+		8.assertEquals(StandardFunctions.invokeBinaryOperator("EXPT", 2.toRealValue, 3.toRealValue), NUMERIC_DELTA)
+		25.assertEquals(StandardFunctions.invokeBinaryOperator("EXPT", 5.toRealValue, 2.toRealValue), NUMERIC_DELTA)
+		// LREAL
+		1.assertEquals(StandardFunctions.invokeBinaryOperator("EXPT", 0.toLRealValue, 0.toLRealValue), NUMERIC_DELTA)
+		1.assertEquals(StandardFunctions.invokeBinaryOperator("EXPT", 1.toLRealValue, 0.toLRealValue), NUMERIC_DELTA)
+		8.assertEquals(StandardFunctions.invokeBinaryOperator("EXPT", 2.toLRealValue, 3.toLRealValue), NUMERIC_DELTA)
+		25.assertEquals(StandardFunctions.invokeBinaryOperator("EXPT", 5.toLRealValue, 2.toLRealValue), NUMERIC_DELTA)
 	}
 
 	@Test
@@ -83,13 +313,326 @@ class StandardFunctionsTest {
 	}
 
 	@Test
-	def void testSqrt() {
-		1.toLRealValue.assertEquals(StandardFunctions.invoke("SQRT", 1.toLRealValue))
-		2.toLRealValue.assertEquals(StandardFunctions.invoke("SQRT", 4.toLRealValue))
-		3.toLRealValue.assertEquals(StandardFunctions.invoke("SQRT", 9.toLRealValue))
-		1.toRealValue.assertEquals(StandardFunctions.invoke("SQRT", 1.toRealValue))
-		2.toRealValue.assertEquals(StandardFunctions.invoke("SQRT", 4.toRealValue))
-		3.toRealValue.assertEquals(StandardFunctions.invoke("SQRT", 9.toRealValue))
+	def void testAnd() {
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("AND", false.toBoolValue, false.toBoolValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("AND", true.toBoolValue, false.toBoolValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("AND", false.toBoolValue, true.toBoolValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("AND", true.toBoolValue, true.toBoolValue))
+		0x11.toByteValue.assertEquals(StandardFunctions.invoke("AND", 0x17.toByteValue, 0x71.toByteValue))
+		0x301.toWordValue.assertEquals(StandardFunctions.invoke("AND", 0x1701.toWordValue, 0x2363.toWordValue))
+		0x201.toDWordValue.assertEquals(StandardFunctions.invoke("AND", 0x74205.toDWordValue, 0x2371.toDWordValue))
+		0x250.toLWordValue.assertEquals(StandardFunctions.invoke("AND", 0x74656.toLWordValue, 0x2371.toLWordValue))
+		1.toByteValue.assertEquals(StandardFunctions.invoke("AND", 7.toByteValue, 5.toByteValue, 3.toByteValue))
+	}
+
+	@Test
+	def void testOr() {
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("OR", false.toBoolValue, false.toBoolValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("OR", true.toBoolValue, false.toBoolValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("OR", false.toBoolValue, true.toBoolValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("OR", true.toBoolValue, true.toBoolValue))
+		21.toByteValue.assertEquals(StandardFunctions.invoke("OR", 17.toByteValue, 4.toByteValue))
+		0x3763.toWordValue.assertEquals(StandardFunctions.invoke("OR", 0x1701.toWordValue, 0x2363.toWordValue))
+		0x76375.toDWordValue.assertEquals(StandardFunctions.invoke("OR", 0x74205.toDWordValue, 0x2371.toDWordValue))
+		0x76777.toLWordValue.assertEquals(StandardFunctions.invoke("OR", 0x74656.toLWordValue, 0x2371.toLWordValue))
+		7.toByteValue.assertEquals(StandardFunctions.invoke("OR", 7.toByteValue, 5.toByteValue, 3.toByteValue))
+	}
+
+	@Test
+	def void testXor() {
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("XOR", false.toBoolValue, false.toBoolValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("XOR", true.toBoolValue, false.toBoolValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("XOR", false.toBoolValue, true.toBoolValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("XOR", true.toBoolValue, true.toBoolValue))
+		21.toByteValue.assertEquals(StandardFunctions.invoke("XOR", 17.toByteValue, 4.toByteValue))
+		0x3462.toWordValue.assertEquals(StandardFunctions.invoke("XOR", 0x1701.toWordValue, 0x2363.toWordValue))
+		0x76174.toDWordValue.assertEquals(StandardFunctions.invoke("XOR", 0x74205.toDWordValue, 0x2371.toDWordValue))
+		0x76527.toLWordValue.assertEquals(StandardFunctions.invoke("XOR", 0x74656.toLWordValue, 0x2371.toLWordValue))
+		1.toByteValue.assertEquals(StandardFunctions.invoke("XOR", 7.toByteValue, 5.toByteValue, 3.toByteValue))
+	}
+
+	@Test
+	def void testNot() {
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("NOT", false.toBoolValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("NOT", true.toBoolValue))
+		0xe8fe.toWordValue.assertEquals(StandardFunctions.invoke("NOT", 0x1701.toWordValue))
+		0x1234567.toDWordValue.assertEquals(StandardFunctions.invoke("NOT", 0xfedcba98.toDWordValue))
+		0x22224444ddddbbbb#L.toLWordValue.assertEquals(
+			StandardFunctions.invoke("NOT", 0xddddbbbb22224444#L.toLWordValue))
+	}
+
+	@Test
+	def void testMove() {
+		17.toIntValue.assertEquals(StandardFunctions.invoke("MOVE", 17.toIntValue))
+		"4".toStringValue.assertEquals(StandardFunctions.invoke("MOVE", "4".toStringValue))
+	}
+
+	@Test
+	def void testSel() {
+		17.toIntValue.assertEquals(StandardFunctions.invoke("SEL", false.toBoolValue, 17.toIntValue, 4.toIntValue))
+		"4".toStringValue.assertEquals(
+			StandardFunctions.invoke("SEL", true.toBoolValue, "0".toStringValue, "4".toStringValue))
+	}
+
+	@Test
+	def void testMax() {
+		17.toIntValue.assertEquals(StandardFunctions.invoke("MAX", 17.toIntValue, 4.toIntValue))
+		"4".toStringValue.assertEquals(StandardFunctions.invoke("MAX", "0".toStringValue, "4".toStringValue))
+		21.toIntValue.assertEquals(StandardFunctions.invoke("MAX", 17.toIntValue, 4.toIntValue, 21.toIntValue))
+	}
+
+	@Test
+	def void testMin() {
+		4.toIntValue.assertEquals(StandardFunctions.invoke("MIN", 17.toIntValue, 4.toIntValue))
+		"0".toStringValue.assertEquals(StandardFunctions.invoke("MIN", "0".toStringValue, "4".toStringValue))
+		4.toIntValue.assertEquals(StandardFunctions.invoke("MIN", 17.toIntValue, 4.toIntValue, 21.toIntValue))
+	}
+
+	@Test
+	def void testLimit() {
+		4.toIntValue.assertEquals(StandardFunctions.invoke("LIMIT", 0.toIntValue, 4.toIntValue, 17.toIntValue))
+		17.toIntValue.assertEquals(StandardFunctions.invoke("LIMIT", 0.toIntValue, 21.toIntValue, 17.toIntValue))
+		0.toIntValue.assertEquals(StandardFunctions.invoke("LIMIT", 0.toIntValue, (-5).toIntValue, 17.toIntValue))
+	}
+
+	@Test
+	def void testMux() {
+		17.toIntValue.assertEquals(StandardFunctions.invoke("MUX", 0.toIntValue, 17.toIntValue, 4.toIntValue))
+		4.toIntValue.assertEquals(StandardFunctions.invoke("MUX", 1.toIntValue, 17.toIntValue, 4.toIntValue))
+		21.toIntValue.assertEquals(
+			StandardFunctions.invoke("MUX", 2.toIntValue, 17.toIntValue, 4.toIntValue, 21.toIntValue, 42.toIntValue))
+	}
+
+	@Test
+	def void testGt() {
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("GT", 17.toIntValue, 4.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("GT", 4.toIntValue, 17.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("GT", 4.toIntValue, 4.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("GT", 17.toIntValue, 4.toIntValue, 21.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("GT", 4.toIntValue, 17.toIntValue, 21.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("GT", 4.toIntValue, 17.toIntValue, 17.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("GT", 21.toIntValue, 17.toIntValue, 4.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("GT", 21.toIntValue, 17.toIntValue, 17.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("GT", 17.toIntValue, 17.toIntValue, 17.toIntValue))
+	}
+
+	@Test
+	def void testGe() {
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("GE", 17.toIntValue, 4.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("GE", 4.toIntValue, 17.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("GE", 4.toIntValue, 4.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("GE", 17.toIntValue, 4.toIntValue, 21.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("GE", 4.toIntValue, 17.toIntValue, 21.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("GE", 4.toIntValue, 17.toIntValue, 17.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("GE", 21.toIntValue, 17.toIntValue, 4.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("GE", 21.toIntValue, 17.toIntValue, 17.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("GE", 17.toIntValue, 17.toIntValue, 17.toIntValue))
+	}
+
+	@Test
+	def void testEq() {
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("EQ", 17.toIntValue, 4.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("EQ", 4.toIntValue, 17.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("EQ", 4.toIntValue, 4.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("EQ", 17.toIntValue, 4.toIntValue, 21.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("EQ", 4.toIntValue, 17.toIntValue, 21.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("EQ", 4.toIntValue, 17.toIntValue, 17.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("EQ", 21.toIntValue, 17.toIntValue, 4.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("EQ", 21.toIntValue, 17.toIntValue, 17.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("EQ", 17.toIntValue, 17.toIntValue, 17.toIntValue))
+	}
+
+	@Test
+	def void testLt() {
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("LT", 17.toIntValue, 4.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("LT", 4.toIntValue, 17.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("LT", 4.toIntValue, 4.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("LT", 17.toIntValue, 4.toIntValue, 21.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("LT", 4.toIntValue, 17.toIntValue, 21.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("LT", 4.toIntValue, 17.toIntValue, 17.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("LT", 21.toIntValue, 17.toIntValue, 4.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("LT", 21.toIntValue, 17.toIntValue, 17.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("LT", 17.toIntValue, 17.toIntValue, 17.toIntValue))
+	}
+
+	@Test
+	def void testLe() {
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("LE", 17.toIntValue, 4.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("LE", 4.toIntValue, 17.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("LE", 4.toIntValue, 4.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("LE", 17.toIntValue, 4.toIntValue, 21.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("LE", 4.toIntValue, 17.toIntValue, 21.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("LE", 4.toIntValue, 17.toIntValue, 17.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("LE", 21.toIntValue, 17.toIntValue, 4.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("LE", 21.toIntValue, 17.toIntValue, 17.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("LE", 17.toIntValue, 17.toIntValue, 17.toIntValue))
+	}
+
+	@Test
+	def void testNe() {
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("NE", 17.toIntValue, 4.toIntValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("NE", 4.toIntValue, 17.toIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("NE", 4.toIntValue, 4.toIntValue))
+	}
+
+	@Test
+	def void testLen() {
+		// STRING
+		0.toULIntValue.assertEquals(StandardFunctions.invoke("LEN", "".toStringValue))
+		4.toULIntValue.assertEquals(StandardFunctions.invoke("LEN", "Test".toStringValue))
+		9.toULIntValue.assertEquals(StandardFunctions.invoke("LEN", "4diac IDE".toStringValue))
+		// WSTRING
+		0.toULIntValue.assertEquals(StandardFunctions.invoke("LEN", "".toWStringValue))
+		4.toULIntValue.assertEquals(StandardFunctions.invoke("LEN", "Test".toWStringValue))
+		9.toULIntValue.assertEquals(StandardFunctions.invoke("LEN", "4diac IDE".toWStringValue))
+	}
+
+	@Test
+	def void testLeft() {
+		// STRING
+		"".toStringValue.assertEquals(StandardFunctions.invoke("LEFT", "".toStringValue, 0.toIntValue))
+		"Test".toStringValue.assertEquals(StandardFunctions.invoke("LEFT", "TestString".toStringValue, 4.toIntValue))
+		"4diac".toStringValue.assertEquals(StandardFunctions.invoke("LEFT", "4diac IDE".toStringValue, 5.toIntValue))
+		// WSTRING
+		"".toWStringValue.assertEquals(StandardFunctions.invoke("LEFT", "".toWStringValue, 0.toIntValue))
+		"Test".toWStringValue.assertEquals(StandardFunctions.invoke("LEFT", "TestString".toWStringValue, 4.toIntValue))
+		"4diac".toWStringValue.assertEquals(StandardFunctions.invoke("LEFT", "4diac IDE".toWStringValue, 5.toIntValue))
+	}
+
+	@Test
+	def void testRight() {
+		// STRING
+		"".toStringValue.assertEquals(StandardFunctions.invoke("RIGHT", "".toStringValue, 0.toIntValue))
+		"String".toStringValue.assertEquals(StandardFunctions.invoke("RIGHT", "TestString".toStringValue, 6.toIntValue))
+		"IDE".toStringValue.assertEquals(StandardFunctions.invoke("RIGHT", "4diac IDE".toStringValue, 3.toIntValue))
+		// WSTRING
+		"".toWStringValue.assertEquals(StandardFunctions.invoke("RIGHT", "".toWStringValue, 0.toIntValue))
+		"String".toWStringValue.assertEquals(
+			StandardFunctions.invoke("RIGHT", "TestString".toWStringValue, 6.toIntValue))
+		"IDE".toWStringValue.assertEquals(StandardFunctions.invoke("RIGHT", "4diac IDE".toWStringValue, 3.toIntValue))
+	}
+
+	@Test
+	def void testMid() {
+		// STRING
+		"".toStringValue.assertEquals(StandardFunctions.invoke("MID", "".toStringValue, 0.toIntValue, 1.toIntValue))
+		"Str".toStringValue.assertEquals(
+			StandardFunctions.invoke("MID", "TestString".toStringValue, 3.toIntValue, 5.toIntValue))
+		"diac".toStringValue.assertEquals(
+			StandardFunctions.invoke("MID", "4diac IDE".toStringValue, 4.toIntValue, 2.toIntValue))
+		// WSTRING
+		"".toWStringValue.assertEquals(StandardFunctions.invoke("MID", "".toWStringValue, 0.toIntValue, 1.toIntValue))
+		"Str".toWStringValue.assertEquals(
+			StandardFunctions.invoke("MID", "TestString".toWStringValue, 3.toIntValue, 5.toIntValue))
+		"diac".toWStringValue.assertEquals(
+			StandardFunctions.invoke("MID", "4diac IDE".toWStringValue, 4.toIntValue, 2.toIntValue))
+	}
+
+	@Test
+	def void testConcat() {
+		// STRING
+		"".toStringValue.assertEquals(StandardFunctions.invoke("CONCAT", "".toStringValue))
+		"Test".toStringValue.assertEquals(StandardFunctions.invoke("CONCAT", "Test".toStringValue))
+		"".toStringValue.assertEquals(StandardFunctions.invoke("CONCAT", "".toStringValue, "".toStringValue))
+		"TestString".toStringValue.assertEquals(
+			StandardFunctions.invoke("CONCAT", "Test".toStringValue, "String".toStringValue))
+		"4diac IDE".toStringValue.assertEquals(
+			StandardFunctions.invoke("CONCAT", "4diac".toStringValue, " ".toStringValue, "IDE".toStringValue))
+		// WSTRING
+		"".toWStringValue.assertEquals(StandardFunctions.invoke("CONCAT", "".toWStringValue))
+		"Test".toWStringValue.assertEquals(StandardFunctions.invoke("CONCAT", "Test".toWStringValue))
+		"".toWStringValue.assertEquals(StandardFunctions.invoke("CONCAT", "".toWStringValue, "".toWStringValue))
+		"TestString".toWStringValue.assertEquals(
+			StandardFunctions.invoke("CONCAT", "Test".toWStringValue, "String".toWStringValue))
+		"4diac IDE".toWStringValue.assertEquals(
+			StandardFunctions.invoke("CONCAT", "4diac".toWStringValue, " ".toWStringValue, "IDE".toWStringValue))
+	}
+
+	@Test
+	def void testInsert() {
+		// STRING
+		"".toStringValue.assertEquals(
+			StandardFunctions.invoke("INSERT", "".toStringValue, "".toStringValue, 0.toIntValue))
+		"Test".toStringValue.assertEquals(
+			StandardFunctions.invoke("INSERT", "Test".toStringValue, "".toStringValue, 0.toIntValue))
+		"TestString".toStringValue.assertEquals(
+			StandardFunctions.invoke("INSERT", "Test".toStringValue, "String".toStringValue, 4.toIntValue))
+		"4diac IDE".toStringValue.assertEquals(
+			StandardFunctions.invoke("INSERT", "4diacIDE".toStringValue, " ".toStringValue, 5.toIntValue))
+		// WSTRING
+		"".toWStringValue.assertEquals(
+			StandardFunctions.invoke("INSERT", "".toWStringValue, "".toWStringValue, 0.toIntValue))
+		"Test".toWStringValue.assertEquals(
+			StandardFunctions.invoke("INSERT", "Test".toWStringValue, "".toWStringValue, 0.toIntValue))
+		"TestString".toWStringValue.assertEquals(
+			StandardFunctions.invoke("INSERT", "Test".toWStringValue, "String".toWStringValue, 4.toIntValue))
+		"4diac IDE".toWStringValue.assertEquals(
+			StandardFunctions.invoke("INSERT", "4diacIDE".toWStringValue, " ".toWStringValue, 5.toIntValue))
+	}
+
+	@Test
+	def void testDelete() {
+		// STRING
+		"".toStringValue.assertEquals(StandardFunctions.invoke("DELETE", "".toStringValue, 0.toIntValue, 1.toIntValue))
+		"Test".toStringValue.assertEquals(
+			StandardFunctions.invoke("DELETE", "TestString".toStringValue, 6.toIntValue, 5.toIntValue))
+		"4diacIDE".toStringValue.assertEquals(
+			StandardFunctions.invoke("DELETE", "4diac IDE".toStringValue, 1.toIntValue, 6.toIntValue))
+		// WSTRING
+		"".toWStringValue.assertEquals(
+			StandardFunctions.invoke("DELETE", "".toWStringValue, 0.toIntValue, 1.toIntValue))
+		"Test".toWStringValue.assertEquals(
+			StandardFunctions.invoke("DELETE", "TestString".toWStringValue, 6.toIntValue, 5.toIntValue))
+		"4diacIDE".toWStringValue.assertEquals(
+			StandardFunctions.invoke("DELETE", "4diac IDE".toWStringValue, 1.toIntValue, 6.toIntValue))
+	}
+
+	@Test
+	def void testReplace() {
+		// STRING
+		"".toStringValue.assertEquals(
+			StandardFunctions.invoke("REPLACE", "".toStringValue, "".toStringValue, 0.toIntValue, 1.toIntValue))
+		"TeaString".toStringValue.assertEquals(
+			StandardFunctions.invoke("REPLACE", "TestString".toStringValue, "a".toStringValue, 2.toIntValue,
+				3.toIntValue))
+		"4diac FORTE".toStringValue.assertEquals(
+			StandardFunctions.invoke("REPLACE", "4diac IDE".toStringValue, "FORT".toStringValue, 2.toIntValue,
+				7.toIntValue))
+		// WSTRING
+		"".toWStringValue.assertEquals(
+			StandardFunctions.invoke("REPLACE", "".toWStringValue, "".toWStringValue, 0.toIntValue, 1.toIntValue))
+		"TeaString".toWStringValue.assertEquals(
+			StandardFunctions.invoke("REPLACE", "TestString".toWStringValue, "a".toWStringValue, 2.toIntValue,
+				3.toIntValue))
+		"4diac FORTE".toWStringValue.assertEquals(
+			StandardFunctions.invoke("REPLACE", "4diac IDE".toWStringValue, "FORT".toWStringValue, 2.toIntValue,
+				7.toIntValue))
+	}
+
+	@Test
+	def void testFind() {
+		// STRING
+		1.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "".toStringValue, "".toStringValue))
+		0.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "".toStringValue, "Test".toStringValue))
+		1.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "Test".toStringValue, "Test".toStringValue))
+		5.toULIntValue.assertEquals(
+			StandardFunctions.invoke("FIND", "TestString".toStringValue, "String".toStringValue))
+		6.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "4diac IDE".toStringValue, " ".toStringValue))
+		// WSTRING
+		1.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "".toWStringValue, "".toWStringValue))
+		0.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "".toWStringValue, "Test".toWStringValue))
+		1.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "Test".toWStringValue, "Test".toWStringValue))
+		5.toULIntValue.assertEquals(
+			StandardFunctions.invoke("FIND", "TestString".toWStringValue, "String".toWStringValue))
+		6.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "4diac IDE".toWStringValue, " ".toWStringValue))
+	}
+
+	@Test
+	def void testIsValid() {
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("IS_VALID", 17.toLRealValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("IS_VALID", Double.POSITIVE_INFINITY.toLRealValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("IS_VALID", Double.NEGATIVE_INFINITY.toLRealValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("IS_VALID", Double.NaN.toLRealValue))
 	}
 
 	@ParameterizedTest(name="{index}: {0} as {1}")
@@ -116,5 +659,26 @@ class StandardFunctionsTest {
 		DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ first |
 			DataTypeLibrary.nonUserDefinedDataTypes.stream.map[second|arguments(first.name, second.name)]
 		]
+	}
+
+	def <T extends Value> T invokeUnaryOperator(Class<? extends Functions> clazz, String name, T argument) {
+		clazz.invoke(name, argument) as T
+	}
+
+	def <T extends Value> T invokeBinaryOperator(Class<? extends Functions> clazz, String name, T argument1,
+		T argument2) {
+		clazz.invoke(name, argument1, argument2) as T
+	}
+
+	def <T extends Value> T invokeOperator(Class<? extends Functions> clazz, String name, T... arguments) {
+		clazz.invoke(name, arguments) as T
+	}
+
+	def void assertEquals(double expected, RealValue actual, double delta) {
+		assertEquals(expected, actual.doubleValue, delta)
+	}
+
+	def void assertEquals(double expected, LRealValue actual, double delta) {
+		assertEquals(expected, actual.doubleValue, delta)
 	}
 }
