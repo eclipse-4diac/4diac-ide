@@ -13,13 +13,12 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.ui.IEditorInput
 import org.eclipse.ui.IFileEditorInput
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.ui.editor.model.ResourceForIEditorInputFactory
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 
 class STAlgorithmResourceForIEditorInputFactory extends ResourceForIEditorInputFactory {
 	override createResource(IEditorInput editorInput) {
@@ -32,6 +31,7 @@ class STAlgorithmResourceForIEditorInputFactory extends ResourceForIEditorInputF
 					if (libraryElement instanceof FBType) {
 						if (resource instanceof STAlgorithmResource) {
 							resource.fbType = libraryElement
+							resource.defaultLoadOptions.put(STAlgorithmResource.OPTION_PLAIN_ST, Boolean.TRUE)
 						}
 					}
 				}

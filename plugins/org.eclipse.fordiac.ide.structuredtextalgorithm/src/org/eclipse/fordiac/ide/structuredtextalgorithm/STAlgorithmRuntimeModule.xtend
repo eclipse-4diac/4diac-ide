@@ -17,6 +17,7 @@ import com.google.inject.name.Names
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.scoping.STAlgorithmImportedNamespaceAwareLocalScopeProvider
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters
+import org.eclipse.xtext.Constants
 import org.eclipse.xtext.scoping.IScopeProvider
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
 
@@ -35,5 +36,11 @@ class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 	override configureIScopeProviderDelegate(Binder binder) {
 		binder.bind(IScopeProvider).annotatedWith(Names.named(AbstractDeclarativeScopeProvider.NAMED_DELEGATE)).to(
 			STAlgorithmImportedNamespaceAwareLocalScopeProvider)
+	}
+
+	override void configureFileExtensions(Binder binder) {
+		if (properties === null || properties.getProperty(Constants.FILE_EXTENSIONS) === null) {
+			binder.bind(String).annotatedWith(Names.named(Constants.FILE_EXTENSIONS)).toInstance("stalg,fbt")
+		}
 	}
 }

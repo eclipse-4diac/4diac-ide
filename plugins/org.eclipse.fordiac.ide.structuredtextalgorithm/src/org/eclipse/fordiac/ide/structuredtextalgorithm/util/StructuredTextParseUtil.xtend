@@ -123,6 +123,7 @@ class StructuredTextParseUtil {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		resourceSet.loadOptions.putAll(#{
 			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
+			STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE,
 			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE
 		})
 		val resource = SERVICE_PROVIDER.get(XtextResource) as STAlgorithmResource

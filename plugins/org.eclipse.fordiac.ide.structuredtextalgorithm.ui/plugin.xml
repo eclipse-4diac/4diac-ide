@@ -226,6 +226,10 @@
 			class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
 			uriExtension="stalg">
 		</resourceServiceProvider>
+  <resourceServiceProvider
+        class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+        uriExtension="fbt">
+  </resourceServiceProvider>
 	</extension>
 	<!-- Quick Outline -->
 	<extension
@@ -395,5 +399,11 @@
              menubarPath="debug">
        </action>
     </viewerContribution>
+ </extension>
+ <extension
+       point="org.eclipse.xtext.ui.shared.sharedStateContributingModule">
+    <module
+          class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmSharedModule">
+    </module>
  </extension>
 </plugin>
