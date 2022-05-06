@@ -1542,16 +1542,64 @@ public interface StandardFunctions extends Functions {
 		return LTimeOfDayValue.toLTimeOfDayValue(value);
 	}
 
+	@OnlySupportedBy("4diac FORTE")
+	static LIntValue TIME_IN_S_TO_LINT(final AnyDurationValue value) {
+		return LIntValue.toLIntValue(value.toDuration().toSeconds());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
 	static LIntValue TIME_IN_MS_TO_LINT(final AnyDurationValue value) {
 		return LIntValue.toLIntValue(value.toDuration().toMillis());
 	}
 
+	@OnlySupportedBy("4diac FORTE")
+	static LIntValue TIME_IN_US_TO_LINT(final AnyDurationValue value) {
+		return LIntValue.toLIntValue(value.toDuration().toNanos() / 1000);
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static LIntValue TIME_IN_NS_TO_LINT(final AnyDurationValue value) {
+		return LIntValue.toLIntValue(value.toDuration().toNanos());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static ULIntValue TIME_IN_S_TO_ULINT(final AnyDurationValue value) {
+		return ULIntValue.toULIntValue(value.toDuration().toSeconds());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static ULIntValue TIME_IN_MS_TO_ULINT(final AnyDurationValue value) {
+		return ULIntValue.toULIntValue(value.toDuration().toMillis());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static ULIntValue TIME_IN_US_TO_ULINT(final AnyDurationValue value) {
+		return ULIntValue.toULIntValue(value.toDuration().toNanos() / 1000);
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static ULIntValue TIME_IN_NS_TO_ULINT(final AnyDurationValue value) {
+		return ULIntValue.toULIntValue(value.toDuration().toNanos());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static LRealValue TIME_IN_S_TO_LREAL(final AnyDurationValue value) {
+		return LRealValue.toLRealValue(value.toDuration().toNanos() / 1000000000.0);
+	}
+
+	@OnlySupportedBy("4diac FORTE")
 	static LRealValue TIME_IN_MS_TO_LREAL(final AnyDurationValue value) {
 		return LRealValue.toLRealValue(value.toDuration().toNanos() / 1000000.0);
 	}
 
+	@OnlySupportedBy("4diac FORTE")
 	static LRealValue TIME_IN_US_TO_LREAL(final AnyDurationValue value) {
 		return LRealValue.toLRealValue(value.toDuration().toNanos() / 1000.0);
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static LRealValue TIME_IN_NS_TO_LREAL(final AnyDurationValue value) {
+		return LRealValue.toLRealValue(value.toDuration().toNanos());
 	}
 
 	/* ANY_CHARS conversions */
@@ -1587,9 +1635,4 @@ public interface StandardFunctions extends Functions {
 	static WCharValue CHAR_TO_WCHAR(final CharValue value) {
 		return WCharValue.toWCharValue(value);
 	}
-
-	// TODO: rest of string functions
-
-	// TODO: date and duration functions
-
 }
