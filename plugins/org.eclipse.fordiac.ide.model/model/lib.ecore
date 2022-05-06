@@ -196,7 +196,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="destination" eType="#//IInterfaceElement"
         eOpposite="#//IInterfaceElement/inputConnections"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="routingData" lowerBound="1"
-        eType="#//ConnectionRoutingData"/>
+        eType="#//ConnectionRoutingData" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConnectionRoutingData">
     <eOperations name="is1SegementData" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">

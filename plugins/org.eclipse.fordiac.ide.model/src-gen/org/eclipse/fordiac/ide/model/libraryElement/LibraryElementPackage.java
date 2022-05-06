@@ -1405,7 +1405,7 @@ public interface LibraryElementPackage extends EPackage {
 	int CONNECTION__DESTINATION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 5;
 
 	/**
-	 * The feature id for the '<em><b>Routing Data</b></em>' reference.
+	 * The feature id for the '<em><b>Routing Data</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4107,7 +4107,7 @@ public interface LibraryElementPackage extends EPackage {
 	int DATA_CONNECTION__DESTINATION = CONNECTION__DESTINATION;
 
 	/**
-	 * The feature id for the '<em><b>Routing Data</b></em>' reference.
+	 * The feature id for the '<em><b>Routing Data</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4216,7 +4216,7 @@ public interface LibraryElementPackage extends EPackage {
 	int EVENT_CONNECTION__DESTINATION = CONNECTION__DESTINATION;
 
 	/**
-	 * The feature id for the '<em><b>Routing Data</b></em>' reference.
+	 * The feature id for the '<em><b>Routing Data</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -4325,7 +4325,7 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_CONNECTION__DESTINATION = CONNECTION__DESTINATION;
 
 	/**
-	 * The feature id for the '<em><b>Routing Data</b></em>' reference.
+	 * The feature id for the '<em><b>Routing Data</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -6913,10 +6913,10 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getConnection_Destination();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getRoutingData <em>Routing Data</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Connection#getRoutingData <em>Routing Data</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Routing Data</em>'.
+	 * @return the meta object for the containment reference '<em>Routing Data</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.Connection#getRoutingData()
 	 * @see #getConnection()
 	 * @generated
@@ -9682,7 +9682,7 @@ public interface LibraryElementPackage extends EPackage {
 		EReference CONNECTION__DESTINATION = eINSTANCE.getConnection_Destination();
 
 		/**
-		 * The meta object literal for the '<em><b>Routing Data</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Routing Data</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
