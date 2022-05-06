@@ -12,7 +12,7 @@
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
  *       - adds check for trailing underscore on identifiers
- *
+ *       - validation for unqualified FB calls (exactly one input event)
  *   Ulzii Jargalsaikhan
  *       - custom validation for identifiers
  *   Martin Jobst
@@ -25,6 +25,7 @@ import java.util.stream.StreamSupport;
 
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
@@ -54,6 +55,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String NO_CAST_AVAILABLE = ISSUE_CODE_PREFIX + "noCastAvailable"; //$NON-NLS-1$
 	public static final String WRONG_NAME_CASE = ISSUE_CODE_PREFIX + "wrongNameCase"; //$NON-NLS-1$
 	public static final String RESERVED_IDENTIFIER_ERROR = ISSUE_CODE_PREFIX + "reservedIdentifierError"; //$NON-NLS-1$
+	public static final String UNQUALIFIED_FB_CALL_ON_FB_WITH_INPUT_EVENT_SIZE_NOT_ONE = ISSUE_CODE_PREFIX
+			+ "UnqualifiedFbCallOnFbWithInputEventSizeNotOne"; //$NON-NLS-1$
 
 	@Check
 	public void checkConsecutiveUnderscoresInIdentifier(final INamedElement iNamedElement) {
@@ -152,4 +155,17 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			}
 		}
 	}
+
+	@Check
+	public void checkCalledFBWithoutEventSpecificerHasOnlyOneInputEvent(final STFeatureExpression expression) {
+		if(expression.isCall() && expression.getFeature() instanceof FB) {
+			final FB functionBlock = (FB)expression.getFeature();
+			if(functionBlock.getInterface().getEventInputs().size() != 1) {
+				error(Messages.STCoreValidator_Unqualified_FB_Call_On_FB_With_Input_Event_Size_Not_One,
+						STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
+						UNQUALIFIED_FB_CALL_ON_FB_WITH_INPUT_EVENT_SIZE_NOT_ONE);
+			}
+		}
+	}
+
 }
