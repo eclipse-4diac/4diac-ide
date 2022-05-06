@@ -463,9 +463,11 @@ final class ValueOperations {
 			DWordValue:
 				DWordValue.toDWordValue(Integer.rotateLeft(first.intValue, second.intValue))
 			WordValue:
-				WordValue.toWordValue(((first.intValue << second.intValue).bitwiseOr(first.intValue >>> (16 - second.intValue))) as short)
+				WordValue.toWordValue(
+					((first.intValue << second.intValue).bitwiseOr(first.intValue >>> (16 - second.intValue))) as short)
 			ByteValue:
-				ByteValue.toByteValue(((first.intValue << second.intValue).bitwiseOr(first.intValue >>> (8 - second.intValue))) as byte)
+				ByteValue.toByteValue(
+					((first.intValue << second.intValue).bitwiseOr(first.intValue >>> (8 - second.intValue))) as byte)
 			default:
 				throw new UnsupportedOperationException('''The shift left operation is not supported for types «first.type.name» and «second.type.name»''')
 		}
@@ -482,9 +484,11 @@ final class ValueOperations {
 			DWordValue:
 				DWordValue.toDWordValue(Integer.rotateRight(first.intValue, second.intValue))
 			WordValue:
-				WordValue.toWordValue(((first.intValue >>> second.intValue).bitwiseOr(first.intValue << (16 - second.intValue))) as short)
+				WordValue.toWordValue(
+					((first.intValue >>> second.intValue).bitwiseOr(first.intValue << (16 - second.intValue))) as short)
 			ByteValue:
-				ByteValue.toByteValue(((first.intValue >>> second.intValue).bitwiseOr(first.intValue << (8 - second.intValue))) as byte)
+				ByteValue.toByteValue(
+					((first.intValue >>> second.intValue).bitwiseOr(first.intValue << (8 - second.intValue))) as byte)
 			default:
 				throw new UnsupportedOperationException('''The shift left operation is not supported for types «first.type.name» and «second.type.name»''')
 		}
@@ -576,7 +580,24 @@ final class ValueOperations {
 			TimeType:
 				Long.compare(first.longValue, second.longValue)
 			default:
-				0
+				throw new UnsupportedOperationException('''The compare operation is not supported for types «first.type.name» and «second.type.name»''')
+		}
+	}
+
+	def static dispatch int compareTo(AnyBitValue first, AnyBitValue second) {
+		switch (first.type.resultType(second.type)) {
+			LwordType:
+				Long.compareUnsigned(first.longValue, second.longValue)
+			DwordType:
+				Integer.compareUnsigned(first.intValue, second.intValue)
+			WordType:
+				Integer.compareUnsigned(first.intValue, second.intValue)
+			ByteType:
+				Integer.compareUnsigned(first.intValue, second.intValue)
+			BoolType:
+				Boolean.compare(first.boolValue, second.boolValue)
+			default:
+				throw new UnsupportedOperationException('''The compare operation is not supported for types «first.type.name» and «second.type.name»''')
 		}
 	}
 
