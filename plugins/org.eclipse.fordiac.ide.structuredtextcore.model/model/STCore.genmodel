@@ -274,6 +274,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStandardFunction/inputParameters"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStandardFunction/outputParameters"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStandardFunction/inOutParameters"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STStandardFunction/onlySupportedBy"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

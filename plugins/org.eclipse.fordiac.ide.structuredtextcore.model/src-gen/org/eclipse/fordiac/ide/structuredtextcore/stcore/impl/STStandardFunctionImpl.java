@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 
+import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
@@ -53,6 +54,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getInputParameters <em>Input Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getOutputParameters <em>Output Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getInOutParameters <em>In Out Parameters</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getOnlySupportedBy <em>Only Supported By</em>}</li>
  * </ul>
  *
  * @generated
@@ -137,6 +139,16 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	 * @ordered
 	 */
 	protected EList<INamedElement> inOutParameters;
+
+	/**
+	 * The cached value of the '{@link #getOnlySupportedBy() <em>Only Supported By</em>}' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getOnlySupportedBy()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<String> onlySupportedBy;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -288,6 +300,19 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 */
 	@Override
+	public EList<String> getOnlySupportedBy() {
+		if (onlySupportedBy == null) {
+			onlySupportedBy = new EDataTypeUniqueEList<String>(String.class, this, STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY);
+		}
+		return onlySupportedBy;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 			case STCorePackage.ST_STANDARD_FUNCTION__INPUT_PARAMETERS:
@@ -322,6 +347,8 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return getOutputParameters();
 			case STCorePackage.ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS:
 				return getInOutParameters();
+			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
+				return getOnlySupportedBy();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -357,6 +384,10 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				getInOutParameters().clear();
 				getInOutParameters().addAll((Collection<? extends INamedElement>)newValue);
 				return;
+			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
+				getOnlySupportedBy().clear();
+				getOnlySupportedBy().addAll((Collection<? extends String>)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -389,6 +420,9 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 			case STCorePackage.ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS:
 				getInOutParameters().clear();
 				return;
+			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
+				getOnlySupportedBy().clear();
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -415,6 +449,8 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return outputParameters != null && !outputParameters.isEmpty();
 			case STCorePackage.ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS:
 				return inOutParameters != null && !inOutParameters.isEmpty();
+			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
+				return onlySupportedBy != null && !onlySupportedBy.isEmpty();
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -434,6 +470,8 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 		result.append(name);
 		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
+		result.append(", onlySupportedBy: "); //$NON-NLS-1$
+		result.append(onlySupportedBy);
 		result.append(')');
 		return result.toString();
 	}
