@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020, 2021 Johannes Kepler University Linz, fortiss GmbH.
+ *               2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,8 @@
  *     - test for forte_ng
  *   Kirill Dorofeev
  *     - tests for lua exporter
+ *   Martin Jobst
+ *     - adopt new ST language support
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.test.export;
@@ -21,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
@@ -30,14 +34,18 @@ import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter;
 import org.eclipse.fordiac.ide.export.forte_ng.algorithm.OtherAlgorithmSupportFactory;
-import org.eclipse.fordiac.ide.export.forte_ng.st.STAlgorithmFilter;
 import org.eclipse.fordiac.ide.export.forte_ng.st.StructuredTextSupportFactory;
+import org.eclipse.fordiac.ide.export.language.ILanguageSupport;
+import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
+import org.eclipse.fordiac.ide.model.libraryElement.ECC;
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -45,12 +53,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetup;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.testmocks.FBTypeEntryMock;
-import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetup;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -93,7 +99,6 @@ public abstract class ExporterTestBase<T extends FBType> {
 	protected static final int SIZE_BOOL = 1;
 
 	private static final DataTypeLibrary dataTypeLib = new DataTypeLibrary();
-	private final STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter();
 	protected T functionBlock;
 	protected Event inputEvent;
 	protected Event outputEvent;
@@ -117,9 +122,18 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 * @param errorList     reference to List where error messages are stored
 	 *
 	 * @return the generated code or null on error */
+	@SuppressWarnings("static-method")
 	public CharSequence generateAlgorithm(final FBType fb, final String algorithmName, final List<String> errorList) {
-		return stAlgorithmFilter.generate(castAlgorithm(((BasicFBType) fb).getAlgorithmNamed(algorithmName)),
-				errorList);
+		CharSequence result = null;
+		final ILanguageSupport languageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", //$NON-NLS-1$
+				((BaseFBType) fb).getAlgorithmNamed(algorithmName));
+		try {
+			result = languageSupport.generate(Collections.emptyMap());
+			errorList.addAll(languageSupport.getErrors());
+		} catch (final ExportException e) {
+			errorList.add(e.getMessage());
+		}
+		return result;
 	}
 
 	/** generate code from an expression with variables attached to a functionblock
@@ -130,7 +144,21 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 *
 	 * @return the generated code or null on error */
 	public CharSequence generateExpression(final FBType fb, final String expression, final List<String> errorList) {
-		return stAlgorithmFilter.generate(expression, ((BasicFBType) fb), errorList);
+		CharSequence result = null;
+		final ECC ecc = ((BasicFBType) functionBlock).getECC();
+		final ECTransition transition = LibraryElementFactory.eINSTANCE.createECTransition();
+		transition.setConditionExpression(expression);
+		transition.setSource(ecc.getStart());
+		transition.setDestination(ecc.getStart());
+		ecc.getECTransition().add(transition);
+		final ILanguageSupport languageSupport = ILanguageSupportFactory.createLanguageSupport("forte_ng", transition); //$NON-NLS-1$
+		try {
+			result = languageSupport.generate(Collections.emptyMap());
+			errorList.addAll(languageSupport.getErrors());
+		} catch (final ExportException e) {
+			errorList.add(e.getMessage());
+		}
+		return result;
 	}
 
 	protected static class FileObject {
@@ -218,13 +246,6 @@ public abstract class ExporterTestBase<T extends FBType> {
 	 * @return error list object */
 	public List<String> getErrors() {
 		return errors;
-	}
-
-	@BeforeAll
-	/** initialize the Equinox extension registry substitute */
-	public static void doSetup() {
-		FBTypeStandaloneSetup.doSetup();
-		StructuredTextStandaloneSetup.doSetup();
 	}
 
 	@BeforeEach
@@ -409,7 +430,6 @@ public abstract class ExporterTestBase<T extends FBType> {
 		adapterPlugDecl.setName(ADAPTER_PLUG_NAME);
 		adapterPlugDecl.setTypeName(ADAPTERFUNCTIONBLOCK_NAME);
 		functionBlock.getInterfaceList().getPlugs().add(adapterPlugDecl);
-
 
 	}
 }

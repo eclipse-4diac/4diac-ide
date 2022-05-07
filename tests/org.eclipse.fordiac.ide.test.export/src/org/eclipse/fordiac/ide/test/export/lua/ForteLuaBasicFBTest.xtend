@@ -14,13 +14,22 @@
 
 package org.eclipse.fordiac.ide.test.export.lua
 
+import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetup
+import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetup
 import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeAdvanced
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 class ForteLuaBasicFBTest extends ExporterTestBasicFBTypeAdvanced {
+
+	@BeforeAll
+	def static void doSetup() {
+		FBTypeStandaloneSetup.doSetup();
+		StructuredTextStandaloneSetup.doSetup();
+	}
 
 	@Test
 	def exportValidBasicFB() {
