@@ -324,9 +324,8 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="eCTransition" lowerBound="1"
-        upperBound="-1" eType="#//ECTransition" containment="true" resolveProxies="false"
-        eOpposite="#//ECTransition/eCC">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eCTransition" upperBound="-1"
+        eType="#//ECTransition" containment="true" resolveProxies="false" eOpposite="#//ECTransition/eCC">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="ECTransition"/>
