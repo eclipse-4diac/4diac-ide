@@ -6,7 +6,7 @@
       <editor
             class="org.eclipse.fordiac.ide.fbtypeeditor.st.StructuredTextFBTypeExecutableExtensionFactory:org.eclipse.fordiac.ide.fbtypeeditor.st.StructuredTextFBTypeEditor"
             sortIndex="60"
-            type="simple">
+            type="base">
       </editor>
    </extension>
 </plugin>

@@ -71,6 +71,8 @@
                   </enumeration>
                   <enumeration value="serviceInterface">
                   </enumeration>
+                  <enumeration value="base">
+                  </enumeration>
                   <enumeration value="basic">
                   </enumeration>
                   <enumeration value="simple">

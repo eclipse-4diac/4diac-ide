@@ -45,6 +45,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -306,6 +307,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		return ((editorType.equals("ForAllTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllFBTypes")) || //$NON-NLS-1$
 				(editorType.equals("ForAllNonAdapterFBTypes") && !(fbType instanceof AdapterFBType)) || //$NON-NLS-1$
+				((fbType instanceof BaseFBType) && editorType.equals("base")) || //$NON-NLS-1$
 				((fbType instanceof BasicFBType) && editorType.equals("basic")) || //$NON-NLS-1$
 				((fbType instanceof SimpleFBType) && editorType.equals("simple")) || //$NON-NLS-1$
 				((fbType instanceof ServiceInterfaceFBType) && editorType.equals("serviceInterface")) || //$NON-NLS-1$
