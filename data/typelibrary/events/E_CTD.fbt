@@ -37,7 +37,7 @@
         <ECAction Algorithm="CD" Output="CDO"/>
       </ECState>
       <ECState Comment="" Name="LD" x="450.0" y="610.0">
-        <ECAction Algorithm="LD" Output="LDO"/>
+        <ECAction Algorithm="LOAD" Output="LDO"/>
       </ECState>
       <ECTransition Comment="" Condition="CD[(CV &gt; 0)]" Destination="CD" Source="START" x="1035.0" y="460.0"/>
       <ECTransition Comment="" Condition="1" Destination="START" Source="CD" x="630.0" y="90.0"/>
@@ -47,7 +47,7 @@
     <Algorithm Comment="Count Down" Name="CD">
       <ST Text="CV := CV - 1;&#10;Q := (CV = 0);&#10;&#10;"/>
     </Algorithm>
-    <Algorithm Comment="Load" Name="LD">
+    <Algorithm Comment="Load" Name="LOAD">
       <ST Text="CV := PV;&#10;Q:= (CV = 0);&#10;"/>
     </Algorithm>
   </BasicFB>
