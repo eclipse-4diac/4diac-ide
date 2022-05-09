@@ -1941,12 +1941,15 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cXORKeyword_4 = (Keyword)cAlternatives.eContents().get(4);
 		private final Keyword cNOTKeyword_5 = (Keyword)cAlternatives.eContents().get(5);
 		private final Keyword cMODKeyword_6 = (Keyword)cAlternatives.eContents().get(6);
+		private final Keyword cDKeyword_7 = (Keyword)cAlternatives.eContents().get(7);
+		private final Keyword cDTKeyword_8 = (Keyword)cAlternatives.eContents().get(8);
+		private final Keyword cLDKeyword_9 = (Keyword)cAlternatives.eContents().get(9);
 		
 		//STFeatureName:
-		//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD';
+		//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD' | 'D' | 'DT' | 'LD';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD'
+		//ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD' | 'D' | 'DT' | 'LD'
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//ID
@@ -1969,6 +1972,15 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//'MOD'
 		public Keyword getMODKeyword_6() { return cMODKeyword_6; }
+		
+		//'D'
+		public Keyword getDKeyword_7() { return cDKeyword_7; }
+		
+		//'DT'
+		public Keyword getDTKeyword_8() { return cDTKeyword_8; }
+		
+		//'LD'
+		public Keyword getLDKeyword_9() { return cLDKeyword_9; }
 	}
 	public class STMultibitPartialExpressionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STMultibitPartialExpression");
@@ -3983,7 +3995,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STFeatureName:
-	//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD';
+	//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD' | 'D' | 'DT' | 'LD';
 	public STFeatureNameElements getSTFeatureNameAccess() {
 		return pSTFeatureName;
 	}

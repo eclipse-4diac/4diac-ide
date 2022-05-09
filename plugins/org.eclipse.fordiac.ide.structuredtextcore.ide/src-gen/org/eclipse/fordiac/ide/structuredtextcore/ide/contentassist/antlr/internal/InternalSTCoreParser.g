@@ -2213,6 +2213,24 @@ rule__STFeatureName__Alternatives
 		MOD
 		{ after(grammarAccess.getSTFeatureNameAccess().getMODKeyword_6()); }
 	)
+	|
+	(
+		{ before(grammarAccess.getSTFeatureNameAccess().getDKeyword_7()); }
+		D
+		{ after(grammarAccess.getSTFeatureNameAccess().getDKeyword_7()); }
+	)
+	|
+	(
+		{ before(grammarAccess.getSTFeatureNameAccess().getDTKeyword_8()); }
+		DT
+		{ after(grammarAccess.getSTFeatureNameAccess().getDTKeyword_8()); }
+	)
+	|
+	(
+		{ before(grammarAccess.getSTFeatureNameAccess().getLDKeyword_9()); }
+		LD
+		{ after(grammarAccess.getSTFeatureNameAccess().getLDKeyword_9()); }
+	)
 ;
 finally {
 	restoreStackSize(stackSize);

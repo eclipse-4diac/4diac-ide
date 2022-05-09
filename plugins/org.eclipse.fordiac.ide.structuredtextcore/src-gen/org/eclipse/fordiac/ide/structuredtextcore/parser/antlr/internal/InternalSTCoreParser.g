@@ -2865,6 +2865,24 @@ ruleSTFeatureName returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleT
 			$current.merge(kw);
 			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getMODKeyword_6());
 		}
+		    |
+		kw=D
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getDKeyword_7());
+		}
+		    |
+		kw=DT
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getDTKeyword_8());
+		}
+		    |
+		kw=LD
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getLDKeyword_9());
+		}
 	)
 ;
 
