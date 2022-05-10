@@ -17,6 +17,7 @@
  *       - custom validation for identifiers
  *   Martin Jobst
  *       - validation for reserved identifiers
+ *       - validation for unary and binary operators
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.validation;
 
@@ -31,8 +32,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
@@ -57,6 +60,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String RESERVED_IDENTIFIER_ERROR = ISSUE_CODE_PREFIX + "reservedIdentifierError"; //$NON-NLS-1$
 	public static final String UNQUALIFIED_FB_CALL_ON_FB_WITH_INPUT_EVENT_SIZE_NOT_ONE = ISSUE_CODE_PREFIX
 			+ "UnqualifiedFbCallOnFbWithInputEventSizeNotOne"; //$NON-NLS-1$
+	public static final String OPERATOR_NOT_APPLICABLE = ISSUE_CODE_PREFIX + "operatorNotApplicable"; //$NON-NLS-1$
 
 	@Check
 	public void checkConsecutiveUnderscoresInIdentifier(final INamedElement iNamedElement) {
@@ -153,6 +157,27 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 						rightType.getName(), leftType.getName(),
 						NodeModelUtils.getNode(statement.getRight()).getText().trim());
 			}
+		}
+	}
+
+	@Check
+	public void checkUnaryExpressionOperator(final STUnaryExpression expression) {
+		final var resultType = expression.getExpression().getResultType();
+		if (!STCoreUtil.isApplicableTo(expression.getOp(), resultType)) {
+			error(MessageFormat.format(Messages.STCoreValidator_UnaryOperator_Not_Applicable,
+					expression.getOp().getLiteral(), resultType.getName()),
+					STCorePackage.Literals.ST_UNARY_EXPRESSION__OP, OPERATOR_NOT_APPLICABLE);
+		}
+	}
+
+	@Check
+	public void checkBinaryExpressionOperator(final STBinaryExpression expression) {
+		final var leftResultType = expression.getLeft().getResultType();
+		final var rightResultType = expression.getRight().getResultType();
+		if (!STCoreUtil.isApplicableTo(expression.getOp(), leftResultType, rightResultType)) {
+			error(MessageFormat.format(Messages.STCoreValidator_BinaryOperator_Not_Applicable,
+					expression.getOp().getLiteral(), leftResultType.getName(), rightResultType.getName()),
+					STCorePackage.Literals.ST_BINARY_EXPRESSION__OP, OPERATOR_NOT_APPLICABLE);
 		}
 	}
 

@@ -17,16 +17,27 @@
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 
 import com.google.inject.Inject
+import java.util.stream.Stream
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation.STFunctionValidator
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
-import org.junit.jupiter.api.^extension.ExtendWith
 import org.eclipse.xtext.testing.util.ParseHelper
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtext.testing.validation.ValidationTestHelper
 import org.junit.jupiter.api.Test
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation.STFunctionValidator
-import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator
+import org.junit.jupiter.api.^extension.ExtendWith
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.Arguments
+import org.junit.jupiter.params.provider.MethodSource
+
+import static org.junit.jupiter.params.provider.Arguments.*
 
 @ExtendWith(InjectionExtension)
 @InjectWith(STFunctionInjectorProvider)
@@ -232,7 +243,65 @@ class STFunctionValidatorTest {
 		VAR
 		    add : BOOL;
 		END_VAR
-		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.RESERVED_IDENTIFIER_ERROR)
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration,
+			STCoreValidator.RESERVED_IDENTIFIER_ERROR)
 	}
 
+	@ParameterizedTest(name="{index}: {0} with {1}")
+	@MethodSource("typeUnaryOperatorArgumentsCartesianProvider")
+	def void testUnaryOperatorNotApplicableErrorValidator(String operatorName, String typeName) {
+		val operator = STUnaryOperator.getByName(operatorName)
+		val type = ElementaryTypes.getTypeByName(typeName)
+		val result = '''
+		FUNCTION hubert
+		VAR
+		    var1 : «type.name»;
+		END_VAR
+		var1 := «operator.literal» var1;
+		END_FUNCTION'''.parse
+		if (STCoreUtil.isApplicableTo(operator, type))
+			result.assertNoErrors
+		else
+			result.assertError(STCorePackage.eINSTANCE.STUnaryExpression, STCoreValidator.OPERATOR_NOT_APPLICABLE)
+	}
+
+	@ParameterizedTest(name="{index}: {0} with {1} and {2}")
+	@MethodSource("typeBinaryOperatorArgumentsCartesianProvider")
+	def void testBinaryOperatorNotApplicableErrorValidator(String operatorName, String leftTypeName,
+		String rightTypeName) {
+		val operator = STBinaryOperator.getByName(operatorName)
+		val leftType = ElementaryTypes.getTypeByName(leftTypeName)
+		val rightType = ElementaryTypes.getTypeByName(rightTypeName)
+		val result = '''
+		FUNCTION hubert
+		VAR
+		    var1 : «leftType.name»;
+		    var2 : «rightType.name»;
+		    var3 : BOOL;
+		END_VAR
+		var3 := (var1 «operator.literal» var2) = var1;
+		END_FUNCTION'''.parse
+		if (STCoreUtil.isApplicableTo(operator, leftType, rightType))
+			result.assertNoErrors
+		else
+			result.assertError(STCorePackage.eINSTANCE.STBinaryExpression, STCoreValidator.OPERATOR_NOT_APPLICABLE)
+	}
+
+	def static Stream<Arguments> typeUnaryOperatorArgumentsCartesianProvider() {
+		DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ type |
+			STUnaryOperator.VALUES.stream.map [ op |
+				arguments(op.getName, type.name)
+			]
+		]
+	}
+
+	def static Stream<Arguments> typeBinaryOperatorArgumentsCartesianProvider() {
+		DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ first |
+			DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ second |
+				STBinaryOperator.VALUES.stream.map [ op |
+					arguments(op.getName, first.name, second.name)
+				]
+			]
+		]
+	}
 }
