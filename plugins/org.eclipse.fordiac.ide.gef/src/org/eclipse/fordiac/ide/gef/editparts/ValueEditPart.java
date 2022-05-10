@@ -54,8 +54,11 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Text;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
@@ -357,12 +360,32 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 *
 	 * @return the manager */
 	public DirectEditManager createDirectEditManager() {
-		return new LabelDirectEditManager(this, getFigure());
+		return new LabelDirectEditManager(this, getFigure()) {
+
+			@Override
+			protected void initCellEditor() {
+				super.initCellEditor();
+				((Text) getCellEditor().getControl()).addKeyListener(new KeyAdapter() {
+					// hook enter key pressed to save also default values in pin
+					@Override
+					public void keyPressed(KeyEvent e) {
+						if(e.character == '\r') {
+							setDirty(true);	
+						}
+					}
+				});
+			}
+		};
+		
 	}
 
 	/** performs the directEdit. */
 	public void performDirectEdit() {
-		getFigure().setText(getModel().getValue()); // Shows the current initial value when editing
+		if(!getModel().getValue().isBlank()) { // Shows the current initial value when editing
+			getFigure().setText(getModel().getValue());
+		} else {
+			getFigure().setText(getDefaultValue(getModel().getParentIE()));		
+		}
 		createDirectEditManager().show();
 	}
 
