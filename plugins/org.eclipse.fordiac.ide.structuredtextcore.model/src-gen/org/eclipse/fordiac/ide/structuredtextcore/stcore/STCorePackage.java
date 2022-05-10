@@ -1740,13 +1740,22 @@ public interface STCorePackage extends EPackage {
 	int ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Only Supported By</b></em>' attribute list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>ST Standard Function</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_STANDARD_FUNCTION_FEATURE_COUNT = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 4;
+	int ST_STANDARD_FUNCTION_FEATURE_COUNT = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}' enum.
@@ -3115,6 +3124,17 @@ public interface STCorePackage extends EPackage {
 	EReference getSTStandardFunction_InOutParameters();
 
 	/**
+	 * Returns the meta object for the attribute list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getOnlySupportedBy <em>Only Supported By</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute list '<em>Only Supported By</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getOnlySupportedBy()
+	 * @see #getSTStandardFunction()
+	 * @generated
+	 */
+	EAttribute getSTStandardFunction_OnlySupportedBy();
+
+	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4280,6 +4300,14 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS = eINSTANCE.getSTStandardFunction_InOutParameters();
+
+		/**
+		 * The meta object literal for the '<em><b>Only Supported By</b></em>' attribute list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY = eINSTANCE.getSTStandardFunction_OnlySupportedBy();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator <em>ST Binary Operator</em>}' enum.

@@ -26,6 +26,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_Non_Compatible_Types_In_Assignment;
 	public static String STCoreValidator_No_Cast_Available;
 	public static String STCoreValidator_Wrong_Name_Case;
+	public static String STCoreValidator_Unqualified_FB_Call_On_FB_With_Input_Event_Size_Not_One;
 
 	static {
 		// initialize resource bundle

@@ -212,37 +212,29 @@ class ValueOperationsTest {
 	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
 	def void testLessThan(String typeName) {
-		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyBitType: UnsupportedOperationException.assertThrows[type.defaultValue < type.defaultValue]
-			default: false.assertEquals(type.defaultValue < type.defaultValue)
-		}
+		val type = ElementaryTypes.getTypeByName(typeName)
+		false.assertEquals(type.defaultValue < type.defaultValue)
 	}
 
 	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
 	def void testLessEquals(String typeName) {
-		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyBitType: UnsupportedOperationException.assertThrows[type.defaultValue <= type.defaultValue]
-			default: true.assertEquals(type.defaultValue <= type.defaultValue)
-		}
+		val type = ElementaryTypes.getTypeByName(typeName)
+		true.assertEquals(type.defaultValue <= type.defaultValue)
 	}
 
 	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
 	def void testGreaterThan(String typeName) {
-		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyBitType: UnsupportedOperationException.assertThrows[type.defaultValue > type.defaultValue]
-			default: false.assertEquals(type.defaultValue > type.defaultValue)
-		}
+		val type = ElementaryTypes.getTypeByName(typeName)
+		false.assertEquals(type.defaultValue > type.defaultValue)
 	}
 
 	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
 	def void testGreaterEquals(String typeName) {
-		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyBitType: UnsupportedOperationException.assertThrows[type.defaultValue >= type.defaultValue]
-			default: true.assertEquals(type.defaultValue >= type.defaultValue)
-		}
+		val type = ElementaryTypes.getTypeByName(typeName)
+		true.assertEquals(type.defaultValue >= type.defaultValue)
 	}
 
 	@ParameterizedTest(name="{index}: {0} partial {1}")
@@ -251,19 +243,24 @@ class ValueOperationsTest {
 		val type = ElementaryTypes.getTypeByName(typeName)
 		val partialType = ElementaryTypes.getTypeByName(partialTypeName)
 		// both type and partialType must be ANY_BIT types and the partialType must be smaller than type
-		if(type instanceof AnyBitType && partialType instanceof AnyBitType && type != partialType && partialType.isCompatibleWith(type)) {
-			for(index : 0..<(type.bitSize / partialType.bitSize)) {
+		if (type instanceof AnyBitType && partialType instanceof AnyBitType && type != partialType &&
+			partialType.isCompatibleWith(type)) {
+			for (index : 0 ..< (type.bitSize / partialType.bitSize)) {
 				partialType.defaultValue.assertEquals(type.defaultValue.partial(partialType, index))
-				(0xffffffff >>> (32 - partialType.bitSize)).wrapValue(partialType).assertEquals(0xffffffffffffffff#L.wrapValue(type).partial(partialType, index))
+				(0xffffffff >>> (32 - partialType.bitSize)).wrapValue(partialType).assertEquals(
+					0xffffffffffffffff#L.wrapValue(type).partial(partialType, index))
 				type.defaultValue.assertEquals(type.defaultValue.partial(partialType, index, partialType.defaultValue))
-				(0x1#L << (index * partialType.bitSize)).wrapValue(type).assertEquals(type.defaultValue.partial(partialType, index, 1.wrapValue(partialType)))
+				(0x1#L << (index * partialType.bitSize)).wrapValue(type).assertEquals(
+					type.defaultValue.partial(partialType, index, 1.wrapValue(partialType)))
 			}
 		} else {
 			UnsupportedOperationException.assertThrows[type.defaultValue.partial(partialType, 0)]
-			UnsupportedOperationException.assertThrows[type.defaultValue.partial(partialType, 0, partialType.defaultValue)]
+			UnsupportedOperationException.assertThrows [
+				type.defaultValue.partial(partialType, 0, partialType.defaultValue)
+			]
 		}
 	}
-	
+
 	@ParameterizedTest(name="{index}: {0} as {1}")
 	@MethodSource("typeArgumentsCartesianProvider")
 	def void testCastValue(String typeName, String castTypeName) {

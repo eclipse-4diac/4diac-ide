@@ -1360,13 +1360,132 @@ public interface StandardFunctions extends Functions {
 	}
 
 	/***************************************/
+	static SIntValue TRUNC_SINT(final LRealValue value) {
+		return SIntValue.toSIntValue(value);
+	}
 
-	static LIntValue TRUNC(final LRealValue value) {
+	static IntValue TRUNC_INT(final LRealValue value) {
+		return IntValue.toIntValue(value);
+	}
+
+	static DIntValue TRUNC_DINT(final LRealValue value) {
+		return DIntValue.toDIntValue(value);
+	}
+
+	static LIntValue TRUNC_LINT(final LRealValue value) {
 		return LIntValue.toLIntValue(value);
 	}
 
-	static IntValue TRUNC(final RealValue value) {
+	static USIntValue TRUNC_USINT(final LRealValue value) {
+		return USIntValue.toUSIntValue(value);
+	}
+
+	static UIntValue TRUNC_UINT(final LRealValue value) {
+		return UIntValue.toUIntValue(value);
+	}
+
+	static UDIntValue TRUNC_UDINT(final LRealValue value) {
+		return UDIntValue.toUDIntValue(value);
+	}
+
+	static ULIntValue TRUNC_ULINT(final LRealValue value) {
+		return ULIntValue.toULIntValue(value);
+	}
+
+	static SIntValue LREAL_TRUNC_SINT(final LRealValue value) {
+		return SIntValue.toSIntValue(value);
+	}
+
+	static IntValue LREAL_TRUNC_INT(final LRealValue value) {
 		return IntValue.toIntValue(value);
+	}
+
+	static DIntValue LREAL_TRUNC_DINT(final LRealValue value) {
+		return DIntValue.toDIntValue(value);
+	}
+
+	static LIntValue LREAL_TRUNC_LINT(final LRealValue value) {
+		return LIntValue.toLIntValue(value);
+	}
+
+	static USIntValue LREAL_TRUNC_USINT(final LRealValue value) {
+		return USIntValue.toUSIntValue(value);
+	}
+
+	static UIntValue LREAL_TRUNC_UINT(final LRealValue value) {
+		return UIntValue.toUIntValue(value);
+	}
+
+	static UDIntValue LREAL_TRUNC_UDINT(final LRealValue value) {
+		return UDIntValue.toUDIntValue(value);
+	}
+
+	static ULIntValue LREAL_TRUNC_ULINT(final LRealValue value) {
+		return ULIntValue.toULIntValue(value);
+	}
+
+	static SIntValue TRUNC_SINT(final RealValue value) {
+		return SIntValue.toSIntValue(value);
+	}
+
+	static IntValue TRUNC_INT(final RealValue value) {
+		return IntValue.toIntValue(value);
+	}
+
+	static DIntValue TRUNC_DINT(final RealValue value) {
+		return DIntValue.toDIntValue(value);
+	}
+
+	static LIntValue TRUNC_LINT(final RealValue value) {
+		return LIntValue.toLIntValue(value);
+	}
+
+	static USIntValue TRUNC_USINT(final RealValue value) {
+		return USIntValue.toUSIntValue(value);
+	}
+
+	static UIntValue TRUNC_UINT(final RealValue value) {
+		return UIntValue.toUIntValue(value);
+	}
+
+	static UDIntValue TRUNC_UDINT(final RealValue value) {
+		return UDIntValue.toUDIntValue(value);
+	}
+
+	static ULIntValue TRUNC_ULINT(final RealValue value) {
+		return ULIntValue.toULIntValue(value);
+	}
+
+	static SIntValue REAL_TRUNC_SINT(final RealValue value) {
+		return SIntValue.toSIntValue(value);
+	}
+
+	static IntValue REAL_TRUNC_INT(final RealValue value) {
+		return IntValue.toIntValue(value);
+	}
+
+	static DIntValue REAL_TRUNC_DINT(final RealValue value) {
+		return DIntValue.toDIntValue(value);
+	}
+
+	static LIntValue REAL_TRUNC_LINT(final RealValue value) {
+		return LIntValue.toLIntValue(value);
+	}
+
+	static USIntValue REAL_TRUNC_USINT(final RealValue value) {
+		return USIntValue.toUSIntValue(value);
+	}
+
+	static UIntValue REAL_TRUNC_UINT(final RealValue value) {
+		return UIntValue.toUIntValue(value);
+	}
+
+	static UDIntValue REAL_TRUNC_UDINT(final RealValue value) {
+		return UDIntValue.toUDIntValue(value);
+	}
+
+	static ULIntValue REAL_TRUNC_ULINT(final RealValue value) {
+		return ULIntValue.toULIntValue(value);
 	}
 
 	static TimeValue NOW_MONOTONIC() {
@@ -1423,16 +1542,64 @@ public interface StandardFunctions extends Functions {
 		return LTimeOfDayValue.toLTimeOfDayValue(value);
 	}
 
+	@OnlySupportedBy("4diac FORTE")
+	static LIntValue TIME_IN_S_TO_LINT(final AnyDurationValue value) {
+		return LIntValue.toLIntValue(value.toDuration().toSeconds());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
 	static LIntValue TIME_IN_MS_TO_LINT(final AnyDurationValue value) {
 		return LIntValue.toLIntValue(value.toDuration().toMillis());
 	}
 
+	@OnlySupportedBy("4diac FORTE")
+	static LIntValue TIME_IN_US_TO_LINT(final AnyDurationValue value) {
+		return LIntValue.toLIntValue(value.toDuration().toNanos() / 1000);
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static LIntValue TIME_IN_NS_TO_LINT(final AnyDurationValue value) {
+		return LIntValue.toLIntValue(value.toDuration().toNanos());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static ULIntValue TIME_IN_S_TO_ULINT(final AnyDurationValue value) {
+		return ULIntValue.toULIntValue(value.toDuration().toSeconds());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static ULIntValue TIME_IN_MS_TO_ULINT(final AnyDurationValue value) {
+		return ULIntValue.toULIntValue(value.toDuration().toMillis());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static ULIntValue TIME_IN_US_TO_ULINT(final AnyDurationValue value) {
+		return ULIntValue.toULIntValue(value.toDuration().toNanos() / 1000);
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static ULIntValue TIME_IN_NS_TO_ULINT(final AnyDurationValue value) {
+		return ULIntValue.toULIntValue(value.toDuration().toNanos());
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static LRealValue TIME_IN_S_TO_LREAL(final AnyDurationValue value) {
+		return LRealValue.toLRealValue(value.toDuration().toNanos() / 1000000000.0);
+	}
+
+	@OnlySupportedBy("4diac FORTE")
 	static LRealValue TIME_IN_MS_TO_LREAL(final AnyDurationValue value) {
 		return LRealValue.toLRealValue(value.toDuration().toNanos() / 1000000.0);
 	}
 
+	@OnlySupportedBy("4diac FORTE")
 	static LRealValue TIME_IN_US_TO_LREAL(final AnyDurationValue value) {
 		return LRealValue.toLRealValue(value.toDuration().toNanos() / 1000.0);
+	}
+
+	@OnlySupportedBy("4diac FORTE")
+	static LRealValue TIME_IN_NS_TO_LREAL(final AnyDurationValue value) {
+		return LRealValue.toLRealValue(value.toDuration().toNanos());
 	}
 
 	/* ANY_CHARS conversions */
@@ -1468,9 +1635,4 @@ public interface StandardFunctions extends Functions {
 	static WCharValue CHAR_TO_WCHAR(final CharValue value) {
 		return WCharValue.toWCharValue(value);
 	}
-
-	// TODO: rest of string functions
-
-	// TODO: date and duration functions
-
 }

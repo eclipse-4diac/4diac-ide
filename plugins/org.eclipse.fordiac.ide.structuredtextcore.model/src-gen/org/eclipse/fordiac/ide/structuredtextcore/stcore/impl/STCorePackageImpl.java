@@ -1755,6 +1755,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getSTStandardFunction_OnlySupportedBy() {
+		return (EAttribute)stStandardFunctionEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getSTBinaryOperator() {
 		return stBinaryOperatorEEnum;
 	}
@@ -2024,6 +2034,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEReference(stStandardFunctionEClass, ST_STANDARD_FUNCTION__INPUT_PARAMETERS);
 		createEReference(stStandardFunctionEClass, ST_STANDARD_FUNCTION__OUTPUT_PARAMETERS);
 		createEReference(stStandardFunctionEClass, ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS);
+		createEAttribute(stStandardFunctionEClass, ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY);
 
 		// Create enums
 		stBinaryOperatorEEnum = createEEnum(ST_BINARY_OPERATOR);
@@ -2366,6 +2377,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEReference(getSTStandardFunction_InputParameters(), theLibraryElementPackage.getINamedElement(), null, "inputParameters", null, 0, -1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTStandardFunction_OutputParameters(), theLibraryElementPackage.getINamedElement(), null, "outputParameters", null, 0, -1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTStandardFunction_InOutParameters(), theLibraryElementPackage.getINamedElement(), null, "inOutParameters", null, 0, -1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSTStandardFunction_OnlySupportedBy(), ecorePackage.getEString(), "onlySupportedBy", null, 0, -1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(stBinaryOperatorEEnum, STBinaryOperator.class, "STBinaryOperator"); //$NON-NLS-1$

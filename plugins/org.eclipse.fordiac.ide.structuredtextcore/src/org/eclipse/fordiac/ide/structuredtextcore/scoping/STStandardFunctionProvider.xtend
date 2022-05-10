@@ -18,6 +18,7 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.eval.function.Functions
+import org.eclipse.fordiac.ide.model.eval.function.OnlySupportedBy
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
@@ -67,6 +68,7 @@ class STStandardFunctionProvider {
 		name = method.name
 		returnType = method.inferReturnTypeFromDataTypes(argumentTypes)
 		inputParameters.addAll(method.inferParameterVariables(argumentTypes))
+		onlySupportedBy.addAll(method.getAnnotationsByType(OnlySupportedBy).flatMap[value.toList])
 		functionResource.contents.add(it)
 	}
 

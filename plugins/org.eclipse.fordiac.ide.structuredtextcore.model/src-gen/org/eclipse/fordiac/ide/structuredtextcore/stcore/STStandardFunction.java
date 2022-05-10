@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getInputParameters <em>Input Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getOutputParameters <em>Output Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getInOutParameters <em>In Out Parameters</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getOnlySupportedBy <em>Only Supported By</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTStandardFunction()
@@ -100,5 +101,17 @@ public interface STStandardFunction extends ICallable {
 	 * @generated
 	 */
 	EList<INamedElement> getInOutParameters();
+
+	/**
+	 * Returns the value of the '<em><b>Only Supported By</b></em>' attribute list.
+	 * The list contents are of type {@link java.lang.String}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Only Supported By</em>' attribute list.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTStandardFunction_OnlySupportedBy()
+	 * @model
+	 * @generated
+	 */
+	EList<String> getOnlySupportedBy();
 
 } // STStandardFunction
