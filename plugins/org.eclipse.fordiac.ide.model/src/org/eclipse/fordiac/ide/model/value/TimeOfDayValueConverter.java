@@ -17,6 +17,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 import java.time.temporal.ChronoField;
 
+import org.eclipse.fordiac.ide.model.Messages;
+
 public final class TimeOfDayValueConverter implements ValueConverter<LocalTime> {
 	public static final TimeOfDayValueConverter INSTANCE = new TimeOfDayValueConverter();
 
@@ -43,7 +45,7 @@ public final class TimeOfDayValueConverter implements ValueConverter<LocalTime> 
 		try {
 			return LocalTime.parse(string, TIME_OF_DAY_FORMATTER);
 		} catch (final Exception e) {
-			throw new IllegalArgumentException("Invalid time-of-day literal", e); //$NON-NLS-1$
+			throw new IllegalArgumentException(Messages.VALIDATOR_InvalidTimeOfDayLiteral, e);
 		}
 	}
 }

@@ -17,6 +17,8 @@ import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.regex.Pattern;
 
+import org.eclipse.fordiac.ide.model.Messages;
+
 public final class TimeValueConverter implements ValueConverter<Duration> {
 	public static final TimeValueConverter INSTANCE = new TimeValueConverter();
 
@@ -68,7 +70,7 @@ public final class TimeValueConverter implements ValueConverter<Duration> {
 						.longValueExact(), ChronoUnit.NANOS);
 			}).reduce(Duration.ZERO, Duration::plus);
 		} catch (final Exception e) {
-			throw new IllegalArgumentException("Invalid time literal", e); //$NON-NLS-1$
+			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_TIME_LITERAL, e);
 		}
 	}
 

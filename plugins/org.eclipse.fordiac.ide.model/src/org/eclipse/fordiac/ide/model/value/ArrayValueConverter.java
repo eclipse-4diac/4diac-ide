@@ -17,6 +17,8 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.fordiac.ide.model.Messages;
+
 public class ArrayValueConverter<T> implements ValueConverter<List<T>> {
 	static final Pattern ARRAY_PATTERN = Pattern.compile(",(?=(?:[^\"']*(?:(?:\"[^\"]*\")|(?:\'[^\']*\')))*[^\"']*$)"); //$NON-NLS-1$
 
@@ -35,7 +37,7 @@ public class ArrayValueConverter<T> implements ValueConverter<List<T>> {
 	public List<T> toValue(final String string) throws IllegalArgumentException {
 		final var trimmed = string.trim();
 		if (!trimmed.startsWith("[") || !trimmed.endsWith("]")) { //$NON-NLS-1$ //$NON-NLS-2$
-			throw new IllegalArgumentException("Not a valid array value"); //$NON-NLS-1$
+			throw new IllegalArgumentException(Messages.VALIDATOR_ARRAY_MISSES_BRACKETS);
 		}
 		final var inner = trimmed.substring(1, trimmed.length() - 1);
 		return Stream.of(ARRAY_PATTERN.split(inner)).map(String::trim).map(elementValueConverter::toValue)

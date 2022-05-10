@@ -16,6 +16,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
+import org.eclipse.fordiac.ide.model.Messages;
+
 public final class StringValueConverter implements ValueConverter<String> {
 	public static final StringValueConverter INSTANCE = new StringValueConverter();
 
@@ -29,14 +31,14 @@ public final class StringValueConverter implements ValueConverter<String> {
 	public String toValue(final String string) throws IllegalArgumentException {
 		// check length
 		if (string.length() < 2) {
-			throw new IllegalArgumentException("Illegal string literal", null); //$NON-NLS-1$
+			throw new IllegalArgumentException(Messages.VALIDATOR_IllegalStringLiteral, null);
 		}
 		// process quotes
 		final char quote = string.charAt(0);
 		if (quote != '\'' && quote != '"') {
-			throw new IllegalArgumentException("Illegal string literal", null); //$NON-NLS-1$
+			throw new IllegalArgumentException(Messages.VALIDATOR_IllegalStringLiteral, null);
 		} else if (quote != string.charAt(string.length() - 1)) {
-			throw new IllegalArgumentException("Unevenly quoted string literal", null); //$NON-NLS-1$
+			throw new IllegalArgumentException(Messages.VALIDATOR_UnevenlyQuotedStringLiteral, null);
 		}
 		final boolean wide = quote == '"';
 		final String unquoted = string.substring(1, string.length() - 1);
@@ -51,7 +53,7 @@ public final class StringValueConverter implements ValueConverter<String> {
 		try {
 			result = pattern.matcher(unquoted).replaceAll(StringValueConverter::unescape);
 		} catch (final Exception e) {
-			throw new IllegalArgumentException("Illegal string literal", e); //$NON-NLS-1$
+			throw new IllegalArgumentException(Messages.VALIDATOR_IllegalStringLiteral, e);
 		}
 		return result;
 	}
@@ -59,7 +61,7 @@ public final class StringValueConverter implements ValueConverter<String> {
 	protected static String unescape(final MatchResult result) {
 		final String escape = result.group(1);
 		if (escape == null) {
-			throw new IllegalArgumentException("Illegal escape in string literal"); //$NON-NLS-1$
+			throw new IllegalArgumentException(Messages.VALIDATOR_UnevenlyQuotedStringLiteral);
 		}
 		switch (escape.charAt(0)) {
 		case '$':

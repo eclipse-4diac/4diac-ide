@@ -18,6 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import java.math.BigInteger;
 
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter;
 import org.junit.jupiter.api.Test;
 
@@ -34,14 +35,14 @@ class ValueConverterTest {
 	void invalidNumericConverterTest() {
 		assertThrowsExactly(IllegalArgumentException.class, () -> {
 			NumericValueConverter.INSTANCE.toValue("NoNumber"); //$NON-NLS-1$
-		}, NumericValueConverter.INVALID_NUMBER_LITERAL);
+		}, Messages.VALIDATOR_INVALID_NUMBER_LITERAL);
 	}
 
 	@Test
 	void twoOrMoreConsecutiveUnderscoresForbiddenTest() {
 		assertThrowsExactly(IllegalArgumentException.class, () -> {
 			NumericValueConverter.INSTANCE.toValue("1__00"); //$NON-NLS-1$
-		}, NumericValueConverter.CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
+		}, Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
 	}
 
 }

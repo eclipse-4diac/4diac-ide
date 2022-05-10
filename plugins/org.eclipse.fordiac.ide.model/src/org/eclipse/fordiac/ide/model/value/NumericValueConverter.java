@@ -17,14 +17,14 @@ import java.math.BigInteger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.eclipse.fordiac.ide.model.Messages;
+
 public final class NumericValueConverter implements ValueConverter<Object> {
 	public static final NumericValueConverter INSTANCE = new NumericValueConverter();
 
 	private static final String TRUE = "TRUE"; //$NON-NLS-1$
 	private static final String FALSE = "FALSE"; //$NON-NLS-1$
 	private static final Pattern NON_DECIMAL = Pattern.compile("(\\d+)#(\\p{XDigit}[_\\p{XDigit}]*)"); //$NON-NLS-1$
-	public static final String CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE = "Numbers shall not contain more than one consecutive \"_\" characters"; //$NON-NLS-1$
-	public static final String INVALID_NUMBER_LITERAL = "Invalid number literal"; //$NON-NLS-1$
 
 	private NumericValueConverter() {
 	}
@@ -33,8 +33,7 @@ public final class NumericValueConverter implements ValueConverter<Object> {
 	public Object toValue(final String string) throws IllegalArgumentException {
 		try {
 			if (string.indexOf("__") != -1) { //$NON-NLS-1$
-				throw new IllegalArgumentException(
-						CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
+				throw new IllegalArgumentException(Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
 			}
 			final Matcher matcher = NON_DECIMAL.matcher(string);
 			if (TRUE.equalsIgnoreCase(string)) {
@@ -51,7 +50,7 @@ public final class NumericValueConverter implements ValueConverter<Object> {
 			}
 			return new BigInteger(string.replace("_", "")); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (final Exception e) {
-			throw new IllegalArgumentException(INVALID_NUMBER_LITERAL, e);
+			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_NUMBER_LITERAL, e);
 		}
 	}
 }

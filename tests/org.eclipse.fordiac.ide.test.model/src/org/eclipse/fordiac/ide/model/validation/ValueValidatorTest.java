@@ -30,12 +30,12 @@ import org.junit.jupiter.params.provider.ValueSource;
 class ValueValidatorTest {
 
 	private static final String NO_ERROR = ""; //$NON-NLS-1$
-	private static final String INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE = "Invalid BOOL Literal! Valid BOOL literals are 0, 1, FALSE and TRUE"; //$NON-NLS-1$
-	private static final String BASE_SPECIFIER_INVALID_FOR_BOOL = "Base specifiers are not allowed for BOOL literals!"; //$NON-NLS-1$
+	private static final String INVALID_BOOL_LITERAL = "Invalid BOOL Literal! Valid BOOL literals are 0, 1, FALSE and TRUE"; //$NON-NLS-1$
 	private static final String TYPE_SPECIFIER_MANDATORY_FOR_ANYS = "Concrete type specifier is mandatory for ANY types!"; //$NON-NLS-1$
 	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_1 = "Characters used outside boundaries!"; //$NON-NLS-1$
 	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_2 = "\'%\' symbols used inside boundaries!"; //$NON-NLS-1$
 	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_3 = "Characters outside boundaries, \'%\' symbols used inside boundaries!"; //$NON-NLS-1$
+	private static final String DATE_TYPE_REQURIES_TYPE_LITERAL = "Data type DATE requires type specifier as part of literal"; //$NON-NLS-1$
 
 	static Stream<Arguments> validateValidBoolLiteralsTestCases() {
 		return Stream.of(Arguments.of(IecTypes.ElementaryTypes.BOOL, "0", NO_ERROR), //$NON-NLS-1$
@@ -58,32 +58,31 @@ class ValueValidatorTest {
 
 	static Stream<Arguments> validateInvalidBoolLiteralsTestCases() {
 		return Stream.of(Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"0\"", //$NON-NLS-1$
-				INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+				INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"1\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"FALSE\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"TRUE\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#0\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#1\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#FALSE\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#TRUE\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "2", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "3.1415", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "1970-01-30", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "16#AFFE", //$NON-NLS-1$
-						BASE_SPECIFIER_INVALID_FOR_BOOL
-						+ INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE),
+						INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "12:00:00", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL_VALID_BOOL_LITERALS_ARE_0_1_FALSE_AND_TRUE));
+						INVALID_BOOL_LITERAL));
 	}
 
 	@DisplayName("Validator tests for invalid BOOL literals")
@@ -103,7 +102,8 @@ class ValueValidatorTest {
 				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1906-12-09", NO_ERROR), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1992-01-01", NO_ERROR), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1878-11-07", NO_ERROR), //$NON-NLS-1$
-				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1968-10-27", NO_ERROR)); //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1968-10-27", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.DATE, "2022-05-10", DATE_TYPE_REQURIES_TYPE_LITERAL)); //$NON-NLS-1$
 	}
 
 	@DisplayName("Validator tests for valid DATE literals")
