@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ArrayValueConverter<T> implements ValueConverter<List<T>> {
-	static final Pattern ARRAY_PATTERN = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)"); //$NON-NLS-1$
+	static final Pattern ARRAY_PATTERN = Pattern.compile(",(?=(?:[^\"']*(?:(?:\"[^\"]*\")|(?:\'[^\']*\')))*[^\"']*$)"); //$NON-NLS-1$
 
 	private final ValueConverter<T> elementValueConverter;
 
