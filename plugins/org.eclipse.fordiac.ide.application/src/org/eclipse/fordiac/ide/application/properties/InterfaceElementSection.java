@@ -133,6 +133,8 @@ public class InterfaceElementSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		instanceCommentText = createGroupText(composite, false);
 		instanceCommentText.setLayoutData(new GridData(SWT.FILL, SWT.None, true, false));
+		instanceCommentText.selectAll();
+
 		instanceCommentText.addModifyListener(e -> {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), instanceCommentText.getText()));
@@ -173,7 +175,11 @@ public class InterfaceElementSection extends AbstractSection {
 					(getType().getType() instanceof StructuredType && !"ANY_STRUCT".equals(getType().getType().getName()))
 					|| (getType().getType() instanceof AdapterType));
 
-			instanceCommentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+			if (hasComment()) {
+				instanceCommentText.setText(getInstanceComment());
+			} else {
+				instanceCommentText.setMessage(getInstanceComment());
+			}
 
 			if (getType() instanceof VarDeclaration) {
 				setParameter();
@@ -210,6 +216,17 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 		}
 		return "";   //$NON-NLS-1$
+	}
+
+	private Boolean hasComment() {
+		return (getType().getComment() != null && !getType().getComment().isBlank());
+	}
+
+	private String getInstanceComment() {
+		if (hasComment()) {
+			return getType().getComment();
+		}
+		return getTypeComment();
 	}
 
 	private Object getPinName() {
