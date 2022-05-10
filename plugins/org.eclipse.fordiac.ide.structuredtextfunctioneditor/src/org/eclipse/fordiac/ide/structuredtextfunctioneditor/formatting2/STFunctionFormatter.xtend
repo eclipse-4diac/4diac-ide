@@ -35,16 +35,20 @@ class STFunctionFormatter extends STCoreFormatter {
 				RuleCall case element.rule == STNumericLiteralTypeRule: true
 				RuleCall case element.rule == STDateLiteralTypeRule: true
 				RuleCall case element.rule == STTimeLiteralTypeRule: true
-				RuleCall case element.rule == orOperatorRule : true
-				RuleCall case element.rule == xorOperatorRule : true
-				RuleCall case element.rule == getUnaryOperatorRule : true
+				RuleCall case element.rule == orOperatorRule: true
+				RuleCall case element.rule == xorOperatorRule: true
+				RuleCall case element.rule == getUnaryOperatorRule: true
 				default: false
 			}
 		].forEach [
 			document.addReplacer(new KeywordCaseTextReplacer(document, it))
 		]
-		stFunctionSource.allRegionsFor.keywords(STPrimaryExpressionAccess.leftParenthesisKeyword_0_0).forEach[append[noSpace]]
-		stFunctionSource.allRegionsFor.keywords(STPrimaryExpressionAccess.rightParenthesisKeyword_0_2).forEach[prepend[noSpace]]
+		stFunctionSource.allRegionsFor.keywords(STPrimaryExpressionAccess.leftParenthesisKeyword_0_0).forEach [
+			append[noSpace]
+		]
+		stFunctionSource.allRegionsFor.keywords(STPrimaryExpressionAccess.rightParenthesisKeyword_0_2).forEach [
+			prepend[noSpace]
+		]
 		for (stFunction : stFunctionSource.functions) {
 			stFunction.format
 		}
@@ -57,17 +61,17 @@ class STFunctionFormatter extends STCoreFormatter {
 			// We have a return type
 			stFunction.regionFor.keyword(":").surround[oneSpace]
 			stFunction.regionFor.feature(STFunctionPackage.Literals.ST_FUNCTION__RETURN_TYPE).prepend[oneSpace].append [
-				newLine
+				setNewLines(1, 2, 2)
 			]
 		} else {
-			stFunction.regionFor.assignment(STFunctionAccess.nameAssignment_2).append[newLine]
+			stFunction.regionFor.assignment(STFunctionAccess.nameAssignment_2).append[setNewLines(1, 2, 2)]
 		}
 
 		stFunction.varDeclarations.forEach[format]
 
 		stFunction.code.forEach[format]
 
-		stFunction.regionFor.keyword("END_FUNCTION").prepend[noIndentation].append[newLine]
+		stFunction.regionFor.keyword("END_FUNCTION").prepend[noIndentation].append[setNewLines(1, 2, 2)]
 	}
 
 }
