@@ -561,6 +561,20 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testArrayMultiInitializer() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(STArrayAccessExpression.repeat(3), '''
+			VAR_TEMP
+				test: ARRAY [ 0 .. 2 ] OF INT;
+				testMulti: ARRAY [ 0 .. 2, 0 .. 1 ] OF INT := [ 2([17, 4]), [21, 42] ];
+			END_VAR
+			
+			test[0] := testMulti[0, 0];
+			test[1] := testMulti[1, 1];
+			test[2] := testMulti[2, 0];
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
 	def void testArrayInitializerWithIndex() {
 		#[17.toIntValue, 4.toIntValue, 21.toIntValue, 17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(
 			STBinaryExpression.repeat(2), '''

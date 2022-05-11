@@ -11595,9 +11595,9 @@ rule__STArrayInitElement__IndexOrInitExpressionAssignment_0
 	}
 :
 	(
-		{ before(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTExpressionParserRuleCall_0_0()); }
-		ruleSTExpression
-		{ after(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTExpressionParserRuleCall_0_0()); }
+		{ before(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTInitializerExpressionParserRuleCall_0_0()); }
+		ruleSTInitializerExpression
+		{ after(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTInitializerExpressionParserRuleCall_0_0()); }
 	)
 ;
 finally {
@@ -11610,9 +11610,9 @@ rule__STArrayInitElement__InitExpressionsAssignment_1_1
 	}
 :
 	(
-		{ before(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_1_0()); }
-		ruleSTExpression
-		{ after(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_1_0()); }
+		{ before(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_1_0()); }
+		ruleSTInitializerExpression
+		{ after(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_1_0()); }
 	)
 ;
 finally {
@@ -11625,9 +11625,9 @@ rule__STArrayInitElement__InitExpressionsAssignment_1_2_1
 	}
 :
 	(
-		{ before(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_2_1_0()); }
-		ruleSTExpression
-		{ after(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_2_1_0()); }
+		{ before(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_2_1_0()); }
+		ruleSTInitializerExpression
+		{ after(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_2_1_0()); }
 	)
 ;
 finally {

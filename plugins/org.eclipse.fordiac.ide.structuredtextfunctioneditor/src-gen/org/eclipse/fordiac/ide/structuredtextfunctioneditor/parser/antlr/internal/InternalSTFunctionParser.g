@@ -1036,9 +1036,9 @@ ruleSTArrayInitElement returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTExpressionParserRuleCall_0_0());
+					newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTInitializerExpressionParserRuleCall_0_0());
 				}
-				lv_indexOrInitExpression_0_0=ruleSTExpression
+				lv_indexOrInitExpression_0_0=ruleSTInitializerExpression
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getSTArrayInitElementRule());
@@ -1047,7 +1047,7 @@ ruleSTArrayInitElement returns [EObject current=null]
 						$current,
 						"indexOrInitExpression",
 						lv_indexOrInitExpression_0_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STInitializerExpression");
 					afterParserOrEnumRuleCall();
 				}
 			)
@@ -1060,9 +1060,9 @@ ruleSTArrayInitElement returns [EObject current=null]
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_1_0());
+						newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_1_0());
 					}
-					lv_initExpressions_2_0=ruleSTExpression
+					lv_initExpressions_2_0=ruleSTInitializerExpression
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getSTArrayInitElementRule());
@@ -1071,7 +1071,7 @@ ruleSTArrayInitElement returns [EObject current=null]
 							$current,
 							"initExpressions",
 							lv_initExpressions_2_0,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STInitializerExpression");
 						afterParserOrEnumRuleCall();
 					}
 				)
@@ -1084,9 +1084,9 @@ ruleSTArrayInitElement returns [EObject current=null]
 				(
 					(
 						{
-							newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_2_1_0());
+							newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_2_1_0());
 						}
-						lv_initExpressions_4_0=ruleSTExpression
+						lv_initExpressions_4_0=ruleSTInitializerExpression
 						{
 							if ($current==null) {
 								$current = createModelElementForParent(grammarAccess.getSTArrayInitElementRule());
@@ -1095,7 +1095,7 @@ ruleSTArrayInitElement returns [EObject current=null]
 								$current,
 								"initExpressions",
 								lv_initExpressions_4_0,
-								"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.STInitializerExpression");
 							afterParserOrEnumRuleCall();
 						}
 					)

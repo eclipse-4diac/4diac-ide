@@ -17952,7 +17952,7 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             // InternalSTFunctionParser.g:5050:1: ( rule__STArrayInitializerExpression__Group__0__Impl rule__STArrayInitializerExpression__Group__1 )
             // InternalSTFunctionParser.g:5051:2: rule__STArrayInitializerExpression__Group__0__Impl rule__STArrayInitializerExpression__Group__1
             {
-            pushFollow(FOLLOW_23);
+            pushFollow(FOLLOW_28);
             rule__STArrayInitializerExpression__Group__0__Impl();
 
             state._fsp--;
@@ -18301,7 +18301,7 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             // InternalSTFunctionParser.g:5158:1: ( rule__STArrayInitializerExpression__Group_2__0__Impl rule__STArrayInitializerExpression__Group_2__1 )
             // InternalSTFunctionParser.g:5159:2: rule__STArrayInitializerExpression__Group_2__0__Impl rule__STArrayInitializerExpression__Group_2__1
             {
-            pushFollow(FOLLOW_23);
+            pushFollow(FOLLOW_28);
             rule__STArrayInitializerExpression__Group_2__0__Impl();
 
             state._fsp--;
@@ -18648,7 +18648,7 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             // InternalSTFunctionParser.g:5266:1: ( rule__STArrayInitElement__Group_1__0__Impl rule__STArrayInitElement__Group_1__1 )
             // InternalSTFunctionParser.g:5267:2: rule__STArrayInitElement__Group_1__0__Impl rule__STArrayInitElement__Group_1__1
             {
-            pushFollow(FOLLOW_23);
+            pushFollow(FOLLOW_28);
             rule__STArrayInitElement__Group_1__0__Impl();
 
             state._fsp--;
@@ -18997,7 +18997,7 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
             // InternalSTFunctionParser.g:5374:1: ( rule__STArrayInitElement__Group_1_2__0__Impl rule__STArrayInitElement__Group_1_2__1 )
             // InternalSTFunctionParser.g:5375:2: rule__STArrayInitElement__Group_1_2__0__Impl rule__STArrayInitElement__Group_1_2__1
             {
-            pushFollow(FOLLOW_23);
+            pushFollow(FOLLOW_28);
             rule__STArrayInitElement__Group_1_2__0__Impl();
 
             state._fsp--;
@@ -38527,28 +38527,28 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
 
 
     // $ANTLR start "rule__STArrayInitElement__IndexOrInitExpressionAssignment_0"
-    // InternalSTFunctionParser.g:11592:1: rule__STArrayInitElement__IndexOrInitExpressionAssignment_0 : ( ruleSTExpression ) ;
+    // InternalSTFunctionParser.g:11592:1: rule__STArrayInitElement__IndexOrInitExpressionAssignment_0 : ( ruleSTInitializerExpression ) ;
     public final void rule__STArrayInitElement__IndexOrInitExpressionAssignment_0() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTFunctionParser.g:11596:1: ( ( ruleSTExpression ) )
-            // InternalSTFunctionParser.g:11597:2: ( ruleSTExpression )
+            // InternalSTFunctionParser.g:11596:1: ( ( ruleSTInitializerExpression ) )
+            // InternalSTFunctionParser.g:11597:2: ( ruleSTInitializerExpression )
             {
-            // InternalSTFunctionParser.g:11597:2: ( ruleSTExpression )
-            // InternalSTFunctionParser.g:11598:3: ruleSTExpression
+            // InternalSTFunctionParser.g:11597:2: ( ruleSTInitializerExpression )
+            // InternalSTFunctionParser.g:11598:3: ruleSTInitializerExpression
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTExpressionParserRuleCall_0_0()); 
+               before(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTInitializerExpressionParserRuleCall_0_0()); 
             }
             pushFollow(FOLLOW_2);
-            ruleSTExpression();
+            ruleSTInitializerExpression();
 
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTExpressionParserRuleCall_0_0()); 
+               after(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTInitializerExpressionParserRuleCall_0_0()); 
             }
 
             }
@@ -38572,28 +38572,28 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
 
 
     // $ANTLR start "rule__STArrayInitElement__InitExpressionsAssignment_1_1"
-    // InternalSTFunctionParser.g:11607:1: rule__STArrayInitElement__InitExpressionsAssignment_1_1 : ( ruleSTExpression ) ;
+    // InternalSTFunctionParser.g:11607:1: rule__STArrayInitElement__InitExpressionsAssignment_1_1 : ( ruleSTInitializerExpression ) ;
     public final void rule__STArrayInitElement__InitExpressionsAssignment_1_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTFunctionParser.g:11611:1: ( ( ruleSTExpression ) )
-            // InternalSTFunctionParser.g:11612:2: ( ruleSTExpression )
+            // InternalSTFunctionParser.g:11611:1: ( ( ruleSTInitializerExpression ) )
+            // InternalSTFunctionParser.g:11612:2: ( ruleSTInitializerExpression )
             {
-            // InternalSTFunctionParser.g:11612:2: ( ruleSTExpression )
-            // InternalSTFunctionParser.g:11613:3: ruleSTExpression
+            // InternalSTFunctionParser.g:11612:2: ( ruleSTInitializerExpression )
+            // InternalSTFunctionParser.g:11613:3: ruleSTInitializerExpression
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_1_0()); 
+               before(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_1_0()); 
             }
             pushFollow(FOLLOW_2);
-            ruleSTExpression();
+            ruleSTInitializerExpression();
 
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_1_0()); 
+               after(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_1_0()); 
             }
 
             }
@@ -38617,28 +38617,28 @@ public class InternalSTFunctionParser extends AbstractInternalContentAssistParse
 
 
     // $ANTLR start "rule__STArrayInitElement__InitExpressionsAssignment_1_2_1"
-    // InternalSTFunctionParser.g:11622:1: rule__STArrayInitElement__InitExpressionsAssignment_1_2_1 : ( ruleSTExpression ) ;
+    // InternalSTFunctionParser.g:11622:1: rule__STArrayInitElement__InitExpressionsAssignment_1_2_1 : ( ruleSTInitializerExpression ) ;
     public final void rule__STArrayInitElement__InitExpressionsAssignment_1_2_1() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalSTFunctionParser.g:11626:1: ( ( ruleSTExpression ) )
-            // InternalSTFunctionParser.g:11627:2: ( ruleSTExpression )
+            // InternalSTFunctionParser.g:11626:1: ( ( ruleSTInitializerExpression ) )
+            // InternalSTFunctionParser.g:11627:2: ( ruleSTInitializerExpression )
             {
-            // InternalSTFunctionParser.g:11627:2: ( ruleSTExpression )
-            // InternalSTFunctionParser.g:11628:3: ruleSTExpression
+            // InternalSTFunctionParser.g:11627:2: ( ruleSTInitializerExpression )
+            // InternalSTFunctionParser.g:11628:3: ruleSTInitializerExpression
             {
             if ( state.backtracking==0 ) {
-               before(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_2_1_0()); 
+               before(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_2_1_0()); 
             }
             pushFollow(FOLLOW_2);
-            ruleSTExpression();
+            ruleSTInitializerExpression();
 
             state._fsp--;
             if (state.failed) return ;
             if ( state.backtracking==0 ) {
-               after(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_2_1_0()); 
+               after(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_2_1_0()); 
             }
 
             }

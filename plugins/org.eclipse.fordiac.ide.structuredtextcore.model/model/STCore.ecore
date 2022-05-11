@@ -28,9 +28,9 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STArrayInitElement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="indexOrInitExpression"
-        eType="#//STExpression" containment="true"/>
+        eType="#//STInitializerExpression" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="initExpressions" upperBound="-1"
-        eType="#//STExpression" containment="true"/>
+        eType="#//STInitializerExpression" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STStatement"/>
   <eClassifiers xsi:type="ecore:EClass" name="STAssignmentStatement" eSuperTypes="#//STStatement">

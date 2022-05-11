@@ -1325,7 +1325,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
             // InternalSTCoreParser.g:451:2: (otherlv_0= LeftSquareBracket ( (lv_values_1_0= ruleSTArrayInitElement ) ) (otherlv_2= Comma ( (lv_values_3_0= ruleSTArrayInitElement ) ) )* otherlv_4= RightSquareBracket )
             // InternalSTCoreParser.g:452:3: otherlv_0= LeftSquareBracket ( (lv_values_1_0= ruleSTArrayInitElement ) ) (otherlv_2= Comma ( (lv_values_3_0= ruleSTArrayInitElement ) ) )* otherlv_4= RightSquareBracket
             {
-            otherlv_0=(Token)match(input,LeftSquareBracket,FOLLOW_9); if (state.failed) return current;
+            otherlv_0=(Token)match(input,LeftSquareBracket,FOLLOW_16); if (state.failed) return current;
             if ( state.backtracking==0 ) {
 
               			newLeafNode(otherlv_0, grammarAccess.getSTArrayInitializerExpressionAccess().getLeftSquareBracketKeyword_0());
@@ -1381,7 +1381,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
             	case 1 :
             	    // InternalSTCoreParser.g:476:4: otherlv_2= Comma ( (lv_values_3_0= ruleSTArrayInitElement ) )
             	    {
-            	    otherlv_2=(Token)match(input,Comma,FOLLOW_9); if (state.failed) return current;
+            	    otherlv_2=(Token)match(input,Comma,FOLLOW_16); if (state.failed) return current;
             	    if ( state.backtracking==0 ) {
 
             	      				newLeafNode(otherlv_2, grammarAccess.getSTArrayInitializerExpressionAccess().getCommaKeyword_2_0());
@@ -1502,7 +1502,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleSTArrayInitElement"
-    // InternalSTCoreParser.g:515:1: ruleSTArrayInitElement returns [EObject current=null] : ( ( (lv_indexOrInitExpression_0_0= ruleSTExpression ) ) (otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTExpression ) ) )* otherlv_5= RightParenthesis )? ) ;
+    // InternalSTCoreParser.g:515:1: ruleSTArrayInitElement returns [EObject current=null] : ( ( (lv_indexOrInitExpression_0_0= ruleSTInitializerExpression ) ) (otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTInitializerExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTInitializerExpression ) ) )* otherlv_5= RightParenthesis )? ) ;
     public final EObject ruleSTArrayInitElement() throws RecognitionException {
         EObject current = null;
 
@@ -1520,25 +1520,25 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalSTCoreParser.g:521:2: ( ( ( (lv_indexOrInitExpression_0_0= ruleSTExpression ) ) (otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTExpression ) ) )* otherlv_5= RightParenthesis )? ) )
-            // InternalSTCoreParser.g:522:2: ( ( (lv_indexOrInitExpression_0_0= ruleSTExpression ) ) (otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTExpression ) ) )* otherlv_5= RightParenthesis )? )
+            // InternalSTCoreParser.g:521:2: ( ( ( (lv_indexOrInitExpression_0_0= ruleSTInitializerExpression ) ) (otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTInitializerExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTInitializerExpression ) ) )* otherlv_5= RightParenthesis )? ) )
+            // InternalSTCoreParser.g:522:2: ( ( (lv_indexOrInitExpression_0_0= ruleSTInitializerExpression ) ) (otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTInitializerExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTInitializerExpression ) ) )* otherlv_5= RightParenthesis )? )
             {
-            // InternalSTCoreParser.g:522:2: ( ( (lv_indexOrInitExpression_0_0= ruleSTExpression ) ) (otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTExpression ) ) )* otherlv_5= RightParenthesis )? )
-            // InternalSTCoreParser.g:523:3: ( (lv_indexOrInitExpression_0_0= ruleSTExpression ) ) (otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTExpression ) ) )* otherlv_5= RightParenthesis )?
+            // InternalSTCoreParser.g:522:2: ( ( (lv_indexOrInitExpression_0_0= ruleSTInitializerExpression ) ) (otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTInitializerExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTInitializerExpression ) ) )* otherlv_5= RightParenthesis )? )
+            // InternalSTCoreParser.g:523:3: ( (lv_indexOrInitExpression_0_0= ruleSTInitializerExpression ) ) (otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTInitializerExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTInitializerExpression ) ) )* otherlv_5= RightParenthesis )?
             {
-            // InternalSTCoreParser.g:523:3: ( (lv_indexOrInitExpression_0_0= ruleSTExpression ) )
-            // InternalSTCoreParser.g:524:4: (lv_indexOrInitExpression_0_0= ruleSTExpression )
+            // InternalSTCoreParser.g:523:3: ( (lv_indexOrInitExpression_0_0= ruleSTInitializerExpression ) )
+            // InternalSTCoreParser.g:524:4: (lv_indexOrInitExpression_0_0= ruleSTInitializerExpression )
             {
-            // InternalSTCoreParser.g:524:4: (lv_indexOrInitExpression_0_0= ruleSTExpression )
-            // InternalSTCoreParser.g:525:5: lv_indexOrInitExpression_0_0= ruleSTExpression
+            // InternalSTCoreParser.g:524:4: (lv_indexOrInitExpression_0_0= ruleSTInitializerExpression )
+            // InternalSTCoreParser.g:525:5: lv_indexOrInitExpression_0_0= ruleSTInitializerExpression
             {
             if ( state.backtracking==0 ) {
 
-              					newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTExpressionParserRuleCall_0_0());
+              					newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTInitializerExpressionParserRuleCall_0_0());
               				
             }
             pushFollow(FOLLOW_18);
-            lv_indexOrInitExpression_0_0=ruleSTExpression();
+            lv_indexOrInitExpression_0_0=ruleSTInitializerExpression();
 
             state._fsp--;
             if (state.failed) return current;
@@ -1551,7 +1551,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
               						current,
               						"indexOrInitExpression",
               						lv_indexOrInitExpression_0_0,
-              						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+              						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STInitializerExpression");
               					afterParserOrEnumRuleCall();
               				
             }
@@ -1561,7 +1561,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
             }
 
-            // InternalSTCoreParser.g:542:3: (otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTExpression ) ) )* otherlv_5= RightParenthesis )?
+            // InternalSTCoreParser.g:542:3: (otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTInitializerExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTInitializerExpression ) ) )* otherlv_5= RightParenthesis )?
             int alt12=2;
             int LA12_0 = input.LA(1);
 
@@ -1570,27 +1570,27 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
             }
             switch (alt12) {
                 case 1 :
-                    // InternalSTCoreParser.g:543:4: otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTExpression ) ) )* otherlv_5= RightParenthesis
+                    // InternalSTCoreParser.g:543:4: otherlv_1= LeftParenthesis ( (lv_initExpressions_2_0= ruleSTInitializerExpression ) ) (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTInitializerExpression ) ) )* otherlv_5= RightParenthesis
                     {
-                    otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_9); if (state.failed) return current;
+                    otherlv_1=(Token)match(input,LeftParenthesis,FOLLOW_16); if (state.failed) return current;
                     if ( state.backtracking==0 ) {
 
                       				newLeafNode(otherlv_1, grammarAccess.getSTArrayInitElementAccess().getLeftParenthesisKeyword_1_0());
                       			
                     }
-                    // InternalSTCoreParser.g:547:4: ( (lv_initExpressions_2_0= ruleSTExpression ) )
-                    // InternalSTCoreParser.g:548:5: (lv_initExpressions_2_0= ruleSTExpression )
+                    // InternalSTCoreParser.g:547:4: ( (lv_initExpressions_2_0= ruleSTInitializerExpression ) )
+                    // InternalSTCoreParser.g:548:5: (lv_initExpressions_2_0= ruleSTInitializerExpression )
                     {
-                    // InternalSTCoreParser.g:548:5: (lv_initExpressions_2_0= ruleSTExpression )
-                    // InternalSTCoreParser.g:549:6: lv_initExpressions_2_0= ruleSTExpression
+                    // InternalSTCoreParser.g:548:5: (lv_initExpressions_2_0= ruleSTInitializerExpression )
+                    // InternalSTCoreParser.g:549:6: lv_initExpressions_2_0= ruleSTInitializerExpression
                     {
                     if ( state.backtracking==0 ) {
 
-                      						newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_1_0());
+                      						newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_1_0());
                       					
                     }
                     pushFollow(FOLLOW_19);
-                    lv_initExpressions_2_0=ruleSTExpression();
+                    lv_initExpressions_2_0=ruleSTInitializerExpression();
 
                     state._fsp--;
                     if (state.failed) return current;
@@ -1603,7 +1603,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                       							current,
                       							"initExpressions",
                       							lv_initExpressions_2_0,
-                      							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+                      							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STInitializerExpression");
                       						afterParserOrEnumRuleCall();
                       					
                     }
@@ -1613,7 +1613,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
                     }
 
-                    // InternalSTCoreParser.g:566:4: (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTExpression ) ) )*
+                    // InternalSTCoreParser.g:566:4: (otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTInitializerExpression ) ) )*
                     loop11:
                     do {
                         int alt11=2;
@@ -1626,27 +1626,27 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
 
                         switch (alt11) {
                     	case 1 :
-                    	    // InternalSTCoreParser.g:567:5: otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTExpression ) )
+                    	    // InternalSTCoreParser.g:567:5: otherlv_3= Comma ( (lv_initExpressions_4_0= ruleSTInitializerExpression ) )
                     	    {
-                    	    otherlv_3=(Token)match(input,Comma,FOLLOW_9); if (state.failed) return current;
+                    	    otherlv_3=(Token)match(input,Comma,FOLLOW_16); if (state.failed) return current;
                     	    if ( state.backtracking==0 ) {
 
                     	      					newLeafNode(otherlv_3, grammarAccess.getSTArrayInitElementAccess().getCommaKeyword_1_2_0());
                     	      				
                     	    }
-                    	    // InternalSTCoreParser.g:571:5: ( (lv_initExpressions_4_0= ruleSTExpression ) )
-                    	    // InternalSTCoreParser.g:572:6: (lv_initExpressions_4_0= ruleSTExpression )
+                    	    // InternalSTCoreParser.g:571:5: ( (lv_initExpressions_4_0= ruleSTInitializerExpression ) )
+                    	    // InternalSTCoreParser.g:572:6: (lv_initExpressions_4_0= ruleSTInitializerExpression )
                     	    {
-                    	    // InternalSTCoreParser.g:572:6: (lv_initExpressions_4_0= ruleSTExpression )
-                    	    // InternalSTCoreParser.g:573:7: lv_initExpressions_4_0= ruleSTExpression
+                    	    // InternalSTCoreParser.g:572:6: (lv_initExpressions_4_0= ruleSTInitializerExpression )
+                    	    // InternalSTCoreParser.g:573:7: lv_initExpressions_4_0= ruleSTInitializerExpression
                     	    {
                     	    if ( state.backtracking==0 ) {
 
-                    	      							newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_2_1_0());
+                    	      							newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_2_1_0());
                     	      						
                     	    }
                     	    pushFollow(FOLLOW_19);
-                    	    lv_initExpressions_4_0=ruleSTExpression();
+                    	    lv_initExpressions_4_0=ruleSTInitializerExpression();
 
                     	    state._fsp--;
                     	    if (state.failed) return current;
@@ -1659,7 +1659,7 @@ public class InternalSTCoreParser extends AbstractInternalAntlrParser {
                     	      								current,
                     	      								"initExpressions",
                     	      								lv_initExpressions_4_0,
-                    	      								"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+                    	      								"org.eclipse.fordiac.ide.structuredtextcore.STCore.STInitializerExpression");
                     	      							afterParserOrEnumRuleCall();
                     	      						
                     	    }

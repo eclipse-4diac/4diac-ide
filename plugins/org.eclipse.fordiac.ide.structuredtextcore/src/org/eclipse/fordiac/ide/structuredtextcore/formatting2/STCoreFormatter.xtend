@@ -295,6 +295,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	def dispatch void format(STArrayInitElement element, extension IFormattableDocument document) {
 		element.indexOrInitExpression.format
+		element.initExpressions.forEach[format]
 	}
 
 	def dispatch void format(STBinaryExpression binaryExpression, extension IFormattableDocument document) {

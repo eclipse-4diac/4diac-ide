@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
@@ -113,10 +114,10 @@ final class STCoreUtil {
 			STCaseCases:
 				switch (stmt : eContainer) { STCaseStatement: stmt.selector.declaredResultType }
 			STInitializerExpression:
-				switch (decl : eContainer) { STVarDeclaration: decl.type }
+				expectedType
 			STArrayInitElement:
 				if (initExpressions.empty || expression !== indexOrInitExpression)
-					switch (decl : eContainer?.eContainer) { STVarDeclaration: decl.type }
+					expectedType
 				else
 					ElementaryTypes.INT
 			STCallNamedInputArgument:
@@ -131,6 +132,20 @@ final class STCoreUtil {
 					VarDeclaration: parameter.type
 					STVarDeclaration: parameter.type
 				}
+		}
+	}
+
+	def static INamedElement getExpectedType(STInitializerExpression expression) {
+		switch (it : expression.eContainer) {
+			STVarDeclaration: type
+			STArrayInitElement: expectedType
+			STArrayInitializerExpression: expectedType
+		}
+	}
+
+	def static INamedElement getExpectedType(STArrayInitElement initElement) {
+		switch (it : initElement.eContainer) {
+			STArrayInitializerExpression: expectedType
 		}
 	}
 

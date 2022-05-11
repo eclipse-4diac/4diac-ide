@@ -319,7 +319,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STArrayInitElement returns STArrayInitElement
 	 *
 	 * Constraint:
-	 *     (indexOrInitExpression=STExpression (initExpressions+=STExpression initExpressions+=STExpression*)?)
+	 *     (indexOrInitExpression=STInitializerExpression (initExpressions+=STInitializerExpression initExpressions+=STInitializerExpression*)?)
 	 * </pre>
 	 */
 	protected void sequence_STArrayInitElement(ISerializationContext context, STArrayInitElement semanticObject) {

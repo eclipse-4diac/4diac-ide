@@ -546,53 +546,53 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STArrayInitElement");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cIndexOrInitExpressionAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final RuleCall cIndexOrInitExpressionSTExpressionParserRuleCall_0_0 = (RuleCall)cIndexOrInitExpressionAssignment_0.eContents().get(0);
+		private final RuleCall cIndexOrInitExpressionSTInitializerExpressionParserRuleCall_0_0 = (RuleCall)cIndexOrInitExpressionAssignment_0.eContents().get(0);
 		private final Group cGroup_1 = (Group)cGroup.eContents().get(1);
 		private final Keyword cLeftParenthesisKeyword_1_0 = (Keyword)cGroup_1.eContents().get(0);
 		private final Assignment cInitExpressionsAssignment_1_1 = (Assignment)cGroup_1.eContents().get(1);
-		private final RuleCall cInitExpressionsSTExpressionParserRuleCall_1_1_0 = (RuleCall)cInitExpressionsAssignment_1_1.eContents().get(0);
+		private final RuleCall cInitExpressionsSTInitializerExpressionParserRuleCall_1_1_0 = (RuleCall)cInitExpressionsAssignment_1_1.eContents().get(0);
 		private final Group cGroup_1_2 = (Group)cGroup_1.eContents().get(2);
 		private final Keyword cCommaKeyword_1_2_0 = (Keyword)cGroup_1_2.eContents().get(0);
 		private final Assignment cInitExpressionsAssignment_1_2_1 = (Assignment)cGroup_1_2.eContents().get(1);
-		private final RuleCall cInitExpressionsSTExpressionParserRuleCall_1_2_1_0 = (RuleCall)cInitExpressionsAssignment_1_2_1.eContents().get(0);
+		private final RuleCall cInitExpressionsSTInitializerExpressionParserRuleCall_1_2_1_0 = (RuleCall)cInitExpressionsAssignment_1_2_1.eContents().get(0);
 		private final Keyword cRightParenthesisKeyword_1_3 = (Keyword)cGroup_1.eContents().get(3);
 		
 		//STArrayInitElement:
-		//    indexOrInitExpression=STExpression ('(' initExpressions+=STExpression (',' initExpressions+=STExpression)* ')')?;
+		//    indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (',' initExpressions+=STInitializerExpression)* ')')?;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//indexOrInitExpression=STExpression ('(' initExpressions+=STExpression (',' initExpressions+=STExpression)* ')')?
+		//indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (',' initExpressions+=STInitializerExpression)* ')')?
 		public Group getGroup() { return cGroup; }
 		
-		//indexOrInitExpression=STExpression
+		//indexOrInitExpression=STInitializerExpression
 		public Assignment getIndexOrInitExpressionAssignment_0() { return cIndexOrInitExpressionAssignment_0; }
 		
-		//STExpression
-		public RuleCall getIndexOrInitExpressionSTExpressionParserRuleCall_0_0() { return cIndexOrInitExpressionSTExpressionParserRuleCall_0_0; }
+		//STInitializerExpression
+		public RuleCall getIndexOrInitExpressionSTInitializerExpressionParserRuleCall_0_0() { return cIndexOrInitExpressionSTInitializerExpressionParserRuleCall_0_0; }
 		
-		//('(' initExpressions+=STExpression (',' initExpressions+=STExpression)* ')')?
+		//('(' initExpressions+=STInitializerExpression (',' initExpressions+=STInitializerExpression)* ')')?
 		public Group getGroup_1() { return cGroup_1; }
 		
 		//'('
 		public Keyword getLeftParenthesisKeyword_1_0() { return cLeftParenthesisKeyword_1_0; }
 		
-		//initExpressions+=STExpression
+		//initExpressions+=STInitializerExpression
 		public Assignment getInitExpressionsAssignment_1_1() { return cInitExpressionsAssignment_1_1; }
 		
-		//STExpression
-		public RuleCall getInitExpressionsSTExpressionParserRuleCall_1_1_0() { return cInitExpressionsSTExpressionParserRuleCall_1_1_0; }
+		//STInitializerExpression
+		public RuleCall getInitExpressionsSTInitializerExpressionParserRuleCall_1_1_0() { return cInitExpressionsSTInitializerExpressionParserRuleCall_1_1_0; }
 		
-		//(',' initExpressions+=STExpression)*
+		//(',' initExpressions+=STInitializerExpression)*
 		public Group getGroup_1_2() { return cGroup_1_2; }
 		
 		//','
 		public Keyword getCommaKeyword_1_2_0() { return cCommaKeyword_1_2_0; }
 		
-		//initExpressions+=STExpression
+		//initExpressions+=STInitializerExpression
 		public Assignment getInitExpressionsAssignment_1_2_1() { return cInitExpressionsAssignment_1_2_1; }
 		
-		//STExpression
-		public RuleCall getInitExpressionsSTExpressionParserRuleCall_1_2_1_0() { return cInitExpressionsSTExpressionParserRuleCall_1_2_1_0; }
+		//STInitializerExpression
+		public RuleCall getInitExpressionsSTInitializerExpressionParserRuleCall_1_2_1_0() { return cInitExpressionsSTInitializerExpressionParserRuleCall_1_2_1_0; }
 		
 		//')'
 		public Keyword getRightParenthesisKeyword_1_3() { return cRightParenthesisKeyword_1_3; }
@@ -3580,7 +3580,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STArrayInitElement:
-	//    indexOrInitExpression=STExpression ('(' initExpressions+=STExpression (',' initExpressions+=STExpression)* ')')?;
+	//    indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (',' initExpressions+=STInitializerExpression)* ')')?;
 	public STArrayInitElementElements getSTArrayInitElementAccess() {
 		return pSTArrayInitElement;
 	}

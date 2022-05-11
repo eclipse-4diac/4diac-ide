@@ -69,7 +69,7 @@ STArrayInitializerExpression:
 	'[' values+=STArrayInitElement (',' values+=STArrayInitElement)* ']';
 
 STArrayInitElement:
-	indexOrInitExpression=STExpression ('(' initExpressions+=STExpression (',' initExpressions+=STExpression)* ')')?;
+	indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (',' initExpressions+=STInitializerExpression)* ')')?;
 	
 STStatement:
 	(STIfStatement |

@@ -123,14 +123,20 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def protected dispatch Variable evaluateInitializerExpression(Variable variable,
 		STArrayInitializerExpression expression) {
 		val value = variable.value as ArrayValue
-		expression.values.flatMap [ elem |
+		var index = 0;
+		for (elem : expression.values) {
 			if (elem.initExpressions.empty)
-				#[elem.indexOrInitExpression.evaluateExpression]
+				value.getRaw(index++).evaluateInitializerExpression(elem.indexOrInitExpression)
 			else {
-				val initValues = elem.initExpressions.map[evaluateExpression]
-				(0 ..< elem.indexOrInitExpression.evaluateExpression.asInteger).flatMap[initValues]
+				val repeatExpression = (elem.indexOrInitExpression as STElementaryInitializerExpression).value
+				val repeat = repeatExpression.evaluateExpression.asInteger
+				for (unused : 0 ..< repeat) {
+					for(initElement : elem.initExpressions) {
+						value.getRaw(index++).evaluateInitializerExpression(initElement)
+					}
+				}
 			}
-		].forEach[initValue, index|value.getRaw(index).value = initValue]
+		}
 		variable
 	}
 

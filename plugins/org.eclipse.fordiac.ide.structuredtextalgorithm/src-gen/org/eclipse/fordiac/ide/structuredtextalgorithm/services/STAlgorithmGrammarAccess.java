@@ -486,7 +486,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STArrayInitElement:
-	//    indexOrInitExpression=STExpression ('(' initExpressions+=STExpression (',' initExpressions+=STExpression)* ')')?;
+	//    indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (',' initExpressions+=STInitializerExpression)* ')')?;
 	public STCoreGrammarAccess.STArrayInitElementElements getSTArrayInitElementAccess() {
 		return gaSTCore.getSTArrayInitElementAccess();
 	}
