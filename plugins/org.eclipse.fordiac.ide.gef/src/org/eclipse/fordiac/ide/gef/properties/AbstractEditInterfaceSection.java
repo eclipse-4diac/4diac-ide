@@ -284,10 +284,14 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
-			inputsViewer.setInput(getType());
-			outputsViewer.setInput(getType());
+			setTableInput();
 		}
 		commandStack = commandStackBuffer;
+	}
+	
+	protected void setTableInput() {
+		inputsViewer.setInput(getType());
+		outputsViewer.setInput(getType());
 	}
 
 	protected abstract static class InterfaceContentProvider implements IStructuredContentProvider {

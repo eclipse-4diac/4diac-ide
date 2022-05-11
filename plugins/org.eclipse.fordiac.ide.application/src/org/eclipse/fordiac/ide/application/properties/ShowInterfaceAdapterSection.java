@@ -91,4 +91,17 @@ public class ShowInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 		return (FBNetworkElement) type;
 	}
 
+	@Override
+	protected void setTableInput() {
+		final FBNetworkElement selection = getType();
+		if (selection.getType() != null) {
+			getInputsViewer().setInput(selection.getType());
+			getOutputsViewer().setInput(selection.getType());
+		} else {
+			// untyped subapp in typed subapp
+			super.setTableInput();
+		}
+
+	}
+
 }
