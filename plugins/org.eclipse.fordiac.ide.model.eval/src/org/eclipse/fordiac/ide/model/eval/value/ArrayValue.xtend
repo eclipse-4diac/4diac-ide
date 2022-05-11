@@ -21,22 +21,22 @@ import org.eclipse.xtend.lib.annotations.Data
 @Data
 class ArrayValue implements AnyDerivedValue, Iterable<Value> {
 	ArrayType type
-	List<Variable> elements
+	List<Variable<?>> elements
 	int start
 	int end
 
-	new(ArrayType type, List<Variable> elements) {
+	new(ArrayType type, List<Variable<?>> elements) {
 		this.type = type
 		this.elements = elements
 		start = type.subranges.head.lowerLimit
 		end = type.subranges.head.upperLimit
 	}
 
-	def Variable get(int index) {
+	def Variable<?> get(int index) {
 		elements.get(index - start)
 	}
 
-	def Variable get(Iterable<Integer> indices) {
+	def Variable<?> get(Iterable<Integer> indices) {
 		if (indices.size > 1) {
 			(indices.head.get as ArrayVariable).value.get(indices.tail)
 		} else {
@@ -44,7 +44,7 @@ class ArrayValue implements AnyDerivedValue, Iterable<Value> {
 		}
 	}
 
-	def Variable getRaw(int index) {
+	def Variable<?> getRaw(int index) {
 		elements.get(index)
 	}
 

@@ -29,7 +29,7 @@ final class ConstantExpressionEvaluator extends StructuredTextEvaluator {
 		INSTANCE.evaluateExpression(expression)
 	}
 	
-	def static Variable evaluate(Variable variable, STInitializerExpression expression) {
+	def static Variable<?> evaluate(Variable<?> variable, STInitializerExpression expression) {
 		INSTANCE.evaluateInitializerExpression(variable, expression)
 	}
 	

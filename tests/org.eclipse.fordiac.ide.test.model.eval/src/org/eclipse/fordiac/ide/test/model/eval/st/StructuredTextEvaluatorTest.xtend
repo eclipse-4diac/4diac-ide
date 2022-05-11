@@ -1148,11 +1148,11 @@ class StructuredTextEvaluatorTest {
 		expression.evaluateExpression(emptyList)
 	}
 
-	def static evaluateExpression(CharSequence expression, Variable variable) {
+	def static evaluateExpression(CharSequence expression, Variable<?> variable) {
 		expression.evaluateExpression(#[variable])
 	}
 
-	def static evaluateExpression(CharSequence expression, Collection<Variable> variables) {
+	def static evaluateExpression(CharSequence expression, Collection<Variable<?>> variables) {
 		val transition = LibraryElementFactory.eINSTANCE.createECTransition
 		transition.conditionExpression = expression.toString
 		new ECTransitionEvaluator(transition, null, variables, null).evaluate
@@ -1162,7 +1162,7 @@ class StructuredTextEvaluatorTest {
 		algorithm.evaluateAlgorithm(emptyList)
 	}
 
-	def static evaluateAlgorithm(CharSequence algorithm, Iterable<Variable> variables) {
+	def static evaluateAlgorithm(CharSequence algorithm, Iterable<Variable<?>> variables) {
 		val alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm
 		alg.name = "TEST_ALGORITHM"
 		alg.text = algorithm.toString
@@ -1201,7 +1201,7 @@ class StructuredTextEvaluatorTest {
 		@Accessors
 		final Queue<Object> trace = new ArrayBlockingQueue(1000)
 
-		new(STAlgorithm alg, Variable context, Iterable<Variable> variables, Evaluator parent) {
+		new(STAlgorithm alg, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 			super(alg, context, variables, parent)
 		}
 

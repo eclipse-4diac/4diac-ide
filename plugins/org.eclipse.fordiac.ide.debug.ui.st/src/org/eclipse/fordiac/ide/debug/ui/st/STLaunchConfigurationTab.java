@@ -144,7 +144,7 @@ public class STLaunchConfigurationTab extends MainLaunchConfigurationTab {
 	}
 
 	@Override
-	protected List<Variable> getDefaultArguments() {
+	protected List<Variable<?>> getDefaultArguments() {
 		final STFunction function = getFunction();
 		if (function != null) {
 			return Stream.concat(function.getInputParameters().stream(), function.getInOutParameters().stream())

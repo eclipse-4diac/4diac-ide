@@ -64,7 +64,7 @@ public class STLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 		}
 	}
 
-	public void launch(final STFunction function, final List<Variable> variables,
+	public void launch(final STFunction function, final List<Variable<?>> variables,
 			final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
 			final IProgressMonitor monitor) throws CoreException {
 		final Evaluator evaluator = createEvaluator(function, variables);
@@ -81,12 +81,12 @@ public class STLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 	}
 
 	@SuppressWarnings("static-method")
-	public Evaluator createEvaluator(final STFunction function, final List<Variable> variables) {
+	public Evaluator createEvaluator(final STFunction function, final List<Variable<?>> variables) {
 		return new STFunctionEvaluator(function, null, variables, null);
 	}
 
 	@SuppressWarnings("static-method")
-	protected List<Variable> getDefaultArguments(final STFunction function) {
+	protected List<Variable<?>> getDefaultArguments(final STFunction function) {
 		return Stream.concat(function.getInputParameters().stream(), function.getInOutParameters().stream())
 				.map(STVarDeclaration.class::cast)
 				.map(STVariableOperations::newVariable).collect(Collectors.toList());

@@ -25,9 +25,9 @@ import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 class STFunctionEvaluator extends StructuredTextEvaluator {
 	final STFunction function
 
-	final Variable returnVariable
+	final Variable<?> returnVariable
 
-	new(STFunction function, Variable context, Iterable<Variable> variables, Evaluator parent) {
+	new(STFunction function, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		super(function.name, null, variables, parent)
 		this.function = function
 		function.varDeclarations.filter [

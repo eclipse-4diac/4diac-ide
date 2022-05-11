@@ -26,7 +26,7 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	@Accessors final Queue<Event> queue
 	@Accessors final FBVariable instance
 
-	new(T type, Variable context, Iterable<Variable> variables, Queue<Event> queue, Evaluator parent) {
+	new(T type, Variable<?> context, Iterable<Variable<?>> variables, Queue<Event> queue, Evaluator parent) {
 		super(context, parent)
 		this.type = type
 		this.queue = queue

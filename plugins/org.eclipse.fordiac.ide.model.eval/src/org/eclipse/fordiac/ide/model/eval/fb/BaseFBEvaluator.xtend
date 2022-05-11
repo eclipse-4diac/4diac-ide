@@ -25,7 +25,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 abstract class BaseFBEvaluator<T extends BaseFBType> extends FBEvaluator<T> {
 	@Accessors final Map<Algorithm, Evaluator> algorithmEvaluators
 
-	new(T type, Variable context, Iterable<Variable> variables, Queue<Event> queue, Evaluator parent) {
+	new(T type, Variable<?> context, Iterable<Variable<?>> variables, Queue<Event> queue, Evaluator parent) {
 		super(type, context, variables, queue, parent)
 		algorithmEvaluators = type.algorithm.toInvertedMap [
 			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends Algorithm>, instance, emptySet,

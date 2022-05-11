@@ -32,7 +32,7 @@ final class STVariableOperations {
 	private new() {
 	}
 
-	def static Variable newVariable(STVarDeclaration decl) {
+	def static Variable<?> newVariable(STVarDeclaration decl) {
 		if (decl.array)
 			newVariable(decl.name, newArrayType(decl.type as DataType, decl.ranges.map[newSubrange])).evaluate(
 				decl.defaultValue)
@@ -40,7 +40,7 @@ final class STVariableOperations {
 			newVariable(decl.name, decl.type).evaluate(decl.defaultValue)
 	}
 
-	def static Variable newVariable(STVarDeclaration decl, Value value) {
+	def static Variable<?> newVariable(STVarDeclaration decl, Value value) {
 		newVariable(decl.name, value)
 	}
 

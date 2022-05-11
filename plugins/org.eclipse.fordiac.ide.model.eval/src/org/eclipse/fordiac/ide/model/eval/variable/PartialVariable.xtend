@@ -22,18 +22,18 @@ import org.eclipse.fordiac.ide.model.eval.value.Value
 
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
 
-class PartialVariable extends AbstractVariable {
-	final Variable delegate
+class PartialVariable<T extends Value> extends AbstractVariable<T> {
+	final Variable<?> delegate
 	final int index
 
-	new(Variable delegate, DataType partial, int index) {
+	new(Variable<?> delegate, DataType partial, int index) {
 		super('''«delegate.name».%«partial.partialName»(«index»)''', partial)
 		this.delegate = delegate
 		this.index = index
 	}
 
 	override getValue() {
-		delegate.value.partial(type as DataType, index)
+		delegate.value.partial(type as DataType, index) as T
 	}
 
 	override setValue(Value value) {

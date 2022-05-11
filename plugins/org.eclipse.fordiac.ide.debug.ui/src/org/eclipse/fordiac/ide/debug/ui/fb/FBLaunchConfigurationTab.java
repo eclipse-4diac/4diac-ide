@@ -136,7 +136,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	}
 
 	@Override
-	protected List<Variable> getDefaultArguments() {
+	protected List<Variable<?>> getDefaultArguments() {
 		final FBType fbType = getFBType();
 		if (fbType != null) {
 			return fbType.getInterfaceList().getInputVars().stream().map(VariableOperations::newVariable)

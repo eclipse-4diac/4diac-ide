@@ -27,7 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 public class BasicFBLaunchConfigurationDelegate extends FBLaunchConfigurationDelegate {
 
 	@Override
-	public FBEvaluator<? extends FBType> createEvaluator(final FBType type, final Queue<Event> queue, final List<Variable> variables)
+	public FBEvaluator<? extends FBType> createEvaluator(final FBType type, final Queue<Event> queue,
+			final List<Variable<?>> variables)
 			throws CoreException {
 		return new BasicFBEvaluator((BasicFBType) type, null, variables, queue, null);
 	}

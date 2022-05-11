@@ -63,7 +63,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 	private Text resourceText;
 	private TreeViewer argumentsTable;
 
-	private List<Variable> arguments;
+	private List<Variable<?>> arguments;
 
 	@Override
 	public void createControl(final Composite parent) {
@@ -221,7 +221,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		updateLaunchConfigurationDialog();
 	}
 
-	protected abstract List<Variable> getDefaultArguments();
+	protected abstract List<Variable<?>> getDefaultArguments();
 
 	protected boolean filterTargetResource(final IResource resource) throws CoreException {
 		if (resource instanceof IFile) {
@@ -282,8 +282,8 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		@Override
 		public StyledString getStyledText(final Object element) {
-			if (element instanceof Variable) {
-				final Variable variable = (Variable) element;
+			if (element instanceof Variable<?>) {
+				final Variable<?> variable = (Variable<?>) element;
 				return new StyledString(variable.getName());
 			}
 			return null;
@@ -295,8 +295,8 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		@Override
 		public StyledString getStyledText(final Object element) {
-			if (element instanceof Variable) {
-				final Variable variable = (Variable) element;
+			if (element instanceof Variable<?>) {
+				final Variable<?> variable = (Variable<?>) element;
 				return new StyledString(variable.getValue().toString());
 			}
 			return null;
@@ -324,16 +324,16 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		@Override
 		protected Object getValue(final Object element) {
-			if (element instanceof Variable) {
-				return ((Variable) element).getValue().toString();
+			if (element instanceof Variable<?>) {
+				return ((Variable<?>) element).getValue().toString();
 			}
 			return null;
 		}
 
 		@Override
 		protected void setValue(final Object element, final Object value) {
-			if (element instanceof Variable) {
-				final Variable variable = (Variable) element;
+			if (element instanceof Variable<?>) {
+				final Variable<?> variable = (Variable<?>) element;
 				try {
 					variable.setValue(value.toString());
 				} catch (final Throwable t) {

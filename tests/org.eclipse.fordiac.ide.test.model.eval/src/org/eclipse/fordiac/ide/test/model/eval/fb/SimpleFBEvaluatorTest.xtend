@@ -589,12 +589,12 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	}
 
 	def static evaluateSimpleFB(Iterable<? extends ICallable> callables, String inputEventName,
-		Iterable<Variable> variables, VarDeclaration output) {
+		Iterable<Variable<?>> variables, VarDeclaration output) {
 		evaluateSimpleFB(callables, inputEventName, variables, output, emptyList)
 	}
 
 	def static evaluateSimpleFB(Iterable<? extends ICallable> callables, String inputEventName,
-		Iterable<Variable> variables, VarDeclaration output, Iterable<FB> internalFBs) {
+		Iterable<Variable<?>> variables, VarDeclaration output, Iterable<FB> internalFBs) {
 		val inputEvent = inputEventName.newEvent(true)
 		val outputEvent = "CNF".newEvent(false)
 		val fbType = LibraryElementFactory.eINSTANCE.createSimpleFBType

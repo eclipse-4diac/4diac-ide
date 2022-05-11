@@ -277,7 +277,7 @@ class STFunctionEvaluatorTest {
 		'''.evaluateFunction(emptyList))
 	}
 
-	def static evaluateFunction(CharSequence text, Iterable<Variable> variables) {
+	def static evaluateFunction(CharSequence text, Iterable<Variable<?>> variables) {
 		val errors = newArrayList
 		val source = text.toString.parse("anonymous", errors, null, null)
 		source.assertNotNull("Parse error: " + errors.join(", "))

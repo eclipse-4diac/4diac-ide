@@ -23,10 +23,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class EvaluatorDebugVariable extends EvaluatorDebugElement
 implements IVariable, Comparable<EvaluatorDebugVariable> {
-	private final Variable variable;
+	private final Variable<?> variable;
 	private EvaluatorDebugValue cachedValue;
 
-	public EvaluatorDebugVariable(final Variable variable, final EvaluatorDebugTarget debugTarget) {
+	public EvaluatorDebugVariable(final Variable<?> variable, final EvaluatorDebugTarget debugTarget) {
 		super(debugTarget);
 		this.variable = variable;
 		this.cachedValue = new EvaluatorDebugValue(this.variable.getValue(), getDebugTarget());

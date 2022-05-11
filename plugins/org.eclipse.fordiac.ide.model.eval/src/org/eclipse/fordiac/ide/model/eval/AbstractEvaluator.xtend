@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable
 
 @FinalFieldsConstructor
 abstract class AbstractEvaluator implements Evaluator {
-	@Accessors final Variable context
+	@Accessors final Variable<?> context
 	@Accessors final Evaluator parent
 
 	def protected <T> T trap(T context) {

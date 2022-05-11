@@ -29,11 +29,11 @@ import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations
 class BasicFBEvaluator extends BaseFBEvaluator<BasicFBType> {
 	final Map<ECTransition, Evaluator> transitionEvaluators
 
-	new(BasicFBType type, Variable context, Iterable<Variable> variables, Evaluator parent) {
+	new(BasicFBType type, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		this(type, context, variables, null, parent)
 	}
 
-	new(BasicFBType type, Variable context, Iterable<Variable> variables, Queue<Event> queue, Evaluator parent) {
+	new(BasicFBType type, Variable<?> context, Iterable<Variable<?>> variables, Queue<Event> queue, Evaluator parent) {
 		super(type, context, variables, queue, parent)
 		transitionEvaluators = type.ECC.ECTransition.filter[!it.conditionExpression.nullOrEmpty].toInvertedMap [
 			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends ECTransition>, instance,

@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 
 class StructuredTextEvaluatorFactory implements EvaluatorFactory {
-	override createEvaluator(Object source, Variable context, Iterable<Variable> variables, Evaluator parent) {
+	override createEvaluator(Object source, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		if (source instanceof STAlgorithm) {
 			new STAlgorithmEvaluator(source, context, variables, parent)
 		} else if (source instanceof ECTransition) {

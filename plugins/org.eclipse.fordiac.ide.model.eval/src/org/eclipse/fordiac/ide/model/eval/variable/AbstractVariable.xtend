@@ -12,12 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable
 
+import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 @FinalFieldsConstructor
-abstract class AbstractVariable implements Variable {
+abstract class AbstractVariable<T extends Value> implements Variable<T> {
 	@Accessors final String name
 	@Accessors final INamedElement type
 	

@@ -27,7 +27,7 @@ final class VariableOperations {
 	private new() {
 	}
 
-	def static Variable newVariable(String name, INamedElement type) {
+	def static Variable<?> newVariable(String name, INamedElement type) {
 		switch (type) {
 			AnyElementaryType: new ElementaryVariable(name, type)
 			ArrayType: new ArrayVariable(name, type)
@@ -37,7 +37,7 @@ final class VariableOperations {
 		}
 	}
 
-	def static Variable newVariable(String name, INamedElement type, String value) {
+	def static Variable<?> newVariable(String name, INamedElement type, String value) {
 		switch (type) {
 			AnyElementaryType: new ElementaryVariable(name, type, value)
 			ArrayType: new ArrayVariable(name, type, value)
@@ -46,7 +46,7 @@ final class VariableOperations {
 		}
 	}
 
-	def static Variable newVariable(String name, Value value) {
+	def static Variable<?> newVariable(String name, Value value) {
 		switch (type : value.type) {
 			AnyElementaryType: new ElementaryVariable(name, type, value)
 			ArrayType: new ArrayVariable(name, type, value)
@@ -56,22 +56,22 @@ final class VariableOperations {
 		}
 	}
 
-	def static Variable newVariable(VarDeclaration decl) {
+	def static Variable<?> newVariable(VarDeclaration decl) {
 		newVariable(decl, decl.initialValue)
 	}
 
-	def static Variable newVariable(VarDeclaration decl, String value) {
+	def static Variable<?> newVariable(VarDeclaration decl, String value) {
 		if (decl.array)
 			newVariable(decl.name, decl.type.newArrayType(newSubrange(0, decl.arraySize - 1)), value)
 		else
 			newVariable(decl.name, decl.type, value)
 	}
 
-	def static Variable newVariable(VarDeclaration decl, Value value) {
+	def static Variable<?> newVariable(VarDeclaration decl, Value value) {
 		newVariable(decl.name, value)
 	}
 
-	def static Variable newVariable(FB fb) {
+	def static Variable<?> newVariable(FB fb) {
 		newVariable(fb.name, fb.type)
 	}
 

@@ -49,7 +49,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 	private final ThreadMonitor threadMonitor;
 	private final ConcurrentHashMap<Thread, EvaluatorDebugThread> threads = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<Evaluator, EvaluatorDebugStackFrame> stackFrames = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<Variable, EvaluatorDebugVariable> variables = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Variable<?>, EvaluatorDebugVariable> variables = new ConcurrentHashMap<>();
 	private final Set<IBreakpoint> breakpoints = ConcurrentHashMap.newKeySet();
 
 	public CommonEvaluatorDebugger(final EvaluatorDebugTarget debugTarget) {
@@ -222,7 +222,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 		return this.stackFrames.computeIfAbsent(evaluator, key -> new EvaluatorDebugStackFrame(key, thread));
 	}
 
-	protected EvaluatorDebugVariable getVariable(final Variable variable) {
+	protected EvaluatorDebugVariable getVariable(final Variable<?> variable) {
 		return this.variables.computeIfAbsent(variable, key -> new EvaluatorDebugVariable(key, debugTarget));
 	}
 
