@@ -1,15 +1,18 @@
 /**
  * Copyright (c) 2021 Primetals Technologies GmbH
- * 
+ *               2022 Martin Erich Jobst
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *       - adapt non-compatible type quickfix
  */
 package org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix;
 
@@ -48,11 +51,13 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	@Fix(STCoreValidator.NON_COMPATIBLE_TYPES)
 	public static void fixNonCompatibleTypes(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, "Add explicit typecast",
-				"Add typecast from " + issue.getData()[0] + " to " + issue.getData()[1], "upcase.png",
+				"Add typecast from " + issue.getData()[0] + " to " + issue.getData()[1], "upcase.png", //$NON-NLS-3$
 				(IModification) context -> {
 					final IXtextDocument xtextDocument = context.getXtextDocument();
-					xtextDocument.replace(issue.getOffset(), issue.getLength(),
-							issue.getData()[0] + "_TO_" + issue.getData()[1] + "(" + issue.getData()[2] + ")");
+					final String original = xtextDocument.get(issue.getOffset().intValue(),
+							issue.getLength().intValue());
+					final String replacement = issue.getData()[0] + "_TO_" + issue.getData()[1] + "(" + original + ")"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					xtextDocument.replace(issue.getOffset().intValue(), issue.getLength().intValue(), replacement);
 				});
 	}
 

@@ -114,55 +114,13 @@ final package class ExpressionAnnotations {
 	def package static INamedElement getDeclaredResultType(STFeatureExpression expr) {
 		// mirror changes here in callaSTCoreScopeProvider.isApplicableForFeatureReference(IEObjectDescription)
 		switch (feature : expr.feature) {
-			VarDeclaration:
-				if (feature.array)
-					feature.type.newArrayType(newSubrange(0, feature.arraySize))
-				else
-					feature.type
-			STVarDeclaration:
-				if (feature.array)
-					(feature.type as DataType).newArrayType(feature.ranges.map[toSubrange])
-				else
-					feature.type
+			VarDeclaration,
+			STVarDeclaration,
 			FB:
-				feature.type
+				feature.featureType
 			ICallable:
 				feature.returnType
 		}
-	}
-
-	def private static Subrange toSubrange(STExpression expr) {
-		switch (expr) {
-			STBinaryExpression case expr.op === STBinaryOperator.RANGE:
-				newSubrange(expr.left.asConstantInt, expr.right.asConstantInt)
-			default:
-				newSubrange(0, expr.asConstantInt)
-		}
-	}
-
-	def private static int asConstantInt(STExpression expr) {
-		switch (expr) {
-			STNumericLiteral: (expr.value as BigInteger).intValueExact
-			default: 0
-		}
-	}
-
-	def private static ArrayType newArrayType(DataType arrayBaseType, Subrange... arraySubranges) {
-		arrayBaseType.newArrayType(arraySubranges as Iterable<Subrange>)
-	}
-
-	def private static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
-		DataFactory.eINSTANCE.createArrayType => [
-			baseType = arrayBaseType
-			subranges.addAll(arraySubranges)
-		]
-	}
-
-	def private static newSubrange(int lower, int upper) {
-		DataFactory.eINSTANCE.createSubrange => [
-			lowerLimit = lower
-			upperLimit = upper
-		]
 	}
 
 	def package static INamedElement getResultType(STMultibitPartialExpression expr) { getDeclaredResultType(expr) }

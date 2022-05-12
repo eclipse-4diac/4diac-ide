@@ -13,6 +13,7 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *       - validation for reserved identifiers
+ *       - validation for calls
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 
@@ -98,7 +99,7 @@ class STFunctionValidatorTest {
 			3 := 4;
 			2+3 := 5;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.ASSIGNMENT_INVALID_LEFT)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NOT_ASSIGNABLE)
 	}
 
 	@Test
@@ -242,4 +243,186 @@ class STFunctionValidatorTest {
 		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.RESERVED_IDENTIFIER_ERROR)
 	}
 
+	@Test
+	def void testCallNonCallableErrorValidator() {
+		'''
+		FUNCTION hubert
+		VAR
+		    X : INT;
+		END_VAR
+		X();
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FEATURE_NOT_CALLABLE)
+	}
+
+	@Test
+	def void testCallMixedFormalErrorValidator() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		emil(17, B := 4);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.MIXING_FORMAL_AND_NON_FORMAL_ARGUMENTS)
+	}
+
+	@Test
+	def void testCallWrongNumberArgumentsErrorValidator() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		emil(17);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.WRONG_NUMBER_OF_ARGUMENTS)
+	}
+
+	@Test
+	def void testCallNonFormalNotAssignable() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		VAR_OUTPUT
+		    X : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		emil(17, 4, 21);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.NOT_ASSIGNABLE)
+	}
+
+	@Test
+	def void testCallFormalNotAssignable() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		VAR_IN_OUT
+		    X : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		emil(A := 17, B := 4, X := 21);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.NOT_ASSIGNABLE)
+	}
+
+	@Test
+	def void testCallIncompatibleInputTypes() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		emil(17, LINT#4);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
+
+	@Test
+	def void testCallIncompatibleOutputTypes() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		VAR_OUTPUT
+		    X : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		VAR_TEMP
+			X: SINT;
+		END_VAR
+		
+		emil(17, 4, X);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
+
+	@Test
+	def void testCallCompatibleOutputTypes() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		VAR_OUTPUT
+		    X : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		VAR_TEMP
+			X: LINT;
+		END_VAR
+		
+		emil(17, 4, X);
+		END_FUNCTION'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testCallIncompatibleInOutTypes() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		VAR_IN_OUT
+		    X : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		VAR_TEMP
+			X: LINT;
+		END_VAR
+		
+		emil(17, 4, X);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		VAR_IN_OUT
+		    X : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		VAR_TEMP
+			X: SINT;
+		END_VAR
+		
+		emil(17, 4, X);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
 }

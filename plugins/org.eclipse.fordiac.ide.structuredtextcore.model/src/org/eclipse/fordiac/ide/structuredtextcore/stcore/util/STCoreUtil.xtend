@@ -12,7 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.util
 
+import java.math.BigInteger
+import org.eclipse.fordiac.ide.model.data.ArrayType
+import org.eclipse.fordiac.ide.model.data.DataFactory
+import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -22,7 +28,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpre
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
@@ -34,6 +42,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
@@ -86,12 +95,12 @@ final class STCoreUtil {
 		operator == STBinaryOperator.RANGE
 	}
 
-	def static boolean isValidLeftAssignment(STExpression expression) {
+	def static boolean isAssignable(STExpression expression) {
 		switch (it : expression) {
 			STMultibitPartialExpression,
 			STFeatureExpression case !call,
-			STArrayAccessExpression case receiver.validLeftAssignment,
-			STMemberAccessExpression case receiver.validLeftAssignment && member.validLeftAssignment: true
+			STArrayAccessExpression case receiver.assignable,
+			STMemberAccessExpression case receiver.assignable && member.assignable: true
 			default: false
 		}
 	}
@@ -182,5 +191,56 @@ final class STCoreUtil {
 
 	def package static getFeatureExpression(STCallUnnamedArgument argument) {
 		switch (container: argument.eContainer) { STFeatureExpression: container }
+	}
+
+	def static getFeatureType(INamedElement feature) {
+		switch (feature) {
+			VarDeclaration:
+				if (feature.array)
+					feature.type.newArrayType(newSubrange(0, feature.arraySize))
+				else
+					feature.type
+			STVarDeclaration:
+				if (feature.array)
+					(feature.type as DataType).newArrayType(feature.ranges.map[toSubrange])
+				else
+					feature.type
+			FB:
+				feature.type
+		}
+	}
+
+	def package static ArrayType newArrayType(DataType arrayBaseType, Subrange... arraySubranges) {
+		arrayBaseType.newArrayType(arraySubranges as Iterable<Subrange>)
+	}
+
+	def package static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
+		DataFactory.eINSTANCE.createArrayType => [
+			baseType = arrayBaseType
+			subranges.addAll(arraySubranges)
+		]
+	}
+
+	def package static Subrange toSubrange(STExpression expr) {
+		switch (expr) {
+			STBinaryExpression case expr.op === STBinaryOperator.RANGE:
+				newSubrange(expr.left.asConstantInt, expr.right.asConstantInt)
+			default:
+				newSubrange(0, expr.asConstantInt)
+		}
+	}
+
+	def package static int asConstantInt(STExpression expr) {
+		switch (expr) {
+			STNumericLiteral: (expr.value as BigInteger).intValueExact
+			default: 0
+		}
+	}
+
+	def package static newSubrange(int lower, int upper) {
+		DataFactory.eINSTANCE.createSubrange => [
+			lowerLimit = lower
+			upperLimit = upper
+		]
 	}
 }

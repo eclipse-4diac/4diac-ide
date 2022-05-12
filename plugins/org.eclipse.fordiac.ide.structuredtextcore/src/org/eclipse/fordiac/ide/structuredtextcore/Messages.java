@@ -22,10 +22,14 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_Consecutive_Underscores_In_Identifier;
 	public static String STCoreValidator_Identifier_Is_Reserved;
 	public static String STCoreValidator_Trailing_Underscore_In_Identifier;
+	public static String STCoreValidator_Argument_Not_Assignable;
 	public static String STCoreValidator_Assignment_Invalid_Left_Side;
-	public static String STCoreValidator_Non_Compatible_Types_In_Assignment;
+	public static String STCoreValidator_Feature_Not_Callable;
+	public static String STCoreValidator_Mixing_Formal_And_NonFormal;
 	public static String STCoreValidator_No_Cast_Available;
+	public static String STCoreValidator_Non_Compatible_Types;
 	public static String STCoreValidator_Wrong_Name_Case;
+	public static String STCoreValidator_Wrong_Number_Of_Arguments;
 	public static String STCoreValidator_Unqualified_FB_Call_On_FB_With_Input_Event_Size_Not_One;
 
 	static {
