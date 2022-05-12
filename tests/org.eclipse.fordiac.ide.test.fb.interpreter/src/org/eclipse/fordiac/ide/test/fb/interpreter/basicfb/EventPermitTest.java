@@ -29,7 +29,7 @@ public class EventPermitTest extends AbstractInterpreterTest {
 
 		// input PERMIT is default 0, no output event sent
 		addTransaction(seq, new FBTransaction("EI")); //$NON-NLS-1$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		// set input PERMIT to 1, event goes through
 		fb.getService().getServiceSequence().clear();

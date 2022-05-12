@@ -31,19 +31,19 @@ public class EventCTUTest extends AbstractInterpreterTest {
 		addTransaction(seq, new FBTransaction("R", "RO", "Q:=FALSE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		addTransaction(seq, new FBTransaction("CU", "CUO", "Q:=FALSE;CV:=1")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		addTransaction(seq, new FBTransaction("CU", "CUO", "Q:=TRUE;CV:=2")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PV", "0"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("R", "RO", "Q:=FALSE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		addTransaction(seq, new FBTransaction("CU", "CUO", "Q:=TRUE;CV:=1")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		addTransaction(seq, new FBTransaction("R", "RO", "Q:=FALSE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("CU", "CUO", "Q:=TRUE;CV:=1")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 	}
 
 }

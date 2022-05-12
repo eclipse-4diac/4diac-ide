@@ -16,10 +16,11 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+import org.eclipse.fordiac.ide.fb.interpreter.DefaultRunFBType;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTypeRuntimeUtils;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>FB
@@ -53,10 +54,12 @@ public abstract class FBRuntimeAbstractImpl extends MinimalEObjectImpl.Container
 	 * @generated
 	 */
 	@Override
-	public EList<EventOccurrence> run() {
-		if (this.eContainer instanceof EventOccurrence)
-			return FBTypeRuntimeUtils.run((EventOccurrence) this.eContainer, this);
+	public EList<EventOccurrence> run(final EventManager eventManager) {
+		if (this.eContainer instanceof EventOccurrence) {
+			return DefaultRunFBType.runFBType(this, (EventOccurrence) this.eContainer, eventManager);
+		}
 		throw new IllegalArgumentException("The eContainer of the FBRuntimeAbstract object must be an EventOccurrence");
+
 	}
 
 } // FBRuntimeAbstractImpl

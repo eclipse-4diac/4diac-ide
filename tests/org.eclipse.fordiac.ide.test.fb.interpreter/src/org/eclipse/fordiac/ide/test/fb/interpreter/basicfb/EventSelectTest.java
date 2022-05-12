@@ -30,7 +30,7 @@ public class EventSelectTest extends AbstractInterpreterTest {
 		addTransaction(seq, new FBTransaction("EI0")); //$NON-NLS-1$
 		addTransaction(seq, new FBTransaction("EI1", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		fb.getService().getServiceSequence().clear();
 		final ServiceSequence seq2 = ServiceSequenceUtils.addServiceSequence(fb.getService());
@@ -38,7 +38,7 @@ public class EventSelectTest extends AbstractInterpreterTest {
 		addTransaction(seq2, new FBTransaction("EI0", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq2, new FBTransaction("EI1")); //$NON-NLS-1$
 
-		runTest(fb, seq2);
+		runFBTest(fb, seq2);
 
 	}
 }

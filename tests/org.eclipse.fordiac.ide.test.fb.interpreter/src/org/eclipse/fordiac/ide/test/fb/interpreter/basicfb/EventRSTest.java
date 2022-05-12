@@ -33,7 +33,7 @@ public class EventRSTest extends AbstractInterpreterTest {
 		addTransaction(seq, new FBTransaction("S", "EO", "Q:=1")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		addTransaction(seq, new FBTransaction("R", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 	}
 
 

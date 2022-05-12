@@ -27,7 +27,7 @@ public class InoutTest extends AbstractInterpreterTest {
 
 		setVariable(fb, "IN", "1");
 		addTransaction(seq, FBTransaction.getSimpleFBTransaction("OUT:=1")); //$NON-NLS-1$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 	}
 
 }

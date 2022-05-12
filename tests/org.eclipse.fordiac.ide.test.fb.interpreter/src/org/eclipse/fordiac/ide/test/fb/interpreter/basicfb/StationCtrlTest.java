@@ -30,7 +30,7 @@ public class StationCtrlTest extends AbstractInterpreterTest {
 		ServiceSequence seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 
 		addTransaction(seq, new FBTransaction("INIT", "INITO")); //$NON-NLS-1$ //$NON-NLS-2$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		// ErrorCode is default 0
 		fb.getService().getServiceSequence().clear();
@@ -39,7 +39,7 @@ public class StationCtrlTest extends AbstractInterpreterTest {
 		final String[] outputs = { "StopConv", "PickPart" }; //$NON-NLS-1$//$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("NextPart", Arrays.asList(outputs))); //$NON-NLS-1$
 		addTransaction(seq, new FBTransaction("PartPicked", "StartConv")); //$NON-NLS-1$ //$NON-NLS-2$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 
 		fb.getService().getServiceSequence().clear();

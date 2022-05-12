@@ -428,7 +428,7 @@
       </eAnnotations>
       <eParameters name="other" lowerBound="1" eType="#//DataType"/>
     </eOperations>
-   </eClassifiers>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LtodType" eSuperTypes="#//AnyDateType">
     <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

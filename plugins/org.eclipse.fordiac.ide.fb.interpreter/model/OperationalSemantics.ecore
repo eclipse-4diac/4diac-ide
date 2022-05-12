@@ -26,7 +26,12 @@
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
       <details key="documentation" value="How to manage to get the data? Three variants..."/>
     </eAnnotations>
-    <eOperations name="run" upperBound="-1" eType="#//EventOccurrence"/>
+    <eOperations name="run" upperBound="-1" eType="#//EventOccurrence">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="&#x9;&#x9;if (this.eContainer instanceof EventOccurrence) {&#xA;&#x9;&#x9;&#x9;return DefaultRunFBType.runFBType(this, (EventOccurrence) this.eContainer, eventManager);&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;throw new IllegalArgumentException(&quot;The eContainer of the FBRuntimeAbstract object must be an EventOccurrence&quot;);&#xA;"/>
+      </eAnnotations>
+      <eParameters name="eventManager" lowerBound="1" eType="#//EventManager"/>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BasicFBTypeRuntime" eSuperTypes="#//FBRuntimeAbstract">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"/>

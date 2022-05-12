@@ -33,13 +33,13 @@ public class EventSwitchTest extends AbstractInterpreterTest {
 		setVariable(fb, "G", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("EI", "EO1")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		fb.getService().getServiceSequence().clear();
 		final ServiceSequence seq2 = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "G", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq2, new FBTransaction("EI", "EO0")); //$NON-NLS-1$ //$NON-NLS-2$
  
-		runTest(fb, seq2);
+		runFBTest(fb, seq2);
 	}
 }

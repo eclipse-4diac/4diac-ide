@@ -13,16 +13,20 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter;
 
+import java.util.List;
 import java.util.function.Function;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.api.IRunFBTypeVisitor;
@@ -37,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression;
@@ -50,22 +55,22 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		this.eventOccurrence = eventOccurrence;
 	}
 
-	public static Function<Object,Object> of(IRunFBTypeVisitor runTypeVisitor) {
+	public static Function<Object,Object> of(IRunFBTypeVisitor runTypeVisitor, EventManager eventManager) {
 		return new LambdaVisitor<>()
-				.on(BasicFBTypeRuntime.class).then(runTypeVisitor::runFBType)
-				.on(SimpleFBTypeRuntime.class).then(runTypeVisitor::runFBType)
-				.on(FBNetworkRuntime.class).then(runTypeVisitor::runFBType)
+				.on(BasicFBTypeRuntime.class).then(runTypeVisitor::runBasicFBType)
+				.on(SimpleFBTypeRuntime.class).then(runTypeVisitor::runSimpleFBType)
+				.on(FBNetworkRuntime.class).then(fb -> runTypeVisitor.runFBNetwork(fb, eventManager))
 				;
 	}
 
 	@SuppressWarnings("unchecked")
-	public static EList<EventOccurrence> runFBType(FBRuntimeAbstract fbTypeRuntime, EventOccurrence eventOccurrence) {
+	public static EList<EventOccurrence> runFBType(FBRuntimeAbstract fbTypeRuntime, EventOccurrence eventOccurrence, EventManager eventManager) {
 		final var defaultRun = new DefaultRunFBType(eventOccurrence);
-		return (EList<EventOccurrence>) of(defaultRun).apply(fbTypeRuntime);
+		return (EList<EventOccurrence>) of(defaultRun, eventManager).apply(fbTypeRuntime);
 	}
 
 	@Override
-	public EList<EventOccurrence> runFBType(BasicFBTypeRuntime basicFBTypeRuntime) {
+	public EList<EventOccurrence> runBasicFBType(BasicFBTypeRuntime basicFBTypeRuntime) {
 		// Initialization of variables
 		VariableUtils.fBVariableInitialization(basicFBTypeRuntime.getBasicfbtype());
 		final var outputEvents = new BasicEList<EventOccurrence>();
@@ -186,7 +191,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 	}
 
 	@Override
-	public EList<EventOccurrence> runFBType(SimpleFBTypeRuntime simpleFBTypeRuntime) {
+	public EList<EventOccurrence> runSimpleFBType(SimpleFBTypeRuntime simpleFBTypeRuntime) {
 		// Initialization of variables
 		SimpleFBType simpleFBType = simpleFBTypeRuntime.getSimpleFBType();
 		VariableUtils.fBVariableInitialization(simpleFBType);
@@ -201,7 +206,32 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 	}
 
 	@Override
-	public EList<EventOccurrence> runFBType(FBNetworkRuntime fBNetworkRuntime) {
+	public EList<EventOccurrence> runFBNetwork(FBNetworkRuntime fBNetworkRuntime, EventManager manager) {
+		EList<EventOccurrence> events = eventOccurrence.getFbRuntime().run(manager);
+		events.forEach(e -> {
+			List<IInterfaceElement> destinations = findConnectedPins(e);
+			for (IInterfaceElement dest : destinations) {
+				manager.getTransactions().add(createNewTransaction(dest, fBNetworkRuntime));
+			}
+		});
+
+		// TODO execute transactions
+
 		throw new UnsupportedOperationException("Not supported operation runFBType(FBTypeRuntime fBTypeRuntime)"); //$NON-NLS-1$
+	}
+
+	private FBTransaction createNewTransaction(IInterfaceElement dest, FBNetworkRuntime fBNetworkRuntime) {
+		EventOccurrence newEo = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
+		newEo.setEvent((Event) EcoreUtil.copy(dest));
+		newEo.setFbRuntime(EcoreUtil.copy(fBNetworkRuntime));
+
+		FBTransaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
+		transaction.setInputEventOccurrence(newEo);
+		return transaction;
+	}
+
+	private List<IInterfaceElement> findConnectedPins(EventOccurrence e) {
+		// TODO implement
+		return null;
 	}
 }

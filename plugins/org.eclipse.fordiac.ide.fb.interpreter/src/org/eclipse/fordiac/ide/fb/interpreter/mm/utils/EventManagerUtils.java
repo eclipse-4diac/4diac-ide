@@ -30,9 +30,10 @@ public class EventManagerUtils {
 			final var transaction = transactions.get(i);
 			if (transaction instanceof FBTransaction) {
 				FBTransaction fbTransaction = (FBTransaction) transaction;
-				final var result = transaction.getInputEventOccurrence().getFbRuntime().run();
+				final var result = transaction.getInputEventOccurrence().getFbRuntime().run(eventManager);
 				fbTransaction.getOutputEventOccurrences().addAll(result);
 				if ((i + 1) < transactions.size()) {
+					// TODO use ECoreUtil.copyAll(list of things to copy);
 					final var copyfbRuntime = new Copier();
 					final FBRuntimeAbstract newfbRuntime;
 					// choose the latest: input event occurr. or last output event occurr.
@@ -49,4 +50,5 @@ public class EventManagerUtils {
 			}
 		}
 	}
+
 }

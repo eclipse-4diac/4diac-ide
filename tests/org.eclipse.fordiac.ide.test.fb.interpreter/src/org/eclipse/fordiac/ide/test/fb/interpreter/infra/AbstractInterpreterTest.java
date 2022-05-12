@@ -41,10 +41,12 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
@@ -67,6 +69,7 @@ import org.osgi.framework.Bundle;
 
 public abstract class AbstractInterpreterTest {
 	public static final String START_STATE = "START"; //$NON-NLS-1$
+	private static final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.fb.interpreter");//$NON-NLS-1$
 
 	@Test
 	public abstract void test() throws IllegalArgumentException;
@@ -75,9 +78,22 @@ public abstract class AbstractInterpreterTest {
 		return loadFBType(name, true);
 	}
 
+	protected static FBNetwork loadFbNetwork(final String projectName, String appName) {
+		Path projectPath = new Path("data/" + projectName); //$NON-NLS-1$
+		FordiacProjectLoader loader;
+		try {
+			loader = new FordiacProjectLoader(bundle, projectPath);
+		} catch (CoreException | IOException e) {
+			return null;
+		}
+
+		AutomationSystem system = loader.getAutomationSystem(appName);
+		return system.getApplication().get(0).getFBNetwork();
+	}
+
 	protected static FBType loadFBType(final String name, final boolean emptyService) {
-		final Path projectPath = new Path("data/TestFBs");
-		final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.fb.interpreter");
+		final Path projectPath = new Path("data/TestFBs"); //$NON-NLS-1$
+		final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.fb.interpreter"); //$NON-NLS-1$
 		FordiacProjectLoader loader;
 		try {
 			loader = new FordiacProjectLoader(bundle, projectPath);
@@ -173,14 +189,22 @@ public abstract class AbstractInterpreterTest {
 		return null;
 	}
 
-	public static BaseFBType runTest(final BaseFBType fb, final ServiceSequence seq) throws IllegalArgumentException {
+	public static BaseFBType runFBTest(final BaseFBType fb, final ServiceSequence seq) throws IllegalArgumentException {
 		if (fb instanceof BasicFBType) {
 			return runTest((BasicFBType) fb, seq, START_STATE);
 		}
 		return runSimpleFBTest((SimpleFBType) fb, seq);
 	}
 
-	private static BaseFBType runSimpleFBTest(final SimpleFBType fb, final ServiceSequence seq) {
+	public static FBNetwork runFBNetworkTest(final FBNetwork network) {
+		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
+		//network.eResource().getContents().add(eventManager);
+		// TODO finish test
+		EventManagerUtils.process(eventManager);
+		return network;
+	}
+
+	private static BaseFBType runSimpleFBTest(SimpleFBType fb, ServiceSequence seq) {
 		final ResourceSet reset = new ResourceSetImpl();
 		final Resource resource = reset.createResource(URI.createURI("platform:/resource/" + fb.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();

@@ -33,7 +33,7 @@ public class EventRendTest extends AbstractInterpreterTest {
 		addTransaction(seq, new FBTransaction("EI1")); //$NON-NLS-1$
 		addTransaction(seq, new FBTransaction("EI2", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 	}
 
 

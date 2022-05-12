@@ -32,7 +32,7 @@ public class EventSplitTest extends AbstractInterpreterTest {
 		final List<String> outputEvents = Arrays.asList(arr);
 		addTransaction(seq, new FBTransaction("EI", outputEvents)); //$NON-NLS-1$
 		addTransaction(seq, new FBTransaction("EI", outputEvents)); //$NON-NLS-1$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 	}
 
 }

@@ -29,13 +29,13 @@ public class EventDFFTest extends AbstractInterpreterTest {
 		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("CLK")); //$NON-NLS-1$
 
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="ExampleFbNetwork" Comment="">
+	<VersionInfo Version="1.0" Author="AK115394" Date="2022-05-12">
+	</VersionInfo>
+	<Application Name="ExampleFbNetworkApp" Comment="">
+		<SubAppNetwork>
+			<FB Name="E_SR" Type="E_SR" Comment="" x="606.6666666666667" y="300.0">
+			</FB>
+			<FB Name="E_SWITCH" Type="E_SWITCH" Comment="" x="1600.0" y="306.6666666666667">
+			</FB>
+			<FB Name="E_CTUD" Type="E_CTUD" Comment="" x="2853.3333333333335" y="240.0">
+			</FB>
+			<EventConnections>
+				<Connection Source="E_SR.EO" Destination="E_SWITCH.EI" Comment="" dx1="360.0"/>
+				<Connection Source="E_SWITCH.EO0" Destination="E_CTUD.CU" Comment="" dx1="300.0"/>
+				<Connection Source="E_SWITCH.EO1" Destination="E_CTUD.CD" Comment="" dx1="300.0"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="E_SR.Q" Destination="E_SWITCH.G" Comment="" dx1="313.33333333333337"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+</System>

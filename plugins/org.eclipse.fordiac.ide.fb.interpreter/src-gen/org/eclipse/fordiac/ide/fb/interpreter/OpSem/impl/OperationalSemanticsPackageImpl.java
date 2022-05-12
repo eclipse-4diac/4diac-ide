@@ -574,7 +574,8 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEClass(fbRuntimeAbstractEClass, FBRuntimeAbstract.class, "FBRuntimeAbstract", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
 
-		addEOperation(fbRuntimeAbstractEClass, this.getEventOccurrence(), "run", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		op = addEOperation(fbRuntimeAbstractEClass, this.getEventOccurrence(), "run", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, this.getEventManager(), "eventManager", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(basicFBTypeRuntimeEClass, BasicFBTypeRuntime.class, "BasicFBTypeRuntime", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
