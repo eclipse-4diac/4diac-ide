@@ -15,9 +15,13 @@ package org.eclipse.fordiac.ide.test.model.eval.function
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.eval.function.Functions
+import org.eclipse.fordiac.ide.model.eval.value.AnyIntValue
 import org.eclipse.fordiac.ide.model.eval.value.AnyMagnitudeValue
 import org.eclipse.fordiac.ide.model.eval.value.IntValue
+import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.junit.jupiter.api.Test
+
+import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.IntValue.*
@@ -84,25 +88,37 @@ class FunctionsTest {
 	@Test
 	def void testMultiGenericParam() {
 		// lookup
-		SampleFunctions.findMethodFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT, ElementaryTypes.INT).assertNotNull
-		SampleFunctions.findMethodFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.LINT, ElementaryTypes.INT).assertNotNull
-		SampleFunctions.findMethodFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT, ElementaryTypes.LINT).assertNotNull
+		SampleFunctions.findMethodFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT, ElementaryTypes.INT).
+			assertNotNull
+		SampleFunctions.findMethodFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.LINT, ElementaryTypes.INT).
+			assertNotNull
+		SampleFunctions.findMethodFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT, ElementaryTypes.LINT).
+			assertNotNull
 		// wrong argument type
-		NoSuchMethodError.assertThrows[SampleFunctions.findMethodFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.STRING, ElementaryTypes.STRING)]
+		NoSuchMethodError.assertThrows [
+			SampleFunctions.findMethodFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.STRING,
+				ElementaryTypes.STRING)
+		]
 		// return type
 		ElementaryTypes.INT.assertEquals(
-			SampleFunctions.inferReturnTypeFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT, ElementaryTypes.INT))
+			SampleFunctions.inferReturnTypeFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT,
+				ElementaryTypes.INT))
 		ElementaryTypes.INT.assertEquals(
-			SampleFunctions.inferReturnTypeFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.LINT, ElementaryTypes.INT))
+			SampleFunctions.inferReturnTypeFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.LINT,
+				ElementaryTypes.INT))
 		ElementaryTypes.INT.assertEquals(
-			SampleFunctions.inferReturnTypeFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT, ElementaryTypes.LINT))
+			SampleFunctions.inferReturnTypeFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT,
+				ElementaryTypes.LINT))
 		// parameter types
 		#[ElementaryTypes.INT, ElementaryTypes.INT].assertIterableEquals(
-			SampleFunctions.inferParameterTypesFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT, ElementaryTypes.INT))
+			SampleFunctions.inferParameterTypesFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT,
+				ElementaryTypes.INT))
 		#[ElementaryTypes.LINT, ElementaryTypes.INT].assertIterableEquals(
-			SampleFunctions.inferParameterTypesFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.LINT, ElementaryTypes.INT))
+			SampleFunctions.inferParameterTypesFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.LINT,
+				ElementaryTypes.INT))
 		#[ElementaryTypes.INT, ElementaryTypes.LINT].assertIterableEquals(
-			SampleFunctions.inferParameterTypesFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT, ElementaryTypes.LINT))
+			SampleFunctions.inferParameterTypesFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT,
+				ElementaryTypes.LINT))
 		// invoke
 		21.toIntValue.assertEquals(SampleFunctions.invoke("MULTI_GENERIC_PARAM", 17.toIntValue, 4.toIntValue))
 		21.toIntValue.assertEquals(SampleFunctions.invoke("MULTI_GENERIC_PARAM", 17.toLIntValue, 4.toIntValue))
@@ -134,7 +150,8 @@ class FunctionsTest {
 		#[ElementaryTypes.INT, ElementaryTypes.INT].assertIterableEquals(
 			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS", ElementaryTypes.INT, ElementaryTypes.INT))
 		#[ElementaryTypes.INT, ElementaryTypes.INT, ElementaryTypes.INT].assertIterableEquals(
-			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS", ElementaryTypes.INT, ElementaryTypes.INT, ElementaryTypes.INT))
+			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS", ElementaryTypes.INT, ElementaryTypes.INT,
+				ElementaryTypes.INT))
 		// invoke
 		SampleFunctions.invoke("VARARGS").assertNull
 		17.toIntValue.assertEquals(SampleFunctions.invoke("VARARGS", 17.toIntValue))
@@ -147,14 +164,18 @@ class FunctionsTest {
 		// lookup
 		SampleFunctions.findMethodFromDataTypes("VARARGS_GENERIC").assertNotNull
 		SampleFunctions.findMethodFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT).assertNotNull
-		SampleFunctions.findMethodFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT, ElementaryTypes.INT).assertNotNull
+		SampleFunctions.findMethodFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT, ElementaryTypes.INT).
+			assertNotNull
 		SampleFunctions.findMethodFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT, ElementaryTypes.INT,
 			ElementaryTypes.SINT).assertNotNull
 		// wrong argument type
-		NoSuchMethodError.assertThrows[SampleFunctions.findMethodFromDataTypes("VARARGS_GENERIC", ElementaryTypes.STRING)]
+		NoSuchMethodError.assertThrows [
+			SampleFunctions.findMethodFromDataTypes("VARARGS_GENERIC", ElementaryTypes.STRING)
+		]
 		// return type
 		GenericTypes.ANY_MAGNITUDE.assertEquals(SampleFunctions.inferReturnTypeFromDataTypes("VARARGS_GENERIC"))
-		ElementaryTypes.LINT.assertEquals(SampleFunctions.inferReturnTypeFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT))
+		ElementaryTypes.LINT.assertEquals(
+			SampleFunctions.inferReturnTypeFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT))
 		ElementaryTypes.LINT.assertEquals(
 			SampleFunctions.inferReturnTypeFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT, ElementaryTypes.INT))
 		ElementaryTypes.LINT.assertEquals(
@@ -165,14 +186,47 @@ class FunctionsTest {
 		#[ElementaryTypes.LINT].assertIterableEquals(
 			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT))
 		#[ElementaryTypes.LINT, ElementaryTypes.LINT].assertIterableEquals(
-			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT, ElementaryTypes.INT))
+			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT,
+				ElementaryTypes.INT))
 		#[ElementaryTypes.LINT, ElementaryTypes.LINT, ElementaryTypes.LINT].assertIterableEquals(
-			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT, ElementaryTypes.INT, ElementaryTypes.SINT))
+			SampleFunctions.inferParameterTypesFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT,
+				ElementaryTypes.INT, ElementaryTypes.SINT))
 		// invoke
 		SampleFunctions.invoke("VARARGS_GENERIC").assertNull
 		17.toLIntValue.assertEquals(SampleFunctions.invoke("VARARGS_GENERIC", 17.toLIntValue))
 		21.toLIntValue.assertEquals(SampleFunctions.invoke("VARARGS_GENERIC", 17.toLIntValue, 4.toIntValue))
-		42.toLIntValue.assertEquals(SampleFunctions.invoke("VARARGS_GENERIC", 17.toLIntValue, 4.toIntValue, 21.toSIntValue))
+		42.toLIntValue.assertEquals(
+			SampleFunctions.invoke("VARARGS_GENERIC", 17.toLIntValue, 4.toIntValue, 21.toSIntValue))
+	}
+
+	@Test
+	def void testSimpleOutput() {
+		// lookup
+		SampleFunctions.findMethodFromDataTypes("SIMPLE_OUTPUT", ElementaryTypes.INT).assertNotNull
+		// return type
+		assertNull(SampleFunctions.inferReturnTypeFromDataTypes("SIMPLE_OUTPUT", ElementaryTypes.INT))
+		// parameter types
+		#[ElementaryTypes.INT].assertIterableEquals(
+			SampleFunctions.inferParameterTypesFromDataTypes("SIMPLE_OUTPUT", ElementaryTypes.INT))
+		// invoke
+		val arg = newVariable("A", ElementaryTypes.INT)
+		SampleFunctions.invoke("SIMPLE_OUTPUT", arg)
+		21.toIntValue.assertEquals(arg.value)
+	}
+
+	@Test
+	def void testGenericOutput() {
+		// lookup
+		SampleFunctions.findMethodFromDataTypes("GENERIC_OUTPUT", ElementaryTypes.INT).assertNotNull
+		// return type
+		assertNull(SampleFunctions.inferReturnTypeFromDataTypes("GENERIC_OUTPUT", ElementaryTypes.INT))
+		// parameter types
+		#[ElementaryTypes.INT].assertIterableEquals(
+			SampleFunctions.inferParameterTypesFromDataTypes("GENERIC_OUTPUT", ElementaryTypes.INT))
+		// invoke
+		val arg = newVariable("A", ElementaryTypes.INT)
+		SampleFunctions.invoke("GENERIC_OUTPUT", arg)
+		21.toIntValue.assertEquals(arg.value)
 	}
 
 	static interface SampleFunctions extends Functions {
@@ -182,10 +236,16 @@ class FunctionsTest {
 
 		def static <T extends AnyMagnitudeValue> T GENERIC_RETURN(T a) { a }
 
-		def static <T extends AnyMagnitudeValue, U extends AnyMagnitudeValue> IntValue MULTI_GENERIC_PARAM(T a, U b) { ((a + b) as AnyMagnitudeValue).toIntValue }
+		def static <T extends AnyMagnitudeValue, U extends AnyMagnitudeValue> IntValue MULTI_GENERIC_PARAM(T a, U b) {
+			((a + b) as AnyMagnitudeValue).toIntValue
+		}
 
 		def static IntValue VARARGS(IntValue... a) { a.reduce[p1, p2|(p1 + p2) as IntValue] }
 
 		def static <T extends AnyMagnitudeValue> T VARARGS_GENERIC(T... a) { a.reduce[p1, p2|(p1 + p2) as T] }
+
+		def static void SIMPLE_OUTPUT(Variable<IntValue> a) { a.value = 21.wrapValue(a.type) }
+
+		def static <T extends AnyIntValue> void GENERIC_OUTPUT(Variable<T> a) { a.value = 21.wrapValue(a.type) }
 	}
 }

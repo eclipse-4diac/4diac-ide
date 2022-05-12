@@ -360,9 +360,11 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			ICallable case !expr.call:
 				feature.findVariable.value
 			STStandardFunction case expr.call: {
-				val arguments = expr.mappedInputArguments.entrySet.filter[value !== null].map [
-					value.evaluateExpression
-				].toList
+				val arguments = (expr.mappedInputArguments.entrySet.map [
+					value?.evaluateExpression
+				] + expr.mappedOutputArguments.entrySet.map [
+					value?.evaluateVariable
+				]).toList
 				StandardFunctions.invoke(feature.name, arguments)
 			}
 			FB case expr.call: {

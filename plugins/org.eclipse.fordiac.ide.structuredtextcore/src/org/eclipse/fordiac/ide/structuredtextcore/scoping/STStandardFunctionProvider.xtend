@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
+import org.eclipse.fordiac.ide.model.eval.variable.Variable
 
 class STStandardFunctionProvider {
 	static final List<Class<? extends Functions>> DEFAULT_FUNCTIONS = #[StandardFunctions]
@@ -67,7 +68,8 @@ class STStandardFunctionProvider {
 		List<DataType> argumentTypes) {
 		name = method.name
 		returnType = method.inferReturnTypeFromDataTypes(argumentTypes)
-		inputParameters.addAll(method.inferParameterVariables(argumentTypes))
+		inputParameters.addAll(method.inferParameterVariables(argumentTypes, true))
+		outputParameters.addAll(method.inferParameterVariables(argumentTypes, false))
 		onlySupportedBy.addAll(method.getAnnotationsByType(OnlySupportedBy).flatMap[value.toList])
 		functionResource.contents.add(it)
 	}
@@ -75,20 +77,16 @@ class STStandardFunctionProvider {
 	/**
 	 * Infer concrete parameter variable declarations based on a given method and argument types
 	 */
-	def protected Iterable<STVarDeclaration> inferParameterVariables(Method method, List<DataType> argumentTypes) {
+	def protected Iterable<STVarDeclaration> inferParameterVariables(Method method, List<DataType> argumentTypes,
+		boolean input) {
 		val ptypes = method.inferParameterTypesFromDataTypes(argumentTypes)
-		(0 ..< argumentTypes.size).map [ index |
-			newParameter(index, ptypes.get(index))
-		]
-	}
-
-	/**
-	 * Create a new parameter variable declaration
-	 */
-	def protected STVarDeclaration newParameter(int index, DataType parameterType) {
-		STCoreFactory.eINSTANCE.createSTVarDeclaration => [
-			name = '''IN«index»'''
-			type = parameterType
-		]
+		(0 ..< ptypes.size).map [ index |
+			if (input.xor(method.getParameterType(index) == Variable)) {
+				STCoreFactory.eINSTANCE.createSTVarDeclaration => [
+					name = '''«IF input»IN«ELSE»OUT«ENDIF»«index»'''
+					type = ptypes.get(index)
+				]
+			}
+		].filterNull
 	}
 }
