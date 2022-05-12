@@ -226,7 +226,7 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
 	 * @generated
 	 */
 	@Override
-	public Map<INamedElement, INamedElement> getMappedOutputArguments() {
+	public Map<INamedElement, STExpression> getMappedOutputArguments() {
 		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedOutputArguments(this);
 	}
 
@@ -236,7 +236,7 @@ public class STFeatureExpressionImpl extends STExpressionImpl implements STFeatu
 	 * @generated
 	 */
 	@Override
-	public Map<INamedElement, INamedElement> getMappedInOutArguments() {
+	public Map<INamedElement, STExpression> getMappedInOutArguments() {
 		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedInOutArguments(this);
 	}
 

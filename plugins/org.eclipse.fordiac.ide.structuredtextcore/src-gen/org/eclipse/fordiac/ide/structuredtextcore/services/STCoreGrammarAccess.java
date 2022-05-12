@@ -808,75 +808,74 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	public class STCallUnnamedArgumentElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STCallUnnamedArgument");
-		private final Assignment cArgAssignment = (Assignment)rule.eContents().get(1);
-		private final RuleCall cArgSTExpressionParserRuleCall_0 = (RuleCall)cArgAssignment.eContents().get(0);
+		private final Assignment cArgumentAssignment = (Assignment)rule.eContents().get(1);
+		private final RuleCall cArgumentSTExpressionParserRuleCall_0 = (RuleCall)cArgumentAssignment.eContents().get(0);
 		
 		//STCallUnnamedArgument:
-		//    arg=STExpression
+		//    argument=STExpression
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//arg=STExpression
-		public Assignment getArgAssignment() { return cArgAssignment; }
+		//argument=STExpression
+		public Assignment getArgumentAssignment() { return cArgumentAssignment; }
 		
 		//STExpression
-		public RuleCall getArgSTExpressionParserRuleCall_0() { return cArgSTExpressionParserRuleCall_0; }
+		public RuleCall getArgumentSTExpressionParserRuleCall_0() { return cArgumentSTExpressionParserRuleCall_0; }
 	}
 	public class STCallNamedInputArgumentElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STCallNamedInputArgument");
 		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final Assignment cTargetAssignment_0 = (Assignment)cGroup.eContents().get(0);
-		private final CrossReference cTargetINamedElementCrossReference_0_0 = (CrossReference)cTargetAssignment_0.eContents().get(0);
-		private final RuleCall cTargetINamedElementIDTerminalRuleCall_0_0_1 = (RuleCall)cTargetINamedElementCrossReference_0_0.eContents().get(1);
+		private final Assignment cParameterAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final CrossReference cParameterINamedElementCrossReference_0_0 = (CrossReference)cParameterAssignment_0.eContents().get(0);
+		private final RuleCall cParameterINamedElementIDTerminalRuleCall_0_0_1 = (RuleCall)cParameterINamedElementCrossReference_0_0.eContents().get(1);
 		private final Keyword cColonEqualsSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
-		private final Assignment cSourceAssignment_2 = (Assignment)cGroup.eContents().get(2);
-		private final RuleCall cSourceSTExpressionParserRuleCall_2_0 = (RuleCall)cSourceAssignment_2.eContents().get(0);
+		private final Assignment cArgumentAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cArgumentSTExpressionParserRuleCall_2_0 = (RuleCall)cArgumentAssignment_2.eContents().get(0);
 		
 		//STCallNamedInputArgument:
-		//    target=[libraryElement::INamedElement] ':=' source=STExpression
+		//    parameter=[libraryElement::INamedElement] ':=' argument=STExpression
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//target=[libraryElement::INamedElement] ':=' source=STExpression
+		//parameter=[libraryElement::INamedElement] ':=' argument=STExpression
 		public Group getGroup() { return cGroup; }
 		
-		//target=[libraryElement::INamedElement]
-		public Assignment getTargetAssignment_0() { return cTargetAssignment_0; }
+		//parameter=[libraryElement::INamedElement]
+		public Assignment getParameterAssignment_0() { return cParameterAssignment_0; }
 		
 		//[libraryElement::INamedElement]
-		public CrossReference getTargetINamedElementCrossReference_0_0() { return cTargetINamedElementCrossReference_0_0; }
+		public CrossReference getParameterINamedElementCrossReference_0_0() { return cParameterINamedElementCrossReference_0_0; }
 		
 		//ID
-		public RuleCall getTargetINamedElementIDTerminalRuleCall_0_0_1() { return cTargetINamedElementIDTerminalRuleCall_0_0_1; }
+		public RuleCall getParameterINamedElementIDTerminalRuleCall_0_0_1() { return cParameterINamedElementIDTerminalRuleCall_0_0_1; }
 		
 		//':='
 		public Keyword getColonEqualsSignKeyword_1() { return cColonEqualsSignKeyword_1; }
 		
-		//source=STExpression
-		public Assignment getSourceAssignment_2() { return cSourceAssignment_2; }
+		//argument=STExpression
+		public Assignment getArgumentAssignment_2() { return cArgumentAssignment_2; }
 		
 		//STExpression
-		public RuleCall getSourceSTExpressionParserRuleCall_2_0() { return cSourceSTExpressionParserRuleCall_2_0; }
+		public RuleCall getArgumentSTExpressionParserRuleCall_2_0() { return cArgumentSTExpressionParserRuleCall_2_0; }
 	}
 	public class STCallNamedOutputArgumentElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STCallNamedOutputArgument");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Assignment cNotAssignment_0 = (Assignment)cGroup.eContents().get(0);
 		private final Keyword cNotNOTKeyword_0_0 = (Keyword)cNotAssignment_0.eContents().get(0);
-		private final Assignment cSourceAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final CrossReference cSourceINamedElementCrossReference_1_0 = (CrossReference)cSourceAssignment_1.eContents().get(0);
-		private final RuleCall cSourceINamedElementIDTerminalRuleCall_1_0_1 = (RuleCall)cSourceINamedElementCrossReference_1_0.eContents().get(1);
+		private final Assignment cParameterAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final CrossReference cParameterINamedElementCrossReference_1_0 = (CrossReference)cParameterAssignment_1.eContents().get(0);
+		private final RuleCall cParameterINamedElementIDTerminalRuleCall_1_0_1 = (RuleCall)cParameterINamedElementCrossReference_1_0.eContents().get(1);
 		private final Keyword cEqualsSignGreaterThanSignKeyword_2 = (Keyword)cGroup.eContents().get(2);
-		private final Assignment cTargetAssignment_3 = (Assignment)cGroup.eContents().get(3);
-		private final CrossReference cTargetINamedElementCrossReference_3_0 = (CrossReference)cTargetAssignment_3.eContents().get(0);
-		private final RuleCall cTargetINamedElementIDTerminalRuleCall_3_0_1 = (RuleCall)cTargetINamedElementCrossReference_3_0.eContents().get(1);
+		private final Assignment cArgumentAssignment_3 = (Assignment)cGroup.eContents().get(3);
+		private final RuleCall cArgumentSTExpressionParserRuleCall_3_0 = (RuleCall)cArgumentAssignment_3.eContents().get(0);
 		
 		//STCallNamedOutputArgument:
-		//    not?='NOT'? source=[libraryElement::INamedElement] '=>' target=[libraryElement::INamedElement]
+		//    not?='NOT'? parameter=[libraryElement::INamedElement] '=>' argument=STExpression
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//not?='NOT'? source=[libraryElement::INamedElement] '=>' target=[libraryElement::INamedElement]
+		//not?='NOT'? parameter=[libraryElement::INamedElement] '=>' argument=STExpression
 		public Group getGroup() { return cGroup; }
 		
 		//not?='NOT'?
@@ -885,26 +884,23 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'NOT'
 		public Keyword getNotNOTKeyword_0_0() { return cNotNOTKeyword_0_0; }
 		
-		//source=[libraryElement::INamedElement]
-		public Assignment getSourceAssignment_1() { return cSourceAssignment_1; }
+		//parameter=[libraryElement::INamedElement]
+		public Assignment getParameterAssignment_1() { return cParameterAssignment_1; }
 		
 		//[libraryElement::INamedElement]
-		public CrossReference getSourceINamedElementCrossReference_1_0() { return cSourceINamedElementCrossReference_1_0; }
+		public CrossReference getParameterINamedElementCrossReference_1_0() { return cParameterINamedElementCrossReference_1_0; }
 		
 		//ID
-		public RuleCall getSourceINamedElementIDTerminalRuleCall_1_0_1() { return cSourceINamedElementIDTerminalRuleCall_1_0_1; }
+		public RuleCall getParameterINamedElementIDTerminalRuleCall_1_0_1() { return cParameterINamedElementIDTerminalRuleCall_1_0_1; }
 		
 		//'=>'
 		public Keyword getEqualsSignGreaterThanSignKeyword_2() { return cEqualsSignGreaterThanSignKeyword_2; }
 		
-		//target=[libraryElement::INamedElement]
-		public Assignment getTargetAssignment_3() { return cTargetAssignment_3; }
+		//argument=STExpression
+		public Assignment getArgumentAssignment_3() { return cArgumentAssignment_3; }
 		
-		//[libraryElement::INamedElement]
-		public CrossReference getTargetINamedElementCrossReference_3_0() { return cTargetINamedElementCrossReference_3_0; }
-		
-		//ID
-		public RuleCall getTargetINamedElementIDTerminalRuleCall_3_0_1() { return cTargetINamedElementIDTerminalRuleCall_3_0_1; }
+		//STExpression
+		public RuleCall getArgumentSTExpressionParserRuleCall_3_0() { return cArgumentSTExpressionParserRuleCall_3_0; }
 	}
 	public class STIfStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STIfStatement");
@@ -3643,7 +3639,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STCallUnnamedArgument:
-	//    arg=STExpression
+	//    argument=STExpression
 	//;
 	public STCallUnnamedArgumentElements getSTCallUnnamedArgumentAccess() {
 		return pSTCallUnnamedArgument;
@@ -3654,7 +3650,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STCallNamedInputArgument:
-	//    target=[libraryElement::INamedElement] ':=' source=STExpression
+	//    parameter=[libraryElement::INamedElement] ':=' argument=STExpression
 	//;
 	public STCallNamedInputArgumentElements getSTCallNamedInputArgumentAccess() {
 		return pSTCallNamedInputArgument;
@@ -3665,7 +3661,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STCallNamedOutputArgument:
-	//    not?='NOT'? source=[libraryElement::INamedElement] '=>' target=[libraryElement::INamedElement]
+	//    not?='NOT'? parameter=[libraryElement::INamedElement] '=>' argument=STExpression
 	//;
 	public STCallNamedOutputArgumentElements getSTCallNamedOutputArgumentAccess() {
 		return pSTCallNamedOutputArgument;

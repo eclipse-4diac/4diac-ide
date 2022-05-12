@@ -88,15 +88,15 @@
           body="return null;"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STCallUnnamedArgument">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallUnnamedArgument/arg"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallUnnamedArgument/argument"/>
       <genOperations ecoreOperation="STCore.ecore#//STCallUnnamedArgument/getResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
       <genOperations ecoreOperation="STCore.ecore#//STCallUnnamedArgument/getDeclaredResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STCallNamedInputArgument">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedInputArgument/target"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedInputArgument/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedInputArgument/parameter"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedInputArgument/argument"/>
       <genOperations ecoreOperation="STCore.ecore#//STCallNamedInputArgument/getResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
       <genOperations ecoreOperation="STCore.ecore#//STCallNamedInputArgument/getDeclaredResultType"
@@ -104,8 +104,8 @@
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STCallNamedOutputArgument">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STCallNamedOutputArgument/not"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedOutputArgument/source"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedOutputArgument/target"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedOutputArgument/parameter"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedOutputArgument/argument"/>
       <genOperations ecoreOperation="STCore.ecore#//STCallNamedOutputArgument/getResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
       <genOperations ecoreOperation="STCore.ecore#//STCallNamedOutputArgument/getDeclaredResultType"

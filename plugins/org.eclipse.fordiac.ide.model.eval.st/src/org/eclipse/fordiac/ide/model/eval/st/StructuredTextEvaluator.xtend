@@ -374,7 +374,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				val arguments = (expr.mappedInputArguments.entrySet.filter[value !== null].map [
 					newVariable(key, value.evaluateExpression)
 				] + expr.mappedInOutArguments.entrySet.filter[value !== null].map [
-					newVariable(key, value.findVariable.value)
+					newVariable(key, value.evaluateVariable.value)
 				]).toList
 				val eval = EvaluatorFactory.createEvaluator(feature,
 					feature.eClass.instanceClass as Class<? extends ICallable>, context, arguments, this)
@@ -384,10 +384,10 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				}
 				val result = eval.evaluate
 				expr.mappedInOutArguments.forEach [ parameter, argument |
-					argument.findVariable.value = eval.variables.get(parameter.name).value
+					argument.evaluateVariable.value = eval.variables.get(parameter.name).value
 				]
 				expr.mappedOutputArguments.forEach [ parameter, argument |
-					argument.findVariable.value = eval.variables.get(parameter.name).value
+					argument.evaluateVariable.value = eval.variables.get(parameter.name).value
 				]
 				result
 			}
@@ -494,7 +494,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected Value evaluateFBCall(FBValue fb, Event event, Map<INamedElement, STExpression> inputs,
-		Map<INamedElement, INamedElement> outputs) {
+		Map<INamedElement, STExpression> outputs) {
 		inputs.forEach [ parameter, argument |
 			fb.get(parameter.name).value = argument?.evaluateExpression ?:
 				(parameter as VarDeclaration).type.defaultValue
@@ -507,7 +507,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 		eval.evaluate(event)
 		outputs.forEach [ parameter, argument |
-			if(argument !== null) argument.findVariable.value = eval.variables.get(parameter.name).value
+			if(argument !== null) argument.evaluateVariable.value = eval.variables.get(parameter.name).value
 		]
 		null
 	}

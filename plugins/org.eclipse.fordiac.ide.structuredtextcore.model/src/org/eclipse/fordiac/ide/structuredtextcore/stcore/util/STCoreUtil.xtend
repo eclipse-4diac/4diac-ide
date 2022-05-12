@@ -150,7 +150,7 @@ final class STCoreUtil {
 	}
 
 	def package static getParameterNoresolve(STCallNamedInputArgument argument) {
-		switch (target : argument.eGet(STCorePackage.eINSTANCE.STCallNamedInputArgument_Target, false)) {
+		switch (target : argument.eGet(STCorePackage.eINSTANCE.STCallNamedInputArgument_Parameter, false)) {
 			INamedElement case !target.eIsProxy: target
 		}
 	}

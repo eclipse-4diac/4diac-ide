@@ -356,12 +356,12 @@ class STCoreFormatter extends AbstractFormatter2 {
 	}
 
 	def dispatch void format(STCallUnnamedArgument unnamedArgument, extension IFormattableDocument document) {
-		unnamedArgument.arg.format
+		unnamedArgument.argument.format
 	}
 
 	def dispatch void format(STCallNamedInputArgument namedInputArgument, extension IFormattableDocument document) {
 		namedInputArgument.regionFor.keyword(":=").surround[oneSpace]
-		namedInputArgument.source.format
+		namedInputArgument.argument.format
 	}
 
 	def dispatch void format(STCallNamedOutputArgument namedOutputArgument, extension IFormattableDocument document) {
@@ -370,6 +370,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		}
 		namedOutputArgument.regionFor.keyword(STCallNamedOutputArgumentAccess.equalsSignGreaterThanSignKeyword_2).
 			surround[oneSpace]
+		namedOutputArgument.argument.format
 	}
 
 	def dispatch void format(STArrayAccessExpression arrayAccessExpression, extension IFormattableDocument document) {

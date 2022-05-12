@@ -27,8 +27,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument#getTarget <em>Target</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument#getSource <em>Source</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument#getParameter <em>Parameter</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument#getArgument <em>Argument</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallNamedInputArgument()
@@ -37,48 +37,48 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  */
 public interface STCallNamedInputArgument extends STCallArgument {
 	/**
-	 * Returns the value of the '<em><b>Target</b></em>' reference.
+	 * Returns the value of the '<em><b>Parameter</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Target</em>' reference.
-	 * @see #setTarget(INamedElement)
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallNamedInputArgument_Target()
+	 * @return the value of the '<em>Parameter</em>' reference.
+	 * @see #setParameter(INamedElement)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallNamedInputArgument_Parameter()
 	 * @model
 	 * @generated
 	 */
-	INamedElement getTarget();
+	INamedElement getParameter();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument#getTarget <em>Target</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument#getParameter <em>Parameter</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Target</em>' reference.
-	 * @see #getTarget()
+	 * @param value the new value of the '<em>Parameter</em>' reference.
+	 * @see #getParameter()
 	 * @generated
 	 */
-	void setTarget(INamedElement value);
+	void setParameter(INamedElement value);
 
 	/**
-	 * Returns the value of the '<em><b>Source</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Argument</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Source</em>' containment reference.
-	 * @see #setSource(STExpression)
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallNamedInputArgument_Source()
+	 * @return the value of the '<em>Argument</em>' containment reference.
+	 * @see #setArgument(STExpression)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallNamedInputArgument_Argument()
 	 * @model containment="true"
 	 * @generated
 	 */
-	STExpression getSource();
+	STExpression getArgument();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument#getSource <em>Source</em>}' containment reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument#getArgument <em>Argument</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Source</em>' containment reference.
-	 * @see #getSource()
+	 * @param value the new value of the '<em>Argument</em>' containment reference.
+	 * @see #getArgument()
 	 * @generated
 	 */
-	void setSource(STExpression value);
+	void setArgument(STExpression value);
 
 	/**
 	 * <!-- begin-user-doc -->

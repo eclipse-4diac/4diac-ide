@@ -97,15 +97,15 @@ STCallArgument:
 ;
 
 STCallUnnamedArgument:
-	arg=STExpression
+	argument=STExpression
 ;
 
 STCallNamedInputArgument:
-	target=[libraryElement::INamedElement] ':=' source=STExpression 
+	parameter=[libraryElement::INamedElement] ':=' argument=STExpression 
 ;
 
 STCallNamedOutputArgument:
-	not?='NOT'? source=[libraryElement::INamedElement] '=>' target=[libraryElement::INamedElement] 
+	not?='NOT'? parameter=[libraryElement::INamedElement] '=>' argument=STExpression 
 ;
 
 STIfStatement:

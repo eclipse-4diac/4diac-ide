@@ -129,19 +129,17 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 			final Iterable<STStandardFunction> standardFunctions = standardFunctionProvider.get();
 			return scopeFor(standardFunctions,
 					filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference));
-		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET) {
+		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER) {
 			final var feature = getFeature(context);
 			if (feature instanceof ICallable) {
 				final ICallable callable = (ICallable) feature;
 				return Scopes.scopeFor(Iterables.concat(callable.getInputParameters(), callable.getInOutParameters()));
 			}
-		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_OUTPUT_ARGUMENT__SOURCE) {
+		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_OUTPUT_ARGUMENT__PARAMETER) {
 			final var feature = getFeature(context);
 			if (feature instanceof ICallable) {
 				return Scopes.scopeFor(((ICallable) feature).getOutputParameters());
 			}
-		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_OUTPUT_ARGUMENT__TARGET) {
-			return filterScope(super.getScope(context, reference), this::isApplicableForVariableReference);
 		} else if (reference == STCorePackage.Literals.ST_FOR_STATEMENT__VARIABLE) {
 			return filterScope(super.getScope(context, reference), this::isApplicableForVariableReference);
 		}

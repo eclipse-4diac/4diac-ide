@@ -549,7 +549,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STCallUnnamedArgument:
-	//    arg=STExpression
+	//    argument=STExpression
 	//;
 	public STCoreGrammarAccess.STCallUnnamedArgumentElements getSTCallUnnamedArgumentAccess() {
 		return gaSTCore.getSTCallUnnamedArgumentAccess();
@@ -560,7 +560,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STCallNamedInputArgument:
-	//    target=[libraryElement::INamedElement] ':=' source=STExpression
+	//    parameter=[libraryElement::INamedElement] ':=' argument=STExpression
 	//;
 	public STCoreGrammarAccess.STCallNamedInputArgumentElements getSTCallNamedInputArgumentAccess() {
 		return gaSTCore.getSTCallNamedInputArgumentAccess();
@@ -571,7 +571,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STCallNamedOutputArgument:
-	//    not?='NOT'? source=[libraryElement::INamedElement] '=>' target=[libraryElement::INamedElement]
+	//    not?='NOT'? parameter=[libraryElement::INamedElement] '=>' argument=STExpression
 	//;
 	public STCoreGrammarAccess.STCallNamedOutputArgumentElements getSTCallNamedOutputArgumentAccess() {
 		return gaSTCore.getSTCallNamedOutputArgumentAccess();

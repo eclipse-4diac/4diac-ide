@@ -28,8 +28,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#isNot <em>Not</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#getSource <em>Source</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#getTarget <em>Target</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#getParameter <em>Parameter</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#getArgument <em>Argument</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallNamedOutputArgument()
@@ -60,48 +60,48 @@ public interface STCallNamedOutputArgument extends STCallArgument {
 	void setNot(boolean value);
 
 	/**
-	 * Returns the value of the '<em><b>Source</b></em>' reference.
+	 * Returns the value of the '<em><b>Parameter</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Source</em>' reference.
-	 * @see #setSource(INamedElement)
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallNamedOutputArgument_Source()
+	 * @return the value of the '<em>Parameter</em>' reference.
+	 * @see #setParameter(INamedElement)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallNamedOutputArgument_Parameter()
 	 * @model
 	 * @generated
 	 */
-	INamedElement getSource();
+	INamedElement getParameter();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#getSource <em>Source</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#getParameter <em>Parameter</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Source</em>' reference.
-	 * @see #getSource()
+	 * @param value the new value of the '<em>Parameter</em>' reference.
+	 * @see #getParameter()
 	 * @generated
 	 */
-	void setSource(INamedElement value);
+	void setParameter(INamedElement value);
 
 	/**
-	 * Returns the value of the '<em><b>Target</b></em>' reference.
+	 * Returns the value of the '<em><b>Argument</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Target</em>' reference.
-	 * @see #setTarget(INamedElement)
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallNamedOutputArgument_Target()
-	 * @model
+	 * @return the value of the '<em>Argument</em>' containment reference.
+	 * @see #setArgument(STExpression)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallNamedOutputArgument_Argument()
+	 * @model containment="true"
 	 * @generated
 	 */
-	INamedElement getTarget();
+	STExpression getArgument();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#getTarget <em>Target</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#getArgument <em>Argument</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Target</em>' reference.
-	 * @see #getTarget()
+	 * @param value the new value of the '<em>Argument</em>' containment reference.
+	 * @see #getArgument()
 	 * @generated
 	 */
-	void setTarget(INamedElement value);
+	void setArgument(STExpression value);
 
 	/**
 	 * <!-- begin-user-doc -->

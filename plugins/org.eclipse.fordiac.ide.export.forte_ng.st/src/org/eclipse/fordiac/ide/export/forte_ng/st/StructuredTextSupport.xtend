@@ -235,18 +235,18 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		if(argument === null) parameter.generateVariableDefaultValue else argument.generateExpression
 	}
 
-	def protected CharSequence generateInOutCallArgument(INamedElement parameter, INamedElement argument) {
+	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STExpression argument) {
 		if (argument === null)
 			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
 		else
-			argument.generateFeatureName
+			argument.generateExpression
 	}
 
-	def protected CharSequence generateOutputCallArgument(INamedElement parameter, INamedElement argument) {
+	def protected CharSequence generateOutputCallArgument(INamedElement parameter, STExpression argument) {
 		if (argument === null)
 			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
 		else
-			argument.generateFeatureName
+			argument.generateExpression
 	}
 
 	def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //
