@@ -14,6 +14,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.function;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.eval.value.AnyBitValue;
@@ -53,6 +56,7 @@ import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.eval.value.WCharValue;
 import org.eclipse.fordiac.ide.model.eval.value.WStringValue;
 import org.eclipse.fordiac.ide.model.eval.value.WordValue;
+import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
 @SuppressWarnings("squid:S100") // ST Name conventions must be used here
 public interface StandardFunctions extends Functions {
@@ -508,28 +512,58 @@ public interface StandardFunctions extends Functions {
 		throw new UnsupportedOperationException("Not implemented yet!");
 	}
 
-	static <T extends AnyIntValue> void SPLIT_DATE(final DateValue IN, final T YEAR, final T MONTH, final T DAY) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue> void SPLIT_DATE(final DateValue IN,
+			final Variable<T> YEAR, final Variable<U> MONTH, final Variable<V> DAY) {
+		final LocalDate value = IN.toLocalDate();
+		YEAR.setValue(DIntValue.toDIntValue(value.getYear()));
+		MONTH.setValue(DIntValue.toDIntValue(value.getMonthValue()));
+		DAY.setValue(DIntValue.toDIntValue(value.getDayOfMonth()));
 	}
 
-	static <T extends AnyIntValue> void SPLIT_TOD(final TimeOfDayValue IN, final T HOUR, final T MINUTE, final T SECOND,
-			final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue> void SPLIT_TOD(
+			final TimeOfDayValue IN, final Variable<T> HOUR, final Variable<U> MINUTE, final Variable<V> SECOND,
+			final Variable<W> MILLISECOND) {
+		final LocalTime value = IN.toLocalTime();
+		HOUR.setValue(DIntValue.toDIntValue(value.getHour()));
+		MINUTE.setValue(DIntValue.toDIntValue(value.getMinute()));
+		SECOND.setValue(DIntValue.toDIntValue(value.getSecond()));
+		MILLISECOND.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
-	static <T extends AnyIntValue> void SPLIT_LTOD(final LTimeOfDayValue IN, final T HOUR, final T MINUTE,
-			final T SECOND, final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue> void SPLIT_LTOD(
+			final LTimeOfDayValue IN, final Variable<T> HOUR, final Variable<U> MINUTE, final Variable<V> SECOND,
+			final Variable<W> MILLISECOND) {
+		final LocalTime value = IN.toLocalTime();
+		HOUR.setValue(DIntValue.toDIntValue(value.getHour()));
+		MINUTE.setValue(DIntValue.toDIntValue(value.getMinute()));
+		SECOND.setValue(DIntValue.toDIntValue(value.getSecond()));
+		MILLISECOND.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
-	static <T extends AnyIntValue> void SPLIT_DT(final DateAndTimeValue IN, final T YEAR, final T MONTH, final T DAY,
-			final T HOUR, final T MINUTE, final T SECOND, final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue, X extends AnyIntValue, Y extends AnyIntValue, Z extends AnyIntValue> void SPLIT_DT(
+			final DateAndTimeValue IN, final Variable<T> YEAR, final Variable<U> MONTH, final Variable<V> DAY,
+			final Variable<W> HOUR, final Variable<X> MINUTE, final Variable<Y> SECOND, final Variable<Z> MILLISECOND) {
+		final LocalDateTime value = IN.toLocalDateTime();
+		YEAR.setValue(DIntValue.toDIntValue(value.getYear()));
+		MONTH.setValue(DIntValue.toDIntValue(value.getMonthValue()));
+		DAY.setValue(DIntValue.toDIntValue(value.getDayOfMonth()));
+		HOUR.setValue(DIntValue.toDIntValue(value.getHour()));
+		MINUTE.setValue(DIntValue.toDIntValue(value.getMinute()));
+		SECOND.setValue(DIntValue.toDIntValue(value.getSecond()));
+		MILLISECOND.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
-	static <T extends AnyIntValue> void SPLIT_LDT(final LDateAndTimeValue IN, final T YEAR, final T MONTH, final T DAY,
-			final T HOUR, final T MINUTE, final T SECOND, final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue, X extends AnyIntValue, Y extends AnyIntValue, Z extends AnyIntValue> void SPLIT_LDT(
+			final LDateAndTimeValue IN, final Variable<T> YEAR, final Variable<U> MONTH, final Variable<V> DAY,
+			final Variable<W> HOUR, final Variable<X> MINUTE, final Variable<Y> SECOND, final Variable<Z> MILLISECOND) {
+		final LocalDateTime value = IN.toLocalDateTime();
+		YEAR.setValue(DIntValue.toDIntValue(value.getYear()));
+		MONTH.setValue(DIntValue.toDIntValue(value.getMonthValue()));
+		DAY.setValue(DIntValue.toDIntValue(value.getDayOfMonth()));
+		HOUR.setValue(DIntValue.toDIntValue(value.getHour()));
+		MINUTE.setValue(DIntValue.toDIntValue(value.getMinute()));
+		SECOND.setValue(DIntValue.toDIntValue(value.getSecond()));
+		MILLISECOND.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
 	static <T extends AnyIntValue> T DAY_OF_WEEK(final DateValue IN) {

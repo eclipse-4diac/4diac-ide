@@ -45,12 +45,15 @@ class DateAndTimeValue implements AnyDateValue {
 
 	override toNanos() { value }
 
+	def LocalDateTime toLocalDateTime() {
+		LocalDateTime.ofEpochSecond(value / 1000000000L, (value % 1000000000L) as int, ZoneOffset.UTC)
+	}
+
 	override equals(Object obj) { if(obj instanceof DateAndTimeValue) value == obj.value else false }
 
 	override hashCode() { Long.hashCode(value) }
 
 	override toString() {
-		DateAndTimeValueConverter.INSTANCE.toString(
-			LocalDateTime.ofEpochSecond(value / 1000000000L, (value % 1000000000L) as int, ZoneOffset.UTC))
+		DateAndTimeValueConverter.INSTANCE.toString(toLocalDateTime)
 	}
 }

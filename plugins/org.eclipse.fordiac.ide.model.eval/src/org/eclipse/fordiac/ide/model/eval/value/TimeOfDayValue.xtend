@@ -40,9 +40,13 @@ class TimeOfDayValue implements AnyDateValue {
 
 	override toNanos() { value }
 
+	def LocalTime toLocalTime() {
+		LocalTime.ofNanoOfDay(value)
+	}
+
 	override equals(Object obj) { if(obj instanceof TimeOfDayValue) value == obj.value else false }
 
 	override hashCode() { Long.hashCode(value) }
-	
-	override toString() { TimeOfDayValueConverter.INSTANCE.toString(LocalTime.ofNanoOfDay(value)) }
+
+	override toString() { TimeOfDayValueConverter.INSTANCE.toString(toLocalTime) }
 }
