@@ -107,6 +107,11 @@
                    id="org.eclipse.fordiac.ide.application.VirtualDNSTab"
                    label="VirtualDNS">
       </propertyTab>
+      <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyInterfaceTab"
+      			   category="FB"
+                   id="org.eclipse.fordiac.ide.application.propertyCommentTab"
+                   label="Comments">
+      </propertyTab>
       <propertyTab category="Connection"
                    id="org.eclipse.fordiac.ide.application.propertyConnectionTab"
                    label="Connection">
@@ -142,6 +147,12 @@
             filter="org.eclipse.fordiac.ide.application.properties.InstanceSectionFilter"
             id="org.eclipse.fordiac.ide.application.properties.InterfaceSection"
             tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
+      </propertySection>
+      <propertySection
+            class="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
+            filter="org.eclipse.fordiac.ide.application.properties.CommentPropertyFilter"
+            id="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
+            tab="org.eclipse.fordiac.ide.application.propertyCommentTab">
       </propertySection>
       <propertySection class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
                        id="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"

@@ -325,11 +325,13 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		for (final VarDeclaration output : oldElement.getInterface().getOutputVars()) {
 			if (output.getOutputConnections().isEmpty() && hasValue(output.getValue())) {
 				updateSelectedInterface(output, newElement);
+
 			}
 		}
-
 		checkErrorMarkerPinParameters();
+
 	}
+
 
 	private void checkErrorMarkerPinParameters() {
 		for (final ErrorMarkerInterface erroMarker : oldElement.getInterface().getErrorMarker()) {
