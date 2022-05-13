@@ -335,198 +335,206 @@ public interface StandardFunctions extends Functions {
 
 	/* Numeric functions for time and date */
 
+	@SuppressWarnings("unchecked")
 	static <T extends AnyDurationValue> T ADD(final T IN1, final T IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return (T) ValueOperations.add(IN1, IN2);
 	}
 
 	static TimeValue ADD_TIME(final TimeValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return ADD(IN1, IN2);
 	}
 
 	static LTimeValue ADD_LTIME(final LTimeValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return ADD(IN1, IN2);
 	}
 
 	static TimeOfDayValue ADD(final TimeOfDayValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return TimeOfDayValue.toTimeOfDayValue(IN1.toNanos() + IN2.longValue());
 	}
 
 	static LTimeOfDayValue ADD(final LTimeOfDayValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return LTimeOfDayValue.toLTimeOfDayValue(IN1.toNanos() + IN2.longValue());
 	}
 
 	static TimeOfDayValue ADD_TOD_TIME(final TimeOfDayValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return ADD(IN1, IN2);
 	}
 
 	static LTimeOfDayValue ADD_LTOD_LTIME(final LTimeOfDayValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return ADD(IN1, IN2);
 	}
 
 	static DateAndTimeValue ADD(final DateAndTimeValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return DateAndTimeValue.toDateAndTimeValue(IN1.toNanos() + IN2.longValue());
 	}
 
 	static LDateAndTimeValue ADD(final LDateAndTimeValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return LDateAndTimeValue.toLDateAndTimeValue(IN1.toNanos() + IN2.longValue());
 	}
 
 	static DateAndTimeValue ADD_DT_TIME(final DateAndTimeValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return ADD(IN1, IN2);
 	}
 
 	static LDateAndTimeValue ADD_LDT_LTIME(final LDateAndTimeValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return ADD(IN1, IN2);
 	}
 
+	@SuppressWarnings("unchecked")
 	static <T extends AnyDurationValue> T SUB(final T IN1, final T IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return (T) ValueOperations.subtract(IN1, IN2);
 	}
 
 	static TimeValue SUB_TIME(final TimeValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return SUB(IN1, IN2);
 	}
 
 	static LTimeValue SUB_LTIME(final LTimeValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return SUB(IN1, IN2);
 	}
 
 	static TimeValue SUB(final DateValue IN1, final DateValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return TimeValue.toTimeValue(IN1.toNanos() - IN2.toNanos());
 	}
 
 	static LTimeValue SUB(final LDateValue IN1, final LDateValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return LTimeValue.toLTimeValue(IN1.toNanos() - IN2.toNanos());
 	}
 
 	static TimeValue SUB_DATE_DATE(final DateValue IN1, final DateValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return SUB(IN1, IN2);
 	}
 
 	static LTimeValue SUB_LDATE_LDATE(final LDateValue IN1, final LDateValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return SUB(IN1, IN2);
 	}
 
 	static TimeOfDayValue SUB(final TimeOfDayValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return TimeOfDayValue.toTimeOfDayValue(IN1.toNanos() - IN2.longValue());
 	}
 
 	static LTimeOfDayValue SUB(final LTimeOfDayValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return LTimeOfDayValue.toLTimeOfDayValue(IN1.toNanos() - IN2.longValue());
 	}
 
 	static TimeOfDayValue SUB_TOD_TIME(final TimeOfDayValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return SUB(IN1, IN2);
 	}
 
 	static LTimeOfDayValue SUB_LTOD_LTIME(final LTimeOfDayValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return SUB(IN1, IN2);
 	}
 
 	static TimeValue SUB(final TimeOfDayValue IN1, final TimeOfDayValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return TimeValue.toTimeValue(IN1.toNanos() - IN2.toNanos());
 	}
 
 	static LTimeValue SUB(final LTimeOfDayValue IN1, final LTimeOfDayValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return LTimeValue.toLTimeValue(IN1.toNanos() - IN2.toNanos());
 	}
 
 	static TimeValue SUB_TOD_TOD(final TimeOfDayValue IN1, final TimeOfDayValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return SUB(IN1, IN2);
 	}
 
 	static LTimeValue SUB_LTOD_LTOD(final LTimeOfDayValue IN1, final LTimeOfDayValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return SUB(IN1, IN2);
 	}
 
 	static DateAndTimeValue SUB(final DateAndTimeValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return DateAndTimeValue.toDateAndTimeValue(IN1.toNanos() - IN2.longValue());
 	}
 
 	static LDateAndTimeValue SUB(final LDateAndTimeValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return LDateAndTimeValue.toLDateAndTimeValue(IN1.toNanos() - IN2.longValue());
 	}
 
 	static DateAndTimeValue SUB_DT_TIME(final DateAndTimeValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return SUB(IN1, IN2);
 	}
 
 	static LDateAndTimeValue SUB_LDT_LTIME(final LDateAndTimeValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return SUB(IN1, IN2);
 	}
 
 	static TimeValue SUB(final DateAndTimeValue IN1, final DateAndTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return TimeValue.toTimeValue(IN1.toNanos() - IN2.toNanos());
 	}
 
 	static LTimeValue SUB(final LDateAndTimeValue IN1, final LDateAndTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return LTimeValue.toLTimeValue(IN1.toNanos() - IN2.toNanos());
 	}
 
 	static TimeValue SUB_DT_DT(final DateAndTimeValue IN1, final DateAndTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return SUB(IN1, IN2);
 	}
 
 	static LTimeValue SUB_LDT_LDT(final LDateAndTimeValue IN1, final LDateAndTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return SUB(IN1, IN2);
 	}
 
+	@SuppressWarnings("unchecked")
 	static <T extends AnyDurationValue, U extends AnyIntValue> T MUL(final T IN1, final U IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return (T) ValueOperations.multiply(IN1, IN2);
 	}
 
 	static <U extends AnyIntValue> TimeValue MUL_TIME(final TimeValue IN1, final U IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return MUL(IN1, IN2);
 	}
 
 	static <U extends AnyIntValue> LTimeValue MUL_LTIME(final LTimeValue IN1, final U IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return MUL(IN1, IN2);
 	}
 
+	@SuppressWarnings("unchecked")
 	static <T extends AnyDurationValue, U extends AnyIntValue> T DIV(final T IN1, final U IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return (T) ValueOperations.divideBy(IN1, IN2);
 	}
 
 	static <U extends AnyIntValue> TimeValue DIV_TIME(final TimeValue IN1, final U IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return DIV(IN1, IN2);
 	}
 
 	static <U extends AnyIntValue> LTimeValue DIV_LTIME(final LTimeValue IN1, final U IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return DIV(IN1, IN2);
 	}
 
 	// Additional time functions CONCAT and SPLIT
 
 	static DateAndTimeValue CONCAT_DATE_TOD(final DateValue IN1, final TimeOfDayValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return DateAndTimeValue.toDateAndTimeValue(IN1.toLocalDate().atTime(IN2.toLocalTime()));
 	}
 
-	static DateAndTimeValue CONCAT_DATE_LTOD(final DateValue IN1, final LTimeOfDayValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LDateAndTimeValue CONCAT_DATE_LTOD(final DateValue IN1, final LTimeOfDayValue IN2) {
+		return LDateAndTimeValue.toLDateAndTimeValue(IN1.toLocalDate().atTime(IN2.toLocalTime()));
 	}
 
 	static <T extends AnyIntValue> DateValue CONCAT_DATE(final T YEAR, final T MONTH, final T DAY) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return DateValue.toDateValue(LocalDate.of(YEAR.intValue(), MONTH.intValue(), DAY.intValue()));
 	}
 
 	static <T extends AnyIntValue> TimeOfDayValue CONCAT_TOD(final T HOUR, final T MINUTE, final T SECOND,
 			final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return TimeOfDayValue.toTimeOfDayValue(LocalTime.of(HOUR.intValue(), MINUTE.intValue(), SECOND.intValue(),
+				MILLISECOND.intValue() * 1_000_000));
 	}
 
 	static <T extends AnyIntValue> LTimeOfDayValue CONCAT_LTOD(final T HOUR, final T MINUTE, final T SECOND,
 			final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return LTimeOfDayValue.toLTimeOfDayValue(LocalTime.of(HOUR.intValue(), MINUTE.intValue(), SECOND.intValue(),
+				MILLISECOND.intValue() * 1_000_000));
 	}
 
 	static <T extends AnyIntValue> DateAndTimeValue CONCAT_DT(final T YEAR, final T MONTH, final T DAY, final T HOUR,
 			final T MINUTE, final T SECOND, final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return DateAndTimeValue.toDateAndTimeValue(LocalDateTime.of(YEAR.intValue(), MONTH.intValue(), DAY.intValue(),
+				HOUR.intValue(), MINUTE.intValue(), SECOND.intValue(), MILLISECOND.intValue() * 1_000_000));
 	}
 
 	static <T extends AnyIntValue> LDateAndTimeValue CONCAT_LDT(final T YEAR, final T MONTH, final T DAY, final T HOUR,
 			final T MINUTE, final T SECOND, final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return LDateAndTimeValue.toLDateAndTimeValue(LocalDateTime.of(YEAR.intValue(), MONTH.intValue(), DAY.intValue(),
+				HOUR.intValue(), MINUTE.intValue(), SECOND.intValue(), MILLISECOND.intValue() * 1_000_000));
 	}
 
 	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue> void SPLIT_DATE(final DateValue IN,
@@ -583,8 +591,8 @@ public interface StandardFunctions extends Functions {
 		MILLISECOND.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
-	static <T extends AnyIntValue> T DAY_OF_WEEK(final DateValue IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static SIntValue DAY_OF_WEEK(final DateValue IN) {
+		return SIntValue.toSIntValue((byte) IN.toLocalDate().getDayOfWeek().getValue());
 	}
 
 	static <T extends AnyValue> T TO_BIG_ENDIAN(final T IN) {

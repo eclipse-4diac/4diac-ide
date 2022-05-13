@@ -12,15 +12,22 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.model.eval.function
 
+import java.time.Duration
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
 import java.util.stream.Stream
 import org.eclipse.fordiac.ide.model.data.AnyCharType
+import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.function.Functions
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
 import org.eclipse.fordiac.ide.model.eval.value.LRealValue
 import org.eclipse.fordiac.ide.model.eval.value.RealValue
+import org.eclipse.fordiac.ide.model.eval.value.TimeValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
+import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
@@ -33,12 +40,21 @@ import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.BoolValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ByteValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.DWordValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.DateAndTimeValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.DateValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.IntValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LDateAndTimeValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LDateValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.LIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.LRealValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LTimeOfDayValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.LTimeValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.LWordValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.RealValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.SIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.StringValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.TimeOfDayValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.TimeValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ULIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.WStringValue.*
@@ -628,11 +644,325 @@ class StandardFunctionsTest {
 	}
 
 	@Test
+	def void testAddTime() {
+		Duration.ofSeconds(21).toTimeValue.assertEquals(
+			StandardFunctions.invoke("ADD_TIME", Duration.ofSeconds(17).toTimeValue, Duration.ofSeconds(4).toTimeValue))
+	}
+
+	@Test
+	def void testAddLTime() {
+		Duration.ofSeconds(21).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("ADD_LTIME", Duration.ofSeconds(17).toLTimeValue,
+				Duration.ofSeconds(4).toLTimeValue))
+	}
+
+	@Test
+	def void testAddTodTime() {
+		LocalTime.of(21, 42).toTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("ADD_TOD_TIME", LocalTime.of(17, 21).toTimeOfDayValue,
+				Duration.ofHours(4).plusMinutes(21).toTimeValue))
+	}
+
+	@Test
+	def void testAddLTodLTime() {
+		LocalTime.of(21, 42).toLTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("ADD_LTOD_LTIME", LocalTime.of(17, 21).toLTimeOfDayValue,
+				Duration.ofHours(4).plusMinutes(21).toLTimeValue))
+	}
+
+	@Test
+	def void testAddDTTime() {
+		LocalDateTime.of(2017, 4, 21, 21, 42).toDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("ADD_DT_TIME", LocalDateTime.of(2017, 4, 21, 17, 21).toDateAndTimeValue,
+				Duration.ofHours(4).plusMinutes(21).toTimeValue))
+	}
+
+	@Test
+	def void testAddLDTLTime() {
+		LocalDateTime.of(2017, 4, 21, 21, 42).toLDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("ADD_LDT_LTIME", LocalDateTime.of(2017, 4, 21, 17, 21).toLDateAndTimeValue,
+				Duration.ofHours(4).plusMinutes(21).toLTimeValue))
+	}
+
+	@Test
+	def void testSubTime() {
+		Duration.ofSeconds(17).toTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB_TIME", Duration.ofSeconds(21).toTimeValue, Duration.ofSeconds(4).toTimeValue))
+	}
+
+	@Test
+	def void testSubLTime() {
+		Duration.ofSeconds(17).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB_LTIME", Duration.ofSeconds(21).toLTimeValue,
+				Duration.ofSeconds(4).toLTimeValue))
+	}
+
+	@Test
+	def void testSubDate() {
+		Duration.ofDays(17).toTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB_DATE_DATE", LocalDate.of(2021, 4, 21).toDateValue,
+				LocalDate.of(2021, 4, 4).toDateValue))
+	}
+
+	@Test
+	def void testSubLDate() {
+		Duration.ofDays(17).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB_LDATE_LDATE", LocalDate.of(2021, 4, 21).toLDateValue,
+				LocalDate.of(2021, 4, 4).toLDateValue))
+	}
+
+	@Test
+	def void testSubTodTime() {
+		LocalTime.of(17, 21).toTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("SUB_TOD_TIME", LocalTime.of(21, 42).toTimeOfDayValue,
+				Duration.ofHours(4).plusMinutes(21).toTimeValue))
+	}
+
+	@Test
+	def void testSubLTodLTime() {
+		LocalTime.of(17, 21).toLTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("SUB_LTOD_LTIME", LocalTime.of(21, 42).toLTimeOfDayValue,
+				Duration.ofHours(4).plusMinutes(21).toLTimeValue))
+	}
+
+	@Test
+	def void testSubTod() {
+		Duration.ofHours(4).plusMinutes(21).toTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB_TOD_TOD", LocalTime.of(21, 42).toTimeOfDayValue,
+				LocalTime.of(17, 21).toTimeOfDayValue))
+	}
+
+	@Test
+	def void testSubLTod() {
+		Duration.ofHours(4).plusMinutes(21).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB_LTOD_LTOD", LocalTime.of(21, 42).toLTimeOfDayValue,
+				LocalTime.of(17, 21).toLTimeOfDayValue))
+	}
+
+	@Test
+	def void testSubDTTime() {
+		LocalDateTime.of(2017, 4, 21, 17, 21).toDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB_DT_TIME", LocalDateTime.of(2017, 4, 21, 21, 42).toDateAndTimeValue,
+				Duration.ofHours(4).plusMinutes(21).toTimeValue))
+	}
+
+	@Test
+	def void testSubLDTLTime() {
+		LocalDateTime.of(2017, 4, 21, 17, 21).toLDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB_LDT_LTIME", LocalDateTime.of(2017, 4, 21, 21, 42).toLDateAndTimeValue,
+				Duration.ofHours(4).plusMinutes(21).toLTimeValue))
+	}
+
+	@Test
+	def void testSubDT() {
+		Duration.ofHours(4).plusMinutes(21).toTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB_DT_DT", LocalDateTime.of(2017, 4, 21, 21, 42).toDateAndTimeValue,
+				LocalDateTime.of(2017, 4, 21, 17, 21).toDateAndTimeValue))
+	}
+
+	@Test
+	def void testSubLDT() {
+		Duration.ofHours(4).plusMinutes(21).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB_LDT_LDT", LocalDateTime.of(2017, 4, 21, 21, 42).toLDateAndTimeValue,
+				LocalDateTime.of(2017, 4, 21, 17, 21).toLDateAndTimeValue))
+	}
+
+	@Test
+	def void testMulTime() {
+		Duration.ofSeconds(42).toTimeValue.assertEquals(
+			StandardFunctions.invoke("MUL_TIME", Duration.ofSeconds(21).toTimeValue, 2.toIntValue))
+	}
+
+	@Test
+	def void testMulLTime() {
+		Duration.ofSeconds(42).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("MUL_LTIME", Duration.ofSeconds(21).toLTimeValue, 2.toIntValue))
+	}
+
+	@Test
+	def void testDivTime() {
+		Duration.ofSeconds(21).toTimeValue.assertEquals(
+			StandardFunctions.invoke("DIV_TIME", Duration.ofSeconds(42).toTimeValue, 2.toIntValue))
+	}
+
+	@Test
+	def void testDivLTime() {
+		Duration.ofSeconds(21).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("DIV_LTIME", Duration.ofSeconds(42).toLTimeValue, 2.toIntValue))
+	}
+
+	@Test
+	def void testConcatDateTod() {
+		LocalDateTime.of(2017, 4, 21, 21, 42).toDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("CONCAT_DATE_TOD", LocalDate.of(2017, 4, 21).toDateValue,
+				LocalTime.of(21, 42).toTimeOfDayValue))
+	}
+
+	@Test
+	def void testConcatDateLTod() {
+		LocalDateTime.of(2017, 4, 21, 21, 42).toLDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("CONCAT_DATE_LTOD", LocalDate.of(2017, 4, 21).toDateValue,
+				LocalTime.of(21, 42).toLTimeOfDayValue))
+	}
+
+	@Test
+	def void testConcatDate() {
+		LocalDate.of(2017, 4, 21).toDateValue.assertEquals(
+			StandardFunctions.invoke("CONCAT_DATE", 2017.toIntValue, 4.toIntValue, 21.toIntValue))
+	}
+
+	@Test
+	def void testConcatTod() {
+		LocalTime.of(17, 4, 21).toTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("CONCAT_TOD", 17.toIntValue, 4.toIntValue, 21.toIntValue, 0.toIntValue))
+	}
+
+	@Test
+	def void testConcatLTod() {
+		LocalTime.of(17, 4, 21).toLTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("CONCAT_LTOD", 17.toIntValue, 4.toIntValue, 21.toIntValue, 0.toIntValue))
+	}
+
+	@Test
+	def void testConcatDT() {
+		LocalDateTime.of(2017, 4, 21, 21, 42).toDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("CONCAT_DT", 2017.toIntValue, 4.toIntValue, 21.toIntValue, 21.toIntValue,
+				42.toIntValue, 0.toIntValue, 0.toIntValue))
+	}
+
+	@Test
+	def void testConcatLDT() {
+		LocalDateTime.of(2017, 4, 21, 21, 42).toLDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("CONCAT_LDT", 2017.toIntValue, 4.toIntValue, 21.toIntValue, 21.toIntValue,
+				42.toIntValue, 0.toIntValue, 0.toIntValue))
+	}
+
+	@Test
+	def void testSplitDate() {
+		val year = new ElementaryVariable("YEAR", ElementaryTypes.INT)
+		val month = new ElementaryVariable("MONTH", ElementaryTypes.INT)
+		val day = new ElementaryVariable("DAY", ElementaryTypes.INT)
+		StandardFunctions.invoke("SPLIT_DATE", LocalDate.of(2017, 4, 21).toDateValue, year, month, day)
+		2017.toIntValue.assertEquals(year.value)
+		4.toIntValue.assertEquals(month.value)
+		21.toIntValue.assertEquals(day.value)
+	}
+
+	@Test
+	def void testSplitTod() {
+		val hour = new ElementaryVariable("HOUR", ElementaryTypes.INT)
+		val minute = new ElementaryVariable("MINUTE", ElementaryTypes.INT)
+		val second = new ElementaryVariable("SECOND", ElementaryTypes.INT)
+		val milli = new ElementaryVariable("MILLI", ElementaryTypes.INT)
+		StandardFunctions.invoke("SPLIT_TOD", LocalTime.of(17, 4, 21).toTimeOfDayValue, hour, minute, second, milli)
+		17.toIntValue.assertEquals(hour.value)
+		4.toIntValue.assertEquals(minute.value)
+		21.toIntValue.assertEquals(second.value)
+		0.toIntValue.assertEquals(milli.value)
+	}
+
+	@Test
+	def void testSplitLTod() {
+		val hour = new ElementaryVariable("HOUR", ElementaryTypes.INT)
+		val minute = new ElementaryVariable("MINUTE", ElementaryTypes.INT)
+		val second = new ElementaryVariable("SECOND", ElementaryTypes.INT)
+		val milli = new ElementaryVariable("MILLI", ElementaryTypes.INT)
+		StandardFunctions.invoke("SPLIT_LTOD", LocalTime.of(17, 4, 21).toLTimeOfDayValue, hour, minute, second, milli)
+		17.toIntValue.assertEquals(hour.value)
+		4.toIntValue.assertEquals(minute.value)
+		21.toIntValue.assertEquals(second.value)
+		0.toIntValue.assertEquals(milli.value)
+	}
+
+	@Test
+	def void testSplitDT() {
+		val year = new ElementaryVariable("YEAR", ElementaryTypes.INT)
+		val month = new ElementaryVariable("MONTH", ElementaryTypes.INT)
+		val day = new ElementaryVariable("DAY", ElementaryTypes.INT)
+		val hour = new ElementaryVariable("HOUR", ElementaryTypes.INT)
+		val minute = new ElementaryVariable("MINUTE", ElementaryTypes.INT)
+		val second = new ElementaryVariable("SECOND", ElementaryTypes.INT)
+		val milli = new ElementaryVariable("MILLI", ElementaryTypes.INT)
+		StandardFunctions.invoke("SPLIT_DT",
+			LocalDateTime.of(2017, 4, 21, 21, 42, 17, 7 * 1_000_000).toDateAndTimeValue, year, month, day, hour, minute,
+			second, milli)
+		2017.toIntValue.assertEquals(year.value)
+		4.toIntValue.assertEquals(month.value)
+		21.toIntValue.assertEquals(day.value)
+		21.toIntValue.assertEquals(hour.value)
+		42.toIntValue.assertEquals(minute.value)
+		17.toIntValue.assertEquals(second.value)
+		7.toIntValue.assertEquals(milli.value)
+	}
+
+	@Test
+	def void testSplitLDT() {
+		val year = new ElementaryVariable("YEAR", ElementaryTypes.INT)
+		val month = new ElementaryVariable("MONTH", ElementaryTypes.INT)
+		val day = new ElementaryVariable("DAY", ElementaryTypes.INT)
+		val hour = new ElementaryVariable("HOUR", ElementaryTypes.INT)
+		val minute = new ElementaryVariable("MINUTE", ElementaryTypes.INT)
+		val second = new ElementaryVariable("SECOND", ElementaryTypes.INT)
+		val milli = new ElementaryVariable("MILLI", ElementaryTypes.INT)
+		StandardFunctions.invoke("SPLIT_LDT",
+			LocalDateTime.of(2017, 4, 21, 21, 42, 17, 7 * 1_000_000).toLDateAndTimeValue, year, month, day, hour,
+			minute, second, milli)
+		2017.toIntValue.assertEquals(year.value)
+		4.toIntValue.assertEquals(month.value)
+		21.toIntValue.assertEquals(day.value)
+		21.toIntValue.assertEquals(hour.value)
+		42.toIntValue.assertEquals(minute.value)
+		17.toIntValue.assertEquals(second.value)
+		7.toIntValue.assertEquals(milli.value)
+	}
+
+	@Test
+	def void testDayOfWeek() {
+		5.toSIntValue.assertEquals(StandardFunctions.invoke("DAY_OF_WEEK", LocalDate.of(2022, 5, 13).toDateValue))
+	}
+
+	@Test
 	def void testIsValid() {
 		true.toBoolValue.assertEquals(StandardFunctions.invoke("IS_VALID", 17.toLRealValue))
 		false.toBoolValue.assertEquals(StandardFunctions.invoke("IS_VALID", Double.POSITIVE_INFINITY.toLRealValue))
 		false.toBoolValue.assertEquals(StandardFunctions.invoke("IS_VALID", Double.NEGATIVE_INFINITY.toLRealValue))
 		false.toBoolValue.assertEquals(StandardFunctions.invoke("IS_VALID", Double.NaN.toLRealValue))
+	}
+
+	@Test
+	def void testTimeConversion() {
+		17L.toLIntValue.assertEquals(StandardFunctions.invoke("TIME_IN_S_TO_LINT", Duration.ofSeconds(17).toTimeValue))
+		(17L * 1000).toLIntValue.assertEquals(
+			StandardFunctions.invoke("TIME_IN_MS_TO_LINT", Duration.ofSeconds(17).toTimeValue))
+		(17L * 1_000_000).toLIntValue.assertEquals(
+			StandardFunctions.invoke("TIME_IN_US_TO_LINT", Duration.ofSeconds(17).toTimeValue))
+		(17L * 1_000_000_000).toLIntValue.assertEquals(
+			StandardFunctions.invoke("TIME_IN_NS_TO_LINT", Duration.ofSeconds(17).toTimeValue))
+		17L.toULIntValue.assertEquals(
+			StandardFunctions.invoke("TIME_IN_S_TO_ULINT", Duration.ofSeconds(17).toTimeValue))
+		(17L * 1000).toULIntValue.assertEquals(
+			StandardFunctions.invoke("TIME_IN_MS_TO_ULINT", Duration.ofSeconds(17).toTimeValue))
+		(17L * 1_000_000).toULIntValue.assertEquals(
+			StandardFunctions.invoke("TIME_IN_US_TO_ULINT", Duration.ofSeconds(17).toTimeValue))
+		(17L * 1_000_000_000).toULIntValue.assertEquals(
+			StandardFunctions.invoke("TIME_IN_NS_TO_ULINT", Duration.ofSeconds(17).toTimeValue))
+		(17.0).toLRealValue.assertEquals(
+			StandardFunctions.invoke("TIME_IN_S_TO_LREAL", Duration.ofSeconds(17).toTimeValue))
+		(17.0 * 1000).toLRealValue.assertEquals(
+			StandardFunctions.invoke("TIME_IN_MS_TO_LREAL", Duration.ofSeconds(17).toTimeValue))
+		(17.0 * 1_000_000).toLRealValue.assertEquals(
+			StandardFunctions.invoke("TIME_IN_US_TO_LREAL", Duration.ofSeconds(17).toTimeValue))
+		(17.0 * 1_000_000_000).toLRealValue.assertEquals(
+			StandardFunctions.invoke("TIME_IN_NS_TO_LREAL", Duration.ofSeconds(17).toTimeValue))
+	}
+
+	@Test
+	def void testNowMonotonic() {
+		val before = System.nanoTime()
+		val now = StandardFunctions.invoke("NOW_MONOTONIC") as TimeValue
+		val after = System.nanoTime()
+		assertTrue(before <= now.longValue)
+		assertTrue(after >= now.longValue)
 	}
 
 	@ParameterizedTest(name="{index}: {0} as {1}")
