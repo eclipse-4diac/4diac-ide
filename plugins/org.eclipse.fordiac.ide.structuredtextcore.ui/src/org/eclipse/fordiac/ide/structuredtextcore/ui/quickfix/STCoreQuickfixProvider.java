@@ -29,7 +29,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	@Fix(STCoreValidator.TRAILING_UNDERSCORE_IN_IDENTIFIER_ERROR)
 	public static void fixTrailingUnderscore(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, "Remove trailing '_' from identifier",
-				"Remove trailing underscore from name: " + issue.getData()[0], "upcase.png",
+				"Remove trailing underscore from name: " + issue.getData()[0], null,
 				(IModification) context -> {
 					final IXtextDocument xtextDocument = context.getXtextDocument();
 					xtextDocument.replace(issue.getOffset(), issue.getLength(),
@@ -40,7 +40,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	@Fix(STCoreValidator.CONSECUTIVE_UNDERSCORE_IN_IDENTIFIER_ERROR)
 	public static void fixConsecutiveUnderscore(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, "Replace consecutive undersocres with one underscore from identifier",
-				"Remove consecutive underscore from name: " + issue.getData()[0], "upcase.png",
+				"Remove consecutive underscore from name: " + issue.getData()[0], null,
 				(IModification) context -> {
 					final IXtextDocument xtextDocument = context.getXtextDocument();
 					xtextDocument.replace(issue.getOffset(), issue.getLength(),
@@ -51,7 +51,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	@Fix(STCoreValidator.NON_COMPATIBLE_TYPES)
 	public static void fixNonCompatibleTypes(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, "Add explicit typecast",
-				"Add typecast from " + issue.getData()[0] + " to " + issue.getData()[1], "upcase.png", //$NON-NLS-3$
+				"Add typecast from " + issue.getData()[0] + " to " + issue.getData()[1], null,
 				(IModification) context -> {
 					final IXtextDocument xtextDocument = context.getXtextDocument();
 					final String original = xtextDocument.get(issue.getOffset().intValue(),
@@ -64,7 +64,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	@Fix(STCoreValidator.WRONG_NAME_CASE)
 	public static void fixVariableNameCasing(final Issue issue, final IssueResolutionAcceptor acceptor) {
 		acceptor.accept(issue, "Change variable name case as declared",
-				"Changes " + issue.getData()[0] + "to " + issue.getData()[1], "upcase.png", (IModification) context -> {
+				"Changes " + issue.getData()[0] + "to " + issue.getData()[1], null, (IModification) context -> {
 					final IXtextDocument xtextDocument = context.getXtextDocument();
 					xtextDocument.replace(issue.getOffset(), issue.getLength(), issue.getData()[1]);
 				});

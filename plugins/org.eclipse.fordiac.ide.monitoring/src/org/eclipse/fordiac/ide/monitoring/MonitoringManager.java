@@ -277,16 +277,16 @@ public class MonitoringManager extends AbstractMonitoringManager {
 				.getDevMgmInteractor(device);
 
 		if (devMgmInteractor != null) {
-			writeElements(element, value, data, devMgmInteractor);
+			writeElements(element, value, devMgmInteractor);
 		}
 	}
 
-	public static void writeElements(final MonitoringElement element, final String value, final SystemMonitoringData data,
+	public static void writeElements(final MonitoringElement element, final String value,
 			final IDeviceManagementInteractor devMgmInteractor) {
 		final List<MonitoringElement> elements = new ArrayList<>();
 
 		if (element instanceof SubappMonitoringElement) {
-			handleSubappPinWrite(element, data, elements);
+			handleSubappPinWrite(element, elements);
 		} else {
 			elements.add(element);
 		}
@@ -308,15 +308,14 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		}
 	}
 
-	public static void handleSubappPinWrite(final MonitoringElement element, final SystemMonitoringData data,
+	public static void handleSubappPinWrite(final MonitoringElement element,
 			final Collection<MonitoringElement> elements) {
 		final List<MonitoringElement> findElements = SubAppPortHelper
 				.findConnectedElements(element.getPort().getInterfaceElement());
 		elements.addAll(findElements);
 	}
 
-	public void forceValue(final MonitoringElement element, final IInterfaceElement interfaceElement,
-			final String value) {
+	public void forceValue(final MonitoringElement element, final String value) {
 		final AutomationSystem automationSystem = element.getPort().getSystem();
 
 		if (automationSystem == null) {
@@ -330,15 +329,13 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		}
 
 		final List<MonitoringElement> elements = new ArrayList<>();
-		final SystemMonitoringData data = getSystemMonitoringData(automationSystem);
 		if (element instanceof SubappMonitoringElement) {
-			handleSubappPinWrite(element, data, elements);
+			handleSubappPinWrite(element, elements);
 		} else {
 			elements.add(element);
 		}
 
 		for (final MonitoringElement e : elements) {
-
 			e.forceValue(value);
 			final IDeviceManagementInteractor devMgmInteractor = getSystemMonitoringData(automationSystem)
 					.getDevMgmInteractor(device);
@@ -355,7 +352,6 @@ public class MonitoringManager extends AbstractMonitoringManager {
 					FordiacLogHelper.logError("Could not force value of " + e.getQualifiedString() + "to " + value, ex); //$NON-NLS-1$ //$NON-NLS-2$
 				}
 			}
-
 		}
 	}
 

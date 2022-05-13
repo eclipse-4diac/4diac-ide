@@ -24,16 +24,14 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.core.ILaunchManager;
 import org.eclipse.debug.ui.ILaunchShortcut2;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.part.FileEditorInput;
 
-/**
- * @author mjobst
- *
- */
+/** @author mjobst */
 public abstract class LaunchShortcut implements ILaunchShortcut2 {
 
 	@Override
@@ -60,14 +58,15 @@ public abstract class LaunchShortcut implements ILaunchShortcut2 {
 				launch(resource, configurations[0], mode);
 			}
 		} catch (final CoreException e) {
+			FordiacLogHelper.logWarning(e.getMessage(), e);
 			launch(resource, null, mode);
 		}
 	}
 
 	public abstract void launch(IResource resource, ILaunchConfiguration configuration, String mode);
 
-	public void initializeDefaultLaunchConfiguration(final ILaunchConfigurationWorkingCopy configuration, final IResource resource,
-			final String mode) {
+	public void initializeDefaultLaunchConfiguration(final ILaunchConfigurationWorkingCopy configuration,
+			final IResource resource, final String mode) {
 		configuration.setAttribute(LaunchConfigurationAttributes.RESOURCE, resource.getFullPath().toString());
 	}
 
@@ -95,9 +94,11 @@ public abstract class LaunchShortcut implements ILaunchShortcut2 {
 						configurations.add(configuration);
 					}
 				} catch (final CoreException e) {
+					FordiacLogHelper.logWarning(e.getMessage(), e);
 				}
 			}
 		} catch (final CoreException e) {
+			FordiacLogHelper.logWarning(e.getMessage(), e);
 		}
 
 		return configurations.toArray(new ILaunchConfiguration[configurations.size()]);

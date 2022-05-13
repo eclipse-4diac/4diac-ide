@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.systemmanagement;
 
 import java.util.List;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
@@ -36,8 +37,8 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.ui.editor.validation.MarkerCreator;
 import org.eclipse.xtext.validation.Issue;
 
-public class ValidateProject {	
-	
+public final class ValidateProject {
+
 	public static void checkTypeLibraryInProjectsInWorkspaceJob() {
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
@@ -46,78 +47,60 @@ public class ValidateProject {
 		final WorkspaceJob job = new WorkspaceJob(Messages.ValidateTypeLibrary) {
 			@Override
 			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-
-				checkTypeLibraryInProjects(projects);
-				return Status.OK_STATUS;
-			}
-		};
-		job.setRule(root);
-		job.schedule();
-		
-	}
-	
-	public static void checkTypeLibraryInProjects(IProject[] projects) {
-		for (final IProject project : projects) {
-
-			if (isFordiacProject(project)) {
-				
-				final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
-										
-				typeLibrary.getSubAppTypes().values()
-				.forEach(SubAppTypeEntry::getType);
-				typeLibrary.getAdapterTypes().values()
-				.forEach(AdapterTypeEntry::getType);
-				typeLibrary.getFbTypes().values().forEach(FBTypeEntry::getType);
-				typeLibrary.getDataTypeLibrary().getDerivedDataTypes().values().forEach(DataTypeEntry::getType);
-			}
-		}
-	}
-	
-	public static void checkSTInProjects(IProject[] projects) {
-		for (final IProject project : projects) {
-			if (isFordiacProject(project)) {
-				final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
-				
-				typeLibrary.getFbTypes().values().forEach(f -> {
-					if (f.getType() instanceof BaseFBType) {
-						final List<Issue> errors = StructuredTextParseUtil.validate((BaseFBType) f.getType());
-						
-						final MarkerCreator markerCreator = new MarkerCreator();
-						for (final Issue issue : errors) {
-							try {
-								markerCreator.createMarker(issue, f.getFile(), IMarker.PROBLEM);
-								f.setLastModificationTimestamp(f.getFile().getModificationStamp());
-							} catch (final CoreException e) {
-								FordiacLogHelper.logError(e.getMessage(), e);
-							}
-						}
-					}
-				});
-			}
-		}
-	}
-	
-	public static void clearInWorkspaceJob() {
-		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-		final WorkspaceJob job = new WorkspaceJob("Remove all Markers") {
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				clear(root.getProjects());
-				return Status.OK_STATUS;
-			}
-		};
-		job.setRule(root);
-		job.schedule();
-	}
-
-	public static void clear(IProject[] projects) { 
-		for (final IProject project : projects) {
-			if (isFordiacProject(project)) {
-				try {
-					project.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-				} catch (CoreException e) {
-					FordiacLogHelper.logError("Could not delete error marker", e); //$NON-NLS-1$
+				for (final IProject project : projects) {
+					checkTypeLibraryInProjects(project);
 				}
+				return Status.OK_STATUS;
+			}
+		};
+		job.setRule(root);
+		job.schedule();
+
+	}
+
+	public static void checkTypeLibraryInProjects(final IProject project) {
+
+		if (isFordiacProject(project)) {
+
+			final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
+
+			typeLibrary.getSubAppTypes().values().forEach(SubAppTypeEntry::getType);
+			typeLibrary.getAdapterTypes().values().forEach(AdapterTypeEntry::getType);
+			typeLibrary.getFbTypes().values().forEach(FBTypeEntry::getType);
+			typeLibrary.getDataTypeLibrary().getDerivedDataTypes().values().forEach(DataTypeEntry::getType);
+		}
+	}
+
+	public static void checkSTInProjects(final IProject project) {
+		if (isFordiacProject(project)) {
+			final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(project);
+
+			typeLibrary.getFbTypes().values().stream().filter(f -> f.getType() instanceof BaseFBType)
+			.forEach(f -> checkBaseFB((BaseFBType) f.getType()));
+		}
+	}
+
+	public static void checkBaseFB(final BaseFBType baseFB) {
+		final List<Issue> errors = StructuredTextParseUtil.validate(baseFB);
+		final IFile file = baseFB.getTypeEntry().getFile();
+
+		final MarkerCreator markerCreator = new MarkerCreator();
+		for (final Issue issue : errors) {
+			try {
+				markerCreator.createMarker(issue, file, IMarker.PROBLEM);
+				baseFB.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp());
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+		}
+	}
+
+	public static void clear(final IProject project) {
+		if (isFordiacProject(project)) {
+			try {
+				project.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError("Could not delete error marker", e); //$NON-NLS-1$
 			}
 		}
 	}
@@ -129,6 +112,10 @@ public class ValidateProject {
 			FordiacLogHelper.logError("Could not read project nature", e); //$NON-NLS-1$
 		}
 		return false;
+	}
+
+	private ValidateProject() {
+		throw new IllegalStateException("Utility class should not be instantiated!"); //$NON-NLS-1$
 	}
 
 }

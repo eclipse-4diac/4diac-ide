@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.model.data.LdtType;
 import org.eclipse.fordiac.ide.model.data.LtodType;
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType;
 
-public class ValueConverterFactory {
+public final class ValueConverterFactory {
 	public static ValueConverter<?> createValueConverter(final DataType type) {
 		if (type instanceof BoolType) {
 			return BoolValueConverter.INSTANCE;
@@ -43,5 +43,9 @@ public class ValueConverterFactory {
 			return DateAndTimeValueConverter.INSTANCE;
 		}
 		return null;
+	}
+
+	private ValueConverterFactory() {
+		throw new IllegalStateException("Utility class should not be instantiated!"); //$NON-NLS-1$
 	}
 }

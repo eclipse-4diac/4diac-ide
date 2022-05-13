@@ -52,11 +52,9 @@ public class CheckProject extends Task {
 			throw new BuildException("Project named '" + projectNameString + "' not in workspace in Workspace");//$NON-NLS-1$ //$NON-NLS-2$
 		}
 
-
-		final IProject[] projectList = new IProject[] { project };
-		ValidateProject.clear(projectList);
-		ValidateProject.checkTypeLibraryInProjects(projectList);
-		ValidateProject.checkSTInProjects(projectList);
+		ValidateProject.clear(project);
+		ValidateProject.checkTypeLibraryInProjects(project);
+		ValidateProject.checkSTInProjects(project);
 
 		waitMarkerJobsComplete();
 

@@ -76,8 +76,8 @@ public abstract class AbstractInterpreterTest {
 	}
 
 	protected static FBType loadFBType(final String name, final boolean emptyService) {
-		Path projectPath = new Path("data/TestFBs");
-		Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.fb.interpreter");
+		final Path projectPath = new Path("data/TestFBs");
+		final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.fb.interpreter");
 		FordiacProjectLoader loader;
 		try {
 			loader = new FordiacProjectLoader(bundle, projectPath);
@@ -85,9 +85,9 @@ public abstract class AbstractInterpreterTest {
 			return null;
 		}
 
-		TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(loader.getEclipseProject());
-		FBTypeEntry typeEntry = typeLib.getFBTypeEntry(name);
-		FBType fbt = typeEntry.getType();
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(loader.getEclipseProject());
+		final FBTypeEntry typeEntry = typeLib.getFBTypeEntry(name);
+		final FBType fbt = typeEntry.getType();
 
 		if (emptyService) {
 			fbt.setService(ServiceSequenceUtils.createEmptyServiceModel());
@@ -129,8 +129,8 @@ public abstract class AbstractInterpreterTest {
 		if (val == null) {
 			((VarDeclaration) el).setValue(LibraryElementFactory.eINSTANCE.createValue());
 		}
-		ValueConverter conv = ValueConverterFactory.createValueConverter(el.getType());
-		Object convertedValue = conv.toValue(value);
+		final ValueConverter<?> conv = ValueConverterFactory.createValueConverter(el.getType());
+		final Object convertedValue = conv.toValue(value);
 		((VarDeclaration) el).getValue().setValue(convertedValue.toString());
 	}
 
@@ -138,7 +138,7 @@ public abstract class AbstractInterpreterTest {
 			final BasicFBTypeRuntime runtime) {
 		final List<Transaction> transactions = new ArrayList<>();
 		for (final ServiceTransaction st : seq.getServiceTransaction()) {
-			FBTransaction t = createTransaction(fb, st);
+			final FBTransaction t = createTransaction(fb, st);
 			if (t != null) {
 				transactions.add(t);
 			}
@@ -180,7 +180,7 @@ public abstract class AbstractInterpreterTest {
 		return runSimpleFBTest((SimpleFBType) fb, seq);
 	}
 
-	private static BaseFBType runSimpleFBTest(SimpleFBType fb, ServiceSequence seq) {
+	private static BaseFBType runSimpleFBTest(final SimpleFBType fb, final ServiceSequence seq) {
 		final ResourceSet reset = new ResourceSetImpl();
 		final Resource resource = reset.createResource(URI.createURI("platform:/resource/" + fb.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
@@ -190,7 +190,7 @@ public abstract class AbstractInterpreterTest {
 		if (seq.getServiceTransaction().isEmpty()) {
 			seq.getServiceTransaction().add(LibraryElementFactory.eINSTANCE.createServiceTransaction());
 		}
-		FBTransaction transaction = createTransaction(fb, seq.getServiceTransaction().get(0));
+		final FBTransaction transaction = createTransaction(fb, seq.getServiceTransaction().get(0));
 		transaction.getInputEventOccurrence().setFbRuntime(simpleFBTypeRT);
 		eventManager.getTransactions().add(transaction);
 

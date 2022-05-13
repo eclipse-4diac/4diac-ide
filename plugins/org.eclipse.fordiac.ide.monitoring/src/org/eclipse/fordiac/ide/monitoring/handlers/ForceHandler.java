@@ -80,7 +80,7 @@ public class ForceHandler extends AbstractMonitoringHandler {
 					}));
 			final int ret = input.open();
 			if (ret == org.eclipse.jface.window.Window.OK) {
-				manager.forceValue(monitoringElement, interfaceElement,
+				manager.forceValue(monitoringElement,
 						StructParser.changeStructNodeValue(monitoringElement, interfaceElement, input.getValue()));
 			}
 
@@ -108,7 +108,7 @@ public class ForceHandler extends AbstractMonitoringHandler {
 								}));
 				final int ret = input.open();
 				if (ret == org.eclipse.jface.window.Window.OK) {
-					manager.forceValue(monitoringElement, null, input.getValue());
+					manager.forceValue(monitoringElement, input.getValue());
 				}
 			}
 		}

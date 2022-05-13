@@ -110,7 +110,7 @@ public final class NameRepository {
 
 		if (!IdentifierVerifyer.isValidIdentifier(nameProposal) && nameProposal.contains(".")) //$NON-NLS-1$
 		{
-			retVal = nameProposal.replace(".", "_"); //$NON-NLS-1$//$NON-NLS-2$ }
+			retVal = nameProposal.replace(".", "_"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		Assert.isTrue(IdentifierVerifyer.isValidIdentifier(retVal),
 				"The given name proposal is not a valid identifier!"); //$NON-NLS-1$

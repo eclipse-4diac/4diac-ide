@@ -100,17 +100,13 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			final Object feature = notification.getFeature();
-			if (null != feature) {
-				if (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass())) {
-					Display.getDefault().asyncExec(() -> {
-						if (null != typeEntry) {
-							setPartName(typeEntry.getFile().getName());
-							setInput(new FileEditorInput(typeEntry.getFile()));
-						}
-					});
-
-				}
+			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(notification.getFeature())) {
+				Display.getDefault().asyncExec(() -> {
+					if (null != typeEntry) {
+						setPartName(typeEntry.getFile().getName());
+						setInput(new FileEditorInput(typeEntry.getFile()));
+					}
+				});
 			}
 		}
 	};

@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorDebugger;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 
@@ -160,6 +161,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 				}
 			}
 		} catch (final CoreException e) {
+			FordiacLogHelper.logWarning(e.getMessage(), e);
 			// ignore (we don't care about broken breakpoints)
 		}
 		return false;
@@ -209,9 +211,9 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 
 	public List<EvaluatorDebugThread> getThreads() {
 		final ThreadGroup threadGroup = this.debugTarget.getProcess().getThreadGroup();
-		final Thread[] threads = new Thread[threadGroup.activeCount()];
-		final int count = threadGroup.enumerate(threads);
-		return Arrays.stream(threads, 0, count).map(this::getThread).collect(Collectors.toList());
+		final Thread[] activeThreads = new Thread[threadGroup.activeCount()];
+		final int count = threadGroup.enumerate(activeThreads);
+		return Arrays.stream(activeThreads, 0, count).map(this::getThread).collect(Collectors.toList());
 	}
 
 	protected EvaluatorDebugThread getThread(final Thread thread) {
@@ -226,7 +228,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 		return this.variables.computeIfAbsent(variable, key -> new EvaluatorDebugVariable(key, debugTarget));
 	}
 
-	public class ThreadMonitor extends Job {
+	public final class ThreadMonitor extends Job {
 		private final ThreadGroup threadGroup;
 
 		private ThreadMonitor(final ThreadGroup threadGroup) {
@@ -237,9 +239,9 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 		@Override
 		protected IStatus run(final IProgressMonitor monitor) {
 			// add new threads (on demand)
-			final Thread[] threads = new Thread[this.threadGroup.activeCount()];
-			final int count = threadGroup.enumerate(threads);
-			Arrays.stream(threads, 0, count).forEach(CommonEvaluatorDebugger.this::getThread);
+			final Thread[] activeThreads = new Thread[this.threadGroup.activeCount()];
+			final int count = threadGroup.enumerate(activeThreads);
+			Arrays.stream(activeThreads, 0, count).forEach(CommonEvaluatorDebugger.this::getThread);
 			// notify and remove dead threads
 			CommonEvaluatorDebugger.this.threads.entrySet().removeIf(entry -> {
 				if (entry.getKey().isAlive()) {

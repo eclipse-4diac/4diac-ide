@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.search;
 import java.util.Map;
 import java.util.Set;
 
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.search.ui.text.AbstractTextSearchResult;
@@ -67,7 +68,7 @@ public class ModelSearchTreeContentProvider implements ITreeContentProvider, IMo
 
 	@Override
 	public void elementsChanged(final Object[] updatedElements) {
-		System.err.println("not supported yet");
+		FordiacLogHelper.logInfo("not supported yet"); //$NON-NLS-1$
 	}
 
 }
