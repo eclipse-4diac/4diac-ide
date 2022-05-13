@@ -138,7 +138,7 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyNumValue> T EXPT(final T first, final T second) {
+	static <T extends AnyRealValue, U extends AnyNumValue> T EXPT(final T first, final U second) {
 		return (T) ValueOperations.power(first, second);
 	}
 
