@@ -1389,7 +1389,7 @@ public interface StandardFunctions extends Functions {
 		return DWordValue.toDWordValue(value.charValue());
 	}
 
-	static WordValue CWHAR_TO_WORD(final WCharValue value) {
+	static WordValue WCHAR_TO_WORD(final WCharValue value) {
 		return WordValue.toWordValue((short) value.charValue());
 	}
 
