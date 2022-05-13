@@ -29,4 +29,11 @@ class StructuredTextSupportFactory implements ILanguageSupportFactory {
 			new STFunctionSupport(source)
 		}
 	}
+
+	def static void register() {
+		val factory = new StructuredTextSupportFactory
+		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_lua", STAlgorithm, factory)
+		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_lua", STMethod, factory)
+		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_lua", STFunctionSource, factory)
+	}
 }
