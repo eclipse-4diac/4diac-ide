@@ -309,12 +309,10 @@ final class ValueOperations {
 		throw new UnsupportedOperationException('''The remainder operation is not supported for types «first.type.name» and «second.type.name»''')
 	}
 
-	def static dispatch AnyMagnitudeValue remainderBy(AnyMagnitudeValue first, AnyMagnitudeValue second) {
-		switch (first.type.resultType(second.type)) {
-			LrealType:
-				LRealValue.toLRealValue(first.doubleValue % second.doubleValue)
-			RealType:
-				RealValue.toRealValue(first.floatValue % second.floatValue)
+	def static dispatch AnyIntValue remainderBy(AnyIntValue first, AnyIntValue second) {
+		switch (resultType : first.type.resultType(second.type)) {
+			case second.longValue == 0: // MOD by 0 defined to return 0
+				resultType.defaultValue as AnyIntValue
 			LintType:
 				LIntValue.toLIntValue(first.longValue % second.longValue)
 			DintType:
@@ -331,10 +329,6 @@ final class ValueOperations {
 				UIntValue.toUIntValue(Integer.remainderUnsigned(first.intValue, second.intValue) as short)
 			UsintType:
 				USIntValue.toUSIntValue(Integer.remainderUnsigned(first.intValue, second.intValue) as byte)
-			LtimeType:
-				LTimeValue.toLTimeValue(first.longValue % second.longValue)
-			TimeType:
-				TimeValue.toTimeValue(first.longValue % second.longValue)
 		}
 	}
 

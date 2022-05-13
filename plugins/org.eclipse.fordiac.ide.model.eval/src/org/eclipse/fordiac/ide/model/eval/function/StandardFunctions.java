@@ -133,7 +133,7 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyMagnitudeValue> T MOD(final T first, final T second) {
+	static <T extends AnyIntValue> T MOD(final T first, final T second) {
 		return (T) ValueOperations.remainderBy(first, second);
 	}
 

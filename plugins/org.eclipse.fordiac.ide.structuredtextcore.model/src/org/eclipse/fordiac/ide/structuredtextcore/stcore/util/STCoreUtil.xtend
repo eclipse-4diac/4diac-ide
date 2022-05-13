@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore.util
 import java.math.BigDecimal
 import java.math.BigInteger
 import org.eclipse.fordiac.ide.model.data.AnyBitType
+import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.AnyRealType
@@ -133,7 +134,7 @@ final class STCoreUtil {
 			case SUB: first instanceof AnyMagnitudeType && second instanceof AnyMagnitudeType
 			case MUL,
 			case DIV: first instanceof AnyMagnitudeType && second instanceof AnyNumType
-			case MOD: first instanceof AnyNumType && second instanceof AnyNumType
+			case MOD: first instanceof AnyIntType && second instanceof AnyIntType
 			case POWER: first instanceof AnyRealType && second instanceof AnyNumType
 			case AMPERSAND,
 			case AND,

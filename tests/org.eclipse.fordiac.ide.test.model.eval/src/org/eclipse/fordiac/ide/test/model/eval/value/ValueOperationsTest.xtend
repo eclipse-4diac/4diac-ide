@@ -145,12 +145,9 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testRemainder(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyRealType:
-				type.defaultValue.assertNotEquals(type.defaultValue / type.defaultValue)
-			AnyIntType,
-			AnyDurationType: {
+			AnyIntType: {
 				type.defaultValue.assertEquals(type.defaultValue % 1.wrapValue(type))
-				ArithmeticException.assertThrows[type.defaultValue % type.defaultValue]
+				type.defaultValue.assertEquals(type.defaultValue % type.defaultValue) // MOD by 0 defined to return 0
 			}
 			default:
 				UnsupportedOperationException.assertThrows[type.defaultValue % type.defaultValue]
