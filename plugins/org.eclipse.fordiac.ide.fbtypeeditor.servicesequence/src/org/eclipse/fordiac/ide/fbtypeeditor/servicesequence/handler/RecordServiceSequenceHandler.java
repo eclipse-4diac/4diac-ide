@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Johannes Kepler University Linz
+ * Copyright (c) 2021, 2022 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -44,22 +44,30 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class RecordServiceSequenceHandler extends AbstractHandler {
+
+	private static final int CANCEL = -1;
+	private static boolean append;
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -68,26 +76,45 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			final ServiceSequence seq = getSequence(selected);
 			if (seq != null) {
 				final List<String> events = new ArrayList<>();
-				final RecordSequenceDialog dialog = new RecordSequenceDialog(HandlerUtil.getActiveShell(event),
-						events);
-				dialog.open();
-				final BasicFBType fbType = (BasicFBType) seq.getService().getFBType();
-				final EventManager eventManager = createEventManager(fbType,
-						events);
-				EventManagerUtils.process(eventManager);
-				for (final Transaction transaction : eventManager.getTransactions()) {
-					convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
+				final List<String> parameters = new ArrayList<>();
+				final RecordSequenceDialog dialog = new RecordSequenceDialog(HandlerUtil.getActiveShell(event), events,
+						parameters);
+				int returnCode = dialog.open();
+				if (returnCode != CANCEL) {
+					try {
+						final BasicFBType fbType = (BasicFBType) seq.getService().getFBType();
+						setParameters(fbType, parameters);
+						final EventManager eventManager = createEventManager(fbType, events);
+						EventManagerUtils.process(eventManager);
+						if (!append) {
+							seq.getServiceTransaction().clear();
+						}
+						for (final Transaction transaction : eventManager.getTransactions()) {
+							convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
+						}
+					} catch (Exception e) {
+						MessageDialog.openError(HandlerUtil.getActiveShell(event), "Problem",
+								"The input data specification was incorrect. Please try again and check the variable names");
+					}
 				}
 			}
 		}
 		return Status.OK_STATUS;
 	}
 
+	private void setParameters(BasicFBType fbType, List<String> parameters) {
+		// parameter: format "VarName:=Value"
+		for (String param : parameters) {
+			String[] paramValues = param.split(":="); //$NON-NLS-1$
+			if (paramValues.length == 2) {
+				AbstractInterpreterTest.setVariable(fbType, paramValues[0], paramValues[1]);
+			}
+		}
+	}
 
 	private static void convertTransactionToServiceModel(final ServiceSequence seq, final BasicFBType fbType,
 			final FBTransaction transaction) {
-		final ServiceTransaction serviceTransaction = LibraryElementFactory.eINSTANCE
-				.createServiceTransaction();
+		final ServiceTransaction serviceTransaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
 		seq.getServiceTransaction().add(serviceTransaction);
 		final InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
 		inputPrimitive.setEvent(transaction.getInputEventOccurrence().getEvent().getName());
@@ -101,7 +128,6 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		}
 	}
 
-
 	private static EventManager createEventManager(BasicFBType fb, List<String> events) {
 		if (fb.getService() == null) {
 			fb.setService(ServiceSequenceUtils.createEmptyServiceModel());
@@ -114,8 +140,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		basicFBTypeRT.setBasicfbtype(fb);
 		// set the start state
 		final EList<ECState> stateList = basicFBTypeRT.getBasicfbtype().getECC().getECState();
-		final ECState startState = stateList.stream().filter(ECState::isStartState)
-				.collect(Collectors.toList()).get(0);
+		final ECState startState = stateList.stream().filter(ECState::isStartState).collect(Collectors.toList()).get(0);
 		basicFBTypeRT.setActiveState(startState);
 
 		// create transactions
@@ -123,7 +148,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 			final Event eventPin = (Event) fb.getInterfaceList().getInterfaceElement(inputEvent);
 			if (eventPin == null) {
-				throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist");  //$NON-NLS-1$//$NON-NLS-2$
+				throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist"); //$NON-NLS-1$//$NON-NLS-2$
 			}
 			eventOccurrence.setEvent(eventPin);
 
@@ -163,34 +188,65 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		return null;
 	}
 
-	public static class RecordSequenceDialog extends MessageDialog {
-		private Text text;
+	private static class RecordSequenceDialog extends MessageDialog {
+		private Text inputEventText;
+		private Text inputParameterText;
+		private Button appendCheckbox;
 		private final List<String> events;
+		private final List<String> parameters;
 
-		public RecordSequenceDialog(Shell parentShell, List<String> events) {
-			super(parentShell, "Record Sequence (separated by ;)", null, "Input Events:", MessageDialog.INFORMATION, 0,
+		public RecordSequenceDialog(Shell parentShell, List<String> events, List<String> parameters) {
+			super(parentShell, "Record Sequence (separated by ;)", null, "Configuration", MessageDialog.INFORMATION, 0,
 					"Run");
 			this.events = events;
+			this.parameters = parameters;
 		}
 
 		@Override
 		protected Control createCustomArea(Composite parent) {
-			final Composite container = new Composite(parent, SWT.NONE);
+			parent.setLayout(new FillLayout());
+			final Composite dialogArea = new Composite(parent, SWT.NONE);
 			final GridLayout layout = new GridLayout(2, false);
-			container.setLayout(layout);
-			text = new Text(container, SWT.NONE);
-			text.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
-			return container;
+			dialogArea.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
+			dialogArea.setLayout(layout);
+
+			final Group group = new Group(dialogArea, SWT.NONE);
+			group.setText("Input Data");
+			group.setLayout(new GridLayout(2, false));
+			group.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
+
+			Label label = new Label(group, SWT.None);
+			label.setText("Input Event(s)");
+
+			inputEventText = new Text(group, SWT.NONE);
+			inputEventText.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
+
+			label = new Label(group, SWT.None);
+			label.setText("Parameters");
+
+			inputParameterText = new Text(group, SWT.NONE);
+			inputParameterText.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
+
+			appendCheckbox = new Button(group, SWT.CHECK);
+			appendCheckbox.setText("Append");
+			appendCheckbox.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
+			return dialogArea;
 		}
 
 		@Override
 		protected void buttonPressed(int buttonId) {
 			events.addAll(getEvents());
+			parameters.addAll(getParameters());
+			append = appendCheckbox.getSelection();
 			super.buttonPressed(buttonId);
 		}
 
-		public List<String> getEvents() {
-			return Arrays.asList(text.getText().split(";")); //$NON-NLS-1$
+		private List<String> getEvents() {
+			return Arrays.asList(inputEventText.getText().split(";")); //$NON-NLS-1$
+		}
+
+		private List<String> getParameters() {
+			return Arrays.asList(inputParameterText.getText().split(";")); //$NON-NLS-1$
 		}
 	}
 }
