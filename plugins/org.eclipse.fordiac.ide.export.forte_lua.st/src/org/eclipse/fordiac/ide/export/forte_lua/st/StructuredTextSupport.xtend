@@ -125,10 +125,10 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''{«FOR elem : expr.values SEPARATOR ", "»«elem.generateArrayInitElement»«ENDFOR»}'''
 
 	def protected CharSequence generateArrayInitElement(STArrayInitElement elem) //
-	'''«IF elem.initExpressions.empty»«elem.indexOrInitExpression.generateExpression»«ELSE»«elem.generateMultiArrayInitElement»«ENDIF»'''
+	'''«IF elem.initExpressions.empty»«elem.indexOrInitExpression.generateInitializerExpression»«ELSE»«elem.generateMultiArrayInitElement»«ENDIF»'''
 
 	def protected CharSequence generateMultiArrayInitElement(STArrayInitElement elem) //
-	'''«FOR i : 0..<elem.indexOrInitExpression.integerFromConstantExpression SEPARATOR ", "»«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateExpression»«ENDFOR»«ENDFOR»'''
+	'''«FOR i : 0..<(elem.indexOrInitExpression as STElementaryInitializerExpression).value.integerFromConstantExpression SEPARATOR ", "»«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateInitializerExpression»«ENDFOR»«ENDFOR»'''
 
 	def protected CharSequence generateStatementList(List<STStatement> statements) '''
 		«FOR statement : statements»
@@ -285,10 +285,11 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateExpression(STFeatureExpression expr) // TODO: function call
 	'''«expr.feature.generateFeatureName»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
 
-	def protected Iterable<CharSequence> generateCallArguments(STFeatureExpression expr) { // 
+	def protected Iterable<CharSequence> generateCallArguments(STFeatureExpression expr) {
 		try {
 			expr.mappedInputArguments.entrySet.map[key.generateInputCallArgument(value)] +
-				expr.mappedInOutArguments.entrySet.map[key.generateInOutCallArgument(value)]
+				expr.mappedInOutArguments.entrySet.map[key.generateInOutCallArgument(value)] +
+				expr.mappedOutputArguments.entrySet.map[key.generateOutputCallArgument(value)]
 		} catch (IndexOutOfBoundsException e) {
 			errors.add('''Not enough arguments for «expr.feature.name»''')
 			emptyList
@@ -300,21 +301,20 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument) {
 		if(argument === null) parameter.generateVariableDefaultValue else argument.generateExpression
-		''''''
 	}
 
-	def protected CharSequence generateInOutCallArgument(INamedElement parameter, INamedElement argument) {
+	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STExpression argument) {
 		if (argument === null)
 			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
 		else
-			argument.generateFeatureName
+			argument.generateExpression
 	}
 
-	def protected CharSequence generateOutputCallArgument(INamedElement parameter, INamedElement argument) {
+	def protected CharSequence generateOutputCallArgument(INamedElement parameter, STExpression argument) {
 		if (argument === null)
 			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
 		else
-			argument.generateFeatureName
+			argument.generateExpression
 	}
 
 	def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //
@@ -477,8 +477,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			AnyElementaryType: '''0'''
 			ArrayType: '''()'''
 			StructuredType: '''{}'''
-			default:
-				'''0'''
+			default: '''0'''
 		}
 	}
 

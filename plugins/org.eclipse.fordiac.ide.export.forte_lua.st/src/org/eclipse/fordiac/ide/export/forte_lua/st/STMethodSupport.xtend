@@ -36,7 +36,7 @@ class STMethodSupport extends StructuredTextSupport {
 
 	override prepare(Map<?, ?> options) {
 		if (parseResult === null && errors.empty) {
-			parseResult = method.parse(errors)
+			parseResult = method.parse(errors, warnings, infos)
 		}
 		return parseResult !== null
 	}
