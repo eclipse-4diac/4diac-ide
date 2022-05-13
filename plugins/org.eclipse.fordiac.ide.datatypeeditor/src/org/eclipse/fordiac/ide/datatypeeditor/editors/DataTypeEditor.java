@@ -16,6 +16,8 @@
  *     - use new saveType method of AbstractTypeExporter
  *     - replaced DataTypeListener by AdapterImpl
  *     - keep a copy of the datatype object in the view, otherwise the content of the file is changed even the save button was not pressed
+ *   Lukas Wais
+ *     - enabled Save As
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.datatypeeditor.editors;
@@ -32,6 +34,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -53,6 +56,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -155,8 +159,10 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 
 	@Override
 	public void doSaveAs() {
-		// TODO implement save as new data type method, update isSaveAsAllowed()
-		// accordingly
+		if (dataTypeEntry.getTypeEditable() instanceof StructuredType) {
+			final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
+			new WizardDialog(null, new SaveAsStructTypeWizard(structuredType, this)).open();
+		}
 	}
 
 	@Override
@@ -229,7 +235,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 
 	@Override
 	public boolean isSaveAsAllowed() {
-		return false;
+		return true;
 	}
 
 	@Override

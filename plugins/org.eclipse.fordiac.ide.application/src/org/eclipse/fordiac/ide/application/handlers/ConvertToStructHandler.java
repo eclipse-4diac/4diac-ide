@@ -31,7 +31,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.InterfaceEditPartForFBNetwork;
 import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEditPart;
-import org.eclipse.fordiac.ide.application.wizards.SaveAsStructWizard;
+import org.eclipse.fordiac.ide.application.wizards.ExtractStructTypeWizard;
 import org.eclipse.fordiac.ide.model.commands.create.CreateStructFromInterfaceElementsCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -54,7 +54,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 
 public class ConvertToStructHandler extends AbstractHandler {
 
-	private SaveAsStructWizard wizard;
+	private ExtractStructTypeWizard wizard;
 	private IProject project;
 
 	@Override
@@ -104,7 +104,7 @@ public class ConvertToStructHandler extends AbstractHandler {
 	}
 
 	private void invokeSaveWizard(final List<VarDeclaration> varDecls, final IEditorPart editor) {
-		wizard = new SaveAsStructWizard(varDecls, project, Messages.ConvertToStructHandler_Title);
+		wizard = new ExtractStructTypeWizard(varDecls, project, Messages.ConvertToStructHandler_Title);
 		final WizardDialog dialog = new WizardDialog(editor.getSite().getShell(), wizard);
 		dialog.create();
 		dialog.open();

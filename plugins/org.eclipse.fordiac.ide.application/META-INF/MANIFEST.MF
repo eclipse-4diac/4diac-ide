@@ -8,7 +8,8 @@ Export-Package: org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.application.handlers,
  org.eclipse.fordiac.ide.application.policies,
  org.eclipse.fordiac.ide.application.properties,
- org.eclipse.fordiac.ide.application.utilities
+ org.eclipse.fordiac.ide.application.utilities,
+ org.eclipse.fordiac.ide.application.wizards
 Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.util,

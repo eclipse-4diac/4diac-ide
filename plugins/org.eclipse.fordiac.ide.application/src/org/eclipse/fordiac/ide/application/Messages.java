@@ -137,6 +137,10 @@ public final class Messages extends NLS {
 
 	public static String PasteEditPartsAction_Text;
 
+	public static String SaveAsStructTypeWizard_WindowTitle;
+
+	public static String SaveAsStructTypeWizard_WizardPageName;
+
 	public static String SaveAsStructWizard_WizardPageName;
 
 	public static String SaveAsStructWizardPage_ConvertSourceElements;
@@ -168,6 +172,14 @@ public final class Messages extends NLS {
 	public static String SaveAsSubApplicationTypeAction_TemplateMissingErrorTitle;
 
 	public static String SaveAsSubApplicationTypeAction_TemplateMissingErrorMessage;
+
+	public static String SaveAsWizardPage_SaveAsStructType_Description;
+
+	public static String SaveAsWizardPage_SaveAsStructType_PageName;
+
+	public static String SaveAsWizardPage_SaveAsStructType_WizardPageTitle;
+
+	public static String SaveAsWizardPage_SaveAsStructTypeReplaceDialogText;
 
 	public static String SearchFor;
 

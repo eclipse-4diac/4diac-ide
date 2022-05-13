@@ -43,8 +43,9 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 	private final String checkBoxText;
 	private final String replaceSourceText;
 
-	private SaveAsWizardPage(final String pageName, final IStructuredSelection selection, final String title, final String description,
-			final String fileLabel, final String checkBoxText, final String replaceSourceText) {
+	private SaveAsWizardPage(final String pageName, final IStructuredSelection selection, final String title,
+			final String description, final String fileLabel, final String checkBoxText,
+			final String replaceSourceText) {
 		super(pageName, selection);
 		setTitle(title);
 		setDescription(description);
@@ -139,18 +140,29 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 		return groupComposite;
 	}
 
-	public static SaveAsWizardPage createSaveAsStructWizardPage(final String pageName, final IStructuredSelection selection) {
+	public static SaveAsWizardPage createSaveAsStructWizardPage(final String pageName,
+			final IStructuredSelection selection) {
 		return new SaveAsWizardPage(pageName, selection, Messages.SaveAsStructWizardPage_WizardPageTitle,
 				Messages.SaveAsStructWizardPage_WizardPageDescription, Messages.SaveAsStructWizardPage_TypeName,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType,
 				Messages.SaveAsStructWizardPage_ConvertSourceElements);
 	}
 
-	public static SaveAsWizardPage createSaveAsSubAppWizardPage(final String pageName, final IStructuredSelection selection) {
+	public static SaveAsWizardPage createSaveAsSubAppWizardPage(final String pageName,
+			final IStructuredSelection selection) {
 		return new SaveAsWizardPage(pageName, selection, Messages.SaveAsSubApplicationTypeAction_WizardPageTitle,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageDescription,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageNameLabel,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType,
 				Messages.SaveAsSubappHandler_ReplaceDialogText);
+	}
+
+	public static SaveAsWizardPage createSaveAsStructTypeWizardPage(final String pageName,
+			final IStructuredSelection selection) {
+		return new SaveAsWizardPage(pageName, selection, Messages.SaveAsWizardPage_SaveAsStructType_WizardPageTitle,
+				Messages.SaveAsWizardPage_SaveAsStructType_Description,
+				Messages.SaveAsWizardPage_SaveAsStructType_PageName,
+				Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType,
+				Messages.SaveAsWizardPage_SaveAsStructTypeReplaceDialogText);
 	}
 }

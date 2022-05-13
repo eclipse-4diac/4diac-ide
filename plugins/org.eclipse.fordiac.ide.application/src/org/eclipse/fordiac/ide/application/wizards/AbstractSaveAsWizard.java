@@ -21,12 +21,16 @@ import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.wizard.Wizard;
 
 public abstract class AbstractSaveAsWizard extends Wizard {
-	private final String subappSection;
-	SaveAsWizardPage newFilePage;
+	private String subappSection;
+	protected SaveAsWizardPage newFilePage;
 
 	protected AbstractSaveAsWizard(final String subAppSection) {
 		this.subappSection = subAppSection;
 		setupDiagramSettings();
+	}
+
+	protected AbstractSaveAsWizard() {
+		/* used for the struct type save as wizard */
 	}
 
 	protected boolean perform() {

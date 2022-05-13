@@ -37,14 +37,14 @@ import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferen
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.StructuredSelection;
 
-public class SaveAsStructWizard extends AbstractSaveAsWizard {
+public class ExtractStructTypeWizard extends AbstractSaveAsWizard {
 	private static final String SUBAPP_SECTION = "SUBAPP_SECTION"; //$NON-NLS-1$
 	private final List<VarDeclaration> varDecl;
 	private final IProject project;
 	private String datatypeName;
 	private boolean replaceSource;
 
-	public SaveAsStructWizard(final List<VarDeclaration> varDecl, final IProject project, final String windowTitle) {
+	public ExtractStructTypeWizard(final List<VarDeclaration> varDecl, final IProject project, final String windowTitle) {
 		super(SUBAPP_SECTION);
 		setWindowTitle(windowTitle);
 		this.varDecl = varDecl;
