@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2012, 2014,2016 TU Wien ACIN, fortiss GmbH
+ * Copyright (c) 2012, 2022 TU Wien ACIN, fortiss GmbH,
+ * 							Primetals Technologies Austria Gmbh
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,8 +9,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois Zoitl
- *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *               - fixed resize layouting issues of the error status dialog
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.ui.wizard;
 
@@ -20,11 +21,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.export.ui.Messages;
 import org.eclipse.jface.dialogs.ErrorDialog;
+import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.StyledText;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -36,7 +36,6 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 	private final List<String> errors;
 
 	private StyledText text;
-	private String newLine = ""; //$NON-NLS-1$
 
 	public ExportStatusMessageDialog(final Shell parentShell, final List<String> warnings, final List<String> errors) {
 		super(parentShell, Messages.ExportStatusMessageDialog_4diacIDETypeExportErrors,
@@ -51,68 +50,57 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 	}
 
 	@Override
+	protected void createDialogAndButtonArea(final Composite parent) {
+		super.createDialogAndButtonArea(parent);
+		// ensure that dialog area also fills in both directions. Otherwise the text area is not resized correctly.
+		// introduced to fix Bug #579939.
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(dialogArea);
+	}
+
+	@Override
 	protected Control createMessageArea(final Composite parent) {
 		final Control retval = super.createMessageArea(parent);
 
 		new Label(parent, SWT.NONE); // simple placeholder label
 
-		final Composite main = new Composite(parent, SWT.NONE);
-		main.setLayout(new GridLayout());
-		final GridData fillBoth = new GridData();
-		fillBoth.grabExcessHorizontalSpace = true;
-		fillBoth.grabExcessVerticalSpace = true;
-		fillBoth.horizontalAlignment = GridData.FILL;
-		fillBoth.verticalAlignment = GridData.FILL;
-
-		main.setLayoutData(fillBoth);
-
-		final GridData fillText = new GridData();
-		fillText.grabExcessHorizontalSpace = true;
-		fillText.grabExcessVerticalSpace = true;
-		fillText.horizontalAlignment = GridData.FILL;
-		fillText.verticalAlignment = GridData.FILL;
-
-		text = new StyledText(main, SWT.MULTI | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
-		text.setLayoutData(fillText);
+		text = new StyledText(parent, SWT.MULTI | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(text);
 
 		printMessages();
 
 		return retval;
 	}
 
-	/**
-	 * writes all the messages ( warnings and errors) in the textfield.
-	 */
+	/** writes all the messages ( warnings and errors) in the text field. */
 	public void printMessages() {
 
 		text.setText(""); //$NON-NLS-1$
 		int count = 0;
-		StyleRange style1 = new StyleRange();
-
-		if (!warnings.isEmpty()) {
-			final String warning = Messages.ExportStatusMessageDialog_WarningsNotEmpty;
-			text.append(warning);
-			style1.start = count;
-			style1.length = warning.length();
-			style1.fontStyle = SWT.BOLD;
-			text.setStyleRange(style1);
-
-			count += warning.length();
-			count += addLines(warnings);
-			text.append(newLine);
-			count += newLine.length();
-		}
 
 		if (!errors.isEmpty()) {
-			final String error = Messages.ExportStatusMessageDialog_ErrorsNotEmpty;
-			text.append(error);
-			style1 = new StyleRange();
-			style1.start = count;
-			style1.length = error.length();
-			style1.fontStyle = SWT.BOLD;
-			text.setStyleRange(style1);
-			addLines(errors);
+			count += printMessageList(Messages.ExportStatusMessageDialog_ErrorsNotEmpty, errors, count);
 		}
+
+		if (!warnings.isEmpty()) {
+			printMessageList(Messages.ExportStatusMessageDialog_WarningsNotEmpty, warnings, count);
+		}
+	}
+
+	private int printMessageList(final String title, final List<String> messages, final int startCount) {
+		int count = startCount;
+
+		text.append(title);
+		final StyleRange style1 = new StyleRange();
+		style1.start = count;
+		style1.length = title.length();
+		style1.fontStyle = SWT.BOLD;
+		text.setStyleRange(style1);
+
+		count += title.length();
+		count += addLines(messages);
+		text.append("\n"); //$NON-NLS-1$
+		count += "\n".length(); //$NON-NLS-1$
+		return count;
 	}
 
 	private int addLines(final List<String> messages) {
@@ -120,11 +108,9 @@ public class ExportStatusMessageDialog extends ErrorDialog {
 
 		for (final String string : messages) {
 			if (null != string) {
-				count += string.length();
-				text.append(string);
-				newLine = "\n"; //$NON-NLS-1$
-				text.append(newLine);
-				count += newLine.length();
+				final String line = "    - " + string + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
+				text.append(line);
+				count += line.length();
 			}
 		}
 		return count;
