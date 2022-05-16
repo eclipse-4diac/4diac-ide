@@ -16,6 +16,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
 
+import org.eclipse.fordiac.ide.model.Messages;
+
 public final class DateAndTimeValueConverter implements ValueConverter<LocalDateTime> {
 	public static final DateAndTimeValueConverter INSTANCE = new DateAndTimeValueConverter();
 
@@ -38,7 +40,7 @@ public final class DateAndTimeValueConverter implements ValueConverter<LocalDate
 		try {
 			return LocalDateTime.parse(string, DATE_AND_TIME);
 		} catch (final Exception e) {
-			throw new IllegalArgumentException("Invalid date-and-time literal", e); //$NON-NLS-1$
+			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_DATE_AND_TIME_FORMAT, e);
 		}
 	}
 }

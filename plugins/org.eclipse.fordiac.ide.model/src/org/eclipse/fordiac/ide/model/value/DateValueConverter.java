@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.model.value;
 
 import java.time.LocalDate;
 
+import org.eclipse.fordiac.ide.model.Messages;
+
 public final class DateValueConverter implements ValueConverter<LocalDate> {
 	public static final DateValueConverter INSTANCE = new DateValueConverter();
 
@@ -25,7 +27,7 @@ public final class DateValueConverter implements ValueConverter<LocalDate> {
 		try {
 			return LocalDate.parse(string);
 		} catch (final Exception e) {
-			throw new IllegalArgumentException("Invalid date literal", e); //$NON-NLS-1$
+			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_DATE_FORMAT, e);
 		}
 	}
 }

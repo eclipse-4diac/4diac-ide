@@ -13,6 +13,11 @@
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.util
 
 import java.math.BigInteger
+import org.eclipse.fordiac.ide.model.data.AnyBitType
+import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
+import org.eclipse.fordiac.ide.model.data.AnyNumType
+import org.eclipse.fordiac.ide.model.data.AnyRealType
+import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
@@ -28,9 +33,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpre
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
@@ -45,6 +48,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpres
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 
@@ -93,6 +97,36 @@ final class STCoreUtil {
 
 	def static boolean isRange(STBinaryOperator operator) {
 		operator == STBinaryOperator.RANGE
+	}
+
+	def static boolean isApplicableTo(STUnaryOperator operator, INamedElement type) {
+		switch (operator) {
+			case PLUS,
+			case MINUS: type instanceof AnyMagnitudeType && !(type instanceof AnyUnsignedType)
+			case NOT: type instanceof AnyBitType
+		}
+	}
+
+	def static boolean isApplicableTo(STBinaryOperator operator, INamedElement first, INamedElement second) {
+		switch (operator) {
+			case ADD,
+			case SUB,
+			case MUL,
+			case DIV: first instanceof AnyMagnitudeType && second instanceof AnyNumType
+			case MOD: first instanceof AnyNumType && second instanceof AnyNumType
+			case POWER: first instanceof AnyRealType && second instanceof AnyNumType
+			case AMPERSAND,
+			case AND,
+			case OR,
+			case XOR: first instanceof AnyBitType && second instanceof AnyBitType
+			case EQ,
+			case NE,
+			case GE,
+			case GT,
+			case LE,
+			case LT,
+			case RANGE: true
+		}
 	}
 
 	def static boolean isAssignable(STExpression expression) {

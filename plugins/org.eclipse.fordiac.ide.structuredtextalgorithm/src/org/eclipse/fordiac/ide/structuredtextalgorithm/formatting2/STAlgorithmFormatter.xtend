@@ -21,9 +21,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.formatting2.STCoreFormatter
 import org.eclipse.xtext.Keyword
 import org.eclipse.xtext.RuleCall
 import org.eclipse.xtext.formatting2.IFormattableDocument
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 
 class STAlgorithmFormatter extends STCoreFormatter {
-	
+
 	@Inject extension STAlgorithmGrammarAccess
 
 	def dispatch void format(STAlgorithmSource sTAlgorithmSource, extension IFormattableDocument document) {
@@ -34,16 +35,20 @@ class STAlgorithmFormatter extends STCoreFormatter {
 				RuleCall case element.rule == STNumericLiteralTypeRule: true
 				RuleCall case element.rule == STDateLiteralTypeRule: true
 				RuleCall case element.rule == STTimeLiteralTypeRule: true
-				RuleCall case element.rule == orOperatorRule : true
-				RuleCall case element.rule == xorOperatorRule : true
-				RuleCall case element.rule == getUnaryOperatorRule : true
+				RuleCall case element.rule == orOperatorRule: true
+				RuleCall case element.rule == xorOperatorRule: true
+				RuleCall case element.rule == getUnaryOperatorRule: true
 				default: false
 			}
 		].forEach [
 			document.addReplacer(new KeywordCaseTextReplacer(document, it))
 		]
-		sTAlgorithmSource.allRegionsFor.keywords(STPrimaryExpressionAccess.leftParenthesisKeyword_0_0).forEach[append[noSpace]]
-		sTAlgorithmSource.allRegionsFor.keywords(STPrimaryExpressionAccess.rightParenthesisKeyword_0_2).forEach[prepend[noSpace]]
+		sTAlgorithmSource.allRegionsFor.keywords(STPrimaryExpressionAccess.leftParenthesisKeyword_0_0).forEach [
+			append[noSpace]
+		]
+		sTAlgorithmSource.allRegionsFor.keywords(STPrimaryExpressionAccess.rightParenthesisKeyword_0_2).forEach [
+			prepend[noSpace]
+		]
 		for (element : sTAlgorithmSource.elements) {
 			element.format
 		}
@@ -51,8 +56,16 @@ class STAlgorithmFormatter extends STCoreFormatter {
 
 	def dispatch void format(STAlgorithm sTAlgorithm, extension IFormattableDocument document) {
 		sTAlgorithm.regionFor.keyword("ALGORITHM").prepend[noIndentation].append[oneSpace]
-		sTAlgorithm.regionFor.keyword("END_FUNCTION").prepend[noIndentation].append[newLine] 
-		
+		sTAlgorithm.regionFor.keyword("END_ALGORITHM").prepend[noIndentation].append[setNewLines(1, 2, 2)]
+
 		sTAlgorithm.body.format
 	}
+
+	def dispatch void format(STMethod sTMethod, extension IFormattableDocument document) {
+		sTMethod.regionFor.keyword("METHOD").prepend[noIndentation].append[oneSpace]
+		sTMethod.regionFor.keyword("END_METHOD").prepend[noIndentation].append[setNewLines(1, 2, 2)]
+
+		sTMethod.body.format
+	}
+
 }

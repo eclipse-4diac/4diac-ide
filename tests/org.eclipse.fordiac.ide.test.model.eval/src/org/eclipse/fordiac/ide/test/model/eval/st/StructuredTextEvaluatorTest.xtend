@@ -24,8 +24,6 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
-import org.eclipse.fordiac.ide.model.data.AnyNumType
-import org.eclipse.fordiac.ide.model.data.AnyRealType
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
@@ -359,10 +357,7 @@ class StructuredTextEvaluatorTest {
 					((type instanceof AnyUnsignedType || type instanceof AnyBitType) && contains('-')) ||
 						(type instanceof BoolType && length > 1)
 				].flatMap [ value |
-					STUnaryOperator.VALUES.reject [
-						(type instanceof AnyNumType && it == STUnaryOperator.NOT) ||
-							(type instanceof AnyBitType && it != STUnaryOperator.NOT)
-					].map [ operator |
+					STUnaryOperator.VALUES.filter[isApplicableTo(type)].map [ operator |
 						arguments(operator, type.name, value)
 					]
 				]
@@ -437,12 +432,7 @@ class StructuredTextEvaluatorTest {
 					((type instanceof AnyUnsignedType || type instanceof AnyBitType) && contains('-')) ||
 						(type instanceof BoolType && length > 1)
 				].flatMap [ value |
-					STBinaryOperator.VALUES.reject [
-						it == STBinaryOperator.RANGE ||
-							(type instanceof AnyIntType && (it == STBinaryOperator.POWER || logical)) ||
-							(type instanceof AnyBitType && (arithmetic && !logical)) ||
-							(type instanceof AnyRealType && logical) || (type instanceof BoolType && !logical)
-					].flatMap [ operator |
+					STBinaryOperator.VALUES.filter[isApplicableTo(type, type) && !range].flatMap [ operator |
 						#[
 							arguments(operator, type.name, value, "1"),
 							arguments(operator, type.name, value, if(type instanceof BoolType) "0" else "7")

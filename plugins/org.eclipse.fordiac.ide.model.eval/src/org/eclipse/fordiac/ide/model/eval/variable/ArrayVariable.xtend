@@ -29,7 +29,7 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
 
 class ArrayVariable extends AbstractVariable<ArrayValue> {
-	static final Pattern ARRAY_PATTERN = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
+	static final Pattern ARRAY_PATTERN = Pattern.compile(",(?=(?:[^\"']*(?:(?:\"[^\"]*\")|(?:\'[^\']*\')))*[^\"']*$)")
 
 	@Accessors final DataType elementType
 	@Accessors final List<Variable<?>> elements

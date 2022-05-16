@@ -59,7 +59,6 @@ class STCoreFormatter extends AbstractFormatter2 {
 	@Inject extension STCoreGrammarAccess
 
 	def dispatch void format(STCoreSource sTCoreSource, extension IFormattableDocument document) {
-		// TODO: format HiddenRegions around keywords, attributes, cross references, etc. 
 		for (sTStatement : sTCoreSource.statements) {
 			sTStatement.format
 		}
@@ -81,7 +80,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
-		varDeclarationBlock.append[newLine]
+		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
 	def dispatch void format(STVarTempDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
@@ -100,7 +99,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
-		varDeclarationBlock.append[newLine]
+		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
 	def dispatch void format(STVarInputDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
@@ -119,7 +118,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
-		varDeclarationBlock.append[newLine]
+		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
 	def dispatch void format(STVarOutputDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
@@ -138,7 +137,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
-		varDeclarationBlock.append[newLine]
+		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
 	def dispatch void format(STVarInOutDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
@@ -157,7 +156,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
-		varDeclarationBlock.append[newLine]
+		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
 	def dispatch void format(STVarDeclaration varDeclaration, extension IFormattableDocument document) {
@@ -183,7 +182,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		ifStatement.elseifs.forEach[format]
 		ifStatement.^else.format
 		ifStatement.regionFor.keyword(";").surround[noSpace]
-		ifStatement.append[newLine]
+		ifStatement.append[setNewLines(1, 2, 2)]
 	}
 
 	def dispatch void format(STElseIfPart elseIfStatement, extension IFormattableDocument document) {
@@ -206,7 +205,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		forStatement.regionFor.keyword(STForStatementAccess.colonEqualsSignKeyword_2).surround[oneSpace]
 		forStatement.statements.forEach[format]
 		forStatement.regionFor.keyword(";").surround[noSpace]
-		forStatement.append[newLine]
+		forStatement.append[setNewLines(1, 2, 2)]
 	}
 
 	def dispatch void format(STWhileStatement whileStatement, extension IFormattableDocument document) {
@@ -218,7 +217,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		whileStatement.condition.format
 		whileStatement.statements.forEach[format]
 		whileStatement.regionFor.keyword(";").surround[noSpace]
-		whileStatement.append[newLine]
+		whileStatement.append[setNewLines(1, 2, 2)]
 	}
 
 	def dispatch void format(STRepeatStatement repeatStatement, extension IFormattableDocument document) {
@@ -230,9 +229,8 @@ class STCoreFormatter extends AbstractFormatter2 {
 		repeatStatement.condition.format
 		repeatStatement.regionFor.keyword(STRepeatStatementAccess.END_REPEATKeyword_4).prepend[newLine noSpace]
 		repeatStatement.statements.forEach[format]
-		repeatStatement.statements.forEach[surround[newLine]]
 		repeatStatement.regionFor.keyword(";").surround[noSpace]
-		repeatStatement.append[newLine]
+		repeatStatement.append[setNewLines(1, 2, 2)]
 	}
 
 	def dispatch void format(STCaseStatement caseStatement, extension IFormattableDocument document) {
@@ -243,9 +241,8 @@ class STCoreFormatter extends AbstractFormatter2 {
 		)
 		caseStatement.regionFor.keyword(";").surround[noSpace]
 		caseStatement.cases.forEach[format]
-		caseStatement.cases.forEach[append[newLine]]
 		caseStatement.^else.format
-		caseStatement.append[newLine]
+		caseStatement.append[setNewLines(1, 2, 2)]
 	}
 
 	def dispatch format(STCaseCases stCase, extension IFormattableDocument document) {
@@ -257,20 +254,20 @@ class STCoreFormatter extends AbstractFormatter2 {
 	def dispatch void format(STAssignmentStatement assignmentStatement, extension IFormattableDocument document) {
 		assignmentStatement.regionFor.keyword(":=").surround[oneSpace]
 		assignmentStatement.regionFor.keyword(";").surround[noSpace]
-		assignmentStatement.append[newLine]
 		assignmentStatement.left.format
 		assignmentStatement.right.format
+		assignmentStatement.append[setNewLines(1, 1, 2)]
 	}
 
 	def dispatch void format(STCallStatement callStatement, extension IFormattableDocument document) {
 		callStatement.call.format
 		callStatement.regionFor.keyword(";").surround[noSpace]
-		callStatement.append[newLine]
+		callStatement.append[setNewLines(1, 2, 2)]
 	}
 
 	def dispatch void format(STStatement statement, extension IFormattableDocument document) {
 		statement.regionFor.keyword(";").surround[noSpace]
-		statement.append[newLine]
+		statement.append[setNewLines(1, 2, 2)]
 	}
 
 	def dispatch void format(STElementaryInitializerExpression initExpression,
@@ -384,6 +381,4 @@ class STCoreFormatter extends AbstractFormatter2 {
 		]
 		arrayAccessExpression.receiver.format
 	}
-
-// TODO: implement for STVarDeclaration, STElementaryInitializerExpression, STArrayInitializerExpression, STArrayInitElement, STAssignmentStatement, STCallStatement, STCallUnnamedArgument, STCallNamedInputArgument, STIfStatement, STElseIfPart, STCaseStatement, STCaseCases, STElsePart, STForStatement, STWhileStatement, STRepeatStatement, STBinaryExpression, STUnaryExpression, STMemberAccessExpression, STArrayAccessExpression, STFeatureExpression, STMultibitPartialExpression
 }

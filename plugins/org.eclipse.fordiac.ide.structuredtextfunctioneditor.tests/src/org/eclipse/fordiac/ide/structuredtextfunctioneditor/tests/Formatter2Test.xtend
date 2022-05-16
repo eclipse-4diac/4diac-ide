@@ -687,7 +687,7 @@ class Formatter2Test {
 	}
 
 	@Test
-	def void unaryNotForamtting() {
+	def void unaryNotFormatting() {
 		assertFormatted[
 			toBeFormatted = '''
 				FUNCTION hubert
@@ -708,4 +708,143 @@ class Formatter2Test {
 		]
 	}
 
+	@Test
+	def void noLineTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				VAR
+				   bool1 : BOOL;
+				END_VAR
+				VAR_OUTPUT
+					int1 : INT;
+				END_VAR
+				IF int1 < int2 THEN
+					bol1 := TRUE;
+				ELSIF real2 = real3 THEN
+					bol2 := FALSE;
+				ELSE
+					bol3 := 1;
+				END_IF;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				VAR
+					bool1 : BOOL;
+				END_VAR
+				VAR_OUTPUT
+					int1 : INT;
+				END_VAR
+				IF int1 < int2 THEN
+					bol1 := TRUE;
+				ELSIF real2 = real3 THEN
+					bol2 := FALSE;
+				ELSE
+					bol3 := 1;
+				END_IF;
+				END_FUNCTION
+			'''
+		]
+	}
+	
+	@Test
+	def void oneLineTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				VAR
+				   bool1 : BOOL;
+				END_VAR
+				
+				VAR_OUTPUT
+					int1 : INT;
+				END_VAR
+				
+				IF int1 < int2 THEN
+					bol1 := TRUE;
+				ELSIF real2 = real3 THEN
+					bol2 := FALSE;
+				ELSE
+					bol3 := 1;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				VAR
+					bool1 : BOOL;
+				END_VAR
+				
+				VAR_OUTPUT
+					int1 : INT;
+				END_VAR
+				
+				IF int1 < int2 THEN
+					bol1 := TRUE;
+				ELSIF real2 = real3 THEN
+					bol2 := FALSE;
+				ELSE
+					bol3 := 1;
+				END_IF;
+
+				END_FUNCTION
+			'''
+		]
+	}
+	
+	@Test
+	def void multiLineTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				
+				VAR
+				   bool1 : BOOL;
+				END_VAR
+				
+				
+				VAR_OUTPUT
+					int1 : INT;
+				END_VAR
+				
+				
+				IF int1 < int2 THEN
+					bol1 := TRUE;
+				ELSIF real2 = real3 THEN
+					bol2 := FALSE;
+				ELSE
+					bol3 := 1;
+				END_IF;
+				
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				VAR
+					bool1 : BOOL;
+				END_VAR
+				
+				VAR_OUTPUT
+					int1 : INT;
+				END_VAR
+				
+				IF int1 < int2 THEN
+					bol1 := TRUE;
+				ELSIF real2 = real3 THEN
+					bol2 := FALSE;
+				ELSE
+					bol3 := 1;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+		]
+	}
 }

@@ -26,10 +26,12 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_Assignment_Invalid_Left_Side;
 	public static String STCoreValidator_Feature_Not_Callable;
 	public static String STCoreValidator_Mixing_Formal_And_NonFormal;
+	public static String STCoreValidator_BinaryOperator_Not_Applicable;
 	public static String STCoreValidator_No_Cast_Available;
 	public static String STCoreValidator_Non_Compatible_Types;
 	public static String STCoreValidator_Wrong_Name_Case;
 	public static String STCoreValidator_Wrong_Number_Of_Arguments;
+	public static String STCoreValidator_UnaryOperator_Not_Applicable;
 	public static String STCoreValidator_Unqualified_FB_Call_On_FB_With_Input_Event_Size_Not_One;
 
 	static {
