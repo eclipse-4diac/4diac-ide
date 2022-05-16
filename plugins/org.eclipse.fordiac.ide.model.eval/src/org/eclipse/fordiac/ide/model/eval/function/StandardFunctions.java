@@ -337,263 +337,263 @@ public interface StandardFunctions extends Functions {
 	/* Numeric functions for time and date */
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyDurationValue> T ADD(final T IN1, final T IN2) {
-		return (T) ValueOperations.add(IN1, IN2);
+	static <T extends AnyDurationValue> T ADD(final T first, final T second) {
+		return (T) ValueOperations.add(first, second);
 	}
 
-	static TimeValue ADD_TIME(final TimeValue IN1, final TimeValue IN2) {
-		return ADD(IN1, IN2);
+	static TimeValue ADD_TIME(final TimeValue first, final TimeValue second) {
+		return ADD(first, second);
 	}
 
-	static LTimeValue ADD_LTIME(final LTimeValue IN1, final LTimeValue IN2) {
-		return ADD(IN1, IN2);
+	static LTimeValue ADD_LTIME(final LTimeValue first, final LTimeValue second) {
+		return ADD(first, second);
 	}
 
-	static TimeOfDayValue ADD(final TimeOfDayValue IN1, final TimeValue IN2) {
-		return TimeOfDayValue.toTimeOfDayValue(IN1.toNanos() + IN2.longValue());
+	static TimeOfDayValue ADD(final TimeOfDayValue first, final TimeValue second) {
+		return TimeOfDayValue.toTimeOfDayValue(first.toNanos() + second.longValue());
 	}
 
-	static LTimeOfDayValue ADD(final LTimeOfDayValue IN1, final LTimeValue IN2) {
-		return LTimeOfDayValue.toLTimeOfDayValue(IN1.toNanos() + IN2.longValue());
+	static LTimeOfDayValue ADD(final LTimeOfDayValue first, final LTimeValue second) {
+		return LTimeOfDayValue.toLTimeOfDayValue(first.toNanos() + second.longValue());
 	}
 
-	static TimeOfDayValue ADD_TOD_TIME(final TimeOfDayValue IN1, final TimeValue IN2) {
-		return ADD(IN1, IN2);
+	static TimeOfDayValue ADD_TOD_TIME(final TimeOfDayValue first, final TimeValue second) {
+		return ADD(first, second);
 	}
 
-	static LTimeOfDayValue ADD_LTOD_LTIME(final LTimeOfDayValue IN1, final LTimeValue IN2) {
-		return ADD(IN1, IN2);
+	static LTimeOfDayValue ADD_LTOD_LTIME(final LTimeOfDayValue first, final LTimeValue second) {
+		return ADD(first, second);
 	}
 
-	static DateAndTimeValue ADD(final DateAndTimeValue IN1, final TimeValue IN2) {
-		return DateAndTimeValue.toDateAndTimeValue(IN1.toNanos() + IN2.longValue());
+	static DateAndTimeValue ADD(final DateAndTimeValue first, final TimeValue second) {
+		return DateAndTimeValue.toDateAndTimeValue(first.toNanos() + second.longValue());
 	}
 
-	static LDateAndTimeValue ADD(final LDateAndTimeValue IN1, final LTimeValue IN2) {
-		return LDateAndTimeValue.toLDateAndTimeValue(IN1.toNanos() + IN2.longValue());
+	static LDateAndTimeValue ADD(final LDateAndTimeValue first, final LTimeValue second) {
+		return LDateAndTimeValue.toLDateAndTimeValue(first.toNanos() + second.longValue());
 	}
 
-	static DateAndTimeValue ADD_DT_TIME(final DateAndTimeValue IN1, final TimeValue IN2) {
-		return ADD(IN1, IN2);
+	static DateAndTimeValue ADD_DT_TIME(final DateAndTimeValue first, final TimeValue second) {
+		return ADD(first, second);
 	}
 
-	static LDateAndTimeValue ADD_LDT_LTIME(final LDateAndTimeValue IN1, final LTimeValue IN2) {
-		return ADD(IN1, IN2);
-	}
-
-	@SuppressWarnings("unchecked")
-	static <T extends AnyDurationValue> T SUB(final T IN1, final T IN2) {
-		return (T) ValueOperations.subtract(IN1, IN2);
-	}
-
-	static TimeValue SUB_TIME(final TimeValue IN1, final TimeValue IN2) {
-		return SUB(IN1, IN2);
-	}
-
-	static LTimeValue SUB_LTIME(final LTimeValue IN1, final LTimeValue IN2) {
-		return SUB(IN1, IN2);
-	}
-
-	static TimeValue SUB(final DateValue IN1, final DateValue IN2) {
-		return TimeValue.toTimeValue(IN1.toNanos() - IN2.toNanos());
-	}
-
-	static LTimeValue SUB(final LDateValue IN1, final LDateValue IN2) {
-		return LTimeValue.toLTimeValue(IN1.toNanos() - IN2.toNanos());
-	}
-
-	static TimeValue SUB_DATE_DATE(final DateValue IN1, final DateValue IN2) {
-		return SUB(IN1, IN2);
-	}
-
-	static LTimeValue SUB_LDATE_LDATE(final LDateValue IN1, final LDateValue IN2) {
-		return SUB(IN1, IN2);
-	}
-
-	static TimeOfDayValue SUB(final TimeOfDayValue IN1, final TimeValue IN2) {
-		return TimeOfDayValue.toTimeOfDayValue(IN1.toNanos() - IN2.longValue());
-	}
-
-	static LTimeOfDayValue SUB(final LTimeOfDayValue IN1, final LTimeValue IN2) {
-		return LTimeOfDayValue.toLTimeOfDayValue(IN1.toNanos() - IN2.longValue());
-	}
-
-	static TimeOfDayValue SUB_TOD_TIME(final TimeOfDayValue IN1, final TimeValue IN2) {
-		return SUB(IN1, IN2);
-	}
-
-	static LTimeOfDayValue SUB_LTOD_LTIME(final LTimeOfDayValue IN1, final LTimeValue IN2) {
-		return SUB(IN1, IN2);
-	}
-
-	static TimeValue SUB(final TimeOfDayValue IN1, final TimeOfDayValue IN2) {
-		return TimeValue.toTimeValue(IN1.toNanos() - IN2.toNanos());
-	}
-
-	static LTimeValue SUB(final LTimeOfDayValue IN1, final LTimeOfDayValue IN2) {
-		return LTimeValue.toLTimeValue(IN1.toNanos() - IN2.toNanos());
-	}
-
-	static TimeValue SUB_TOD_TOD(final TimeOfDayValue IN1, final TimeOfDayValue IN2) {
-		return SUB(IN1, IN2);
-	}
-
-	static LTimeValue SUB_LTOD_LTOD(final LTimeOfDayValue IN1, final LTimeOfDayValue IN2) {
-		return SUB(IN1, IN2);
-	}
-
-	static DateAndTimeValue SUB(final DateAndTimeValue IN1, final TimeValue IN2) {
-		return DateAndTimeValue.toDateAndTimeValue(IN1.toNanos() - IN2.longValue());
-	}
-
-	static LDateAndTimeValue SUB(final LDateAndTimeValue IN1, final LTimeValue IN2) {
-		return LDateAndTimeValue.toLDateAndTimeValue(IN1.toNanos() - IN2.longValue());
-	}
-
-	static DateAndTimeValue SUB_DT_TIME(final DateAndTimeValue IN1, final TimeValue IN2) {
-		return SUB(IN1, IN2);
-	}
-
-	static LDateAndTimeValue SUB_LDT_LTIME(final LDateAndTimeValue IN1, final LTimeValue IN2) {
-		return SUB(IN1, IN2);
-	}
-
-	static TimeValue SUB(final DateAndTimeValue IN1, final DateAndTimeValue IN2) {
-		return TimeValue.toTimeValue(IN1.toNanos() - IN2.toNanos());
-	}
-
-	static LTimeValue SUB(final LDateAndTimeValue IN1, final LDateAndTimeValue IN2) {
-		return LTimeValue.toLTimeValue(IN1.toNanos() - IN2.toNanos());
-	}
-
-	static TimeValue SUB_DT_DT(final DateAndTimeValue IN1, final DateAndTimeValue IN2) {
-		return SUB(IN1, IN2);
-	}
-
-	static LTimeValue SUB_LDT_LDT(final LDateAndTimeValue IN1, final LDateAndTimeValue IN2) {
-		return SUB(IN1, IN2);
+	static LDateAndTimeValue ADD_LDT_LTIME(final LDateAndTimeValue first, final LTimeValue second) {
+		return ADD(first, second);
 	}
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyDurationValue, U extends AnyIntValue> T MUL(final T IN1, final U IN2) {
-		return (T) ValueOperations.multiply(IN1, IN2);
+	static <T extends AnyDurationValue> T SUB(final T first, final T second) {
+		return (T) ValueOperations.subtract(first, second);
 	}
 
-	static <U extends AnyIntValue> TimeValue MUL_TIME(final TimeValue IN1, final U IN2) {
-		return MUL(IN1, IN2);
+	static TimeValue SUB_TIME(final TimeValue first, final TimeValue second) {
+		return SUB(first, second);
 	}
 
-	static <U extends AnyIntValue> LTimeValue MUL_LTIME(final LTimeValue IN1, final U IN2) {
-		return MUL(IN1, IN2);
+	static LTimeValue SUB_LTIME(final LTimeValue first, final LTimeValue second) {
+		return SUB(first, second);
+	}
+
+	static TimeValue SUB(final DateValue first, final DateValue second) {
+		return TimeValue.toTimeValue(first.toNanos() - second.toNanos());
+	}
+
+	static LTimeValue SUB(final LDateValue first, final LDateValue second) {
+		return LTimeValue.toLTimeValue(first.toNanos() - second.toNanos());
+	}
+
+	static TimeValue SUB_DATE_DATE(final DateValue first, final DateValue second) {
+		return SUB(first, second);
+	}
+
+	static LTimeValue SUB_LDATE_LDATE(final LDateValue first, final LDateValue second) {
+		return SUB(first, second);
+	}
+
+	static TimeOfDayValue SUB(final TimeOfDayValue first, final TimeValue second) {
+		return TimeOfDayValue.toTimeOfDayValue(first.toNanos() - second.longValue());
+	}
+
+	static LTimeOfDayValue SUB(final LTimeOfDayValue first, final LTimeValue second) {
+		return LTimeOfDayValue.toLTimeOfDayValue(first.toNanos() - second.longValue());
+	}
+
+	static TimeOfDayValue SUB_TOD_TIME(final TimeOfDayValue first, final TimeValue second) {
+		return SUB(first, second);
+	}
+
+	static LTimeOfDayValue SUB_LTOD_LTIME(final LTimeOfDayValue first, final LTimeValue second) {
+		return SUB(first, second);
+	}
+
+	static TimeValue SUB(final TimeOfDayValue first, final TimeOfDayValue second) {
+		return TimeValue.toTimeValue(first.toNanos() - second.toNanos());
+	}
+
+	static LTimeValue SUB(final LTimeOfDayValue first, final LTimeOfDayValue second) {
+		return LTimeValue.toLTimeValue(first.toNanos() - second.toNanos());
+	}
+
+	static TimeValue SUB_TOD_TOD(final TimeOfDayValue first, final TimeOfDayValue second) {
+		return SUB(first, second);
+	}
+
+	static LTimeValue SUB_LTOD_LTOD(final LTimeOfDayValue first, final LTimeOfDayValue second) {
+		return SUB(first, second);
+	}
+
+	static DateAndTimeValue SUB(final DateAndTimeValue first, final TimeValue second) {
+		return DateAndTimeValue.toDateAndTimeValue(first.toNanos() - second.longValue());
+	}
+
+	static LDateAndTimeValue SUB(final LDateAndTimeValue first, final LTimeValue second) {
+		return LDateAndTimeValue.toLDateAndTimeValue(first.toNanos() - second.longValue());
+	}
+
+	static DateAndTimeValue SUB_DT_TIME(final DateAndTimeValue first, final TimeValue second) {
+		return SUB(first, second);
+	}
+
+	static LDateAndTimeValue SUB_LDT_LTIME(final LDateAndTimeValue first, final LTimeValue second) {
+		return SUB(first, second);
+	}
+
+	static TimeValue SUB(final DateAndTimeValue first, final DateAndTimeValue second) {
+		return TimeValue.toTimeValue(first.toNanos() - second.toNanos());
+	}
+
+	static LTimeValue SUB(final LDateAndTimeValue first, final LDateAndTimeValue second) {
+		return LTimeValue.toLTimeValue(first.toNanos() - second.toNanos());
+	}
+
+	static TimeValue SUB_DT_DT(final DateAndTimeValue first, final DateAndTimeValue second) {
+		return SUB(first, second);
+	}
+
+	static LTimeValue SUB_LDT_LDT(final LDateAndTimeValue first, final LDateAndTimeValue second) {
+		return SUB(first, second);
 	}
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyDurationValue, U extends AnyIntValue> T DIV(final T IN1, final U IN2) {
-		return (T) ValueOperations.divideBy(IN1, IN2);
+	static <T extends AnyDurationValue, U extends AnyIntValue> T MUL(final T first, final U second) {
+		return (T) ValueOperations.multiply(first, second);
 	}
 
-	static <U extends AnyIntValue> TimeValue DIV_TIME(final TimeValue IN1, final U IN2) {
-		return DIV(IN1, IN2);
+	static <U extends AnyIntValue> TimeValue MUL_TIME(final TimeValue first, final U second) {
+		return MUL(first, second);
 	}
 
-	static <U extends AnyIntValue> LTimeValue DIV_LTIME(final LTimeValue IN1, final U IN2) {
-		return DIV(IN1, IN2);
+	static <U extends AnyIntValue> LTimeValue MUL_LTIME(final LTimeValue first, final U second) {
+		return MUL(first, second);
+	}
+
+	@SuppressWarnings("unchecked")
+	static <T extends AnyDurationValue, U extends AnyIntValue> T DIV(final T first, final U second) {
+		return (T) ValueOperations.divideBy(first, second);
+	}
+
+	static <U extends AnyIntValue> TimeValue DIV_TIME(final TimeValue first, final U second) {
+		return DIV(first, second);
+	}
+
+	static <U extends AnyIntValue> LTimeValue DIV_LTIME(final LTimeValue first, final U second) {
+		return DIV(first, second);
 	}
 
 	// Additional time functions CONCAT and SPLIT
 
-	static DateAndTimeValue CONCAT_DATE_TOD(final DateValue IN1, final TimeOfDayValue IN2) {
-		return DateAndTimeValue.toDateAndTimeValue(IN1.toLocalDate().atTime(IN2.toLocalTime()));
+	static DateAndTimeValue CONCAT_DATE_TOD(final DateValue first, final TimeOfDayValue second) {
+		return DateAndTimeValue.toDateAndTimeValue(first.toLocalDate().atTime(second.toLocalTime()));
 	}
 
-	static LDateAndTimeValue CONCAT_DATE_LTOD(final DateValue IN1, final LTimeOfDayValue IN2) {
-		return LDateAndTimeValue.toLDateAndTimeValue(IN1.toLocalDate().atTime(IN2.toLocalTime()));
+	static LDateAndTimeValue CONCAT_DATE_LTOD(final DateValue first, final LTimeOfDayValue second) {
+		return LDateAndTimeValue.toLDateAndTimeValue(first.toLocalDate().atTime(second.toLocalTime()));
 	}
 
-	static <T extends AnyIntValue> DateValue CONCAT_DATE(final T YEAR, final T MONTH, final T DAY) {
-		return DateValue.toDateValue(LocalDate.of(YEAR.intValue(), MONTH.intValue(), DAY.intValue()));
+	static <T extends AnyIntValue> DateValue CONCAT_DATE(final T year, final T month, final T day) {
+		return DateValue.toDateValue(LocalDate.of(year.intValue(), month.intValue(), day.intValue()));
 	}
 
-	static <T extends AnyIntValue> TimeOfDayValue CONCAT_TOD(final T HOUR, final T MINUTE, final T SECOND,
-			final T MILLISECOND) {
-		return TimeOfDayValue.toTimeOfDayValue(LocalTime.of(HOUR.intValue(), MINUTE.intValue(), SECOND.intValue(),
-				MILLISECOND.intValue() * 1_000_000));
+	static <T extends AnyIntValue> TimeOfDayValue CONCAT_TOD(final T hour, final T minute, final T second,
+			final T millisecond) {
+		return TimeOfDayValue.toTimeOfDayValue(LocalTime.of(hour.intValue(), minute.intValue(), second.intValue(),
+				millisecond.intValue() * 1_000_000));
 	}
 
-	static <T extends AnyIntValue> LTimeOfDayValue CONCAT_LTOD(final T HOUR, final T MINUTE, final T SECOND,
-			final T MILLISECOND) {
-		return LTimeOfDayValue.toLTimeOfDayValue(LocalTime.of(HOUR.intValue(), MINUTE.intValue(), SECOND.intValue(),
-				MILLISECOND.intValue() * 1_000_000));
+	static <T extends AnyIntValue> LTimeOfDayValue CONCAT_LTOD(final T hour, final T minute, final T second,
+			final T millisecond) {
+		return LTimeOfDayValue.toLTimeOfDayValue(LocalTime.of(hour.intValue(), minute.intValue(), second.intValue(),
+				millisecond.intValue() * 1_000_000));
 	}
 
-	static <T extends AnyIntValue> DateAndTimeValue CONCAT_DT(final T YEAR, final T MONTH, final T DAY, final T HOUR,
-			final T MINUTE, final T SECOND, final T MILLISECOND) {
-		return DateAndTimeValue.toDateAndTimeValue(LocalDateTime.of(YEAR.intValue(), MONTH.intValue(), DAY.intValue(),
-				HOUR.intValue(), MINUTE.intValue(), SECOND.intValue(), MILLISECOND.intValue() * 1_000_000));
+	static <T extends AnyIntValue> DateAndTimeValue CONCAT_DT(final T year, final T month, final T day, final T hour,
+			final T minute, final T second, final T millisecond) {
+		return DateAndTimeValue.toDateAndTimeValue(LocalDateTime.of(year.intValue(), month.intValue(), day.intValue(),
+				hour.intValue(), minute.intValue(), second.intValue(), millisecond.intValue() * 1_000_000));
 	}
 
-	static <T extends AnyIntValue> LDateAndTimeValue CONCAT_LDT(final T YEAR, final T MONTH, final T DAY, final T HOUR,
-			final T MINUTE, final T SECOND, final T MILLISECOND) {
-		return LDateAndTimeValue.toLDateAndTimeValue(LocalDateTime.of(YEAR.intValue(), MONTH.intValue(), DAY.intValue(),
-				HOUR.intValue(), MINUTE.intValue(), SECOND.intValue(), MILLISECOND.intValue() * 1_000_000));
+	static <T extends AnyIntValue> LDateAndTimeValue CONCAT_LDT(final T year, final T month, final T day, final T hour,
+			final T minute, final T second, final T millisecond) {
+		return LDateAndTimeValue.toLDateAndTimeValue(LocalDateTime.of(year.intValue(), month.intValue(), day.intValue(),
+				hour.intValue(), minute.intValue(), second.intValue(), millisecond.intValue() * 1_000_000));
 	}
 
-	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue> void SPLIT_DATE(final DateValue IN,
-			final Variable<T> YEAR, final Variable<U> MONTH, final Variable<V> DAY) {
-		final LocalDate value = IN.toLocalDate();
-		YEAR.setValue(DIntValue.toDIntValue(value.getYear()));
-		MONTH.setValue(DIntValue.toDIntValue(value.getMonthValue()));
-		DAY.setValue(DIntValue.toDIntValue(value.getDayOfMonth()));
+	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue> void SPLIT_DATE(final DateValue in,
+			final Variable<T> year, final Variable<U> month, final Variable<V> day) {
+		final LocalDate value = in.toLocalDate();
+		year.setValue(DIntValue.toDIntValue(value.getYear()));
+		month.setValue(DIntValue.toDIntValue(value.getMonthValue()));
+		day.setValue(DIntValue.toDIntValue(value.getDayOfMonth()));
 	}
 
 	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue> void SPLIT_TOD(
-			final TimeOfDayValue IN, final Variable<T> HOUR, final Variable<U> MINUTE, final Variable<V> SECOND,
-			final Variable<W> MILLISECOND) {
-		final LocalTime value = IN.toLocalTime();
-		HOUR.setValue(DIntValue.toDIntValue(value.getHour()));
-		MINUTE.setValue(DIntValue.toDIntValue(value.getMinute()));
-		SECOND.setValue(DIntValue.toDIntValue(value.getSecond()));
-		MILLISECOND.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
+			final TimeOfDayValue in, final Variable<T> hour, final Variable<U> minute, final Variable<V> second,
+			final Variable<W> millisecond) {
+		final LocalTime value = in.toLocalTime();
+		hour.setValue(DIntValue.toDIntValue(value.getHour()));
+		minute.setValue(DIntValue.toDIntValue(value.getMinute()));
+		second.setValue(DIntValue.toDIntValue(value.getSecond()));
+		millisecond.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
 	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue> void SPLIT_LTOD(
-			final LTimeOfDayValue IN, final Variable<T> HOUR, final Variable<U> MINUTE, final Variable<V> SECOND,
-			final Variable<W> MILLISECOND) {
-		final LocalTime value = IN.toLocalTime();
-		HOUR.setValue(DIntValue.toDIntValue(value.getHour()));
-		MINUTE.setValue(DIntValue.toDIntValue(value.getMinute()));
-		SECOND.setValue(DIntValue.toDIntValue(value.getSecond()));
-		MILLISECOND.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
+			final LTimeOfDayValue in, final Variable<T> hour, final Variable<U> minute, final Variable<V> second,
+			final Variable<W> millisecond) {
+		final LocalTime value = in.toLocalTime();
+		hour.setValue(DIntValue.toDIntValue(value.getHour()));
+		minute.setValue(DIntValue.toDIntValue(value.getMinute()));
+		second.setValue(DIntValue.toDIntValue(value.getSecond()));
+		millisecond.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
 	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue, X extends AnyIntValue, Y extends AnyIntValue, Z extends AnyIntValue> void SPLIT_DT(
-			final DateAndTimeValue IN, final Variable<T> YEAR, final Variable<U> MONTH, final Variable<V> DAY,
-			final Variable<W> HOUR, final Variable<X> MINUTE, final Variable<Y> SECOND, final Variable<Z> MILLISECOND) {
-		final LocalDateTime value = IN.toLocalDateTime();
-		YEAR.setValue(DIntValue.toDIntValue(value.getYear()));
-		MONTH.setValue(DIntValue.toDIntValue(value.getMonthValue()));
-		DAY.setValue(DIntValue.toDIntValue(value.getDayOfMonth()));
-		HOUR.setValue(DIntValue.toDIntValue(value.getHour()));
-		MINUTE.setValue(DIntValue.toDIntValue(value.getMinute()));
-		SECOND.setValue(DIntValue.toDIntValue(value.getSecond()));
-		MILLISECOND.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
+			final DateAndTimeValue in, final Variable<T> year, final Variable<U> month, final Variable<V> day,
+			final Variable<W> hour, final Variable<X> minute, final Variable<Y> second, final Variable<Z> millisecond) {
+		final LocalDateTime value = in.toLocalDateTime();
+		year.setValue(DIntValue.toDIntValue(value.getYear()));
+		month.setValue(DIntValue.toDIntValue(value.getMonthValue()));
+		day.setValue(DIntValue.toDIntValue(value.getDayOfMonth()));
+		hour.setValue(DIntValue.toDIntValue(value.getHour()));
+		minute.setValue(DIntValue.toDIntValue(value.getMinute()));
+		second.setValue(DIntValue.toDIntValue(value.getSecond()));
+		millisecond.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
 	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue, X extends AnyIntValue, Y extends AnyIntValue, Z extends AnyIntValue> void SPLIT_LDT(
-			final LDateAndTimeValue IN, final Variable<T> YEAR, final Variable<U> MONTH, final Variable<V> DAY,
-			final Variable<W> HOUR, final Variable<X> MINUTE, final Variable<Y> SECOND, final Variable<Z> MILLISECOND) {
-		final LocalDateTime value = IN.toLocalDateTime();
-		YEAR.setValue(DIntValue.toDIntValue(value.getYear()));
-		MONTH.setValue(DIntValue.toDIntValue(value.getMonthValue()));
-		DAY.setValue(DIntValue.toDIntValue(value.getDayOfMonth()));
-		HOUR.setValue(DIntValue.toDIntValue(value.getHour()));
-		MINUTE.setValue(DIntValue.toDIntValue(value.getMinute()));
-		SECOND.setValue(DIntValue.toDIntValue(value.getSecond()));
-		MILLISECOND.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
+			final LDateAndTimeValue in, final Variable<T> year, final Variable<U> month, final Variable<V> day,
+			final Variable<W> hour, final Variable<X> minute, final Variable<Y> second, final Variable<Z> millisecond) {
+		final LocalDateTime value = in.toLocalDateTime();
+		year.setValue(DIntValue.toDIntValue(value.getYear()));
+		month.setValue(DIntValue.toDIntValue(value.getMonthValue()));
+		day.setValue(DIntValue.toDIntValue(value.getDayOfMonth()));
+		hour.setValue(DIntValue.toDIntValue(value.getHour()));
+		minute.setValue(DIntValue.toDIntValue(value.getMinute()));
+		second.setValue(DIntValue.toDIntValue(value.getSecond()));
+		millisecond.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
-	static SIntValue DAY_OF_WEEK(final DateValue IN) {
-		return SIntValue.toSIntValue((byte) IN.toLocalDate().getDayOfWeek().getValue());
+	static SIntValue DAY_OF_WEEK(final DateValue value) {
+		return SIntValue.toSIntValue((byte) value.toLocalDate().getDayOfWeek().getValue());
 	}
 
 	static <T extends AnyValue> T TO_BIG_ENDIAN(final T IN) {
