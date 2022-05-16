@@ -1419,35 +1419,35 @@ public interface StandardFunctions extends Functions {
 	}
 
 	/***************************************/
-	static SIntValue TRUNC_SINT(final LRealValue value) {
+	static <T extends AnyRealValue> SIntValue TRUNC_SINT(final T value) {
 		return SIntValue.toSIntValue(value);
 	}
 
-	static IntValue TRUNC_INT(final LRealValue value) {
+	static <T extends AnyRealValue> IntValue TRUNC_INT(final T value) {
 		return IntValue.toIntValue(value);
 	}
 
-	static DIntValue TRUNC_DINT(final LRealValue value) {
+	static <T extends AnyRealValue> DIntValue TRUNC_DINT(final T value) {
 		return DIntValue.toDIntValue(value);
 	}
 
-	static LIntValue TRUNC_LINT(final LRealValue value) {
+	static <T extends AnyRealValue> LIntValue TRUNC_LINT(final T value) {
 		return LIntValue.toLIntValue(value);
 	}
 
-	static USIntValue TRUNC_USINT(final LRealValue value) {
+	static <T extends AnyRealValue> USIntValue TRUNC_USINT(final T value) {
 		return USIntValue.toUSIntValue(value);
 	}
 
-	static UIntValue TRUNC_UINT(final LRealValue value) {
+	static <T extends AnyRealValue> UIntValue TRUNC_UINT(final T value) {
 		return UIntValue.toUIntValue(value);
 	}
 
-	static UDIntValue TRUNC_UDINT(final LRealValue value) {
+	static <T extends AnyRealValue> UDIntValue TRUNC_UDINT(final T value) {
 		return UDIntValue.toUDIntValue(value);
 	}
 
-	static ULIntValue TRUNC_ULINT(final LRealValue value) {
+	static <T extends AnyRealValue> ULIntValue TRUNC_ULINT(final T value) {
 		return ULIntValue.toULIntValue(value);
 	}
 
@@ -1480,38 +1480,6 @@ public interface StandardFunctions extends Functions {
 	}
 
 	static ULIntValue LREAL_TRUNC_ULINT(final LRealValue value) {
-		return ULIntValue.toULIntValue(value);
-	}
-
-	static SIntValue TRUNC_SINT(final RealValue value) {
-		return SIntValue.toSIntValue(value);
-	}
-
-	static IntValue TRUNC_INT(final RealValue value) {
-		return IntValue.toIntValue(value);
-	}
-
-	static DIntValue TRUNC_DINT(final RealValue value) {
-		return DIntValue.toDIntValue(value);
-	}
-
-	static LIntValue TRUNC_LINT(final RealValue value) {
-		return LIntValue.toLIntValue(value);
-	}
-
-	static USIntValue TRUNC_USINT(final RealValue value) {
-		return USIntValue.toUSIntValue(value);
-	}
-
-	static UIntValue TRUNC_UINT(final RealValue value) {
-		return UIntValue.toUIntValue(value);
-	}
-
-	static UDIntValue TRUNC_UDINT(final RealValue value) {
-		return UDIntValue.toUDIntValue(value);
-	}
-
-	static ULIntValue TRUNC_ULINT(final RealValue value) {
 		return ULIntValue.toULIntValue(value);
 	}
 

@@ -985,6 +985,26 @@ class StandardFunctionsTest {
 		}
 	}
 
+	@ParameterizedTest(name="{index}: {0}")
+	@MethodSource("typeAnyIntArgumentsProvider")
+	def void testTruncConversions(String typeName) {
+		val type = ElementaryTypes.getTypeByName(typeName)
+		// REAL
+		type.defaultValue.assertEquals(StandardFunctions.invoke('''TRUNC_«typeName»''', 0.toRealValue))
+		type.defaultValue.assertEquals(StandardFunctions.invoke('''REAL_TRUNC_«typeName»''', 0.toRealValue))
+		17.wrapValue(type).assertEquals(StandardFunctions.invoke('''TRUNC_«typeName»''', 17.toRealValue))
+		17.wrapValue(type).assertEquals(StandardFunctions.invoke('''REAL_TRUNC_«typeName»''', 17.toRealValue))
+		// LREAL
+		type.defaultValue.assertEquals(StandardFunctions.invoke('''TRUNC_«typeName»''', 0.toLRealValue))
+		type.defaultValue.assertEquals(StandardFunctions.invoke('''LREAL_TRUNC_«typeName»''', 0.toLRealValue))
+		17.wrapValue(type).assertEquals(StandardFunctions.invoke('''TRUNC_«typeName»''', 17.toLRealValue))
+		17.wrapValue(type).assertEquals(StandardFunctions.invoke('''LREAL_TRUNC_«typeName»''', 17.toLRealValue))
+	}
+
+	def static Stream<String> typeAnyIntArgumentsProvider() {
+		DataTypeLibrary.nonUserDefinedDataTypes.stream.filter[it instanceof AnyIntType].map[name]
+	}
+
 	def static Stream<Arguments> typeArgumentsCartesianProvider() {
 		DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ first |
 			DataTypeLibrary.nonUserDefinedDataTypes.stream.map[second|arguments(first.name, second.name)]
