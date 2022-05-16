@@ -67,7 +67,7 @@ public class ModifiedResizeablePolicy extends ResizableEditPolicy {
 	}
 
 	protected IFigure createSelectionFeedbackFigure() {
-		return ModifiedNonResizeableEditPolicy.createSelectionFeedbackFigure(getHost(), 2);
+		return ModifiedNonResizeableEditPolicy.createSelectionFeedbackFigure(getHost(), DiagramPreferences.CORNER_DIM);
 	}
 
 	@Override

@@ -13,9 +13,9 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.RectangleFigure;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.ToolbarLayout;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
@@ -45,23 +45,30 @@ public class ContainerResizePolicy extends ModifiedResizeablePolicy {
 		return figure;
 	}
 
-	private RoundedRectangle createCommentAreaFBFigure(final RoundedRectangle figure) {
-		final RoundedRectangle commentArea = new RoundedRectangle() {
+	private IFigure createCommentAreaFBFigure(final RoundedRectangle figure) {
+		final RectangleFigure commentArea = new RectangleFigure() {
 			@Override
 			public void setBounds(final Rectangle rect) {
-				// the layouter is putting us on the same position as the outer figure which is to high and left
-				// correct this here
+				// the layouter is putting us on the same position as the outer figure which is to high, left, and to
+				// wide correct this here
 				rect.translate(figure.getLineWidth(), figure.getLineWidth());
+				rect.width -= 2 * figure.getLineWidth();
 				super.setBounds(rect);
 			}
 		};
 		commentArea.setAlpha(ModifiedMoveHandle.SELECTION_FILL_ALPHA);
 		commentArea.setOutline(false);
-		commentArea.setBounds(getHost().getCommentBounds().getCopy());
-		commentArea.setCornerDimensions(new Dimension(2, 2));
+		commentArea.setBounds(getCommentAreaBounds(figure));
 		commentArea.setForegroundColor(ModifiedMoveHandle.getSelectionColor());
 		commentArea.setBackgroundColor(ModifiedMoveHandle.getSelectionColor());
 		return commentArea;
+	}
+
+	private Rectangle getCommentAreaBounds(final RoundedRectangle figure) {
+		final Rectangle bounds = getHost().getFigure().getBounds().getCopy();
+		final Rectangle contentBounds = getHost().getContentEP().getFigure().getBounds();
+		bounds.height = contentBounds.y - bounds.y - figure.getLineWidth();
+		return bounds;
 	}
 
 }

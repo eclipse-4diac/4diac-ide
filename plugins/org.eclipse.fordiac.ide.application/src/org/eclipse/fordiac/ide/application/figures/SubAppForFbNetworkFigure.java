@@ -21,13 +21,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
+import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.MarginBorder;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
+import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.figures.FBShapeShadowBorder;
 import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
@@ -168,9 +172,15 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	}
 
 	private void addComment() {
+		final Figure commentContainer = new Figure();
+		commentContainer.setLayoutManager(new ToolbarLayout());
+		commentContainer.setBorder(new MarginBorder(2, 2, 2, 2));
+		expandedMainFigure.add(commentContainer, createCommentLayoutData(), 0);
+
 		commentFigure = new InstanceCommentFigure();
-		expandedMainFigure.add(commentFigure, createCommentLayoutData(), 0);
-		commentFigure.setBorder(new MarginBorder(2, 2, 2, 2));
+		commentFigure.setBorder(new AdvancedLineBorder(PositionConstants.SOUTH));
+		commentFigure.setCursor(Cursors.SIZEALL);
+		commentContainer.add(commentFigure);
 		refreshComment();
 	}
 
