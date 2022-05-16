@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -239,10 +240,28 @@ public class FBTImporter extends TypeImporter {
 			if (LibraryElementTags.SERVICE_TRANSACTION_ELEMENT.equals(name)) {
 				parseServiceTransaction(serviceSequence, type);
 				return true;
+			} else if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
+				parseGenericAttributeNode(serviceSequence);
 			}
 			return false;
 		});
+		processServiceAttributes(serviceSequence);
 		type.getService().getServiceSequence().add(serviceSequence);
+	}
+
+	private static void processServiceAttributes(final ServiceSequence serviceSequence) {
+		final EList<Attribute> attrs = serviceSequence.getAttributes();
+		final List<Attribute> processed = new ArrayList<>();
+		for (final Attribute attr : attrs) {
+			if (attr.getName().equals(LibraryElementTags.START_STATE_ATTRIBUTE)) {
+				serviceSequence.setStartState(attr.getValue());
+				processed.add(attr);
+			} else if (attr.getName().equals(LibraryElementTags.SERVICE_SEQUENCE_TYPE_ATTRIBUTE)) {
+				serviceSequence.setServiceSequenceType(attr.getValue());
+				processed.add(attr);
+			}
+		}
+		attrs.removeAll(processed);
 	}
 
 	/**

@@ -2064,6 +2064,26 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EAttribute getServiceSequence_StartState() {
+		return (EAttribute)serviceSequenceEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getServiceSequence_ServiceSequenceType() {
+		return (EAttribute)serviceSequenceEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getServiceTransaction() {
 		return serviceTransactionEClass;
 	}
@@ -3659,6 +3679,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		serviceSequenceEClass = createEClass(SERVICE_SEQUENCE);
 		createEReference(serviceSequenceEClass, SERVICE_SEQUENCE__SERVICE_TRANSACTION);
+		createEAttribute(serviceSequenceEClass, SERVICE_SEQUENCE__SERVICE_SEQUENCE_TYPE);
+		createEAttribute(serviceSequenceEClass, SERVICE_SEQUENCE__START_STATE);
 
 		serviceTransactionEClass = createEClass(SERVICE_TRANSACTION);
 		createEReference(serviceTransactionEClass, SERVICE_TRANSACTION__INPUT_PRIMITIVE);
@@ -3928,7 +3950,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		segmentEClass.getESuperTypes().add(this.getTypedConfigureableObject());
 		segmentEClass.getESuperTypes().add(this.getPositionableElement());
 		segmentEClass.getESuperTypes().add(this.getColorizableElement());
-		serviceSequenceEClass.getESuperTypes().add(this.getINamedElement());
+		serviceSequenceEClass.getESuperTypes().add(this.getConfigurableObject());
 		serviceInterfaceFBTypeEClass.getESuperTypes().add(this.getFBType());
 		stAlgorithmEClass.getESuperTypes().add(this.getTextAlgorithm());
 		subAppTypeEClass.getESuperTypes().add(this.getCompositeFBType());
@@ -4279,6 +4301,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(serviceSequenceEClass, ServiceSequence.class, "ServiceSequence", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getServiceSequence_ServiceTransaction(), this.getServiceTransaction(), null, "serviceTransaction", null, 0, -1, ServiceSequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getServiceSequence_ServiceSequenceType(), ecorePackage.getEString(), "serviceSequenceType", "POSSIBLE", 0, 1, ServiceSequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getServiceSequence_StartState(), ecorePackage.getEString(), "startState", null, 0, 1, ServiceSequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(serviceSequenceEClass, this.getService(), "getService", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 

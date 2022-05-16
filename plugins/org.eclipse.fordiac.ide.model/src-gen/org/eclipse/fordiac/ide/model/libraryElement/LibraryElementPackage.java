@@ -3356,7 +3356,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE_SEQUENCE__NAME = INAMED_ELEMENT__NAME;
+	int SERVICE_SEQUENCE__NAME = CONFIGURABLE_OBJECT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -3365,7 +3365,16 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE_SEQUENCE__COMMENT = INAMED_ELEMENT__COMMENT;
+	int SERVICE_SEQUENCE__COMMENT = CONFIGURABLE_OBJECT__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE_SEQUENCE__ATTRIBUTES = CONFIGURABLE_OBJECT__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Service Transaction</b></em>' containment reference list.
@@ -3374,7 +3383,25 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE_SEQUENCE__SERVICE_TRANSACTION = INAMED_ELEMENT_FEATURE_COUNT + 0;
+	int SERVICE_SEQUENCE__SERVICE_TRANSACTION = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Service Sequence Type</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE_SEQUENCE__SERVICE_SEQUENCE_TYPE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Start State</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE_SEQUENCE__START_STATE = CONFIGURABLE_OBJECT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Service Sequence</em>' class.
@@ -3383,7 +3410,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE_SEQUENCE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 1;
+	int SERVICE_SEQUENCE_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl <em>Service Transaction</em>}' class.
@@ -7944,6 +7971,28 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getServiceSequence_ServiceTransaction();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getStartState <em>Start State</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start State</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getStartState()
+	 * @see #getServiceSequence()
+	 * @generated
+	 */
+	EAttribute getServiceSequence_StartState();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getServiceSequenceType <em>Service Sequence Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Service Sequence Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getServiceSequenceType()
+	 * @see #getServiceSequence()
+	 * @generated
+	 */
+	EAttribute getServiceSequence_ServiceSequenceType();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction <em>Service Transaction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10498,6 +10547,22 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SERVICE_SEQUENCE__SERVICE_TRANSACTION = eINSTANCE.getServiceSequence_ServiceTransaction();
+
+		/**
+		 * The meta object literal for the '<em><b>Start State</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SERVICE_SEQUENCE__START_STATE = eINSTANCE.getServiceSequence_StartState();
+
+		/**
+		 * The meta object literal for the '<em><b>Service Sequence Type</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SERVICE_SEQUENCE__SERVICE_SEQUENCE_TYPE = eINSTANCE.getServiceSequence_ServiceSequenceType();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl <em>Service Transaction</em>}' class.

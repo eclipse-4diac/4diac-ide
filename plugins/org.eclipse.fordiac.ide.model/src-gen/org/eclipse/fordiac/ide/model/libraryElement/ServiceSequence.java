@@ -31,7 +31,7 @@ import org.eclipse.emf.common.util.EList;
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceSequence()
  * @model
  * @generated */
-public interface ServiceSequence extends INamedElement {
+public interface ServiceSequence extends ConfigurableObject {
 	/** Returns the value of the '<em><b>Service Transaction</b></em>' containment reference list. The list contents are
 	 * of type {@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
@@ -42,6 +42,51 @@ public interface ServiceSequence extends INamedElement {
 	 *        namespace='##targetNamespace'"
 	 * @generated */
 	EList<ServiceTransaction> getServiceTransaction();
+
+	/**
+	 * Returns the value of the '<em><b>Start State</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Start State</em>' attribute.
+	 * @see #setStartState(String)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceSequence_StartState()
+	 * @model
+	 * @generated
+	 */
+	String getStartState();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getStartState <em>Start State</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Start State</em>' attribute.
+	 * @see #getStartState()
+	 * @generated
+	 */
+	void setStartState(String value);
+
+	/**
+	 * Returns the value of the '<em><b>Service Sequence Type</b></em>' attribute.
+	 * The default value is <code>"POSSIBLE"</code>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Service Sequence Type</em>' attribute.
+	 * @see #setServiceSequenceType(String)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getServiceSequence_ServiceSequenceType()
+	 * @model default="POSSIBLE"
+	 * @generated
+	 */
+	String getServiceSequenceType();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getServiceSequenceType <em>Service Sequence Type</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Service Sequence Type</em>' attribute.
+	 * @see #getServiceSequenceType()
+	 * @generated
+	 */
+	void setServiceSequenceType(String value);
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
