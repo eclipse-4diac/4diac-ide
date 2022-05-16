@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2014 fortiss GmbH
+ * Copyright (c) 2014 fortiss GmbH, 2022 Felix Roithmayr
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,18 +10,24 @@
  * Contributors:
  *   Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Felix Roithmayr
+ *     - Update to more generic model filtering
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IFilter;
 
 public class InputPrimitiveFilter implements IFilter {
 
 	@Override
-	public boolean select(final Object toTest) {
-		return (toTest instanceof InputPrimitiveEditPart) || (toTest instanceof InputPrimitive);
+	public boolean select(Object toTest) {
+		if (toTest instanceof EditPart) {
+			toTest = ((EditPart) toTest).getModel();
+		}
+
+		return (toTest instanceof InputPrimitive);
 	}
 
 }
