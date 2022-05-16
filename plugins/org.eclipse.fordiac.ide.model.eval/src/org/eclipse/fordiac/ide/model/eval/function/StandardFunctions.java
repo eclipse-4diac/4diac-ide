@@ -208,13 +208,13 @@ public interface StandardFunctions extends Functions {
 		return Stream.of(values).min(ValueOperations::compareTo).orElseThrow();
 	}
 
-	static <T extends AnyElementaryValue> T LIMIT(final T MN, final T IN, final T MX) {
-		if (ValueOperations.operator_greaterThan(IN, MX)) {
-			return MX;
-		} else if (ValueOperations.operator_lessThan(IN, MN)) {
-			return MN;
+	static <T extends AnyElementaryValue> T LIMIT(final T min, final T value, final T max) {
+		if (ValueOperations.operator_greaterThan(value, max)) {
+			return max;
+		} else if (ValueOperations.operator_lessThan(value, min)) {
+			return min;
 		} else {
-			return IN;
+			return value;
 		}
 	}
 
@@ -294,17 +294,18 @@ public interface StandardFunctions extends Functions {
 		return ULIntValue.toULIntValue(string.length());
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue> T LEFT(final T string, final U L) {
-		return apply(string, value -> value.substring(0, L.intValue()));
+	static <T extends AnyStringValue, U extends AnyIntValue> T LEFT(final T string, final U length) {
+		return apply(string, value -> value.substring(0, length.intValue()));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue> T RIGHT(final T string, final U L) {
-		return apply(string, value -> value.substring(value.length() - L.intValue()));
+	static <T extends AnyStringValue, U extends AnyIntValue> T RIGHT(final T string, final U length) {
+		return apply(string, value -> value.substring(value.length() - length.intValue()));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T MID(final T string, final U L,
-			final V P) {
-		return apply(string, value -> value.substring(P.intValue() - 1, P.intValue() + L.intValue() - 1));
+	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T MID(final T string,
+			final U length, final V position) {
+		return apply(string,
+				value -> value.substring(position.intValue() - 1, position.intValue() + length.intValue() - 1));
 	}
 
 	@SafeVarargs
@@ -312,25 +313,25 @@ public interface StandardFunctions extends Functions {
 		return Stream.of(strings).reduce((value1, value2) -> apply(value1, value2, String::concat)).orElseThrow();
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue> T INSERT(final T IN1, final T IN2, final U P) {
-		return apply(IN1, value -> value.substring(0, P.intValue()).concat(IN2.stringValue())
-				.concat(value.substring(P.intValue())));
+	static <T extends AnyStringValue, U extends AnyIntValue> T INSERT(final T first, final T second, final U position) {
+		return apply(first, value -> value.substring(0, position.intValue()).concat(second.stringValue())
+				.concat(value.substring(position.intValue())));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T DELETE(final T string, final U L,
-			final V P) {
-		return apply(string,
-				value -> value.substring(0, P.intValue() - 1).concat(value.substring(P.intValue() + L.intValue() - 1)));
+	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T DELETE(final T string,
+			final U length, final V position) {
+		return apply(string, value -> value.substring(0, position.intValue() - 1)
+				.concat(value.substring(position.intValue() + length.intValue() - 1)));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T REPLACE(final T IN1, final T IN2,
-			final U L, final V P) {
-		return apply(IN1, value -> value.substring(0, P.intValue() - 1).concat(IN2.stringValue())
-				.concat(value.substring(P.intValue() + L.intValue() - 1)));
+	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T REPLACE(final T first,
+			final T second, final U length, final V position) {
+		return apply(first, value -> value.substring(0, position.intValue() - 1).concat(second.stringValue())
+				.concat(value.substring(position.intValue() + length.intValue() - 1)));
 	}
 
-	static <T extends AnyStringValue> ULIntValue FIND(final T IN1, final T IN2) {
-		return ULIntValue.toULIntValue(IN1.stringValue().indexOf(IN2.stringValue()) + 1);
+	static <T extends AnyStringValue> ULIntValue FIND(final T first, final T second) {
+		return ULIntValue.toULIntValue(first.stringValue().indexOf(second.stringValue()) + 1L);
 	}
 
 	/* Numeric functions for time and date */
@@ -613,8 +614,8 @@ public interface StandardFunctions extends Functions {
 
 	/* Validation functions */
 
-	static <T extends AnyRealValue> BoolValue IS_VALID(final T IN) {
-		return BoolValue.toBoolValue(Double.isFinite(IN.doubleValue()));
+	static <T extends AnyRealValue> BoolValue IS_VALID(final T value) {
+		return BoolValue.toBoolValue(Double.isFinite(value.doubleValue()));
 	}
 
 	static <T extends AnyBitValue> BoolValue IS_VALID_BCD(final T IN) {
