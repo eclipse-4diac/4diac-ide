@@ -596,19 +596,19 @@ public interface StandardFunctions extends Functions {
 		return SIntValue.toSIntValue((byte) value.toLocalDate().getDayOfWeek().getValue());
 	}
 
-	static <T extends AnyValue> T TO_BIG_ENDIAN(final T IN) {
+	static <T extends AnyValue> T TO_BIG_ENDIAN(final T value) {
 		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
-	static <T extends AnyValue> T TO_LITTLE_ENDIAN(final T IN) {
+	static <T extends AnyValue> T TO_LITTLE_ENDIAN(final T value) {
 		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
-	static <T extends AnyValue> T FROM_BIG_ENDIAN(final T IN) {
+	static <T extends AnyValue> T FROM_BIG_ENDIAN(final T value) {
 		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
-	static <T extends AnyValue> T FROM_LITTLE_ENDIAN(final T IN) {
+	static <T extends AnyValue> T FROM_LITTLE_ENDIAN(final T value) {
 		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
@@ -618,7 +618,7 @@ public interface StandardFunctions extends Functions {
 		return BoolValue.toBoolValue(Double.isFinite(value.doubleValue()));
 	}
 
-	static <T extends AnyBitValue> BoolValue IS_VALID_BCD(final T IN) {
+	static <T extends AnyBitValue> BoolValue IS_VALID_BCD(final T value) {
 		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
