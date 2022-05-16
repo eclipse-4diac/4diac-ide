@@ -922,11 +922,36 @@ class StandardFunctionsTest {
 	}
 
 	@Test
+	def void testToBigEndian() {
+		UnsupportedOperationException.assertThrows[StandardFunctions.invoke("TO_BIG_ENDIAN", 17.toIntValue)]
+	}
+
+	@Test
+	def void testToLittleEndian() {
+		UnsupportedOperationException.assertThrows[StandardFunctions.invoke("TO_LITTLE_ENDIAN", 17.toIntValue)]
+	}
+
+	@Test
+	def void testFromBigEndian() {
+		UnsupportedOperationException.assertThrows[StandardFunctions.invoke("FROM_BIG_ENDIAN", 17.toIntValue)]
+	}
+
+	@Test
+	def void testFromLittleEndian() {
+		UnsupportedOperationException.assertThrows[StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 17.toIntValue)]
+	}
+
+	@Test
 	def void testIsValid() {
 		true.toBoolValue.assertEquals(StandardFunctions.invoke("IS_VALID", 17.toLRealValue))
 		false.toBoolValue.assertEquals(StandardFunctions.invoke("IS_VALID", Double.POSITIVE_INFINITY.toLRealValue))
 		false.toBoolValue.assertEquals(StandardFunctions.invoke("IS_VALID", Double.NEGATIVE_INFINITY.toLRealValue))
 		false.toBoolValue.assertEquals(StandardFunctions.invoke("IS_VALID", Double.NaN.toLRealValue))
+	}
+
+	@Test
+	def void testIsValidBCD() {
+		UnsupportedOperationException.assertThrows[StandardFunctions.invoke("IS_VALID_BCD", 17.toByteValue)]
 	}
 
 	@Test

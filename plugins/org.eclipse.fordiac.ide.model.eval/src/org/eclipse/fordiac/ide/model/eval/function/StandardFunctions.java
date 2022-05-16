@@ -596,19 +596,19 @@ public interface StandardFunctions extends Functions {
 	}
 
 	static <T extends AnyValue> T TO_BIG_ENDIAN(final T IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
 	static <T extends AnyValue> T TO_LITTLE_ENDIAN(final T IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
 	static <T extends AnyValue> T FROM_BIG_ENDIAN(final T IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
 	static <T extends AnyValue> T FROM_LITTLE_ENDIAN(final T IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
 	/* Validation functions */
@@ -618,7 +618,7 @@ public interface StandardFunctions extends Functions {
 	}
 
 	static <T extends AnyBitValue> BoolValue IS_VALID_BCD(final T IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
 	/* conversion functions */
