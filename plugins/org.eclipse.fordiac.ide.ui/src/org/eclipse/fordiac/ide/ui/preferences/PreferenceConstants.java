@@ -71,6 +71,9 @@ public final class PreferenceConstants {
 	public static final int P_ALLOCATION_SIZE_MIN_VALUE = 50;
 	public static final int P_ALLOCATION_SIZE_MAX_VALUE = 1000;
 
+	public static final String P_SHOW_ERRORS_AT_MOUSE_CURSOR = "ShowErrorsAtMouseCursor"; //$NON-NLS-1$
+	public static final boolean P_SHOW_ERRORS_AT_MOUSE_CURSOR_DEFAULT_VALUE = true;
+
 	private PreferenceConstants() {
 		throw new UnsupportedOperationException();
 	}

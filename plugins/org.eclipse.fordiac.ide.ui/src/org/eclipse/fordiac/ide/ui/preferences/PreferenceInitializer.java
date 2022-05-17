@@ -27,7 +27,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 	@Override
 	public void initializeDefaultPreferences() {
-		IPreferenceStore store = UIPlugin.getDefault().getPreferenceStore();
+		final IPreferenceStore store = UIPlugin.getDefault().getPreferenceStore();
 		PreferenceConverter.setDefault(store, PreferenceConstants.P_EVENT_CONNECTOR_COLOR, new RGB(255, 0, 0));
 
 		PreferenceConverter.setDefault(store, PreferenceConstants.P_BOOL_CONNECTOR_COLOR, new RGB(159, 164, 138));
@@ -43,6 +43,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(PreferenceConstants.P_HIDE_DATA_CON, false);
 
 		store.setDefault(PreferenceConstants.P_DEFAULT_COMPLIANCE_PROFILE, "HOLOBLOC"); //$NON-NLS-1$
+
+		store.setDefault(PreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR,
+				PreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR_DEFAULT_VALUE);
 
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2020, 2022 Primetals Technologies Germany GmbH
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,6 +8,8 @@
  *
  * Contributors:
  *   Ernst Blecha - initial API and implementation and/or initial documentation
+ *   Alois Zoitl  - added option to show error messages at the bottom right
+ *                  instead of the mouse position
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.handlers;
 
@@ -19,8 +21,10 @@ import java.util.stream.Collectors;
 
 import org.eclipse.e4.core.contexts.EclipseContextFactory;
 import org.eclipse.e4.core.services.events.IEventBroker;
+import org.eclipse.fordiac.ide.ui.UIPlugin;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessage;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
+import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
@@ -41,6 +45,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
@@ -122,27 +129,68 @@ public class ErrorMessageHandler {
 		@Override
 		protected void adjustBounds() {
 			super.adjustBounds();
-
-			final Control focused = getShell().getDisplay().getFocusControl();
-
-			Point pt;
-			if (isTextInput(focused)) {
-				final Rectangle elementBounds = focused.getDisplay().getBounds();
-				pt = focused.toDisplay(new Point(elementBounds.x, elementBounds.y + focused.getSize().y));
-			} else if (isTableInput(focused)) {
-				final Table table = (Table) focused;
-				final TableItem ti = table.getItem(table.getSelectionIndex());
-				final Rectangle elementBounds = ti.getBounds();
-				pt = focused.toDisplay(new Point(elementBounds.x, elementBounds.y + ti.getBounds().height));
-			} else {
-				pt = getShell().getDisplay().getCursorLocation();
-				pt.x += MOUSE_CURSOR_OFFSET.x;
-				pt.y += MOUSE_CURSOR_OFFSET.y;
-			}
+			final Point pt = getDialogPosition();
 			final Rectangle boundingBox = getShell().getBounds();
 			boundingBox.x = pt.x;
 			boundingBox.y = pt.y;
 			getShell().setBounds(boundingBox);
+		}
+
+		public Point getDialogPosition() {
+			final Control focused = getShell().getDisplay().getFocusControl();
+			Point pt;
+			if (isTextInput(focused)) {
+				pt = getTextInputRelativeLocation(focused);
+			} else if (isTableInput(focused)) {
+				pt = getTableRelativeLocation(focused);
+			} else {
+				pt = getUnAttachedLocation();
+			}
+			return pt;
+		}
+
+		private static Point getTextInputRelativeLocation(final Control focused) {
+			final Rectangle elementBounds = focused.getDisplay().getBounds();
+			return focused.toDisplay(new Point(elementBounds.x, elementBounds.y + focused.getSize().y));
+		}
+
+		private static Point getTableRelativeLocation(final Control focused) {
+			final Table table = (Table) focused;
+			final TableItem ti = table.getItem(table.getSelectionIndex());
+			final Rectangle elementBounds = ti.getBounds();
+			return focused.toDisplay(new Point(elementBounds.x, elementBounds.y + ti.getBounds().height));
+		}
+
+		private Point getUnAttachedLocation() {
+			if (showErrorAtMouse()) {
+				return getMouseRelativeLocation();
+			}
+			return getBottomRightLocation();
+		}
+
+		public Point getMouseRelativeLocation() {
+			final Point pt = getShell().getDisplay().getCursorLocation();
+			pt.x += MOUSE_CURSOR_OFFSET.x;
+			pt.y += MOUSE_CURSOR_OFFSET.y;
+			return pt;
+		}
+
+		public Point getBottomRightLocation() {
+			final IWorkbench wb = PlatformUI.getWorkbench();
+			final IWorkbenchWindow win = wb.getActiveWorkbenchWindow();
+
+			if (win == null) {
+				// we couldn't get the workbench window still use mouse position as backup
+				return getMouseRelativeLocation();
+			}
+
+			final Rectangle parentBounds = win.getShell().getBounds();
+			final Point pt = new Point(parentBounds.x + parentBounds.width, parentBounds.y + parentBounds.height);
+
+			final Rectangle boundingBox = getShell().getBounds();
+			pt.x -= boundingBox.width;
+			pt.y -= boundingBox.height;
+			return pt;
 		}
 
 		private static boolean isTextInput(final Control focused) {
@@ -247,6 +295,11 @@ public class ErrorMessageHandler {
 				table.removeSelectionListener(selectionChangeListener);
 				table.addSelectionListener(selectionChangeListener);
 			}
+		}
+
+		private static boolean showErrorAtMouse() {
+			return UIPlugin.getDefault().getPreferenceStore()
+					.getBoolean(PreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR);
 		}
 
 	}

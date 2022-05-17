@@ -98,6 +98,7 @@ public final class FordiacMessages extends NLS {
 	public static String FordiacPreferencePage_LABEL_AnyRealConnectorColor;  // NOSONAR
 	public static String FordiacPreferencePage_LABEL_AnyStringConnectorColor;  // NOSONAR
 	public static String FordiacPreferencePage_LABEL_DataConnectorColor;  // NOSONAR
+	public static String FordiacPreferencePage_LABEL_ShowErrorsAtMouseCursor;
 
 	public static String FordiacPreferencePage_LABEL_DefaultAdapterConnectorColor;  // NOSONAR
 	public static String FordiacPreferencePage_LABEL_PreferencePageDescription;  // NOSONAR
