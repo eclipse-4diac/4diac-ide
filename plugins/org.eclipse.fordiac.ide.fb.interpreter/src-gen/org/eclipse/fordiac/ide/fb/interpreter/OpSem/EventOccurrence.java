@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>Event
@@ -35,6 +36,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
  * <em>Fb Runtime</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getCreatedTransactions
  * <em>Created Transactions</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getParentFB
+ * <em>Parent FB</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getEventOccurrence()
@@ -148,5 +151,28 @@ public interface EventOccurrence extends EObject {
 	 * @generated
 	 */
 	EList<Transaction> getCreatedTransactions();
+
+	/**
+	 * Returns the value of the '<em><b>Parent FB</b></em>' reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the value of the '<em>Parent FB</em>' reference.
+	 * @see #setParentFB(EObject)
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getEventOccurrence_ParentFB()
+	 * @model
+	 * @generated
+	 */
+	FBNetworkElement getParentFB();
+
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getParentFB
+	 * <em>Parent FB</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @param value the new value of the '<em>Parent FB</em>' reference.
+	 * @see #getParentFB()
+	 * @generated
+	 */
+	void setParentFB(FBNetworkElement value);
 
 } // EventOccurrence

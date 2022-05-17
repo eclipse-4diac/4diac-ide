@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>Event
@@ -46,6 +47,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
  * <em>Fb Runtime</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getCreatedTransactions
  * <em>Created Transactions</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getParentFB
+ * <em>Parent FB</em>}</li>
  * </ul>
  *
  * @generated
@@ -121,6 +124,16 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 	 * @ordered
 	 */
 	protected EList<Transaction> createdTransactions;
+
+	/**
+	 * The cached value of the '{@link #getParentFB() <em>Parent FB</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see #getParentFB()
+	 * @generated
+	 * @ordered
+	 */
+	protected FBNetworkElement parentFB;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -331,6 +344,48 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 */
 	@Override
+	public FBNetworkElement getParentFB() {
+		if (parentFB != null && parentFB.eIsProxy()) {
+			InternalEObject oldParentFB = (InternalEObject) parentFB;
+			parentFB = (FBNetworkElement) eResolveProxy(oldParentFB);
+			if (parentFB != oldParentFB) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB, oldParentFB, parentFB));
+			}
+		}
+		return parentFB;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	public FBNetworkElement basicGetParentFB() {
+		return parentFB;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public void setParentFB(FBNetworkElement newParentFB) {
+		FBNetworkElement oldParentFB = parentFB;
+		parentFB = newParentFB;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB, oldParentFB, parentFB));
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__FB_RUNTIME:
@@ -361,6 +416,10 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 			return basicGetFbRuntime();
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__CREATED_TRANSACTIONS:
 			return getCreatedTransactions();
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB:
+			if (resolve)
+				return getParentFB();
+			return basicGetParentFB();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -390,6 +449,9 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 			getCreatedTransactions().clear();
 			getCreatedTransactions().addAll((Collection<? extends Transaction>) newValue);
 			return;
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB:
+			setParentFB((FBNetworkElement) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -417,6 +479,9 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__CREATED_TRANSACTIONS:
 			getCreatedTransactions().clear();
 			return;
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB:
+			setParentFB((FBNetworkElement) null);
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -439,6 +504,8 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 			return fbRuntime != null;
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__CREATED_TRANSACTIONS:
 			return createdTransactions != null && !createdTransactions.isEmpty();
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB:
+			return parentFB != null;
 		}
 		return super.eIsSet(featureID);
 	}

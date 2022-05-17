@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Johannes Kepler University Linz
+ * Copyright (c) 2021, 2022 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -29,10 +29,12 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
@@ -69,7 +71,7 @@ import org.osgi.framework.Bundle;
 
 public abstract class AbstractInterpreterTest {
 	public static final String START_STATE = "START"; //$NON-NLS-1$
-	private static final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.fb.interpreter");//$NON-NLS-1$
+	private static final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.test.fb.interpreter"); //$NON-NLS-1$
 
 	@Test
 	public abstract void test() throws IllegalArgumentException;
@@ -196,10 +198,23 @@ public abstract class AbstractInterpreterTest {
 		return runSimpleFBTest((SimpleFBType) fb, seq);
 	}
 
-	public static FBNetwork runFBNetworkTest(final FBNetwork network) {
+	public static FBNetwork runFBNetworkTest(final FBNetwork network, Event event) {
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
 		//network.eResource().getContents().add(eventManager);
-		// TODO finish test
+		// TODO create convenience methods in eventManagerUtils
+		final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
+		eventOccurrence.setEvent(EcoreUtil.copy(event));
+		eventOccurrence.setParentFB(event.getFBNetworkElement());
+		eventOccurrence.setActive(true);
+
+		final FBNetworkRuntime runtime = OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime();
+		runtime.setFbnetwork(EcoreUtil.copy(network));
+		eventOccurrence.setFbRuntime(runtime);
+
+		final FBTransaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
+		transaction.setInputEventOccurrence(eventOccurrence);
+		eventManager.getTransactions().add(transaction);
+
 		EventManagerUtils.process(eventManager);
 		return network;
 	}

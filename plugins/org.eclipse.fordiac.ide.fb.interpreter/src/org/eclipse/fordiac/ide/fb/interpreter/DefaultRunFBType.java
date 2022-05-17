@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
@@ -74,7 +75,6 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		// Initialization of variables
 		VariableUtils.fBVariableInitialization(basicFBTypeRuntime.getBasicfbtype());
 		final var outputEvents = new BasicEList<EventOccurrence>();
-		// First Step: evaluate the ECC
 		final var eCC = basicFBTypeRuntime.getBasicfbtype().getECC();
 		//Create a resource if the BasicFBType does not have one
 		final var fBTypeResource = new DefaultParserXMI().createFBResource(basicFBTypeRuntime.getBasicfbtype());
@@ -207,31 +207,59 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 
 	@Override
 	public EList<EventOccurrence> runFBNetwork(FBNetworkRuntime fBNetworkRuntime, EventManager manager) {
-		EList<EventOccurrence> events = eventOccurrence.getFbRuntime().run(manager);
-		events.forEach(e -> {
+
+		// run FB Type to get the output events for the instance in the network
+		// TODO reuse the runtimes
+		BasicFBTypeRuntime runtime = OperationalSemanticsFactory.eINSTANCE.createBasicFBTypeRuntime();
+		runtime.setBasicfbtype((BasicFBType) EcoreUtil.copy(eventOccurrence.getParentFB().getType()));
+		runtime.setActiveState(runtime.getBasicfbtype().getECC().getStart());
+		EList<EventOccurrence> outputEvents = runBasicFBType(runtime);
+
+		EList<EventOccurrence> networkEvents = new BasicEList<>();
+
+		outputEvents.forEach( outputevent ->
+		eventOccurrence.getParentFB().getInterface().getAllInterfaceElements().stream().filter(iel -> outputevent.getEvent().getName().equals(iel.getName())));
+		// create transactions for the output events
+		outputEvents.forEach(e -> {
 			List<IInterfaceElement> destinations = findConnectedPins(e);
 			for (IInterfaceElement dest : destinations) {
 				manager.getTransactions().add(createNewTransaction(dest, fBNetworkRuntime));
+				final EventOccurrence networkEo = mapFBTypeEventToFBNetworkInstance(e);
+				networkEvents.add(networkEo);
 			}
 		});
 
-		// TODO execute transactions
-
-		throw new UnsupportedOperationException("Not supported operation runFBType(FBTypeRuntime fBTypeRuntime)"); //$NON-NLS-1$
+		// TODO make sure that the correct events are returned (those from the fb network, based on what the fb type returned)
+		return networkEvents;
 	}
 
-	private FBTransaction createNewTransaction(IInterfaceElement dest, FBNetworkRuntime fBNetworkRuntime) {
+	private EventOccurrence mapFBTypeEventToFBNetworkInstance(EventOccurrence e) throws IllegalAccessError {
+		IInterfaceElement networkEvent = eventOccurrence.getParentFB().getInterface().getAllInterfaceElements().stream()
+				.filter(iel -> e.getEvent().getName().equals(iel.getName()))
+				.findFirst().orElseThrow(() -> new IllegalAccessError("Cannot find the event:" + e.getEvent().getName()));
+
+		final EventOccurrence networkEo = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
+		networkEo.setEvent((Event) EcoreUtil.copy(networkEvent));
+		networkEo.setParentFB(networkEvent.getFBNetworkElement());
+		networkEo.setActive(true);
+		return networkEo;
+	}
+
+	private static FBTransaction createNewTransaction(IInterfaceElement dest, FBNetworkRuntime fBNetworkRuntime) {
 		EventOccurrence newEo = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 		newEo.setEvent((Event) EcoreUtil.copy(dest));
 		newEo.setFbRuntime(EcoreUtil.copy(fBNetworkRuntime));
-
+		newEo.setParentFB(dest.getFBNetworkElement());
 		FBTransaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
 		transaction.setInputEventOccurrence(newEo);
+
+		newEo.getCreatedTransactions().add(transaction);
 		return transaction;
 	}
 
 	private List<IInterfaceElement> findConnectedPins(EventOccurrence e) {
-		// TODO implement
-		return null;
+		List<IInterfaceElement> destinations = new ArrayList<>();
+		e.getEvent().getOutputConnections().forEach(conn -> destinations.add(conn.getDestination()));
+		return destinations;
 	}
 }

@@ -242,6 +242,16 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 * @generated
 	 */
 	@Override
+	public EReference getEventOccurrence_ParentFB() {
+		return (EReference) eventOccurrenceEClass.getEStructuralFeatures().get(5);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
 	public EClass getEventManager() {
 		return eventManagerEClass;
 	}
@@ -472,6 +482,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		createEAttribute(eventOccurrenceEClass, EVENT_OCCURRENCE__IGNORED);
 		createEReference(eventOccurrenceEClass, EVENT_OCCURRENCE__FB_RUNTIME);
 		createEReference(eventOccurrenceEClass, EVENT_OCCURRENCE__CREATED_TRANSACTIONS);
+		createEReference(eventOccurrenceEClass, EVENT_OCCURRENCE__PARENT_FB);
 
 		eventManagerEClass = createEClass(EVENT_MANAGER);
 		createEReference(eventManagerEClass, EVENT_MANAGER__TRANSACTIONS);
@@ -557,6 +568,9 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getEventOccurrence_CreatedTransactions(), this.getTransaction(), null, "createdTransactions", //$NON-NLS-1$
 				null, 0, -1, EventOccurrence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
+				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getEventOccurrence_ParentFB(), theLibraryElementPackage.getFBNetworkElement(), null, "parentFB", //$NON-NLS-1$
+				null, 0, 1, EventOccurrence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(eventManagerEClass, EventManager.class, "EventManager", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
