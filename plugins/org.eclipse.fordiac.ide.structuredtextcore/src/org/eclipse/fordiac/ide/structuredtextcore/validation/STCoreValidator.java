@@ -23,6 +23,8 @@
 package org.eclipse.fordiac.ide.structuredtextcore.validation;
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType;
+import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isNumericValueValid;
+import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isStringValueValid;
 
 import java.text.MessageFormat;
 import java.util.stream.StreamSupport;
@@ -50,7 +52,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement;
@@ -84,6 +88,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String WRONG_NUMBER_OF_ARGUMENTS = ISSUE_CODE_PREFIX + "wrongNumberOfArguments"; //$NON-NLS-1$
 	public static final String OPERATOR_NOT_APPLICABLE = ISSUE_CODE_PREFIX + "operatorNotApplicable"; //$NON-NLS-1$
 	public static final String FOR_VARIABLE_NOT_INTEGRAL_TYPE = ISSUE_CODE_PREFIX + "forVariableNotIntegralType"; //$NON-NLS-1$
+	public static final String INVALID_NUMERIC_LITERAL = ISSUE_CODE_PREFIX + "invalidNumericLiteral"; //$NON-NLS-1$
+	public static final String INVALID_STRING_LITERAL = ISSUE_CODE_PREFIX + "invalidStringLiteral"; //$NON-NLS-1$
 
 	@Check
 	public void checkConsecutiveUnderscoresInIdentifier(final INamedElement iNamedElement) {
@@ -329,6 +335,24 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 						STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
 						UNQUALIFIED_FB_CALL_ON_FB_WITH_INPUT_EVENT_SIZE_NOT_ONE);
 			}
+		}
+	}
+
+	@Check
+	public void checkNumericLiteral(final STNumericLiteral expression) {
+		final var type = (DataType) expression.getResultType();
+		if (!isNumericValueValid(type, expression.getValue())) {
+			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(), expression.getValue()),
+					STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE, INVALID_NUMERIC_LITERAL);
+		}
+	}
+
+	@Check
+	public void checkStringLiteral(final STStringLiteral expression) {
+		final var type = (DataType) expression.getResultType();
+		if (!isStringValueValid(type, expression.getValue())) {
+			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(), expression.getValue()),
+					STCorePackage.Literals.ST_STRING_LITERAL__VALUE, INVALID_STRING_LITERAL);
 		}
 	}
 

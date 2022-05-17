@@ -163,14 +163,6 @@ final package class ExpressionAnnotations {
 
 	def package static INamedElement getDeclaredResultType(STNumericLiteral expr) { expr.type }
 
-	def private static checkRange(BigInteger value, long lower, long upper) {
-		value >= BigInteger.valueOf(lower) && value <= BigInteger.valueOf(upper)
-	}
-
-	def private static checkRangeUnsigned(BigInteger value, BigInteger upper) {
-		value.signum >= 0 && value <= upper
-	}
-
 	def package static INamedElement getResultType(STDateLiteral expr) { getDeclaredResultType(expr) }
 
 	def package static INamedElement getDeclaredResultType(STDateLiteral expr) { expr.type }

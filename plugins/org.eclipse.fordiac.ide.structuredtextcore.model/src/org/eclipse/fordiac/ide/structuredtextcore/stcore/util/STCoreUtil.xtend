@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.util
 
+import java.math.BigDecimal
 import java.math.BigInteger
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
@@ -19,9 +20,28 @@ import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.AnyRealType
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.ArrayType
+import org.eclipse.fordiac.ide.model.data.BoolType
+import org.eclipse.fordiac.ide.model.data.ByteType
+import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.DintType
+import org.eclipse.fordiac.ide.model.data.DwordType
+import org.eclipse.fordiac.ide.model.data.IntType
+import org.eclipse.fordiac.ide.model.data.LintType
+import org.eclipse.fordiac.ide.model.data.LrealType
+import org.eclipse.fordiac.ide.model.data.LwordType
+import org.eclipse.fordiac.ide.model.data.RealType
+import org.eclipse.fordiac.ide.model.data.SintType
+import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.data.Subrange
+import org.eclipse.fordiac.ide.model.data.UdintType
+import org.eclipse.fordiac.ide.model.data.UintType
+import org.eclipse.fordiac.ide.model.data.UlintType
+import org.eclipse.fordiac.ide.model.data.UsintType
+import org.eclipse.fordiac.ide.model.data.WcharType
+import org.eclipse.fordiac.ide.model.data.WordType
+import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -46,6 +66,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpressio
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
@@ -136,6 +157,56 @@ final class STCoreUtil {
 			STMemberAccessExpression case receiver.assignable && member.assignable: true
 			default: false
 		}
+	}
+
+	def static boolean isNumericValueValid(DataType type, Object value) {
+		switch (value) {
+			Boolean:
+				type instanceof BoolType
+			BigDecimal:
+				switch (type) {
+					RealType: Float.isFinite(value.floatValue)
+					LrealType: Double.isFinite(value.doubleValue)
+					default: false
+				}
+			BigInteger:
+				switch (type) {
+					SintType: value.checkRange(Byte.MIN_VALUE, Byte.MAX_VALUE)
+					IntType: value.checkRange(Short.MIN_VALUE, Short.MAX_VALUE)
+					DintType: value.checkRange(Integer.MIN_VALUE, Integer.MAX_VALUE)
+					LintType: value.checkRange(Long.MIN_VALUE, Long.MAX_VALUE)
+					UsintType: value.checkRangeUnsigned(0xff#bi)
+					UintType: value.checkRangeUnsigned(0xffff#bi)
+					UdintType: value.checkRangeUnsigned(0xffffffff#bi)
+					UlintType: value.checkRangeUnsigned(0xffffffffffffffff#bi)
+					BoolType: value.checkRangeUnsigned(1bi)
+					ByteType: value.checkRangeUnsigned(0xff#bi)
+					WordType: value.checkRangeUnsigned(0xffff#bi)
+					DwordType: value.checkRangeUnsigned(0xffffffff#bi)
+					LwordType: value.checkRangeUnsigned(0xffffffffffffffff#bi)
+					default: false
+				}
+			default:
+				false
+		}
+	}
+
+	def static boolean isStringValueValid(DataType type, STString value) {
+		switch (type) {
+			CharType: !value.wide && value.length === 1
+			StringType: !value.wide
+			WcharType: value.wide && value.length === 1
+			WstringType: value.wide
+			default: false
+		}
+	}
+
+	def static checkRange(BigInteger value, long lower, long upper) {
+		value >= BigInteger.valueOf(lower) && value <= BigInteger.valueOf(upper)
+	}
+
+	def static checkRangeUnsigned(BigInteger value, BigInteger upper) {
+		value.signum >= 0 && value <= upper
 	}
 
 	def static INamedElement getExpectedType(STExpression expression) {

@@ -21,6 +21,7 @@ public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextcore.messages"; //$NON-NLS-1$
 	public static String STCoreValidator_Consecutive_Underscores_In_Identifier;
 	public static String STCoreValidator_Identifier_Is_Reserved;
+	public static String STCoreValidator_Invalid_Literal;
 	public static String STCoreValidator_Trailing_Underscore_In_Identifier;
 	public static String STCoreValidator_Argument_Not_Assignable;
 	public static String STCoreValidator_Assignment_Invalid_Left_Side;

@@ -137,8 +137,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			  VAR_TEMP
 			    a : REAL;
 			  END_VAR
-			  a := 1;
-			  a := a / 1;
+			  a := 1.0;
+			  a := a / 1.0;
 			END_ALGORITHM
 		'''
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
@@ -146,8 +146,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		assertEquals('''
 			local «var_a»
 			
-			«var_a» = 1
-			«var_a» = («var_a» / 1)
+			«var_a» = 1.0
+			«var_a» = («var_a» / 1.0)
 		'''.toString(), result.toString())
 	}
 
@@ -183,8 +183,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			  VAR_TEMP
 			    a : REAL;
 			  END_VAR
-			  a := 1;
-			  a := a ** 1;
+			  a := 1.0;
+			  a := a ** 1.0;
 			END_ALGORITHM
 		'''
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
@@ -192,8 +192,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		assertEquals('''
 			local «var_a»
 			
-			«var_a» = 1
-			«var_a» = («var_a»^1)
+			«var_a» = 1.0
+			«var_a» = («var_a»^1.0)
 		'''.toString(), result.toString())
 	}
 
@@ -207,8 +207,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			    a : REAL;
 			    b : BOOL;
 			  END_VAR
-			  a := 1;
-			  b := a > 1;
+			  a := 1.0;
+			  b := a > 1.0;
 			END_ALGORITHM
 		'''
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
@@ -217,8 +217,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			local «var_a»
 			local «var_b»
 			
-			«var_a» = 1
-			«var_b» = («var_a» > 1)
+			«var_a» = 1.0
+			«var_b» = («var_a» > 1.0)
 		'''.toString(), result.toString())
 	}
 
@@ -232,8 +232,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			    a : REAL;
 			    b : BOOL;
 			  END_VAR
-			  a := 1;
-			  b := a <= 1;
+			  a := 1.0;
+			  b := a <= 1.0;
 			END_ALGORITHM
 		'''
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
@@ -242,8 +242,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			local «var_a»
 			local «var_b»
 			
-			«var_a» = 1
-			«var_b» = («var_a» <= 1)
+			«var_a» = 1.0
+			«var_b» = («var_a» <= 1.0)
 		'''.toString(), result.toString())
 	}
 
@@ -257,8 +257,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			    a : REAL;
 			    b : BOOL;
 			  END_VAR
-			  a := 1;
-			  b := a = 1;
+			  a := 1.0;
+			  b := a = 1.0;
 			END_ALGORITHM
 		'''
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
@@ -267,8 +267,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			local «var_a»
 			local «var_b»
 			
-			«var_a» = 1
-			«var_b» = («var_a» == 1)
+			«var_a» = 1.0
+			«var_b» = («var_a» == 1.0)
 		'''.toString(), result.toString())
 	}
 
@@ -282,8 +282,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			    a : REAL;
 			    b : BOOL;
 			  END_VAR
-			  a := 1;
-			  b := a <> 1;
+			  a := 1.0;
+			  b := a <> 1.0;
 			END_ALGORITHM
 		'''
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
@@ -292,8 +292,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			local «var_a»
 			local «var_b»
 			
-			«var_a» = 1
-			«var_b» = («var_a» ~= 1)
+			«var_a» = 1.0
+			«var_b» = («var_a» ~= 1.0)
 		'''.toString(), result.toString())
 	}
 

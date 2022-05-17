@@ -435,6 +435,77 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
+	def void testInvalidNumericLiteral() {
+		'''
+			FUNCTION hubert
+			VAR
+				bool1 : BOOL := 2;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.INVALID_NUMERIC_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : SINT := 1024;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.INVALID_NUMERIC_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : USINT := -1;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.INVALID_NUMERIC_LITERAL)
+	}
+
+	@Test
+	def void testInvalidStringLiteral() {
+		'''
+			FUNCTION hubert
+			VAR
+				str : CHAR := 'abc';
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				str : CHAR := "a";
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				str : STRING := "abc";
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				str : WCHAR := "abc";
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				str : WCHAR := 'a';
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				str : WSTRING := 'abc';
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
+	}
+
+	@Test
 	def void testReservedIdentifierErrorValidator() {
 		'''
 		FUNCTION hubert
