@@ -28,8 +28,11 @@ import java.text.MessageFormat;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -42,10 +45,15 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
@@ -75,6 +83,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String FEATURE_NOT_CALLABLE = ISSUE_CODE_PREFIX + "featureNotCallable"; //$NON-NLS-1$
 	public static final String WRONG_NUMBER_OF_ARGUMENTS = ISSUE_CODE_PREFIX + "wrongNumberOfArguments"; //$NON-NLS-1$
 	public static final String OPERATOR_NOT_APPLICABLE = ISSUE_CODE_PREFIX + "operatorNotApplicable"; //$NON-NLS-1$
+	public static final String FOR_VARIABLE_NOT_INTEGRAL_TYPE = ISSUE_CODE_PREFIX + "forVariableNotIntegralType"; //$NON-NLS-1$
 
 	@Check
 	public void checkConsecutiveUnderscoresInIdentifier(final INamedElement iNamedElement) {
@@ -144,6 +153,56 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			final var initializerType = declaration.getDefaultValue().getResultType();
 			checkTypeCompatibility(type, initializerType, STCorePackage.Literals.ST_VAR_DECLARATION__DEFAULT_VALUE);
 		}
+	}
+
+	@Check
+	public void checkIfConditionType(final STIfStatement stmt) {
+		if (stmt.getCondition() != null) {
+			checkTypeCompatibility(ElementaryTypes.BOOL, stmt.getCondition().getResultType(),
+					STCorePackage.Literals.ST_IF_STATEMENT__CONDITION);
+		}
+	}
+
+	@Check
+	public void checkWhileConditionType(final STWhileStatement stmt) {
+		if (stmt.getCondition() != null) {
+			checkTypeCompatibility(ElementaryTypes.BOOL, stmt.getCondition().getResultType(),
+					STCorePackage.Literals.ST_WHILE_STATEMENT__CONDITION);
+		}
+	}
+
+	@Check
+	public void checkRepeatConditionType(final STRepeatStatement stmt) {
+		if (stmt.getCondition() != null) {
+			checkTypeCompatibility(ElementaryTypes.BOOL, stmt.getCondition().getResultType(),
+					STCorePackage.Literals.ST_REPEAT_STATEMENT__CONDITION);
+		}
+	}
+
+	@Check
+	public void checkForTypes(final STForStatement stmt) {
+		final var type = getFeatureType(stmt.getVariable());
+		if (!(type instanceof AnyIntType)) {
+			error(MessageFormat.format(Messages.STCoreValidator_For_Variable_Not_Integral_Type, type.getName()), stmt,
+					STCorePackage.Literals.ST_FOR_STATEMENT__VARIABLE, FOR_VARIABLE_NOT_INTEGRAL_TYPE);
+		}
+		if (stmt.getFrom() != null) {
+			checkTypeCompatibility(type, stmt.getFrom().getResultType(), STCorePackage.Literals.ST_FOR_STATEMENT__FROM);
+		}
+		if (stmt.getTo() != null) {
+			checkTypeCompatibility(type, stmt.getTo().getResultType(), STCorePackage.Literals.ST_FOR_STATEMENT__TO);
+		}
+		if (stmt.getBy() != null) {
+			checkTypeCompatibility(GenericTypes.ANY_NUM, stmt.getBy().getResultType(),
+					STCorePackage.Literals.ST_FOR_STATEMENT__BY);
+		}
+	}
+
+	@Check
+	public void checkCaseConditionType(final STCaseCases stmt) {
+		final var type = stmt.getStatement().getSelector().getResultType();
+		stmt.getConditions().forEach(condition -> checkTypeCompatibility(type, condition.getResultType(),
+				STCorePackage.Literals.ST_CASE_CASES__CONDITIONS, stmt.getConditions().indexOf(condition)));
 	}
 
 	@Check

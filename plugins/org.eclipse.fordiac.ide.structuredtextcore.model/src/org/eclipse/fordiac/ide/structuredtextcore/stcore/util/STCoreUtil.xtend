@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
@@ -155,7 +154,7 @@ final class STCoreUtil {
 			STForStatement:
 				variable.type
 			STCaseCases:
-				switch (stmt : eContainer) { STCaseStatement: stmt.selector.declaredResultType }
+				statement.selector.declaredResultType
 			STInitializerExpression:
 				expectedType
 			STArrayInitElement:

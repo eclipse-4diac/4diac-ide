@@ -314,6 +314,127 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
+	def void testInvalidIfConditionType() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			IF int1 THEN
+				int1 := 17;
+			END_IF;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STIfStatement, STCoreValidator.NO_CAST_AVAILABLE)
+	}
+
+	@Test
+	def void testInvalidWhileConditionType() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			WHILE int1 DO
+				int1 := 17;
+			END_WHILE;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STWhileStatement, STCoreValidator.NO_CAST_AVAILABLE)
+	}
+
+	@Test
+	def void testInvalidRepeatConditionType() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			REPEAT
+				int1 := 17;
+			UNTIL int1
+			END_REPEAT;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STRepeatStatement, STCoreValidator.NO_CAST_AVAILABLE)
+	}
+
+	@Test
+	def void testInvalidForTypes() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : STRING;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				int1 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.FOR_VARIABLE_NOT_INTEGRAL_TYPE)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := LINT#4 TO 17 DO
+				int1 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO LINT#17 DO
+				int1 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 BY LINT#2 DO
+				int1 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertNoErrors
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 BY "2" DO
+				int1 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NO_CAST_AVAILABLE)
+	}
+
+	@Test
+	def void testInvalidCaseConditionType() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			CASE int1 OF
+				1: int1 := 17;
+				LINT#2: int1 := 17;
+			END_CASE;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STCaseCases, STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
+
+	@Test
 	def void testReservedIdentifierErrorValidator() {
 		'''
 		FUNCTION hubert

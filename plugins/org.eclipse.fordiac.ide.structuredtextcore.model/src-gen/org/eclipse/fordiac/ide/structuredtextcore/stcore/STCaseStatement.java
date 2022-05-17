@@ -62,11 +62,13 @@ public interface STCaseStatement extends STStatement {
 	/**
 	 * Returns the value of the '<em><b>Cases</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases}.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases#getStatement <em>Statement</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Cases</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCaseStatement_Cases()
-	 * @model containment="true"
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases#getStatement
+	 * @model opposite="statement" containment="true"
 	 * @generated
 	 */
 	EList<STCaseCases> getCases();

@@ -161,7 +161,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="selector" eType="#//STExpression"
         containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="cases" upperBound="-1"
-        eType="#//STCaseCases" containment="true"/>
+        eType="#//STCaseCases" containment="true" eOpposite="#//STCaseCases/statement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="else" eType="#//STElsePart"
         containment="true"/>
   </eClassifiers>
@@ -170,6 +170,8 @@
         eType="#//STExpression" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"
         eType="#//STStatement" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="statement" lowerBound="1"
+        eType="#//STCaseStatement" eOpposite="#//STCaseStatement/cases"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STElsePart">
     <eStructuralFeatures xsi:type="ecore:EReference" name="statements" upperBound="-1"

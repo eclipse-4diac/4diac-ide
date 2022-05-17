@@ -835,13 +835,22 @@ public interface STCorePackage extends EPackage {
 	int ST_CASE_CASES__STATEMENTS = 1;
 
 	/**
+	 * The feature id for the '<em><b>Statement</b></em>' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_CASE_CASES__STATEMENT = 2;
+
+	/**
 	 * The number of structural features of the '<em>ST Case Cases</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_CASE_CASES_FEATURE_COUNT = 2;
+	int ST_CASE_CASES_FEATURE_COUNT = 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STElsePartImpl <em>ST Else Part</em>}' class.
@@ -2366,6 +2375,17 @@ public interface STCorePackage extends EPackage {
 	EReference getSTCaseCases_Statements();
 
 	/**
+	 * Returns the meta object for the container reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases#getStatement <em>Statement</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the container reference '<em>Statement</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases#getStatement()
+	 * @see #getSTCaseCases()
+	 * @generated
+	 */
+	EReference getSTCaseCases_Statement();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STElsePart <em>ST Else Part</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3686,6 +3706,14 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference ST_CASE_CASES__STATEMENTS = eINSTANCE.getSTCaseCases_Statements();
+
+		/**
+		 * The meta object literal for the '<em><b>Statement</b></em>' container reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_CASE_CASES__STATEMENT = eINSTANCE.getSTCaseCases_Statement();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STElsePartImpl <em>ST Else Part</em>}' class.
