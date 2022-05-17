@@ -110,7 +110,7 @@ final class STCoreUtil {
 	def static boolean isApplicableTo(STBinaryOperator operator, INamedElement first, INamedElement second) {
 		switch (operator) {
 			case ADD,
-			case SUB,
+			case SUB: first instanceof AnyMagnitudeType && second instanceof AnyMagnitudeType
 			case MUL,
 			case DIV: first instanceof AnyMagnitudeType && second instanceof AnyNumType
 			case MOD: first instanceof AnyNumType && second instanceof AnyNumType

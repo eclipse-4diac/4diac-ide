@@ -461,6 +461,25 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testBinaryExpressionTimeArithmetic() {
+		// TIME
+		Duration.ofSeconds(21).toTimeValue.assertEquals("T#17s + T#4s".evaluateExpression)
+		Duration.ofSeconds(4).toTimeValue.assertEquals("T#21s - T#17s".evaluateExpression)
+		Duration.ofSeconds(42).toTimeValue.assertEquals("T#21s * 2".evaluateExpression)
+		Duration.ofSeconds(21).toTimeValue.assertEquals("T#42s / 2".evaluateExpression)
+		// LTIME
+		Duration.ofSeconds(21).toLTimeValue.assertEquals("LT#17s + LT#4s".evaluateExpression)
+		Duration.ofSeconds(4).toLTimeValue.assertEquals("LT#21s - LT#17s".evaluateExpression)
+		Duration.ofSeconds(42).toLTimeValue.assertEquals("LT#21s * 2".evaluateExpression)
+		Duration.ofSeconds(21).toLTimeValue.assertEquals("LT#42s / 2".evaluateExpression)
+		// promotion
+		Duration.ofSeconds(21).toLTimeValue.assertEquals("LT#17s + T#4s".evaluateExpression)
+		Duration.ofSeconds(4).toLTimeValue.assertEquals("LT#21s - T#17s".evaluateExpression)
+		Duration.ofSeconds(21).toLTimeValue.assertEquals("T#17s + LT#4s".evaluateExpression)
+		Duration.ofSeconds(4).toLTimeValue.assertEquals("T#21s - LT#17s".evaluateExpression)
+	}
+
+	@Test
 	def void testStandardFunctions() {
 		21.toSIntValue.assertEquals("ADD(17, 4)".evaluateExpression)
 		42.toSIntValue.assertEquals("ADD(17, 4, 21)".evaluateExpression)

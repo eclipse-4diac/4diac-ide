@@ -17,11 +17,12 @@ import java.math.BigInteger
 import java.util.Map
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyCharsType
+import org.eclipse.fordiac.ide.model.data.AnyDurationType
+import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
-import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -29,7 +30,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
@@ -67,6 +67,8 @@ final package class ExpressionAnnotations {
 					if (left.isCompatibleWith(right))
 						right
 					else if (right.isCompatibleWith(left))
+						left
+					else if (left instanceof AnyDurationType && right instanceof AnyIntType)
 						left
 					else
 						null
