@@ -236,7 +236,12 @@ final class STCoreUtil {
 					feature.type
 			STVarDeclaration:
 				if (feature.array)
-					(feature.type as DataType).newArrayType(feature.ranges.map[toSubrange])
+					(feature.type as DataType).newArrayType(
+						if (feature.ranges.empty)
+							feature.count.map[DataFactory.eINSTANCE.createSubrange]
+						else
+							feature.ranges.map[toSubrange]
+					)
 				else
 					feature.type
 			FB:
@@ -244,18 +249,18 @@ final class STCoreUtil {
 		}
 	}
 
-	def package static ArrayType newArrayType(DataType arrayBaseType, Subrange... arraySubranges) {
+	def static ArrayType newArrayType(DataType arrayBaseType, Subrange... arraySubranges) {
 		arrayBaseType.newArrayType(arraySubranges as Iterable<Subrange>)
 	}
 
-	def package static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
+	def static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
 		DataFactory.eINSTANCE.createArrayType => [
 			baseType = arrayBaseType
 			subranges.addAll(arraySubranges)
 		]
 	}
 
-	def package static Subrange toSubrange(STExpression expr) {
+	def static Subrange toSubrange(STExpression expr) {
 		switch (expr) {
 			STBinaryExpression case expr.op === STBinaryOperator.RANGE:
 				newSubrange(expr.left.asConstantInt, expr.right.asConstantInt)
@@ -264,14 +269,14 @@ final class STCoreUtil {
 		}
 	}
 
-	def package static int asConstantInt(STExpression expr) {
+	def static int asConstantInt(STExpression expr) {
 		switch (expr) {
 			STNumericLiteral: (expr.value as BigInteger).intValueExact
 			default: 0
 		}
 	}
 
-	def package static newSubrange(int lower, int upper) {
+	def static newSubrange(int lower, int upper) {
 		DataFactory.eINSTANCE.createSubrange => [
 			lowerLimit = lower
 			upperLimit = upper

@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
@@ -137,6 +138,15 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	@Check
+	public void checkInitializerTypeCompatibility(final STVarDeclaration declaration) {
+		if (declaration.getDefaultValue() != null) {
+			final var type = getFeatureType(declaration);
+			final var initializerType = declaration.getDefaultValue().getResultType();
+			checkTypeCompatibility(type, initializerType, STCorePackage.Literals.ST_VAR_DECLARATION__DEFAULT_VALUE);
+		}
+	}
+
+	@Check
 	public void checkCallArguments(final STFeatureExpression expression) {
 		final INamedElement feature = expression.getFeature();
 		if (feature == null || !expression.isCall()) {
@@ -211,11 +221,11 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 		// check argument type
 		expression.getMappedInputArguments()
-				.forEach((param, arg) -> checkTypeCompatibility(getFeatureType(param), arg.getResultType(),
+		.forEach((param, arg) -> checkTypeCompatibility(getFeatureType(param), arg.getResultType(),
 				STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
 				expression.getParameters().indexOf(arg.eContainer())));
 		expression.getMappedOutputArguments()
-				.forEach((param, arg) -> checkTypeCompatibility(arg.getResultType(), getFeatureType(param),
+		.forEach((param, arg) -> checkTypeCompatibility(arg.getResultType(), getFeatureType(param),
 				STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
 				expression.getParameters().indexOf(arg.eContainer())));
 		expression.getMappedInOutArguments().forEach((param, arg) -> {
@@ -281,7 +291,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	protected void checkTypeCompatibility(DataType destination, DataType source, final EStructuralFeature feature,
 			final int index) {
 		if (destination instanceof ArrayType || source instanceof ArrayType) {
-			if (destination instanceof ArrayType && source instanceof ArrayType) {
+			if (destination instanceof ArrayType && source instanceof ArrayType
+					&& ((ArrayType) destination).getSubranges().size() == ((ArrayType) source).getSubranges().size()) {
 				destination = ((ArrayType) destination).getBaseType();
 				source = ((ArrayType) source).getBaseType();
 			} else {

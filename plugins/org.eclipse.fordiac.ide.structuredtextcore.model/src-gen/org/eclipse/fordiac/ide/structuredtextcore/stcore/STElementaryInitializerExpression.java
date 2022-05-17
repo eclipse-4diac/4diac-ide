@@ -16,6 +16,8 @@
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+
 
 /**
  * <!-- begin-user-doc -->
@@ -55,5 +57,21 @@ public interface STElementaryInitializerExpression extends STInitializerExpressi
 	 * @generated
 	 */
 	void setValue(STExpression value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getResultType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getDeclaredResultType();
 
 } // STElementaryInitializerExpression

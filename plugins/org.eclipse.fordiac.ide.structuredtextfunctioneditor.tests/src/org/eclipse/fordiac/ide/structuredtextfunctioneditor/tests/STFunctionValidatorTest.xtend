@@ -244,6 +244,76 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
+	def void testInvalidInitializer() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT := LINT#17;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+
+	}
+
+	def void testInvalidArrayInitializer() {
+		'''
+			FUNCTION hubert
+			VAR
+				testArray: ARRAY [ 0 .. 3 ] OF INT := [LINT#17, 4];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
+
+	def void testInvalidArrayDimensionsInitializer() {
+		'''
+			FUNCTION hubert
+			VAR
+				testArray: ARRAY [ 0 .. 3 ] OF INT := [[17, 4]];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''
+			FUNCTION hubert
+			VAR
+				testArray: ARRAY [ 0 .. 3, 0 .. 2 ] OF INT := [17, 4, 21];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''
+			FUNCTION hubert
+			VAR
+				testArray: ARRAY [ 0 .. 3, 0 .. 2 ] OF INT := [[17, 4], 21];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
+
+	@Test
+	def void testValidInitializer() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT := 17;
+				int2 : INT := SINT#4;
+				bool1 : BOOL := 0;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testValidArrayInitializer() {
+		'''
+			FUNCTION hubert
+			VAR
+				testArray: ARRAY [ 0 .. 3 ] OF INT := [17, 4];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+
+	@Test
 	def void testReservedIdentifierErrorValidator() {
 		'''
 		FUNCTION hubert

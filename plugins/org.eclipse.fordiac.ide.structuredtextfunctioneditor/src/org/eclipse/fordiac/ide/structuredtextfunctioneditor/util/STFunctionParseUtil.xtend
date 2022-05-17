@@ -57,9 +57,9 @@ final class STFunctionParseUtil {
 		resource.load(new LazyStringInputStream(text), resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
-		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''«name» at «lineNumber»: «message» '''])
-		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''«name» at «lineNumber»: «message» '''])
-		infos?.addAll(issues.filter[severity == Severity.INFO].map['''«name» at «lineNumber»: «message» '''])
+		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''Â«nameÂ» at Â«lineNumberÂ»: Â«messageÂ» '''])
+		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''Â«nameÂ» at Â«lineNumberÂ»: Â«messageÂ» '''])
+		infos?.addAll(issues.filter[severity == Severity.INFO].map['''Â«nameÂ» at Â«lineNumberÂ»: Â«messageÂ» '''])
 		if (issues.exists[severity == Severity.ERROR]) {
 			return null
 		}
@@ -77,9 +77,9 @@ final class STFunctionParseUtil {
 		resource.load(resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
-		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''«uri.toString» at «lineNumber»: «message» '''])
-		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''«uri.toString» at «lineNumber»: «message» '''])
-		infos?.addAll(issues.filter[severity == Severity.INFO].map['''«uri.toString» at «lineNumber»: «message» '''])
+		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''Â«uri.toStringÂ» at Â«lineNumberÂ»: Â«messageÂ» '''])
+		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''Â«uri.toStringÂ» at Â«lineNumberÂ»: Â«messageÂ» '''])
+		infos?.addAll(issues.filter[severity == Severity.INFO].map['''Â«uri.toStringÂ» at Â«lineNumberÂ»: Â«messageÂ» '''])
 		if (issues.exists[severity == Severity.ERROR]) {
 			return null
 		}

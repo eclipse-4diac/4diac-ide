@@ -29,12 +29,15 @@ import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
@@ -215,6 +218,34 @@ final package class ExpressionAnnotations {
 		arg.argument?.declaredResultType
 	}
 
+	def package static INamedElement getResultType(STElementaryInitializerExpression expr) { expr.value?.resultType }
+
+	def package static INamedElement getDeclaredResultType(STElementaryInitializerExpression expr) {
+		expr.value?.declaredResultType
+	}
+
+	def package static INamedElement getResultType(STArrayInitializerExpression expr) {
+		expr.values.map[resultType].reduce[first, second|first.commonSupertype(second)].addDimension(expr)
+	}
+
+	def package static INamedElement getDeclaredResultType(STArrayInitializerExpression expr) {
+		expr.values.map[declaredResultType].reduce[first, second|first.commonSupertype(second)].addDimension(expr)
+	}
+
+	def package static INamedElement getResultType(STArrayInitElement expr) {
+		if (expr.initExpressions.empty)
+			expr.indexOrInitExpression.resultType
+		else
+			expr.initExpressions.map[resultType].reduce[first, second|first.commonSupertype(second)]
+	}
+
+	def package static INamedElement getDeclaredResultType(STArrayInitElement expr) {
+		if (expr.initExpressions.empty)
+			expr.indexOrInitExpression.resultType
+		else
+			expr.initExpressions.map[declaredResultType].reduce[first, second|first.commonSupertype(second)]
+	}
+
 	def package static Map<INamedElement, STExpression> getMappedInputArguments(STFeatureExpression expr) {
 		val feature = expr.feature
 		if (feature instanceof ICallable) {
@@ -271,5 +302,31 @@ final package class ExpressionAnnotations {
 			}
 		} else
 			emptyMap
+	}
+
+	def package static INamedElement addDimension(INamedElement type, STArrayInitializerExpression expr) {
+		val size = expr.values.map [
+			if (initExpressions.empty)
+				1
+			else
+				(indexOrInitExpression as STElementaryInitializerExpression).value.asConstantInt
+		].fold(0)[a, b|a + b]
+		if (type instanceof ArrayType)
+			type.baseType.newArrayType(#[newSubrange(0, size - 1)] + type.subranges.map[copy])
+		else if (type instanceof DataType)
+			type.newArrayType(newSubrange(0, size - 1))
+	}
+
+	def package static INamedElement commonSupertype(INamedElement first, INamedElement second) {
+		if (first == second)
+			first
+		else if (first instanceof DataType) {
+			if (second instanceof DataType) {
+				if (first.isCompatibleWith(second))
+					second
+				else if (second.isCompatibleWith(first))
+					first
+			}
+		}
 	}
 }
