@@ -129,10 +129,6 @@
                    indented="false"
                    label="Struct Element">
       </propertyTab>
-      <propertyTab category="Interface"
-                   id="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
-                   label="Pin">
-      </propertyTab>
     </propertyTabs>
   </extension>
   <extension point="org.eclipse.ui.views.properties.tabbed.propertySections">
@@ -175,11 +171,6 @@
                        id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
                        tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
                        filter="org.eclipse.fordiac.ide.application.properties.TypedInterfacePinFilter">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-      				   filter="org.eclipse.fordiac.ide.application.properties.FBNetworkElementTypeFilter"
-                       id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-                       tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
       </propertySection>
       <propertySection
             class="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
@@ -227,19 +218,19 @@
       
       <propertySection class="org.eclipse.fordiac.ide.application.properties.PinEventInfoSection"
                    id="org.eclipse.fordiac.ide.application.pins.PinEventSection"
-                   tab="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
+                   tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
                    filter="org.eclipse.fordiac.ide.gef.filters.PinEventInfoFilter">
       </propertySection>
         
 	<propertySection class="org.eclipse.fordiac.ide.application.properties.PinDataInfoSection"
                    id="org.eclipse.fordiac.ide.application.pins.PinDataSection"
-                   tab="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
+                   tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
                    filter="org.eclipse.fordiac.ide.gef.filters.PinDataInfoFilter">
       </propertySection>
       
       <propertySection class="org.eclipse.fordiac.ide.application.properties.PinAdapterInfoSection"
                    id="org.eclipse.fordiac.ide.application.pins.PinAdapterSection"
-                   tab="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
+                   tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
                    filter="org.eclipse.fordiac.ide.gef.filters.PinAdapterInfoFilter">
       </propertySection>
       
