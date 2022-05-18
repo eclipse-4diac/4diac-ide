@@ -83,7 +83,7 @@ class STStandardFunctionProvider {
 		(0 ..< ptypes.size).map [ index |
 			if (input.xor(method.getParameterType(index) == Variable)) {
 				STCoreFactory.eINSTANCE.createSTVarDeclaration => [
-					name = '''«IF input»IN«ELSE»OUT«ENDIF»«index»'''
+					name = '''Â«IF inputÂ»INÂ«ELSEÂ»OUTÂ«ENDIFÂ»Â«indexÂ»'''
 					type = ptypes.get(index)
 				]
 			}
