@@ -54,6 +54,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
@@ -90,6 +91,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String FOR_VARIABLE_NOT_INTEGRAL_TYPE = ISSUE_CODE_PREFIX + "forVariableNotIntegralType"; //$NON-NLS-1$
 	public static final String INVALID_NUMERIC_LITERAL = ISSUE_CODE_PREFIX + "invalidNumericLiteral"; //$NON-NLS-1$
 	public static final String INVALID_STRING_LITERAL = ISSUE_CODE_PREFIX + "invalidStringLiteral"; //$NON-NLS-1$
+	public static final String STANDARD_FUNCTION_WITH_FORMAL_ARGUMENTS = ISSUE_CODE_PREFIX
+			+ "standardFunctionWithFormalArguments"; //$NON-NLS-1$
 
 	@Check
 	public void checkConsecutiveUnderscoresInIdentifier(final INamedElement iNamedElement) {
@@ -258,6 +261,14 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				return;
 			}
 		} else {
+			// check no formal arguments for standard functions
+			if (callable instanceof STStandardFunction) {
+				error(MessageFormat.format(
+						Messages.STCoreValidator_Attempting_To_Call_Standard_Function_With_Formal_Arguments,
+						callable.getName()), expression, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
+						STANDARD_FUNCTION_WITH_FORMAL_ARGUMENTS);
+				return;
+			}
 			// check formal argument kind
 			boolean error = false;
 			for (int index = 0; index < expression.getParameters().size(); ++index) {

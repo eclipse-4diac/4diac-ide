@@ -699,6 +699,15 @@ class STFunctionValidatorTest {
 			STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
+	@Test
+	def void testCallStandardFunctionFormalArguments() {
+		'''
+		FUNCTION hubert
+		ADD(IN0 := 17, IN1 := 4);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.STANDARD_FUNCTION_WITH_FORMAL_ARGUMENTS)
+	}
+
 	@ParameterizedTest(name="{index}: {0} with {1}")
 	@MethodSource("typeUnaryOperatorArgumentsCartesianProvider")
 	def void testUnaryOperatorNotApplicableErrorValidator(String operatorName, String typeName) {
