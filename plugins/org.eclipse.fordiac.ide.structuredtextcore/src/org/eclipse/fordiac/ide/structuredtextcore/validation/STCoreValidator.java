@@ -260,7 +260,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			if (error) {
 				return;
 			}
-		} else {
+		} else if (!expression.getParameters().isEmpty()) {
 			// check no formal arguments for standard functions
 			if (callable instanceof STStandardFunction) {
 				error(MessageFormat.format(
