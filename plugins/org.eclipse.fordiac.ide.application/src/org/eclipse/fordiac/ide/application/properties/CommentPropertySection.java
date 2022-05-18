@@ -9,9 +9,11 @@
  *
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr - multline comments and cleanup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -28,6 +30,8 @@ import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.layout.GridDataFactory;
+import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ICellModifier;
@@ -37,7 +41,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -67,7 +71,7 @@ public class CommentPropertySection extends AbstractSection {
 		this.tabbedPropertySheetPage = tabbedPropertySheetPage;
 		setLeftComposite(parent);
 		parent.setLayout(new GridLayout(ONE_COLUMN, true));
-		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(parent);
 		createFBInfoGroup(parent);
 		createTableSection(parent);
 		configureTableViewer(inputCommentsViewer, new InputViewerContentProvider());
@@ -76,7 +80,7 @@ public class CommentPropertySection extends AbstractSection {
 
 	@Override
 	public void refresh() {
-		if (getType() != null && !nameText.isDisposed() && !nameText.getParent().isDisposed()) {
+		if ((getType() != null) && !nameText.isDisposed() && !nameText.getParent().isDisposed()) {
 			final CommandStack commandStackBuffer = commandStack;
 			commandStack = null;
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
@@ -134,14 +138,14 @@ public class CommentPropertySection extends AbstractSection {
 
 	private void createTableSection(final Composite parent) {
 		final Composite tableSectionComposite = getWidgetFactory().createComposite(parent);
-		tableSectionComposite.setLayout(new GridLayout(TWO_COLUMNS, false));
-		tableSectionComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).applyTo(tableSectionComposite);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(tableSectionComposite);
 
-		final Group inputComposite = new Group(tableSectionComposite, 0);
-		final Group outputComposite = new Group(tableSectionComposite, 0);
+		final Group inputComposite = getWidgetFactory().createGroup(tableSectionComposite, Messages.CommentPropertySection_DataInputs);
+		final Group outputComposite = getWidgetFactory().createGroup(tableSectionComposite, Messages.CommentPropertySection_DataOutputs);
 
-		inputComposite.setText(FordiacMessages.Inputs);
-		outputComposite.setText(FordiacMessages.Outputs);
+		inputComposite.setText(Messages.CommentPropertySection_DataInputs);
+		outputComposite.setText(Messages.CommentPropertySection_DataOutputs);
 
 		inputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
 		outputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
@@ -149,8 +153,8 @@ public class CommentPropertySection extends AbstractSection {
 		inputCommentsViewer = TableWidgetFactory.createPropertyTableViewer(inputComposite, 0);
 		outputCommentsViewer = TableWidgetFactory.createPropertyTableViewer(outputComposite, 0);
 
-		inputComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
-		outputComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(outputComposite);
 
 		tableSectionComposite.layout();
 	}
@@ -161,11 +165,10 @@ public class CommentPropertySection extends AbstractSection {
 	}
 
 	protected void createFBInfoGroup(final Composite parent) {
-		final Group fbInfoGroup = new Group(parent, 0);
-		fbInfoGroup.setText(FordiacMessages.InstanceInfo);
-		fbInfoGroup.setLayout(new GridLayout(TWO_COLUMNS, false));
-		final GridData gridData = new GridData(GridData.FILL, 0, true, false);
-		fbInfoGroup.setLayoutData(gridData);
+		final Composite fbInfoGroup = getWidgetFactory().createComposite(parent);
+		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).applyTo(fbInfoGroup);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).applyTo(fbInfoGroup);
+
 		getWidgetFactory().createCLabel(fbInfoGroup, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createGroupText(fbInfoGroup, true);
 		nameText.addModifyListener(e -> {
@@ -173,8 +176,12 @@ public class CommentPropertySection extends AbstractSection {
 			executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
 			addContentAdapter();
 		});
-		getWidgetFactory().createCLabel(fbInfoGroup, FordiacMessages.Comment + ":"); //$NON-NLS-1$
-		commentText = createGroupText(fbInfoGroup, true);
+
+		final CLabel commentLabel = getWidgetFactory().createCLabel(fbInfoGroup, FordiacMessages.Comment + ":"); //$NON-NLS-1$
+		GridDataFactory.fillDefaults().align(SWT.LEFT, SWT.TOP).grab(false, false).applyTo(commentLabel);
+
+		commentText = createGroupText(fbInfoGroup, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).hint(SWT.DEFAULT, 3 * commentText.getLineHeight()).applyTo(commentText);
 		commentText.addModifyListener(e -> {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
@@ -187,7 +194,8 @@ public class CommentPropertySection extends AbstractSection {
 	protected Object getInputType(final Object input) {
 		if (input instanceof EditPart) {
 			return ((EditPart) input).getModel();
-		} else if (input instanceof FBNetworkElement) {
+		}
+		if (input instanceof FBNetworkElement) {
 			return input;
 		}
 		return null;

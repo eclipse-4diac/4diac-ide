@@ -33,6 +33,10 @@ public final class Messages extends NLS {
 
 	public static String Comment;
 
+	public static String CommentPropertySection_DataInputs;
+
+	public static String CommentPropertySection_DataOutputs;
+
 	public static String ConnectionConstraintsPrefernecePage_Description;
 
 	public static String ConnectionConstraintsPrefernecePage_EnableFORTETypeCasts;

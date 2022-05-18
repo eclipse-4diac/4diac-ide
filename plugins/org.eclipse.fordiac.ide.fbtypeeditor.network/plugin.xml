@@ -100,7 +100,7 @@
       <propertySections
             contributorId="property.contributor.fb">
          <propertySection
-               class="org.eclipse.fordiac.ide.application.properties.InterfaceSection"
+               class="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
                filter="org.eclipse.fordiac.ide.application.properties.InstanceSectionFilter"
                id="org.eclipse.fordiac.ide.fbnet.properties.InterfaceSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab">
