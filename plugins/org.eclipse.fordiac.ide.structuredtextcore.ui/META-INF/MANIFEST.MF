@@ -6,8 +6,10 @@ Bundle-Vendor: My Company
 Bundle-Version: 1.0.0.qualifier
 Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextcore.ui; singleton:=true
 Bundle-ActivationPolicy: lazy
-Require-Bundle: org.eclipse.fordiac.ide.structuredtextcore,
+Require-Bundle: org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.structuredtextcore,
  org.eclipse.fordiac.ide.structuredtextcore.ide,
+ org.eclipse.fordiac.ide.ui,
  org.eclipse.xtext.ui,
  org.eclipse.xtext.ui.shared,
  org.eclipse.xtext.ui.codetemplates.ui,
@@ -26,5 +28,6 @@ Export-Package: org.eclipse.fordiac.ide.structuredtextcore.ui,
  org.eclipse.fordiac.ide.structuredtextcore.ui.hovering,
  org.eclipse.fordiac.ide.structuredtextcore.ui.internal,
  org.eclipse.fordiac.ide.structuredtextcore.ui.labeling,
- org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix
+ org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix,
+ org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring
 Bundle-Activator: org.eclipse.fordiac.ide.structuredtextcore.ui.internal.StructuredtextcoreActivatorEx

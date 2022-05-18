@@ -15,12 +15,15 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui;
 
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
+import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
 
 /**
  * Use this class to register components to be used within the Eclipse IDE.
  */
+@SuppressWarnings("restriction")
 public class STCoreUiModule extends AbstractSTCoreUiModule {
 
 	public STCoreUiModule(final AbstractUIPlugin plugin) {
@@ -30,5 +33,10 @@ public class STCoreUiModule extends AbstractSTCoreUiModule {
 	@SuppressWarnings("static-method")
 	public Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {
 		return STCoreHoverProvider.class;
+	}
+
+	@SuppressWarnings("static-method")
+	public Class<? extends IRefactoringDocument.Provider> bindIRefactoringDocument$Provider() {
+		return STCoreRefactoringDocumentProvider.class;
 	}
 }

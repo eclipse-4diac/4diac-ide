@@ -15,24 +15,26 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui
 
+import com.google.inject.Binder
+import com.google.inject.name.Names
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocument
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentProvider
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.reconciler.STAlgorithmDocumentReconcileStrategy
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceForIEditorInputFactory
+import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider
+import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider
 import org.eclipse.xtext.resource.IContainer
 import org.eclipse.xtext.resource.containers.StateBasedContainerManager
+import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider
+import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider
 import org.eclipse.xtext.ui.editor.model.XtextDocument
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider
 import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy
+import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument
 import org.eclipse.xtext.ui.shared.Access
-import com.google.inject.Binder
-import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider
-import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider
-import com.google.inject.name.Names
-import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider
-import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider
-import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider
 
 /**
  * Use this class to register components to be used within the Eclipse IDE.
@@ -63,7 +65,6 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 		return STAlgorithmDocumentReconcileStrategy
 	}
 	
-	
 	def Class<? extends IEObjectHoverDocumentationProvider> bindIEObjectHoverDocumentationProvider() {
 		return STCoreHoverDocumentationProvider
 	}
@@ -75,5 +76,9 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 	def configureIEObjectDocumentationProvider(Binder binder) {
 		binder.bindConstant().annotatedWith(Names.named(AbstractMultiLineCommentProvider.START_TAG)).to("[/(]\\*\\*?"); // $NON-NLS-1$
 		binder.bindConstant().annotatedWith(Names.named(AbstractMultiLineCommentProvider.END_TAG)).to("\\*[/)]"); // $NON-NLS-1$
+	}
+
+	def Class<? extends IRefactoringDocument.Provider> bindIRefactoringDocumentProvider() {
+		return STCoreRefactoringDocumentProvider;
 	}
 }
