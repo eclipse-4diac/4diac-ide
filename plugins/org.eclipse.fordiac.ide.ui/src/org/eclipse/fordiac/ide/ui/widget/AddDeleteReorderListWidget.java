@@ -83,6 +83,7 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 				final List<Object> bottomup = viewer.getStructuredSelection().toList();
 				Collections.reverse(bottomup);
 				executeCompoundCommandForList(viewer, bottomup, executor, commandProvider);
+				viewer.getTable().forceFocus();
 			}
 		};
 	}

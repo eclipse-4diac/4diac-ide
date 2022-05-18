@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2020 Johannes Kepler University Linz
- *               2020, 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2019, 2022 Johannes Kepler University Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +18,7 @@
  *     - extracted helper for ComboCellEditors that unfold on activation
  *   Daniel Lindhuber
  *     - added copy/paste/cut for tables
+ *   Alois Zoitl - added single cell selection support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
@@ -29,10 +30,12 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ColumnViewerEditor;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationEvent;
 import org.eclipse.jface.viewers.ColumnViewerEditorActivationStrategy;
+import org.eclipse.jface.viewers.FocusCellOwnerDrawHighlighter;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerEditor;
+import org.eclipse.jface.viewers.TableViewerFocusCellManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
@@ -51,13 +54,15 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public final class TableWidgetFactory {
 
+
+
 	private static List<IWorkbenchSite> handledSites = new ArrayList<>();
 
 	public static TableViewer createTableViewer(final Composite parent) {
 		return createTableViewer(parent, 0);
 	}
 
-	public static TableViewer createTableViewer(final Composite parent, int style) {
+	public static TableViewer createTableViewer(final Composite parent, final int style) {
 		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		final TableViewer tableViewer = createGenericTableViewer(gridData, parent, style);
 
@@ -71,7 +76,7 @@ public final class TableWidgetFactory {
 		return createPropertyTableViewer(parent, 0);
 	}
 
-	public static TableViewer createPropertyTableViewer(final Composite parent, int style) {
+	public static TableViewer createPropertyTableViewer(final Composite parent, final int style) {
 		final GridData gridData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		final TableViewer tableViewer = createGenericTableViewer(gridData, parent, style);
 
@@ -82,24 +87,26 @@ public final class TableWidgetFactory {
 		return tableViewer;
 	}
 
-	private static TableViewer createGenericTableViewer(GridData gridData, final Composite parent, int style) {
+	private static TableViewer createGenericTableViewer(final GridData gridData, final Composite parent, final int style) {
 		final TableViewer tableViewer = new TableViewer(parent,
 				SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | style);
 
+		final TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(tableViewer,
+				new FocusCellOwnerDrawHighlighter(tableViewer));
 		final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tableViewer) {
 			@Override
-			protected boolean isEditorActivationEvent(ColumnViewerEditorActivationEvent event) {
+			protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {
 				return (event.eventType == ColumnViewerEditorActivationEvent.TRAVERSAL)
 						|| (event.eventType == ColumnViewerEditorActivationEvent.MOUSE_DOUBLE_CLICK_SELECTION)
 						|| ((event.eventType == ColumnViewerEditorActivationEvent.KEY_PRESSED)
-								&& (event.keyCode == SWT.CR))
+								&& (event.keyCode == SWT.CR || event.keyCode == SWT.F2))
 						|| (event.eventType == ColumnViewerEditorActivationEvent.PROGRAMMATIC);
 			}
 		};
 
-		TableViewerEditor.create(tableViewer, actSupport,
+		TableViewerEditor.create(tableViewer, focusCellManager, actSupport,
 				ColumnViewerEditor.TABBING_HORIZONTAL | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
-						| ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION);
+				| ColumnViewerEditor.TABBING_VERTICAL | ColumnViewerEditor.KEYBOARD_ACTIVATION);
 
 		tableViewer.getControl().setLayoutData(gridData);
 		final Table table = tableViewer.getTable();
@@ -134,7 +141,7 @@ public final class TableWidgetFactory {
 		}
 	}
 
-	private static void registerActions(Object part, ActionRegistry registry) {
+	private static void registerActions(final Object part, final ActionRegistry registry) {
 		IAction action = new TableCopyAction(part);
 		registry.registerAction(action);
 
@@ -145,7 +152,7 @@ public final class TableWidgetFactory {
 		registry.registerAction(action);
 	}
 
-	private static void setActionHandlers(IWorkbenchSite site, ActionRegistry registry) {
+	private static void setActionHandlers(final IWorkbenchSite site, final ActionRegistry registry) {
 		final IActionBars bars = getActionBars(site);
 		if (bars != null) {
 			String id = ActionFactory.COPY.getId();
@@ -158,7 +165,7 @@ public final class TableWidgetFactory {
 		}
 	}
 
-	private static IActionBars getActionBars(IWorkbenchSite site) {
+	private static IActionBars getActionBars(final IWorkbenchSite site) {
 		if (site instanceof IEditorSite) {
 			return ((IEditorSite) site).getActionBars();
 		} else if (site instanceof IPageSite) {
@@ -167,7 +174,7 @@ public final class TableWidgetFactory {
 		return null;
 	}
 
-	private static IWorkbenchSite getSite(Object part) {
+	private static IWorkbenchSite getSite(final Object part) {
 		if (part instanceof IWorkbenchPart) {
 			return ((IWorkbenchPart) part).getSite();
 		} else if (part instanceof IPageBookViewPage) {
@@ -176,7 +183,7 @@ public final class TableWidgetFactory {
 		return null;
 	}
 
-	public static I4diacTableUtil getTableEditor(Object part) {
+	public static I4diacTableUtil getTableEditor(final Object part) {
 		if (part instanceof IWorkbenchPart) {
 			return getTableEditorFromWorkbenchPart((IWorkbenchPart) part);
 		} else if (part instanceof IPageBookViewPage) {
@@ -185,7 +192,7 @@ public final class TableWidgetFactory {
 		return null;
 	}
 
-	private static I4diacTableUtil getTableEditorFromWorkbenchPart(IWorkbenchPart part) {
+	private static I4diacTableUtil getTableEditorFromWorkbenchPart(final IWorkbenchPart part) {
 		final IWorkbenchWindow window = part.getSite().getWorkbenchWindow();
 		final ISelection sel = window.getSelectionService().getSelection();
 		final Object editor = (sel instanceof StructuredSelection) ? ((StructuredSelection) sel).getFirstElement()
@@ -193,7 +200,7 @@ public final class TableWidgetFactory {
 		return (editor instanceof I4diacTableUtil) ? (I4diacTableUtil) editor : null;
 	}
 
-	private static I4diacTableUtil getTableEditorFromPropertySheet(TabbedPropertySheetPage part) {
+	private static I4diacTableUtil getTableEditorFromPropertySheet(final TabbedPropertySheetPage part) {
 		final TabContents content = part.getCurrentTab();
 		final ISection section = content.getSectionAtIndex(0);
 		return (section instanceof I4diacTableUtil) ? (I4diacTableUtil) section : null;

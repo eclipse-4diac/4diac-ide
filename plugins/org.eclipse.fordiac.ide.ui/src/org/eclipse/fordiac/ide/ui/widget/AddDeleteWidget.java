@@ -199,6 +199,7 @@ public class AddDeleteWidget {
 			viewer.refresh();
 			final StructuredSelection selection = new StructuredSelection(cmd.getCreatedElement());
 			viewer.setSelection(selection);
+			viewer.getTable().forceFocus();
 		};
 	}
 
