@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
@@ -72,7 +73,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			return createChangeGroupSizeCommand((Group) child.getModel(), request);
 		}
 		if ((child.getModel() instanceof PositionableElement) && (RequestUtil.isMoveRequest(request))) {
-			return createMoveCommand((PositionableElement) child.getModel(), request);
+			return createMoveCommand((PositionableElement) child.getModel(), request, constraint);
 		}
 		return null;
 	}
@@ -81,7 +82,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		final Dimension sizeDelta = getScaledSizeDelta(request);
 		if (sizeDelta.width == 0 && sizeDelta.height == 0) {
 			// we hit the min size and we are just moving, return a set position command
-			return createMoveCommand(group, request);
+			return createMoveCommand(group, request, null);
 		}
 		final Point moveDelta = getScaledMoveDelta(request);
 		final ChangeGroupBoundsCommand changeGroupBoundsCommand = new ChangeGroupBoundsCommand(group, moveDelta.x,
@@ -215,12 +216,27 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 				|| (moveDelta.y != 0 && (moveDelta.y + sizeDelta.height) != 0);
 	}
 
-	private Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request) {
-		final Point moveDelta = getScaledMoveDelta(request);
+	private Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request,
+			final Object constraint) {
+		final Point moveDelta = (isAlignRequest(request)) ? getAlignmentDelta(model, constraint) :
+			getScaledMoveDelta(request);
 		if (model instanceof FBNetworkElement) {
 			return new FBNetworkElementSetPositionCommand((FBNetworkElement) model, moveDelta.x, moveDelta.y);
 		}
 		return new SetPositionCommand(model, moveDelta.x, moveDelta.y);
+	}
+
+	private static boolean isAlignRequest(final ChangeBoundsRequest request) {
+		return RequestConstants.REQ_ALIGN_CHILDREN.equals(request.getType());
+	}
+
+	private static Point getAlignmentDelta(final PositionableElement model, final Object constraint) {
+		if (constraint instanceof Rectangle) {
+			final Point newPos = ((Rectangle) constraint).getTopLeft();
+			return new Point(newPos.x - model.getPosition().getX(), newPos.y - model.getPosition().getY());
+		}
+		// we don't have new positions keep the old one
+		return new Point(model.getPosition().getX(), model.getPosition().getY());
 	}
 
 	protected Dimension getScaledSizeDelta(final ChangeBoundsRequest request) {

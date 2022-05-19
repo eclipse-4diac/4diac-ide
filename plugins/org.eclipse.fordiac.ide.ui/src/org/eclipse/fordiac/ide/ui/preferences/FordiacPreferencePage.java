@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.ui.preferences;
 
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.ColorFieldEditor;
 import org.eclipse.jface.preference.ComboFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
@@ -45,6 +46,8 @@ public class FordiacPreferencePage extends FieldEditorPreferencePage implements 
 				FordiacMessages.FordiacPreferencePage_LABEL_DefaultComplianceProfile, getSupportedProfiles(),
 				getFieldEditorParent()));
 
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR,
+				FordiacMessages.FordiacPreferencePage_LABEL_ShowErrorsAtMouseCursor, getFieldEditorParent()));
 	}
 
 	private void createDataColorFields() {
