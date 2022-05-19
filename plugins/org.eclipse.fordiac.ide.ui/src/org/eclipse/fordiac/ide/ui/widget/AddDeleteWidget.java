@@ -37,6 +37,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class AddDeleteWidget {
+	private static final int EDIT_COLUMN = 0;
 	private Button createButton;
 	private Button deleteButton;
 	private Composite container;
@@ -185,7 +186,6 @@ public class AddDeleteWidget {
 					viewer.getTable().forceFocus();
 					// the selection has to be set again via the table viewer for the widgets to recognize it
 					viewer.getTable().setSelection(pos);
-					viewer.setSelection(viewer.getSelection());
 				}
 			}
 		};
@@ -200,6 +200,7 @@ public class AddDeleteWidget {
 			final StructuredSelection selection = new StructuredSelection(cmd.getCreatedElement());
 			viewer.setSelection(selection);
 			viewer.getTable().forceFocus();
+			viewer.editElement(cmd.getCreatedElement(), EDIT_COLUMN);
 		};
 	}
 
