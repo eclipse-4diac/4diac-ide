@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2016, 2022 fortiss GmbH, Johannes Kepler University Linz,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -64,7 +64,6 @@ public class InterfaceElementSection extends AbstractSection {
 	private CLabel currentParameterTextCLabel;
 	private Button openEditorButton;
 	private Section infoSection;
-	// Added
 	private ConnectionDisplayWidget connectionDisplayWidget;
 
 
@@ -172,7 +171,7 @@ public class InterfaceElementSection extends AbstractSection {
 			typeCommentText.setText(getTypeComment());
 
 			openEditorButton.setEnabled(
-					(getType().getType() instanceof StructuredType && !"ANY_STRUCT".equals(getType().getType().getName()))
+					((getType().getType() instanceof StructuredType) && !"ANY_STRUCT".equals(getType().getType().getName()))
 					|| (getType().getType() instanceof AdapterType));
 
 			if (hasComment()) {
@@ -208,7 +207,7 @@ public class InterfaceElementSection extends AbstractSection {
 
 	private String getTypeComment() {
 		final FBNetworkElement fb = getType().getFBNetworkElement();
-		if (fb != null && fb.getType() != null) {
+		if ((fb != null) && (fb.getType() != null)) {
 			final IInterfaceElement interfaceElement = fb.getType().getInterfaceList()
 					.getInterfaceElement(getType().getName());
 			if (interfaceElement != null) {
@@ -218,8 +217,8 @@ public class InterfaceElementSection extends AbstractSection {
 		return "";   //$NON-NLS-1$
 	}
 
-	private Boolean hasComment() {
-		return (getType().getComment() != null && !getType().getComment().isBlank());
+	private boolean hasComment() {
+		return ((getType().getComment() != null) && !getType().getComment().isBlank());
 	}
 
 	private String getInstanceComment() {
@@ -280,7 +279,7 @@ public class InterfaceElementSection extends AbstractSection {
 	}
 
 	private static String getValueText(final Value value) {
-		return (value != null && value.getValue() != null) ? value.getValue() : ""; //$NON-NLS-1$
+		return ((value != null) && (value.getValue() != null)) ? value.getValue() : ""; //$NON-NLS-1$
 	}
 
 	// this method will be removed as soon as there is a toString for StructType in
