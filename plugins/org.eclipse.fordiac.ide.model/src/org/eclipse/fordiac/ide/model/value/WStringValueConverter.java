@@ -14,15 +14,15 @@ package org.eclipse.fordiac.ide.model.value;
 
 import org.eclipse.fordiac.ide.model.Messages;
 
-public final class StringValueConverter extends AbstractStringValueConverter {
-	public static final StringValueConverter INSTANCE = new StringValueConverter();
+public final class WStringValueConverter extends AbstractStringValueConverter {
+	public static final WStringValueConverter INSTANCE = new WStringValueConverter();
 
-	private StringValueConverter() {
+	private WStringValueConverter() {
 	}
 
 	@Override
 	public String toValue(final String string) throws IllegalArgumentException {
-		if (string.length() < 1 || string.charAt(0) != '\'') {
+		if (string.length() < 1 || string.charAt(0) != '"') {
 			throw new IllegalArgumentException(Messages.VALIDATOR_IllegalStringLiteral);
 		}
 		return super.toValue(string);
@@ -30,6 +30,6 @@ public final class StringValueConverter extends AbstractStringValueConverter {
 
 	@Override
 	public String toString(final String value) {
-		return toString(value, false);
+		return toString(value, true);
 	}
 }

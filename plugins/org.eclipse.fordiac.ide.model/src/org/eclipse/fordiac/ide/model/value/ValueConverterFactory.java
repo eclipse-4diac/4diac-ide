@@ -13,17 +13,20 @@
 package org.eclipse.fordiac.ide.model.value;
 
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
-import org.eclipse.fordiac.ide.model.data.AnyCharsType;
 import org.eclipse.fordiac.ide.model.data.AnyDurationType;
 import org.eclipse.fordiac.ide.model.data.AnyNumType;
 import org.eclipse.fordiac.ide.model.data.BoolType;
+import org.eclipse.fordiac.ide.model.data.CharType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType;
 import org.eclipse.fordiac.ide.model.data.DateType;
 import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
 import org.eclipse.fordiac.ide.model.data.LtodType;
+import org.eclipse.fordiac.ide.model.data.StringType;
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType;
+import org.eclipse.fordiac.ide.model.data.WcharType;
+import org.eclipse.fordiac.ide.model.data.WstringType;
 
 public final class ValueConverterFactory {
 	public static ValueConverter<?> createValueConverter(final DataType type) {
@@ -33,8 +36,10 @@ public final class ValueConverterFactory {
 			return NumericValueConverter.INSTANCE;
 		} else if (type instanceof AnyDurationType) {
 			return TimeValueConverter.INSTANCE;
-		} else if (type instanceof AnyCharsType) {
+		} else if (type instanceof CharType || type instanceof StringType) {
 			return StringValueConverter.INSTANCE;
+		} else if (type instanceof WcharType || type instanceof WstringType) {
+			return WStringValueConverter.INSTANCE;
 		} else if (type instanceof DateType || type instanceof LdateType) {
 			return DateValueConverter.INSTANCE;
 		} else if (type instanceof TimeOfDayType || type instanceof LtodType) {

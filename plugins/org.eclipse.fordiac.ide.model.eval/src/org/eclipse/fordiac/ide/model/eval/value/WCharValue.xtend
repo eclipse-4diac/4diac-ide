@@ -14,7 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 
 import org.eclipse.fordiac.ide.model.data.WcharType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
-import org.eclipse.fordiac.ide.model.value.StringValueConverter
+import org.eclipse.fordiac.ide.model.value.WStringValueConverter
 
 class WCharValue implements AnyCharValue {
 	final char value;
@@ -43,5 +43,5 @@ class WCharValue implements AnyCharValue {
 
 	override hashCode() { Character.hashCode(value) }
 
-	override toString() { StringValueConverter.INSTANCE.toString(stringValue) }
+	override toString() { WStringValueConverter.INSTANCE.toString(stringValue) }
 }
