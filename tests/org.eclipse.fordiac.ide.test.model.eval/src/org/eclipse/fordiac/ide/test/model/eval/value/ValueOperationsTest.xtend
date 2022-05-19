@@ -28,8 +28,10 @@ import org.eclipse.fordiac.ide.model.data.DateAndTimeType
 import org.eclipse.fordiac.ide.model.data.DateType
 import org.eclipse.fordiac.ide.model.data.LdateType
 import org.eclipse.fordiac.ide.model.data.LdtType
+import org.eclipse.fordiac.ide.model.data.LtimeType
 import org.eclipse.fordiac.ide.model.data.LtodType
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
+import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
@@ -333,14 +335,15 @@ class ValueOperationsTest {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
 			AnyNumType,
 			AnyBitType: type.defaultValue.assertEquals("0".parseValue(type))
-			AnyDurationType: type.defaultValue.assertEquals("0s".parseValue(type))
+			TimeType: type.defaultValue.assertEquals("T#0s".parseValue(type))
+			LtimeType: type.defaultValue.assertEquals("LT#0s".parseValue(type))
 			AnyCharsType: type.defaultValue.assertEquals("".parseValue(type))
-			DateType,
-			LdateType: type.defaultValue.assertEquals("1970-01-01".parseValue(type))
-			TimeOfDayType,
-			LtodType: type.defaultValue.assertEquals("00:00:00".parseValue(type))
-			DateAndTimeType,
-			LdtType: type.defaultValue.assertEquals("1970-01-01-00:00:00".parseValue(type))
+			DateType: type.defaultValue.assertEquals("D#1970-01-01".parseValue(type))
+			LdateType: type.defaultValue.assertEquals("LD#1970-01-01".parseValue(type))
+			TimeOfDayType: type.defaultValue.assertEquals("TOD#00:00:00".parseValue(type))
+			LtodType: type.defaultValue.assertEquals("LTOD#00:00:00".parseValue(type))
+			DateAndTimeType: type.defaultValue.assertEquals("DT#1970-01-01-00:00:00".parseValue(type))
+			LdtType: type.defaultValue.assertEquals("LDT#1970-01-01-00:00:00".parseValue(type))
 			default: UnsupportedOperationException.assertThrows["0".parseValue(type)]
 		}
 	}

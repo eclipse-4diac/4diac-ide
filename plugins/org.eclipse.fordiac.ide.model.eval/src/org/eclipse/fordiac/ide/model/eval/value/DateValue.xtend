@@ -18,7 +18,7 @@ import java.time.LocalTime
 import java.time.ZoneOffset
 import org.eclipse.fordiac.ide.model.data.DateType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
-import org.eclipse.fordiac.ide.model.value.DateValueConverter
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 
 class DateValue implements AnyDateValue {
 	final long value;
@@ -37,7 +37,7 @@ class DateValue implements AnyDateValue {
 		new DateValue(value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L)
 	}
 
-	def static toDateValue(String value) { DateValueConverter.INSTANCE.toValue(value).toDateValue }
+	def static toDateValue(String value) { (TypedValueConverter.INSTANCE_DATE.toValue(value) as LocalDate).toDateValue }
 
 	def static toDateValue(AnyDateValue value) { value.toNanos.toDateValue }
 
@@ -54,6 +54,6 @@ class DateValue implements AnyDateValue {
 	override hashCode() { Long.hashCode(value) }
 
 	override toString() {
-		DateValueConverter.INSTANCE.toString(toLocalDate)
+		TypedValueConverter.INSTANCE_DATE.toString(toLocalDate)
 	}
 }

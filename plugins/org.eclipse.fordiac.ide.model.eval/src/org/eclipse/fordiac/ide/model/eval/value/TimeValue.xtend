@@ -16,7 +16,7 @@ import java.time.Duration
 import java.time.temporal.ChronoUnit
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
-import org.eclipse.fordiac.ide.model.value.TimeValueConverter
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 
 class TimeValue implements AnyDurationValue {
 	final long value;
@@ -33,7 +33,9 @@ class TimeValue implements AnyDurationValue {
 
 	def static toTimeValue(Duration value) { new TimeValue(value.toNanos) }
 
-	def static toTimeValue(String string) { TimeValueConverter.INSTANCE.toValue(string).toTimeValue }
+	def static toTimeValue(String string) {
+		(TypedValueConverter.INSTANCE_TIME.toValue(string) as Duration).toTimeValue
+	}
 
 	def static toTimeValue(AnyMagnitudeValue value) { value.longValue.toTimeValue }
 
@@ -57,5 +59,5 @@ class TimeValue implements AnyDurationValue {
 
 	override hashCode() { Long.hashCode(value) }
 
-	override toString() { TimeValueConverter.INSTANCE.toString(Duration.of(value, ChronoUnit.NANOS)) }
+	override toString() { TypedValueConverter.INSTANCE_TIME.toString(Duration.of(value, ChronoUnit.NANOS)) }
 }

@@ -33,7 +33,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.model.value.ValueConverterFactory
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
@@ -45,10 +45,9 @@ final class ForteNgExportUtil {
 		if (decl.value?.value.nullOrEmpty) {
 			decl.type.generateTypeDefaultValue
 		} else {
-			val converter = ValueConverterFactory.createValueConverter(decl.type)
-			if (converter !== null) {
-				val value = converter.toValue(decl.value.value)
-				'''«decl.type.generateTypeName»(«switch (value) {
+			val converter = new TypedValueConverter(decl.type)
+			val value = converter.toValue(decl.value.value)
+			'''«decl.type.generateTypeName»(«switch (value) {
 				String: '''"«value.convertToJavaString»"'''
 				Duration: Long.toString(value.toNanos)
 				LocalTime: Long.toString(value.toNanoOfDay)
@@ -56,8 +55,6 @@ final class ForteNgExportUtil {
 				LocalDateTime: Long.toString(LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(value, ChronoUnit.NANOS))
 				default: value
 			}»)'''
-			} else
-				throw new UnsupportedOperationException("No value converter for type " + decl.type?.name)
 		}
 	}
 

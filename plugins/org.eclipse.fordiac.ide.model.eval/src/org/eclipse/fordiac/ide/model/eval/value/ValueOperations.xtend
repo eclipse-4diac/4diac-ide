@@ -52,6 +52,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.value.ValueConverterFactory
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 
 final class ValueOperations {
 
@@ -1037,10 +1038,7 @@ final class ValueOperations {
 		if (value.nullOrEmpty)
 			type.defaultValue
 		else if (type instanceof DataType) {
-			val converter = ValueConverterFactory.createValueConverter(type)
-			if (converter === null) {
-				throw new UnsupportedOperationException('''The type «type?.name» is not supported''')
-			}
+			val converter = new TypedValueConverter(type)
 			converter.toValue(value).wrapValue(type)
 		} else
 			throw new UnsupportedOperationException('''The type «type?.name» is not supported''')
