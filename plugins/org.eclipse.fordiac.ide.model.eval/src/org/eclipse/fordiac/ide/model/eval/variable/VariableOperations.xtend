@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.variable
 
 import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.data.ArrayType
+import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.libraryElement.FB
@@ -61,10 +62,7 @@ final class VariableOperations {
 	}
 
 	def static Variable<?> newVariable(VarDeclaration decl, String value) {
-		if (decl.array)
-			newVariable(decl.name, decl.type.newArrayType(newSubrange(0, decl.arraySize - 1)), value)
-		else
-			newVariable(decl.name, decl.type, value)
+		newVariable(decl.name, decl.actualType, value)
 	}
 
 	def static Variable<?> newVariable(VarDeclaration decl, Value value) {
@@ -87,5 +85,12 @@ final class VariableOperations {
 	def static String getInheritedInitialValue(VarDeclaration decl) {
 		val result = decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name)?.value?.value
 		if(result.nullOrEmpty) null else result
+	}
+
+	def static DataType getActualType(VarDeclaration decl) {
+		if (decl.array)
+			decl.type.newArrayType(newSubrange(0, decl.arraySize - 1))
+		else
+			decl.type
 	}
 }

@@ -66,10 +66,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.xtend.lib.annotations.Accessors
 
-import static org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations.*
-
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
+import static extension org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
+import static extension org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 
 abstract class StructuredTextEvaluator extends AbstractEvaluator {
@@ -131,7 +131,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				val repeatExpression = (elem.indexOrInitExpression as STElementaryInitializerExpression).value
 				val repeat = repeatExpression.evaluateExpression.asInteger
 				for (unused : 0 ..< repeat) {
-					for(initElement : elem.initExpressions) {
+					for (initElement : elem.initExpressions) {
 						value.getRaw(index++).evaluateInitializerExpression(initElement)
 					}
 				}
@@ -361,7 +361,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				feature.findVariable.value
 			STStandardFunction case expr.call: {
 				val arguments = (expr.mappedInputArguments.entrySet.map [
-					value?.evaluateExpression
+					value?.evaluateExpression.castValue(key.actualType)
 				] + expr.mappedOutputArguments.entrySet.map [
 					value?.evaluateVariable
 				]).toList
@@ -485,6 +485,14 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def protected dispatch Variable<?> evaluateVariable(STMultibitPartialExpression expr, Variable<?> receiver) {
 		new PartialVariable(receiver, expr.resultType as DataType,
 			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
+	}
+
+	def protected static dispatch INamedElement getActualType(VarDeclaration v) {
+		v.actualType
+	}
+
+	def protected static dispatch INamedElement getActualType(STVarDeclaration v) {
+		v.actualType
 	}
 
 	def protected static dispatch Variable<?> newVariable(VarDeclaration v, Value value) {

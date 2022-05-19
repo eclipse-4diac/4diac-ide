@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
@@ -33,11 +34,7 @@ final class STVariableOperations {
 	}
 
 	def static Variable<?> newVariable(STVarDeclaration decl) {
-		if (decl.array)
-			newVariable(decl.name, newArrayType(decl.type as DataType, decl.ranges.map[newSubrange])).evaluate(
-				decl.defaultValue)
-		else
-			newVariable(decl.name, decl.type).evaluate(decl.defaultValue)
+		newVariable(decl.name, decl.actualType).evaluate(decl.defaultValue)
 	}
 
 	def static Variable<?> newVariable(STVarDeclaration decl, Value value) {
@@ -58,5 +55,12 @@ final class STVariableOperations {
 			STNumericLiteral: (expr.value as BigInteger).intValueExact
 			default: 0
 		}
+	}
+
+	def static INamedElement getActualType(STVarDeclaration decl) {
+		if (decl.array)
+			newArrayType(decl.type as DataType, decl.ranges.map[newSubrange])
+		else
+			decl.type
 	}
 }
