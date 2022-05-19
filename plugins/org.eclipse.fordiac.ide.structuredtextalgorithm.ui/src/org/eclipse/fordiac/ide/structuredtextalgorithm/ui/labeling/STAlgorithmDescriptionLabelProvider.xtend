@@ -12,12 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.labeling
 
-import org.eclipse.xtext.ui.label.DefaultDescriptionLabelProvider
+import org.eclipse.fordiac.ide.structuredtextcore.ui.labeling.STCoreDescriptionLabelProvider
 
 /**
  * Provides labels for IEObjectDescriptions and IResourceDescriptions.
  * 
  * See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#label-provider
  */
-class STAlgorithmDescriptionLabelProvider extends DefaultDescriptionLabelProvider {
+class STAlgorithmDescriptionLabelProvider extends STCoreDescriptionLabelProvider {
 }

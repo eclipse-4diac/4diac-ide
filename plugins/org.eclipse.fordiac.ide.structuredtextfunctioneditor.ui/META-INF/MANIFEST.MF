@@ -17,7 +17,8 @@ Require-Bundle: org.eclipse.fordiac.ide.structuredtextfunctioneditor,
  org.eclipse.compare,
  org.eclipse.xtext.builder,
  org.eclipse.fordiac.ide.structuredtextcore,
- org.eclipse.fordiac.ide.structuredtextcore.ui
+ org.eclipse.fordiac.ide.structuredtextcore.ui,
+ org.eclipse.fordiac.ide.structuredtextcore.ide
 Import-Package: org.apache.log4j
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.contentassist,
