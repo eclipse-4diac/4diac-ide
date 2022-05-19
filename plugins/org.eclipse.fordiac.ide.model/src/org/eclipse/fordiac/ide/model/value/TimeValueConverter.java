@@ -29,7 +29,11 @@ public final class TimeValueConverter implements ValueConverter<Duration> {
 
 	@Override
 	public String toString(final Duration value) {
+		if (value.isZero()) {
+			return "0s"; //$NON-NLS-1$
+		}
 		final var days = value.toDays();
+		final var hours = value.toHoursPart();
 		final var minutes = value.toMinutesPart();
 		final var seconds = value.toSecondsPart();
 		final var millis = value.toNanosPart() / 1_000_000;
@@ -37,22 +41,25 @@ public final class TimeValueConverter implements ValueConverter<Duration> {
 		final var nanos = value.toNanosPart() % 1000;
 		final StringBuilder builder = new StringBuilder();
 		if (days != 0) {
-			builder.append(days).append('D');
+			builder.append(days).append('d');
+		}
+		if (hours != 0) {
+			builder.append(hours).append('h');
 		}
 		if (minutes != 0) {
-			builder.append(minutes).append('M');
+			builder.append(minutes).append('m');
 		}
 		if (seconds != 0) {
-			builder.append(seconds).append('S');
+			builder.append(seconds).append('s');
 		}
 		if (millis != 0) {
-			builder.append(millis).append("MS"); //$NON-NLS-1$
+			builder.append(millis).append("ms"); //$NON-NLS-1$
 		}
 		if (micros != 0) {
-			builder.append(micros).append("US"); //$NON-NLS-1$
+			builder.append(micros).append("us"); //$NON-NLS-1$
 		}
 		if (nanos != 0) {
-			builder.append(nanos).append("NS"); //$NON-NLS-1$
+			builder.append(nanos).append("ns"); //$NON-NLS-1$
 		}
 		return builder.toString();
 	}
