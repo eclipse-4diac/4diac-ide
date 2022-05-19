@@ -29,7 +29,7 @@ class LWordValue implements AnyBitValue {
 
 	def static toLWordValue(Number value) { new LWordValue(value.longValue) }
 
-	def static toLWordValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toLWordValue }
+	def static toLWordValue(String value) { (NumericValueConverter.INSTANCE_LWORD.toValue(value) as Number).toLWordValue }
 
 	def static toLWordValue(AnyBitValue value) { value.longValue.toLWordValue }
 
@@ -49,5 +49,5 @@ class LWordValue implements AnyBitValue {
 
 	override hashCode() { Long.hashCode(value) }
 
-	override toString() { Long.toUnsignedString(value) }
+	override toString() { NumericValueConverter.INSTANCE_LWORD.toString(intValue) }
 }

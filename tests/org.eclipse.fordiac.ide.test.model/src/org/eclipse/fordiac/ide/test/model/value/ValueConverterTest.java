@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.test.model.value;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
+import java.math.BigDecimal;
 import java.math.BigInteger;
 
 import org.eclipse.fordiac.ide.model.Messages;
@@ -31,23 +32,32 @@ import org.junit.jupiter.api.Test;
 class ValueConverterTest {
 
 	@Test
-	void validNumericConverterTest() {
-		final BigInteger result = (BigInteger) NumericValueConverter.INSTANCE.toValue("1_00"); //$NON-NLS-1$
-		assertEquals(result.intValue(), 100);
-	}
-
-	@Test
-	void invalidNumericConverterTest() {
+	void toValueNumericTest() {
+		assertEquals(Boolean.TRUE, NumericValueConverter.INSTANCE.toValue("true")); //$NON-NLS-1$
+		assertEquals(Boolean.FALSE, NumericValueConverter.INSTANCE.toValue("false")); //$NON-NLS-1$
+		assertEquals(Boolean.TRUE, NumericValueConverter.INSTANCE.toValue("TRUE")); //$NON-NLS-1$
+		assertEquals(Boolean.FALSE, NumericValueConverter.INSTANCE.toValue("FALSE")); //$NON-NLS-1$
+		assertEquals(BigInteger.valueOf(100), NumericValueConverter.INSTANCE.toValue("1_00")); //$NON-NLS-1$
+		assertEquals(BigInteger.valueOf(16), NumericValueConverter.INSTANCE.toValue("16#10")); //$NON-NLS-1$
+		assertEquals(BigDecimal.valueOf(3.1415), NumericValueConverter.INSTANCE.toValue("3.1415")); //$NON-NLS-1$
 		assertThrowsExactly(IllegalArgumentException.class, () -> {
 			NumericValueConverter.INSTANCE.toValue("NoNumber"); //$NON-NLS-1$
 		}, Messages.VALIDATOR_INVALID_NUMBER_LITERAL);
-	}
-
-	@Test
-	void twoOrMoreConsecutiveUnderscoresForbiddenTest() {
 		assertThrowsExactly(IllegalArgumentException.class, () -> {
 			NumericValueConverter.INSTANCE.toValue("1__00"); //$NON-NLS-1$
 		}, Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
+	}
+
+	@Test
+	void toStringNumericTest() {
+		assertEquals("TRUE", NumericValueConverter.INSTANCE.toString(Boolean.TRUE)); //$NON-NLS-1$
+		assertEquals("FALSE", NumericValueConverter.INSTANCE.toString(Boolean.FALSE)); //$NON-NLS-1$
+		assertEquals("100", NumericValueConverter.INSTANCE.toString(BigInteger.valueOf(100))); //$NON-NLS-1$
+		assertEquals("3.1415", NumericValueConverter.INSTANCE.toString(BigDecimal.valueOf(3.1415))); //$NON-NLS-1$
+		assertEquals("16#04", NumericValueConverter.INSTANCE_BYTE.toString(BigInteger.valueOf(4))); //$NON-NLS-1$
+		assertEquals("16#0011", NumericValueConverter.INSTANCE_WORD.toString(BigInteger.valueOf(17))); //$NON-NLS-1$
+		assertEquals("16#00000015", NumericValueConverter.INSTANCE_DWORD.toString(BigInteger.valueOf(21))); //$NON-NLS-1$
+		assertEquals("16#000000000000002A", NumericValueConverter.INSTANCE_LWORD.toString(BigInteger.valueOf(42))); //$NON-NLS-1$
 	}
 
 	@Test

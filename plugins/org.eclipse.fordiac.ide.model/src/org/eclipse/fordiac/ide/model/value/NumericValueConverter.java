@@ -21,12 +21,23 @@ import org.eclipse.fordiac.ide.model.Messages;
 
 public final class NumericValueConverter implements ValueConverter<Object> {
 	public static final NumericValueConverter INSTANCE = new NumericValueConverter();
+	public static final NumericValueConverter INSTANCE_BYTE = new NumericValueConverter("16#%02X"); //$NON-NLS-1$
+	public static final NumericValueConverter INSTANCE_WORD = new NumericValueConverter("16#%04X"); //$NON-NLS-1$
+	public static final NumericValueConverter INSTANCE_DWORD = new NumericValueConverter("16#%08X"); //$NON-NLS-1$
+	public static final NumericValueConverter INSTANCE_LWORD = new NumericValueConverter("16#%016X"); //$NON-NLS-1$
 
 	private static final String TRUE = "TRUE"; //$NON-NLS-1$
 	private static final String FALSE = "FALSE"; //$NON-NLS-1$
 	private static final Pattern NON_DECIMAL = Pattern.compile("(\\d+)#(\\p{XDigit}[_\\p{XDigit}]*)"); //$NON-NLS-1$
 
+	private final String format;
+
 	private NumericValueConverter() {
+		this(null);
+	}
+
+	private NumericValueConverter(final String format) {
+		this.format = format;
 	}
 
 	@Override
@@ -52,5 +63,13 @@ public final class NumericValueConverter implements ValueConverter<Object> {
 		} catch (final Exception e) {
 			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_NUMBER_LITERAL, e);
 		}
+	}
+
+	@Override
+	public String toString(final Object value) {
+		if (format != null) {
+			return String.format(format, value);
+		}
+		return ValueConverter.super.toString(value);
 	}
 }

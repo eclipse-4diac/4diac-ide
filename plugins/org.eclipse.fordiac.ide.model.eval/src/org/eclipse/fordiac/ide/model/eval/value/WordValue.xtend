@@ -29,7 +29,7 @@ class WordValue implements AnyBitValue {
 
 	def static toWordValue(Number value) { new WordValue(value.shortValue) }
 
-	def static toWordValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toWordValue }
+	def static toWordValue(String value) { (NumericValueConverter.INSTANCE_WORD.toValue(value) as Number).toWordValue }
 
 	def static toWordValue(AnyBitValue value) { value.shortValue.toWordValue }
 
@@ -49,5 +49,5 @@ class WordValue implements AnyBitValue {
 
 	override hashCode() { Short.hashCode(value) }
 
-	override toString() { Integer.toUnsignedString(intValue) }
+	override toString() { NumericValueConverter.INSTANCE_WORD.toString(intValue) }
 }
