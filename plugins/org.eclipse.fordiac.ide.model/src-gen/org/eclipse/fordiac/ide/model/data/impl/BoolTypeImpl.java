@@ -48,4 +48,5 @@ public class BoolTypeImpl extends AnyBitTypeImpl implements BoolType {
 				.isBoolCompatibleWith(other);
 	}
 
+
 } // BoolTypeImpl

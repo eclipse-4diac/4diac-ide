@@ -10,9 +10,11 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.eval,
+ org.eclipse.fordiac.ide.ui,
  org.eclipse.debug.core,
  org.eclipse.xtext
 Export-Package: org.eclipse.fordiac.ide.debug,
  org.eclipse.fordiac.ide.debug.basic,
+ org.eclipse.fordiac.ide.debug.breakpoint,
  org.eclipse.fordiac.ide.debug.fb,
  org.eclipse.fordiac.ide.debug.simple

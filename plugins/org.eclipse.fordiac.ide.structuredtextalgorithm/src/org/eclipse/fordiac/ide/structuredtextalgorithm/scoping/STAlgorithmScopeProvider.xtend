@@ -19,7 +19,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.xtext.resource.IEObjectDescription
 
 /**
@@ -33,10 +32,6 @@ class STAlgorithmScopeProvider extends AbstractSTAlgorithmScopeProvider {
 		if (reference == STAlgorithmPackage.Literals.ST_METHOD__RETURN_TYPE) {
 			val globalScope = super.getScope(context, reference)
 			return scopeFor(DataTypeLibrary.nonUserDefinedDataTypes, globalScope)
-		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_OUTPUT_ARGUMENT__TARGET) {
-			val method = context.method
-			return if(method !== null) scopeFor(#[method], super.getScope(context, reference)) else super.
-				getScope(context, reference)
 		}
 		return super.getScope(context, reference)
 	}

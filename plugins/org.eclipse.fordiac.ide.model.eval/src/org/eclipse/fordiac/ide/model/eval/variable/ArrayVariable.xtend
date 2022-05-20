@@ -24,13 +24,15 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
+import static extension java.lang.Math.*
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
 
-class ArrayVariable extends AbstractVariable {
+class ArrayVariable extends AbstractVariable<ArrayValue> {
 	static final Pattern ARRAY_PATTERN = Pattern.compile(",(?=(?:[^\"']*(?:(?:\"[^\"]*\")|(?:\'[^\']*\')))*[^\"']*$)")
 
 	@Accessors final DataType elementType
-	@Accessors final List<Variable> elements
+	@Accessors final List<Variable<?>> elements
 	@Accessors final ArrayValue value
 
 	new(String name, ArrayType type) {
@@ -57,10 +59,9 @@ class ArrayVariable extends AbstractVariable {
 
 	override setValue(Value value) {
 		if (value instanceof ArrayValue) {
-			if (value.elements.size != elements.size) {
-				throw new IllegalArgumentException('''Cannot assign array with different size «value.elements.size» to array of size «elements.size»''')
-			}
-			elements.forEach[variable, index|variable.value = value.get(index).value]
+			(this.value.start.max(value.start) .. this.value.end.min(value.end)).forEach [ index |
+				this.value.get(index).value = value.get(index).value.castValue(elementType)
+			]
 		} else
 			throw new ClassCastException('''Cannot assign value with incompatible type «value.type.name» as «type.name»''')
 	}
@@ -71,7 +72,7 @@ class ArrayVariable extends AbstractVariable {
 			throw new IllegalArgumentException("Not a valid array value")
 		}
 		val inner = trimmed.substring(1, trimmed.length - 1)
-		ARRAY_PATTERN.split(inner).forEach[elem, index|
+		ARRAY_PATTERN.split(inner).forEach [ elem, index |
 			elements.get(index).value = elem.trim
 		]
 	}
@@ -91,12 +92,20 @@ class ArrayVariable extends AbstractVariable {
 		return true
 	}
 
+	override ArrayType getType() {
+		super.type as ArrayType
+	}
+
 	def static ArrayType newArrayType(DataType arrayBaseType, Subrange... arraySubranges) {
 		arrayBaseType.newArrayType(arraySubranges as Iterable<Subrange>)
 	}
 
 	def static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
+		if(arraySubranges.empty) {
+			throw new UnsupportedOperationException("Cannot create array with variable size")
+		}
 		DataFactory.eINSTANCE.createArrayType => [
+			name = '''ARRAY [«arraySubranges.map['''«lowerLimit»..«upperLimit»'''].join(", ")»] OF «arrayBaseType.name»'''
 			baseType = arrayBaseType
 			subranges.addAll(arraySubranges)
 		]

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2015 Luka Lednicki, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -15,9 +15,9 @@ package org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.ChannelEnd;
 import org.eclipse.fordiac.ide.comgeneration.implementation.CommunicationMediaInfo;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 public interface MediaSpecificGenerator {
 
@@ -25,7 +25,7 @@ public interface MediaSpecificGenerator {
 
 	String getProtocolId();
 
-	FBTypePaletteEntry getPaletteType(ChannelEnd end, int numDataPorts, boolean local);
+	FBTypeEntry getPaletteType(ChannelEnd end, int numDataPorts, boolean local);
 
 	void configureFBs(FB sourceFB, FB destinationFB, CommunicationMediaInfo mediaInfo);
 

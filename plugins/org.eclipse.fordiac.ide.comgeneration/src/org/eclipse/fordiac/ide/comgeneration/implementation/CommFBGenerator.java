@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.Medi
 import org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators.MediaSpecificGeneratorFactory;
 import org.eclipse.fordiac.ide.comgeneration.plugin.Messages;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
@@ -38,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class CommFBGenerator {
@@ -129,11 +129,11 @@ public class CommFBGenerator {
 		if (generatedFBInfo != null) {
 			generatedFBInfo.getDestinations().add(destination);
 		} else {
-			final FBTypePaletteEntry paletteEntry = specificGenerator.getPaletteType(end, numberOfDataPorts,
+			final FBTypeEntry typeEntry = specificGenerator.getPaletteType(end, numberOfDataPorts,
 					destination.getCommunicationChannel().isLocal());
 			final Resource resource = (end == ChannelEnd.SOURCE) ? destination.getCommunicationChannel().getSourceResource()
 					: destination.getDestinationResource();
-			final FBCreateCommand command = new FBCreateCommand(paletteEntry, resource.getFBNetwork(), 10, 10);
+			final FBCreateCommand command = new FBCreateCommand(typeEntry, resource.getFBNetwork(), 10, 10);
 			command.execute();
 			final FB generatedFB = command.getFB();
 			generatedFB.setName(NameRepository.createUniqueName(generatedFB, "GENERATED_" + generatedFBIndex)); //$NON-NLS-1$

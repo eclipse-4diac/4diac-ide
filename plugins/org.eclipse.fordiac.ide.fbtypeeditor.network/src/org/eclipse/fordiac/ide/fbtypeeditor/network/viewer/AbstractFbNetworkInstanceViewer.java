@@ -55,7 +55,7 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 		public void notifyChanged(final Notification msg) {
 			super.notifyChanged(msg);
 			final Object feature = msg.getFeature();
-			if ((LibraryElementPackage.eINSTANCE.getTypedConfigureableObject_PaletteEntry().equals(feature))
+			if ((LibraryElementPackage.eINSTANCE.getTypedConfigureableObject_TypeEntry().equals(feature))
 					&& (fbNetworkElement.getType() == null)) {
 				// the subapp/cfb was detached from the type
 				closeEditor();

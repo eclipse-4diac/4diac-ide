@@ -1,353 +1,524 @@
-/********************************************************************************
- * Copyright (c) 2008, 2010, 2012 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
+ * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Monika Wenger, Martin Jobst
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.data;
 
 import org.eclipse.emf.ecore.EFactory;
 
-/** <!-- begin-user-doc --> The <b>Factory</b> for the model. It provides a create method for each non-abstract class of
- * the model. <!-- end-user-doc -->
- *
+/**
+ * <!-- begin-user-doc -->
+ * The <b>Factory</b> for the model.
+ * It provides a create method for each non-abstract class of the model.
+ * <!-- end-user-doc -->
  * @see org.eclipse.fordiac.ide.model.data.DataPackage
- * @generated */
+ * @generated
+ */
 public interface DataFactory extends EFactory {
-	/** The singleton instance of the factory. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * The singleton instance of the factory.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	DataFactory eINSTANCE = org.eclipse.fordiac.ide.model.data.impl.DataFactoryImpl.init();
 
-	/** Returns a new object of class '<em>Any Derived Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Derived Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Derived Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyDerivedType createAnyDerivedType();
 
-	/** Returns a new object of class '<em>Array Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Array Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Array Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	ArrayType createArrayType();
 
-	/** Returns a new object of class '<em>Directly Derived Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Directly Derived Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Directly Derived Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	DirectlyDerivedType createDirectlyDerivedType();
 
-	/** Returns a new object of class '<em>Enumerated Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Enumerated Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Enumerated Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	EnumeratedType createEnumeratedType();
 
-	/** Returns a new object of class '<em>Enumerated Value</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Enumerated Value</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Enumerated Value</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	EnumeratedValue createEnumeratedValue();
 
-	/** Returns a new object of class '<em>Structured Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Structured Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Structured Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	StructuredType createStructuredType();
 
-	/** Returns a new object of class '<em>Subrange</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Subrange</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Subrange</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	Subrange createSubrange();
 
-	/** Returns a new object of class '<em>Subrange Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Subrange Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Subrange Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	SubrangeType createSubrangeType();
 
-	/** Returns a new object of class '<em>Value Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Value Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Value Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	ValueType createValueType();
 
-	/** Returns a new object of class '<em>Elementary Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Elementary Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Elementary Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	ElementaryType createElementaryType();
 
-	/** Returns a new object of class '<em>Derived Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Derived Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Derived Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	DerivedType createDerivedType();
 
-	/** Returns a new object of class '<em>Event Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Event Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Event Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	EventType createEventType();
 
-	/** Returns a new object of class '<em>Any Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyType createAnyType();
 
-	/** Returns a new object of class '<em>Any Elementary Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Elementary Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Elementary Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyElementaryType createAnyElementaryType();
 
-	/** Returns a new object of class '<em>Any Magnitude Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Magnitude Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Magnitude Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyMagnitudeType createAnyMagnitudeType();
 
-	/** Returns a new object of class '<em>Any Num Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Num Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Num Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyNumType createAnyNumType();
 
-	/** Returns a new object of class '<em>Any Real Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Real Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Real Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyRealType createAnyRealType();
 
-	/** Returns a new object of class '<em>Real Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Real Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Real Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	RealType createRealType();
 
-	/** Returns a new object of class '<em>Lreal Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Lreal Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Lreal Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	LrealType createLrealType();
 
-	/** Returns a new object of class '<em>Any Int Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Int Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Int Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyIntType createAnyIntType();
 
-	/** Returns a new object of class '<em>Any Unsigned Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Unsigned Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Unsigned Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyUnsignedType createAnyUnsignedType();
 
-	/** Returns a new object of class '<em>Usint Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Usint Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Usint Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	UsintType createUsintType();
 
-	/** Returns a new object of class '<em>Uint Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Uint Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Uint Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	UintType createUintType();
 
-	/** Returns a new object of class '<em>Udint Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Udint Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Udint Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	UdintType createUdintType();
 
-	/** Returns a new object of class '<em>Ulint Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Ulint Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Ulint Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	UlintType createUlintType();
 
-	/** Returns a new object of class '<em>Any Signed Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Signed Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Signed Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnySignedType createAnySignedType();
 
-	/** Returns a new object of class '<em>Sint Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Sint Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Sint Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	SintType createSintType();
 
-	/** Returns a new object of class '<em>Int Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Int Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Int Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	IntType createIntType();
 
-	/** Returns a new object of class '<em>Dint Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Dint Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Dint Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	DintType createDintType();
 
-	/** Returns a new object of class '<em>Lint Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Lint Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Lint Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	LintType createLintType();
 
-	/** Returns a new object of class '<em>Any Duration Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Duration Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Duration Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyDurationType createAnyDurationType();
 
-	/** Returns a new object of class '<em>Time Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Time Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Time Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	TimeType createTimeType();
 
-	/** Returns a new object of class '<em>Ltime Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Ltime Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Ltime Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	LtimeType createLtimeType();
 
-	/** Returns a new object of class '<em>Any Bit Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Bit Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Bit Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyBitType createAnyBitType();
 
-	/** Returns a new object of class '<em>Bool Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Bool Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Bool Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	BoolType createBoolType();
 
-	/** Returns a new object of class '<em>Byte Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Byte Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Byte Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	ByteType createByteType();
 
-	/** Returns a new object of class '<em>Word Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Word Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Word Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	WordType createWordType();
 
-	/** Returns a new object of class '<em>Dword Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Dword Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Dword Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	DwordType createDwordType();
 
-	/** Returns a new object of class '<em>Lword Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Lword Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Lword Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	LwordType createLwordType();
 
-	/** Returns a new object of class '<em>Any Chars Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Chars Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Chars Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyCharsType createAnyCharsType();
 
-	/** Returns a new object of class '<em>Any String Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any String Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any String Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyStringType createAnyStringType();
 
-	/** Returns a new object of class '<em>String Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>String Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>String Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	StringType createStringType();
 
-	/** Returns a new object of class '<em>Wstring Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Wstring Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Wstring Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	WstringType createWstringType();
 
-	/** Returns a new object of class '<em>Any Char Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Char Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Char Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyCharType createAnyCharType();
 
-	/** Returns a new object of class '<em>Char Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Char Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Char Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	CharType createCharType();
 
-	/** Returns a new object of class '<em>Wchar Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Wchar Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Wchar Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	WcharType createWcharType();
 
-	/** Returns a new object of class '<em>Any Date Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Any Date Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Any Date Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	AnyDateType createAnyDateType();
 
-	/** Returns a new object of class '<em>Date And Time Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Date And Time Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Date And Time Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	DateAndTimeType createDateAndTimeType();
 
-	/** Returns a new object of class '<em>Ldt Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Ldt Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Ldt Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	LdtType createLdtType();
 
-	/** Returns a new object of class '<em>Date Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Date Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Date Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	DateType createDateType();
 
-	/** Returns a new object of class '<em>Time Of Day Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Time Of Day Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Time Of Day Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	TimeOfDayType createTimeOfDayType();
 
-	/** Returns a new object of class '<em>Ltod Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Ltod Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Ltod Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	LtodType createLtodType();
 
-	/** Returns a new object of class '<em>Ldate Type</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns a new object of class '<em>Ldate Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return a new object of class '<em>Ldate Type</em>'.
-	 * @generated */
+	 * @generated
+	 */
 	LdateType createLdateType();
 
-	/** Returns the package supported by this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * Returns the package supported by this factory.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @return the package supported by this factory.
-	 * @generated */
+	 * @generated
+	 */
 	DataPackage getDataPackage();
 
-} // DataFactory
+} //DataFactory

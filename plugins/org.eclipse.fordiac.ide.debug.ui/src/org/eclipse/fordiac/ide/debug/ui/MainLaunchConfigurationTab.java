@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -63,7 +64,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 	private Text resourceText;
 	private TreeViewer argumentsTable;
 
-	private List<Variable> arguments;
+	private List<Variable<?>> arguments;
 
 	@Override
 	public void createControl(final Composite parent) {
@@ -175,7 +176,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 			final String resourceAttribute = configuration.getAttribute(LaunchConfigurationAttributes.RESOURCE, ""); //$NON-NLS-1$
 			resourceText.setText(resourceAttribute);
 		} catch (final CoreException e) {
-			// ignore
+			FordiacLogHelper.logWarning(e.getMessage(), e);
 		}
 	}
 
@@ -184,7 +185,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 			arguments = LaunchConfigurationAttributes.getArguments(configuration, getDefaultArguments());
 			argumentsTable.setInput(arguments);
 		} catch (final CoreException e) {
-			// ignore
+			FordiacLogHelper.logWarning(e.getMessage(), e);
 		}
 	}
 
@@ -213,7 +214,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 						try {
 							variable.setValue(arg.getValue().toString());
 						} catch (final Exception e) {
-							// ignore
+							FordiacLogHelper.logWarning(e.getMessage(), e);
 						}
 					}));
 		}
@@ -221,7 +222,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		updateLaunchConfigurationDialog();
 	}
 
-	protected abstract List<Variable> getDefaultArguments();
+	protected abstract List<Variable<?>> getDefaultArguments();
 
 	protected boolean filterTargetResource(final IResource resource) throws CoreException {
 		if (resource instanceof IFile) {
@@ -282,8 +283,8 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		@Override
 		public StyledString getStyledText(final Object element) {
-			if (element instanceof Variable) {
-				final Variable variable = (Variable) element;
+			if (element instanceof Variable<?>) {
+				final Variable<?> variable = (Variable<?>) element;
 				return new StyledString(variable.getName());
 			}
 			return null;
@@ -295,8 +296,8 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		@Override
 		public StyledString getStyledText(final Object element) {
-			if (element instanceof Variable) {
-				final Variable variable = (Variable) element;
+			if (element instanceof Variable<?>) {
+				final Variable<?> variable = (Variable<?>) element;
 				return new StyledString(variable.getValue().toString());
 			}
 			return null;
@@ -304,7 +305,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 	}
 
-	private class ArgumentsValueEditingSupport extends EditingSupport {
+	private final class ArgumentsValueEditingSupport extends EditingSupport {
 		private final CellEditor editor;
 
 		private ArgumentsValueEditingSupport(final TreeViewer viewer) {
@@ -324,19 +325,20 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		@Override
 		protected Object getValue(final Object element) {
-			if (element instanceof Variable) {
-				return ((Variable) element).getValue().toString();
+			if (element instanceof Variable<?>) {
+				return ((Variable<?>) element).getValue().toString();
 			}
 			return null;
 		}
 
 		@Override
 		protected void setValue(final Object element, final Object value) {
-			if (element instanceof Variable) {
-				final Variable variable = (Variable) element;
+			if (element instanceof Variable<?>) {
+				final Variable<?> variable = (Variable<?>) element;
 				try {
 					variable.setValue(value.toString());
-				} catch (final Throwable t) {
+				} catch (final Exception e) {
+					FordiacLogHelper.logWarning(e.getMessage(), e);
 					MessageDialog.openError(getViewer().getControl().getShell(), "Invalid Value", //$NON-NLS-1$
 							String.format("'%s' is not a valid value for variable %s with type %s", value.toString(), //$NON-NLS-1$
 									variable.getName(), variable.getType().getName()));

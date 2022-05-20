@@ -13,10 +13,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.xtext.fbt
 
-import com.google.inject.Binder
-import com.google.inject.name.Names
-import org.eclipse.xtext.validation.CompositeEValidator
-
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
  */
@@ -24,11 +20,5 @@ class FBTypeRuntimeModule extends AbstractFBTypeRuntimeModule {
 
 	override bindISerializer() {
 		return org.eclipse.xtext.serializer.impl.Serializer
-	}
-
-	@SuppressWarnings("static-method")
-	def void configureCompositeEValidator(Binder binder) {
-		// ignore dangling reference errors (until Palette vs. Resource issues have been addressed)
-		binder.bindConstant().annotatedWith(Names.named(CompositeEValidator.USE_EOBJECT_VALIDATOR)).to(false);
 	}
 }

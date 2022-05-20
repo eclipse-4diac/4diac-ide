@@ -42,277 +42,274 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class CaseStatementImpl extends StatementImpl implements CaseStatement
 {
   /**
-   * The cached value of the '{@link #getExpression() <em>Expression</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getExpression() <em>Expression</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getExpression()
-   * @generated
-   * @ordered
-   */
+	 * @see #getExpression()
+	 * @generated
+	 * @ordered
+	 */
   protected Expression expression;
 
   /**
-   * The cached value of the '{@link #getCase() <em>Case</em>}' containment reference list.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getCase() <em>Case</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getCase()
-   * @generated
-   * @ordered
-   */
+	 * @see #getCase()
+	 * @generated
+	 * @ordered
+	 */
   protected EList<CaseClause> case_;
 
   /**
-   * The cached value of the '{@link #getElse() <em>Else</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getElse() <em>Else</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getElse()
-   * @generated
-   * @ordered
-   */
+	 * @see #getElse()
+	 * @generated
+	 * @ordered
+	 */
   protected ElseClause else_;
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected CaseStatementImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.CASE_STATEMENT;
-  }
+		return StructuredTextPackage.Literals.CASE_STATEMENT;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Expression getExpression()
   {
-    return expression;
-  }
+		return expression;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public NotificationChain basicSetExpression(Expression newExpression, NotificationChain msgs)
   {
-    Expression oldExpression = expression;
-    expression = newExpression;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CASE_STATEMENT__EXPRESSION, oldExpression, newExpression);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
+		Expression oldExpression = expression;
+		expression = newExpression;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CASE_STATEMENT__EXPRESSION, oldExpression, newExpression);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setExpression(Expression newExpression)
   {
-    if (newExpression != expression)
-    {
-      NotificationChain msgs = null;
-      if (expression != null)
-        msgs = ((InternalEObject)expression).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.CASE_STATEMENT__EXPRESSION, null, msgs);
-      if (newExpression != null)
-        msgs = ((InternalEObject)newExpression).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.CASE_STATEMENT__EXPRESSION, null, msgs);
-      msgs = basicSetExpression(newExpression, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CASE_STATEMENT__EXPRESSION, newExpression, newExpression));
-  }
+		if (newExpression != expression) {
+			NotificationChain msgs = null;
+			if (expression != null)
+				msgs = ((InternalEObject)expression).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.CASE_STATEMENT__EXPRESSION, null, msgs);
+			if (newExpression != null)
+				msgs = ((InternalEObject)newExpression).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.CASE_STATEMENT__EXPRESSION, null, msgs);
+			msgs = basicSetExpression(newExpression, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CASE_STATEMENT__EXPRESSION, newExpression, newExpression));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public EList<CaseClause> getCase()
   {
-    if (case_ == null)
-    {
-      case_ = new EObjectContainmentEList<CaseClause>(CaseClause.class, this, StructuredTextPackage.CASE_STATEMENT__CASE);
-    }
-    return case_;
-  }
+		if (case_ == null) {
+			case_ = new EObjectContainmentEList<CaseClause>(CaseClause.class, this, StructuredTextPackage.CASE_STATEMENT__CASE);
+		}
+		return case_;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public ElseClause getElse()
   {
-    return else_;
-  }
+		return else_;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public NotificationChain basicSetElse(ElseClause newElse, NotificationChain msgs)
   {
-    ElseClause oldElse = else_;
-    else_ = newElse;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CASE_STATEMENT__ELSE, oldElse, newElse);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
+		ElseClause oldElse = else_;
+		else_ = newElse;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CASE_STATEMENT__ELSE, oldElse, newElse);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setElse(ElseClause newElse)
   {
-    if (newElse != else_)
-    {
-      NotificationChain msgs = null;
-      if (else_ != null)
-        msgs = ((InternalEObject)else_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.CASE_STATEMENT__ELSE, null, msgs);
-      if (newElse != null)
-        msgs = ((InternalEObject)newElse).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.CASE_STATEMENT__ELSE, null, msgs);
-      msgs = basicSetElse(newElse, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CASE_STATEMENT__ELSE, newElse, newElse));
-  }
+		if (newElse != else_) {
+			NotificationChain msgs = null;
+			if (else_ != null)
+				msgs = ((InternalEObject)else_).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.CASE_STATEMENT__ELSE, null, msgs);
+			if (newElse != null)
+				msgs = ((InternalEObject)newElse).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.CASE_STATEMENT__ELSE, null, msgs);
+			msgs = basicSetElse(newElse, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CASE_STATEMENT__ELSE, newElse, newElse));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CASE_STATEMENT__EXPRESSION:
-        return basicSetExpression(null, msgs);
-      case StructuredTextPackage.CASE_STATEMENT__CASE:
-        return ((InternalEList<?>)getCase()).basicRemove(otherEnd, msgs);
-      case StructuredTextPackage.CASE_STATEMENT__ELSE:
-        return basicSetElse(null, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CASE_STATEMENT__EXPRESSION:
+				return basicSetExpression(null, msgs);
+			case StructuredTextPackage.CASE_STATEMENT__CASE:
+				return ((InternalEList<?>)getCase()).basicRemove(otherEnd, msgs);
+			case StructuredTextPackage.CASE_STATEMENT__ELSE:
+				return basicSetElse(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CASE_STATEMENT__EXPRESSION:
-        return getExpression();
-      case StructuredTextPackage.CASE_STATEMENT__CASE:
-        return getCase();
-      case StructuredTextPackage.CASE_STATEMENT__ELSE:
-        return getElse();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CASE_STATEMENT__EXPRESSION:
+				return getExpression();
+			case StructuredTextPackage.CASE_STATEMENT__CASE:
+				return getCase();
+			case StructuredTextPackage.CASE_STATEMENT__ELSE:
+				return getElse();
+			default:
+				return super.eGet(featureID, resolve, coreType);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CASE_STATEMENT__EXPRESSION:
-        setExpression((Expression)newValue);
-        return;
-      case StructuredTextPackage.CASE_STATEMENT__CASE:
-        getCase().clear();
-        getCase().addAll((Collection<? extends CaseClause>)newValue);
-        return;
-      case StructuredTextPackage.CASE_STATEMENT__ELSE:
-        setElse((ElseClause)newValue);
-        return;
-    }
-    super.eSet(featureID, newValue);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CASE_STATEMENT__EXPRESSION:
+				setExpression((Expression)newValue);
+				return;
+			case StructuredTextPackage.CASE_STATEMENT__CASE:
+				getCase().clear();
+				getCase().addAll((Collection<? extends CaseClause>)newValue);
+				return;
+			case StructuredTextPackage.CASE_STATEMENT__ELSE:
+				setElse((ElseClause)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eUnset(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CASE_STATEMENT__EXPRESSION:
-        setExpression((Expression)null);
-        return;
-      case StructuredTextPackage.CASE_STATEMENT__CASE:
-        getCase().clear();
-        return;
-      case StructuredTextPackage.CASE_STATEMENT__ELSE:
-        setElse((ElseClause)null);
-        return;
-    }
-    super.eUnset(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CASE_STATEMENT__EXPRESSION:
+				setExpression((Expression)null);
+				return;
+			case StructuredTextPackage.CASE_STATEMENT__CASE:
+				getCase().clear();
+				return;
+			case StructuredTextPackage.CASE_STATEMENT__ELSE:
+				setElse((ElseClause)null);
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CASE_STATEMENT__EXPRESSION:
-        return expression != null;
-      case StructuredTextPackage.CASE_STATEMENT__CASE:
-        return case_ != null && !case_.isEmpty();
-      case StructuredTextPackage.CASE_STATEMENT__ELSE:
-        return else_ != null;
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CASE_STATEMENT__EXPRESSION:
+				return expression != null;
+			case StructuredTextPackage.CASE_STATEMENT__CASE:
+				return case_ != null && !case_.isEmpty();
+			case StructuredTextPackage.CASE_STATEMENT__ELSE:
+				return else_ != null;
+			default:
+				return super.eIsSet(featureID);
+		}
+	}
 
 } //CaseStatementImpl

@@ -193,12 +193,12 @@ public class STCoreParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTAssignmentStatementAccess().getLeftAssignment_0(), "rule__STAssignmentStatement__LeftAssignment_0");
 			builder.put(grammarAccess.getSTAssignmentStatementAccess().getRightAssignment_2(), "rule__STAssignmentStatement__RightAssignment_2");
 			builder.put(grammarAccess.getSTCallStatementAccess().getCallAssignment(), "rule__STCallStatement__CallAssignment");
-			builder.put(grammarAccess.getSTCallUnnamedArgumentAccess().getArgAssignment(), "rule__STCallUnnamedArgument__ArgAssignment");
-			builder.put(grammarAccess.getSTCallNamedInputArgumentAccess().getTargetAssignment_0(), "rule__STCallNamedInputArgument__TargetAssignment_0");
-			builder.put(grammarAccess.getSTCallNamedInputArgumentAccess().getSourceAssignment_2(), "rule__STCallNamedInputArgument__SourceAssignment_2");
+			builder.put(grammarAccess.getSTCallUnnamedArgumentAccess().getArgumentAssignment(), "rule__STCallUnnamedArgument__ArgumentAssignment");
+			builder.put(grammarAccess.getSTCallNamedInputArgumentAccess().getParameterAssignment_0(), "rule__STCallNamedInputArgument__ParameterAssignment_0");
+			builder.put(grammarAccess.getSTCallNamedInputArgumentAccess().getArgumentAssignment_2(), "rule__STCallNamedInputArgument__ArgumentAssignment_2");
 			builder.put(grammarAccess.getSTCallNamedOutputArgumentAccess().getNotAssignment_0(), "rule__STCallNamedOutputArgument__NotAssignment_0");
-			builder.put(grammarAccess.getSTCallNamedOutputArgumentAccess().getSourceAssignment_1(), "rule__STCallNamedOutputArgument__SourceAssignment_1");
-			builder.put(grammarAccess.getSTCallNamedOutputArgumentAccess().getTargetAssignment_3(), "rule__STCallNamedOutputArgument__TargetAssignment_3");
+			builder.put(grammarAccess.getSTCallNamedOutputArgumentAccess().getParameterAssignment_1(), "rule__STCallNamedOutputArgument__ParameterAssignment_1");
+			builder.put(grammarAccess.getSTCallNamedOutputArgumentAccess().getArgumentAssignment_3(), "rule__STCallNamedOutputArgument__ArgumentAssignment_3");
 			builder.put(grammarAccess.getSTIfStatementAccess().getConditionAssignment_1(), "rule__STIfStatement__ConditionAssignment_1");
 			builder.put(grammarAccess.getSTIfStatementAccess().getStatementsAssignment_3(), "rule__STIfStatement__StatementsAssignment_3");
 			builder.put(grammarAccess.getSTIfStatementAccess().getElseifsAssignment_4(), "rule__STIfStatement__ElseifsAssignment_4");

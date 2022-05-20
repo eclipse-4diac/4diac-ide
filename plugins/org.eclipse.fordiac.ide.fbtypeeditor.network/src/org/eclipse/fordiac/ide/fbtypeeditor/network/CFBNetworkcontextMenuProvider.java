@@ -25,14 +25,14 @@ public class CFBNetworkcontextMenuProvider extends FBNetworkContextMenuProvider 
 
 	private final TypeLibrary typelib;
 
-	public CFBNetworkcontextMenuProvider(DiagramEditorWithFlyoutPalette editor, ActionRegistry registry,
-			ZoomManager zoomManager, TypeLibrary typelib) {
-		super(editor, registry, zoomManager, typelib.getBlockTypeLib());
+	public CFBNetworkcontextMenuProvider(final DiagramEditorWithFlyoutPalette editor, final ActionRegistry registry,
+			final ZoomManager zoomManager, final TypeLibrary typelib) {
+		super(editor, registry, zoomManager, typelib);
 		this.typelib = typelib;
 	}
 
 	@Override
-	public void buildContextMenu(IMenuManager menu) {
+	public void buildContextMenu(final IMenuManager menu) {
 		super.buildContextMenu(menu);
 		InterfaceContextMenuProvider.buildInterfaceEditEntries(menu, getRegistry(), typelib.getDataTypeLibrary());
 	}

@@ -15,4 +15,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor,
  org.eclipse.debug.core,
  org.eclipse.xtext
-Export-Package: org.eclipse.fordiac.ide.debug.st
+Export-Package: org.eclipse.fordiac.ide.debug.st,
+ org.eclipse.fordiac.ide.debug.st.breakpoint

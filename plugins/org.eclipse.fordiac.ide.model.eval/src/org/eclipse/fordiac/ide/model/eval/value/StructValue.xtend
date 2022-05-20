@@ -20,9 +20,9 @@ import org.eclipse.xtend.lib.annotations.Data
 @Data
 class StructValue implements AnyDerivedValue, Iterable<Value> {
 	StructuredType type
-	Map<String, Variable> members
+	Map<String, Variable<?>> members
 
-	def Variable get(String key) {
+	def Variable<?> get(String key) {
 		members.get(key)
 	}
 

@@ -21,11 +21,11 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
-class StructVariable extends AbstractVariable {
+class StructVariable extends AbstractVariable<StructValue> {
 	static final Pattern MAP_PATTERN = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
 	static final Pattern MAP_KV_PATTERN = Pattern.compile("=(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
 
-	@Accessors final Map<String, Variable> members
+	@Accessors final Map<String, Variable<?>> members
 	@Accessors final StructValue value
 
 	new(String name, StructuredType type) {

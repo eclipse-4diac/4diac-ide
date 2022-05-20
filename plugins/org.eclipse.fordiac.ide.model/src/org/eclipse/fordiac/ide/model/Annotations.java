@@ -26,7 +26,6 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -63,8 +62,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public final class Annotations {
@@ -532,11 +531,6 @@ public final class Annotations {
 				: null;
 	}
 
-	// *** Value ***//
-	public static VarDeclaration getVarDeclaration(final Value v) {
-		return (VarDeclaration) v.eContainer();
-	}
-
 	// *** SystemConfiguration ***//
 	public static AutomationSystem getAutomationSystem(final SystemConfiguration sc) {
 		return (AutomationSystem) sc.eContainer();
@@ -567,19 +561,19 @@ public final class Annotations {
 
 	// *** TypedConfigureableObject ***//
 	public static String getTypeName(final TypedConfigureableObject tco) {
-		return (null != tco.getPaletteEntry()) ? tco.getPaletteEntry().getLabel() : null;
+		return (null != tco.getTypeEntry()) ? tco.getTypeEntry().getTypeName() : null;
 	}
 
 	public static LibraryElement getType(final TypedConfigureableObject tco) {
-		if (null != tco.getPaletteEntry()) {
-			return tco.getPaletteEntry().getType();
+		if (null != tco.getTypeEntry()) {
+			return tco.getTypeEntry().getType();
 		}
 		return null;
 	}
 
 	public static TypeLibrary getTypeLibrary(final TypedConfigureableObject tco) {
-		if (null != tco.getPaletteEntry()) {
-			return tco.getPaletteEntry().getTypeLibrary();
+		if (null != tco.getTypeEntry()) {
+			return tco.getTypeEntry().getTypeLibrary();
 		}
 		return null;
 	}
@@ -591,11 +585,11 @@ public final class Annotations {
 
 	public static FBType getType(final AdapterFB afb) {
 		FBType retVal = null;
-		if ((afb.getPaletteEntry() instanceof AdapterTypePaletteEntry) && (null != afb.getAdapterDecl())) {
+		if ((afb.getTypeEntry() instanceof AdapterTypeEntry) && (null != afb.getAdapterDecl())) {
 			if (afb.isPlug()) {
-				retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getType().getPlugType();
+				retVal = ((AdapterTypeEntry) afb.getTypeEntry()).getType().getPlugType();
 			} else {
-				retVal = ((AdapterTypePaletteEntry) afb.getPaletteEntry()).getType().getSocketType();
+				retVal = ((AdapterTypeEntry) afb.getTypeEntry()).getType().getSocketType();
 			}
 		}
 		return retVal;

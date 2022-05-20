@@ -20,11 +20,11 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.FBNetworkItemProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.SubAppTypeItemProvider;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 
 public class TypedSubAppItemProvider extends SubAppTypeItemProvider {
 
@@ -52,9 +52,9 @@ public class TypedSubAppItemProvider extends SubAppTypeItemProvider {
 	}
 
 	@Override
-	public Object getParent(Object object) {
+	public Object getParent(final Object object) {
 		final Object parent = super.getParent(object);
-		return parent instanceof PaletteEntry ? null : parent;
+		return parent instanceof TypeEntry ? null : parent;
 	}
 
 	@Override

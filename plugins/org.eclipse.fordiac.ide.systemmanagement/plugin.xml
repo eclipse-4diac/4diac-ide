@@ -43,6 +43,13 @@
             class="org.eclipse.fordiac.ide.systemmanagement.ant.CheckSystem">
       </antTask>
    </extension>
+   <extension point="org.eclipse.ant.core.antTasks">
+      <antTask
+            library="ant_tasks/systemmanagement-ant.jar"
+            name="fordiac.checkProject"
+            class="org.eclipse.fordiac.ide.systemmanagement.ant.CheckProject">
+      </antTask>
+   </extension>
   
    <extension point="org.eclipse.ant.core.extraClasspathEntries">
       <extraClasspathEntry library="ant_tasks/systemmanagement-ant.jar" />

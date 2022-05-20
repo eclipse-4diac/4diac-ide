@@ -23,15 +23,15 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -137,7 +137,7 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 		if (TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
 				|| TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
 				|| TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			text = TypeLibrary.getTypeNameFromFile(element);
+			text = TypeEntry.getTypeNameFromFile(element);
 		}
 		return text;
 	}
@@ -173,17 +173,17 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	}
 
 	private static FBType getAdapterTypeForFile(final IFile file) {
-		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
-		if (entry instanceof AdapterTypePaletteEntry) {
-			return ((AdapterTypePaletteEntry) entry).getType().getAdapterFBType();
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		if (entry instanceof AdapterTypeEntry) {
+			return ((AdapterTypeEntry) entry).getType().getAdapterFBType();
 		}
 		return null;
 	}
 
 	private static FBType getFBTypeFromFile(final IFile file) {
-		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
-		if (entry instanceof FBTypePaletteEntry) {
-			return ((FBTypePaletteEntry) entry).getType();
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		if (entry instanceof FBTypeEntry) {
+			return ((FBTypeEntry) entry).getType();
 		}
 		return null;
 	}

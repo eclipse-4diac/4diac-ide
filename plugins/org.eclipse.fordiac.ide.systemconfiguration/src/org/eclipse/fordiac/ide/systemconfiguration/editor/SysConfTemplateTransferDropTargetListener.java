@@ -16,11 +16,11 @@ package org.eclipse.fordiac.ide.systemconfiguration.editor;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.fordiac.ide.gef.utilities.TemplateCreationFactory;
-import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
-import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.dnd.TemplateTransfer;
@@ -72,8 +72,8 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 			getCurrentEvent().operations = DND.DROP_NONE;
 
 		} else {
-			if (TemplateTransfer.getInstance().getTemplate() instanceof PaletteEntry) {
-				final PaletteEntry entry = (PaletteEntry) TemplateTransfer.getInstance().getTemplate();
+			if (TemplateTransfer.getInstance().getTemplate() instanceof TypeEntry) {
+				final TypeEntry entry = (TypeEntry) TemplateTransfer.getInstance().getTemplate();
 				final IProject srcProject = entry.getFile().getProject();
 
 				// If project is null it is an entry from the tool palette
@@ -114,8 +114,8 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 	}
 
 	private static boolean isSysConfEditorType(final Object template) {
-		return (template instanceof DeviceTypePaletteEntry) || (template instanceof ResourceTypeEntry)
-				|| (template instanceof SegmentTypePaletteEntry);
+		return (template instanceof DeviceTypeEntry) || (template instanceof ResourceTypeEntry)
+				|| (template instanceof SegmentTypeEntry);
 	}
 
 }

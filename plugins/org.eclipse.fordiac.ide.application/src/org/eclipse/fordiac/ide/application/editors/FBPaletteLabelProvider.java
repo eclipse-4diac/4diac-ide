@@ -15,7 +15,7 @@
 package org.eclipse.fordiac.ide.application.editors;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -36,7 +36,7 @@ public class FBPaletteLabelProvider extends LabelProvider {
 	public String getText(final Object element) {
 		if (element instanceof IFile) {
 			// we want to hide the extension of the fb type
-			return TypeLibrary.getTypeNameFromFile((IFile) element);
+			return TypeEntry.getTypeNameFromFile((IFile) element);
 		}
 		return wbLabelProvider.getText(element);
 	}

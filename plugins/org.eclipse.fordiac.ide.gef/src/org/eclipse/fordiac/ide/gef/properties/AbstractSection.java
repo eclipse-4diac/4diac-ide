@@ -24,10 +24,8 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -75,17 +73,11 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	protected final TypeLibrary getTypeLibrary() {
 		final EObject root = EcoreUtil.getRootContainer(getType());
 
-		if (root instanceof FBType) {
-			return ((FBType) root).getTypeLibrary();
-		} else if (root instanceof AutomationSystem) {
-			return ((AutomationSystem) root).getPalette().getTypeLibrary();
+		if (root instanceof LibraryElement) {
+			return ((LibraryElement) root).getTypeLibrary();
 		}
 		throw new IllegalStateException(
 				"Could not determine root element for finding the typ lib for given element: " + getType()); //$NON-NLS-1$
-	}
-
-	protected final Palette getPalette() {
-		return getTypeLibrary().getBlockTypeLib();
 	}
 
 	protected final DataTypeLibrary getDataTypeLib() {

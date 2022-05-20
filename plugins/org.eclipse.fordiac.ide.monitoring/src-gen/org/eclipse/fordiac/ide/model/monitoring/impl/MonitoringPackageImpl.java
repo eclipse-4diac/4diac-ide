@@ -1,4 +1,5 @@
-/*******************************************************************************
+/**
+ * ******************************************************************************
  * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -8,9 +9,11 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
+ *      - initial API and implementation and/or initial documentation
+ * ******************************************************************************
+ *
+ */
 package org.eclipse.fordiac.ide.model.monitoring.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
@@ -23,7 +26,6 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBasePackage;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.monitoring.AdapterMonitoringEvent;
@@ -37,25 +39,50 @@ import org.eclipse.fordiac.ide.model.monitoring.SubAppPortElement;
 import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 
 /**
- * <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!--
- * end-user-doc -->
+ * <!-- begin-user-doc -->
+ * An implementation of the model <b>Package</b>.
+ * <!-- end-user-doc -->
  * @generated
  */
 public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPackage {
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	private EClass monitoringElementEClass = null;
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	private EClass monitoringAdapterElementEClass = null;
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass adapterPortElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass adapterMonitoringEventEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass adapterMonitoringVarDeclarationEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	private EClass iEditPartCreatorEClass = null;
@@ -75,24 +102,6 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	private EClass subappMonitoringElementEClass = null;
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass adapterPortElementEClass = null;
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass adapterMonitoringEventEClass = null;
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass adapterMonitoringVarDeclarationEClass = null;
-
-	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the package
 	 * package URI value.
@@ -100,8 +109,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 * factory method {@link #init init()}, which also performs
 	 * initialization of the package, or returns the registered package,
 	 * if one already exists.
-	 * <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see org.eclipse.fordiac.ide.model.monitoring.MonitoringPackage#eNS_URI
 	 * @see #init()
@@ -112,7 +121,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	private static boolean isInited = false;
@@ -122,8 +132,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	 *
 	 * <p>This method is used to initialize {@link MonitoringPackage#eINSTANCE} when that field is accessed.
 	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package.
-	 * <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
@@ -140,7 +150,6 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 
 		// Initialize simple dependencies
 		EcorePackage.eINSTANCE.eClass();
-		PalettePackage.eINSTANCE.eClass();
 		LibraryElementPackage.eINSTANCE.eClass();
 		DataPackage.eINSTANCE.eClass();
 		MonitoringBasePackage.eINSTANCE.eClass();
@@ -161,7 +170,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -170,7 +180,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -179,7 +190,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -188,7 +200,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -197,7 +210,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -206,7 +220,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -215,7 +230,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -224,7 +240,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -233,7 +250,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -242,7 +260,48 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getAdapterPortElement() {
+		return adapterPortElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getAdapterPortElement_Ports() {
+		return (EReference)adapterPortElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getAdapterMonitoringEvent() {
+		return adapterMonitoringEventEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getAdapterMonitoringVarDeclaration() {
+		return adapterMonitoringVarDeclarationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -291,43 +350,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getAdapterPortElement() {
-		return adapterPortElementEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getAdapterPortElement_Ports() {
-		return (EReference)adapterPortElementEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getAdapterMonitoringEvent() {
-		return adapterMonitoringEventEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EClass getAdapterMonitoringVarDeclaration() {
-		return adapterMonitoringVarDeclarationEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -336,7 +360,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	private boolean isCreated = false;
@@ -344,8 +369,8 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	/**
 	 * Creates the meta-model objects for the package.  This method is
 	 * guarded to have no affect on any invocation but its first.
-	 * <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void createPackageContents() {
@@ -381,16 +406,17 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	private boolean isInitialized = false;
 
 	/**
-	 * Complete the initialization of the package and its meta-model. This method is
-	 * guarded to have no affect on any invocation but its first. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * Complete the initialization of the package and its meta-model.  This
+	 * method is guarded to have no affect on any invocation but its first.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	public void initializePackageContents() {
@@ -467,4 +493,4 @@ public class MonitoringPackageImpl extends EPackageImpl implements MonitoringPac
 		createResource(eNS_URI);
 	}
 
-} // MonitoringPackageImpl
+} //MonitoringPackageImpl

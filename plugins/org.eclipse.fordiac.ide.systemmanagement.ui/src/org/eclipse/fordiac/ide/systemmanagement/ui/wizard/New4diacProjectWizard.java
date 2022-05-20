@@ -100,7 +100,7 @@ public class New4diacProjectWizard extends Wizard implements INewWizard {
 		try {
 
 			final IProject newProject = SystemManager.INSTANCE.createNew4diacProject(page.getProjectName(),
-					page.getLocationPath(), page.importDefaultPalette(), monitor);
+					page.getLocationPath(), page.importDefaultTypeLibrary(), monitor);
 			final AutomationSystem system = SystemManager.INSTANCE.createNewSystem(newProject, page.getInitialSystemName());
 			TypeManagementPreferencesHelper.setupVersionInfo(system);
 			createInitialApplication(monitor, system);

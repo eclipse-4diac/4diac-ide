@@ -48,13 +48,12 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
-import org.eclipse.fordiac.ide.model.Palette.SystemPaletteEntry;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
@@ -102,9 +101,9 @@ public enum SystemManager {
 		CoordinateConverter.INSTANCE.name();
 		// Correctly setup the tool library needs to be done before loading any systems
 		// and adding the resource change listener
-		TypeLibrary.loadToolLibrary();
+		TypeLibraryManager.INSTANCE.loadToolLibrary();
 		ResourcesPlugin.getWorkspace().addResourceChangeListener(new FordiacResourceChangeListener(this));
-		ValidateTypeLibrary.validate();
+		ValidateProject.checkTypeLibraryInProjectsInWorkspaceJob();
 	}
 
 	public static boolean isSystemFile(final Object entry) {
@@ -113,7 +112,7 @@ public enum SystemManager {
 	}
 
 	public IProject createNew4diacProject(final String projectName, final IPath location,
-			final boolean importDefaultPalette, final IProgressMonitor monitor) throws CoreException {
+			final boolean importDefaultTypeLibrary, final IProgressMonitor monitor) throws CoreException {
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
 		final IProject project = root.getProject(projectName);
@@ -135,8 +134,8 @@ public enum SystemManager {
 		project.create(description, monitor);
 		project.open(monitor);
 
-		// configure palette
-		if (importDefaultPalette) {
+		// configure type lib
+		if (importDefaultTypeLibrary) {
 			SystemPaletteManagement.copyToolTypeLibToDestination(project.getFolder(TYPE_LIB_FOLDER_NAME));
 		}
 		getProjectSystems(project); // insert the project into the project list
@@ -148,10 +147,9 @@ public enum SystemManager {
 		final Map<IFile, AutomationSystem> projectSystems = getProjectSystems(location.getProject());
 		final AutomationSystem system = projectSystems.computeIfAbsent(systemFile,
 				SystemImporter::createAutomationSystem);
-		final SystemPaletteEntry entry = PaletteFactory.eINSTANCE.createSystemPaletteEntry();
-		entry.setFile(systemFile);
+		final SystemEntry entry = TypeLibraryManager.INSTANCE.getTypeLibrary(location.getProject())
+				.createSystemEntry(systemFile);
 		entry.setType(system);
-		entry.setPalette(system.getPalette());
 		saveSystem(system);
 		return system;
 	}
@@ -224,11 +222,9 @@ public enum SystemManager {
 	 * @return the automation system */
 	private static AutomationSystem initSystem(final IFile systemFile) {
 		if (systemFile.exists()) {
-			final SystemPaletteEntry entry = PaletteFactory.eINSTANCE.createSystemPaletteEntry();
-			entry.setFile(systemFile);
-			final AutomationSystem system = entry.getSystem();
-			entry.setPalette(system.getPalette());
-			return system;
+			final SystemEntry entry = TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject())
+					.createSystemEntry(systemFile);
+			return entry.getSystem();
 		}
 		return null;
 	}
@@ -260,8 +256,8 @@ public enum SystemManager {
 	}
 
 	public static void saveSystem(final AutomationSystem system, final IFile file) {
-		Assert.isNotNull(system.getPaletteEntry()); // there should be no system without palette entry
-		system.getPaletteEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
+		Assert.isNotNull(system.getTypeEntry()); // there should be no system without type entry
+		system.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
 		final SystemExporter systemExporter = new SystemExporter(system);
 		systemExporter.saveSystem(file);
 	}
@@ -365,7 +361,7 @@ public enum SystemManager {
 		}
 	}
 
-	public PaletteEntry getPaletteEntry(final IFile file) {
+	public TypeEntry getTypeEntry(final IFile file) {
 		final Map<IFile, AutomationSystem> map = allSystemsInWS.get(file.getProject());
 
 		if (map == null) {
@@ -377,7 +373,7 @@ public enum SystemManager {
 			return null;
 		}
 
-		return automationSystem.getPaletteEntry();
+		return automationSystem.getTypeEntry();
 
 	}
 

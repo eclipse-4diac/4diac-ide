@@ -289,4 +289,12 @@ public class PasteCommand extends Command {
 		this.cutPasteCmd = cutPasteCmd;
 	}
 
+	public Collection<? extends Object> getTemplates() {
+		return templates;
+	}
+
+	public Collection<FBNetworkElement> getCopiedFBs() {
+		return copiedElements.values();
+	}
+
 }

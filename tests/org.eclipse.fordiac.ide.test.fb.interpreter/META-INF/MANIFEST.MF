@@ -8,7 +8,9 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.ecore.xmi,
  org.eclipse.fordiac.ide.fb.interpreter,
  org.eclipse.fordiac.ide.model,
- org.junit
+ org.junit,
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.fb.interpreter
 Bundle-ActivationPolicy: lazy

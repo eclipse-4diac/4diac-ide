@@ -35,9 +35,9 @@ import org.eclipse.fordiac.ide.application.utilities.FbTypeTemplateTransferDropT
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.preferences.PaletteFlyoutPreferences;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.actions.Open4DIACElementAction;
 import org.eclipse.fordiac.ide.systemmanagement.ISystemEditor;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -81,7 +81,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	@Override
 	protected ScalableFreeformRootEditPart createRootEditPart() {
-		return new FBNetworkRootEditPart(getModel(), getPalette(), getSite(), getActionRegistry());
+		return new FBNetworkRootEditPart(getModel(), getTypeLibrary(), getSite(), getActionRegistry());
 	}
 
 	@Override
@@ -104,11 +104,11 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	@Override
 	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
-		return new FBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager, getPalette());
+		return new FBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager, getTypeLibrary());
 	}
 
-	protected Palette getPalette() {
-		return getSystem().getPalette();
+	protected TypeLibrary getTypeLibrary() {
+		return getSystem().getTypeLibrary();
 	}
 
 	@Override

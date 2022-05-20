@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
@@ -62,5 +62,9 @@ public class FBTransaction {
 
 	public FBTransaction(String inputEvent, List<String> outputEvents) {
 		this(inputEvent, outputEvents, Collections.emptyList());
+	}
+
+	public static FBTransaction getSimpleFBTransaction(String parameters) {
+		return new FBTransaction("REQ", "CNF", parameters);
 	}
 }

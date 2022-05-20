@@ -28,7 +28,7 @@ class ECTransitionEvaluator extends StructuredTextEvaluator {
 
 	STExpression parseResult
 
-	new(ECTransition transition, Variable context, Iterable<Variable> variables, Evaluator parent) {
+	new(ECTransition transition, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		super("anonymous", context, variables, parent)
 		this.transition = transition
 	}

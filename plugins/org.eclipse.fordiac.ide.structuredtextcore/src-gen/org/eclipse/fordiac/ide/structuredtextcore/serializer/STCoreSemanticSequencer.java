@@ -319,7 +319,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STArrayInitElement returns STArrayInitElement
 	 *
 	 * Constraint:
-	 *     (indexOrInitExpression=STExpression (initExpressions+=STExpression initExpressions+=STExpression*)?)
+	 *     (indexOrInitExpression=STInitializerExpression (initExpressions+=STInitializerExpression initExpressions+=STInitializerExpression*)?)
 	 * </pre>
 	 */
 	protected void sequence_STArrayInitElement(ISerializationContext context, STArrayInitElement semanticObject) {
@@ -373,19 +373,19 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STCallNamedInputArgument returns STCallNamedInputArgument
 	 *
 	 * Constraint:
-	 *     (target=[INamedElement|ID] source=STExpression)
+	 *     (parameter=[INamedElement|ID] argument=STExpression)
 	 * </pre>
 	 */
 	protected void sequence_STCallNamedInputArgument(ISerializationContext context, STCallNamedInputArgument semanticObject) {
 		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET));
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTCallNamedInputArgumentAccess().getTargetINamedElementIDTerminalRuleCall_0_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET, false));
-		feeder.accept(grammarAccess.getSTCallNamedInputArgumentAccess().getSourceSTExpressionParserRuleCall_2_0(), semanticObject.getSource());
+		feeder.accept(grammarAccess.getSTCallNamedInputArgumentAccess().getParameterINamedElementIDTerminalRuleCall_0_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER, false));
+		feeder.accept(grammarAccess.getSTCallNamedInputArgumentAccess().getArgumentSTExpressionParserRuleCall_2_0(), semanticObject.getArgument());
 		feeder.finish();
 	}
 	
@@ -397,7 +397,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STCallNamedOutputArgument returns STCallNamedOutputArgument
 	 *
 	 * Constraint:
-	 *     (not?='NOT'? source=[INamedElement|ID] target=[INamedElement|ID])
+	 *     (not?='NOT'? parameter=[INamedElement|ID] argument=STExpression)
 	 * </pre>
 	 */
 	protected void sequence_STCallNamedOutputArgument(ISerializationContext context, STCallNamedOutputArgument semanticObject) {
@@ -433,16 +433,16 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STCallUnnamedArgument returns STCallUnnamedArgument
 	 *
 	 * Constraint:
-	 *     arg=STExpression
+	 *     argument=STExpression
 	 * </pre>
 	 */
 	protected void sequence_STCallUnnamedArgument(ISerializationContext context, STCallUnnamedArgument semanticObject) {
 		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_UNNAMED_ARGUMENT__ARG) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_UNNAMED_ARGUMENT__ARG));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_UNNAMED_ARGUMENT__ARGUMENT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_UNNAMED_ARGUMENT__ARGUMENT));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
-		feeder.accept(grammarAccess.getSTCallUnnamedArgumentAccess().getArgSTExpressionParserRuleCall_0(), semanticObject.getArg());
+		feeder.accept(grammarAccess.getSTCallUnnamedArgumentAccess().getArgumentSTExpressionParserRuleCall_0(), semanticObject.getArgument());
 		feeder.finish();
 	}
 	

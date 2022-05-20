@@ -56,7 +56,7 @@ public class StructuredTextFBTypeEditor extends XtextEditor implements IFBTEdito
 	@Override
 	public void init(final IEditorSite site, IEditorInput input) throws PartInitException {
 		if (input instanceof FBTypeEditorInput) {
-			input = new FileEditorInput(((FBTypeEditorInput) input).getPaletteEntry().getFile());
+			input = new FileEditorInput(((FBTypeEditorInput) input).getTypeEntry().getFile());
 		}
 		super.init(site, input);
 	}
@@ -70,7 +70,7 @@ public class StructuredTextFBTypeEditor extends XtextEditor implements IFBTEdito
 	@Override
 	protected void doSetInput(IEditorInput input) throws CoreException {
 		if (input instanceof FBTypeEditorInput) {
-			input = new FileEditorInput(((FBTypeEditorInput) input).getPaletteEntry().getFile());
+			input = new FileEditorInput(((FBTypeEditorInput) input).getTypeEntry().getFile());
 		}
 		removeFBTypeUpdater();
 		super.doSetInput(input);
@@ -165,5 +165,10 @@ public class StructuredTextFBTypeEditor extends XtextEditor implements IFBTEdito
 	@Override
 	public Object getSelectableEditPart() {
 		return null;
+	}
+
+	@Override
+	public String getEditorId() {
+		return "org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm"; //$NON-NLS-1$
 	}
 }

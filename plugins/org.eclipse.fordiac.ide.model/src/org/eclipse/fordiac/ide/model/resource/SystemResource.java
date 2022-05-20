@@ -27,23 +27,23 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 
 
 public class SystemResource extends ResourceImpl {
-	
+
 	public SystemResource(final URI uri) {
-		super(uri);	
+		super(uri);
 	}
-	
+
 	@Override
 	protected void doSave(final OutputStream outputStream, final Map<?, ?> options) throws IOException {
 		saveSystem((AutomationSystem) getContents().get(0));
 	}
-	
+
 	public void saveSystem(final AutomationSystem system) {
 		saveSystem(system, system.getSystemFile());
 	}
-	
+
 	public void saveSystem(final AutomationSystem system, final IFile file) {
-		Assert.isNotNull(system.getPaletteEntry()); // there should be no system without palette entry
-		system.getPaletteEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
+		Assert.isNotNull(system.getTypeEntry()); // there should be no system without type entry
+		system.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
 		final SystemExporter systemExporter = new SystemExporter(system);
 		systemExporter.saveSystem(file);
 	}

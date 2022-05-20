@@ -81,7 +81,7 @@ public class ResourceDiagramEditor extends FBNetworkEditor {
 	@Override
 	protected ContextMenuProvider getContextMenuProvider(final ScrollingGraphicalViewer viewer,
 			final ZoomManager zoomManager) {
-		return new FBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager, getPalette());
+		return new FBNetworkContextMenuProvider(this, getActionRegistry(), zoomManager, getTypeLibrary());
 	}
 
 	@Override

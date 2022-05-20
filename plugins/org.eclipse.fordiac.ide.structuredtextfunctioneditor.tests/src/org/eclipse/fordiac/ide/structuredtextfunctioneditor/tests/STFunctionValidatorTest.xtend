@@ -13,6 +13,7 @@
  *       - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *       - validation for reserved identifiers
+ *       - validation for calls
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 
@@ -31,6 +32,7 @@ import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
 import org.eclipse.xtext.testing.util.ParseHelper
 import org.eclipse.xtext.testing.validation.ValidationTestHelper
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
 import org.junit.jupiter.params.ParameterizedTest
@@ -45,6 +47,11 @@ class STFunctionValidatorTest {
 
 	@Inject extension ParseHelper<STFunctionSource> parseHelper
 	@Inject extension ValidationTestHelper
+
+	@BeforeAll
+	def static void setup() {
+		new DataTypeLibrary
+	}
 
 	@Test
 	def void testWrongCasedIdentifierWarning() {
@@ -102,7 +109,7 @@ class STFunctionValidatorTest {
 			3 := 4;
 			2+3 := 5;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.ASSIGNMENT_INVALID_LEFT)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NOT_ASSIGNABLE)
 	}
 
 	@Test
@@ -237,6 +244,268 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
+	def void testInvalidInitializer() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT := LINT#17;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+
+	}
+
+	def void testInvalidArrayInitializer() {
+		'''
+			FUNCTION hubert
+			VAR
+				testArray: ARRAY [ 0 .. 3 ] OF INT := [LINT#17, 4];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
+
+	def void testInvalidArrayDimensionsInitializer() {
+		'''
+			FUNCTION hubert
+			VAR
+				testArray: ARRAY [ 0 .. 3 ] OF INT := [[17, 4]];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''
+			FUNCTION hubert
+			VAR
+				testArray: ARRAY [ 0 .. 3, 0 .. 2 ] OF INT := [17, 4, 21];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''
+			FUNCTION hubert
+			VAR
+				testArray: ARRAY [ 0 .. 3, 0 .. 2 ] OF INT := [[17, 4], 21];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
+
+	@Test
+	def void testValidInitializer() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT := 17;
+				int2 : INT := SINT#4;
+				bool1 : BOOL := 0;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testValidArrayInitializer() {
+		'''
+			FUNCTION hubert
+			VAR
+				testArray: ARRAY [ 0 .. 3 ] OF INT := [17, 4];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testInvalidIfConditionType() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			IF int1 THEN
+				int1 := 17;
+			END_IF;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STIfStatement, STCoreValidator.NO_CAST_AVAILABLE)
+	}
+
+	@Test
+	def void testInvalidWhileConditionType() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			WHILE int1 DO
+				int1 := 17;
+			END_WHILE;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STWhileStatement, STCoreValidator.NO_CAST_AVAILABLE)
+	}
+
+	@Test
+	def void testInvalidRepeatConditionType() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			REPEAT
+				int1 := 17;
+			UNTIL int1
+			END_REPEAT;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STRepeatStatement, STCoreValidator.NO_CAST_AVAILABLE)
+	}
+
+	@Test
+	def void testInvalidForTypes() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : STRING;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 DO
+				int1 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.FOR_VARIABLE_NOT_INTEGRAL_TYPE)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := LINT#4 TO 17 DO
+				int1 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO LINT#17 DO
+				int1 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 BY LINT#2 DO
+				int1 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertNoErrors
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			FOR int1 := 4 TO 17 BY "2" DO
+				int1 := 17;
+			END_FOR;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NO_CAST_AVAILABLE)
+	}
+
+	@Test
+	def void testInvalidCaseConditionType() {
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : INT;
+			END_VAR
+			
+			CASE int1 OF
+				1: int1 := 17;
+				LINT#2: int1 := 17;
+			END_CASE;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STCaseCases, STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
+
+	@Test
+	def void testInvalidNumericLiteral() {
+		'''
+			FUNCTION hubert
+			VAR
+				bool1 : BOOL := 2;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.INVALID_NUMERIC_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : SINT := 1024;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.INVALID_NUMERIC_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				int1 : USINT := -1;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.INVALID_NUMERIC_LITERAL)
+	}
+
+	@Test
+	def void testInvalidStringLiteral() {
+		'''
+			FUNCTION hubert
+			VAR
+				str : CHAR := 'abc';
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				str : CHAR := "a";
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				str : STRING := "abc";
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				str : WCHAR := "abc";
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				str : WCHAR := 'a';
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
+		'''
+			FUNCTION hubert
+			VAR
+				str : WSTRING := 'abc';
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
+	}
+
+	@Test
 	def void testReservedIdentifierErrorValidator() {
 		'''
 		FUNCTION hubert
@@ -245,6 +514,198 @@ class STFunctionValidatorTest {
 		END_VAR
 		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration,
 			STCoreValidator.RESERVED_IDENTIFIER_ERROR)
+	}
+
+	@Test
+	def void testCallNonCallableErrorValidator() {
+		'''
+		FUNCTION hubert
+		VAR
+		    X : INT;
+		END_VAR
+		X();
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.FEATURE_NOT_CALLABLE)
+	}
+
+	@Test
+	def void testCallMixedFormalErrorValidator() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		emil(17, B := 4);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.MIXING_FORMAL_AND_NON_FORMAL_ARGUMENTS)
+	}
+
+	@Test
+	def void testCallWrongNumberArgumentsErrorValidator() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		emil(17);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.WRONG_NUMBER_OF_ARGUMENTS)
+	}
+
+	@Test
+	def void testCallNonFormalNotAssignable() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		VAR_OUTPUT
+		    X : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		emil(17, 4, 21);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.NOT_ASSIGNABLE)
+	}
+
+	@Test
+	def void testCallFormalNotAssignable() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		VAR_IN_OUT
+		    X : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		emil(A := 17, B := 4, X := 21);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.NOT_ASSIGNABLE)
+	}
+
+	@Test
+	def void testCallIncompatibleInputTypes() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		emil(17, LINT#4);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
+
+	@Test
+	def void testCallIncompatibleOutputTypes() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		VAR_OUTPUT
+		    X : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		VAR_TEMP
+			X: SINT;
+		END_VAR
+		
+		emil(17, 4, X);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
+
+	@Test
+	def void testCallCompatibleOutputTypes() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		VAR_OUTPUT
+		    X : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		VAR_TEMP
+			X: LINT;
+		END_VAR
+		
+		emil(17, 4, X);
+		END_FUNCTION'''.parse.assertNoErrors
+	}
+
+	@Test
+	def void testCallIncompatibleInOutTypes() {
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		VAR_IN_OUT
+		    X : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		VAR_TEMP
+			X: LINT;
+		END_VAR
+		
+		emil(17, 4, X);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''
+		FUNCTION emil
+		VAR_INPUT
+		    A : INT;
+		    B : INT;
+		END_VAR
+		VAR_IN_OUT
+		    X : INT;
+		END_VAR
+		END_FUNCTION
+		
+		FUNCTION hubert
+		VAR_TEMP
+			X: SINT;
+		END_VAR
+		
+		emil(17, 4, X);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES)
+	}
+
+	@Test
+	def void testCallStandardFunctionFormalArguments() {
+		'''
+		FUNCTION hubert
+		ADD(IN0 := 17, IN1 := 4);
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression,
+			STCoreValidator.STANDARD_FUNCTION_WITH_FORMAL_ARGUMENTS)
 	}
 
 	@ParameterizedTest(name="{index}: {0} with {1}")

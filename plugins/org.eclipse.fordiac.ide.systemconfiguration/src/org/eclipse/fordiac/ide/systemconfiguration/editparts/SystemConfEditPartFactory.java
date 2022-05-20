@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.systemconfiguration.editparts;
 
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
-import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
@@ -27,7 +26,7 @@ import org.eclipse.gef.ui.parts.GraphicalEditor;
 
 public class SystemConfEditPartFactory extends Abstract4diacEditPartFactory {
 
-	public SystemConfEditPartFactory(GraphicalEditor editor) {
+	public SystemConfEditPartFactory(final GraphicalEditor editor) {
 		super(editor);
 	}
 
@@ -52,7 +51,7 @@ public class SystemConfEditPartFactory extends Abstract4diacEditPartFactory {
 			return new ResourceEditPart();
 		}
 		if (modelElement instanceof Value) {
-			return new ValueEditPart();
+			return new DeviceValueEditPart();
 		}
 		if (modelElement instanceof ResourceContainer) {
 			return new ResourceContainerEditPart();

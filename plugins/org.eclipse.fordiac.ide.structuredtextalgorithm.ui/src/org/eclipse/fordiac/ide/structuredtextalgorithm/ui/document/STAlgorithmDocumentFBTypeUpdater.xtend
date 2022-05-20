@@ -49,9 +49,9 @@ class STAlgorithmDocumentFBTypeUpdater extends Job {
 	def protected void doRun(STAlgorithmResource resource, IProgressMonitor monitor) {
 		val fbType = resource.fbType
 		if (fbType !== null) {
-			val paletteEntry = fbType.paletteEntry
-			if (paletteEntry !== null) {
-				val libraryElement = paletteEntry.typeEditable
+			val typeEntry = fbType.typeEntry
+			if (typeEntry !== null) {
+				val libraryElement = typeEntry.typeEditable
 				if (libraryElement instanceof FBType) {
 					resource.fbType = libraryElement
 					resource.relink

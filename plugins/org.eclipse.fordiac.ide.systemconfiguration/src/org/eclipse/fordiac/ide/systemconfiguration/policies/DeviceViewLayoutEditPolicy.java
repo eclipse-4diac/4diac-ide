@@ -20,9 +20,9 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceMoveCommand;
 import org.eclipse.gef.EditPart;
@@ -40,7 +40,7 @@ import org.eclipse.gef.requests.CreateRequest;
 public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	@Override
-	protected EditPolicy createChildEditPolicy(EditPart child) {
+	protected EditPolicy createChildEditPolicy(final EditPart child) {
 		return new ModifiedNonResizeableEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1));
 	}
 
@@ -70,9 +70,9 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
-		Object childClass = request.getNewObjectType();
+		final Object childClass = request.getNewObjectType();
 		if (childClass instanceof ResourceTypeEntry) {
-			ResourceTypeEntry type = (ResourceTypeEntry) request.getNewObjectType();
+			final ResourceTypeEntry type = (ResourceTypeEntry) request.getNewObjectType();
 			if (getHost().getModel() instanceof Device) {
 				return new ResourceCreateCommand(type, (Device) getHost().getModel(), false);
 			}
@@ -84,8 +84,8 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	 * @see org.eclipse.gef.EditPolicy#getCommand(org.eclipse.gef.Request)
 	 */
 	@Override
-	public Command getCommand(Request request) {
-		Object type = request.getType();
+	public Command getCommand(final Request request) {
+		final Object type = request.getType();
 		if (REQ_ALIGN.equals(type) && request instanceof AlignmentRequest) {
 			return getAlignCommand((AlignmentRequest) request);
 		}
@@ -94,9 +94,9 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	}
 
 	@Override
-	protected Command createAddCommand(ChangeBoundsRequest request, EditPart child, Object constraint) {
+	protected Command createAddCommand(final ChangeBoundsRequest request, final EditPart child, final Object constraint) {
 		if (child.getModel() instanceof Resource) {
-			Device targetDevice = (Device) getHost().getModel();
+			final Device targetDevice = (Device) getHost().getModel();
 			return new ResourceMoveCommand((Resource) child.getModel(), targetDevice,
 					targetDevice.getResource().size());
 		}
@@ -109,8 +109,8 @@ public class DeviceViewLayoutEditPolicy extends ConstrainedLayoutEditPolicy {
 	 * @param request the alignment request
 	 * @return the contribution to the alignment
 	 */
-	protected Command getAlignCommand(AlignmentRequest request) {
-		AlignmentRequest req = new AlignmentRequest(REQ_ALIGN_CHILDREN);
+	protected Command getAlignCommand(final AlignmentRequest request) {
+		final AlignmentRequest req = new AlignmentRequest(REQ_ALIGN_CHILDREN);
 		req.setEditParts(getHost());
 		req.setAlignment(request.getAlignment());
 		req.setAlignmentRectangle(request.getAlignmentRectangle());

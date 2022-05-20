@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.application.search;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -77,7 +78,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 	@Override
 	public String getLabel() {
-		return null != searchDescription ? searchDescription : "IEC 61499 Model Search";
+		return null != searchDescription ? searchDescription : Messages.SearchHeaderName;
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
-		table.setLayout(createTableLayout(table));
+		table.setLayout(createTableLayout());
 
 		final TableViewerColumn colKind = new TableViewerColumn(viewer, SWT.LEAD);
 		colKind.getColumn().setText("Element Kind");
@@ -204,7 +205,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 	}
 
-	protected static TableLayout createTableLayout(final Table table) {
+	protected static TableLayout createTableLayout() {
 		final TableLayout layout = new TableLayout();
 		layout.addColumnData(new ColumnPixelData(TYPE_COLUMN_WIDTH));
 		layout.addColumnData(new ColumnPixelData(NAME_COMMENT_COLUMN_WIDTH));

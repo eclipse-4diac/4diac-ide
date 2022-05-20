@@ -69,7 +69,7 @@ STArrayInitializerExpression:
 	'[' values+=STArrayInitElement (',' values+=STArrayInitElement)* ']';
 
 STArrayInitElement:
-	indexOrInitExpression=STExpression ('(' initExpressions+=STExpression (',' initExpressions+=STExpression)* ')')?;
+	indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (',' initExpressions+=STInitializerExpression)* ')')?;
 	
 STStatement:
 	(STIfStatement |
@@ -97,15 +97,15 @@ STCallArgument:
 ;
 
 STCallUnnamedArgument:
-	arg=STExpression
+	argument=STExpression
 ;
 
 STCallNamedInputArgument:
-	target=[libraryElement::INamedElement] ':=' source=STExpression 
+	parameter=[libraryElement::INamedElement] ':=' argument=STExpression 
 ;
 
 STCallNamedOutputArgument:
-	not?='NOT'? source=[libraryElement::INamedElement] '=>' target=[libraryElement::INamedElement] 
+	not?='NOT'? parameter=[libraryElement::INamedElement] '=>' argument=STExpression 
 ;
 
 STIfStatement:
@@ -194,7 +194,7 @@ STFeatureExpression returns STExpression:
 	{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] ( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
 
 STFeatureName:
-	ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD';
+	ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD' | 'D' | 'DT' | 'LD';
 
 enum STMultiBitAccessSpecifier:
 	L='%L' | D='%D' | W='%W' | B='%B' | X='%X';

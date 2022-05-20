@@ -32,9 +32,11 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression;
 
 /**
  * <!-- begin-user-doc -->
@@ -59,7 +61,7 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 * @ordered
 	 */
-	protected STExpression indexOrInitExpression;
+	protected STInitializerExpression indexOrInitExpression;
 
 	/**
 	 * The cached value of the '{@link #getInitExpressions() <em>Init Expressions</em>}' containment reference list.
@@ -69,7 +71,7 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<STExpression> initExpressions;
+	protected EList<STInitializerExpression> initExpressions;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -96,7 +98,7 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 */
 	@Override
-	public STExpression getIndexOrInitExpression() {
+	public STInitializerExpression getIndexOrInitExpression() {
 		return indexOrInitExpression;
 	}
 
@@ -105,8 +107,8 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetIndexOrInitExpression(STExpression newIndexOrInitExpression, NotificationChain msgs) {
-		STExpression oldIndexOrInitExpression = indexOrInitExpression;
+	public NotificationChain basicSetIndexOrInitExpression(STInitializerExpression newIndexOrInitExpression, NotificationChain msgs) {
+		STInitializerExpression oldIndexOrInitExpression = indexOrInitExpression;
 		indexOrInitExpression = newIndexOrInitExpression;
 		if (eNotificationRequired()) {
 			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION, oldIndexOrInitExpression, newIndexOrInitExpression);
@@ -121,7 +123,7 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 */
 	@Override
-	public void setIndexOrInitExpression(STExpression newIndexOrInitExpression) {
+	public void setIndexOrInitExpression(STInitializerExpression newIndexOrInitExpression) {
 		if (newIndexOrInitExpression != indexOrInitExpression) {
 			NotificationChain msgs = null;
 			if (indexOrInitExpression != null)
@@ -141,11 +143,31 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 */
 	@Override
-	public EList<STExpression> getInitExpressions() {
+	public EList<STInitializerExpression> getInitExpressions() {
 		if (initExpressions == null) {
-			initExpressions = new EObjectContainmentEList<STExpression>(STExpression.class, this, STCorePackage.ST_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS);
+			initExpressions = new EObjectContainmentEList<STInitializerExpression>(STInitializerExpression.class, this, STCorePackage.ST_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS);
 		}
 		return initExpressions;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public INamedElement getResultType() {
+		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public INamedElement getDeclaredResultType() {
+		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);
 	}
 
 	/**
@@ -192,11 +214,11 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION:
-				setIndexOrInitExpression((STExpression)newValue);
+				setIndexOrInitExpression((STInitializerExpression)newValue);
 				return;
 			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS:
 				getInitExpressions().clear();
-				getInitExpressions().addAll((Collection<? extends STExpression>)newValue);
+				getInitExpressions().addAll((Collection<? extends STInitializerExpression>)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -213,7 +235,7 @@ public class STArrayInitElementImpl extends MinimalEObjectImpl.Container impleme
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INDEX_OR_INIT_EXPRESSION:
-				setIndexOrInitExpression((STExpression)null);
+				setIndexOrInitExpression((STInitializerExpression)null);
 				return;
 			case STCorePackage.ST_ARRAY_INIT_ELEMENT__INIT_EXPRESSIONS:
 				getInitExpressions().clear();

@@ -22,21 +22,28 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.actions.CopyPasteMessage.CopyStatus;
 import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
+import org.eclipse.fordiac.ide.application.commands.CopyElementsToGroupCommand;
 import org.eclipse.fordiac.ide.application.commands.CutAndPasteFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
+import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
+import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
+import org.eclipse.fordiac.ide.application.policies.GroupXYLayoutPolicy;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -71,10 +78,41 @@ public class PasteEditPartsAction extends SelectionAction {
 
 	protected Command createPasteCommand() {
 		final FBNetwork fbNetwork = getFBNetwork();
+
 		if (null != fbNetwork) {
-			return new PasteCommand(getClipboardContents(), fbNetwork, pasteRefPosition);
+			final PasteCommand pasteCommand = new PasteCommand(getClipboardContents(), fbNetwork, pasteRefPosition);
+			final GroupContentEditPart group = findGroupUnderMouse(fbNetwork);
+			if (group != null) {
+				return new CopyElementsToGroupCommand(group.getModel().getGroup(), pasteCommand,
+						getOffsetPosition(group));
+			}
+			return pasteCommand;
 		}
 		return new CompoundCommand();
+	}
+
+	private GroupContentEditPart findGroupUnderMouse(final FBNetwork fbNetwork) {
+		final GraphicalViewer graphicalViewer = getWorkbenchPart().getAdapter(GraphicalViewer.class);
+		final Object object = graphicalViewer.getEditPartRegistry().get(fbNetwork);
+		if (object instanceof GraphicalEditPart) {
+			final IFigure figure = ((GraphicalEditPart) object).getFigure().findFigureAt(pasteRefPosition.x,
+					pasteRefPosition.y);
+			if (figure != null) {
+				Object targetObject = graphicalViewer.getVisualPartMap().get(figure);
+				if (targetObject instanceof GroupEditPart) {
+					targetObject = graphicalViewer.getEditPartRegistry()
+							.get(((GroupEditPart) targetObject).getModel().getFbNetwork());
+				}
+				if (targetObject instanceof GroupContentEditPart) {
+					return ((GroupContentEditPart) targetObject);
+				}
+			}
+		}
+		return null;
+	}
+
+	private org.eclipse.draw2d.geometry.Point getOffsetPosition(final GroupContentEditPart group) {
+		return GroupXYLayoutPolicy.getGroupAreaBounds(group).getTopLeft();
 	}
 
 	private static List<? extends Object> getClipboardContents() {
@@ -107,7 +145,7 @@ public class PasteEditPartsAction extends SelectionAction {
 	public void setMouseLocationAsPastePos(final Event event) {
 		final FigureCanvas figureCanvas = (FigureCanvas) event.widget;
 		final org.eclipse.draw2d.geometry.Point viewLocation = figureCanvas.getViewport().getViewLocation();
-		Point mouseLocation = Display.getCurrent().getCursorLocation();
+		org.eclipse.swt.graphics.Point mouseLocation = Display.getCurrent().getCursorLocation();
 		mouseLocation = figureCanvas.toControl(mouseLocation.x, mouseLocation.y);
 
 		if (figureCanvas.getBounds().contains(mouseLocation.x, mouseLocation.y)) {

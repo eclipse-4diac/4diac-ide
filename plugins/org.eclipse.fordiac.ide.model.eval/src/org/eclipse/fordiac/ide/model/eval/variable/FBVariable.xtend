@@ -22,9 +22,9 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
-class FBVariable extends AbstractVariable {
-	@Accessors final Map<String, Variable> members
-	final FBValue value
+class FBVariable extends AbstractVariable<FBValue> {
+	@Accessors final Map<String, Variable<?>> members
+	@Accessors final FBValue value
 
 	new(String name, FBType type) {
 		this(name, type, emptySet)
@@ -35,7 +35,7 @@ class FBVariable extends AbstractVariable {
 		if(value !== null) this.value = value
 	}
 
-	new(String name, FBType type, Iterable<Variable> variables) {
+	new(String name, FBType type, Iterable<Variable<?>> variables) {
 		super(name, type)
 		val members = variables?.toMap[getName] ?: newHashMap;
 		(type.interfaceList.inputVars + type.interfaceList.outputVars).forEach [ variable |
@@ -55,8 +55,6 @@ class FBVariable extends AbstractVariable {
 		this.members = members.immutableCopy
 		value = new FBValue(type, this.members)
 	}
-
-	override FBValue getValue() { value }
 
 	override setValue(Value value) {
 		if (value instanceof FBValue) {

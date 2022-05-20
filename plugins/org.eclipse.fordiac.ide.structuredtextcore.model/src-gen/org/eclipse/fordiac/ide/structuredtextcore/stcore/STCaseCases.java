@@ -31,6 +31,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases#getConditions <em>Conditions</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases#getStatements <em>Statements</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases#getStatement <em>Statement</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCaseCases()
@@ -61,5 +62,29 @@ public interface STCaseCases extends EObject {
 	 * @generated
 	 */
 	EList<STStatement> getStatements();
+
+	/**
+	 * Returns the value of the '<em><b>Statement</b></em>' container reference.
+	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement#getCases <em>Cases</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Statement</em>' container reference.
+	 * @see #setStatement(STCaseStatement)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCaseCases_Statement()
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement#getCases
+	 * @model opposite="cases" required="true" transient="false"
+	 * @generated
+	 */
+	STCaseStatement getStatement();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases#getStatement <em>Statement</em>}' container reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Statement</em>' container reference.
+	 * @see #getStatement()
+	 * @generated
+	 */
+	void setStatement(STCaseStatement value);
 
 } // STCaseCases

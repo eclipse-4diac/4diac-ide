@@ -177,7 +177,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 			public void widgetSelected(final SelectionEvent e) {
 				final StructuredType sel = getSelectedStructuredType();
 				if (sel != null) {
-					OpenStructMenu.openStructEditor(sel.getPaletteEntry().getFile());
+					OpenStructMenu.openStructEditor(sel.getTypeEntry().getFile());
 				}
 			}
 
@@ -265,7 +265,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	}
 
 	public void initTree(final StructManipulator manipulator, final TreeViewer viewer) {
-		final StructuredType struct = manipulator.getPaletteEntry().getTypeLibrary().getDataTypeLibrary()
+		final StructuredType struct = manipulator.getTypeEntry().getTypeLibrary().getDataTypeLibrary()
 				.getStructuredType(manipulator.getStructType().getName());
 
 		final CheckableStructTree tree;

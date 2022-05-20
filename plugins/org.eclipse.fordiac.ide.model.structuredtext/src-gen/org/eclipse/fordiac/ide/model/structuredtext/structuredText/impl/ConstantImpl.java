@@ -18,24 +18,24 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class ConstantImpl extends ExpressionImpl implements Constant
 {
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected ConstantImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.CONSTANT;
-  }
+		return StructuredTextPackage.Literals.CONSTANT;
+	}
 
 } //ConstantImpl

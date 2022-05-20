@@ -18,24 +18,24 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class ContinueStatementImpl extends StatementImpl implements ContinueStatement
 {
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected ContinueStatementImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.CONTINUE_STATEMENT;
-  }
+		return StructuredTextPackage.Literals.CONTINUE_STATEMENT;
+	}
 
 } //ContinueStatementImpl

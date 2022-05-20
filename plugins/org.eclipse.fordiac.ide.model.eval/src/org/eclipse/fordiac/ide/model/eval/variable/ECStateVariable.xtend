@@ -18,10 +18,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.fordiac.ide.model.libraryElement.ECState
 
-class ECStateVariable extends AbstractVariable {
+class ECStateVariable extends AbstractVariable<ECStateValue> {
 	public static final String NAME = "__STATE"
 
-	@Accessors ECStateValue value
+	@Accessors(PUBLIC_GETTER) ECStateValue value
 
 	new(BasicFBType type) {
 		this(type, new ECStateValue(type.ECC.start))

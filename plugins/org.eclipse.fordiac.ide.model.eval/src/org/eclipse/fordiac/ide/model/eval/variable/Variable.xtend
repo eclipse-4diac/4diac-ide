@@ -15,12 +15,12 @@ package org.eclipse.fordiac.ide.model.eval.variable
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
-interface Variable {
+interface Variable<T extends Value> {
 	def String getName()
 	
 	def INamedElement getType()
 	
-	def Value getValue()
+	def T getValue()
 	
 	def void setValue(Value value)
 	

@@ -27,81 +27,81 @@ import org.eclipse.emf.common.util.EList;
 public interface IfStatement extends Statement
 {
   /**
-   * Returns the value of the '<em><b>Expression</b></em>' containment reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Expression</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Expression</em>' containment reference.
-   * @see #setExpression(Expression)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getIfStatement_Expression()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Expression</em>' containment reference.
+	 * @see #setExpression(Expression)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getIfStatement_Expression()
+	 * @model containment="true"
+	 * @generated
+	 */
   Expression getExpression();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement#getExpression <em>Expression</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement#getExpression <em>Expression</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Expression</em>' containment reference.
-   * @see #getExpression()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Expression</em>' containment reference.
+	 * @see #getExpression()
+	 * @generated
+	 */
   void setExpression(Expression value);
 
   /**
-   * Returns the value of the '<em><b>Statments</b></em>' containment reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Statments</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Statments</em>' containment reference.
-   * @see #setStatments(StatementList)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getIfStatement_Statments()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Statments</em>' containment reference.
+	 * @see #setStatments(StatementList)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getIfStatement_Statments()
+	 * @model containment="true"
+	 * @generated
+	 */
   StatementList getStatments();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement#getStatments <em>Statments</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement#getStatments <em>Statments</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Statments</em>' containment reference.
-   * @see #getStatments()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Statments</em>' containment reference.
+	 * @see #getStatments()
+	 * @generated
+	 */
   void setStatments(StatementList value);
 
   /**
-   * Returns the value of the '<em><b>Elseif</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseIfClause}.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Elseif</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.ElseIfClause}.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Elseif</em>' containment reference list.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getIfStatement_Elseif()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Elseif</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getIfStatement_Elseif()
+	 * @model containment="true"
+	 * @generated
+	 */
   EList<ElseIfClause> getElseif();
 
   /**
-   * Returns the value of the '<em><b>Else</b></em>' containment reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Else</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Else</em>' containment reference.
-   * @see #setElse(ElseClause)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getIfStatement_Else()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Else</em>' containment reference.
+	 * @see #setElse(ElseClause)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getIfStatement_Else()
+	 * @model containment="true"
+	 * @generated
+	 */
   ElseClause getElse();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement#getElse <em>Else</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.IfStatement#getElse <em>Else</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Else</em>' containment reference.
-   * @see #getElse()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Else</em>' containment reference.
+	 * @see #getElse()
+	 * @generated
+	 */
   void setElse(ElseClause value);
 
 } // IfStatement

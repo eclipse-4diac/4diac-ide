@@ -22,6 +22,7 @@ import org.eclipse.xtext.parser.IParseResult
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.resource.XtextResourceSet
+import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.eclipse.xtext.util.CancelIndicator
 import org.eclipse.xtext.util.LazyStringInputStream
 import org.eclipse.xtext.validation.CheckMode
@@ -45,16 +46,20 @@ final class STFunctionParseUtil {
 	def private static IParseResult parseInternal(String text, String name, ParserRule entryPoint,
 		List<String> errors, List<String> warnings, List<String> infos) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
+		resourceSet.loadOptions.putAll(#{
+			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
+			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE
+		})
 		val resource = SERVICE_PROVIDER.get(XtextResource)
 		resource.URI = URI.createPlatformResourceURI(SYNTHETIC_URI, true)
 		resourceSet.resources.add(resource)
 		resource.entryPoint = entryPoint
-		resource.load(new LazyStringInputStream(text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
+		resource.load(new LazyStringInputStream(text), resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
-		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''«name» at «lineNumber»: «message» '''])
-		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''«name» at «lineNumber»: «message» '''])
-		infos?.addAll(issues.filter[severity == Severity.INFO].map['''«name» at «lineNumber»: «message» '''])
+		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''Â«nameÂ» at Â«lineNumberÂ»: Â«messageÂ» '''])
+		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''Â«nameÂ» at Â«lineNumberÂ»: Â«messageÂ» '''])
+		infos?.addAll(issues.filter[severity == Severity.INFO].map['''Â«nameÂ» at Â«lineNumberÂ»: Â«messageÂ» '''])
 		if (issues.exists[severity == Severity.ERROR]) {
 			return null
 		}
@@ -63,14 +68,18 @@ final class STFunctionParseUtil {
 
 	def private static IParseResult parseInternal(URI uri, ParserRule entryPoint, List<String> errors, List<String> warnings, List<String> infos) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
+		resourceSet.loadOptions.putAll(#{
+			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
+			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE
+		})
 		val resource = resourceSet.createResource(uri) as XtextResource
 		resource.entryPoint = entryPoint
-		resource.load(#{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
+		resource.load(resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator
 		val issues = validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl)
-		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''«uri.toString» at «lineNumber»: «message» '''])
-		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''«uri.toString» at «lineNumber»: «message» '''])
-		infos?.addAll(issues.filter[severity == Severity.INFO].map['''«uri.toString» at «lineNumber»: «message» '''])
+		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''Â«uri.toStringÂ» at Â«lineNumberÂ»: Â«messageÂ» '''])
+		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''Â«uri.toStringÂ» at Â«lineNumberÂ»: Â«messageÂ» '''])
+		infos?.addAll(issues.filter[severity == Severity.INFO].map['''Â«uri.toStringÂ» at Â«lineNumberÂ»: Â«messageÂ» '''])
 		if (issues.exists[severity == Severity.ERROR]) {
 			return null
 		}

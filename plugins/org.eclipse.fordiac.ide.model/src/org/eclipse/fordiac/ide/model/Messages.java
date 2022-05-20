@@ -31,6 +31,8 @@ public final class Messages extends NLS {
 	/** The Common element importer_ erro r_ missing version info. */
 	public static String CommonElementImporter_ERROR_MissingVersionInfo;
 
+	public static String CommonElementImporter_ERROR_MissingPinForParameter;
+
 	/** The Compilable element importer_ erro r_ language not defined. */
 	public static String CompilableElementImporter_ERROR_LanguageNotDefined;
 

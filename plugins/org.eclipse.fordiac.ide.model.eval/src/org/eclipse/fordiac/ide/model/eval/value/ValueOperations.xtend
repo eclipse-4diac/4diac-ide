@@ -18,6 +18,8 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.Objects
 import org.eclipse.fordiac.ide.model.data.AnyBitType
+import org.eclipse.fordiac.ide.model.data.AnyDurationType
+import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.data.ByteType
 import org.eclipse.fordiac.ide.model.data.CharType
@@ -46,10 +48,11 @@ import org.eclipse.fordiac.ide.model.data.UsintType
 import org.eclipse.fordiac.ide.model.data.WcharType
 import org.eclipse.fordiac.ide.model.data.WordType
 import org.eclipse.fordiac.ide.model.data.WstringType
-import org.eclipse.fordiac.ide.model.value.ValueConverterFactory
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.value.ValueConverterFactory
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 
 final class ValueOperations {
 
@@ -307,12 +310,10 @@ final class ValueOperations {
 		throw new UnsupportedOperationException('''The remainder operation is not supported for types «first.type.name» and «second.type.name»''')
 	}
 
-	def static dispatch AnyMagnitudeValue remainderBy(AnyMagnitudeValue first, AnyMagnitudeValue second) {
-		switch (first.type.resultType(second.type)) {
-			LrealType:
-				LRealValue.toLRealValue(first.doubleValue % second.doubleValue)
-			RealType:
-				RealValue.toRealValue(first.floatValue % second.floatValue)
+	def static dispatch AnyIntValue remainderBy(AnyIntValue first, AnyIntValue second) {
+		switch (resultType : first.type.resultType(second.type)) {
+			case second.longValue == 0: // MOD by 0 defined to return 0
+				resultType.defaultValue as AnyIntValue
 			LintType:
 				LIntValue.toLIntValue(first.longValue % second.longValue)
 			DintType:
@@ -329,10 +330,6 @@ final class ValueOperations {
 				UIntValue.toUIntValue(Integer.remainderUnsigned(first.intValue, second.intValue) as short)
 			UsintType:
 				USIntValue.toUSIntValue(Integer.remainderUnsigned(first.intValue, second.intValue) as byte)
-			LtimeType:
-				LTimeValue.toLTimeValue(first.longValue % second.longValue)
-			TimeType:
-				TimeValue.toTimeValue(first.longValue % second.longValue)
 		}
 	}
 
@@ -1041,10 +1038,7 @@ final class ValueOperations {
 		if (value.nullOrEmpty)
 			type.defaultValue
 		else if (type instanceof DataType) {
-			val converter = ValueConverterFactory.createValueConverter(type)
-			if (converter === null) {
-				throw new UnsupportedOperationException('''The type «type?.name» is not supported''')
-			}
+			val converter = new TypedValueConverter(type)
 			converter.toValue(value).wrapValue(type)
 		} else
 			throw new UnsupportedOperationException('''The type «type?.name» is not supported''')
@@ -1147,6 +1141,11 @@ final class ValueOperations {
 	}
 
 	def static resultType(DataType first, DataType second) {
-		if(first.isCompatibleWith(second)) second else if(second.isCompatibleWith(first)) first
+		if (first instanceof AnyDurationType && second instanceof AnyIntType)
+			first
+		else if (first.isCompatibleWith(second))
+			second
+		else if (second.isCompatibleWith(first))
+			first
 	}
 }

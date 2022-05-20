@@ -27,7 +27,7 @@ import java.text.MessageFormat;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.typemanagement.util.TypeFromTemplateCreator;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -45,7 +45,7 @@ import org.eclipse.ui.part.FileEditorInput;
 public class NewTypeWizard extends Wizard implements INewWizard {
 	private IStructuredSelection selection;
 	private NewFBTypeWizardPage page1;
-	private PaletteEntry entry;
+	private TypeEntry entry;
 
 	public NewTypeWizard() {
 		setWindowTitle(FordiacMessages.NewType);
@@ -110,7 +110,7 @@ public class NewTypeWizard extends Wizard implements INewWizard {
 		EditorUtils.openEditor(new FileEditorInput(file), desc.getId());
 	}
 
-	public PaletteEntry getPaletteEntry() {
+	public TypeEntry getTypeEntry() {
 		return entry;
 	}
 }

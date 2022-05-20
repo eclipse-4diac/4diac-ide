@@ -42,205 +42,204 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class StructuredTextAlgorithmImpl extends MinimalEObjectImpl.Container implements StructuredTextAlgorithm
 {
   /**
-   * The cached value of the '{@link #getLocalVariables() <em>Local Variables</em>}' containment reference list.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getLocalVariables() <em>Local Variables</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getLocalVariables()
-   * @generated
-   * @ordered
-   */
+	 * @see #getLocalVariables()
+	 * @generated
+	 * @ordered
+	 */
   protected EList<VarDeclaration> localVariables;
 
   /**
-   * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getStatements()
-   * @generated
-   * @ordered
-   */
+	 * @see #getStatements()
+	 * @generated
+	 * @ordered
+	 */
   protected StatementList statements;
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected StructuredTextAlgorithmImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.STRUCTURED_TEXT_ALGORITHM;
-  }
+		return StructuredTextPackage.Literals.STRUCTURED_TEXT_ALGORITHM;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public EList<VarDeclaration> getLocalVariables()
   {
-    if (localVariables == null)
-    {
-      localVariables = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__LOCAL_VARIABLES);
-    }
-    return localVariables;
-  }
+		if (localVariables == null) {
+			localVariables = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__LOCAL_VARIABLES);
+		}
+		return localVariables;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public StatementList getStatements()
   {
-    return statements;
-  }
+		return statements;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public NotificationChain basicSetStatements(StatementList newStatements, NotificationChain msgs)
   {
-    StatementList oldStatements = statements;
-    statements = newStatements;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS, oldStatements, newStatements);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
+		StatementList oldStatements = statements;
+		statements = newStatements;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS, oldStatements, newStatements);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setStatements(StatementList newStatements)
   {
-    if (newStatements != statements)
-    {
-      NotificationChain msgs = null;
-      if (statements != null)
-        msgs = ((InternalEObject)statements).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS, null, msgs);
-      if (newStatements != null)
-        msgs = ((InternalEObject)newStatements).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS, null, msgs);
-      msgs = basicSetStatements(newStatements, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS, newStatements, newStatements));
-  }
+		if (newStatements != statements) {
+			NotificationChain msgs = null;
+			if (statements != null)
+				msgs = ((InternalEObject)statements).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS, null, msgs);
+			if (newStatements != null)
+				msgs = ((InternalEObject)newStatements).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS, null, msgs);
+			msgs = basicSetStatements(newStatements, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS, newStatements, newStatements));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__LOCAL_VARIABLES:
-        return ((InternalEList<?>)getLocalVariables()).basicRemove(otherEnd, msgs);
-      case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS:
-        return basicSetStatements(null, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__LOCAL_VARIABLES:
+				return ((InternalEList<?>)getLocalVariables()).basicRemove(otherEnd, msgs);
+			case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS:
+				return basicSetStatements(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__LOCAL_VARIABLES:
-        return getLocalVariables();
-      case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS:
-        return getStatements();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__LOCAL_VARIABLES:
+				return getLocalVariables();
+			case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS:
+				return getStatements();
+			default:
+				return super.eGet(featureID, resolve, coreType);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__LOCAL_VARIABLES:
-        getLocalVariables().clear();
-        getLocalVariables().addAll((Collection<? extends VarDeclaration>)newValue);
-        return;
-      case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS:
-        setStatements((StatementList)newValue);
-        return;
-    }
-    super.eSet(featureID, newValue);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__LOCAL_VARIABLES:
+				getLocalVariables().clear();
+				getLocalVariables().addAll((Collection<? extends VarDeclaration>)newValue);
+				return;
+			case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS:
+				setStatements((StatementList)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eUnset(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__LOCAL_VARIABLES:
-        getLocalVariables().clear();
-        return;
-      case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS:
-        setStatements((StatementList)null);
-        return;
-    }
-    super.eUnset(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__LOCAL_VARIABLES:
+				getLocalVariables().clear();
+				return;
+			case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS:
+				setStatements((StatementList)null);
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__LOCAL_VARIABLES:
-        return localVariables != null && !localVariables.isEmpty();
-      case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS:
-        return statements != null;
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__LOCAL_VARIABLES:
+				return localVariables != null && !localVariables.isEmpty();
+			case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM__STATEMENTS:
+				return statements != null;
+			default:
+				return super.eIsSet(featureID);
+		}
+	}
 
 } //StructuredTextAlgorithmImpl

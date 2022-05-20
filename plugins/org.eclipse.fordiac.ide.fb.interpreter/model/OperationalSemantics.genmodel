@@ -11,8 +11,8 @@
     nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     codeFormatting="true" commentFormatting="true" importerID="org.eclipse.emf.importer.ecore"
     containmentProxies="true" complianceLevel="11.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.fb.interpreter.mm.OpSem.edit"
-    editorPluginID="org.eclipse.fordiac.ide.fb.interpreter.mm.OpSem.editor" usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//Palette ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data"
-    importOrganizing="true" cleanup="true" eclipsePlatformVersion="2022-03">
+    editorPluginID="org.eclipse.fordiac.ide.fb.interpreter.mm.OpSem.editor" usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data"
+    importOrganizing="true" cleanup="true" eclipsePlatformVersion="2021-06">
   <foreignModel>OperationalSemantics.ecore</foreignModel>
   <testsDirectory xsi:nil="true"/>
   <genPackages prefix="OperationalSemantics" basePackage="org.eclipse.fordiac.ide.fb.interpreter"
@@ -22,9 +22,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute OperationalSemantics.ecore#//EventOccurrence/active"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute OperationalSemantics.ecore#//EventOccurrence/ignored"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventOccurrence/fbRuntime"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventOccurrence/createdTransactions"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventOccurrence/parentFB"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//EventManager">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventManager/transactions"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventManager/readyQueue"/>
       <genOperations ecoreOperation="OperationalSemantics.ecore#//EventManager/process"
           body="EventManagerUtils.process(this);">
         <genParameters ecoreParameter="OperationalSemantics.ecore#//EventManager/process/eventManager"/>
@@ -32,18 +35,31 @@
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//FBRuntimeAbstract">
       <genOperations ecoreOperation="OperationalSemantics.ecore#//FBRuntimeAbstract/run"
-          body="if (this.eContainer instanceof EventOccurrence) &#x9;&#x9;&#xA;&#x9;return FBTypeRuntimeUtils.run((EventOccurrence)this.eContainer, this);&#xA;throw new IllegalArgumentException(&quot;The eContainer of the FBRuntimeAbstract object must be an EventOccurrence&quot;);"/>
+          body="&#x9;&#x9;if (this.eContainer instanceof EventOccurrence) {&#xA;&#x9;&#x9;&#x9;return DefaultRunFBType.runFBType(this, (EventOccurrence) this.eContainer, eventManager);&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;throw new IllegalArgumentException(&quot;The eContainer of the FBRuntimeAbstract object must be an EventOccurrence&quot;);&#xA;">
+        <genParameters ecoreParameter="OperationalSemantics.ecore#//FBRuntimeAbstract/run/eventManager"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//BasicFBTypeRuntime">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//BasicFBTypeRuntime/basicfbtype"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//BasicFBTypeRuntime/activeState"/>
     </genClasses>
-    <genClasses ecoreClass="OperationalSemantics.ecore#//FBTypeRuntime">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTypeRuntime/fbtype"/>
+    <genClasses ecoreClass="OperationalSemantics.ecore#//SimpleFBTypeRuntime">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//SimpleFBTypeRuntime/simpleFBType"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//Transaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//Transaction/inputEventOccurrence"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//Transaction/outputEventOccurences"/>
+    </genClasses>
+    <genClasses ecoreClass="OperationalSemantics.ecore#//FBNetworkRuntime">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBNetworkRuntime/fbnetwork"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBNetworkRuntime/fbRuntimes"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBNetworkRuntime/transferData"/>
+    </genClasses>
+    <genClasses ecoreClass="OperationalSemantics.ecore#//TransferData">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//TransferData/connection"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//TransferData/currentValue"/>
+    </genClasses>
+    <genClasses ecoreClass="OperationalSemantics.ecore#//FBTransaction">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/outputEventOccurrences"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

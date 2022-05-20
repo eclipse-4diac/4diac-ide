@@ -37,481 +37,479 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable;
 public class LocalVariableImpl extends org.eclipse.fordiac.ide.model.libraryElement.impl.LocalVariableImpl implements LocalVariable
 {
   /**
-   * The default value of the '{@link #isConstant() <em>Constant</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The default value of the '{@link #isConstant() <em>Constant</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #isConstant()
-   * @generated
-   * @ordered
-   */
+	 * @see #isConstant()
+	 * @generated
+	 * @ordered
+	 */
   protected static final boolean CONSTANT_EDEFAULT = false;
 
   /**
-   * The cached value of the '{@link #isConstant() <em>Constant</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #isConstant() <em>Constant</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #isConstant()
-   * @generated
-   * @ordered
-   */
+	 * @see #isConstant()
+	 * @generated
+	 * @ordered
+	 */
   protected boolean constant = CONSTANT_EDEFAULT;
 
   /**
-   * The default value of the '{@link #isLocated() <em>Located</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The default value of the '{@link #isLocated() <em>Located</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #isLocated()
-   * @generated
-   * @ordered
-   */
+	 * @see #isLocated()
+	 * @generated
+	 * @ordered
+	 */
   protected static final boolean LOCATED_EDEFAULT = false;
 
   /**
-   * The cached value of the '{@link #isLocated() <em>Located</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #isLocated() <em>Located</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #isLocated()
-   * @generated
-   * @ordered
-   */
+	 * @see #isLocated()
+	 * @generated
+	 * @ordered
+	 */
   protected boolean located = LOCATED_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getLocation() <em>Location</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getLocation() <em>Location</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getLocation()
-   * @generated
-   * @ordered
-   */
+	 * @see #getLocation()
+	 * @generated
+	 * @ordered
+	 */
   protected Variable location;
 
   /**
-   * The default value of the '{@link #isArray() <em>Array</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The default value of the '{@link #isArray() <em>Array</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #isArray()
-   * @generated
-   * @ordered
-   */
+	 * @see #isArray()
+	 * @generated
+	 * @ordered
+	 */
   protected static final boolean ARRAY_EDEFAULT = false;
 
   /**
-   * The cached value of the '{@link #isArray() <em>Array</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #isArray() <em>Array</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #isArray()
-   * @generated
-   * @ordered
-   */
+	 * @see #isArray()
+	 * @generated
+	 * @ordered
+	 */
   protected boolean array = ARRAY_EDEFAULT;
 
   /**
-   * The default value of the '{@link #isInitalized() <em>Initalized</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The default value of the '{@link #isInitalized() <em>Initalized</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #isInitalized()
-   * @generated
-   * @ordered
-   */
+	 * @see #isInitalized()
+	 * @generated
+	 * @ordered
+	 */
   protected static final boolean INITALIZED_EDEFAULT = false;
 
   /**
-   * The cached value of the '{@link #isInitalized() <em>Initalized</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #isInitalized() <em>Initalized</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #isInitalized()
-   * @generated
-   * @ordered
-   */
+	 * @see #isInitalized()
+	 * @generated
+	 * @ordered
+	 */
   protected boolean initalized = INITALIZED_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getInitialValue() <em>Initial Value</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getInitialValue() <em>Initial Value</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getInitialValue()
-   * @generated
-   * @ordered
-   */
+	 * @see #getInitialValue()
+	 * @generated
+	 * @ordered
+	 */
   protected Constant initialValue;
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected LocalVariableImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.LOCAL_VARIABLE;
-  }
+		return StructuredTextPackage.Literals.LOCAL_VARIABLE;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean isConstant()
   {
-    return constant;
-  }
+		return constant;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setConstant(boolean newConstant)
   {
-    boolean oldConstant = constant;
-    constant = newConstant;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__CONSTANT, oldConstant, constant));
-  }
+		boolean oldConstant = constant;
+		constant = newConstant;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__CONSTANT, oldConstant, constant));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean isLocated()
   {
-    return located;
-  }
+		return located;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setLocated(boolean newLocated)
   {
-    boolean oldLocated = located;
-    located = newLocated;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__LOCATED, oldLocated, located));
-  }
+		boolean oldLocated = located;
+		located = newLocated;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__LOCATED, oldLocated, located));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Variable getLocation()
   {
-    return location;
-  }
+		return location;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public NotificationChain basicSetLocation(Variable newLocation, NotificationChain msgs)
   {
-    Variable oldLocation = location;
-    location = newLocation;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__LOCATION, oldLocation, newLocation);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
+		Variable oldLocation = location;
+		location = newLocation;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__LOCATION, oldLocation, newLocation);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setLocation(Variable newLocation)
   {
-    if (newLocation != location)
-    {
-      NotificationChain msgs = null;
-      if (location != null)
-        msgs = ((InternalEObject)location).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.LOCAL_VARIABLE__LOCATION, null, msgs);
-      if (newLocation != null)
-        msgs = ((InternalEObject)newLocation).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.LOCAL_VARIABLE__LOCATION, null, msgs);
-      msgs = basicSetLocation(newLocation, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__LOCATION, newLocation, newLocation));
-  }
+		if (newLocation != location) {
+			NotificationChain msgs = null;
+			if (location != null)
+				msgs = ((InternalEObject)location).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.LOCAL_VARIABLE__LOCATION, null, msgs);
+			if (newLocation != null)
+				msgs = ((InternalEObject)newLocation).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.LOCAL_VARIABLE__LOCATION, null, msgs);
+			msgs = basicSetLocation(newLocation, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__LOCATION, newLocation, newLocation));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean isArray()
   {
-    return array;
-  }
+		return array;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setArray(boolean newArray)
   {
-    boolean oldArray = array;
-    array = newArray;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__ARRAY, oldArray, array));
-  }
+		boolean oldArray = array;
+		array = newArray;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__ARRAY, oldArray, array));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean isInitalized()
   {
-    return initalized;
-  }
+		return initalized;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setInitalized(boolean newInitalized)
   {
-    boolean oldInitalized = initalized;
-    initalized = newInitalized;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__INITALIZED, oldInitalized, initalized));
-  }
+		boolean oldInitalized = initalized;
+		initalized = newInitalized;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__INITALIZED, oldInitalized, initalized));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Constant getInitialValue()
   {
-    return initialValue;
-  }
+		return initialValue;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public NotificationChain basicSetInitialValue(Constant newInitialValue, NotificationChain msgs)
   {
-    Constant oldInitialValue = initialValue;
-    initialValue = newInitialValue;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE, oldInitialValue, newInitialValue);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
+		Constant oldInitialValue = initialValue;
+		initialValue = newInitialValue;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE, oldInitialValue, newInitialValue);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setInitialValue(Constant newInitialValue)
   {
-    if (newInitialValue != initialValue)
-    {
-      NotificationChain msgs = null;
-      if (initialValue != null)
-        msgs = ((InternalEObject)initialValue).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE, null, msgs);
-      if (newInitialValue != null)
-        msgs = ((InternalEObject)newInitialValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE, null, msgs);
-      msgs = basicSetInitialValue(newInitialValue, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE, newInitialValue, newInitialValue));
-  }
+		if (newInitialValue != initialValue) {
+			NotificationChain msgs = null;
+			if (initialValue != null)
+				msgs = ((InternalEObject)initialValue).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE, null, msgs);
+			if (newInitialValue != null)
+				msgs = ((InternalEObject)newInitialValue).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE, null, msgs);
+			msgs = basicSetInitialValue(newInitialValue, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE, newInitialValue, newInitialValue));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.LOCAL_VARIABLE__LOCATION:
-        return basicSetLocation(null, msgs);
-      case StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE:
-        return basicSetInitialValue(null, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.LOCAL_VARIABLE__LOCATION:
+				return basicSetLocation(null, msgs);
+			case StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE:
+				return basicSetInitialValue(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.LOCAL_VARIABLE__CONSTANT:
-        return isConstant();
-      case StructuredTextPackage.LOCAL_VARIABLE__LOCATED:
-        return isLocated();
-      case StructuredTextPackage.LOCAL_VARIABLE__LOCATION:
-        return getLocation();
-      case StructuredTextPackage.LOCAL_VARIABLE__ARRAY:
-        return isArray();
-      case StructuredTextPackage.LOCAL_VARIABLE__INITALIZED:
-        return isInitalized();
-      case StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE:
-        return getInitialValue();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.LOCAL_VARIABLE__CONSTANT:
+				return isConstant();
+			case StructuredTextPackage.LOCAL_VARIABLE__LOCATED:
+				return isLocated();
+			case StructuredTextPackage.LOCAL_VARIABLE__LOCATION:
+				return getLocation();
+			case StructuredTextPackage.LOCAL_VARIABLE__ARRAY:
+				return isArray();
+			case StructuredTextPackage.LOCAL_VARIABLE__INITALIZED:
+				return isInitalized();
+			case StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE:
+				return getInitialValue();
+			default:
+				return super.eGet(featureID, resolve, coreType);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eSet(int featureID, Object newValue)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.LOCAL_VARIABLE__CONSTANT:
-        setConstant((Boolean)newValue);
-        return;
-      case StructuredTextPackage.LOCAL_VARIABLE__LOCATED:
-        setLocated((Boolean)newValue);
-        return;
-      case StructuredTextPackage.LOCAL_VARIABLE__LOCATION:
-        setLocation((Variable)newValue);
-        return;
-      case StructuredTextPackage.LOCAL_VARIABLE__ARRAY:
-        setArray((Boolean)newValue);
-        return;
-      case StructuredTextPackage.LOCAL_VARIABLE__INITALIZED:
-        setInitalized((Boolean)newValue);
-        return;
-      case StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE:
-        setInitialValue((Constant)newValue);
-        return;
-    }
-    super.eSet(featureID, newValue);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.LOCAL_VARIABLE__CONSTANT:
+				setConstant((Boolean)newValue);
+				return;
+			case StructuredTextPackage.LOCAL_VARIABLE__LOCATED:
+				setLocated((Boolean)newValue);
+				return;
+			case StructuredTextPackage.LOCAL_VARIABLE__LOCATION:
+				setLocation((Variable)newValue);
+				return;
+			case StructuredTextPackage.LOCAL_VARIABLE__ARRAY:
+				setArray((Boolean)newValue);
+				return;
+			case StructuredTextPackage.LOCAL_VARIABLE__INITALIZED:
+				setInitalized((Boolean)newValue);
+				return;
+			case StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE:
+				setInitialValue((Constant)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eUnset(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.LOCAL_VARIABLE__CONSTANT:
-        setConstant(CONSTANT_EDEFAULT);
-        return;
-      case StructuredTextPackage.LOCAL_VARIABLE__LOCATED:
-        setLocated(LOCATED_EDEFAULT);
-        return;
-      case StructuredTextPackage.LOCAL_VARIABLE__LOCATION:
-        setLocation((Variable)null);
-        return;
-      case StructuredTextPackage.LOCAL_VARIABLE__ARRAY:
-        setArray(ARRAY_EDEFAULT);
-        return;
-      case StructuredTextPackage.LOCAL_VARIABLE__INITALIZED:
-        setInitalized(INITALIZED_EDEFAULT);
-        return;
-      case StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE:
-        setInitialValue((Constant)null);
-        return;
-    }
-    super.eUnset(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.LOCAL_VARIABLE__CONSTANT:
+				setConstant(CONSTANT_EDEFAULT);
+				return;
+			case StructuredTextPackage.LOCAL_VARIABLE__LOCATED:
+				setLocated(LOCATED_EDEFAULT);
+				return;
+			case StructuredTextPackage.LOCAL_VARIABLE__LOCATION:
+				setLocation((Variable)null);
+				return;
+			case StructuredTextPackage.LOCAL_VARIABLE__ARRAY:
+				setArray(ARRAY_EDEFAULT);
+				return;
+			case StructuredTextPackage.LOCAL_VARIABLE__INITALIZED:
+				setInitalized(INITALIZED_EDEFAULT);
+				return;
+			case StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE:
+				setInitialValue((Constant)null);
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.LOCAL_VARIABLE__CONSTANT:
-        return constant != CONSTANT_EDEFAULT;
-      case StructuredTextPackage.LOCAL_VARIABLE__LOCATED:
-        return located != LOCATED_EDEFAULT;
-      case StructuredTextPackage.LOCAL_VARIABLE__LOCATION:
-        return location != null;
-      case StructuredTextPackage.LOCAL_VARIABLE__ARRAY:
-        return array != ARRAY_EDEFAULT;
-      case StructuredTextPackage.LOCAL_VARIABLE__INITALIZED:
-        return initalized != INITALIZED_EDEFAULT;
-      case StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE:
-        return initialValue != null;
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.LOCAL_VARIABLE__CONSTANT:
+				return constant != CONSTANT_EDEFAULT;
+			case StructuredTextPackage.LOCAL_VARIABLE__LOCATED:
+				return located != LOCATED_EDEFAULT;
+			case StructuredTextPackage.LOCAL_VARIABLE__LOCATION:
+				return location != null;
+			case StructuredTextPackage.LOCAL_VARIABLE__ARRAY:
+				return array != ARRAY_EDEFAULT;
+			case StructuredTextPackage.LOCAL_VARIABLE__INITALIZED:
+				return initalized != INITALIZED_EDEFAULT;
+			case StructuredTextPackage.LOCAL_VARIABLE__INITIAL_VALUE:
+				return initialValue != null;
+			default:
+				return super.eIsSet(featureID);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public String toString()
   {
-    if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-    StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (constant: ");
-    result.append(constant);
-    result.append(", located: ");
-    result.append(located);
-    result.append(", array: ");
-    result.append(array);
-    result.append(", initalized: ");
-    result.append(initalized);
-    result.append(')');
-    return result.toString();
-  }
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (constant: ");
+		result.append(constant);
+		result.append(", located: ");
+		result.append(located);
+		result.append(", array: ");
+		result.append(array);
+		result.append(", initalized: ");
+		result.append(initalized);
+		result.append(')');
+		return result.toString();
+	}
 
 } //LocalVariableImpl

@@ -14,14 +14,14 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.labeling
 
 import com.google.inject.Inject
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider
-import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider
+import org.eclipse.fordiac.ide.structuredtextcore.ui.labeling.STCoreLabelProvider
 
 /**
  * Provides labels for EObjects.
  * 
  * See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#label-provider
  */
-class STAlgorithmLabelProvider extends DefaultEObjectLabelProvider {
+class STAlgorithmLabelProvider extends STCoreLabelProvider {
 
 	@Inject
 	new(AdapterFactoryLabelProvider delegate) {

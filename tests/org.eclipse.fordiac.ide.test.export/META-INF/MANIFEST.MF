@@ -7,8 +7,13 @@ Fragment-Host: org.eclipse.fordiac.ide.export.forte_ng
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.export
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Bundle-Vendor: Eclipse 4diac
-Import-Package: org.junit.jupiter.api,
- org.opentest4j,
+Import-Package: org.eclipse.fordiac.ide.export.forte_lua,
+ org.junit.jupiter.api,
  org.junit.jupiter.params,
  org.junit.jupiter.params.provider,
- org.eclipse.fordiac.ide.export.forte_lua
+ org.opentest4j
+Require-Bundle: org.eclipse.fordiac.ide.export.forte_ng.st,
+ org.eclipse.fordiac.ide.model.structuredtext,
+ org.eclipse.fordiac.ide.model.xtext.fbt,
+ org.eclipse.fordiac.ide.structuredtextalgorithm,
+ org.eclipse.fordiac.ide.export.forte_lua.st

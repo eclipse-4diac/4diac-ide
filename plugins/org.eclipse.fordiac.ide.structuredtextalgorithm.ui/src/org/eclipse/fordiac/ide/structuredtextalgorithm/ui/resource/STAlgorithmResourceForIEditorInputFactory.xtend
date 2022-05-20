@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.ui.IEditorInput
 import org.eclipse.ui.IFileEditorInput
@@ -25,12 +25,13 @@ class STAlgorithmResourceForIEditorInputFactory extends ResourceForIEditorInputF
 		val resource = super.createResource(editorInput)
 		if (resource instanceof XtextResource) {
 			if (editorInput instanceof IFileEditorInput) {
-				val paletteEntry = TypeLibrary.getPaletteEntryForFile(editorInput.file)
-				if (paletteEntry !== null) {
-					val libraryElement = paletteEntry.typeEditable
+				val typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(editorInput.file)
+				if (typeEntry !== null) {
+					val libraryElement = typeEntry.typeEditable
 					if (libraryElement instanceof FBType) {
 						if (resource instanceof STAlgorithmResource) {
 							resource.fbType = libraryElement
+							resource.defaultLoadOptions.put(STAlgorithmResource.OPTION_PLAIN_ST, Boolean.TRUE)
 						}
 					}
 				}

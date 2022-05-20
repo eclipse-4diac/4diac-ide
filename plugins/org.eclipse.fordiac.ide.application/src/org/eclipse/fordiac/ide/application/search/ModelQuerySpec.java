@@ -21,19 +21,21 @@ public class ModelQuerySpec {
 	private boolean checkType;
 	private boolean checkComments;
 	private boolean checkCaseSensitive;
+	private boolean checkExactMatching;
 
 	public ModelQuerySpec() {
 	}
 
 	public ModelQuerySpec(final String searchString, final boolean isCheckedInstanceName,
 			final boolean isCheckedPinName, final boolean isCheckedType, final boolean isCheckedComment,
-			final boolean isCaseSensitive) {
+			final boolean isCaseSensitive, final boolean isExactNameMatching) {
 		this.searchString = searchString;
 		this.checkInstanceName = isCheckedInstanceName;
 		this.checkPinName = isCheckedPinName;
 		this.checkType = isCheckedType;
 		this.checkComments = isCheckedComment;
 		this.checkCaseSensitive = isCaseSensitive;
+		this.checkExactMatching = isExactNameMatching;
 	}
 
 	public String getSearchString() {
@@ -60,6 +62,10 @@ public class ModelQuerySpec {
 		return checkCaseSensitive;
 	}
 
+	public boolean isCheckExactMatching() {
+		return checkExactMatching;
+	}
+
 	public void setCheckCaseSensitive(final boolean checkCaseSensitive) {
 		this.checkCaseSensitive = checkCaseSensitive;
 	}
@@ -84,11 +90,15 @@ public class ModelQuerySpec {
 		this.checkComments = isCheckedComment;
 	}
 
+	public void setCheckExactMatching(final boolean checkExactMatching) {
+		this.checkExactMatching = checkExactMatching;
+	}
+
 	@Override
 	public String toString() {
 		return "ModelQuerySpec [searchString=" + searchString + ", checkInstanceName=" + checkInstanceName
 				+ ", checkPinName=" + checkPinName + ", checkType=" + checkType + ", checkComments=" + checkComments
-				+ ", checkCaseSensitive=" + checkCaseSensitive + "]";
+				+ ", checkCaseSensitive=" + checkCaseSensitive + ", checkExactMatching=" + checkExactMatching + "]";
 	}
 
 

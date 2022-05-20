@@ -39,7 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -71,7 +71,7 @@ public class ConvertToStructHandler extends AbstractHandler {
 			invokeSaveWizard(varDecls, editor);
 
 			if (wizard.replaceSource()) {
-				final DataType datatype = TypeLibrary.getTypeLibrary(project).getDataTypeLibrary()
+				final DataType datatype = TypeLibraryManager.INSTANCE.getTypeLibrary(project).getDataTypeLibrary()
 						.getType(wizard.getDatatypeName());
 				// (potentially) replace old elements with new ones
 				final Command cmd = new CreateStructFromInterfaceElementsCommand(varDecls, datatype);

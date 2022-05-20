@@ -18,19 +18,7 @@
 -->
 
 <plugin>
-   <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
-      <!-- @generated fordiac -->
-      <factory
-            uri="org.eclipse.fordiac.ide.model.Palette"
-            class="org.eclipse.fordiac.ide.model.Palette.provider.PaletteItemProviderAdapterFactory"
-            supportedTypes=
-              "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
-               org.eclipse.emf.edit.provider.IStructuredItemContentProvider
-               org.eclipse.emf.edit.provider.ITreeItemContentProvider
-               org.eclipse.emf.edit.provider.IItemLabelProvider
-               org.eclipse.emf.edit.provider.IItemPropertySource"/>
-   </extension>
-
+ 
    <extension point="org.eclipse.emf.edit.itemProviderAdapterFactories">
       <factory
             uri="org.eclipse.fordiac.ide.model"

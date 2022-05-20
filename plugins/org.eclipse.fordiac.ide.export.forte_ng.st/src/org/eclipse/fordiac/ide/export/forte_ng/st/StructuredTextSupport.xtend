@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
@@ -105,10 +106,10 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''{«FOR elem : expr.values SEPARATOR ", "»«elem.generateArrayInitElement»«ENDFOR»}'''
 
 	def protected CharSequence generateArrayInitElement(STArrayInitElement elem) //
-	'''«IF elem.initExpressions.empty»«elem.indexOrInitExpression.generateExpression»«ELSE»«elem.generateMultiArrayInitElement»«ENDIF»'''
+	'''«IF elem.initExpressions.empty»«elem.indexOrInitExpression.generateInitializerExpression»«ELSE»«elem.generateMultiArrayInitElement»«ENDIF»'''
 
 	def protected CharSequence generateMultiArrayInitElement(STArrayInitElement elem) //
-	'''«FOR i : 0..<elem.indexOrInitExpression.integerFromConstantExpression SEPARATOR ", "»«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateExpression»«ENDFOR»«ENDFOR»'''
+	'''«FOR i : 0..<(elem.indexOrInitExpression as STElementaryInitializerExpression).value.integerFromConstantExpression SEPARATOR ", "»«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateInitializerExpression»«ENDFOR»«ENDFOR»'''
 
 	def protected CharSequence generateStatementList(List<STStatement> statements) '''
 		«FOR statement : statements»
@@ -197,17 +198,15 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		""
 	}
 
-	def protected dispatch CharSequence generateExpression(STBinaryExpression expr) {
-		switch (expr.op) {
-			case RANGE: '''«expr.left.generateExpression», «expr.right.generateExpression»'''
-			case AMPERSAND: '''func_AND(«expr.left.generateExpression», «expr.right.generateExpression»)'''
-			case POWER: '''func_EXPT(«expr.left.generateExpression», «expr.right.generateExpression»)'''
-			default: '''func_«expr.op.getName»(«expr.left.generateExpression», «expr.right.generateExpression»)'''
-		}
-	}
+	def protected dispatch CharSequence generateExpression(STBinaryExpression expr) //
+	'''«switch (expr.op) {
+			case AMPERSAND: "func_AND"
+			case POWER: "func_EXPT"
+			default: '''func_«expr.op.getName»'''
+		}»«IF expr.op.arithmetic»<«(expr.resultType as DataType).generateTypeName»>«ENDIF»(«expr.left.generateExpression», «expr.right.generateExpression»)'''
 
 	def protected dispatch CharSequence generateExpression(STUnaryExpression expr) //
-	'''func_«expr.op.getName»(«expr.expression.generateExpression»)'''
+	'''func_«expr.op.getName»<«(expr.resultType as DataType).generateTypeName»>(«expr.expression.generateExpression»)'''
 
 	def protected dispatch CharSequence generateExpression(STMemberAccessExpression expr) //
 	'''«expr.receiver.generateExpression».«expr.member.generateExpression»'''
@@ -236,18 +235,18 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		if(argument === null) parameter.generateVariableDefaultValue else argument.generateExpression
 	}
 
-	def protected CharSequence generateInOutCallArgument(INamedElement parameter, INamedElement argument) {
+	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STExpression argument) {
 		if (argument === null)
 			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
 		else
-			argument.generateFeatureName
+			argument.generateExpression
 	}
 
-	def protected CharSequence generateOutputCallArgument(INamedElement parameter, INamedElement argument) {
+	def protected CharSequence generateOutputCallArgument(INamedElement parameter, STExpression argument) {
 		if (argument === null)
 			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
 		else
-			argument.generateFeatureName
+			argument.generateExpression
 	}
 
 	def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //

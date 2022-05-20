@@ -23,25 +23,25 @@ package org.eclipse.fordiac.ide.model.structuredtext.structuredText;
 public interface Variable extends Expression
 {
   /**
-   * Returns the value of the '<em><b>Part</b></em>' containment reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Part</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Part</em>' containment reference.
-   * @see #setPart(PartialAccess)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getVariable_Part()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Part</em>' containment reference.
+	 * @see #setPart(PartialAccess)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getVariable_Part()
+	 * @model containment="true"
+	 * @generated
+	 */
   PartialAccess getPart();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable#getPart <em>Part</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable#getPart <em>Part</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Part</em>' containment reference.
-   * @see #getPart()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Part</em>' containment reference.
+	 * @see #getPart()
+	 * @generated
+	 */
   void setPart(PartialAccess value);
 
 } // Variable

@@ -39,205 +39,206 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class CallImpl extends StatementImpl implements Call
 {
   /**
-   * The default value of the '{@link #getFunc() <em>Func</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getFunc() <em>Func</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getFunc()
-   * @generated
-   * @ordered
-   */
+	 * @see #getFunc()
+	 * @generated
+	 * @ordered
+	 */
   protected static final String FUNC_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getFunc() <em>Func</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getFunc() <em>Func</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getFunc()
-   * @generated
-   * @ordered
-   */
+	 * @see #getFunc()
+	 * @generated
+	 * @ordered
+	 */
   protected String func = FUNC_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getArgs() <em>Args</em>}' containment reference list.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getArgs() <em>Args</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getArgs()
-   * @generated
-   * @ordered
-   */
+	 * @see #getArgs()
+	 * @generated
+	 * @ordered
+	 */
   protected EList<Argument> args;
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected CallImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.CALL;
-  }
+		return StructuredTextPackage.Literals.CALL;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public String getFunc()
   {
-    return func;
-  }
+		return func;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setFunc(String newFunc)
   {
-    String oldFunc = func;
-    func = newFunc;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CALL__FUNC, oldFunc, func));
-  }
+		String oldFunc = func;
+		func = newFunc;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.CALL__FUNC, oldFunc, func));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public EList<Argument> getArgs()
   {
-    if (args == null)
-    {
-      args = new EObjectContainmentEList<Argument>(Argument.class, this, StructuredTextPackage.CALL__ARGS);
-    }
-    return args;
-  }
+		if (args == null) {
+			args = new EObjectContainmentEList<Argument>(Argument.class, this, StructuredTextPackage.CALL__ARGS);
+		}
+		return args;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CALL__ARGS:
-        return ((InternalEList<?>)getArgs()).basicRemove(otherEnd, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CALL__ARGS:
+				return ((InternalEList<?>)getArgs()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CALL__FUNC:
-        return getFunc();
-      case StructuredTextPackage.CALL__ARGS:
-        return getArgs();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CALL__FUNC:
+				return getFunc();
+			case StructuredTextPackage.CALL__ARGS:
+				return getArgs();
+			default:
+				return super.eGet(featureID, resolve, coreType);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CALL__FUNC:
-        setFunc((String)newValue);
-        return;
-      case StructuredTextPackage.CALL__ARGS:
-        getArgs().clear();
-        getArgs().addAll((Collection<? extends Argument>)newValue);
-        return;
-    }
-    super.eSet(featureID, newValue);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CALL__FUNC:
+				setFunc((String)newValue);
+				return;
+			case StructuredTextPackage.CALL__ARGS:
+				getArgs().clear();
+				getArgs().addAll((Collection<? extends Argument>)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eUnset(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CALL__FUNC:
-        setFunc(FUNC_EDEFAULT);
-        return;
-      case StructuredTextPackage.CALL__ARGS:
-        getArgs().clear();
-        return;
-    }
-    super.eUnset(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CALL__FUNC:
+				setFunc(FUNC_EDEFAULT);
+				return;
+			case StructuredTextPackage.CALL__ARGS:
+				getArgs().clear();
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.CALL__FUNC:
-        return FUNC_EDEFAULT == null ? func != null : !FUNC_EDEFAULT.equals(func);
-      case StructuredTextPackage.CALL__ARGS:
-        return args != null && !args.isEmpty();
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.CALL__FUNC:
+				return FUNC_EDEFAULT == null ? func != null : !FUNC_EDEFAULT.equals(func);
+			case StructuredTextPackage.CALL__ARGS:
+				return args != null && !args.isEmpty();
+			default:
+				return super.eIsSet(featureID);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public String toString()
   {
-    if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-    StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (func: ");
-    result.append(func);
-    result.append(')');
-    return result.toString();
-  }
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (func: ");
+		result.append(func);
+		result.append(')');
+		return result.toString();
+	}
 
 } //CallImpl

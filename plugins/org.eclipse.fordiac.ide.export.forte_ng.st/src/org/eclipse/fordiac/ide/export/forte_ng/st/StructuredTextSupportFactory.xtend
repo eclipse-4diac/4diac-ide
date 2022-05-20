@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
@@ -26,6 +27,16 @@ class StructuredTextSupportFactory implements ILanguageSupportFactory {
 			new STMethodSupport(source)
 		} else if (source instanceof STFunctionSource) {
 			new STFunctionSupport(source)
+		} else if (source instanceof ECTransition) {
+			new ECTransitionSupport(source)
 		}
+	}
+
+	def static void register() {
+		val factory = new StructuredTextSupportFactory
+		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", STAlgorithm, factory)
+		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", ECTransition, factory)
+		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", STMethod, factory)
+		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", STFunctionSource, factory)
 	}
 }

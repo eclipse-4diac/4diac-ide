@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.model.eval.value
 import java.time.LocalTime
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
-import org.eclipse.fordiac.ide.model.value.TimeOfDayValueConverter
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 
 class TimeOfDayValue implements AnyDateValue {
 	final long value;
@@ -32,7 +32,9 @@ class TimeOfDayValue implements AnyDateValue {
 
 	def static toTimeOfDayValue(LocalTime value) { value.toNanoOfDay.toTimeOfDayValue }
 
-	def static toTimeOfDayValue(String value) { TimeOfDayValueConverter.INSTANCE.toValue(value).toTimeOfDayValue }
+	def static toTimeOfDayValue(String value) {
+		(TypedValueConverter.INSTANCE_TIME_OF_DAY.toValue(value) as LocalTime).toTimeOfDayValue
+	}
 
 	def static toTimeOfDayValue(AnyDateValue value) { value.toNanos.toTimeOfDayValue }
 
@@ -40,9 +42,13 @@ class TimeOfDayValue implements AnyDateValue {
 
 	override toNanos() { value }
 
+	def LocalTime toLocalTime() {
+		LocalTime.ofNanoOfDay(value)
+	}
+
 	override equals(Object obj) { if(obj instanceof TimeOfDayValue) value == obj.value else false }
 
 	override hashCode() { Long.hashCode(value) }
-	
-	override toString() { TimeOfDayValueConverter.INSTANCE.toString(LocalTime.ofNanoOfDay(value)) }
+
+	override toString() { TypedValueConverter.INSTANCE_TIME_OF_DAY.toString(toLocalTime) }
 }

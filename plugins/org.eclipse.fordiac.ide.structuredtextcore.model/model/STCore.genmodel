@@ -10,7 +10,7 @@
     commentFormatting="true" testSuiteClass="org.eclipse.fordiac.ide.structuredtextcore.model.stcore.tests.STCoreAllTests"
     complianceLevel="11.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.structuredtextcore.model.edit"
     editorPluginID="org.eclipse.fordiac.ide.structuredtextcore.model.editor" runtimeVersion="2.28"
-    usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//Palette">
+    usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement">
   <genPackages prefix="STCore" basePackage="org.eclipse.fordiac.ide.structuredtextcore"
       disposableProviderFactory="true" fileExtensions="stcore" ecorePackage="STCore.ecore#/">
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//STBinaryOperator">
@@ -62,16 +62,33 @@
     <genClasses ecoreClass="STCore.ecore#//STVarOutputDeclarationBlock"/>
     <genClasses ecoreClass="STCore.ecore#//STVarInOutDeclarationBlock"/>
     <genClasses ecoreClass="STCore.ecore#//STVarTempDeclarationBlock"/>
-    <genClasses ecoreClass="STCore.ecore#//STInitializerExpression"/>
+    <genClasses ecoreClass="STCore.ecore#//STInitializerExpression">
+      <genOperations ecoreOperation="STCore.ecore#//STInitializerExpression/getResultType"
+          body="return null;"/>
+      <genOperations ecoreOperation="STCore.ecore#//STInitializerExpression/getDeclaredResultType"
+          body="return null;"/>
+    </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STElementaryInitializerExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STElementaryInitializerExpression/value"/>
+      <genOperations ecoreOperation="STCore.ecore#//STElementaryInitializerExpression/getResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STElementaryInitializerExpression/getDeclaredResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STArrayInitializerExpression">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STArrayInitializerExpression/values"/>
+      <genOperations ecoreOperation="STCore.ecore#//STArrayInitializerExpression/getResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STArrayInitializerExpression/getDeclaredResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STArrayInitElement">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STArrayInitElement/indexOrInitExpression"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STArrayInitElement/initExpressions"/>
+      <genOperations ecoreOperation="STCore.ecore#//STArrayInitElement/getResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STArrayInitElement/getDeclaredResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STStatement"/>
     <genClasses ecoreClass="STCore.ecore#//STAssignmentStatement">
@@ -88,15 +105,15 @@
           body="return null;"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STCallUnnamedArgument">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallUnnamedArgument/arg"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallUnnamedArgument/argument"/>
       <genOperations ecoreOperation="STCore.ecore#//STCallUnnamedArgument/getResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
       <genOperations ecoreOperation="STCore.ecore#//STCallUnnamedArgument/getDeclaredResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STCallNamedInputArgument">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedInputArgument/target"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedInputArgument/source"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedInputArgument/parameter"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedInputArgument/argument"/>
       <genOperations ecoreOperation="STCore.ecore#//STCallNamedInputArgument/getResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
       <genOperations ecoreOperation="STCore.ecore#//STCallNamedInputArgument/getDeclaredResultType"
@@ -104,8 +121,8 @@
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STCallNamedOutputArgument">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STCallNamedOutputArgument/not"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedOutputArgument/source"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedOutputArgument/target"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedOutputArgument/parameter"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STCallNamedOutputArgument/argument"/>
       <genOperations ecoreOperation="STCore.ecore#//STCallNamedOutputArgument/getResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
       <genOperations ecoreOperation="STCore.ecore#//STCallNamedOutputArgument/getDeclaredResultType"
@@ -129,6 +146,7 @@
     <genClasses ecoreClass="STCore.ecore#//STCaseCases">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCaseCases/conditions"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STCaseCases/statements"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference STCore.ecore#//STCaseCases/statement"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STElsePart">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STElsePart/statements"/>

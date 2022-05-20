@@ -14,29 +14,51 @@ package org.eclipse.fordiac.ide.debug;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
+import org.eclipse.core.resources.IMarkerDelta;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.debug.core.DebugEvent;
+import org.eclipse.debug.core.DebugPlugin;
+import org.eclipse.debug.core.model.IBreakpoint;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.debug.breakpoint.EvaluatorLineBreakpoint;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorDebugger;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.xtext.nodemodel.ICompositeNode;
+import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
+
+import com.google.common.base.Objects;
 
 public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 	private final EvaluatorDebugTarget debugTarget;
 	private final ThreadMonitor threadMonitor;
 	private final ConcurrentHashMap<Thread, EvaluatorDebugThread> threads = new ConcurrentHashMap<>();
 	private final ConcurrentHashMap<Evaluator, EvaluatorDebugStackFrame> stackFrames = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<Variable, EvaluatorDebugVariable> variables = new ConcurrentHashMap<>();
+	private final ConcurrentHashMap<Variable<?>, EvaluatorDebugVariable> variables = new ConcurrentHashMap<>();
+	private final Set<IBreakpoint> breakpoints = ConcurrentHashMap.newKeySet();
 
 	public CommonEvaluatorDebugger(final EvaluatorDebugTarget debugTarget) {
 		this.debugTarget = debugTarget;
 		this.threadMonitor = new ThreadMonitor(debugTarget.getProcess().getThreadGroup());
 		this.threadMonitor.schedule();
+		DebugPlugin.getDefault().getBreakpointManager().addBreakpointListener(debugTarget);
+		this.breakpoints.addAll(List.of(DebugPlugin.getDefault().getBreakpointManager().getBreakpoints()));
 	}
 
 	@Override
@@ -47,12 +69,16 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			throw new InterruptedException();
 		}
 		DebugEvent request = thread.peekRequest();
-		if (shouldSuspend(request, frame)) {
+		if (shouldSuspend(request, frame, context)) {
 			// update model
 			frame.setCurrentContext(context);
 			thread.setCurrentEvaluator(eval);
 			thread.setSuspended(true);
-			thread.fireEvent(new DebugEvent(thread, request.getKind(), request.getDetail()));
+			if (request != null) {
+				thread.fireEvent(new DebugEvent(thread, request.getKind(), request.getDetail()));
+			} else {
+				thread.fireEvent(new DebugEvent(thread, DebugEvent.SUSPEND, DebugEvent.BREAKPOINT));
+			}
 			try {
 				// wait for resume
 				request = thread.awaitResumeRequest();
@@ -85,12 +111,18 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 				// update model
 				thread.setSuspended(false);
 				thread.setCurrentEvaluator(null);
-				thread.fireEvent(new DebugEvent(thread, request.getKind(), request.getDetail()));
+				if (request != null) {
+					thread.fireEvent(new DebugEvent(thread, request.getKind(), request.getDetail()));
+				} else {
+					thread.fireEvent(new DebugEvent(thread, DebugEvent.RESUME, DebugEvent.UNSPECIFIED));
+				}
 			}
 		}
 	}
 
-	protected boolean shouldSuspend(final DebugEvent request, final EvaluatorDebugStackFrame frame) {
+	protected boolean shouldSuspend(final DebugEvent request, final EvaluatorDebugStackFrame frame,
+			final Object context) {
+		// check user request
 		if (request != null && request.getKind() == DebugEvent.SUSPEND) {
 			final Object source = request.getSource();
 			if (request.getDetail() == DebugEvent.STEP_END) { // suspend after step only when:
@@ -108,14 +140,80 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			}
 			return true; // otherwise suspend unconditionally
 		}
-		return false; // otherwise keep running
+		// check breakpoints or otherwise keep running
+		return DebugPlugin.getDefault().getBreakpointManager().isEnabled()
+				&& breakpoints.stream().anyMatch(breakpoint -> breakpointMatches(breakpoint, frame, context));
+	}
+
+	protected boolean breakpointMatches(final IBreakpoint breakpoint, final EvaluatorDebugStackFrame frame,
+			final Object context) {
+		try {
+			if (!breakpoint.isEnabled()) {
+				return false;
+			}
+			final IResource resource = getResource(context);
+			final int lineNumber = getLineNumber(context);
+			if (breakpoint instanceof EvaluatorLineBreakpoint) {
+				final EvaluatorLineBreakpoint evaluatorLineBreakpoint = (EvaluatorLineBreakpoint) breakpoint;
+				if (Objects.equal(breakpoint.getMarker().getResource(), resource)
+						&& evaluatorLineBreakpoint.getLineNumber() == lineNumber) {
+					return true;
+				}
+			}
+		} catch (final CoreException e) {
+			FordiacLogHelper.logWarning(e.getMessage(), e);
+			// ignore (we don't care about broken breakpoints)
+		}
+		return false;
+	}
+
+	public IResource getResource(final Object context) {
+		if (context instanceof EObject) {
+			final EObject root = EcoreUtil.getRootContainer((EObject) context);
+			if (root instanceof FBType) {
+				final FBType fbType = (FBType) root;
+				return fbType.getTypeEntry().getFile();
+			}
+			return getResource(((EObject) context).eResource());
+		} else if (context instanceof Resource) {
+			final Resource resource = (Resource) context;
+			final URI uri = resource.getURI();
+			if (uri.isPlatformResource()) {
+				final String path = uri.toPlatformString(true);
+				return ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(path));
+			}
+		}
+		return null;
+	}
+
+	@SuppressWarnings("static-method")
+	public int getLineNumber(final Object context) {
+		if (context instanceof EObject) {
+			final ICompositeNode node = NodeModelUtils.findActualNodeFor((EObject) context);
+			if (node != null) {
+				return node.getEndLine();
+			}
+		}
+		return -1;
+	}
+
+	public void addBreakpoint(final IBreakpoint breakpoint) {
+		breakpoints.add(breakpoint);
+	}
+
+	public void removeBreakpoint(final IBreakpoint breakpoint, final IMarkerDelta delta) {
+		breakpoints.remove(breakpoint);
+	}
+
+	public void updateBreakpoint(final IBreakpoint breakpoint, final IMarkerDelta delta) {
+		// do nothing
 	}
 
 	public List<EvaluatorDebugThread> getThreads() {
 		final ThreadGroup threadGroup = this.debugTarget.getProcess().getThreadGroup();
-		final Thread[] threads = new Thread[threadGroup.activeCount()];
-		final int count = threadGroup.enumerate(threads);
-		return Arrays.stream(threads, 0, count).map(this::getThread).collect(Collectors.toList());
+		final Thread[] activeThreads = new Thread[threadGroup.activeCount()];
+		final int count = threadGroup.enumerate(activeThreads);
+		return Arrays.stream(activeThreads, 0, count).map(this::getThread).collect(Collectors.toList());
 	}
 
 	protected EvaluatorDebugThread getThread(final Thread thread) {
@@ -126,24 +224,24 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 		return this.stackFrames.computeIfAbsent(evaluator, key -> new EvaluatorDebugStackFrame(key, thread));
 	}
 
-	protected EvaluatorDebugVariable getVariable(final Variable variable) {
+	protected EvaluatorDebugVariable getVariable(final Variable<?> variable) {
 		return this.variables.computeIfAbsent(variable, key -> new EvaluatorDebugVariable(key, debugTarget));
 	}
 
-	public class ThreadMonitor extends Job {
+	public final class ThreadMonitor extends Job {
 		private final ThreadGroup threadGroup;
 
 		private ThreadMonitor(final ThreadGroup threadGroup) {
-			super(String.format("ThreadMonitor [%s]", threadGroup.getName()));
+			super(String.format("ThreadMonitor [%s]", threadGroup.getName())); //$NON-NLS-1$
 			this.threadGroup = threadGroup;
 		}
 
 		@Override
 		protected IStatus run(final IProgressMonitor monitor) {
 			// add new threads (on demand)
-			final Thread[] threads = new Thread[this.threadGroup.activeCount()];
-			final int count = threadGroup.enumerate(threads);
-			Arrays.stream(threads, 0, count).forEach(CommonEvaluatorDebugger.this::getThread);
+			final Thread[] activeThreads = new Thread[this.threadGroup.activeCount()];
+			final int count = threadGroup.enumerate(activeThreads);
+			Arrays.stream(activeThreads, 0, count).forEach(CommonEvaluatorDebugger.this::getThread);
 			// notify and remove dead threads
 			CommonEvaluatorDebugger.this.threads.entrySet().removeIf(entry -> {
 				if (entry.getKey().isAlive()) {
@@ -154,6 +252,8 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			});
 			// notify dead group or reschedule
 			if (threadGroup.isDestroyed()) {
+				DebugPlugin.getDefault().getBreakpointManager()
+				.removeBreakpointListener(CommonEvaluatorDebugger.this.debugTarget);
 				CommonEvaluatorDebugger.this.debugTarget.fireTerminateEvent();
 			} else {
 				this.schedule(1000);

@@ -37,22 +37,21 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallUnnamedArgumentImpl#getArg <em>Arg</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallUnnamedArgumentImpl#getArgument <em>Argument</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class STCallUnnamedArgumentImpl extends STCallArgumentImpl implements STCallUnnamedArgument {
 	/**
-	 * The cached value of the '{@link #getArg() <em>Arg</em>}' containment reference.
+	 * The cached value of the '{@link #getArgument() <em>Argument</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getArg()
+	 * @see #getArgument()
 	 * @generated
 	 * @ordered
 	 */
-	protected STExpression arg;
-
+	protected STExpression argument;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -78,8 +77,8 @@ public class STCallUnnamedArgumentImpl extends STCallArgumentImpl implements STC
 	 * @generated
 	 */
 	@Override
-	public STExpression getArg() {
-		return arg;
+	public STExpression getArgument() {
+		return argument;
 	}
 
 	/**
@@ -87,11 +86,11 @@ public class STCallUnnamedArgumentImpl extends STCallArgumentImpl implements STC
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetArg(STExpression newArg, NotificationChain msgs) {
-		STExpression oldArg = arg;
-		arg = newArg;
+	public NotificationChain basicSetArgument(STExpression newArgument, NotificationChain msgs) {
+		STExpression oldArgument = argument;
+		argument = newArgument;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARG, oldArg, newArg);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARGUMENT, oldArgument, newArgument);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -103,18 +102,18 @@ public class STCallUnnamedArgumentImpl extends STCallArgumentImpl implements STC
 	 * @generated
 	 */
 	@Override
-	public void setArg(STExpression newArg) {
-		if (newArg != arg) {
+	public void setArgument(STExpression newArgument) {
+		if (newArgument != argument) {
 			NotificationChain msgs = null;
-			if (arg != null)
-				msgs = ((InternalEObject)arg).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARG, null, msgs);
-			if (newArg != null)
-				msgs = ((InternalEObject)newArg).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARG, null, msgs);
-			msgs = basicSetArg(newArg, msgs);
+			if (argument != null)
+				msgs = ((InternalEObject)argument).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARGUMENT, null, msgs);
+			if (newArgument != null)
+				msgs = ((InternalEObject)newArgument).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARGUMENT, null, msgs);
+			msgs = basicSetArgument(newArgument, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARG, newArg, newArg));
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARGUMENT, newArgument, newArgument));
 	}
 
 	/**
@@ -145,8 +144,8 @@ public class STCallUnnamedArgumentImpl extends STCallArgumentImpl implements STC
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARG:
-				return basicSetArg(null, msgs);
+			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARGUMENT:
+				return basicSetArgument(null, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -160,8 +159,8 @@ public class STCallUnnamedArgumentImpl extends STCallArgumentImpl implements STC
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARG:
-				return getArg();
+			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARGUMENT:
+				return getArgument();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -175,8 +174,8 @@ public class STCallUnnamedArgumentImpl extends STCallArgumentImpl implements STC
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARG:
-				setArg((STExpression)newValue);
+			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARGUMENT:
+				setArgument((STExpression)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -192,8 +191,8 @@ public class STCallUnnamedArgumentImpl extends STCallArgumentImpl implements STC
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARG:
-				setArg((STExpression)null);
+			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARGUMENT:
+				setArgument((STExpression)null);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -209,8 +208,8 @@ public class STCallUnnamedArgumentImpl extends STCallArgumentImpl implements STC
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARG:
-				return arg != null;
+			case STCorePackage.ST_CALL_UNNAMED_ARGUMENT__ARGUMENT:
+				return argument != null;
 			default:
 				return super.eIsSet(featureID);
 		}

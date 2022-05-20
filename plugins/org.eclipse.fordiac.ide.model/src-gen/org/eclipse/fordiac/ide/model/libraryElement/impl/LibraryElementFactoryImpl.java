@@ -1,6 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -106,6 +107,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 import org.eclipse.gef.commands.CommandStack;
 
@@ -251,6 +255,10 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return createCommandStackFromString(eDataType, initialValue);
 			case LibraryElementPackage.POINT:
 				return createPointFromString(eDataType, initialValue);
+			case LibraryElementPackage.TYPE_ENTRY:
+				return createTypeEntryFromString(eDataType, initialValue);
+			case LibraryElementPackage.TYPE_LIBRARY:
+				return createTypeLibraryFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -274,6 +282,10 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return convertCommandStackToString(eDataType, instanceValue);
 			case LibraryElementPackage.POINT:
 				return convertPointToString(eDataType, instanceValue);
+			case LibraryElementPackage.TYPE_ENTRY:
+				return convertTypeEntryToString(eDataType, instanceValue);
+			case LibraryElementPackage.TYPE_LIBRARY:
+				return convertTypeLibraryToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -1193,6 +1205,42 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	public String convertPointToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TypeEntry createTypeEntryFromString(EDataType eDataType, String initialValue) {
+		return (TypeEntry)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertTypeEntryToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public TypeLibrary createTypeLibraryFromString(EDataType eDataType, String initialValue) {
+		return (TypeLibrary)super.createFromString(eDataType, initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertTypeLibraryToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 

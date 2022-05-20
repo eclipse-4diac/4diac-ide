@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
@@ -98,11 +99,11 @@ public final class ServiceSequenceUtils {
 		checkResults(seq, eventManager);
 
 		final int nT = eventManager.getTransactions().size();
-		final Transaction t = eventManager.getTransactions().get(nT - 1);
+		final FBTransaction t = (FBTransaction) eventManager.getTransactions().get(nT - 1);
 		BasicFBType next = null;
-		if (!t.getOutputEventOccurences().isEmpty()) {
-			final int nEv = t.getOutputEventOccurences().size();
-			final BasicFBTypeRuntime last = (BasicFBTypeRuntime) (t.getOutputEventOccurences().get(nEv - 1)
+		if (!t.getOutputEventOccurrences().isEmpty()) {
+			final int nEv = t.getOutputEventOccurrences().size();
+			final BasicFBTypeRuntime last = (BasicFBTypeRuntime) (t.getOutputEventOccurrences().get(nEv - 1)
 					.getFbRuntime());
 			next = last.getBasicfbtype();
 		} else {
@@ -141,7 +142,7 @@ public final class ServiceSequenceUtils {
 				}
 				final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 				eventOccurrence.setEvent(eventPin);
-				final Transaction transaction = OperationalSemanticsFactory.eINSTANCE.createTransaction();
+				final Transaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
 				transaction.setInputEventOccurrence(eventOccurrence);
 				// process parameter and set variables
 				final String inputParameters = st.getInputPrimitive().getParameters();
@@ -162,15 +163,14 @@ public final class ServiceSequenceUtils {
 
 	public static void setVariable(final FBType fb, final String name, final String value) {
 		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name);
-		if (el instanceof VarDeclaration) {
-			final Value val = ((VarDeclaration) el).getValue();
-			if (val == null) {
-				((VarDeclaration) el).setValue(LibraryElementFactory.eINSTANCE.createValue());
-			}
-			((VarDeclaration) el).getValue().setValue(value);
-		} else {
+		if (!(el instanceof VarDeclaration)) {
 			throw new IllegalArgumentException("variable does not exist in FB"); //$NON-NLS-1$
 		}
+		final Value val = ((VarDeclaration) el).getValue();
+		if (val == null) {
+			((VarDeclaration) el).setValue(LibraryElementFactory.eINSTANCE.createValue());
+		}
+		((VarDeclaration) el).getValue().setValue(value);
 	}
 
 	private static void checkTransaction(final Transaction result, final ServiceTransaction expectedResult) {
@@ -183,7 +183,7 @@ public final class ServiceSequenceUtils {
 		// no unwanted output event occurrences
 		final long outputEvents = expectedResult.getOutputPrimitive().stream()
 				.filter(p -> !p.getInterface().getName().toLowerCase().contains(INTERNAL_INTERFACE)).count();
-		if (outputEvents != result.getOutputEventOccurences().size()) {
+		if (outputEvents != ((FBTransaction) result).getOutputEventOccurrences().size()) {
 			throw new IllegalArgumentException("Unwanted output event occurrence"); //$NON-NLS-1$
 		}
 
@@ -197,7 +197,7 @@ public final class ServiceSequenceUtils {
 	private static void checkOutputPrimitive(final Transaction result, final int j, final OutputPrimitive p) {
 		if (!p.getInterface().getName().toLowerCase().contains(INTERNAL_INTERFACE)) {
 			// generated output event is correct
-			if (!p.getEvent().equals(result.getOutputEventOccurences().get(j).getEvent().getName())) {
+			if (!p.getEvent().equals(((FBTransaction) result).getOutputEventOccurrences().get(j).getEvent().getName())) {
 				throw new IllegalArgumentException("Generated output event is incorrect"); //$NON-NLS-1$
 			}
 			// the associated data is correct
@@ -211,8 +211,8 @@ public final class ServiceSequenceUtils {
 		if ((parameters == null) || parameters.isBlank()) {
 			return true;
 		}
-		final int length = result.getOutputEventOccurences().size();
-		final BasicFBTypeRuntime captured = (BasicFBTypeRuntime) result.getOutputEventOccurences().get(length - 1)
+		final int length = ((FBTransaction) result).getOutputEventOccurrences().size();
+		final BasicFBTypeRuntime captured = (BasicFBTypeRuntime) ((FBTransaction) result).getOutputEventOccurrences().get(length - 1)
 				.getFbRuntime();
 		final var parameterList = getParametersFromString(parameters);
 		for (final List<String> assumption : parameterList) {

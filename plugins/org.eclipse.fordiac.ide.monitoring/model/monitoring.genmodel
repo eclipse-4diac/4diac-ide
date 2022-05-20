@@ -5,7 +5,7 @@
     editorDirectory="/org.eclipse.fordiac.ide.monitoring.editor/src-gen" modelPluginID="org.eclipse.fordiac.ide.monitoring"
     modelName="monitoring" nonNLSMarkers="true" importerID="org.eclipse.emf.importer.ecore"
     complianceLevel="8.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.monitoring.edit"
-    editorPluginID="org.eclipse.fordiac.ide.monitoring.editor" usedGenPackages="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//Palette ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.genmodel#//monitoringbase"
+    editorPluginID="org.eclipse.fordiac.ide.monitoring.editor" usedGenPackages="platform:/plugin/org.eclipse.emf.ecore/model/Ecore.genmodel#//ecore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data ../../org.eclipse.fordiac.ide.deployment/model/monitoringBase.genmodel#//monitoringbase"
     importOrganizing="true" cleanup="true">
   <foreignModel>monitoring.ecore</foreignModel>
   <genPackages prefix="Monitoring" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"

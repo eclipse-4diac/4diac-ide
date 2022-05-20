@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.variable
 
 import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.data.ArrayType
+import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.libraryElement.FB
@@ -27,11 +28,17 @@ final class VariableOperations {
 	private new() {
 	}
 
-	def static Variable newVariable(String name, INamedElement type) {
-		newVariable(name, type, null as Value)
+	def static Variable<?> newVariable(String name, INamedElement type) {
+		switch (type) {
+			AnyElementaryType: new ElementaryVariable(name, type)
+			ArrayType: new ArrayVariable(name, type)
+			StructuredType: new StructVariable(name, type)
+			FBType: new FBVariable(name, type)
+			default: throw new UnsupportedOperationException('''Cannot instanciate variable «name» of type «type.name»''')
+		}
 	}
 
-	def static Variable newVariable(String name, INamedElement type, String value) {
+	def static Variable<?> newVariable(String name, INamedElement type, String value) {
 		switch (type) {
 			AnyElementaryType: new ElementaryVariable(name, type, value)
 			ArrayType: new ArrayVariable(name, type, value)
@@ -40,8 +47,8 @@ final class VariableOperations {
 		}
 	}
 
-	def static Variable newVariable(String name, INamedElement type, Value value) {
-		switch (type) {
+	def static Variable<?> newVariable(String name, Value value) {
+		switch (type : value.type) {
 			AnyElementaryType: new ElementaryVariable(name, type, value)
 			ArrayType: new ArrayVariable(name, type, value)
 			StructuredType: new StructVariable(name, type, value)
@@ -50,18 +57,19 @@ final class VariableOperations {
 		}
 	}
 
-	def static Variable newVariable(VarDeclaration decl) {
+	def static Variable<?> newVariable(VarDeclaration decl) {
 		newVariable(decl, decl.initialValue)
 	}
 
-	def static Variable newVariable(VarDeclaration decl, String value) {
-		if (decl.array)
-			newVariable(decl.name, decl.type.newArrayType(newSubrange(0, decl.arraySize - 1)), value)
-		else
-			newVariable(decl.name, decl.type, value)
+	def static Variable<?> newVariable(VarDeclaration decl, String value) {
+		newVariable(decl.name, decl.actualType, value)
 	}
 
-	def static Variable newVariable(FB fb) {
+	def static Variable<?> newVariable(VarDeclaration decl, Value value) {
+		newVariable(decl.name, value)
+	}
+
+	def static Variable<?> newVariable(FB fb) {
 		newVariable(fb.name, fb.type)
 	}
 
@@ -77,5 +85,12 @@ final class VariableOperations {
 	def static String getInheritedInitialValue(VarDeclaration decl) {
 		val result = decl.FBNetworkElement?.type?.interfaceList?.getVariable(decl.name)?.value?.value
 		if(result.nullOrEmpty) null else result
+	}
+
+	def static DataType getActualType(VarDeclaration decl) {
+		if (decl.array)
+			decl.type.newArrayType(newSubrange(0, decl.arraySize - 1))
+		else
+			decl.type
 	}
 }

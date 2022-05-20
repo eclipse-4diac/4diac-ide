@@ -33,238 +33,236 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class RepeatStatementImpl extends StatementImpl implements RepeatStatement
 {
   /**
-   * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getStatements() <em>Statements</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getStatements()
-   * @generated
-   * @ordered
-   */
+	 * @see #getStatements()
+	 * @generated
+	 * @ordered
+	 */
   protected StatementList statements;
 
   /**
-   * The cached value of the '{@link #getExpression() <em>Expression</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getExpression() <em>Expression</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getExpression()
-   * @generated
-   * @ordered
-   */
+	 * @see #getExpression()
+	 * @generated
+	 * @ordered
+	 */
   protected Expression expression;
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected RepeatStatementImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.REPEAT_STATEMENT;
-  }
+		return StructuredTextPackage.Literals.REPEAT_STATEMENT;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public StatementList getStatements()
   {
-    return statements;
-  }
+		return statements;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public NotificationChain basicSetStatements(StatementList newStatements, NotificationChain msgs)
   {
-    StatementList oldStatements = statements;
-    statements = newStatements;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS, oldStatements, newStatements);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
+		StatementList oldStatements = statements;
+		statements = newStatements;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS, oldStatements, newStatements);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setStatements(StatementList newStatements)
   {
-    if (newStatements != statements)
-    {
-      NotificationChain msgs = null;
-      if (statements != null)
-        msgs = ((InternalEObject)statements).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS, null, msgs);
-      if (newStatements != null)
-        msgs = ((InternalEObject)newStatements).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS, null, msgs);
-      msgs = basicSetStatements(newStatements, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS, newStatements, newStatements));
-  }
+		if (newStatements != statements) {
+			NotificationChain msgs = null;
+			if (statements != null)
+				msgs = ((InternalEObject)statements).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS, null, msgs);
+			if (newStatements != null)
+				msgs = ((InternalEObject)newStatements).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS, null, msgs);
+			msgs = basicSetStatements(newStatements, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS, newStatements, newStatements));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Expression getExpression()
   {
-    return expression;
-  }
+		return expression;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public NotificationChain basicSetExpression(Expression newExpression, NotificationChain msgs)
   {
-    Expression oldExpression = expression;
-    expression = newExpression;
-    if (eNotificationRequired())
-    {
-      ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION, oldExpression, newExpression);
-      if (msgs == null) msgs = notification; else msgs.add(notification);
-    }
-    return msgs;
-  }
+		Expression oldExpression = expression;
+		expression = newExpression;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION, oldExpression, newExpression);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setExpression(Expression newExpression)
   {
-    if (newExpression != expression)
-    {
-      NotificationChain msgs = null;
-      if (expression != null)
-        msgs = ((InternalEObject)expression).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION, null, msgs);
-      if (newExpression != null)
-        msgs = ((InternalEObject)newExpression).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION, null, msgs);
-      msgs = basicSetExpression(newExpression, msgs);
-      if (msgs != null) msgs.dispatch();
-    }
-    else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION, newExpression, newExpression));
-  }
+		if (newExpression != expression) {
+			NotificationChain msgs = null;
+			if (expression != null)
+				msgs = ((InternalEObject)expression).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION, null, msgs);
+			if (newExpression != null)
+				msgs = ((InternalEObject)newExpression).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION, null, msgs);
+			msgs = basicSetExpression(newExpression, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION, newExpression, newExpression));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS:
-        return basicSetStatements(null, msgs);
-      case StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION:
-        return basicSetExpression(null, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS:
+				return basicSetStatements(null, msgs);
+			case StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION:
+				return basicSetExpression(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS:
-        return getStatements();
-      case StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION:
-        return getExpression();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS:
+				return getStatements();
+			case StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION:
+				return getExpression();
+			default:
+				return super.eGet(featureID, resolve, coreType);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eSet(int featureID, Object newValue)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS:
-        setStatements((StatementList)newValue);
-        return;
-      case StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION:
-        setExpression((Expression)newValue);
-        return;
-    }
-    super.eSet(featureID, newValue);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS:
+				setStatements((StatementList)newValue);
+				return;
+			case StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION:
+				setExpression((Expression)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eUnset(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS:
-        setStatements((StatementList)null);
-        return;
-      case StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION:
-        setExpression((Expression)null);
-        return;
-    }
-    super.eUnset(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS:
+				setStatements((StatementList)null);
+				return;
+			case StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION:
+				setExpression((Expression)null);
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS:
-        return statements != null;
-      case StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION:
-        return expression != null;
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.REPEAT_STATEMENT__STATEMENTS:
+				return statements != null;
+			case StructuredTextPackage.REPEAT_STATEMENT__EXPRESSION:
+				return expression != null;
+			default:
+				return super.eIsSet(featureID);
+		}
+	}
 
 } //RepeatStatementImpl

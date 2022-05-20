@@ -230,25 +230,49 @@
 	<!-- marker definitions for org.eclipse.fordiac.ide.structuredtextcore.STCore -->
 	<extension
 			id="stcore.check.fast"
-			name="STCore Problem"
+			name="4diac IDE Structured Text Problem"
 			point="org.eclipse.core.resources.markers">
 		<super type="org.eclipse.xtext.ui.check.fast"/>
+  <super
+        type="org.eclipse.fordiac.ide.model.problem">
+  </super>
 		<persistent value="true"/>
 	</extension>
 	<extension
 			id="stcore.check.normal"
-			name="STCore Problem"
+			name="4diac IDE Structured Text Problem"
 			point="org.eclipse.core.resources.markers">
 		<super type="org.eclipse.xtext.ui.check.normal"/>
+  <super
+        type="org.eclipse.fordiac.ide.model.problem">
+  </super>
 		<persistent value="true"/>
 	</extension>
 	<extension
 			id="stcore.check.expensive"
-			name="STCore Problem"
+			name="4diac IDE Structured Text Problem"
 			point="org.eclipse.core.resources.markers">
 		<super type="org.eclipse.xtext.ui.check.expensive"/>
+  <super
+        type="org.eclipse.fordiac.ide.model.problem">
+  </super>
 		<persistent value="true"/>
 	</extension>
+ <extension
+       point="org.eclipse.ui.ide.markerSupport">
+    <markerTypeCategory
+          name="4diac IDE Structured Text Problem">
+       <markerTypeReference
+             id="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.check.fast">
+       </markerTypeReference>
+       <markerTypeReference
+             id="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.check.normal">
+       </markerTypeReference>
+       <markerTypeReference
+             id="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.check.expensive">
+       </markerTypeReference>
+    </markerTypeCategory>
+ </extension>
 	<extension point="org.eclipse.ui.preferencePages">
 		<page
 			category="org.eclipse.fordiac.ide.structuredtextcore.STCore"

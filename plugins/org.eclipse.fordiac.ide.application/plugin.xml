@@ -129,16 +129,12 @@
                    indented="false"
                    label="Struct Element">
       </propertyTab>
-      <propertyTab category="Interface"
-                   id="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
-                   label="Pin">
-      </propertyTab>
     </propertyTabs>
   </extension>
   <extension point="org.eclipse.ui.views.properties.tabbed.propertySections">
     <propertySections contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
       <propertySection
-            class="org.eclipse.fordiac.ide.application.properties.InterfaceSection"
+            class="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
             filter="org.eclipse.fordiac.ide.application.properties.InstanceSectionFilter"
             id="org.eclipse.fordiac.ide.application.properties.InterfaceSection"
             tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
@@ -175,11 +171,6 @@
                        id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
                        tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
                        filter="org.eclipse.fordiac.ide.application.properties.TypedInterfacePinFilter">
-      </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-      				   filter="org.eclipse.fordiac.ide.application.properties.FBNetworkElementTypeFilter"
-                       id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-                       tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
       </propertySection>
       <propertySection
             class="org.eclipse.fordiac.ide.application.properties.CreateConnectionSection"
@@ -227,19 +218,19 @@
       
       <propertySection class="org.eclipse.fordiac.ide.application.properties.PinEventInfoSection"
                    id="org.eclipse.fordiac.ide.application.pins.PinEventSection"
-                   tab="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
+                   tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
                    filter="org.eclipse.fordiac.ide.gef.filters.PinEventInfoFilter">
       </propertySection>
         
 	<propertySection class="org.eclipse.fordiac.ide.application.properties.PinDataInfoSection"
                    id="org.eclipse.fordiac.ide.application.pins.PinDataSection"
-                   tab="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
+                   tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
                    filter="org.eclipse.fordiac.ide.gef.filters.PinDataInfoFilter">
       </propertySection>
       
       <propertySection class="org.eclipse.fordiac.ide.application.properties.PinAdapterInfoSection"
                    id="org.eclipse.fordiac.ide.application.pins.PinAdapterSection"
-                   tab="org.eclipse.fordiac.ide.application.propertyPinInfoTab"
+                   tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab"
                    filter="org.eclipse.fordiac.ide.gef.filters.PinAdapterInfoFilter">
       </propertySection>
       
@@ -1133,23 +1124,16 @@
       </command>
     </menuContribution>
   </extension>
-  <extension id="org.eclipse.fordiac.ide.application.marker"
-             point="org.eclipse.core.resources.markers">
-    <persistent value="false">
-    </persistent>
-    <super type="org.eclipse.core.resources.marker">
-    </super>
-    <attribute name="org.eclipse.fordiac.ide.application.marker.fb">
-    </attribute>
-  </extension>
   <extension point="org.eclipse.ui.ide.markerSupport">
-    <markerContentGenerator id="org.eclipse.fordiac.ide.application.fordiacmarkerContentGenerator"
-                            name="4diac IDE Marker Generator">
-      <markerFieldReference id="org.eclipse.ui.ide.severityAndDescriptionField">
-      </markerFieldReference>
-      <markerTypeReference id="org.eclipse.core.resources.marker">
-      </markerTypeReference>
-    </markerContentGenerator>
+    <markerTypeCategory
+          name="4diac IDE Problem">
+       <markerTypeReference
+             id="org.eclipse.fordiac.ide.model.problem">
+       </markerTypeReference>
+       <markerTypeReference
+             id="org.eclipse.fordiac.ide.model.iec61499">
+       </markerTypeReference>
+    </markerTypeCategory>
   </extension>
   <extension point="org.eclipse.ui.elementFactories">
     <factory class="org.eclipse.fordiac.ide.application.editors.ApplicationEditorInputFactory"
@@ -1347,7 +1331,7 @@
  <extension point="org.eclipse.search.searchPages">
 		<page
 			id="org.eclipse.fordiac.ide.application.search.ModelSearchPage"
-			label="Model Search"
+			label="IEC 61499 Model Search"
 			sizeHint="250,160"
 			tabPosition="1"
 			extensions="*:1"

@@ -107,7 +107,7 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 	}
 
 	private static String getValidType(final FBNetworkElement fb) {
-		if (fb != null && fb.getPaletteEntry() != null) {
+		if (fb != null && fb.getTypeEntry() != null) {
 			if (fb instanceof StructManipulator) {
 				// the _1 is needed for 4diac FORTE to separate type name from configuration
 				// part

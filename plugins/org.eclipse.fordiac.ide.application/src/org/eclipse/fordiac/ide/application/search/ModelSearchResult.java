@@ -39,7 +39,10 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 
 	@Override
 	public String getLabel() {
-		return modelSearchQuery.getLabel() + ": " + results.size() + " results"; //$NON-NLS-1$
+		if (results.size() == 1) {
+			return "\'" + modelSearchQuery.getLabel() + "\' - " + results.size() + " result"; //$NON-NLS-1$
+		}
+		return "\'" + modelSearchQuery.getLabel() + "\' - " + results.size() + " results"; //$NON-NLS-1$
 	}
 
 	@Override
@@ -62,12 +65,12 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 		fireChange(getSearchResultEvent(res, ModelSearchResultEvent.ADDED));
 	}
 
-	public void addResults(List<EObject> res) {
+	public void addResults(final List<EObject> res) {
 		results.addAll(res);
 		fireChange(getSearchResultEvent(res.get(0), ModelSearchResultEvent.ADDED));
 	}
 
-	private SearchResultEvent getSearchResultEvent(EObject el, int eventKind) {
+	private SearchResultEvent getSearchResultEvent(final EObject el, final int eventKind) {
 		searchResEvent.setKind(eventKind);
 		searchResEvent.setResult(el);
 		return searchResEvent;

@@ -26,7 +26,6 @@ import javax.xml.stream.XMLStreamException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -45,7 +44,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.CommandStack;
 
 public class SystemImporter extends CommonElementImporter {
@@ -72,7 +72,7 @@ public class SystemImporter extends CommonElementImporter {
 	 * @return the automation system model with its basic setup */
 	public static AutomationSystem createAutomationSystem(final IFile systemFile) {
 		final AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
-		system.setName(TypeLibrary.getTypeNameFromFile(systemFile));
+		system.setName(TypeEntry.getTypeNameFromFile(systemFile));
 		system.setSystemFile(systemFile);
 
 		system.setCommandStack(new CommandStack());
@@ -81,7 +81,6 @@ public class SystemImporter extends CommonElementImporter {
 		final SystemConfiguration sysConf = LibraryElementFactory.eINSTANCE.createSystemConfiguration();
 		system.setSystemConfiguration(sysConf);
 
-		system.setPalette(TypeLibrary.getTypeLibrary(systemFile.getProject()).getBlockTypeLib());
 		return system;
 	}
 
@@ -136,7 +135,7 @@ public class SystemImporter extends CommonElementImporter {
 
 		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != type) {
-			segment.setPaletteEntry(getPalette().getSegmentTypeEntry(type));
+			segment.setTypeEntry(getTypeLibrary().getSegmentTypeEntry(type));
 		}
 
 		parseSegmentNodeChildren(segment);
@@ -190,9 +189,9 @@ public class SystemImporter extends CommonElementImporter {
 	private void parseDeviceType(final Device device) {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (typeName != null) {
-			final DeviceTypePaletteEntry entry = getPalette().getDeviceTypeEntry(typeName);
+			final DeviceTypeEntry entry = getTypeLibrary().getDeviceTypeEntry(typeName);
 			if (null != entry) {
-				device.setPaletteEntry(entry);
+				device.setTypeEntry(entry);
 				createParamters(device);
 			}
 		}

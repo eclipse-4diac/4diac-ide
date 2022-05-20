@@ -75,8 +75,8 @@ public class OpenTypeHandler extends AbstractHandler {
 			}
 			if (obj instanceof FBNetworkElement) {
 				final FBType type = ((FBNetworkElement) obj).getType();
-				if ((type != null) && (type.getPaletteEntry() != null)) {
-					return type.getPaletteEntry().getFile();
+				if ((type != null) && (type.getTypeEntry() != null)) {
+					return type.getTypeEntry().getFile();
 				}
 			}
 		}

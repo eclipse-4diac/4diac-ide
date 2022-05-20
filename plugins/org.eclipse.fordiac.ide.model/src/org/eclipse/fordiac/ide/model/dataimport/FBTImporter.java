@@ -32,9 +32,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -42,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -75,7 +73,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 /**
  * Managing class for importing *.fbt files
@@ -240,10 +240,28 @@ public class FBTImporter extends TypeImporter {
 			if (LibraryElementTags.SERVICE_TRANSACTION_ELEMENT.equals(name)) {
 				parseServiceTransaction(serviceSequence, type);
 				return true;
+			} else if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
+				parseGenericAttributeNode(serviceSequence);
 			}
 			return false;
 		});
+		processServiceAttributes(serviceSequence);
 		type.getService().getServiceSequence().add(serviceSequence);
+	}
+
+	private static void processServiceAttributes(final ServiceSequence serviceSequence) {
+		final EList<Attribute> attrs = serviceSequence.getAttributes();
+		final List<Attribute> processed = new ArrayList<>();
+		for (final Attribute attr : attrs) {
+			if (attr.getName().equals(LibraryElementTags.START_STATE_ATTRIBUTE)) {
+				serviceSequence.setStartState(attr.getValue());
+				processed.add(attr);
+			} else if (attr.getName().equals(LibraryElementTags.SERVICE_SEQUENCE_TYPE_ATTRIBUTE)) {
+				serviceSequence.setServiceSequenceType(attr.getValue());
+				processed.add(attr);
+			}
+		}
+		attrs.removeAll(processed);
 	}
 
 	/**
@@ -375,14 +393,14 @@ public class FBTImporter extends TypeImporter {
 	private void parseFBNetwork(final CompositeFBType type) throws TypeImportException, XMLStreamException {
 		final FBNetwork fbNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		type.setFBNetwork(fbNetwork);
-		adapters.values().forEach(adapter -> addAdapterFB(fbNetwork, adapter, getPalette()));
+		adapters.values().forEach(adapter -> addAdapterFB(fbNetwork, adapter));
 		final FBNetworkImporter fbnInmporter = new FBNetworkImporter(this, fbNetwork, type.getInterfaceList());
 		fbnInmporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 	}
 
-	private void addAdapterFB(final FBNetwork fbNetwork, final AdapterDeclaration adapter, final Palette palette) {
+	private void addAdapterFB(final FBNetwork fbNetwork, final AdapterDeclaration adapter) {
 		final AdapterFB aFB = LibraryElementFactory.eINSTANCE.createAdapterFB();
-		aFB.setPaletteEntry(palette.getAdapterTypeEntry(adapter.getTypeName()));
+		aFB.setTypeEntry(getTypeLibrary().getAdapterTypeEntry(adapter.getTypeName()));
 		aFB.setAdapterDecl(adapter);
 
 		aFB.setName(adapter.getName());
@@ -597,7 +615,7 @@ public class FBTImporter extends TypeImporter {
 
 		DataType type = null;
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		if (null != typeName) {
+		if (null != typeName && !typeName.isEmpty()) {
 			type = getDataTypeLibrary().getType(typeName);
 		}
 
@@ -872,13 +890,15 @@ public class FBTImporter extends TypeImporter {
 				final FB fb = LibraryElementFactory.eINSTANCE.createFB();
 				readNameCommentAttributes(fb);
 				final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-				final FBTypePaletteEntry entry = getTypeEntry(typeFbElement);
+				final FBTypeEntry entry = getTypeEntry(typeFbElement);
 				if (null != entry) {
-					fb.setPaletteEntry(entry);
+					fb.setTypeEntry(entry);
 					fb.setInterface(fb.getType().getInterfaceList().copy());
 					parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 					type.getInternalFbs().add(fb);
 					return true;
+				} else {
+					return false;
 				}
 			}
 			return false;
@@ -1052,8 +1072,8 @@ public class FBTImporter extends TypeImporter {
 		readNameCommentAttributes(a);
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
-			final AdapterTypePaletteEntry entry = getPalette().getAdapterTypeEntry(typeName);
-			a.setPaletteEntry(entry);
+			final AdapterTypeEntry entry = getTypeLibrary().getAdapterTypeEntry(typeName);
+			a.setTypeEntry(entry);
 			AdapterType dataType = null;
 			if (null != entry) {
 				dataType = entry.getType();

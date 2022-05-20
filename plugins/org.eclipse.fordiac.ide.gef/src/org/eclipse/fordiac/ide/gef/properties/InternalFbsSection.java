@@ -15,7 +15,6 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.fordiac.ide.gef.editors.NewInstanceCellEditor;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFbTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInternalFBOrderCommand;
@@ -28,6 +27,7 @@ import org.eclipse.fordiac.ide.model.edit.providers.InternalFBLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
@@ -97,15 +97,15 @@ public class InternalFbsSection extends AbstractSection implements I4diacTableUt
 		internalFbsViewer.setCellModifier(new InternalFBsCellModifier());
 
 		buttons.bindToTableViewer(internalFbsViewer, this,
-				ref -> new CreateInternalFBCommand(getType(), getInsertionIndex(), getName(), getFBTypePaletteEntry()),
+				ref -> new CreateInternalFBCommand(getType(), getInsertionIndex(), getName(), getFBTypeEntry()),
 				ref -> new DeleteInternalFBCommand(getType(), getLastSelectedFB()),
 				ref -> new ChangeInternalFBOrderCommand(getType(), (FB) ref, IndexUpDown.UP),
 				ref -> new ChangeInternalFBOrderCommand(getType(), (FB) ref, IndexUpDown.DOWN));
 	}
 
-	private FBTypePaletteEntry getFBTypePaletteEntry() {
+	private FBTypeEntry getFBTypeEntry() {
 		final FB fb = getLastSelectedFB();
-		return (null != fb) ? (FBTypePaletteEntry) fb.getPaletteEntry() : null;
+		return (null != fb) ? (FBTypeEntry) fb.getTypeEntry() : null;
 	}
 
 	private String getName() {
@@ -148,7 +148,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacTableUt
 		((Text) fbNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
 
 		final NewInstanceCellEditor fbTypeEditor = new InternalFBNewInstanceCellEditor(table, SWT.ON_TOP, true);
-		fbTypeEditor.setPalette(getPalette());
+		fbTypeEditor.setTypeLibrary(getTypeLibrary());
 		fbTypeEditor.getMenuButton().dispose();
 
 		return new CellEditor[] { fbNameEditor, fbTypeEditor, new TextCellEditor(table), new TextCellEditor(table),
@@ -229,7 +229,7 @@ public class InternalFbsSection extends AbstractSection implements I4diacTableUt
 				cmd = new ChangeNameCommand(fb, value.toString());
 				break;
 			case FB_TYPE:
-				final FBTypePaletteEntry fbTypeEntry = (FBTypePaletteEntry) value;
+				final FBTypeEntry fbTypeEntry = (FBTypeEntry) value;
 				if (null == fbTypeEntry) {
 					return;
 				}

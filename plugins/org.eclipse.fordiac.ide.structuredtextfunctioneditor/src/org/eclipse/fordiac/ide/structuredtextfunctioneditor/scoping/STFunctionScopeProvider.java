@@ -17,12 +17,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.scoping;
 
-import java.util.List;
-
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
 import org.eclipse.xtext.scoping.IScope;
@@ -36,10 +33,6 @@ public class STFunctionScopeProvider extends AbstractSTFunctionScopeProvider {
 		if (reference == STFunctionPackage.Literals.ST_FUNCTION__RETURN_TYPE) {
 			final IScope globalScope = super.getScope(context, reference);
 			return scopeFor(DataTypeLibrary.getNonUserDefinedDataTypes(), globalScope);
-		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_OUTPUT_ARGUMENT__TARGET) {
-			final var function = getFunction(context);
-			return function != null ? scopeFor(List.of(function), super.getScope(context, reference))
-					: super.getScope(context, reference);
 		}
 		return super.getScope(context, reference);
 	}

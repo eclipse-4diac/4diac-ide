@@ -24,25 +24,25 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public interface AdapterRoot extends AdapterVariable
 {
   /**
-   * Returns the value of the '<em><b>Adapter</b></em>' reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Adapter</b></em>' reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Adapter</em>' reference.
-   * @see #setAdapter(VarDeclaration)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getAdapterRoot_Adapter()
-   * @model
-   * @generated
-   */
+	 * @return the value of the '<em>Adapter</em>' reference.
+	 * @see #setAdapter(VarDeclaration)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getAdapterRoot_Adapter()
+	 * @model
+	 * @generated
+	 */
   VarDeclaration getAdapter();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot#getAdapter <em>Adapter</em>}' reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot#getAdapter <em>Adapter</em>}' reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Adapter</em>' reference.
-   * @see #getAdapter()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Adapter</em>' reference.
+	 * @see #getAdapter()
+	 * @generated
+	 */
   void setAdapter(VarDeclaration value);
 
 } // AdapterRoot

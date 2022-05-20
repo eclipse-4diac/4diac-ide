@@ -22,8 +22,8 @@ import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.widgets.Composite;
@@ -78,8 +78,8 @@ public class AdapterInterfaceElementSection extends AbstractSection {
 	}
 
 	protected ITypeSelectionContentProvider getTypeSelectionContentProvider() {
-		return () -> getTypeLibrary().getBlockTypeLib().getAdapterTypesSorted().stream()
-				.map(AdapterTypePaletteEntry::getType).collect(Collectors.toList());
+		return () -> getTypeLibrary().getAdapterTypesSorted().stream().map(AdapterTypeEntry::getType)
+				.collect(Collectors.toList());
 	}
 
 }

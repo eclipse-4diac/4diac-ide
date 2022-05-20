@@ -90,7 +90,7 @@ public final class FBNetworkHelper {
 	private static void createResourceTypeFB(final FBNetworkElement srcFb, final FBNetwork dstNetwork) {
 		final FB copy = LibraryElementFactory.eINSTANCE.createResourceTypeFB();
 		dstNetwork.getNetworkElements().add(copy);
-		copy.setPaletteEntry(srcFb.getPaletteEntry());
+		copy.setTypeEntry(srcFb.getTypeEntry());
 		copy.setName(srcFb.getName()); // name should be last so that checks
 		// are working correctly
 		final InterfaceList interfaceList = InterfaceListCopier.copy(srcFb.getInterface(), true, false);

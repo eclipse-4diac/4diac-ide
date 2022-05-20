@@ -32,8 +32,6 @@ import org.eclipse.emf.ecore.EReference;
 
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
-
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -526,7 +524,6 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		// Initialize simple dependencies
 		DataPackage.eINSTANCE.eClass();
 		LibraryElementPackage.eINSTANCE.eClass();
-		PalettePackage.eINSTANCE.eClass();
 
 		// Create package meta-data objects
 		theSTCorePackage.createPackageContents();
@@ -818,7 +815,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTCallUnnamedArgument_Arg() {
+	public EReference getSTCallUnnamedArgument_Argument() {
 		return (EReference)stCallUnnamedArgumentEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -838,7 +835,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTCallNamedInputArgument_Target() {
+	public EReference getSTCallNamedInputArgument_Parameter() {
 		return (EReference)stCallNamedInputArgumentEClass.getEStructuralFeatures().get(0);
 	}
 
@@ -848,7 +845,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTCallNamedInputArgument_Source() {
+	public EReference getSTCallNamedInputArgument_Argument() {
 		return (EReference)stCallNamedInputArgumentEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -878,7 +875,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTCallNamedOutputArgument_Source() {
+	public EReference getSTCallNamedOutputArgument_Parameter() {
 		return (EReference)stCallNamedOutputArgumentEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -888,7 +885,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTCallNamedOutputArgument_Target() {
+	public EReference getSTCallNamedOutputArgument_Argument() {
 		return (EReference)stCallNamedOutputArgumentEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -1040,6 +1037,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	@Override
 	public EReference getSTCaseCases_Statements() {
 		return (EReference)stCaseCasesEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTCaseCases_Statement() {
+		return (EReference)stCaseCasesEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -1914,16 +1921,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stCallArgumentEClass = createEClass(ST_CALL_ARGUMENT);
 
 		stCallUnnamedArgumentEClass = createEClass(ST_CALL_UNNAMED_ARGUMENT);
-		createEReference(stCallUnnamedArgumentEClass, ST_CALL_UNNAMED_ARGUMENT__ARG);
+		createEReference(stCallUnnamedArgumentEClass, ST_CALL_UNNAMED_ARGUMENT__ARGUMENT);
 
 		stCallNamedInputArgumentEClass = createEClass(ST_CALL_NAMED_INPUT_ARGUMENT);
-		createEReference(stCallNamedInputArgumentEClass, ST_CALL_NAMED_INPUT_ARGUMENT__TARGET);
-		createEReference(stCallNamedInputArgumentEClass, ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE);
+		createEReference(stCallNamedInputArgumentEClass, ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER);
+		createEReference(stCallNamedInputArgumentEClass, ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT);
 
 		stCallNamedOutputArgumentEClass = createEClass(ST_CALL_NAMED_OUTPUT_ARGUMENT);
 		createEAttribute(stCallNamedOutputArgumentEClass, ST_CALL_NAMED_OUTPUT_ARGUMENT__NOT);
-		createEReference(stCallNamedOutputArgumentEClass, ST_CALL_NAMED_OUTPUT_ARGUMENT__SOURCE);
-		createEReference(stCallNamedOutputArgumentEClass, ST_CALL_NAMED_OUTPUT_ARGUMENT__TARGET);
+		createEReference(stCallNamedOutputArgumentEClass, ST_CALL_NAMED_OUTPUT_ARGUMENT__PARAMETER);
+		createEReference(stCallNamedOutputArgumentEClass, ST_CALL_NAMED_OUTPUT_ARGUMENT__ARGUMENT);
 
 		stIfStatementEClass = createEClass(ST_IF_STATEMENT);
 		createEReference(stIfStatementEClass, ST_IF_STATEMENT__CONDITION);
@@ -1943,6 +1950,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stCaseCasesEClass = createEClass(ST_CASE_CASES);
 		createEReference(stCaseCasesEClass, ST_CASE_CASES__CONDITIONS);
 		createEReference(stCaseCasesEClass, ST_CASE_CASES__STATEMENTS);
+		createEReference(stCaseCasesEClass, ST_CASE_CASES__STATEMENT);
 
 		stElsePartEClass = createEClass(ST_ELSE_PART);
 		createEReference(stElsePartEClass, ST_ELSE_PART__STATEMENTS);
@@ -2143,15 +2151,31 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		initEClass(stInitializerExpressionEClass, STInitializerExpression.class, "STInitializerExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
+		addEOperation(stInitializerExpressionEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stInitializerExpressionEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(stElementaryInitializerExpressionEClass, STElementaryInitializerExpression.class, "STElementaryInitializerExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTElementaryInitializerExpression_Value(), this.getSTExpression(), null, "value", null, 0, 1, STElementaryInitializerExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stElementaryInitializerExpressionEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stElementaryInitializerExpressionEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stArrayInitializerExpressionEClass, STArrayInitializerExpression.class, "STArrayInitializerExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTArrayInitializerExpression_Values(), this.getSTArrayInitElement(), null, "values", null, 0, -1, STArrayInitializerExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
+		addEOperation(stArrayInitializerExpressionEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stArrayInitializerExpressionEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(stArrayInitElementEClass, STArrayInitElement.class, "STArrayInitElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getSTArrayInitElement_IndexOrInitExpression(), this.getSTExpression(), null, "indexOrInitExpression", null, 0, 1, STArrayInitElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getSTArrayInitElement_InitExpressions(), this.getSTExpression(), null, "initExpressions", null, 0, -1, STArrayInitElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTArrayInitElement_IndexOrInitExpression(), this.getSTInitializerExpression(), null, "indexOrInitExpression", null, 0, 1, STArrayInitElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTArrayInitElement_InitExpressions(), this.getSTInitializerExpression(), null, "initExpressions", null, 0, -1, STArrayInitElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stArrayInitElementEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stArrayInitElementEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stStatementEClass, STStatement.class, "STStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
@@ -2169,15 +2193,15 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		addEOperation(stCallArgumentEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stCallUnnamedArgumentEClass, STCallUnnamedArgument.class, "STCallUnnamedArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getSTCallUnnamedArgument_Arg(), this.getSTExpression(), null, "arg", null, 0, 1, STCallUnnamedArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTCallUnnamedArgument_Argument(), this.getSTExpression(), null, "argument", null, 0, 1, STCallUnnamedArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(stCallUnnamedArgumentEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(stCallUnnamedArgumentEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stCallNamedInputArgumentEClass, STCallNamedInputArgument.class, "STCallNamedInputArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getSTCallNamedInputArgument_Target(), theLibraryElementPackage.getINamedElement(), null, "target", null, 0, 1, STCallNamedInputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getSTCallNamedInputArgument_Source(), this.getSTExpression(), null, "source", null, 0, 1, STCallNamedInputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTCallNamedInputArgument_Parameter(), theLibraryElementPackage.getINamedElement(), null, "parameter", null, 0, 1, STCallNamedInputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTCallNamedInputArgument_Argument(), this.getSTExpression(), null, "argument", null, 0, 1, STCallNamedInputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(stCallNamedInputArgumentEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -2185,8 +2209,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		initEClass(stCallNamedOutputArgumentEClass, STCallNamedOutputArgument.class, "STCallNamedOutputArgument", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getSTCallNamedOutputArgument_Not(), ecorePackage.getEBoolean(), "not", null, 0, 1, STCallNamedOutputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getSTCallNamedOutputArgument_Source(), theLibraryElementPackage.getINamedElement(), null, "source", null, 0, 1, STCallNamedOutputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getSTCallNamedOutputArgument_Target(), theLibraryElementPackage.getINamedElement(), null, "target", null, 0, 1, STCallNamedOutputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTCallNamedOutputArgument_Parameter(), theLibraryElementPackage.getINamedElement(), null, "parameter", null, 0, 1, STCallNamedOutputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTCallNamedOutputArgument_Argument(), this.getSTExpression(), null, "argument", null, 0, 1, STCallNamedOutputArgument.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(stCallNamedOutputArgumentEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -2204,12 +2228,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 
 		initEClass(stCaseStatementEClass, STCaseStatement.class, "STCaseStatement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTCaseStatement_Selector(), this.getSTExpression(), null, "selector", null, 0, 1, STCaseStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEReference(getSTCaseStatement_Cases(), this.getSTCaseCases(), null, "cases", null, 0, -1, STCaseStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTCaseStatement_Cases(), this.getSTCaseCases(), this.getSTCaseCases_Statement(), "cases", null, 0, -1, STCaseStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTCaseStatement_Else(), this.getSTElsePart(), null, "else", null, 0, 1, STCaseStatement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stCaseCasesEClass, STCaseCases.class, "STCaseCases", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTCaseCases_Conditions(), this.getSTExpression(), null, "conditions", null, 0, -1, STCaseCases.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTCaseCases_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STCaseCases.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTCaseCases_Statement(), this.getSTCaseStatement(), this.getSTCaseStatement_Cases(), "statement", null, 1, 1, STCaseCases.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stElsePartEClass, STElsePart.class, "STElsePart", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSTElsePart_Statements(), this.getSTStatement(), null, "statements", null, 0, -1, STElsePart.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -2354,7 +2379,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		g1 = createEGenericType(ecorePackage.getEMap());
 		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
 		g1.getETypeArguments().add(g2);
-		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g2 = createEGenericType(this.getSTExpression());
 		g1.getETypeArguments().add(g2);
 		initEOperation(op, g1);
 
@@ -2362,7 +2387,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		g1 = createEGenericType(ecorePackage.getEMap());
 		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
 		g1.getETypeArguments().add(g2);
-		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g2 = createEGenericType(this.getSTExpression());
 		g1.getETypeArguments().add(g2);
 		initEOperation(op, g1);
 

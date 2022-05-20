@@ -18,20 +18,20 @@ package org.eclipse.fordiac.ide.systemconfiguration.commands;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.Palette.SegmentTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.commands.Command;
 
 public class SegmentCreateCommand extends Command {
-	private final SegmentTypePaletteEntry type;
+	private final SegmentTypeEntry type;
 	private final SystemConfiguration parent;
 	private final Rectangle bounds;
 	private Segment segment;
 
-	public SegmentCreateCommand(final SegmentTypePaletteEntry type, final SystemConfiguration parent,
+	public SegmentCreateCommand(final SegmentTypeEntry type, final SystemConfiguration parent,
 			final Rectangle bounds) {
 		super();
 		this.type = type;
@@ -48,12 +48,12 @@ public class SegmentCreateCommand extends Command {
 	public void execute() {
 		segment = LibraryElementFactory.eINSTANCE.createSegment();
 		segment.setColor(ColorHelper.createRandomColor());
-		segment.setPaletteEntry(type);
-		segment.getVarDeclarations().addAll(EcoreUtil.copyAll(type.getSegmentType().getVarDeclaration()));
+		segment.setTypeEntry(type);
+		segment.getVarDeclarations().addAll(EcoreUtil.copyAll(type.getType().getVarDeclaration()));
 		segment.updatePosition(bounds.getTopLeft());
 		segment.setWidth((-1 != bounds.width) ? bounds.width : 300);
 		redo();
-		segment.setName(NameRepository.createUniqueName(segment, type.getSegmentType().getName()));
+		segment.setName(NameRepository.createUniqueName(segment, type.getType().getName()));
 	}
 
 	@Override

@@ -27,9 +27,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -52,7 +52,7 @@ import org.eclipse.ui.part.FileEditorInput;
 public class OpenTypeHandler extends AbstractHandler {
 
 	ElementListSelectionDialog dialog;
-	private final Set<PaletteEntry> entries = new HashSet<>();
+	private final Set<TypeEntry> entries = new HashSet<>();
 	private final List<IContainer> projects = new ArrayList<>();
 	private int selectedProject = 0;
 
@@ -66,8 +66,8 @@ public class OpenTypeHandler extends AbstractHandler {
 		dialog.open();
 
 		final Object result = dialog.getFirstResult();
-		if (result instanceof PaletteEntry) {
-			openEditor(((PaletteEntry) result).getFile());
+		if (result instanceof TypeEntry) {
+			openEditor(((TypeEntry) result).getFile());
 		}
 		return null;
 	}
@@ -167,7 +167,7 @@ public class OpenTypeHandler extends AbstractHandler {
 			if (member instanceof IContainer) {
 				processContainer((IContainer) member);
 			} else if (member instanceof IFile) {
-				entries.add(TypeLibrary.getPaletteEntryForFile((IFile) member));
+				entries.add(TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) member));
 			}
 		}
 

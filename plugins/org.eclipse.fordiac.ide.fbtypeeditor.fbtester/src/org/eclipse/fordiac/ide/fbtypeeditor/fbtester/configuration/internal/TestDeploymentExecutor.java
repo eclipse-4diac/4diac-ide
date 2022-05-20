@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.TestingManager;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
-import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -101,8 +100,6 @@ public final class TestDeploymentExecutor {
 
 		fb = new TestFB(type.getName());
 		fb.setName(type.getName());
-		// arbitrary PaletteEntry, necessary to use the overridden getTypeName()
-		fb.setPaletteEntry(PaletteFactory.eINSTANCE.createFBTypePaletteEntry());
 		fbdata = new FBDeploymentData("_", fb); //$NON-NLS-1$
 		address = ipAddress + ":" + Integer.toString(runtimePort); //$NON-NLS-1$
 		testElements = elements;

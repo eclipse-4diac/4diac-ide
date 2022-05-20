@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
@@ -23,13 +23,13 @@ public class EventPermitTest extends AbstractInterpreterTest {
 
 	@Override
 	public void test() {
-		final BasicFBType fb = loadFBType("E_PERMIT"); //$NON-NLS-1$
+		final BasicFBType fb = (BasicFBType) loadFBType("E_PERMIT"); //$NON-NLS-1$
 		fb.setService(ServiceSequenceUtils.createEmptyServiceModel());
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		// input PERMIT is default 0, no output event sent
 		addTransaction(seq, new FBTransaction("EI")); //$NON-NLS-1$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		// set input PERMIT to 1, event goes through
 		fb.getService().getServiceSequence().clear();

@@ -110,10 +110,10 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
-			return getAdapterFBType();
-		default:
-			return super.eGet(featureID, resolve, coreType);
+			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
+				return getAdapterFBType();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
@@ -123,12 +123,12 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
-			setAdapterFBType((AdapterFBType) newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
-			return;
+			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
+				setAdapterFBType((AdapterFBType) newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
 	}
 
@@ -138,12 +138,12 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
-			setAdapterFBType((AdapterFBType) null);
-			return;
-		default:
-			super.eUnset(featureID);
-			return;
+			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
+				setAdapterFBType((AdapterFBType) null);
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
 	}
 

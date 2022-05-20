@@ -22,11 +22,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public class FilterProperties {
 
-	public static boolean isSubapp(Object o) {
+	public static boolean isSubapp(final Object o) {
 		return o instanceof SubApp;
 	}
 
-	public static boolean isSubappPin(Object o) {
+	public static boolean isSubappPin(final Object o) {
 		if (o instanceof IInterfaceElement) {
 			final IInterfaceElement pin = (IInterfaceElement) o;
 			final FBNetworkElement fbEl = pin.getFBNetworkElement();
@@ -35,22 +35,22 @@ public class FilterProperties {
 		return false;
 	}
 
-	public static boolean isAdapter(Object o) {
+	public static boolean isAdapter(final Object o) {
 		return o instanceof AdapterDeclaration;
 	}
 
-	public static boolean isDataPin(Object o) {
+	public static boolean isDataPin(final Object o) {
 		if (o instanceof Value) {
-			return isDataPin(((Value) o).getVarDeclaration());
+			return isDataPin(((Value) o).getParentIE());
 		}
 		return o instanceof VarDeclaration && !(o instanceof AdapterDeclaration);
 	}
 
-	public static boolean isEventPin(Object o) {
+	public static boolean isEventPin(final Object o) {
 		return o instanceof Event;
 	}
 
-	public static boolean isTypedSubappPin(Object o) {
+	public static boolean isTypedSubappPin(final Object o) {
 		if (isSubappPin(o)) {
 			final FBNetworkElement fbNetworkElement = ((IInterfaceElement) o).getFBNetworkElement();
 			return isTyped(fbNetworkElement);
@@ -62,7 +62,7 @@ public class FilterProperties {
 		return fbNetworkElement.getType() != null || fbNetworkElement.isContainedInTypedInstance();
 	}
 
-	public static boolean isUntypedSubappPin(Object o) {
+	public static boolean isUntypedSubappPin(final Object o) {
 		if (isSubappPin(o)) {
 			final FBNetworkElement fbNetworkElement = ((IInterfaceElement) o).getFBNetworkElement();
 			return !isTyped(fbNetworkElement);

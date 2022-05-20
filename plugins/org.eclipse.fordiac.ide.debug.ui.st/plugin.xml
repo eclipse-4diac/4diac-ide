@@ -16,5 +16,15 @@
          </launchMode>
       </launchConfigurationTabGroup>
    </extension>
+   <extension
+         point="org.eclipse.core.runtime.adapters">
+      <factory
+            adaptableType="org.eclipse.xtext.ui.editor.XtextEditor"
+            class="org.eclipse.fordiac.ide.debug.ui.st.breakpoint.STToggleBreakpointsTargetExtension">
+         <adapter
+               type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget">
+         </adapter>
+      </factory>
+   </extension>
 
 </plugin>

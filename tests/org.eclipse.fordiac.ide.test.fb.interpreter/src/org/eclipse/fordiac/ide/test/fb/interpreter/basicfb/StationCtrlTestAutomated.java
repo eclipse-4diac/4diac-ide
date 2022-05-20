@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
@@ -21,7 +21,7 @@ public class StationCtrlTestAutomated extends AbstractInterpreterTest {
 
 	@Override
 	public void test() {
-		final BasicFBType fb = loadFBType("StationCtrl2", false); //$NON-NLS-1$
+		final BasicFBType fb = (BasicFBType) loadFBType("StationCtrl2", false); //$NON-NLS-1$
 
 		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 		runTest(fb, seq, "START"); //$NON-NLS-1$

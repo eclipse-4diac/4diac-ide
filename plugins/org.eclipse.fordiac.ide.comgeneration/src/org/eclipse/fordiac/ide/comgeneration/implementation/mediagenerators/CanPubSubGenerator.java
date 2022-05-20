@@ -14,9 +14,9 @@
 package org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.CommunicationMediaInfo;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 
@@ -27,8 +27,8 @@ public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 	private int startMessageId;
 	private int currentMessageId;
 
-	public CanPubSubGenerator(Palette palette) {
-		super(palette);
+	public CanPubSubGenerator(final TypeLibrary typeLib) {
+		super(typeLib);
 		startMessageId = DEFAULT_START_MESSAGE_ID;
 		reset();
 	}
@@ -44,7 +44,7 @@ public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 	}
 
 	@Override
-	public void configureFBs(FB sourceFB, FB destinationFB, CommunicationMediaInfo mediaInfo) {
+	public void configureFBs(final FB sourceFB, final FB destinationFB, final CommunicationMediaInfo mediaInfo) {
 		VarDeclaration sourceQI;
 		VarDeclaration sourceId;
 		VarDeclaration destinationQI;
@@ -64,7 +64,7 @@ public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 
 		String sourceValue = sourceId.getValue().getValue();
 		if (sourceValue.isEmpty()) {
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder sb = new StringBuilder();
 			sb.append("CAN:"); //$NON-NLS-1$
 			sb.append(mediaInfo.getSegment().getName());
 			sb.append(":"); //$NON-NLS-1$
@@ -88,7 +88,7 @@ public class CanPubSubGenerator extends AbstractMediaSpecificGenerator {
 		currentMessageId = startMessageId;
 	}
 
-	public void reset(int startMessageId) {
+	public void reset(final int startMessageId) {
 		this.startMessageId = startMessageId;
 		reset();
 	}

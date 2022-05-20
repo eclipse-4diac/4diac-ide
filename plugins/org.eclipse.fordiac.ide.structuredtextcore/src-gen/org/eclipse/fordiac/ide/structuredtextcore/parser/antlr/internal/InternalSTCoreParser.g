@@ -523,9 +523,9 @@ ruleSTArrayInitElement returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTExpressionParserRuleCall_0_0());
+					newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getIndexOrInitExpressionSTInitializerExpressionParserRuleCall_0_0());
 				}
-				lv_indexOrInitExpression_0_0=ruleSTExpression
+				lv_indexOrInitExpression_0_0=ruleSTInitializerExpression
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getSTArrayInitElementRule());
@@ -534,7 +534,7 @@ ruleSTArrayInitElement returns [EObject current=null]
 						$current,
 						"indexOrInitExpression",
 						lv_indexOrInitExpression_0_0,
-						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STInitializerExpression");
 					afterParserOrEnumRuleCall();
 				}
 			)
@@ -547,9 +547,9 @@ ruleSTArrayInitElement returns [EObject current=null]
 			(
 				(
 					{
-						newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_1_0());
+						newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_1_0());
 					}
-					lv_initExpressions_2_0=ruleSTExpression
+					lv_initExpressions_2_0=ruleSTInitializerExpression
 					{
 						if ($current==null) {
 							$current = createModelElementForParent(grammarAccess.getSTArrayInitElementRule());
@@ -558,7 +558,7 @@ ruleSTArrayInitElement returns [EObject current=null]
 							$current,
 							"initExpressions",
 							lv_initExpressions_2_0,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STInitializerExpression");
 						afterParserOrEnumRuleCall();
 					}
 				)
@@ -571,9 +571,9 @@ ruleSTArrayInitElement returns [EObject current=null]
 				(
 					(
 						{
-							newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTExpressionParserRuleCall_1_2_1_0());
+							newCompositeNode(grammarAccess.getSTArrayInitElementAccess().getInitExpressionsSTInitializerExpressionParserRuleCall_1_2_1_0());
 						}
-						lv_initExpressions_4_0=ruleSTExpression
+						lv_initExpressions_4_0=ruleSTInitializerExpression
 						{
 							if ($current==null) {
 								$current = createModelElementForParent(grammarAccess.getSTArrayInitElementRule());
@@ -582,7 +582,7 @@ ruleSTArrayInitElement returns [EObject current=null]
 								$current,
 								"initExpressions",
 								lv_initExpressions_4_0,
-								"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.STInitializerExpression");
 							afterParserOrEnumRuleCall();
 						}
 					)
@@ -904,17 +904,17 @@ ruleSTCallUnnamedArgument returns [EObject current=null]
 	(
 		(
 			{
-				newCompositeNode(grammarAccess.getSTCallUnnamedArgumentAccess().getArgSTExpressionParserRuleCall_0());
+				newCompositeNode(grammarAccess.getSTCallUnnamedArgumentAccess().getArgumentSTExpressionParserRuleCall_0());
 			}
-			lv_arg_0_0=ruleSTExpression
+			lv_argument_0_0=ruleSTExpression
 			{
 				if ($current==null) {
 					$current = createModelElementForParent(grammarAccess.getSTCallUnnamedArgumentRule());
 				}
 				set(
 					$current,
-					"arg",
-					lv_arg_0_0,
+					"argument",
+					lv_argument_0_0,
 					"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
 				afterParserOrEnumRuleCall();
 			}
@@ -947,7 +947,7 @@ ruleSTCallNamedInputArgument returns [EObject current=null]
 				}
 				otherlv_0=RULE_ID
 				{
-					newLeafNode(otherlv_0, grammarAccess.getSTCallNamedInputArgumentAccess().getTargetINamedElementCrossReference_0_0());
+					newLeafNode(otherlv_0, grammarAccess.getSTCallNamedInputArgumentAccess().getParameterINamedElementCrossReference_0_0());
 				}
 			)
 		)
@@ -958,17 +958,17 @@ ruleSTCallNamedInputArgument returns [EObject current=null]
 		(
 			(
 				{
-					newCompositeNode(grammarAccess.getSTCallNamedInputArgumentAccess().getSourceSTExpressionParserRuleCall_2_0());
+					newCompositeNode(grammarAccess.getSTCallNamedInputArgumentAccess().getArgumentSTExpressionParserRuleCall_2_0());
 				}
-				lv_source_2_0=ruleSTExpression
+				lv_argument_2_0=ruleSTExpression
 				{
 					if ($current==null) {
 						$current = createModelElementForParent(grammarAccess.getSTCallNamedInputArgumentRule());
 					}
 					set(
 						$current,
-						"source",
-						lv_source_2_0,
+						"argument",
+						lv_argument_2_0,
 						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
 					afterParserOrEnumRuleCall();
 				}
@@ -1016,7 +1016,7 @@ ruleSTCallNamedOutputArgument returns [EObject current=null]
 				}
 				otherlv_1=RULE_ID
 				{
-					newLeafNode(otherlv_1, grammarAccess.getSTCallNamedOutputArgumentAccess().getSourceINamedElementCrossReference_1_0());
+					newLeafNode(otherlv_1, grammarAccess.getSTCallNamedOutputArgumentAccess().getParameterINamedElementCrossReference_1_0());
 				}
 			)
 		)
@@ -1027,13 +1027,19 @@ ruleSTCallNamedOutputArgument returns [EObject current=null]
 		(
 			(
 				{
-					if ($current==null) {
-						$current = createModelElement(grammarAccess.getSTCallNamedOutputArgumentRule());
-					}
+					newCompositeNode(grammarAccess.getSTCallNamedOutputArgumentAccess().getArgumentSTExpressionParserRuleCall_3_0());
 				}
-				otherlv_3=RULE_ID
+				lv_argument_3_0=ruleSTExpression
 				{
-					newLeafNode(otherlv_3, grammarAccess.getSTCallNamedOutputArgumentAccess().getTargetINamedElementCrossReference_3_0());
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTCallNamedOutputArgumentRule());
+					}
+					set(
+						$current,
+						"argument",
+						lv_argument_3_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STExpression");
+					afterParserOrEnumRuleCall();
 				}
 			)
 		)
@@ -2864,6 +2870,24 @@ ruleSTFeatureName returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleT
 		{
 			$current.merge(kw);
 			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getMODKeyword_6());
+		}
+		    |
+		kw=D
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getDKeyword_7());
+		}
+		    |
+		kw=DT
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getDTKeyword_8());
+		}
+		    |
+		kw=LD
+		{
+			$current.merge(kw);
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getLDKeyword_9());
 		}
 	)
 ;

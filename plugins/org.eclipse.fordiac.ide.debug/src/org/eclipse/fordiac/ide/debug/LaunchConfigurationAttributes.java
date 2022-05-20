@@ -34,7 +34,7 @@ public interface LaunchConfigurationAttributes {
 		return null;
 	}
 
-	static List<Variable> getArguments(final ILaunchConfiguration configuration, final List<Variable> defaultArguments)
+	static List<Variable<?>> getArguments(final ILaunchConfiguration configuration, final List<Variable<?>> defaultArguments)
 			throws CoreException {
 		final var argumentsAttribute = configuration.getAttribute(ARGUMENTS, Collections.emptyMap());
 		if (argumentsAttribute != null && defaultArguments != null) {

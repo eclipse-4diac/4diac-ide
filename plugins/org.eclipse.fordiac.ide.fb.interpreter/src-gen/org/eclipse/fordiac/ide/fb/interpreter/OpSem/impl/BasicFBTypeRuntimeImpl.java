@@ -1,4 +1,5 @@
 /**
+ * *******************************************************************************
  * Copyright (c) 2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at http://www.eclipse.org/legal/epl-2.0.
@@ -6,8 +7,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio GarmendÃ­a, Bianca Wiesmayr
  *          - initial implementation and/or documentation
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl;
 
@@ -21,54 +23,66 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Basic FB Type Runtime</b></em>'. <!--
- * end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>Basic
+ * FB Type Runtime</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.BasicFBTypeRuntimeImpl#getBasicfbtype
  * <em>Basicfbtype</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.BasicFBTypeRuntimeImpl#getActiveState <em>Active
- * State</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.BasicFBTypeRuntimeImpl#getActiveState
+ * <em>Active State</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class BasicFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements BasicFBTypeRuntime {
-	/** The cached value of the '{@link #getBasicfbtype() <em>Basicfbtype</em>}' containment reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getBasicfbtype() <em>Basicfbtype</em>}'
+	 * containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getBasicfbtype()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected BasicFBType basicfbtype;
 
-	/** The cached value of the '{@link #getActiveState() <em>Active State</em>}' reference. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getActiveState() <em>Active State</em>}'
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getActiveState()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected ECState activeState;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected BasicFBTypeRuntimeImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return OperationalSemanticsPackage.Literals.BASIC_FB_TYPE_RUNTIME;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public BasicFBType getBasicfbtype() {
 		if (basicfbtype != null && basicfbtype.eIsProxy()) {
@@ -95,16 +109,20 @@ public class BasicFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Bas
 		return basicfbtype;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public BasicFBType basicGetBasicfbtype() {
 		return basicfbtype;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetBasicfbtype(BasicFBType newBasicfbtype, NotificationChain msgs) {
 		BasicFBType oldBasicfbtype = basicfbtype;
 		basicfbtype = newBasicfbtype;
@@ -119,9 +137,11 @@ public class BasicFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Bas
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setBasicfbtype(BasicFBType newBasicfbtype) {
 		if (newBasicfbtype != basicfbtype) {
@@ -142,9 +162,11 @@ public class BasicFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Bas
 					OperationalSemanticsPackage.BASIC_FB_TYPE_RUNTIME__BASICFBTYPE, newBasicfbtype, newBasicfbtype));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public ECState getActiveState() {
 		if (activeState != null && activeState.eIsProxy()) {
@@ -160,16 +182,20 @@ public class BasicFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Bas
 		return activeState;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public ECState basicGetActiveState() {
 		return activeState;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setActiveState(ECState newActiveState) {
 		ECState oldActiveState = activeState;
@@ -179,22 +205,25 @@ public class BasicFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Bas
 					OperationalSemanticsPackage.BASIC_FB_TYPE_RUNTIME__ACTIVE_STATE, oldActiveState, activeState));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.BASIC_FB_TYPE_RUNTIME__BASICFBTYPE:
 			return basicSetBasicfbtype(null, msgs);
-		default:
-			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -206,14 +235,15 @@ public class BasicFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Bas
 			if (resolve)
 				return getActiveState();
 			return basicGetActiveState();
-		default:
-			return super.eGet(featureID, resolve, coreType);
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -223,15 +253,15 @@ public class BasicFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Bas
 		case OperationalSemanticsPackage.BASIC_FB_TYPE_RUNTIME__ACTIVE_STATE:
 			setActiveState((ECState) newValue);
 			return;
-		default:
-			super.eSet(featureID, newValue);
-			return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -241,15 +271,15 @@ public class BasicFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Bas
 		case OperationalSemanticsPackage.BASIC_FB_TYPE_RUNTIME__ACTIVE_STATE:
 			setActiveState((ECState) null);
 			return;
-		default:
-			super.eUnset(featureID);
-			return;
 		}
+		super.eUnset(featureID);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -257,9 +287,8 @@ public class BasicFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Bas
 			return basicfbtype != null;
 		case OperationalSemanticsPackage.BASIC_FB_TYPE_RUNTIME__ACTIVE_STATE:
 			return activeState != null;
-		default:
-			return super.eIsSet(featureID);
 		}
+		return super.eIsSet(featureID);
 	}
 
 } // BasicFBTypeRuntimeImpl

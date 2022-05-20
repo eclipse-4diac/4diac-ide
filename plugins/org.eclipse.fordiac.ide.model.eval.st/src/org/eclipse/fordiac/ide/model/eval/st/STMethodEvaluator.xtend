@@ -25,15 +25,15 @@ import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 class STMethodEvaluator extends StructuredTextEvaluator {
 	final STMethod method
 
-	final Variable returnVariable
+	final Variable<?> returnVariable
 
-	new(STMethod method, Variable context, Iterable<Variable> variables, Evaluator parent) {
+	new(STMethod method, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		super(method.name, context, variables, parent)
 		this.method = method
 		method.body.varDeclarations.filter [
 			it instanceof STVarInputDeclarationBlock || it instanceof STVarInputDeclarationBlock
 		].flatMap[varDeclarations].reject [
-			this.variables.containsKey(name)
+			this.variables.containsKey(name) || !count.empty
 		].forEach [
 			evaluateVariableInitialization
 		]
@@ -59,6 +59,9 @@ class STMethodEvaluator extends StructuredTextEvaluator {
 			varDeclarations
 		].forEach [
 			evaluateVariableInitialization
+		]
+		method.body.varDeclarations.flatMap[varDeclarations].reject[this.variables.containsKey(name)].forEach [
+			throw new IllegalStateException('''Must pass variable «name» as argument to «method.name»''')
 		]
 		try {
 			method.body.statements.evaluateStatementList

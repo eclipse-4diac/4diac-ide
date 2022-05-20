@@ -29,6 +29,8 @@ public interface LibraryElementTags {
 	String INPUT_PRIMITIVE_ELEMENT = "InputPrimitive"; //$NON-NLS-1$
 	String SERVICE_TRANSACTION_ELEMENT = "ServiceTransaction"; //$NON-NLS-1$
 	String INTERFACE_ATTRIBUTE = "Interface"; //$NON-NLS-1$
+	String START_STATE_ATTRIBUTE = "StartState"; //$NON-NLS-1$
+	String SERVICE_SEQUENCE_TYPE_ATTRIBUTE = "ServiceSequenceType"; //$NON-NLS-1$
 
 	String PARAMETERS_ATTRIBUTE = "Parameters"; //$NON-NLS-1$
 

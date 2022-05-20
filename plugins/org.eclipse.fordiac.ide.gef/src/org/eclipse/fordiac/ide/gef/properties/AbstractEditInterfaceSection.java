@@ -284,10 +284,14 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
-			inputsViewer.setInput(getType());
-			outputsViewer.setInput(getType());
+			setTableInput();
 		}
 		commandStack = commandStackBuffer;
+	}
+	
+	protected void setTableInput() {
+		inputsViewer.setInput(getType());
+		outputsViewer.setInput(getType());
 	}
 
 	protected abstract static class InterfaceContentProvider implements IStructuredContentProvider {
@@ -368,7 +372,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 			case TYPE_COL:
 				if (data instanceof AdapterDeclaration) {
 					final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[((Integer) value).intValue()];
-					final DataType newType = getPalette().getAdapterTypeEntry(dataTypeName).getType();
+					final DataType newType = getTypeLibrary().getAdapterTypeEntry(dataTypeName).getType();
 					cmd = newChangeTypeCommand((VarDeclaration) data, newType);
 				} else {
 					if (data instanceof VarDeclaration) {

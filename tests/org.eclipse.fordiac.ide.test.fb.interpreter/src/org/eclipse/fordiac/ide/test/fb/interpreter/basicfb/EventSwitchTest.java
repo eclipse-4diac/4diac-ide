@@ -8,10 +8,12 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
+
+import static org.junit.Assert.assertNotNull;
 
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -23,20 +25,21 @@ public class EventSwitchTest extends AbstractInterpreterTest {
 
 	@Override
 	public void test() {
-		final BasicFBType fb = loadFBType("E_SWITCH"); //$NON-NLS-1$
+		final BasicFBType fb = (BasicFBType) loadFBType("E_SWITCH"); //$NON-NLS-1$
+		assertNotNull(fb);
+		fb.setService(ServiceSequenceUtils.createEmptyServiceModel());
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "G", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("EI", "EO1")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		fb.getService().getServiceSequence().clear();
 		final ServiceSequence seq2 = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "G", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq2, new FBTransaction("EI", "EO0")); //$NON-NLS-1$ //$NON-NLS-2$
-
-		runTest(fb, seq2);
+ 
+		runFBTest(fb, seq2);
 	}
-
 }

@@ -286,8 +286,8 @@ public final class ConnectionHelper {
 
 	public static ErrorMarkerInterface createErrorMarkerInterface(final DataType type, final String name,
 			final boolean isInput, final InterfaceList ieList) {
-		return (ErrorMarkerInterface) ieList.getErrorMarker().stream().filter(e -> e.getName().equals(name) && isInput == e.isIsInput()).findAny()
-				.orElseGet(() -> createErrorMarker(type, name, isInput, ieList));
+		return ieList.getErrorMarker().stream().filter(e -> e.getName().equals(name) && isInput == e.isIsInput())
+				.findAny().orElseGet(() -> createErrorMarker(type, name, isInput, ieList));
 	}
 
 	private static ErrorMarkerInterface createErrorMarker(final DataType type, final String name, final boolean isInput,

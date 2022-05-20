@@ -116,8 +116,8 @@ public class TypeSelectionWidget {
 				dataType = ((IInterfaceElement) configurableObject).getType();
 			}
 
-			if (dataType != null && dataType.getPaletteEntry() != null) {
-				OpenStructMenu.openStructEditor(dataType.getPaletteEntry().getFile());
+			if (dataType != null && dataType.getTypeEntry() != null) {
+				OpenStructMenu.openStructEditor(dataType.getTypeEntry().getFile());
 			}
 		});
 	}

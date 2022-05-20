@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Primetals Technologies Germany GmbH
+ * Copyright (c) 2022 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Daniel Lindhuber
  *     - updated label provider
+ *   Fabio Gandolfi - removed special label providers
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -24,14 +25,14 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
-import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -109,38 +110,24 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected LabelProvider getLabelProvider() {
-		return new DataLabelProvider() {
-			@Override
-			public String getColumnText(Object element, int columnIndex) {
-				if ((element instanceof VarDeclaration) && (columnIndex == DataLabelProvider.INITIALVALUE_COL_INDEX)) {
-					final VarDeclaration varDecl = (VarDeclaration) element;
-					final FBType fbType = varDecl.getFBNetworkElement().getType();
-					VarDeclaration varDeclType;
+	protected void setTableInput() {
+		final FBNetworkElement selection = getType();
+		if(selection instanceof Multiplexer) {
+			getInputsViewer().setContentProvider(new ArrayContentProvider());
+			getInputsViewer().setInput(((StructManipulator) selection).getStructType().getMemberVariables());
+			getOutputsViewer().setInput(selection.getType());
+		} else if (selection instanceof Demultiplexer) {
+			getOutputsViewer().setContentProvider(new ArrayContentProvider());
+			getOutputsViewer().setInput(((StructManipulator) selection).getStructType().getMemberVariables());
+			getInputsViewer().setInput(selection.getType());
 
-					if (fbType != null) {
-						varDeclType = fbType.getInterfaceList().getVariable(varDecl.getName());
-						if ((varDeclType == null) && (varDecl.getFBNetworkElement() instanceof StructManipulator)) {
-							// struct var of a struct manipulator inside a typed subapp/composite
-							varDeclType = ((StructManipulator) varDecl.getFBNetworkElement()).getStructType().getMemberVariables()
-									.stream()
-									.filter(memberVar -> varDecl.getName().equals(memberVar.getName()))
-									.findFirst()
-									.orElse(null);
-						}
-					} else {
-						// var declaration of untyped subapp inside typed subapp/composite
-						varDeclType = varDecl;
-					}
+		} else if (selection.getType() != null) { // untyped subapp in typed subapp
+			getInputsViewer().setInput(selection.getType());
+			getOutputsViewer().setInput(selection.getType());
+		} else {
+			// untyped subapp in typed subapp
+			super.setTableInput();
+		}
 
-					if ((varDeclType == null) || (varDeclType.getValue() == null)) {
-						return ""; //$NON-NLS-1$
-					}
-
-					return varDeclType.getValue().getValue();
-				}
-				return super.getColumnText(element, columnIndex);
-			}
-		};
 	}
 }

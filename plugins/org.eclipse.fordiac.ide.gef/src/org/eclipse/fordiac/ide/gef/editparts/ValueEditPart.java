@@ -33,11 +33,14 @@ import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
@@ -51,8 +54,11 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Text;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
@@ -80,7 +86,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		super.activate();
 		getModel().eAdapters().add(contentAdapter);
 
-		final Object part = getViewer().getEditPartRegistry().get(getModel().getVarDeclaration());
+		final Object part = getViewer().getEditPartRegistry().get(getModel().getParentIE());
 		if (part instanceof InterfaceEditPart) {
 			parentPart = (InterfaceEditPart) part;
 			final IFigure parentFigure = parentPart.getFigure();
@@ -198,22 +204,38 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 			setVisible(true);
 			setBackground(getModel().hasError());
 			if (getOuterConnections().isEmpty()) {
-				getFigure().setText(getModel().getValue());
+				if(!getModel().getValue().isBlank()) {
+					getFigure().setText(getModel().getValue());
+					getFigure().setFont(null);
+					getFigure().setForegroundColor(ColorConstants.menuForeground);
+				} else {
+					getFigure().setText(getDefaultValue(getModel().getParentIE()));
+					getFigure().setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
+					getFigure().setForegroundColor(ColorConstants.gray);
+				}
 			} else {
-				getFigure().setText("");
+				getFigure().setText(""); //$NON-NLS-1$
 			}
 		} else {
 			setVisible(false);
 		}
 	}
-	
+
+	@SuppressWarnings("static-method")  // allow subclasses to overwrite this method
+	protected String getDefaultValue(final IInterfaceElement ie) {
+		if (ie instanceof VarDeclaration && !IecTypes.GenericTypes.isAnyType(ie.getType())) {
+			return VariableOperations.newVariable((VarDeclaration) ie).getValue().toString();
+		}
+		// we should only arrive here in case of an errormarker interface without value OR ANY type
+		return ""; //$NON-NLS-1$
+	}
+
 	private EList<Connection> getOuterConnections() {
-		IInterfaceElement model = getIInterfaceElement();
+		final IInterfaceElement model = getIInterfaceElement();
 		if(model.isIsInput()) {
 			return model.getInputConnections();
-		} else {
-			return model.getOutputConnections();
 		}
+		return model.getOutputConnections();
 	}
 
 	private void setBackground(final boolean hasError) {
@@ -274,7 +296,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	}
 
 	private IInterfaceElement getIInterfaceElement() {
-		return getModel().getVarDeclaration();
+		return getModel().getParentIE();
 	}
 
 	/* (non-Javadoc)
@@ -338,12 +360,32 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 *
 	 * @return the manager */
 	public DirectEditManager createDirectEditManager() {
-		return new LabelDirectEditManager(this, getFigure());
+		return new LabelDirectEditManager(this, getFigure()) {
+
+			@Override
+			protected void initCellEditor() {
+				super.initCellEditor();
+				((Text) getCellEditor().getControl()).addKeyListener(new KeyAdapter() {
+					// hook enter key pressed to save also default values in pin
+					@Override
+					public void keyPressed(KeyEvent e) {
+						if(e.character == '\r') {
+							setDirty(true);	
+						}
+					}
+				});
+			}
+		};
+		
 	}
 
 	/** performs the directEdit. */
 	public void performDirectEdit() {
-		getFigure().setText(getModel().getValue()); // Shows the current initial value when editing
+		if(!getModel().getValue().isBlank()) { // Shows the current initial value when editing
+			getFigure().setText(getModel().getValue());
+		} else {
+			getFigure().setText(getDefaultValue(getModel().getParentIE()));		
+		}
 		createDirectEditManager().show();
 	}
 
@@ -355,7 +397,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
 		// REQ_OPEN -> doubleclick
 
-		final FBNetworkElement fb = getModel().getVarDeclaration().getFBNetworkElement();
+		final FBNetworkElement fb = getModel().getParentIE().getFBNetworkElement();
 		if (!isTypedInstance(fb)
 				&& ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 						|| (request.getType() == RequestConstants.REQ_OPEN))) {

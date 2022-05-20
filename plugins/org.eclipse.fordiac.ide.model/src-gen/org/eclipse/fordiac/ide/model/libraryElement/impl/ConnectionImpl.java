@@ -142,7 +142,7 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 	protected IInterfaceElement destination;
 
 	/**
-	 * The cached value of the '{@link #getRoutingData() <em>Routing Data</em>}' reference.
+	 * The cached value of the '{@link #getRoutingData() <em>Routing Data</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getRoutingData()
@@ -402,42 +402,72 @@ public abstract class ConnectionImpl extends ConfigurableObjectImpl implements C
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public ConnectionRoutingData getRoutingData() {
 		if (routingData != null && routingData.eIsProxy()) {
-			final InternalEObject oldRoutingData = (InternalEObject) routingData;
-			routingData = (ConnectionRoutingData) eResolveProxy(oldRoutingData);
+			InternalEObject oldRoutingData = (InternalEObject)routingData;
+			routingData = (ConnectionRoutingData)eResolveProxy(oldRoutingData);
 			if (routingData != oldRoutingData) {
-				if (eNotificationRequired()) {
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
-							LibraryElementPackage.CONNECTION__ROUTING_DATA, oldRoutingData, routingData));
+				InternalEObject newRoutingData = (InternalEObject)routingData;
+				NotificationChain msgs = oldRoutingData.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.CONNECTION__ROUTING_DATA, null, null);
+				if (newRoutingData.eInternalContainer() == null) {
+					msgs = newRoutingData.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.CONNECTION__ROUTING_DATA, null, msgs);
 				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.CONNECTION__ROUTING_DATA, oldRoutingData, routingData));
 			}
 		}
 		return routingData;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public ConnectionRoutingData basicGetRoutingData() {
 		return routingData;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public void setRoutingData(final ConnectionRoutingData newRoutingData) {
-		final ConnectionRoutingData oldRoutingData = routingData;
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetRoutingData(ConnectionRoutingData newRoutingData, NotificationChain msgs) {
+		ConnectionRoutingData oldRoutingData = routingData;
 		routingData = newRoutingData;
 		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__ROUTING_DATA,
-					oldRoutingData, routingData));
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__ROUTING_DATA, oldRoutingData, newRoutingData);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setRoutingData(ConnectionRoutingData newRoutingData) {
+		if (newRoutingData != routingData) {
+			NotificationChain msgs = null;
+			if (routingData != null)
+				msgs = ((InternalEObject)routingData).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.CONNECTION__ROUTING_DATA, null, msgs);
+			if (newRoutingData != null)
+				msgs = ((InternalEObject)newRoutingData).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.CONNECTION__ROUTING_DATA, null, msgs);
+			msgs = basicSetRoutingData(newRoutingData, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__ROUTING_DATA, newRoutingData, newRoutingData));
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

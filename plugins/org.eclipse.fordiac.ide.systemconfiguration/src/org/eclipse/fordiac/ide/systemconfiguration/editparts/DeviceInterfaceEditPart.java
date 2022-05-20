@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2012 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH, 
+ * Copyright (c) 2008, 2012 - 2017 Profactor GbmH, TU Wien ACIN, fortiss GmbH,
  * 				 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -9,7 +9,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger 
+ *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - allowed resource drop on on whole interfaces
  *******************************************************************************/
@@ -20,8 +20,8 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.policies.DataInterfaceLayoutEditPolicy;
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceMoveCommand;
 import org.eclipse.gef.DragTracker;
@@ -37,7 +37,7 @@ import org.eclipse.gef.tools.SelectEditPartTracker;
 
 /**
  * The Class DeviceInterfaceEditPart.
- * 
+ *
  * @author Gerhard Ebenhofer, gerhard.ebenhofer@profactor.at
  */
 public class DeviceInterfaceEditPart extends InterfaceEditPart {

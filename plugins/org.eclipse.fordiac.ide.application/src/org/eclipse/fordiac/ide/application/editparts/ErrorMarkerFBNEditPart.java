@@ -43,8 +43,8 @@ public class ErrorMarkerFBNEditPart extends AbstractFBNElementEditPart {
 	private void updateErrorText() {
 		final StringBuilder errorText = new StringBuilder();
 
-		if (getModel().getPaletteEntry() != null) {
-			final FBType type = (FBType) getModel().getPaletteEntry().getType();
+		if (getModel().getTypeEntry() != null) {
+			final FBType type = (FBType) getModel().getTypeEntry().getType();
 			if (type != null) {
 				errorText.append(MessageFormat.format(Messages.ErrorMarkerFBNEditPart_OldType, type.getName()));
 			}

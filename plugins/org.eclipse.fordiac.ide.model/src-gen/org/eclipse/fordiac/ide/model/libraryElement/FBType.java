@@ -67,7 +67,7 @@ public interface FBType extends CompilableType, ICallable {
 	 * @return the value of the '<em>Service</em>' containment reference.
 	 * @see #setService(Service)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getFBType_Service()
-	 * @model containment="true" required="true"
+	 * @model containment="true"
 	 *        extendedMetaData="kind='element' name='ServiceSequence' namespace='##targetNamespace'"
 	 * @generated
 	 */

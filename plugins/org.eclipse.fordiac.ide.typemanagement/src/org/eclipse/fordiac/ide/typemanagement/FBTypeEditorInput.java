@@ -13,8 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement;
 
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
@@ -26,9 +26,9 @@ import org.eclipse.ui.IPersistableElement;
  */
 public class FBTypeEditorInput implements IEditorInput {
 	private FBType fbType;
-	private final PaletteEntry entry;
+	private final TypeEntry entry;
 
-	public FBTypeEditorInput(final FBType fbType, final PaletteEntry entry) {
+	public FBTypeEditorInput(final FBType fbType, final TypeEntry entry) {
 		this.fbType = fbType;
 		this.entry = entry;
 	}
@@ -69,7 +69,7 @@ public class FBTypeEditorInput implements IEditorInput {
 		return fbType;
 	}
 
-	public PaletteEntry getPaletteEntry() {
+	public TypeEntry getTypeEntry() {
 		return entry;
 	}
 
@@ -77,7 +77,7 @@ public class FBTypeEditorInput implements IEditorInput {
 	public boolean equals(final Object obj) {
 		if (obj instanceof FBTypeEditorInput) {
 			final FBTypeEditorInput input = (FBTypeEditorInput) obj;
-			return fbType.equals(input.getContent()) && entry.getFile().equals(input.getPaletteEntry().getFile());
+			return fbType.equals(input.getContent()) && entry.getFile().equals(input.getTypeEntry().getFile());
 		}
 		return false;
 	}

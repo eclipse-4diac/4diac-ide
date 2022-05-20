@@ -35,16 +35,16 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 
 	@Override
-	public void launch(final ILaunchConfiguration configuration, final String mode, final ILaunch launch, final IProgressMonitor monitor)
-			throws CoreException {
+	public void launch(final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
+			final IProgressMonitor monitor) throws CoreException {
 		final IResource resource = LaunchConfigurationAttributes.getResource(configuration);
 		if (resource instanceof IFile) {
-			final FBType type = (FBType) TypeLibrary.getPaletteEntryForFile((IFile) resource).getType();
+			final FBType type = (FBType) TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource).getType();
 			final var event = FBLaunchConfigurationAttributes.getEvent(configuration, type, getDefaultEvent(type));
 			final var defaultArguments = getDefaultArguments(type);
 			final var variables = LaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
@@ -52,8 +52,9 @@ public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationD
 		}
 	}
 
-	public void launch(final FBType type, final Event event, final List<Variable> variables, final ILaunchConfiguration configuration,
-			final String mode, final ILaunch launch, final IProgressMonitor monitor) throws CoreException {
+	public void launch(final FBType type, final Event event, final List<Variable<?>> variables,
+			final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
+			final IProgressMonitor monitor) throws CoreException {
 		final Queue<Event> queue = new ArrayBlockingQueue<>(1000);
 		final Evaluator evaluator = createEvaluator(type, queue, variables);
 		queue.add(event);
@@ -61,7 +62,8 @@ public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationD
 			final EvaluatorProcess process = new EvaluatorProcess(configuration.getName(), evaluator, launch);
 			process.start();
 		} else if (ILaunchManager.DEBUG_MODE.equals(mode)) {
-			final EvaluatorDebugTarget debugTarget = new EvaluatorDebugTarget(configuration.getName(), evaluator, launch);
+			final EvaluatorDebugTarget debugTarget = new EvaluatorDebugTarget(configuration.getName(), evaluator,
+					launch);
 			debugTarget.start();
 		} else {
 			throw new CoreException(Status.error("Illegal launch mode: " + mode)); //$NON-NLS-1$
@@ -69,10 +71,10 @@ public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationD
 	}
 
 	public abstract FBEvaluator<? extends FBType> createEvaluator(FBType type, Queue<Event> queue,
-			List<Variable> variables) throws CoreException;
+			List<Variable<?>> variables) throws CoreException;
 
 	@SuppressWarnings("static-method")
-	protected List<Variable> getDefaultArguments(final FBType type) {
+	protected List<Variable<?>> getDefaultArguments(final FBType type) {
 		return type.getInterfaceList().getInputVars().stream().map(VariableOperations::newVariable)
 				.collect(Collectors.toList());
 	}

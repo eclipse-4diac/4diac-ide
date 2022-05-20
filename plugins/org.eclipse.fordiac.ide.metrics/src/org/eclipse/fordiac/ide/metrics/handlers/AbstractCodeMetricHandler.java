@@ -27,11 +27,11 @@ import org.eclipse.fordiac.ide.metrics.Messages;
 import org.eclipse.fordiac.ide.metrics.analyzers.AbstractCodeMetricAnalyzer;
 import org.eclipse.fordiac.ide.metrics.analyzers.MetricResult;
 import org.eclipse.fordiac.ide.metrics.providers.MetricsResultLabelProvider;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -127,9 +127,9 @@ public abstract class AbstractCodeMetricHandler extends AbstractHandler {
 	}
 
 	private static INamedElement checkSelectedFile(final IFile file) {
-		final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(file);
-		if (entry instanceof FBTypePaletteEntry) {
-			return ((FBTypePaletteEntry) entry).getType();
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		if (entry instanceof FBTypeEntry) {
+			return ((FBTypeEntry) entry).getType();
 		}
 		return null;
 	}

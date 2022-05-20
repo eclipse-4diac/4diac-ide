@@ -20,6 +20,7 @@
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +30,8 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -42,10 +40,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.Palette.DeviceTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
@@ -56,6 +50,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -76,7 +71,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -106,7 +105,7 @@ public abstract class CommonElementImporter {
 
 		if (interfaceList.eContainer() instanceof FB) {
 			// only if it is an FB check if it is typed
-			hasType = (null != ((FB) interfaceList.eContainer()).getPaletteEntry());
+			hasType = (null != ((FB) interfaceList.eContainer()).getTypeEntry());
 		}
 
 		if (hasType) {
@@ -149,13 +148,9 @@ public abstract class CommonElementImporter {
 		return typeLibrary;
 	}
 
-	protected Palette getPalette() {
-		return getTypeLibrary().getBlockTypeLib();
-	}
-
-	protected FBTypePaletteEntry getTypeEntry(final String typeFbElement) {
+	protected FBTypeEntry getTypeEntry(final String typeFbElement) {
 		if (null != typeFbElement) {
-			return getPalette().getFBTypeEntry(typeFbElement);
+			return getTypeLibrary().getFBTypeEntry(typeFbElement);
 		}
 		return null;
 	}
@@ -175,7 +170,7 @@ public abstract class CommonElementImporter {
 	protected CommonElementImporter(final IFile file) {
 		Assert.isNotNull(file);
 		this.file = file;
-		typeLibrary = TypeLibrary.getTypeLibrary(file.getProject());
+		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
 		errorMarkerAttributes = new ArrayList<>();
 	}
 
@@ -190,7 +185,7 @@ public abstract class CommonElementImporter {
 	public void loadElement() {
 		element = createRootModelElement();
 		try (ImporterStreams streams = createInputStreams(getInputStream())) {
-			deleteMarkers();
+			deleteErrorMarkers();
 			proceedToStartElementNamed(getStartElementName());
 			readNameCommentAttributes(element);
 			processChildren(getStartElementName(), getBaseChildrenHandler());
@@ -228,29 +223,15 @@ public abstract class CommonElementImporter {
 		}
 	}
 
+	protected void deleteErrorMarkers() {
+		ErrorMarkerBuilder.deleteErrorMarkers(file, ErrorMarkerBuilder.IEC61499_MARKER);
+	}
+
 	protected abstract LibraryElement createRootModelElement();
 
 	protected abstract String getStartElementName();
 
 	protected abstract IChildHandler getBaseChildrenHandler();
-
-	protected void deleteMarkers() {
-		if (file.exists()) {
-			final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + file.getName()) {
-				@Override
-				public IStatus runInWorkspace(final IProgressMonitor monitor) {
-					try {
-						file.deleteMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-					} catch (final CoreException e) {
-						FordiacLogHelper.logError("Could not delete error marker", e); //$NON-NLS-1$
-					}
-					return Status.OK_STATUS;
-				}
-			};
-			job.setRule(file.getProject());
-			job.schedule();
-		}
-	}
 
 	private ImporterStreams createInputStreams(final InputStream fileInputStream) throws XMLStreamException {
 		final XMLInputFactory factory = XMLInputFactory.newInstance();
@@ -447,8 +428,8 @@ public abstract class CommonElementImporter {
 		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if ((null != name) && (null != value)) {
-			confObject.setAttribute(name, null == type ? IecTypes.ElementaryTypes.STRING.getName() : type,
-					value, comment);
+			confObject.setAttribute(name, null == type ? IecTypes.ElementaryTypes.STRING.getName() : type, value,
+					comment);
 		}
 
 		if (confObject instanceof StructManipulator) {
@@ -617,7 +598,20 @@ public abstract class CommonElementImporter {
 		if (null != vInput) {
 			vInput.setValue(parameter.getValue());
 			validateValue(vInput);
+		} else {
+			createParameterErrorMarker(block, parameter);
 		}
+	}
+
+	protected void createParameterErrorMarker(final FBNetworkElement block, final VarDeclaration parameter) {
+		final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarker(
+				MessageFormat.format(Messages.CommonElementImporter_ERROR_MissingPinForParameter, parameter.getName(),
+						block.getName()),
+				block, getLineNumber());
+		errorMarkerAttributes.add(e);
+		final ErrorMarkerInterface errorMarkerInterface = ConnectionHelper.createErrorMarkerInterface(IecTypes.GenericTypes.ANY,parameter.getName(), true, block.getInterface());
+		e.setErrorMarkerRef(errorMarkerInterface);
+		errorMarkerInterface.setValue(parameter.getValue());
 	}
 
 	protected void validateValue(final VarDeclaration vInput) {
@@ -683,9 +677,9 @@ public abstract class CommonElementImporter {
 	private void parseResourceType(final Resource resource) {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (typeName != null) {
-			final ResourceTypeEntry entry = getPalette().getResourceTypeEntry(typeName);
+			final ResourceTypeEntry entry = getTypeLibrary().getResourceTypeEntry(typeName);
 			if (null != entry) {
-				resource.setPaletteEntry(entry);
+				resource.setTypeEntry(entry);
 				createParamters(resource);
 			}
 		}
@@ -694,14 +688,14 @@ public abstract class CommonElementImporter {
 	/** Creates the values. */
 	public static void createParamters(final IVarElement element) {
 		if (element instanceof Device) {
-			element.getVarDeclarations().addAll(
-					EcoreUtil.copyAll(((DeviceTypePaletteEntry) ((TypedConfigureableObject) element).getPaletteEntry())
-							.getDeviceType().getVarDeclaration()));
+			element.getVarDeclarations()
+			.addAll(EcoreUtil.copyAll(((DeviceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+					.getType().getVarDeclaration()));
 		}
 		if (element instanceof Resource) {
-			element.getVarDeclarations().addAll(
-					EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getPaletteEntry())
-							.getResourceType().getVarDeclaration()));
+			element.getVarDeclarations()
+			.addAll(EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+					.getType().getVarDeclaration()));
 		}
 		for (final VarDeclaration varDecl : element.getVarDeclarations()) {
 			final Value value = LibraryElementFactory.eINSTANCE.createValue();

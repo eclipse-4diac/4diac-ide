@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
@@ -24,7 +24,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 
 	@Override
 	public void test() {
-		BasicFBType fb = loadFBType("E_CTUD"); //$NON-NLS-1$
+		BasicFBType fb = (BasicFBType) loadFBType("E_CTUD"); //$NON-NLS-1$
 		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -32,7 +32,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 		// $NON-NLS-3$
 		addTransaction(seq, new FBTransaction("CD", "CO", "QU:=FALSE;QD:=TRUE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		// $NON-NLS-3$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PV", "2"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -42,7 +42,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 		// $NON-NLS-3$
 		addTransaction(seq, new FBTransaction("CD", "CO", "QU:=FALSE;QD:=TRUE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		// $NON-NLS-3$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PV", "2"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -50,7 +50,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 		// $NON-NLS-3$
 		addTransaction(seq, new FBTransaction("CD", "CO", "QU:=FALSE;QD:=FALSE;CV:=1")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		// $NON-NLS-3$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PV", "2"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -60,7 +60,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 		// $NON-NLS-3$
 		addTransaction(seq, new FBTransaction("CU", "CO", "QU:=TRUE;QD:=FALSE;CV:=2")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		// $NON-NLS-3$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PV", "0"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -70,12 +70,12 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 		// $NON-NLS-3$
 		addTransaction(seq, new FBTransaction("R", "RO", "QU:=TRUE;QD:=TRUE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		// $NON-NLS-3$
-		fb = runTest(fb, seq);
+		fb = (BasicFBType) runFBTest(fb, seq);
 		seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("CU", "CO", "QU:=TRUE;QD:=FALSE;CV:=1")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 	}
 
 }

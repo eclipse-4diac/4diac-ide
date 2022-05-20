@@ -29,6 +29,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectContainmentWithInverseEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
@@ -155,7 +156,7 @@ public class STCaseStatementImpl extends STStatementImpl implements STCaseStatem
 	@Override
 	public EList<STCaseCases> getCases() {
 		if (cases == null) {
-			cases = new EObjectContainmentEList<STCaseCases>(STCaseCases.class, this, STCorePackage.ST_CASE_STATEMENT__CASES);
+			cases = new EObjectContainmentWithInverseEList<STCaseCases>(STCaseCases.class, this, STCorePackage.ST_CASE_STATEMENT__CASES, STCorePackage.ST_CASE_CASES__STATEMENT);
 		}
 		return cases;
 	}
@@ -203,6 +204,22 @@ public class STCaseStatementImpl extends STStatementImpl implements STCaseStatem
 		}
 		else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CASE_STATEMENT__ELSE, newElse, newElse));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case STCorePackage.ST_CASE_STATEMENT__CASES:
+				return ((InternalEList<InternalEObject>)(InternalEList<?>)getCases()).basicAdd(otherEnd, msgs);
+			default:
+				return super.eInverseAdd(otherEnd, featureID, msgs);
+		}
 	}
 
 	/**

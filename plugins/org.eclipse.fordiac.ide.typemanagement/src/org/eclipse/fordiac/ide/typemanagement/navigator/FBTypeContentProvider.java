@@ -24,8 +24,6 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
@@ -37,19 +35,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 
 	private List<Notifier> targets = new ArrayList<>();
 
-	private final Adapter palletteEntryAdapter = new AdapterImpl() {
+	private final Adapter typeEntryAdapter = new AdapterImpl() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			final Object feature = notification.getFeature();
-			if (PalettePackage.eINSTANCE.getPaletteEntry_TypeEditable().equals(feature)) {
-				final PaletteEntry entry = (PaletteEntry) notification.getNotifier();
+			if (TypeEntry.TYPE_ENTRY_TYPE_EDITABLE_FEATURE.equals(feature)) {
+				final TypeEntry entry = (TypeEntry) notification.getNotifier();
 				FBTypeContentProvider.super.notifyChanged(new ViewerNotification(notification, entry.getFile()));
 			}
 		}
@@ -69,9 +68,9 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 	public Object[] getChildren(Object parentElement) {
 		if (parentElement instanceof IFile) {
 			final IFile element = (IFile) parentElement;
-			final PaletteEntry entry = TypeLibrary.getPaletteEntryForFile(element);
+			final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(element);
 			if (null != entry) {
-				hookToPaletteEntry(entry);
+				hookToTypeEntry(entry);
 				parentElement = entry.getTypeEditable();
 				if (parentElement instanceof AdapterType) {
 					parentElement = ((AdapterType) parentElement).getAdapterFBType();
@@ -87,9 +86,9 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 		return super.getChildren(parentElement);
 	}
 
-	private void hookToPaletteEntry(final PaletteEntry entry) {
-		if (!entry.eAdapters().contains(palletteEntryAdapter)) {
-			entry.eAdapters().add(palletteEntryAdapter);
+	private void hookToTypeEntry(final TypeEntry entry) {
+		if (!entry.eAdapters().contains(typeEntryAdapter)) {
+			entry.eAdapters().add(typeEntryAdapter);
 			targets.add(entry);
 		}
 	}
@@ -97,7 +96,7 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 	@Override
 	public void dispose() {
 		super.dispose();
-		targets.forEach(entry -> entry.eAdapters().remove(palletteEntryAdapter));
+		targets.forEach(entry -> entry.eAdapters().remove(typeEntryAdapter));
 		targets = null;
 	}
 
@@ -108,7 +107,7 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 		}
 		final Object retval = super.getParent(element);
 		if (retval instanceof FBType) {
-			return ((FBType) retval).getPaletteEntry().getFile();
+			return ((FBType) retval).getTypeEntry().getFile();
 		}
 		return retval;
 	}
@@ -134,7 +133,7 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 			if (type instanceof AdapterFBType) {
 				type = ((AdapterFBType) type).getAdapterType();
 			}
-			super.notifyChanged(new ViewerNotification(notification, type.getPaletteEntry().getFile()));
+			super.notifyChanged(new ViewerNotification(notification, type.getTypeEntry().getFile()));
 		} else {
 			super.notifyChanged(notification);
 		}

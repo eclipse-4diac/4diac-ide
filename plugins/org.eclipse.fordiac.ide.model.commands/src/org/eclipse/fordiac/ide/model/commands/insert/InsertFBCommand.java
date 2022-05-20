@@ -42,7 +42,7 @@ public class InsertFBCommand extends Command {
 		} else {
 			internalFB = LibraryElementFactory.eINSTANCE.createFB();
 		}
-		internalFB.setPaletteEntry(fbTypeEntry.getPaletteEntry());
+		internalFB.setTypeEntry(fbTypeEntry.getTypeEntry());
 		internalFB.setComment(""); //$NON-NLS-1$
 		redo();
 		internalFB.setName(NameRepository.createUniqueName(internalFB, fbTypeEntry.getName()));

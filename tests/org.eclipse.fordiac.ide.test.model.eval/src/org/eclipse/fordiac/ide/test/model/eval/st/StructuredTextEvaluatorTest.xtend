@@ -24,6 +24,7 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
+import org.eclipse.fordiac.ide.model.data.AnyRealType
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
@@ -92,6 +93,7 @@ class StructuredTextEvaluatorTest {
 
 	@BeforeAll
 	def static void setupXtext() {
+		new DataTypeLibrary
 		STAlgorithmStandaloneSetup.doSetup
 	}
 
@@ -112,40 +114,32 @@ class StructuredTextEvaluatorTest {
 		17.toSIntValue.assertEquals("SINT#17".evaluateExpression)
 		17.toSIntValue.assertEquals("SINT#16#11".evaluateExpression)
 		(-4).toSIntValue.assertEquals("SINT#-4".evaluateExpression)
-		(-4).toSIntValue.assertEquals("SINT#16#fc".evaluateExpression)
 		Byte.MIN_VALUE.toSIntValue.assertEquals("SINT#-128".evaluateExpression)
 		Byte.MAX_VALUE.toSIntValue.assertEquals("SINT#127".evaluateExpression)
-		Byte.MIN_VALUE.toSIntValue.assertEquals("SINT#16#80".evaluateExpression)
 		Byte.MAX_VALUE.toSIntValue.assertEquals("SINT#16#7f".evaluateExpression)
 		// INT
 		0.toIntValue.assertEquals("INT#0".evaluateExpression)
 		17.toIntValue.assertEquals("INT#17".evaluateExpression)
 		17.toIntValue.assertEquals("INT#16#11".evaluateExpression)
 		(-4).toIntValue.assertEquals("INT#-4".evaluateExpression)
-		(-4).toIntValue.assertEquals("INT#16#fffc".evaluateExpression)
 		Short.MIN_VALUE.toIntValue.assertEquals("INT#-32768".evaluateExpression)
 		Short.MAX_VALUE.toIntValue.assertEquals("INT#32767".evaluateExpression)
-		Short.MIN_VALUE.toIntValue.assertEquals("INT#16#8000".evaluateExpression)
 		Short.MAX_VALUE.toIntValue.assertEquals("INT#16#7fff".evaluateExpression)
 		// DINT
 		0.toDIntValue.assertEquals("DINT#0".evaluateExpression)
 		17.toDIntValue.assertEquals("DINT#17".evaluateExpression)
 		17.toDIntValue.assertEquals("DINT#16#11".evaluateExpression)
 		(-4).toDIntValue.assertEquals("DINT#-4".evaluateExpression)
-		(-4).toDIntValue.assertEquals("DINT#16#fffffffc".evaluateExpression)
 		Integer.MIN_VALUE.toDIntValue.assertEquals("DINT#-2147483648".evaluateExpression)
 		Integer.MAX_VALUE.toDIntValue.assertEquals("DINT#2147483647".evaluateExpression)
-		Integer.MIN_VALUE.toDIntValue.assertEquals("DINT#16#80000000".evaluateExpression)
 		Integer.MAX_VALUE.toDIntValue.assertEquals("DINT#16#7fffffff".evaluateExpression)
 		// LINT
 		0.toLIntValue.assertEquals("LINT#0".evaluateExpression)
 		17.toLIntValue.assertEquals("LINT#17".evaluateExpression)
 		17.toLIntValue.assertEquals("LINT#16#11".evaluateExpression)
 		(-4).toLIntValue.assertEquals("LINT#-4".evaluateExpression)
-		(-4).toLIntValue.assertEquals("LINT#16#fffffffffffffffc".evaluateExpression)
 		Long.MIN_VALUE.toLIntValue.assertEquals("LINT#-9223372036854775808".evaluateExpression)
 		Long.MAX_VALUE.toLIntValue.assertEquals("LINT#9223372036854775807".evaluateExpression)
-		Long.MIN_VALUE.toLIntValue.assertEquals("LINT#16#8000000000000000".evaluateExpression)
 		Long.MAX_VALUE.toLIntValue.assertEquals("LINT#16#7fffffffffffffff".evaluateExpression)
 		// USINT
 		0.toUSIntValue.assertEquals("USINT#0".evaluateExpression)
@@ -157,35 +151,29 @@ class StructuredTextEvaluatorTest {
 		0.toUIntValue.assertEquals("UINT#0".evaluateExpression)
 		17.toUIntValue.assertEquals("UINT#17".evaluateExpression)
 		17.toUIntValue.assertEquals("UINT#16#11".evaluateExpression)
-		(-4).toUIntValue.assertEquals("UINT#-4".evaluateExpression)
-		(-4).toUIntValue.assertEquals("UINT#16#fffc".evaluateExpression)
 		65535.toUIntValue.assertEquals("UINT#65535".evaluateExpression)
 		65535.toUIntValue.assertEquals("UINT#16#ffff".evaluateExpression)
 		// UDINT
 		0.toUDIntValue.assertEquals("UDINT#0".evaluateExpression)
 		17.toUDIntValue.assertEquals("UDINT#17".evaluateExpression)
 		17.toUDIntValue.assertEquals("UDINT#16#11".evaluateExpression)
-		(-4).toUDIntValue.assertEquals("UDINT#-4".evaluateExpression)
-		(-4).toUDIntValue.assertEquals("UDINT#16#fffffffc".evaluateExpression)
 		0xffffffff.toUDIntValue.assertEquals("UDINT#4294967295".evaluateExpression)
 		0xffffffff.toUDIntValue.assertEquals("UDINT#16#ffffffff".evaluateExpression)
 		// ULINT
 		0.toULIntValue.assertEquals("ULINT#0".evaluateExpression)
 		17.toULIntValue.assertEquals("ULINT#17".evaluateExpression)
 		17.toULIntValue.assertEquals("ULINT#16#11".evaluateExpression)
-		(-4).toULIntValue.assertEquals("ULINT#-4".evaluateExpression)
-		(-4).toULIntValue.assertEquals("ULINT#16#fffffffffffffffc".evaluateExpression)
 		0xffffffffffffffff#L.toULIntValue.assertEquals("ULINT#18446744073709551615".evaluateExpression)
 		0xffffffffffffffff#L.toULIntValue.assertEquals("ULINT#16#ffffffffffffffff".evaluateExpression)
 		// REAL
-		0.toRealValue.assertEquals("REAL#0".evaluateExpression)
-		17.toRealValue.assertEquals("REAL#17".evaluateExpression)
-		(-4).toRealValue.assertEquals("REAL#-4".evaluateExpression)
+		0.toRealValue.assertEquals("REAL#0.0".evaluateExpression)
+		17.toRealValue.assertEquals("REAL#17.0".evaluateExpression)
+		(-4).toRealValue.assertEquals("REAL#-4.0".evaluateExpression)
 		(3.1415).toRealValue.assertEquals("REAL#3.1415".evaluateExpression)
 		// LREAL
-		0.toLRealValue.assertEquals("LREAL#0".evaluateExpression)
-		17.toLRealValue.assertEquals("LREAL#17".evaluateExpression)
-		(-4).toLRealValue.assertEquals("LREAL#-4".evaluateExpression)
+		0.toLRealValue.assertEquals("LREAL#0.0".evaluateExpression)
+		17.toLRealValue.assertEquals("LREAL#17.0".evaluateExpression)
+		(-4).toLRealValue.assertEquals("LREAL#-4.0".evaluateExpression)
 		(3.1415).toLRealValue.assertEquals("LREAL#3.1415".evaluateExpression)
 		// BYTE
 		0.toByteValue.assertEquals("BYTE#0".evaluateExpression)
@@ -197,24 +185,18 @@ class StructuredTextEvaluatorTest {
 		0.toWordValue.assertEquals("WORD#0".evaluateExpression)
 		17.toWordValue.assertEquals("WORD#17".evaluateExpression)
 		17.toWordValue.assertEquals("WORD#16#11".evaluateExpression)
-		(-4).toWordValue.assertEquals("WORD#-4".evaluateExpression)
-		(-4).toWordValue.assertEquals("WORD#16#fffc".evaluateExpression)
 		65535.toWordValue.assertEquals("WORD#65535".evaluateExpression)
 		65535.toWordValue.assertEquals("WORD#16#ffff".evaluateExpression)
 		// DWORD
 		0.toDWordValue.assertEquals("DWORD#0".evaluateExpression)
 		17.toDWordValue.assertEquals("DWORD#17".evaluateExpression)
 		17.toDWordValue.assertEquals("DWORD#16#11".evaluateExpression)
-		(-4).toDWordValue.assertEquals("DWORD#-4".evaluateExpression)
-		(-4).toDWordValue.assertEquals("DWORD#16#fffffffc".evaluateExpression)
 		0xffffffff.toDWordValue.assertEquals("DWORD#4294967295".evaluateExpression)
 		0xffffffff.toDWordValue.assertEquals("DWORD#16#ffffffff".evaluateExpression)
 		// LWORD
 		0.toLWordValue.assertEquals("LWORD#0".evaluateExpression)
 		17.toLWordValue.assertEquals("LWORD#17".evaluateExpression)
 		17.toLWordValue.assertEquals("LWORD#16#11".evaluateExpression)
-		(-4).toLWordValue.assertEquals("LWORD#-4".evaluateExpression)
-		(-4).toLWordValue.assertEquals("LWORD#16#fffffffffffffffc".evaluateExpression)
 		0xffffffffffffffff#L.toLWordValue.assertEquals("LWORD#18446744073709551615".evaluateExpression)
 		0xffffffffffffffff#L.toLWordValue.assertEquals("LWORD#16#ffffffffffffffff".evaluateExpression)
 		// TIME
@@ -271,7 +253,7 @@ class StructuredTextEvaluatorTest {
 		// WCHAR
 		'\u0000'.toWCharValue.assertEquals("WCHAR#\"$0000\"".evaluateExpression)
 		'0'.toWCharValue.assertEquals("WCHAR#\"$0030\"".evaluateExpression)
-		'\n'.toWCharValue.assertEquals("WCHAR#'$N'".evaluateExpression)
+		'\n'.toWCharValue.assertEquals("WCHAR#\"$N\"".evaluateExpression)
 		'a'.toWCharValue.assertEquals("WCHAR#\"a\"".evaluateExpression)
 		// STRING
 		"\u0000".toStringValue.assertEquals("STRING#'$00'".evaluateExpression)
@@ -281,7 +263,7 @@ class StructuredTextEvaluatorTest {
 		// WSTRING
 		"\u0000".toWStringValue.assertEquals("WSTRING#\"$0000\"".evaluateExpression)
 		"0".toWStringValue.assertEquals("WSTRING#\"$0030\"".evaluateExpression)
-		"\n".toWStringValue.assertEquals("WSTRING#'$N'".evaluateExpression)
+		"\n".toWStringValue.assertEquals("WSTRING#\"$N\"".evaluateExpression)
 		"abc".toWStringValue.assertEquals("WSTRING#\"abc\"".evaluateExpression)
 	}
 
@@ -355,7 +337,7 @@ class StructuredTextEvaluatorTest {
 				#["0", "1", "-1", "17", "-4"].reject [
 					((type instanceof AnyUnsignedType || type instanceof AnyBitType) && contains('-')) ||
 						(type instanceof BoolType && length > 1)
-				].flatMap [ value |
+				].map[type instanceof AnyRealType ? concat(".0") : it].flatMap [ value |
 					STUnaryOperator.VALUES.filter[isApplicableTo(type)].map [ operator |
 						arguments(operator, type.name, value)
 					]
@@ -430,11 +412,12 @@ class StructuredTextEvaluatorTest {
 				#["0", "1", "-1", "17", "-4"].reject [
 					((type instanceof AnyUnsignedType || type instanceof AnyBitType) && contains('-')) ||
 						(type instanceof BoolType && length > 1)
-				].flatMap [ value |
+				].map[type instanceof AnyRealType ? concat(".0") : it].flatMap [ value |
 					STBinaryOperator.VALUES.filter[isApplicableTo(type, type) && !range].flatMap [ operator |
 						#[
-							arguments(operator, type.name, value, "1"),
-							arguments(operator, type.name, value, if(type instanceof BoolType) "0" else "7")
+							arguments(operator, type.name, value, if(type instanceof AnyRealType) "1.0" else "1"),
+							arguments(operator, type.name, value,
+								if(type instanceof BoolType) "0" else if(type instanceof AnyRealType) "7.0" else "7")
 						]
 					]
 				]
@@ -457,6 +440,25 @@ class StructuredTextEvaluatorTest {
 		ArithmeticException.assertThrows["BOOL#TRUE AND ((INT#0 / INT#0) = INT#0)".evaluateExpression]
 		BoolValue.TRUE.assertEquals("BOOL#TRUE OR ((INT#0 / INT#0) = INT#0)".evaluateExpression)
 		ArithmeticException.assertThrows["BOOL#FALSE OR ((INT#0 / INT#0) = INT#0)".evaluateExpression]
+	}
+
+	@Test
+	def void testBinaryExpressionTimeArithmetic() {
+		// TIME
+		Duration.ofSeconds(21).toTimeValue.assertEquals("T#17s + T#4s".evaluateExpression)
+		Duration.ofSeconds(4).toTimeValue.assertEquals("T#21s - T#17s".evaluateExpression)
+		Duration.ofSeconds(42).toTimeValue.assertEquals("T#21s * 2".evaluateExpression)
+		Duration.ofSeconds(21).toTimeValue.assertEquals("T#42s / 2".evaluateExpression)
+		// LTIME
+		Duration.ofSeconds(21).toLTimeValue.assertEquals("LT#17s + LT#4s".evaluateExpression)
+		Duration.ofSeconds(4).toLTimeValue.assertEquals("LT#21s - LT#17s".evaluateExpression)
+		Duration.ofSeconds(42).toLTimeValue.assertEquals("LT#21s * 2".evaluateExpression)
+		Duration.ofSeconds(21).toLTimeValue.assertEquals("LT#42s / 2".evaluateExpression)
+		// promotion
+		Duration.ofSeconds(21).toLTimeValue.assertEquals("LT#17s + T#4s".evaluateExpression)
+		Duration.ofSeconds(4).toLTimeValue.assertEquals("LT#21s - T#17s".evaluateExpression)
+		Duration.ofSeconds(21).toLTimeValue.assertEquals("T#17s + LT#4s".evaluateExpression)
+		Duration.ofSeconds(4).toLTimeValue.assertEquals("T#21s - LT#17s".evaluateExpression)
 	}
 
 	@Test
@@ -550,6 +552,20 @@ class StructuredTextEvaluatorTest {
 	}
 
 	@Test
+	def void testArrayMultiInitializer() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(STArrayAccessExpression.repeat(3), '''
+			VAR_TEMP
+				test: ARRAY [ 0 .. 2 ] OF INT;
+				testMulti: ARRAY [ 0 .. 2, 0 .. 1 ] OF INT := [ 2([17, 4]), [21, 42] ];
+			END_VAR
+			
+			test[0] := testMulti[0, 0];
+			test[1] := testMulti[1, 1];
+			test[2] := testMulti[2, 0];
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
 	def void testArrayInitializerWithIndex() {
 		#[17.toIntValue, 4.toIntValue, 21.toIntValue, 17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(
 			STBinaryExpression.repeat(2), '''
@@ -603,6 +619,23 @@ class StructuredTextEvaluatorTest {
 				test2[2] := test2[0] + test2[1];
 				test := test2;
 			'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testArrayCopyBounds() {
+		#[17.toIntValue, 4.toIntValue, 21.toIntValue].assertIterableTrace(#[STBinaryExpression, STFeatureExpression] +
+			STArrayAccessExpression.repeat(3), '''
+			VAR_TEMP
+				test: ARRAY [ 0 .. 2 ] OF INT;
+				test2: ARRAY [ 1 .. 3 ] OF INT := [ 17, 4 ];
+			END_VAR
+			
+			test2[3] := test2[1] + test2[2];
+			test := test2;
+			test[0] := test[1];
+			test[1] := test[2];
+			test[2] := test2[3];
+		'''.evaluateAlgorithm)
 	}
 
 	@Test
@@ -1106,11 +1139,11 @@ class StructuredTextEvaluatorTest {
 		expression.evaluateExpression(emptyList)
 	}
 
-	def static evaluateExpression(CharSequence expression, Variable variable) {
+	def static evaluateExpression(CharSequence expression, Variable<?> variable) {
 		expression.evaluateExpression(#[variable])
 	}
 
-	def static evaluateExpression(CharSequence expression, Collection<Variable> variables) {
+	def static evaluateExpression(CharSequence expression, Collection<Variable<?>> variables) {
 		val transition = LibraryElementFactory.eINSTANCE.createECTransition
 		transition.conditionExpression = expression.toString
 		new ECTransitionEvaluator(transition, null, variables, null).evaluate
@@ -1120,7 +1153,7 @@ class StructuredTextEvaluatorTest {
 		algorithm.evaluateAlgorithm(emptyList)
 	}
 
-	def static evaluateAlgorithm(CharSequence algorithm, Iterable<Variable> variables) {
+	def static evaluateAlgorithm(CharSequence algorithm, Iterable<Variable<?>> variables) {
 		val alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm
 		alg.name = "TEST_ALGORITHM"
 		alg.text = algorithm.toString
@@ -1159,7 +1192,7 @@ class StructuredTextEvaluatorTest {
 		@Accessors
 		final Queue<Object> trace = new ArrayBlockingQueue(1000)
 
-		new(STAlgorithm alg, Variable context, Iterable<Variable> variables, Evaluator parent) {
+		new(STAlgorithm alg, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 			super(alg, context, variables, parent)
 		}
 

@@ -24,25 +24,25 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public interface PrimaryVariable extends Variable
 {
   /**
-   * Returns the value of the '<em><b>Var</b></em>' reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Var</b></em>' reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Var</em>' reference.
-   * @see #setVar(VarDeclaration)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getPrimaryVariable_Var()
-   * @model
-   * @generated
-   */
+	 * @return the value of the '<em>Var</em>' reference.
+	 * @see #setVar(VarDeclaration)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getPrimaryVariable_Var()
+	 * @model
+	 * @generated
+	 */
   VarDeclaration getVar();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariable#getVar <em>Var</em>}' reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariable#getVar <em>Var</em>}' reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Var</em>' reference.
-   * @see #getVar()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Var</em>' reference.
+	 * @see #getVar()
+	 * @generated
+	 */
   void setVar(VarDeclaration value);
 
 } // PrimaryVariable

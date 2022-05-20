@@ -77,18 +77,18 @@ public class ChangeDataTypeCommand extends Command {
 
 	private static final class ChangeAdapterFBCommand extends UpdateFBTypeCommand {
 
-		public ChangeAdapterFBCommand(AdapterDeclaration adpDecl) {
+		public ChangeAdapterFBCommand(final AdapterDeclaration adpDecl) {
 			super(adpDecl.getAdapterFB(), null);
-			setEntry(adpDecl.getType().getPaletteEntry());
+			setEntry(adpDecl.getType().getTypeEntry());
 		}
 
 		@Override
-		protected FBNetworkElement createCopiedFBEntry(FBNetworkElement srcElement) {
-			AdapterFB copy = LibraryElementFactory.eINSTANCE.createAdapterFB();
+		protected FBNetworkElement createCopiedFBEntry(final FBNetworkElement srcElement) {
+			final AdapterFB copy = LibraryElementFactory.eINSTANCE.createAdapterFB();
 			if (null == getEntry()) {
-				copy.setPaletteEntry(srcElement.getPaletteEntry());
+				copy.setTypeEntry(srcElement.getTypeEntry());
 			} else {
-				copy.setPaletteEntry(getEntry());
+				copy.setTypeEntry(getEntry());
 			}
 			copy.setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
 			return copy;

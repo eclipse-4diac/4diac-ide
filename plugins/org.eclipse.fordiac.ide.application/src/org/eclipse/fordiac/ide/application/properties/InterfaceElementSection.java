@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 fortiss GmbH, Johannes Kepler University Linz,
+ * Copyright (c) 2016, 2022 fortiss GmbH, Johannes Kepler University Linz,
  * 							Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -27,12 +27,15 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.ConnectionDisplayWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -61,7 +64,6 @@ public class InterfaceElementSection extends AbstractSection {
 	private CLabel currentParameterTextCLabel;
 	private Button openEditorButton;
 	private Section infoSection;
-	// Added
 	private ConnectionDisplayWidget connectionDisplayWidget;
 
 
@@ -107,7 +109,7 @@ public class InterfaceElementSection extends AbstractSection {
 		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
 
 		openEditorButton.addListener(SWT.Selection, ev -> OpenStructMenu
-				.openStructEditor(((VarDeclaration) getType()).getType().getPaletteEntry().getFile()));
+				.openStructEditor(((VarDeclaration) getType()).getType().getTypeEntry().getFile()));
 
 		parameterTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.DefaultValue + ":"); //$NON-NLS-1$
 		parameterText = createGroupText(composite, false);
@@ -130,6 +132,8 @@ public class InterfaceElementSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		instanceCommentText = createGroupText(composite, false);
 		instanceCommentText.setLayoutData(new GridData(SWT.FILL, SWT.None, true, false));
+		instanceCommentText.selectAll();
+
 		instanceCommentText.addModifyListener(e -> {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), instanceCommentText.getText()));
@@ -140,7 +144,10 @@ public class InterfaceElementSection extends AbstractSection {
 		currentParameterText = createGroupText(composite, true);
 		currentParameterText.addModifyListener(e -> {
 			removeContentAdapter();
-			executeCommand(new ChangeValueCommand((VarDeclaration) getType(), currentParameterText.getText()));
+			if (getType() instanceof VarDeclaration) {
+				// only allow to change the parameter text if is a var declaration and not an error marker
+				executeCommand(new ChangeValueCommand((VarDeclaration) getType(), currentParameterText.getText()));
+			}
 			addContentAdapter();
 		});
 
@@ -162,20 +169,24 @@ public class InterfaceElementSection extends AbstractSection {
 				infoSection.setText(Messages.InterfaceElementSection_InterfaceElement);
 			}
 			typeCommentText.setText(getTypeComment());
-			String itype = ""; //$NON-NLS-1$
 
 			openEditorButton.setEnabled(
-					(getType().getType() instanceof StructuredType && !"ANY_STRUCT".equals(getType().getType().getName()))
+					((getType().getType() instanceof StructuredType) && !"ANY_STRUCT".equals(getType().getType().getName()))
 					|| (getType().getType() instanceof AdapterType));
 
-			instanceCommentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+			if (hasComment()) {
+				instanceCommentText.setText(getInstanceComment());
+			} else {
+				instanceCommentText.setMessage(getInstanceComment());
+			}
 
 			if (getType() instanceof VarDeclaration) {
-				itype = setParameterAndType();
-			} else {
-				itype = FordiacMessages.Event;
+				setParameter();
+			} else if (getType() instanceof ErrorMarkerInterface) {
+				setErrorParam();
 			}
-			typeText.setText(itype);
+
+			typeText.setText(getPinTypeName());
 
 			connectionDisplayWidget.refreshConnectionsViewer(getType());
 
@@ -187,9 +198,16 @@ public class InterfaceElementSection extends AbstractSection {
 		commandStack = commandStackBuffer;
 	}
 
+	private String getPinTypeName() {
+		if (getType().getType() instanceof StructuredType) {
+			return getStructTypes((StructuredType) getType().getType());
+		}
+		return getType().getType() != null ? getType().getType().getName() : ""; //$NON-NLS-1$
+	}
+
 	private String getTypeComment() {
 		final FBNetworkElement fb = getType().getFBNetworkElement();
-		if (fb != null && fb.getType() != null) {
+		if ((fb != null) && (fb.getType() != null)) {
 			final IInterfaceElement interfaceElement = fb.getType().getInterfaceList()
 					.getInterfaceElement(getType().getName());
 			if (interfaceElement != null) {
@@ -199,16 +217,34 @@ public class InterfaceElementSection extends AbstractSection {
 		return "";   //$NON-NLS-1$
 	}
 
+	private boolean hasComment() {
+		return ((getType().getComment() != null) && !getType().getComment().isBlank());
+	}
+
+	private String getInstanceComment() {
+		if (hasComment()) {
+			return getType().getComment();
+		}
+		return getTypeComment();
+	}
+
 	private Object getPinName() {
 		return getType().getName() != null ? getType().getName() : ""; //$NON-NLS-1$
 	}
 
 	private void refreshParameterVisibility() {
-		final boolean isDataIO = (getType() instanceof VarDeclaration) && !(getType() instanceof AdapterDeclaration);
+		final boolean isDataIO = isDataIO();
 		parameterTextCLabel.setVisible(isDataIO);
 		parameterText.setVisible(isDataIO);
 		currentParameterTextCLabel.setVisible(isDataIO && getType().isIsInput());
 		currentParameterText.setVisible(isDataIO && getType().isIsInput());
+	}
+
+	private boolean isDataIO() {
+		if (getType() instanceof ErrorMarkerInterface) {
+			return !(getType().getType() instanceof EventType) && !(getType().getType() instanceof AdapterType);
+		}
+		return (getType() instanceof VarDeclaration) && !(getType() instanceof AdapterDeclaration);
 	}
 
 	private void setEditable(final boolean editable) {
@@ -219,30 +255,31 @@ public class InterfaceElementSection extends AbstractSection {
 		connectionDisplayWidget.setEditable(editable);
 	}
 
-	protected String setParameterAndType() {
-		String itype;
+	protected void setParameter() {
 		final VarDeclaration varDecl = (VarDeclaration) getType();
-		itype = varDecl.getType() != null ? varDecl.getType().getName() : ""; //$NON-NLS-1$
 		if (varDecl.isIsInput() && (varDecl.getFBNetworkElement() != null)) {
 			final FBType fbType = varDecl.getFBNetworkElement().getType();
 			if (null != fbType) {
-				final IInterfaceElement ie = fbType.getInterfaceList()
-						.getInterfaceElement(varDecl.getName());
+				final IInterfaceElement ie = fbType.getInterfaceList().getInterfaceElement(varDecl.getName());
 				if (ie instanceof VarDeclaration) {
-					parameterText.setText(
-							getValueFromVarDecl((VarDeclaration) ie));
-					if (varDecl.getType() instanceof StructuredType) {
-						itype = getStructTypes((StructuredType) getType().getType());
-					}
+					parameterText.setText(getValueFromVarDecl((VarDeclaration) ie));
 				}
 			}
 		}
 		currentParameterText.setText(getValueFromVarDecl(varDecl));
-		return itype;
+	}
+
+	private void setErrorParam() {
+		final ErrorMarkerInterface pin = (ErrorMarkerInterface) getType();
+		currentParameterText.setText(getValueText(pin.getValue()));
 	}
 
 	private static String getValueFromVarDecl(final VarDeclaration varDecl) {
-		return (varDecl.getValue() != null) ? varDecl.getValue().getValue() : ""; //$NON-NLS-1$
+		return getValueText(varDecl.getValue());
+	}
+
+	private static String getValueText(final Value value) {
+		return ((value != null) && (value.getValue() != null)) ? value.getValue() : ""; //$NON-NLS-1$
 	}
 
 	// this method will be removed as soon as there is a toString for StructType in

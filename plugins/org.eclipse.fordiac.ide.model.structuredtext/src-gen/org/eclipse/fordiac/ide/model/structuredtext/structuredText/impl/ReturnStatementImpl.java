@@ -18,24 +18,24 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class ReturnStatementImpl extends StatementImpl implements ReturnStatement
 {
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected ReturnStatementImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.RETURN_STATEMENT;
-  }
+		return StructuredTextPackage.Literals.RETURN_STATEMENT;
+	}
 
 } //ReturnStatementImpl

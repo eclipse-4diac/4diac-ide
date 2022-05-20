@@ -20,24 +20,24 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class ExpressionImpl extends MinimalEObjectImpl.Container implements Expression
 {
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected ExpressionImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.EXPRESSION;
-  }
+		return StructuredTextPackage.Literals.EXPRESSION;
+	}
 
 } //ExpressionImpl

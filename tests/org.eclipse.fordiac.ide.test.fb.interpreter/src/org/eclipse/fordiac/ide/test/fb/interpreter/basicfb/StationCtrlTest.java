@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
@@ -25,12 +25,12 @@ public class StationCtrlTest extends AbstractInterpreterTest {
 
 	@Override
 	public void test() {
-		final BasicFBType fb = loadFBType("StationCtrl"); //$NON-NLS-1$
+		final BasicFBType fb = (BasicFBType) loadFBType("StationCtrl"); //$NON-NLS-1$
 		fb.getService().getServiceSequence().clear();
 		ServiceSequence seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 
 		addTransaction(seq, new FBTransaction("INIT", "INITO")); //$NON-NLS-1$ //$NON-NLS-2$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 		// ErrorCode is default 0
 		fb.getService().getServiceSequence().clear();
@@ -39,7 +39,7 @@ public class StationCtrlTest extends AbstractInterpreterTest {
 		final String[] outputs = { "StopConv", "PickPart" }; //$NON-NLS-1$//$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("NextPart", Arrays.asList(outputs))); //$NON-NLS-1$
 		addTransaction(seq, new FBTransaction("PartPicked", "StartConv")); //$NON-NLS-1$ //$NON-NLS-2$
-		runTest(fb, seq);
+		runFBTest(fb, seq);
 
 
 		fb.getService().getServiceSequence().clear();

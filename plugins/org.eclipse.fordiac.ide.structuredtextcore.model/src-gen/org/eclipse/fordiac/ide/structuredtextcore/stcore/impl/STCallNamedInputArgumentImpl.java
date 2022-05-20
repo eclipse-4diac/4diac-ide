@@ -38,32 +38,32 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallNamedInputArgumentImpl#getTarget <em>Target</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallNamedInputArgumentImpl#getSource <em>Source</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallNamedInputArgumentImpl#getParameter <em>Parameter</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallNamedInputArgumentImpl#getArgument <em>Argument</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements STCallNamedInputArgument {
 	/**
-	 * The cached value of the '{@link #getTarget() <em>Target</em>}' reference.
+	 * The cached value of the '{@link #getParameter() <em>Parameter</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getTarget()
+	 * @see #getParameter()
 	 * @generated
 	 * @ordered
 	 */
-	protected INamedElement target;
+	protected INamedElement parameter;
 
 	/**
-	 * The cached value of the '{@link #getSource() <em>Source</em>}' containment reference.
+	 * The cached value of the '{@link #getArgument() <em>Argument</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getSource()
+	 * @see #getArgument()
 	 * @generated
 	 * @ordered
 	 */
-	protected STExpression source;
+	protected STExpression argument;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -90,16 +90,16 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	 * @generated
 	 */
 	@Override
-	public INamedElement getTarget() {
-		if (target != null && target.eIsProxy()) {
-			InternalEObject oldTarget = (InternalEObject)target;
-			target = (INamedElement)eResolveProxy(oldTarget);
-			if (target != oldTarget) {
+	public INamedElement getParameter() {
+		if (parameter != null && parameter.eIsProxy()) {
+			InternalEObject oldParameter = (InternalEObject)parameter;
+			parameter = (INamedElement)eResolveProxy(oldParameter);
+			if (parameter != oldParameter) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET, oldTarget, target));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER, oldParameter, parameter));
 			}
 		}
-		return target;
+		return parameter;
 	}
 
 	/**
@@ -107,8 +107,8 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public INamedElement basicGetTarget() {
-		return target;
+	public INamedElement basicGetParameter() {
+		return parameter;
 	}
 
 	/**
@@ -117,11 +117,11 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	 * @generated
 	 */
 	@Override
-	public void setTarget(INamedElement newTarget) {
-		INamedElement oldTarget = target;
-		target = newTarget;
+	public void setParameter(INamedElement newParameter) {
+		INamedElement oldParameter = parameter;
+		parameter = newParameter;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET, oldTarget, target));
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER, oldParameter, parameter));
 	}
 
 	/**
@@ -130,8 +130,8 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	 * @generated
 	 */
 	@Override
-	public STExpression getSource() {
-		return source;
+	public STExpression getArgument() {
+		return argument;
 	}
 
 	/**
@@ -139,11 +139,11 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetSource(STExpression newSource, NotificationChain msgs) {
-		STExpression oldSource = source;
-		source = newSource;
+	public NotificationChain basicSetArgument(STExpression newArgument, NotificationChain msgs) {
+		STExpression oldArgument = argument;
+		argument = newArgument;
 		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE, oldSource, newSource);
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT, oldArgument, newArgument);
 			if (msgs == null) msgs = notification; else msgs.add(notification);
 		}
 		return msgs;
@@ -155,18 +155,18 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	 * @generated
 	 */
 	@Override
-	public void setSource(STExpression newSource) {
-		if (newSource != source) {
+	public void setArgument(STExpression newArgument) {
+		if (newArgument != argument) {
 			NotificationChain msgs = null;
-			if (source != null)
-				msgs = ((InternalEObject)source).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE, null, msgs);
-			if (newSource != null)
-				msgs = ((InternalEObject)newSource).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE, null, msgs);
-			msgs = basicSetSource(newSource, msgs);
+			if (argument != null)
+				msgs = ((InternalEObject)argument).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT, null, msgs);
+			if (newArgument != null)
+				msgs = ((InternalEObject)newArgument).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT, null, msgs);
+			msgs = basicSetArgument(newArgument, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
 		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE, newSource, newSource));
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT, newArgument, newArgument));
 	}
 
 	/**
@@ -197,8 +197,8 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE:
-				return basicSetSource(null, msgs);
+			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT:
+				return basicSetArgument(null, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -212,11 +212,11 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET:
-				if (resolve) return getTarget();
-				return basicGetTarget();
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE:
-				return getSource();
+			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER:
+				if (resolve) return getParameter();
+				return basicGetParameter();
+			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT:
+				return getArgument();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -230,11 +230,11 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET:
-				setTarget((INamedElement)newValue);
+			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER:
+				setParameter((INamedElement)newValue);
 				return;
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE:
-				setSource((STExpression)newValue);
+			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT:
+				setArgument((STExpression)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -250,11 +250,11 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET:
-				setTarget((INamedElement)null);
+			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER:
+				setParameter((INamedElement)null);
 				return;
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE:
-				setSource((STExpression)null);
+			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT:
+				setArgument((STExpression)null);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -270,10 +270,10 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__TARGET:
-				return target != null;
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__SOURCE:
-				return source != null;
+			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER:
+				return parameter != null;
+			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT:
+				return argument != null;
 			default:
 				return super.eIsSet(featureID);
 		}

@@ -18,24 +18,24 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class ExitStatementImpl extends StatementImpl implements ExitStatement
 {
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected ExitStatementImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.EXIT_STATEMENT;
-  }
+		return StructuredTextPackage.Literals.EXIT_STATEMENT;
+	}
 
 } //ExitStatementImpl

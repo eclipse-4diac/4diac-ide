@@ -12,29 +12,45 @@
  */
 package org.eclipse.fordiac.ide.model.value;
 
-import org.eclipse.fordiac.ide.model.data.AnyBitType;
-import org.eclipse.fordiac.ide.model.data.AnyCharsType;
 import org.eclipse.fordiac.ide.model.data.AnyDurationType;
 import org.eclipse.fordiac.ide.model.data.AnyNumType;
 import org.eclipse.fordiac.ide.model.data.BoolType;
+import org.eclipse.fordiac.ide.model.data.ByteType;
+import org.eclipse.fordiac.ide.model.data.CharType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType;
 import org.eclipse.fordiac.ide.model.data.DateType;
+import org.eclipse.fordiac.ide.model.data.DwordType;
 import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
 import org.eclipse.fordiac.ide.model.data.LtodType;
+import org.eclipse.fordiac.ide.model.data.LwordType;
+import org.eclipse.fordiac.ide.model.data.StringType;
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType;
+import org.eclipse.fordiac.ide.model.data.WcharType;
+import org.eclipse.fordiac.ide.model.data.WordType;
+import org.eclipse.fordiac.ide.model.data.WstringType;
 
-public class ValueConverterFactory {
+public final class ValueConverterFactory {
 	public static ValueConverter<?> createValueConverter(final DataType type) {
 		if (type instanceof BoolType) {
 			return BoolValueConverter.INSTANCE;
-		} else if (type instanceof AnyNumType || type instanceof AnyBitType) {
+		} else if (type instanceof AnyNumType) {
 			return NumericValueConverter.INSTANCE;
+		} else if (type instanceof ByteType) {
+			return NumericValueConverter.INSTANCE_BYTE;
+		} else if (type instanceof WordType) {
+			return NumericValueConverter.INSTANCE_WORD;
+		} else if (type instanceof DwordType) {
+			return NumericValueConverter.INSTANCE_DWORD;
+		} else if (type instanceof LwordType) {
+			return NumericValueConverter.INSTANCE_LWORD;
 		} else if (type instanceof AnyDurationType) {
 			return TimeValueConverter.INSTANCE;
-		} else if (type instanceof AnyCharsType) {
+		} else if (type instanceof CharType || type instanceof StringType) {
 			return StringValueConverter.INSTANCE;
+		} else if (type instanceof WcharType || type instanceof WstringType) {
+			return WStringValueConverter.INSTANCE;
 		} else if (type instanceof DateType || type instanceof LdateType) {
 			return DateValueConverter.INSTANCE;
 		} else if (type instanceof TimeOfDayType || type instanceof LtodType) {
@@ -43,5 +59,9 @@ public class ValueConverterFactory {
 			return DateAndTimeValueConverter.INSTANCE;
 		}
 		return null;
+	}
+
+	private ValueConverterFactory() {
+		throw new IllegalStateException("Utility class should not be instantiated!"); //$NON-NLS-1$
 	}
 }

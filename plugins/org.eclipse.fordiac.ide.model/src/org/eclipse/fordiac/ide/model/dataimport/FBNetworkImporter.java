@@ -33,9 +33,6 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionBuilder;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionState;
@@ -62,7 +59,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 class FBNetworkImporter extends CommonElementImporter {
 
@@ -174,7 +173,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
 
-		if ((null == fb.getPaletteEntry()) || (fb instanceof ErrorMarkerRef)) {
+		if ((null == fb.getTypeEntry()) || (fb instanceof ErrorMarkerRef)) {
 			// we don't have a type create error marker.
 			// This can only be done after fb has been added to FB network,
 			// so that the error marker can determine the location!
@@ -188,7 +187,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	private FBNetworkElement createFBInstance(final String typeFbElement) {
 		FB fb = LibraryElementFactory.eINSTANCE.createFB();
-		final FBTypePaletteEntry entry = getTypeEntry(typeFbElement);
+		final FBTypeEntry entry = getTypeEntry(typeFbElement);
 
 		if (null != entry) {
 			final FBType type = entry.getType();
@@ -204,10 +203,9 @@ class FBNetworkImporter extends CommonElementImporter {
 			fb.setInterface(type.getInterfaceList().copy());
 		} else {
 			return FordiacMarkerHelper.createTypeErrorMarkerFB(typeFbElement, getTypeLibrary(),
-					LibraryElementFactory.eINSTANCE.createFBType().eClass(),
-					PaletteFactory.eINSTANCE.createFBTypePaletteEntry().eClass());
+					LibraryElementFactory.eINSTANCE.createFBType());
 		}
-		fb.setPaletteEntry(entry);
+		fb.setTypeEntry(entry);
 		return fb;
 	}
 
@@ -350,7 +348,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		if(connection instanceof EventConnection) {
 			return EventTypeLibrary.getInstance().getType(null);
 		} else if(connection instanceof AdapterConnection) {
-			final AdapterTypePaletteEntry entry = getPalette().getAdapterTypeEntry("ANY_ADAPTER"); //$NON-NLS-1$
+			final AdapterTypeEntry entry = getTypeLibrary().getAdapterTypeEntry("ANY_ADAPTER"); //$NON-NLS-1$
 			if (null != entry) {
 				return entry.getType();
 			}
@@ -534,7 +532,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		if (interfaceList.eContainer() instanceof FB) {
 			// only if it is an FB check if it is typed
-			hasType = (null != ((FB) interfaceList.eContainer()).getPaletteEntry());
+			hasType = (null != ((FB) interfaceList.eContainer()).getTypeEntry());
 		}
 
 		if (hasType) {

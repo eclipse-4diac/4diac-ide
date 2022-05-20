@@ -139,7 +139,8 @@ public class STMethodItemProvider extends TextMethodItemProvider {
 
 		boolean qualify =
 			childFeature == LibraryElementPackage.Literals.TEXT_METHOD__INPUT_PARAMETERS ||
-			childFeature == LibraryElementPackage.Literals.TEXT_METHOD__OUTPUT_PARAMETERS;
+			childFeature == LibraryElementPackage.Literals.TEXT_METHOD__OUTPUT_PARAMETERS ||
+			childFeature == LibraryElementPackage.Literals.TEXT_METHOD__IN_OUT_PARAMETERS;
 
 		if (qualify) {
 			return getString

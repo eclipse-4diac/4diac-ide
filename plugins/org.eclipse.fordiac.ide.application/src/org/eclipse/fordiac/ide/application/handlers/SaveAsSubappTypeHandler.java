@@ -59,7 +59,7 @@ public class SaveAsSubappTypeHandler extends AbstractHandler {
 		if ((selection instanceof IStructuredSelection) && !selection.isEmpty()) {
 			for (final Object selected : ((IStructuredSelection) selection).toList()) {
 				if ((selected instanceof EditPart) && (((EditPart) selected).getModel() instanceof SubApp)) {
-					if (null != ((SubApp) ((EditPart) selected).getModel()).getPaletteEntry()) {
+					if (null != ((SubApp) ((EditPart) selected).getModel()).getTypeEntry()) {
 						// a typed subapplication has been selected
 						return false;
 					}

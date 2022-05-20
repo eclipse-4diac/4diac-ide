@@ -13,14 +13,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.gef.commands.Command;
 
@@ -30,7 +30,7 @@ public class CreateInternalFBCommand extends Command implements CreationCommand 
 	private final BaseFBType baseFbType;
 
 	/** Command information */
-	private FBTypePaletteEntry fbType;
+	private FBTypeEntry fbType;
 	private final String name;
 	private final int index;
 
@@ -44,23 +44,12 @@ public class CreateInternalFBCommand extends Command implements CreationCommand 
 	}
 
 	public CreateInternalFBCommand(final BaseFBType baseFbType, final int index, final String name,
-			final FBTypePaletteEntry fbType) {
+			final FBTypeEntry fbType) {
 		this.baseFbType = baseFbType;
 		this.fbType = fbType;
 		if (null == fbType) {
-			final EMap<String, FBTypePaletteEntry> typeLib = baseFbType.getTypeLibrary().getBlockTypeLib().getFbTypes();
-			this.fbType = typeLib.get(0).getValue();
-		}
-		this.name = (null != name) ? name : DEFAULT_INTERNAL_FB_NAME;
-		this.index = index;
-	}
-
-	public CreateInternalFBCommand(final BaseFBType baseFbType, final int index, final String name,
-			final FBTypePaletteEntry fbType, final Palette palette) {
-		this.baseFbType = baseFbType;
-		this.fbType = fbType;
-		if (null == fbType) {
-			this.fbType = (FBTypePaletteEntry) palette.eContents().get(0);
+			final Map<String, FBTypeEntry> typeLib = baseFbType.getTypeLibrary().getFbTypes();
+			this.fbType = typeLib.values().iterator().next();
 		}
 		this.name = (null != name) ? name : DEFAULT_INTERNAL_FB_NAME;
 		this.index = index;
@@ -79,7 +68,7 @@ public class CreateInternalFBCommand extends Command implements CreationCommand 
 	@Override
 	public void execute() {
 		internalFB = LibraryElementFactory.eINSTANCE.createFB();
-		internalFB.setPaletteEntry(fbType);
+		internalFB.setTypeEntry(fbType);
 		internalFB.setComment(""); //$NON-NLS-1$
 		internalFB.setInterface(fbType.getType().getInterfaceList().copy());
 		getInteralFBList().add(index, internalFB);

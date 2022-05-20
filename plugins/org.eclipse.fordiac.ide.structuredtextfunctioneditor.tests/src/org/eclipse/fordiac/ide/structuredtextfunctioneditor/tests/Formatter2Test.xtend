@@ -300,6 +300,9 @@ class Formatter2Test {
 				END_VAR
 				END_FUNCTION
 			'''
+			// workaround to fix a problem in Xtext due to differences between the node model and serialized model
+			// (different rule calls) when using expressions in array initializers
+			useSerializer = false
 		]
 	}
 
@@ -571,9 +574,9 @@ class Formatter2Test {
 			'''
 		]
 	}
-	
+
 	@Test
-	def void testComparisonOperatorSpacing(){
+	def void testComparisonOperatorSpacing() {
 		assertFormatted[
 			toBeFormatted = '''
 				FUNCTION hubert
@@ -612,9 +615,9 @@ class Formatter2Test {
 			'''
 		]
 	}
-	
+
 	@Test
-	def void testParanthesesSpacing(){
+	def void testParanthesesSpacing() {
 		assertFormatted[
 			toBeFormatted = '''
 				FUNCTION CHECK : INT
@@ -652,7 +655,7 @@ class Formatter2Test {
 			'''
 		]
 	}
-	
+
 	@Test
 	def void testBooleanOperatorsCasing() {
 		assertFormatted[
@@ -682,7 +685,7 @@ class Formatter2Test {
 			'''
 		]
 	}
-	
+
 	@Test
 	def void unaryNotFormatting() {
 		assertFormatted[

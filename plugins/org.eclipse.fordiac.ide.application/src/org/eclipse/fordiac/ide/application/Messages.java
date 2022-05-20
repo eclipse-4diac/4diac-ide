@@ -29,9 +29,19 @@ public final class Messages extends NLS {
 
 	public static String AddFBBookMark_EnterBookmarkName;
 
+	public static String CaseSensitive;
+
+	public static String Comment;
+
+	public static String CommentPropertySection_DataInputs;
+
+	public static String CommentPropertySection_DataOutputs;
+
 	public static String ConnectionConstraintsPrefernecePage_Description;
 
 	public static String ConnectionConstraintsPrefernecePage_EnableFORTETypeCasts;
+
+	public static String ContainingText;
 
 	public static String ConvertToStructHandler_ErrorMessage;
 
@@ -47,6 +57,8 @@ public final class Messages extends NLS {
 
 	public static String CreateConnectionSection_CreateConnection;
 
+	public static String CreateGroupPasteCommand;
+
 	/** The Create sub app command_ label create sub app command. */
 	public static String CreateSubAppCommand_LABELCreateSubAppCommand;
 
@@ -55,6 +67,10 @@ public final class Messages extends NLS {
 	public static String ErrorMarkerFBNEditPart_ErrorMarker;
 
 	public static String ErrorMarkerFBNEditPart_OldType;
+
+	public static String ErrorMessageSearch;
+
+	public static String ExactNameMatching;
 
 	/** The FB edit part_ erro r_ unsupported fb type. */
 	public static String FBEditPart_ERROR_UnsupportedFBType;
@@ -90,6 +106,8 @@ public final class Messages extends NLS {
 	public static String InterfaceElementSection_OutConnections;
 
 	public static String InterfaceElementSection_InterfaceElement;
+
+	public static String InstanceName;
 
 	public static String ListFBCreateCommand_FBTypeNotFound;
 
@@ -151,6 +169,12 @@ public final class Messages extends NLS {
 
 	public static String SaveAsSubApplicationTypeAction_TemplateMissingErrorMessage;
 
+	public static String SearchFor;
+
+	public static String SearchHeaderName;
+
+	public static String SearchStringProperties;
+
 	public static String StructManipulatorSection_MEMBERVAR_COLUMN_COMMENT;
 
 	public static String StructManipulatorSection_MEMBERVAR_COLUMN_NAME;
@@ -168,13 +192,23 @@ public final class Messages extends NLS {
 
 	public static String UIFBNetworkContextMenuProvider_ChangeType;
 
+	public static String Untyped;
+
 	public static String UpdateFBTypeAction_Text;
 
 	public static String PasteRecreateNotPossible;
 
+	public static String PinName;
+
 	public static String ToggleSubAppRepresentation_Collapse;
 
 	public static String ToggleSubAppRepresentation_Expand;
+
+	public static String Type;
+
+	public static String TypeQuery;
+
+	public static String Warning;
 
 	static {
 		// initialize resource bundle

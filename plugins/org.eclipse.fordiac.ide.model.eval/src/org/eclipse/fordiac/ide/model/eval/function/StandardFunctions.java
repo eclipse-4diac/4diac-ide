@@ -14,6 +14,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.function;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.function.BinaryOperator;
+import java.util.function.DoubleBinaryOperator;
+import java.util.function.DoubleUnaryOperator;
+import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
 import org.eclipse.fordiac.ide.model.eval.value.AnyBitValue;
@@ -53,6 +60,7 @@ import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.eval.value.WCharValue;
 import org.eclipse.fordiac.ide.model.eval.value.WStringValue;
 import org.eclipse.fordiac.ide.model.eval.value.WordValue;
+import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
 @SuppressWarnings("squid:S100") // ST Name conventions must be used here
 public interface StandardFunctions extends Functions {
@@ -69,43 +77,43 @@ public interface StandardFunctions extends Functions {
 	}
 
 	static <T extends AnyRealValue> T LN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::log);
 	}
 
 	static <T extends AnyRealValue> T LOG(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::log10);
 	}
 
 	static <T extends AnyRealValue> T EXP(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::exp);
 	}
 
 	static <T extends AnyRealValue> T SIN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::sin);
 	}
 
 	static <T extends AnyRealValue> T COS(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::cos);
 	}
 
 	static <T extends AnyRealValue> T TAN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::tan);
 	}
 
 	static <T extends AnyRealValue> T ASIN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::asin);
 	}
 
 	static <T extends AnyRealValue> T ACON(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::acos);
 	}
 
 	static <T extends AnyRealValue> T ATAN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(value, Math::atan);
 	}
 
 	static <T extends AnyRealValue> T ATAN2(final T x, final T y) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return apply(x, y, Math::atan2);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -129,12 +137,12 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyMagnitudeValue> T MOD(final T first, final T second) {
+	static <T extends AnyIntValue> T MOD(final T first, final T second) {
 		return (T) ValueOperations.remainderBy(first, second);
 	}
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyNumValue> T EXPT(final T first, final T second) {
+	static <T extends AnyRealValue, U extends AnyNumValue> T EXPT(final T first, final U second) {
 		return (T) ValueOperations.power(first, second);
 	}
 
@@ -190,80 +198,89 @@ public interface StandardFunctions extends Functions {
 		return g.boolValue() ? in1 : in0;
 	}
 
+	@SafeVarargs
 	static <T extends AnyElementaryValue> T MAX(final T... values) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return Stream.of(values).max(ValueOperations::compareTo).orElseThrow();
 	}
 
+	@SafeVarargs
 	static <T extends AnyElementaryValue> T MIN(final T... values) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return Stream.of(values).min(ValueOperations::compareTo).orElseThrow();
 	}
 
-	static <T extends AnyElementaryValue> T LIMIT(final T MN, final T IN, final T MX) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyElementaryValue> T LIMIT(final T min, final T value, final T max) {
+		if (ValueOperations.operator_greaterThan(value, max)) {
+			return max;
+		} else if (ValueOperations.operator_lessThan(value, min)) {
+			return min;
+		} else {
+			return value;
+		}
 	}
 
+	@SafeVarargs
 	static <T extends AnyIntValue, U extends AnyValue> U MUX(final T k, final U... values) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return values[k.intValue()];
 	}
 
 	/* Comparisons */
 
-	@SuppressWarnings("unchecked")
+	@SafeVarargs
 	static <T extends AnyElementaryValue> BoolValue GT(final T... values) {
-		T val = values[0];
-		for (int i = 1; i < values.length; ++i) {
-			if (!ValueOperations.operator_greaterThan(val, values[i])) {
+		T last = null;
+		for (final T element : values) {
+			if (last != null && !ValueOperations.operator_greaterThan(last, element)) {
 				return BoolValue.FALSE;
 			}
-			val = values[i];
+			last = element;
 		}
 		return BoolValue.TRUE;
 	}
 
 	@SuppressWarnings("unchecked")
 	static <T extends AnyElementaryValue> BoolValue GE(final T... values) {
-		T val = values[0];
-		for (int i = 1; i < values.length; ++i) {
-			if (!ValueOperations.operator_greaterEqualsThan(val, values[i])) {
+		T last = null;
+		for (final T element : values) {
+			if (last != null && !ValueOperations.operator_greaterEqualsThan(last, element)) {
 				return BoolValue.FALSE;
 			}
-			val = values[i];
+			last = element;
 		}
 		return BoolValue.TRUE;
 	}
 
 	@SuppressWarnings("unchecked")
 	static <T extends AnyElementaryValue> BoolValue EQ(final T... values) {
-		T val = values[0];
-		for (int i = 1; i < values.length; ++i) {
-			if (!ValueOperations.equals(val, values[i])) {
+		T last = null;
+		for (final T element : values) {
+			if (last != null && !ValueOperations.equals(last, element)) {
 				return BoolValue.FALSE;
 			}
-			val = values[i];
+			last = element;
 		}
 		return BoolValue.TRUE;
 	}
 
 	@SuppressWarnings("unchecked")
 	static <T extends AnyElementaryValue> BoolValue LE(final T... values) {
-		T val = values[0];
-		for (int i = 1; i < values.length; ++i) {
-			if (!ValueOperations.operator_lessEqualsThan(val, values[i])) {
+		T last = null;
+		for (final T element : values) {
+			if (last != null && !ValueOperations.operator_lessEqualsThan(last, element)) {
 				return BoolValue.FALSE;
 			}
-			val = values[i];
+			last = element;
 		}
 		return BoolValue.TRUE;
 	}
 
 	@SuppressWarnings("unchecked")
 	static <T extends AnyElementaryValue> BoolValue LT(final T... values) {
-		T val = values[0];
-		for (int i = 1; i < values.length; ++i) {
-			if (!ValueOperations.operator_lessThan(val, values[i])) {
+		T last = null;
+		for (final T element : values) {
+			if (last != null && !ValueOperations.operator_lessThan(last, element)) {
 				return BoolValue.FALSE;
 			}
-			val = values[i];
+			last = element;
 		}
 		return BoolValue.TRUE;
 	}
@@ -277,289 +294,332 @@ public interface StandardFunctions extends Functions {
 		return ULIntValue.toULIntValue(string.length());
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue> T LEFT(final T string, final U L) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyStringValue, U extends AnyIntValue> T LEFT(final T string, final U length) {
+		return apply(string, value -> value.substring(0, length.intValue()));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue> T RIGHT(final T string, final U L) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyStringValue, U extends AnyIntValue> T RIGHT(final T string, final U length) {
+		return apply(string, value -> value.substring(value.length() - length.intValue()));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T MID(final T string, final U L,
-			final V P) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T MID(final T string,
+			final U length, final V position) {
+		return apply(string,
+				value -> value.substring(position.intValue() - 1, position.intValue() + length.intValue() - 1));
 	}
 
+	@SafeVarargs
 	static <T extends AnyStringValue> T CONCAT(final T... strings) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+		return Stream.of(strings).reduce((value1, value2) -> apply(value1, value2, String::concat)).orElseThrow();
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue> T INSERT(final T IN1, final T IN2, final U P) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyStringValue, U extends AnyIntValue> T INSERT(final T first, final T second, final U position) {
+		return apply(first, value -> value.substring(0, position.intValue()).concat(second.stringValue())
+				.concat(value.substring(position.intValue())));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T DELETE(final T string, final U L,
-			final V P) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T DELETE(final T string,
+			final U length, final V position) {
+		return apply(string, value -> value.substring(0, position.intValue() - 1)
+				.concat(value.substring(position.intValue() + length.intValue() - 1)));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T REPLACE(final T IN1, final T IN2,
-			final U L, final V P) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T REPLACE(final T first,
+			final T second, final U length, final V position) {
+		return apply(first, value -> value.substring(0, position.intValue() - 1).concat(second.stringValue())
+				.concat(value.substring(position.intValue() + length.intValue() - 1)));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue> U FIND(final T IN1, final T IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyStringValue> ULIntValue FIND(final T first, final T second) {
+		return ULIntValue.toULIntValue(first.stringValue().indexOf(second.stringValue()) + 1L);
 	}
 
 	/* Numeric functions for time and date */
 
-	static <T extends AnyDurationValue> T ADD(final T IN1, final T IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	@SuppressWarnings("unchecked")
+	static <T extends AnyDurationValue> T ADD(final T first, final T second) {
+		return (T) ValueOperations.add(first, second);
 	}
 
-	static TimeValue ADD_TIME(final TimeValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static TimeValue ADD_TIME(final TimeValue first, final TimeValue second) {
+		return ADD(first, second);
 	}
 
-	static LTimeValue ADD_LTIME(final LTimeValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LTimeValue ADD_LTIME(final LTimeValue first, final LTimeValue second) {
+		return ADD(first, second);
 	}
 
-	static TimeOfDayValue ADD(final TimeOfDayValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static TimeOfDayValue ADD(final TimeOfDayValue first, final TimeValue second) {
+		return TimeOfDayValue.toTimeOfDayValue(first.toNanos() + second.longValue());
 	}
 
-	static LTimeOfDayValue ADD(final LTimeOfDayValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LTimeOfDayValue ADD(final LTimeOfDayValue first, final LTimeValue second) {
+		return LTimeOfDayValue.toLTimeOfDayValue(first.toNanos() + second.longValue());
 	}
 
-	static TimeOfDayValue ADD_TOD_TIME(final TimeOfDayValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static TimeOfDayValue ADD_TOD_TIME(final TimeOfDayValue first, final TimeValue second) {
+		return ADD(first, second);
 	}
 
-	static LTimeOfDayValue ADD_LTOD_LTIME(final LTimeOfDayValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LTimeOfDayValue ADD_LTOD_LTIME(final LTimeOfDayValue first, final LTimeValue second) {
+		return ADD(first, second);
 	}
 
-	static DateAndTimeValue ADD(final DateAndTimeValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static DateAndTimeValue ADD(final DateAndTimeValue first, final TimeValue second) {
+		return DateAndTimeValue.toDateAndTimeValue(first.toNanos() + second.longValue());
 	}
 
-	static LDateAndTimeValue ADD(final LDateAndTimeValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LDateAndTimeValue ADD(final LDateAndTimeValue first, final LTimeValue second) {
+		return LDateAndTimeValue.toLDateAndTimeValue(first.toNanos() + second.longValue());
 	}
 
-	static DateAndTimeValue ADD_DT_TIME(final DateAndTimeValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static DateAndTimeValue ADD_DT_TIME(final DateAndTimeValue first, final TimeValue second) {
+		return ADD(first, second);
 	}
 
-	static LDateAndTimeValue ADD_LDT_LTIME(final LDateAndTimeValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LDateAndTimeValue ADD_LDT_LTIME(final LDateAndTimeValue first, final LTimeValue second) {
+		return ADD(first, second);
 	}
 
-	static <T extends AnyDurationValue> T SUB(final T IN1, final T IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	@SuppressWarnings("unchecked")
+	static <T extends AnyDurationValue> T SUB(final T first, final T second) {
+		return (T) ValueOperations.subtract(first, second);
 	}
 
-	static TimeValue SUB_TIME(final TimeValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static TimeValue SUB_TIME(final TimeValue first, final TimeValue second) {
+		return SUB(first, second);
 	}
 
-	static LTimeValue SUB_LTIME(final LTimeValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LTimeValue SUB_LTIME(final LTimeValue first, final LTimeValue second) {
+		return SUB(first, second);
 	}
 
-	static TimeValue SUB(final DateValue IN1, final DateValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static TimeValue SUB(final DateValue first, final DateValue second) {
+		return TimeValue.toTimeValue(first.toNanos() - second.toNanos());
 	}
 
-	static LTimeValue SUB(final LDateValue IN1, final LDateValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LTimeValue SUB(final LDateValue first, final LDateValue second) {
+		return LTimeValue.toLTimeValue(first.toNanos() - second.toNanos());
 	}
 
-	static TimeValue SUB_DATE_DATE(final DateValue IN1, final DateValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static TimeValue SUB_DATE_DATE(final DateValue first, final DateValue second) {
+		return SUB(first, second);
 	}
 
-	static LTimeValue SUB_LDATE_LDATE(final LDateValue IN1, final LDateValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LTimeValue SUB_LDATE_LDATE(final LDateValue first, final LDateValue second) {
+		return SUB(first, second);
 	}
 
-	static TimeOfDayValue SUB(final TimeOfDayValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static TimeOfDayValue SUB(final TimeOfDayValue first, final TimeValue second) {
+		return TimeOfDayValue.toTimeOfDayValue(first.toNanos() - second.longValue());
 	}
 
-	static LTimeOfDayValue SUB(final LTimeOfDayValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LTimeOfDayValue SUB(final LTimeOfDayValue first, final LTimeValue second) {
+		return LTimeOfDayValue.toLTimeOfDayValue(first.toNanos() - second.longValue());
 	}
 
-	static TimeOfDayValue SUB_TOD_TIME(final TimeOfDayValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static TimeOfDayValue SUB_TOD_TIME(final TimeOfDayValue first, final TimeValue second) {
+		return SUB(first, second);
 	}
 
-	static LTimeOfDayValue SUB_LTOD_LTIME(final LTimeOfDayValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LTimeOfDayValue SUB_LTOD_LTIME(final LTimeOfDayValue first, final LTimeValue second) {
+		return SUB(first, second);
 	}
 
-	static TimeValue SUB(final TimeOfDayValue IN1, final TimeOfDayValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static TimeValue SUB(final TimeOfDayValue first, final TimeOfDayValue second) {
+		return TimeValue.toTimeValue(first.toNanos() - second.toNanos());
 	}
 
-	static LTimeValue SUB(final LTimeOfDayValue IN1, final LTimeOfDayValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LTimeValue SUB(final LTimeOfDayValue first, final LTimeOfDayValue second) {
+		return LTimeValue.toLTimeValue(first.toNanos() - second.toNanos());
 	}
 
-	static TimeValue SUB_TOD_TOD(final TimeOfDayValue IN1, final TimeOfDayValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static TimeValue SUB_TOD_TOD(final TimeOfDayValue first, final TimeOfDayValue second) {
+		return SUB(first, second);
 	}
 
-	static LTimeValue SUB_LTOD_LTOD(final LTimeOfDayValue IN1, final LTimeOfDayValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LTimeValue SUB_LTOD_LTOD(final LTimeOfDayValue first, final LTimeOfDayValue second) {
+		return SUB(first, second);
 	}
 
-	static DateAndTimeValue SUB(final DateAndTimeValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static DateAndTimeValue SUB(final DateAndTimeValue first, final TimeValue second) {
+		return DateAndTimeValue.toDateAndTimeValue(first.toNanos() - second.longValue());
 	}
 
-	static LDateAndTimeValue SUB(final LDateAndTimeValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LDateAndTimeValue SUB(final LDateAndTimeValue first, final LTimeValue second) {
+		return LDateAndTimeValue.toLDateAndTimeValue(first.toNanos() - second.longValue());
 	}
 
-	static DateAndTimeValue SUB_DT_TIME(final DateAndTimeValue IN1, final TimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static DateAndTimeValue SUB_DT_TIME(final DateAndTimeValue first, final TimeValue second) {
+		return SUB(first, second);
 	}
 
-	static LDateAndTimeValue SUB_LDT_LTIME(final LDateAndTimeValue IN1, final LTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LDateAndTimeValue SUB_LDT_LTIME(final LDateAndTimeValue first, final LTimeValue second) {
+		return SUB(first, second);
 	}
 
-	static TimeValue SUB(final DateAndTimeValue IN1, final DateAndTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static TimeValue SUB(final DateAndTimeValue first, final DateAndTimeValue second) {
+		return TimeValue.toTimeValue(first.toNanos() - second.toNanos());
 	}
 
-	static LTimeValue SUB(final LDateAndTimeValue IN1, final LDateAndTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LTimeValue SUB(final LDateAndTimeValue first, final LDateAndTimeValue second) {
+		return LTimeValue.toLTimeValue(first.toNanos() - second.toNanos());
 	}
 
-	static TimeValue SUB_DT_DT(final DateAndTimeValue IN1, final DateAndTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static TimeValue SUB_DT_DT(final DateAndTimeValue first, final DateAndTimeValue second) {
+		return SUB(first, second);
 	}
 
-	static LTimeValue SUB_LDT_LDT(final LDateAndTimeValue IN1, final LDateAndTimeValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LTimeValue SUB_LDT_LDT(final LDateAndTimeValue first, final LDateAndTimeValue second) {
+		return SUB(first, second);
 	}
 
-	static <T extends AnyDurationValue, U extends AnyIntValue> T MUL(final T IN1, final U IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	@SuppressWarnings("unchecked")
+	static <T extends AnyDurationValue, U extends AnyIntValue> T MUL(final T first, final U second) {
+		return (T) ValueOperations.multiply(first, second);
 	}
 
-	static <U extends AnyIntValue> TimeValue MUL_TIME(final TimeValue IN1, final U IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <U extends AnyIntValue> TimeValue MUL_TIME(final TimeValue first, final U second) {
+		return MUL(first, second);
 	}
 
-	static <U extends AnyIntValue> LTimeValue MUL_LTIME(final LTimeValue IN1, final U IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <U extends AnyIntValue> LTimeValue MUL_LTIME(final LTimeValue first, final U second) {
+		return MUL(first, second);
 	}
 
-	static <T extends AnyDurationValue, U extends AnyIntValue> T DIV(final T IN1, final U IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	@SuppressWarnings("unchecked")
+	static <T extends AnyDurationValue, U extends AnyIntValue> T DIV(final T first, final U second) {
+		return (T) ValueOperations.divideBy(first, second);
 	}
 
-	static <U extends AnyIntValue> TimeValue DIV_TIME(final TimeValue IN1, final U IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <U extends AnyIntValue> TimeValue DIV_TIME(final TimeValue first, final U second) {
+		return DIV(first, second);
 	}
 
-	static <U extends AnyIntValue> LTimeValue DIV_LTIME(final LTimeValue IN1, final U IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <U extends AnyIntValue> LTimeValue DIV_LTIME(final LTimeValue first, final U second) {
+		return DIV(first, second);
 	}
 
 	// Additional time functions CONCAT and SPLIT
 
-	static DateAndTimeValue CONCAT_DATE_TOD(final DateValue IN1, final TimeOfDayValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static DateAndTimeValue CONCAT_DATE_TOD(final DateValue first, final TimeOfDayValue second) {
+		return DateAndTimeValue.toDateAndTimeValue(first.toLocalDate().atTime(second.toLocalTime()));
 	}
 
-	static DateAndTimeValue CONCAT_DATE_LTOD(final DateValue IN1, final LTimeOfDayValue IN2) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static LDateAndTimeValue CONCAT_DATE_LTOD(final DateValue first, final LTimeOfDayValue second) {
+		return LDateAndTimeValue.toLDateAndTimeValue(first.toLocalDate().atTime(second.toLocalTime()));
 	}
 
-	static <T extends AnyIntValue> DateValue CONCAT_DATE(final T YEAR, final T MONTH, final T DAY) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue> DateValue CONCAT_DATE(final T year, final T month, final T day) {
+		return DateValue.toDateValue(LocalDate.of(year.intValue(), month.intValue(), day.intValue()));
 	}
 
-	static <T extends AnyIntValue> TimeOfDayValue CONCAT_TOD(final T HOUR, final T MINUTE, final T SECOND,
-			final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue> TimeOfDayValue CONCAT_TOD(final T hour, final T minute, final T second,
+			final T millisecond) {
+		return TimeOfDayValue.toTimeOfDayValue(LocalTime.of(hour.intValue(), minute.intValue(), second.intValue(),
+				millisecond.intValue() * 1_000_000));
 	}
 
-	static <T extends AnyIntValue> LTimeOfDayValue CONCAT_LTOD(final T HOUR, final T MINUTE, final T SECOND,
-			final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue> LTimeOfDayValue CONCAT_LTOD(final T hour, final T minute, final T second,
+			final T millisecond) {
+		return LTimeOfDayValue.toLTimeOfDayValue(LocalTime.of(hour.intValue(), minute.intValue(), second.intValue(),
+				millisecond.intValue() * 1_000_000));
 	}
 
-	static <T extends AnyIntValue> DateAndTimeValue CONCAT_DT(final T YEAR, final T MONTH, final T DAY, final T HOUR,
-			final T MINUTE, final T SECOND, final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue> DateAndTimeValue CONCAT_DT(final T year, final T month, final T day, final T hour,
+			final T minute, final T second, final T millisecond) {
+		return DateAndTimeValue.toDateAndTimeValue(LocalDateTime.of(year.intValue(), month.intValue(), day.intValue(),
+				hour.intValue(), minute.intValue(), second.intValue(), millisecond.intValue() * 1_000_000));
 	}
 
-	static <T extends AnyIntValue> LDateAndTimeValue CONCAT_LDT(final T YEAR, final T MONTH, final T DAY, final T HOUR,
-			final T MINUTE, final T SECOND, final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue> LDateAndTimeValue CONCAT_LDT(final T year, final T month, final T day, final T hour,
+			final T minute, final T second, final T millisecond) {
+		return LDateAndTimeValue.toLDateAndTimeValue(LocalDateTime.of(year.intValue(), month.intValue(), day.intValue(),
+				hour.intValue(), minute.intValue(), second.intValue(), millisecond.intValue() * 1_000_000));
 	}
 
-	static <T extends AnyIntValue> void SPLIT_DATE(final DateValue IN, final T YEAR, final T MONTH, final T DAY) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue> void SPLIT_DATE(final DateValue in,
+			final Variable<T> year, final Variable<U> month, final Variable<V> day) {
+		final LocalDate value = in.toLocalDate();
+		year.setValue(DIntValue.toDIntValue(value.getYear()));
+		month.setValue(DIntValue.toDIntValue(value.getMonthValue()));
+		day.setValue(DIntValue.toDIntValue(value.getDayOfMonth()));
 	}
 
-	static <T extends AnyIntValue> void SPLIT_TOD(final TimeOfDayValue IN, final T HOUR, final T MINUTE, final T SECOND,
-			final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue> void SPLIT_TOD(
+			final TimeOfDayValue in, final Variable<T> hour, final Variable<U> minute, final Variable<V> second,
+			final Variable<W> millisecond) {
+		final LocalTime value = in.toLocalTime();
+		hour.setValue(DIntValue.toDIntValue(value.getHour()));
+		minute.setValue(DIntValue.toDIntValue(value.getMinute()));
+		second.setValue(DIntValue.toDIntValue(value.getSecond()));
+		millisecond.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
-	static <T extends AnyIntValue> void SPLIT_LTOD(final LTimeOfDayValue IN, final T HOUR, final T MINUTE,
-			final T SECOND, final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue> void SPLIT_LTOD(
+			final LTimeOfDayValue in, final Variable<T> hour, final Variable<U> minute, final Variable<V> second,
+			final Variable<W> millisecond) {
+		final LocalTime value = in.toLocalTime();
+		hour.setValue(DIntValue.toDIntValue(value.getHour()));
+		minute.setValue(DIntValue.toDIntValue(value.getMinute()));
+		second.setValue(DIntValue.toDIntValue(value.getSecond()));
+		millisecond.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
-	static <T extends AnyIntValue> void SPLIT_DT(final DateAndTimeValue IN, final T YEAR, final T MONTH, final T DAY,
-			final T HOUR, final T MINUTE, final T SECOND, final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue, X extends AnyIntValue, Y extends AnyIntValue, Z extends AnyIntValue> void SPLIT_DT(
+			final DateAndTimeValue in, final Variable<T> year, final Variable<U> month, final Variable<V> day,
+			final Variable<W> hour, final Variable<X> minute, final Variable<Y> second, final Variable<Z> millisecond) {
+		final LocalDateTime value = in.toLocalDateTime();
+		year.setValue(DIntValue.toDIntValue(value.getYear()));
+		month.setValue(DIntValue.toDIntValue(value.getMonthValue()));
+		day.setValue(DIntValue.toDIntValue(value.getDayOfMonth()));
+		hour.setValue(DIntValue.toDIntValue(value.getHour()));
+		minute.setValue(DIntValue.toDIntValue(value.getMinute()));
+		second.setValue(DIntValue.toDIntValue(value.getSecond()));
+		millisecond.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
-	static <T extends AnyIntValue> void SPLIT_LDT(final LDateAndTimeValue IN, final T YEAR, final T MONTH, final T DAY,
-			final T HOUR, final T MINUTE, final T SECOND, final T MILLISECOND) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyIntValue, U extends AnyIntValue, V extends AnyIntValue, W extends AnyIntValue, X extends AnyIntValue, Y extends AnyIntValue, Z extends AnyIntValue> void SPLIT_LDT(
+			final LDateAndTimeValue in, final Variable<T> year, final Variable<U> month, final Variable<V> day,
+			final Variable<W> hour, final Variable<X> minute, final Variable<Y> second, final Variable<Z> millisecond) {
+		final LocalDateTime value = in.toLocalDateTime();
+		year.setValue(DIntValue.toDIntValue(value.getYear()));
+		month.setValue(DIntValue.toDIntValue(value.getMonthValue()));
+		day.setValue(DIntValue.toDIntValue(value.getDayOfMonth()));
+		hour.setValue(DIntValue.toDIntValue(value.getHour()));
+		minute.setValue(DIntValue.toDIntValue(value.getMinute()));
+		second.setValue(DIntValue.toDIntValue(value.getSecond()));
+		millisecond.setValue(DIntValue.toDIntValue(value.getNano() / 1000000));
 	}
 
-	static <T extends AnyIntValue> T DAY_OF_WEEK(final DateValue IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static SIntValue DAY_OF_WEEK(final DateValue value) {
+		return SIntValue.toSIntValue((byte) value.toLocalDate().getDayOfWeek().getValue());
 	}
 
-	static <T extends AnyValue> T TO_BIG_ENDIAN(final T IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyValue> T TO_BIG_ENDIAN(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
-	static <T extends AnyValue> T TO_LITTLE_ENDIAN(final T IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyValue> T TO_LITTLE_ENDIAN(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
-	static <T extends AnyValue> T FROM_BIG_ENDIAN(final T IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyValue> T FROM_BIG_ENDIAN(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
-	static <T extends AnyValue> T FROM_LITTLE_ENDIAN(final T IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyValue> T FROM_LITTLE_ENDIAN(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
 	/* Validation functions */
 
-	static <T extends AnyRealValue> BoolValue IS_VALID(final T IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyRealValue> BoolValue IS_VALID(final T value) {
+		return BoolValue.toBoolValue(Double.isFinite(value.doubleValue()));
 	}
 
-	static <T extends AnyBitValue> BoolValue IS_VALID_BCD(final T IN) {
-		throw new UnsupportedOperationException("Not implemented yet!");
+	static <T extends AnyBitValue> BoolValue IS_VALID_BCD(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
 	/* conversion functions */
@@ -1355,40 +1415,40 @@ public interface StandardFunctions extends Functions {
 		return DWordValue.toDWordValue(value.charValue());
 	}
 
-	static WordValue CWHAR_TO_WORD(final WCharValue value) {
+	static WordValue WCHAR_TO_WORD(final WCharValue value) {
 		return WordValue.toWordValue((short) value.charValue());
 	}
 
 	/***************************************/
-	static SIntValue TRUNC_SINT(final LRealValue value) {
+	static <T extends AnyRealValue> SIntValue TRUNC_SINT(final T value) {
 		return SIntValue.toSIntValue(value);
 	}
 
-	static IntValue TRUNC_INT(final LRealValue value) {
+	static <T extends AnyRealValue> IntValue TRUNC_INT(final T value) {
 		return IntValue.toIntValue(value);
 	}
 
-	static DIntValue TRUNC_DINT(final LRealValue value) {
+	static <T extends AnyRealValue> DIntValue TRUNC_DINT(final T value) {
 		return DIntValue.toDIntValue(value);
 	}
 
-	static LIntValue TRUNC_LINT(final LRealValue value) {
+	static <T extends AnyRealValue> LIntValue TRUNC_LINT(final T value) {
 		return LIntValue.toLIntValue(value);
 	}
 
-	static USIntValue TRUNC_USINT(final LRealValue value) {
+	static <T extends AnyRealValue> USIntValue TRUNC_USINT(final T value) {
 		return USIntValue.toUSIntValue(value);
 	}
 
-	static UIntValue TRUNC_UINT(final LRealValue value) {
+	static <T extends AnyRealValue> UIntValue TRUNC_UINT(final T value) {
 		return UIntValue.toUIntValue(value);
 	}
 
-	static UDIntValue TRUNC_UDINT(final LRealValue value) {
+	static <T extends AnyRealValue> UDIntValue TRUNC_UDINT(final T value) {
 		return UDIntValue.toUDIntValue(value);
 	}
 
-	static ULIntValue TRUNC_ULINT(final LRealValue value) {
+	static <T extends AnyRealValue> ULIntValue TRUNC_ULINT(final T value) {
 		return ULIntValue.toULIntValue(value);
 	}
 
@@ -1421,38 +1481,6 @@ public interface StandardFunctions extends Functions {
 	}
 
 	static ULIntValue LREAL_TRUNC_ULINT(final LRealValue value) {
-		return ULIntValue.toULIntValue(value);
-	}
-
-	static SIntValue TRUNC_SINT(final RealValue value) {
-		return SIntValue.toSIntValue(value);
-	}
-
-	static IntValue TRUNC_INT(final RealValue value) {
-		return IntValue.toIntValue(value);
-	}
-
-	static DIntValue TRUNC_DINT(final RealValue value) {
-		return DIntValue.toDIntValue(value);
-	}
-
-	static LIntValue TRUNC_LINT(final RealValue value) {
-		return LIntValue.toLIntValue(value);
-	}
-
-	static USIntValue TRUNC_USINT(final RealValue value) {
-		return USIntValue.toUSIntValue(value);
-	}
-
-	static UIntValue TRUNC_UINT(final RealValue value) {
-		return UIntValue.toUIntValue(value);
-	}
-
-	static UDIntValue TRUNC_UDINT(final RealValue value) {
-		return UDIntValue.toUDIntValue(value);
-	}
-
-	static ULIntValue TRUNC_ULINT(final RealValue value) {
 		return ULIntValue.toULIntValue(value);
 	}
 
@@ -1634,5 +1662,40 @@ public interface StandardFunctions extends Functions {
 
 	static WCharValue CHAR_TO_WCHAR(final CharValue value) {
 		return WCharValue.toWCharValue(value);
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T extends AnyRealValue> T apply(final T value, final DoubleUnaryOperator operator) {
+		if (value instanceof RealValue) {
+			return (T) RealValue.toRealValue((float) operator.applyAsDouble(value.doubleValue()));
+		}
+		return (T) LRealValue.toLRealValue(operator.applyAsDouble(value.doubleValue()));
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T extends AnyRealValue> T apply(final T value1, final T value2,
+			final DoubleBinaryOperator operator) {
+		if (value1 instanceof RealValue) {
+			return (T) RealValue
+					.toRealValue((float) operator.applyAsDouble(value1.doubleValue(), value2.doubleValue()));
+		}
+		return (T) LRealValue.toLRealValue(operator.applyAsDouble(value1.doubleValue(), value2.doubleValue()));
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T extends AnyStringValue> T apply(final T value, final UnaryOperator<String> operator) {
+		if (value instanceof StringValue) {
+			return (T) StringValue.toStringValue(operator.apply(value.stringValue()));
+		}
+		return (T) WStringValue.toWStringValue(operator.apply(value.stringValue()));
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T extends AnyStringValue> T apply(final T value1, final T value2,
+			final BinaryOperator<String> operator) {
+		if (value1 instanceof StringValue) {
+			return (T) StringValue.toStringValue(operator.apply(value1.stringValue(), value2.stringValue()));
+		}
+		return (T) WStringValue.toWStringValue(operator.apply(value1.stringValue(), value2.stringValue()));
 	}
 }

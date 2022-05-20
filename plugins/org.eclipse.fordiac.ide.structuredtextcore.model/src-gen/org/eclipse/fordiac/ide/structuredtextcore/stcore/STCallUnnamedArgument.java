@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument#getArg <em>Arg</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument#getArgument <em>Argument</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallUnnamedArgument()
@@ -37,26 +37,26 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  */
 public interface STCallUnnamedArgument extends STCallArgument {
 	/**
-	 * Returns the value of the '<em><b>Arg</b></em>' containment reference.
+	 * Returns the value of the '<em><b>Argument</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Arg</em>' containment reference.
-	 * @see #setArg(STExpression)
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallUnnamedArgument_Arg()
+	 * @return the value of the '<em>Argument</em>' containment reference.
+	 * @see #setArgument(STExpression)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallUnnamedArgument_Argument()
 	 * @model containment="true"
 	 * @generated
 	 */
-	STExpression getArg();
+	STExpression getArgument();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument#getArg <em>Arg</em>}' containment reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument#getArgument <em>Argument</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Arg</em>' containment reference.
-	 * @see #getArg()
+	 * @param value the new value of the '<em>Argument</em>' containment reference.
+	 * @see #getArgument()
 	 * @generated
 	 */
-	void setArg(STExpression value);
+	void setArgument(STExpression value);
 
 	/**
 	 * <!-- begin-user-doc -->

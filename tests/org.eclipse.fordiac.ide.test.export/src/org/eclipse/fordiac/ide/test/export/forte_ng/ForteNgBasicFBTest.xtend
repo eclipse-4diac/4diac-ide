@@ -23,13 +23,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue
 import static org.junit.jupiter.api.Assertions.fail
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
-
 class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 
 	@Test
 	def exportValidBasicFB() {
 		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
-		VAR
+		VAR_TEMP
 		  «VARIABLE_NAME» : ARRAY [0..31] OF DWORD;
 		END_VAR'''))
 
@@ -42,58 +41,59 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 			switch export.getName() {
 				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h''': {
 					headerfileFound = true
-					
+
 					assertEquals('''
-					/*************************************************************************
-					 *** FORTE Library Element
-					 ***
-					 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
-					 ***
-					 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
-					 *** Description: 
-					 *** Version:
-					 *************************************************************************/
-
-					#ifndef _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
-					#define _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
-
-					#include "basicfb.h"
-					#include "forte_array_common.h"
-					#include "forte_array.h"
-					#include "forte_array_fixed.h"
-					#include "forte_array_variable.h"
-
-
-					class «EXPORTED_FUNCTIONBLOCK_NAME»: public CBasicFB {
-					  DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
-
-					private:
-					  
-					  
-					  
-					  
-
-					  static const SFBInterfaceSpec scm_stFBInterfaceSpec;
-
-
-					  void «EXPORTED_ALGORITHM_NAME»(void);
-
-					  
-
-					  virtual void executeEvent(int pa_nEIID);
-
-					  FORTE_BASIC_FB_DATA_ARRAY(0, 0, 0, 0, 0);
-
-					public:
-					  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-					      CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr, m_anFBConnData, m_anFBVarsData) {
-					  };
-
-					  virtual ~«EXPORTED_FUNCTIONBLOCK_NAME»() = default;
-					};
-
-					#endif // _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
-
+						/*************************************************************************
+						 *** FORTE Library Element
+						 ***
+						 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
+						 ***
+						 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
+						 *** Description: 
+						 *** Version:
+						 *************************************************************************/
+						
+						#ifndef _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
+						#define _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
+						
+						#include "basicfb.h"
+						#include "forte_array_common.h"
+						#include "forte_array.h"
+						#include "forte_array_fixed.h"
+						#include "forte_array_variable.h"
+						
+						
+						class «EXPORTED_FUNCTIONBLOCK_NAME»: public CBasicFB {
+						  DECLARE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME»)
+						
+						private:
+						  
+						  
+						  
+						  
+						
+						  static const SFBInterfaceSpec scm_stFBInterfaceSpec;
+						  void «EXPORTED_ALGORITHM_NAME»(void);
+						  static const TForteInt16 scm_nStateINIT = 0;
+						  
+						  void enterStateINIT(void);
+						
+						  virtual void executeEvent(int pa_nEIID);
+						
+						  FORTE_BASIC_FB_DATA_ARRAY(0, 0, 0, 0, 0);
+						
+						public:
+						  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
+						      CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr, m_anFBConnData, m_anFBVarsData) {
+						  };
+						
+						  virtual ~«EXPORTED_FUNCTIONBLOCK_NAME»() = default;
+						
+						
+						};
+						
+						#endif // _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
+						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
 					assertNoErrors(export.warnings)
@@ -101,64 +101,71 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 				}
 				case '''«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».cpp''': {
 					cppfileFound = true
-					
+
 					assertEquals('''
-					/*************************************************************************
-					 *** FORTE Library Element
-					 ***
-					 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
-					 ***
-					 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
-					 *** Description: 
-					 *** Version:
-					 *************************************************************************/
-
-					#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h"
-					#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
-					#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_gen.cpp"
-					#endif
-
-					#include "forte_dword.h"
-					#include "forte_array_common.h"
-					#include "forte_array.h"
-					#include "forte_array_fixed.h"
-					#include "forte_array_variable.h"
-
-					DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringId«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»)
-
-
-
-
-
-
-					const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scm_stFBInterfaceSpec = {
-					  0, nullptr, nullptr, nullptr,
-					  0, nullptr, nullptr, nullptr,
-					  0, nullptr, nullptr,
-					  0, nullptr, nullptr,
-					  0, nullptr
-					};
-
-					void «EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
-					  CIEC_ARRAY «EXPORTED_VARIABLE_NAME»(32 , g_nStringIdDWORD);
-					}
-
-
-
-					void «EXPORTED_FUNCTIONBLOCK_NAME»::executeEvent(int pa_nEIID){
-					  bool bTransitionCleared;
-					  do {
-					    bTransitionCleared = true;
-					    switch(m_nECCState) {
-					      default:
-					        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 0.", m_nECCState.operator TForteUInt16 ());
-					        m_nECCState = 0; // 0 is always the initial state
-					        break;
-					    }
-					    pa_nEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
-					  } while(bTransitionCleared);
-					}
-
+						/*************************************************************************
+						 *** FORTE Library Element
+						 ***
+						 *** This file was generated using the 4DIAC FORTE Export Filter V1.0.x NG!
+						 ***
+						 *** Name: «ExporterTestBase.BASICFUNCTIONBLOCK_NAME»
+						 *** Description: 
+						 *** Version:
+						 *************************************************************************/
+						
+						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME».h"
+						#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
+						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_gen.cpp"
+						#endif
+						
+						#include "forte_dword.h"
+						#include "forte_sint.h"
+						#include "forte_array_common.h"
+						#include "forte_array.h"
+						#include "forte_array_fixed.h"
+						#include "forte_array_variable.h"
+						
+						DEFINE_FIRMWARE_FB(«EXPORTED_FUNCTIONBLOCK_NAME», g_nStringId«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»)
+						
+						
+						
+						
+						
+						
+						const SFBInterfaceSpec «EXPORTED_FUNCTIONBLOCK_NAME»::scm_stFBInterfaceSpec = {
+						  0, nullptr, nullptr, nullptr,
+						  0, nullptr, nullptr, nullptr,
+						  0, nullptr, nullptr,
+						  0, nullptr, nullptr,
+						  0, nullptr
+						};
+						
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
+						  CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31> st_lv_variable = {};
+						  
+						}
+						
+						
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::executeEvent(int pa_nEIID){
+						  do {
+						    switch(m_nECCState) {
+						      case scm_nStateINIT:
+						        return; //no transition cleared
+						      default:
+						        DEVLOG_ERROR("The state is not in the valid range! The state value is: %d. The max value can be: 1.", m_nECCState.operator TForteUInt16 ());
+						        m_nECCState = 0; // 0 is always the initial state
+						        return;
+						    }
+						    pa_nEIID = cg_nInvalidEventID; // we have to clear the event after the first check in order to ensure correct behavior
+						  } while(true);
+						}
+						
+						
+						void FORTE_functionblock::enterStateINIT(void) {
+						  m_nECCState = scm_nStateINIT;
+						}
+						
+						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
 					assertNoErrors(export.warnings)

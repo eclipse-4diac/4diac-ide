@@ -14,7 +14,7 @@
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.labeling;
 
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
-import org.eclipse.xtext.ui.label.DefaultEObjectLabelProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.labeling.STCoreLabelProvider;
 
 import com.google.inject.Inject;
 
@@ -23,20 +23,10 @@ import com.google.inject.Inject;
  *
  * See https://www.eclipse.org/Xtext/documentation/310_eclipse_support.html#label-provider
  */
-public class STFunctionLabelProvider extends DefaultEObjectLabelProvider {
+public class STFunctionLabelProvider extends STCoreLabelProvider {
 
 	@Inject
 	public STFunctionLabelProvider(final AdapterFactoryLabelProvider delegate) {
 		super(delegate);
 	}
-
-	// Labels and icons can be computed like this:
-
-	//	String text(Greeting ele) {
-	//		return "A greeting to " + ele.getName();
-	//	}
-	//
-	//	String image(Greeting ele) {
-	//		return "Greeting.gif";
-	//	}
 }

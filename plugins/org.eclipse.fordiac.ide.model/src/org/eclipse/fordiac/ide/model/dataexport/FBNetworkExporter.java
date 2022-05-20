@@ -24,7 +24,6 @@ import javax.xml.stream.XMLStreamException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.impl.SubApplicationTypePaletteEntryImpl;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -42,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.impl.SubAppTypeEntryImpl;
 
 class FBNetworkExporter extends CommonElementExporter {
 
@@ -111,6 +111,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		if (!isUntypedSubapp(fbnElement)) {
 			// for untyped subapp initial values are stored in the vardeclarations
 			addParamsConfig(fbnElement.getInterface().getInputVars());
+			addErrorMarkerParamsConfig(fbnElement.getInterface().getErrorMarker());
 			addPinComments(fbnElement.getInterface().getAllInterfaceElements());
 		}
 
@@ -131,7 +132,7 @@ class FBNetworkExporter extends CommonElementExporter {
 			}
 
 			if(fbnElement instanceof ErrorMarkerFBNElement) {
-				if(fbnElement.getPaletteEntry() instanceof SubApplicationTypePaletteEntryImpl) {
+				if (fbnElement.getTypeEntry() instanceof SubAppTypeEntryImpl) {
 					return LibraryElementTags.SUBAPP_ELEMENT;
 				}
 				return LibraryElementTags.FB_ELEMENT;
@@ -201,7 +202,7 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	public static boolean isExportableErrorMarker(final FBNetworkElement fbNetworkElement) {
-		return !((fbNetworkElement instanceof ErrorMarkerFBNElement) && (fbNetworkElement.getPaletteEntry() == null));
+		return !((fbNetworkElement instanceof ErrorMarkerFBNElement) && (fbNetworkElement.getTypeEntry() == null));
 	}
 
 	private static String getConnectionEndpointIdentifier(final IInterfaceElement interfaceElement, final FBNetwork fbNetwork) {

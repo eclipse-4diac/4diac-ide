@@ -18,6 +18,7 @@ import java.math.BigInteger
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGrammarAccess
@@ -41,6 +42,10 @@ class STAlgorithmPartitioner {
 	@Inject
 	extension STAlgorithmGrammarAccess grammarAccess
 
+	def String combine(FBType fbType) {
+		if(fbType instanceof BaseFBType) fbType.combine else ""
+	}
+
 	def String combine(BaseFBType fbType) {
 		fbType.callables.combine
 	}
@@ -49,7 +54,7 @@ class STAlgorithmPartitioner {
 		callables.map[toSTText].join
 	}
 
-	def dispatch String toSTText(org.eclipse.fordiac.ide.model.libraryElement.ICallable callable) { "" }
+	def dispatch String toSTText(ICallable callable) { "" }
 
 	def dispatch String toSTText(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm) {
 		val text = algorithm.text
@@ -195,7 +200,7 @@ class STAlgorithmPartitioner {
 			result.add(text.newLostAndFound(index))
 		}
 	}
-	
+
 	def protected dispatch appendText(org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm algorithm, String text) {
 		algorithm.text = algorithm.text + text
 	}

@@ -16,9 +16,9 @@ package org.eclipse.fordiac.ide.systemconfiguration.policies;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.model.Palette.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceMoveCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.editparts.ResourceContainer;
@@ -31,27 +31,27 @@ import org.eclipse.gef.requests.CreateRequest;
 public class ResourceContainerLayoutEditPolicy extends FlowLayoutEditPolicy {
 
 	@Override
-	protected EditPolicy createChildEditPolicy(EditPart child) {
+	protected EditPolicy createChildEditPolicy(final EditPart child) {
 
 		return new ModifiedNonResizeableEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1));
 	}
 
 	@Override
-	protected Command createMoveChildCommand(EditPart child, EditPart after) {
+	protected Command createMoveChildCommand(final EditPart child, final EditPart after) {
 		return getMoveCommand(child, after);
 	}
 
 	@Override
-	protected Command getCreateCommand(CreateRequest request) {
+	protected Command getCreateCommand(final CreateRequest request) {
 		if (request == null) {
 			return null;
 		}
-		Object childClass = request.getNewObjectType();
+		final Object childClass = request.getNewObjectType();
 		if (childClass instanceof ResourceTypeEntry) {
-			ResourceTypeEntry type = (ResourceTypeEntry) request.getNewObjectType();
+			final ResourceTypeEntry type = (ResourceTypeEntry) request.getNewObjectType();
 			if (getHost().getModel() instanceof ResourceContainer) {
-				ResourceContainer resContainer = (ResourceContainer) getHost().getModel();
-				EditPart ref = getInsertionReference(request);
+				final ResourceContainer resContainer = (ResourceContainer) getHost().getModel();
+				final EditPart ref = getInsertionReference(request);
 				int index = -1;
 				if (ref != null) {
 					index = resContainer.getDevice().getResource().indexOf(ref.getModel());
@@ -63,15 +63,15 @@ public class ResourceContainerLayoutEditPolicy extends FlowLayoutEditPolicy {
 	}
 
 	@Override
-	protected Command createAddCommand(EditPart child, EditPart after) {
+	protected Command createAddCommand(final EditPart child, final EditPart after) {
 		return getMoveCommand(child, after);
 	}
 
-	private ResourceMoveCommand getMoveCommand(EditPart child, EditPart after) {
+	private ResourceMoveCommand getMoveCommand(final EditPart child, final EditPart after) {
 		ResourceMoveCommand cmd = null;
 		if (child.getModel() instanceof Resource && getHost().getModel() instanceof ResourceContainer) {
 			int index = -1;
-			Device targetDevice = ((ResourceContainer) getHost().getModel()).getDevice();
+			final Device targetDevice = ((ResourceContainer) getHost().getModel()).getDevice();
 			if (after == null) {
 				index = targetDevice.getResource().size();
 			} else {

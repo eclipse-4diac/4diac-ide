@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorExitException;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorThreadGroup;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class EvaluatorProcess extends PlatformObject implements IProcess, Callable<IStatus> {
 
@@ -70,6 +71,7 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 			try {
 				result = this.evaluator.evaluate();
 			} catch (final EvaluatorExitException e) {
+				FordiacLogHelper.logWarning(e.getMessage(), e);
 				// exit
 			}
 			if (result != null) {
@@ -82,8 +84,9 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 			return Status.OK_STATUS;
 		} catch (final InterruptedException e) {
 			this.streamsProxy.getErrorStreamMonitor().error("Terminated");
+			Thread.currentThread().interrupt();
 			return Status.error("Terminated");
-		} catch (final Throwable t) {
+		} catch (final Exception t) {
 			this.streamsProxy.getErrorStreamMonitor().error("Exception occurred", t);
 			return Status.error("Exception occurred", t);
 		} finally {
@@ -122,7 +125,10 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 	public int getExitValue() throws DebugException {
 		try {
 			return this.task.get(-1, TimeUnit.NANOSECONDS).getCode();
-		} catch (InterruptedException | ExecutionException | TimeoutException e) {
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			throw new DebugException(Status.error("Couldn't get exit code", e));
+		} catch (ExecutionException | TimeoutException e) {
 			throw new DebugException(Status.error("Couldn't get exit code", e));
 		} catch (final CancellationException e) {
 			return -1;
@@ -179,9 +185,7 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 		if (adapter.equals(IProcess.class)) {
 			return (T) this;
 		} else if (adapter.equals(IDebugTarget.class)) {
-			final ILaunch launch = getLaunch();
-			final IDebugTarget[] targets = launch.getDebugTargets();
-			for (final IDebugTarget target : targets) {
+			for (final IDebugTarget target : getLaunch().getDebugTargets()) {
 				if (this.equals(target.getProcess())) {
 					return (T) target;
 				}

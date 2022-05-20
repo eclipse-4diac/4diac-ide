@@ -20,33 +20,31 @@ import java.util.Map.Entry;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.ui.dialogs.SearchPattern;
 
 public class PaletteFilter {
 
-	private final Palette palette;
+	private final TypeLibrary typeLib;
 	private final SearchPattern matcher = new SearchPattern();
 
-	public PaletteFilter(final Palette palette) {
-		this.palette = palette;
+	public PaletteFilter(final TypeLibrary typeLib) {
+		this.typeLib = typeLib;
 
 	}
 
-	public List<PaletteEntry> findFBAndSubappTypes(final String searchString) {
-		final Stream<Entry<String, ? extends PaletteEntry>> stream = Stream.concat(palette.getFbTypes().entrySet().stream(),
-				palette.getSubAppTypes().entrySet().stream());
+	public List<TypeEntry> findFBAndSubappTypes(final String searchString) {
+		final Stream<Entry<String, ? extends TypeEntry>> stream = Stream
+				.concat(typeLib.getFbTypes().entrySet().stream(), typeLib.getSubAppTypes().entrySet().stream());
 		return sortResultsByBestMatch(searchString, findTypes(searchString, stream));
 	}
 
-	public List<PaletteEntry> findTypes(final String searchString,
-			final Stream<Entry<String, ? extends PaletteEntry>> stream) {
+	public List<TypeEntry> findTypes(final String searchString,
+			final Stream<Entry<String, ? extends TypeEntry>> stream) {
 		setSearchPattern(searchString);
 		return stream.filter(entry -> matcher.matches(entry.getKey()))
 				.filter(entry -> (null != entry.getValue().getType())). // only forward types that can be loaded //
 				// correctly
-				map(Entry<String, ? extends PaletteEntry>::getValue).collect(Collectors.toList());
+				map(Entry<String, ? extends TypeEntry>::getValue).collect(Collectors.toList());
 	}
 
 	private void setSearchPattern(final String searchString) {
@@ -60,21 +58,21 @@ public class PaletteFilter {
 		matcher.setPattern(searchPattern);
 	}
 
-	private List<PaletteEntry> sortResultsByBestMatch(final String searchString, final List<PaletteEntry> results) {
+	private List<TypeEntry> sortResultsByBestMatch(final String searchString, final List<TypeEntry> results) {
 		final String searchPattern = searchString;
-		final List<PaletteEntry> sortedResults = results;
-		sortedResults.sort(Comparator.comparing(PaletteEntry::getLabel));
-		final List<PaletteEntry> exact = new ArrayList<>();
-		final List<PaletteEntry> right = new ArrayList<>();
-		final List<PaletteEntry> rest = new ArrayList<>();
+		final List<TypeEntry> sortedResults = results;
+		sortedResults.sort(Comparator.comparing(TypeEntry::getTypeName));
+		final List<TypeEntry> exact = new ArrayList<>();
+		final List<TypeEntry> right = new ArrayList<>();
+		final List<TypeEntry> rest = new ArrayList<>();
 
-		for (final PaletteEntry entry : sortedResults) {
+		for (final TypeEntry entry : sortedResults) {
 			matcher.setPattern(searchPattern);
-			if (matcher.matches(entry.getLabel())) {
+			if (matcher.matches(entry.getTypeName())) {
 				exact.add(entry);
 			} else {
 				matcher.setPattern(searchPattern + "*"); //$NON-NLS-1$
-				if (matcher.matches(entry.getLabel())) {
+				if (matcher.matches(entry.getTypeName())) {
 					right.add(entry);
 				} else {
 					rest.add(entry);

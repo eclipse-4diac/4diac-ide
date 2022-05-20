@@ -198,13 +198,7 @@
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-               filter="org.eclipse.fordiac.ide.application.properties.FBNetworkElementTypeFilter"
-               id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-               tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
-         </propertySection>
-         <propertySection
-               class="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
-               filter="org.eclipse.fordiac.ide.application.properties.FBNetworkElementTypeFilter"
+               filter="org.eclipse.fordiac.ide.application.properties.TypedInterfacePinFilter"
                id="org.eclipse.fordiac.ide.application.properties.InterfaceElementSection"
                tab="org.eclipse.fordiac.ide.application.propertyInterfaceElementTab">
          </propertySection>

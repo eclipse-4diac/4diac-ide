@@ -23,25 +23,25 @@ package org.eclipse.fordiac.ide.model.structuredtext.structuredText;
 public interface TimeLiteral extends Constant
 {
   /**
-   * Returns the value of the '<em><b>Literal</b></em>' attribute.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Literal</b></em>' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Literal</em>' attribute.
-   * @see #setLiteral(String)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getTimeLiteral_Literal()
-   * @model
-   * @generated
-   */
+	 * @return the value of the '<em>Literal</em>' attribute.
+	 * @see #setLiteral(String)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getTimeLiteral_Literal()
+	 * @model
+	 * @generated
+	 */
   String getLiteral();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral#getLiteral <em>Literal</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.TimeLiteral#getLiteral <em>Literal</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Literal</em>' attribute.
-   * @see #getLiteral()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Literal</em>' attribute.
+	 * @see #getLiteral()
+	 * @generated
+	 */
   void setLiteral(String value);
 
 } // TimeLiteral

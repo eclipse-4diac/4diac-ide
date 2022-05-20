@@ -17,6 +17,7 @@ import org.eclipse.core.runtime.IProgressMonitor
 import org.eclipse.core.runtime.Platform
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmReconciler
 import org.eclipse.jface.text.IDocument
@@ -36,9 +37,9 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 	override setDocumentContent(IDocument document, IEditorInput editorInput, String encoding) {
 		var result = false
 		if (editorInput instanceof IFileEditorInput) {
-			val paletteEntry = TypeLibrary.getPaletteEntryForFile(editorInput.file)
-			if (paletteEntry !== null) {
-				val libraryElement = paletteEntry.typeEditable
+			val typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(editorInput.file)
+			if (typeEntry !== null) {
+				val libraryElement = typeEntry.typeEditable
 				if (libraryElement instanceof BaseFBType) {
 					setDocumentContent(document, libraryElement)
 					result = true
@@ -57,9 +58,9 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 
 	override doSaveDocument(IProgressMonitor monitor, Object element, IDocument document, boolean overwrite) {
 		if (element instanceof IFileEditorInput) {
-			val paletteEntry = TypeLibrary.getPaletteEntryForFile(element.file)
-			if (paletteEntry !== null) {
-				val libraryElement = paletteEntry.typeEditable
+			val typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(element.file)
+			if (typeEntry !== null) {
+				val libraryElement = typeEntry.typeEditable
 				if (libraryElement instanceof BaseFBType) {
 					if (document instanceof XtextDocument) {
 						doSaveDocument(monitor, libraryElement, document)
@@ -92,9 +93,9 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 		val document = info.fDocument as XtextDocument
 		super.handleElementContentChanged(fileEditorInput)
 		if (document === info.fDocument) { // still unchanged? -> update FB reference and reparse
-			val paletteEntry = TypeLibrary.getPaletteEntryForFile(fileEditorInput.file)
-			if (paletteEntry !== null) {
-				val libraryElement = paletteEntry.typeEditable
+			val typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fileEditorInput.file)
+			if (typeEntry !== null) {
+				val libraryElement = typeEntry.typeEditable
 				if (libraryElement instanceof BaseFBType) {
 					removeUnchangedElementListeners(fileEditorInput, info);
 

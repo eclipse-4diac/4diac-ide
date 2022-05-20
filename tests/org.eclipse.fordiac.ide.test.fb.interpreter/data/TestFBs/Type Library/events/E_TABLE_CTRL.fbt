@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
+<FBType Comment="Support function block for E_TABLE" Name="E_TABLE_CTRL">
+  <Identification Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-1 Annex A"/>
+  <VersionInfo Author="Alois Zoitl" Date="2017-09-22" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
+  <InterfaceList>
+    <EventInputs>
+      <Event Comment="" Name="INIT" Type="Event">
+        <With Var="DT"/>
+        <With Var="N"/>
+      </Event>
+      <Event Comment="" Name="CLK" Type="Event"/>
+    </EventInputs>
+    <EventOutputs>
+      <Event Comment="" Name="CLKO" Type="Event">
+        <With Var="DTO"/>
+        <With Var="CV"/>
+      </Event>
+    </EventOutputs>
+    <InputVars>
+      <VarDeclaration ArraySize="4" Comment="" Name="DT" Type="TIME"/>
+      <VarDeclaration Comment="" Name="N" Type="UINT"/>
+    </InputVars>
+    <OutputVars>
+      <VarDeclaration Comment="" Name="DTO" Type="TIME"/>
+      <VarDeclaration Comment="" Name="CV" Type="UINT"/>
+    </OutputVars>
+  </InterfaceList>
+  <BasicFB>
+    <ECC>
+      <ECState Comment="Initial State" Name="START" x="400.0" y="700.0"/>
+      <ECState Comment="" Name="INIT" x="740.0" y="85.0">
+        <ECAction Algorithm="INIT"/>
+      </ECState>
+      <ECState Comment="" Name="INIT1" x="1285.0" y="460.0">
+        <ECAction Output="CLKO"/>
+      </ECState>
+      <ECState Comment="" Name="STEP" x="1000.0" y="1275.0">
+        <ECAction Algorithm="STEP" Output="CLKO"/>
+      </ECState>
+      <ECTransition Comment="" Condition="INIT" Destination="INIT" Source="START" x="685.0" y="435.0"/>
+      <ECTransition Comment="" Condition="[N = 0]" Destination="START" Source="INIT" x="405.0" y="345.0"/>
+      <ECTransition Comment="" Condition="[N &gt; 0]" Destination="INIT1" Source="INIT" x="1080.0" y="315.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="INIT1" x="955.0" y="650.0"/>
+      <ECTransition Comment="" Condition="CLK[CV &lt; MIN(3, N-1)]" Destination="STEP" Source="START" x="1080.0" y="940.0"/>
+      <ECTransition Comment="" Condition="1" Destination="START" Source="STEP" x="475.0" y="1315.0"/>
+    </ECC>
+    <Algorithm Comment="new algorithm" Name="INIT">
+      <ST Text="CV := 0;&#13;&#10;DTO := DT[0];"/>
+    </Algorithm>
+    <Algorithm Comment="new algorithm" Name="STEP">
+      <ST Text="CV := CV +1;&#13;&#10;DTO := DT[CV];&#13;&#10;"/>
+    </Algorithm>
+  </BasicFB>
+</FBType>

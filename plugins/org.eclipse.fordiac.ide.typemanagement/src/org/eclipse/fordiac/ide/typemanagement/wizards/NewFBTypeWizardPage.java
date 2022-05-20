@@ -32,9 +32,10 @@ import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.emf.common.util.EMap;
 import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -158,7 +159,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 	private boolean isDuplicate() {
 		// here: getContainerFullPath().segment(0) --> name of the selected project
-		final TypeLibrary lib = TypeLibrary
+		final TypeLibrary lib = TypeLibraryManager.INSTANCE
 				.getTypeLibrary(ResourcesPlugin.getWorkspace().getRoot().getProject(getContainerFullPath().segment(0)));
 
 		final String[] s = getTemplate().getName().split("\\."); //$NON-NLS-1$
@@ -170,17 +171,17 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private boolean isSubFbtAdpDuplicate(final TypeLibrary lib, final String fileExtension) {
-		EMap<String, ?> map = null;
+		Map<String, ? extends TypeEntry> map = null;
 
 		switch (fileExtension) {
 		case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING:
-			map = lib.getBlockTypeLib().getSubAppTypes();
+			map = lib.getSubAppTypes();
 			break;
 		case TypeLibraryTags.FB_TYPE_FILE_ENDING:
-			map = lib.getBlockTypeLib().getFbTypes();
+			map = lib.getFbTypes();
 			break;
 		case TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING:
-			map = lib.getBlockTypeLib().getAdapterTypes();
+			map = lib.getAdapterTypes();
 			break;
 		default:
 			break;

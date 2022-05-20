@@ -61,7 +61,7 @@ public class DeleteInterfaceCommand extends Command {
 			} else if (interfaceElement instanceof VarDeclaration) {
 				parent.getInputVars().add(oldIndex, (VarDeclaration) interfaceElement);
 			} else if (interfaceElement instanceof ErrorMarkerInterface) {
-				undoErrorMarker();
+				undoErrorMarker((ErrorMarkerInterface) interfaceElement);
 			}
 		} else {
 			if (interfaceElement instanceof Event) {
@@ -71,7 +71,7 @@ public class DeleteInterfaceCommand extends Command {
 			} else if (interfaceElement instanceof VarDeclaration) {
 				parent.getOutputVars().add(oldIndex, (VarDeclaration) interfaceElement);
 			} else if (interfaceElement instanceof ErrorMarkerInterface) {
-				undoErrorMarker();
+				undoErrorMarker((ErrorMarkerInterface) interfaceElement);
 			}
 		}
 		if (cmds.canUndo()) {
@@ -79,8 +79,8 @@ public class DeleteInterfaceCommand extends Command {
 		}
 	}
 
-	private void undoErrorMarker() {
-		parent.getErrorMarker().add(oldIndex, interfaceElement);
+	private void undoErrorMarker(final ErrorMarkerInterface errorIE) {
+		parent.getErrorMarker().add(oldIndex, errorIE);
 		if (oldErrorMarker != null) {
 			oldErrorMarker.createMarkerInFile();
 		}

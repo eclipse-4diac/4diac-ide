@@ -13,7 +13,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IFilter;
@@ -34,17 +36,23 @@ public class TypedInterfacePinFilter implements IFilter {
 			retval = ((EditPart) retval).getModel();
 		}
 		if (retval instanceof Value) {
-			retval = ((Value) retval).getVarDeclaration();
+			retval = ((Value) retval).getParentIE();
 		}
 		return isPinOfTypedElement(retval) ? (IInterfaceElement) retval : null;
 	}
 
 	private static boolean isPinOfTypedElement(final Object element) {
 		if (element instanceof IInterfaceElement) {
-			final IInterfaceElement ie = (IInterfaceElement) element;
-			return (ie.getFBNetworkElement() != null && ie.getFBNetworkElement().getType() != null);
+			final FBNetworkElement fbEl = ((IInterfaceElement) element).getFBNetworkElement();
+			return ((fbEl != null) && ((fbEl.getType() != null) || isIndirectlyTyped(fbEl)));
 		}
 		return false;
 	}
 
+	private static boolean isIndirectlyTyped(final FBNetworkElement subapp) {
+		if (subapp instanceof SubApp) {
+			return ((SubApp) subapp).isContainedInTypedInstance();
+		}
+		return false;
+	}
 }

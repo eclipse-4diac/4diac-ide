@@ -26,7 +26,7 @@ import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.swt.graphics.Image;
@@ -58,7 +58,7 @@ public class SystemLabelProvider extends AdapterFactoryLabelProvider implements 
 				|| TypeLibraryTags.RESOURCE_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
 				|| TypeLibraryTags.SEGMENT_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())
 				|| TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			text = TypeLibrary.getTypeNameFromFile(element);
+			text = TypeEntry.getTypeNameFromFile(element);
 		}
 		return text;
 	}

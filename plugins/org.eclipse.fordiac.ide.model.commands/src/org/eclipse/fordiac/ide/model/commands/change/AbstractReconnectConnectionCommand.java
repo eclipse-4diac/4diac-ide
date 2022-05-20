@@ -19,24 +19,15 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.requests.ReconnectRequest;
 
 public abstract class AbstractReconnectConnectionCommand extends Command {
-	private final FBNetwork parent;
+	private FBNetwork parent;
 	private final Connection connection;
 	private final boolean isSourceReconnect;
 	private final IInterfaceElement newTarget;
 	private DeleteConnectionCommand deleteConnectionCmd;
 	private AbstractConnectionCreateCommand connectionCreateCmd;
-
-	protected AbstractReconnectConnectionCommand(final String label, final ReconnectRequest request,
-			final FBNetwork parent) {
-		this(label, (Connection) request.getConnectionEditPart().getModel(),
-				request.getType().equals(RequestConstants.REQ_RECONNECT_SOURCE), getRequestTarget(request), parent);
-	}
 
 	protected AbstractReconnectConnectionCommand(final String label, final Connection connection,
 			final boolean isSourceReconnect, final IInterfaceElement newTarget, final FBNetwork parent) {
@@ -47,8 +38,12 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 		this.parent = parent;
 	}
 
-	protected FBNetwork getParent() {
+	public FBNetwork getParent() {
 		return parent;
+	}
+
+	public void setParent(final FBNetwork parent) {
+		this.parent = parent;
 	}
 
 	@Override
@@ -79,14 +74,6 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 		return connection;
 	}
 
-	private static IInterfaceElement getRequestTarget(final ReconnectRequest request) {
-		final EditPart target = request.getTarget();
-		if (target.getModel() instanceof IInterfaceElement) {
-			return (IInterfaceElement) target.getModel();
-		}
-		return null;
-	}
-
 	@Override
 	public boolean canRedo() {
 		// this should be always possible
@@ -102,7 +89,7 @@ public abstract class AbstractReconnectConnectionCommand extends Command {
 		connectionCreateCmd.setDestination(getNewDestination());
 		connectionCreateCmd.setArrangementConstraints(con.getRoutingData());
 		connectionCreateCmd.setVisible(con.isVisible());
-		
+
 		connectionCreateCmd.execute();  // perform adding the connection first to preserve any error markers
 		deleteConnectionCmd.execute();
 		copyAttributes(connectionCreateCmd.getConnection(), deleteConnectionCmd.getConnection());

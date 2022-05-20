@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -36,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.search.ui.ISearchQuery;
@@ -126,7 +126,7 @@ public class ModelSearchQuery implements ISearchQuery {
 
 	private void searchTypeLibrary(final AutomationSystem sys) {
 		final TypeLibrary lib = sys.getTypeLibrary();
-		for (final PaletteEntry entry : lib.getBlockTypeLib().getFbTypes().values()) {
+		for (final TypeEntry entry : lib.getFbTypes().values()) {
 			if (matchEObject(entry.getType())) {
 				searchResult.addResult(entry.getType());
 			}
@@ -159,6 +159,10 @@ public class ModelSearchQuery implements ISearchQuery {
 	}
 
 	private boolean compareStrings(final String toTest) {
+		// TODO: think what makes sense, this can be done in a couple of ways
+		if (modelQuerySpec.isCheckExactMatching()) {
+			return toTest.equals(modelQuerySpec.getSearchString());
+		}
 		if (modelQuerySpec.isCheckCaseSensitive()) {
 			return toTest.contains(modelQuerySpec.getSearchString());
 		}
@@ -167,7 +171,7 @@ public class ModelSearchQuery implements ISearchQuery {
 
 	@Override
 	public String getLabel() {
-		return modelQuerySpec.toString();
+		return modelQuerySpec.getSearchString();
 	}
 
 	@Override

@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.IMonitoringListener;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.model.data.EventType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -358,9 +357,8 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 						final MonitoringBaseElement element = manager
 								.getMonitoringElement(interfaceElement);
 						forceMenuItem
-						.setEnabled(!(interfaceElement.getType() instanceof EventType) && ((interfaceElement
-								.getType() instanceof StructuredType) == (((WatchValueTreeNode) selection
-										.getFirstElement()).getVariable() != null)));
+						.setEnabled(!(interfaceElement.getType() instanceof EventType) &&  !((WatchValueTreeNode) selection
+										.getFirstElement()).hasChildren());
 						clearForceMenuItem.setEnabled(
 								!(interfaceElement.getType() instanceof EventType)
 								&& ((MonitoringElement) element).isForce());

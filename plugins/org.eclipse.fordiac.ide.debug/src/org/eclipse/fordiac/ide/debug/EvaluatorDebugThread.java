@@ -27,8 +27,7 @@ import org.eclipse.fordiac.ide.model.eval.Evaluator;
 public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThread {
 	private final Thread thread;
 
-	private final AtomicReference<DebugEvent> request = new AtomicReference<>(
-			new DebugEvent(this, DebugEvent.SUSPEND, DebugEvent.CLIENT_REQUEST));
+	private final AtomicReference<DebugEvent> request = new AtomicReference<>(null);
 	private final AtomicBoolean suspended = new AtomicBoolean();
 	private final AtomicReference<Evaluator> currentEvaluator = new AtomicReference<>();
 
@@ -54,13 +53,13 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 	}
 
 	public DebugEvent awaitResumeRequest() throws InterruptedException {
-		DebugEvent request = null;
+		DebugEvent resultingRequest = null;
 		synchronized (this.request) {
-			while ((request = this.request.getAndSet(null)) == null || request.getKind() != DebugEvent.RESUME) {
+			while ((resultingRequest = this.request.getAndSet(null)) == null || resultingRequest.getKind() != DebugEvent.RESUME) {
 				this.request.wait(1000); // wake up every second in case we missed a notification
 			}
 		}
-		return request;
+		return resultingRequest;
 	}
 
 	public Evaluator getCurrentEvaluator() {

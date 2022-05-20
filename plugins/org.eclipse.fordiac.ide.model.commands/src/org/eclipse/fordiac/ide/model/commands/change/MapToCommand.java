@@ -16,8 +16,6 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import java.util.List;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -41,6 +39,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -139,7 +139,7 @@ public class MapToCommand extends Command {
 		} else if (srcElement instanceof FB) {
 			targetElement = createTargetFB();
 		} else if (srcElement instanceof SubApp) {
-			if (null != srcElement.getPaletteEntry()) {
+			if (((SubApp) srcElement).isTyped()) {
 				targetElement = createTargetTypedSubApp();
 			} else {
 				targetElement = createTargetUntypedSubApp();
@@ -150,7 +150,7 @@ public class MapToCommand extends Command {
 	}
 
 	private FBNetworkElement createTargetFB() {
-		final FBCreateCommand targetCreateFB = new FBCreateCommand((FBTypePaletteEntry) srcElement.getPaletteEntry(),
+		final FBCreateCommand targetCreateFB = new FBCreateCommand((FBTypeEntry) srcElement.getTypeEntry(),
 				getTargetFBNetwork(), srcElement.getPosition().getX(), srcElement.getPosition().getY());
 		targetCreateFB.execute();
 		return targetCreateFB.getFB();
@@ -168,7 +168,7 @@ public class MapToCommand extends Command {
 		}
 
 		final CreateSubAppInstanceCommand cmd = new CreateSubAppInstanceCommand(
-				(SubApplicationTypePaletteEntry) srcElement.getPaletteEntry(), getTargetFBNetwork(),
+				(SubAppTypeEntry) srcElement.getTypeEntry(), getTargetFBNetwork(),
 				srcElement.getPosition().getX(), srcElement.getPosition().getY());
 		cmd.execute();
 
@@ -232,6 +232,7 @@ public class MapToCommand extends Command {
 								.getInterfaceElement(connection.getSource().getName()),
 						targetElement.getInterfaceElement(interfaceElement.getName()),
 						connection.isVisible());
+
 			}
 		}
 	}

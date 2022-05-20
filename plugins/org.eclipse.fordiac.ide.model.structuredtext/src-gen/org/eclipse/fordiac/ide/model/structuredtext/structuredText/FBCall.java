@@ -28,59 +28,59 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 public interface FBCall extends Statement
 {
   /**
-   * Returns the value of the '<em><b>Fb</b></em>' reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Fb</b></em>' reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Fb</em>' reference.
-   * @see #setFb(FB)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getFBCall_Fb()
-   * @model
-   * @generated
-   */
+	 * @return the value of the '<em>Fb</em>' reference.
+	 * @see #setFb(FB)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getFBCall_Fb()
+	 * @model
+	 * @generated
+	 */
   FB getFb();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall#getFb <em>Fb</em>}' reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall#getFb <em>Fb</em>}' reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Fb</em>' reference.
-   * @see #getFb()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Fb</em>' reference.
+	 * @see #getFb()
+	 * @generated
+	 */
   void setFb(FB value);
 
   /**
-   * Returns the value of the '<em><b>Event</b></em>' attribute.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Event</b></em>' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Event</em>' attribute.
-   * @see #setEvent(String)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getFBCall_Event()
-   * @model
-   * @generated
-   */
+	 * @return the value of the '<em>Event</em>' attribute.
+	 * @see #setEvent(String)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getFBCall_Event()
+	 * @model
+	 * @generated
+	 */
   String getEvent();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall#getEvent <em>Event</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall#getEvent <em>Event</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Event</em>' attribute.
-   * @see #getEvent()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Event</em>' attribute.
+	 * @see #getEvent()
+	 * @generated
+	 */
   void setEvent(String value);
 
   /**
-   * Returns the value of the '<em><b>Args</b></em>' containment reference list.
-   * The list contents are of type {@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument}.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Args</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.Argument}.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Args</em>' containment reference list.
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getFBCall_Args()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Args</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getFBCall_Args()
+	 * @model containment="true"
+	 * @generated
+	 */
   EList<Argument> getArgs();
 
 } // FBCall

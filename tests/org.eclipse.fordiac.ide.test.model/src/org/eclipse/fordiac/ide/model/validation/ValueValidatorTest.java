@@ -10,14 +10,18 @@
  * Contributors:
  *   Martin Melik Merkumians
  *     - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *     - migrated to typed value converter
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.validation;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.text.MessageFormat;
 import java.util.stream.Stream;
 
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.junit.jupiter.api.DisplayName;
@@ -30,12 +34,9 @@ import org.junit.jupiter.params.provider.ValueSource;
 class ValueValidatorTest {
 
 	private static final String NO_ERROR = ""; //$NON-NLS-1$
-	private static final String INVALID_BOOL_LITERAL = "Invalid BOOL Literal! Valid BOOL literals are 0, 1, FALSE and TRUE"; //$NON-NLS-1$
-	private static final String TYPE_SPECIFIER_MANDATORY_FOR_ANYS = "Concrete type specifier is mandatory for ANY types!"; //$NON-NLS-1$
 	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_1 = "Characters used outside boundaries!"; //$NON-NLS-1$
 	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_2 = "\'%\' symbols used inside boundaries!"; //$NON-NLS-1$
 	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_3 = "Characters outside boundaries, \'%\' symbols used inside boundaries!"; //$NON-NLS-1$
-	private static final String DATE_TYPE_REQURIES_TYPE_LITERAL = "Data type DATE requires type specifier as part of literal"; //$NON-NLS-1$
 
 	static Stream<Arguments> validateValidBoolLiteralsTestCases() {
 		return Stream.of(Arguments.of(IecTypes.ElementaryTypes.BOOL, "0", NO_ERROR), //$NON-NLS-1$
@@ -58,40 +59,41 @@ class ValueValidatorTest {
 
 	static Stream<Arguments> validateInvalidBoolLiteralsTestCases() {
 		return Stream.of(Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"0\"", //$NON-NLS-1$
-				INVALID_BOOL_LITERAL),
+				Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"1\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL),
+						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"FALSE\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL),
+						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"TRUE\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL),
+						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#0\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL),
+						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#1\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL),
+						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#FALSE\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL),
+						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#TRUE\"", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL),
+						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "2", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL),
+						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "3.1415", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL),
+						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "1970-01-30", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL),
+						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "16#AFFE", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL),
+						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "12:00:00", //$NON-NLS-1$
-						INVALID_BOOL_LITERAL));
+						Messages.VALIDATOR_INVALID_BOOL_LITERAL));
 	}
 
 	@DisplayName("Validator tests for invalid BOOL literals")
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateInvalidBoolLiteralsTestCases")
 
-	void validateInvalidBoolLiterals(final DataType type, final String value, final String expectedErrorString) {
+	void validateInvalidBoolLiterals(final DataType type, final String value, final String expectedFormatString) {
+		final String expectedString = MessageFormat.format(expectedFormatString, type.getName());
 		final String resultString = ValueValidator.validateValue(type, value);
-		assertEquals(expectedErrorString, resultString);
+		assertEquals(expectedString, resultString);
 	}
 
 	static Stream<Arguments> validateValidDateLiteralsTestCases() {
@@ -103,35 +105,49 @@ class ValueValidatorTest {
 				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1992-01-01", NO_ERROR), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1878-11-07", NO_ERROR), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1968-10-27", NO_ERROR), //$NON-NLS-1$
-				Arguments.of(IecTypes.ElementaryTypes.DATE, "2022-05-10", DATE_TYPE_REQURIES_TYPE_LITERAL)); //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.DATE, "2022-05-10", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier));
 	}
 
 	@DisplayName("Validator tests for valid DATE literals")
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateValidDateLiteralsTestCases")
 
-	void validateValidDateLiterals(final DataType type, final String value, final String expectedResult) {
+	void validateValidDateLiterals(final DataType type, final String value, final String expectedFormatString) {
+		final String expectedString = MessageFormat.format(expectedFormatString, type.getName());
 		final String resultString = ValueValidator.validateValue(type, value);
-		assertEquals(expectedResult, resultString);
+		assertEquals(expectedString, resultString);
 	}
 
 	static Stream<Arguments> validateTypeSpecifierMandatoryForAnyLiteralsTestCases() {
-		return Stream.of(Arguments.of(IecTypes.GenericTypes.ANY, "0", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_BIT, "-0", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_CHAR, "-342434", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_CHARS, "3.1415", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_DATE, "3.1415", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_DERIVED, "3.1415", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_DURATION, "3.1415", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_ELEMENTARY, "3.1415", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_INT, "3.1415", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_MAGNITUDE, "3.1415", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_NUM, "3.1415", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_REAL, "3.1415", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_SIGNED, "3.1415", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_STRING, "3.1415", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_STRUCT, "3.1415", TYPE_SPECIFIER_MANDATORY_FOR_ANYS), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_UNSIGNED, "3.1415", TYPE_SPECIFIER_MANDATORY_FOR_ANYS)); //$NON-NLS-1$
+		return Stream.of(Arguments.of(IecTypes.GenericTypes.ANY, "0", Messages.VALIDATOR_DatatypeRequiresTypeSpecifier), //$NON-NLS-1$
+				Arguments.of(IecTypes.GenericTypes.ANY_BIT, "-0", Messages.VALIDATOR_DatatypeRequiresTypeSpecifier), //$NON-NLS-1$
+				Arguments.of(IecTypes.GenericTypes.ANY_CHAR, "-342434", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_CHARS, "3.1415", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_DATE, "3.1415", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_DERIVED, "3.1415", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_DURATION, "3.1415", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_ELEMENTARY, "3.1415", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_INT, "3.1415", Messages.VALIDATOR_DatatypeRequiresTypeSpecifier), //$NON-NLS-1$
+				Arguments.of(IecTypes.GenericTypes.ANY_MAGNITUDE, "3.1415", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_NUM, "3.1415", Messages.VALIDATOR_DatatypeRequiresTypeSpecifier), //$NON-NLS-1$
+				Arguments.of(IecTypes.GenericTypes.ANY_REAL, "3.1415", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_SIGNED, "3.1415", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_STRING, "3.1415", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_STRUCT, "3.1415", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_UNSIGNED, "3.1415", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier));
 	}
 
 	@DisplayName("Validator tests for mandatory type specifier for ANYs")
@@ -139,9 +155,10 @@ class ValueValidatorTest {
 	@MethodSource("validateTypeSpecifierMandatoryForAnyLiteralsTestCases")
 
 	void validateTypeSpecifierMandatoryForAnyLiterals(final DataType type, final String value,
-			final String expectedErrorString) {
+			final String expectedFormatString) {
+		final String expectedString = MessageFormat.format(expectedFormatString, type.getName());
 		final String resultString = ValueValidator.validateValue(type, value);
-		assertEquals(expectedErrorString, resultString);
+		assertEquals(expectedString, resultString);
 	}
 
 	@DisplayName("Validator tests for single correctly typed virtual DNS entries")

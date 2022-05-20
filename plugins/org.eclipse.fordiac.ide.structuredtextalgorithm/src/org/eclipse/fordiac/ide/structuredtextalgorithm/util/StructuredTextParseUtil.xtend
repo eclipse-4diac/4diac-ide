@@ -30,6 +30,7 @@ import org.eclipse.xtext.parser.IParser
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.resource.XtextResourceSet
+import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.eclipse.xtext.util.CancelIndicator
 import org.eclipse.xtext.util.LazyStringInputStream
 import org.eclipse.xtext.validation.CheckMode
@@ -120,12 +121,17 @@ class StructuredTextParseUtil {
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, FBType fbType, List<Issue> issues) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
+		resourceSet.loadOptions.putAll(#{
+			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
+			STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE,
+			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE
+		})
 		val resource = SERVICE_PROVIDER.get(XtextResource) as STAlgorithmResource
-		resource.URI = fbType?.paletteEntry?.file?.fullPath?.toString?.createPlatformResourceURI(true) ?: SYNTHETIC_URI
+		resource.URI = fbType?.typeEntry?.file?.fullPath?.toString?.createPlatformResourceURI(true) ?: SYNTHETIC_URI
 		resourceSet.resources.add(resource)
 		resource.entryPoint = entryPoint
 		resource.fbType = fbType?.copy
-		resource.load(new LazyStringInputStream(text), #{XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE})
+		resource.load(new LazyStringInputStream(text), resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator
 		issues.addAll(validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl))
 		return resource.parseResult

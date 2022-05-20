@@ -22,12 +22,12 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.application.policies.GroupXYLayoutPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.CreateFBElementInGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -47,8 +47,8 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 		protected Command getDirectEditCommand(final DirectEditRequest request) {
 			final Object value = request.getCellEditor().getValue();
 			final Point refPoint = getInsertionPoint(request);
-			if (value instanceof PaletteEntry) {
-				return new CreateFBElementInGroupCommand((PaletteEntry) value, getModel().getGroup(), refPoint.x,
+			if (value instanceof TypeEntry) {
+				return new CreateFBElementInGroupCommand((TypeEntry) value, getModel().getGroup(), refPoint.x,
 						refPoint.y);
 			}
 			return null;
@@ -124,12 +124,12 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 	}
 
 	private NewInstanceDirectEditManager createDirectEditManager() {
-		return new NewInstanceDirectEditManager(this, getPalette(), false);
+		return new NewInstanceDirectEditManager(this, getTypeLibrary(), false);
 	}
 
-	private Palette getPalette() {
+	private TypeLibrary getTypeLibrary() {
 		final EObject root = EcoreUtil.getRootContainer(getModel().getGroup());
-		return (root instanceof LibraryElement) ? ((LibraryElement) root).getPaletteEntry().getPalette() : null;
+		return (root instanceof LibraryElement) ? ((LibraryElement) root).getTypeEntry().getTypeLibrary() : null;
 	}
 
 	void performDirectEdit(final SelectionRequest request) {

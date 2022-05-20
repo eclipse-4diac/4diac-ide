@@ -55,5 +55,7 @@ public interface IFBTEditorPart extends ISelectionListener, IEditorPart, IGotoMa
 
 	Object getSelectableEditPart();
 
-
+	default String getEditorId() {
+		return ""; //$NON-NLS-1$
+	}
 }

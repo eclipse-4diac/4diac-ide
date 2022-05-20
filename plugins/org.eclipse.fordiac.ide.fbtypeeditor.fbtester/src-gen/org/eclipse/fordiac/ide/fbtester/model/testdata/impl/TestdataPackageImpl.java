@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.fbtester.model.testdata.TestData;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.TestdataFactory;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.TestdataPackage;
 import org.eclipse.fordiac.ide.fbtester.model.testdata.ValuedVarDecl;
-import org.eclipse.fordiac.ide.model.Palette.PalettePackage;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -100,7 +99,6 @@ public class TestdataPackageImpl extends EPackageImpl implements TestdataPackage
 		isInited = true;
 
 		// Initialize simple dependencies
-		PalettePackage.eINSTANCE.eClass();
 		LibraryElementPackage.eINSTANCE.eClass();
 		DataPackage.eINSTANCE.eClass();
 

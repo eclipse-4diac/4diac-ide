@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 /**
  * <!-- begin-user-doc -->
@@ -43,12 +44,12 @@ public interface STArrayInitElement extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Index Or Init Expression</em>' containment reference.
-	 * @see #setIndexOrInitExpression(STExpression)
+	 * @see #setIndexOrInitExpression(STInitializerExpression)
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTArrayInitElement_IndexOrInitExpression()
 	 * @model containment="true"
 	 * @generated
 	 */
-	STExpression getIndexOrInitExpression();
+	STInitializerExpression getIndexOrInitExpression();
 
 	/**
 	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement#getIndexOrInitExpression <em>Index Or Init Expression</em>}' containment reference.
@@ -58,11 +59,11 @@ public interface STArrayInitElement extends EObject {
 	 * @see #getIndexOrInitExpression()
 	 * @generated
 	 */
-	void setIndexOrInitExpression(STExpression value);
+	void setIndexOrInitExpression(STInitializerExpression value);
 
 	/**
 	 * Returns the value of the '<em><b>Init Expressions</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression}.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Init Expressions</em>' containment reference list.
@@ -70,6 +71,22 @@ public interface STArrayInitElement extends EObject {
 	 * @model containment="true"
 	 * @generated
 	 */
-	EList<STExpression> getInitExpressions();
+	EList<STInitializerExpression> getInitExpressions();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getResultType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	INamedElement getDeclaredResultType();
 
 } // STArrayInitElement

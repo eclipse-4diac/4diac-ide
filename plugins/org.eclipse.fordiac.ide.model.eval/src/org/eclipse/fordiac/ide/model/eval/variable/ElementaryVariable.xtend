@@ -13,13 +13,14 @@
 package org.eclipse.fordiac.ide.model.eval.variable
 
 import org.eclipse.fordiac.ide.model.data.AnyElementaryType
+import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
 
-final class ElementaryVariable extends AbstractVariable {
-	@Accessors Value value
+final class ElementaryVariable<T extends AnyElementaryValue> extends AbstractVariable<T> {
+	@Accessors(PUBLIC_GETTER) T value
 
 	new(String name, AnyElementaryType type) {
 		this(name, type, null as Value)
@@ -35,7 +36,7 @@ final class ElementaryVariable extends AbstractVariable {
 	}
 
 	override setValue(Value value) {
-		this.value = value.castValue(type) ?: type.defaultValue
+		this.value = (value.castValue(type) ?: type.defaultValue) as T
 	}
 
 	override setValue(String value) {

@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 
 class FBEvaluatorFactory implements EvaluatorFactory {
-	override createEvaluator(Object source, Variable context, Iterable<Variable> variables, Evaluator parent) {
+	override createEvaluator(Object source, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		if (source instanceof SimpleFBType) {
 			new SimpleFBEvaluator(source, context, variables, parent)
 		} else if (source instanceof BasicFBType) {

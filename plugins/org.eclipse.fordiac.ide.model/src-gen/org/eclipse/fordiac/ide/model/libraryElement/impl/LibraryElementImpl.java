@@ -1,6 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -31,13 +32,12 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
@@ -52,7 +52,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getComment <em>Comment</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getVersionInfo <em>Version Info</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getIdentification <em>Identification</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getPaletteEntry <em>Palette Entry</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl#getTypeEntry <em>Type Entry</em>}</li>
  * </ul>
  *
  * @generated
@@ -119,14 +119,24 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	protected Identification identification;
 
 	/**
-	 * The cached value of the '{@link #getPaletteEntry() <em>Palette Entry</em>}' reference.
+	 * The default value of the '{@link #getTypeEntry() <em>Type Entry</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getPaletteEntry()
+	 * @see #getTypeEntry()
 	 * @generated
 	 * @ordered
 	 */
-	protected PaletteEntry paletteEntry;
+	protected static final TypeEntry TYPE_ENTRY_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getTypeEntry() <em>Type Entry</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getTypeEntry()
+	 * @generated
+	 * @ordered
+	 */
+	protected TypeEntry typeEntry = TYPE_ENTRY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -280,25 +290,8 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 * @generated
 	 */
 	@Override
-	public PaletteEntry getPaletteEntry() {
-		if (paletteEntry != null && paletteEntry.eIsProxy()) {
-			InternalEObject oldPaletteEntry = (InternalEObject)paletteEntry;
-			paletteEntry = (PaletteEntry)eResolveProxy(oldPaletteEntry);
-			if (paletteEntry != oldPaletteEntry) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY, oldPaletteEntry, paletteEntry));
-			}
-		}
-		return paletteEntry;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PaletteEntry basicGetPaletteEntry() {
-		return paletteEntry;
+	public TypeEntry getTypeEntry() {
+		return typeEntry;
 	}
 
 	/**
@@ -307,11 +300,11 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 * @generated
 	 */
 	@Override
-	public void setPaletteEntry(PaletteEntry newPaletteEntry) {
-		PaletteEntry oldPaletteEntry = paletteEntry;
-		paletteEntry = newPaletteEntry;
+	public void setTypeEntry(TypeEntry newTypeEntry) {
+		TypeEntry oldTypeEntry = typeEntry;
+		typeEntry = newTypeEntry;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY, oldPaletteEntry, paletteEntry));
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.LIBRARY_ELEMENT__TYPE_ENTRY, oldTypeEntry, typeEntry));
 	}
 
 	/**
@@ -321,8 +314,8 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 	 */
 	@Override
 	public TypeLibrary getTypeLibrary() {
-		if (null != getPaletteEntry()) {
-			return getPaletteEntry().getTypeLibrary();
+		if (null != getTypeEntry()) {
+			return getTypeEntry().getTypeLibrary();
 		}
 		return null;
 	}
@@ -361,9 +354,8 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 				if (resolve) return getIdentification();
 				return basicGetIdentification();
-			case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
-				if (resolve) return getPaletteEntry();
-				return basicGetPaletteEntry();
+			case LibraryElementPackage.LIBRARY_ELEMENT__TYPE_ENTRY:
+				return getTypeEntry();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -391,8 +383,8 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 				setIdentification((Identification)newValue);
 				return;
-			case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
-				setPaletteEntry((PaletteEntry)newValue);
+			case LibraryElementPackage.LIBRARY_ELEMENT__TYPE_ENTRY:
+				setTypeEntry((TypeEntry)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -420,8 +412,8 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 				setIdentification((Identification)null);
 				return;
-			case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
-				setPaletteEntry((PaletteEntry)null);
+			case LibraryElementPackage.LIBRARY_ELEMENT__TYPE_ENTRY:
+				setTypeEntry(TYPE_ENTRY_EDEFAULT);
 				return;
 			default:
 				super.eUnset(featureID);
@@ -445,8 +437,8 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 				return versionInfo != null && !versionInfo.isEmpty();
 			case LibraryElementPackage.LIBRARY_ELEMENT__IDENTIFICATION:
 				return identification != null;
-			case LibraryElementPackage.LIBRARY_ELEMENT__PALETTE_ENTRY:
-				return paletteEntry != null;
+			case LibraryElementPackage.LIBRARY_ELEMENT__TYPE_ENTRY:
+				return TYPE_ENTRY_EDEFAULT == null ? typeEntry != null : !TYPE_ENTRY_EDEFAULT.equals(typeEntry);
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -466,6 +458,8 @@ public class LibraryElementImpl extends EObjectImpl implements LibraryElement {
 		result.append(name);
 		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
+		result.append(", typeEntry: "); //$NON-NLS-1$
+		result.append(typeEntry);
 		result.append(')');
 		return result.toString();
 	}

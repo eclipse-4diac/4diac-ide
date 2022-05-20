@@ -64,13 +64,14 @@ class BasicFBEvaluatorTest extends FBEvaluatorTest {
 		val state2 = newState("STATE2", newAction(alg2, outputEvent))
 		val ecc = newECC(#[init, state, state2],
 			#[newTransition(init, state, inputEvent, null), newTransition(state, state2, inputEvent, null)])
+		val fb = newBasicFB(ecc,
+			#[newVarDeclaration("DI1", ElementaryTypes.INT, true), newVarDeclaration("DI2", ElementaryTypes.INT, true),
+				newVarDeclaration("DO1", ElementaryTypes.INT, false)])
 		0.toIntValue.assertTrace(#[outputEvent], #[state],
-			evaluateBasicFB(ecc, #[inputEvent], #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
-				"DO1".newVarDeclaration(ElementaryTypes.INT, false)))
+			evaluateBasicFB(fb, #[inputEvent], #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")]))
 		21.toIntValue.assertTrace(#[outputEvent], #[state2],
-			evaluateBasicFB(ecc, #[inputEvent],
-				#[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2"), new ECStateVariable(state)],
-				"DO1".newVarDeclaration(ElementaryTypes.INT, false)))
+			evaluateBasicFB(fb, #[inputEvent],
+				#[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2"), new ECStateVariable(state)]))
 	}
 
 	@Test
@@ -136,15 +137,14 @@ class BasicFBEvaluatorTest extends FBEvaluatorTest {
 				"DO1".newVarDeclaration(ElementaryTypes.INT, false)))
 	}
 
-	def static evaluateBasicFB(ECC ecc, Iterable<Event> inputEvents, Iterable<Variable> variables,
+	def static evaluateBasicFB(ECC ecc, Iterable<Event> inputEvents, Iterable<Variable<?>> variables,
 		VarDeclaration output) {
-		val fbType = LibraryElementFactory.eINSTANCE.createBasicFBType
-		fbType.name = "Test"
-		fbType.interfaceList = newInterfaceList(ecc.containedEvents, variables.filter[type instanceof DataType].map [
+		evaluateBasicFB(newBasicFB(ecc, variables.filter[type instanceof DataType].map [
 			newVarDeclaration(name, type as DataType, true)
-		] + #[output])
-		fbType.ECC = ecc
-		fbType.callables.addAll(ecc.containedCallables)
+		] + #[output]), inputEvents, variables)
+	}
+
+	def static evaluateBasicFB(BasicFBType fbType, Iterable<Event> inputEvents, Iterable<Variable<?>> variables) {
 		val queue = new ArrayBlockingQueue(1000)
 		val eval = new TracingBasicFBEvaluator(fbType, null, variables, queue, null)
 		queue.addAll(inputEvents)
@@ -173,6 +173,15 @@ class BasicFBEvaluatorTest extends FBEvaluatorTest {
 
 	def static Iterable<ECState> repeatStates(Iterable<ECState> state, int repeat) {
 		(0 ..< repeat).map[state].flatten
+	}
+
+	def static newBasicFB(ECC ecc, Iterable<VarDeclaration> variables) {
+		LibraryElementFactory.eINSTANCE.createBasicFBType => [
+			name = "Test"
+			interfaceList = newInterfaceList(ecc.containedEvents, variables)
+			ECC = ecc
+			callables.addAll(ecc.containedCallables)
+		]
 	}
 
 	def static newECC(Iterable<ECState> states, Iterable<ECTransition> transitions) {
@@ -221,7 +230,8 @@ class BasicFBEvaluatorTest extends FBEvaluatorTest {
 	static class TracingBasicFBEvaluator extends BasicFBEvaluator {
 		@Accessors final Queue<ECState> trace = new ArrayBlockingQueue(1000)
 
-		new(BasicFBType type, Variable context, Iterable<Variable> variables, Queue<Event> queue, Evaluator parent) {
+		new(BasicFBType type, Variable<?> context, Iterable<Variable<?>> variables, Queue<Event> queue,
+			Evaluator parent) {
 			super(type, context, variables, queue, parent)
 		}
 

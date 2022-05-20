@@ -15,7 +15,6 @@
 
 package org.eclipse.fordiac.ide.model.edit.providers;
 
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -23,6 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.DelegatingStyledCellLabelProvider.IStyledLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -44,15 +44,15 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 	@Override
 	public StyledString getStyledText(final Object element) {
 		StyledString styledString = null;
-		if (element instanceof PaletteEntry) {
-			final PaletteEntry entry = (PaletteEntry) element;
-			styledString = new StyledString(entry.getLabel());
+		if (element instanceof TypeEntry) {
+			final TypeEntry entry = (TypeEntry) element;
+			styledString = new StyledString(entry.getTypeName());
 			styledString.append(" - " + entry.getType().getComment(), //$NON-NLS-1$
 					StyledString.QUALIFIER_STYLER);
 
 			int lastIndex = 0;
 			for (final String searchStringElement : searchString) {
-				int offset = styledString.toString().toUpperCase().indexOf((searchStringElement.toUpperCase()), lastIndex);
+				final int offset = styledString.toString().toUpperCase().indexOf((searchStringElement.toUpperCase()), lastIndex);
 				if (offset >= 0) {
 					styledString.setStyle(offset, searchStringElement.length(), BoldStyler.INSTANCE_DEFAULT);
 					lastIndex = offset + searchStringElement.length();
@@ -67,8 +67,8 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 
 	@Override
 	public Image getImage(final Object element) {
-		if (element instanceof PaletteEntry) {
-			final PaletteEntry entry = (PaletteEntry) element;
+		if (element instanceof TypeEntry) {
+			final TypeEntry entry = (TypeEntry) element;
 			return getTypeImage(entry.getType());
 		}
 		return null;
@@ -94,8 +94,8 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 
 	@Override
 	public String getText(final Object element) {
-		return (element instanceof PaletteEntry) ? String.format("%s - %s", getStyledText(element).toString(), //$NON-NLS-1$
-				((PaletteEntry) element).getFile().getFullPath()) : "-"; //$NON-NLS-1$
+		return (element instanceof TypeEntry) ? String.format("%s - %s", getStyledText(element).toString(), //$NON-NLS-1$
+				((TypeEntry) element).getFile().getFullPath()) : "-"; //$NON-NLS-1$
 	}
 
 	public void setSearchString(final String searchString) {

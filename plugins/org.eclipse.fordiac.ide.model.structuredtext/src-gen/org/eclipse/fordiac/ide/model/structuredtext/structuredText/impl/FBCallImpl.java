@@ -42,271 +42,270 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class FBCallImpl extends StatementImpl implements FBCall
 {
   /**
-   * The cached value of the '{@link #getFb() <em>Fb</em>}' reference.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getFb() <em>Fb</em>}' reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getFb()
-   * @generated
-   * @ordered
-   */
+	 * @see #getFb()
+	 * @generated
+	 * @ordered
+	 */
   protected FB fb;
 
   /**
-   * The default value of the '{@link #getEvent() <em>Event</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The default value of the '{@link #getEvent() <em>Event</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getEvent()
-   * @generated
-   * @ordered
-   */
+	 * @see #getEvent()
+	 * @generated
+	 * @ordered
+	 */
   protected static final String EVENT_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getEvent() <em>Event</em>}' attribute.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getEvent() <em>Event</em>}' attribute.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getEvent()
-   * @generated
-   * @ordered
-   */
+	 * @see #getEvent()
+	 * @generated
+	 * @ordered
+	 */
   protected String event = EVENT_EDEFAULT;
 
   /**
-   * The cached value of the '{@link #getArgs() <em>Args</em>}' containment reference list.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getArgs() <em>Args</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getArgs()
-   * @generated
-   * @ordered
-   */
+	 * @see #getArgs()
+	 * @generated
+	 * @ordered
+	 */
   protected EList<Argument> args;
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected FBCallImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.FB_CALL;
-  }
+		return StructuredTextPackage.Literals.FB_CALL;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public FB getFb()
   {
-    if (fb != null && fb.eIsProxy())
-    {
-      InternalEObject oldFb = (InternalEObject)fb;
-      fb = (FB)eResolveProxy(oldFb);
-      if (fb != oldFb)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, StructuredTextPackage.FB_CALL__FB, oldFb, fb));
-      }
-    }
-    return fb;
-  }
+		if (fb != null && fb.eIsProxy()) {
+			InternalEObject oldFb = (InternalEObject)fb;
+			fb = (FB)eResolveProxy(oldFb);
+			if (fb != oldFb) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, StructuredTextPackage.FB_CALL__FB, oldFb, fb));
+			}
+		}
+		return fb;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public FB basicGetFb()
   {
-    return fb;
-  }
+		return fb;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setFb(FB newFb)
   {
-    FB oldFb = fb;
-    fb = newFb;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.FB_CALL__FB, oldFb, fb));
-  }
+		FB oldFb = fb;
+		fb = newFb;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.FB_CALL__FB, oldFb, fb));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public String getEvent()
   {
-    return event;
-  }
+		return event;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setEvent(String newEvent)
   {
-    String oldEvent = event;
-    event = newEvent;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.FB_CALL__EVENT, oldEvent, event));
-  }
+		String oldEvent = event;
+		event = newEvent;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.FB_CALL__EVENT, oldEvent, event));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public EList<Argument> getArgs()
   {
-    if (args == null)
-    {
-      args = new EObjectContainmentEList<Argument>(Argument.class, this, StructuredTextPackage.FB_CALL__ARGS);
-    }
-    return args;
-  }
+		if (args == null) {
+			args = new EObjectContainmentEList<Argument>(Argument.class, this, StructuredTextPackage.FB_CALL__ARGS);
+		}
+		return args;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.FB_CALL__ARGS:
-        return ((InternalEList<?>)getArgs()).basicRemove(otherEnd, msgs);
-    }
-    return super.eInverseRemove(otherEnd, featureID, msgs);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.FB_CALL__ARGS:
+				return ((InternalEList<?>)getArgs()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.FB_CALL__FB:
-        if (resolve) return getFb();
-        return basicGetFb();
-      case StructuredTextPackage.FB_CALL__EVENT:
-        return getEvent();
-      case StructuredTextPackage.FB_CALL__ARGS:
-        return getArgs();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.FB_CALL__FB:
+				if (resolve) return getFb();
+				return basicGetFb();
+			case StructuredTextPackage.FB_CALL__EVENT:
+				return getEvent();
+			case StructuredTextPackage.FB_CALL__ARGS:
+				return getArgs();
+			default:
+				return super.eGet(featureID, resolve, coreType);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @SuppressWarnings("unchecked")
   @Override
   public void eSet(int featureID, Object newValue)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.FB_CALL__FB:
-        setFb((FB)newValue);
-        return;
-      case StructuredTextPackage.FB_CALL__EVENT:
-        setEvent((String)newValue);
-        return;
-      case StructuredTextPackage.FB_CALL__ARGS:
-        getArgs().clear();
-        getArgs().addAll((Collection<? extends Argument>)newValue);
-        return;
-    }
-    super.eSet(featureID, newValue);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.FB_CALL__FB:
+				setFb((FB)newValue);
+				return;
+			case StructuredTextPackage.FB_CALL__EVENT:
+				setEvent((String)newValue);
+				return;
+			case StructuredTextPackage.FB_CALL__ARGS:
+				getArgs().clear();
+				getArgs().addAll((Collection<? extends Argument>)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eUnset(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.FB_CALL__FB:
-        setFb((FB)null);
-        return;
-      case StructuredTextPackage.FB_CALL__EVENT:
-        setEvent(EVENT_EDEFAULT);
-        return;
-      case StructuredTextPackage.FB_CALL__ARGS:
-        getArgs().clear();
-        return;
-    }
-    super.eUnset(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.FB_CALL__FB:
+				setFb((FB)null);
+				return;
+			case StructuredTextPackage.FB_CALL__EVENT:
+				setEvent(EVENT_EDEFAULT);
+				return;
+			case StructuredTextPackage.FB_CALL__ARGS:
+				getArgs().clear();
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.FB_CALL__FB:
-        return fb != null;
-      case StructuredTextPackage.FB_CALL__EVENT:
-        return EVENT_EDEFAULT == null ? event != null : !EVENT_EDEFAULT.equals(event);
-      case StructuredTextPackage.FB_CALL__ARGS:
-        return args != null && !args.isEmpty();
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.FB_CALL__FB:
+				return fb != null;
+			case StructuredTextPackage.FB_CALL__EVENT:
+				return EVENT_EDEFAULT == null ? event != null : !EVENT_EDEFAULT.equals(event);
+			case StructuredTextPackage.FB_CALL__ARGS:
+				return args != null && !args.isEmpty();
+			default:
+				return super.eIsSet(featureID);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public String toString()
   {
-    if (eIsProxy()) return super.toString();
+		if (eIsProxy()) return super.toString();
 
-    StringBuilder result = new StringBuilder(super.toString());
-    result.append(" (event: ");
-    result.append(event);
-    result.append(')');
-    return result.toString();
-  }
+		StringBuilder result = new StringBuilder(super.toString());
+		result.append(" (event: ");
+		result.append(event);
+		result.append(')');
+		return result.toString();
+	}
 
 } //FBCallImpl

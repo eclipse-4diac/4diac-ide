@@ -17,10 +17,10 @@ package org.eclipse.fordiac.ide.gef.editors;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.PaletteFilter;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnViewerToolTipSupport;
@@ -56,7 +56,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	protected TableViewer tableViewer;
 	private PaletteFilter paletteFilter;
 	private boolean blockTableSelection = false;
-	private PaletteEntry selectedEntry = null;
+	private TypeEntry selectedEntry = null;
 	protected Text textControl;
 
 	private ResultListLabelProvider resultListLabelProvider;
@@ -83,8 +83,8 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		return menuButton;
 	}
 
-	public void setPalette(final Palette palette) {
-		paletteFilter = new PaletteFilter(palette);
+	public void setTypeLibrary(final TypeLibrary typeLib) {
+		paletteFilter = new PaletteFilter(typeLib);
 	}
 
 	@Override
@@ -195,7 +195,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 	protected void updateSelectionList() {
 		blockTableSelection = true;
 		if (textControl.getText().length() >= 2) {
-			final List<PaletteEntry> entries = paletteFilter.findFBAndSubappTypes((textControl.getText()));
+			final List<TypeEntry> entries = paletteFilter.findFBAndSubappTypes((textControl.getText()));
 			resultListLabelProvider.setSearchString(textControl.getText());
 			tableViewer.setInput(entries);
 			if (!entries.isEmpty()) {
@@ -228,8 +228,8 @@ public class NewInstanceCellEditor extends TextCellEditor {
 			break;
 		case SWT.CR:
 			if (popupShell.isVisible() && (tableViewer.getTable().getSelectionIndex() != -1)) {
-				selectedEntry = (PaletteEntry) tableViewer.getStructuredSelection().getFirstElement();
-				textControl.setText(selectedEntry.getLabel());
+				selectedEntry = (TypeEntry) tableViewer.getStructuredSelection().getFirstElement();
+				textControl.setText(selectedEntry.getTypeName());
 			} else {
 				event.doit = false;
 			}
@@ -271,7 +271,7 @@ public class NewInstanceCellEditor extends TextCellEditor {
 
 		tableViewer.addSelectionChangedListener(event -> {
 			if (!blockTableSelection) {
-				selectedEntry = (PaletteEntry) tableViewer.getStructuredSelection().getFirstElement();
+				selectedEntry = (TypeEntry) tableViewer.getStructuredSelection().getFirstElement();
 				fireApplyEditorValue();
 			}
 		});

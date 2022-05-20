@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.converter;
 
-import org.eclipse.fordiac.ide.model.value.StringValueConverter;
+import org.eclipse.fordiac.ide.model.value.AbstractStringValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString;
 import org.eclipse.xtext.conversion.ValueConverterException;
 import org.eclipse.xtext.conversion.impl.AbstractLexerBasedConverter;
@@ -23,7 +23,7 @@ public class STStringValueConverter extends AbstractLexerBasedConverter<STString
 	@Override
 	public STString toValue(final String string, final INode node) throws ValueConverterException {
 		try {
-			final var value = StringValueConverter.INSTANCE.toValue(string);
+			final var value = STInternalStringValueConverter.INSTANCE.toValue(string);
 			final boolean wide = string.charAt(0) == '"';
 			return new STString(value, wide);
 		} catch (final Exception e) {
@@ -33,6 +33,15 @@ public class STStringValueConverter extends AbstractLexerBasedConverter<STString
 
 	@Override
 	protected String toEscapedString(final STString value) {
-		return StringValueConverter.INSTANCE.toString(value.toString(), value.isWide());
+		return STInternalStringValueConverter.INSTANCE.toString(value.toString(), value.isWide());
+	}
+
+	private static class STInternalStringValueConverter extends AbstractStringValueConverter {
+		private static final STInternalStringValueConverter INSTANCE = new STInternalStringValueConverter();
+
+		@Override
+		public String toString(final String value) {
+			throw new UnsupportedOperationException();
+		}
 	}
 }

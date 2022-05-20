@@ -12,11 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 
 public class CreateFBElementInGroupCommand extends Command {
@@ -24,11 +24,10 @@ public class CreateFBElementInGroupCommand extends Command {
 	private final Group group;
 	private final AbstractCreateFBNetworkElementCommand elementCreateCmd;
 
-	public CreateFBElementInGroupCommand(final PaletteEntry paletteEntry, final Group group, final int x,
+	public CreateFBElementInGroupCommand(final TypeEntry typeEntry, final Group group, final int x,
 			final int y) {
 		this.group = group;
-		elementCreateCmd = createCreateCommand(paletteEntry, group.getFbNetwork(), x, y);
-
+		elementCreateCmd = createCreateCommand(typeEntry, group.getFbNetwork(), x, y);
 	}
 
 	@Override
@@ -54,13 +53,13 @@ public class CreateFBElementInGroupCommand extends Command {
 		group.getGroupElements().add(elementCreateCmd.getElement());
 	}
 
-	private static AbstractCreateFBNetworkElementCommand createCreateCommand(final PaletteEntry paletteEntry,
+	private static AbstractCreateFBNetworkElementCommand createCreateCommand(final TypeEntry typeEntry,
 			final FBNetwork fbNetwork, final int x, final int y) {
-		if (paletteEntry instanceof FBTypePaletteEntry) {
-			return new FBCreateCommand((FBTypePaletteEntry) paletteEntry, fbNetwork, x, y);
+		if (typeEntry instanceof FBTypeEntry) {
+			return new FBCreateCommand((FBTypeEntry) typeEntry, fbNetwork, x, y);
 		}
-		if (paletteEntry instanceof SubApplicationTypePaletteEntry) {
-			return new CreateSubAppInstanceCommand((SubApplicationTypePaletteEntry) paletteEntry, fbNetwork, x, y);
+		if (typeEntry instanceof SubAppTypeEntry) {
+			return new CreateSubAppInstanceCommand((SubAppTypeEntry) typeEntry, fbNetwork, x, y);
 		}
 		return null;
 	}

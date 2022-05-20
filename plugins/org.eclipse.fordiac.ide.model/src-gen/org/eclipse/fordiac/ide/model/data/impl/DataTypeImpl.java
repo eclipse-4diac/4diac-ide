@@ -44,5 +44,5 @@ public abstract class DataTypeImpl extends LibraryElementImpl implements DataTyp
 	public boolean isCompatibleWith(final DataType other) {
 		return this == other;
 	}
-
+	
 } // DataTypeImpl

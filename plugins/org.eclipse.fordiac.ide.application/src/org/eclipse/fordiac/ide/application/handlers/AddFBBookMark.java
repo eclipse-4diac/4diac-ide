@@ -93,7 +93,7 @@ public class AddFBBookMark extends AbstractHandler {
 	private static IResource getFile(final FBNetworkElement element) {
 		final EObject container = element.eContainer().eContainer();
 		if (container instanceof FBType) {
-			return ((FBType) container).getPaletteEntry().getFile();
+			return ((FBType) container).getTypeEntry().getFile();
 		}
 		// if we are here we are in a app or subapp
 		return element.getFbNetwork().getAutomationSystem().getSystemFile();

@@ -22,6 +22,7 @@ import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.debug.core.model.IMemoryBlock;
 import org.eclipse.debug.core.model.IThread;
+import org.eclipse.fordiac.ide.debug.breakpoint.EvaluatorLineBreakpoint;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 
 public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebugTarget {
@@ -80,19 +81,22 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 
 	@Override
 	public boolean supportsBreakpoint(final IBreakpoint breakpoint) {
-		return false;
+		return breakpoint instanceof EvaluatorLineBreakpoint;
 	}
 
 	@Override
 	public void breakpointAdded(final IBreakpoint breakpoint) {
+		debugger.addBreakpoint(breakpoint);
 	}
 
 	@Override
 	public void breakpointRemoved(final IBreakpoint breakpoint, final IMarkerDelta delta) {
+		debugger.removeBreakpoint(breakpoint, delta);
 	}
 
 	@Override
 	public void breakpointChanged(final IBreakpoint breakpoint, final IMarkerDelta delta) {
+		debugger.updateBreakpoint(breakpoint, delta);
 	}
 
 	@Override
@@ -132,7 +136,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 
 	@Override
 	public void disconnect() throws DebugException {
-		throw new DebugException(Status.error("Disconnect is not supported"));
+		throw new DebugException(Status.error("Disconnect is not supported")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -147,7 +151,7 @@ public class EvaluatorDebugTarget extends EvaluatorDebugElement implements IDebu
 
 	@Override
 	public IMemoryBlock getMemoryBlock(final long startAddress, final long length) throws DebugException {
-		throw new DebugException(Status.error("Getting memory blocks is not supported"));
+		throw new DebugException(Status.error("Getting memory blocks is not supported")); //$NON-NLS-1$
 	}
 
 	@Override

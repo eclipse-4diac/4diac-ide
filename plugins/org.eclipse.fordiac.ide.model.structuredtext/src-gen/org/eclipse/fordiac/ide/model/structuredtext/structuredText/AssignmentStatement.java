@@ -24,47 +24,47 @@ package org.eclipse.fordiac.ide.model.structuredtext.structuredText;
 public interface AssignmentStatement extends Statement
 {
   /**
-   * Returns the value of the '<em><b>Variable</b></em>' containment reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Variable</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Variable</em>' containment reference.
-   * @see #setVariable(Variable)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getAssignmentStatement_Variable()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Variable</em>' containment reference.
+	 * @see #setVariable(Variable)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getAssignmentStatement_Variable()
+	 * @model containment="true"
+	 * @generated
+	 */
   Variable getVariable();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AssignmentStatement#getVariable <em>Variable</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AssignmentStatement#getVariable <em>Variable</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Variable</em>' containment reference.
-   * @see #getVariable()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Variable</em>' containment reference.
+	 * @see #getVariable()
+	 * @generated
+	 */
   void setVariable(Variable value);
 
   /**
-   * Returns the value of the '<em><b>Expression</b></em>' containment reference.
-   * <!-- begin-user-doc -->
+	 * Returns the value of the '<em><b>Expression</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return the value of the '<em>Expression</em>' containment reference.
-   * @see #setExpression(Expression)
-   * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getAssignmentStatement_Expression()
-   * @model containment="true"
-   * @generated
-   */
+	 * @return the value of the '<em>Expression</em>' containment reference.
+	 * @see #setExpression(Expression)
+	 * @see org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextPackage#getAssignmentStatement_Expression()
+	 * @model containment="true"
+	 * @generated
+	 */
   Expression getExpression();
 
   /**
-   * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AssignmentStatement#getExpression <em>Expression</em>}' containment reference.
-   * <!-- begin-user-doc -->
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.structuredtext.structuredText.AssignmentStatement#getExpression <em>Expression</em>}' containment reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Expression</em>' containment reference.
-   * @see #getExpression()
-   * @generated
-   */
+	 * @param value the new value of the '<em>Expression</em>' containment reference.
+	 * @see #getExpression()
+	 * @generated
+	 */
   void setExpression(Expression value);
 
 } // AssignmentStatement

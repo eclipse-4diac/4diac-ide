@@ -29,7 +29,7 @@ class ByteValue implements AnyBitValue {
 
 	def static toByteValue(Number value) { new ByteValue(value.byteValue) }
 
-	def static toByteValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toByteValue }
+	def static toByteValue(String value) { (NumericValueConverter.INSTANCE_BYTE.toValue(value) as Number).toByteValue }
 
 	def static toByteValue(AnyBitValue value) { value.byteValue.toByteValue }
 
@@ -49,5 +49,5 @@ class ByteValue implements AnyBitValue {
 
 	override hashCode() { Byte.hashCode(value) }
 
-	override toString() { Integer.toUnsignedString(intValue) }
+	override toString() { NumericValueConverter.INSTANCE_BYTE.toString(intValue) }
 }

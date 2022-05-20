@@ -29,7 +29,7 @@ class DWordValue implements AnyBitValue {
 
 	def static toDWordValue(Number value) { new DWordValue(value.intValue) }
 
-	def static toDWordValue(String value) { (NumericValueConverter.INSTANCE.toValue(value) as Number).toDWordValue }
+	def static toDWordValue(String value) { (NumericValueConverter.INSTANCE_DWORD.toValue(value) as Number).toDWordValue }
 
 	def static toDWordValue(AnyBitValue value) { value.intValue.toDWordValue }
 
@@ -49,5 +49,5 @@ class DWordValue implements AnyBitValue {
 
 	override hashCode() { Integer.hashCode(value) }
 
-	override toString() { Integer.toUnsignedString(value) }
+	override toString() { NumericValueConverter.INSTANCE_DWORD.toString(intValue) }
 }

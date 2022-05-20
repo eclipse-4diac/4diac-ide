@@ -43,9 +43,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
-import org.eclipse.fordiac.ide.model.Palette.AdapterTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -55,7 +52,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -90,7 +90,7 @@ public class FBTypeEditor extends AbstractCloseAbleFormEditor implements ISelect
 ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INavigationLocationProvider {
 
 	private Collection<IFBTEditorPart> editors;
-	private PaletteEntry paletteEntry;
+	private TypeEntry typeEntry;
 	private FBType fbType;
 	private FBTypeContentOutline contentOutline = null;
 	private final CommandStack commandStack = new CommandStack();
@@ -100,29 +100,25 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			final Object feature = notification.getFeature();
-			if (null != feature) {
-				if (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass())) {
-					Display.getDefault().asyncExec(() -> {
-						if (null != paletteEntry) {
-							setPartName(paletteEntry.getFile().getName());
-							setInput(new FileEditorInput(paletteEntry.getFile()));
-						}
-					});
-
-				}
+			if (LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(notification.getFeature())) {
+				Display.getDefault().asyncExec(() -> {
+					if (null != typeEntry) {
+						setPartName(typeEntry.getFile().getName());
+						setInput(new FileEditorInput(typeEntry.getFile()));
+					}
+				});
 			}
 		}
 	};
 
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
-		if ((null != paletteEntry) && (checkTypeSaveAble())) {
+		if ((null != typeEntry) && (checkTypeSaveAble())) {
 			performPresaveHooks();
 			// allow each editor to save back changes before saving to file
 			editors.forEach(editorPart -> editorPart.doSave(monitor));
 			getCommandStack().markSaveLocation();
-			AbstractTypeExporter.saveType(paletteEntry);
+			AbstractTypeExporter.saveType(typeEntry);
 			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
 	}
@@ -148,7 +144,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		if (fbType instanceof CompositeFBType) {
 			// only allow to save composite FBs if all contained FBs have types
 			for (final FBNetworkElement fb : ((CompositeFBType) fbType).getFBNetwork().getNetworkElements()) {
-				if (null == fb.getPaletteEntry()) {
+				if (null == fb.getTypeEntry()) {
 					MessageDialog.openInformation(getSite().getShell(),
 							Messages.FBTypeEditor_CompositeContainsFunctionBlockWithoutType,
 							MessageFormat.format(Messages.FBTypeEditor_CheckTypeSaveAble, fb.getName()));
@@ -184,15 +180,15 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 								Messages.FBTypeEditor_TypeFileDoesnotExist));
 			}
 
-			paletteEntry = TypeLibrary.getPaletteEntryForFile(fbTypeFile);
+			typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fbTypeFile);
 		} else if (editorInput instanceof FBTypeEditorInput) {
-			paletteEntry = ((FBTypeEditorInput) editorInput).getPaletteEntry();
+			typeEntry = ((FBTypeEditorInput) editorInput).getTypeEntry();
 		}
 
-		if (null != paletteEntry) {
-			setPartName(paletteEntry.getLabel());
+		if (null != typeEntry) {
+			setPartName(typeEntry.getTypeName());
 
-			fbType = getFBType(paletteEntry);
+			fbType = getFBType(typeEntry);
 			if (null != fbType) {
 				fbType.eAdapters().add(adapter);
 			}
@@ -205,11 +201,11 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 	}
 
 	@SuppressWarnings("static-method")  // allow children to override this method
-	protected FBType getFBType(final PaletteEntry paletteEntry) {
-		if (paletteEntry instanceof FBTypePaletteEntry) {
-			return ((FBTypePaletteEntry) paletteEntry).getTypeEditable();
-		} else if (paletteEntry instanceof AdapterTypePaletteEntry) {
-			return ((AdapterTypePaletteEntry) paletteEntry).getTypeEditable().getAdapterFBType();
+	protected FBType getFBType(final TypeEntry typeEntry) {
+		if (typeEntry instanceof FBTypeEntry) {
+			return ((FBTypeEntry) typeEntry).getTypeEditable();
+		} else if (typeEntry instanceof AdapterTypeEntry) {
+			return ((AdapterTypeEntry) typeEntry).getTypeEditable().getAdapterFBType();
 		}
 		return null;
 	}
@@ -237,9 +233,9 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 
 		super.dispose();
 
-		if (dirty && paletteEntry != null) {
+		if (dirty && typeEntry != null) {
 			// purge editable type from typelib after super.dispose() so that no notifiers will be called
-			paletteEntry.setTypeEditable(null);
+			typeEntry.setTypeEditable(null);
 		}
 
 		getCommandStack().removeCommandStackEventListener(this);
@@ -318,7 +314,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 	}
 
 	private FBTypeEditorInput getFBTypeEditorInput() {
-		return new FBTypeEditorInput(fbType, paletteEntry);
+		return new FBTypeEditorInput(fbType, typeEntry);
 	}
 
 	/*
@@ -405,7 +401,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 
 	@Override
 	public void reloadFile() {
-		final FBType newFBType = (FBType) paletteEntry.getTypeEditable();
+		final FBType newFBType = (FBType) typeEntry.getTypeEditable();
 		if (newFBType != fbType) {
 			if ((fbType != null) && fbType.eAdapters().contains(adapter)) {
 				fbType.eAdapters().remove(adapter);
@@ -415,9 +411,9 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			final IEditorPart activeEditor = getActiveEditor();
 			if (activeEditor instanceof IFBTEditorPart) {
 				Display.getDefault()
-						.asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
-								activeEditor.getAdapter(GraphicalViewer.class),
-								((IFBTEditorPart) activeEditor).getSelectableEditPart()));
+				.asyncExec(() -> EditorUtils.refreshPropertySheetWithSelection(this,
+						activeEditor.getAdapter(GraphicalViewer.class),
+						((IFBTEditorPart) activeEditor).getSelectableEditPart()));
 			}
 			getCommandStack().flush();
 			fbType.eAdapters().add(adapter);
@@ -426,7 +422,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 
 	@Override
 	public IFile getFile() {
-		return paletteEntry != null ? paletteEntry.getFile() : null;
+		return typeEntry != null ? typeEntry.getFile() : null;
 	}
 
 	@Override
@@ -449,5 +445,10 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 	public void updateEditorInput(final FileEditorInput newInput) {
 		setInput(newInput);
 		setTitleToolTip(newInput.getFile().getFullPath().toOSString());
+	}
+
+	@Override
+	protected IEditorSite createSite(final IEditorPart editor) {
+		return new FBTypeMultiPageEditorSite(this, editor);
 	}
 }

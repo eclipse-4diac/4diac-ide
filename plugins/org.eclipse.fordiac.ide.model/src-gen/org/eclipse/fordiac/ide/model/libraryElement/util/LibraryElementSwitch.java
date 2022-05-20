@@ -439,6 +439,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.SERVICE_SEQUENCE: {
 				ServiceSequence serviceSequence = (ServiceSequence)theEObject;
 				T result = caseServiceSequence(serviceSequence);
+				if (result == null) result = caseConfigurableObject(serviceSequence);
 				if (result == null) result = caseINamedElement(serviceSequence);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

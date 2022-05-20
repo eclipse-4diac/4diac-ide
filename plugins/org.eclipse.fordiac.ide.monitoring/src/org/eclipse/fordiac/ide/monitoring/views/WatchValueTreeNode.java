@@ -47,7 +47,13 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 		this.structType = structType;
 		this.monitoringBaseElement = monitoringBaseElement;
 		this.varName = varName;
-		this.value = value;
+
+		if (value != null && variable != null && variable.getType() != null
+				&& WatchValueTreeNodeUtils.isHexDecorationNecessary(value, variable.getType())) {
+			this.value = WatchValueTreeNodeUtils.decorateHexNumber(value);
+		} else {
+			this.value = value;
+		}
 		setVariable(variable);
 		setParent(parent);
 	}
@@ -76,8 +82,6 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 			} else if (type != IecTypes.GenericTypes.ANY_STRUCT) {
 				node = createVariableNode(monitoringElement);
 			}
-
-
 		}
 		return node;
 	}
@@ -152,14 +156,14 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 
 		if (isStructLeaf() || isStructNode() && !isStructRootNode()) {
 
-			return varName != null ? varName : "N/A";
+			return varName != null ? varName : "N/A"; //$NON-NLS-1$
 		}
 
 		if (monitoringBaseElement instanceof MonitoringElement) {
 			return ((MonitoringElement) monitoringBaseElement).getPortString();
 		}
 
-		return "N/A";
+		return "N/A"; //$NON-NLS-1$
 	}
 
 	public String getValue() {
@@ -175,14 +179,14 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 		}
 
 		if (isStructLeaf()) {
-			return value != null ? value : "N/A";
+			return value != null ? value : "N/A"; //$NON-NLS-1$
 		}
 
 		if (isStructNode()) {
 			return ""; //$NON-NLS-1$
 		}
 
-		return "N/A";
+		return "N/A"; //$NON-NLS-1$
 	}
 
 	public void setValue(final String value) {
@@ -204,5 +208,4 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 	public String getVarName() {
 		return varName;
 	}
-
 }

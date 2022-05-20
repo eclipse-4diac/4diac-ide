@@ -20,7 +20,6 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
-import org.eclipse.fordiac.ide.model.Palette.DataTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
@@ -34,6 +33,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
@@ -77,13 +77,13 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	private DataTypeDropdown typeDropDown;
 	private final CommandStack cmdStack;
 	private final IWorkbenchPart part;
-	private final DataTypePaletteEntry dataTypePaletteEntry;
+	private final DataTypeEntry dataTypeEntry;
 
-	public StructViewingComposite(final Composite parent, final int style, final CommandStack cmdStack, 
-			final DataTypePaletteEntry dataTypePaletteEntry, final IWorkbenchPart part) {
+	public StructViewingComposite(final Composite parent, final int style, final CommandStack cmdStack,
+			final DataTypeEntry dataTypeEntry, final IWorkbenchPart part) {
 		super(parent, style);
 		this.cmdStack = cmdStack;
-		this.dataTypePaletteEntry = dataTypePaletteEntry;
+		this.dataTypeEntry = dataTypeEntry;
 		this.part = part;
 	}
 
@@ -154,11 +154,11 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private StructuredType getType() {
-		return (StructuredType) dataTypePaletteEntry.getTypeEditable();
+		return (StructuredType) dataTypeEntry.getTypeEditable();
 	}
-	
+
 	private DataTypeLibrary getDataTypeLibrary() {
-		return dataTypePaletteEntry.getTypeLibrary().getDataTypeLibrary();
+		return dataTypeEntry.getTypeLibrary().getDataTypeLibrary();
 	}
 
 	private CellEditor[] createCellEditors(final Table table) {
@@ -196,7 +196,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		layout.addColumnData(new ColumnWeightData(2, 20));
 		table.setLayout(layout);
 	}
-	
+
 	public void reload() {
 		structViewer.setInput(getType().getMemberVariables());
 	}

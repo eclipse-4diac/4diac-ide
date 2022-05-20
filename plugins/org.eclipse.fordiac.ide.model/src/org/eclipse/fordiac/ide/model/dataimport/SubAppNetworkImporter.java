@@ -19,8 +19,6 @@ import java.text.MessageFormat;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.PaletteFactory;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
@@ -30,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 
 class SubAppNetworkImporter extends FBNetworkImporter {
 
@@ -75,7 +74,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 
 		fbNetworkElementMap.put(subApp.getName(), subApp);
 
-		if ((null == subApp.getPaletteEntry() && type != null) || (subApp instanceof ErrorMarkerRef)) {
+		if ((null == subApp.getTypeEntry() && type != null) || (subApp instanceof ErrorMarkerRef)) {
 			final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarker(
 					MessageFormat.format("Type ({0}) could not be loaded for Subapplication: {1}", type, //$NON-NLS-1$
 							subApp.getName()),
@@ -92,13 +91,12 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 			return subApp;
 		}
 
-		final SubApplicationTypePaletteEntry subEntry = getPalette().getSubAppTypeEntry(type);
+		final SubAppTypeEntry subEntry = getTypeLibrary().getSubAppTypeEntry(type);
 		if (subEntry == null) {
 			return FordiacMarkerHelper.createTypeErrorMarkerFB(type, getTypeLibrary(),
-					LibraryElementFactory.eINSTANCE.createSubAppType().eClass(),
-					PaletteFactory.eINSTANCE.createSubApplicationTypePaletteEntry().eClass());
+					LibraryElementFactory.eINSTANCE.createSubAppType());
 		}
-		subApp.setPaletteEntry(subEntry);
+		subApp.setTypeEntry(subEntry);
 		subApp.setInterface(subEntry.getType().getInterfaceList().copy());
 		return subApp;
 	}

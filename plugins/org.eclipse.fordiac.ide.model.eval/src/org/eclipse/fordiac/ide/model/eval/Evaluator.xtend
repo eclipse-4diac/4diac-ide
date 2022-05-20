@@ -26,7 +26,7 @@ interface Evaluator {
 
 	def String getName()
 
-	def Variable getContext()
+	def Variable<?> getContext()
 
 	def Evaluator getParent()
 
@@ -34,5 +34,5 @@ interface Evaluator {
 
 	def Object getSourceElement()
 
-	def Map<String, Variable> getVariables()
+	def Map<String, Variable<?>> getVariables()
 }

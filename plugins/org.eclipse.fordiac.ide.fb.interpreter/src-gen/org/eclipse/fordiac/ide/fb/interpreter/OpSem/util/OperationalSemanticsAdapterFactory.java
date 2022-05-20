@@ -1,4 +1,5 @@
 /**
+ * *******************************************************************************
  * Copyright (c) 2021 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at http://www.eclipse.org/legal/epl-2.0.
@@ -6,8 +7,9 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio GarmendÃ­a, Bianca Wiesmayr
  *          - initial implementation and/or documentation
+ * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem.util;
 
@@ -18,37 +20,51 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTypeRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData;
 
-/** <!-- begin-user-doc --> The <b>Adapter Factory</b> for the model. It provides an adapter <code>createXXX</code>
- * method for each class of the model. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> The <b>Adapter Factory</b> for the model. It provides
+ * an adapter <code>createXXX</code> method for each class of the model. <!--
+ * end-user-doc -->
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage
- * @generated */
+ * @generated
+ */
 public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
-	/** The cached model package. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached model package. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected static OperationalSemanticsPackage modelPackage;
 
-	/** Creates an instance of the adapter factory. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Creates an instance of the adapter factory. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public OperationalSemanticsAdapterFactory() {
 		if (modelPackage == null) {
 			modelPackage = OperationalSemanticsPackage.eINSTANCE;
 		}
 	}
 
-	/** Returns whether this factory is applicable for the type of the object. <!-- begin-user-doc --> This
-	 * implementation returns <code>true</code> if the object is either the model's package or is an instance object of
-	 * the model. <!-- end-user-doc -->
+	/**
+	 * Returns whether this factory is applicable for the type of the object. <!--
+	 * begin-user-doc --> This implementation returns <code>true</code> if the
+	 * object is either the model's package or is an instance object of the model.
+	 * <!-- end-user-doc -->
 	 *
 	 * @return whether this factory is applicable for the type of the object.
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean isFactoryForType(Object object) {
 		if (object == modelPackage) {
@@ -60,9 +76,12 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 		return false;
 	}
 
-	/** The switch that delegates to the <code>createXXX</code> methods. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The switch that delegates to the <code>createXXX</code> methods. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected OperationalSemanticsSwitch<Adapter> modelSwitch = new OperationalSemanticsSwitch<>() {
 		@Override
 		public Adapter caseEventOccurrence(EventOccurrence object) {
@@ -85,8 +104,8 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
-		public Adapter caseFBTypeRuntime(FBTypeRuntime object) {
-			return createFBTypeRuntimeAdapter();
+		public Adapter caseSimpleFBTypeRuntime(SimpleFBTypeRuntime object) {
+			return createSimpleFBTypeRuntimeAdapter();
 		}
 
 		@Override
@@ -95,98 +114,184 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
+		public Adapter caseFBNetworkRuntime(FBNetworkRuntime object) {
+			return createFBNetworkRuntimeAdapter();
+		}
+
+		@Override
+		public Adapter caseTransferData(TransferData object) {
+			return createTransferDataAdapter();
+		}
+
+		@Override
+		public Adapter caseFBTransaction(FBTransaction object) {
+			return createFBTransactionAdapter();
+		}
+
+		@Override
 		public Adapter defaultCase(EObject object) {
 			return createEObjectAdapter();
 		}
 	};
 
-	/** Creates an adapter for the <code>target</code>. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Creates an adapter for the <code>target</code>. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @param target the object to adapt.
 	 * @return the adapter for the <code>target</code>.
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Adapter createAdapter(Notifier target) {
 		return modelSwitch.doSwitch((EObject) target);
 	}
 
-	/** Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence <em>Event Occurrence</em>}'. <!--
-	 * begin-user-doc --> This default implementation returns null so that we can easily ignore cases; it's useful to
-	 * ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence
+	 * <em>Event Occurrence</em>}'. <!-- begin-user-doc --> This default
+	 * implementation returns null so that we can easily ignore cases; it's useful
+	 * to ignore a case when inheritance will catch all the cases anyway. <!--
+	 * end-user-doc -->
 	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence
-	 * @generated */
+	 * @generated
+	 */
 	public Adapter createEventOccurrenceAdapter() {
 		return null;
 	}
 
-	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager
-	 * <em>Event Manager</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
-	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
-	 * -->
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager <em>Event
+	 * Manager</em>}'. <!-- begin-user-doc --> This default implementation returns
+	 * null so that we can easily ignore cases; it's useful to ignore a case when
+	 * inheritance will catch all the cases anyway. <!-- end-user-doc -->
 	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager
-	 * @generated */
+	 * @generated
+	 */
 	public Adapter createEventManagerAdapter() {
 		return null;
 	}
 
-	/** Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract <em>FB Runtime Abstract</em>}'. <!--
-	 * begin-user-doc --> This default implementation returns null so that we can easily ignore cases; it's useful to
-	 * ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract <em>FB
+	 * Runtime Abstract</em>}'. <!-- begin-user-doc --> This default implementation
+	 * returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
 	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract
-	 * @generated */
+	 * @generated
+	 */
 	public Adapter createFBRuntimeAbstractAdapter() {
 		return null;
 	}
 
-	/** Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime <em>Basic FB Type Runtime</em>}'. <!--
-	 * begin-user-doc --> This default implementation returns null so that we can easily ignore cases; it's useful to
-	 * ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime
+	 * <em>Basic FB Type Runtime</em>}'. <!-- begin-user-doc --> This default
+	 * implementation returns null so that we can easily ignore cases; it's useful
+	 * to ignore a case when inheritance will catch all the cases anyway. <!--
+	 * end-user-doc -->
 	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime
-	 * @generated */
+	 * @generated
+	 */
 	public Adapter createBasicFBTypeRuntimeAdapter() {
 		return null;
 	}
 
-	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTypeRuntime
-	 * <em>FB Type Runtime</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can
-	 * easily ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!--
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime
+	 * <em>Simple FB Type Runtime</em>}'. <!-- begin-user-doc --> This default
+	 * implementation returns null so that we can easily ignore cases; it's useful
+	 * to ignore a case when inheritance will catch all the cases anyway. <!--
 	 * end-user-doc -->
 	 *
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTypeRuntime
-	 * @generated */
-	public Adapter createFBTypeRuntimeAdapter() {
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime
+	 * @generated
+	 */
+	public Adapter createSimpleFBTypeRuntimeAdapter() {
 		return null;
 	}
 
-	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction
-	 * <em>Transaction</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
-	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
-	 * -->
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction
+	 * <em>Transaction</em>}'. <!-- begin-user-doc --> This default implementation
+	 * returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
 	 *
 	 * @return the new adapter.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction
-	 * @generated */
+	 * @generated
+	 */
 	public Adapter createTransactionAdapter() {
 		return null;
 	}
 
-	/** Creates a new adapter for the default case. <!-- begin-user-doc --> This default implementation returns null.
-	 * <!-- end-user-doc -->
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime <em>FB
+	 * Network Runtime</em>}'. <!-- begin-user-doc --> This default implementation
+	 * returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
 	 *
 	 * @return the new adapter.
-	 * @generated */
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime
+	 * @generated
+	 */
+	public Adapter createFBNetworkRuntimeAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData
+	 * <em>Transfer Data</em>}'. <!-- begin-user-doc --> This default implementation
+	 * returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData
+	 * @generated
+	 */
+	public Adapter createTransferDataAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction <em>FB
+	 * Transaction</em>}'. <!-- begin-user-doc --> This default implementation
+	 * returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction
+	 * @generated
+	 */
+	public Adapter createFBTransactionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for the default case. <!-- begin-user-doc --> This
+	 * default implementation returns null. <!-- end-user-doc -->
+	 *
+	 * @return the new adapter.
+	 * @generated
+	 */
 	public Adapter createEObjectAdapter() {
 		return null;
 	}

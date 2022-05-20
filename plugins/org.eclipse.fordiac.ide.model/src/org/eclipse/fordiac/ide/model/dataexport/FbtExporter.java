@@ -26,7 +26,6 @@ import java.util.regex.Pattern;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -45,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 /**
  * The Class FbtExporter.
@@ -58,7 +58,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	 *
 	 * @param entry
 	 */
-	FbtExporter(final FBTypePaletteEntry entry) {
+	FbtExporter(final FBTypeEntry entry) {
 		super(entry.getTypeEditable());
 	}
 

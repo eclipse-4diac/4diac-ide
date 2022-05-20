@@ -16,9 +16,7 @@
 package org.eclipse.fordiac.ide.model.libraryElement;
 
 import org.eclipse.emf.common.util.EList;
-
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
@@ -32,7 +30,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getVersionInfo <em>Version Info</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getIdentification <em>Identification</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getPaletteEntry <em>Palette Entry</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getTypeEntry <em>Type Entry</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLibraryElement()
@@ -47,7 +45,7 @@ public interface LibraryElement extends INamedElement {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Version Info</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLibraryElement_VersionInfo()
-	 * @model containment="true" resolveProxies="true" required="true"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<VersionInfo> getVersionInfo();
@@ -75,31 +73,31 @@ public interface LibraryElement extends INamedElement {
 	void setIdentification(Identification value);
 
 	/**
-	 * Returns the value of the '<em><b>Palette Entry</b></em>' reference.
+	 * Returns the value of the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Palette Entry</em>' reference.
-	 * @see #setPaletteEntry(PaletteEntry)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLibraryElement_PaletteEntry()
-	 * @model
+	 * @return the value of the '<em>Type Entry</em>' attribute.
+	 * @see #setTypeEntry(TypeEntry)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getLibraryElement_TypeEntry()
+	 * @model dataType="org.eclipse.fordiac.ide.model.libraryElement.TypeEntry" transient="true"
 	 * @generated
 	 */
-	PaletteEntry getPaletteEntry();
+	TypeEntry getTypeEntry();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getPaletteEntry <em>Palette Entry</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.LibraryElement#getTypeEntry <em>Type Entry</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Palette Entry</em>' reference.
-	 * @see #getPaletteEntry()
+	 * @param value the new value of the '<em>Type Entry</em>' attribute.
+	 * @see #getTypeEntry()
 	 * @generated
 	 */
-	void setPaletteEntry(PaletteEntry value);
+	void setTypeEntry(TypeEntry value);
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.Palette.TypeLibrary" required="true"
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.TypeLibrary" required="true"
 	 * @generated
 	 */
 	TypeLibrary getTypeLibrary();

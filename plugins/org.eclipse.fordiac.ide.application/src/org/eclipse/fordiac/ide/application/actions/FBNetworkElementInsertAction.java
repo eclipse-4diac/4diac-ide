@@ -21,13 +21,13 @@ package org.eclipse.fordiac.ide.application.actions;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
-import org.eclipse.fordiac.ide.model.Palette.FBTypePaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
-import org.eclipse.fordiac.ide.model.Palette.SubApplicationTypePaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
 import org.eclipse.ui.IEditorPart;
@@ -35,21 +35,21 @@ import org.eclipse.ui.IWorkbenchPart;
 
 public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 
-	private final PaletteEntry paletteEntry;
+	private final TypeEntry typeEntry;
 	private final FBNetwork fbNetwork;
 
-	public FBNetworkElementInsertAction(IWorkbenchPart part, PaletteEntry paletteEntry, FBNetwork fbNetwork) {
+	public FBNetworkElementInsertAction(final IWorkbenchPart part, final TypeEntry entry, final FBNetwork fbNetwork) {
 		super(part);
-		this.paletteEntry = paletteEntry;
+		this.typeEntry = entry;
 		this.fbNetwork = fbNetwork;
 
-		setId(paletteEntry.getFile().getFullPath().toString());
-		setText(paletteEntry.getLabel());
+		setId(typeEntry.getFile().getFullPath().toString());
+		setText(typeEntry.getTypeName());
 	}
 
 	@Override
 	protected boolean calculateEnabled() {
-		return (null != paletteEntry) && (null != fbNetwork);
+		return (null != typeEntry) && (null != fbNetwork);
 	}
 
 	@Override
@@ -59,17 +59,16 @@ public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 
 	private AbstractCreateFBNetworkElementCommand createFBNetworkElementCreateCommand() {
 		final Point pt = getPositionInViewer((IEditorPart) getWorkbenchPart());
-		if (paletteEntry instanceof FBTypePaletteEntry) {
-			return new FBCreateCommand((FBTypePaletteEntry) paletteEntry, fbNetwork, pt.x, pt.y);
-		} else if (paletteEntry instanceof SubApplicationTypePaletteEntry) {
-			return new CreateSubAppInstanceCommand((SubApplicationTypePaletteEntry) paletteEntry, fbNetwork, pt.x,
-					pt.y);
+		if (typeEntry instanceof FBTypeEntry) {
+			return new FBCreateCommand((FBTypeEntry) typeEntry, fbNetwork, pt.x, pt.y);
+		} else if (typeEntry instanceof SubAppTypeEntry) {
+			return new CreateSubAppInstanceCommand((SubAppTypeEntry) typeEntry, fbNetwork, pt.x, pt.y);
 		}
 
 		return null;
 	}
 
-	private static Point getPositionInViewer(IEditorPart editor) {
+	private static Point getPositionInViewer(final IEditorPart editor) {
 		final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 		return ((FBNetworkContextMenuProvider) viewer.getContextMenu()).getTranslatedAndZoomedPoint();
 	}

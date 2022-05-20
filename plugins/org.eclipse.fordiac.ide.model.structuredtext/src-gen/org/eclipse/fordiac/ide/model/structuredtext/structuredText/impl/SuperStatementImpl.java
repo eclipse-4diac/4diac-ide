@@ -18,24 +18,24 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.SuperStatemen
 public class SuperStatementImpl extends StatementImpl implements SuperStatement
 {
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected SuperStatementImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.SUPER_STATEMENT;
-  }
+		return StructuredTextPackage.Literals.SUPER_STATEMENT;
+	}
 
 } //SuperStatementImpl

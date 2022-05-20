@@ -37,6 +37,13 @@ import org.eclipse.xtext.parser.antlr.LexerProvider;
 import org.eclipse.xtext.parsetree.reconstr.ITokenSerializer;
 import org.eclipse.xtext.parsetree.reconstr.impl.IgnoreCaseKeywordSerializer;
 import org.eclipse.xtext.preferences.IPreferenceValuesProvider;
+import org.eclipse.xtext.resource.IContainer;
+import org.eclipse.xtext.resource.IResourceDescriptions;
+import org.eclipse.xtext.resource.containers.IAllContainersState;
+import org.eclipse.xtext.resource.containers.ResourceSetBasedAllContainersStateProvider;
+import org.eclipse.xtext.resource.containers.StateBasedContainerManager;
+import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider;
+import org.eclipse.xtext.resource.impl.ResourceSetBasedResourceDescriptions;
 import org.eclipse.xtext.scoping.IGlobalScopeProvider;
 import org.eclipse.xtext.scoping.IScopeProvider;
 import org.eclipse.xtext.scoping.IgnoreCaseLinking;
@@ -180,6 +187,26 @@ public abstract class AbstractSTAlgorithmRuntimeModule extends DefaultRuntimeMod
 	// contributed by org.eclipse.xtext.xtext.generator.exporting.QualifiedNamesFragment2
 	public Class<? extends IQualifiedNameProvider> bindIQualifiedNameProvider() {
 		return DefaultDeclarativeQualifiedNameProvider.class;
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
+	public Class<? extends IContainer.Manager> bindIContainer$Manager() {
+		return StateBasedContainerManager.class;
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
+	public Class<? extends IAllContainersState.Provider> bindIAllContainersState$Provider() {
+		return ResourceSetBasedAllContainersStateProvider.class;
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
+	public void configureIResourceDescriptions(Binder binder) {
+		binder.bind(IResourceDescriptions.class).to(ResourceSetBasedResourceDescriptions.class);
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.builder.BuilderIntegrationFragment2
+	public void configureIResourceDescriptionsPersisted(Binder binder) {
+		binder.bind(IResourceDescriptions.class).annotatedWith(Names.named(ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS)).to(ResourceSetBasedResourceDescriptions.class);
 	}
 	
 	// contributed by org.eclipse.xtext.xtext.generator.formatting.Formatter2Fragment2

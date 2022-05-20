@@ -31,146 +31,146 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTex
 public class AdapterRootImpl extends AdapterVariableImpl implements AdapterRoot
 {
   /**
-   * The cached value of the '{@link #getAdapter() <em>Adapter</em>}' reference.
-   * <!-- begin-user-doc -->
+	 * The cached value of the '{@link #getAdapter() <em>Adapter</em>}' reference.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getAdapter()
-   * @generated
-   * @ordered
-   */
+	 * @see #getAdapter()
+	 * @generated
+	 * @ordered
+	 */
   protected VarDeclaration adapter;
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   protected AdapterRootImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   protected EClass eStaticClass()
   {
-    return StructuredTextPackage.Literals.ADAPTER_ROOT;
-  }
+		return StructuredTextPackage.Literals.ADAPTER_ROOT;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public VarDeclaration getAdapter()
   {
-    if (adapter != null && adapter.eIsProxy())
-    {
-      InternalEObject oldAdapter = (InternalEObject)adapter;
-      adapter = (VarDeclaration)eResolveProxy(oldAdapter);
-      if (adapter != oldAdapter)
-      {
-        if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, StructuredTextPackage.ADAPTER_ROOT__ADAPTER, oldAdapter, adapter));
-      }
-    }
-    return adapter;
-  }
+		if (adapter != null && adapter.eIsProxy()) {
+			InternalEObject oldAdapter = (InternalEObject)adapter;
+			adapter = (VarDeclaration)eResolveProxy(oldAdapter);
+			if (adapter != oldAdapter) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, StructuredTextPackage.ADAPTER_ROOT__ADAPTER, oldAdapter, adapter));
+			}
+		}
+		return adapter;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public VarDeclaration basicGetAdapter()
   {
-    return adapter;
-  }
+		return adapter;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void setAdapter(VarDeclaration newAdapter)
   {
-    VarDeclaration oldAdapter = adapter;
-    adapter = newAdapter;
-    if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.ADAPTER_ROOT__ADAPTER, oldAdapter, adapter));
-  }
+		VarDeclaration oldAdapter = adapter;
+		adapter = newAdapter;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, StructuredTextPackage.ADAPTER_ROOT__ADAPTER, oldAdapter, adapter));
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object eGet(int featureID, boolean resolve, boolean coreType)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.ADAPTER_ROOT__ADAPTER:
-        if (resolve) return getAdapter();
-        return basicGetAdapter();
-    }
-    return super.eGet(featureID, resolve, coreType);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.ADAPTER_ROOT__ADAPTER:
+				if (resolve) return getAdapter();
+				return basicGetAdapter();
+			default:
+				return super.eGet(featureID, resolve, coreType);
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eSet(int featureID, Object newValue)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.ADAPTER_ROOT__ADAPTER:
-        setAdapter((VarDeclaration)newValue);
-        return;
-    }
-    super.eSet(featureID, newValue);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.ADAPTER_ROOT__ADAPTER:
+				setAdapter((VarDeclaration)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public void eUnset(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.ADAPTER_ROOT__ADAPTER:
-        setAdapter((VarDeclaration)null);
-        return;
-    }
-    super.eUnset(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.ADAPTER_ROOT__ADAPTER:
+				setAdapter((VarDeclaration)null);
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public boolean eIsSet(int featureID)
   {
-    switch (featureID)
-    {
-      case StructuredTextPackage.ADAPTER_ROOT__ADAPTER:
-        return adapter != null;
-    }
-    return super.eIsSet(featureID);
-  }
+		switch (featureID) {
+			case StructuredTextPackage.ADAPTER_ROOT__ADAPTER:
+				return adapter != null;
+			default:
+				return super.eIsSet(featureID);
+		}
+	}
 
 } //AdapterRootImpl

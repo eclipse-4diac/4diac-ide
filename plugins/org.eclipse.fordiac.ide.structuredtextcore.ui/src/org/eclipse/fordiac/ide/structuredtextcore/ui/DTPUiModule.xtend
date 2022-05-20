@@ -10,16 +10,23 @@
  * Contributors:
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
+ * 		 - registers hover provider
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.ui
 
 import org.eclipse.ui.plugin.AbstractUIPlugin
+import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider
 import org.eclipse.xtext.ui.resource.generic.EmfUiModule
+import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider
 
 class DTPUiModule extends EmfUiModule {
 	
 	new(AbstractUIPlugin plugin) {
 		super(plugin)
+	}
+	
+	def Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {
+		return STCoreHoverProvider
 	}
 
 }

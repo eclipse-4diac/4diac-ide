@@ -23,677 +23,671 @@ import org.eclipse.fordiac.ide.model.structuredtext.structuredText.*;
 public class StructuredTextFactoryImpl extends EFactoryImpl implements StructuredTextFactory
 {
   /**
-   * Creates the default factory implementation.
-   * <!-- begin-user-doc -->
+	 * Creates the default factory implementation.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public static StructuredTextFactory init()
   {
-    try
-    {
-      StructuredTextFactory theStructuredTextFactory = (StructuredTextFactory)EPackage.Registry.INSTANCE.getEFactory(StructuredTextPackage.eNS_URI);
-      if (theStructuredTextFactory != null)
-      {
-        return theStructuredTextFactory;
-      }
-    }
-    catch (Exception exception)
-    {
-      EcorePlugin.INSTANCE.log(exception);
-    }
-    return new StructuredTextFactoryImpl();
-  }
+		try {
+			StructuredTextFactory theStructuredTextFactory = (StructuredTextFactory)EPackage.Registry.INSTANCE.getEFactory(StructuredTextPackage.eNS_URI);
+			if (theStructuredTextFactory != null) {
+				return theStructuredTextFactory;
+			}
+		}
+		catch (Exception exception) {
+			EcorePlugin.INSTANCE.log(exception);
+		}
+		return new StructuredTextFactoryImpl();
+	}
 
   /**
-   * Creates an instance of the factory.
-   * <!-- begin-user-doc -->
+	 * Creates an instance of the factory.
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public StructuredTextFactoryImpl()
   {
-    super();
-  }
+		super();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public EObject create(EClass eClass)
   {
-    switch (eClass.getClassifierID())
-    {
-      case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM: return createStructuredTextAlgorithm();
-      case StructuredTextPackage.STATEMENT_LIST: return createStatementList();
-      case StructuredTextPackage.STATEMENT: return createStatement();
-      case StructuredTextPackage.ASSIGNMENT_STATEMENT: return createAssignmentStatement();
-      case StructuredTextPackage.FB_CALL: return createFBCall();
-      case StructuredTextPackage.IF_STATEMENT: return createIfStatement();
-      case StructuredTextPackage.ELSE_IF_CLAUSE: return createElseIfClause();
-      case StructuredTextPackage.ELSE_CLAUSE: return createElseClause();
-      case StructuredTextPackage.CASE_STATEMENT: return createCaseStatement();
-      case StructuredTextPackage.CASE_CLAUSE: return createCaseClause();
-      case StructuredTextPackage.FOR_STATEMENT: return createForStatement();
-      case StructuredTextPackage.WHILE_STATEMENT: return createWhileStatement();
-      case StructuredTextPackage.REPEAT_STATEMENT: return createRepeatStatement();
-      case StructuredTextPackage.EXPRESSION: return createExpression();
-      case StructuredTextPackage.CALL: return createCall();
-      case StructuredTextPackage.ARGUMENT: return createArgument();
-      case StructuredTextPackage.IN_ARGUMENT: return createInArgument();
-      case StructuredTextPackage.OUT_ARGUMENT: return createOutArgument();
-      case StructuredTextPackage.VARIABLE: return createVariable();
-      case StructuredTextPackage.ADAPTER_VARIABLE: return createAdapterVariable();
-      case StructuredTextPackage.PARTIAL_ACCESS: return createPartialAccess();
-      case StructuredTextPackage.PRIMARY_VARIABLE: return createPrimaryVariable();
-      case StructuredTextPackage.CONSTANT: return createConstant();
-      case StructuredTextPackage.NUMERIC_LITERAL: return createNumericLiteral();
-      case StructuredTextPackage.INT_LITERAL: return createIntLiteral();
-      case StructuredTextPackage.REAL_LITERAL: return createRealLiteral();
-      case StructuredTextPackage.BOOL_LITERAL: return createBoolLiteral();
-      case StructuredTextPackage.STRING_LITERAL: return createStringLiteral();
-      case StructuredTextPackage.TIME_LITERAL: return createTimeLiteral();
-      case StructuredTextPackage.LOCAL_VARIABLE: return createLocalVariable();
-      case StructuredTextPackage.SUPER_STATEMENT: return createSuperStatement();
-      case StructuredTextPackage.RETURN_STATEMENT: return createReturnStatement();
-      case StructuredTextPackage.EXIT_STATEMENT: return createExitStatement();
-      case StructuredTextPackage.CONTINUE_STATEMENT: return createContinueStatement();
-      case StructuredTextPackage.BINARY_EXPRESSION: return createBinaryExpression();
-      case StructuredTextPackage.UNARY_EXPRESSION: return createUnaryExpression();
-      case StructuredTextPackage.ARRAY_VARIABLE: return createArrayVariable();
-      case StructuredTextPackage.ADAPTER_ROOT: return createAdapterRoot();
-      default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
-    }
-  }
+		switch (eClass.getClassifierID()) {
+			case StructuredTextPackage.STRUCTURED_TEXT_ALGORITHM: return createStructuredTextAlgorithm();
+			case StructuredTextPackage.STATEMENT_LIST: return createStatementList();
+			case StructuredTextPackage.STATEMENT: return createStatement();
+			case StructuredTextPackage.ASSIGNMENT_STATEMENT: return createAssignmentStatement();
+			case StructuredTextPackage.FB_CALL: return createFBCall();
+			case StructuredTextPackage.IF_STATEMENT: return createIfStatement();
+			case StructuredTextPackage.ELSE_IF_CLAUSE: return createElseIfClause();
+			case StructuredTextPackage.ELSE_CLAUSE: return createElseClause();
+			case StructuredTextPackage.CASE_STATEMENT: return createCaseStatement();
+			case StructuredTextPackage.CASE_CLAUSE: return createCaseClause();
+			case StructuredTextPackage.FOR_STATEMENT: return createForStatement();
+			case StructuredTextPackage.WHILE_STATEMENT: return createWhileStatement();
+			case StructuredTextPackage.REPEAT_STATEMENT: return createRepeatStatement();
+			case StructuredTextPackage.EXPRESSION: return createExpression();
+			case StructuredTextPackage.CALL: return createCall();
+			case StructuredTextPackage.ARGUMENT: return createArgument();
+			case StructuredTextPackage.IN_ARGUMENT: return createInArgument();
+			case StructuredTextPackage.OUT_ARGUMENT: return createOutArgument();
+			case StructuredTextPackage.VARIABLE: return createVariable();
+			case StructuredTextPackage.ADAPTER_VARIABLE: return createAdapterVariable();
+			case StructuredTextPackage.PARTIAL_ACCESS: return createPartialAccess();
+			case StructuredTextPackage.PRIMARY_VARIABLE: return createPrimaryVariable();
+			case StructuredTextPackage.CONSTANT: return createConstant();
+			case StructuredTextPackage.NUMERIC_LITERAL: return createNumericLiteral();
+			case StructuredTextPackage.INT_LITERAL: return createIntLiteral();
+			case StructuredTextPackage.REAL_LITERAL: return createRealLiteral();
+			case StructuredTextPackage.BOOL_LITERAL: return createBoolLiteral();
+			case StructuredTextPackage.STRING_LITERAL: return createStringLiteral();
+			case StructuredTextPackage.TIME_LITERAL: return createTimeLiteral();
+			case StructuredTextPackage.LOCAL_VARIABLE: return createLocalVariable();
+			case StructuredTextPackage.SUPER_STATEMENT: return createSuperStatement();
+			case StructuredTextPackage.RETURN_STATEMENT: return createReturnStatement();
+			case StructuredTextPackage.EXIT_STATEMENT: return createExitStatement();
+			case StructuredTextPackage.CONTINUE_STATEMENT: return createContinueStatement();
+			case StructuredTextPackage.BINARY_EXPRESSION: return createBinaryExpression();
+			case StructuredTextPackage.UNARY_EXPRESSION: return createUnaryExpression();
+			case StructuredTextPackage.ARRAY_VARIABLE: return createArrayVariable();
+			case StructuredTextPackage.ADAPTER_ROOT: return createAdapterRoot();
+			default:
+				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Object createFromString(EDataType eDataType, String initialValue)
   {
-    switch (eDataType.getClassifierID())
-    {
-      case StructuredTextPackage.BINARY_OPERATOR:
-        return createBinaryOperatorFromString(eDataType, initialValue);
-      case StructuredTextPackage.UNARY_OPERATOR:
-        return createUnaryOperatorFromString(eDataType, initialValue);
-      case StructuredTextPackage.TYPE:
-        return createTypeFromString(eDataType, initialValue);
-      default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
-    }
-  }
+		switch (eDataType.getClassifierID()) {
+			case StructuredTextPackage.BINARY_OPERATOR:
+				return createBinaryOperatorFromString(eDataType, initialValue);
+			case StructuredTextPackage.UNARY_OPERATOR:
+				return createUnaryOperatorFromString(eDataType, initialValue);
+			case StructuredTextPackage.TYPE:
+				return createTypeFromString(eDataType, initialValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public String convertToString(EDataType eDataType, Object instanceValue)
   {
-    switch (eDataType.getClassifierID())
-    {
-      case StructuredTextPackage.BINARY_OPERATOR:
-        return convertBinaryOperatorToString(eDataType, instanceValue);
-      case StructuredTextPackage.UNARY_OPERATOR:
-        return convertUnaryOperatorToString(eDataType, instanceValue);
-      case StructuredTextPackage.TYPE:
-        return convertTypeToString(eDataType, instanceValue);
-      default:
-        throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
-    }
-  }
+		switch (eDataType.getClassifierID()) {
+			case StructuredTextPackage.BINARY_OPERATOR:
+				return convertBinaryOperatorToString(eDataType, instanceValue);
+			case StructuredTextPackage.UNARY_OPERATOR:
+				return convertUnaryOperatorToString(eDataType, instanceValue);
+			case StructuredTextPackage.TYPE:
+				return convertTypeToString(eDataType, instanceValue);
+			default:
+				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier");
+		}
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public StructuredTextAlgorithm createStructuredTextAlgorithm()
   {
-    StructuredTextAlgorithmImpl structuredTextAlgorithm = new StructuredTextAlgorithmImpl();
-    return structuredTextAlgorithm;
-  }
+		StructuredTextAlgorithmImpl structuredTextAlgorithm = new StructuredTextAlgorithmImpl();
+		return structuredTextAlgorithm;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public StatementList createStatementList()
   {
-    StatementListImpl statementList = new StatementListImpl();
-    return statementList;
-  }
+		StatementListImpl statementList = new StatementListImpl();
+		return statementList;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Statement createStatement()
   {
-    StatementImpl statement = new StatementImpl();
-    return statement;
-  }
+		StatementImpl statement = new StatementImpl();
+		return statement;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public AssignmentStatement createAssignmentStatement()
   {
-    AssignmentStatementImpl assignmentStatement = new AssignmentStatementImpl();
-    return assignmentStatement;
-  }
+		AssignmentStatementImpl assignmentStatement = new AssignmentStatementImpl();
+		return assignmentStatement;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public FBCall createFBCall()
   {
-    FBCallImpl fbCall = new FBCallImpl();
-    return fbCall;
-  }
+		FBCallImpl fbCall = new FBCallImpl();
+		return fbCall;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public IfStatement createIfStatement()
   {
-    IfStatementImpl ifStatement = new IfStatementImpl();
-    return ifStatement;
-  }
+		IfStatementImpl ifStatement = new IfStatementImpl();
+		return ifStatement;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public ElseIfClause createElseIfClause()
   {
-    ElseIfClauseImpl elseIfClause = new ElseIfClauseImpl();
-    return elseIfClause;
-  }
+		ElseIfClauseImpl elseIfClause = new ElseIfClauseImpl();
+		return elseIfClause;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public ElseClause createElseClause()
   {
-    ElseClauseImpl elseClause = new ElseClauseImpl();
-    return elseClause;
-  }
+		ElseClauseImpl elseClause = new ElseClauseImpl();
+		return elseClause;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public CaseStatement createCaseStatement()
   {
-    CaseStatementImpl caseStatement = new CaseStatementImpl();
-    return caseStatement;
-  }
+		CaseStatementImpl caseStatement = new CaseStatementImpl();
+		return caseStatement;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public CaseClause createCaseClause()
   {
-    CaseClauseImpl caseClause = new CaseClauseImpl();
-    return caseClause;
-  }
+		CaseClauseImpl caseClause = new CaseClauseImpl();
+		return caseClause;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public ForStatement createForStatement()
   {
-    ForStatementImpl forStatement = new ForStatementImpl();
-    return forStatement;
-  }
+		ForStatementImpl forStatement = new ForStatementImpl();
+		return forStatement;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public WhileStatement createWhileStatement()
   {
-    WhileStatementImpl whileStatement = new WhileStatementImpl();
-    return whileStatement;
-  }
+		WhileStatementImpl whileStatement = new WhileStatementImpl();
+		return whileStatement;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public RepeatStatement createRepeatStatement()
   {
-    RepeatStatementImpl repeatStatement = new RepeatStatementImpl();
-    return repeatStatement;
-  }
+		RepeatStatementImpl repeatStatement = new RepeatStatementImpl();
+		return repeatStatement;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Expression createExpression()
   {
-    ExpressionImpl expression = new ExpressionImpl();
-    return expression;
-  }
+		ExpressionImpl expression = new ExpressionImpl();
+		return expression;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Call createCall()
   {
-    CallImpl call = new CallImpl();
-    return call;
-  }
+		CallImpl call = new CallImpl();
+		return call;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Argument createArgument()
   {
-    ArgumentImpl argument = new ArgumentImpl();
-    return argument;
-  }
+		ArgumentImpl argument = new ArgumentImpl();
+		return argument;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public InArgument createInArgument()
   {
-    InArgumentImpl inArgument = new InArgumentImpl();
-    return inArgument;
-  }
+		InArgumentImpl inArgument = new InArgumentImpl();
+		return inArgument;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public OutArgument createOutArgument()
   {
-    OutArgumentImpl outArgument = new OutArgumentImpl();
-    return outArgument;
-  }
+		OutArgumentImpl outArgument = new OutArgumentImpl();
+		return outArgument;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Variable createVariable()
   {
-    VariableImpl variable = new VariableImpl();
-    return variable;
-  }
+		VariableImpl variable = new VariableImpl();
+		return variable;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public AdapterVariable createAdapterVariable()
   {
-    AdapterVariableImpl adapterVariable = new AdapterVariableImpl();
-    return adapterVariable;
-  }
+		AdapterVariableImpl adapterVariable = new AdapterVariableImpl();
+		return adapterVariable;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public PartialAccess createPartialAccess()
   {
-    PartialAccessImpl partialAccess = new PartialAccessImpl();
-    return partialAccess;
-  }
+		PartialAccessImpl partialAccess = new PartialAccessImpl();
+		return partialAccess;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public PrimaryVariable createPrimaryVariable()
   {
-    PrimaryVariableImpl primaryVariable = new PrimaryVariableImpl();
-    return primaryVariable;
-  }
+		PrimaryVariableImpl primaryVariable = new PrimaryVariableImpl();
+		return primaryVariable;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public Constant createConstant()
   {
-    ConstantImpl constant = new ConstantImpl();
-    return constant;
-  }
+		ConstantImpl constant = new ConstantImpl();
+		return constant;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public NumericLiteral createNumericLiteral()
   {
-    NumericLiteralImpl numericLiteral = new NumericLiteralImpl();
-    return numericLiteral;
-  }
+		NumericLiteralImpl numericLiteral = new NumericLiteralImpl();
+		return numericLiteral;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public IntLiteral createIntLiteral()
   {
-    IntLiteralImpl intLiteral = new IntLiteralImpl();
-    return intLiteral;
-  }
+		IntLiteralImpl intLiteral = new IntLiteralImpl();
+		return intLiteral;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public RealLiteral createRealLiteral()
   {
-    RealLiteralImpl realLiteral = new RealLiteralImpl();
-    return realLiteral;
-  }
+		RealLiteralImpl realLiteral = new RealLiteralImpl();
+		return realLiteral;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public BoolLiteral createBoolLiteral()
   {
-    BoolLiteralImpl boolLiteral = new BoolLiteralImpl();
-    return boolLiteral;
-  }
+		BoolLiteralImpl boolLiteral = new BoolLiteralImpl();
+		return boolLiteral;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public StringLiteral createStringLiteral()
   {
-    StringLiteralImpl stringLiteral = new StringLiteralImpl();
-    return stringLiteral;
-  }
+		StringLiteralImpl stringLiteral = new StringLiteralImpl();
+		return stringLiteral;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public TimeLiteral createTimeLiteral()
   {
-    TimeLiteralImpl timeLiteral = new TimeLiteralImpl();
-    return timeLiteral;
-  }
+		TimeLiteralImpl timeLiteral = new TimeLiteralImpl();
+		return timeLiteral;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public LocalVariable createLocalVariable()
   {
-    LocalVariableImpl localVariable = new LocalVariableImpl();
-    return localVariable;
-  }
+		LocalVariableImpl localVariable = new LocalVariableImpl();
+		return localVariable;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public SuperStatement createSuperStatement()
   {
-    SuperStatementImpl superStatement = new SuperStatementImpl();
-    return superStatement;
-  }
+		SuperStatementImpl superStatement = new SuperStatementImpl();
+		return superStatement;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public ReturnStatement createReturnStatement()
   {
-    ReturnStatementImpl returnStatement = new ReturnStatementImpl();
-    return returnStatement;
-  }
+		ReturnStatementImpl returnStatement = new ReturnStatementImpl();
+		return returnStatement;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public ExitStatement createExitStatement()
   {
-    ExitStatementImpl exitStatement = new ExitStatementImpl();
-    return exitStatement;
-  }
+		ExitStatementImpl exitStatement = new ExitStatementImpl();
+		return exitStatement;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public ContinueStatement createContinueStatement()
   {
-    ContinueStatementImpl continueStatement = new ContinueStatementImpl();
-    return continueStatement;
-  }
+		ContinueStatementImpl continueStatement = new ContinueStatementImpl();
+		return continueStatement;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public BinaryExpression createBinaryExpression()
   {
-    BinaryExpressionImpl binaryExpression = new BinaryExpressionImpl();
-    return binaryExpression;
-  }
+		BinaryExpressionImpl binaryExpression = new BinaryExpressionImpl();
+		return binaryExpression;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public UnaryExpression createUnaryExpression()
   {
-    UnaryExpressionImpl unaryExpression = new UnaryExpressionImpl();
-    return unaryExpression;
-  }
+		UnaryExpressionImpl unaryExpression = new UnaryExpressionImpl();
+		return unaryExpression;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public ArrayVariable createArrayVariable()
   {
-    ArrayVariableImpl arrayVariable = new ArrayVariableImpl();
-    return arrayVariable;
-  }
+		ArrayVariableImpl arrayVariable = new ArrayVariableImpl();
+		return arrayVariable;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public AdapterRoot createAdapterRoot()
   {
-    AdapterRootImpl adapterRoot = new AdapterRootImpl();
-    return adapterRoot;
-  }
+		AdapterRootImpl adapterRoot = new AdapterRootImpl();
+		return adapterRoot;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public BinaryOperator createBinaryOperatorFromString(EDataType eDataType, String initialValue)
   {
-    BinaryOperator result = BinaryOperator.get(initialValue);
-    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-    return result;
-  }
+		BinaryOperator result = BinaryOperator.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public String convertBinaryOperatorToString(EDataType eDataType, Object instanceValue)
   {
-    return instanceValue == null ? null : instanceValue.toString();
-  }
+		return instanceValue == null ? null : instanceValue.toString();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public UnaryOperator createUnaryOperatorFromString(EDataType eDataType, String initialValue)
   {
-    UnaryOperator result = UnaryOperator.get(initialValue);
-    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-    return result;
-  }
+		UnaryOperator result = UnaryOperator.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public String convertUnaryOperatorToString(EDataType eDataType, Object instanceValue)
   {
-    return instanceValue == null ? null : instanceValue.toString();
-  }
+		return instanceValue == null ? null : instanceValue.toString();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public Type createTypeFromString(EDataType eDataType, String initialValue)
   {
-    Type result = Type.get(initialValue);
-    if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
-    return result;
-  }
+		Type result = Type.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'");
+		return result;
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   public String convertTypeToString(EDataType eDataType, Object instanceValue)
   {
-    return instanceValue == null ? null : instanceValue.toString();
-  }
+		return instanceValue == null ? null : instanceValue.toString();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @generated
-   */
+	 * @generated
+	 */
   @Override
   public StructuredTextPackage getStructuredTextPackage()
   {
-    return (StructuredTextPackage)getEPackage();
-  }
+		return (StructuredTextPackage)getEPackage();
+	}
 
   /**
-   * <!-- begin-user-doc -->
+	 * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @deprecated
-   * @generated
-   */
+	 * @deprecated
+	 * @generated
+	 */
   @Deprecated
   public static StructuredTextPackage getPackage()
   {
-    return StructuredTextPackage.eINSTANCE;
-  }
+		return StructuredTextPackage.eINSTANCE;
+	}
 
 } //StructuredTextFactoryImpl

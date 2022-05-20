@@ -24,13 +24,13 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.typemanagement.preferences.TypeManagementPreferencesHelper;
@@ -55,14 +55,14 @@ public class SaveAsStructWizard extends AbstractSaveAsWizard {
 	public boolean performFinish() {
 		if (perform()) {
 			final IFile targetFile = getTargetTypeFile();
-			final PaletteEntry entry = createPaletteEntry(targetFile);
+			final TypeEntry entry = createTypeEntry(targetFile);
 			final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
 			entry.setType(type);
 			InterfaceListCopier.copyVarList(type.getMemberVariables(), varDecl, true);
 
 			TypeManagementPreferencesHelper.setupVersionInfo(type);
 
-			datatypeName = TypeLibrary.getTypeNameFromFile(targetFile);
+			datatypeName = TypeEntry.getTypeNameFromFile(targetFile);
 			type.setName(datatypeName);
 			AbstractTypeExporter.saveType(entry);
 
@@ -78,8 +78,8 @@ public class SaveAsStructWizard extends AbstractSaveAsWizard {
 		return true;
 	}
 
-	private PaletteEntry createPaletteEntry(final IFile targetTypeFile) {
-		return TypeLibrary.getTypeLibrary(project).createPaletteEntry(targetTypeFile);
+	private TypeEntry createTypeEntry(final IFile targetTypeFile) {
+		return TypeLibraryManager.INSTANCE.getTypeLibrary(project).createTypeEntry(targetTypeFile);
 	}
 
 	public boolean replaceSource() {

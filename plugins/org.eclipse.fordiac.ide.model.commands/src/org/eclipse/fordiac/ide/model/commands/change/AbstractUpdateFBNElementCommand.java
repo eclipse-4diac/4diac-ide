@@ -17,7 +17,6 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.Palette.PaletteEntry;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -40,7 +39,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -73,7 +74,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	protected final List<ErrorMarkerBuilder> errorPins;
 	protected ErrorMarkerBuilder errorMarkerBuilder;
-	protected PaletteEntry entry;
+	protected TypeEntry entry;
 
 	protected AbstractUpdateFBNElementCommand(final FBNetworkElement oldElement) {
 		this.oldElement = oldElement;
@@ -99,14 +100,19 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 		createNewFB();
 		checkGroup(oldElement, newElement);  // needs to be done before anything is changed on the old element Bug
-											  // 579570
+		// 579570
 
 		network.getNetworkElements().add(newElement);
 
 		handleErrorMarker();
 
+		// Find connectionless pins which should be saved
+		handleParameters();
+
 		// Find connections which should be reconnected
 		handleApplicationConnections();
+
+
 
 		network.getNetworkElements().remove(oldElement);
 
@@ -307,6 +313,51 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	}
 
+	// Ensure that connectionless pins with a value are saved as well
+	protected void handleParameters() {
+		for (final VarDeclaration input : oldElement.getInterface().getInputVars()) {
+			// No outside connections to a pin in oldElement and it has an initial value
+			if (input.getInputConnections().isEmpty() && hasValue(input.getValue())) {
+				updateSelectedInterface(input, newElement);
+			}
+		}
+
+		for (final VarDeclaration output : oldElement.getInterface().getOutputVars()) {
+			if (output.getOutputConnections().isEmpty() && hasValue(output.getValue())) {
+				updateSelectedInterface(output, newElement);
+
+			}
+		}
+		checkErrorMarkerPinParameters();
+
+	}
+
+
+	private void checkErrorMarkerPinParameters() {
+		for (final ErrorMarkerInterface erroMarker : oldElement.getInterface().getErrorMarker()) {
+			if (hasValue(erroMarker.getValue())) {
+				final IInterfaceElement updatedSelected = newElement.getInterfaceElement(erroMarker.getName());
+				if (updatedSelected != null) {
+					// the new block has a pin with given name
+					if (updatedSelected instanceof VarDeclaration) {
+						final Value value = LibraryElementFactory.eINSTANCE.createValue();
+						value.setValue(erroMarker.getValue().getValue());
+						((VarDeclaration) updatedSelected).setValue(value);
+					}
+				} else if ((erroMarker.isIsInput() && erroMarker.getInputConnections().isEmpty())
+						|| (!erroMarker.isIsInput() && erroMarker.getOutputConnections().isEmpty())) {
+					// unconnected error pin create a new error pin
+					updateSelectedInterface(erroMarker, newElement);
+				}
+			}
+		}
+	}
+
+
+	private static boolean hasValue(final Value value) {
+		return value != null && value.getValue() != null && !value.getValue().isBlank();
+	}
+
 	private boolean onlyNewElementIsErrorMarker() {
 		return (!(oldElement instanceof ErrorMarkerFBNElement)) && newElement instanceof ErrorMarkerFBNElement;
 	}
@@ -328,8 +379,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	private void moveEntryToErrorLib() {
 		final TypeLibrary typeLibrary = oldElement.getTypeLibrary();
-		typeLibrary.removePaletteEntry(entry);
-		typeLibrary.getErrorTypeLib().addPaletteEntry(entry);
+		typeLibrary.removeTypeEntry(entry);
+		typeLibrary.addErrorTypeEntry(entry);
 
 	}
 
@@ -338,14 +389,21 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		final boolean markerExists = newElement.getInterface().getErrorMarker().stream()
 				.anyMatch(e -> e.getName().equals(oldInterface.getName()) && e.isIsInput() == oldInterface.isIsInput());
 
-		IInterfaceElement interfaceElement;
-		interfaceElement = ConnectionHelper.createErrorMarkerInterface(oldInterface.getType(), oldInterface.getName(),
+		final ErrorMarkerInterface interfaceElement = ConnectionHelper.createErrorMarkerInterface(
+				oldInterface.getType(), oldInterface.getName(),
 				oldInterface.isIsInput(), newElement.getInterface());
+
+		if (oldInterface instanceof VarDeclaration
+				&& !((VarDeclaration) oldInterface).getValue().getValue().isBlank()) {
+			final Value value = LibraryElementFactory.eINSTANCE.createValue();
+			value.setValue(((VarDeclaration) oldInterface).getValue().getValue());
+			interfaceElement.setValue(value);
+		}
 
 		if (!markerExists) {
 			final ErrorMarkerBuilder createErrorMarker = FordiacMarkerHelper.createErrorMarker(errorMessage, newElement,
 					0);
-			createErrorMarker.setErrorMarkerRef((ErrorMarkerRef) interfaceElement);
+			createErrorMarker.setErrorMarkerRef(interfaceElement);
 			createErrorMarker.createMarkerInFile();
 			errorPins.add(createErrorMarker);
 		}

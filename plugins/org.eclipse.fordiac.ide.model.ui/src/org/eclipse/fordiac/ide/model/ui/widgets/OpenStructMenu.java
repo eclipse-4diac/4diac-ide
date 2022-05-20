@@ -77,7 +77,7 @@ public final class OpenStructMenu {
 			public void widgetSelected(final SelectionEvent e) {
 				final StructuredType sel = getSelectedStructuredType(viewer.getTable().getSelection());
 				if (sel != null) {
-					openStructEditor(sel.getPaletteEntry().getFile());
+					openStructEditor(sel.getTypeEntry().getFile());
 				}
 			}
 

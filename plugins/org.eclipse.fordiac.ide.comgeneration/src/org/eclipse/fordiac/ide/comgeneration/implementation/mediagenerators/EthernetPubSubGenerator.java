@@ -14,9 +14,9 @@
 package org.eclipse.fordiac.ide.comgeneration.implementation.mediagenerators;
 
 import org.eclipse.fordiac.ide.comgeneration.implementation.CommunicationMediaInfo;
-import org.eclipse.fordiac.ide.model.Palette.Palette;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public class EthernetPubSubGenerator extends AbstractMediaSpecificGenerator {
 	public static final String PROTOCOL_ID = "EthernetPubSub"; //$NON-NLS-1$
@@ -24,12 +24,12 @@ public class EthernetPubSubGenerator extends AbstractMediaSpecificGenerator {
 	private static final String DEFAULT_HOST = "225.0.0.1"; //$NON-NLS-1$
 	private static final int DEFAULT_START_PORT = 61550;
 
-	private String host;
+	private final String host;
 	private int startPort;
 	private int currentPort;
 
-	public EthernetPubSubGenerator(Palette palette) {
-		super(palette);
+	public EthernetPubSubGenerator(final TypeLibrary typeLib) {
+		super(typeLib);
 		startPort = DEFAULT_START_PORT;
 		host = DEFAULT_HOST;
 		reset();
@@ -46,7 +46,7 @@ public class EthernetPubSubGenerator extends AbstractMediaSpecificGenerator {
 	}
 
 	@Override
-	public void configureFBs(FB sourceFB, FB destinationFB, CommunicationMediaInfo mediaInfo) {
+	public void configureFBs(final FB sourceFB, final FB destinationFB, final CommunicationMediaInfo mediaInfo) {
 
 		VarDeclaration sourceQI;
 		VarDeclaration sourceId;
@@ -67,7 +67,7 @@ public class EthernetPubSubGenerator extends AbstractMediaSpecificGenerator {
 
 		String sourceValue = sourceId.getValue().getValue();
 		if (sourceValue.isEmpty()) {
-			StringBuilder sb = new StringBuilder();
+			final StringBuilder sb = new StringBuilder();
 			sb.append(host);
 			sb.append(":"); //$NON-NLS-1$
 			sb.append(currentPort);
@@ -90,7 +90,7 @@ public class EthernetPubSubGenerator extends AbstractMediaSpecificGenerator {
 		currentPort = startPort;
 	}
 
-	public void reset(int startPort) {
+	public void reset(final int startPort) {
 		this.startPort = startPort;
 		reset();
 	}

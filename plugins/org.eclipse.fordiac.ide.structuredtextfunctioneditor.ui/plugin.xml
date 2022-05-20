@@ -231,25 +231,40 @@
 	<!-- marker definitions for org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction -->
 	<extension
 			id="stfunction.check.fast"
-			name="STFunction Problem"
+			name="4diac IDE Structured Text Function Problem"
 			point="org.eclipse.core.resources.markers">
-		<super type="org.eclipse.xtext.ui.check.fast"/>
+		<super type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.check.fast"/>
 		<persistent value="true"/>
 	</extension>
 	<extension
 			id="stfunction.check.normal"
-			name="STFunction Problem"
+			name="4diac IDE Structured Text Function Problem"
 			point="org.eclipse.core.resources.markers">
-		<super type="org.eclipse.xtext.ui.check.normal"/>
+		<super type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.check.normal"/>
 		<persistent value="true"/>
 	</extension>
 	<extension
 			id="stfunction.check.expensive"
-			name="STFunction Problem"
+			name="4diac IDE Structured Text Function Problem"
 			point="org.eclipse.core.resources.markers">
-		<super type="org.eclipse.xtext.ui.check.expensive"/>
+		<super type="org.eclipse.fordiac.ide.structuredtextcore.ui.stcore.check.expensive"/>
 		<persistent value="true"/>
 	</extension>
+ <extension
+       point="org.eclipse.ui.ide.markerSupport">
+    <markerTypeCategory
+          name="4diac IDE Structured Text Problem">
+       <markerTypeReference
+             id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.stfunction.check.fast">
+       </markerTypeReference>
+       <markerTypeReference
+             id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.stfunction.check.normal">
+       </markerTypeReference>
+       <markerTypeReference
+             id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.stfunction.check.expensive">
+       </markerTypeReference>
+    </markerTypeCategory>
+ </extension>
 	<extension point="org.eclipse.ui.preferencePages">
 		<page
 			category="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"
@@ -432,4 +447,39 @@
 			type="text">
 		</fileTypes>
 	</extension>
+ <extension
+       point="org.eclipse.ui.editorActions">
+    <!-- extension point is generally deprecated but still valid for rulerActions in the editor gutter, according to bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=455985 -->
+    <editorContribution
+          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunction.rulerActions"
+          targetID="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction">
+       <action
+             actionID="RulerDoubleClick"
+             class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
+             id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunction.doubleClickBreakpointAction"
+             label="Toggle Breakpoint"
+             style="push">
+       </action>
+    </editorContribution>
+ </extension>
+ <extension
+       point="org.eclipse.ui.popupMenus">
+    <!-- extension point is generally deprecated but still valid for rulerActions in the editor gutter, according to bug https://bugs.eclipse.org/bugs/show_bug.cgi?id=455985 -->
+    <viewerContribution
+          id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunction.RulerPopupActions"
+          targetID="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.RulerContext">
+       <action
+             class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerToggleBreakpointActionDelegate"
+             id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunction.rulerContextMenu.toggleBreakpointAction"
+             label="Toggle Breakpoint"
+             menubarPath="debug">
+       </action>
+       <action
+             class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.debug.ui.actions.RulerEnableDisableBreakpointActionDelegate"
+             id="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunction.rulerContextMenu.enableDisableBreakpointAction"
+             label="Enable/Disable Breakpoint"
+             menubarPath="debug">
+       </action>
+    </viewerContribution>
+ </extension>
 </plugin>
