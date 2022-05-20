@@ -62,6 +62,7 @@ public class STFunctionParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getNumberAccess().getAlternatives_0(), "rule__Number__Alternatives_0");
 			builder.put(grammarAccess.getNumberAccess().getAlternatives_2_1(), "rule__Number__Alternatives_2_1");
 			builder.put(grammarAccess.getTimeAccess().getAlternatives_1(), "rule__Time__Alternatives_1");
+			builder.put(grammarAccess.getRESERVED_KEYWORDSAccess().getAlternatives(), "rule__RESERVED_KEYWORDS__Alternatives");
 			builder.put(grammarAccess.getAndOperatorAccess().getAlternatives(), "rule__AndOperator__Alternatives");
 			builder.put(grammarAccess.getEqualityOperatorAccess().getAlternatives(), "rule__EqualityOperator__Alternatives");
 			builder.put(grammarAccess.getCompareOperatorAccess().getAlternatives(), "rule__CompareOperator__Alternatives");
@@ -69,6 +70,7 @@ public class STFunctionParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getMulDivModOperatorAccess().getAlternatives(), "rule__MulDivModOperator__Alternatives");
 			builder.put(grammarAccess.getUnaryOperatorAccess().getAlternatives(), "rule__UnaryOperator__Alternatives");
 			builder.put(grammarAccess.getSTMultiBitAccessSpecifierAccess().getAlternatives(), "rule__STMultiBitAccessSpecifier__Alternatives");
+			builder.put(grammarAccess.getSTAccessSpecifierAccess().getAlternatives(), "rule__STAccessSpecifier__Alternatives");
 			builder.put(grammarAccess.getSTFunctionSourceAccess().getGroup(), "rule__STFunctionSource__Group__0");
 			builder.put(grammarAccess.getSTFunctionAccess().getGroup(), "rule__STFunction__Group__0");
 			builder.put(grammarAccess.getSTFunctionAccess().getGroup_3(), "rule__STFunction__Group_3__0");
