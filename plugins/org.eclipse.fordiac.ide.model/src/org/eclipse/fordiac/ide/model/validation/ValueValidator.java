@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
 
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.value.ArrayValueConverter;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
@@ -38,6 +39,11 @@ public final class ValueValidator {
 	}
 
 	public static String validateValue(final VarDeclaration varDeclaration, final String valueString) {
+		if (varDeclaration.getType() instanceof StructuredType) {
+			// results in structs getting sent to the forte for validation
+			// should be removed once there is a struct validator
+			return EMPTY_STRING;
+		}
 		if (varDeclaration.isArray()) {
 			return validateArray(varDeclaration, valueString);
 		}
