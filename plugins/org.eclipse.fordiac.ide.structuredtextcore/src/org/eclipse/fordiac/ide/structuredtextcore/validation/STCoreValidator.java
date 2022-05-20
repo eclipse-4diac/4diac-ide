@@ -217,7 +217,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Check
 	public void checkCallArguments(final STFeatureExpression expression) {
 		final INamedElement feature = expression.getFeature();
-		if (feature == null || !expression.isCall()) {
+		if (feature == null || feature.eIsProxy() || !expression.isCall()) {
 			return;
 		}
 
