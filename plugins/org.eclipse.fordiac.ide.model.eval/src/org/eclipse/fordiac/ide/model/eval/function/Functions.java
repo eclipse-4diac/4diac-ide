@@ -426,7 +426,7 @@ public interface Functions {
 		} else if (Value.class.isAssignableFrom(ptype) && Value.class.isAssignableFrom(atype)) {
 			final DataType type1 = ValueOperations.dataType(ptype.asSubclass(Value.class));
 			final DataType type2 = ValueOperations.dataType(atype.asSubclass(Value.class));
-			return type2.isCompatibleWith(type1);
+			return type1.isAssignableFrom(type2);
 		}
 		return false;
 	}
@@ -447,10 +447,10 @@ public interface Functions {
 				return ValueOperations.valueType(type2);
 			} else if (type2 == null) {
 				return ValueOperations.valueType(type1);
-			} else if (type1.isCompatibleWith(type2)) {
-				return ValueOperations.valueType(type2);
-			} else if (type2.isCompatibleWith(type1)) {
+			} else if (type1.isAssignableFrom(type2)) {
 				return ValueOperations.valueType(type1);
+			} else if (type2.isAssignableFrom(type1)) {
+				return ValueOperations.valueType(type2);
 			}
 		}
 		return null;

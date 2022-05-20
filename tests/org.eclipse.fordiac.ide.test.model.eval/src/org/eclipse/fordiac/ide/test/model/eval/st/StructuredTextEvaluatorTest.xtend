@@ -24,11 +24,11 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
+import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.AnyRealType
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.st.ECTransitionEvaluator
 import org.eclipse.fordiac.ide.model.eval.st.STAlgorithmEvaluator
@@ -331,14 +331,14 @@ class StructuredTextEvaluatorTest {
 
 	def static Stream<Arguments> testUnaryExpressionArgumentsProvider() {
 		StreamSupport.stream(
-			DataTypeLibrary.nonUserDefinedDataTypes.filter [
-				GenericTypes.ANY_NUM.isCompatibleWith(it) || it instanceof BoolType
-			].flatMap [ type |
-				#["0", "1", "-1", "17", "-4"].reject [
-					((type instanceof AnyUnsignedType || type instanceof AnyBitType) && contains('-')) ||
-						(type instanceof BoolType && length > 1)
-				].map[type instanceof AnyRealType ? concat(".0") : it].flatMap [ value |
-					STUnaryOperator.VALUES.filter[isApplicableTo(type)].map [ operator |
+			STUnaryOperator.VALUES.flatMap [ operator |
+				ElementaryTypes.allElementaryType.filter[it instanceof AnyNumType || it instanceof AnyBitType].filter [
+					operator.isApplicableTo(it)
+				].flatMap [ type |
+					#["0", "1", "-1", "17", "-4"].reject [
+						((type instanceof AnyUnsignedType || type instanceof AnyBitType) && contains('-')) ||
+							(type instanceof BoolType && length > 1)
+					].map[type instanceof AnyRealType ? concat(".0") : it].map [ value |
 						arguments(operator, type.name, value)
 					]
 				]
@@ -406,14 +406,14 @@ class StructuredTextEvaluatorTest {
 
 	def static Stream<Arguments> testBinaryExpressionArgumentsProvider() {
 		StreamSupport.stream(
-			DataTypeLibrary.nonUserDefinedDataTypes.filter [
-				GenericTypes.ANY_NUM.isCompatibleWith(it) || it instanceof BoolType
-			].flatMap [ type |
-				#["0", "1", "-1", "17", "-4"].reject [
-					((type instanceof AnyUnsignedType || type instanceof AnyBitType) && contains('-')) ||
-						(type instanceof BoolType && length > 1)
-				].map[type instanceof AnyRealType ? concat(".0") : it].flatMap [ value |
-					STBinaryOperator.VALUES.filter[isApplicableTo(type, type) && !range].flatMap [ operator |
+			STBinaryOperator.VALUES.flatMap [ operator |
+				ElementaryTypes.allElementaryType.filter[it instanceof AnyNumType || it instanceof AnyBitType].filter [
+					operator.isApplicableTo(it, it) && !operator.range
+				].flatMap [ type |
+					#["0", "1", "-1", "17", "-4"].reject [
+						((type instanceof AnyUnsignedType || type instanceof AnyBitType) && contains('-')) ||
+							(type instanceof BoolType && length > 1)
+					].map[type instanceof AnyRealType ? concat(".0") : it].flatMap [ value |
 						#[
 							arguments(operator, type.name, value, if(type instanceof AnyRealType) "1.0" else "1"),
 							arguments(operator, type.name, value,

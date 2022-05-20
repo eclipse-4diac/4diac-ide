@@ -142,7 +142,7 @@ public final class LinkConstraints {
 	 * @return true, if successful
 	 */
 	public static boolean typeCheck(final IInterfaceElement source, final IInterfaceElement target) {
-		return source.getType().isCompatibleWith(target.getType());
+		return target.getType().isAssignableFrom(source.getType());
 	}
 
 	/** Checks for already input connections check.

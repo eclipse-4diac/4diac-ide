@@ -63,10 +63,10 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 	@Override
 	public boolean verifyValue(final IValue value) throws DebugException {
 		if (value instanceof EvaluatorDebugValue) {
-			final INamedElement variableType = ((EvaluatorDebugValue) value).getInternalValue().getType();
-			final INamedElement valueType = this.variable.getType();
+			final INamedElement variableType = this.variable.getType();
+			final INamedElement valueType = ((EvaluatorDebugValue) value).getInternalValue().getType();
 			if (variableType instanceof DataType && valueType instanceof DataType) {
-				return ((DataType) variableType).isCompatibleWith((DataType) valueType);
+				return ((DataType) variableType).isAssignableFrom((DataType) valueType);
 			}
 			return variableType == valueType;
 		}

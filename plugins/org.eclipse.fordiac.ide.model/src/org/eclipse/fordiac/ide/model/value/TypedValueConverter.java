@@ -81,7 +81,7 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 		final Matcher matcher = TYPE_PREFIX_PATTERN.matcher(string);
 		if (matcher.find() && matcher.group(1) != null) {
 			valueType = getTypeFromPrefix(matcher.group(1));
-			if (!valueType.isCompatibleWith(type)) {
+			if (!type.isAssignableFrom(valueType)) {
 				throw new IllegalArgumentException(
 						MessageFormat.format(Messages.VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE,
 								valueType.getName(), type.getName()));
