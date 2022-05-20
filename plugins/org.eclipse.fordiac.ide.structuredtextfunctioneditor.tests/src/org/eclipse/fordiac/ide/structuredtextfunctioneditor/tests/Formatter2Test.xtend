@@ -747,7 +747,7 @@ class Formatter2Test {
 			'''
 		]
 	}
-	
+
 	@Test
 	def void oneLineTest() {
 		assertFormatted[
@@ -764,7 +764,7 @@ class Formatter2Test {
 				
 				IF int1 < int2 THEN
 					bol1 := TRUE;
-				ELSIF real2 = real3 THEN
+				ELSIF real2 = real3 THEN 
 					bol2 := FALSE;
 				ELSE
 					bol3 := 1;
@@ -790,12 +790,12 @@ class Formatter2Test {
 				ELSE
 					bol3 := 1;
 				END_IF;
-
+				
 				END_FUNCTION
 			'''
 		]
 	}
-	
+
 	@Test
 	def void multiLineTest() {
 		assertFormatted[
@@ -847,4 +847,162 @@ class Formatter2Test {
 			'''
 		]
 	}
+
+	@Test
+	def void oneLineCommentTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN //Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing
+				                                                               // elit, sed do eiusmod tempor incididunt ut labore et
+				                                                               // dolore magna aliqua.
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void oneLineToMultiLineCommentTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN //Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing
+				                                                               // elit, sed do eiusmod tempor incididunt ut labore et
+				                                                               // dolore magna aliqua. Ut enim ad minim veniam, quis
+				                                                               // nostrud exercitation ullamco laboris nisi ut aliquip
+				                                                               // ex ea commodo consequat. Duis aute irure dolor in
+				                                                               // reprehenderit
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void maxLengthLineCommentTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing eli
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing eli
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void longWordCommentTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // DasisteinlangesWortdasdiemaximaleZeilenlängeüberschreitensollohneLeerzeichen
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // DasisteinlangesWortdasdiemaximaleZeilenlängeüberschrei
+				                                                               // tensollohneLeerzeichen
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void multiLineCommentTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				IF int1 < int2 THEN(*Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+				Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit*)
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				IF int1 < int2 THEN (* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+				                     * labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+				                     * laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit *)
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+		]
+	}
+	
+	@Test
+	def void trailingLineMLCommentTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				bol1 := TRUE; (* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+				labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris*)
+				
+				bol1 := TRUE;
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				bol1 := TRUE; (* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+				               * et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris *)
+
+				bol1 := TRUE;
+				
+				END_FUNCTION
+			'''
+		]
+	}
+	
 }
