@@ -77,7 +77,6 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 		if (monitoringBaseElement instanceof MonitoringElement) {
 			final MonitoringElement monitoringElement = ((MonitoringElement) monitoringBaseElement);
 			if ((type instanceof StructuredType) && (type != IecTypes.GenericTypes.ANY_STRUCT)) {
-
 				node = createStructNode(monitoringBaseElement, type, root);
 			} else if (type != IecTypes.GenericTypes.ANY_STRUCT) {
 				node = createVariableNode(monitoringElement);
@@ -93,7 +92,6 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 
 	public static WatchValueTreeNode createStructNode(final MonitoringBaseElement monitoringBaseElement,
 			final DataType type, final WatchValueTreeNode parent) {
-
 		if (monitoringBaseElement instanceof MonitoringElement
 				&& !((MonitoringElement) monitoringBaseElement).isOffline()
 				&& !((MonitoringElement) monitoringBaseElement).getCurrentValue().equals("N/A")) { //$NON-NLS-1$
@@ -105,10 +103,9 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 
 	public static WatchValueTreeNode createOfflineNode(final MonitoringBaseElement monitoringBaseElement,
 			final DataType type, final WatchValueTreeNode parent) {
-		final String pinName = ((MonitoringElement) monitoringBaseElement).getPort().getInterfaceElement().getName();
+		final String pinName = monitoringBaseElement.getPort().getInterfaceElement().getName();
 		final WatchValueTreeNode structRoot = new WatchValueTreeNode(monitoringBaseElement, (StructuredType) type, "", //$NON-NLS-1$
-				pinName, null,
-				parent);
+				pinName, null, parent);
 
 		StructParser.buildTree((StructuredType) type, structRoot, monitoringBaseElement);
 		return structRoot;
