@@ -31,12 +31,6 @@ public final class Messages extends NLS {
 
 	public static String AbstractDeviceDeploymentCommand_DeviceName;
 
-	/** The Annotation marker access_ labe l_ error annotation. */
-	public static String AnnotationMarkerAccess_LABEL_ErrorAnnotation;
-
-	/** The Annotation marker access_ labe l_ warning annotation. */
-	public static String AnnotationMarkerAccess_LABEL_WarningAnnotation;
-
 	public static String CleanDeviceHandler_CleanDeviceError;
 
 	public static String CreateBootfilesWizard_GeneratingBootFilesForTheSelectedResources;
@@ -64,7 +58,8 @@ public final class Messages extends NLS {
 	public static String DownloadSelectionTree_Properties;
 
 	/** The Error annotation_ download error. */
-	public static String ErrorAnnotation_DownloadError;
+	public static String ErrorAnnotation_DeploymentError;
+	public static String WarningAnnotation_DeploymentWarning;
 
 	/** Title of the create bootfile wizard */
 	public static String FordiacCreateBootfilesWizard_LABEL_Window_Title;
@@ -107,12 +102,6 @@ public final class Messages extends NLS {
 
 	/** The Output_ comment. */
 	public static String Output_Comment;
-
-	/** The Output_ download error. */
-	public static String Output_DownloadError;
-
-	/** The Output_ download warning. */
-	public static String Output_DownloadWarning;
 
 	public static String Output_FormattedXML;
 

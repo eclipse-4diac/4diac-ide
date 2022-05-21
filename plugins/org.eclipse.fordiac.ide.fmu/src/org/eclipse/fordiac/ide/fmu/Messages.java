@@ -25,8 +25,6 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.fmu.messages"; //$NON-NLS-1$
 
-	public static String AnnotationMarkerAccess_LABEL_ErrorAnnotation;
-	public static String AnnotationMarkerAccess_LABEL_WarningAnnotation;
 	public static String CreateFMUWizard_FMUCreationError;
 	public static String CreateFMUWizardPage_IncludeTheFollowingLibrariesInExportedFMU;
 	public static String CreateFMUWizardPage_NoLibrariesSelectedToInclude;

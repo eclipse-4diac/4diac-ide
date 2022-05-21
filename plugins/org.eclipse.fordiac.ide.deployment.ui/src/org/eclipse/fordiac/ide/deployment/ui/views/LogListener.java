@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2009, 2014 Profactor GbmH, fortiss GmbH
+ * Copyright (c) 2008, 2021 Profactor GbmH, fortiss GmbH,
+ *                          Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - cleanup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.ui.views;
 
@@ -49,118 +51,85 @@ public class LogListener implements IDocumentListener {
 		this.annotationModel = annotationModel;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.eclipse.jface.text.IDocumentListener#documentAboutToBeChanged(org.eclipse
-	 * .jface.text.DocumentEvent)
-	 */
 	@Override
 	public void documentAboutToBeChanged(final DocumentEvent event) {
 		// not used
 	}
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see
-	 * org.eclipse.jface.text.IDocumentListener#documentChanged(org.eclipse.jface.
-	 * text.DocumentEvent)
-	 */
 	@Override
 	public void documentChanged(final DocumentEvent event) {
 		try {
 			final IDocument doc = event.getDocument();
-			final FindReplaceDocumentAdapter search = new FindReplaceDocumentAdapter(doc);
-			int offset = event.getOffset();
 			if (event.getDocument().getLength() > 0) {
-				IRegion region;
-				do {
-					// find beginning of "Reason" Argument in Mgr-Response, if
-					// any
-					region = search.find(offset, "Reason", true, true, true, //$NON-NLS-1$
-							false);
-					if (region != null) {
-						// find end of "Reason" Argument in Mgr-Response = end
-						// of "Response" tag
-						final IRegion msg = search.find(region.getOffset(), "/", //$NON-NLS-1$
-								true, true, false, true);
-						String s;
-						ErrorAnnotation errorAnnotation;
-
-						if (msg != null) {
-							// extract Reason Code from Mgr-Response
-							s = doc.get(region.getOffset() + 8, msg.getOffset() - region.getOffset() - 10);
-							errorAnnotation = new ErrorAnnotation(doc.getLineOfOffset(region.getOffset()),
-									MessageFormat.format(Messages.LogListener_ReturnedError, s));
-						} else {
-							errorAnnotation = new ErrorAnnotation(doc.getLineOfOffset(region.getOffset()),
-									Messages.LogListener_ErrorAnnotation);
-						}
-						annotationModel.addAnnotation(errorAnnotation,
-								new Position(region.getOffset(), region.getLength()));
-						offset = region.getOffset() + 6;
-					}
-				} while (region != null);
-				do {
-					// find beginning of "Reason" Argument in Mgr-Response, if
-					// any
-					region = search.find(offset, "Error", true, true, true, //$NON-NLS-1$
-							false);
-					if (region != null) {
-						// find end of "Reason" Argument in Mgr-Response = end
-						// of "Response" tag
-						final IRegion msg = search.find(region.getOffset(), "/", //$NON-NLS-1$
-								true, true, false, true);
-						String s;
-						ErrorAnnotation errorAnnotation;
-
-						if (msg != null) {
-							// extract Reason Code from Mgr-Response
-							s = doc.get(region.getOffset() + 8, msg.getOffset() - region.getOffset() - 10);
-							errorAnnotation = new ErrorAnnotation(doc.getLineOfOffset(region.getOffset()),
-									MessageFormat.format(Messages.LogListener_ReturnedError, s));
-						} else {
-							errorAnnotation = new ErrorAnnotation(doc.getLineOfOffset(region.getOffset()),
-									Messages.LogListener_ErrorAnnotation);
-						}
-						annotationModel.addAnnotation(errorAnnotation,
-								new Position(region.getOffset(), region.getLength()));
-						offset = region.getOffset() + 6;
-					}
-				} while (region != null);
-				do {
-					// find beginning of "Warning" Argument in Mgr-Response, if
-					// any
-					region = search.find(offset, "Warning", true, true, true, //$NON-NLS-1$
-							false);
-					if (region != null) {
-						// find end of "Reason" Argument in Mgr-Response = end
-						// of "Response" tag
-						final IRegion msg = search.find(region.getOffset(), "/", //$NON-NLS-1$
-								true, true, false, true);
-						String s;
-						WarningAnnotation warningAnnotation;
-
-						if (msg != null) {
-							// extract Reason Code from Mgr-Response
-							s = doc.get(region.getOffset(), msg.getOffset() - region.getOffset() - 10);
-							warningAnnotation = new WarningAnnotation(doc.getLineOfOffset(region.getOffset()),
-									MessageFormat.format(Messages.LogListener_ReturnedError, s));
-						} else {
-							warningAnnotation = new WarningAnnotation(doc.getLineOfOffset(region.getOffset()),
-									Messages.LogListener_MalformedError);
-						}
-						annotationModel.addAnnotation(warningAnnotation,
-								new Position(region.getOffset(), region.getLength()));
-						offset = region.getOffset() + 7;
-					}
-				} while (region != null);
+				final int offset = event.getOffset();
+				final FindReplaceDocumentAdapter search = new FindReplaceDocumentAdapter(doc);
+				processErrors(doc, search, offset, "Reason"); //$NON-NLS-1$
+				processErrors(doc, search, offset, "Error"); //$NON-NLS-1$
+				processWarnings(doc, search, offset);
 			}
 		} catch (final BadLocationException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
-
 	}
+
+	public void processErrors(final IDocument doc, final FindReplaceDocumentAdapter search, int offset,
+			final String errorIdentifer)
+					throws BadLocationException {
+		IRegion region;
+		do {
+			// find beginning of "Error" Argument in Mgr-Response, if any
+			region = search.find(offset, errorIdentifer, true, true, true, false);
+			if (region != null) {
+				annotationModel.addAnnotation(createErrorAnnotation(doc, search, region),
+						new Position(region.getOffset(), region.getLength()));
+				offset = region.getOffset() + 6;
+			}
+		} while (region != null);
+	}
+
+	public void processWarnings(final IDocument doc, final FindReplaceDocumentAdapter search, int offset)
+			throws BadLocationException {
+		IRegion region;
+		do {
+			// find beginning of "Warning" Argument in Mgr-Response, if any
+			region = search.find(offset, "Warning", true, true, true, //$NON-NLS-1$
+					false);
+			if (region != null) {
+				annotationModel.addAnnotation(createWarningAnnotation(doc, search, region),
+						new Position(region.getOffset(), region.getLength()));
+				offset = region.getOffset() + 7;
+			}
+		} while (region != null);
+	}
+
+	public static AbstractDeploymentAnnotations createErrorAnnotation(final IDocument doc,
+			final FindReplaceDocumentAdapter search, final IRegion region) throws BadLocationException {
+		final IRegion msg = extractMessage(search, region);
+		if (msg != null) {
+			// extract Reason Code from Mgr-Response
+			final String s = doc.get(region.getOffset() + 8, msg.getOffset() - region.getOffset() - 10);
+			return new ErrorAnnotation(doc.getLineOfOffset(region.getOffset()),
+					MessageFormat.format(Messages.LogListener_ReturnedError, s));
+		}
+		return new ErrorAnnotation(doc.getLineOfOffset(region.getOffset()), Messages.LogListener_ErrorAnnotation);
+	}
+
+	private static AbstractDeploymentAnnotations createWarningAnnotation(final IDocument doc,
+			final FindReplaceDocumentAdapter search, final IRegion region) throws BadLocationException {
+		final IRegion msg = extractMessage(search, region);
+		if (msg != null) {
+			// extract Reason Code from Mgr-Response
+			final String s = doc.get(region.getOffset(), msg.getOffset() - region.getOffset() - 10);
+			return new WarningAnnotation(doc.getLineOfOffset(region.getOffset()),
+					MessageFormat.format(Messages.LogListener_ReturnedError, s));
+		}
+		return new WarningAnnotation(doc.getLineOfOffset(region.getOffset()), Messages.LogListener_MalformedError);
+	}
+
+	public static IRegion extractMessage(final FindReplaceDocumentAdapter search, final IRegion region)
+			throws BadLocationException {
+		// find end of "Reason" Argument in Mgr-Response = end of "Response" tag
+		return search.find(region.getOffset(), "/", true, true, false, true); //$NON-NLS-1$
+	}
+
 }

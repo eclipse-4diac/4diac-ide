@@ -168,8 +168,8 @@ public class Output extends ViewPart implements IDeploymentListener {
 	}
 
 	/** The ERRO r_ type. */
-	private static final String ERROR_TYPE = Messages.Output_DownloadError;
-	private static final String WARNIGN_TYPE = Messages.Output_DownloadWarning;
+	private static final String ERROR_TYPE = ErrorAnnotation.DEPLOYMENT_ERROR_TYPE;
+	private static final String WARNIGN_TYPE = WarningAnnotation.DEPLOYMENT_WARNING_TYPE;
 	private static final int OVERVIEW_RULER_WIDTH = 12;
 	private static final int ANNOTATION_RULES_COLUMN_WIDTH = 16;
 
@@ -255,18 +255,14 @@ public class Output extends ViewPart implements IDeploymentListener {
 		@Override
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public String getHoverInfo(final ISourceViewer sourceViewer, final int lineNumber) {
-
 			final Map annotations = new HashMap();
-
 			for (final Iterator iterator = fAnnotationModel.getAnnotationIterator(); iterator.hasNext();) {
 				final Annotation annotation = (Annotation) iterator.next();
-				if (annotation instanceof ErrorAnnotation) {
-					final ErrorAnnotation err = (ErrorAnnotation) annotation;
+				if (annotation instanceof AbstractDeploymentAnnotations) {
+					final AbstractDeploymentAnnotations err = (AbstractDeploymentAnnotations) annotation;
 					annotations.put(Integer.toString(err.getLine()), err.getText());
 				}
-
 			}
-
 			return (String) annotations.get(Integer.toString(lineNumber));
 		}
 
