@@ -199,7 +199,7 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 
 
 	private void addWatchesAdapters() {
-		MonitoringManager.getInstance().addMonitoringListener(listener);
+		MonitoringManager.getInstance().registerMonitoringListener(listener);
 	}
 
 	/** Contribute to action bars. */
@@ -234,7 +234,7 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 
 	@Override
 	public void dispose() {
-		MonitoringManager.getInstance().removeMonitoringListener(listener);
+		MonitoringManager.getInstance().deRegisterMonitoringListener(listener);
 		super.dispose();
 	}
 
@@ -358,7 +358,7 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 								.getMonitoringElement(interfaceElement);
 						forceMenuItem
 						.setEnabled(!(interfaceElement.getType() instanceof EventType) &&  !((WatchValueTreeNode) selection
-										.getFirstElement()).hasChildren());
+								.getFirstElement()).hasChildren());
 						clearForceMenuItem.setEnabled(
 								!(interfaceElement.getType() instanceof EventType)
 								&& ((MonitoringElement) element).isForce());

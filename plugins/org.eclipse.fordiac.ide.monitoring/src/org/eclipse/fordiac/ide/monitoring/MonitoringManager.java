@@ -101,14 +101,8 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	public void addMonitoringElement(final MonitoringBaseElement element) {
 		final PortElement port = element.getPort();
 		final SystemMonitoringData data = getSystemMonitoringData(port.getSystem());
-
 		data.addMonitoringElement(element);
-
 		notifyAddPort(port);
-
-		if (element instanceof MonitoringElement) {
-			notifyWatchesAdapterPortAdded(port);
-		}
 	}
 
 	/**
@@ -118,12 +112,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	 */
 	public void removeMonitoringElement(final MonitoringBaseElement element) {
 		final SystemMonitoringData data = getSystemMonitoringData(element.getPort().getSystem());
-
 		data.removeMonitoringElement(element);
-
-		if (element instanceof MonitoringElement) {
-			notifyWatchesAdapterPortRemoved(element.getPort());
-		}
 		notifyRemovePort(element.getPort());
 	}
 

@@ -102,6 +102,10 @@ public abstract class AbstractMonitoringManager {
 		}
 	}
 
+	public void deRegisterMonitoringListener(final IMonitoringListener adapter) {
+		monitoringListeners.remove(adapter);
+	}
+
 	/**
 	 * Notify add port.
 	 *
@@ -135,31 +139,8 @@ public abstract class AbstractMonitoringManager {
 		}
 	}
 
-	private final List<IMonitoringListener> monitoringListener = new ArrayList<>();
-
-	public void addMonitoringListener(final IMonitoringListener adapter) {
-		if (!monitoringListener.contains(adapter)) {
-			monitoringListener.add(adapter);
-		}
-	}
-
-	public void removeMonitoringListener(final IMonitoringListener adapter) {
-		monitoringListener.remove(adapter);
-	}
-
-	public void notifyWatchesAdapterPortAdded(final PortElement port) {
-		for (final IMonitoringListener adapter : monitoringListener) {
-			adapter.notifyAddPort(port);
-		}
-	}
-	public void notifyWatchesAdapterPortRemoved(final PortElement port) {
-		for (final IMonitoringListener adapter : monitoringListener) {
-			adapter.notifyRemovePort(port);
-		}
-	}
-
 	public void notifyWatchesChanged() {
-		for (final IMonitoringListener adapter : monitoringListener) {
+		for (final IMonitoringListener adapter : monitoringListeners) {
 			adapter.notifyWatchesChanged();
 		}
 	}
