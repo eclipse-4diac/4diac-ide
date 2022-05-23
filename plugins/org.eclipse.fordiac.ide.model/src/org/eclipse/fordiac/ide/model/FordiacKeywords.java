@@ -147,6 +147,7 @@ public final class FordiacKeywords {
 	@Keyword(KeywordTypes.TIME_UNIT)
 	public static final String NANOSECOND = "NS"; //$NON-NLS-1$
 
+	/** @brief Keep in sync with ST editor keywords */
 	@Keyword(KeywordTypes.STRUCTURED_TEXT)
 	public static final String EXPONENT = "E"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.STRUCTURED_TEXT)
@@ -209,6 +210,120 @@ public final class FordiacKeywords {
 	public static final String MOD = "MOD"; //$NON-NLS-1$
 	@Keyword(KeywordTypes.STRUCTURED_TEXT)
 	public static final String NOT = "NOT"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String ABSTRACT = "ABSTRACT;"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String ALGORITHM = "ALGORITHM"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_ALGORITHM = "END_ALGORITHM"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String ACTION = "ACTION"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_ACTION = "END_ACTION"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String CLASS = "CLASS"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_CLASS = "END_CLASS"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String CONFIGURATION = "CONFIGURATION"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_CONFIGURATION = "END_CONFIGURATION"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String FUNCTION = "FUNCTION"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_FUNCTION = "END_FUNCTION"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String FUNCTION_BLOCK = "FUNCTION_BLOCK"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_FUNCTION_BLOCK = "END_FUNCTION_BLOCK"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String INTERFACE = "INTERFACE"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_INTERFACE = "END_INTERFACE"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String METHOD = "METHOD"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_METHOD = "END_METHOD"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String NAMESPACE = "NAMESPACE"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_NAMESPACE = "END_NAMESPACE"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String PROGRAM = "PROGRAM"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_PROGRAM = "END_PROGRAM"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String RESOURCE = "RESOURCE"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_RESOURCE = "END_RESOURCE"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String STEP = "STEP"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_STEP = "END_STEP"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String STRUCT = "STRUCT"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_STRUCT = "END_STRUCT"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String TRANSITION = "TRANSITION"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_TRANSITION = "END_TRANSITION"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String TYPE = "TYPE"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String END_TYPE = "END_TYPE"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String EXTENDS = "EXTENDS"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String FINAL = "FINAL"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String IMPLEMENTS = "IMPLEMENTS"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String INITIAL_STEP = "INITIAL_STEP"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String INTERVAL = "INTERVAL"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String RETAIN = "RETAIN"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String NON_RETAIN = "NON_RETAIN"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String NULL = "NULL"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String ON = "ON"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String OVERLAP = "OVERLAP"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String OVERRIDE = "OVERRIDE"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String PRIORITY = "PRIORITY"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String READ_ONLY = "READ_ONLY"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String READ_WRITE = "READ_WRITE"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String REF = "REF"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String REF_TO = "REF_TO"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String SINGLE = "SINGLE"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String THIS = "THIS"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String VAR_ACCESS = "VAR_ACCESS"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String VAR_CONFIG = "VAR_CONFIG"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String VAR_EXTERNAL = "VAR_EXTERNAL"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String VAR_GLOBAL = "VAR_GLOBAL"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String VAR_INPUT = "VAR_INPUT"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String VAR_IN_OUT = "VAR_IN_OUT"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String VAR_OUTPUT = "VAR_OUTPUT"; //$NON-NLS-1$
+	@Keyword(KeywordTypes.STRUCTURED_TEXT)
+	public static final String VAR_TEMP = "VAR_TEMP"; //$NON-NLS-1$
 
 	@ModelString
 	public static final String VARIABLE_INTERNAL = "InternalVar1"; //$NON-NLS-1$
