@@ -40,7 +40,7 @@ public final class StructParser {
 		final int END = struct.length() - 1;
 
 		boolean process = true;
-		int innerStructCnt = 0;
+		int innerCnt = 0;
 		int frameStart = START;
 
 		for (int i = START; i < END; i++) {
@@ -53,14 +53,26 @@ public final class StructParser {
 					frameStart = i + 1; // switch to next frame
 				}
 				break;
+			case '$':
+				i++; // skip escaped chars
+				break;
+			case '\'':
+			case '\"':
+				if (innerCnt != 0) {
+					process = true;
+					innerCnt = 0;
+					break;
+				}
+			case '[':
 			case '(': // start of inner struct
 				// skip the whole inner struct since this will be handled recursively
 				process = false;
-				innerStructCnt++;
+				innerCnt++;
 				break;
+			case ']':
 			case ')': // end of inner struct
-				innerStructCnt--;
-				if (innerStructCnt == 0) {
+				innerCnt--;
+				if (innerCnt == 0) {
 					process = true;
 				}
 				break;
@@ -98,20 +110,30 @@ public final class StructParser {
 				variable,
 				parent
 				);
-
+		
 		if (isStructLiteral(value)) {
 			// recursive call
 			buildTree(node, (StructuredType) variable.getType(), value);
+		} else if (isArrayLiteral(value)) {
+			// possibility to parse array
 		}
 
 		parent.addChild(node);
 	}
 
+	private static boolean isArrayLiteral(final String value) {
+		return isDerivedTypeLiteral(value, '[', ']');
+	}
+
 	private static boolean isStructLiteral(final String value) {
+		return isDerivedTypeLiteral(value, '(', ')');
+	}
+	
+	private static boolean isDerivedTypeLiteral(final String value, final char opening, final char closing) {
 		return !value.isBlank() &&
 				value.length() >= 2 &&
-				value.charAt(0) == '(' &&
-				value.charAt(value.length() - 1) == ')';
+				value.charAt(0) == opening &&
+				value.charAt(value.length() - 1) == closing;
 	}
 
 	private static VarDeclaration findVarDeclaration(final StructuredType structType, final String varName) {
