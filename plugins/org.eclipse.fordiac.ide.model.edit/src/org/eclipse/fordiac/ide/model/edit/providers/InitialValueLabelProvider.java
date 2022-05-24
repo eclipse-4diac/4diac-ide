@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.edit.providers;
 
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -28,7 +29,8 @@ public class InitialValueLabelProvider extends ColumnLabelProvider {
 			if (hasInitalValue(element)) {
 				return varDec.getValue().getValue();
 			}
-			return VariableOperations.newVariable(varDec).getValue().toString();
+			return (IecTypes.GenericTypes.isAnyType(varDec.getType())) ? "" //$NON-NLS-1$
+					: VariableOperations.newVariable(varDec).getValue().toString();
 		}
 		return super.getText(element);
 	}
