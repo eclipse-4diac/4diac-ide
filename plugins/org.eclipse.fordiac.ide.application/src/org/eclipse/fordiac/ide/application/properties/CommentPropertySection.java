@@ -66,6 +66,9 @@ public class CommentPropertySection extends AbstractSection {
 	private TableViewer outputCommentsViewer;
 	private TabbedPropertySheetPage tabbedPropertySheetPage;
 
+	private CommentLabelProvider commentLabelProvider;
+	private InitialValueLabelProvider initialValueLabelProvider;
+
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		this.tabbedPropertySheetPage = tabbedPropertySheetPage;
@@ -101,9 +104,10 @@ public class CommentPropertySection extends AbstractSection {
 		final String[] cols = new String[] { FordiacMessages.Name, FordiacMessages.Type, FordiacMessages.InitialValue,
 				FordiacMessages.Comment };
 		tableViewer.setColumnProperties(cols);
+
 		tableViewer
-		.setCellEditors(new CellEditor[] { null, null,
-				new TextCellEditor(table), new TextCellEditor(table) });
+		.setCellEditors(new CellEditor[] { null, null, new TextCellEditor(table), new TextCellEditor(table) });
+
 		tableViewer.setContentProvider(contentProvider);
 
 		table.setHeaderVisible(true);
@@ -119,12 +123,15 @@ public class CommentPropertySection extends AbstractSection {
 		col2.getColumn().setText(FordiacMessages.Type);
 
 		final TableViewerColumn col3 = new TableViewerColumn(tableViewer, SWT.NONE);
-		col3.setLabelProvider(new InitialValueLabelProvider());
+		initialValueLabelProvider = new InitialValueLabelProvider();
+		col3.setLabelProvider(initialValueLabelProvider);
 		col3.getColumn().setText(FordiacMessages.InitialValue);
 
 		final TableViewerColumn col4 = new TableViewerColumn(tableViewer, SWT.NONE);
-		col4.setLabelProvider(new CommentLabelProvider());
+		commentLabelProvider = new CommentLabelProvider();
+		col4.setLabelProvider(commentLabelProvider);
 		col4.getColumn().setText(FordiacMessages.Comment);
+
 	}
 
 	private static TableLayout createTableLayout() {
@@ -231,15 +238,11 @@ public class CommentPropertySection extends AbstractSection {
 		@Override
 		public Object getValue(final Object element, final String property) {
 			if (element instanceof VarDeclaration) {
-				final VarDeclaration varDec = (VarDeclaration) element;
 				switch (property) {
 				case INITIAL_VALUE:
-					if (varDec.getValue() != null) {
-						return varDec.getValue().getValue();
-					}
-					return ""; //$NON-NLS-1$
+					return initialValueLabelProvider.getText(element);
 				case COMMENT:
-					return varDec.getComment();
+					return commentLabelProvider.getText(element);
 				default:
 					break;
 				}
@@ -269,7 +272,6 @@ public class CommentPropertySection extends AbstractSection {
 				}
 			}
 		}
-
 	}
 
 	private static class InputViewerContentProvider implements IStructuredContentProvider {
