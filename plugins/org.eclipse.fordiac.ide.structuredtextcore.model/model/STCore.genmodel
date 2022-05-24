@@ -44,6 +44,12 @@
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/D"/>
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/L"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//STAccessSpecifier">
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STAccessSpecifier/PUBLIC"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STAccessSpecifier/PROTECTED"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STAccessSpecifier/PRIVATE"/>
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STAccessSpecifier/INTERNAL"/>
+    </genEnums>
     <genDataTypes ecoreDataType="STCore.ecore#//STDate"/>
     <genDataTypes ecoreDataType="STCore.ecore#//STTime"/>
     <genDataTypes ecoreDataType="STCore.ecore#//STTimeOfDay"/>

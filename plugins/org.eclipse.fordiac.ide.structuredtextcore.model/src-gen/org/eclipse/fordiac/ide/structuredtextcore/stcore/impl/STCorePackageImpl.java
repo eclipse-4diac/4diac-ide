@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAccessSpecifier;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
@@ -438,6 +439,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EEnum stMultiBitAccessSpecifierEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum stAccessSpecifierEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1805,6 +1813,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
+	public EEnum getSTAccessSpecifier() {
+		return stAccessSpecifierEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EDataType getSTDate() {
 		return stDateEDataType;
 	}
@@ -2051,6 +2069,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stBinaryOperatorEEnum = createEEnum(ST_BINARY_OPERATOR);
 		stUnaryOperatorEEnum = createEEnum(ST_UNARY_OPERATOR);
 		stMultiBitAccessSpecifierEEnum = createEEnum(ST_MULTI_BIT_ACCESS_SPECIFIER);
+		stAccessSpecifierEEnum = createEEnum(ST_ACCESS_SPECIFIER);
 
 		// Create data types
 		stDateEDataType = createEDataType(ST_DATE);
@@ -2438,6 +2457,12 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.W);
 		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.D);
 		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.L);
+
+		initEEnum(stAccessSpecifierEEnum, STAccessSpecifier.class, "STAccessSpecifier"); //$NON-NLS-1$
+		addEEnumLiteral(stAccessSpecifierEEnum, STAccessSpecifier.PUBLIC);
+		addEEnumLiteral(stAccessSpecifierEEnum, STAccessSpecifier.PROTECTED);
+		addEEnumLiteral(stAccessSpecifierEEnum, STAccessSpecifier.PRIVATE);
+		addEEnumLiteral(stAccessSpecifierEEnum, STAccessSpecifier.INTERNAL);
 
 		// Initialize data types
 		initEDataType(stDateEDataType, LocalDate.class, "STDate", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

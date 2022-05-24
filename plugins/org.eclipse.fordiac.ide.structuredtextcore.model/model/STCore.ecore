@@ -486,4 +486,10 @@
   <eClassifiers xsi:type="ecore:EDataType" name="STTimeOfDay" instanceClassName="java.time.LocalTime"/>
   <eClassifiers xsi:type="ecore:EDataType" name="STDateAndTime" instanceClassName="java.time.LocalDateTime"/>
   <eClassifiers xsi:type="ecore:EDataType" name="STString" instanceClassName="org.eclipse.fordiac.ide.structuredtextcore.stcore.STString"/>
+  <eClassifiers xsi:type="ecore:EEnum" name="STAccessSpecifier">
+    <eLiterals name="PUBLIC"/>
+    <eLiterals name="PROTECTED"/>
+    <eLiterals name="PRIVATE"/>
+    <eLiterals name="INTERNAL"/>
+  </eClassifiers>
 </ecore:EPackage>

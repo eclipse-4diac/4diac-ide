@@ -1797,6 +1797,16 @@ public interface STCorePackage extends EPackage {
 	int ST_MULTI_BIT_ACCESS_SPECIFIER = 48;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAccessSpecifier <em>ST Access Specifier</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STAccessSpecifier
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTAccessSpecifier()
+	 * @generated
+	 */
+	int ST_ACCESS_SPECIFIER = 49;
+
+	/**
 	 * The meta object id for the '<em>ST Date</em>' data type.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1804,7 +1814,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDate()
 	 * @generated
 	 */
-	int ST_DATE = 49;
+	int ST_DATE = 50;
 
 	/**
 	 * The meta object id for the '<em>ST Time</em>' data type.
@@ -1814,7 +1824,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTime()
 	 * @generated
 	 */
-	int ST_TIME = 50;
+	int ST_TIME = 51;
 
 	/**
 	 * The meta object id for the '<em>ST Time Of Day</em>' data type.
@@ -1824,7 +1834,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTimeOfDay()
 	 * @generated
 	 */
-	int ST_TIME_OF_DAY = 51;
+	int ST_TIME_OF_DAY = 52;
 
 	/**
 	 * The meta object id for the '<em>ST Date And Time</em>' data type.
@@ -1834,7 +1844,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDateAndTime()
 	 * @generated
 	 */
-	int ST_DATE_AND_TIME = 52;
+	int ST_DATE_AND_TIME = 53;
 
 	/**
 	 * The meta object id for the '<em>ST String</em>' data type.
@@ -1844,7 +1854,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTString()
 	 * @generated
 	 */
-	int ST_STRING = 53;
+	int ST_STRING = 54;
 
 
 	/**
@@ -3185,6 +3195,16 @@ public interface STCorePackage extends EPackage {
 	EEnum getSTMultiBitAccessSpecifier();
 
 	/**
+	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAccessSpecifier <em>ST Access Specifier</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>ST Access Specifier</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STAccessSpecifier
+	 * @generated
+	 */
+	EEnum getSTAccessSpecifier();
+
+	/**
 	 * Returns the meta object for data type '{@link java.time.LocalDate <em>ST Date</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4366,6 +4386,16 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EEnum ST_MULTI_BIT_ACCESS_SPECIFIER = eINSTANCE.getSTMultiBitAccessSpecifier();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAccessSpecifier <em>ST Access Specifier</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STAccessSpecifier
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTAccessSpecifier()
+		 * @generated
+		 */
+		EEnum ST_ACCESS_SPECIFIER = eINSTANCE.getSTAccessSpecifier();
 
 		/**
 		 * The meta object literal for the '<em>ST Date</em>' data type.

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies GmbH, 
+ * Copyright (c) 2021 - 2022 Primetals Technologies GmbH, 
  *               2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  * Contributors:
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
+ * 		 - add reserved but currently not used keywords
  *   Martin Jobst
  *       - access expressions and assignment lvalues
  *       - literal data types
@@ -20,7 +21,6 @@
 grammar org.eclipse.fordiac.ide.structuredtextcore.STCore hidden(WS, ML_COMMENT, SL_COMMENT)
 
 import "http://www.eclipse.org/fordiac/ide/structuredtextcore/STCore"
-
 import "http://www.eclipse.org/emf/2002/Ecore" as ecore
 import "org.eclipse.fordiac.ide.model.datatype" as datatype
 import "org.eclipse.fordiac.ide.model.libraryElement" as libraryElement
@@ -56,9 +56,10 @@ STVarInOutDeclarationBlock returns STVarInOutDeclarationBlock:
 STVarDeclaration:
 	{STVarDeclaration}
 	name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
-	ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')? (type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
+	ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
+	(type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
 	defaultValue=STInitializerExpression)? ';';
-	
+
 STInitializerExpression:
 	STElementaryInitializerExpression | STArrayInitializerExpression;
 
@@ -69,8 +70,9 @@ STArrayInitializerExpression:
 	'[' values+=STArrayInitElement (',' values+=STArrayInitElement)* ']';
 
 STArrayInitElement:
-	indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (',' initExpressions+=STInitializerExpression)* ')')?;
-	
+	indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (','
+	initExpressions+=STInitializerExpression)* ')')?;
+
 STStatement:
 	(STIfStatement |
 	STCaseStatement |
@@ -85,28 +87,22 @@ STStatement:
 	{STNop} ';';
 
 STAssignmentStatement:
-	left=STAccessExpression ':=' right=STExpression
-;
+	left=STAccessExpression ':=' right=STExpression;
 
 STCallStatement:
-	call=STAccessExpression
-;
+	call=STAccessExpression;
 
 STCallArgument:
-	STCallUnnamedArgument | STCallNamedInputArgument | STCallNamedOutputArgument
-;
+	STCallUnnamedArgument | STCallNamedInputArgument | STCallNamedOutputArgument;
 
 STCallUnnamedArgument:
-	argument=STExpression
-;
+	argument=STExpression;
 
 STCallNamedInputArgument:
-	parameter=[libraryElement::INamedElement] ':=' argument=STExpression 
-;
+	parameter=[libraryElement::INamedElement] ':=' argument=STExpression;
 
 STCallNamedOutputArgument:
-	not?='NOT'? parameter=[libraryElement::INamedElement] '=>' argument=STExpression 
-;
+	not?='NOT'? parameter=[libraryElement::INamedElement] '=>' argument=STExpression;
 
 STIfStatement:
 	'IF' condition=STExpression 'THEN' statements+=STStatement* elseifs+=(STElseIfPart)* (else=STElsePart)? 'END_IF';
@@ -118,7 +114,7 @@ STCaseStatement:
 	'CASE' selector=STExpression 'OF' cases+=STCaseCases+ (else=STElsePart)? 'END_CASE';
 
 STCaseCases:
-	conditions+=STExpression (',' conditions+=STExpression)* ':'=> statements+=STStatement*;
+	conditions+=STExpression (',' conditions+=STExpression)* ':' =>statements+=STStatement*;
 
 STElsePart:
 	{STElsePart} 'ELSE' statements+=STStatement*;
@@ -142,43 +138,63 @@ STRepeatStatement:
 STExpression returns STExpression:
 	STSubrangeExpression;
 
-enum SubrangeOperator returns STBinaryOperator: Range='..';
+enum SubrangeOperator returns STBinaryOperator:
+	Range='..';
+
 STSubrangeExpression returns STExpression:
 	STOrExpression (({STBinaryExpression.left=current} op=SubrangeOperator) right=STOrExpression)*;
 
-enum OrOperator returns STBinaryOperator: OR;
+enum OrOperator returns STBinaryOperator:
+	OR;
+
 STOrExpression returns STExpression:
 	STXorExpression (({STBinaryExpression.left=current} op=OrOperator) right=STXorExpression)*;
 
-enum XorOperator returns STBinaryOperator: XOR;
+enum XorOperator returns STBinaryOperator:
+	XOR;
+
 STXorExpression returns STExpression:
 	STAndExpression (({STBinaryExpression.left=current} op=XorOperator) right=STAndExpression)*;
 
-enum AndOperator returns STBinaryOperator: AND | AMPERSAND='&';
+enum AndOperator returns STBinaryOperator:
+	AND | AMPERSAND='&';
+
 STAndExpression returns STExpression:
 	STEqualityExpression (({STBinaryExpression.left=current} op=AndOperator) right=STEqualityExpression)*;
 
-enum EqualityOperator returns STBinaryOperator: EQ='=' | NE='<>';
+enum EqualityOperator returns STBinaryOperator:
+	EQ='=' | NE='<>';
+
 STEqualityExpression returns STExpression:
 	STComparisonExpression (({STBinaryExpression.left=current} op=EqualityOperator) right=STComparisonExpression)*;
 
-enum CompareOperator returns STBinaryOperator: LT='<' | LE='<=' | GT='>' | GE='>=';
+enum CompareOperator returns STBinaryOperator:
+	LT='<' | LE='<=' | GT='>' | GE='>=';
+
 STComparisonExpression returns STExpression:
 	STAddSubExpression (({STBinaryExpression.left=current} op=CompareOperator) right=STAddSubExpression)*;
 
-enum AddSubOperator returns STBinaryOperator: ADD='+' | SUB='-';
+enum AddSubOperator returns STBinaryOperator:
+	ADD='+' | SUB='-';
+
 STAddSubExpression returns STExpression:
 	STMulDivModExpression (({STBinaryExpression.left=current} op=AddSubOperator) right=STMulDivModExpression)*;
 
-enum MulDivModOperator returns STBinaryOperator: MUL='*' | DIV='/' | MOD;
+enum MulDivModOperator returns STBinaryOperator:
+	MUL='*' | DIV='/' | MOD;
+
 STMulDivModExpression returns STExpression:
 	STPowerExpression (({STBinaryExpression.left=current} op=MulDivModOperator) right=STPowerExpression)*;
 
-enum PowerOperator returns STBinaryOperator: POWER='**';
+enum PowerOperator returns STBinaryOperator:
+	POWER='**';
+
 STPowerExpression returns STExpression:
 	STUnaryExpression (({STBinaryExpression.left=current} op=PowerOperator) right=STUnaryExpression)*;
 
-enum UnaryOperator returns STUnaryOperator: MINUS='-' | PLUS='+' | NOT;
+enum UnaryOperator returns STUnaryOperator:
+	MINUS='-' | PLUS='+' | NOT;
+
 STUnaryExpression returns STExpression:
 	=> STAccessExpression | ({STUnaryExpression} op=UnaryOperator expression=STUnaryExpression);
 
@@ -191,7 +207,8 @@ STPrimaryExpression returns STExpression:
 	'(' STExpression ')' | STFeatureExpression | STLiteralExpressions;
 
 STFeatureExpression returns STExpression:
-	{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] ( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
+	{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] (=>call?='(' (parameters+=STCallArgument
+	(',' parameters+=STCallArgument)*)? ')')?;
 
 STFeatureName:
 	ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD' | 'D' | 'DT' | 'LD';
@@ -200,7 +217,8 @@ enum STMultiBitAccessSpecifier:
 	L='%L' | D='%D' | W='%W' | B='%B' | X='%X';
 
 STMultibitPartialExpression returns STExpression:
-	{STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? (index=INT | ('(' expression=STExpression ')'));
+	{STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? (index=INT | ('(' expression=STExpression ')'))
+;
 
 STLiteralExpressions returns STExpression:
 	STNumericLiteral |
@@ -220,8 +238,7 @@ STNumericLiteral:
 STDateLiteralType:
 	STDateType |
 	'D' |
-	'LD'
-;
+	'LD';
 
 STDateLiteral:
 	type=[datatype::DataType|STDateLiteralType] '#' value=Date;
@@ -229,8 +246,7 @@ STDateLiteral:
 STTimeLiteralType:
 	STAnyDurationType |
 	'T' |
-	'LT'
-;
+	'LT';
 
 STTimeLiteral:
 	type=[datatype::DataType|STTimeLiteralType] '#' value=Time;
@@ -269,15 +285,13 @@ STTimeOfDayType:
 	'TIME_OF_DAY' |
 	'LTIME_OF_DAY' |
 	'TOD' |
-	'LTOD'
-;
+	'LTOD';
 
 STDateAndTimeType:
 	'DATE_AND_TIME' |
 	'LDATE_AND_TIME' |
 	'DT' |
-	'LDT'
-;
+	'LDT';
 
 STAnyCharsType:
 	'STRING' | 'WSTRING' | 'CHAR' | 'WCHAR';
@@ -286,23 +300,34 @@ QualifiedName:
 	ID ('.' ID)*;
 
 BoolLiteral returns ecore::EJavaObject:
-	'TRUE' | 'FALSE'
-;
+	'TRUE' | 'FALSE';
 
 Number returns ecore::EJavaObject:
-	('+' | '-')? INT (=> '.' (EXT_INT | INT))?;
+	('+' | '-')? INT (=>'.' (EXT_INT | INT))?;
 
 Date returns STDate:
 	INT '-' INT '-' INT;
 
 DateAndTime returns STDateAndTime:
-	INT '-' INT '-' INT '-' INT ':' INT ':' INT (=> '.' INT)?;
+	INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?;
 
 TimeOfDay returns STTimeOfDay:
-	INT ':' INT ':' INT (=> '.' INT)?;
+	INT ':' INT ':' INT (=>'.' INT)?;
 
 Time returns STTime:
 	(Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
+
+enum STAccessSpecifier:
+	PROTECTED='PROTECTED' | PUBLIC='PUBLIC' | PRIVATE='PRIVATE' | INTERNAL='INTERNAL';
+
+/** Keep in sync with fordiac keywords */
+RESERVED_KEYWORDS:
+	'ABSTRACT' | 'ACTION' | 'END_ACTION' | 'CLASS' | 'END_CLASS' | 'CONFIGURATION' | 'END_CONFIGURATION' |
+	'FUNCTION_BLOCK' | 'END_FUNCTION_BLOCK' | 'INTERFACE' | 'END_INTERFACE' | 'NAMESPACE' | 'END_NAMESPACE' | 'PROGRAM'
+	| 'END_PROGRAM' | 'RESOURCE' | 'END_RESOURCE' | 'STEP' | 'END_STEP' | 'STRUCT' | 'END_STRUCT' | 'TRANSITION' |
+	'END_TRANSITION' | 'TYPE' | 'END_TYPE' | 'EXTENDS' | 'FINAL' | 'IMPLEMENTS' | 'INITIAL_STEP' | 'INTERVAL' | 'RETAIN'
+	| 'NON_RETAIN' | 'NULL' | 'ON' | 'OVERLAP' | 'OVERRIDE' | 'PRIORITY' | 'READ_ONLY' | 'READ_WRITE' | 'REF' | 'REF_TO'
+	| 'SINGLE' | 'THIS' | 'VAR_ACCESS' | 'VAR_CONFIG' | 'VAR_EXTERNAL' | 'VAR_GLOBAL' | 'WITH';
 
 terminal fragment HEX_DIGIT:
 	'0'..'9' | 'a'..'f' | 'A'..'F' | '_';

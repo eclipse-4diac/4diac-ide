@@ -141,6 +141,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 				return createSTUnaryOperatorFromString(eDataType, initialValue);
 			case STCorePackage.ST_MULTI_BIT_ACCESS_SPECIFIER:
 				return createSTMultiBitAccessSpecifierFromString(eDataType, initialValue);
+			case STCorePackage.ST_ACCESS_SPECIFIER:
+				return createSTAccessSpecifierFromString(eDataType, initialValue);
 			case STCorePackage.ST_DATE:
 				return createSTDateFromString(eDataType, initialValue);
 			case STCorePackage.ST_TIME:
@@ -170,6 +172,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 				return convertSTUnaryOperatorToString(eDataType, instanceValue);
 			case STCorePackage.ST_MULTI_BIT_ACCESS_SPECIFIER:
 				return convertSTMultiBitAccessSpecifierToString(eDataType, instanceValue);
+			case STCorePackage.ST_ACCESS_SPECIFIER:
+				return convertSTAccessSpecifierToString(eDataType, instanceValue);
 			case STCorePackage.ST_DATE:
 				return convertSTDateToString(eDataType, instanceValue);
 			case STCorePackage.ST_TIME:
@@ -748,6 +752,26 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * @generated
 	 */
 	public String convertSTMultiBitAccessSpecifierToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public STAccessSpecifier createSTAccessSpecifierFromString(EDataType eDataType, String initialValue) {
+		STAccessSpecifier result = STAccessSpecifier.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSTAccessSpecifierToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

@@ -445,7 +445,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	//STVarDeclaration:
 	//    {STVarDeclaration}
 	//    name=ID ('AT' locatedAt=[libraryElement::INamedElement])? ':' (array?='ARRAY' (('[' ranges+=(STExpression) (','
-	//    ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')? (type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
+	//    ranges+=STExpression)* ']') | ('[' count+='*' (',' count+='*')* ']')) 'OF')?
+	//    (type=[libraryElement::INamedElement|STAnyType]) ('[' maxLength=STExpression ']')? (':='
 	//    defaultValue=STInitializerExpression)? ';';
 	public STCoreGrammarAccess.STVarDeclarationElements getSTVarDeclarationAccess() {
 		return gaSTCore.getSTVarDeclarationAccess();
@@ -486,7 +487,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STArrayInitElement:
-	//    indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (',' initExpressions+=STInitializerExpression)* ')')?;
+	//    indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (','
+	//    initExpressions+=STInitializerExpression)* ')')?;
 	public STCoreGrammarAccess.STArrayInitElementElements getSTArrayInitElementAccess() {
 		return gaSTCore.getSTArrayInitElementAccess();
 	}
@@ -516,8 +518,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STAssignmentStatement:
-	//    left=STAccessExpression ':=' right=STExpression
-	//;
+	//    left=STAccessExpression ':=' right=STExpression;
 	public STCoreGrammarAccess.STAssignmentStatementElements getSTAssignmentStatementAccess() {
 		return gaSTCore.getSTAssignmentStatementAccess();
 	}
@@ -527,8 +528,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STCallStatement:
-	//    call=STAccessExpression
-	//;
+	//    call=STAccessExpression;
 	public STCoreGrammarAccess.STCallStatementElements getSTCallStatementAccess() {
 		return gaSTCore.getSTCallStatementAccess();
 	}
@@ -538,8 +538,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STCallArgument:
-	//    STCallUnnamedArgument | STCallNamedInputArgument | STCallNamedOutputArgument
-	//;
+	//    STCallUnnamedArgument | STCallNamedInputArgument | STCallNamedOutputArgument;
 	public STCoreGrammarAccess.STCallArgumentElements getSTCallArgumentAccess() {
 		return gaSTCore.getSTCallArgumentAccess();
 	}
@@ -549,8 +548,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STCallUnnamedArgument:
-	//    argument=STExpression
-	//;
+	//    argument=STExpression;
 	public STCoreGrammarAccess.STCallUnnamedArgumentElements getSTCallUnnamedArgumentAccess() {
 		return gaSTCore.getSTCallUnnamedArgumentAccess();
 	}
@@ -560,8 +558,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STCallNamedInputArgument:
-	//    parameter=[libraryElement::INamedElement] ':=' argument=STExpression
-	//;
+	//    parameter=[libraryElement::INamedElement] ':=' argument=STExpression;
 	public STCoreGrammarAccess.STCallNamedInputArgumentElements getSTCallNamedInputArgumentAccess() {
 		return gaSTCore.getSTCallNamedInputArgumentAccess();
 	}
@@ -571,8 +568,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STCallNamedOutputArgument:
-	//    not?='NOT'? parameter=[libraryElement::INamedElement] '=>' argument=STExpression
-	//;
+	//    not?='NOT'? parameter=[libraryElement::INamedElement] '=>' argument=STExpression;
 	public STCoreGrammarAccess.STCallNamedOutputArgumentElements getSTCallNamedOutputArgumentAccess() {
 		return gaSTCore.getSTCallNamedOutputArgumentAccess();
 	}
@@ -612,7 +608,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STCaseCases:
-	//    conditions+=STExpression (',' conditions+=STExpression)* ':'=> statements+=STStatement*;
+	//    conditions+=STExpression (',' conditions+=STExpression)* ':' =>statements+=STStatement*;
 	public STCoreGrammarAccess.STCaseCasesElements getSTCaseCasesAccess() {
 		return gaSTCore.getSTCaseCasesAccess();
 	}
@@ -678,7 +674,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTExpressionAccess().getRule();
 	}
 	
-	//enum SubrangeOperator returns STBinaryOperator: Range='..';
+	//enum SubrangeOperator returns STBinaryOperator:
+	//    Range='..';
 	public STCoreGrammarAccess.SubrangeOperatorElements getSubrangeOperatorAccess() {
 		return gaSTCore.getSubrangeOperatorAccess();
 	}
@@ -697,7 +694,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTSubrangeExpressionAccess().getRule();
 	}
 	
-	//enum OrOperator returns STBinaryOperator: OR;
+	//enum OrOperator returns STBinaryOperator:
+	//    OR;
 	public STCoreGrammarAccess.OrOperatorElements getOrOperatorAccess() {
 		return gaSTCore.getOrOperatorAccess();
 	}
@@ -716,7 +714,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTOrExpressionAccess().getRule();
 	}
 	
-	//enum XorOperator returns STBinaryOperator: XOR;
+	//enum XorOperator returns STBinaryOperator:
+	//    XOR;
 	public STCoreGrammarAccess.XorOperatorElements getXorOperatorAccess() {
 		return gaSTCore.getXorOperatorAccess();
 	}
@@ -735,7 +734,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTXorExpressionAccess().getRule();
 	}
 	
-	//enum AndOperator returns STBinaryOperator: AND | AMPERSAND='&';
+	//enum AndOperator returns STBinaryOperator:
+	//    AND | AMPERSAND='&';
 	public STCoreGrammarAccess.AndOperatorElements getAndOperatorAccess() {
 		return gaSTCore.getAndOperatorAccess();
 	}
@@ -754,7 +754,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTAndExpressionAccess().getRule();
 	}
 	
-	//enum EqualityOperator returns STBinaryOperator: EQ='=' | NE='<>';
+	//enum EqualityOperator returns STBinaryOperator:
+	//    EQ='=' | NE='<>';
 	public STCoreGrammarAccess.EqualityOperatorElements getEqualityOperatorAccess() {
 		return gaSTCore.getEqualityOperatorAccess();
 	}
@@ -773,7 +774,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTEqualityExpressionAccess().getRule();
 	}
 	
-	//enum CompareOperator returns STBinaryOperator: LT='<' | LE='<=' | GT='>' | GE='>=';
+	//enum CompareOperator returns STBinaryOperator:
+	//    LT='<' | LE='<=' | GT='>' | GE='>=';
 	public STCoreGrammarAccess.CompareOperatorElements getCompareOperatorAccess() {
 		return gaSTCore.getCompareOperatorAccess();
 	}
@@ -792,7 +794,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTComparisonExpressionAccess().getRule();
 	}
 	
-	//enum AddSubOperator returns STBinaryOperator: ADD='+' | SUB='-';
+	//enum AddSubOperator returns STBinaryOperator:
+	//    ADD='+' | SUB='-';
 	public STCoreGrammarAccess.AddSubOperatorElements getAddSubOperatorAccess() {
 		return gaSTCore.getAddSubOperatorAccess();
 	}
@@ -811,7 +814,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTAddSubExpressionAccess().getRule();
 	}
 	
-	//enum MulDivModOperator returns STBinaryOperator: MUL='*' | DIV='/' | MOD;
+	//enum MulDivModOperator returns STBinaryOperator:
+	//    MUL='*' | DIV='/' | MOD;
 	public STCoreGrammarAccess.MulDivModOperatorElements getMulDivModOperatorAccess() {
 		return gaSTCore.getMulDivModOperatorAccess();
 	}
@@ -830,7 +834,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTMulDivModExpressionAccess().getRule();
 	}
 	
-	//enum PowerOperator returns STBinaryOperator: POWER='**';
+	//enum PowerOperator returns STBinaryOperator:
+	//    POWER='**';
 	public STCoreGrammarAccess.PowerOperatorElements getPowerOperatorAccess() {
 		return gaSTCore.getPowerOperatorAccess();
 	}
@@ -849,7 +854,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getSTPowerExpressionAccess().getRule();
 	}
 	
-	//enum UnaryOperator returns STUnaryOperator: MINUS='-' | PLUS='+' | NOT;
+	//enum UnaryOperator returns STUnaryOperator:
+	//    MINUS='-' | PLUS='+' | NOT;
 	public STCoreGrammarAccess.UnaryOperatorElements getUnaryOperatorAccess() {
 		return gaSTCore.getUnaryOperatorAccess();
 	}
@@ -891,7 +897,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STFeatureExpression returns STExpression:
-	//    {STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] ( => call?='(' (parameters+=STCallArgument (',' parameters+=STCallArgument)* )? ')' )?;
+	//    {STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] (=>call?='(' (parameters+=STCallArgument
+	//    (',' parameters+=STCallArgument)*)? ')')?;
 	public STCoreGrammarAccess.STFeatureExpressionElements getSTFeatureExpressionAccess() {
 		return gaSTCore.getSTFeatureExpressionAccess();
 	}
@@ -921,7 +928,8 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STMultibitPartialExpression returns STExpression:
-	//    {STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? (index=INT | ('(' expression=STExpression ')'));
+	//    {STMultibitPartialExpression} (specifier=STMultiBitAccessSpecifier)? (index=INT | ('(' expression=STExpression ')'))
+	//;
 	public STCoreGrammarAccess.STMultibitPartialExpressionElements getSTMultibitPartialExpressionAccess() {
 		return gaSTCore.getSTMultibitPartialExpressionAccess();
 	}
@@ -969,8 +977,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	//STDateLiteralType:
 	//    STDateType |
 	//    'D' |
-	//    'LD'
-	//;
+	//    'LD';
 	public STCoreGrammarAccess.STDateLiteralTypeElements getSTDateLiteralTypeAccess() {
 		return gaSTCore.getSTDateLiteralTypeAccess();
 	}
@@ -992,8 +999,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	//STTimeLiteralType:
 	//    STAnyDurationType |
 	//    'T' |
-	//    'LT'
-	//;
+	//    'LT';
 	public STCoreGrammarAccess.STTimeLiteralTypeElements getSTTimeLiteralTypeAccess() {
 		return gaSTCore.getSTTimeLiteralTypeAccess();
 	}
@@ -1116,8 +1122,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	//    'TIME_OF_DAY' |
 	//    'LTIME_OF_DAY' |
 	//    'TOD' |
-	//    'LTOD'
-	//;
+	//    'LTOD';
 	public STCoreGrammarAccess.STTimeOfDayTypeElements getSTTimeOfDayTypeAccess() {
 		return gaSTCore.getSTTimeOfDayTypeAccess();
 	}
@@ -1130,8 +1135,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	//    'DATE_AND_TIME' |
 	//    'LDATE_AND_TIME' |
 	//    'DT' |
-	//    'LDT'
-	//;
+	//    'LDT';
 	public STCoreGrammarAccess.STDateAndTimeTypeElements getSTDateAndTimeTypeAccess() {
 		return gaSTCore.getSTDateAndTimeTypeAccess();
 	}
@@ -1161,8 +1165,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//BoolLiteral returns ecore::EJavaObject:
-	//    'TRUE' | 'FALSE'
-	//;
+	//    'TRUE' | 'FALSE';
 	public STCoreGrammarAccess.BoolLiteralElements getBoolLiteralAccess() {
 		return gaSTCore.getBoolLiteralAccess();
 	}
@@ -1172,7 +1175,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//Number returns ecore::EJavaObject:
-	//    ('+' | '-')? INT (=> '.' (EXT_INT | INT))?;
+	//    ('+' | '-')? INT (=>'.' (EXT_INT | INT))?;
 	public STCoreGrammarAccess.NumberElements getNumberAccess() {
 		return gaSTCore.getNumberAccess();
 	}
@@ -1192,7 +1195,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//DateAndTime returns STDateAndTime:
-	//    INT '-' INT '-' INT '-' INT ':' INT ':' INT (=> '.' INT)?;
+	//    INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?;
 	public STCoreGrammarAccess.DateAndTimeElements getDateAndTimeAccess() {
 		return gaSTCore.getDateAndTimeAccess();
 	}
@@ -1202,7 +1205,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//TimeOfDay returns STTimeOfDay:
-	//    INT ':' INT ':' INT (=> '.' INT)?;
+	//    INT ':' INT ':' INT (=>'.' INT)?;
 	public STCoreGrammarAccess.TimeOfDayElements getTimeOfDayAccess() {
 		return gaSTCore.getTimeOfDayAccess();
 	}
@@ -1219,6 +1222,31 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	
 	public ParserRule getTimeRule() {
 		return getTimeAccess().getRule();
+	}
+	
+	//enum STAccessSpecifier:
+	//    PROTECTED='PROTECTED' | PUBLIC='PUBLIC' | PRIVATE='PRIVATE' | INTERNAL='INTERNAL';
+	public STCoreGrammarAccess.STAccessSpecifierElements getSTAccessSpecifierAccess() {
+		return gaSTCore.getSTAccessSpecifierAccess();
+	}
+	
+	public EnumRule getSTAccessSpecifierRule() {
+		return getSTAccessSpecifierAccess().getRule();
+	}
+	
+	//RESERVED_KEYWORDS:
+	//    'ABSTRACT' | 'ACTION' | 'END_ACTION' | 'CLASS' | 'END_CLASS' | 'CONFIGURATION' | 'END_CONFIGURATION' |
+	//    'FUNCTION_BLOCK' | 'END_FUNCTION_BLOCK' | 'INTERFACE' | 'END_INTERFACE' | 'NAMESPACE' | 'END_NAMESPACE' | 'PROGRAM'
+	//    | 'END_PROGRAM' | 'RESOURCE' | 'END_RESOURCE' | 'STEP' | 'END_STEP' | 'STRUCT' | 'END_STRUCT' | 'TRANSITION' |
+	//    'END_TRANSITION' | 'TYPE' | 'END_TYPE' | 'EXTENDS' | 'FINAL' | 'IMPLEMENTS' | 'INITIAL_STEP' | 'INTERVAL' | 'RETAIN'
+	//    | 'NON_RETAIN' | 'NULL' | 'ON' | 'OVERLAP' | 'OVERRIDE' | 'PRIORITY' | 'READ_ONLY' | 'READ_WRITE' | 'REF' | 'REF_TO'
+	//    | 'SINGLE' | 'THIS' | 'VAR_ACCESS' | 'VAR_CONFIG' | 'VAR_EXTERNAL' | 'VAR_GLOBAL' | 'WITH';
+	public STCoreGrammarAccess.RESERVED_KEYWORDSElements getRESERVED_KEYWORDSAccess() {
+		return gaSTCore.getRESERVED_KEYWORDSAccess();
+	}
+	
+	public ParserRule getRESERVED_KEYWORDSRule() {
+		return getRESERVED_KEYWORDSAccess().getRule();
 	}
 	
 	//terminal fragment HEX_DIGIT:
