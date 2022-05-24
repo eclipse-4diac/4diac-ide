@@ -106,6 +106,10 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 		return this.threadGroup;
 	}
 
+	public Thread getMainThread() {
+		return this.thread;
+	}
+
 	@Override
 	public boolean canTerminate() {
 		return !this.isTerminated();

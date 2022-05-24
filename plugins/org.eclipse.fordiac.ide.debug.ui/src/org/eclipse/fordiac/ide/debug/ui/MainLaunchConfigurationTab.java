@@ -62,6 +62,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigurationTab {
 	private Text resourceText;
+	private Button stopOnFirstLineCheckbox;
 	private TreeViewer argumentsTable;
 
 	private List<Variable<?>> arguments;
@@ -74,6 +75,9 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		final Composite resourceComponent = createResourceComponent(comp);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(resourceComponent);
+
+		final Composite optionsComponent = createOptionsComponent(comp);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(optionsComponent);
 	}
 
 	protected Composite createResourceComponent(final Composite parent) {
@@ -99,6 +103,22 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		resourceButton.setText("Browse..."); //$NON-NLS-1$
 		resourceButton.addSelectionListener(widgetSelectedAdapter(e -> handleResourceButtonSelected()));
 		GridDataFactory.swtDefaults().applyTo(resourceButton);
+		return group;
+	}
+
+	protected Composite createOptionsComponent(final Composite parent) {
+		final Group group = new Group(parent, SWT.BORDER);
+		GridLayoutFactory.swtDefaults().applyTo(group);
+		group.setText("Options"); //$NON-NLS-1$
+
+		final Composite comp = new Composite(group, SWT.NONE);
+		GridLayoutFactory.swtDefaults().numColumns(1).applyTo(comp);
+		GridDataFactory.fillDefaults().grab(true, false).applyTo(comp);
+
+		stopOnFirstLineCheckbox = new Button(comp, SWT.CHECK);
+		stopOnFirstLineCheckbox.setText("Stop on first line"); //$NON-NLS-1$
+		stopOnFirstLineCheckbox.addSelectionListener(widgetSelectedAdapter(e -> updateLaunchConfigurationDialog()));
+		GridDataFactory.fillDefaults().applyTo(stopOnFirstLineCheckbox);
 		return group;
 	}
 
@@ -168,6 +188,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
 		configuration.removeAttribute(LaunchConfigurationAttributes.RESOURCE);
 		configuration.removeAttribute(LaunchConfigurationAttributes.ARGUMENTS);
+		configuration.removeAttribute(LaunchConfigurationAttributes.STOP_ON_FIRST_LINE);
 	}
 
 	@Override
@@ -175,6 +196,7 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		try {
 			final String resourceAttribute = configuration.getAttribute(LaunchConfigurationAttributes.RESOURCE, ""); //$NON-NLS-1$
 			resourceText.setText(resourceAttribute);
+			stopOnFirstLineCheckbox.setSelection(LaunchConfigurationAttributes.isStopOnFirstLine(configuration));
 		} catch (final CoreException e) {
 			FordiacLogHelper.logWarning(e.getMessage(), e);
 		}
@@ -199,6 +221,8 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 		} else {
 			configuration.removeAttribute(LaunchConfigurationAttributes.ARGUMENTS);
 		}
+		configuration.setAttribute(LaunchConfigurationAttributes.STOP_ON_FIRST_LINE,
+				stopOnFirstLineCheckbox.getSelection());
 	}
 
 	protected void handleResourceUpdated() {

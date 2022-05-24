@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 public interface LaunchConfigurationAttributes {
 	String RESOURCE = "org.eclipse.fordiac.ide.debug.resource"; //$NON-NLS-1$
 	String ARGUMENTS = "org.eclipse.fordiac.ide.debug.arguments"; //$NON-NLS-1$
+	String STOP_ON_FIRST_LINE = "org.eclipse.fordiac.ide.debug.stopOnFirstLine"; //$NON-NLS-1$
 
 	static IResource getResource(final ILaunchConfiguration configuration) throws CoreException {
 		final String resourceAttribute = configuration.getAttribute(RESOURCE, ""); //$NON-NLS-1$
@@ -34,8 +35,8 @@ public interface LaunchConfigurationAttributes {
 		return null;
 	}
 
-	static List<Variable<?>> getArguments(final ILaunchConfiguration configuration, final List<Variable<?>> defaultArguments)
-			throws CoreException {
+	static List<Variable<?>> getArguments(final ILaunchConfiguration configuration,
+			final List<Variable<?>> defaultArguments) throws CoreException {
 		final var argumentsAttribute = configuration.getAttribute(ARGUMENTS, Collections.emptyMap());
 		if (argumentsAttribute != null && defaultArguments != null) {
 			defaultArguments.forEach(arg -> {
@@ -50,5 +51,9 @@ public interface LaunchConfigurationAttributes {
 			});
 		}
 		return defaultArguments;
+	}
+
+	static boolean isStopOnFirstLine(final ILaunchConfiguration configuration) throws CoreException {
+		return configuration.getAttribute(STOP_ON_FIRST_LINE, true);
 	}
 }

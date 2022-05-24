@@ -244,7 +244,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			Arrays.stream(activeThreads, 0, count).forEach(CommonEvaluatorDebugger.this::getThread);
 			// notify and remove dead threads
 			CommonEvaluatorDebugger.this.threads.entrySet().removeIf(entry -> {
-				if (entry.getKey().isAlive()) {
+				if (entry.getKey().getState() != Thread.State.TERMINATED) {
 					return false;
 				}
 				entry.getValue().fireTerminateEvent();
