@@ -614,20 +614,36 @@
     </genEnums>
     <genClasses ecoreClass="data.ecore#//AnyDerivedType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//AnyDerivedType/compilerInfo"/>
+      <genOperations ecoreOperation="data.ecore#//AnyDerivedType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyDerivedType/isAssignableFrom/other"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//ArrayType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//ArrayType/subranges"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//ArrayType/initialValues"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference data.ecore#//ArrayType/baseType"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="data.ecore#//DataType">
-      <genOperations ecoreOperation="data.ecore#//DataType/isCompatibleWith" body="return this == other;">
-        <genParameters ecoreParameter="data.ecore#//DataType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//ArrayType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//ArrayType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
-    <genClasses ecoreClass="data.ecore#//DirectlyDerivedType"/>
+    <genClasses image="false" ecoreClass="data.ecore#//DataType">
+      <genOperations ecoreOperation="data.ecore#//DataType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//DataType/isAssignableFrom/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//DirectlyDerivedType">
+      <genOperations ecoreOperation="data.ecore#//DirectlyDerivedType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//DirectlyDerivedType/isAssignableFrom/other"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="data.ecore#//EnumeratedType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//EnumeratedType/enumeratedValue"/>
+      <genOperations ecoreOperation="data.ecore#//EnumeratedType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//EnumeratedType/isAssignableFrom/other"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//EnumeratedValue">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//EnumeratedValue/comment"/>
@@ -635,9 +651,9 @@
     </genClasses>
     <genClasses ecoreClass="data.ecore#//StructuredType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//StructuredType/memberVariables"/>
-      <genOperations ecoreOperation="data.ecore#//StructuredType/isCompatibleWith"
-          body="return (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY)&#xA;&#x9;&#x9;&#x9;&#x9;|| (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_DERIVED)&#xA;&#x9;&#x9;&#x9;&#x9;|| ((other instanceof StructuredType)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&amp;&amp; ((this == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_STRUCT)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;|| (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_STRUCT)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;|| (getName().equals(other.getName()))));">
-        <genParameters ecoreParameter="data.ecore#//StructuredType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//StructuredType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//StructuredType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//Subrange">
@@ -646,213 +662,243 @@
     </genClasses>
     <genClasses ecoreClass="data.ecore#//SubrangeType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference data.ecore#//SubrangeType/subrange"/>
+      <genOperations ecoreOperation="data.ecore#//SubrangeType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//SubrangeType/isAssignableFrom/other"/>
+      </genOperations>
     </genClasses>
-    <genClasses ecoreClass="data.ecore#//ValueType"/>
-    <genClasses ecoreClass="data.ecore#//ElementaryType"/>
+    <genClasses ecoreClass="data.ecore#//ValueType">
+      <genOperations ecoreOperation="data.ecore#//ValueType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//ValueType/isAssignableFrom/other"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="data.ecore#//ElementaryType">
+      <genOperations ecoreOperation="data.ecore#//ElementaryType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//ElementaryType/isAssignableFrom/other"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="data.ecore#//DerivedType">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference data.ecore#//DerivedType/baseType"/>
+      <genOperations ecoreOperation="data.ecore#//DerivedType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//DerivedType/isAssignableFrom/other"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//EventType">
-      <genOperations ecoreOperation="data.ecore#//EventType/isCompatibleWith" body="return (other instanceof EventType);">
-        <genParameters ecoreParameter="data.ecore#//EventType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//EventType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//EventType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyType">
-      <genOperations ecoreOperation="data.ecore#//AnyType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//AnyType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//AnyType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyElementaryType">
-      <genOperations ecoreOperation="data.ecore#//AnyElementaryType/isCompatibleWith"
-          body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyElementaryCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//AnyElementaryType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//AnyElementaryType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyElementaryType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyMagnitudeType">
-      <genOperations ecoreOperation="data.ecore#//AnyMagnitudeType/isCompatibleWith"
-          body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyMagnitudeCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//AnyMagnitudeType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//AnyMagnitudeType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyMagnitudeType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyNumType">
-      <genOperations ecoreOperation="data.ecore#//AnyNumType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyNumCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//AnyNumType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//AnyNumType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyNumType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyRealType">
-      <genOperations ecoreOperation="data.ecore#//AnyRealType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyRealCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//AnyRealType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//AnyRealType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyRealType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//RealType">
-      <genOperations ecoreOperation="data.ecore#//RealType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isRealCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//RealType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//RealType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//RealType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//LrealType">
-      <genOperations ecoreOperation="data.ecore#//LrealType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLRealCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//LrealType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//LrealType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//LrealType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyIntType">
-      <genOperations ecoreOperation="data.ecore#//AnyIntType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyIntCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//AnyIntType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//AnyIntType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyIntType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
-    <genClasses ecoreClass="data.ecore#//AnyUnsignedType"/>
+    <genClasses ecoreClass="data.ecore#//AnyUnsignedType">
+      <genOperations ecoreOperation="data.ecore#//AnyUnsignedType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyUnsignedType/isAssignableFrom/other"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="data.ecore#//UsintType">
-      <genOperations ecoreOperation="data.ecore#//UsintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isUsintCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//UsintType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//UsintType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//UsintType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//UintType">
-      <genOperations ecoreOperation="data.ecore#//UintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isUsintCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//UintType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//UintType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//UintType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//UdintType">
-      <genOperations ecoreOperation="data.ecore#//UdintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isUdintCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//UdintType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//UdintType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//UdintType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//UlintType">
-      <genOperations ecoreOperation="data.ecore#//UlintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isUlintCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//UlintType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//UlintType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//UlintType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
-    <genClasses ecoreClass="data.ecore#//AnySignedType"/>
+    <genClasses ecoreClass="data.ecore#//AnySignedType">
+      <genOperations ecoreOperation="data.ecore#//AnySignedType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnySignedType/isAssignableFrom/other"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="data.ecore#//SintType">
-      <genOperations ecoreOperation="data.ecore#//SintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isSintCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//SintType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//SintType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//SintType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//IntType">
-      <genOperations ecoreOperation="data.ecore#//IntType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isIntCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//IntType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//IntType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//IntType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//DintType">
-      <genOperations ecoreOperation="data.ecore#//DintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isDintCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//DintType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//DintType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//DintType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//LintType">
-      <genOperations ecoreOperation="data.ecore#//LintType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLintCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//LintType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//LintType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//LintType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
-    <genClasses ecoreClass="data.ecore#//AnyDurationType"/>
+    <genClasses ecoreClass="data.ecore#//AnyDurationType">
+      <genOperations ecoreOperation="data.ecore#//AnyDurationType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyDurationType/isAssignableFrom/other"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="data.ecore#//TimeType">
-      <genOperations ecoreOperation="data.ecore#//TimeType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isTimeCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//TimeType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//TimeType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//TimeType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//LtimeType">
-      <genOperations ecoreOperation="data.ecore#//LtimeType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLtimeCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//LtimeType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//LtimeType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//LtimeType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyBitType">
-      <genOperations ecoreOperation="data.ecore#//AnyBitType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyBitCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//AnyBitType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//AnyBitType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyBitType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//BoolType">
-      <genOperations ecoreOperation="data.ecore#//BoolType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isBoolCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//BoolType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//BoolType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//BoolType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//ByteType">
-      <genOperations ecoreOperation="data.ecore#//ByteType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isByteCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//ByteType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//ByteType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//ByteType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//WordType">
-      <genOperations ecoreOperation="data.ecore#//WordType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isWordCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//WordType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//WordType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//WordType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//DwordType">
-      <genOperations ecoreOperation="data.ecore#//DwordType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isDwordCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//DwordType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//DwordType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//DwordType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//LwordType">
-      <genOperations ecoreOperation="data.ecore#//LwordType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLwordCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//LwordType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//LwordType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//LwordType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyCharsType">
-      <genOperations ecoreOperation="data.ecore#//AnyCharsType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyCharsCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//AnyCharsType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//AnyCharsType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyCharsType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyStringType">
-      <genOperations ecoreOperation="data.ecore#//AnyStringType/isCompatibleWith"
-          body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyStringCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//AnyStringType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//AnyStringType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyStringType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//StringType">
-      <genOperations ecoreOperation="data.ecore#//StringType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isStringCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//StringType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//StringType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//StringType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//WstringType">
-      <genOperations ecoreOperation="data.ecore#//WstringType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isWstringCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//WstringType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//WstringType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//WstringType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyCharType">
-      <genOperations ecoreOperation="data.ecore#//AnyCharType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyCharCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//AnyCharType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//AnyCharType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyCharType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//CharType">
-      <genOperations ecoreOperation="data.ecore#//CharType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isCharCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//CharType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//CharType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//CharType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//WcharType">
-      <genOperations ecoreOperation="data.ecore#//WcharType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isWcharCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//WcharType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//WcharType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//WcharType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyDateType">
-      <genOperations ecoreOperation="data.ecore#//AnyDateType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyDateCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//AnyDateType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//AnyDateType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//AnyDateType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//DateAndTimeType">
-      <genOperations ecoreOperation="data.ecore#//DateAndTimeType/isCompatibleWith"
-          body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isDateAndTimeCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//DateAndTimeType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//DateAndTimeType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//DateAndTimeType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//LdtType">
-      <genOperations ecoreOperation="data.ecore#//LdtType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLdtCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//LdtType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//LdtType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//LdtType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//DateType">
-      <genOperations ecoreOperation="data.ecore#//DateType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isDateCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//DateType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//DateType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//DateType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//TimeOfDayType">
-      <genOperations ecoreOperation="data.ecore#//TimeOfDayType/isCompatibleWith"
-          body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isTimeOfDayCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//TimeOfDayType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//TimeOfDayType/isAssignableFrom"
+          body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//TimeOfDayType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//LtodType">
-      <genOperations ecoreOperation="data.ecore#//LtodType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLtodCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//LtodType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//LtodType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//LtodType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//LdateType">
-      <genOperations ecoreOperation="data.ecore#//LdateType/isCompatibleWith" body="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLdateCompatibleWith(other);">
-        <genParameters ecoreParameter="data.ecore#//LdateType/isCompatibleWith/other"/>
+      <genOperations ecoreOperation="data.ecore#//LdateType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
+        <genParameters ecoreParameter="data.ecore#//LdateType/isAssignableFrom/other"/>
       </genOperations>
     </genClasses>
   </genPackages>

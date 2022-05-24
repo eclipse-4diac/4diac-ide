@@ -2,10 +2,22 @@
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="data" nsURI="org.eclipse.fordiac.ide.model.datatype" nsPrefix="data">
   <eClassifiers xsi:type="ecore:EClass" name="AnyDerivedType" eSuperTypes="#//AnyType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
+      </eAnnotations>
+      <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="compilerInfo" eType="ecore:EClass lib.ecore#//CompilerInfo"
         containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ArrayType" eSuperTypes="#//AnyDerivedType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
+      </eAnnotations>
+      <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subranges" lowerBound="1"
         upperBound="-1" eType="#//Subrange" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -47,15 +59,28 @@
     <eLiterals name="ANY" value="21"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DataType" abstract="true" eSuperTypes="lib.ecore#//LibraryElement">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return this == other;"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="DirectlyDerivedType" eSuperTypes="#//DerivedType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="DirectlyDerivedType" eSuperTypes="#//DerivedType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
+      </eAnnotations>
+      <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EnumeratedType" eSuperTypes="#//ValueType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
+      </eAnnotations>
+      <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="enumeratedValue" lowerBound="1"
         upperBound="-1" eType="#//EnumeratedValue" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -80,11 +105,11 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StructuredType" eSuperTypes="#//AnyDerivedType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY)&#xA;&#x9;&#x9;&#x9;&#x9;|| (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_DERIVED)&#xA;&#x9;&#x9;&#x9;&#x9;|| ((other instanceof StructuredType)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&amp;&amp; ((this == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_STRUCT)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;|| (other == org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.ANY_STRUCT)&#xA;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;&#x9;|| (getName().equals(other.getName()))));"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="memberVariables" upperBound="-1"
         eType="ecore:EClass lib.ecore#//VarDeclaration" containment="true" resolveProxies="false">
@@ -115,6 +140,12 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SubrangeType" eSuperTypes="#//DerivedType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
+      </eAnnotations>
+      <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="subrange" lowerBound="1"
         eType="#//Subrange" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -124,325 +155,366 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="ValueType" eSuperTypes="#//DataType"/>
-  <eClassifiers xsi:type="ecore:EClass" name="ElementaryType" eSuperTypes="#//ValueType"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ValueType" eSuperTypes="#//DataType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
+      </eAnnotations>
+      <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ElementaryType" eSuperTypes="#//ValueType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
+      </eAnnotations>
+      <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DerivedType" eSuperTypes="#//ValueType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
+      </eAnnotations>
+      <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="baseType" lowerBound="1"
         eType="#//ElementaryType"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventType" eSuperTypes="#//DataType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return (other instanceof EventType);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnyType" eSuperTypes="#//DataType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnyElementaryType" eSuperTypes="#//AnyType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyElementaryCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnyMagnitudeType" eSuperTypes="#//AnyElementaryType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyMagnitudeCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnyNumType" eSuperTypes="#//AnyMagnitudeType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyNumCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnyRealType" eSuperTypes="#//AnyNumType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyRealCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="RealType" eSuperTypes="#//AnyRealType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isRealCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LrealType" eSuperTypes="#//AnyRealType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLRealCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnyIntType" eSuperTypes="#//AnyNumType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyIntCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AnyUnsignedType" eSuperTypes="#//AnyIntType"/>
-  <eClassifiers xsi:type="ecore:EClass" name="UsintType" eSuperTypes="#//AnyUnsignedType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+  <eClassifiers xsi:type="ecore:EClass" name="AnyUnsignedType" eSuperTypes="#//AnyIntType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isUsintCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="UsintType" eSuperTypes="#//AnyUnsignedType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
+      </eAnnotations>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UintType" eSuperTypes="#//AnyUnsignedType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isUsintCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UdintType" eSuperTypes="#//AnyUnsignedType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isUdintCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="UlintType" eSuperTypes="#//AnyUnsignedType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isUlintCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AnySignedType" eSuperTypes="#//AnyIntType"/>
-  <eClassifiers xsi:type="ecore:EClass" name="SintType" eSuperTypes="#//AnySignedType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+  <eClassifiers xsi:type="ecore:EClass" name="AnySignedType" eSuperTypes="#//AnyIntType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isSintCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="SintType" eSuperTypes="#//AnySignedType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
+      </eAnnotations>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IntType" eSuperTypes="#//AnySignedType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isIntCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DintType" eSuperTypes="#//AnySignedType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isDintCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LintType" eSuperTypes="#//AnySignedType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLintCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AnyDurationType" eSuperTypes="#//AnyMagnitudeType"/>
-  <eClassifiers xsi:type="ecore:EClass" name="TimeType" eSuperTypes="#//AnyDurationType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+  <eClassifiers xsi:type="ecore:EClass" name="AnyDurationType" eSuperTypes="#//AnyMagnitudeType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isTimeCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="TimeType" eSuperTypes="#//AnyDurationType">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
+      </eAnnotations>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LtimeType" eSuperTypes="#//AnyDurationType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLtimeCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnyBitType" eSuperTypes="#//AnyElementaryType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyBitCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BoolType" eSuperTypes="#//AnyBitType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isBoolCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ByteType" eSuperTypes="#//AnyBitType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isByteCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WordType" eSuperTypes="#//AnyBitType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isWordCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DwordType" eSuperTypes="#//AnyBitType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isDwordCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LwordType" eSuperTypes="#//AnyBitType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLwordCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnyCharsType" eSuperTypes="#//AnyElementaryType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyCharsCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnyStringType" eSuperTypes="#//AnyCharsType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyStringCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StringType" eSuperTypes="#//AnyStringType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isStringCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WstringType" eSuperTypes="#//AnyStringType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isWstringCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnyCharType" eSuperTypes="#//AnyCharsType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyCharCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CharType" eSuperTypes="#//AnyCharType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isCharCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WcharType" eSuperTypes="#//AnyCharType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isWcharCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnyDateType" eSuperTypes="#//AnyElementaryType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.GenericDataTypeCompatibility.isAnyDateCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DateAndTimeType" eSuperTypes="#//AnyDateType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isDateAndTimeCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LdtType" eSuperTypes="#//AnyDateType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLdtCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DateType" eSuperTypes="#//AnyDateType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isDateCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="TimeOfDayType" eSuperTypes="#//AnyDateType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isTimeOfDayCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LtodType" eSuperTypes="#//AnyDateType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLtodCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LdateType" eSuperTypes="#//AnyDateType">
-    <eOperations name="isCompatibleWith" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+    <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.datatype.helper.ElementaryDataTypeCompatibility.isLdateCompatibleWith(other);"/>
+        <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
-      <eParameters name="other" lowerBound="1" eType="#//DataType"/>
+      <eParameters name="other" eType="#//DataType"/>
     </eOperations>
   </eClassifiers>
 </ecore:EPackage>

@@ -22,9 +22,12 @@ import org.eclipse.fordiac.ide.model.AbstractStructTreeNode;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.BoolType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StringType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.data.WstringType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.fordiac.ide.model.value.StringValueConverter;
 
 public final class WatchValueTreeNodeUtils {
 
@@ -97,6 +100,21 @@ public final class WatchValueTreeNodeUtils {
 			parseInt = 0;
 		}
 		return convertIntegerToHexString(parseInt);
+	}
+	
+	public static String decorateInitialCellValue(final MonitoringElement element) {
+		final DataType type = element.getPort().getInterfaceElement().getType();
+		final String value = element.getCurrentValue();
+		return decorateInitialCellValue(type, value);
+	}
+	
+	public static String decorateInitialCellValue(final DataType type, final String value) {
+		if (type instanceof WstringType) {
+			return StringValueConverter.INSTANCE.toString(value, true);
+		} else if (type instanceof StringType) {
+			return StringValueConverter.INSTANCE.toString(value, false);
+		}
+		return value;
 	}
 
 	private static String buildTreeString(final WatchValueTreeNode dbgStruct) {

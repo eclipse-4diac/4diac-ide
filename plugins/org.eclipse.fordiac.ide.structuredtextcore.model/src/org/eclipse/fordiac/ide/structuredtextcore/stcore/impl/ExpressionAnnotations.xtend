@@ -67,10 +67,10 @@ final package class ExpressionAnnotations {
 		if (left instanceof DataType) {
 			if (right instanceof DataType) {
 				if (expr.op.isArithmetic) {
-					if (left.isCompatibleWith(right))
-						right
-					else if (right.isCompatibleWith(left))
+					if (left.isAssignableFrom(right))
 						left
+					else if (right.isAssignableFrom(left))
+						right
 					else if (left instanceof AnyDurationType && right instanceof AnyIntType)
 						left
 					else
@@ -314,10 +314,10 @@ final package class ExpressionAnnotations {
 			first
 		else if (first instanceof DataType) {
 			if (second instanceof DataType) {
-				if (first.isCompatibleWith(second))
-					second
-				else if (second.isCompatibleWith(first))
+				if (first.isAssignableFrom(second))
 					first
+				else if (second.isAssignableFrom(first))
+					second
 			}
 		}
 	}

@@ -649,7 +649,7 @@ final class ValueOperations {
 	}
 
 	def static dispatch Value partial(ByteValue value, AnyBitType type, int index, AnyBitValue partial) {
-		if (type == value.type || !type.isCompatibleWith(value.type))
+		if (type == value.type || !value.type.isAssignableFrom(type))
 			throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name» and partial type «type.name»''')
 		ByteValue.toByteValue(value.byteValue.combine(
 			(partial.byteValue << (index * type.bitSize)) as byte,
@@ -658,7 +658,7 @@ final class ValueOperations {
 	}
 
 	def static dispatch Value partial(WordValue value, AnyBitType type, int index, AnyBitValue partial) {
-		if (type == value.type || !type.isCompatibleWith(value.type))
+		if (type == value.type || !value.type.isAssignableFrom(type))
 			throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name» and partial type «type.name»''')
 		WordValue.toWordValue(value.shortValue.combine(
 			(partial.shortValue << (index * type.bitSize)) as short,
@@ -667,7 +667,7 @@ final class ValueOperations {
 	}
 
 	def static dispatch Value partial(DWordValue value, AnyBitType type, int index, AnyBitValue partial) {
-		if (type == value.type || !type.isCompatibleWith(value.type))
+		if (type == value.type || !value.type.isAssignableFrom(type))
 			throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name» and partial type «type.name»''')
 		DWordValue.toDWordValue(value.intValue.combine(
 			partial.intValue << (index * type.bitSize),
@@ -676,7 +676,7 @@ final class ValueOperations {
 	}
 
 	def static dispatch Value partial(LWordValue value, AnyBitType type, int index, AnyBitValue partial) {
-		if (type == value.type || !type.isCompatibleWith(value.type))
+		if (type == value.type || !value.type.isAssignableFrom(type))
 			throw new UnsupportedOperationException('''The partial operation is not supported for type «value.type.name» and partial type «type.name»''')
 		LWordValue.toLWordValue(value.longValue.combine(
 			partial.longValue << (index * type.bitSize),
@@ -1143,9 +1143,9 @@ final class ValueOperations {
 	def static resultType(DataType first, DataType second) {
 		if (first instanceof AnyDurationType && second instanceof AnyIntType)
 			first
-		else if (first.isCompatibleWith(second))
-			second
-		else if (second.isCompatibleWith(first))
+		else if (first.isAssignableFrom(second))
 			first
+		else if (second.isAssignableFrom(first))
+			second
 	}
 }

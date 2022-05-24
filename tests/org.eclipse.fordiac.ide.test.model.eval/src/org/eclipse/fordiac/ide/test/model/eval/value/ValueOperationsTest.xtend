@@ -243,7 +243,7 @@ class ValueOperationsTest {
 		val partialType = ElementaryTypes.getTypeByName(partialTypeName)
 		// both type and partialType must be ANY_BIT types and the partialType must be smaller than type
 		if (type instanceof AnyBitType && partialType instanceof AnyBitType && type != partialType &&
-			partialType.isCompatibleWith(type)) {
+			type.isAssignableFrom(partialType)) {
 			for (index : 0 ..< (type.bitSize / partialType.bitSize)) {
 				partialType.defaultValue.assertEquals(type.defaultValue.partial(partialType, index))
 				(0xffffffff >>> (32 - partialType.bitSize)).wrapValue(partialType).assertEquals(

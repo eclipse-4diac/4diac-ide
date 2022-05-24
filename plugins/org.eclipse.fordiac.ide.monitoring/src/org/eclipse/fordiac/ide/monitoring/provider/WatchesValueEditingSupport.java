@@ -23,9 +23,11 @@ import org.eclipse.fordiac.ide.monitoring.views.StructParser;
 import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNode;
 import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNodeUtils;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
+import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.widgets.Tree;
 
 public class WatchesValueEditingSupport extends EditingSupport {
@@ -34,6 +36,16 @@ public class WatchesValueEditingSupport extends EditingSupport {
 	public WatchesValueEditingSupport(final ColumnViewer viewer, final Tree tree) {
 		super(viewer);
 		cellEditor = new TextCellEditor(tree);
+	}
+
+	@Override
+	protected void initializeCellEditorValue(final CellEditor cellEditor, final ViewerCell cell) {
+		final Object element = cell.getElement();
+		if (element instanceof WatchValueTreeNode) {
+			final MonitoringElement monitoringElement = (MonitoringElement) ((WatchValueTreeNode) element).getMonitoringBaseElement();
+			final String value = WatchValueTreeNodeUtils.decorateInitialCellValue(monitoringElement);
+			cellEditor.setValue(value);	
+		}
 	}
 
 	@Override

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ *               2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *   Martin Melik Merkumians
  *     - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *     - adopt assignable from
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.datatype.helper;
@@ -68,7 +71,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("lrealImplicitlyCastableInTestCases")
 	void lrealImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.LREAL.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.LREAL);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -112,7 +115,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("realImplicitlyCastableInTestCases")
 	void realImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.REAL.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.REAL);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -156,7 +159,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("uLintImplicitlyCastableInTestCases")
 	void uLintImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.ULINT.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.ULINT);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -200,7 +203,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("uDintImplicitlyCastableInTestCases")
 	void uDintImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.UDINT.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.UDINT);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -244,7 +247,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("uIntImplicitlyCastableInTestCases")
 	void uIntImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.UINT.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.UINT);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -288,7 +291,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("uSintImplicitlyCastableInTestCases")
 	void uSintImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.USINT.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.USINT);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -332,7 +335,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("lintImplicitlyCastableInTestCases")
 	void lintImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.LINT.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.LINT);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -376,7 +379,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("dintImplicitlyCastableInTestCases")
 	void dintImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.DINT.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.DINT);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -420,7 +423,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("intImplicitlyCastableInTestCases")
 	void intImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.INT.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.INT);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -464,7 +467,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("sintImplicitlyCastableInTestCases")
 	void sintImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.SINT.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.SINT);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -508,7 +511,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("lwordImplicitlyCastableInTestCases")
 	void lwordImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.LWORD.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.LWORD);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -552,7 +555,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("dwordImplicitlyCastableInTestCases")
 	void dwordImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.DWORD.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.DWORD);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -596,7 +599,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("wordImplicitlyCastableInTestCases")
 	void wordImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.WORD.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.WORD);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -640,7 +643,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("byteImplicitlyCastableInTestCases")
 	void byteImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.BYTE.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.BYTE);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -684,7 +687,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("boolImplicitlyCastableInTestCases")
 	void boolImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String dataTypeName) {
-		final var castable = IecTypes.ElementaryTypes.BOOL.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.BOOL);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -728,7 +731,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("lTimeImplicitlyCastableInTestCases")
 	void lTimeImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String typeName) {
-		final var castable = IecTypes.ElementaryTypes.LTIME.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.LTIME);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -772,7 +775,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("timeImplicitlyCastableInTestCases")
 	void timeImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String typeName) {
-		final var castable = IecTypes.ElementaryTypes.TIME.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.TIME);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -816,7 +819,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("ldtImplicitlyCastableInTestCases")
 	void ldtImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String typeName) {
-		final var castable = IecTypes.ElementaryTypes.LDT.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.LDT);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -860,7 +863,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("dtImplicitlyCastableInTestCases")
 	void dtImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String typeName) {
-		final var castable = IecTypes.ElementaryTypes.DT.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.DT);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -904,7 +907,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("lDateImplicitlyCastableInTestCases")
 	void lDateImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String typeName) {
-		final var castable = IecTypes.ElementaryTypes.LDATE.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.LDATE);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -948,7 +951,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("dateImplicitlyCastableInTestCases")
 	void dateImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String typeName) {
-		final var castable = IecTypes.ElementaryTypes.DATE.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.DATE);
 		assertEquals(Boolean.valueOf(isAllowed), Boolean.valueOf(castable));
 	}
 
@@ -992,7 +995,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("lTodImplicitlyCastableInTestCases")
 	void lTodImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String typeName) {
-		final var castable = IecTypes.ElementaryTypes.LTOD.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.LTOD);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -1023,7 +1026,7 @@ class ElementaryDataTypeCompatibilityTest {
 						IecTypes.ElementaryTypes.DATE_AND_TIME.getName()),
 				Arguments.of(IecTypes.ElementaryTypes.LDATE, false, IecTypes.ElementaryTypes.LDATE.getName()),
 				Arguments.of(IecTypes.ElementaryTypes.DATE, false, IecTypes.ElementaryTypes.DATE.getName()),
-				Arguments.of(IecTypes.ElementaryTypes.LTOD, false, IecTypes.ElementaryTypes.LTOD.getName()),
+				Arguments.of(IecTypes.ElementaryTypes.LTOD, true, IecTypes.ElementaryTypes.LTOD.getName()),
 				Arguments.of(IecTypes.ElementaryTypes.TOD, true, IecTypes.ElementaryTypes.TOD.getName()),
 				Arguments.of(IecTypes.ElementaryTypes.WSTRING, false, IecTypes.ElementaryTypes.WSTRING.getName()),
 				Arguments.of(IecTypes.ElementaryTypes.STRING, false, IecTypes.ElementaryTypes.STRING.getName()),
@@ -1036,7 +1039,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("todImplicitlyCastableInTestCases")
 	void todImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String typeName) {
-		final var castable = IecTypes.ElementaryTypes.TOD.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.TOD);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -1080,7 +1083,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("wstringImplicitlyCastableInTestCases")
 	void wstringImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String typeName) {
-		final var castable = IecTypes.ElementaryTypes.WSTRING.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.WSTRING);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -1124,7 +1127,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("stringImplicitlyCastableInTestCases")
 	void stringImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String typeName) {
-		final var castable = IecTypes.ElementaryTypes.STRING.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.STRING);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -1168,7 +1171,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("wCharImplicitlyCastableInTestCases")
 	void wCharImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String typeName) {
-		final var castable = IecTypes.ElementaryTypes.WCHAR.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.WCHAR);
 		assertEquals(isAllowed, castable);
 	}
 
@@ -1212,7 +1215,7 @@ class ElementaryDataTypeCompatibilityTest {
 	@ParameterizedTest(name = "Cast in type {2} is {1}")
 	@MethodSource("charImplicitlyCastableInTestCases")
 	void charImplicitlyCastableInTest(final DataType targetType, final boolean isAllowed, final String typeName) {
-		final var castable = IecTypes.ElementaryTypes.CHAR.isCompatibleWith(targetType);
+		final var castable = targetType.isAssignableFrom(IecTypes.ElementaryTypes.CHAR);
 		assertEquals(isAllowed, castable);
 	}
 

@@ -225,7 +225,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 			// FB
 			final IInterfaceElement interfaceElement = updateSelectedInterface(oldInterface, newElement);
 
-			if (!oldInterface.getType().isCompatibleWith(interfaceElement.getType())) {
+			if (!interfaceElement.getType().isAssignableFrom(oldInterface.getType())) {
 				return createWrongTypeMarker(oldInterface, interfaceElement, newElement);
 			}
 
@@ -467,9 +467,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	private void handleReconnect(final Connection connection, final IInterfaceElement selected,
 			final IInterfaceElement other, IInterfaceElement updatedSelected, IInterfaceElement updatedOther) {
-		if (!updatedSelected.getType().isCompatibleWith(updatedOther.getType())) {
+		if (!updatedOther.getType().isAssignableFrom(updatedSelected.getType())) {
 			// connection not compatible
-			if (other instanceof ErrorMarkerInterface && other.getType().isCompatibleWith(updatedSelected.getType())) {
+			if (other instanceof ErrorMarkerInterface && updatedSelected.getType().isAssignableFrom(other.getType())) {
 				updatedOther = other;
 			} else {
 				updatedSelected = createWrongTypeMarker(selected, updatedSelected, newElement);

@@ -291,13 +291,15 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 			final Label figure = (Label) getFigure();
 			if (isVariable()) {
 				final VarDeclaration varDeclaration = (VarDeclaration) getInterfaceElement();
+				// decorate WString and String
+				final String value = WatchValueTreeNodeUtils.decorateInitialCellValue(varDeclaration.getType(), input);
 				if (isForced()) {
 					figure.setText(MessageFormat.format(Messages.MonitoringEditPart_Forced_ValueDisplay,
 							getModel().getForceValue(),
-							WatchValueTreeNodeUtils.decorateHexValue(input, varDeclaration.getType(), getModel())));
+							WatchValueTreeNodeUtils.decorateHexValue(value, varDeclaration.getType(), getModel())));
 				} else {
 					figure.setText(
-							WatchValueTreeNodeUtils.decorateHexValue(input, varDeclaration.getType(), getModel()));
+							WatchValueTreeNodeUtils.decorateHexValue(value, varDeclaration.getType(), getModel()));
 				}
 			} else {
 				figure.setText(input);

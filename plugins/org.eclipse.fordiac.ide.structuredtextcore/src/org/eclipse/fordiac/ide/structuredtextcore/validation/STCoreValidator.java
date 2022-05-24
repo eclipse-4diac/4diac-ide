@@ -31,7 +31,6 @@ import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
-import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
@@ -217,7 +216,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Check
 	public void checkCallArguments(final STFeatureExpression expression) {
 		final INamedElement feature = expression.getFeature();
-		if (feature == null || !expression.isCall()) {
+		if (feature == null || feature.eIsProxy() || !expression.isCall()) {
 			return;
 		}
 
@@ -382,21 +381,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 	}
 
-	protected void checkTypeCompatibility(DataType destination, DataType source, final EStructuralFeature feature,
+	protected void checkTypeCompatibility(final DataType destination, final DataType source, final EStructuralFeature feature,
 			final int index) {
-		if (destination instanceof ArrayType || source instanceof ArrayType) {
-			if (destination instanceof ArrayType && source instanceof ArrayType
-					&& ((ArrayType) destination).getSubranges().size() == ((ArrayType) source).getSubranges().size()) {
-				destination = ((ArrayType) destination).getBaseType();
-				source = ((ArrayType) source).getBaseType();
-			} else {
-				error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
-						source.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
-						destination.getName());
-			}
-		}
-
-		if (!source.isCompatibleWith(destination)) {
+		if (!destination.isAssignableFrom(source)) {
 			final String castName = source.getName() + "_TO_" + destination.getName(); //$NON-NLS-1$
 			final boolean castPossible = StreamSupport.stream(standardFunctionProvider.get().spliterator(), true)
 					.anyMatch(func -> func.getName().equals(castName));
