@@ -57,6 +57,5 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 				}
 			}
 		}
-
 	}
 }
