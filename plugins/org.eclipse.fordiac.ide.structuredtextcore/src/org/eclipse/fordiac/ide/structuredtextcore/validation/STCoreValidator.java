@@ -38,7 +38,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.value.NumericValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
+import org.eclipse.fordiac.ide.structuredtextcore.converter.STStringValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
@@ -71,6 +73,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Inject
 	private STStandardFunctionProvider standardFunctionProvider;
 
+	@Inject
+	private STStringValueConverter stringValueConverter;
+
 	public static final String ISSUE_CODE_PREFIX = "org.eclipse.fordiac.ide.structuredtextcore."; //$NON-NLS-1$
 	public static final String CONSECUTIVE_UNDERSCORE_IN_IDENTIFIER_ERROR = ISSUE_CODE_PREFIX
 			+ "consecutiveUnderscoreInIdentifierError"; //$NON-NLS-1$
@@ -92,6 +97,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String INVALID_STRING_LITERAL = ISSUE_CODE_PREFIX + "invalidStringLiteral"; //$NON-NLS-1$
 	public static final String STANDARD_FUNCTION_WITH_FORMAL_ARGUMENTS = ISSUE_CODE_PREFIX
 			+ "standardFunctionWithFormalArguments"; //$NON-NLS-1$
+	public static final String LITERAL_IMPLICIT_CONVERSION = ISSUE_CODE_PREFIX + "literalImplicitConversion"; //$NON-NLS-1$
 
 	@Check
 	public void checkConsecutiveUnderscoresInIdentifier(final INamedElement iNamedElement) {
@@ -351,18 +357,28 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Check
 	public void checkNumericLiteral(final STNumericLiteral expression) {
 		final var type = (DataType) expression.getResultType();
+		final var expectedType = STCoreUtil.getExpectedType(expression);
 		if (!isNumericValueValid(type, expression.getValue())) {
-			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(), expression.getValue()),
+			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(),
+					NumericValueConverter.INSTANCE.toString(expression.getValue())),
 					STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE, INVALID_NUMERIC_LITERAL);
+		} else if (expectedType != null && !type.equals(expectedType)) {
+			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
+					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
 		}
 	}
 
 	@Check
 	public void checkStringLiteral(final STStringLiteral expression) {
 		final var type = (DataType) expression.getResultType();
+		final var expectedType = STCoreUtil.getExpectedType(expression);
 		if (!isStringValueValid(type, expression.getValue())) {
-			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(), expression.getValue()),
+			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(),
+					stringValueConverter.toString(expression.getValue())),
 					STCorePackage.Literals.ST_STRING_LITERAL__VALUE, INVALID_STRING_LITERAL);
+		} else if (expectedType != null && !type.equals(expectedType)) {
+			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
+					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
 		}
 	}
 
@@ -381,8 +397,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 	}
 
-	protected void checkTypeCompatibility(final DataType destination, final DataType source, final EStructuralFeature feature,
-			final int index) {
+	protected void checkTypeCompatibility(final DataType destination, final DataType source,
+			final EStructuralFeature feature, final int index) {
 		if (!destination.isAssignableFrom(source)) {
 			final String castName = source.getName() + "_TO_" + destination.getName(); //$NON-NLS-1$
 			final boolean castPossible = StreamSupport.stream(standardFunctionProvider.get().spliterator(), true)
