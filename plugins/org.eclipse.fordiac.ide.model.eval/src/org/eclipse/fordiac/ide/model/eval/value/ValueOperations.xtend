@@ -19,7 +19,7 @@ import java.time.LocalTime
 import java.util.Objects
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyDurationType
-import org.eclipse.fordiac.ide.model.data.AnyIntType
+import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.data.ByteType
 import org.eclipse.fordiac.ide.model.data.CharType
@@ -51,7 +51,6 @@ import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
-import org.eclipse.fordiac.ide.model.value.ValueConverterFactory
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 
 final class ValueOperations {
@@ -1141,7 +1140,7 @@ final class ValueOperations {
 	}
 
 	def static resultType(DataType first, DataType second) {
-		if (first instanceof AnyDurationType && second instanceof AnyIntType)
+		if (first instanceof AnyDurationType && second instanceof AnyNumType)
 			first
 		else if (first.isAssignableFrom(second))
 			first
