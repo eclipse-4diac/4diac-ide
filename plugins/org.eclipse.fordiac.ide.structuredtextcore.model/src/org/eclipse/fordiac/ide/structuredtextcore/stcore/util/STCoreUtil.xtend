@@ -280,7 +280,8 @@ final class STCoreUtil {
 						feature.inputParameters.get(index)
 					else if (index < feature.inputParameters.size + feature.inOutParameters.size)
 						feature.inOutParameters.get(index - feature.inputParameters.size)
-					else
+					else if (index <
+						feature.inputParameters.size + feature.inOutParameters.size + feature.outputParameters.size)
 						feature.outputParameters.get(index - feature.inputParameters.size -
 							feature.inOutParameters.size)
 				}
