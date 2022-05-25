@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.nio.charset.StandardCharsets
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -50,6 +51,8 @@ import org.eclipse.fordiac.ide.model.data.WordType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
+import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable
+import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter
 
@@ -159,6 +162,77 @@ final class ValueOperations {
 				BoolValue.toBoolValue(!value.boolValue)
 			default:
 				throw new UnsupportedOperationException('''The not operation is not supported for type «value.type.name»''')
+		}
+	}
+
+	def static Value reverseBytes(Value value) {
+		switch (value) {
+			LRealValue:
+				LRealValue.toLRealValue(
+					Double.longBitsToDouble(Long.reverseBytes(Double.doubleToRawLongBits(value.doubleValue))))
+			RealValue:
+				RealValue.toRealValue(
+					Float.intBitsToFloat(Integer.reverseBytes(Float.floatToRawIntBits(value.floatValue))))
+			LIntValue:
+				LIntValue.toLIntValue(Long.reverseBytes(value.longValue))
+			DIntValue:
+				DIntValue.toDIntValue(Integer.reverseBytes(value.intValue))
+			IntValue:
+				IntValue.toIntValue(Short.reverseBytes(value.shortValue))
+			SIntValue:
+				value
+			ULIntValue:
+				ULIntValue.toULIntValue(Long.reverseBytes(value.longValue))
+			UDIntValue:
+				UDIntValue.toUDIntValue(Integer.reverseBytes(value.intValue))
+			UIntValue:
+				UIntValue.toUIntValue(Short.reverseBytes(value.shortValue))
+			USIntValue:
+				value
+			LTimeValue:
+				LTimeValue.toLTimeValue(Long.reverseBytes(value.longValue))
+			TimeValue:
+				TimeValue.toTimeValue(Long.reverseBytes(value.longValue))
+			LWordValue:
+				LWordValue.toLWordValue(Long.reverseBytes(value.longValue))
+			DWordValue:
+				DWordValue.toDWordValue(Integer.reverseBytes(value.intValue))
+			WordValue:
+				WordValue.toWordValue(Short.reverseBytes(value.shortValue))
+			ByteValue,
+			BoolValue,
+			StringValue,
+			CharValue:
+				value
+			WStringValue:
+				WStringValue.toWStringValue(
+					new String(value.stringValue.getBytes(StandardCharsets.UTF_16BE), StandardCharsets.UTF_16LE))
+			WCharValue:
+				WCharValue.toWCharValue(Character.reverseBytes(value.charValue))
+			LDateValue:
+				LDateValue.toLDateValue(Long.reverseBytes(value.toNanos))
+			DateValue:
+				DateValue.toDateValue(Long.reverseBytes(value.toNanos))
+			LTimeOfDayValue:
+				LTimeOfDayValue.toLTimeOfDayValue(Long.reverseBytes(value.toNanos))
+			TimeOfDayValue:
+				TimeOfDayValue.toTimeOfDayValue(Long.reverseBytes(value.toNanos))
+			LDateAndTimeValue:
+				LDateAndTimeValue.toLDateAndTimeValue(Long.reverseBytes(value.toNanos))
+			DateAndTimeValue:
+				DateAndTimeValue.toDateAndTimeValue(Long.reverseBytes(value.toNanos))
+			ArrayValue: {
+				val temp = new ArrayVariable("TEMP", value.type, value)
+				temp.forEach[variable|variable.value = variable.value.reverseBytes]
+				temp.value
+			}
+			StructValue: {
+				val temp = new StructVariable("TEMP", value.type, value)
+				temp.forEach[variable|variable.value = variable.value.reverseBytes]
+				temp.value
+			}
+			default:
+				throw new UnsupportedOperationException('''The reverseBytes operation is not supported for type «value.type.name»''')
 		}
 	}
 

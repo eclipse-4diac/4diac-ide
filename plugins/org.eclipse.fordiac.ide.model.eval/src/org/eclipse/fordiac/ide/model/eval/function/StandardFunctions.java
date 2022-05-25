@@ -597,19 +597,21 @@ public interface StandardFunctions extends Functions {
 	}
 
 	static <T extends AnyValue> T TO_BIG_ENDIAN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+		return value;
 	}
 
+	@SuppressWarnings("unchecked")
 	static <T extends AnyValue> T TO_LITTLE_ENDIAN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+		return (T) ValueOperations.reverseBytes(value);
 	}
 
 	static <T extends AnyValue> T FROM_BIG_ENDIAN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+		return value;
 	}
 
+	@SuppressWarnings("unchecked")
 	static <T extends AnyValue> T FROM_LITTLE_ENDIAN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+		return (T) ValueOperations.reverseBytes(value);
 	}
 
 	/* Validation functions */

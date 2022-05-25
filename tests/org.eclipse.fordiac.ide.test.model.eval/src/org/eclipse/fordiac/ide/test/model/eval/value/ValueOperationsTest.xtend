@@ -104,6 +104,13 @@ class ValueOperationsTest {
 
 	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
+	def void testReverseBytes(String typeName) {
+		val type = ElementaryTypes.getTypeByName(typeName)
+		type.defaultValue.assertEquals(type.defaultValue.reverseBytes)
+	}
+
+	@ParameterizedTest(name="{index}: {0}")
+	@MethodSource("typeArgumentsProvider")
 	def void testAdd(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
 			AnyMagnitudeType: type.defaultValue.assertEquals(type.defaultValue + type.defaultValue)
