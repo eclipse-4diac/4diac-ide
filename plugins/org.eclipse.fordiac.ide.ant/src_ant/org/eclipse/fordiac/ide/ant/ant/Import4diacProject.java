@@ -10,7 +10,7 @@
  * Contributors:
  *   Alois Zoitl - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ant;
+package org.eclipse.fordiac.ide.ant.ant;
 
 import java.io.File;
 import java.text.MessageFormat;
@@ -70,7 +70,8 @@ public class Import4diacProject extends Task {
 
 	private boolean validateProjectLocation(final IProject project, final IPath projectPath) throws CoreException {
 		if (project.exists()) {
-			// if the project already exists we can only import it if it has the same location
+			// if the project already exists we can only import it if it has the same
+			// location
 			if (project.getLocation().equals(projectPath)) {
 				project.open(getMonitor());
 				return false;
@@ -87,7 +88,8 @@ public class Import4diacProject extends Task {
 		final IPath projectPathInWorkspace = ResourcesPlugin.getWorkspace().getRoot().getLocation()
 				.append(projectPath.lastSegment());
 		if (!projectPathInWorkspace.equals(projectPath)) {
-			// if projectPath is not in workspace root we need to set the location for correct loading
+			// if projectPath is not in workspace root we need to set the location for
+			// correct loading
 			description.setLocation(projectPath);
 		}
 	}

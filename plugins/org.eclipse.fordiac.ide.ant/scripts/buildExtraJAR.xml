@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="org.eclipse.fordiac.ide.ant" default="main" basedir="..">
+   <target name="main" depends="clean, ant_tasks/ant-ant.jar" />
+
+   <target name="init" depends="properties">
+      <property name="plugin" value="org.eclipse.fordiac.ide.ant"/>
+      <property name="temp.folder" value="${basedir}/temp.folder"/>
+      <property name="plugin.destination" value="${basedir}"/>
+      <property name="build.result.folder" value="${basedir}/ant_tasks"/>
+      <property name="version.suffix" value="_3.1.0"/>
+      <property name="target.home" value="${basedir}/../../.metadata/.plugins/org.eclipse.pde.core/.bundle_pool"/>
+   </target>
+
+   <target name="properties" if="eclipse.running">
+      <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+   </target>
+
+   <target name="ant_tasks/ant-ant.jar" depends="init" unless="ant_tasks/ant-ant.jar">
+      <property name="destdir" value="${temp.folder}/ant_tasks/ant-ant.jar.bin"/>
+      <delete dir="${temp.folder}/ant_tasks/ant-ant.jar.bin"/>
+      <mkdir dir="${temp.folder}/ant_tasks/ant-ant.jar.bin"/>
+
+      <!-- compile the source code -->
+      <javac destdir="${temp.folder}/ant_tasks/ant-ant.jar.bin" failonerror="true" verbose="true" debug="on" includeantruntime="false">
+         <classpath>
+            <dirset dir="${basedir}/..">
+               <include name="org.eclipse.fordiac.ide.ant/bin"/>
+               <include name="org.eclipse.fordiac.ide.model/bin"/>
+               <include name="org.eclipse.fordiac.ide.systemmanagement/bin"/>
+            </dirset>
+            <fileset dir="${target.home}">
+				<include name="plugins/eclipse.fordiac.ide.ant*.jar"/>
+				<include name="plugins/eclipse.fordiac.ide.model*.jar"/>
+				<include name="plugins/org.eclipse.core.resources*.jar"/>
+				<include name="plugins/org.eclipse.core.runtime*.jar"/>
+				<include name="plugins/org.eclipse.equinox.common*.jar"/>
+				<include name="plugins/org.eclipse.core.jobs*.jar"/>
+				<include name="plugins/org.eclipse.osgi*.jar"/>
+				<include name="plugins/org.eclipse.ant.core*.jar"/>
+				<include name="plugins/org.apache.ant*/lib/*.jar"/>
+            </fileset>
+         </classpath>
+         <src path="src_ant/"/>
+      </javac>
+
+      <!-- copy necessary resources -->
+      <copy todir="${temp.folder}/ant_tasks/ant-ant.jar.bin">
+         <fileset dir="src_ant/" excludes="**/*.java"/>
+      </copy>
+      <mkdir dir="${build.result.folder}"/>
+      <jar jarfile="${build.result.folder}/ant-ant.jar" basedir="${temp.folder}/ant_tasks/ant-ant.jar.bin"/>
+      <delete dir="${temp.folder}/ant_tasks/ant-ant.jar.bin"/>
+      <delete dir="${temp.folder}"/>
+   </target>
+
+   <target name="clean" depends="init">
+      <delete file="${build.result.folder}/ant-ant.jar"/>
+      <delete dir="${temp.folder}"/>
+   </target>
+</project>

@@ -10,7 +10,7 @@
  * Contributors:
  *   Fabio Gandolfi - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ant;
+package org.eclipse.fordiac.ide.ant.ant;
 
 import java.util.Arrays;
 import java.util.Optional;

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ant.core.antTasks">
+      <antTask
+            class="org.eclipse.fordiac.ide.ant.ant.CheckProject"
+            library="ant_tasks/ant-ant.jar"
+            name="fordiac.checkProject">
+      </antTask>
+   </extension>
+   <extension
+         point="org.eclipse.ant.core.antTasks">
+      <antTask
+            library="ant_tasks/ant-ant.jar"
+            name="fordiac.importProject"
+            class="org.eclipse.fordiac.ide.ant.ant.Import4diacProject">
+      </antTask>
+   </extension>
+   <extension
+         point="org.eclipse.ant.core.antTasks">
+      <antTask
+            class="org.eclipse.fordiac.ide.ant.ant.CheckSystem"
+            library="ant_tasks/ant-ant.jar"
+            name="fordiac.checkSystem">
+      </antTask>
+   </extension>
+   <extension
+         point="org.eclipse.ant.core.extraClasspathEntries">
+      <extraClasspathEntry
+            library="ant_tasks/ant-ant.jar">
+      </extraClasspathEntry>
+   </extension>
+
+</plugin>

@@ -10,7 +10,7 @@
  * Contributors:
  *   Alois Zoitl - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ant;
+package org.eclipse.fordiac.ide.ant.ant;
 
 import java.text.MessageFormat;
 
