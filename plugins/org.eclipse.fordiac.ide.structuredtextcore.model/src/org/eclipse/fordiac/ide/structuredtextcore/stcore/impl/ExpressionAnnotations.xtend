@@ -71,7 +71,7 @@ final package class ExpressionAnnotations {
 						left
 					else if (right.isAssignableFrom(left))
 						right
-					else if (left instanceof AnyDurationType && right instanceof AnyIntType)
+					else if (left instanceof AnyDurationType && right instanceof AnyNumType)
 						left
 					else
 						null

@@ -186,6 +186,30 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		assertEquals('''func_MUL<CIEC_REAL>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
+	
+	@Test
+	def mulTimeRealExpression() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, TIME))
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
+
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
+		assertNoErrors(errors); // Expression can not be an assignment
+		assertNotNull(generatedCode);
+		assertEquals('''func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		generatedCode.toString())
+	}
+	
+	@Test
+	def mulTimeLintExpression() {
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, TIME))
+		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, LINT))
+
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
+		assertNoErrors(errors); // Expression can not be an assignment
+		assertNotNull(generatedCode);
+		assertEquals('''func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		generatedCode.toString())
+	}
 
 	@Test
 	def void otherAlgorithmBasic() {
