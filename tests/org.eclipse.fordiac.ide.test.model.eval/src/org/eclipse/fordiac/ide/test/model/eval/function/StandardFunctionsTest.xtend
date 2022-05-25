@@ -771,24 +771,32 @@ class StandardFunctionsTest {
 	def void testMulTime() {
 		Duration.ofSeconds(42).toTimeValue.assertEquals(
 			StandardFunctions.invoke("MUL_TIME", Duration.ofSeconds(21).toTimeValue, 2.toIntValue))
+		Duration.ofSeconds(42).toTimeValue.assertEquals(
+			StandardFunctions.invoke("MUL_TIME", Duration.ofSeconds(21).toTimeValue, 2.toRealValue))
 	}
 
 	@Test
 	def void testMulLTime() {
 		Duration.ofSeconds(42).toLTimeValue.assertEquals(
 			StandardFunctions.invoke("MUL_LTIME", Duration.ofSeconds(21).toLTimeValue, 2.toIntValue))
+		Duration.ofSeconds(42).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("MUL_LTIME", Duration.ofSeconds(21).toLTimeValue, 2.toRealValue))
 	}
 
 	@Test
 	def void testDivTime() {
 		Duration.ofSeconds(21).toTimeValue.assertEquals(
 			StandardFunctions.invoke("DIV_TIME", Duration.ofSeconds(42).toTimeValue, 2.toIntValue))
+		Duration.ofSeconds(21).toTimeValue.assertEquals(
+			StandardFunctions.invoke("DIV_TIME", Duration.ofSeconds(42).toTimeValue, 2.toRealValue))
 	}
 
 	@Test
 	def void testDivLTime() {
 		Duration.ofSeconds(21).toLTimeValue.assertEquals(
 			StandardFunctions.invoke("DIV_LTIME", Duration.ofSeconds(42).toLTimeValue, 2.toIntValue))
+		Duration.ofSeconds(21).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("DIV_LTIME", Duration.ofSeconds(42).toLTimeValue, 2.toRealValue))
 	}
 
 	@Test
