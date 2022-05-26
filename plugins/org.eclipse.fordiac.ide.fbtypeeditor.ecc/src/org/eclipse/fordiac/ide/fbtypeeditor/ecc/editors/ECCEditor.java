@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
+import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
@@ -237,9 +238,8 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	private CommandStack commandStack;
 
 	@Override
-	protected void setModel(final IEditorInput input) {
-		super.setModel(input);
-		setEditDomain(new ECCEditorEditDomain(this, commandStack));
+	protected DefaultEditDomain createEditDomain() {
+		return new ECCEditorEditDomain(this, commandStack);
 	}
 
 	@Override

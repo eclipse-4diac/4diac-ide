@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
+import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.GraphicalEditPart;
@@ -70,10 +71,14 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 			final FBTypeEditorInput untypedInput = (FBTypeEditorInput) input;
 			fbType = untypedInput.getContent();
 		}
-		setEditDomain(new FBTypeEditDomain(this, commandStack));
 		super.init(site, input);
 		setPartName(Messages.ServiceSequenceEditor_Service);
 		setTitleImage(FordiacImage.ICON_SERVICE_SEQUENCE.getImage());
+	}
+
+	@Override
+	protected DefaultEditDomain createEditDomain() {
+		return new FBTypeEditDomain(this, commandStack);
 	}
 
 	@Override
