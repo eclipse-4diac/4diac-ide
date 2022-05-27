@@ -202,7 +202,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	 * @return true if the two pins can be connected false otherwise */
 	protected abstract boolean canExecuteConType();
 
-	private void setPerformMappingCheck(final boolean performMappingCheck) {
+	public void setPerformMappingCheck(final boolean performMappingCheck) {
 		this.performMappingCheck = performMappingCheck;
 	}
 

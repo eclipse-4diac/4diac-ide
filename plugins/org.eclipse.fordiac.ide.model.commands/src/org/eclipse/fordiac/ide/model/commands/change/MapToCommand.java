@@ -229,7 +229,7 @@ public class MapToCommand extends Command {
 				// connections to error markers will not get mapped
 				addConnectionCreateCommand(
 						connection.getSourceElement().getOpposite()
-								.getInterfaceElement(connection.getSource().getName()),
+						.getInterfaceElement(connection.getSource().getName()),
 						targetElement.getInterfaceElement(interfaceElement.getName()),
 						connection.isVisible());
 
@@ -266,6 +266,8 @@ public class MapToCommand extends Command {
 			cmd.setSource(source);
 			cmd.setDestination(destination);
 			cmd.setVisible(visible);
+			// as we are creating the connection as part of the mapping command we don't need to perform a mapping check
+			cmd.setPerformMappingCheck(false);
 			createdConnections.add(cmd);
 		}
 	}
