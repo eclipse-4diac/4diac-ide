@@ -60,7 +60,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class GroupEditPart extends AbstractPositionableElementEditPart {
+public class GroupEditPart extends AbstractPositionableElementEditPart implements IContainerEditPart {
 	private GroupContentNetwork groupContents;
 	private InstanceCommentFigure commentFigure;
 
@@ -114,6 +114,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 		// as we don't have a name label we don't want to do anything here
 	}
 
+	@Override
 	public Rectangle getCommentBounds() {
 		if (commentFigure != null) {
 			return commentFigure.getBounds();
@@ -250,6 +251,12 @@ public class GroupEditPart extends AbstractPositionableElementEditPart {
 			return getModel();
 		}
 		return super.getAdapter(key);
+	}
+
+	@Override
+	public GraphicalEditPart getContentEP() {
+		return (GraphicalEditPart) getChildren().stream().filter(GroupContentEditPart.class::isInstance).findAny()
+				.orElse(null);
 	}
 
 	private Dimension getGroupSize() {

@@ -16,54 +16,22 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
-import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
+import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.tools.ResizeTracker;
 
-public class GroupResizePolicy extends ModifiedResizeablePolicy {
+public class ContainerResizePolicy extends ModifiedResizeablePolicy {
 
 	@Override
 	protected ResizeTracker getResizeTracker(final int direction) {
-		return new GroupResizeTracker(getHost(), direction);
+		return new ContainerResizeTracker(getHost(), direction);
 	}
 
 	@Override
-	public GroupEditPart getHost() {
-		return (GroupEditPart) super.getHost();
-	}
-
-	public static GraphicalEditPart getGroupContent(final EditPart groupEP) {
-		return (GraphicalEditPart) groupEP.getChildren().stream()
-				.filter(GroupContentEditPart.class::isInstance).findAny().orElse(null);
-	}
-
-	public static Rectangle getGroupContentBounds(final EditPart groupContent) {
-		Rectangle selectionExtend = null;
-		for (final Object child : groupContent.getChildren()) {
-			if (child instanceof GraphicalEditPart) {
-				final Rectangle fbBounds = getBoundsForEditPart((GraphicalEditPart) child);
-				if (selectionExtend == null) {
-					selectionExtend = fbBounds.getCopy();
-				} else {
-					selectionExtend.union(fbBounds);
-				}
-			}
-		}
-		return (selectionExtend != null) ? selectionExtend : getDefaultGroupContentBounds();
-	}
-
-	private static Rectangle getBoundsForEditPart(final GraphicalEditPart ep) {
-		return ep.getFigure().getBounds().getCopy();
-	}
-
-	static Rectangle getDefaultGroupContentBounds() {
-		return new Rectangle(new Point(0, 0), IFigure.MIN_DIMENSION);
+	public IContainerEditPart getHost() {
+		return (IContainerEditPart) super.getHost();
 	}
 
 	@Override

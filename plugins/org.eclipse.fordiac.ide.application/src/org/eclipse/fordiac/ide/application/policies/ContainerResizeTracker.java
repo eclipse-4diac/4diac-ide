@@ -17,15 +17,21 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.tools.ResizeTracker;
 
-class GroupResizeTracker extends ResizeTracker {
-	private Rectangle minGroupBounds;
+class ContainerResizeTracker extends ResizeTracker {
+	private Rectangle minBounds;
 
-	public GroupResizeTracker(final GraphicalEditPart owner, final int direction) {
+	public ContainerResizeTracker(final IContainerEditPart owner, final int direction) {
 		super(owner, direction);
+	}
+
+	@Override
+	protected IContainerEditPart getOwner() {
+		return (IContainerEditPart) super.getOwner();
 	}
 
 	@Override
@@ -39,7 +45,7 @@ class GroupResizeTracker extends ResizeTracker {
 
 	@Override
 	protected boolean handleDragStarted() {
-		updateGroupMinBounds();
+		updateMinBounds();
 		return super.handleDragStarted();
 	}
 
@@ -70,37 +76,37 @@ class GroupResizeTracker extends ResizeTracker {
 				|| getResizeDirection() == PositionConstants.WEST;
 	}
 
-	private void updateGroupMinBounds() {
+	private void updateMinBounds() {
 		final Rectangle groupBounds = getOwner().getFigure().getBounds();
-		final GraphicalEditPart groupContent = GroupResizePolicy.getGroupContent(getOwner());
+		final GraphicalEditPart groupContent = getOwner().getContentEP();
 		if (groupContent != null) { // this should never be the case but just for safety
 			final Rectangle groupContentFigureBounds = groupContent.getFigure().getBounds();
-			minGroupBounds = GroupResizePolicy.getGroupContentBounds(groupContent);
+			minBounds = getOwner().getGroupContentBounds();
 
 			final int wInc = (groupBounds.width - groupContentFigureBounds.width) / 2;
-			minGroupBounds.expand(wInc, 0);
+			minBounds.expand(wInc, 0);
 			// we can not use expand for the height increment as we are not symmetrically applying it
-			minGroupBounds.height += groupBounds.height - groupContentFigureBounds.height;
-			minGroupBounds.y -= (groupContentFigureBounds.y - groupBounds.y);
+			minBounds.height += groupBounds.height - groupContentFigureBounds.height;
+			minBounds.y -= (groupContentFigureBounds.y - groupBounds.y);
 		} else {
-			minGroupBounds = GroupResizePolicy.getDefaultGroupContentBounds();
+			minBounds = IContainerEditPart.getDefaultGroupContentBounds();
 		}
 	}
 
 	private int getMinHeight(final Rectangle bounds, final int resizeDirection) {
-		int height = minGroupBounds.height;
+		int height = minBounds.height;
 		switch (resizeDirection) {
 		case PositionConstants.NORTH:
 		case PositionConstants.NORTH_WEST:
 		case PositionConstants.NORTH_EAST:
 			// ensure that the bottom border is not lost
-			height += bounds.height - (minGroupBounds.y - bounds.y) - minGroupBounds.height;
+			height += bounds.height - (minBounds.y - bounds.y) - minBounds.height;
 			break;
 		case PositionConstants.SOUTH:
 		case PositionConstants.SOUTH_EAST:
 		case PositionConstants.SOUTH_WEST:
 			// ensure that the top border is not lost
-			height += (minGroupBounds.y - bounds.y);
+			height += (minBounds.y - bounds.y);
 			break;
 		default:
 			// we don't care about WEST and EAST as they are not define the height
@@ -111,19 +117,19 @@ class GroupResizeTracker extends ResizeTracker {
 	}
 
 	private int getMinWidth(final Rectangle bounds, final int resizeDirection) {
-		int width = minGroupBounds.width;
+		int width = minBounds.width;
 		switch (resizeDirection) {
 		case PositionConstants.WEST:
 		case PositionConstants.NORTH_WEST:
 		case PositionConstants.SOUTH_WEST:
 			// ensure that the right border is not lost
-			width += bounds.width - (minGroupBounds.x - bounds.x) - minGroupBounds.width;
+			width += bounds.width - (minBounds.x - bounds.x) - minBounds.width;
 			break;
 		case PositionConstants.EAST:
 		case PositionConstants.NORTH_EAST:
 		case PositionConstants.SOUTH_EAST:
 			// ensure that the top border is not lost
-			width += (minGroupBounds.x - bounds.x);
+			width += (minBounds.x - bounds.x);
 			break;
 		default:
 			// we don't care about NORTH and SOUTH as they are not define the height

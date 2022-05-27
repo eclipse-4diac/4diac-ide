@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.gef.EditPart;
@@ -61,7 +62,10 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
 		if (child.getModel() instanceof Group) {
-			return new GroupResizePolicy();
+			return new ContainerResizePolicy();
+		}
+		if (child.getModel() instanceof SubApp && ((SubApp) child.getModel()).isUnfolded()) {
+
 		}
 		return new ModifiedNonResizeableEditPolicy();
 	}

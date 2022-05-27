@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
-import org.eclipse.fordiac.ide.application.policies.GroupResizePolicy;
 import org.eclipse.fordiac.ide.application.policies.GroupXYLayoutPolicy;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -39,10 +38,10 @@ public class TrimGroupHandler extends AbstractHandler {
 		final GroupEditPart groupEditPart = getGroupEditPart(HandlerUtil.getCurrentSelection(event));
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		if (groupEditPart != null && editor != null) {
-			final GraphicalEditPart groupContentEP = GroupResizePolicy.getGroupContent(groupEditPart);
+			final GraphicalEditPart groupContentEP = groupEditPart.getContentEP();
 			if(groupContentEP != null) {
 				final Rectangle groupContentContainerBounds = GroupXYLayoutPolicy.getGroupAreaBounds(groupContentEP);
-				final Rectangle groupContentBounds = GroupResizePolicy.getGroupContentBounds(groupContentEP);
+				final Rectangle groupContentBounds = groupEditPart.getGroupContentBounds();
 				final Command cmd = GroupXYLayoutPolicy.createChangeGroupBoundsCommand(groupEditPart.getModel(),
 						groupContentContainerBounds, groupContentBounds);
 				getCommandStack(editor).execute(cmd);
