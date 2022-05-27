@@ -28,7 +28,10 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.List;
 
+import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -46,6 +49,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.gef.EditPart;
@@ -65,66 +69,84 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 
 	@Override
 	public Adapter createContentAdapter() {
-		return new AdapterImpl() {
-			@Override
-			public void notifyChanged(final Notification notification) {
-				super.notifyChanged(notification);
-				switch (notification.getEventType()) {
-				case Notification.ADD:
-				case Notification.ADD_MANY:
-				case Notification.MOVE:
-					if (notification.getNewValue() instanceof IInterfaceElement) {
-						refreshChildren();
-					}
-					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
-							.equals(notification.getFeature())) {
-						refreshVisuals();
-						refreshChildren();
-						refreshInterfaceEditParts();
-						refreshRoot();
-					}
-					break;
-				case Notification.REMOVE:
-				case Notification.REMOVE_MANY:
-					if (notification.getOldValue() instanceof IInterfaceElement) {
-						refreshChildren();
-					}
-					if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
-							.equals(notification.getFeature())) {
-						refreshVisuals();
-						refreshChildren();
-						refreshInterfaceEditParts();
-						refreshRoot();
-					}
-					break;
-				case Notification.SET:
-					if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(notification.getFeature())) {
-						getFigure().refreshComment();
-					}
-					refreshVisuals();
-					break;
-				default:
-					break;
-				}
-				refreshToolTip();
-				backgroundColorChanged(getFigure());
-			}
+		return new SubappContentAdapter();
+	}
 
-			private void refreshRoot() {
-				final EditPart root = getRoot();
-				if (root != null) {
-					root.getChildren().forEach(child -> ((EditPart) child).refresh());
-				}
+	private final class SubappContentAdapter extends AdapterImpl {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			switch (notification.getEventType()) {
+			case Notification.ADD:
+			case Notification.ADD_MANY:
+			case Notification.MOVE:
+				handleAddMove(notification);
+				break;
+			case Notification.REMOVE:
+			case Notification.REMOVE_MANY:
+				handleRemove(notification);
+				break;
+			case Notification.SET:
+				handleSet(notification);
+				break;
+			default:
+				break;
 			}
+			refreshToolTip();
+			backgroundColorChanged(getFigure());
+		}
 
-			private void refreshInterfaceEditParts() {
-				getChildren().forEach(ep -> {
-					if (ep instanceof InterfaceEditPart) {
-						((InterfaceEditPart) ep).refresh();
-					}
-				});
+		private void handleAddMove(final Notification notification) {
+			if (notification.getNewValue() instanceof IInterfaceElement) {
+				refreshChildren();
 			}
-		};
+			if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
+					.equals(notification.getFeature())) {
+				refreshVisuals();
+				refreshChildren();
+				refreshInterfaceEditParts();
+				refreshRoot();
+			}
+		}
+
+		private void handleRemove(final Notification notification) {
+			if (notification.getOldValue() instanceof IInterfaceElement) {
+				refreshChildren();
+			}
+			if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
+					.equals(notification.getFeature())) {
+				refreshVisuals();
+				refreshChildren();
+				refreshInterfaceEditParts();
+				refreshRoot();
+			}
+		}
+
+		private void handleSet(final Notification notification) {
+			if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(notification.getFeature())) {
+				getFigure().refreshComment();
+			}
+			if (LibraryElementPackage.eINSTANCE.getSubApp_Width().equals(notification.getFeature())
+					|| LibraryElementPackage.eINSTANCE.getSubApp_Height().equals(notification.getFeature())) {
+				refreshPosition();
+			}
+			refreshVisuals();
+		}
+
+		private void refreshRoot() {
+			final EditPart root = getRoot();
+			if (root != null) {
+				root.getChildren().forEach(child -> ((EditPart) child).refresh());
+			}
+		}
+
+		private void refreshInterfaceEditParts() {
+			getChildren().forEach(ep -> {
+				if (ep instanceof InterfaceEditPart) {
+					((InterfaceEditPart) ep).refresh();
+				}
+			});
+		}
 	}
 
 	private class SubappCommentRenameEditPolicy extends AbstractViewRenameEditPolicy {
@@ -275,7 +297,10 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		if (childEditPart instanceof UnfoldedSubappContentEditPart) {
-			getFigure().getExpandedMainFigure().add(((UnfoldedSubappContentEditPart) childEditPart).getFigure(), 2);
+			final IFigure contentFigure = ((UnfoldedSubappContentEditPart) childEditPart).getFigure();
+			final GridData contentGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+					| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
+			getFigure().getExpandedMainFigure().add(contentFigure, contentGridData, 2);
 		} else {
 			super.addChildVisual(childEditPart, index);
 		}
@@ -304,5 +329,22 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	public GraphicalEditPart getContentEP() {
 		return (GraphicalEditPart) getChildren().stream().filter(UnfoldedSubappContentEditPart.class::isInstance)
 				.findAny().orElse(null);
+	}
+
+	@Override
+	protected void refreshPosition() {
+		if (getParent() != null) {
+			final Position position = getModel().getPosition();
+			final Point asPoint = position.asPoint();
+			final Rectangle bounds = new Rectangle(asPoint, getSubappSize());
+			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
+		}
+	}
+
+	private Dimension getSubappSize() {
+		if (getModel().isUnfolded()) {
+			return new Dimension(getModel().getWidth(), getModel().getHeight());
+		}
+		return new Dimension(-1, -1);
 	}
 }

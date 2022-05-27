@@ -15,6 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,7 +33,9 @@ import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
+import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
@@ -69,8 +72,9 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
 			final Object constraint) {
-		if (child.getModel() instanceof Group && RequestUtil.isResizeRequest(request)) {
-			return createChangeGroupSizeCommand((Group) child.getModel(), request);
+		if ((child.getModel() instanceof Group || child.getModel() instanceof SubApp)
+				&& RequestUtil.isResizeRequest(request)) {
+			return createChangeSizeCommand((FBNetworkElement) child.getModel(), request);
 		}
 		if ((child.getModel() instanceof PositionableElement) && (RequestUtil.isMoveRequest(request))) {
 			return createMoveCommand((PositionableElement) child.getModel(), request, constraint);
@@ -78,27 +82,49 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
-	private Command createChangeGroupSizeCommand(final Group group, final ChangeBoundsRequest request) {
+	private Command createChangeSizeCommand(final FBNetworkElement container, final ChangeBoundsRequest request) {
 		final Dimension sizeDelta = getScaledSizeDelta(request);
 		if (sizeDelta.width == 0 && sizeDelta.height == 0) {
 			// we hit the min size and we are just moving, return a set position command
-			return createMoveCommand(group, request, null);
+			return createMoveCommand(container, request, null);
 		}
 		final Point moveDelta = getScaledMoveDelta(request);
-		final ChangeGroupBoundsCommand changeGroupBoundsCommand = new ChangeGroupBoundsCommand(group, moveDelta.x,
-				moveDelta.y, sizeDelta.width, sizeDelta.height);
+		final AbstractChangeContainerBoundsCommand changeGroupBoundsCommand = createChangeBoundsCommand(container,
+				sizeDelta, moveDelta);
 
-		if (isMoveWithResizing(sizeDelta, moveDelta)) {
+		if (changeGroupBoundsCommand != null && isMoveWithResizing(sizeDelta, moveDelta)) {
 			// we have a move resize situation where we have to re-compensate FB positions
 			final int dx = moveDelta.x + sizeDelta.width;
 			final int dy = moveDelta.y + sizeDelta.height;
 			final CompoundCommand cmd = new CompoundCommand();
 			cmd.add(changeGroupBoundsCommand);
-			group.getGroupElements().forEach(el -> cmd.add(new SetPositionCommand(el, dx, dy)));
+			getContainerChildren(container).forEach(el -> cmd.add(new SetPositionCommand(el, dx, dy)));
 			return cmd;
 		}
-
 		return changeGroupBoundsCommand;
+	}
+
+	private static List<FBNetworkElement> getContainerChildren(final FBNetworkElement container) {
+		if (container instanceof Group) {
+			return ((Group) container).getGroupElements();
+		}
+		if (container instanceof SubApp) {
+			return ChangeSubAppBoundsCommand.getDirectSubappChildren((SubApp) container);
+		}
+		return Collections.emptyList();
+	}
+
+	protected static AbstractChangeContainerBoundsCommand createChangeBoundsCommand(final FBNetworkElement container,
+			final Dimension sizeDelta, final Point moveDelta) {
+		if (container instanceof Group) {
+			return new ChangeGroupBoundsCommand((Group) container, moveDelta.x, moveDelta.y, sizeDelta.width,
+					sizeDelta.height);
+		}
+		if (container instanceof SubApp) {
+			return new ChangeSubAppBoundsCommand((SubApp) container, moveDelta.x, moveDelta.y, sizeDelta.width,
+					sizeDelta.height);
+		}
+		return null;
 	}
 
 	@Override

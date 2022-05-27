@@ -22,6 +22,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentNetwork;
 import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
+import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateFBElementInGroupCommand;
@@ -78,7 +79,7 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 			final Rectangle groupContentBounds = getGroupAreaBounds(getHost());
 			if (!groupContentBounds.contains(newContentBounds)) {
 				newContentBounds.union(groupContentBounds);
-				final ChangeGroupBoundsCommand changeSizeCmd = createChangeGroupBoundsCommand(getGroup(),
+				final AbstractChangeContainerBoundsCommand changeSizeCmd = createChangeGroupBoundsCommand(getGroup(),
 						groupContentBounds, newContentBounds);
 				if (cmd instanceof CompoundCommand) {
 					((CompoundCommand) cmd).add(changeSizeCmd);
@@ -179,7 +180,7 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 		return cmd;
 	}
 
-	public static ChangeGroupBoundsCommand createChangeGroupBoundsCommand(final Group group,
+	public static AbstractChangeContainerBoundsCommand createChangeGroupBoundsCommand(final Group group,
 			final Rectangle groupContentContainerBounds, final Rectangle groupContentBounds) {
 		final int dx = groupContentBounds.x - groupContentContainerBounds.x;
 		final int dy = groupContentBounds.y - groupContentContainerBounds.y;

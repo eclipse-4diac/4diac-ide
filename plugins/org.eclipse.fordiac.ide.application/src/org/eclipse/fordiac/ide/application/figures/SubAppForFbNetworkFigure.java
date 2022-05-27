@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.swt.SWT;
 
 /**
  * The Class SubAppForFbNetworkFigure.
@@ -92,6 +93,11 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	private void transformToExpandedSubapp() {
 		setBorder(null);
 		getFbFigureContainer().setBorder(new RoundedRectangleShadowBorder());
+
+		final GridData layoutConstraint = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
+		setConstraint(getFbFigureContainer(), layoutConstraint);
+
 		createExpandedMainFigure();
 		removeTopMiddleBotom();
 		addComment();
@@ -103,6 +109,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 
 	private void transformToCollapsedSubapp() {
 		getFbFigureContainer().setBorder(null);
+		setConstraint(getFbFigureContainer(), createDefaultFBContainerLayoutData());
 		setBorder(new FBShapeShadowBorder());
 		getFbFigureContainer().remove(expandedMainFigure);
 		expandedMainFigure = null;
@@ -119,25 +126,39 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure = new RoundedRectangle();
 		expandedMainFigure.setOutline(false);
 		expandedMainFigure
-		.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
+				.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 		expandedMainFigure.setLayoutManager(createTopBottomLayout());
-		getFbFigureContainer().add(expandedMainFigure, createTopBottomLayoutData(), -1);
+		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
+		getFbFigureContainer().add(expandedMainFigure, gridData, -1);
 	}
 
 	private void createExpandedInputs() {
 		final Figure inputFigure = new Figure();
 		inputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(inputFigure, createTopBottomLayoutData(), -1);
-		inputFigure.add(getEventInputs(), createTopBottomLayoutData(), -1);
-		inputFigure.add(getBottomInputArea(), createTopBottomLayoutData(), -1);
+		expandedMainFigure.add(inputFigure, createExpandedIOLayoutData(), -1);
+		inputFigure.add(getEventInputs(), createExpandedIOLayoutData(), -1);
+		inputFigure.add(getBottomInputArea(), createExpandedIOLayoutData(), -1);
 	}
 
 	private void crateExpandedOutputs() {
 		final Figure outputFigure = new Figure();
 		outputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(outputFigure, createTopBottomLayoutData(), -1);
-		outputFigure.add(getEventOutputs(), createTopBottomOutputLayoutData(), -1);
-		outputFigure.add(getBottomOutputArea(), createTopBottomOutputLayoutData(), -1);
+		expandedMainFigure.add(outputFigure, createExpandedIOLayoutData(), -1);
+		outputFigure.add(getEventOutputs(), createExpandedOutputLayoutData(), -1);
+		outputFigure.add(getBottomOutputArea(), createExpandedOutputLayoutData(), -1);
+	}
+
+	private static GridData createExpandedIOLayoutData() {
+		final GridData gridData = new GridData(GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
+		gridData.verticalAlignment = SWT.TOP;
+		return gridData;
+	}
+
+	protected static GridData createExpandedOutputLayoutData() {
+		final GridData outputsLayoutData = createExpandedIOLayoutData();
+		outputsLayoutData.horizontalAlignment = GridData.END;
+		return outputsLayoutData;
 	}
 
 	private void removeTopMiddleBotom() {

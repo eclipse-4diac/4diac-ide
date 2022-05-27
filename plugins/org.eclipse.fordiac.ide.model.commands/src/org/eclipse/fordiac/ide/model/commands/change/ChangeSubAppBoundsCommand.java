@@ -13,13 +13,14 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
-public class ChangeGroupBoundsCommand extends AbstractChangeContainerBoundsCommand {
+public class ChangeSubAppBoundsCommand extends AbstractChangeContainerBoundsCommand {
 
-	public ChangeGroupBoundsCommand(final Group group, final int dx, final int dy, final int dw, final int dh) {
+	public ChangeSubAppBoundsCommand(final SubApp group, final int dx, final int dy, final int dw, final int dh) {
 		super(group, dx, dy, dw, dh, group.getWidth(), group.getHeight());
 	}
 
@@ -31,12 +32,17 @@ public class ChangeGroupBoundsCommand extends AbstractChangeContainerBoundsComma
 
 	@Override
 	protected List<FBNetworkElement> getChildren() {
-		return getTarget().getGroupElements();
+		return getTarget().getSubAppNetwork().getNetworkElements();
 	}
 
 	@Override
-	public Group getTarget() {
-		return (Group) super.getTarget();
+	public SubApp getTarget() {
+		return (SubApp) super.getTarget();
+	}
+
+	public static List<FBNetworkElement> getDirectSubappChildren(final SubApp subapp) {
+		return subapp.getSubAppNetwork().getNetworkElements().stream().filter(el -> !el.isInGroup())
+				.collect(Collectors.toList());
 	}
 
 }

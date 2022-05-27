@@ -334,8 +334,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 			}
 		};
 		add(fbFigureContainer);
-		final GridData layoutConstraint = new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
-		setConstraint(fbFigureContainer, layoutConstraint);
+		setConstraint(fbFigureContainer, createDefaultFBContainerLayoutData());
 
 		final GridLayout gridLayout = new GridLayout(1, true);
 		gridLayout.marginHeight = 0;
@@ -343,6 +342,10 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		gridLayout.horizontalSpacing = 0;
 		gridLayout.verticalSpacing = -1;
 		fbFigureContainer.setLayoutManager(gridLayout);
+	}
+
+	protected static GridData createDefaultFBContainerLayoutData() {
+		return new GridData(GridData.HORIZONTAL_ALIGN_CENTER);
 	}
 
 	private void setupTopIOs() {
