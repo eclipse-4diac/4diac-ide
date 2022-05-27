@@ -2435,13 +2435,31 @@ public interface LibraryElementPackage extends EPackage {
 	int SUB_APP__SUB_APP_NETWORK = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_APP__WIDTH = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Height</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SUB_APP__HEIGHT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
 	 * The number of structural features of the '<em>Sub App</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SUB_APP_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
+	int SUB_APP_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.IdentificationImpl <em>Identification</em>}' class.
@@ -7446,6 +7464,28 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getSubApp_SubAppNetwork();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getWidth <em>Width</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Width</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.SubApp#getWidth()
+	 * @see #getSubApp()
+	 * @generated
+	 */
+	EAttribute getSubApp_Width();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.SubApp#getHeight <em>Height</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Height</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.SubApp#getHeight()
+	 * @see #getSubApp()
+	 * @generated
+	 */
+	EAttribute getSubApp_Height();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.FBType <em>FB Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7971,17 +8011,6 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getServiceSequence_ServiceTransaction();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getStartState <em>Start State</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Start State</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getStartState()
-	 * @see #getServiceSequence()
-	 * @generated
-	 */
-	EAttribute getServiceSequence_StartState();
-
-	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getServiceSequenceType <em>Service Sequence Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -7991,6 +8020,17 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EAttribute getServiceSequence_ServiceSequenceType();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getStartState <em>Start State</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Start State</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getStartState()
+	 * @see #getServiceSequence()
+	 * @generated
+	 */
+	EAttribute getServiceSequence_StartState();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction <em>Service Transaction</em>}'.
@@ -10129,6 +10169,22 @@ public interface LibraryElementPackage extends EPackage {
 		EReference SUB_APP__SUB_APP_NETWORK = eINSTANCE.getSubApp_SubAppNetwork();
 
 		/**
+		 * The meta object literal for the '<em><b>Width</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUB_APP__WIDTH = eINSTANCE.getSubApp_Width();
+
+		/**
+		 * The meta object literal for the '<em><b>Height</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SUB_APP__HEIGHT = eINSTANCE.getSubApp_Height();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeImpl <em>FB Type</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -10549,20 +10605,20 @@ public interface LibraryElementPackage extends EPackage {
 		EReference SERVICE_SEQUENCE__SERVICE_TRANSACTION = eINSTANCE.getServiceSequence_ServiceTransaction();
 
 		/**
-		 * The meta object literal for the '<em><b>Start State</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute SERVICE_SEQUENCE__START_STATE = eINSTANCE.getServiceSequence_StartState();
-
-		/**
 		 * The meta object literal for the '<em><b>Service Sequence Type</b></em>' attribute feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EAttribute SERVICE_SEQUENCE__SERVICE_SEQUENCE_TYPE = eINSTANCE.getServiceSequence_ServiceSequenceType();
+
+		/**
+		 * The meta object literal for the '<em><b>Start State</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute SERVICE_SEQUENCE__START_STATE = eINSTANCE.getServiceSequence_StartState();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl <em>Service Transaction</em>}' class.

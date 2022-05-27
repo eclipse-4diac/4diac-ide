@@ -1574,6 +1574,26 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EAttribute getSubApp_Width() {
+		return (EAttribute)subAppEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSubApp_Height() {
+		return (EAttribute)subAppEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getFBType() {
 		return fbTypeEClass;
 	}
@@ -2064,8 +2084,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EAttribute getServiceSequence_StartState() {
-		return (EAttribute)serviceSequenceEClass.getEStructuralFeatures().get(2);
+	public EAttribute getServiceSequence_ServiceSequenceType() {
+		return (EAttribute)serviceSequenceEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -2074,8 +2094,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EAttribute getServiceSequence_ServiceSequenceType() {
-		return (EAttribute)serviceSequenceEClass.getEStructuralFeatures().get(1);
+	public EAttribute getServiceSequence_StartState() {
+		return (EAttribute)serviceSequenceEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -3616,6 +3636,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		subAppEClass = createEClass(SUB_APP);
 		createEReference(subAppEClass, SUB_APP__SUB_APP_NETWORK);
+		createEAttribute(subAppEClass, SUB_APP__WIDTH);
+		createEAttribute(subAppEClass, SUB_APP__HEIGHT);
 
 		fbTypeEClass = createEClass(FB_TYPE);
 		createEReference(fbTypeEClass, FB_TYPE__INTERFACE_LIST);
@@ -4192,6 +4214,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(subAppEClass, SubApp.class, "SubApp", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getSubApp_SubAppNetwork(), this.getFBNetwork(), null, "subAppNetwork", null, 0, 1, SubApp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSubApp_Width(), theXMLTypePackage.getInt(), "width", "200", 0, 1, SubApp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+		initEAttribute(getSubApp_Height(), theXMLTypePackage.getInt(), "height", "100", 0, 1, SubApp.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
 		addEOperation(subAppEClass, this.getSubAppType(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
