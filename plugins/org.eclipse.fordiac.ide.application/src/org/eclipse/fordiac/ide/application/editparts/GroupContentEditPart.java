@@ -14,67 +14,16 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.List;
 
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.application.policies.GroupXYLayoutPolicy;
-import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.commands.create.CreateFBElementInGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.RootEditPart;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
-import org.eclipse.gef.editpolicies.DirectEditPolicy;
-import org.eclipse.gef.requests.DirectEditRequest;
-import org.eclipse.gef.requests.SelectionRequest;
 
 public class GroupContentEditPart extends AbstractContainerContentEditPart {
-
-	private class CreateInstanceDirectEditPolicy extends DirectEditPolicy {
-
-		@Override
-		protected Command getDirectEditCommand(final DirectEditRequest request) {
-			final Object value = request.getCellEditor().getValue();
-			final Point refPoint = getInsertionPoint(request);
-			if (value instanceof TypeEntry) {
-				return new CreateFBElementInGroupCommand((TypeEntry) value, getModel().getGroup(), refPoint.x,
-						refPoint.y);
-			}
-			return null;
-		}
-
-		private Point getInsertionPoint(final DirectEditRequest request) {
-			final Point refPoint = new Point(FBNetworkRootEditPart.getInsertPos(request, getViewer(), getZoom()));
-			final Point topLeft = getFigure().getClientArea().getTopLeft();
-			refPoint.translate(-topLeft.x, -topLeft.y);
-			return refPoint;
-		}
-
-		private double getZoom() {
-			final RootEditPart root = getHost().getRoot();
-			if (root instanceof ScalableFreeformRootEditPart) {
-				return ((ScalableFreeformRootEditPart) root).getZoomManager().getZoom();
-			}
-			return 1.0;
-		}
-
-		@Override
-		protected void showCurrentEditValue(final DirectEditRequest request) {
-			// we don't need to do anything here for creating new fb instances
-		}
-
-	}
 
 	@Override
 	public GroupContentNetwork getModel() {
@@ -91,29 +40,14 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 	protected void createEditPolicies() {
 		super.createEditPolicies();
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new GroupXYLayoutPolicy());
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new CreateInstanceDirectEditPolicy());
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractCreateInstanceDirectEditPolicy() {
+			@Override
+			public CreateFBElementInGroupCommand getElementCreateCommand(final TypeEntry type, final Point refPoint) {
+				return new CreateFBElementInGroupCommand(type, getModel().getGroup(), refPoint.x, refPoint.y);
+			}
+		});
 	}
 
-	@Override
-	public void setLayoutConstraint(final EditPart child, final IFigure childFigure, final Object constraint) {
-		if ((constraint instanceof Rectangle)  && (child instanceof ValueEditPart)){
-			final Rectangle rectConstraint = (Rectangle) constraint;
-			final Point topLeft = getFigure().getClientArea().getTopLeft();
-			rectConstraint.performTranslate(-topLeft.x, -topLeft.y);
-		}
-		super.setLayoutConstraint(child, childFigure, constraint);
-	}
-
-	@Override
-	public void performRequest(final Request request) {
-		final Object type = request.getType();
-		if ((type == RequestConstants.REQ_DIRECT_EDIT || type == RequestConstants.REQ_OPEN)
-				&& (request instanceof SelectionRequest)) {
-			performDirectEdit((SelectionRequest) request);
-		} else {
-			super.performRequest(request);
-		}
-	}
 
 	@Override
 	public Object getAdapter(final Class key) {
@@ -123,27 +57,10 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 		return super.getAdapter(key);
 	}
 
-	private NewInstanceDirectEditManager createDirectEditManager() {
-		return new NewInstanceDirectEditManager(this, getTypeLibrary(), false);
+	@Override
+	protected EObject getContainerElement() {
+		return getModel().getGroup();
 	}
 
-	private TypeLibrary getTypeLibrary() {
-		final EObject root = EcoreUtil.getRootContainer(getModel().getGroup());
-		return (root instanceof LibraryElement) ? ((LibraryElement) root).getTypeEntry().getTypeLibrary() : null;
-	}
-
-	void performDirectEdit(final SelectionRequest request) {
-		final NewInstanceDirectEditManager directEditManager = createDirectEditManager();
-		directEditManager.updateRefPosition(
-				new org.eclipse.swt.graphics.Point(request.getLocation().x, request.getLocation().y));
-		if (request.getExtendedData().isEmpty()) {
-			directEditManager.show();
-		} else {
-			final Object key = request.getExtendedData().keySet().iterator().next();
-			if (key instanceof String) {
-				directEditManager.show((String) key);
-			}
-		}
-	}
 
 }

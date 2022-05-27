@@ -23,25 +23,32 @@ import java.util.List;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EContentAdapter;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart.FBNetworkMarqueeDragTracker;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentXYLayoutPolicy;
+import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.gef.editpolicies.SelectionEditPolicy;
+import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.tools.MarqueeSelectionTool;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.graphics.Point;
 
 public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart {
 	private static class ContainerMarqueeDragTracker extends FBNetworkRootEditPart.FBNetworkMarqueeDragTracker {
@@ -58,30 +65,14 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		}
 	}
 
-	private int childrenNumber = 0;
-	protected Point p = new Point(0, 0);
-
-	public Point getOffsetPoint() {
-		return p;
-	}
-
 	private final Adapter adapter = new EContentAdapter() {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
 			if (LibraryElementPackage.eINSTANCE.getPositionableElement_Position().equals(feature)) {
-				p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
-				p.x -= 40;
 				getChildren().forEach(ep -> ((EditPart) ep).refresh());
-			} else {
-				super.notifyChanged(notification);
-				if (getModel().getNetworkElements().size() != childrenNumber) {
-					childrenNumber = getModel().getNetworkElements().size();
-					p = FBNetworkHelper.getTopLeftCornerOfFBNetwork(getModel().getNetworkElements());
-					p.x -= 40;
-					getChildren().forEach(ep -> ((EditPart) ep).refresh());
-				}
 			}
+			super.notifyChanged(notification);
 		}
 	};
 
@@ -138,8 +129,6 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ContainerContentXYLayoutPolicy());
 	}
 
-
-
 	@Override
 	protected IFigure createFigure() {
 		final IFigure figure = new Figure() {
@@ -164,5 +153,51 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
 		return dragTracker;
 	}
+
+	@Override
+	public void setLayoutConstraint(final EditPart child, final IFigure childFigure, final Object constraint) {
+		if ((constraint instanceof Rectangle) && (child instanceof ValueEditPart)) {
+			final Rectangle rectConstraint = (Rectangle) constraint;
+			final Point topLeft = getFigure().getClientArea().getTopLeft();
+			rectConstraint.performTranslate(-topLeft.x, -topLeft.y);
+		}
+		super.setLayoutConstraint(child, childFigure, constraint);
+	}
+
+	@Override
+	public void performRequest(final Request request) {
+		final Object type = request.getType();
+		if ((type == RequestConstants.REQ_DIRECT_EDIT || type == RequestConstants.REQ_OPEN)
+				&& (request instanceof SelectionRequest)) {
+			performDirectEdit((SelectionRequest) request);
+		} else {
+			super.performRequest(request);
+		}
+	}
+
+	private void performDirectEdit(final SelectionRequest request) {
+		final NewInstanceDirectEditManager directEditManager = createDirectEditManager();
+		directEditManager.updateRefPosition(
+				new org.eclipse.swt.graphics.Point(request.getLocation().x, request.getLocation().y));
+		if (request.getExtendedData().isEmpty()) {
+			directEditManager.show();
+		} else {
+			final Object key = request.getExtendedData().keySet().iterator().next();
+			if (key instanceof String) {
+				directEditManager.show((String) key);
+			}
+		}
+	}
+
+	private NewInstanceDirectEditManager createDirectEditManager() {
+		return new NewInstanceDirectEditManager(this, getTypeLibrary(), false);
+	}
+
+	private TypeLibrary getTypeLibrary() {
+		final EObject root = EcoreUtil.getRootContainer(getContainerElement());
+		return (root instanceof LibraryElement) ? ((LibraryElement) root).getTypeEntry().getTypeLibrary() : null;
+	}
+
+	protected abstract EObject getContainerElement();
 
 }

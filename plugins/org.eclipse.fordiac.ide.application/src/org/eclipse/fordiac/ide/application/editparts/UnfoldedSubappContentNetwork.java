@@ -58,6 +58,10 @@ public class UnfoldedSubappContentNetwork implements FBNetwork {
 		return subappContent;
 	}
 
+	public SubApp getSubapp() {
+		return (SubApp) getSubappContent().eContainer();
+	}
+
 	@Override
 	public EClass eClass() {
 		return subappContent.eClass();

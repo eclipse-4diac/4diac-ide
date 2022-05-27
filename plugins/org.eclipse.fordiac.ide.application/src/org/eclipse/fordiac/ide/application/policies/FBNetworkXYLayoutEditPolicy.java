@@ -36,15 +36,13 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
-import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
-import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -110,14 +108,9 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			final Rectangle constraint = (Rectangle) getConstraintFor(request);
 			if (getHost().getModel() instanceof FBNetwork) {
 				final FBNetwork fbNetwork = (FBNetwork) getHost().getModel();
-				if (childClass instanceof FBTypeEntry) {
-					final FBTypeEntry type = (FBTypeEntry) childClass;
-					return new FBCreateCommand(type, fbNetwork, constraint.getLocation().x, constraint.getLocation().y);
-				}
-				if (childClass instanceof SubAppTypeEntry) {
-					final SubAppTypeEntry type = (SubAppTypeEntry) childClass;
-					return new CreateSubAppInstanceCommand(type, fbNetwork, constraint.getLocation().x,
-							constraint.getLocation().y);
+				if (childClass instanceof TypeEntry) {
+					return AbstractCreateFBNetworkElementCommand.createCreateCommand((TypeEntry) childClass, fbNetwork,
+							constraint.getLocation().x, constraint.getLocation().y);
 				}
 			}
 		}

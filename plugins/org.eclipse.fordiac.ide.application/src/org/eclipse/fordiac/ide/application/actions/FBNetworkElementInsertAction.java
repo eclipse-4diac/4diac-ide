@@ -22,11 +22,7 @@ package org.eclipse.fordiac.ide.application.actions;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
-import org.eclipse.fordiac.ide.model.commands.create.CreateSubAppInstanceCommand;
-import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.ui.actions.WorkbenchPartAction;
@@ -59,13 +55,7 @@ public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 
 	private AbstractCreateFBNetworkElementCommand createFBNetworkElementCreateCommand() {
 		final Point pt = getPositionInViewer((IEditorPart) getWorkbenchPart());
-		if (typeEntry instanceof FBTypeEntry) {
-			return new FBCreateCommand((FBTypeEntry) typeEntry, fbNetwork, pt.x, pt.y);
-		} else if (typeEntry instanceof SubAppTypeEntry) {
-			return new CreateSubAppInstanceCommand((SubAppTypeEntry) typeEntry, fbNetwork, pt.x, pt.y);
-		}
-
-		return null;
+		return AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, fbNetwork, pt.x, pt.y);
 	}
 
 	private static Point getPositionInViewer(final IEditorPart editor) {

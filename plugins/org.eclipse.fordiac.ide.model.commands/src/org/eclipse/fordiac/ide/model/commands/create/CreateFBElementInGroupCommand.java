@@ -12,10 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 
@@ -27,7 +24,8 @@ public class CreateFBElementInGroupCommand extends Command {
 	public CreateFBElementInGroupCommand(final TypeEntry typeEntry, final Group group, final int x,
 			final int y) {
 		this.group = group;
-		elementCreateCmd = createCreateCommand(typeEntry, group.getFbNetwork(), x, y);
+		elementCreateCmd = AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, group.getFbNetwork(), x,
+				y);
 	}
 
 	@Override
@@ -51,17 +49,6 @@ public class CreateFBElementInGroupCommand extends Command {
 	public void redo() {
 		elementCreateCmd.redo();
 		group.getGroupElements().add(elementCreateCmd.getElement());
-	}
-
-	private static AbstractCreateFBNetworkElementCommand createCreateCommand(final TypeEntry typeEntry,
-			final FBNetwork fbNetwork, final int x, final int y) {
-		if (typeEntry instanceof FBTypeEntry) {
-			return new FBCreateCommand((FBTypeEntry) typeEntry, fbNetwork, x, y);
-		}
-		if (typeEntry instanceof SubAppTypeEntry) {
-			return new CreateSubAppInstanceCommand((SubAppTypeEntry) typeEntry, fbNetwork, x, y);
-		}
-		return null;
 	}
 
 }

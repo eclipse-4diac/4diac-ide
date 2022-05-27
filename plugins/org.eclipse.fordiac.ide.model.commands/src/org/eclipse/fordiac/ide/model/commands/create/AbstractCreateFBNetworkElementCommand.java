@@ -21,6 +21,9 @@ import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 
 public abstract class AbstractCreateFBNetworkElementCommand extends Command {
@@ -82,5 +85,16 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command {
 
 	protected FBNetwork getFBNetwork() {
 		return fbNetwork;
+	}
+
+	public static AbstractCreateFBNetworkElementCommand createCreateCommand(final TypeEntry typeEntry,
+			final FBNetwork fbNetwork, final int x, final int y) {
+		if (typeEntry instanceof FBTypeEntry) {
+			return new FBCreateCommand((FBTypeEntry) typeEntry, fbNetwork, x, y);
+		}
+		if (typeEntry instanceof SubAppTypeEntry) {
+			return new CreateSubAppInstanceCommand((SubAppTypeEntry) typeEntry, fbNetwork, x, y);
+		}
+		return null;
 	}
 }
