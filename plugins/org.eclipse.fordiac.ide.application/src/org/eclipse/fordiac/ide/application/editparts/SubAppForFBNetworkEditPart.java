@@ -36,7 +36,7 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.ContainerResizePolicy;
-import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
+import org.eclipse.fordiac.ide.application.policies.SubAppContentLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
@@ -191,7 +191,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	protected void createEditPolicies() {
 		super.createEditPolicies();
 		// Add policy to handle drag&drop of fbs
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBAddToSubAppLayoutEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new SubAppContentLayoutEditPolicy());
 		if (getModel().isUnfolded()) {
 			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new SubappCommentRenameEditPolicy());
 		}

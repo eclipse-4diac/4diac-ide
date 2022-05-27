@@ -23,13 +23,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -38,13 +36,11 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
-import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 /** This policy creates an AddFBToSubAppCommand when user moves selected FBs over a subapp. When this is possible the
  * subapp is marked as selected. */
-public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
+public class SubAppContentLayoutEditPolicy extends ContainerContentXYLayoutPolicy {
 
 	private Figure moveHandle;
 
@@ -87,13 +83,6 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 		return draggedFB.getOuterFBNetworkElement().getOuterFBNetworkElement().equals(dropTarget);
 	}
 
-	private org.eclipse.draw2d.geometry.Point getTranslatedAndZoomedPoint(final ChangeBoundsRequest request) {
-		final FigureCanvas viewerControl = (FigureCanvas) getTargetEditPart(request).getViewer().getControl();
-		final org.eclipse.draw2d.geometry.Point location = viewerControl.getViewport().getViewLocation();
-		return new org.eclipse.draw2d.geometry.Point(request.getLocation().x + location.x,
-				request.getLocation().y + location.y).scale(1.0 / getZoomManager().getZoom());
-	}
-
 	@Override
 	protected void showLayoutTargetFeedback(final Request request) {
 		if (REQ_ADD.equals(request.getType()) && (null == moveHandle)) {
@@ -102,10 +91,6 @@ public class FBAddToSubAppLayoutEditPolicy extends EmptyXYLayoutEditPolicy {
 					DiagramPreferences.CORNER_DIM_HALF);
 			addFeedback(moveHandle);
 		}
-	}
-
-	private ZoomManager getZoomManager() {
-		return ((ScalableFreeformRootEditPart) (getHost().getRoot())).getZoomManager();
 	}
 
 	@Override

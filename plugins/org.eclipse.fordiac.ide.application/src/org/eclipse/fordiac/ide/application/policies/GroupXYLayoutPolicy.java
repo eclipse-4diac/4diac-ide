@@ -21,8 +21,6 @@ import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentNetwork;
-import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
-import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
 import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
@@ -31,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
@@ -108,18 +105,6 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 		return (generic instanceof ChangeBoundsRequest) && (targetEditPart instanceof GroupContentEditPart);
 	}
 
-	@Override
-	protected EditPolicy createChildEditPolicy(final EditPart child) {
-		if (child.getModel() instanceof Group) {
-			return new ModifiedResizeablePolicy();
-		}
-		return new ModifiedNonResizeableEditPolicy();
-	}
-
-	@Override
-	public GraphicalEditPart getHost() {
-		return (GraphicalEditPart) super.getHost();
-	}
 
 	private Group getGroup() {
 		final Object model = getHost().getModel();

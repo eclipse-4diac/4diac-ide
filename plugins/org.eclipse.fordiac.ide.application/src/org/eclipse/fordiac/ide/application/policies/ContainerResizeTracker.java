@@ -77,19 +77,18 @@ class ContainerResizeTracker extends ResizeTracker {
 	}
 
 	private void updateMinBounds() {
-		final Rectangle groupBounds = getOwner().getFigure().getBounds();
-		final GraphicalEditPart groupContent = getOwner().getContentEP();
-		if (groupContent != null) { // this should never be the case but just for safety
-			final Rectangle groupContentFigureBounds = groupContent.getFigure().getBounds();
-			minBounds = getOwner().getGroupContentBounds();
-
-			final int wInc = (groupBounds.width - groupContentFigureBounds.width) / 2;
-			minBounds.expand(wInc, 0);
-			// we can not use expand for the height increment as we are not symmetrically applying it
-			minBounds.height += groupBounds.height - groupContentFigureBounds.height;
-			minBounds.y -= (groupContentFigureBounds.y - groupBounds.y);
+		final Rectangle containerBounds = getOwner().getFigure().getBounds();
+		final GraphicalEditPart contentEP = getOwner().getContentEP();
+		if (contentEP != null) { // this should never be the case but just for safety
+			final Rectangle contentFigureBounds = contentEP.getFigure().getBounds();
+			minBounds = getOwner().getMinContentBounds();
+			// consider container size requirements
+			minBounds.x -= (contentFigureBounds.x - containerBounds.x);
+			minBounds.y -= (contentFigureBounds.y - containerBounds.y);
+			minBounds.width += containerBounds.width - contentFigureBounds.width;
+			minBounds.height += containerBounds.height - contentFigureBounds.height;
 		} else {
-			minBounds = IContainerEditPart.getDefaultGroupContentBounds();
+			minBounds = IContainerEditPart.getDefaultContentBounds();
 		}
 	}
 

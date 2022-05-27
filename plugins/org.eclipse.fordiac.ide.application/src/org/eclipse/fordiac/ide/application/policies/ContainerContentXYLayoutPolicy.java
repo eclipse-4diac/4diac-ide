@@ -45,4 +45,10 @@ public class ContainerContentXYLayoutPolicy extends FBNetworkXYLayoutEditPolicy 
 			moveHandle = null;
 		}
 	}
+
+	@Override
+	public GraphicalEditPart getHost() {
+		return (GraphicalEditPart) super.getHost();
+	}
+
 }

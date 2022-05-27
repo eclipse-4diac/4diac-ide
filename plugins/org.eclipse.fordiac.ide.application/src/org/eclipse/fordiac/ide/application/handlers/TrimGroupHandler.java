@@ -41,7 +41,7 @@ public class TrimGroupHandler extends AbstractHandler {
 			final GraphicalEditPart groupContentEP = groupEditPart.getContentEP();
 			if(groupContentEP != null) {
 				final Rectangle groupContentContainerBounds = GroupXYLayoutPolicy.getGroupAreaBounds(groupContentEP);
-				final Rectangle groupContentBounds = groupEditPart.getGroupContentBounds();
+				final Rectangle groupContentBounds = groupEditPart.getMinContentBounds();
 				final Command cmd = GroupXYLayoutPolicy.createChangeGroupBoundsCommand(groupEditPart.getModel(),
 						groupContentContainerBounds, groupContentBounds);
 				getCommandStack(editor).execute(cmd);

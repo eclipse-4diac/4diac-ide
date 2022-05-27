@@ -19,7 +19,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
+import org.eclipse.fordiac.ide.application.policies.SubAppContentLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPolicy;
@@ -32,7 +32,7 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 	protected void createEditPolicies() {
 		super.createEditPolicies();
 		// Add policy to handle drag&drop of fbs
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBAddToSubAppLayoutEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new SubAppContentLayoutEditPolicy());
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractCreateInstanceDirectEditPolicy() {
 			@Override
 			protected Command getElementCreateCommand(final TypeEntry value, final Point refPoint) {

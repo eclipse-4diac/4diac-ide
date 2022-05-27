@@ -23,7 +23,7 @@ public interface IContainerEditPart extends GraphicalEditPart {
 
 	Rectangle getCommentBounds();
 
-	default Rectangle getGroupContentBounds() {
+	default Rectangle getMinContentBounds() {
 		Rectangle selectionExtend = null;
 		for (final Object child : getContentEP().getChildren()) {
 			if (child instanceof GraphicalEditPart) {
@@ -35,14 +35,14 @@ public interface IContainerEditPart extends GraphicalEditPart {
 				}
 			}
 		}
-		return (selectionExtend != null) ? selectionExtend : getDefaultGroupContentBounds();
+		return (selectionExtend != null) ? selectionExtend : getDefaultContentBounds();
 	}
 
 	private static Rectangle getBoundsForEditPart(final GraphicalEditPart ep) {
 		return ep.getFigure().getBounds().getCopy();
 	}
 
-	static Rectangle getDefaultGroupContentBounds() {
+	static Rectangle getDefaultContentBounds() {
 		return new Rectangle(new Point(0, 0), IFigure.MIN_DIMENSION);
 	}
 
