@@ -16,16 +16,21 @@ package org.eclipse.fordiac.ide.application.search;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -63,12 +68,12 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 	@Override
 	public void restoreState(final IMemento memento) {
-		// Nothing to do here yet
+		// Nothing to do here for now
 	}
 
 	@Override
 	public void saveState(final IMemento memento) {
-		// Nothing to do here yet
+		// Nothing to do here for now
 	}
 
 	@Override
@@ -178,15 +183,10 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		fullHierarchicalName.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof FBNetworkElement) {
-					return FBNetworkHelper.getFullHierarchicalName((FBNetworkElement) element);
-				}
-				return super.getText(element);
+				return hierarchicalName(element);
 			}
 
 		});
-
-
 		viewer.addDoubleClickListener(ModelSearchResultPage::jumpToBlock);
 	}
 
@@ -195,14 +195,51 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		final StructuredSelection selectionList = (StructuredSelection) doubleClick.getSelection();
 		if (!selectionList.isEmpty()) {
 			final Object selection = selectionList.getFirstElement();
-			if (selection instanceof FBNetworkElement) {
-				final FBNetworkElement fbSelection = (FBNetworkElement) selection;
-				final IEditorPart editor = OpenListenerManager.openEditor(fbSelection.eContainer().eContainer());
-				HandlerHelper.selectElement(selection, HandlerHelper.getViewer(editor));
+			if (selection instanceof EObject) {
+				jumpHelper((EObject) selection);
 			}
-
 		}
+	}
 
+	private static void jumpHelper(final EObject jumpingTo) {
+		final IEditorPart editor = OpenListenerManager.openEditor(getParent(jumpingTo));
+		final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
+		HandlerHelper.selectElement(jumpingTo, viewer);
+	}
+
+	private static EObject getParent(final EObject eobj) {
+		if (eobj instanceof IInterfaceElement) {
+			return ((IInterfaceElement) eobj).getFBNetworkElement().eContainer().eContainer();
+		} else if (eobj instanceof Device) {
+			return ((Device) eobj).getPosition().eContainer().eContainer();
+		} else if (eobj instanceof Application) {
+			return ((Application) eobj).eContainer();
+		}
+		return eobj.eContainer().eContainer();
+	}
+
+	private static String hierarchicalName(final Object element) {
+		if (element instanceof FBNetworkElement) {
+			return FBNetworkHelper.getFullHierarchicalName((FBNetworkElement) element);
+		} else if (element instanceof IInterfaceElement) {
+			final String FBName = FBNetworkHelper
+					.getFullHierarchicalName(((IInterfaceElement) element).getFBNetworkElement());
+			return FBName + "." + ((IInterfaceElement) element).getName(); //$NON-NLS-1$
+		} else if (element instanceof Device) {
+			final Device device = (Device) element;
+			// systemname.device
+			return device.getAutomationSystem().getName() + "." + device.getName(); //$NON-NLS-1$
+		} else if (element instanceof Resource) {
+			final Resource res = (Resource) element;
+			// systemname.devicename.resource
+			return res.getDevice().getAutomationSystem().getName() + "." + res.getDevice().getName() + "."  //$NON-NLS-1$
+					+ res.getName();
+		} else if (element instanceof Application) {
+			return ((Application) element).getName();
+		} else if (element instanceof FBType) {
+			return ((FBType) element).getName();
+		}
+		return element.toString();
 	}
 
 	protected static TableLayout createTableLayout() {
