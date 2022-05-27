@@ -29,6 +29,7 @@ import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.
 import java.text.MessageFormat;
 import java.util.stream.StreamSupport;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -92,6 +93,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String INVALID_STRING_LITERAL = ISSUE_CODE_PREFIX + "invalidStringLiteral"; //$NON-NLS-1$
 	public static final String STANDARD_FUNCTION_WITH_FORMAL_ARGUMENTS = ISSUE_CODE_PREFIX
 			+ "standardFunctionWithFormalArguments"; //$NON-NLS-1$
+
+	public static final String ICALLABLE_NOT_VISIBLE = ISSUE_CODE_PREFIX + "iCallableNotVisible"; //$NON-NLS-1$
+	public static final String ICALLABLE_HAS_NO_RETURN_TYPE = ISSUE_CODE_PREFIX + "iCallableHasNoReturnType"; //$NON-NLS-1$
 
 	@Check
 	public void checkConsecutiveUnderscoresInIdentifier(final INamedElement iNamedElement) {
@@ -366,6 +370,31 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 	}
 
+	@Check
+	public void checkReturnValueCanOnlyBeAssignedToCurrentICallable(final STFeatureExpression expression) {
+		final var feature = expression.getFeature();
+		if (feature instanceof ICallable && !expression.isCall() && !(feature instanceof FB)) {
+			final var callable = (ICallable) feature;
+			final var containingElement = getICallableContainer(expression);
+			if (callable != containingElement) {
+				error(MessageFormat.format(Messages.STCoreValidator_NameNotVisible, callable.getName()),
+						STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, ICALLABLE_NOT_VISIBLE);
+			} else if (callable.getReturnType() == null) {
+				error(MessageFormat.format(Messages.STCoreValidator_CallableHasNoReturnType, callable.getName()),
+						STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, ICALLABLE_HAS_NO_RETURN_TYPE);
+			}
+		}
+	}
+
+	protected static ICallable getICallableContainer(final EObject eObject) {
+		for (EObject parent = eObject.eContainer(); parent != null; parent = parent.eContainer()) {
+			if (parent instanceof ICallable) {
+				return (ICallable) parent;
+			}
+		}
+		return null;
+	}
+
 	protected void checkTypeCompatibility(final INamedElement destination, final INamedElement source,
 			final EStructuralFeature feature) {
 		checkTypeCompatibility(destination, source, feature, ValidationMessageAcceptor.INSIGNIFICANT_INDEX);
@@ -375,14 +404,14 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			final EStructuralFeature feature, final int index) {
 		if (destination instanceof DataType && source instanceof DataType) {
 			checkTypeCompatibility((DataType) destination, (DataType) source, feature, index);
-		} else {
+		} else if (source != null && destination != null) {
 			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
 					source.getName()), feature, NON_COMPATIBLE_TYPES, source.getName(), destination.getName());
 		}
 	}
 
-	protected void checkTypeCompatibility(final DataType destination, final DataType source, final EStructuralFeature feature,
-			final int index) {
+	protected void checkTypeCompatibility(final DataType destination, final DataType source,
+			final EStructuralFeature feature, final int index) {
 		if (!destination.isAssignableFrom(source)) {
 			final String castName = source.getName() + "_TO_" + destination.getName(); //$NON-NLS-1$
 			final boolean castPossible = StreamSupport.stream(standardFunctionProvider.get().spliterator(), true)

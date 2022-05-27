@@ -15,11 +15,11 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation;
 
 import java.text.MessageFormat;
 
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.Messages;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage;
+import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.resource.IContainer;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.IResourceDescription;
@@ -50,7 +50,7 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 		for (final IContainer c : containerManager.getVisibleContainers(resourceDescription, resourceDescriptions)) {
 			for (final IEObjectDescription od : c.getExportedObjectsByType(STFunctionPackage.Literals.ST_FUNCTION)) {
 				if (function.getName().equalsIgnoreCase(od.getQualifiedName().toString())
-						&& !od.getEObjectURI().equals(EcoreUtil.getURI(function))) {
+						&& !od.getEObjectURI().equals(EcoreUtil2.getNormalizedURI(function))) {
 					error(MessageFormat.format(Messages.STFunctionValidator_Duplicate_Function_Name,
 							function.getName(), od.getEObjectURI().toPlatformString(true)),
 							LibraryElementPackage.Literals.INAMED_ELEMENT__NAME);
