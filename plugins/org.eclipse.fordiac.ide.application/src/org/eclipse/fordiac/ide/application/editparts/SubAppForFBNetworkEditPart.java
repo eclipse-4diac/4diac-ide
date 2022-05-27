@@ -29,16 +29,19 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.List;
 
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
+import org.eclipse.fordiac.ide.application.policies.ContainerResizePolicy;
 import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
+import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -47,6 +50,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
@@ -56,7 +60,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
+public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart implements IContainerEditPart {
 	private UnfoldedSubappContentNetwork subappContents;
 
 	@Override
@@ -248,23 +252,22 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 	@Override
 	protected void refreshVisuals() {
 		super.refreshVisuals();
-		updateDirectEditPolicies();
+		updateEditPolicies();
 		final SubAppForFbNetworkFigure figure = getFigure();
 		figure.updateTypeLabel(getModel());
 		figure.updateExpandedFigure();
-		if (getModel().isUnfolded()) {
-			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new SubappCommentRenameEditPolicy());
-		}
 	}
 
-	private void updateDirectEditPolicies() {
+	private void updateEditPolicies() {
 		if (getModel().isUnfolded()) {
 			if (getFigure().getExpandedMainFigure() == null) {
 				installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new SubappCommentRenameEditPolicy());
+				installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new ContainerResizePolicy());
 			}
 		} else {
 			if (getFigure().getExpandedMainFigure() != null) {
 				installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new TypeDirectEditPolicy());
+				installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new ModifiedNonResizeableEditPolicy());
 			}
 		}
 	}
@@ -287,5 +290,19 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart {
 		} else {
 			super.removeChildVisual(childEditPart);
 		}
+	}
+
+	@Override
+	public Rectangle getCommentBounds() {
+		if (getFigure().getCommentFigure() != null) {
+			return getFigure().getCommentFigure().getBounds();
+		}
+		return null;
+	}
+
+	@Override
+	public GraphicalEditPart getContentEP() {
+		return (GraphicalEditPart) getChildren().stream().filter(UnfoldedSubappContentEditPart.class::isInstance)
+				.findAny().orElse(null);
 	}
 }

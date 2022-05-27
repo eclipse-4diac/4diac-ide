@@ -61,11 +61,9 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
-		if (child.getModel() instanceof Group) {
+		if ((child.getModel() instanceof Group)
+				|| (child.getModel() instanceof SubApp && ((SubApp) child.getModel()).isUnfolded())) {
 			return new ContainerResizePolicy();
-		}
-		if (child.getModel() instanceof SubApp && ((SubApp) child.getModel()).isUnfolded()) {
-
 		}
 		return new ModifiedNonResizeableEditPolicy();
 	}
