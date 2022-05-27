@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionPackage
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.validation.STFunctionValidator
 import org.eclipse.xtext.testing.InjectWith
@@ -765,71 +766,87 @@ class STFunctionValidatorTest {
 			]
 		]
 	}
-	
+
 	@Test
 	def void checkReturnValueAssignmentIsValidToContainingName() {
 		'''
-		FUNCTION other : BOOL
-		END_FUNCTION
-		FUNCTION current : BOOL
-			current := false;
-		END_FUNCTION
+			FUNCTION other : BOOL
+			END_FUNCTION
+			FUNCTION current : BOOL
+				current := false;
+			END_FUNCTION
 		'''.parse.assertNoErrors
 	}
-	
+
 	@Test
 	def void checkReturnValueAssignmentIsInvalidToNotContainingName() {
 		'''
-		FUNCTION other : BOOL
-		END_FUNCTION
-		FUNCTION current : BOOL
-			other := false;
-		END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.ICALLABLE_NOT_VISIBLE, "Name 'other' not visible in this context")
+			FUNCTION other : BOOL
+			END_FUNCTION
+			FUNCTION current : BOOL
+				other := false;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.ICALLABLE_NOT_VISIBLE,
+			"Name 'other' not visible in this context")
 	}
-	
+
 	@Test
 	def void checkCallableNameIsValidCallableInNotContainingName() {
 		'''
-		FUNCTION other : BOOL
-		END_FUNCTION
-		FUNCTION current : BOOL
-			current := other();
-		END_FUNCTION
+			FUNCTION other : BOOL
+			END_FUNCTION
+			FUNCTION current : BOOL
+				current := other();
+			END_FUNCTION
 		'''.parse.assertNoErrors
 	}
-	
+
 	@Test
 	def void checkCallableNameIsNotAValidVariableInNotContainingName() {
 		'''
-		FUNCTION other : BOOL
-		END_FUNCTION
-		FUNCTION current : BOOL
-			current := other;
-		END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.ICALLABLE_NOT_VISIBLE, "Name 'other' not visible in this context")
+			FUNCTION other : BOOL
+			END_FUNCTION
+			FUNCTION current : BOOL
+				current := other;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.ICALLABLE_NOT_VISIBLE,
+			"Name 'other' not visible in this context")
 		'''
-		FUNCTION other : BYTE
-		END_FUNCTION
-		FUNCTION current : BYTE
-			other.%X0 := current;
-		END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.ICALLABLE_NOT_VISIBLE, "Name 'other' not visible in this context")
+			FUNCTION other : BYTE
+			END_FUNCTION
+			FUNCTION current : BYTE
+				other.%X0 := current;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.ICALLABLE_NOT_VISIBLE,
+			"Name 'other' not visible in this context")
 		'''
-		FUNCTION other : BYTE
-		END_FUNCTION
-		FUNCTION current : BOOL
-			current := other.0;
-		END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.ICALLABLE_NOT_VISIBLE, "Name 'other' not visible in this context")
+			FUNCTION other : BYTE
+			END_FUNCTION
+			FUNCTION current : BOOL
+				current := other.0;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.ICALLABLE_NOT_VISIBLE,
+			"Name 'other' not visible in this context")
 	}
-	
+
 	@Test
 	def void checkCallableNameAssignmentInvalidIfNoReturnType() {
 		'''
-		FUNCTION current
-			current := 1;
-		END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.ICALLABLE_HAS_NO_RETURN_TYPE, "Callable 'current' has no return type")
+			FUNCTION current
+				current := 1;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.ICALLABLE_HAS_NO_RETURN_TYPE,
+			"Callable 'current' has no return type")
+	}
+
+	@Test
+	def void testDuplicateFunctionmNameIsForbidden() {
+		'''
+			FUNCTION duplicate
+			END_FUNCTION
+			FUNCTION duplicate
+			END_FUNCTION
+		'''.parse.assertError(STFunctionPackage.eINSTANCE.STFunction, STFunctionValidator.DUPLICATE_FUNCTION_NAME,
+			"FUNCTION with duplicate name 'duplicate' found in null")
 	}
 }

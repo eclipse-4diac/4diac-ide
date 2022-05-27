@@ -53,7 +53,7 @@ public class STFunctionValidator extends AbstractSTFunctionValidator {
 						&& !od.getEObjectURI().equals(EcoreUtil2.getNormalizedURI(function))) {
 					error(MessageFormat.format(Messages.STFunctionValidator_Duplicate_Function_Name,
 							function.getName(), od.getEObjectURI().toPlatformString(true)),
-							LibraryElementPackage.Literals.INAMED_ELEMENT__NAME);
+							LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, DUPLICATE_FUNCTION_NAME);
 				}
 			}
 		}

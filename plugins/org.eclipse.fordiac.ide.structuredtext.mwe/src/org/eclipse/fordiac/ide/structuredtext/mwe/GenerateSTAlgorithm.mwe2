@@ -24,7 +24,7 @@ Workflow {
 				baseName = "org.eclipse.fordiac.ide.structuredtextalgorithm"
 				rootPath = rootPath
 				runtimeTest = {
-					enabled = false
+					enabled = true
 				}
 				eclipsePlugin = {
 					enabled = true
@@ -81,6 +81,7 @@ Workflow {
 	        	generateXtendStub = true
 	        }
 	        fragment = ui.compare.CompareFragment2 {}
+	        fragment = junit.JUnitFragment {}
 	    }
 	}
 }
