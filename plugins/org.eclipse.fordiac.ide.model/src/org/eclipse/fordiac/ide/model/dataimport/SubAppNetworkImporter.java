@@ -18,6 +18,7 @@ import java.text.MessageFormat;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
@@ -119,13 +120,38 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 				parseParameter(subApp);
 				return true;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
-				parseGenericAttributeNode(subApp);
-				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				parseUntypedSubappAttributes(subApp);
 				return true;
 			default:
 				return false;
 			}
 		});
+	}
+
+	private void parseUntypedSubappAttributes(final SubApp subApp) throws XMLStreamException {
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		if (name != null) {
+			switch (name) {
+			case LibraryElementTags.WIDTH_ATTRIBUTE:
+				final String widthValue = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+				if (widthValue != null) {
+					subApp.setWidth(CoordinateConverter.INSTANCE.convertFrom1499XML(widthValue));
+				}
+				break;
+			case LibraryElementTags.HEIGHT_ATTRIBUTE:
+				final String heightValue = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+				if (heightValue != null) {
+					subApp.setHeight(CoordinateConverter.INSTANCE.convertFrom1499XML(heightValue));
+				}
+				break;
+			default:
+				parseGenericAttributeNode(subApp);
+				break;
+			}
+		} else {
+			parseGenericAttributeNode(subApp);
+		}
+		proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
 	}
 
 }

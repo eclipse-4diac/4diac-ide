@@ -115,8 +115,23 @@ class FBNetworkExporter extends CommonElementExporter {
 			addPinComments(fbnElement.getInterface().getAllInterfaceElements());
 		}
 
+		if (fbnElement instanceof SubApp) {
+			addSubappHeightAndWidthAttributes((SubApp) fbnElement);
+		}
+
 		if (fbnElement.isInGroup()) {
 			addGroupAttribute(fbnElement.getGroup());
+		}
+	}
+
+	private void addSubappHeightAndWidthAttributes(final SubApp subApp) throws XMLStreamException {
+		if (subApp.getWidth() != 0) {
+			addAttributeElement(LibraryElementTags.WIDTH_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL.getName(),
+					CoordinateConverter.INSTANCE.convertTo1499XML(subApp.getWidth()), null);
+		}
+		if (subApp.getHeight() != 0) {
+			addAttributeElement(LibraryElementTags.HEIGHT_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL.getName(),
+					CoordinateConverter.INSTANCE.convertTo1499XML(subApp.getHeight()), null);
 		}
 	}
 
