@@ -214,6 +214,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 			return ((Device) eobj).getPosition().eContainer().eContainer();
 		} else if (eobj instanceof Application) {
 			return ((Application) eobj).eContainer();
+		} else if (eobj instanceof FBType) {
+			return eobj;
 		}
 		return eobj.eContainer().eContainer();
 	}
