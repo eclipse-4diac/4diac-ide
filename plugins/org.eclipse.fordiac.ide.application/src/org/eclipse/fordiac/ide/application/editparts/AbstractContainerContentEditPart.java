@@ -33,9 +33,10 @@ import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart.FBNetworkMarqueeDragTracker;
-import org.eclipse.fordiac.ide.application.policies.ContainerContentXYLayoutPolicy;
+import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -126,7 +127,7 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
 		// handles constraint changes of model elements and creation of new
 		// model elements
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ContainerContentXYLayoutPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new ContainerContentLayoutPolicy());
 	}
 
 	@Override
@@ -198,6 +199,6 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		return (root instanceof LibraryElement) ? ((LibraryElement) root).getTypeEntry().getTypeLibrary() : null;
 	}
 
-	protected abstract EObject getContainerElement();
+	public abstract FBNetworkElement getContainerElement();
 
 }

@@ -17,21 +17,32 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppBoundsCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
+import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gef.requests.ChangeBoundsRequest;
 
-public class ContainerContentXYLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
+public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 
 	private Figure moveHandle;
 
@@ -56,6 +67,62 @@ public class ContainerContentXYLayoutPolicy extends FBNetworkXYLayoutEditPolicy 
 	@Override
 	public GraphicalEditPart getHost() {
 		return (GraphicalEditPart) super.getHost();
+	}
+
+	@Override
+	protected Command getChangeConstraintCommand(final ChangeBoundsRequest request) {
+		final Command cmd = super.getChangeConstraintCommand(request);
+
+		if (RequestUtil.isMoveRequest(request)) {
+			final Point moveDelta = getScaledMoveDelta(request);
+			final Rectangle newContentBounds = getNewContentBounds(request.getEditParts());
+			newContentBounds.translate(moveDelta);
+			final Rectangle contentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(getHost());
+			if (!contentBounds.contains(newContentBounds)) {
+				newContentBounds.union(contentBounds);
+				final AbstractChangeContainerBoundsCommand changeSizeCmd = ContainerContentLayoutPolicy
+						.createChangeBoundsCommand(getParentModel(), contentBounds, newContentBounds);
+				if (cmd instanceof CompoundCommand) {
+					((CompoundCommand) cmd).add(changeSizeCmd);
+				} else {
+					final CompoundCommand compCmd = new CompoundCommand();
+					compCmd.add(cmd);
+					compCmd.add(changeSizeCmd);
+					return compCmd;
+				}
+			}
+		}
+		return cmd;
+	}
+
+	protected FBNetworkElement getParentModel() {
+		return (getHost() instanceof AbstractContainerContentEditPart)
+				? ((AbstractContainerContentEditPart) getHost()).getContainerElement()
+				: null;
+	}
+
+	protected Rectangle getNewContentBounds(final List<EditPart> editParts) {
+		Rectangle selectionExtend = null;
+		for (final EditPart selElem : editParts) {
+			if (selElem instanceof GraphicalEditPart && selElem.getModel() instanceof FBNetworkElement) {
+				// only consider the selected FBNetworkElements
+				final Rectangle fbBounds = ((GraphicalEditPart) selElem).getFigure().getBounds();
+				if (selectionExtend == null) {
+					selectionExtend = fbBounds.getCopy();
+				} else {
+					selectionExtend.union(fbBounds);
+				}
+				addValueBounds((FBNetworkElement) selElem.getModel(), selectionExtend);
+			}
+		}
+		return (selectionExtend != null) ? selectionExtend : new Rectangle();
+	}
+
+	private void addValueBounds(final FBNetworkElement model, final Rectangle selectionExtend) {
+		final Map<Object, Object> editPartRegistry = getHost().getViewer().getEditPartRegistry();
+		model.getInterface().getInputVars().stream().filter(Objects::nonNull)
+		.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
+		.forEach(ep -> selectionExtend.union(((GraphicalEditPart) ep).getFigure().getBounds()));
 	}
 
 	public static Rectangle getContainerAreaBounds(final GraphicalEditPart containerContentEP) {

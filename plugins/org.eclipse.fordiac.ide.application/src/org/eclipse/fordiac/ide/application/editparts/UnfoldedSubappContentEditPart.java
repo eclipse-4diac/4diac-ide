@@ -48,7 +48,7 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 	}
 
 	@Override
-	protected SubApp getContainerElement() {
+	public SubApp getContainerElement() {
 		return getModel().getSubapp();
 	}
 

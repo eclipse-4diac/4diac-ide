@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
-import org.eclipse.fordiac.ide.application.policies.ContainerContentXYLayoutPolicy;
+import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -112,7 +112,7 @@ public class PasteEditPartsAction extends SelectionAction {
 	}
 
 	private org.eclipse.draw2d.geometry.Point getOffsetPosition(final GroupContentEditPart group) {
-		return ContainerContentXYLayoutPolicy.getContainerAreaBounds(group).getTopLeft();
+		return ContainerContentLayoutPolicy.getContainerAreaBounds(group).getTopLeft();
 	}
 
 	private static List<? extends Object> getClipboardContents() {

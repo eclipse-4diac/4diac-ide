@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.policies.GroupXYLayoutPolicy;
 import org.eclipse.fordiac.ide.model.commands.create.CreateFBElementInGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -58,7 +57,7 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 	}
 
 	@Override
-	protected EObject getContainerElement() {
+	public Group getContainerElement() {
 		return getModel().getGroup();
 	}
 
