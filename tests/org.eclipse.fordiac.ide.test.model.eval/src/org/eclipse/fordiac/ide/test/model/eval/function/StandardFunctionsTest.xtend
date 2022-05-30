@@ -20,25 +20,34 @@ import java.util.stream.Stream
 import org.eclipse.fordiac.ide.model.data.AnyCharType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.AnyStringType
+import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.function.Functions
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
+import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.LRealValue
 import org.eclipse.fordiac.ide.model.eval.value.RealValue
+import org.eclipse.fordiac.ide.model.eval.value.StructValue
 import org.eclipse.fordiac.ide.model.eval.value.TimeValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
+import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable
 import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
+import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
 
+import static org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable.*
 import static org.junit.jupiter.params.provider.Arguments.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.BoolValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ByteValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.CharValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.DIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.DWordValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.DateAndTimeValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.DateValue.*
@@ -55,8 +64,12 @@ import static extension org.eclipse.fordiac.ide.model.eval.value.SIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.StringValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.TimeOfDayValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.TimeValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.UDIntValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.UIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ULIntValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.USIntValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.WCharValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.WStringValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.WordValue.*
 import static extension org.junit.jupiter.api.Assertions.*
@@ -771,24 +784,32 @@ class StandardFunctionsTest {
 	def void testMulTime() {
 		Duration.ofSeconds(42).toTimeValue.assertEquals(
 			StandardFunctions.invoke("MUL_TIME", Duration.ofSeconds(21).toTimeValue, 2.toIntValue))
+		Duration.ofSeconds(42).toTimeValue.assertEquals(
+			StandardFunctions.invoke("MUL_TIME", Duration.ofSeconds(21).toTimeValue, 2.toRealValue))
 	}
 
 	@Test
 	def void testMulLTime() {
 		Duration.ofSeconds(42).toLTimeValue.assertEquals(
 			StandardFunctions.invoke("MUL_LTIME", Duration.ofSeconds(21).toLTimeValue, 2.toIntValue))
+		Duration.ofSeconds(42).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("MUL_LTIME", Duration.ofSeconds(21).toLTimeValue, 2.toRealValue))
 	}
 
 	@Test
 	def void testDivTime() {
 		Duration.ofSeconds(21).toTimeValue.assertEquals(
 			StandardFunctions.invoke("DIV_TIME", Duration.ofSeconds(42).toTimeValue, 2.toIntValue))
+		Duration.ofSeconds(21).toTimeValue.assertEquals(
+			StandardFunctions.invoke("DIV_TIME", Duration.ofSeconds(42).toTimeValue, 2.toRealValue))
 	}
 
 	@Test
 	def void testDivLTime() {
 		Duration.ofSeconds(21).toLTimeValue.assertEquals(
 			StandardFunctions.invoke("DIV_LTIME", Duration.ofSeconds(42).toLTimeValue, 2.toIntValue))
+		Duration.ofSeconds(21).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("DIV_LTIME", Duration.ofSeconds(42).toLTimeValue, 2.toRealValue))
 	}
 
 	@Test
@@ -923,22 +944,155 @@ class StandardFunctionsTest {
 
 	@Test
 	def void testToBigEndian() {
-		UnsupportedOperationException.assertThrows[StandardFunctions.invoke("TO_BIG_ENDIAN", 17.toIntValue)]
+		0x1704.toIntValue.assertEquals(StandardFunctions.invoke("TO_BIG_ENDIAN", 0x1704.toIntValue))
 	}
 
 	@Test
 	def void testToLittleEndian() {
-		UnsupportedOperationException.assertThrows[StandardFunctions.invoke("TO_LITTLE_ENDIAN", 17.toIntValue)]
+		0x17.toSIntValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x17.toSIntValue))
+		0x1704.toIntValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x0417.toIntValue))
+		0x1704.toDIntValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x04170000.toDIntValue))
+		0x1704.toLIntValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x0417000000000000#L.toLIntValue))
+		0x17.toUSIntValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x17.toUSIntValue))
+		0x1704.toUIntValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x0417.toUIntValue))
+		0x1704.toUDIntValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x04170000.toUDIntValue))
+		0x1704.toULIntValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x0417000000000000#L.toULIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", false.toBoolValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", true.toBoolValue))
+		0x17.toByteValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x0417.toByteValue))
+		0x1704.toWordValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x0417.toWordValue))
+		0x1704.toDWordValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x04170000.toDWordValue))
+		0x1704.toLWordValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x0417000000000000#L.toLWordValue))
+		Float.intBitsToFloat(0x00008841).toRealValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 17.toRealValue))
+		Double.longBitsToDouble(0x0000000000003140#L).toLRealValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 17.toLRealValue))
+		0x0417000000000000#L.toTimeValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toTimeValue))
+		0x0417000000000000#L.toLTimeValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLTimeValue))
+		0x0417000000000000#L.toDateValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toDateValue))
+		0x0417000000000000#L.toLDateValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLDateValue))
+		0x0417000000000000#L.toTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toTimeOfDayValue))
+		0x0417000000000000#L.toLTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLTimeOfDayValue))
+		0x0417000000000000#L.toDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toDateAndTimeValue))
+		0x0417000000000000#L.toLDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLDateAndTimeValue))
+		'a'.toCharValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 'a'.toCharValue))
+		"abc".toStringValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", "abc".toStringValue))
+		'\u6100'.toWCharValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 'a'.toWCharValue))
+		"\u6100\u6200\u6300".toWStringValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", "abc".toWStringValue))
+	}
+
+	@Test
+	def void testToLittleEndianArray() {
+		val array = new ArrayVariable("TEST", newArrayType(ElementaryTypes.INT, newSubrange(0, 1))).value
+		array.get(0).value = 0x1704.toIntValue
+		array.get(1).value = 0x2142.toIntValue
+		#[0x0417.toIntValue, 0x4221.toIntValue].assertIterableEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", array) as ArrayValue)
+		#[0x1704.toIntValue, 0x2142.toIntValue].assertIterableEquals(array) // original contents unchanged
+	}
+
+	@Test
+	def void testToLittleEndianStruct() {
+		val struct = new StructVariable("TEST", DataFactory.eINSTANCE.createStructuredType => [
+			memberVariables.addAll(#[
+				LibraryElementFactory.eINSTANCE.createVarDeclaration => [name = "a" type = ElementaryTypes.INT],
+				LibraryElementFactory.eINSTANCE.createVarDeclaration => [name = "b" type = ElementaryTypes.INT]
+			])
+		]).value
+		struct.get("a").value = 0x1704.toIntValue
+		struct.get("b").value = 0x2142.toIntValue
+		val reverse = StandardFunctions.invoke("TO_LITTLE_ENDIAN", struct) as StructValue
+		0x0417.toIntValue.assertEquals(reverse.get("a").value)
+		0x4221.toIntValue.assertEquals(reverse.get("b").value)
+		0x1704.toIntValue.assertEquals(struct.get("a").value) // original contents unchanged
+		0x2142.toIntValue.assertEquals(struct.get("b").value) // original contents unchanged
 	}
 
 	@Test
 	def void testFromBigEndian() {
-		UnsupportedOperationException.assertThrows[StandardFunctions.invoke("FROM_BIG_ENDIAN", 17.toIntValue)]
+		0x1704.toIntValue.assertEquals(StandardFunctions.invoke("FROM_BIG_ENDIAN", 0x1704.toIntValue))
 	}
 
 	@Test
 	def void testFromLittleEndian() {
-		UnsupportedOperationException.assertThrows[StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 17.toIntValue)]
+		0x17.toSIntValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x17.toSIntValue))
+		0x1704.toIntValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417.toIntValue))
+		0x1704.toDIntValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x04170000.toDIntValue))
+		0x1704.toLIntValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toLIntValue))
+		0x17.toUSIntValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x17.toUSIntValue))
+		0x1704.toUIntValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417.toUIntValue))
+		0x1704.toUDIntValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x04170000.toUDIntValue))
+		0x1704.toULIntValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toULIntValue))
+		false.toBoolValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", false.toBoolValue))
+		true.toBoolValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", true.toBoolValue))
+		0x17.toByteValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417.toByteValue))
+		0x1704.toWordValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417.toWordValue))
+		0x1704.toDWordValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x04170000.toDWordValue))
+		0x1704.toLWordValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toLWordValue))
+		17.toRealValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", Float.intBitsToFloat(0x00008841).toRealValue))
+		17.toLRealValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", Double.longBitsToDouble(0x0000000000003140#L).toLRealValue))
+		0x1704.toTimeValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toTimeValue))
+		0x1704.toLTimeValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toLTimeValue))
+		0x1704.toDateValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toDateValue))
+		0x1704.toLDateValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toLDateValue))
+		0x1704.toTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toTimeOfDayValue))
+		0x1704.toLTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toLTimeOfDayValue))
+		0x1704.toDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toDateAndTimeValue))
+		0x1704.toLDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toLDateAndTimeValue))
+		'a'.toCharValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 'a'.toCharValue))
+		"abc".toStringValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", "abc".toStringValue))
+		'a'.toWCharValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", '\u6100'.toWCharValue))
+		"abc".toWStringValue.assertEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", "\u6100\u6200\u6300".toWStringValue))
+	}
+
+	@Test
+	def void testFromLittleEndianArray() {
+		val array = new ArrayVariable("TEST", newArrayType(ElementaryTypes.INT, newSubrange(0, 1))).value
+		array.get(0).value = 0x0417.toIntValue
+		array.get(1).value = 0x4221.toIntValue
+		#[0x1704.toIntValue, 0x2142.toIntValue].assertIterableEquals(
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", array) as ArrayValue)
+		#[0x0417.toIntValue, 0x4221.toIntValue].assertIterableEquals(array) // original contents unchanged
+	}
+
+	@Test
+	def void testFromLittleEndianStruct() {
+		val struct = new StructVariable("TEST", DataFactory.eINSTANCE.createStructuredType => [
+			memberVariables.addAll(#[
+				LibraryElementFactory.eINSTANCE.createVarDeclaration => [name = "a" type = ElementaryTypes.INT],
+				LibraryElementFactory.eINSTANCE.createVarDeclaration => [name = "b" type = ElementaryTypes.INT]
+			])
+		]).value
+		struct.get("a").value = 0x0417.toIntValue
+		struct.get("b").value = 0x4221.toIntValue
+		val reverse = StandardFunctions.invoke("FROM_LITTLE_ENDIAN", struct) as StructValue
+		0x1704.toIntValue.assertEquals(reverse.get("a").value)
+		0x2142.toIntValue.assertEquals(reverse.get("b").value)
+		0x0417.toIntValue.assertEquals(struct.get("a").value) // original contents unchanged
+		0x4221.toIntValue.assertEquals(struct.get("b").value) // original contents unchanged
 	}
 
 	@Test

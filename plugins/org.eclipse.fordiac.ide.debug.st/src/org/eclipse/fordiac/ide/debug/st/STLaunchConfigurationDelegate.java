@@ -24,11 +24,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
-import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
+import org.eclipse.fordiac.ide.debug.CommonLaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.st.STFunctionEvaluator;
@@ -39,7 +36,7 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionParseUtil;
 
-public class STLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
+public class STLaunchConfigurationDelegate extends CommonLaunchConfigurationDelegate {
 
 	@Override
 	public void launch(final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
@@ -60,23 +57,8 @@ public class STLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 			}
 			final var defaultArguments = getDefaultArguments(function);
 			final var variables = LaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
-			launch(function, variables, configuration, mode, launch, monitor);
-		}
-	}
-
-	public void launch(final STFunction function, final List<Variable<?>> variables,
-			final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
-			final IProgressMonitor monitor) throws CoreException {
-		final Evaluator evaluator = createEvaluator(function, variables);
-		if (ILaunchManager.RUN_MODE.equals(mode)) {
-			final EvaluatorProcess process = new EvaluatorProcess(configuration.getName(), evaluator, launch);
-			process.start();
-		} else if (ILaunchManager.DEBUG_MODE.equals(mode)) {
-			final EvaluatorDebugTarget debugTarget = new EvaluatorDebugTarget(configuration.getName(), evaluator,
-					launch);
-			debugTarget.start();
-		} else {
-			throw new CoreException(Status.error("Illegal launch mode: " + mode)); //$NON-NLS-1$
+			final Evaluator evaluator = createEvaluator(function, variables);
+			launch(evaluator, configuration, mode, launch, monitor);
 		}
 	}
 
@@ -88,7 +70,6 @@ public class STLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
 	@SuppressWarnings("static-method")
 	protected List<Variable<?>> getDefaultArguments(final STFunction function) {
 		return Stream.concat(function.getInputParameters().stream(), function.getInOutParameters().stream())
-				.map(STVarDeclaration.class::cast)
-				.map(STVariableOperations::newVariable).collect(Collectors.toList());
+				.map(STVarDeclaration.class::cast).map(STVariableOperations::newVariable).collect(Collectors.toList());
 	}
 }

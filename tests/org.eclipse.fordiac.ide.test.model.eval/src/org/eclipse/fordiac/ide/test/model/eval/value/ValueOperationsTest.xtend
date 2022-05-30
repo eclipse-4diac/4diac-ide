@@ -33,6 +33,8 @@ import org.eclipse.fordiac.ide.model.data.LtodType
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.eval.value.LTimeValue
+import org.eclipse.fordiac.ide.model.eval.value.TimeValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.junit.jupiter.api.Test
@@ -102,6 +104,13 @@ class ValueOperationsTest {
 
 	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
+	def void testReverseBytes(String typeName) {
+		val type = ElementaryTypes.getTypeByName(typeName)
+		type.defaultValue.assertEquals(type.defaultValue.reverseBytes)
+	}
+
+	@ParameterizedTest(name="{index}: {0}")
+	@MethodSource("typeArgumentsProvider")
 	def void testAdd(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
 			AnyMagnitudeType: type.defaultValue.assertEquals(type.defaultValue + type.defaultValue)
@@ -129,6 +138,17 @@ class ValueOperationsTest {
 
 	@ParameterizedTest(name="{index}: {0}")
 	@MethodSource("typeArgumentsProvider")
+	def void testMultiplyTime(String typeName) {
+		switch (type : ElementaryTypes.getTypeByName(typeName)) {
+			AnyNumType: {
+				TimeValue.DEFAULT.assertEquals(TimeValue.DEFAULT * type.defaultValue)
+				LTimeValue.DEFAULT.assertEquals(LTimeValue.DEFAULT * type.defaultValue)
+			}
+		}
+	}
+
+	@ParameterizedTest(name="{index}: {0}")
+	@MethodSource("typeArgumentsProvider")
 	def void testDivide(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
 			AnyRealType:
@@ -140,6 +160,19 @@ class ValueOperationsTest {
 			}
 			default:
 				UnsupportedOperationException.assertThrows[type.defaultValue / type.defaultValue]
+		}
+	}
+
+	@ParameterizedTest(name="{index}: {0}")
+	@MethodSource("typeArgumentsProvider")
+	def void testDivideTime(String typeName) {
+		switch (type : ElementaryTypes.getTypeByName(typeName)) {
+			AnyNumType: {
+				TimeValue.DEFAULT.assertEquals(TimeValue.DEFAULT / 1.wrapValue(type))
+				LTimeValue.DEFAULT.assertEquals(LTimeValue.DEFAULT / 1.wrapValue(type))
+				ArithmeticException.assertThrows[TimeValue.DEFAULT / type.defaultValue]
+				ArithmeticException.assertThrows[TimeValue.DEFAULT / type.defaultValue]
+			}
 		}
 	}
 

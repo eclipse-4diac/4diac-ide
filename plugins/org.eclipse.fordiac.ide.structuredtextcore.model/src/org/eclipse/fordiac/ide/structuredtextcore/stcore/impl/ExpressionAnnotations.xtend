@@ -15,10 +15,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.Map
-import org.eclipse.fordiac.ide.model.data.AnyBitType
-import org.eclipse.fordiac.ide.model.data.AnyCharsType
 import org.eclipse.fordiac.ide.model.data.AnyDurationType
-import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataFactory
@@ -71,7 +68,7 @@ final package class ExpressionAnnotations {
 						left
 					else if (right.isAssignableFrom(left))
 						right
-					else if (left instanceof AnyDurationType && right instanceof AnyIntType)
+					else if (left instanceof AnyDurationType && right instanceof AnyNumType)
 						left
 					else
 						null
@@ -143,8 +140,7 @@ final package class ExpressionAnnotations {
 
 	def package static INamedElement getResultType(STNumericLiteral expr) {
 		getDeclaredResultType(expr) ?: switch (result : expr.expectedType) {
-			AnyNumType,
-			AnyBitType: result
+			DataType case result.isNumericValueValid(expr.value): result
 			default: null
 		} ?: switch (it : expr.value) {
 			Boolean: ElementaryTypes.BOOL
@@ -181,7 +177,7 @@ final package class ExpressionAnnotations {
 
 	def package static INamedElement getResultType(STStringLiteral expr) {
 		getDeclaredResultType(expr) ?: switch (result : expr.expectedType) {
-			AnyCharsType: result
+			DataType case result.isStringValueValid(expr.value): result
 			default: null
 		} ?: if (expr.value.length == 1) {
 			if(expr.value.wide) ElementaryTypes.WCHAR else ElementaryTypes.CHAR

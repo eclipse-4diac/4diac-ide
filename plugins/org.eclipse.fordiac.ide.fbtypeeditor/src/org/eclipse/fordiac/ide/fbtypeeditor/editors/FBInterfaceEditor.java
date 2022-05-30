@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.ContextMenuProvider;
+import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.GraphicalEditPart;
@@ -80,9 +81,8 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 	}
 
 	@Override
-	protected void setModel(final IEditorInput input) {
-		super.setModel(input);
-		setEditDomain(new FBTypeEditDomain(this, commandStack));
+	protected DefaultEditDomain createEditDomain() {
+		return new FBTypeEditDomain(this, commandStack);
 	}
 
 	@Override

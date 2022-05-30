@@ -440,24 +440,46 @@ class STFunctionValidatorTest {
 		'''
 			FUNCTION hubert
 			VAR
-				bool1 : BOOL := 2;
+				bool1 : BOOL := BOOL#2;
 			END_VAR
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.INVALID_NUMERIC_LITERAL)
 		'''
 			FUNCTION hubert
 			VAR
-				int1 : SINT := 1024;
+				int1 : SINT := SINT#1024;
 			END_VAR
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.INVALID_NUMERIC_LITERAL)
 		'''
 			FUNCTION hubert
 			VAR
-				int1 : USINT := -1;
+				int1 : USINT := USINT#-1;
 			END_VAR
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.INVALID_NUMERIC_LITERAL)
+	}
+
+	@Test
+	def void testNumericLiteralImplicitConversion() {
+		val func1 = '''
+			FUNCTION hubert
+			VAR
+				bool1 : REAL := 17;
+			END_VAR
+			END_FUNCTION
+		'''.parse
+		func1.assertNoErrors
+		func1.assertWarning(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.LITERAL_IMPLICIT_CONVERSION)
+		val func2 = '''
+			FUNCTION hubert
+			VAR
+				bool1 : INT := SINT#17;
+			END_VAR
+			END_FUNCTION
+		'''.parse
+		func2.assertNoErrors
+		func2.assertWarning(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.LITERAL_IMPLICIT_CONVERSION)
 	}
 
 	@Test
@@ -465,45 +487,67 @@ class STFunctionValidatorTest {
 		'''
 			FUNCTION hubert
 			VAR
-				str : CHAR := 'abc';
+				str : CHAR := CHAR#'abc';
 			END_VAR
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
 		'''
 			FUNCTION hubert
 			VAR
-				str : CHAR := "a";
+				str : CHAR := CHAR#"a";
 			END_VAR
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
 		'''
 			FUNCTION hubert
 			VAR
-				str : STRING := "abc";
+				str : STRING := STRING#"abc";
 			END_VAR
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
 		'''
 			FUNCTION hubert
 			VAR
-				str : WCHAR := "abc";
+				str : WCHAR := WCHAR#"abc";
 			END_VAR
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
 		'''
 			FUNCTION hubert
 			VAR
-				str : WCHAR := 'a';
+				str : WCHAR := WCHAR#'a';
 			END_VAR
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
 		'''
 			FUNCTION hubert
 			VAR
-				str : WSTRING := 'abc';
+				str : WSTRING := WSTRING#'abc';
 			END_VAR
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.INVALID_STRING_LITERAL)
+	}
+
+	@Test
+	def void testStringLiteralImplicitConversion() {
+		val func1 = '''
+			FUNCTION hubert
+			VAR
+				str : STRING := CHAR#'a';
+			END_VAR
+			END_FUNCTION
+		'''.parse
+		func1.assertNoErrors
+		func1.assertWarning(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.LITERAL_IMPLICIT_CONVERSION)
+		val func2 = '''
+			FUNCTION hubert
+			VAR
+				str : WSTRING := WCHAR#"a";
+			END_VAR
+			END_FUNCTION
+		'''.parse
+		func2.assertNoErrors
+		func2.assertWarning(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.LITERAL_IMPLICIT_CONVERSION)
 	}
 
 	@Test

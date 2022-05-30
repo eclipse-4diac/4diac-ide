@@ -21,13 +21,9 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
-import org.eclipse.debug.core.ILaunchManager;
-import org.eclipse.debug.core.model.LaunchConfigurationDelegate;
-import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
-import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
+import org.eclipse.fordiac.ide.debug.CommonLaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
@@ -37,7 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
-public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationDelegate {
+public abstract class FBLaunchConfigurationDelegate extends CommonLaunchConfigurationDelegate {
 
 	@Override
 	public void launch(final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
@@ -48,25 +44,10 @@ public abstract class FBLaunchConfigurationDelegate extends LaunchConfigurationD
 			final var event = FBLaunchConfigurationAttributes.getEvent(configuration, type, getDefaultEvent(type));
 			final var defaultArguments = getDefaultArguments(type);
 			final var variables = LaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
-			launch(type, event, variables, configuration, mode, launch, monitor);
-		}
-	}
-
-	public void launch(final FBType type, final Event event, final List<Variable<?>> variables,
-			final ILaunchConfiguration configuration, final String mode, final ILaunch launch,
-			final IProgressMonitor monitor) throws CoreException {
-		final Queue<Event> queue = new ArrayBlockingQueue<>(1000);
-		final Evaluator evaluator = createEvaluator(type, queue, variables);
-		queue.add(event);
-		if (ILaunchManager.RUN_MODE.equals(mode)) {
-			final EvaluatorProcess process = new EvaluatorProcess(configuration.getName(), evaluator, launch);
-			process.start();
-		} else if (ILaunchManager.DEBUG_MODE.equals(mode)) {
-			final EvaluatorDebugTarget debugTarget = new EvaluatorDebugTarget(configuration.getName(), evaluator,
-					launch);
-			debugTarget.start();
-		} else {
-			throw new CoreException(Status.error("Illegal launch mode: " + mode)); //$NON-NLS-1$
+			final Queue<Event> queue = new ArrayBlockingQueue<>(1000);
+			final Evaluator evaluator = createEvaluator(type, queue, variables);
+			queue.add(event);
+			launch(evaluator, configuration, mode, launch, monitor);
 		}
 	}
 

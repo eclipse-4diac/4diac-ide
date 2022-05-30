@@ -38,10 +38,11 @@ public final class MonitoringManagerUtils {
 	}
 
 	public static boolean canBeMonitored(final IInterfaceElement ie, final boolean showError) {
-
 		final FBNetworkElement fbNetworkElement = ie.getFBNetworkElement();
 
 		if (fbNetworkElement instanceof SubApp) {
+			checkSubAppNetwork((SubApp) fbNetworkElement);
+
 			final IInterfaceElement anchor = SubAppPortHelper.findAnchorInterfaceElement(ie);
 
 			if (anchor == null) {
@@ -54,6 +55,13 @@ public final class MonitoringManagerUtils {
 		}
 
 		return fbNetworkElement != null && fbNetworkElement.getResource() != null;
+	}
+
+	private static void checkSubAppNetwork(final SubApp subApp) {
+		if (subApp.getSubAppNetwork() == null) {
+			// the contained network has not been loaded yet, load it now.
+			subApp.loadSubAppNetwork();
+		}
 	}
 
 	public static boolean canBeMonitored(final FBNetworkElement obj) {

@@ -124,8 +124,8 @@ class DeviceMonitoringHandler implements Runnable {
 				final MonitoringBaseElement element = systemMonData.getMonitoringElementByPortString(portString);
 				if (element instanceof MonitoringElement) {
 					updateMonitoringElement((MonitoringElement) element, port);
+					checkSubappGroups(collectedGroups, port, portString, (MonitoringElement) element);
 				}
-				checkSubappGroups(collectedGroups, port, portString, element);
 			}
 		}
 
@@ -133,7 +133,7 @@ class DeviceMonitoringHandler implements Runnable {
 	}
 
 	private void checkSubappGroups(final HashMap<String, SubappGroup> collectedGroups, final Port port,
-			String portString, final MonitoringBaseElement element) {
+			String portString, final MonitoringElement element) {
 		List<MonitoringElement> subappPins = systemMonData.getSubappElements().get(portString);
 		if (element != null && subappPins == null) {
 			final Entry<String, List<MonitoringElement>> subappEntry = systemMonData.getSubappElements(element);
@@ -153,7 +153,7 @@ class DeviceMonitoringHandler implements Runnable {
 				collectedGroups.put(portString, subappGroup);
 			}
 			if (element != null) {
-				subappGroup.assignPort((MonitoringElement) element, port);
+				subappGroup.assignPort(element, port);
 			}
 			subappGroup.assignSubappPorts(port, portString);
 		}

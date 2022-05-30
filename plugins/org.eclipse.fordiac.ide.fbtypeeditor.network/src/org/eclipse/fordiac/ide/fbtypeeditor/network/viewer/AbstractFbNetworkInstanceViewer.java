@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.application.editors.FBNElemEditorCloser;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditor;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
-import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -38,7 +37,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.ui.editors.EditorCloserAdapter;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.ContextMenuProvider;
-import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
@@ -91,9 +89,7 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 
 	@Override
 	protected void setModel(final IEditorInput input) {
-		setEditDomain(new DefaultEditDomain(this));
-		getEditDomain().setDefaultTool(new AdvancedPanningSelectionTool());
-		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
+		super.setModel(input);
 
 		if (input instanceof CompositeAndSubAppInstanceViewerInput) {
 			final CompositeAndSubAppInstanceViewerInput untypedInput = (CompositeAndSubAppInstanceViewerInput) input;

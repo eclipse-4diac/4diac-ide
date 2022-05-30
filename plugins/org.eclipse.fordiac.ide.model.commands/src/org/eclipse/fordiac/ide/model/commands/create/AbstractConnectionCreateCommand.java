@@ -174,15 +174,22 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		if (null != source.getFBNetworkElement() && null != destination.getFBNetworkElement()) {
 			final FBNetworkElement opSource = source.getFBNetworkElement().getOpposite();
 			final FBNetworkElement opDestination = destination.getFBNetworkElement().getOpposite();
-			if (null != opSource && null != opDestination
-					&& opSource.getFbNetwork() == opDestination.getFbNetwork()) {
-				final AbstractConnectionCreateCommand cmd = createMirroredConnectionCommand(opSource.getFbNetwork());
-				cmd.setPerformMappingCheck(false); // as this is the command for the mirrored connection we don't want
-				// again to check
-				cmd.setSource(opSource.getInterfaceElement(source.getName()));
-				cmd.setDestination(opDestination.getInterfaceElement(destination.getName()));
-				cmd.setVisible(visible);
-				return (cmd.canExecute()) ? cmd : null;
+
+			if (opSource != null && opDestination != null) {
+				final IInterfaceElement opSrcIE = opSource.getInterfaceElement(source.getName());
+				final IInterfaceElement opDstIE = opDestination.getInterfaceElement(destination.getName());
+
+				if ((opSrcIE != null && opDstIE != null && opSource.getFbNetwork() == opDestination.getFbNetwork()
+						&& !LinkConstraints.duplicateConnection(opSrcIE, opDstIE))) {
+					final AbstractConnectionCreateCommand cmd = createMirroredConnectionCommand(
+							opSource.getFbNetwork());
+					// as this is the command for the mirrored connection we don't want again to check
+					cmd.setPerformMappingCheck(false);
+					cmd.setSource(opSrcIE);
+					cmd.setDestination(opDstIE);
+					cmd.setVisible(visible);
+					return cmd;
+				}
 			}
 		}
 		return null;
@@ -202,7 +209,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 	 * @return true if the two pins can be connected false otherwise */
 	protected abstract boolean canExecuteConType();
 
-	private void setPerformMappingCheck(final boolean performMappingCheck) {
+	public void setPerformMappingCheck(final boolean performMappingCheck) {
 		this.performMappingCheck = performMappingCheck;
 	}
 

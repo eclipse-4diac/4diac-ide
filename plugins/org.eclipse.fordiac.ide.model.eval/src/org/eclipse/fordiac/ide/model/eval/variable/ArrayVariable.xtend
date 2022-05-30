@@ -28,7 +28,7 @@ import static extension java.lang.Math.*
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
 
-class ArrayVariable extends AbstractVariable<ArrayValue> {
+class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Variable<?>> {
 	static final Pattern ARRAY_PATTERN = Pattern.compile(",(?=(?:[^\"']*(?:(?:\"[^\"]*\")|(?:\'[^\']*\')))*[^\"']*$)")
 
 	@Accessors final DataType elementType
@@ -101,7 +101,7 @@ class ArrayVariable extends AbstractVariable<ArrayValue> {
 	}
 
 	def static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
-		if(arraySubranges.empty) {
+		if (arraySubranges.empty) {
 			throw new UnsupportedOperationException("Cannot create array with variable size")
 		}
 		DataFactory.eINSTANCE.createArrayType => [
@@ -116,5 +116,9 @@ class ArrayVariable extends AbstractVariable<ArrayValue> {
 			lowerLimit = lower
 			upperLimit = upper
 		]
+	}
+
+	override iterator() {
+		elements.iterator
 	}
 }

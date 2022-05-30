@@ -24,10 +24,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.ui.palette.PaletteViewerProvider;
 import org.eclipse.jface.util.TransferDropTargetListener;
-import org.eclipse.ui.IEditorInput;
 
 public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements IFBTEditorPart {
 
@@ -44,10 +44,8 @@ public class UnTypedSubAppNetworkEditor extends SubAppNetworkEditor implements I
 	}
 
 	@Override
-	protected void setModel(final IEditorInput input) {
-		super.setModel(input);
-
-		setEditDomain(new FBTypeEditDomain(this, commandStack));
+	protected DefaultEditDomain createEditDomain() {
+		return new FBTypeEditDomain(this, commandStack);
 	}
 
 	@Override

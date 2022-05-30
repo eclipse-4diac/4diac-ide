@@ -319,8 +319,7 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	 * @param input the new model
 	 */
 	protected void setModel(final IEditorInput input) {
-
-		setEditDomain(new DefaultEditDomain(this));
+		setEditDomain(createEditDomain());
 		getEditDomain().setDefaultTool(createDefaultTool());
 		getEditDomain().setActiveTool(getEditDomain().getDefaultTool());
 		// use one "System - Wide" command stack to avoid inconsistencies due to
@@ -328,6 +327,10 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 		if (null != getSystem()) {
 			getEditDomain().setCommandStack(getSystem().getCommandStack());
 		}
+	}
+
+	protected DefaultEditDomain createEditDomain() {
+		return new DefaultEditDomain(this);
 	}
 
 	@SuppressWarnings("static-method")

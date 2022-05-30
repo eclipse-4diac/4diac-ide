@@ -102,25 +102,30 @@ final class DataTypeAnnotations {
 		return type == other || type.eClass().isSuperTypeOf(other.eClass());
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final BoolType type, final DataType other) {
 		return other instanceof BoolType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final ByteType type, final DataType other) {
 		return other instanceof ByteType //
 				|| other instanceof BoolType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final WordType type, final DataType other) {
 		return other instanceof WordType //
 				|| other instanceof ByteType || other instanceof BoolType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final DwordType type, final DataType other) {
 		return other instanceof DwordType //
 				|| other instanceof WordType || other instanceof ByteType || other instanceof BoolType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final LwordType type, final DataType other) {
 		return other instanceof LwordType //
 				|| other instanceof DwordType || other instanceof WordType || other instanceof ByteType
@@ -135,10 +140,12 @@ final class DataTypeAnnotations {
 		return type == other || type.eClass().isSuperTypeOf(other.eClass());
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final CharType type, final DataType other) {
 		return other instanceof CharType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final WcharType type, final DataType other) {
 		return other instanceof WcharType;
 	}
@@ -147,10 +154,12 @@ final class DataTypeAnnotations {
 		return type == other || type.eClass().isSuperTypeOf(other.eClass());
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final StringType type, final DataType other) {
 		return other instanceof StringType || other instanceof CharType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final WstringType type, final DataType other) {
 		return other instanceof WstringType || other instanceof WcharType;
 	}
@@ -159,26 +168,32 @@ final class DataTypeAnnotations {
 		return type == other || type.eClass().isSuperTypeOf(other.eClass());
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final DateType type, final DataType other) {
 		return other instanceof DateType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final LdateType type, final DataType other) {
 		return other instanceof LdateType || other instanceof DateType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final TimeOfDayType type, final DataType other) {
 		return other instanceof TimeOfDayType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final LtodType type, final DataType other) {
 		return other instanceof LtodType || other instanceof TimeOfDayType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final DateAndTimeType type, final DataType other) {
 		return other instanceof DateAndTimeType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final LdtType type, final DataType other) {
 		return other instanceof LdtType || other instanceof DateAndTimeType;
 	}
@@ -191,10 +206,12 @@ final class DataTypeAnnotations {
 		return type == other || type.eClass().isSuperTypeOf(other.eClass());
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final TimeType type, final DataType other) {
 		return other instanceof TimeType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final LtimeType type, final DataType other) {
 		return other instanceof LtimeType || other instanceof TimeType;
 	}
@@ -211,22 +228,26 @@ final class DataTypeAnnotations {
 		return type == other || type.eClass().isSuperTypeOf(other.eClass());
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final SintType type, final DataType other) {
 		return other instanceof SintType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final IntType type, final DataType other) {
 		return other instanceof IntType //
 				|| other instanceof SintType //
 				|| other instanceof UsintType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final DintType type, final DataType other) {
 		return other instanceof DintType //
 				|| other instanceof IntType || other instanceof SintType //
 				|| other instanceof UintType || other instanceof UsintType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final LintType type, final DataType other) {
 		return other instanceof LintType //
 				|| other instanceof DintType || other instanceof IntType || other instanceof SintType //
@@ -237,20 +258,24 @@ final class DataTypeAnnotations {
 		return type == other || type.eClass().isSuperTypeOf(other.eClass());
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final UsintType type, final DataType other) {
 		return other instanceof UsintType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final UintType type, final DataType other) {
 		return other instanceof UintType //
 				|| other instanceof UsintType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final UdintType type, final DataType other) {
 		return other instanceof UdintType //
 				|| other instanceof UintType || other instanceof UsintType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final UlintType type, final DataType other) {
 		return other instanceof UlintType //
 				|| other instanceof UdintType || other instanceof UintType || other instanceof UsintType;
@@ -260,12 +285,14 @@ final class DataTypeAnnotations {
 		return type == other || type.eClass().isSuperTypeOf(other.eClass());
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final RealType type, final DataType other) {
 		return other instanceof RealType //
 				|| other instanceof IntType || other instanceof SintType//
 				|| other instanceof UintType || other instanceof UsintType;
 	}
 
+	@SuppressWarnings("unused")
 	static boolean isAssignableFrom(final LrealType type, final DataType other) {
 		return other instanceof LrealType || other instanceof RealType //
 				|| other instanceof DintType || other instanceof IntType || other instanceof SintType//

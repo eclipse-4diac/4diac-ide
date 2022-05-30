@@ -25,24 +25,16 @@ public final class StructParser {
 	public static WatchValueTreeNode createStructFromString(final String struct, final StructuredType structType,
 			final MonitoringElement monitoringElement, final WatchValueTreeNode parent) {
 
-		final WatchValueTreeNode root = new WatchValueTreeNode(
-				monitoringElement,
-				structType,
-				monitoringElement.getPort().getInterfaceElement().getName(),
-				null,
-				null,
-				parent
-				);
+		final WatchValueTreeNode root = new WatchValueTreeNode(monitoringElement, structType,
+				monitoringElement.getPort().getInterfaceElement().getName(), null, null, parent);
 
-		if (!struct.isBlank() && !struct.equalsIgnoreCase("N/A")) {//$NON-NLS-1$
+		if (isStructLiteral(struct) && !"N/A".equalsIgnoreCase(struct)) { //$NON-NLS-1$
 			buildTree(root, structType, struct);
 		}
-
 		return root;
 	}
 
 	private static void buildTree(final WatchValueTreeNode parent, final StructuredType type, final String struct) {
-
 		// do not consider outer parentheses
 		final int START = 1;
 		final int END = struct.length() - 1;
@@ -107,7 +99,7 @@ public final class StructParser {
 				parent
 				);
 
-		if (isInnerStruct(value)) {
+		if (isStructLiteral(value)) {
 			// recursive call
 			buildTree(node, (StructuredType) variable.getType(), value);
 		}
@@ -115,7 +107,7 @@ public final class StructParser {
 		parent.addChild(node);
 	}
 
-	private static boolean isInnerStruct(final String value) {
+	private static boolean isStructLiteral(final String value) {
 		return !value.isBlank() &&
 				value.length() >= 2 &&
 				value.charAt(0) == '(' &&

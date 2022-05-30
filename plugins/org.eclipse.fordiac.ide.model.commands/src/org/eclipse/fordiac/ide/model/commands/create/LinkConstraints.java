@@ -261,7 +261,7 @@ public final class LinkConstraints {
 		return sourceAndDestCheck(source, target);
 	}
 
-	private static boolean duplicateConnection(final IInterfaceElement source, final IInterfaceElement destination) {
+	public static boolean duplicateConnection(final IInterfaceElement source, final IInterfaceElement destination) {
 		for (final Connection con : source.getOutputConnections()) {
 			if (con.getDestination() == destination) {
 				return true;

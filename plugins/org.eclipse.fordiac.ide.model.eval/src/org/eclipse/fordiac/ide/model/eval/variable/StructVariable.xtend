@@ -21,7 +21,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
-class StructVariable extends AbstractVariable<StructValue> {
+class StructVariable extends AbstractVariable<StructValue> implements Iterable<Variable<?>> {
 	static final Pattern MAP_PATTERN = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
 	static final Pattern MAP_KV_PATTERN = Pattern.compile("=(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
 
@@ -82,5 +82,9 @@ class StructVariable extends AbstractVariable<StructValue> {
 			}
 			members.get(split.get(0).trim).validateValue(split.get(1).trim)
 		]
+	}
+
+	override iterator() {
+		members.values.iterator
 	}
 }

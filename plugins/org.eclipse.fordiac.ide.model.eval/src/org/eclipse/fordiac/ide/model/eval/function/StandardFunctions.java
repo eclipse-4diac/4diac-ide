@@ -475,28 +475,28 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyDurationValue, U extends AnyIntValue> T MUL(final T first, final U second) {
+	static <T extends AnyDurationValue, U extends AnyNumValue> T MUL(final T first, final U second) {
 		return (T) ValueOperations.multiply(first, second);
 	}
 
-	static <U extends AnyIntValue> TimeValue MUL_TIME(final TimeValue first, final U second) {
+	static <U extends AnyNumValue> TimeValue MUL_TIME(final TimeValue first, final U second) {
 		return MUL(first, second);
 	}
 
-	static <U extends AnyIntValue> LTimeValue MUL_LTIME(final LTimeValue first, final U second) {
+	static <U extends AnyNumValue> LTimeValue MUL_LTIME(final LTimeValue first, final U second) {
 		return MUL(first, second);
 	}
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyDurationValue, U extends AnyIntValue> T DIV(final T first, final U second) {
+	static <T extends AnyDurationValue, U extends AnyNumValue> T DIV(final T first, final U second) {
 		return (T) ValueOperations.divideBy(first, second);
 	}
 
-	static <U extends AnyIntValue> TimeValue DIV_TIME(final TimeValue first, final U second) {
+	static <U extends AnyNumValue> TimeValue DIV_TIME(final TimeValue first, final U second) {
 		return DIV(first, second);
 	}
 
-	static <U extends AnyIntValue> LTimeValue DIV_LTIME(final LTimeValue first, final U second) {
+	static <U extends AnyNumValue> LTimeValue DIV_LTIME(final LTimeValue first, final U second) {
 		return DIV(first, second);
 	}
 
@@ -597,19 +597,21 @@ public interface StandardFunctions extends Functions {
 	}
 
 	static <T extends AnyValue> T TO_BIG_ENDIAN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+		return value;
 	}
 
+	@SuppressWarnings("unchecked")
 	static <T extends AnyValue> T TO_LITTLE_ENDIAN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+		return (T) ValueOperations.reverseBytes(value);
 	}
 
 	static <T extends AnyValue> T FROM_BIG_ENDIAN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+		return value;
 	}
 
+	@SuppressWarnings("unchecked")
 	static <T extends AnyValue> T FROM_LITTLE_ENDIAN(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+		return (T) ValueOperations.reverseBytes(value);
 	}
 
 	/* Validation functions */
