@@ -19,9 +19,11 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
-import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
-import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
-import org.eclipse.fordiac.ide.application.policies.GroupXYLayoutPolicy;
+import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
+import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
+import org.eclipse.fordiac.ide.application.policies.ContainerContentXYLayoutPolicy;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
@@ -31,19 +33,20 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-public class TrimGroupHandler extends AbstractHandler {
+public class TrimHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final GroupEditPart groupEditPart = getGroupEditPart(HandlerUtil.getCurrentSelection(event));
+		final IContainerEditPart conatainerEditPart = getConatinerEditPart(HandlerUtil.getCurrentSelection(event));
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		if (groupEditPart != null && editor != null) {
-			final GraphicalEditPart groupContentEP = groupEditPart.getContentEP();
-			if(groupContentEP != null) {
-				final Rectangle groupContentContainerBounds = GroupXYLayoutPolicy.getGroupAreaBounds(groupContentEP);
-				final Rectangle groupContentBounds = groupEditPart.getMinContentBounds();
-				final Command cmd = GroupXYLayoutPolicy.createChangeGroupBoundsCommand(groupEditPart.getModel(),
-						groupContentContainerBounds, groupContentBounds);
+		if (conatainerEditPart != null && editor != null) {
+			final GraphicalEditPart contentEP = conatainerEditPart.getContentEP();
+			if(contentEP != null) {
+				final Rectangle contentContainerBounds = ContainerContentXYLayoutPolicy.getContainerAreaBounds(contentEP);
+				final Rectangle groupContentBounds = conatainerEditPart.getMinContentBounds();
+				final Command cmd = ContainerContentXYLayoutPolicy.createChangeBoundsCommand(
+						(FBNetworkElement) conatainerEditPart.getModel(),
+						contentContainerBounds, groupContentBounds);
 				getCommandStack(editor).execute(cmd);
 			}
 		}
@@ -54,19 +57,27 @@ public class TrimGroupHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		setBaseEnabled(getGroupEditPart(selection) != null);
+		setBaseEnabled(getConatinerEditPart(selection) != null);
 	}
 
-	private static GroupEditPart getGroupEditPart(final ISelection selection) {
+	private static IContainerEditPart getConatinerEditPart(final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structSel = (IStructuredSelection) selection;
 			if (structSel.size() == 1) {
 				final Object firstElement = structSel.getFirstElement();
-				if (firstElement instanceof GroupEditPart) {
-					return (GroupEditPart) firstElement;
+				if (firstElement instanceof IContainerEditPart) {
+					final IContainerEditPart containerEP = (IContainerEditPart) firstElement;
+					if (containerEP.getModel() instanceof SubApp) {
+						// if we have a subapp only accept if it is expanded
+						if (((SubApp) containerEP.getModel()).isUnfolded()) {
+							return containerEP;
+						}
+					} else {
+						return containerEP;
+					}
 				}
-				if (firstElement instanceof GroupContentEditPart) {
-					return (GroupEditPart) ((EditPart) firstElement).getParent();
+				if (firstElement instanceof AbstractContainerContentEditPart) {
+					return (IContainerEditPart) ((EditPart) firstElement).getParent();
 				}
 			}
 		}

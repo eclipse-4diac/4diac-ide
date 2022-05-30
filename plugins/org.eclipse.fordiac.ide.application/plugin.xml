@@ -399,9 +399,9 @@
              name="Open Type in Editor">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
-             description="Trim the size of a group to the minimum size required by its contents"
-             id="org.eclipse.fordiac.ide.application.commands.trimGroup"
-             name="Trim Group">
+             description="Trim the size of a container to the minimum size required by its contents"
+             id="org.eclipse.fordiac.ide.application.commands.trim"
+             name="Trim">
     </command>
   </extension>
   <extension point="org.eclipse.ui.handlers">
@@ -591,8 +591,8 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.OpenTypeHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.openType">
     </handler>
-    <handler class="org.eclipse.fordiac.ide.application.handlers.TrimGroupHandler"
-             commandId="org.eclipse.fordiac.ide.application.commands.trimGroup">
+    <handler class="org.eclipse.fordiac.ide.application.handlers.TrimHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.trim">
     </handler>
   </extension>
   <extension point="org.eclipse.ui.bindings">
@@ -763,7 +763,7 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.toggleConnections"
                label="Toggle Connection Visibility">
       </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.trimGroup" >
+      <command commandId="org.eclipse.fordiac.ide.application.commands.trim" >
       </command>
     </menuContribution>
     <menuContribution locationURI="toolbar:org.eclipse.ui.main.toolbar?after=additions">
@@ -912,12 +912,15 @@
           </with>
         </visibleWhen>
       </command>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.trimGroup" >
+      <command commandId="org.eclipse.fordiac.ide.application.commands.trim" >
       	<visibleWhen checkEnabled="false">
           <with variable="selection">
             <count value="1" />
             <iterate ifEmpty="false">
-            	<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Group" />
+            	<or>
+            		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.Group" />
+            		<adapt type="org.eclipse.fordiac.ide.model.libraryElement.SubApp" />
+        		</or>
             </iterate>
           </with>
         </visibleWhen>

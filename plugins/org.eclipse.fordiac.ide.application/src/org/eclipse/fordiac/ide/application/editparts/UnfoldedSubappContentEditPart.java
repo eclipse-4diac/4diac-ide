@@ -18,9 +18,9 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.policies.SubAppContentLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
@@ -48,8 +48,16 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 	}
 
 	@Override
-	protected EObject getContainerElement() {
+	protected SubApp getContainerElement() {
 		return getModel().getSubapp();
+	}
+
+	@Override
+	public Object getAdapter(final Class key) {
+		if (key == SubApp.class) {
+			return getContainerElement();
+		}
+		return super.getAdapter(key);
 	}
 
 }

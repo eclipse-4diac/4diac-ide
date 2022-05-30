@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.application.editparts.GroupContentNetwork;
 import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateFBElementInGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -76,10 +75,10 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 			final Point moveDelta = getScaledMoveDelta(request);
 			final Rectangle newContentBounds = getNewContentBounds(request.getEditParts());
 			newContentBounds.translate(moveDelta);
-			final Rectangle groupContentBounds = getGroupAreaBounds(getHost());
+			final Rectangle groupContentBounds = ContainerContentXYLayoutPolicy.getContainerAreaBounds(getHost());
 			if (!groupContentBounds.contains(newContentBounds)) {
 				newContentBounds.union(groupContentBounds);
-				final AbstractChangeContainerBoundsCommand changeSizeCmd = createChangeGroupBoundsCommand(getGroup(),
+				final AbstractChangeContainerBoundsCommand changeSizeCmd = ContainerContentXYLayoutPolicy.createChangeBoundsCommand(getGroup(),
 						groupContentBounds, newContentBounds);
 				if (cmd instanceof CompoundCommand) {
 					((CompoundCommand) cmd).add(changeSizeCmd);
@@ -114,7 +113,7 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 
 	private Command createAddToGroupCommand(final ChangeBoundsRequest request, final Group dropGroup,
 			final List<FBNetworkElement> fbEls) {
-		final Rectangle groupContentBounds = getGroupAreaBounds(getHost());
+		final Rectangle groupContentBounds = ContainerContentXYLayoutPolicy.getContainerAreaBounds(getHost());
 		final Point topLeft = groupContentBounds.getTopLeft();
 		final Point moveDelta = getScaledMoveDelta(request);
 		topLeft.translate(-moveDelta.x, -moveDelta.y);
@@ -128,20 +127,6 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 		}
 
 		return addElementsToGroup;
-	}
-
-	public static Rectangle getGroupAreaBounds(final GraphicalEditPart groupContentEP) {
-		final Rectangle groupContentBounds = groupContentEP.getFigure().getBounds().getCopy();
-		final Rectangle groupBounds = ((GraphicalEditPart) groupContentEP.getParent()).getFigure().getBounds();
-		final int borderSize = groupContentBounds.x - groupBounds.x;
-		if (groupBounds.width < groupContentBounds.width) {
-			groupContentBounds.width = groupBounds.width - borderSize;
-		}
-		final int dy = groupContentBounds.y - groupBounds.y;
-		if ((groupBounds.height - dy) < groupContentBounds.height) {
-			groupContentBounds.height = groupBounds.height - dy - borderSize;
-		}
-		return groupContentBounds;
 	}
 
 	private Rectangle getNewContentBounds(final List<EditPart> editParts) {
@@ -172,21 +157,12 @@ public class GroupXYLayoutPolicy extends ContainerContentXYLayoutPolicy {
 			final AddElementsToGroup addElementsToGroup, final Rectangle groupContentBounds, final Rectangle newContentBounds) {
 		final CompoundCommand cmd = new CompoundCommand();
 		newContentBounds.union(groupContentBounds);
-		cmd.add(createChangeGroupBoundsCommand(dropGroup, groupContentBounds, newContentBounds));
+		cmd.add(ContainerContentXYLayoutPolicy.createChangeBoundsCommand(dropGroup, groupContentBounds, newContentBounds));
 		final Point offset = addElementsToGroup.getOffset();
 		offset.translate(newContentBounds.x - groupContentBounds.x, newContentBounds.y - groupContentBounds.y);
 		addElementsToGroup.setOffset(offset);
 		cmd.add(addElementsToGroup);
 		return cmd;
-	}
-
-	public static AbstractChangeContainerBoundsCommand createChangeGroupBoundsCommand(final Group group,
-			final Rectangle groupContentContainerBounds, final Rectangle groupContentBounds) {
-		final int dx = groupContentBounds.x - groupContentContainerBounds.x;
-		final int dy = groupContentBounds.y - groupContentContainerBounds.y;
-		final int dw = groupContentBounds.width - groupContentContainerBounds.width;
-		final int dh = groupContentBounds.height - groupContentContainerBounds.height;
-		return new ChangeGroupBoundsCommand(group, dx, dy, dw, dh);
 	}
 
 }

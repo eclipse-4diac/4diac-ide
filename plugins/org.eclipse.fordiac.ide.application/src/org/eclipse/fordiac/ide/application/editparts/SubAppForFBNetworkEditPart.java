@@ -347,4 +347,12 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 		}
 		return new Dimension(-1, -1);
 	}
+
+	@Override
+	public Object getAdapter(final Class key) {
+		if (key == SubApp.class) {
+			return getModel();
+		}
+		return super.getAdapter(key);
+	}
 }

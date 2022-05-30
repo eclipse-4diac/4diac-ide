@@ -19,8 +19,15 @@ package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppBoundsCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 
@@ -49,6 +56,36 @@ public class ContainerContentXYLayoutPolicy extends FBNetworkXYLayoutEditPolicy 
 	@Override
 	public GraphicalEditPart getHost() {
 		return (GraphicalEditPart) super.getHost();
+	}
+
+	public static Rectangle getContainerAreaBounds(final GraphicalEditPart containerContentEP) {
+		final Rectangle contentBounds = containerContentEP.getFigure().getBounds().getCopy();
+		final Rectangle containerBounds = ((GraphicalEditPart) containerContentEP.getParent()).getFigure().getBounds();
+		final int borderSize = contentBounds.x - containerBounds.x;
+		if (containerBounds.width < contentBounds.width) {
+			contentBounds.width = containerBounds.width - borderSize;
+		}
+		final int dy = contentBounds.y - containerBounds.y;
+		if ((containerBounds.height - dy) < contentBounds.height) {
+			contentBounds.height = containerBounds.height - dy - borderSize;
+		}
+		return contentBounds;
+	}
+
+	public static AbstractChangeContainerBoundsCommand createChangeBoundsCommand(final FBNetworkElement container,
+			final Rectangle contentContainerBounds, final Rectangle contentBounds) {
+		final int dx = contentBounds.x - contentContainerBounds.x;
+		final int dy = contentBounds.y - contentContainerBounds.y;
+		final int dw = contentBounds.width - contentContainerBounds.width;
+		final int dh = contentBounds.height - contentContainerBounds.height;
+
+		if (container instanceof Group) {
+			return new ChangeGroupBoundsCommand((Group) container, dx, dy, dw, dh);
+		}
+		if (container instanceof SubApp) {
+			return new ChangeSubAppBoundsCommand((SubApp) container, dx, dy, dw, dh);
+		}
+		return null;
 	}
 
 }
