@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.eval.value.AnyMagnitudeValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyNumValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyRealValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue;
+import org.eclipse.fordiac.ide.model.eval.value.AnyUnsignedValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyValue;
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue;
 import org.eclipse.fordiac.ide.model.eval.value.ByteValue;
@@ -1516,6 +1517,167 @@ public interface StandardFunctions extends Functions {
 
 	static ULIntValue REAL_TRUNC_ULINT(final RealValue value) {
 		return ULIntValue.toULIntValue(value);
+	}
+
+	/***************************************/
+	static <T extends AnyBitValue> USIntValue BCD_TO_USINT(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static <T extends AnyBitValue> UIntValue BCD_TO_UINT(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static <T extends AnyBitValue> UDIntValue BCD_TO_UDINT(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static <T extends AnyBitValue> ULIntValue BCD_TO_ULINT(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static <T extends AnyUnsignedValue> ByteValue TO_BCD_BYTE(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static <T extends AnyUnsignedValue> WordValue TO_BCD_WORD(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static <T extends AnyUnsignedValue> DWordValue TO_BCD_DWORD(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static <T extends AnyUnsignedValue> LWordValue TO_BCD_LWORD(final T value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static USIntValue BYTE_BCD_TO_USINT(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static UIntValue BYTE_BCD_TO_UINT(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static UDIntValue BYTE_BCD_TO_UDINT(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static ULIntValue BYTE_BCD_TO_ULINT(final ByteValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static USIntValue WORD_BCD_TO_USINT(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static UIntValue WORD_BCD_TO_UINT(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static UDIntValue WORD_BCD_TO_UDINT(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static ULIntValue WORD_BCD_TO_ULINT(final WordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static USIntValue DWORD_BCD_TO_USINT(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static UIntValue DWORD_BCD_TO_UINT(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static UDIntValue DWORD_BCD_TO_UDINT(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static ULIntValue DWORD_BCD_TO_ULINT(final DWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static USIntValue LWORD_BCD_TO_USINT(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static UIntValue LWORD_BCD_TO_UINT(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static UDIntValue LWORD_BCD_TO_UDINT(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static ULIntValue LWORD_BCD_TO_ULINT(final LWordValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static ByteValue USINT_TO_BCD_BYTE(final USIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static ByteValue UINT_TO_BCD_BYTE(final UIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static ByteValue UDINT_TO_BCD_BYTE(final UDIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static ByteValue ULINT_TO_BCD_BYTE(final ULIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static WordValue USINT_TO_BCD_WORD(final USIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static WordValue UINT_TO_BCD_WORD(final UIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static WordValue UDINT_TO_BCD_WORD(final UDIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static WordValue ULINT_TO_BCD_WORD(final ULIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static DWordValue USINT_TO_BCD_DWORD(final USIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static DWordValue UINT_TO_BCD_DWORD(final UIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static DWordValue UDINT_TO_BCD_DWORD(final UDIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static DWordValue ULINT_TO_BCD_DWORD(final ULIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static LWordValue USINT_TO_BCD_LWORD(final USIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static LWordValue UINT_TO_BCD_LWORD(final UIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static LWordValue UDINT_TO_BCD_LWORD(final UDIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+	}
+
+	static LWordValue ULINT_TO_BCD_LWORD(final ULIntValue value) {
+		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
 	}
 
 	static TimeValue NOW_MONOTONIC() {
