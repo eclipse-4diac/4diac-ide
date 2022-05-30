@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.math.BigDecimal
+import java.math.BigInteger
 import java.time.Duration
 import java.time.temporal.ChronoUnit
 import org.eclipse.fordiac.ide.model.data.TimeType
@@ -52,6 +54,10 @@ class TimeValue implements AnyDurationValue {
 	override doubleValue() { value }
 
 	override floatValue() { value }
+
+	override BigInteger bigIntegerValue() {	BigInteger.valueOf(value) }
+	
+	override BigDecimal bigDecimalValue() { BigDecimal.valueOf(value) }
 
 	override toDuration() { Duration.ofNanos(value) }
 

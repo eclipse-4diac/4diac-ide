@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.math.BigInteger
 import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes
 import org.eclipse.fordiac.ide.model.value.BoolValueConverter
@@ -47,6 +48,8 @@ class BoolValue implements AnyBitValue {
 
 	override longValue() { intValue }
 
+	override BigInteger bigIntegerValue() {	BigInteger.valueOf(longValue) }
+	
 	override equals(Object obj) { if(obj instanceof BoolValue) value == obj.value else false }
 
 	override hashCode() { Boolean.hashCode(value) }

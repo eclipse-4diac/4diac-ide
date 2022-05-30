@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.math.BigDecimal
+import java.math.BigInteger
 import org.eclipse.fordiac.ide.model.data.DintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter
@@ -46,6 +48,10 @@ final class DIntValue implements AnySignedValue {
 	override doubleValue() { value }
 
 	override floatValue() { value }
+
+	override BigInteger bigIntegerValue() {	BigInteger.valueOf(longValue) }
+	
+	override BigDecimal bigDecimalValue() { BigDecimal.valueOf(longValue) }
 
 	override equals(Object obj) { if(obj instanceof DIntValue) value == obj.value else false }
 

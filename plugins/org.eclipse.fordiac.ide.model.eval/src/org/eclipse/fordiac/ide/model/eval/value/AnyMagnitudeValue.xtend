@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.math.BigDecimal
+import java.math.BigInteger
 import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
 
 interface AnyMagnitudeValue extends AnyElementaryValue {
@@ -28,4 +30,8 @@ interface AnyMagnitudeValue extends AnyElementaryValue {
 	def float floatValue()
 
 	def double doubleValue()
+	
+	def BigInteger bigIntegerValue()
+	
+	def BigDecimal bigDecimalValue()
 }

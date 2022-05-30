@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.math.BigInteger
 import org.eclipse.fordiac.ide.model.data.ByteType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter
@@ -45,6 +46,8 @@ class ByteValue implements AnyBitValue {
 
 	override longValue() { Byte.toUnsignedLong(value) }
 
+	override BigInteger bigIntegerValue() {	BigInteger.valueOf(longValue) }
+	
 	override equals(Object obj) { if(obj instanceof ByteValue) value == obj.value else false }
 
 	override hashCode() { Byte.hashCode(value) }

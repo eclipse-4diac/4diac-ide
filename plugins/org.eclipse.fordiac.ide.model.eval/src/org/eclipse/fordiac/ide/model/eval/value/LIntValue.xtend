@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.math.BigDecimal
+import java.math.BigInteger
 import org.eclipse.fordiac.ide.model.data.LintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter
@@ -46,6 +48,10 @@ class LIntValue implements AnySignedValue {
 	override doubleValue() { value }
 
 	override floatValue() { value }
+
+	override BigInteger bigIntegerValue() {	BigInteger.valueOf(value) }
+	
+	override BigDecimal bigDecimalValue() { BigDecimal.valueOf(value) }
 
 	override equals(Object obj) { if(obj instanceof LIntValue) value == obj.value else false }
 

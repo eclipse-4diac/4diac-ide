@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.math.BigDecimal
+import java.math.BigInteger
 import org.eclipse.fordiac.ide.model.data.LrealType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter
@@ -46,6 +48,10 @@ class LRealValue implements AnyRealValue {
 	override doubleValue() { value }
 
 	override floatValue() { value as float }
+
+	override BigInteger bigIntegerValue() {	bigDecimalValue.toBigInteger }
+	
+	override BigDecimal bigDecimalValue() { BigDecimal.valueOf(value) }
 
 	override equals(Object obj) { if(obj instanceof LRealValue) value == obj.value else false }
 
