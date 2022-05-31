@@ -189,7 +189,10 @@ class STAlgorithmPartitioner {
 		}
 		val totalEndOffset = source.node.rootNode.totalEndOffset
 		if (totalEndOffset > lastOffset) {
-			result.last.appendText(source.node.rootNode.text.substring(lastOffset, totalEndOffset))
+			if (result.empty)
+				source.handleLostAndFound(result.size, lastOffset, totalEndOffset, result)
+			else
+				result.last.appendText(source.node.rootNode.text.substring(lastOffset, totalEndOffset))
 		}
 	}
 
