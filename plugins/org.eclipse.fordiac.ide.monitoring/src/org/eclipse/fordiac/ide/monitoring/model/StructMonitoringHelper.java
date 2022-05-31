@@ -30,19 +30,21 @@ public class StructMonitoringHelper {
 		for (int i = 0; i < builder.length() - 1 /* skip last parenthesis */; i++) {			
 			final char c = builder.charAt(i);
 			
-			// check if inside of string literal
-			if (c == '\'') {
+			// check if inside of string or wstring literal
+			if (c == '\'' || c == '\"') {
 				isStringLiteral = !isStringLiteral;
 				continue;
 			}
 			
-			// not inside of string literal, can insert tabs and linebreaks
+			// not inside of string or wstring literal, can insert tabs and linebreaks
 			if (!isStringLiteral) {
-				if (c == '(') {
+				if (c == '(' || c == '[') {
 					level++;
 					addLinebreak(builder, level, i);
 				}
-				if (c == ')') {
+				if (c == ')' || c == ']') {
+					addLinebreak(builder, level, i - 1);
+					i = i + level + 1; // skip inserted characters
 					level--;
 				}
 				if (c == ',') {
@@ -59,7 +61,7 @@ public class StructMonitoringHelper {
 	
 	private static void addLinebreak(final StringBuilder builder, final int level, final int i) {
 		if (i < builder.length()) {
-			// level tells us how much tabs we need
+			// level tells us how many tabs we need
 			builder.insert(i + 1, createLinebreak(level));
 		}
 	}
