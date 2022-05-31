@@ -15,8 +15,8 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document
 import com.google.inject.Inject
 import org.eclipse.core.runtime.IProgressMonitor
 import org.eclipse.core.runtime.Platform
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmReconciler
@@ -73,11 +73,21 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 	def void doSaveDocument(IProgressMonitor monitor, BaseFBType element, XtextDocument document) {
 		monitor.beginTask("Saving", 2)
 		try {
+			monitor.subTask("Updating resource")
+			document.internalModify[resource|
+				if(resource.modificationStamp != document.modificationStamp) {
+					resource.reparse(document.get)
+				}
+				return null;
+			]
 			monitor.subTask("Partitioning")
 			val partition = document.partition
 			monitor.worked(1)
 			monitor.subTask("Reconciling")
-			Display.^default.syncExec[element.callables.reconcile(partition)]
+			Display.^default.syncExec[
+				element.callables.reconcile(partition)
+				AbstractTypeExporter.saveType(element.typeEntry);
+			]
 		} catch (Exception e) {
 			Platform.getLog(class).error("Error saving algorithms to FB type", e)
 		} finally {

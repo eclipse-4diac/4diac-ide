@@ -37,9 +37,10 @@ class STAlgorithmResource extends LazyLinkingResource {
 	extension STAlgorithmPartitioner partitioner
 
 	override doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
+		val actualOptions = options ?: defaultLoadOptions
 		clearInternalFBType
-		if (options.loadPlainST) {
-			super.doLoad(inputStream, options)
+		if (actualOptions.loadPlainST) {
+			super.doLoad(inputStream, actualOptions)
 		} else {
 			try {
 				val typeFile = ResourcesPlugin.workspace.root.getFile(new Path(uri.toPlatformString(true)))
@@ -54,7 +55,7 @@ class STAlgorithmResource extends LazyLinkingResource {
 				throw new IOException("Couldn't load FB type", t)
 			}
 			val text = fbType.combine
-			super.doLoad(new LazyStringInputStream(text, encoding), options)
+			super.doLoad(new LazyStringInputStream(text, encoding), actualOptions)
 		}
 		updateInternalFBType
 	}
