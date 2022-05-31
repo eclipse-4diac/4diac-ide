@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2021 fortiss GmbH, Primetals Technologies GmbH
+ *               2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Martin Jobst - fix name validation with proposed changes and child resources
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement;
 
@@ -73,26 +75,24 @@ public class RenameType extends RenameParticipant {
 	private void verifyAffectedChildren(final IResourceDelta[] affectedChildren,
 			final RefactoringStatus result) {
 		for (final IResourceDelta resourceDelta : affectedChildren) {
-			if (resourceDelta.getMovedFromPath() != null) {
-				if (resourceDelta.getResource() instanceof IFile) {
-					final String newName = ((IFile) resourceDelta.getResource()).getName();
-					if (nameExistsInTypeLibrary(resourceDelta, newName)) {
-						result.addFatalError(MessageFormat.format(Messages.RenameType_TypeExists, newName));
-					}
-					final String name = TypeEntry.getTypeNameFromFileName(newName);
-					if (name != null && !IdentifierVerifyer.isValidIdentifier(name)) {
-						getWrongIdentifierErrorStatus(result);
-					}
-				} else if (resourceDelta.getMovedToPath() == null) {
-					verifyAffectedChildren(resourceDelta.getAffectedChildren(), result);
+			if (resourceDelta.getMovedToPath() != null && resourceDelta.getResource() instanceof IFile) {
+				final IFile newFile = resourceDelta.getResource().getWorkspace().getRoot()
+						.getFile(resourceDelta.getMovedToPath());
+				if (nameExistsInTypeLibrary(newFile)) {
+					result.addFatalError(MessageFormat.format(Messages.RenameType_TypeExists, newFile.getName()));
+				}
+				final String name = TypeEntry.getTypeNameFromFile(newFile);
+				if (name != null && !IdentifierVerifyer.isValidIdentifier(name)) {
+					getWrongIdentifierErrorStatus(result);
 				}
 			}
+			verifyAffectedChildren(resourceDelta.getAffectedChildren(), result);
 		}
 	}
 
-	protected boolean nameExistsInTypeLibrary(final IResourceDelta resourceDelta, final String newName) {
-		return !getOldName().equals(newName) && !newName.equals("a" + getOldName()) //$NON-NLS-1$
-				&& TypeLibraryManager.INSTANCE.getTypeEntryForFile(((IFile) resourceDelta.getResource())) != null;
+	protected boolean nameExistsInTypeLibrary(final IFile newFile) {
+		return !getOldName().equals(newFile.getName()) && !newFile.getName().equals("a" + getOldName()) //$NON-NLS-1$
+				&& TypeLibraryManager.INSTANCE.getTypeEntryForFile(newFile) != null;
 	}
 
 	@SuppressWarnings("static-method")  // allow child classes to overwrite
