@@ -102,7 +102,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		while (firedTransition != null) {
 			isConsumed();
 			basicFBTypeRuntime.setActiveState(firedTransition.getDestination());// fire transition
-			outputEvents.addAll(performEntryAction(basicFBTypeRuntime, fBTypeResource));
+			outputEvents.addAll(performEntryAction(basicFBTypeRuntime));
 			firedTransition = evaluateOutTransitions(basicFBTypeRuntime, fBTypeResource);
 		}
 		basicFBTypeRuntime.setBasicfbtype((BasicFBType)fBTypeResource.getContents().get(0));
@@ -113,14 +113,12 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		return outputEvents;
 	}
 
-	private EList<EventOccurrence> performEntryAction(BasicFBTypeRuntime basicFBTypeRuntime,
-			Resource fBTypeResource) {
+	private EList<EventOccurrence> performEntryAction(BasicFBTypeRuntime basicFBTypeRuntime) {
 		final var outputEvents = new BasicEList<EventOccurrence>();
 		// Copy FBType for execution
 		final var executedFbtype = EcoreUtil.copy(basicFBTypeRuntime.getBasicfbtype());
 		for (final ECAction action : basicFBTypeRuntime.getActiveState().getECAction()) {
 			if (action.getAlgorithm() != null) {
-				//processAlgorithm((TextAlgorithm) action.getAlgorithm(), fBTypeResource);
 				processAlgorithmWithEvaluator(executedFbtype, action.getAlgorithm());
 			}
 			if (action.getOutput() != null) {
@@ -130,18 +128,22 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		return outputEvents;
 	}
 	
-	private static void processAlgorithmWithEvaluator(BasicFBType basicfbtype, Algorithm algorithm) {
+	private static void processAlgorithmWithEvaluator(BaseFBType basefbtype, Algorithm algorithm) {
 		if (!(algorithm instanceof STAlgorithm)) {
 			throw new IllegalArgumentException("StructuredTextAlgorithm object could not be found"); //$NON-NLS-1$
 		}
-		List<VarDeclaration> varDecls = new ArrayList<>(basicfbtype.getInterfaceList().getInputVars());
-		varDecls.addAll(basicfbtype.getInterfaceList().getOutputVars());
-		varDecls.addAll(basicfbtype.getInternalVars());
+		List<VarDeclaration> varDecls = new ArrayList<>(basefbtype.getInterfaceList().getInputVars());
+		varDecls.addAll(basefbtype.getInterfaceList().getOutputVars());
+		varDecls.addAll(basefbtype.getInternalVars());
 		List<Variable<?>> vars = varDecls.stream().map(VariableOperations::newVariable)
 				.collect(Collectors.toList());
-		//BasicFBType copiedType = EcoreUtil.copy(basicfbtype);
-		FBVariable fbVar = new FBVariable("THIS", basicfbtype, Collections.emptyList());
-		Evaluator fbEval = EvaluatorFactory.createEvaluator(basicfbtype, BasicFBType.class, fbVar,
+		FBVariable fbVar = new FBVariable("THIS", basefbtype, Collections.emptyList()); //$NON-NLS-1$
+		Class<? extends FBType> baseFBClass = null;
+		if (basefbtype instanceof BasicFBType)
+			baseFBClass = BasicFBType.class;
+		else if (basefbtype instanceof SimpleFBType) 
+			baseFBClass = SimpleFBType.class;
+		Evaluator fbEval = EvaluatorFactory.createEvaluator(basefbtype, baseFBClass, fbVar,
 				vars, null);
 		Evaluator algoEval = fbEval.getChildren().entrySet().stream()
 				.filter(entry -> entry.getKey().getName().equals(algorithm.getName())).findAny()
@@ -158,25 +160,13 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		}
 	}
 
-	private static void processAlgorithm(TextAlgorithm textAlgorithm, Resource fBTypeResource) {
-		final var resource = new AlgorithmStXMI(fBTypeResource.getResourceSet()).
-				createXtextResourceFromAlgorithmSt(textAlgorithm.getText());
-		final var eObjectStructuredText = resource.getContents().get(0);
-		if (!(eObjectStructuredText instanceof StructuredTextAlgorithm)) {
-			throw new IllegalArgumentException("StructuredTextAlgorithm object could not be found"); //$NON-NLS-1$
-		}
-		final var structuredText = (StructuredTextAlgorithm) eObjectStructuredText;
-		final var listOfStatements = structuredText.getStatements().getStatements();
-		new EvalStatementImpl().evaluateAllStatements(listOfStatements);
-	}
-
 	private static void processOutputEvent(FBRuntimeAbstract runtime, Event output,
 			BasicEList<EventOccurrence> outputEvents/*, Resource fBTypeResource*/, FBType executedFbtype) {
 		final var newEventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 		// Copy FBTypeRuntime
 		final FBRuntimeAbstract newFBTypeRT = EcoreUtil.copy(runtime);
 		// Copy FBType
-		FBType copyFBType = (FBType) EcoreUtil.copy(executedFbtype);
+		FBType copyFBType = EcoreUtil.copy(executedFbtype);
 		//Add copy FBType to the RuntimeFBType
 		if (runtime instanceof BasicFBTypeRuntime) {
 			((BasicFBTypeRuntime) newFBTypeRT).setBasicfbtype((BasicFBType) copyFBType);
@@ -238,12 +228,12 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		SimpleFBType simpleFBType = simpleFBTypeRuntime.getSimpleFBType();
 		VariableUtils.fBVariableInitialization(simpleFBType);
 		final var outputEvents = new BasicEList<EventOccurrence>();
-		//Create a resource if the BasicFBType does not have one
-		final var fBTypeResource = new DefaultParserXMI().createFBResource(simpleFBType);
-		processAlgorithm((TextAlgorithm) simpleFBType.getAlgorithm().get(0), fBTypeResource);
+		//Make a copy to execute the SimpleFBType
+		SimpleFBType executedSimpleFBType = EcoreUtil.copy(simpleFBType);
+		processAlgorithmWithEvaluator(executedSimpleFBType, simpleFBType.getAlgorithm().get(0));
 		isConsumed();
 		Event event = simpleFBType.getInterfaceList().getEventOutputs().get(0);
-		processOutputEvent(simpleFBTypeRuntime, event, outputEvents, (FBType) fBTypeResource.getContents().get(0));
+		processOutputEvent(simpleFBTypeRuntime, event, outputEvents, executedSimpleFBType/*(FBType) fBTypeResource.getContents().get(0)*/);
 		return outputEvents;
 	}
 
