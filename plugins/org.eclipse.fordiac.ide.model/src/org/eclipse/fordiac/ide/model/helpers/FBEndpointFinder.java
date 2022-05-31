@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
@@ -37,7 +38,7 @@ public class FBEndpointFinder {
 
 	protected FBEndpointFinder() {
 	}
-	
+
 	/**
 	 * data class for recursively called methods
 	 */
@@ -144,11 +145,10 @@ public class FBEndpointFinder {
 			final boolean includeOutputs,
 			final boolean traverseParent) {
 
-		final Map<FBNetworkElement, Integer> result = new HashMap<>();
-		final boolean tp = traverseParent || fb.getOuterFBNetworkElement() == null;
-
 		final List<IInterfaceElement> ifs = new ArrayList<>();
+		//include sources to the input side of the given FB
 		if (includeInputs) {
+			//gather interfaces
 			ifs.addAll(fb.getInterface().getEventInputs());
 			ifs.addAll(fb.getInterface().getInputVars());
 			ifs.addAll(fb.getInterface().getSockets());
@@ -156,19 +156,29 @@ public class FBEndpointFinder {
 
 		//include destinations to the output side of the given FB
 		if (includeOutputs) {
+			//gather interfaces
 			ifs.addAll(fb.getInterface().getEventOutputs());
 			ifs.addAll(fb.getInterface().getOutputVars());
 			ifs.addAll(fb.getInterface().getPlugs());
 		}
 
+		//trace connections
 		final Set<IInterfaceElement> connectedIfs = new HashSet<>();
 		ifs.stream().forEach(ifElem -> (ifElem.isIsInput() ? ifElem.getInputConnections() : ifElem.getOutputConnections())
-				.forEach(con -> trace(
-						new RecursionState(new ArrayDeque<>(), ifElem.isIsInput(), ifElem.isIsInput() ? con.getSource() : con.getDestination(), connectedIfs))));
+				.forEach(con -> trace(new RecursionState(
+						new ArrayDeque<>(),
+						ifElem.isIsInput(),
+						(ifElem.isIsInput() ? con.getSource() : con.getDestination()),
+						connectedIfs))));
+
+		//count connections between blocks
+		final Map<FBNetworkElement, Integer> result = new HashMap<>();
 		connectedIfs.stream().map(IInterfaceElement::getFBNetworkElement)
 		.forEach(destFB -> result.put(destFB, result.containsKey(destFB) ? result.get(destFB)+1 : 1));
 
-		if (!tp) {
+		//if parent should not be traversed
+		//remove connected elements that share a parent with the outer parents of this block
+		if (!(traverseParent || fb.getOuterFBNetworkElement() == null)) {
 			final List<FBNetworkElement> parents = new ArrayList<>();
 			FBNetworkElement parent = fb.getOuterFBNetworkElement();
 			while (parent != null) {
@@ -206,12 +216,17 @@ public class FBEndpointFinder {
 			return;
 		}
 
+		//trace an event interface -> handled differently to regular connections since (de)muxer just forward that event
+		if (state.ifElem instanceof Event) {
+			traceEvent(state);
+			return;
+		}
 		//fb is a SubApp traverse down over the interface connections of the subapp
 		if (fb instanceof SubApp) {
 			traceSubApp(state);
 		}
 		//fb is mux/demux
-		else if(fb instanceof Multiplexer || fb instanceof Demultiplexer) {
+		else if(fb instanceof StructManipulator) {
 			//from left into mux or from right into demux
 			if ((state.inputSide && fb instanceof Demultiplexer) || (!state.inputSide && fb instanceof Multiplexer)) {
 				traceTrunk(state);
@@ -225,6 +240,31 @@ public class FBEndpointFinder {
 		else {
 			state.connections.add(state.ifElem);
 		}
+	}
+
+	/**
+	 * traces an event connection to an endpoint
+	 *
+	 * @param state the current state of the recursion
+	 */
+	private static void traceEvent(final RecursionState state) {
+		final FBNetworkElement fb = state.ifElem.getFBNetworkElement();
+
+		if (fb instanceof SubApp) {
+			final EList<Connection> subCons = state.inputSide ? state.ifElem.getInputConnections() : state.ifElem.getOutputConnections();
+			subCons.forEach(subInt -> traceEvent(new RecursionState(null, state.inputSide, state.inputSide ? subInt.getSource() : subInt.getDestination(), state.connections)));
+			return;
+		}
+		if (fb instanceof StructManipulator) {
+			final EList<Connection> plexCons = state.inputSide ?
+					fb.getInterface().getEventInputs().get(0).getInputConnections() :
+						fb.getInterface().getEventOutputs().get(0).getOutputConnections();
+
+			plexCons.forEach(nextInt -> traceEvent(new RecursionState(null, state.inputSide, state.inputSide ? nextInt.getSource() : nextInt.getDestination(), state.connections)));
+			return;
+		}
+
+		state.connections.add(state.ifElem);
 	}
 
 	/**
@@ -271,7 +311,7 @@ public class FBEndpointFinder {
 	 */
 	private static void traceFan(final RecursionState state) {
 		final FBNetworkElement fb = state.ifElem.getFBNetworkElement();
-		
+
 		//trace find right interface from the interface stack
 		for (final IInterfaceElement structMem:
 			((StructManipulator)fb).getStructType().getMemberVariables().stream()
@@ -279,7 +319,7 @@ public class FBEndpointFinder {
 			.collect(Collectors.toList()))
 		{
 			final IInterfaceElement realInt = fb.getInterfaceElement(structMem.getName());
-			
+
 			Deque<String> subStack;
 			/* case stack empty: occurs when a FB has a struct as output data type which is connected to a demux first
 			 * all of the inputs therefore have to be traversed */
