@@ -1353,8 +1353,7 @@
         <details key="name" value="Parameters"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="interface" lowerBound="1"
-        eType="#//ServiceInterface"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="interface" eType="#//ServiceInterface"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="PositionableElement">
     <eOperations name="updatePosition" lowerBound="1">
