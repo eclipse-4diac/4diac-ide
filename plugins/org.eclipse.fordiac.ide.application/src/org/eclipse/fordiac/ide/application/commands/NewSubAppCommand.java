@@ -37,8 +37,8 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 
 	public NewSubAppCommand(final FBNetwork fbNetwork, final List<?> selection, final int x, final int y) {
 		super(fbNetwork, LibraryElementFactory.eINSTANCE.createSubApp(), x, y);
-		getSubApp().setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
-		addElements = new AddElementsToSubAppCommand(getSubApp(), selection);
+		getElement().setSubAppNetwork(LibraryElementFactory.eINSTANCE.createFBNetwork());
+		addElements = new AddElementsToSubAppCommand(getElement(), selection);
 		checkMapping(selection);
 		parts = selection;
 	}
@@ -95,20 +95,19 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 		for (final Object ne : selection) {
 			if ((ne instanceof EditPart) && (((EditPart) ne).getModel() instanceof FBNetworkElement)) {
 				final FBNetworkElement element = (FBNetworkElement) ((EditPart) ne).getModel();
-				if (element.isMapped()) {
-					if (null == res) {
-						// this is the first element
-						res = element.getResource();
-					} else if (res != element.getResource()) {
-						return; // we have elements mapped to different entities
-					}
-				} else {
+				if (!element.isMapped()) {
 					return; // we have at least one unmapped element so we will not mapp the whole subapp
+				}
+				if (null == res) {
+					// this is the first element
+					res = element.getResource();
+				} else if (res != element.getResource()) {
+					return; // we have elements mapped to different entities
 				}
 			}
 		}
 		if (null != res) {
-			mapSubappCmd = new MapToCommand(getSubApp(), res);
+			mapSubappCmd = new MapToCommand(getElement(), res);
 		}
 	}
 
@@ -122,7 +121,8 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 		return "SubApp"; //$NON-NLS-1$
 	}
 
-	private SubApp getSubApp() {
-		return (SubApp) getElement();
+	@Override
+	public SubApp getElement() {
+		return (SubApp) super.getElement();
 	}
 }
