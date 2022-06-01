@@ -2255,33 +2255,27 @@ rule__STFeatureName__Alternatives
 	)
 	|
 	(
-		{ before(grammarAccess.getSTFeatureNameAccess().getNOTKeyword_5()); }
-		NOT
-		{ after(grammarAccess.getSTFeatureNameAccess().getNOTKeyword_5()); }
-	)
-	|
-	(
-		{ before(grammarAccess.getSTFeatureNameAccess().getMODKeyword_6()); }
+		{ before(grammarAccess.getSTFeatureNameAccess().getMODKeyword_5()); }
 		MOD
-		{ after(grammarAccess.getSTFeatureNameAccess().getMODKeyword_6()); }
+		{ after(grammarAccess.getSTFeatureNameAccess().getMODKeyword_5()); }
 	)
 	|
 	(
-		{ before(grammarAccess.getSTFeatureNameAccess().getDKeyword_7()); }
+		{ before(grammarAccess.getSTFeatureNameAccess().getDKeyword_6()); }
 		D
-		{ after(grammarAccess.getSTFeatureNameAccess().getDKeyword_7()); }
+		{ after(grammarAccess.getSTFeatureNameAccess().getDKeyword_6()); }
 	)
 	|
 	(
-		{ before(grammarAccess.getSTFeatureNameAccess().getDTKeyword_8()); }
+		{ before(grammarAccess.getSTFeatureNameAccess().getDTKeyword_7()); }
 		DT
-		{ after(grammarAccess.getSTFeatureNameAccess().getDTKeyword_8()); }
+		{ after(grammarAccess.getSTFeatureNameAccess().getDTKeyword_7()); }
 	)
 	|
 	(
-		{ before(grammarAccess.getSTFeatureNameAccess().getLDKeyword_9()); }
+		{ before(grammarAccess.getSTFeatureNameAccess().getLDKeyword_8()); }
 		LD
-		{ after(grammarAccess.getSTFeatureNameAccess().getLDKeyword_9()); }
+		{ after(grammarAccess.getSTFeatureNameAccess().getLDKeyword_8()); }
 	)
 ;
 finally {

@@ -211,7 +211,7 @@ STFeatureExpression returns STExpression:
 	(',' parameters+=STCallArgument)*)? ')')?;
 
 STFeatureName:
-	ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD' | 'D' | 'DT' | 'LD';
+	ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
 
 enum STMultiBitAccessSpecifier:
 	L='%L' | D='%D' | W='%W' | B='%B' | X='%X';
