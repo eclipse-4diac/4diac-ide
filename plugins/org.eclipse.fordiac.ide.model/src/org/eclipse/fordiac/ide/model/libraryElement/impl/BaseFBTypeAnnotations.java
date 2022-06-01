@@ -14,10 +14,12 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.DelegatingEcoreEList;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 
 final class BaseFBTypeAnnotations {
@@ -26,12 +28,14 @@ final class BaseFBTypeAnnotations {
 	}
 
 	static EList<Algorithm> getAlgorithm(final BaseFBType fbType) {
-		return ECollections.unmodifiableEList(fbType.getCallables().stream().filter(Algorithm.class::isInstance)
-				.map(Algorithm.class::cast).collect(Collectors.toList()));
+		return new DelegatingEcoreEList.UnmodifiableEList<>((InternalEObject) fbType,
+				LibraryElementPackage.eINSTANCE.getBaseFBType_Algorithm(), fbType.getCallables().stream()
+				.filter(Algorithm.class::isInstance).map(Algorithm.class::cast).collect(Collectors.toList()));
 	}
 
 	static EList<Method> getMethods(final BaseFBType fbType) {
-		return ECollections.unmodifiableEList(fbType.getCallables().stream().filter(Method.class::isInstance)
-				.map(Method.class::cast).collect(Collectors.toList()));
+		return new DelegatingEcoreEList.UnmodifiableEList<>((InternalEObject) fbType,
+				LibraryElementPackage.eINSTANCE.getBaseFBType_Methods(), fbType.getCallables().stream()
+				.filter(Method.class::isInstance).map(Method.class::cast).collect(Collectors.toList()));
 	}
 }
