@@ -46,7 +46,7 @@ class STAlgorithmResource extends LazyLinkingResource {
 				val typeFile = ResourcesPlugin.workspace.root.getFile(new Path(uri.toPlatformString(true)))
 				val typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(typeFile)
 				if (typeEntry !== null) {
-					val libraryElement = typeEntry.typeEditable
+					val libraryElement = typeEntry.type
 					if (libraryElement instanceof FBType) {
 						fbType = libraryElement
 					}

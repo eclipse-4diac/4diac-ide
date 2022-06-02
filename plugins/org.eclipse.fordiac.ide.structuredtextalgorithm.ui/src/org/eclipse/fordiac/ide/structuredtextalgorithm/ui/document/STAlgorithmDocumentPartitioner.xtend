@@ -25,7 +25,12 @@ class STAlgorithmDocumentPartitioner extends STAlgorithmPartitioner {
 
 	def EList<ICallable> partition(XtextDocument document) {
 		try {
-			document.readOnly[partition]
+			document.readOnly [ resource |
+				if (resource.modificationStamp != document.modificationStamp) {
+					resource.reparse(document.get)
+				}
+				resource.partition
+			]
 		} catch (Exception e) {
 			document.emergencyPartition // try to salvage what we can
 		}

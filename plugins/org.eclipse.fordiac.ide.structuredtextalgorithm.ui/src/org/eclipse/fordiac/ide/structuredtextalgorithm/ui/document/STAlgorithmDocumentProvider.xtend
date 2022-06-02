@@ -73,13 +73,6 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 	def void doSaveDocument(IProgressMonitor monitor, BaseFBType element, XtextDocument document) {
 		monitor.beginTask("Saving", 2)
 		try {
-			monitor.subTask("Updating resource")
-			document.internalModify[resource|
-				if(resource.modificationStamp != document.modificationStamp) {
-					resource.reparse(document.get)
-				}
-				return null;
-			]
 			monitor.subTask("Partitioning")
 			val partition = document.partition
 			monitor.worked(1)
