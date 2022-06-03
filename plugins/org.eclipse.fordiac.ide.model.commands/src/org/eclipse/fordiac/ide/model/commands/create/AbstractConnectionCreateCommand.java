@@ -20,10 +20,12 @@ package org.eclipse.fordiac.ide.model.commands.create;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
 public abstract class AbstractConnectionCreateCommand extends Command {
@@ -218,6 +220,15 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 		if (null != mirroredConnection) {
 			mirroredConnection.setVisible(visible);
 		}
+	}
+	
+	public static AbstractConnectionCreateCommand createCommand(final IInterfaceElement ie, final FBNetwork network) {
+		if (ie instanceof Event) {
+			return new EventConnectionCreateCommand(network);
+		} else if (ie instanceof VarDeclaration) {
+			return new DataConnectionCreateCommand(network);
+		}
+		return new AdapterConnectionCreateCommand(network);
 	}
 
 }

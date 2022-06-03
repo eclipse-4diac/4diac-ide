@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2016, 2018 fortiss GmbH, Johannes Kepler Universtiy
  * 				 2020 Primetals Technologies Germany GmbH
+ * 				 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,10 +13,15 @@
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Daniel Lindhuber
- *     - reworked getParentNetwork()
+ *     - connections across subapp borders
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -43,7 +49,65 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 			command.setParent(newParent);
 			return command;
 		}
+		// if we are here it is not a direct connection try border crossing command
+		if (canExistConnection(command)) {
+			return processBorderCrossingConnection(command.getSource(), command.getDestination());
+		}
 		return null;
+	}
+
+	private static boolean canExistConnection(final AbstractConnectionCreateCommand command) {
+		final AbstractConnectionCreateCommand compatibilityCheck = AbstractConnectionCreateCommand
+				.createCommand(command.getSource(), getSourceNetwork(command));
+		compatibilityCheck.setSource(command.getSource());
+		compatibilityCheck.setDestination(command.getDestination());
+		return compatibilityCheck.canExecute();
+	}
+
+	private static FBNetwork getSourceNetwork(final AbstractConnectionCreateCommand command) {
+		if (command.getSource().getFBNetworkElement() != null) {
+			return command.getSource().getFBNetworkElement().getFbNetwork();
+		}
+		return command.getParent();
+	}
+
+	private static Command processBorderCrossingConnection(final IInterfaceElement source,
+			final IInterfaceElement destination) {
+		final List<FBNetwork> sourceNetworks = buildHierarchy(source);
+		final List<FBNetwork> destinationNetworks = buildHierarchy(destination);
+
+		final FBNetwork match = findMostSpecificMatch(sourceNetworks, destinationNetworks);
+
+		return new CreateSubAppCrossingConnectionsCommand(source, destination, sourceNetworks, destinationNetworks, match);
+	}
+
+	private static FBNetwork findMostSpecificMatch(final List<FBNetwork> sourceNetworks,
+			final List<FBNetwork> destinationNetworks) {
+		int sourceIndex = sourceNetworks.size() - 1;
+		int destinationIndex = destinationNetworks.size() - 1;
+		FBNetwork match = sourceNetworks.get(0);
+
+		// breaks when the networks don't match anymore
+		while (sourceIndex >= 0 && destinationIndex >= 0
+				&& sourceNetworks.get(sourceIndex) == destinationNetworks.get(destinationIndex)) {
+			match = sourceNetworks.get(sourceIndex);
+			sourceIndex--;
+			destinationIndex--;
+		}
+
+		return match;
+	}
+
+	private static List<FBNetwork> buildHierarchy(final IInterfaceElement source) {
+		final List<FBNetwork> list = new ArrayList<>();
+		EObject current = source.eContainer();
+		while (current != null) {
+			if (current instanceof FBNetwork) {
+				list.add((FBNetwork) current);
+			}
+			current = current.eContainer();
+		}
+		return list;
 	}
 
 	@Override
