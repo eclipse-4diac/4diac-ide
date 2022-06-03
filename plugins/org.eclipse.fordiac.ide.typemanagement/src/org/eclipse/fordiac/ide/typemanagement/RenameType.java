@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.typemanagement;
 
 import java.text.MessageFormat;
+import java.util.Optional;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResourceDelta;
@@ -23,7 +24,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
-import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
@@ -72,8 +73,7 @@ public class RenameType extends RenameParticipant {
 		return result;
 	}
 
-	private void verifyAffectedChildren(final IResourceDelta[] affectedChildren,
-			final RefactoringStatus result) {
+	private void verifyAffectedChildren(final IResourceDelta[] affectedChildren, final RefactoringStatus result) {
 		for (final IResourceDelta resourceDelta : affectedChildren) {
 			if (resourceDelta.getMovedToPath() != null && resourceDelta.getResource() instanceof IFile) {
 				final IFile newFile = resourceDelta.getResource().getWorkspace().getRoot()
@@ -82,9 +82,8 @@ public class RenameType extends RenameParticipant {
 					result.addFatalError(MessageFormat.format(Messages.RenameType_TypeExists, newFile.getName()));
 				}
 				final String name = TypeEntry.getTypeNameFromFile(newFile);
-				if (name != null && !IdentifierVerifyer.isValidIdentifier(name)) {
-					getWrongIdentifierErrorStatus(result);
-				}
+				final Optional<String> error = IdentifierVerifier.verifyIdentifier(name);
+				error.ifPresent(result::addFatalError);
 			}
 			verifyAffectedChildren(resourceDelta.getAffectedChildren(), result);
 		}
@@ -93,11 +92,6 @@ public class RenameType extends RenameParticipant {
 	protected boolean nameExistsInTypeLibrary(final IFile newFile) {
 		return !getOldName().equals(newFile.getName()) && !newFile.getName().equals("a" + getOldName()) //$NON-NLS-1$
 				&& TypeLibraryManager.INSTANCE.getTypeEntryForFile(newFile) != null;
-	}
-
-	@SuppressWarnings("static-method")  // allow child classes to overwrite
-	protected void getWrongIdentifierErrorStatus(final RefactoringStatus result) {
-		result.addFatalError(Messages.RenameType_InvalidIdentifierErrorMessage);
 	}
 
 	@Override
@@ -122,8 +116,7 @@ public class RenameType extends RenameParticipant {
 	}
 
 	private boolean shouldSaveFile(final Shell shell) {
-		final int result = MessageDialog.open(
-				MessageDialog.QUESTION, shell, "Rename of Type with unsaved changes!",
+		final int result = MessageDialog.open(MessageDialog.QUESTION, shell, "Rename of Type with unsaved changes!",
 				MessageFormat.format(
 						"There are unsaved changes for type \"{0}\". Do you want to save them before renaming?",
 						TypeEntry.getTypeNameFromFileName(getOldName())),

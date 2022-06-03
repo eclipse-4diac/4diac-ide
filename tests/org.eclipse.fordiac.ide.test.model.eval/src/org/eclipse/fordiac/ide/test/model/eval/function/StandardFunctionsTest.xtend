@@ -195,15 +195,15 @@ class StandardFunctionsTest {
 	}
 
 	@Test
-	def void testAcon() {
+	def void testAcos() {
 		// REAL
-		(Math.PI / 2).assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 0.toRealValue), NUMERIC_DELTA)
-		(Math.PI / 3).assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 0.5.toRealValue), NUMERIC_DELTA)
-		0.assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 1.toRealValue), NUMERIC_DELTA)
+		(Math.PI / 2).assertEquals(StandardFunctions.invokeUnaryOperator("ACOS", 0.toRealValue), NUMERIC_DELTA)
+		(Math.PI / 3).assertEquals(StandardFunctions.invokeUnaryOperator("ACOS", 0.5.toRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("ACOS", 1.toRealValue), NUMERIC_DELTA)
 		// LREAL
-		(Math.PI / 2).assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 0.toLRealValue), NUMERIC_DELTA)
-		(Math.PI / 3).assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 0.5.toLRealValue), NUMERIC_DELTA)
-		0.assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 1.toLRealValue), NUMERIC_DELTA)
+		(Math.PI / 2).assertEquals(StandardFunctions.invokeUnaryOperator("ACOS", 0.toLRealValue), NUMERIC_DELTA)
+		(Math.PI / 3).assertEquals(StandardFunctions.invokeUnaryOperator("ACOS", 0.5.toLRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("ACOS", 1.toLRealValue), NUMERIC_DELTA)
 	}
 
 	@Test

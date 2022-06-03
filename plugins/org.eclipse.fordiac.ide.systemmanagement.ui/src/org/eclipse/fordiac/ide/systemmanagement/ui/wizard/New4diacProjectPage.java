@@ -16,7 +16,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
-import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
@@ -43,40 +43,32 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 	private InitialNameGroup systemName;
 	private InitialNameGroup applicationName;
 
-	/**
-	 * Height of the "advanced" linked resource group. Set when the advanced group
-	 * is first made visible.
-	 */
+	/** Height of the "advanced" linked resource group. Set when the advanced group is first made visible. */
 	private int linkedResourceGroupHeight = -1;
 
-	/**
-	 * Container for the advanced section in the creation wizard
-	 *
-	 */
+	/** Container for the advanced section in the creation wizard */
 	private Composite advancedGroupContainer;
 
 	private Composite advancedGroupParent;
 
 	private boolean blockListeners = false;
 
-	private Listener nameModifyListener = e -> {
+	private final Listener nameModifyListener = e -> {
 		if (!blockListeners) {
 			setPageComplete(validatePage());
 		}
 	};
 
-	/**
-	 * Creates a new project creation wizard page.
+	/** Creates a new project creation wizard page.
 	 *
-	 * @param pageName the name of this page
-	 */
-	public New4diacProjectPage(String pageName) {
+	 * @param pageName the name of this page */
+	public New4diacProjectPage(final String pageName) {
 		super(pageName);
 		setPageComplete(false);
 	}
 
 	@Override
-	public void createControl(Composite parent) {
+	public void createControl(final Composite parent) {
 		super.createControl(parent);
 
 		systemName = new InitialNameGroup((Composite) getControl(), Messages.New4diacProjectWizard_InitialSystemName);
@@ -87,7 +79,7 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 
 		createAdvancedControls((Composite) getControl());
 
-		Composite composite = (Composite) getControl();
+		final Composite composite = (Composite) getControl();
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
 
@@ -99,7 +91,7 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 	protected boolean validatePage() {
 		blockListeners = true;
 		try {
-			if (!IdentifierVerifyer.isValidIdentifier(getProjectName())) {
+			if (IdentifierVerifier.verifyIdentifier(getProjectName()).isPresent()) {
 				setErrorMessage(Messages.SystemNameNotValid);
 				return false;
 			}
@@ -130,11 +122,11 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		return openApplication;
 	}
 
-	private void createAdvancedControls(Composite parent) {
+	private void createAdvancedControls(final Composite parent) {
 		advancedGroupParent = new Composite(parent, SWT.NONE);
 		advancedGroupParent.setFont(parent.getFont());
 		advancedGroupParent.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
-		GridLayout layout = new GridLayout();
+		final GridLayout layout = new GridLayout();
 		layout.marginHeight = 0;
 		layout.marginWidth = 0;
 		advancedGroupParent.setLayout(layout);
@@ -142,20 +134,18 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		advancedButton = new Button(advancedGroupParent, SWT.PUSH);
 		advancedButton.setFont(advancedGroupParent.getFont());
 		advancedButton.setText(Messages.NewSystemWizard_ShowAdvanced);
-		GridData data = setButtonLayoutData(advancedButton);
+		final GridData data = setButtonLayoutData(advancedButton);
 		data.horizontalAlignment = GridData.BEGINNING;
 		advancedButton.setLayoutData(data);
 		advancedButton.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetSelected(SelectionEvent e) {
+			public void widgetSelected(final SelectionEvent e) {
 				handleAdvancedButtonSelect();
 			}
 		});
 	}
 
-	/**
-	 * Shows/hides the advanced option widgets.
-	 */
+	/** Shows/hides the advanced option widgets. */
 	protected void handleAdvancedButtonSelect() {
 		if (advancedGroupContainer != null) {
 			advancedGroupContainer.dispose();
@@ -164,12 +154,12 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		} else {
 			createAdvancedGroup();
 			if (linkedResourceGroupHeight == -1) {
-				Point groupSize = advancedGroupContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+				final Point groupSize = advancedGroupContainer.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 				linkedResourceGroupHeight = groupSize.y;
 			}
 			advancedButton.setText(Messages.NewSystemWizard_HideAdvanced);
 		}
-		Composite compo = (Composite) getControl();
+		final Composite compo = (Composite) getControl();
 		compo.layout();
 	}
 
@@ -178,7 +168,7 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		advancedGroupContainer.setLayout(new GridLayout());
 		advancedGroupContainer.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
 
-		Button importDefaultTypeLibButton = new Button(advancedGroupContainer, SWT.CHECK);
+		final Button importDefaultTypeLibButton = new Button(advancedGroupContainer, SWT.CHECK);
 		importDefaultTypeLibButton.setSelection(importDefaultTypeLib);
 		importDefaultTypeLibButton.setText(Messages.PaletteManagementPage_LABEL_DefaultTypeLibrary);
 		importDefaultTypeLibButton.addSelectionListener(new SelectionListener() {
@@ -193,7 +183,7 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 			}
 		});
 
-		Button openApplicationCheckbox = new Button(advancedGroupContainer, SWT.CHECK);
+		final Button openApplicationCheckbox = new Button(advancedGroupContainer, SWT.CHECK);
 		openApplicationCheckbox.setText(Messages.NewApplicationPage_OpenApplicationForEditing);
 		openApplicationCheckbox.setSelection(openApplication);
 		openApplicationCheckbox.addSelectionListener(new SelectionListener() {

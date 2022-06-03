@@ -108,11 +108,11 @@ public final class NameRepository {
 	public static String createUniqueName(final INamedElement element, final String nameProposal) {
 		String retVal = nameProposal;
 
-		if (!IdentifierVerifyer.isValidIdentifier(nameProposal) && nameProposal.contains(".")) //$NON-NLS-1$
+		if (IdentifierVerifier.verifyIdentifier(nameProposal).isPresent() && nameProposal.contains(".")) //$NON-NLS-1$
 		{
 			retVal = nameProposal.replace(".", "_"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		Assert.isTrue(IdentifierVerifyer.isValidIdentifier(retVal),
+		Assert.isTrue(IdentifierVerifier.verifyIdentifier(retVal).isEmpty(),
 				"The given name proposal is not a valid identifier!"); //$NON-NLS-1$
 
 		Assert.isNotNull(element.eContainer(),
@@ -137,7 +137,7 @@ public final class NameRepository {
 		Assert.isNotNull(element.eContainer(),
 				"For a correct operation createuniqueName expects that the model element is already added in its containing model!"); //$NON-NLS-1$
 
-		if (!IdentifierVerifyer.isValidIdentifier(nameProposal)) {
+		if (IdentifierVerifier.verifyIdentifier(nameProposal).isPresent()) {
 			ErrorMessenger.popUpErrorMessage(
 					MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, nameProposal));
 			return false;

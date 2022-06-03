@@ -1,5 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2011, 2017 Profactor GmbH, fortiss GmbH, 2018 TU Vienna/ACIN
+ * 				 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,11 +11,14 @@
  * Contributors:
  *  Gerhard Ebenhofer, Alois Zoitl
  *    - initial API and implementation and/or initial documentation
- *  Martin Melik Merkumains - changes implementation to regex expression
+ *  Martin Melik Merkumains - changed implementation to regex expression, changed
+ *  	isValidIdentifier to verifyIdentifier, which returns Optional error string
+ *  	instead of a boolean
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
 import java.text.MessageFormat;
+import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -22,7 +26,7 @@ import java.util.regex.Pattern;
  * This class provides static methods to check whether a string is a valid IEC
  * 61499 compliant identifier.
  */
-public final class IdentifierVerifyer {
+public final class IdentifierVerifier {
 
 	private static final String IDENTIFIER_REGEX = "[_A-Za-z][_A-Za-z\\d]*"; //$NON-NLS-1$
 	private static final Pattern IDENTIFIER_PATTERN = Pattern.compile(IDENTIFIER_REGEX, Pattern.MULTILINE);
@@ -30,46 +34,36 @@ public final class IdentifierVerifyer {
 	private static final Pattern INVALID_IDENTIFIER_PATTERN = Pattern.compile(INVALID_IDENTIFIER_REGEX,
 			Pattern.MULTILINE);
 
-	private IdentifierVerifyer() {
-		// we don't want this util class to be instantiable
+	private IdentifierVerifier() {
+		throw new UnsupportedOperationException();
 	}
 
-	/**
-	 * Checks if is valid identifier.
+	/** Checks if the identifier is valid, and returns an Optional error message.
 	 *
 	 * @param identifier the identifier
 	 *
-	 * @return true, if is valid identifier
-	 */
-	public static boolean isValidIdentifier(final String identifier) {
-		final Matcher matcher = IDENTIFIER_PATTERN.matcher(identifier);
-		return matcher.matches();
-	}
-
-	/**
-	 * Checks if is valid identifier.
-	 *
-	 * @param identifier the identifier
-	 *
-	 * @return null if it is an valid identifier otherwise an Error message
-	 */
-	public static String isValidIdentifierWithErrorMessage(final String identifier) {
-		if (isValidIdentifier(identifier)) {
-			return null;
+	 * @return Empty Optional if the identifier is valid, otherwise the error message is contained in the Optional */
+	public static Optional<String> verifyIdentifier(final String identifier) {
+		if(identifier == null) {
+			return Optional.of(Messages.NameRepository_NameNotAValidIdentifier);
 		}
 		if (identifier.length() < 1) {
-			return Messages.IdentifierVerifyer_ERROR_IdentifierLengthZero;
+			return Optional.of(Messages.IdentifierVerifier_ERROR_IdentifierLengthZero);
 		}
-		final String firstChar = identifier.substring(0, 1);
-		final Matcher startSymbolMatcher = IDENTIFIER_PATTERN.matcher(firstChar);
-		if (!startSymbolMatcher.matches()) {
-			return Messages.IdentifierVerifyer_ERROR_InvalidStartSymbol;
+		if (!IDENTIFIER_PATTERN.matcher(identifier).matches()) {
+			return Optional.of(Messages.NameRepository_NameNotAValidIdentifier);
+		}
+		if (!IDENTIFIER_PATTERN.matcher(identifier.substring(0, 1)).matches()) {
+			return Optional.of(Messages.IdentifierVerifier_ERROR_InvalidStartSymbol);
 		}
 		final Matcher invalidExpressionSymbolsMatcher = INVALID_IDENTIFIER_PATTERN.matcher(identifier);
 		if (invalidExpressionSymbolsMatcher.find()) {
-			return MessageFormat.format(Messages.IdentifierVerifyer_ERROR_InvalidSymbolUsedInIdentifer,
-					invalidExpressionSymbolsMatcher.group(0));
+			return Optional.of(MessageFormat.format(Messages.IdentifierVerifier_ERROR_InvalidSymbolUsedInIdentifer,
+					invalidExpressionSymbolsMatcher.group(0)));
 		}
-		return Messages.IdentifierVerifyer_ERROR_UnkownExpressionError;
+		if (FordiacKeywords.RESERVED_KEYWORDS.contains(identifier)) {
+			return Optional.of(MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, identifier));
+		}
+		return Optional.empty();
 	}
 }

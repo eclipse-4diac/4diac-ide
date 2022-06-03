@@ -172,16 +172,16 @@ public final class Messages extends NLS {
 	public static String FordiacMarkerHelper_RemoveErrorMarkersFromFile;
 
 	/** Identifier has length zero */
-	public static String IdentifierVerifyer_ERROR_IdentifierLengthZero;
+	public static String IdentifierVerifier_ERROR_IdentifierLengthZero;
 
 	/** Identifier has invalid starting symbol */
-	public static String IdentifierVerifyer_ERROR_InvalidStartSymbol;
+	public static String IdentifierVerifier_ERROR_InvalidStartSymbol;
 
 	/** Invalid symbol used in identifier */
-	public static String IdentifierVerifyer_ERROR_InvalidSymbolUsedInIdentifer;
+	public static String IdentifierVerifier_ERROR_InvalidSymbolUsedInIdentifer;
 
 	/** Identifier pattern does not match for unknown reasons */
-	public static String IdentifierVerifyer_ERROR_UnkownExpressionError;
+	public static String IdentifierVerifier_ERROR_UnkownExpressionError;
 
 	/** The Import utils_ erro r_ arraysize_ number format. */
 	public static String Import_ERROR_ArraySize_NumberFormat;

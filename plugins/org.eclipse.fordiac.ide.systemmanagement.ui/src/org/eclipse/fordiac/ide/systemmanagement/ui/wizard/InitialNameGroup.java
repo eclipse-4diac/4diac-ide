@@ -16,7 +16,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
-import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.Text;
 
 public class InitialNameGroup extends Composite {
 
-	private Text name;
+	private final Text name;
 
 	// flag indicating if the user changed the initial application name if yes do
 	// not update the name any more
@@ -39,26 +39,26 @@ public class InitialNameGroup extends Composite {
 
 	private boolean blockListeners = false;
 
-	private Listener applicationNameModifyListener = e -> {
+	private final Listener applicationNameModifyListener = e -> {
 		if (!blockListeners) {
 			nameManuallyChanged = true;
 		}
 	};
 
-	public InitialNameGroup(Composite parent, String labelText) {
+	public InitialNameGroup(final Composite parent, final String labelText) {
 		super(parent, SWT.NONE);
-		GridLayout layout = new GridLayout();
+		final GridLayout layout = new GridLayout();
 		layout.numColumns = 2;
 		setLayout(layout);
 		setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
-		Label applicationLabel = new Label(this, SWT.NONE);
+		final Label applicationLabel = new Label(this, SWT.NONE);
 		applicationLabel.setText(labelText);
 		applicationLabel.setFont(parent.getFont());
 
 		// new project name entry field
 		name = new Text(this, SWT.BORDER);
-		GridData data = new GridData(GridData.FILL_HORIZONTAL);
+		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		name.setLayoutData(data);
 		name.setFont(parent.getFont());
 		name.addListener(SWT.Modify, applicationNameModifyListener);
@@ -68,18 +68,18 @@ public class InitialNameGroup extends Composite {
 		return name.getText();
 	}
 
-	public boolean validateName(String projectName) {
+	public boolean validateName(final String projectName) {
 		if (!nameManuallyChanged) {
 			blockListeners = true;
 			name.setText(projectName);
 			blockListeners = false;
-		} else if (!IdentifierVerifyer.isValidIdentifier(getInitialName())) {
+		} else if (IdentifierVerifier.verifyIdentifier(getInitialName()).isPresent()) {
 			return false;
 		}
 		return true;
 	}
 
-	public void addNameModifyListener(Listener nameModifyListener) {
+	public void addNameModifyListener(final Listener nameModifyListener) {
 		name.addListener(SWT.Modify, nameModifyListener);
 	}
 

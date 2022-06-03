@@ -39,8 +39,6 @@ public final class FordiacMarkerHelper {
 	private static final String CONNECTION_TARGET = "Connection"; //$NON-NLS-1$
 	private static final String VALUE_TARGET = "Value"; //$NON-NLS-1$
 
-
-
 	public static boolean markerTargetsFBNetworkElement(final IMarker marker) {
 		return FB_NETWORK_ELEMENT_TARGET.equals(marker.getAttribute(ErrorMarkerBuilder.TARGET_TYPE, null));
 	}

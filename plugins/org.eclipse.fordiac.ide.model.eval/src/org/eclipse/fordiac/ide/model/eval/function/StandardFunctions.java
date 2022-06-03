@@ -106,7 +106,7 @@ public interface StandardFunctions extends Functions {
 		return apply(value, Math::asin);
 	}
 
-	static <T extends AnyRealValue> T ACON(final T value) {
+	static <T extends AnyRealValue> T ACOS(final T value) {
 		return apply(value, Math::acos);
 	}
 
