@@ -293,10 +293,10 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				VAR_OUTPUT
-					arr1 : ARRAY [1..5] OF INT := [1, 2, 3, 4, 5];
-					arr2 : ARRAY [1..2, 3..4] OF INT := [1, 3(7)];
-					arr3 : ARRAY [1..2, 2..3, 3..4] OF INT := [2(0), 4(4), 2, 3];
-					arr4 : ARRAY [1..5] OF INT := [1 + 3, 2 + 3, 3 * 8, 4, 5];
+					arr1 : ARRAY[1..5] OF INT := [1, 2, 3, 4, 5];
+					arr2 : ARRAY[1..2, 3..4] OF INT := [1, 3(7)];
+					arr3 : ARRAY[1..2, 2..3, 3..4] OF INT := [2(0), 4(4), 2, 3];
+					arr4 : ARRAY[1..5] OF INT := [1 + 3, 2 + 3, 3 * 8, 4, 5];
 				END_VAR
 				END_FUNCTION
 			'''
@@ -321,7 +321,7 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				VAR_OUTPUT
-					arr1 : ARRAY [1..5] OF INT := [1, 2, 3, 4, 5];
+					arr1 : ARRAY[1..5] OF INT := [1, 2, 3, 4, 5];
 				END_VAR
 				arr[1] := 2;
 				arr[1, 2, 3] := 3;

@@ -182,6 +182,11 @@ class STCoreFormatter extends AbstractFormatter2 {
 					varDeclaration.regionFor.assignment(STVarDeclarationAccess.getTypeAssignment_5),
 					varDeclaration.type.name))
 		}
+		
+		if(varDeclaration.array){
+			varDeclaration.regionFor.keyword(STVarDeclarationAccess.getLeftSquareBracketKeyword_4_1_0_0).prepend[noSpace]
+			varDeclaration.regionFor.keyword(STVarDeclarationAccess.getRightSquareBracketKeyword_4_1_0_3).append[oneSpace]
+		}
 
 		varDeclaration?.defaultValue.format
 		varDeclaration.append[newLine]
