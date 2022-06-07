@@ -239,7 +239,6 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 
 	@Override
 	public EList<EventOccurrence> runFBNetwork(FBNetworkRuntime fBNetworkRuntime, EventManager manager) {
-
 		// run FB Type to get the output events for the instance in the network
 		// TODO reuse the runtimes
 		BasicFBTypeRuntime runtime = OperationalSemanticsFactory.eINSTANCE.createBasicFBTypeRuntime();
@@ -248,20 +247,40 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		EList<EventOccurrence> outputEvents = runBasicFBType(runtime);
 
 		EList<EventOccurrence> networkEvents = new BasicEList<>();
-
-		outputEvents.forEach( outputevent ->
-		eventOccurrence.getParentFB().getInterface().getAllInterfaceElements().stream().filter(iel -> outputevent.getEvent().getName().equals(iel.getName())));
-		// create transactions for the output events
-		outputEvents.forEach(e -> {
-			List<IInterfaceElement> destinations = findConnectedPins(e);
-			for (IInterfaceElement dest : destinations) {
-				manager.getTransactions().add(createNewTransaction(dest, fBNetworkRuntime));
-				final EventOccurrence networkEo = mapFBTypeEventToFBNetworkInstance(e);
-				networkEvents.add(networkEo);
+		outputEvents.forEach(event -> {
+			EventOccurrence newEventOccurrence =  OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
+			Event mappedEvent = (Event) eventOccurrence.getParentFB().getInterfaceElement(event.getEvent().getName());
+			newEventOccurrence.setEvent(mappedEvent);
+			networkEvents.add(newEventOccurrence);
+		});
+		
+//		EList<IInterfaceElement> interfaceElements = eventOccurrence.getParentFB()
+//															.getInterface()
+//															.getAllInterfaceElements()
+//															.stream().filter(iel -> outputEvents.get(0).getEvent().getName().equals(iel.getName()))//TODO several output events of one FB
+//															.collect(Collectors.toCollection(BasicEList::new))
+//															;
+//		interfaceElements.forEach(iel -> {
+//				EventOccurrence eventOccurrencce =  OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
+//				eventOccurrencce.setEvent((Event) iel);
+//				networkEvents.add(eventOccurrence);
+//		});
+				
+		networkEvents.forEach(e -> {
+			if (e.getEvent().isIsInput()) {
+				manager.getTransactions().add(createNewTransaction(e.getEvent(), fBNetworkRuntime));
+			} else {
+				//TODO Find the Original Pins 
+				List<IInterfaceElement> destinations = findConnectedPins(e);
+				for (IInterfaceElement dest : destinations) {
+					manager.getTransactions().add(createNewTransaction(dest, fBNetworkRuntime));
+//					final EventOccurrence networkEo = mapFBTypeEventToFBNetworkInstance(e);
+//					networkEvents.add(networkEo);
+				}
 			}
 		});
-
 		// TODO make sure that the correct events are returned (those from the fb network, based on what the fb type returned)
+		
 		return networkEvents;
 	}
 

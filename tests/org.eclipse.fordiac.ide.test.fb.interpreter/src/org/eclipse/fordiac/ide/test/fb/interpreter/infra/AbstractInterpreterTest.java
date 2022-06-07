@@ -198,12 +198,12 @@ public abstract class AbstractInterpreterTest {
 		return runSimpleFBTest((SimpleFBType) fb, seq);
 	}
 
-	public static FBNetwork runFBNetworkTest(final FBNetwork network, Event event) {
+	public static EList<Transaction> runFBNetworkTest(final FBNetwork network, Event event) {
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
 		//network.eResource().getContents().add(eventManager);
 		// TODO create convenience methods in eventManagerUtils
 		final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
-		eventOccurrence.setEvent(EcoreUtil.copy(event));
+		eventOccurrence.setEvent(event);
 		eventOccurrence.setParentFB(event.getFBNetworkElement());
 		eventOccurrence.setActive(true);
 
@@ -215,8 +215,8 @@ public abstract class AbstractInterpreterTest {
 		transaction.setInputEventOccurrence(eventOccurrence);
 		eventManager.getTransactions().add(transaction);
 
-		EventManagerUtils.process(eventManager);
-		return network;
+		EventManagerUtils.processNetwork(eventManager);
+		return eventManager.getTransactions();		
 	}
 
 	private static BaseFBType runSimpleFBTest(SimpleFBType fb, ServiceSequence seq) {

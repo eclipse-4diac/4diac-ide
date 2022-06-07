@@ -34,6 +34,7 @@ public class EventManagerUtils {
 				fbTransaction.getOutputEventOccurrences().addAll(result);
 				if ((i + 1) < transactions.size()) {
 					// TODO use ECoreUtil.copyAll(list of things to copy);
+					// TODO refine this...
 					final var copyfbRuntime = new Copier();
 					final FBRuntimeAbstract newfbRuntime;
 					// choose the latest: input event occurr. or last output event occurr.
@@ -47,6 +48,33 @@ public class EventManagerUtils {
 					copyfbRuntime.copyReferences();
 					transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(newfbRuntime);
 				}
+			}
+		}
+	}
+	
+	public static final void processNetwork(EventManager eventManager) {
+		final var transactions = eventManager.getTransactions();
+		for (var i = 0; i < transactions.size(); i++) {
+			final var transaction = transactions.get(i);
+			if (transaction instanceof FBTransaction) {
+				FBTransaction fbTransaction = (FBTransaction) transaction;
+				final var result = transaction.getInputEventOccurrence().getFbRuntime().run(eventManager);
+				fbTransaction.getOutputEventOccurrences().addAll(result);
+//				if ((i + 1) < transactions.size()) {
+//					// TODO use ECoreUtil.copyAll(list of things to copy);
+//					final var copyfbRuntime = new Copier();
+//					final FBRuntimeAbstract newfbRuntime;
+//					// choose the latest: input event occurr. or last output event occurr.
+//					if (fbTransaction.getOutputEventOccurrences().isEmpty()) {
+//						newfbRuntime = (FBRuntimeAbstract) copyfbRuntime.copy(transaction.getInputEventOccurrence().getFbRuntime());
+//					} else {
+//						newfbRuntime = (FBRuntimeAbstract) copyfbRuntime.copy(
+//								fbTransaction.getOutputEventOccurrences().get(fbTransaction.getOutputEventOccurrences().size() - 1).
+//								getFbRuntime());
+//					}
+//					copyfbRuntime.copyReferences();
+//					transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(newfbRuntime);
+//				}
 			}
 		}
 	}
