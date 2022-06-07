@@ -24,7 +24,15 @@ import org.eclipse.debug.ui.actions.IToggleBreakpointsTargetExtension;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.debug.breakpoint.EvaluatorLineBreakpoint;
 import org.eclipse.fordiac.ide.debug.st.breakpoint.STLineBreakpoint;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElseIfPart;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExit;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.jface.text.ITextSelection;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
@@ -69,6 +77,7 @@ public class STToggleBreakpointsTargetExtension implements IAdapterFactory, ITog
 		return false;
 	}
 
+	@SuppressWarnings("boxing")
 	@Override
 	public void toggleBreakpoints(final IWorkbenchPart part, final ISelection selection) throws CoreException {
 		if (part instanceof XtextEditor) {
@@ -86,8 +95,9 @@ public class STToggleBreakpointsTargetExtension implements IAdapterFactory, ITog
 						return;
 					}
 
-					// final boolean valid = editor.getDocument()
-					// .tryReadOnly(state -> isValidLineForBreakPoint(state, line));
+					if (!editor.getDocument().tryReadOnly(state -> isValidLineForBreakPoint(state, line))) {
+						return;
+					}
 
 					final STLineBreakpoint breakpoint = createBreakpoint(resource, line);
 					DebugPlugin.getDefault().getBreakpointManager().addBreakpoint(breakpoint);
@@ -133,9 +143,11 @@ public class STToggleBreakpointsTargetExtension implements IAdapterFactory, ITog
 		for (final INode n : node.getChildren()) {
 			final ITextRegionWithLineInformation textRegion = n.getTextRegionWithLineInformation();
 			if (textRegion.getLineNumber() <= line && textRegion.getEndLineNumber() >= line) {
-				final EObject eObject = n.getSemanticElement();
-				if (eObject instanceof STExpression) {
-					return true;
+				if (n.hasDirectSemanticElement() && textRegion.getLineNumber() == line) {
+					final EObject eObject = n.getSemanticElement();
+					if (isValidSematicElementForBreakpoint(eObject)) {
+						return true;
+					}
 				}
 				if (n instanceof ICompositeNode && isValidLineForBreakpoint((ICompositeNode) n, line)) {
 					return true;
@@ -144,6 +156,22 @@ public class STToggleBreakpointsTargetExtension implements IAdapterFactory, ITog
 			if (textRegion.getLineNumber() > line) {
 				return false;
 			}
+		}
+		return false;
+	}
+
+	protected static boolean isValidSematicElementForBreakpoint(final EObject element) {
+		if (element instanceof STExpression) {
+			final EObject container = element.eContainer();
+			if (container instanceof STAssignmentStatement) {
+				return ((STAssignmentStatement) container).getRight() == element;
+			} else if (container instanceof STForStatement) {
+				return ((STForStatement) container).getFrom() == element
+						|| ((STForStatement) container).getBy() == element;
+			}
+			return container instanceof STStatement || container instanceof STElseIfPart
+					|| container instanceof STCaseCases || container instanceof STContinue
+					|| container instanceof STReturn || container instanceof STExit;
 		}
 		return false;
 	}
