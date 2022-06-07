@@ -224,7 +224,12 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	@SuppressWarnings("static-method")  // allow subclasses to overwrite this method
 	protected String getDefaultValue(final IInterfaceElement ie) {
 		if (ie instanceof VarDeclaration && !IecTypes.GenericTypes.isAnyType(ie.getType())) {
-			return VariableOperations.newVariable((VarDeclaration) ie).getValue().toString();
+			try {
+				return VariableOperations.newVariable((VarDeclaration) ie).getValue().toString();
+			} catch (final IllegalArgumentException ex) {
+				// we are only logging it and jump to default value below
+				FordiacLogHelper.logWarning("could not aquire type default value", ex); //$NON-NLS-1$
+			}
 		}
 		// we should only arrive here in case of an errormarker interface without value OR ANY type
 		return ""; //$NON-NLS-1$
@@ -368,15 +373,15 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 				((Text) getCellEditor().getControl()).addKeyListener(new KeyAdapter() {
 					// hook enter key pressed to save also default values in pin
 					@Override
-					public void keyPressed(KeyEvent e) {
+					public void keyPressed(final KeyEvent e) {
 						if(e.character == '\r') {
-							setDirty(true);	
+							setDirty(true);
 						}
 					}
 				});
 			}
 		};
-		
+
 	}
 
 	/** performs the directEdit. */
@@ -384,7 +389,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		if(!getModel().getValue().isBlank()) { // Shows the current initial value when editing
 			getFigure().setText(getModel().getValue());
 		} else {
-			getFigure().setText(getDefaultValue(getModel().getParentIE()));		
+			getFigure().setText(getDefaultValue(getModel().getParentIE()));
 		}
 		createDirectEditManager().show();
 	}
