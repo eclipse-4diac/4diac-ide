@@ -20,7 +20,9 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextalgorithm.messages"; //$NON-NLS-1$
 	public static String STAlgorithmValidator_Duplicate_Method_Or_Algorithm_Name;
+	public static String STAlgorithmValidator_No_algorithm_for_input_event;
 	public static String STAlgorithmValidator_Unqualified_Method_Or_Algorithm_Shadowing_Function;
+	public static String STAlgorithmValidator_Unused_algorithm;
 
 	static {
 		// initialize resource bundle

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ *               2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  * 
  * Contributors:
  *   Martin Melik Merkumians - initial API and implementation and/or initial documentation
+ *   Martin Jobst - algorithm and method name format
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.formatting2
 
@@ -16,12 +18,12 @@ import com.google.inject.Inject
 import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.formatting2.KeywordCaseTextReplacer
 import org.eclipse.fordiac.ide.structuredtextcore.formatting2.STCoreFormatter
 import org.eclipse.xtext.Keyword
 import org.eclipse.xtext.RuleCall
 import org.eclipse.xtext.formatting2.IFormattableDocument
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 
 class STAlgorithmFormatter extends STCoreFormatter {
 
@@ -56,14 +58,16 @@ class STAlgorithmFormatter extends STCoreFormatter {
 
 	def dispatch void format(STAlgorithm sTAlgorithm, extension IFormattableDocument document) {
 		sTAlgorithm.regionFor.keyword("ALGORITHM").prepend[noIndentation].append[oneSpace]
-		sTAlgorithm.regionFor.keyword("END_ALGORITHM").prepend[noIndentation].append[setNewLines(1, 2, 2)]
+		sTAlgorithm.regionFor.assignment(STAlgorithmAccess.nameAssignment_1).append[setNewLines(1, 1, 2)]
+		sTAlgorithm.regionFor.keyword("END_ALGORITHM").prepend[noIndentation].append[setNewLines(2, 2, 2)]
 
 		sTAlgorithm.body.format
 	}
 
 	def dispatch void format(STMethod sTMethod, extension IFormattableDocument document) {
 		sTMethod.regionFor.keyword("METHOD").prepend[noIndentation].append[oneSpace]
-		sTMethod.regionFor.keyword("END_METHOD").prepend[noIndentation].append[setNewLines(1, 2, 2)]
+		sTMethod.regionFor.assignment(STMethodAccess.nameAssignment_1).append[setNewLines(1, 1, 2)]
+		sTMethod.regionFor.keyword("END_METHOD").prepend[noIndentation].append[setNewLines(2, 2, 2)]
 
 		sTMethod.body.format
 	}

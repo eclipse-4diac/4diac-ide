@@ -69,7 +69,8 @@ Workflow {
 	        	generateStub = false
 	        }
 	        fragment = ui.quickfix.QuickfixProviderFragment2 {
-	        	generateStub = false
+	        	generateStub = true
+	        	generateXtendStub = true
 	        }
 	        fragment = ui.contentAssist.ContentAssistFragment2 {
 	        	generateStub = false
@@ -81,7 +82,9 @@ Workflow {
 	        	generateXtendStub = true
 	        }
 	        fragment = ui.compare.CompareFragment2 {}
-	        fragment = junit.JUnitFragment {}
+	        fragment = junit.JUnitFragment {
+	        	junitVersion = "5"
+	        }
 	    }
 	}
 }

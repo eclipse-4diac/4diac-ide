@@ -19,7 +19,10 @@ import com.google.inject.Inject
 import java.text.MessageFormat
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.Messages
+import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSourceElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
@@ -45,9 +48,10 @@ class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 	@Inject
 	IContainer.Manager containerManager
 
-	public static final String ISSUE_CODE_PREFIX = "org.eclipse.fordiac.ide.structuredtextalgorithm."; // $NON-NLS-1$
-	public static final String DUPLICATE_METHOD_OR_ALGORITHM_NAME = ISSUE_CODE_PREFIX +
-		"duplicateAlgorithmOrMethodName"; // $NON-NLS-1$
+	public static final String ISSUE_CODE_PREFIX = "org.eclipse.fordiac.ide.structuredtextalgorithm."
+	public static final String DUPLICATE_METHOD_OR_ALGORITHM_NAME = ISSUE_CODE_PREFIX + "duplicateAlgorithmOrMethodName"
+	public static final String NO_ALGORITHM_FOR_INPUT_EVENT = ISSUE_CODE_PREFIX + "noAlgorithmForInputEvent"
+	public static final String NO_INPUT_EVENT_FOR_ALGORITHM = ISSUE_CODE_PREFIX + "noInputEventForAlgorithm"
 
 	@Check
 	def checkUniqunessOfSTAlgorithmSourceElementNames(STAlgorithmSourceElement sourceElement) {
@@ -78,6 +82,37 @@ class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 				}
 			}
 		}
+	}
 
+	@Check
+	def checkAlgorithmForInputEvent(STAlgorithmSource source) {
+		val resource = source.eResource
+		if (resource instanceof STAlgorithmResource) {
+			val fbType = resource.fbType
+			if (fbType instanceof SimpleFBType) {
+				fbType.interfaceList.eventInputs.reject [ event |
+					source.elements.filter(STAlgorithm).exists[alg|alg.name == event.name]
+				].forEach [ event |
+					acceptError(
+						MessageFormat.format(Messages.STAlgorithmValidator_No_algorithm_for_input_event, event.name),
+						source, 0, 0, NO_ALGORITHM_FOR_INPUT_EVENT, event.name)
+				]
+			}
+		}
+	}
+
+	@Check
+	def checkUnusedAlgorithm(STAlgorithm algorithm) {
+		val resource = algorithm.eResource
+		if (resource instanceof STAlgorithmResource) {
+			val fbType = resource.fbType
+			if (fbType instanceof SimpleFBType) {
+				if (!fbType.interfaceList.eventInputs.exists[name == algorithm.name]) {
+					warning(MessageFormat.format(Messages.STAlgorithmValidator_Unused_algorithm, algorithm.name),
+						algorithm, LibraryElementPackage.eINSTANCE.INamedElement_Name, NO_INPUT_EVENT_FOR_ALGORITHM,
+						algorithm.name)
+				}
+			}
+		}
 	}
 }
