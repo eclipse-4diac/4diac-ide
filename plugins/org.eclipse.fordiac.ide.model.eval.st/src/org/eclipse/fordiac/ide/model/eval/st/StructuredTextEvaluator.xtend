@@ -386,10 +386,10 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				}
 				val result = eval.evaluate
 				expr.mappedInOutArguments.forEach [ parameter, argument |
-					argument.evaluateVariable.value = eval.variables.get(parameter.name).value
+					if(argument !== null) argument.evaluateVariable.value = eval.variables.get(parameter.name).value
 				]
 				expr.mappedOutputArguments.forEach [ parameter, argument |
-					argument.evaluateVariable.value = eval.variables.get(parameter.name).value
+					if(argument !== null) argument.evaluateVariable.value = eval.variables.get(parameter.name).value
 				]
 				result
 			}
