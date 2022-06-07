@@ -23,6 +23,7 @@ import java.text.MessageFormat;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -142,6 +143,10 @@ public final class LinkConstraints {
 	 * @return true, if successful
 	 */
 	public static boolean typeCheck(final IInterfaceElement source, final IInterfaceElement target) {
+		// if source has generic type, it adapts to the target, which must fall into the generic type category
+		if (GenericTypes.isAnyType(source.getType()) && source.getType().isAssignableFrom(target.getType())) {
+			return true;
+		}
 		return target.getType().isAssignableFrom(source.getType());
 	}
 

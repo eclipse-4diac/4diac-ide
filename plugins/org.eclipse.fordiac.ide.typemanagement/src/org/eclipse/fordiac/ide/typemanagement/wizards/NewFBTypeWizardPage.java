@@ -27,12 +27,13 @@ import java.io.FileNotFoundException;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -137,9 +138,9 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 		}
 
 		// use super.getFileName here to get the type name without extension
-		final String errorMessage = IdentifierVerifyer.isValidIdentifierWithErrorMessage(super.getFileName());
-		if (null != errorMessage) {
-			setErrorMessage(errorMessage);
+		final Optional<String> errorMessage = IdentifierVerifier.verifyIdentifier(super.getFileName());
+		if (errorMessage.isPresent()) {
+			setErrorMessage(errorMessage.get());
 			return false;
 		}
 

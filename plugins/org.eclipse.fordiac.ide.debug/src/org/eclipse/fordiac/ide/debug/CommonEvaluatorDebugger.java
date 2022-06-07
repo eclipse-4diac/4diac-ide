@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorDebugger;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
@@ -190,8 +191,10 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 	public int getLineNumber(final Object context) {
 		if (context instanceof EObject) {
 			final ICompositeNode node = NodeModelUtils.findActualNodeFor((EObject) context);
-			if (node != null) {
+			if (context instanceof ICallable) {
 				return node.getEndLine();
+			} else if (node != null) {
+				return node.getStartLine();
 			}
 		}
 		return -1;

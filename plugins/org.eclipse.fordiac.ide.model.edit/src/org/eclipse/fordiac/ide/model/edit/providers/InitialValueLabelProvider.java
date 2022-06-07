@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.model.edit.providers;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
@@ -29,8 +30,15 @@ public class InitialValueLabelProvider extends ColumnLabelProvider {
 			if (hasInitalValue(element)) {
 				return varDec.getValue().getValue();
 			}
-			return (IecTypes.GenericTypes.isAnyType(varDec.getType())) ? "" //$NON-NLS-1$
-					: VariableOperations.newVariable(varDec).getValue().toString();
+			try {
+				return (IecTypes.GenericTypes.isAnyType(varDec.getType())) ? "" //$NON-NLS-1$
+						: VariableOperations.newVariable(varDec).getValue().toString();
+			} catch (final IllegalArgumentException ex) {
+				FordiacLogHelper.logWarning("could not aquire type default value", ex); //$NON-NLS-1$
+				// we didn't get an type initial value just leave it empty.
+				return ""; //$NON-NLS-1$
+			}
+
 		}
 		return super.getText(element);
 	}

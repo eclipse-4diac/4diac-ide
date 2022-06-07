@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.math.BigInteger
 import org.eclipse.fordiac.ide.model.data.DwordType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter
@@ -45,6 +46,8 @@ class DWordValue implements AnyBitValue {
 
 	override longValue() { Integer.toUnsignedLong(value) }
 
+	override BigInteger bigIntegerValue() {	BigInteger.valueOf(longValue) }
+	
 	override equals(Object obj) { if(obj instanceof DWordValue) value == obj.value else false }
 
 	override hashCode() { Integer.hashCode(value) }

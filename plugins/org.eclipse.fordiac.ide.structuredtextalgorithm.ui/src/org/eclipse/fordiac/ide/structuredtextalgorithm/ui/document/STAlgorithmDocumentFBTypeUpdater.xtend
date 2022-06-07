@@ -38,7 +38,7 @@ class STAlgorithmDocumentFBTypeUpdater extends Job {
 
 	override protected run(IProgressMonitor monitor) {
 		if(monitor.canceled || paused) return Status.CANCEL_STATUS;
-		document.internalModify [ state |
+		document?.internalModify [ state |
 			doRun(state as STAlgorithmResource, monitor)
 			null
 		]

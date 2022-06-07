@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.math.BigInteger
 import org.eclipse.fordiac.ide.model.data.LwordType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter
@@ -45,6 +46,8 @@ class LWordValue implements AnyBitValue {
 
 	override longValue() { value }
 
+	override BigInteger bigIntegerValue() {	new BigInteger(Long.toUnsignedString(value)) }
+	
 	override equals(Object obj) { if(obj instanceof LWordValue) value == obj.value else false }
 
 	override hashCode() { Long.hashCode(value) }

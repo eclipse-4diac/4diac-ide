@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.math.BigInteger
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 
 interface AnyBitValue extends AnyElementaryValue {
@@ -26,4 +27,6 @@ interface AnyBitValue extends AnyElementaryValue {
 	def int intValue()
 
 	def long longValue()
+
+	def BigInteger bigIntegerValue()
 }

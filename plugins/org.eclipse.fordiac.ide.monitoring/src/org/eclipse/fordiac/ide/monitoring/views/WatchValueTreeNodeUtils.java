@@ -102,12 +102,6 @@ public final class WatchValueTreeNodeUtils {
 		return convertIntegerToHexString(parseInt);
 	}
 	
-	public static String decorateInitialCellValue(final MonitoringElement element) {
-		final DataType type = element.getPort().getInterfaceElement().getType();
-		final String value = element.getCurrentValue();
-		return decorateInitialCellValue(type, value);
-	}
-	
 	public static String decorateInitialCellValue(final DataType type, final String value) {
 		if (type instanceof WstringType) {
 			return StringValueConverter.INSTANCE.toString(value, true);

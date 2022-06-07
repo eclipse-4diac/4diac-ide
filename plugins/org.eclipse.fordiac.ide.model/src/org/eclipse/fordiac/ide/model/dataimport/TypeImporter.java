@@ -34,22 +34,20 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public abstract class TypeImporter extends CommonElementImporter {
 
-	protected TypeImporter(IFile file) {
+	protected TypeImporter(final IFile file) {
 		super(file);
 	}
 
-	protected TypeImporter(CommonElementImporter importer) {
+	protected TypeImporter(final CommonElementImporter importer) {
 		super(importer);
 	}
 
-	/**
-	 * This method parses VariableDeclaration.
+	/** This method parses VariableDeclaration.
 	 *
 	 * @return v - the parsed VariableDeclaration
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	protected VarDeclaration parseVarDeclaration() throws TypeImportException, XMLStreamException {
 		final VarDeclaration v = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 
@@ -83,7 +81,7 @@ public abstract class TypeImporter extends CommonElementImporter {
 			varInitialization.setValue(initialValue);
 			v.setValue(varInitialization);
 		}
-		
+
 		processChildren(LibraryElementTags.VAR_DECLARATION_ELEMENT, name -> {
 			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
 				parseGenericAttributeNode(v);

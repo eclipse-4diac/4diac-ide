@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class DeviceValueEditPart extends ValueEditPart {
 
@@ -26,11 +27,16 @@ public class DeviceValueEditPart extends ValueEditPart {
 		if (!IecTypes.GenericTypes.isAnyType(ie.getType())) {
 			final VarDeclaration typeInput = getDeviceTypeInput(ie);
 
-			if (typeInput != null ) {
-				return VariableOperations.newVariable(typeInput).getValue().toString();
-			}
-			// we should never be here as all device interface need a type entry, but as backup
-			return VariableOperations.newVariable((VarDeclaration) ie).getValue().toString();
+			try {
+				if (typeInput != null ) {
+					return VariableOperations.newVariable(typeInput).getValue().toString();
+				}
+				// we should never be here as all device interface need a type entry, but as backup
+				return VariableOperations.newVariable((VarDeclaration) ie).getValue().toString();
+		} catch (final IllegalArgumentException ex) {
+			// we are only logging it and jump to default value below
+			FordiacLogHelper.logWarning("could not aquire type default value", ex); //$NON-NLS-1$
+		}
 		}
 		return ""; //$NON-NLS-1$
 	}

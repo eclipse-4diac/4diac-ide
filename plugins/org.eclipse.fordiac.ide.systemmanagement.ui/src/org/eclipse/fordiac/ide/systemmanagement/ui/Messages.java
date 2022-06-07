@@ -59,8 +59,6 @@ public final class Messages extends NLS {
 
 	public static String SystemNameNotValid;
 
-
-
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

@@ -16,10 +16,12 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui;
 
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
 import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider;
+import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
 
 import com.google.inject.Binder;
 import com.google.inject.name.Names;
@@ -27,6 +29,7 @@ import com.google.inject.name.Names;
 /**
  * Use this class to register components to be used within the Eclipse IDE.
  */
+@SuppressWarnings("restriction")
 public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public STFunctionUiModule(final AbstractUIPlugin plugin) {
@@ -47,5 +50,10 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 	public void configureIEObjectDocumentationProvider(final Binder binder) {
 		binder.bindConstant().annotatedWith(Names.named(AbstractMultiLineCommentProvider.START_TAG)).to("[/(]\\*\\*?"); //$NON-NLS-1$
 		binder.bindConstant().annotatedWith(Names.named(AbstractMultiLineCommentProvider.END_TAG)).to("\\*[/)]"); //$NON-NLS-1$
+	}
+
+	@SuppressWarnings("static-method")
+	public Class<? extends IRefactoringDocument.Provider> bindIRefactoringDocument$Provider() {
+		return STCoreRefactoringDocumentProvider.class;
 	}
 }

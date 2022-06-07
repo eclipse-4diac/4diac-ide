@@ -908,7 +908,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STFeatureName:
-	//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD' | 'D' | 'DT' | 'LD';
+	//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
 	public STCoreGrammarAccess.STFeatureNameElements getSTFeatureNameAccess() {
 		return gaSTCore.getSTFeatureNameAccess();
 	}

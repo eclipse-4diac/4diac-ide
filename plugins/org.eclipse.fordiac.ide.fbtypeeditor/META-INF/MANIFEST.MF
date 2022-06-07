@@ -26,7 +26,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.jface.text
+ org.eclipse.jface.text,
+ org.eclipse.xtext.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier

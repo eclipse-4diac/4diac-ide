@@ -12,7 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
-import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
+import java.util.Optional;
+
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -34,7 +36,7 @@ public class NewSystemWizardPage extends WizardNewFileCreationPage {
 	private InitialNameGroup applicationName;
 	private boolean blockListeners = false;
 
-	private Listener nameModifyListener = e -> {
+	private final Listener nameModifyListener = e -> {
 		if (!blockListeners) {
 			setPageComplete(validatePage());
 		}
@@ -48,7 +50,7 @@ public class NewSystemWizardPage extends WizardNewFileCreationPage {
 		return openApplication;
 	}
 
-	public NewSystemWizardPage(IStructuredSelection selection) {
+	public NewSystemWizardPage(final IStructuredSelection selection) {
 		super(FordiacMessages.NewSystem, selection);
 		this.setTitle(FordiacMessages.NewSystem);
 		this.setDescription(Messages.NewSystemWizardPage_CreateNewSystem);
@@ -58,7 +60,7 @@ public class NewSystemWizardPage extends WizardNewFileCreationPage {
 	@Override
 	public void createControl(final Composite parent) {
 		super.createControl(parent);
-		Composite composite = (Composite) getControl();
+		final Composite composite = (Composite) getControl();
 		// Show description on opening
 		setErrorMessage(null);
 		setMessage(null);
@@ -70,9 +72,9 @@ public class NewSystemWizardPage extends WizardNewFileCreationPage {
 		blockListeners = true;
 		try {
 			// use super.getFileName here to get the type name without extension
-			String errorMessage = IdentifierVerifyer.isValidIdentifierWithErrorMessage(super.getFileName());
-			if (null != errorMessage) {
-				setErrorMessage(errorMessage);
+			final Optional<String> errorMessage = IdentifierVerifier.verifyIdentifier(super.getFileName());
+			if (errorMessage.isPresent()) {
+				setErrorMessage(errorMessage.get());
 				return false;
 			}
 
@@ -102,7 +104,7 @@ public class NewSystemWizardPage extends WizardNewFileCreationPage {
 	}
 
 	@Override
-	protected void createAdvancedControls(Composite parent) {
+	protected void createAdvancedControls(final Composite parent) {
 		applicationName = new InitialNameGroup(parent, Messages.New4diacProjectWizard_InitialApplicationName);
 		applicationName.addNameModifyListener(nameModifyListener);
 		super.createAdvancedControls(parent);
@@ -110,9 +112,9 @@ public class NewSystemWizardPage extends WizardNewFileCreationPage {
 
 	@Override
 	protected void handleAdvancedButtonSelect() {
-		Shell shell = getShell();
-		Point shellSize = shell.getSize();
-		Composite composite = (Composite) getControl();
+		final Shell shell = getShell();
+		final Point shellSize = shell.getSize();
+		final Composite composite = (Composite) getControl();
 
 		if (null != openApplicationCheckbox) {
 			openApplicationCheckbox.dispose();
@@ -121,7 +123,7 @@ public class NewSystemWizardPage extends WizardNewFileCreationPage {
 		} else {
 			openApplicationCheckbox = createOpenApplicationGroup(composite);
 			if (-1 == openApplicationParentHeight) {
-				Point groupSize = openApplicationCheckbox.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
+				final Point groupSize = openApplicationCheckbox.computeSize(SWT.DEFAULT, SWT.DEFAULT, true);
 				openApplicationParentHeight = groupSize.y;
 			}
 			shell.setSize(shellSize.x, shellSize.y + openApplicationParentHeight);
@@ -129,7 +131,7 @@ public class NewSystemWizardPage extends WizardNewFileCreationPage {
 		super.handleAdvancedButtonSelect();
 	}
 
-	private Button createOpenApplicationGroup(Composite parent) {
+	private Button createOpenApplicationGroup(final Composite parent) {
 		openApplicationCheckbox = new Button(parent, SWT.CHECK);
 		openApplicationCheckbox.setText(Messages.NewApplicationPage_OpenApplicationForEditing);
 		openApplicationCheckbox.setSelection(true);

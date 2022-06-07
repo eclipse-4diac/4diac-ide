@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.math.BigDecimal
+import java.math.BigInteger
 import org.eclipse.fordiac.ide.model.data.UlintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter
@@ -46,6 +48,10 @@ class ULIntValue implements AnyUnsignedValue {
 	override doubleValue() { value }
 
 	override floatValue() { value }
+
+	override BigInteger bigIntegerValue() {	new BigInteger(Long.toUnsignedString(value)) }
+	
+	override BigDecimal bigDecimalValue() { new BigDecimal(bigIntegerValue) }
 
 	override equals(Object obj) { if(obj instanceof ULIntValue) value == obj.value else false }
 

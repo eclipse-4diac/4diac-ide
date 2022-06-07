@@ -24,6 +24,7 @@ import java.util.Optional;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -36,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
@@ -52,6 +54,8 @@ public class AddElementsToSubAppCommand extends Command {
 	private final CompoundCommand modifiedConns = new CompoundCommand();
 	private final CompoundCommand changedSubAppIEs = new CompoundCommand();
 	private final CompoundCommand setUniqueName = new CompoundCommand();
+	private final CompoundCommand removeFromOtherGroups = new CompoundCommand();
+
 	private org.eclipse.swt.graphics.Point offset;
 
 	public AddElementsToSubAppCommand(final SubApp targetSubApp, final List<?> selection) {
@@ -66,7 +70,9 @@ public class AddElementsToSubAppCommand extends Command {
 
 	@Override
 	public void execute() {
+		collectElementsToRemoveFromGroup();
 		unmappingCmds.execute();
+		removeFromOtherGroups.execute();
 		final EList<FBNetworkElement> fbNetwork = targetSubApp.getSubAppNetwork().getNetworkElements();
 		offset = FBNetworkHelper.removeXYOffsetForFBNetwork(elementsToAdd);
 		for (final FBNetworkElement fbNetworkElement : elementsToAdd) {
@@ -89,6 +95,7 @@ public class AddElementsToSubAppCommand extends Command {
 	@Override
 	public void redo() {
 		unmappingCmds.redo();
+		removeFromOtherGroups.redo();
 		FBNetworkHelper.removeXYOffsetForFBNetwork(elementsToAdd);
 		elementsToAdd.forEach(element -> targetSubApp.getSubAppNetwork().getNetworkElements().add(element));
 		movedConns.forEach(con -> targetSubApp.getSubAppNetwork().addConnection(con));
@@ -107,6 +114,7 @@ public class AddElementsToSubAppCommand extends Command {
 
 		elementsToAdd.forEach(element -> targetSubApp.getFbNetwork().getNetworkElements().add(element));
 		setUniqueName.undo();
+		removeFromOtherGroups.undo();
 		unmappingCmds.undo();
 	}
 
@@ -263,4 +271,16 @@ public class AddElementsToSubAppCommand extends Command {
 		return cmd;
 	}
 
+
+	private void collectElementsToRemoveFromGroup() {
+		final Map<Group, List<FBNetworkElement>> groupMap = new HashMap<>();
+		// collect all entries that are in a group and store them by group
+		elementsToAdd.stream().filter(FBNetworkElement::isInGroup).forEach(el -> {
+			final List<FBNetworkElement> entry = groupMap.computeIfAbsent(el.getGroup(), group -> new ArrayList<>());
+			entry.add(el);
+		});
+		// for each entry in the map create one RemoveFromGroupCommand
+		groupMap.forEach(
+				(group, list) -> removeFromOtherGroups.add(new RemoveElementsFromGroup(list)));
+	}
 }

@@ -17,7 +17,7 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
 import java.text.MessageFormat;
 
-import org.eclipse.fordiac.ide.model.IdentifierVerifyer;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
@@ -38,7 +38,7 @@ public class NewApplicationPage extends WizardPage {
 	private Text applicationName;
 	private Button openApplicationCheckbox;
 
-	protected NewApplicationPage(AutomationSystem system) {
+	protected NewApplicationPage(final AutomationSystem system) {
 		super(Messages.NewApplicationWizardTitle);
 		this.setTitle(Messages.NewApplicationWizardTitle);
 		this.system = system;
@@ -58,7 +58,7 @@ public class NewApplicationPage extends WizardPage {
 	public void createControl(final Composite parent) {
 		initializeDialogUnits(parent);
 
-		Composite composite = new Composite(parent, SWT.NULL);
+		final Composite composite = new Composite(parent, SWT.NULL);
 		composite.setFont(parent.getFont());
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL_BOTH));
@@ -74,7 +74,7 @@ public class NewApplicationPage extends WizardPage {
 	}
 
 	protected void createApplicationNameGroup(final Composite composite) {
-		Label l = new Label(composite, SWT.NONE);
+		final Label l = new Label(composite, SWT.NONE);
 		l.setText(FordiacMessages.ApplicationName + ":"); //$NON-NLS-1$
 		l.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 
@@ -85,7 +85,7 @@ public class NewApplicationPage extends WizardPage {
 
 	}
 
-	private void createOpenApplication(Composite parent) {
+	private void createOpenApplication(final Composite parent) {
 		openApplicationCheckbox = new Button(parent, SWT.CHECK);
 		openApplicationCheckbox.setText(Messages.NewApplicationPage_OpenApplicationForEditing);
 		openApplicationCheckbox.setSelection(true);
@@ -111,19 +111,17 @@ public class NewApplicationPage extends WizardPage {
 
 	}
 
-	/**
-	 * Checks if is valid app name.
+	/** Checks if is valid app name.
 	 *
 	 * @param appNameProposal the proposed new name for the application
 	 * @param selectedSystem  the selected system
 	 *
-	 * @return true, if is valid app name
-	 */
+	 * @return true, if is valid app name */
 	private static boolean isValidAppName(final String appNameProposal, final AutomationSystem selectedSystem) {
-		if (!IdentifierVerifyer.isValidIdentifier(appNameProposal)) {
+		if (IdentifierVerifier.verifyIdentifier(appNameProposal).isPresent()) {
 			return false;
 		}
-		for (Application app : selectedSystem.getApplication()) {
+		for (final Application app : selectedSystem.getApplication()) {
 			if (appNameProposal.equalsIgnoreCase(app.getName())) {
 				return false;
 			}

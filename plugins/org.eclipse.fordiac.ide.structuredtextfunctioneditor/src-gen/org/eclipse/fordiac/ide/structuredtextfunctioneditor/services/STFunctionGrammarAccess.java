@@ -753,7 +753,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STFeatureName:
-	//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'NOT' | 'MOD' | 'D' | 'DT' | 'LD';
+	//    ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
 	public STCoreGrammarAccess.STFeatureNameElements getSTFeatureNameAccess() {
 		return gaSTCore.getSTFeatureNameAccess();
 	}
@@ -1079,6 +1079,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getSTAccessSpecifierAccess().getRule();
 	}
 	
+	///** Keep in sync with fordiac keywords */
 	//RESERVED_KEYWORDS:
 	//    'ABSTRACT' | 'ACTION' | 'END_ACTION' | 'CLASS' | 'END_CLASS' | 'CONFIGURATION' | 'END_CONFIGURATION' |
 	//    'FUNCTION_BLOCK' | 'END_FUNCTION_BLOCK' | 'INTERFACE' | 'END_INTERFACE' | 'NAMESPACE' | 'END_NAMESPACE' | 'PROGRAM'

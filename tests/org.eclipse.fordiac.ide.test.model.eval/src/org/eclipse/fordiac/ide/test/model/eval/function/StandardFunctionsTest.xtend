@@ -17,14 +17,23 @@ import java.time.LocalDate
 import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.stream.Stream
+import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyCharType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.AnyStringType
+import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
+import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.data.DataFactory
+import org.eclipse.fordiac.ide.model.data.UdintType
+import org.eclipse.fordiac.ide.model.data.UintType
+import org.eclipse.fordiac.ide.model.data.UlintType
+import org.eclipse.fordiac.ide.model.data.UsintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.function.Functions
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
+import org.eclipse.fordiac.ide.model.eval.value.AnyBitValue
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
+import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.value.LRealValue
 import org.eclipse.fordiac.ide.model.eval.value.RealValue
 import org.eclipse.fordiac.ide.model.eval.value.StructValue
@@ -186,15 +195,15 @@ class StandardFunctionsTest {
 	}
 
 	@Test
-	def void testAcon() {
+	def void testAcos() {
 		// REAL
-		(Math.PI / 2).assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 0.toRealValue), NUMERIC_DELTA)
-		(Math.PI / 3).assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 0.5.toRealValue), NUMERIC_DELTA)
-		0.assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 1.toRealValue), NUMERIC_DELTA)
+		(Math.PI / 2).assertEquals(StandardFunctions.invokeUnaryOperator("ACOS", 0.toRealValue), NUMERIC_DELTA)
+		(Math.PI / 3).assertEquals(StandardFunctions.invokeUnaryOperator("ACOS", 0.5.toRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("ACOS", 1.toRealValue), NUMERIC_DELTA)
 		// LREAL
-		(Math.PI / 2).assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 0.toLRealValue), NUMERIC_DELTA)
-		(Math.PI / 3).assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 0.5.toLRealValue), NUMERIC_DELTA)
-		0.assertEquals(StandardFunctions.invokeUnaryOperator("ACON", 1.toLRealValue), NUMERIC_DELTA)
+		(Math.PI / 2).assertEquals(StandardFunctions.invokeUnaryOperator("ACOS", 0.toLRealValue), NUMERIC_DELTA)
+		(Math.PI / 3).assertEquals(StandardFunctions.invokeUnaryOperator("ACOS", 0.5.toLRealValue), NUMERIC_DELTA)
+		0.assertEquals(StandardFunctions.invokeUnaryOperator("ACOS", 1.toLRealValue), NUMERIC_DELTA)
 	}
 
 	@Test
@@ -1104,11 +1113,6 @@ class StandardFunctionsTest {
 	}
 
 	@Test
-	def void testIsValidBCD() {
-		UnsupportedOperationException.assertThrows[StandardFunctions.invoke("IS_VALID_BCD", 17.toByteValue)]
-	}
-
-	@Test
 	def void testTimeConversion() {
 		17L.toLIntValue.assertEquals(StandardFunctions.invoke("TIME_IN_S_TO_LINT", Duration.ofSeconds(17).toTimeValue))
 		(17L * 1000).toLIntValue.assertEquals(
@@ -1180,6 +1184,102 @@ class StandardFunctionsTest {
 		17.wrapValue(type).assertEquals(StandardFunctions.invoke('''LREAL_TRUNC_«typeName»''', 17.toLRealValue))
 	}
 
+	@ParameterizedTest(name="{index}: {0} and {1}")
+	@MethodSource("typeAnyUnsignedAndAnyBitExceptBoolArgumentsCartesianProvider")
+	def void testBcdFunctions(String intTypeName, String bitTypeName) {
+		val intType = ElementaryTypes.getTypeByName(intTypeName)
+		val bitType = ElementaryTypes.getTypeByName(bitTypeName)
+
+		bitType.defaultValue.assertEquals(StandardFunctions.invoke('''TO_BCD_«bitTypeName»''', intType.defaultValue))
+		intType.defaultValue.assertEquals(StandardFunctions.invoke('''BCD_TO_«intTypeName»''', bitType.defaultValue))
+		0x17.wrapValue(bitType).assertEquals(
+			StandardFunctions.invoke('''TO_BCD_«bitTypeName»''', 17.wrapValue(intType)))
+		17.wrapValue(intType).assertEquals(
+			StandardFunctions.invoke('''BCD_TO_«intTypeName»''', 0x17.wrapValue(bitType)))
+		0x42.wrapValue(bitType).assertEquals(
+			StandardFunctions.invoke('''TO_BCD_«bitTypeName»''', 42.wrapValue(intType)))
+		42.wrapValue(intType).assertEquals(
+			StandardFunctions.invoke('''BCD_TO_«intTypeName»''', 0x42.wrapValue(bitType)))
+		0x84.wrapValue(bitType).assertEquals(
+			StandardFunctions.invoke('''TO_BCD_«bitTypeName»''', 84.wrapValue(intType)))
+		84.wrapValue(intType).assertEquals(
+			StandardFunctions.invoke('''BCD_TO_«intTypeName»''', 0x84.wrapValue(bitType)))
+		switch (intType) {
+			UlintType: 0x8442211784422117#L
+			UdintType: 0x84422117#L
+			UintType: 0x2117#L
+			UsintType: 0x17#L
+		}.wrapValue(bitType).assertEquals(StandardFunctions.invoke('''TO_BCD_«bitTypeName»''', switch (intType) {
+			UlintType: 8442211784422117L.toULIntValue
+			UdintType: 84422117.toUDIntValue
+			UintType: (2117 as short).toUIntValue
+			UsintType: (17 as byte).toUSIntValue
+		}))
+		switch ((0xffffffffffffffff#L.wrapValue(intType).castValue(bitType) as AnyBitValue).longValue) {
+			case 0xffffffffffffffff#L: 8442211784422117L
+			case 0xffffffff#L: 84422117L
+			case 0xffff#L: 2117L
+			case 0xff#L: 17L
+		}.wrapValue(intType).assertEquals(StandardFunctions.invoke('''BCD_TO_«intTypeName»''', switch (intType) {
+			UlintType: 0x8442211784422117#L
+			UdintType: 0x84422117#L
+			UintType: 0x2117#L
+			UsintType: 0x17#L
+		}.wrapValue(bitType)))
+		IllegalArgumentException.assertThrows [
+			StandardFunctions.invoke('''BCD_TO_«intTypeName»''', 0x1A.wrapValue(bitType))
+		]
+
+		bitType.defaultValue.assertEquals(
+			StandardFunctions.invoke('''«intTypeName»_TO_BCD_«bitTypeName»''', intType.defaultValue))
+		intType.defaultValue.assertEquals(
+			StandardFunctions.invoke('''«bitTypeName»_BCD_TO_«intTypeName»''', bitType.defaultValue))
+		0x17.wrapValue(bitType).assertEquals(
+			StandardFunctions.invoke('''«intTypeName»_TO_BCD_«bitTypeName»''', 17.wrapValue(intType)))
+		17.wrapValue(intType).assertEquals(
+			StandardFunctions.invoke('''«bitTypeName»_BCD_TO_«intTypeName»''', 0x17.wrapValue(bitType)))
+		0x42.wrapValue(bitType).assertEquals(
+			StandardFunctions.invoke('''«intTypeName»_TO_BCD_«bitTypeName»''', 42.wrapValue(intType)))
+		42.wrapValue(intType).assertEquals(
+			StandardFunctions.invoke('''«bitTypeName»_BCD_TO_«intTypeName»''', 0x42.wrapValue(bitType)))
+		0x84.wrapValue(bitType).assertEquals(
+			StandardFunctions.invoke('''«intTypeName»_TO_BCD_«bitTypeName»''', 84.wrapValue(intType)))
+		84.wrapValue(intType).assertEquals(
+			StandardFunctions.invoke('''«bitTypeName»_BCD_TO_«intTypeName»''', 0x84.wrapValue(bitType)))
+		switch (intType) {
+			UlintType: 0x8442211784422117#L
+			UdintType: 0x84422117#L
+			UintType: 0x2117#L
+			UsintType: 0x17#L
+		}.wrapValue(bitType).assertEquals(
+			StandardFunctions.invoke('''«intTypeName»_TO_BCD_«bitTypeName»''', switch (intType) {
+				UlintType: 8442211784422117L.toULIntValue
+				UdintType: 84422117.toUDIntValue
+				UintType: (2117 as short).toUIntValue
+				UsintType: (17 as byte).toUSIntValue
+			}))
+		switch ((0xffffffffffffffff#L.wrapValue(intType).castValue(bitType) as AnyBitValue).longValue) {
+			case 0xffffffffffffffff#L: 8442211784422117L
+			case 0xffffffff#L: 84422117L
+			case 0xffff#L: 2117L
+			case 0xff#L: 17L
+		}.wrapValue(intType).assertEquals(
+			StandardFunctions.invoke('''«bitTypeName»_BCD_TO_«intTypeName»''', switch (intType) {
+				UlintType: 0x8442211784422117#L
+				UdintType: 0x84422117#L
+				UintType: 0x2117#L
+				UsintType: 0x17#L
+			}.wrapValue(bitType)))
+		IllegalArgumentException.assertThrows [
+			StandardFunctions.invoke('''«bitTypeName»_BCD_TO_«intTypeName»''', 0x1A.wrapValue(bitType))
+		]
+
+		BoolValue.TRUE.assertEquals(StandardFunctions.invoke("IS_VALID_BCD", 0x17.wrapValue(bitType)))
+		BoolValue.TRUE.assertEquals(StandardFunctions.invoke("IS_VALID_BCD", 0x42.wrapValue(bitType)))
+		BoolValue.TRUE.assertEquals(StandardFunctions.invoke("IS_VALID_BCD", 0x84.wrapValue(bitType)))
+		BoolValue.FALSE.assertEquals(StandardFunctions.invoke("IS_VALID_BCD", 0x1A.wrapValue(bitType)))
+	}
+
 	def static Stream<String> typeAnyIntArgumentsProvider() {
 		DataTypeLibrary.nonUserDefinedDataTypes.stream.filter[it instanceof AnyIntType].map[name]
 	}
@@ -1187,6 +1287,15 @@ class StandardFunctionsTest {
 	def static Stream<Arguments> typeArgumentsCartesianProvider() {
 		DataTypeLibrary.nonUserDefinedDataTypes.stream.flatMap [ first |
 			DataTypeLibrary.nonUserDefinedDataTypes.stream.map[second|arguments(first.name, second.name)]
+		]
+	}
+
+	def static Stream<Arguments> typeAnyUnsignedAndAnyBitExceptBoolArgumentsCartesianProvider() {
+		DataTypeLibrary.nonUserDefinedDataTypes.stream.filter[it instanceof AnyUnsignedType].flatMap [ first |
+			DataTypeLibrary.nonUserDefinedDataTypes.stream.
+				filter[it instanceof AnyBitType && !(it instanceof BoolType)].map [ second |
+					arguments(first.name, second.name)
+				]
 		]
 	}
 

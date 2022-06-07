@@ -14,6 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.function;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.model.eval.value.AnyMagnitudeValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyNumValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyRealValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue;
+import org.eclipse.fordiac.ide.model.eval.value.AnyUnsignedValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyValue;
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue;
 import org.eclipse.fordiac.ide.model.eval.value.ByteValue;
@@ -104,7 +106,7 @@ public interface StandardFunctions extends Functions {
 		return apply(value, Math::asin);
 	}
 
-	static <T extends AnyRealValue> T ACON(final T value) {
+	static <T extends AnyRealValue> T ACOS(final T value) {
 		return apply(value, Math::acos);
 	}
 
@@ -621,7 +623,15 @@ public interface StandardFunctions extends Functions {
 	}
 
 	static <T extends AnyBitValue> BoolValue IS_VALID_BCD(final T value) {
-		throw new UnsupportedOperationException("Not implemented yet!"); //$NON-NLS-1$
+		for (final byte packed : value.bigIntegerValue().toByteArray()) {
+			final int packedInt = Byte.toUnsignedInt(packed);
+			final int upper = packedInt >>> BCD_BITS;
+			final int lower = packedInt & BCD_MASK;
+			if (upper > BCD_DIGIT_MAX || lower > BCD_DIGIT_MAX) {
+				return BoolValue.FALSE;
+			}
+		}
+		return BoolValue.TRUE;
 	}
 
 	/* conversion functions */
@@ -1516,6 +1526,203 @@ public interface StandardFunctions extends Functions {
 
 	static ULIntValue REAL_TRUNC_ULINT(final RealValue value) {
 		return ULIntValue.toULIntValue(value);
+	}
+
+	/***************************************/
+	static <T extends AnyBitValue> USIntValue BCD_TO_USINT(final T value) {
+		return USIntValue.toUSIntValue(convertFromBCD(value.bigIntegerValue()));
+	}
+
+	static <T extends AnyBitValue> UIntValue BCD_TO_UINT(final T value) {
+		return UIntValue.toUIntValue(convertFromBCD(value.bigIntegerValue()));
+	}
+
+	static <T extends AnyBitValue> UDIntValue BCD_TO_UDINT(final T value) {
+		return UDIntValue.toUDIntValue(convertFromBCD(value.bigIntegerValue()));
+	}
+
+	static <T extends AnyBitValue> ULIntValue BCD_TO_ULINT(final T value) {
+		return ULIntValue.toULIntValue(convertFromBCD(value.bigIntegerValue()));
+	}
+
+	static <T extends AnyUnsignedValue> ByteValue TO_BCD_BYTE(final T value) {
+		return ByteValue.toByteValue(convertToBCD(value.bigIntegerValue()));
+	}
+
+	static <T extends AnyUnsignedValue> WordValue TO_BCD_WORD(final T value) {
+		return WordValue.toWordValue(convertToBCD(value.bigIntegerValue()));
+	}
+
+	static <T extends AnyUnsignedValue> DWordValue TO_BCD_DWORD(final T value) {
+		return DWordValue.toDWordValue(convertToBCD(value.bigIntegerValue()));
+	}
+
+	static <T extends AnyUnsignedValue> LWordValue TO_BCD_LWORD(final T value) {
+		return LWordValue.toLWordValue(convertToBCD(value.bigIntegerValue()));
+	}
+
+	static USIntValue BYTE_BCD_TO_USINT(final ByteValue value) {
+		return BCD_TO_USINT(value);
+	}
+
+	static UIntValue BYTE_BCD_TO_UINT(final ByteValue value) {
+		return BCD_TO_UINT(value);
+	}
+
+	static UDIntValue BYTE_BCD_TO_UDINT(final ByteValue value) {
+		return BCD_TO_UDINT(value);
+	}
+
+	static ULIntValue BYTE_BCD_TO_ULINT(final ByteValue value) {
+		return BCD_TO_ULINT(value);
+	}
+
+	static USIntValue WORD_BCD_TO_USINT(final WordValue value) {
+		return BCD_TO_USINT(value);
+	}
+
+	static UIntValue WORD_BCD_TO_UINT(final WordValue value) {
+		return BCD_TO_UINT(value);
+	}
+
+	static UDIntValue WORD_BCD_TO_UDINT(final WordValue value) {
+		return BCD_TO_UDINT(value);
+	}
+
+	static ULIntValue WORD_BCD_TO_ULINT(final WordValue value) {
+		return BCD_TO_ULINT(value);
+	}
+
+	static USIntValue DWORD_BCD_TO_USINT(final DWordValue value) {
+		return BCD_TO_USINT(value);
+	}
+
+	static UIntValue DWORD_BCD_TO_UINT(final DWordValue value) {
+		return BCD_TO_UINT(value);
+	}
+
+	static UDIntValue DWORD_BCD_TO_UDINT(final DWordValue value) {
+		return BCD_TO_UDINT(value);
+	}
+
+	static ULIntValue DWORD_BCD_TO_ULINT(final DWordValue value) {
+		return BCD_TO_ULINT(value);
+	}
+
+	static USIntValue LWORD_BCD_TO_USINT(final LWordValue value) {
+		return BCD_TO_USINT(value);
+	}
+
+	static UIntValue LWORD_BCD_TO_UINT(final LWordValue value) {
+		return BCD_TO_UINT(value);
+	}
+
+	static UDIntValue LWORD_BCD_TO_UDINT(final LWordValue value) {
+		return BCD_TO_UDINT(value);
+	}
+
+	static ULIntValue LWORD_BCD_TO_ULINT(final LWordValue value) {
+		return BCD_TO_ULINT(value);
+	}
+
+	static ByteValue USINT_TO_BCD_BYTE(final USIntValue value) {
+		return TO_BCD_BYTE(value);
+	}
+
+	static ByteValue UINT_TO_BCD_BYTE(final UIntValue value) {
+		return TO_BCD_BYTE(value);
+	}
+
+	static ByteValue UDINT_TO_BCD_BYTE(final UDIntValue value) {
+		return TO_BCD_BYTE(value);
+	}
+
+	static ByteValue ULINT_TO_BCD_BYTE(final ULIntValue value) {
+		return TO_BCD_BYTE(value);
+	}
+
+	static WordValue USINT_TO_BCD_WORD(final USIntValue value) {
+		return TO_BCD_WORD(value);
+	}
+
+	static WordValue UINT_TO_BCD_WORD(final UIntValue value) {
+		return TO_BCD_WORD(value);
+	}
+
+	static WordValue UDINT_TO_BCD_WORD(final UDIntValue value) {
+		return TO_BCD_WORD(value);
+	}
+
+	static WordValue ULINT_TO_BCD_WORD(final ULIntValue value) {
+		return TO_BCD_WORD(value);
+	}
+
+	static DWordValue USINT_TO_BCD_DWORD(final USIntValue value) {
+		return TO_BCD_DWORD(value);
+	}
+
+	static DWordValue UINT_TO_BCD_DWORD(final UIntValue value) {
+		return TO_BCD_DWORD(value);
+	}
+
+	static DWordValue UDINT_TO_BCD_DWORD(final UDIntValue value) {
+		return TO_BCD_DWORD(value);
+	}
+
+	static DWordValue ULINT_TO_BCD_DWORD(final ULIntValue value) {
+		return TO_BCD_DWORD(value);
+	}
+
+	static LWordValue USINT_TO_BCD_LWORD(final USIntValue value) {
+		return TO_BCD_LWORD(value);
+	}
+
+	static LWordValue UINT_TO_BCD_LWORD(final UIntValue value) {
+		return TO_BCD_LWORD(value);
+	}
+
+	static LWordValue UDINT_TO_BCD_LWORD(final UDIntValue value) {
+		return TO_BCD_LWORD(value);
+	}
+
+	static LWordValue ULINT_TO_BCD_LWORD(final ULIntValue value) {
+		return TO_BCD_LWORD(value);
+	}
+
+	int BCD_MASK = 0x0f;
+	int BCD_BITS = 4;
+	int BCD_DIGIT_MAX = 0x9;
+
+	private static BigInteger convertToBCD(final BigInteger value) {
+		// pack lower 4 bits of each digit in each byte
+		var result = BigInteger.ZERO;
+		final var digits = value.toString();
+		for (final char digit : digits.toCharArray()) {
+			result = result.shiftLeft(BCD_BITS);
+			result = result.or(BigInteger.valueOf(digit & BCD_MASK));
+		}
+		return result;
+	}
+
+	private static BigInteger convertFromBCD(final BigInteger value) {
+		if (value.signum() < 0) {
+			throw new IllegalArgumentException();
+		}
+		// unpack lower 4 bits of each digit in each byte
+		var result = BigInteger.ZERO;
+		for (final byte packed : value.toByteArray()) {
+			final int packedInt = Byte.toUnsignedInt(packed);
+			final int upper = packedInt >>> BCD_BITS;
+			final int lower = packedInt & BCD_MASK;
+			if (upper > BCD_DIGIT_MAX || lower > BCD_DIGIT_MAX) {
+				throw new IllegalArgumentException();
+			}
+			result = result.multiply(BigInteger.TEN);
+			result = result.add(BigInteger.valueOf(upper));
+			result = result.multiply(BigInteger.TEN);
+			result = result.add(BigInteger.valueOf(lower));
+		}
+		return result;
 	}
 
 	static TimeValue NOW_MONOTONIC() {

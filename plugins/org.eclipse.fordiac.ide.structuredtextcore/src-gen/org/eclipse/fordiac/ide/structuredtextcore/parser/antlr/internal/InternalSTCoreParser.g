@@ -2860,34 +2860,28 @@ ruleSTFeatureName returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleT
 			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getXORKeyword_4());
 		}
 		    |
-		kw=NOT
-		{
-			$current.merge(kw);
-			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getNOTKeyword_5());
-		}
-		    |
 		kw=MOD
 		{
 			$current.merge(kw);
-			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getMODKeyword_6());
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getMODKeyword_5());
 		}
 		    |
 		kw=D
 		{
 			$current.merge(kw);
-			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getDKeyword_7());
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getDKeyword_6());
 		}
 		    |
 		kw=DT
 		{
 			$current.merge(kw);
-			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getDTKeyword_8());
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getDTKeyword_7());
 		}
 		    |
 		kw=LD
 		{
 			$current.merge(kw);
-			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getLDKeyword_9());
+			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getLDKeyword_8());
 		}
 	)
 ;

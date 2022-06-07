@@ -21,6 +21,7 @@
 package org.eclipse.fordiac.ide.model.typelibrary;
 
 import java.text.Collator;
+import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,6 +36,9 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -167,9 +171,8 @@ public final class TypeLibrary {
 	}
 
 	private void loadPaletteFolderMembers(final IContainer container) {
-		IResource[] members;
 		try {
-			members = container.members();
+			final var members = container.members();
 
 			for (final IResource iResource : members) {
 				if (iResource instanceof IFolder) {
@@ -187,7 +190,14 @@ public final class TypeLibrary {
 	public TypeEntry createTypeEntry(final IFile file) {
 		final TypeEntry entry = TypeEntryFactory.INSTANCE.createTypeEntry(file);
 		if (null != entry) {
-			addTypeEntry(entry);
+			if (!FordiacKeywords.RESERVED_KEYWORDS.contains(entry.getTypeName())) {
+				addTypeEntry(entry);
+			} else {
+				final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
+				marker.addMessage(
+						MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, entry.getTypeName()));
+				marker.createMarkerInFile(file);
+			}
 		}
 		return entry;
 	}

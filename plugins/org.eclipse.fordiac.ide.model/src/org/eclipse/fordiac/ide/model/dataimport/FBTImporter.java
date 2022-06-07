@@ -77,10 +77,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
-/**
- * Managing class for importing *.fbt files
- *
- */
+/** Managing class for importing *.fbt files */
 
 public class FBTImporter extends TypeImporter {
 
@@ -183,14 +180,12 @@ public class FBTImporter extends TypeImporter {
 		setElement(convertToServiceInterfaceType(newType));
 	}
 
-	/**
-	 * This method parses the DTD of a ServiceInterfaceFBType.
+	/** This method parses the DTD of a ServiceInterfaceFBType.
 	 *
 	 * @param type - The ServiceInterfaceFBType that is being parsed
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	protected void parseService(final FBType type) throws TypeImportException, XMLStreamException {
 
 		final String rightInterface = getAttributeValue(LibraryElementTags.RIGHT_INTERFACE_ATTRIBUTE);
@@ -223,15 +218,12 @@ public class FBTImporter extends TypeImporter {
 		});
 	}
 
-	/**
-	 * This method parses the ServiceSequence of a ServiceInterfaceFBType.
+	/** This method parses the ServiceSequence of a ServiceInterfaceFBType.
 	 *
-	 * @param type - The ServiceInterfaceFBType from which the ServiceSequence will
-	 *             be parsed
+	 * @param type - The ServiceInterfaceFBType from which the ServiceSequence will be parsed
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseServiceSequence(final FBType type) throws TypeImportException, XMLStreamException {
 		final ServiceSequence serviceSequence = LibraryElementFactory.eINSTANCE.createServiceSequence();
 		readNameCommentAttributes(serviceSequence);
@@ -264,17 +256,13 @@ public class FBTImporter extends TypeImporter {
 		attrs.removeAll(processed);
 	}
 
-	/**
-	 * This method parses the ServiceTransaction of a ServiceSequence.
+	/** This method parses the ServiceTransaction of a ServiceSequence.
 	 *
-	 * @param serviceSequence - The serviceSequence containing the
-	 *                        serviceTransaction that is being parsed
-	 * @param type            - The serviceInterfaceFBType containing the
-	 *                        serviceTransaction
+	 * @param serviceSequence - The serviceSequence containing the serviceTransaction that is being parsed
+	 * @param type            - The serviceInterfaceFBType containing the serviceTransaction
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseServiceTransaction(final ServiceSequence serviceSequence, final FBType type)
 			throws TypeImportException, XMLStreamException {
 		final ServiceTransaction serviceTransaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
@@ -296,17 +284,13 @@ public class FBTImporter extends TypeImporter {
 		serviceSequence.getServiceTransaction().add(serviceTransaction);
 	}
 
-	/**
-	 * This method parses the OutputPrimitive of a ServiceTransaction.
+	/** This method parses the OutputPrimitive of a ServiceTransaction.
 	 *
-	 * @param serviceTransaction - The serviceTransaction containing the
-	 *                           OutputPrimitive that is being parsed
-	 * @param type               - the serviceInterfaceFBType containing the
-	 *                           OutputPrimitive
+	 * @param serviceTransaction - The serviceTransaction containing the OutputPrimitive that is being parsed
+	 * @param type               - the serviceInterfaceFBType containing the OutputPrimitive
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseOutputPrimitive(final ServiceTransaction serviceTransaction, final FBType type)
 			throws TypeImportException, XMLStreamException {
 		final OutputPrimitive outputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
@@ -339,17 +323,13 @@ public class FBTImporter extends TypeImporter {
 		}
 	}
 
-	/**
-	 * This method parses the InputPrimitive of a ServiceTransaction.
+	/** This method parses the InputPrimitive of a ServiceTransaction.
 	 *
-	 * @param serviceTransaction - The serviceTransaction containing the
-	 *                           InputPrimitive that is being parsed
-	 * @param type               - the serviceInterfaceFBType containing the
-	 *                           InputPrimitive
+	 * @param serviceTransaction - The serviceTransaction containing the InputPrimitive that is being parsed
+	 * @param type               - the serviceInterfaceFBType containing the InputPrimitive
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseInputPrimitive(final ServiceTransaction serviceTransaction, final FBType type)
 			throws TypeImportException, XMLStreamException {
 		final InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
@@ -359,13 +339,11 @@ public class FBTImporter extends TypeImporter {
 		serviceTransaction.setInputPrimitive(inputPrimitive);
 	}
 
-	/**
-	 * This method converts a FBType to a ServiceInterfaceFBType.
+	/** This method converts a FBType to a ServiceInterfaceFBType.
 	 *
 	 * @param type - The FBType that is being converted to ServiceInterfaceFBType
 	 *
-	 * @return - A FBType that is converted
-	 */
+	 * @return - A FBType that is converted */
 	private static FBType convertToServiceInterfaceType(final FBType type) {
 		final ServiceInterfaceFBType serviceType = LibraryElementFactory.eINSTANCE.createServiceInterfaceFBType();
 		copyGeneralTypeInformation(serviceType, type);
@@ -382,14 +360,12 @@ public class FBTImporter extends TypeImporter {
 		dstType.setService(srcType.getService());
 	}
 
-	/**
-	 * This method parses a compositeFBType.
+	/** This method parses a compositeFBType.
 	 *
 	 * @param type - the CompositeFBType that is being parsed
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseFBNetwork(final CompositeFBType type) throws TypeImportException, XMLStreamException {
 		final FBNetwork fbNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		type.setFBNetwork(fbNetwork);
@@ -420,27 +396,23 @@ public class FBTImporter extends TypeImporter {
 		fbNetwork.getNetworkElements().add(aFB);
 	}
 
-	/**
-	 * This method converts a FBType to a CompositeFBType.
+	/** This method converts a FBType to a CompositeFBType.
 	 *
 	 * @param type - The FBType that is being converted to CompositeFBType
 	 *
-	 * @return - A FBType that is converted
-	 */
+	 * @return - A FBType that is converted */
 	private static FBType convertToCompositeType(final FBType type) {
 		final CompositeFBType compositeType = LibraryElementFactory.eINSTANCE.createCompositeFBType();
 		copyGeneralTypeInformation(compositeType, type);
 		return compositeType;
 	}
 
-	/**
-	 * This method parses a BasicFBType.
+	/** This method parses a BasicFBType.
 	 *
 	 * @param type - the basicFBType that is being parsed
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseBasicFB(final BasicFBType type) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.BASIC_F_B_ELEMENT, name -> {
 			switch (name) {
@@ -476,14 +448,12 @@ public class FBTImporter extends TypeImporter {
 
 	}
 
-	/**
-	 * This method parses a SimpleFBType.
+	/** This method parses a SimpleFBType.
 	 *
 	 * @param type - the simpleFBType that is being parsed
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseSimpleFB(final SimpleFBType type) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.SIMPLE_F_B_ELEMENT, name -> {
 			switch (name) {
@@ -509,12 +479,10 @@ public class FBTImporter extends TypeImporter {
 		});
 	}
 
-	/**
-	 * This method parses an Algorithm.
+	/** This method parses an Algorithm.
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private Algorithm parseAlgorithm() throws TypeImportException, XMLStreamException {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
@@ -558,14 +526,12 @@ public class FBTImporter extends TypeImporter {
 		return retVal;
 	}
 
-	/**
-	 * Parses the other alg.
+	/** Parses the other alg.
 	 *
 	 * @param alg the other
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseOtherAlg(final OtherAlgorithm alg) throws TypeImportException, XMLStreamException {
 		final String language = getAttributeValue(LibraryElementTags.LANGUAGE_ATTRIBUTE);
 		if (null != language) {
@@ -578,14 +544,12 @@ public class FBTImporter extends TypeImporter {
 		proceedToEndElementNamed(LibraryElementTags.OTHER_ELEMENT);
 	}
 
-	/**
-	 * This method parses a STAlgorithm.
+	/** This method parses a STAlgorithm.
 	 *
 	 * @param st - the STAlgorithm being parsed
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseST(final STAlgorithm st) throws XMLStreamException {
 		parseAlgorithmText(st);
 		proceedToEndElementNamed(LibraryElementTags.ST_ELEMENT);
@@ -741,14 +705,12 @@ public class FBTImporter extends TypeImporter {
 		type.setECC(ecc);
 	}
 
-	/**
-	 * This method parses an ECTransition.
+	/** This method parses an ECTransition.
 	 *
 	 * @param ecc - the ECC containing the ECTransition being parsed
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseECTransition(final ECC ecc) throws TypeImportException, XMLStreamException {
 		final ECTransition ecTransition = LibraryElementFactory.eINSTANCE.createECTransition();
 		final String source = getAttributeValue(LibraryElementTags.SOURCE_ATTRIBUTE);
@@ -814,14 +776,12 @@ public class FBTImporter extends TypeImporter {
 		ecTransition.setConditionExpression(expression);
 	}
 
-	/**
-	 * This method parses an ECState.
+	/** This method parses an ECState.
 	 *
 	 * @param ecc - the ECC containing the ECState being parsed
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseECState(final ECC ecc) throws TypeImportException, XMLStreamException {
 		final ECState state = LibraryElementFactory.eINSTANCE.createECState();
 		readNameCommentAttributes(state);
@@ -842,12 +802,10 @@ public class FBTImporter extends TypeImporter {
 		ecStates.put(state.getName(), state);
 	}
 
-	/**
-	 * This method parses an ECAction.
+	/** This method parses an ECAction.
 	 *
 	 * @param type - the ECState belonging to the ECAction being parsed
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseECAction(final ECState type) throws XMLStreamException {
 		final ECAction ecAction = LibraryElementFactory.eINSTANCE.createECAction();
 		final String algorithm = getAttributeValue(LibraryElementTags.ALGORITHM_ELEMENT);
@@ -871,14 +829,12 @@ public class FBTImporter extends TypeImporter {
 		type.getECAction().add(ecAction);
 	}
 
-	/**
-	 * This method parses Internal Variables of a BaseFBType.
+	/** This method parses Internal Variables of a BaseFBType.
 	 *
 	 * @param type - the BaseFBType of which the Internal Variables will be parsed
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseInternalVars(final BaseFBType type) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.INTERNAL_VARS_ELEMENT, name -> {
 			if (LibraryElementTags.VAR_DECLARATION_ELEMENT.equals(name)) {
@@ -905,40 +861,34 @@ public class FBTImporter extends TypeImporter {
 		});
 	}
 
-	/**
-	 * This method parses a FBType to a BasicFBType.
+	/** This method parses a FBType to a BasicFBType.
 	 *
 	 * @param type - the FBType being parsed to BasicFBType
 	 *
-	 * @return the basicFBType
-	 */
+	 * @return the basicFBType */
 	private static FBType convertToBasicType(final FBType type) {
 		final BasicFBType basicType = LibraryElementFactory.eINSTANCE.createBasicFBType();
 		copyGeneralTypeInformation(basicType, type);
 		return basicType;
 	}
 
-	/**
-	 * This method parses a FBType to a SimpleFBType.
+	/** This method parses a FBType to a SimpleFBType.
 	 *
 	 * @param type - the FBType being parsed to SimpleFBType
 	 *
-	 * @return the simpleFBType
-	 */
+	 * @return the simpleFBType */
 	private static FBType convertToSimpleType(final FBType type) {
 		final SimpleFBType simpleType = LibraryElementFactory.eINSTANCE.createSimpleFBType();
 		copyGeneralTypeInformation(simpleType, type);
 		return simpleType;
 	}
 
-	/**
-	 * This method parses the InterfaceList of a FBType.
+	/** This method parses the InterfaceList of a FBType.
 	 *
 	 * @param interfaceListName
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	protected InterfaceList parseInterfaceList(final String interfaceListName)
 			throws TypeImportException, XMLStreamException {
 		final InterfaceList interfaceList = LibraryElementFactory.eINSTANCE.createInterfaceList();
@@ -1001,15 +951,13 @@ public class FBTImporter extends TypeImporter {
 		});
 	}
 
-	/**
-	 * This method parses Plugs of a FBType.
+	/** This method parses Plugs of a FBType.
 	 *
 	 * @param adpaterListName
 	 * @param isInput
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseAdapterList(final EList<AdapterDeclaration> adpaterList, final String adpaterListName,
 			final boolean isInput) throws TypeImportException, XMLStreamException {
 		processChildren(adpaterListName, name -> {
@@ -1057,16 +1005,14 @@ public class FBTImporter extends TypeImporter {
 		return ae;
 	}
 
-	/**
-	 * This method parses AdapterDeclaration.
+	/** This method parses AdapterDeclaration.
 	 *
 	 * @param node - the node in the DTD of the AdapterDeclaration being parsed
 	 *
 	 * @return a - the AdapterDeclaration
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private AdapterDeclaration parseAdapterDeclaration() throws TypeImportException, XMLStreamException {
 		final AdapterDeclaration a = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
 		readNameCommentAttributes(a);
@@ -1117,14 +1063,12 @@ public class FBTImporter extends TypeImporter {
 		});
 	}
 
-	/**
-	 * This method parses EventInputs of FBTypes.
+	/** This method parses EventInputs of FBTypes.
 	 *
 	 * @param isInput
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException
-	 */
+	 * @throws XMLStreamException */
 	private void parseEventList(final EList<Event> eventList, final String eventListName, final boolean isInput)
 			throws TypeImportException, XMLStreamException {
 		final String eventName = getEventElement();
