@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
+import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
@@ -240,6 +241,11 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	@Override
 	protected DefaultEditDomain createEditDomain() {
 		return new ECCEditorEditDomain(this, commandStack);
+	}
+
+	@Override
+	protected AdvancedPanningSelectionTool createDefaultTool() {
+		return new ECCEditorEditDomain.ECCPanningSelectionTool();
 	}
 
 	@Override

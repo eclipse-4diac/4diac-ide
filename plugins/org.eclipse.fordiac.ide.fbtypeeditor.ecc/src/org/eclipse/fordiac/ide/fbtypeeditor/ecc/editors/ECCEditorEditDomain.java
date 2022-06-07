@@ -76,7 +76,7 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 
 	}
 
-	private static class ECCPanningSelectionTool extends AdvancedPanningSelectionTool {
+	public static class ECCPanningSelectionTool extends AdvancedPanningSelectionTool {
 		public Point getLastLocation() {
 			return ((LocationRequest) super.getTargetHoverRequest()).getLocation();
 		}
@@ -131,7 +131,6 @@ final class ECCEditorEditDomain extends FBTypeEditDomain {
 
 	ECCEditorEditDomain(final IEditorPart editorPart, final CommandStack commandStack) {
 		super(editorPart, commandStack);
-		setDefaultTool(new ECCPanningSelectionTool());
 	}
 
 	@Override
