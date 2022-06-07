@@ -210,10 +210,12 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	private static EObject getParent(final EObject eobj) {
 		if (eobj instanceof IInterfaceElement) {
 			return ((IInterfaceElement) eobj).getFBNetworkElement().eContainer().eContainer();
-		} else if (eobj instanceof Device) {
+		}
+		if (eobj instanceof Device) {
 			return ((Device) eobj).getPosition().eContainer().eContainer();
-		} else if (eobj instanceof Application) {
-			return ((Application) eobj).eContainer();
+		}
+		if (eobj instanceof Application) {
+			return eobj;
 		} else if (eobj instanceof FBType) {
 			return eobj;
 		}
@@ -223,11 +225,13 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	private static String hierarchicalName(final Object element) {
 		if (element instanceof FBNetworkElement) {
 			return FBNetworkHelper.getFullHierarchicalName((FBNetworkElement) element);
-		} else if (element instanceof IInterfaceElement) {
+		}
+		if (element instanceof IInterfaceElement) {
 			final String FBName = FBNetworkHelper
 					.getFullHierarchicalName(((IInterfaceElement) element).getFBNetworkElement());
 			return FBName + "." + ((IInterfaceElement) element).getName(); //$NON-NLS-1$
-		} else if (element instanceof Device) {
+		}
+		if (element instanceof Device) {
 			final Device device = (Device) element;
 			// systemname.device
 			return device.getAutomationSystem().getName() + "." + device.getName(); //$NON-NLS-1$
