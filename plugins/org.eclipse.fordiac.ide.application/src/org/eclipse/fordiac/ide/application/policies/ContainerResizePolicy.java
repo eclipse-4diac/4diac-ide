@@ -39,7 +39,7 @@ public class ContainerResizePolicy extends ModifiedResizeablePolicy {
 		final RoundedRectangle figure = (RoundedRectangle) super.createSelectionFeedbackFigure();
 		figure.setFill(false);
 		figure.setOutline(true);
-		figure.setLineWidth(2 * ModifiedMoveHandle.SELECTION_BORDER_WIDTH);
+		figure.setLineWidth(5 * ModifiedMoveHandle.SELECTION_BORDER_WIDTH);
 		figure.setLayoutManager(new ToolbarLayout());
 		figure.add(createCommentAreaFBFigure(figure));
 		return figure;

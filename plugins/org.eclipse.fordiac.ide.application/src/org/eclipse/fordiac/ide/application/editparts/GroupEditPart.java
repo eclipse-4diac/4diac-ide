@@ -16,11 +16,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.Cursors;
+import org.eclipse.draw2d.GridData;
+import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
-import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -154,19 +155,25 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 		mainFigure.setFillXOR(false);
 		mainFigure.setOpaque(false);
 		mainFigure.setBorder(new RoundedRectangleShadowBorder());
-		mainFigure.setLayoutManager(new ToolbarLayout());
+		final GridLayout mainLayout = new GridLayout(1, true);
+		mainLayout.verticalSpacing = 0;
+		mainLayout.horizontalSpacing = 0;
+		mainFigure.setLayoutManager(mainLayout);
 		commentFigure = new InstanceCommentFigure();
 		commentFigure.setCursor(Cursors.SIZEALL);
 		final AdvancedLineBorder commentBorder = new AdvancedLineBorder(PositionConstants.SOUTH);
 		commentFigure.setBorder(commentBorder);
-		mainFigure.add(commentFigure);
+		mainFigure.add(commentFigure, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 		refreshComment();
 		return mainFigure;
 	}
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		super.addChildVisual(childEditPart, -1);
+		final GridData layoutConstraint = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
+		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+		getContentPane().add(child, layoutConstraint);
 	}
 
 	@Override

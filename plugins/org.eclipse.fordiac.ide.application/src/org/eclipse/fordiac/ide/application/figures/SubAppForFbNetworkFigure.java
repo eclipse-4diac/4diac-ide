@@ -30,8 +30,10 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
+import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
 import org.eclipse.fordiac.ide.gef.figures.FBShapeShadowBorder;
 import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
@@ -96,7 +98,6 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 
 	private void transformToExpandedSubapp() {
 		setBorder(null);
-		getFbFigureContainer().setBorder(new RoundedRectangleShadowBorder());
 
 		final GridData layoutConstraint = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
@@ -127,11 +128,25 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	}
 
 	private void createExpandedMainFigure() {
-		expandedMainFigure = new RoundedRectangle();
+		expandedMainFigure = new BorderedRoundedRectangle() {
+			@Override
+			public Insets getInsets() {
+				// the insets are needed to correctly get the bottom margin for the selection area
+				// left and right need to be 0 so that the pins are directly at the border
+				final Insets insets = super.getInsets();
+				insets.left = 0;
+				insets.right = 0;
+				return insets;
+			}
+		};
 		expandedMainFigure.setOutline(false);
+		expandedMainFigure.setOpaque(false);
 		expandedMainFigure
-				.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
-		expandedMainFigure.setLayoutManager(createTopBottomLayout());
+		.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
+		expandedMainFigure.setBorder(new RoundedRectangleShadowBorder());
+		final GridLayout expandedMainLayout = createTopBottomLayout();
+		expandedMainLayout.marginHeight = 5;
+		expandedMainFigure.setLayoutManager(expandedMainLayout);
 		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		getFbFigureContainer().add(expandedMainFigure, gridData, -1);
