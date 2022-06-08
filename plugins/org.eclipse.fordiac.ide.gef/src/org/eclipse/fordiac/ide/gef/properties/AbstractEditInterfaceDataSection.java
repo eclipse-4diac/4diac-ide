@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -189,10 +190,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				final int arraySize = ((VarDeclaration) element).getArraySize();
 				return (arraySize <= 0) ? "" : String.valueOf(arraySize); //$NON-NLS-1$
 			case INITIAL_VALUE:
-				if (((VarDeclaration) element).getValue() == null) {
-					return ""; //$NON-NLS-1$
-				}
-				return ((VarDeclaration) element).getValue().getValue();
+				return InitialValueHelper.getInitalOrDefaultValue(element);
 			default:
 				return super.getValue(element, property);
 			}

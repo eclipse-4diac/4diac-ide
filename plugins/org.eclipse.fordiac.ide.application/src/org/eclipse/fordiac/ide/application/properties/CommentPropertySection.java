@@ -19,7 +19,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.edit.providers.CommentLabelProvider;
-import org.eclipse.fordiac.ide.model.edit.providers.InitialValueLabelProvider;
+import org.eclipse.fordiac.ide.model.edit.providers.InitialValueColumLabelProvider;
 import org.eclipse.fordiac.ide.model.edit.providers.NameLabelProvider;
 import org.eclipse.fordiac.ide.model.edit.providers.TypeLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -67,7 +67,7 @@ public class CommentPropertySection extends AbstractSection {
 	private TabbedPropertySheetPage tabbedPropertySheetPage;
 
 	private CommentLabelProvider commentLabelProvider;
-	private InitialValueLabelProvider initialValueLabelProvider;
+	private InitialValueColumLabelProvider initialValueLabelProvider;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -123,7 +123,7 @@ public class CommentPropertySection extends AbstractSection {
 		col2.getColumn().setText(FordiacMessages.Type);
 
 		final TableViewerColumn col3 = new TableViewerColumn(tableViewer, SWT.NONE);
-		initialValueLabelProvider = new InitialValueLabelProvider();
+		initialValueLabelProvider = new InitialValueColumLabelProvider();
 		col3.setLabelProvider(initialValueLabelProvider);
 		col3.getColumn().setText(FordiacMessages.InitialValue);
 

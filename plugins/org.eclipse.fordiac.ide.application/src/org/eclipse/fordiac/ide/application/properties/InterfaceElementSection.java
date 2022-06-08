@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -43,6 +44,8 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -140,15 +143,40 @@ public class InterfaceElementSection extends AbstractSection {
 			addContentAdapter();
 		});
 
-		currentParameterTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
+		currentParameterTextCLabel = getWidgetFactory().createCLabel(composite,
+				FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		currentParameterText = createGroupText(composite, true);
-		currentParameterText.addModifyListener(e -> {
-			removeContentAdapter();
-			if (getType() instanceof VarDeclaration) {
-				// only allow to change the parameter text if is a var declaration and not an error marker
-				executeCommand(new ChangeValueCommand((VarDeclaration) getType(), currentParameterText.getText()));
+		currentParameterText.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusGained(final FocusEvent e) {
+				parent.getDisplay().asyncExec(() -> currentParameterText.selectAll());
 			}
-			addContentAdapter();
+
+			@Override
+			public void focusLost(final FocusEvent e) {
+				currentParameterText.clearSelection();
+				refresh();
+			}
+		});
+
+		currentParameterText.addListener(SWT.Traverse, event -> {
+			if (event.detail == SWT.TRAVERSE_RETURN) {
+				currentParameterText.clearSelection();
+				removeContentAdapter();
+				if (getType() instanceof VarDeclaration) {
+					// only allow to change the parameter text if is a var declaration and not an
+					// error marker
+					executeCommand(new ChangeValueCommand((VarDeclaration) getType(), currentParameterText.getText()));
+				}
+				addContentAdapter();
+				refresh();
+			}
+
+			if (event.detail == SWT.TRAVERSE_ESCAPE) {
+				currentParameterText.clearSelection();
+				parent.forceFocus();
+			}
 		});
 
 		infoSection.setClient(composite);
@@ -260,22 +288,17 @@ public class InterfaceElementSection extends AbstractSection {
 		if (varDecl.isIsInput() && (varDecl.getFBNetworkElement() != null)) {
 			final FBType fbType = varDecl.getFBNetworkElement().getType();
 			if (null != fbType) {
-				final IInterfaceElement ie = fbType.getInterfaceList().getInterfaceElement(varDecl.getName());
-				if (ie instanceof VarDeclaration) {
-					parameterText.setText(getValueFromVarDecl((VarDeclaration) ie));
-				}
+				parameterText.setText(InitialValueHelper
+						.getDefaultValue(fbType.getInterfaceList().getInterfaceElement(varDecl.getName())));
 			}
 		}
-		currentParameterText.setText(getValueFromVarDecl(varDecl));
+		currentParameterText.setText(InitialValueHelper.getInitalOrDefaultValue(varDecl));
+		currentParameterText.setForeground(InitialValueHelper.getForegroundColor(varDecl));
 	}
 
 	private void setErrorParam() {
 		final ErrorMarkerInterface pin = (ErrorMarkerInterface) getType();
 		currentParameterText.setText(getValueText(pin.getValue()));
-	}
-
-	private static String getValueFromVarDecl(final VarDeclaration varDecl) {
-		return getValueText(varDecl.getValue());
 	}
 
 	private static String getValueText(final Value value) {
