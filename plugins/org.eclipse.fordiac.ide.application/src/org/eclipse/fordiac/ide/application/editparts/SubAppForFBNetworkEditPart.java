@@ -39,11 +39,12 @@ import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.ContainerResizePolicy;
-import org.eclipse.fordiac.ide.application.policies.SubAppContentLayoutEditPolicy;
+import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
+import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -212,10 +213,10 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	@Override
 	protected void createEditPolicies() {
 		super.createEditPolicies();
-		// Add policy to handle drag&drop of fbs
-		installEditPolicy(EditPolicy.LAYOUT_ROLE, new SubAppContentLayoutEditPolicy());
 		if (getModel().isUnfolded()) {
 			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new SubappCommentRenameEditPolicy());
+		} else {
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBAddToSubAppLayoutEditPolicy());
 		}
 	}
 
@@ -285,11 +286,13 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			if (getFigure().getExpandedMainFigure() == null) {
 				installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new SubappCommentRenameEditPolicy());
 				installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new ContainerResizePolicy());
+				installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());
 			}
 		} else {
 			if (getFigure().getExpandedMainFigure() != null) {
 				installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new TypeDirectEditPolicy());
 				installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new ModifiedNonResizeableEditPolicy());
+				installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBAddToSubAppLayoutEditPolicy());
 			}
 		}
 	}
