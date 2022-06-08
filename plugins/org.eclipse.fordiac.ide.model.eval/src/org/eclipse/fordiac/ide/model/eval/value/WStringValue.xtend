@@ -29,6 +29,8 @@ class WStringValue implements AnyStringValue {
 
 	def static toWStringValue(AnyCharsValue value) { new WStringValue(value.stringValue) }
 
+	override WCharValue charAt(int index) { WCharValue.toWCharValue(value.charAt(index - 1)) }
+
 	override length() { value.length }
 
 	override charValue() { if(value.length > 0) value.charAt(0) else '\u0000' }

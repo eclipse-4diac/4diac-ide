@@ -20,6 +20,8 @@ import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.StringType
+import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -98,17 +100,21 @@ final package class ExpressionAnnotations {
 	def package static INamedElement getDeclaredResultType(STArrayAccessExpression expr) { getResultType(expr, true) }
 
 	def package static INamedElement getResultType(STArrayAccessExpression expr, boolean declared) {
-		val arrayType = declared ? expr.receiver.declaredResultType : expr.receiver.resultType
-		if (arrayType instanceof ArrayType) {
-			if (expr.index.size < arrayType.subranges.size) { // not consumed all dimensions
-				DataFactory.eINSTANCE.createArrayType => [
-					baseType = arrayType.baseType
-					subranges.addAll(arrayType.subranges.drop(expr.index.size).map[copy])
-				]
-			} else // consumed all dimensions
-				arrayType.baseType
-		} else
-			null
+		val receiverType = declared ? expr.receiver.declaredResultType : expr.receiver.resultType
+		switch (receiverType) {
+			ArrayType:
+				if (expr.index.size < receiverType.subranges.size) { // not consumed all dimensions
+					DataFactory.eINSTANCE.createArrayType => [
+						baseType = receiverType.baseType
+						subranges.addAll(receiverType.subranges.drop(expr.index.size).map[copy])
+					]
+				} else // consumed all dimensions
+					receiverType.baseType
+			StringType:
+				ElementaryTypes.CHAR
+			WstringType:
+				ElementaryTypes.WCHAR
+		}
 	}
 
 	def package static INamedElement getResultType(STFeatureExpression expr) { getDeclaredResultType(expr) }

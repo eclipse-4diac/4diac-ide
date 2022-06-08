@@ -88,6 +88,7 @@ import static extension org.eclipse.fordiac.ide.model.eval.value.WStringValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.WordValue.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.junit.jupiter.api.Assertions.*
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
 
 class StructuredTextEvaluatorTest {
 
@@ -504,6 +505,56 @@ class StructuredTextEvaluatorTest {
 			test.%X(8 + 2) := test.%X(8 + 0);
 			test.%B0 := test.%B1;
 			test.%B1 := BYTE#0;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testStringSubscript() {
+		'a'.toCharValue.assertTrace(#[STArrayAccessExpression], '''
+			VAR_TEMP
+				test: CHAR;
+				str: STRING := '4diac IDE';
+			END_VAR
+			
+			test := str[4];
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testWStringSubscript() {
+		'a'.toWCharValue.assertTrace(#[STArrayAccessExpression], '''
+			VAR_TEMP
+				test: WCHAR;
+				str: WSTRING := "4diac IDE";
+			END_VAR
+			
+			test := str[4];
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testStringSubscriptModify() {
+		"4diac IDE".toStringValue.assertTrace(STStringLiteral.repeat(3), '''
+			VAR_TEMP
+				test: STRING := '4diac ???';
+			END_VAR
+			
+			test[7] := 'I';
+			test[8] := 'D';
+			test[9] := 'E';
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testWStringSubscriptModify() {
+		"4diac IDE".toWStringValue.assertTrace(STStringLiteral.repeat(3), '''
+			VAR_TEMP
+				test: WSTRING := "4diac ???";
+			END_VAR
+			
+			test[7] := "I";
+			test[8] := "D";
+			test[9] := "E";
 		'''.evaluateAlgorithm)
 	}
 
