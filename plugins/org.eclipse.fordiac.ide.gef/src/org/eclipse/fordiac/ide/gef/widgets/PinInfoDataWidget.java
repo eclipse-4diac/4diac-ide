@@ -16,9 +16,13 @@ import java.util.function.Consumer;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusAdapter;
+import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
@@ -41,8 +45,10 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 			arraySizeText.setText((getType().getArraySize() > 0) ?
 					String.valueOf(getType().getArraySize()) : ""); //$NON-NLS-1$
 
-			initValueText.setText((getType().getValue() != null) ?
-					getType().getValue().getValue() : ""); //$NON-NLS-1$
+			initValueText.setText(InitialValueHelper.getInitalOrDefaultValue(getType()));
+			initValueText.setForeground(InitialValueHelper.getForegroundColor(getType()));
+
+
 			commandExecutor = commandExecutorBuffer;
 		}
 	}
@@ -62,8 +68,33 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 
 		widgetFactory.createCLabel(parent, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		initValueText = createText(parent);
-		initValueText
-		.addModifyListener(e -> executeCommand(new ChangeValueCommand(getType(), initValueText.getText())));
+		initValueText.addFocusListener(new FocusAdapter() {
+
+			@Override
+			public void focusGained(final FocusEvent e) {
+				parent.getDisplay().asyncExec(() -> initValueText.setSelection(0, initValueText.getText().length()));
+			}
+
+			@Override
+			public void focusLost(final FocusEvent e) {
+				initValueText.clearSelection();
+				refresh();
+			}
+		});
+
+		initValueText.addListener(SWT.Traverse, event -> {
+			if (event.detail == SWT.TRAVERSE_RETURN) {
+				initValueText.clearSelection();
+				executeCommand(new ChangeValueCommand(getType(), initValueText.getText()));
+				refresh();
+			}
+
+			if (event.detail == SWT.TRAVERSE_ESCAPE) {
+				initValueText.clearSelection();
+				parent.forceFocus();
+			}
+		});
+
 	}
 
 	@Override
