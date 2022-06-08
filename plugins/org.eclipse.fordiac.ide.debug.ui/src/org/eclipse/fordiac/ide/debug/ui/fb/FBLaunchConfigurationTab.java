@@ -145,14 +145,13 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 
 	@Override
 	protected boolean filterTargetResource(final IResource resource) throws CoreException {
-		if (resource instanceof IFile) {
-			if (resource.getFileExtension().equalsIgnoreCase(TypeLibraryTags.FB_TYPE_FILE_ENDING)) {
-				final var typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource);
-				if (typeEntry != null) {
-					final var libraryElement = typeEntry.getType();
-					if (libraryElement instanceof FBType) {
-						return filterTargetFBType((FBType) libraryElement);
-					}
+		if (resource instanceof IFile && resource.getFileExtension() != null
+				&& resource.getFileExtension().equalsIgnoreCase(TypeLibraryTags.FB_TYPE_FILE_ENDING)) {
+			final var typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource);
+			if (typeEntry != null) {
+				final var libraryElement = typeEntry.getType();
+				if (libraryElement instanceof FBType) {
+					return filterTargetFBType((FBType) libraryElement);
 				}
 			}
 		}
