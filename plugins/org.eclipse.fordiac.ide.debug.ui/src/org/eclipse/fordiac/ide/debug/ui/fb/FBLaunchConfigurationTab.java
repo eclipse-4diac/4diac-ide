@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.debug.ui.fb;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -23,8 +22,8 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.debug.ui.MainLaunchConfigurationTab;
+import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
-import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -139,8 +138,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	protected List<Variable<?>> getDefaultArguments() {
 		final FBType fbType = getFBType();
 		if (fbType != null) {
-			return fbType.getInterfaceList().getInputVars().stream().map(VariableOperations::newVariable)
-					.collect(Collectors.toList());
+			return List.copyOf(new FBVariable("dummy", fbType).getMembers().values()); //$NON-NLS-1$
 		}
 		return Collections.emptyList();
 	}

@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.debug.fb;
 import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ArrayBlockingQueue;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -27,8 +26,8 @@ import org.eclipse.fordiac.ide.debug.CommonLaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
+import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
-import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -56,8 +55,7 @@ public abstract class FBLaunchConfigurationDelegate extends CommonLaunchConfigur
 
 	@SuppressWarnings("static-method")
 	protected List<Variable<?>> getDefaultArguments(final FBType type) {
-		return type.getInterfaceList().getInputVars().stream().map(VariableOperations::newVariable)
-				.collect(Collectors.toList());
+		return List.copyOf(new FBVariable("dummy", type).getMembers().values()); //$NON-NLS-1$
 	}
 
 	@SuppressWarnings("static-method")
