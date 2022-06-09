@@ -24,6 +24,7 @@ import org.eclipse.jface.text.IDocument
 import org.eclipse.swt.widgets.Display
 import org.eclipse.ui.IEditorInput
 import org.eclipse.ui.IFileEditorInput
+import org.eclipse.ui.texteditor.ResourceMarkerAnnotationModel
 import org.eclipse.xtext.ui.editor.model.XtextDocument
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider
 
@@ -67,6 +68,14 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 					}
 				}
 			}
+			val info = element.getElementInfo as FileInfo;
+			if (info !== null) {
+				val model = info.fModel
+				if (model instanceof ResourceMarkerAnnotationModel) {
+					model.updateMarkers(info.fDocument)
+				}
+				info.fModificationStamp = computeModificationStamp(element.file);
+			}
 		}
 	}
 
@@ -77,7 +86,7 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 			val partition = document.partition
 			monitor.worked(1)
 			monitor.subTask("Reconciling")
-			Display.^default.syncExec[
+			Display.^default.syncExec [
 				element.callables.reconcile(partition)
 				AbstractTypeExporter.saveType(element.typeEntry);
 			]
