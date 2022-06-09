@@ -12,12 +12,14 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.structuredtextcore.ide.contentassist.antlr.PartialSTCoreContentAssistParser;
 import org.eclipse.fordiac.ide.structuredtextcore.ide.contentassist.antlr.STCoreParser;
 import org.eclipse.fordiac.ide.structuredtextcore.ide.contentassist.antlr.lexer.InternalSTCoreLexer;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreProposalProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.labeling.STCoreDescriptionLabelProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.labeling.STCoreLabelProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.outline.STCoreOutlineTreeProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.STCoreQuickfixProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidatorConfigurationBlock;
+import org.eclipse.jface.text.codemining.ICodeMiningProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.builder.BuilderParticipant;
@@ -42,6 +44,7 @@ import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider;
 import org.eclipse.xtext.service.SingletonBinding;
 import org.eclipse.xtext.ui.DefaultUiModule;
 import org.eclipse.xtext.ui.UIBindings;
+import org.eclipse.xtext.ui.codemining.XtextCodeMiningReconcileStrategy;
 import org.eclipse.xtext.ui.codetemplates.ui.AccessibleCodetemplatesActivator;
 import org.eclipse.xtext.ui.codetemplates.ui.partialEditing.IPartialEditingContentAssistContextFactory;
 import org.eclipse.xtext.ui.codetemplates.ui.partialEditing.PartialEditingContentAssistContextFactory;
@@ -65,6 +68,7 @@ import org.eclipse.xtext.ui.editor.outline.IOutlineTreeProvider;
 import org.eclipse.xtext.ui.editor.outline.impl.IOutlineTreeStructureProvider;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer;
 import org.eclipse.xtext.ui.editor.quickfix.IssueResolutionProvider;
+import org.eclipse.xtext.ui.editor.reconciler.IReconcileStrategyFactory;
 import org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage;
 import org.eclipse.xtext.ui.refactoring.IDependentElementsCalculator;
 import org.eclipse.xtext.ui.refactoring.IReferenceUpdater;
@@ -295,6 +299,19 @@ public abstract class AbstractSTCoreUiModule extends DefaultUiModule {
 	// contributed by org.eclipse.xtext.xtext.generator.ui.compare.CompareFragment2
 	public void configureCompareViewerTitle(Binder binder) {
 		binder.bind(String.class).annotatedWith(Names.named(UIBindings.COMPARE_VIEWER_TITLE)).toInstance("STCore Compare");
+	}
+	
+	// contributed by org.eclipse.xtext.xtext.generator.ui.codemining.CodeMiningFragment
+	public void configureCodeMinding(Binder binder) {
+		try {
+			Class.forName("org.eclipse.jface.text.codemining.ICodeMiningProvider");
+			binder.bind(ICodeMiningProvider.class)
+				.to(STCoreCodeMiningProvider.class);
+			binder.bind(IReconcileStrategyFactory.class).annotatedWith(Names.named("codeMinding"))
+				.to(XtextCodeMiningReconcileStrategy.Factory.class);
+		} catch(ClassNotFoundException ignore) {
+			// no bindings if code mining is not available at runtime
+		}
 	}
 	
 }

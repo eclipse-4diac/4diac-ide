@@ -455,6 +455,24 @@
 			type="text">
 		</fileTypes>
 	</extension>
+	<!-- code mining -->
+	<extension point="org.eclipse.ui.workbench.texteditor.codeMiningProviders">
+		<codeMiningProvider
+			class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.jface.text.codemining.ICodeMiningProvider"
+			id="org.eclipse.fordiac.ide.structuredtextcore.STCore.CodeMiningProvider"
+			label="STCore Codemining">
+			<enabledWhen>
+				<with variable="editorInput">
+					<adapt type="org.eclipse.core.resources.IFile">
+						<test
+							property="org.eclipse.core.resources.contentTypeId"
+							value="org.eclipse.fordiac.ide.structuredtextcore.STCore.contenttype">
+						</test>
+					</adapt>
+				</with>
+			</enabledWhen>
+		</codeMiningProvider>
+	</extension>
 	<!-- register the Xtext UI language services to Xtext's registry -->
 	<extension
 		point="org.eclipse.xtext.extension_resourceServiceProvider">
@@ -463,4 +481,16 @@
 			uriExtension="dtp">
 		</resourceServiceProvider>
 	</extension>
+ <extension
+       point="org.eclipse.ui.preferencePages">
+    <page
+          category="org.eclipse.fordiac.ide.structuredtextcore.STCore"
+          class="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferencePage"
+          id="org.eclipse.fordiac.ide.structuredtextcore.ui.codeMining"
+          name="Code Minings">
+       <keywordReference
+             id="org.eclipse.fordiac.ide.structuredtextcore.ui.keyword_STCore">
+       </keywordReference>
+    </page>
+ </extension>
 </plugin>

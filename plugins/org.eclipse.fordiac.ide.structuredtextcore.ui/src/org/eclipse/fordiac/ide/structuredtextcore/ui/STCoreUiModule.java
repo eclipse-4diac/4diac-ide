@@ -1,5 +1,6 @@
 /**
  * Copyright (c) 2021 - 2022 Primetals Technologies Austria GmbH
+ *               2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,18 +12,23 @@
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
  *       - registers hover provider
+ *   Martin Jobst
+ *       - register code mining preference initializer
  */
 package org.eclipse.fordiac.ide.structuredtextcore.ui;
 
+import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
+import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer;
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
 
-/**
- * Use this class to register components to be used within the Eclipse IDE.
- */
+import com.google.inject.Binder;
+import com.google.inject.name.Names;
+
+/** Use this class to register components to be used within the Eclipse IDE. */
 @SuppressWarnings("restriction")
 public class STCoreUiModule extends AbstractSTCoreUiModule {
 
@@ -38,5 +44,11 @@ public class STCoreUiModule extends AbstractSTCoreUiModule {
 	@SuppressWarnings("static-method")
 	public Class<? extends IRefactoringDocument.Provider> bindIRefactoringDocument$Provider() {
 		return STCoreRefactoringDocumentProvider.class;
+	}
+
+	@SuppressWarnings("static-method")
+	public void configureCodeMinings(final Binder binder) {
+		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("codeMiningInitializer")) //$NON-NLS-1$
+		.to(STCoreCodeMiningPreferences.Initializer.class);
 	}
 }
