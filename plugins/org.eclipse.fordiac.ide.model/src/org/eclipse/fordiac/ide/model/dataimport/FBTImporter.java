@@ -234,6 +234,8 @@ public class FBTImporter extends TypeImporter {
 				return true;
 			} else if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
 				parseGenericAttributeNode(serviceSequence);
+				proceedToEndElementNamed(name);
+				return true;
 			}
 			return false;
 		});

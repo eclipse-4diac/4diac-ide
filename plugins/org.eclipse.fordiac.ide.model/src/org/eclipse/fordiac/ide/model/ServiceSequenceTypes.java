@@ -10,11 +10,18 @@
  * Contributors:
  *   Felix Roithmayr - added enum for use with new model attributes
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.annotations;
+package org.eclipse.fordiac.ide.model;
+
+import java.util.Arrays;
+import java.util.List;
 
 public interface ServiceSequenceTypes {
 	String DEFAULT = "POSSIBLE"; //$NON-NLS-1$
 	String FORBIDDEN = "FORBIDDEN"; //$NON-NLS-1$
 	String ALWAYS = "ALWAYS"; //$NON-NLS-1$
 	String CONDITIONAL = "CONDITIONAL"; //$NON-NLS-1$
+
+	static List<String> getAllTypes() {
+		return Arrays.asList(DEFAULT, FORBIDDEN, ALWAYS, CONDITIONAL);
+	}
 }

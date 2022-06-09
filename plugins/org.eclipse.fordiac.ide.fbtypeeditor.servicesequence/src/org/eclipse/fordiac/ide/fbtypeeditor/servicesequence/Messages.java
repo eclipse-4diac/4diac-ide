@@ -40,6 +40,8 @@ public final class Messages extends NLS {
 	public static String ServiceSection_Name;
 	public static String ServiceSection_RightInterface;
 	public static String ServiceSection_ServiceSequences;
+	public static String ServiceSection_StartState;
+	public static String ServiceSection_Type;
 	public static String ServiceSequenceEditor_Service;
 	public static String ServiceSequenceSection_Index;
 	public static String ServiceSequenceSection_InputPrimitive;

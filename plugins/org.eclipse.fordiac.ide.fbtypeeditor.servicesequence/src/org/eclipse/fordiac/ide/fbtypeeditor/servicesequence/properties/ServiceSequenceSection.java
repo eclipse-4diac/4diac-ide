@@ -16,12 +16,18 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceNameCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceStartStateCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceTypeCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateTransactionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteTransactionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.contentprovider.ServiceSequenceContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
+import org.eclipse.fordiac.ide.model.ServiceSequenceTypes;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTransactionOrderCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -37,6 +43,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -53,6 +60,8 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 	private TableViewer transactionsViewer;
 	private Text nameText;
 	private Text commentText;
+	private Text startState;
+	private CCombo serviceSequencetype;
 
 	private static final String INDEX = "index"; //$NON-NLS-1$
 	private static final String INPUT_PRIMIIVE = "input primitive"; //$NON-NLS-1$
@@ -117,6 +126,22 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 			final Command cmd = new ChangeCommentCommand(getType(), commentText.getText());
 			executeCommand(cmd);
 		});
+
+		getWidgetFactory().createCLabel(typeAndCommentGroup, Messages.ServiceSection_StartState);
+		startState = createGroupText(typeAndCommentGroup, true);
+		startState.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+		startState.addModifyListener(e -> {
+			final Command cmd = new ChangeSequenceStartStateCommand(startState.getText(), getType());
+			executeCommand(cmd);
+		});
+
+		getWidgetFactory().createCLabel(typeAndCommentGroup, Messages.ServiceSection_Type);
+		serviceSequencetype = createTypeSelector(typeAndCommentGroup);
+		serviceSequencetype.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
+		serviceSequencetype.addModifyListener(e -> {
+			final Command cmd = new ChangeSequenceTypeCommand(serviceSequencetype.getText(), getType());
+			executeCommand(cmd);
+		});
 	}
 
 	private void createTransactionSection(final Composite parent) {
@@ -128,6 +153,13 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		buttons.createControls(transactionGroup, getWidgetFactory());
 		transactionsViewer = createTableViewer(transactionGroup);
 		configureButtonList(buttons, transactionsViewer);
+	}
+
+	private CCombo createTypeSelector(final Group parent) {
+		final CCombo combo = getWidgetFactory().createCCombo(parent);
+		final List<String> items = ServiceSequenceTypes.getAllTypes();
+		combo.setItems(items.toArray(new String[0]));
+		return combo;
 	}
 
 	private void configureButtonList(final AddDeleteReorderListWidget buttons, final TableViewer transactionsViewer) {
@@ -186,6 +218,9 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		if (null != type) {
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
+			final int i = Arrays.asList(serviceSequencetype.getItems()).indexOf(getType().getServiceSequenceType());
+			serviceSequencetype.select(i >= 0 ? i : 0);
+			startState.setText(getType().getStartState() != null ? getType().getStartState() : ""); //$NON-NLS-1$
 			transactionsViewer.setInput(getType());
 		}
 		commandStack = commandStackBuffer;

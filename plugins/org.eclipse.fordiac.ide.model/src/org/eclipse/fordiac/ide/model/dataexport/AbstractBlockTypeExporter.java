@@ -24,7 +24,7 @@ import java.util.List;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.annotations.ServiceSequenceTypes;
+import org.eclipse.fordiac.ide.model.ServiceSequenceTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -268,7 +268,8 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 			addNameAttribute(seq.getName());
 			addCommentAttribute(seq);
 			if (seq.getStartState() != null) {
-				addAttributeElement(LibraryElementTags.START_STATE_ATTRIBUTE, IecTypes.ElementaryTypes.STRING.getName(),
+				addAttributeElement(LibraryElementTags.START_STATE_ATTRIBUTE,
+						IecTypes.ElementaryTypes.STRING.getName(),
 						seq.getStartState(), null);
 			}
 			if (!seq.getServiceSequenceType().equals(ServiceSequenceTypes.DEFAULT)) {
