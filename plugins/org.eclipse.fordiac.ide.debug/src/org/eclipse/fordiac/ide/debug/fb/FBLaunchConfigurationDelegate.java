@@ -12,9 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.fb;
 
+import java.util.AbstractQueue;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Queue;
-import java.util.concurrent.ArrayBlockingQueue;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -41,11 +43,11 @@ public abstract class FBLaunchConfigurationDelegate extends CommonLaunchConfigur
 		if (resource instanceof IFile) {
 			final FBType type = (FBType) TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource).getType();
 			final var event = FBLaunchConfigurationAttributes.getEvent(configuration, type, getDefaultEvent(type));
+			final var repeatEvent = FBLaunchConfigurationAttributes.isRepeatEvent(configuration);
 			final var defaultArguments = getDefaultArguments(type);
 			final var variables = LaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
-			final Queue<Event> queue = new ArrayBlockingQueue<>(1000);
+			final Queue<Event> queue = new LaunchEventQueue(event, repeatEvent);
 			final Evaluator evaluator = createEvaluator(type, queue, variables);
-			queue.add(event);
 			launch(evaluator, configuration, mode, launch, monitor);
 		}
 	}
@@ -65,5 +67,64 @@ public abstract class FBLaunchConfigurationDelegate extends CommonLaunchConfigur
 			return eventInputs.get(0);
 		}
 		return null;
+	}
+
+	protected static class LaunchEventQueue extends AbstractQueue<Event> {
+		private final Event event;
+		private final boolean repeat;
+		private boolean full;
+
+		public LaunchEventQueue(final Event event, final boolean repeat) {
+			this.event = event;
+			this.repeat = repeat;
+			this.full = true;
+		}
+
+		@Override
+		public boolean offer(final Event e) {
+			return true; // infinite sink
+		}
+
+		@Override
+		public Event poll() {
+			if (full) {
+				full = repeat;
+				return event;
+			}
+			return null;
+		}
+
+		@Override
+		public Event peek() {
+			return full ? event : null;
+		}
+
+		@Override
+		public Iterator<Event> iterator() {
+			return new LaunchEventIterator();
+		}
+
+		@Override
+		public int size() {
+			return full ? 1 : 0;
+		}
+
+		private class LaunchEventIterator implements Iterator<Event> {
+			private boolean start;
+
+			@Override
+			public boolean hasNext() {
+				return start || repeat;
+			}
+
+			@Override
+			public Event next() {
+				if (!hasNext()) {
+					throw new NoSuchElementException();
+				}
+				start = false;
+				return event;
+			}
+		}
 	}
 }

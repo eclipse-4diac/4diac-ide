@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttributes {
 	String EVENT = "org.eclipse.fordiac.ide.debug.event"; //$NON-NLS-1$
+	String REPEAT_EVENT = "org.eclipse.fordiac.ide.debug.repeatEvent"; //$NON-NLS-1$
 
 	static Event getEvent(final ILaunchConfiguration configuration, final FBType type, final Event defaultEvent) throws CoreException {
 		final String eventAttribute = configuration.getAttribute(EVENT, ""); //$NON-NLS-1$
@@ -30,5 +31,9 @@ public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttr
 			}
 		}
 		return defaultEvent;
+	}
+
+	static boolean isRepeatEvent(final ILaunchConfiguration configuration) throws CoreException {
+		return configuration.getAttribute(REPEAT_EVENT, false);
 	}
 }

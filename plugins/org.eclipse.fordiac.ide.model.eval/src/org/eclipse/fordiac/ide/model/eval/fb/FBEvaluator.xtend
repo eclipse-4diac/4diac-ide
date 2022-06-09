@@ -34,11 +34,17 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	}
 
 	override evaluate() {
-		queue?.poll.evaluate
+		while (queue?.peek.applicable) {
+			queue.poll.evaluate
+		}
 		null
 	}
 
 	def abstract void evaluate(Event event)
+
+	def boolean isApplicable(Event event) {
+		event?.eContainer?.eContainer == type && event.isInput
+	}
 
 	override getName() {
 		type.name
@@ -47,7 +53,7 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	override getSourceElement() {
 		this.type
 	}
-	
+
 	override getVariables() {
 		instance.value.members
 	}

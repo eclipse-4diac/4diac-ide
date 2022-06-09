@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.fb;
 
+import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
+
 import java.util.Collections;
 import java.util.List;
 
@@ -35,12 +37,14 @@ import org.eclipse.jface.viewers.ComboViewer;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
 public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTab {
 
 	private ComboViewer eventCombo;
+	private Button repeatEventCheckbox;
 
 	@Override
 	public void createControl(final Composite parent) {
@@ -51,6 +55,18 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 
 		final Composite argumentsComponent = createArgumentsComponent((Composite) getControl());
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(argumentsComponent);
+	}
+
+	@Override
+	protected Composite createOptionsComponent(final Composite parent) {
+		final Group group = (Group) super.createOptionsComponent(parent);
+		final Composite comp = (Composite) group.getChildren()[0];
+
+		repeatEventCheckbox = new Button(comp, SWT.CHECK);
+		repeatEventCheckbox.setText("Repeat event"); //$NON-NLS-1$
+		repeatEventCheckbox.addSelectionListener(widgetSelectedAdapter(e -> updateLaunchConfigurationDialog()));
+		GridDataFactory.fillDefaults().applyTo(repeatEventCheckbox);
+		return group;
 	}
 
 	protected Composite createEventComponent(final Composite parent) {
@@ -75,6 +91,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	public void setDefaults(final ILaunchConfigurationWorkingCopy configuration) {
 		super.setDefaults(configuration);
 		configuration.removeAttribute(FBLaunchConfigurationAttributes.EVENT);
+		configuration.removeAttribute(FBLaunchConfigurationAttributes.REPEAT_EVENT);
 	}
 
 	@Override
@@ -88,6 +105,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 				final Event event = FBLaunchConfigurationAttributes.getEvent(configuration, fbType, events.get(0));
 				eventCombo.setSelection(new StructuredSelection(event), true);
 			}
+			repeatEventCheckbox.setSelection(FBLaunchConfigurationAttributes.isRepeatEvent(configuration));
 		} catch (final CoreException e) {
 			// ignore
 		}
@@ -103,6 +121,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		} else {
 			configuration.removeAttribute(FBLaunchConfigurationAttributes.EVENT);
 		}
+		configuration.setAttribute(FBLaunchConfigurationAttributes.REPEAT_EVENT, repeatEventCheckbox.getSelection());
 	}
 
 	@Override
