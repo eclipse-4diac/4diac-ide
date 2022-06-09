@@ -176,7 +176,8 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 		return STCorePackage.eINSTANCE.getSTVarDeclaration().isSuperTypeOf(clazz)
 				|| LibraryElementPackage.eINSTANCE.getVarDeclaration().isSuperTypeOf(clazz)
 				|| LibraryElementPackage.eINSTANCE.getFB().isSuperTypeOf(clazz)
-				|| LibraryElementPackage.eINSTANCE.getICallable().isSuperTypeOf(clazz);
+				|| (LibraryElementPackage.eINSTANCE.getICallable().isSuperTypeOf(clazz)
+						&& !LibraryElementPackage.eINSTANCE.getFBType().isSuperTypeOf(clazz));
 	}
 
 	protected static STExpression getReceiver(final EObject context) {
