@@ -16,4 +16,6 @@ import org.eclipse.fordiac.ide.model.data.AnyStringType
 
 interface AnyStringValue extends AnyCharsValue {
 	override AnyStringType getType()
+
+	def AnyCharValue charAt(int index)
 }

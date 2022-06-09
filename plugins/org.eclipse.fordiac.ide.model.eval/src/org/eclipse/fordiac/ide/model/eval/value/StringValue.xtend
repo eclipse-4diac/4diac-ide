@@ -33,6 +33,8 @@ class StringValue implements AnyStringValue {
 
 	def static toStringValue(AnyCharsValue value) { value.stringValue.toStringValue }
 
+	override CharValue charAt(int index) { CharValue.toCharValue(value.get(index - 1)) }
+
 	override length() { value.length }
 
 	override charValue() { if(value.length > 0) value.get(0) as char else '\u0000' }

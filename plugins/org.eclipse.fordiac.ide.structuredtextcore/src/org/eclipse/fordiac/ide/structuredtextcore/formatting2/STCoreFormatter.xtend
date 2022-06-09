@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.formatting2
 
 import com.google.inject.Inject
+import java.util.regex.Pattern
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
@@ -42,17 +43,28 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
+import org.eclipse.xtext.AbstractRule
 import org.eclipse.xtext.formatting2.AbstractFormatter2
+import org.eclipse.xtext.formatting2.FormatterPreferenceKeys
 import org.eclipse.xtext.formatting2.IFormattableDocument
+import org.eclipse.xtext.formatting2.ITextReplacer
 import org.eclipse.xtext.formatting2.ITextReplacerContext
 import org.eclipse.xtext.formatting2.internal.AbstractTextReplacer
+import org.eclipse.xtext.formatting2.internal.MultilineCommentReplacer
+import org.eclipse.xtext.formatting2.internal.SinglelineCodeCommentReplacer
+import org.eclipse.xtext.formatting2.internal.SinglelineDocCommentReplacer
+import org.eclipse.xtext.formatting2.internal.WhitespaceReplacer
+import org.eclipse.xtext.formatting2.regionaccess.IComment
+import org.eclipse.xtext.formatting2.regionaccess.ITextRegionAccess
+import org.eclipse.xtext.formatting2.regionaccess.ITextSegment
+import org.eclipse.xtext.grammaranalysis.impl.GrammarElementTitleSwitch
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage.Literals.*
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
 
 class STCoreFormatter extends AbstractFormatter2 {
 
@@ -169,6 +181,11 @@ class STCoreFormatter extends AbstractFormatter2 {
 				new KeywordCaseTextReplacer(document,
 					varDeclaration.regionFor.assignment(STVarDeclarationAccess.getTypeAssignment_5),
 					varDeclaration.type.name))
+		}
+		
+		if(varDeclaration.array){
+			varDeclaration.regionFor.keyword(STVarDeclarationAccess.getLeftSquareBracketKeyword_4_1_0_0).prepend[noSpace]
+			varDeclaration.regionFor.keyword(STVarDeclarationAccess.getRightSquareBracketKeyword_4_1_0_3).append[oneSpace]
 		}
 
 		varDeclaration?.defaultValue.format
@@ -381,4 +398,75 @@ class STCoreFormatter extends AbstractFormatter2 {
 		]
 		arrayAccessExpression.receiver.format
 	}
+
+	override ITextReplacer createCommentReplacer(IComment comment) {
+		var grammarElement = comment.getGrammarElement()
+		if (grammarElement instanceof AbstractRule) {
+			val ruleName = grammarElement.getName()
+			if (ruleName.startsWith("ML"))
+				return new MultilineCommentReplacer(comment, '*') {
+					override createReplacements(ITextReplacerContext context) {
+						var ITextRegionAccess access = comment.getTextRegionAccess();
+						val region = access.regionForOffset(comment.offset, comment.length)
+						commentReplacementContext(context, region, ruleName)
+					}
+
+					override configureWhitespace(WhitespaceReplacer leading, WhitespaceReplacer trailing) {
+						if (!leading.region.multiline) {
+							enforceSingleSpace(leading);
+						}
+					}
+				}
+			if (ruleName.startsWith("SL")) {
+				if (comment.getLineRegions().get(0).getIndentation().getLength() > 0)
+					return new SinglelineDocCommentReplacer(comment, "//") {
+						override createReplacements(ITextReplacerContext context) {
+							var ITextRegionAccess access = comment.getTextRegionAccess();
+							val region = access.regionForOffset(comment.offset, comment.length)
+							commentReplacementContext(context, region, ruleName)
+						}
+					}
+				else
+					return new SinglelineCodeCommentReplacer(comment, "//") {
+						override createReplacements(ITextReplacerContext context) {
+							var ITextRegionAccess access = comment.getTextRegionAccess();
+							val region = access.regionForOffset(comment.offset, comment.length)
+							commentReplacementContext(context, region, ruleName)
+						}
+					}
+			}
+		}
+		var elementName = new GrammarElementTitleSwitch().showQualified().showRule().doSwitch(grammarElement)
+		throw new IllegalStateException("No " + ITextReplacer.getSimpleName() + " configured for " + elementName)
+	}
+
+	private def ITextReplacerContext commentReplacementContext(ITextReplacerContext context, ITextSegment region,
+		String name) {
+
+		val lineSeparator = context.getNewLinesString(1)
+		val maxLineWidth = getPreference(FormatterPreferenceKeys.maxLineWidth)
+		val isML = name.startsWith("ML")
+
+		val lengthBeforeComment = context.getLeadingCharsInLineCount
+		val spaceBeforeComment = " ".repeat(lengthBeforeComment)
+		val commentLineLength = maxLineWidth - lengthBeforeComment - (isML ? 6 : 3)
+
+		val commentString = if (isML)
+				region.text.replaceFirst("^\\(\\*", "").replaceFirst("\\*\\)$", "").replaceAll("\\s+", " ").trim
+			else
+				region.text.replaceFirst("^//", "").replaceFirst("\n$", "").replaceAll("\\s+", " ").trim
+
+		val pattern = Pattern.compile("\\s*(?:(\\S{" + commentLineLength + "})|([\\s\\S]{1," + commentLineLength +
+			"})(?!\\S))");
+		val matcher = pattern.matcher(commentString);
+
+		val replacement = (isML ? "(" : "") + matcher.replaceAll [ m |
+			spaceBeforeComment + (isML ? " * " : "// ") + (m.group(1) ?: m.group(2)) + lineSeparator
+		].trim + (isML ? " *)" : "\n");
+
+		context.addReplacement(region.replaceWith(replacement))
+
+		context
+	}
+
 }

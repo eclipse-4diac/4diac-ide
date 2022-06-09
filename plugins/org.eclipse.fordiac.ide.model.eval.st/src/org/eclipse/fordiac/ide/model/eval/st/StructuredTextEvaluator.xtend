@@ -15,22 +15,30 @@ package org.eclipse.fordiac.ide.model.eval.st
 import java.util.List
 import java.util.Map
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.StringType
+import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
 import org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations
+import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.value.FBValue
+import org.eclipse.fordiac.ide.model.eval.value.StringValue
 import org.eclipse.fordiac.ide.model.eval.value.StructValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
+import org.eclipse.fordiac.ide.model.eval.value.WStringValue
+import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable
 import org.eclipse.fordiac.ide.model.eval.variable.PartialVariable
+import org.eclipse.fordiac.ide.model.eval.variable.StringCharacterVariable
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
+import org.eclipse.fordiac.ide.model.eval.variable.WStringCharacterVariable
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -53,6 +61,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
@@ -255,6 +264,8 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 
 	def protected dispatch void evaluateStatement(STExit stmt) { throw new ExitException(stmt.trap) }
 
+	def protected dispatch void evaluateStatement(STNop stmt) { /* do nothing */ }
+
 	def protected dispatch Value evaluateExpression(STExpression expr) {
 		error('''The expression «expr.eClass.name» is not supported''')
 		throw new UnsupportedOperationException('''The expression «expr.eClass.name» is not supported''')
@@ -405,9 +416,14 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch Value evaluateExpression(STArrayAccessExpression expr) {
-		val receiver = expr.receiver.evaluateExpression as ArrayValue
+		val receiver = expr.receiver.evaluateExpression
 		val index = expr.index.map[evaluateExpression.asInteger].toList
-		receiver.get(index).value
+		switch (receiver) {
+			ArrayValue:
+				receiver.get(index).value
+			AnyStringValue:
+				receiver.charAt(index.head)
+		}
 	}
 
 	def protected dispatch Value evaluateExpression(STExpression expr, Value receiver) {
@@ -459,9 +475,16 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch Variable<?> evaluateVariable(STArrayAccessExpression expr) {
-		val receiver = expr.receiver.evaluateExpression as ArrayValue
+		val receiver = expr.receiver.evaluateVariable
 		val index = expr.index.map[evaluateExpression.asInteger].toList
-		receiver.get(index)
+		switch (receiver) {
+			ArrayVariable:
+				receiver.value.get(index)
+			Variable<StringValue> case receiver.type instanceof StringType:
+				new StringCharacterVariable(receiver, index.head)
+			Variable<WStringValue> case receiver.type instanceof WstringType:
+				new WStringCharacterVariable(receiver, index.head)
+		}
 	}
 
 	def protected dispatch Variable<?> evaluateVariable(STExpression expr, Variable<?> receiver) {

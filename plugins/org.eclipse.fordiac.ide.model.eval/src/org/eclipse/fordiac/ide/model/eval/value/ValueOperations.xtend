@@ -340,9 +340,15 @@ final class ValueOperations {
 			UsintType:
 				USIntValue.toUSIntValue((first.byteValue * second.byteValue) as byte)
 			LtimeType:
-				LTimeValue.toLTimeValue(first.longValue * second.longValue)
+				if (second instanceof AnyRealValue)
+					LTimeValue.toLTimeValue((first.doubleValue * second.doubleValue) as long)
+				else
+					LTimeValue.toLTimeValue(first.longValue * second.longValue)
 			TimeType:
-				TimeValue.toTimeValue(first.longValue * second.longValue)
+				if (second instanceof AnyRealValue)
+					TimeValue.toTimeValue((first.doubleValue * second.doubleValue) as long)
+				else
+					TimeValue.toTimeValue(first.longValue * second.longValue)
 		}
 	}
 
@@ -373,9 +379,21 @@ final class ValueOperations {
 			UsintType:
 				USIntValue.toUSIntValue(Integer.divideUnsigned(first.intValue, second.intValue) as byte)
 			LtimeType:
-				LTimeValue.toLTimeValue(first.longValue / second.longValue)
+				if (second instanceof AnyRealValue)
+					if (second.doubleValue != 0.0)
+						LTimeValue.toLTimeValue((first.doubleValue / second.doubleValue) as long)
+					else
+						throw new ArithmeticException("Division by zero")
+				else
+					LTimeValue.toLTimeValue(first.longValue / second.longValue)
 			TimeType:
-				TimeValue.toTimeValue(first.longValue / second.longValue)
+				if (second instanceof AnyRealValue)
+					if (second.doubleValue != 0.0)
+						TimeValue.toTimeValue((first.doubleValue / second.doubleValue) as long)
+					else
+						throw new ArithmeticException("Division by zero")
+				else
+					TimeValue.toTimeValue(first.longValue / second.longValue)
 		}
 	}
 

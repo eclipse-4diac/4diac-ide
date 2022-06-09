@@ -91,7 +91,7 @@ final class DataTypeAnnotations {
 	}
 
 	static boolean isAssignableFrom(final StructuredType type, final DataType other) {
-		return type == other; // only strict equality for structs
+		return type.getName().equalsIgnoreCase(other.getName()); // only strict name equality for structs
 	}
 
 	static boolean isAssignableFrom(final AnyElementaryType type, final DataType other) {
