@@ -61,6 +61,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
@@ -262,6 +263,8 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def protected dispatch void evaluateStatement(STReturn stmt) { throw new ReturnException(stmt.trap) }
 
 	def protected dispatch void evaluateStatement(STExit stmt) { throw new ExitException(stmt.trap) }
+
+	def protected dispatch void evaluateStatement(STNop stmt) { /* do nothing */ }
 
 	def protected dispatch Value evaluateExpression(STExpression expr) {
 		error('''The expression «expr.eClass.name» is not supported''')
