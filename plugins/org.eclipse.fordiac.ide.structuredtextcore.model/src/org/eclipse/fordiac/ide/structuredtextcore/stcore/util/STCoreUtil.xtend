@@ -78,6 +78,21 @@ final class STCoreUtil {
 	private new() {
 	}
 
+	def static boolean isArithmetic(STUnaryOperator operator) {
+		switch (operator) {
+			case PLUS,
+			case MINUS: true
+			default: false
+		}
+	}
+
+	def static boolean isLogical(STUnaryOperator operator) {
+		switch (operator) {
+			case NOT: true
+			default: false
+		}
+	}
+
 	def static boolean isArithmetic(STBinaryOperator operator) {
 		switch (operator) {
 			case ADD,
@@ -85,11 +100,7 @@ final class STCoreUtil {
 			case MUL,
 			case DIV,
 			case MOD,
-			case POWER,
-			case AMPERSAND,
-			case AND,
-			case OR,
-			case XOR: true
+			case POWER: true
 			default: false
 		}
 	}
@@ -212,9 +223,12 @@ final class STCoreUtil {
 
 	def static INamedElement getExpectedType(STExpression expression) {
 		switch (it : expression.eContainer) {
-			STUnaryExpression,
+			STUnaryExpression case op.arithmetic,
 			STBinaryExpression case op.arithmetic || op.range:
-				expectedType
+				expectedType.equivalentAnyNumType
+			STUnaryExpression case op.logical,
+			STBinaryExpression case op.logical:
+				expectedType.equivalentAnyBitType
 			STBinaryExpression case op.comparison:
 				expression === left ? right.declaredResultType : left.declaredResultType
 			STAssignmentStatement:
@@ -353,5 +367,32 @@ final class STCoreUtil {
 			lowerLimit = lower
 			upperLimit = upper
 		]
+	}
+
+	def static getEquivalentAnyNumType(INamedElement type) {
+		switch (type) {
+			AnyNumType: type
+			BoolType: ElementaryTypes.SINT
+			ByteType: ElementaryTypes.USINT
+			WordType: ElementaryTypes.UINT
+			DwordType: ElementaryTypes.UDINT
+			LwordType: ElementaryTypes.ULINT
+			default: null
+		}
+	}
+
+	def static getEquivalentAnyBitType(INamedElement type) {
+		switch (type) {
+			AnyBitType: type
+			SintType,
+			UsintType: ElementaryTypes.BYTE
+			IntType,
+			UintType: ElementaryTypes.WORD
+			DintType,
+			UdintType: ElementaryTypes.DWORD
+			LintType,
+			UlintType: ElementaryTypes.LWORD
+			default: null
+		}
 	}
 }

@@ -203,7 +203,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			case AMPERSAND: "func_AND"
 			case POWER: "func_EXPT"
 			default: '''func_«expr.op.getName»'''
-		}»«IF expr.op.arithmetic»<«(expr.resultType as DataType).generateTypeName»>«ENDIF»(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+		}»«IF expr.op.arithmetic || expr.op.logical»<«(expr.resultType as DataType).generateTypeName»>«ENDIF»(«expr.left.generateExpression», «expr.right.generateExpression»)'''
 
 	def protected dispatch CharSequence generateExpression(STUnaryExpression expr) //
 	'''func_«expr.op.getName»<«(expr.resultType as DataType).generateTypeName»>(«expr.expression.generateExpression»)'''

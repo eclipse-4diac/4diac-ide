@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.util.Map
+import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyDurationType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.ArrayType
@@ -65,7 +66,7 @@ final package class ExpressionAnnotations {
 		val right = declared ? expr.right?.declaredResultType : expr.right?.resultType
 		if (left instanceof DataType) {
 			if (right instanceof DataType) {
-				if (expr.op.isArithmetic) {
+				if (expr.op.arithmetic || expr.op.logical) {
 					if (left.isAssignableFrom(right))
 						left
 					else if (right.isAssignableFrom(left))
@@ -74,7 +75,7 @@ final package class ExpressionAnnotations {
 						left
 					else
 						null
-				} else if (expr.op.isComparison)
+				} else if (expr.op.comparison)
 					ElementaryTypes.BOOL
 				else
 					null
@@ -146,8 +147,18 @@ final package class ExpressionAnnotations {
 
 	def package static INamedElement getResultType(STNumericLiteral expr) {
 		getDeclaredResultType(expr) ?: switch (result : expr.expectedType) {
-			DataType case result.isNumericValueValid(expr.value): result
-			default: null
+			DataType case result.isNumericValueValid(expr.value):
+				result
+			AnyBitType:
+				switch (it : expr.value) {
+					BigInteger case checkRangeUnsigned(0xff#bi): ElementaryTypes.BYTE
+					BigInteger case checkRangeUnsigned(0xffff#bi): ElementaryTypes.WORD
+					BigInteger case checkRangeUnsigned(0xffffffff#bi): ElementaryTypes.DWORD
+					BigInteger case checkRangeUnsigned(0xffffffffffffffff#bi): ElementaryTypes.LWORD
+					default: null
+				}
+			default:
+				null
 		} ?: switch (it : expr.value) {
 			Boolean: ElementaryTypes.BOOL
 			BigDecimal: ElementaryTypes.LREAL
