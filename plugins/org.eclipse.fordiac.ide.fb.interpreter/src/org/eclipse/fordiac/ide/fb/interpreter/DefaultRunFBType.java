@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
@@ -50,14 +51,17 @@ import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm;
@@ -249,68 +253,107 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		EList<EventOccurrence> networkEvents = new BasicEList<>();
 		outputEvents.forEach(event -> {
 			EventOccurrence newEventOccurrence =  OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
+			newEventOccurrence.setParentFB(eventOccurrence.getParentFB());
+			newEventOccurrence.setFbRuntime(EcoreUtil.copy(eventOccurrence.getFbRuntime()));
 			Event mappedEvent = (Event) eventOccurrence.getParentFB().getInterfaceElement(event.getEvent().getName());
 			newEventOccurrence.setEvent(mappedEvent);
 			networkEvents.add(newEventOccurrence);
 		});
 		
-//		EList<IInterfaceElement> interfaceElements = eventOccurrence.getParentFB()
-//															.getInterface()
-//															.getAllInterfaceElements()
-//															.stream().filter(iel -> outputEvents.get(0).getEvent().getName().equals(iel.getName()))//TODO several output events of one FB
-//															.collect(Collectors.toCollection(BasicEList::new))
-//															;
-//		interfaceElements.forEach(iel -> {
-//				EventOccurrence eventOccurrencce =  OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
-//				eventOccurrencce.setEvent((Event) iel);
-//				networkEvents.add(eventOccurrence);
-//		});
+		eventConnections(fBNetworkRuntime, manager, networkEvents);		
 				
-		networkEvents.forEach(e -> {
-			if (e.getEvent().isIsInput()) {
-				manager.getTransactions().add(createNewTransaction(e.getEvent(), fBNetworkRuntime));
-			} else {
-				//TODO Find the Original Pins 
-				List<IInterfaceElement> destinations = findConnectedPins(e);
-				for (IInterfaceElement dest : destinations) {
-					manager.getTransactions().add(createNewTransaction(dest, fBNetworkRuntime));
-//					final EventOccurrence networkEo = mapFBTypeEventToFBNetworkInstance(e);
-//					networkEvents.add(networkEo);
-				}
-			}
-		});
-		// TODO make sure that the correct events are returned (those from the fb network, based on what the fb type returned)
-		
 		return networkEvents;
 	}
 
-	private EventOccurrence mapFBTypeEventToFBNetworkInstance(EventOccurrence e) throws IllegalAccessError {
-		IInterfaceElement networkEvent = eventOccurrence.getParentFB().getInterface().getAllInterfaceElements().stream()
-				.filter(iel -> e.getEvent().getName().equals(iel.getName()))
-				.findFirst().orElseThrow(() -> new IllegalAccessError("Cannot find the event:" + e.getEvent().getName()));
-
-		final EventOccurrence networkEo = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
-		networkEo.setEvent((Event) EcoreUtil.copy(networkEvent));
-		networkEo.setParentFB(networkEvent.getFBNetworkElement());
-		networkEo.setActive(true);
-		return networkEo;
+	private void eventConnections(FBNetworkRuntime fBNetworkRuntime, EventManager manager,
+			EList<EventOccurrence> networkEvents) {
+		networkEvents.forEach(e -> {
+			//e.getEvent().getc
+			if (e.getEvent().isIsInput()) {
+				manager.getTransactions().add(createNewInitialTransaction(e.getEvent(), fBNetworkRuntime, e));
+			} else {
+				//Find the Original Pins 
+				List<IInterfaceElement> destinations = findConnectedPins(e.getEvent());
+				for (IInterfaceElement dest : destinations) {
+					manager.getTransactions().add(createNewTransaction(dest, fBNetworkRuntime, e));
+				}
+			}
+		});
 	}
-
-	private static FBTransaction createNewTransaction(IInterfaceElement dest, FBNetworkRuntime fBNetworkRuntime) {
-		EventOccurrence newEo = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
-		newEo.setEvent((Event) EcoreUtil.copy(dest));
-		newEo.setFbRuntime(EcoreUtil.copy(fBNetworkRuntime));
-		newEo.setParentFB(dest.getFBNetworkElement());
+	
+	//TODO remove
+//	private EventOccurrence mapFBTypeEventToFBNetworkInstance(EventOccurrence e) throws IllegalAccessError {
+//		IInterfaceElement networkEvent = eventOccurrence.getParentFB().getInterface().getAllInterfaceElements().stream()
+//				.filter(iel -> e.getEvent().getName().equals(iel.getName()))
+//				.findFirst().orElseThrow(() -> new IllegalAccessError("Cannot find the event:" + e.getEvent().getName()));
+//
+//		final EventOccurrence networkEo = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
+//		networkEo.setEvent((Event) EcoreUtil.copy(networkEvent));
+//		networkEo.setParentFB(networkEvent.getFBNetworkElement());
+//		networkEo.setActive(true);
+//		return networkEo;
+//	}
+	
+	//TODO refactor createNewTransaction
+	private static FBTransaction createNewInitialTransaction(IInterfaceElement dest, FBNetworkRuntime fBNetworkRuntime, EventOccurrence sourceEventOcurrence) {
+		EventOccurrence destinationEventOccurence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
+		destinationEventOccurence.setEvent((Event) EcoreUtil.copy(dest));
+		FBNetworkRuntime copyFBNetworkRuntime = EcoreUtil.copy(fBNetworkRuntime);
+		destinationEventOccurence.setFbRuntime(copyFBNetworkRuntime);
+		destinationEventOccurence.setParentFB(dest.getFBNetworkElement());
 		FBTransaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
-		transaction.setInputEventOccurrence(newEo);
-
-		newEo.getCreatedTransactions().add(transaction);
+		transaction.setInputEventOccurrence(destinationEventOccurence);
+		
 		return transaction;
 	}
 
-	private List<IInterfaceElement> findConnectedPins(EventOccurrence e) {
+	private static FBTransaction createNewTransaction(IInterfaceElement dest, FBNetworkRuntime fBNetworkRuntime, EventOccurrence sourceEventOcurrence) {
+		EventOccurrence destinationEventOccurence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
+		destinationEventOccurence.setEvent((Event) EcoreUtil.copy(dest));
+		FBNetworkRuntime copyFBNetworkRuntime = EcoreUtil.copy(fBNetworkRuntime);
+		destinationEventOccurence.setFbRuntime(copyFBNetworkRuntime);
+		destinationEventOccurence.setParentFB(dest.getFBNetworkElement());
+		FBTransaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
+		transaction.setInputEventOccurrence(destinationEventOccurence);
+		
+		sampleData(sourceEventOcurrence, destinationEventOccurence, copyFBNetworkRuntime, transaction);
+		
+		return transaction;
+	}
+
+	private static void sampleData(EventOccurrence sourceEventOcurrence, EventOccurrence destinationEventOccurence,
+			FBNetworkRuntime copyFBNetworkRuntime, FBTransaction transaction) {
+		//Sample data
+		Event sourceTypeEvent = (Event) findPinInNetwork(sourceEventOcurrence);
+		EList<VarDeclaration> varsToSample = sourceTypeEvent.getWith().stream().map(w -> w.getVariables()).collect(Collectors.toCollection(BasicEList::new));
+		
+		//Find the pins on the network
+		EList<VarDeclaration> networkVarsSample = new BasicEList<VarDeclaration>();
+		//TODO this should be a mapTo?
+		varsToSample.forEach(iel -> { 
+			IInterfaceElement interfaceElement = sourceEventOcurrence.getParentFB().getInterface().getInterfaceElement(iel.getName());
+			networkVarsSample.add((VarDeclaration) interfaceElement);
+		});	
+						
+		EMap<Connection, Value> map = copyFBNetworkRuntime.getTransferData();
+		//TODO this should be a mapTo?
+		networkVarsSample.forEach(var -> {
+			var.getOutputConnections()
+				.stream().forEach(outputConnection -> {
+					map.put(outputConnection, EcoreUtil.copy(var.getValue()));						 
+				});
+		});		
+		
+		destinationEventOccurence.getCreatedTransactions().add(transaction);
+	}
+
+	private static IInterfaceElement findPinInNetwork(EventOccurrence sourceEventOcurrence) {
+		return sourceEventOcurrence.getParentFB().getType().getInterfaceList().getInterfaceElement(sourceEventOcurrence.getEvent().getName());
+	}
+
+	private List<IInterfaceElement> findConnectedPins(IInterfaceElement interfaceElement) {
 		List<IInterfaceElement> destinations = new ArrayList<>();
-		e.getEvent().getOutputConnections().forEach(conn -> destinations.add(conn.getDestination()));
+		interfaceElement.getOutputConnections().forEach(conn -> destinations.add(conn.getDestination()));
 		return destinations;
 	}
 }

@@ -17,6 +17,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 
 public class EventManagerUtils {
 
@@ -58,6 +59,7 @@ public class EventManagerUtils {
 			final var transaction = transactions.get(i);
 			if (transaction instanceof FBTransaction) {
 				FBTransaction fbTransaction = (FBTransaction) transaction;
+				FBNetworkRuntime fbNetwork = ((FBNetworkRuntime) fbTransaction.getInputEventOccurrence().getFbRuntime());
 				final var result = transaction.getInputEventOccurrence().getFbRuntime().run(eventManager);
 				fbTransaction.getOutputEventOccurrences().addAll(result);
 //				if ((i + 1) < transactions.size()) {

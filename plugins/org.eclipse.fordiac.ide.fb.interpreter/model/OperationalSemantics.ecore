@@ -57,15 +57,15 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="fbRuntimes" upperBound="-1"
         eType="#//FBRuntimeAbstract" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="transferData" upperBound="-1"
-        eType="#//TransferData" containment="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TransferData">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="connection" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Connection"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="currentValue" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Value"
-        containment="true"/>
+        eType="#//ConnectionToValueMap" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FBTransaction" eSuperTypes="#//Transaction">
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputEventOccurrences"
         upperBound="-1" eType="#//EventOccurrence" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ConnectionToValueMap" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Connection"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Value"
+        containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

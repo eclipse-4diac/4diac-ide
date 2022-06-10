@@ -327,8 +327,8 @@ public interface OperationalSemanticsPackage extends EPackage {
 	int FB_NETWORK_RUNTIME__FB_RUNTIMES = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Transfer Data</b></em>' containment reference
-	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * The feature id for the '<em><b>Transfer Data</b></em>' map. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
@@ -346,44 +346,6 @@ public interface OperationalSemanticsPackage extends EPackage {
 
 	/**
 	 * The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransferDataImpl
-	 * <em>Transfer Data</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransferDataImpl
-	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getTransferData()
-	 * @generated
-	 */
-	int TRANSFER_DATA = 7;
-
-	/**
-	 * The feature id for the '<em><b>Connection</b></em>' reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered
-	 */
-	int TRANSFER_DATA__CONNECTION = 0;
-
-	/**
-	 * The feature id for the '<em><b>Current Value</b></em>' containment reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered
-	 */
-	int TRANSFER_DATA__CURRENT_VALUE = 1;
-
-	/**
-	 * The number of structural features of the '<em>Transfer Data</em>' class. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered
-	 */
-	int TRANSFER_DATA_FEATURE_COUNT = 2;
-
-	/**
-	 * The meta object id for the
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBTransactionImpl
 	 * <em>FB Transaction</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
@@ -392,7 +354,7 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getFBTransaction()
 	 * @generated
 	 */
-	int FB_TRANSACTION = 8;
+	int FB_TRANSACTION = 7;
 
 	/**
 	 * The feature id for the '<em><b>Input Event Occurrence</b></em>' containment
@@ -420,6 +382,45 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @ordered
 	 */
 	int FB_TRANSACTION_FEATURE_COUNT = TRANSACTION_FEATURE_COUNT + 1;
+
+	/**
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImpl
+	 * <em>Connection To Value Map</em>}' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImpl
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getConnectionToValueMap()
+	 * @generated
+	 */
+	int CONNECTION_TO_VALUE_MAP = 8;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION_TO_VALUE_MAP__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION_TO_VALUE_MAP__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Connection To Value Map</em>'
+	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int CONNECTION_TO_VALUE_MAP_FEATURE_COUNT = 2;
 
 	/**
 	 * Returns the meta object for class
@@ -676,53 +677,16 @@ public interface OperationalSemanticsPackage extends EPackage {
 	EReference getFBNetworkRuntime_FbRuntimes();
 
 	/**
-	 * Returns the meta object for the containment reference list
+	 * Returns the meta object for the map
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getTransferData
 	 * <em>Transfer Data</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @return the meta object for the containment reference list '<em>Transfer
-	 *         Data</em>'.
+	 * @return the meta object for the map '<em>Transfer Data</em>'.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getTransferData()
 	 * @see #getFBNetworkRuntime()
 	 * @generated
 	 */
 	EReference getFBNetworkRuntime_TransferData();
-
-	/**
-	 * Returns the meta object for class
-	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData
-	 * <em>Transfer Data</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @return the meta object for class '<em>Transfer Data</em>'.
-	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData
-	 * @generated
-	 */
-	EClass getTransferData();
-
-	/**
-	 * Returns the meta object for the reference
-	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData#getConnection
-	 * <em>Connection</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @return the meta object for the reference '<em>Connection</em>'.
-	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData#getConnection()
-	 * @see #getTransferData()
-	 * @generated
-	 */
-	EReference getTransferData_Connection();
-
-	/**
-	 * Returns the meta object for the containment reference
-	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData#getCurrentValue
-	 * <em>Current Value</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @return the meta object for the containment reference '<em>Current
-	 *         Value</em>'.
-	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData#getCurrentValue()
-	 * @see #getTransferData()
-	 * @generated
-	 */
-	EReference getTransferData_CurrentValue();
 
 	/**
 	 * Returns the meta object for class
@@ -748,6 +712,42 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFBTransaction_OutputEventOccurrences();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Connection
+	 * To Value Map</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for class '<em>Connection To Value Map</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyType="org.eclipse.fordiac.ide.model.libraryElement.Connection"
+	 *        valueType="org.eclipse.fordiac.ide.model.libraryElement.Value"
+	 *        valueContainment="true" valueResolveProxies="true"
+	 * @generated
+	 */
+	EClass getConnectionToValueMap();
+
+	/**
+	 * Returns the meta object for the reference '{@link java.util.Map.Entry
+	 * <em>Key</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the reference '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getConnectionToValueMap()
+	 * @generated
+	 */
+	EReference getConnectionToValueMap_Key();
+
+	/**
+	 * Returns the meta object for the containment reference
+	 * '{@link java.util.Map.Entry <em>Value</em>}'. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getConnectionToValueMap()
+	 * @generated
+	 */
+	EReference getConnectionToValueMap_Value();
 
 	/**
 	 * Returns the factory that creates the instances of the model. <!--
@@ -966,39 +966,12 @@ public interface OperationalSemanticsPackage extends EPackage {
 		EReference FB_NETWORK_RUNTIME__FB_RUNTIMES = eINSTANCE.getFBNetworkRuntime_FbRuntimes();
 
 		/**
-		 * The meta object literal for the '<em><b>Transfer Data</b></em>' containment
-		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 * The meta object literal for the '<em><b>Transfer Data</b></em>' map feature.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
 		 * @generated
 		 */
 		EReference FB_NETWORK_RUNTIME__TRANSFER_DATA = eINSTANCE.getFBNetworkRuntime_TransferData();
-
-		/**
-		 * The meta object literal for the
-		 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransferDataImpl
-		 * <em>Transfer Data</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
-		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransferDataImpl
-		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getTransferData()
-		 * @generated
-		 */
-		EClass TRANSFER_DATA = eINSTANCE.getTransferData();
-
-		/**
-		 * The meta object literal for the '<em><b>Connection</b></em>' reference
-		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
-		 * @generated
-		 */
-		EReference TRANSFER_DATA__CONNECTION = eINSTANCE.getTransferData_Connection();
-
-		/**
-		 * The meta object literal for the '<em><b>Current Value</b></em>' containment
-		 * reference feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
-		 * @generated
-		 */
-		EReference TRANSFER_DATA__CURRENT_VALUE = eINSTANCE.getTransferData_CurrentValue();
 
 		/**
 		 * The meta object literal for the
@@ -1020,6 +993,34 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES = eINSTANCE.getFBTransaction_OutputEventOccurrences();
+
+		/**
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImpl
+		 * <em>Connection To Value Map</em>}' class. <!-- begin-user-doc --> <!--
+		 * end-user-doc -->
+		 *
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImpl
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getConnectionToValueMap()
+		 * @generated
+		 */
+		EClass CONNECTION_TO_VALUE_MAP = eINSTANCE.getConnectionToValueMap();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' reference feature. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EReference CONNECTION_TO_VALUE_MAP__KEY = eINSTANCE.getConnectionToValueMap_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EReference CONNECTION_TO_VALUE_MAP__VALUE = eINSTANCE.getConnectionToValueMap_Value();
 
 	}
 

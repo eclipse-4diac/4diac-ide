@@ -18,16 +18,20 @@ import java.util.Collection;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EcoreEMap;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>FB
@@ -69,13 +73,13 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 
 	/**
 	 * The cached value of the '{@link #getTransferData() <em>Transfer Data</em>}'
-	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getTransferData()
 	 * @generated
 	 * @ordered
 	 */
-	protected EList<TransferData> transferData;
+	protected EMap<Connection, Value> transferData;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -158,9 +162,10 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 	 * @generated
 	 */
 	@Override
-	public EList<TransferData> getTransferData() {
+	public EMap<Connection, Value> getTransferData() {
 		if (transferData == null) {
-			transferData = new EObjectContainmentEList.Resolving<>(TransferData.class, this,
+			transferData = new EcoreEMap<>(
+					OperationalSemanticsPackage.Literals.CONNECTION_TO_VALUE_MAP, ConnectionToValueMapImpl.class, this,
 					OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TRANSFER_DATA);
 		}
 		return transferData;
@@ -197,7 +202,10 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__FB_RUNTIMES:
 			return getFbRuntimes();
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TRANSFER_DATA:
-			return getTransferData();
+			if (coreType)
+				return getTransferData();
+			else
+				return getTransferData().map();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -219,8 +227,7 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 			getFbRuntimes().addAll((Collection<? extends FBRuntimeAbstract>) newValue);
 			return;
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TRANSFER_DATA:
-			getTransferData().clear();
-			getTransferData().addAll((Collection<? extends TransferData>) newValue);
+			((EStructuralFeature.Setting) getTransferData()).set(newValue);
 			return;
 		}
 		super.eSet(featureID, newValue);

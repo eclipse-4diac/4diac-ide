@@ -14,7 +14,10 @@
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.EMap;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>FB
@@ -74,16 +77,17 @@ public interface FBNetworkRuntime extends FBRuntimeAbstract {
 	EList<FBRuntimeAbstract> getFbRuntimes();
 
 	/**
-	 * Returns the value of the '<em><b>Transfer Data</b></em>' containment
-	 * reference list. The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData}. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * Returns the value of the '<em><b>Transfer Data</b></em>' map. The key is of
+	 * type {@link org.eclipse.fordiac.ide.model.libraryElement.Connection}, and the
+	 * value is of type {@link org.eclipse.fordiac.ide.model.libraryElement.Value},
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @return the value of the '<em>Transfer Data</em>' containment reference list.
+	 * @return the value of the '<em>Transfer Data</em>' map.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBNetworkRuntime_TransferData()
-	 * @model containment="true" resolveProxies="true"
+	 * @model mapType="org.eclipse.fordiac.ide.fb.interpreter.OpSem.ConnectionToValueMap&lt;org.eclipse.fordiac.ide.model.libraryElement.Connection,
+	 *        org.eclipse.fordiac.ide.model.libraryElement.Value&gt;"
 	 * @generated
 	 */
-	EList<TransferData> getTransferData();
+	EMap<Connection, Value> getTransferData();
 
 } // FBNetworkRuntime

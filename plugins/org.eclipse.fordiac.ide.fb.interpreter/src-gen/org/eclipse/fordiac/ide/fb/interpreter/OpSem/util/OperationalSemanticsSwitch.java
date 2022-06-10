@@ -13,6 +13,8 @@
  */
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem.util;
 
+import java.util.Map;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
@@ -25,7 +27,8 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
 /**
  * <!-- begin-user-doc --> The <b>Switch</b> for the model's inheritance
@@ -137,18 +140,19 @@ public class OperationalSemanticsSwitch<T> extends Switch<T> {
 				result = defaultCase(theEObject);
 			return result;
 		}
-		case OperationalSemanticsPackage.TRANSFER_DATA: {
-			TransferData transferData = (TransferData) theEObject;
-			T result = caseTransferData(transferData);
-			if (result == null)
-				result = defaultCase(theEObject);
-			return result;
-		}
 		case OperationalSemanticsPackage.FB_TRANSACTION: {
 			FBTransaction fbTransaction = (FBTransaction) theEObject;
 			T result = caseFBTransaction(fbTransaction);
 			if (result == null)
 				result = caseTransaction(fbTransaction);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP: {
+			@SuppressWarnings("unchecked")
+			Map.Entry<Connection, Value> connectionToValueMap = (Map.Entry<Connection, Value>) theEObject;
+			T result = caseConnectionToValueMap(connectionToValueMap);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -268,21 +272,6 @@ public class OperationalSemanticsSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Transfer
-	 * Data</em>'. <!-- begin-user-doc --> This implementation returns null;
-	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
-	 *
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Transfer
-	 *         Data</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseTransferData(TransferData object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>FB
 	 * Transaction</em>'. <!-- begin-user-doc --> This implementation returns null;
 	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
@@ -294,6 +283,22 @@ public class OperationalSemanticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseFBTransaction(FBTransaction object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of
+	 * '<em>Connection To Value Map</em>'. <!-- begin-user-doc --> This
+	 * implementation returns null; returning a non-null result will terminate the
+	 * switch. <!-- end-user-doc -->
+	 *
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of
+	 *         '<em>Connection To Value Map</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConnectionToValueMap(Map.Entry<Connection, Value> object) {
 		return null;
 	}
 

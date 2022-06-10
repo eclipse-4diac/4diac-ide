@@ -157,7 +157,7 @@ public interface EventOccurrence extends EObject {
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @return the value of the '<em>Parent FB</em>' reference.
-	 * @see #setParentFB(EObject)
+	 * @see #setParentFB(FBNetworkElement)
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getEventOccurrence_ParentFB()
 	 * @model
 	 * @generated

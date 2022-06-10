@@ -13,6 +13,8 @@
  */
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl;
 
+import java.util.Map;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EOperation;
@@ -29,7 +31,6 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -94,14 +95,14 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 *
 	 * @generated
 	 */
-	private EClass transferDataEClass = null;
+	private EClass fbTransactionEClass = null;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 */
-	private EClass fbTransactionEClass = null;
+	private EClass connectionToValueMapEClass = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -402,36 +403,6 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 * @generated
 	 */
 	@Override
-	public EClass getTransferData() {
-		return transferDataEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 */
-	@Override
-	public EReference getTransferData_Connection() {
-		return (EReference) transferDataEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 */
-	@Override
-	public EReference getTransferData_CurrentValue() {
-		return (EReference) transferDataEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 */
-	@Override
 	public EClass getFBTransaction() {
 		return fbTransactionEClass;
 	}
@@ -444,6 +415,36 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	@Override
 	public EReference getFBTransaction_OutputEventOccurrences() {
 		return (EReference) fbTransactionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public EClass getConnectionToValueMap() {
+		return connectionToValueMapEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public EReference getConnectionToValueMap_Key() {
+		return (EReference) connectionToValueMapEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public EReference getConnectionToValueMap_Value() {
+		return (EReference) connectionToValueMapEClass.getEStructuralFeatures().get(1);
 	}
 
 	/**
@@ -505,12 +506,12 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		createEReference(fbNetworkRuntimeEClass, FB_NETWORK_RUNTIME__FB_RUNTIMES);
 		createEReference(fbNetworkRuntimeEClass, FB_NETWORK_RUNTIME__TRANSFER_DATA);
 
-		transferDataEClass = createEClass(TRANSFER_DATA);
-		createEReference(transferDataEClass, TRANSFER_DATA__CONNECTION);
-		createEReference(transferDataEClass, TRANSFER_DATA__CURRENT_VALUE);
-
 		fbTransactionEClass = createEClass(FB_TRANSACTION);
 		createEReference(fbTransactionEClass, FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES);
+
+		connectionToValueMapEClass = createEClass(CONNECTION_TO_VALUE_MAP);
+		createEReference(connectionToValueMapEClass, CONNECTION_TO_VALUE_MAP__KEY);
+		createEReference(connectionToValueMapEClass, CONNECTION_TO_VALUE_MAP__VALUE);
 	}
 
 	/**
@@ -620,24 +621,24 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEReference(getFBNetworkRuntime_FbRuntimes(), this.getFBRuntimeAbstract(), null, "fbRuntimes", null, 0, -1, //$NON-NLS-1$
 				FBNetworkRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getFBNetworkRuntime_TransferData(), this.getTransferData(), null, "transferData", null, 0, -1, //$NON-NLS-1$
-				FBNetworkRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
-				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-
-		initEClass(transferDataEClass, TransferData.class, "TransferData", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
-				IS_GENERATED_INSTANCE_CLASS);
-		initEReference(getTransferData_Connection(), theLibraryElementPackage.getConnection(), null, "connection", null, //$NON-NLS-1$
-				0, 1, TransferData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
-				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getTransferData_CurrentValue(), theLibraryElementPackage.getValue(), null, "currentValue", null, //$NON-NLS-1$
-				0, 1, TransferData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
-				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFBNetworkRuntime_TransferData(), this.getConnectionToValueMap(), null, "transferData", null, //$NON-NLS-1$
+				0, -1, FBNetworkRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
+				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(fbTransactionEClass, FBTransaction.class, "FBTransaction", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFBTransaction_OutputEventOccurrences(), this.getEventOccurrence(), null,
 				"outputEventOccurrences", null, 0, -1, FBTransaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(connectionToValueMapEClass, Map.Entry.class, "ConnectionToValueMap", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+				!IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getConnectionToValueMap_Key(), theLibraryElementPackage.getConnection(), null, "key", null, 0, 1, //$NON-NLS-1$
+				Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getConnectionToValueMap_Value(), theLibraryElementPackage.getValue(), null, "value", null, 0, 1, //$NON-NLS-1$
+				Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

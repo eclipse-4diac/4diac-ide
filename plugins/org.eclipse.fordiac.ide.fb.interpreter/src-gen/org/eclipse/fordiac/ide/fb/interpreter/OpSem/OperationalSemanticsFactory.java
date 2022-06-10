@@ -78,15 +78,6 @@ public interface OperationalSemanticsFactory extends EFactory {
 	FBNetworkRuntime createFBNetworkRuntime();
 
 	/**
-	 * Returns a new object of class '<em>Transfer Data</em>'. <!-- begin-user-doc
-	 * --> <!-- end-user-doc -->
-	 *
-	 * @return a new object of class '<em>Transfer Data</em>'.
-	 * @generated
-	 */
-	TransferData createTransferData();
-
-	/**
 	 * Returns a new object of class '<em>FB Transaction</em>'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
 	 *

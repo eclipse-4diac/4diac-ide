@@ -13,6 +13,8 @@
  */
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem.util;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
@@ -26,7 +28,8 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
 /**
  * <!-- begin-user-doc --> The <b>Adapter Factory</b> for the model. It provides
@@ -119,13 +122,13 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
-		public Adapter caseTransferData(TransferData object) {
-			return createTransferDataAdapter();
+		public Adapter caseFBTransaction(FBTransaction object) {
+			return createFBTransactionAdapter();
 		}
 
 		@Override
-		public Adapter caseFBTransaction(FBTransaction object) {
-			return createFBTransactionAdapter();
+		public Adapter caseConnectionToValueMap(Map.Entry<Connection, Value> object) {
+			return createConnectionToValueMapAdapter();
 		}
 
 		@Override
@@ -257,21 +260,6 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 
 	/**
 	 * Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData
-	 * <em>Transfer Data</em>}'. <!-- begin-user-doc --> This default implementation
-	 * returns null so that we can easily ignore cases; it's useful to ignore a case
-	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
-	 *
-	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData
-	 * @generated
-	 */
-	public Adapter createTransferDataAdapter() {
-		return null;
-	}
-
-	/**
-	 * Creates a new adapter for an object of class
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction <em>FB
 	 * Transaction</em>}'. <!-- begin-user-doc --> This default implementation
 	 * returns null so that we can easily ignore cases; it's useful to ignore a case
@@ -282,6 +270,21 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createFBTransactionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry
+	 * <em>Connection To Value Map</em>}'. <!-- begin-user-doc --> This default
+	 * implementation returns null so that we can easily ignore cases; it's useful
+	 * to ignore a case when inheritance will catch all the cases anyway. <!--
+	 * end-user-doc -->
+	 *
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createConnectionToValueMapAdapter() {
 		return null;
 	}
 

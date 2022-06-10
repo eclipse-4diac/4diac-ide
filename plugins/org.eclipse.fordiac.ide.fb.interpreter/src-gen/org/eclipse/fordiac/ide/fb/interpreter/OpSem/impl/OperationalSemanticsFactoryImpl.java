@@ -13,6 +13,8 @@
  */
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl;
 
+import java.util.Map;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -26,7 +28,8 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.TransferData;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!--
@@ -82,10 +85,10 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 			return createSimpleFBTypeRuntime();
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME:
 			return createFBNetworkRuntime();
-		case OperationalSemanticsPackage.TRANSFER_DATA:
-			return createTransferData();
 		case OperationalSemanticsPackage.FB_TRANSACTION:
 			return createFBTransaction();
+		case OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP:
+			return (EObject) createConnectionToValueMap();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -152,9 +155,9 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 	 * @generated
 	 */
 	@Override
-	public TransferData createTransferData() {
-		TransferDataImpl transferData = new TransferDataImpl();
-		return transferData;
+	public FBTransaction createFBTransaction() {
+		FBTransactionImpl fbTransaction = new FBTransactionImpl();
+		return fbTransaction;
 	}
 
 	/**
@@ -162,10 +165,9 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 	 *
 	 * @generated
 	 */
-	@Override
-	public FBTransaction createFBTransaction() {
-		FBTransactionImpl fbTransaction = new FBTransactionImpl();
-		return fbTransaction;
+	public Map.Entry<Connection, Value> createConnectionToValueMap() {
+		ConnectionToValueMapImpl connectionToValueMap = new ConnectionToValueMapImpl();
+		return connectionToValueMap;
 	}
 
 	/**
