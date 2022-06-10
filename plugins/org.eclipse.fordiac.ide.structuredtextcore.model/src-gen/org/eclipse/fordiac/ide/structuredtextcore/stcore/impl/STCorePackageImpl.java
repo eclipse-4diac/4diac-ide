@@ -1759,8 +1759,8 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTStandardFunction_ReturnType() {
-		return (EReference)stStandardFunctionEClass.getEStructuralFeatures().get(0);
+	public EAttribute getSTStandardFunction_Signature() {
+		return (EAttribute)stStandardFunctionEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -1769,7 +1769,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTStandardFunction_InputParameters() {
+	public EReference getSTStandardFunction_ReturnType() {
 		return (EReference)stStandardFunctionEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -1779,7 +1779,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTStandardFunction_OutputParameters() {
+	public EReference getSTStandardFunction_InputParameters() {
 		return (EReference)stStandardFunctionEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -1789,7 +1789,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
-	public EReference getSTStandardFunction_InOutParameters() {
+	public EReference getSTStandardFunction_OutputParameters() {
 		return (EReference)stStandardFunctionEClass.getEStructuralFeatures().get(3);
 	}
 
@@ -1799,8 +1799,18 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
+	public EReference getSTStandardFunction_InOutParameters() {
+		return (EReference)stStandardFunctionEClass.getEStructuralFeatures().get(4);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getSTStandardFunction_OnlySupportedBy() {
-		return (EAttribute)stStandardFunctionEClass.getEStructuralFeatures().get(4);
+		return (EAttribute)stStandardFunctionEClass.getEStructuralFeatures().get(5);
 	}
 
 	/**
@@ -2136,6 +2146,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEReference(stMultibitPartialExpressionEClass, ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION);
 
 		stStandardFunctionEClass = createEClass(ST_STANDARD_FUNCTION);
+		createEAttribute(stStandardFunctionEClass, ST_STANDARD_FUNCTION__SIGNATURE);
 		createEReference(stStandardFunctionEClass, ST_STANDARD_FUNCTION__RETURN_TYPE);
 		createEReference(stStandardFunctionEClass, ST_STANDARD_FUNCTION__INPUT_PARAMETERS);
 		createEReference(stStandardFunctionEClass, ST_STANDARD_FUNCTION__OUTPUT_PARAMETERS);
@@ -2504,6 +2515,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		addEOperation(stMultibitPartialExpressionEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stStandardFunctionEClass, STStandardFunction.class, "STStandardFunction", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getSTStandardFunction_Signature(), ecorePackage.getEString(), "signature", null, 0, 1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTStandardFunction_ReturnType(), theDataPackage.getDataType(), null, "returnType", null, 0, 1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTStandardFunction_InputParameters(), theLibraryElementPackage.getINamedElement(), null, "inputParameters", null, 0, -1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSTStandardFunction_OutputParameters(), theLibraryElementPackage.getINamedElement(), null, "outputParameters", null, 0, -1, STStandardFunction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

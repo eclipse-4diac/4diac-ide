@@ -1731,13 +1731,22 @@ public interface STCorePackage extends EPackage {
 	int ST_STANDARD_FUNCTION__COMMENT = LibraryElementPackage.ICALLABLE__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Signature</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_STANDARD_FUNCTION__SIGNATURE = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 0;
+
+	/**
 	 * The feature id for the '<em><b>Return Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_STANDARD_FUNCTION__RETURN_TYPE = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 0;
+	int ST_STANDARD_FUNCTION__RETURN_TYPE = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Input Parameters</b></em>' containment reference list.
@@ -1746,7 +1755,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_STANDARD_FUNCTION__INPUT_PARAMETERS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 1;
+	int ST_STANDARD_FUNCTION__INPUT_PARAMETERS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Output Parameters</b></em>' containment reference list.
@@ -1755,7 +1764,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_STANDARD_FUNCTION__OUTPUT_PARAMETERS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 2;
+	int ST_STANDARD_FUNCTION__OUTPUT_PARAMETERS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>In Out Parameters</b></em>' containment reference list.
@@ -1764,7 +1773,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 3;
+	int ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Only Supported By</b></em>' attribute list.
@@ -1773,7 +1782,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 4;
+	int ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>ST Standard Function</em>' class.
@@ -1782,7 +1791,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_STANDARD_FUNCTION_FEATURE_COUNT = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 5;
+	int ST_STANDARD_FUNCTION_FEATURE_COUNT = LibraryElementPackage.ICALLABLE_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCommentImpl <em>ST Comment</em>}' class.
@@ -3195,6 +3204,17 @@ public interface STCorePackage extends EPackage {
 	EClass getSTStandardFunction();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getSignature <em>Signature</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Signature</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getSignature()
+	 * @see #getSTStandardFunction()
+	 * @generated
+	 */
+	EAttribute getSTStandardFunction_Signature();
+
+	/**
 	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getReturnType <em>Return Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4462,6 +4482,14 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass ST_STANDARD_FUNCTION = eINSTANCE.getSTStandardFunction();
+
+		/**
+		 * The meta object literal for the '<em><b>Signature</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ST_STANDARD_FUNCTION__SIGNATURE = eINSTANCE.getSTStandardFunction_Signature();
 
 		/**
 		 * The meta object literal for the '<em><b>Return Type</b></em>' reference feature.

@@ -50,6 +50,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getSignature <em>Signature</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getInputParameters <em>Input Parameters</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getOutputParameters <em>Output Parameters</em>}</li>
@@ -99,6 +100,26 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	 * @ordered
 	 */
 	protected String comment = COMMENT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getSignature() <em>Signature</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSignature()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String SIGNATURE_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getSignature() <em>Signature</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getSignature()
+	 * @generated
+	 * @ordered
+	 */
+	protected String signature = SIGNATURE_EDEFAULT;
 
 	/**
 	 * The cached value of the '{@link #getReturnType() <em>Return Type</em>}' reference.
@@ -213,6 +234,29 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 		comment = newComment;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STANDARD_FUNCTION__COMMENT, oldComment, comment));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getSignature() {
+		return signature;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setSignature(String newSignature) {
+		String oldSignature = signature;
+		signature = newSignature;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STANDARD_FUNCTION__SIGNATURE, oldSignature, signature));
 	}
 
 	/**
@@ -338,6 +382,8 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return getName();
 			case STCorePackage.ST_STANDARD_FUNCTION__COMMENT:
 				return getComment();
+			case STCorePackage.ST_STANDARD_FUNCTION__SIGNATURE:
+				return getSignature();
 			case STCorePackage.ST_STANDARD_FUNCTION__RETURN_TYPE:
 				if (resolve) return getReturnType();
 				return basicGetReturnType();
@@ -368,6 +414,9 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return;
 			case STCorePackage.ST_STANDARD_FUNCTION__COMMENT:
 				setComment((String)newValue);
+				return;
+			case STCorePackage.ST_STANDARD_FUNCTION__SIGNATURE:
+				setSignature((String)newValue);
 				return;
 			case STCorePackage.ST_STANDARD_FUNCTION__RETURN_TYPE:
 				setReturnType((DataType)newValue);
@@ -408,6 +457,9 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 			case STCorePackage.ST_STANDARD_FUNCTION__COMMENT:
 				setComment(COMMENT_EDEFAULT);
 				return;
+			case STCorePackage.ST_STANDARD_FUNCTION__SIGNATURE:
+				setSignature(SIGNATURE_EDEFAULT);
+				return;
 			case STCorePackage.ST_STANDARD_FUNCTION__RETURN_TYPE:
 				setReturnType((DataType)null);
 				return;
@@ -441,6 +493,8 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case STCorePackage.ST_STANDARD_FUNCTION__COMMENT:
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			case STCorePackage.ST_STANDARD_FUNCTION__SIGNATURE:
+				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
 			case STCorePackage.ST_STANDARD_FUNCTION__RETURN_TYPE:
 				return returnType != null;
 			case STCorePackage.ST_STANDARD_FUNCTION__INPUT_PARAMETERS:
@@ -470,6 +524,8 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 		result.append(name);
 		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
+		result.append(", signature: "); //$NON-NLS-1$
+		result.append(signature);
 		result.append(", onlySupportedBy: "); //$NON-NLS-1$
 		result.append(onlySupportedBy);
 		result.append(')');

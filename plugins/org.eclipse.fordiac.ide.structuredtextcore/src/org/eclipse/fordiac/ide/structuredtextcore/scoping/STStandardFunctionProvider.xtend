@@ -26,8 +26,11 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.emf.common.util.URI
 
 class STStandardFunctionProvider {
+	public static final URI STANDARD_FUNCTIONS_URI = URI.createURI("__st_standard_functions.stfunc")
+
 	static final List<Class<? extends Functions>> DEFAULT_FUNCTIONS = #[StandardFunctions]
 	final List<Class<? extends Functions>> functions
 	final Resource functionResource
@@ -45,6 +48,7 @@ class STStandardFunctionProvider {
 	new(List<Class<? extends Functions>> functions) {
 		this.functions = functions
 		this.functionResource = new ResourceImpl
+		this.functionResource.URI = STANDARD_FUNCTIONS_URI
 	}
 
 	/**
@@ -71,6 +75,7 @@ class STStandardFunctionProvider {
 		inputParameters.addAll(method.inferParameterVariables(argumentTypes, true))
 		outputParameters.addAll(method.inferParameterVariables(argumentTypes, false))
 		onlySupportedBy.addAll(method.getAnnotationsByType(OnlySupportedBy).flatMap[value.toList])
+		signature = '''«name»(«(inputParameters.filter(STVarDeclaration).map[type.name] + outputParameters.filter(STVarDeclaration).map['''&«type.name»''']).join(",")»)'''
 		functionResource.contents.add(it)
 	}
 
