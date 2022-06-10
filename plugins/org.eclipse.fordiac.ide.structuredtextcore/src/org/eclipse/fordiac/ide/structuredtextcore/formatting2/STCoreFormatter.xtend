@@ -70,12 +70,14 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	@Inject extension STCoreGrammarAccess
 
+	/** Formats the STCoureSource */
 	def dispatch void format(STCoreSource sTCoreSource, extension IFormattableDocument document) {
 		for (sTStatement : sTCoreSource.statements) {
 			sTStatement.format
 		}
 	}
 
+	/** Formats the STVarDeclarationBlocks */
 	def dispatch void format(STVarDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
@@ -95,6 +97,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
+	/** Formats the STVarTempDeclarationBlocks */
 	def dispatch void format(STVarTempDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarTempDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
@@ -114,6 +117,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
+	/** Formats the STVarInputDeclarationBlocks */
 	def dispatch void format(STVarInputDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarInputDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
@@ -133,6 +137,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
+	/** Formats the STVarOutputDeclarationBlocks */
 	def dispatch void format(STVarOutputDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarOutputDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
@@ -171,6 +176,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
+	/** Formats the STVarDeclarations */
 	def dispatch void format(STVarDeclaration varDeclaration, extension IFormattableDocument document) {
 		varDeclaration.regionFor.keywords(",").forEach[prepend[noSpace] append[oneSpace]]
 		varDeclaration.regionFor.keywords(":", ":=").forEach[surround[oneSpace]]
@@ -182,16 +188,21 @@ class STCoreFormatter extends AbstractFormatter2 {
 					varDeclaration.regionFor.assignment(STVarDeclarationAccess.getTypeAssignment_5),
 					varDeclaration.type.name))
 		}
-		
-		if(varDeclaration.array){
-			varDeclaration.regionFor.keyword(STVarDeclarationAccess.getLeftSquareBracketKeyword_4_1_0_0).prepend[noSpace]
-			varDeclaration.regionFor.keyword(STVarDeclarationAccess.getRightSquareBracketKeyword_4_1_0_3).append[oneSpace]
+
+		if (varDeclaration.array) {
+			varDeclaration.regionFor.keyword(STVarDeclarationAccess.getLeftSquareBracketKeyword_4_1_0_0).prepend [
+				noSpace
+			]
+			varDeclaration.regionFor.keyword(STVarDeclarationAccess.getRightSquareBracketKeyword_4_1_0_3).append [
+				oneSpace
+			]
 		}
 
 		varDeclaration?.defaultValue.format
 		varDeclaration.append[newLine]
 	}
 
+	/** Formats the STIfStatements */
 	def dispatch void format(STIfStatement ifStatement, extension IFormattableDocument document) {
 		ifStatement.condition.format
 		ifStatement.regionFor.keyword("THEN").append[newLine]
@@ -202,17 +213,20 @@ class STCoreFormatter extends AbstractFormatter2 {
 		ifStatement.append[setNewLines(1, 2, 2)]
 	}
 
+	/** Formats the STElseIfStatements */
 	def dispatch void format(STElseIfPart elseIfStatement, extension IFormattableDocument document) {
 		elseIfStatement.condition.format
 		elseIfStatement.regionFor.keyword(STElseIfPartAccess.THENKeyword_2).append[newLine]
 		elseIfStatement.statements.forEach[surround[indent] format]
 	}
 
+	/** Formats the STElseStatements */
 	def dispatch void format(STElsePart elseStatement, extension IFormattableDocument document) {
 		elseStatement.regionFor.keyword(STElsePartAccess.ELSEKeyword_1).append[newLine]
 		elseStatement.statements.forEach[surround[indent] format]
 	}
 
+	/** Formats the STForStatements */
 	def dispatch void format(STForStatement forStatement, extension IFormattableDocument document) {
 		interior(
 			forStatement.regionFor.keyword("DO").append[newLine],
@@ -225,6 +239,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		forStatement.append[setNewLines(1, 2, 2)]
 	}
 
+	/** Formats the STWhileStatements */
 	def dispatch void format(STWhileStatement whileStatement, extension IFormattableDocument document) {
 		interior(
 			whileStatement.regionFor.keyword("DO").append[newLine],
@@ -237,6 +252,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		whileStatement.append[setNewLines(1, 2, 2)]
 	}
 
+	/** Formats the STRepeatStatements */
 	def dispatch void format(STRepeatStatement repeatStatement, extension IFormattableDocument document) {
 		interior(
 			repeatStatement.regionFor.keyword("REPEAT").append[newLine],
@@ -250,6 +266,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		repeatStatement.append[setNewLines(1, 2, 2)]
 	}
 
+	/** Formats the STCaseStatements */
 	def dispatch void format(STCaseStatement caseStatement, extension IFormattableDocument document) {
 		interior(
 			caseStatement.regionFor.keyword("OF").append[newLine],
@@ -262,12 +279,14 @@ class STCoreFormatter extends AbstractFormatter2 {
 		caseStatement.append[setNewLines(1, 2, 2)]
 	}
 
+	/** Formats the STCaseCases */
 	def dispatch format(STCaseCases stCase, extension IFormattableDocument document) {
 		stCase.conditions.forEach[format]
 		stCase.regionFor.keyword(STCaseCasesAccess.colonKeyword_2).prepend[oneSpace].append[newLine]
 		stCase.statements.forEach[surround[indent] format]
 	}
 
+	/** Formats the STAssignmentStatement */
 	def dispatch void format(STAssignmentStatement assignmentStatement, extension IFormattableDocument document) {
 		assignmentStatement.regionFor.keyword(":=").surround[oneSpace]
 		assignmentStatement.regionFor.keyword(";").surround[noSpace]
@@ -276,22 +295,26 @@ class STCoreFormatter extends AbstractFormatter2 {
 		assignmentStatement.append[setNewLines(1, 1, 2)]
 	}
 
+	/** Formats the STCallStatement */
 	def dispatch void format(STCallStatement callStatement, extension IFormattableDocument document) {
 		callStatement.call.format
 		callStatement.regionFor.keyword(";").surround[noSpace]
 		callStatement.append[setNewLines(1, 2, 2)]
 	}
 
+	/** Formats the STStatements */
 	def dispatch void format(STStatement statement, extension IFormattableDocument document) {
 		statement.regionFor.keyword(";").surround[noSpace]
 		statement.append[setNewLines(1, 2, 2)]
 	}
 
+	/** Formats the STElementaryInitializerExpression */
 	def dispatch void format(STElementaryInitializerExpression initExpression,
 		extension IFormattableDocument document) {
 		initExpression.value.format
 	}
 
+	/** Formats the STArrayInitializerExpression */
 	def dispatch void format(STArrayInitializerExpression arrayInitExpression,
 		extension IFormattableDocument document) {
 		arrayInitExpression.regionFor.keyword(STArrayInitializerExpressionAccess.leftSquareBracketKeyword_0).append [
@@ -307,11 +330,13 @@ class STCoreFormatter extends AbstractFormatter2 {
 		arrayInitExpression.values.forEach[format]
 	}
 
+	/** Formats the STArrayInitElement */
 	def dispatch void format(STArrayInitElement element, extension IFormattableDocument document) {
 		element.indexOrInitExpression.format
 		element.initExpressions.forEach[format]
 	}
 
+	/** Formats the STBinaryExpression */
 	def dispatch void format(STBinaryExpression binaryExpression, extension IFormattableDocument document) {
 		if (binaryExpression.op != STBinaryOperator.RANGE) {
 			binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP).surround[oneSpace]
@@ -333,6 +358,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		binaryExpression.right.format
 	}
 
+	/** Formats the STUnaryExpression */
 	def dispatch void format(STUnaryExpression unaryExpression, extension IFormattableDocument document) {
 		if (unaryExpression.op == STUnaryOperator.NOT) {
 			unaryExpression.regionFor.feature(ST_UNARY_EXPRESSION__OP).append[oneSpace]
@@ -342,12 +368,14 @@ class STCoreFormatter extends AbstractFormatter2 {
 		unaryExpression.expression.format
 	}
 
+	/** Formats the STMemberAccessExpression */
 	def dispatch void format(STMemberAccessExpression mExpression, extension IFormattableDocument document) {
 		mExpression.regionFor.keyword(".").surround[noSpace]
 		mExpression.member.format
 		mExpression.receiver.format
 	}
 
+	/** Formats the STFeatureExpression */
 	def dispatch void format(STFeatureExpression featureExpression, extension IFormattableDocument document) {
 		featureExpression.regionFor.keywords(STFeatureExpressionAccess.commaKeyword_2_1_1_0).forEach [
 			prepend[noSpace]
@@ -369,15 +397,18 @@ class STCoreFormatter extends AbstractFormatter2 {
 		mBPExpression.expression.format
 	}
 
+	/** Formats the STCallUnnamedArgument */
 	def dispatch void format(STCallUnnamedArgument unnamedArgument, extension IFormattableDocument document) {
 		unnamedArgument.argument.format
 	}
 
+	/** Formats the STCallNamedInputArgument */
 	def dispatch void format(STCallNamedInputArgument namedInputArgument, extension IFormattableDocument document) {
 		namedInputArgument.regionFor.keyword(":=").surround[oneSpace]
 		namedInputArgument.argument.format
 	}
 
+	/** Formats the STCallNamedOutputArgument */
 	def dispatch void format(STCallNamedOutputArgument namedOutputArgument, extension IFormattableDocument document) {
 		if (namedOutputArgument.not) {
 			namedOutputArgument.regionFor.keyword(STCallNamedOutputArgumentAccess.notNOTKeyword_0_0).append[oneSpace]
@@ -387,6 +418,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		namedOutputArgument.argument.format
 	}
 
+	/** Formats the STArrayAccessExpression */
 	def dispatch void format(STArrayAccessExpression arrayAccessExpression, extension IFormattableDocument document) {
 		arrayAccessExpression.regionFor.keyword(STAccessExpressionAccess.leftSquareBracketKeyword_1_1_1).append[noSpace]
 		arrayAccessExpression.regionFor.keyword(STAccessExpressionAccess.rightSquareBracketKeyword_1_1_4).prepend [
@@ -452,7 +484,8 @@ class STCoreFormatter extends AbstractFormatter2 {
 		val commentLineLength = maxLineWidth - lengthBeforeComment - (isML ? 6 : 3)
 
 		val commentString = if (isML)
-				region.text.replaceFirst("^\\(\\*", "").replaceFirst("\\*\\)$", "").replaceAll("\\s+", " ").trim
+				region.text.replaceFirst("^[(/]\\*", "").replaceFirst("\\*[)/]$", "").replaceAll("(?m)^\\s*\\* ", "").
+					replaceAll("\\s+", " ").trim
 			else
 				region.text.replaceFirst("^//", "").replaceFirst("\n$", "").replaceAll("\\s+", " ").trim
 
