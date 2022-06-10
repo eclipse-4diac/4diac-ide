@@ -13,20 +13,22 @@
 package org.eclipse.fordiac.ide.structuredtextcore.scoping
 
 import java.lang.reflect.Method
+import java.text.MessageFormat
 import java.util.List
+import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.eval.function.Comment
 import org.eclipse.fordiac.ide.model.eval.function.Functions
 import org.eclipse.fordiac.ide.model.eval.function.OnlySupportedBy
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
+import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
-import org.eclipse.fordiac.ide.model.eval.variable.Variable
-import org.eclipse.emf.common.util.URI
 
 class STStandardFunctionProvider {
 	public static final URI STANDARD_FUNCTIONS_URI = URI.createURI("__st_standard_functions.stfunc")
@@ -71,6 +73,7 @@ class STStandardFunctionProvider {
 	def protected create STCoreFactory.eINSTANCE.createSTStandardFunction toStandardFunction(Method method,
 		List<DataType> argumentTypes) {
 		name = method.name
+		comment = method.getAnnotation(Comment)?.value ?: ""
 		returnType = method.inferReturnTypeFromDataTypes(argumentTypes)
 		inputParameters.addAll(method.inferParameterVariables(argumentTypes, true))
 		outputParameters.addAll(method.inferParameterVariables(argumentTypes, false))
@@ -89,6 +92,7 @@ class STStandardFunctionProvider {
 			if (input.xor(method.getParameterType(index) == Variable)) {
 				STCoreFactory.eINSTANCE.createSTVarDeclaration => [
 					name = '''«IF input»IN«ELSE»OUT«ENDIF»«index»'''
+					comment = MessageFormat.format(method.getParameter(index).getAnnotation(Comment)?.value ?: "", index)
 					type = ptypes.get(index)
 				]
 			}

@@ -69,7 +69,8 @@ public interface StandardFunctions extends Functions {
 
 	/* Numeric functions */
 	@SuppressWarnings("unchecked")
-	static <T extends AnyNumValue> T ABS(final T value) {
+	@Comment("Calculate the absolute value")
+	static <T extends AnyNumValue> T ABS(@Comment("The input value") final T value) {
 		return (T) ValueOperations.abs(value);
 	}
 
@@ -119,7 +120,8 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyMagnitudeValue> T ADD(final T... values) {
+	@Comment("Calculate the sum of inputs")
+	static <T extends AnyMagnitudeValue> T ADD(@Comment("The input value {0}") final T... values) {
 		return Stream.of(values).reduce((a, b) -> (T) ValueOperations.add(a, b)).orElseThrow();
 	}
 

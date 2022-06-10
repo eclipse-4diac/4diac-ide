@@ -16,6 +16,7 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.GenericArrayType;
 import java.lang.reflect.Method;
+import java.lang.reflect.Parameter;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
@@ -373,6 +374,21 @@ public interface Functions {
 			return method.getParameterTypes()[method.getParameterCount() - 1].getComponentType();
 		} else if (index < method.getParameterCount()) {
 			return method.getParameterTypes()[index];
+		} else {
+			throw new IndexOutOfBoundsException("Parameter index out of bounds"); //$NON-NLS-1$
+		}
+	}
+
+	/** Get the parameter
+	 *
+	 * @param method The method reference corresponding to the function
+	 * @param index  The index of the parameter
+	 * @return The parameter */
+	static Parameter getParameter(final Method method, final int index) {
+		if (method.isVarArgs() && index >= method.getParameterCount() - 1) {
+			return method.getParameters()[method.getParameterCount() - 1];
+		} else if (index < method.getParameterCount()) {
+			return method.getParameters()[index];
 		} else {
 			throw new IndexOutOfBoundsException("Parameter index out of bounds"); //$NON-NLS-1$
 		}
