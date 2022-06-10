@@ -480,6 +480,14 @@ class STFunctionValidatorTest {
 		'''.parse
 		func2.assertNoErrors
 		func2.assertWarning(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.LITERAL_IMPLICIT_CONVERSION)
+		val func3 = '''
+			FUNCTION hubert
+			VAR
+				bool1 : INT := 17.0;
+			END_VAR
+			END_FUNCTION
+		'''.parse
+		func3.assertNoIssue(STCorePackage.eINSTANCE.STNumericLiteral, STCoreValidator.LITERAL_IMPLICIT_CONVERSION)
 	}
 
 	@Test
@@ -548,6 +556,14 @@ class STFunctionValidatorTest {
 		'''.parse
 		func2.assertNoErrors
 		func2.assertWarning(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.LITERAL_IMPLICIT_CONVERSION)
+		val func3 = '''
+			FUNCTION hubert
+			VAR
+				str : INT := 'a';
+			END_VAR
+			END_FUNCTION
+		'''.parse
+		func3.assertNoIssue(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.LITERAL_IMPLICIT_CONVERSION)
 	}
 
 	@Test

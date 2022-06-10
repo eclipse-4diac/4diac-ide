@@ -361,12 +361,12 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Check
 	public void checkNumericLiteral(final STNumericLiteral expression) {
 		final var type = (DataType) expression.getResultType();
-		final var expectedType = STCoreUtil.getExpectedType(expression);
+		final var expectedType = (DataType) STCoreUtil.getExpectedType(expression);
 		if (!isNumericValueValid(type, expression.getValue())) {
 			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(),
 					NumericValueConverter.INSTANCE.toString(expression.getValue())),
 					STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE, INVALID_NUMERIC_LITERAL);
-		} else if (expectedType != null && !type.equals(expectedType)) {
+		} else if (expectedType != null && !type.equals(expectedType) && expectedType.isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
 					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
 		}
@@ -375,12 +375,12 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Check
 	public void checkStringLiteral(final STStringLiteral expression) {
 		final var type = (DataType) expression.getResultType();
-		final var expectedType = STCoreUtil.getExpectedType(expression);
+		final var expectedType = (DataType) STCoreUtil.getExpectedType(expression);
 		if (!isStringValueValid(type, expression.getValue())) {
 			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(),
 					stringValueConverter.toString(expression.getValue())),
 					STCorePackage.Literals.ST_STRING_LITERAL__VALUE, INVALID_STRING_LITERAL);
-		} else if (expectedType != null && !type.equals(expectedType)) {
+		} else if (expectedType != null && !type.equals(expectedType) && expectedType.isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
 					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
 		}
