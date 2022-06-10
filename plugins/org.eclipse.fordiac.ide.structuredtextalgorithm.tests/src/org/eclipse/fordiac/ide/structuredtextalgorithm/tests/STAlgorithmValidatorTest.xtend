@@ -49,7 +49,7 @@ class STAlgorithmValidatorTest {
 	}
 
 	@Test
-	def void testDuplicateMethodmNameIsForbidden() {
+	def void testDuplicateMethodNameIsForbidden() {
 		'''
 			METHOD REQ
 			END_METHOD
@@ -60,7 +60,7 @@ class STAlgorithmValidatorTest {
 	}
 
 	@Test
-	def void testDuplicateAlgorithmOrMethodmNameIsForbidden() {
+	def void testDuplicateAlgorithmOrMethodNameIsForbidden() {
 		'''
 			ALGORITHM REQ
 			END_ALGORITHM

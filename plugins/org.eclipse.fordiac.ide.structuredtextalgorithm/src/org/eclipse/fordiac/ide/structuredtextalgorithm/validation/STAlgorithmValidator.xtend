@@ -34,6 +34,7 @@ import org.eclipse.xtext.resource.IResourceDescription
 import org.eclipse.xtext.resource.IResourceDescriptions
 import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 import org.eclipse.xtext.validation.Check
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 
 /**
  * This class contains custom validation rules. 
@@ -66,21 +67,24 @@ class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 
 	@Check
 	def checkUniquenessOfSTAlgorithmSourceElementNamesAndFunctionNames(STFeatureExpression featureExpression) {
+		if(featureExpression.feature instanceof STMethod) {
 		val IResourceDescriptions resourceDescriptions = resourceDescriptionsProvider.getResourceDescriptions(
-			featureExpression.feature.eResource());
-		val IResourceDescription resourceDescription = resourceDescriptions.getResourceDescription(
-			featureExpression.feature.eResource().getURI());
-		for (IContainer c : containerManager.getVisibleContainers(resourceDescription, resourceDescriptions)) {
-			for (IEObjectDescription od : c.getExportedObjectsByType(STFunctionPackage.Literals.ST_FUNCTION)) {
-				if (featureExpression.feature.getName().equalsIgnoreCase(od.getQualifiedName().toString()) &&
-					!od.getEObjectURI().equals(EcoreUtil.getURI(featureExpression))) {
-					warning(
-						MessageFormat.format(
-							Messages.STAlgorithmValidator_Unqualified_Method_Or_Algorithm_Shadowing_Function,
-							featureExpression.feature.getName(), od.EObjectURI.toPlatformString(true)),
-						STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE);
+				featureExpression.feature.eResource());
+			val IResourceDescription resourceDescription = resourceDescriptions.getResourceDescription(
+				featureExpression.feature.eResource().getURI());
+			for (IContainer c : containerManager.getVisibleContainers(resourceDescription, resourceDescriptions)) {
+				for (IEObjectDescription od : c.getExportedObjectsByType(STFunctionPackage.Literals.ST_FUNCTION)) {
+					if (featureExpression.feature.getName().equalsIgnoreCase(od.getQualifiedName().toString()) &&
+						!od.getEObjectURI().equals(EcoreUtil.getURI(featureExpression))) {
+						warning(
+							MessageFormat.format(
+								Messages.STAlgorithmValidator_Unqualified_Method_Or_Algorithm_Shadowing_Function,
+								featureExpression.feature.getName(), od.EObjectURI.toPlatformString(true)),
+							STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE);
+					}
 				}
 			}
+			
 		}
 	}
 
