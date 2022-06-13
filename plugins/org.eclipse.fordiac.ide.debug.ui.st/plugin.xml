@@ -25,6 +25,13 @@
                type="org.eclipse.debug.ui.actions.IToggleBreakpointsTarget">
          </adapter>
       </factory>
+      <factory
+            adaptableType="org.eclipse.jface.text.TextSelection"
+            class="org.eclipse.fordiac.ide.debug.ui.st.codemining.TextSelectionIVariableAdapterFactory">
+         <adapter
+               type="org.eclipse.debug.core.model.IVariable">
+         </adapter>
+      </factory>
    </extension>
 
 </plugin>

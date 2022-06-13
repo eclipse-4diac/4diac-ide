@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.eval.value.ArrayValue;
 import org.eclipse.fordiac.ide.model.eval.value.FBValue;
 import org.eclipse.fordiac.ide.model.eval.value.StructValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
+import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
 public class EvaluatorDebugValue extends EvaluatorDebugElement implements IValue {
 	private final Value value;
@@ -48,6 +49,23 @@ public class EvaluatorDebugValue extends EvaluatorDebugElement implements IValue
 	@Override
 	public boolean isAllocated() throws DebugException {
 		return true;
+	}
+
+	public EvaluatorDebugVariable getVariable(final String name) {
+		if (value instanceof StructValue) {
+			final var debugger = getDebugTarget().getDebugger();
+			final Variable<?> variable = ((StructValue) value).get(name);
+			if (variable != null) {
+				return debugger.getVariable(variable);
+			}
+		} else if (value instanceof FBValue) {
+			final var debugger = getDebugTarget().getDebugger();
+			final Variable<?> variable = ((FBValue) value).get(name);
+			if (variable != null) {
+				return debugger.getVariable(variable);
+			}
+		}
+		return null;
 	}
 
 	@Override

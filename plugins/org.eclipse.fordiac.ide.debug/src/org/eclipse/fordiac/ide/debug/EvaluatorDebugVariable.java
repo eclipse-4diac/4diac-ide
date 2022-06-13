@@ -33,7 +33,7 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 	}
 
 	@Override
-	public void setValue(final String expression) throws DebugException {
+	public void setValue(final String expression) {
 		this.variable.setValue(expression);
 		this.fireChangeEvent(DebugEvent.CONTENT);
 	}
@@ -56,7 +56,7 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 	}
 
 	@Override
-	public boolean verifyValue(final String expression) throws DebugException {
+	public boolean verifyValue(final String expression) {
 		return this.variable.validateValue(expression);
 	}
 
@@ -74,7 +74,7 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 	}
 
 	@Override
-	public IValue getValue() throws DebugException {
+	public EvaluatorDebugValue getValue() {
 		if (hasValueChanged()) {
 			this.cachedValue = new EvaluatorDebugValue(this.variable.getValue(), getDebugTarget());
 		}
@@ -82,17 +82,17 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 	}
 
 	@Override
-	public String getName() throws DebugException {
+	public String getName() {
 		return this.variable.getName();
 	}
 
 	@Override
-	public String getReferenceTypeName() throws DebugException {
+	public String getReferenceTypeName() {
 		return this.variable.getType().getName();
 	}
 
 	@Override
-	public boolean hasValueChanged() throws DebugException {
+	public boolean hasValueChanged() {
 		return !this.variable.getValue().equals(this.cachedValue.getInternalValue());
 	}
 

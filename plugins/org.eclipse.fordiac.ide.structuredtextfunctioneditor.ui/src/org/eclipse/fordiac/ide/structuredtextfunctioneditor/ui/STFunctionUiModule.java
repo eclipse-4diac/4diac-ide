@@ -18,10 +18,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMining
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
+import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocument;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
 import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider;
+import org.eclipse.xtext.ui.editor.model.XtextDocument;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer;
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
 
@@ -36,6 +38,11 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public STFunctionUiModule(final AbstractUIPlugin plugin) {
 		super(plugin);
+	}
+
+	@SuppressWarnings("static-method")
+	public Class<? extends XtextDocument> bindXtextDocument() {
+		return STFunctionDocument.class;
 	}
 
 	@SuppressWarnings("static-method")
@@ -62,6 +69,6 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 	@SuppressWarnings("static-method")
 	public void configureCodeMinings(final Binder binder) {
 		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("codeMiningInitializer")) //$NON-NLS-1$
-				.to(STCoreCodeMiningPreferences.Initializer.class);
+		.to(STCoreCodeMiningPreferences.Initializer.class);
 	}
 }

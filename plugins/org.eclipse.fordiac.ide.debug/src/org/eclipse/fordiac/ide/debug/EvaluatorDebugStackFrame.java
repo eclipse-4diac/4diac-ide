@@ -22,6 +22,7 @@ import org.eclipse.debug.core.model.IRegisterGroup;
 import org.eclipse.debug.core.model.IStackFrame;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
+import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
 public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements IStackFrame {
 	private final Evaluator evaluator;
@@ -138,6 +139,15 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 	@Override
 	public void terminate() throws DebugException {
 		this.thread.terminate();
+	}
+
+	public EvaluatorDebugVariable getVariable(final String name) {
+		final Variable<?> variable = this.evaluator.getVariables().get(name);
+		if (variable != null) {
+			final CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
+			return debugger.getVariable(variable);
+		}
+		return null;
 	}
 
 	@Override
