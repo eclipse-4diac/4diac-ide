@@ -18,11 +18,30 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.validation;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.regex.Pattern;
 
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.data.AnyBitType;
+import org.eclipse.fordiac.ide.model.data.AnyNumType;
+import org.eclipse.fordiac.ide.model.data.BoolType;
+import org.eclipse.fordiac.ide.model.data.ByteType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.DintType;
+import org.eclipse.fordiac.ide.model.data.DwordType;
+import org.eclipse.fordiac.ide.model.data.IntType;
+import org.eclipse.fordiac.ide.model.data.LintType;
+import org.eclipse.fordiac.ide.model.data.LrealType;
+import org.eclipse.fordiac.ide.model.data.LwordType;
+import org.eclipse.fordiac.ide.model.data.RealType;
+import org.eclipse.fordiac.ide.model.data.SintType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.data.UdintType;
+import org.eclipse.fordiac.ide.model.data.UintType;
+import org.eclipse.fordiac.ide.model.data.UlintType;
+import org.eclipse.fordiac.ide.model.data.UsintType;
+import org.eclipse.fordiac.ide.model.data.WordType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.value.ArrayValueConverter;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
@@ -54,25 +73,22 @@ public final class ValueValidator {
 		try {
 			final ArrayValueConverter<?> arrayVC = new ArrayValueConverter<>(
 					new TypedValueConverter(varDeclaration.getType()));
-			arrayVC.toValue(valueString);
+			arrayVC.toValue(valueString).forEach(value -> checkValue(varDeclaration.getType(), value));
 		} catch (final IllegalArgumentException e) {
 			return e.getMessage();
 		}
 		return EMPTY_STRING;
 	}
 
-	/**
-	 * Check the given value if it is valid literal for the data type
+	/** Check the given value if it is valid literal for the data type
 	 *
 	 * @param type  data type for which the literal should be checked
 	 * @param value the literal value to check
-	 * @return empty string if the literal is valid, otherwise an error message what
-	 *         is wrong with the literal
-	 */
+	 * @return empty string if the literal is valid, otherwise an error message what is wrong with the literal */
 	public static String validateValue(final DataType type, final String value) {
 		try {
-			if(!checkVirtualDNS(value)) {
-				new TypedValueConverter(type).toValue(value);
+			if (!checkVirtualDNS(value)) {
+				checkValue(type, new TypedValueConverter(type).toValue(value));
 			}
 		} catch (final IllegalArgumentException e) {
 			return e.getMessage();
@@ -104,7 +120,7 @@ public final class ValueValidator {
 
 			inbound = counter % 2 == 1;
 
-			if(outbound && inbound) {
+			if (outbound && inbound) {
 				throw new IllegalArgumentException(Messages.VALIDATOR_VIRTUAL_DNS_ILLEGAL_FORMAT);
 			}
 
@@ -119,6 +135,61 @@ public final class ValueValidator {
 			return true;
 		}
 		return false;
+	}
+
+	private static void checkValue(final DataType type, final Object value) {
+		if ((type instanceof AnyNumType || type instanceof AnyBitType) && !isNumericValueValid(type, value)) {
+			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_NUMBER_LITERAL);
+		}
+	}
+
+	private static boolean isNumericValueValid(final DataType type, final Object value) {
+		if (value instanceof Boolean) {
+			return type instanceof BoolType;
+		} else if (value instanceof BigDecimal) {
+			if (type instanceof RealType) {
+				return Float.isFinite(((BigDecimal) value).floatValue());
+			} else if (type instanceof LrealType) {
+				return Double.isFinite(((BigDecimal) value).doubleValue());
+			}
+		} else if (value instanceof BigInteger) {
+			if (type instanceof SintType) {
+				return checkRange((BigInteger) value, Byte.MIN_VALUE, Byte.MAX_VALUE);
+			} else if (type instanceof IntType) {
+				return checkRange((BigInteger) value, Short.MIN_VALUE, Short.MAX_VALUE);
+			} else if (type instanceof DintType) {
+				return checkRange((BigInteger) value, Integer.MIN_VALUE, Integer.MAX_VALUE);
+			} else if (type instanceof LintType) {
+				return checkRange((BigInteger) value, Long.MIN_VALUE, Long.MAX_VALUE);
+			} else if (type instanceof UsintType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffL));
+			} else if (type instanceof UintType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffffL));
+			} else if (type instanceof UdintType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffffffffL));
+			} else if (type instanceof UlintType) {
+				return checkRangeUnsigned((BigInteger) value, new BigInteger("ffffffffffffffff", 16)); //$NON-NLS-1$
+			} else if (type instanceof BoolType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.ONE);
+			} else if (type instanceof ByteType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffL));
+			} else if (type instanceof WordType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffffL));
+			} else if (type instanceof DwordType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffffffffL));
+			} else if (type instanceof LwordType) {
+				return checkRangeUnsigned((BigInteger) value, new BigInteger("ffffffffffffffff", 16)); //$NON-NLS-1$
+			}
+		}
+		return false;
+	}
+
+	private static boolean checkRange(final BigInteger value, final long lower, final long upper) {
+		return value.compareTo(BigInteger.valueOf(lower)) >= 0 && value.compareTo(BigInteger.valueOf(upper)) <= 0;
+	}
+
+	private static boolean checkRangeUnsigned(final BigInteger value, final BigInteger upper) {
+		return value.signum() >= 0 && value.compareTo(upper) <= 0;
 	}
 
 	private ValueValidator() {

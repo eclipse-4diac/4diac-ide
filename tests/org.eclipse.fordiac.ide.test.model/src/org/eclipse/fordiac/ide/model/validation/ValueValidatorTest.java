@@ -89,8 +89,66 @@ class ValueValidatorTest {
 	@DisplayName("Validator tests for invalid BOOL literals")
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateInvalidBoolLiteralsTestCases")
-
 	void validateInvalidBoolLiterals(final DataType type, final String value, final String expectedFormatString) {
+		final String expectedString = MessageFormat.format(expectedFormatString, type.getName());
+		final String resultString = ValueValidator.validateValue(type, value);
+		assertEquals(expectedString, resultString);
+	}
+
+	static Stream<Arguments> validateValidNumberLiteralsTestCases() {
+		return Stream.of(Arguments.of(IecTypes.ElementaryTypes.SINT, "0", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.SINT, "1", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.SINT, "17", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.INT, "1701", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.REAL, "3.14", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.REAL, "3.14e5", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.REAL, "3.14e-5", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.LREAL, "3.14", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.LREAL, "3.14e5", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.LREAL, "3.14e-5", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.WORD, "16#AFFE", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.LWORD, "16#FFFFFFFFFFFFFFFF", NO_ERROR)); //$NON-NLS-1$
+	}
+
+	@DisplayName("Validator tests for valid numeric literals")
+	@ParameterizedTest(name = "{index}: Literal: {1}")
+	@MethodSource("validateValidNumberLiteralsTestCases")
+	void validateValidNumberLiterals(final DataType type, final String value, final String expectedResult) {
+		final String resultString = ValueValidator.validateValue(type, value);
+		assertEquals(expectedResult, resultString);
+	}
+
+	static Stream<Arguments> validateInvalidNumberLiteralsTestCases() {
+		return Stream.of(Arguments.of(IecTypes.ElementaryTypes.SINT, "\"0\"", //$NON-NLS-1$
+				Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+				Arguments.of(IecTypes.ElementaryTypes.SINT, "\"1\"", //$NON-NLS-1$
+						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+				Arguments.of(IecTypes.ElementaryTypes.SINT, "FALSE", //$NON-NLS-1$
+						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+				Arguments.of(IecTypes.ElementaryTypes.SINT, "TRUE", //$NON-NLS-1$
+						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+				Arguments.of(IecTypes.ElementaryTypes.SINT, "129", //$NON-NLS-1$
+						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+				Arguments.of(IecTypes.ElementaryTypes.INT, "123456", //$NON-NLS-1$
+						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+				Arguments.of(IecTypes.ElementaryTypes.INT, "3.14", //$NON-NLS-1$
+						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+				Arguments.of(IecTypes.ElementaryTypes.UINT, "-1", //$NON-NLS-1$
+						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+				Arguments.of(IecTypes.ElementaryTypes.UINT, "-17", //$NON-NLS-1$
+						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+				Arguments.of(IecTypes.ElementaryTypes.BYTE, "16#AFFE", //$NON-NLS-1$
+						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+				Arguments.of(IecTypes.ElementaryTypes.REAL, "3.14e120", //$NON-NLS-1$
+						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+				Arguments.of(IecTypes.ElementaryTypes.LREAL, "3.14e1200", //$NON-NLS-1$
+						Messages.VALIDATOR_INVALID_NUMBER_LITERAL));
+	}
+
+	@DisplayName("Validator tests for invalid numeric literals")
+	@ParameterizedTest(name = "{index}: Literal: {1}")
+	@MethodSource("validateInvalidNumberLiteralsTestCases")
+	void validateInvalidNumberLiterals(final DataType type, final String value, final String expectedFormatString) {
 		final String expectedString = MessageFormat.format(expectedFormatString, type.getName());
 		final String resultString = ValueValidator.validateValue(type, value);
 		assertEquals(expectedString, resultString);
