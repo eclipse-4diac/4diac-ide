@@ -457,7 +457,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STInitializerExpression:
-	//    STElementaryInitializerExpression | STArrayInitializerExpression;
+	//    STElementaryInitializerExpression | STArrayInitializerExpression | STStructInitializerExpression;
 	public STCoreGrammarAccess.STInitializerExpressionElements getSTInitializerExpressionAccess() {
 		return gaSTCore.getSTInitializerExpressionAccess();
 	}
@@ -495,6 +495,26 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	
 	public ParserRule getSTArrayInitElementRule() {
 		return getSTArrayInitElementAccess().getRule();
+	}
+	
+	//STStructInitializerExpression:
+	//    '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
+	public STCoreGrammarAccess.STStructInitializerExpressionElements getSTStructInitializerExpressionAccess() {
+		return gaSTCore.getSTStructInitializerExpressionAccess();
+	}
+	
+	public ParserRule getSTStructInitializerExpressionRule() {
+		return getSTStructInitializerExpressionAccess().getRule();
+	}
+	
+	//STStructInitElement:
+	//    variable=[libraryElement::INamedElement|STFeatureName] ':=' value=STInitializerExpression;
+	public STCoreGrammarAccess.STStructInitElementElements getSTStructInitElementAccess() {
+		return gaSTCore.getSTStructInitElementAccess();
+	}
+	
+	public ParserRule getSTStructInitElementRule() {
+		return getSTStructInitElementAccess().getRule();
 	}
 	
 	//STStatement:

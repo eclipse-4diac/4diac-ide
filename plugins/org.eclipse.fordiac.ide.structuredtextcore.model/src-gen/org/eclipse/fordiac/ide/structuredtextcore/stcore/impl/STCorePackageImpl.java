@@ -79,6 +79,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
@@ -427,6 +429,20 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EClass stCommentEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stStructInitializerExpressionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stStructInitElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1859,6 +1875,56 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getSTStructInitializerExpression() {
+		return stStructInitializerExpressionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTStructInitializerExpression_Values() {
+		return (EReference)stStructInitializerExpressionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EClass getSTStructInitElement() {
+		return stStructInitElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTStructInitElement_Variable() {
+		return (EReference)stStructInitElementEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTStructInitElement_Value() {
+		return (EReference)stStructInitElementEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getSTBinaryOperator() {
 		return stBinaryOperatorEEnum;
 	}
@@ -2158,6 +2224,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEAttribute(stCommentEClass, ST_COMMENT__TEXT);
 		createEAttribute(stCommentEClass, ST_COMMENT__POSITION);
 
+		stStructInitializerExpressionEClass = createEClass(ST_STRUCT_INITIALIZER_EXPRESSION);
+		createEReference(stStructInitializerExpressionEClass, ST_STRUCT_INITIALIZER_EXPRESSION__VALUES);
+
+		stStructInitElementEClass = createEClass(ST_STRUCT_INIT_ELEMENT);
+		createEReference(stStructInitElementEClass, ST_STRUCT_INIT_ELEMENT__VARIABLE);
+		createEReference(stStructInitElementEClass, ST_STRUCT_INIT_ELEMENT__VALUE);
+
 		// Create enums
 		stBinaryOperatorEEnum = createEEnum(ST_BINARY_OPERATOR);
 		stUnaryOperatorEEnum = createEEnum(ST_UNARY_OPERATOR);
@@ -2241,6 +2314,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stFeatureExpressionEClass.getESuperTypes().add(this.getSTExpression());
 		stMultibitPartialExpressionEClass.getESuperTypes().add(this.getSTExpression());
 		stStandardFunctionEClass.getESuperTypes().add(theLibraryElementPackage.getICallable());
+		stStructInitializerExpressionEClass.getESuperTypes().add(this.getSTInitializerExpression());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(stSourceEClass, STSource.class, "STSource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -2526,6 +2600,29 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		initEReference(getSTComment_Context(), ecorePackage.getEObject(), null, "context", null, 0, 1, STComment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getSTComment_Text(), ecorePackage.getEString(), "text", null, 0, 1, STComment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getSTComment_Position(), this.getSTCommentPosition(), "position", null, 0, 1, STComment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(stStructInitializerExpressionEClass, STStructInitializerExpression.class, "STStructInitializerExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSTStructInitializerExpression_Values(), this.getSTStructInitElement(), null, "values", null, 0, -1, STStructInitializerExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stStructInitializerExpressionEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stStructInitializerExpressionEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(stStructInitializerExpressionEClass, null, "getMappedStructInitElements", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(this.getSTInitializerExpression());
+		g1.getETypeArguments().add(g2);
+		initEOperation(op, g1);
+
+		initEClass(stStructInitElementEClass, STStructInitElement.class, "STStructInitElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getSTStructInitElement_Variable(), theLibraryElementPackage.getINamedElement(), null, "variable", null, 0, 1, STStructInitElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTStructInitElement_Value(), this.getSTInitializerExpression(), null, "value", null, 0, 1, STStructInitElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stStructInitElementEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stStructInitElementEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(stBinaryOperatorEEnum, STBinaryOperator.class, "STBinaryOperator"); //$NON-NLS-1$

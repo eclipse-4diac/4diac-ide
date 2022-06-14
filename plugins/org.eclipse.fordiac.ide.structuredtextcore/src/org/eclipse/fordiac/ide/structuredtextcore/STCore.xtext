@@ -61,7 +61,7 @@ STVarDeclaration:
 	defaultValue=STInitializerExpression)? ';';
 
 STInitializerExpression:
-	STElementaryInitializerExpression | STArrayInitializerExpression;
+	STElementaryInitializerExpression | STArrayInitializerExpression | STStructInitializerExpression;
 
 STElementaryInitializerExpression:
 	value=STExpression;
@@ -72,6 +72,12 @@ STArrayInitializerExpression:
 STArrayInitElement:
 	indexOrInitExpression=STInitializerExpression ('(' initExpressions+=STInitializerExpression (','
 	initExpressions+=STInitializerExpression)* ')')?;
+
+STStructInitializerExpression:
+	'(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
+
+STStructInitElement:
+	variable=[libraryElement::INamedElement|STFeatureName] ':=' value=STInitializerExpression;
 
 STStatement:
 	(STIfStatement |

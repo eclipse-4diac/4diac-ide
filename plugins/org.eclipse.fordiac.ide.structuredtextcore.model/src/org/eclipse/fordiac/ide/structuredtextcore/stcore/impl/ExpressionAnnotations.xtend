@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StringType
+import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.libraryElement.FB
@@ -40,10 +41,13 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
@@ -251,6 +255,14 @@ final package class ExpressionAnnotations {
 			expr.initExpressions.map[declaredResultType].reduce[first, second|first.commonSupertype(second)]
 	}
 
+	def package static INamedElement getResultType(STStructInitializerExpression expr) { getDeclaredResultType(expr) }
+
+	def package static INamedElement getDeclaredResultType(STStructInitializerExpression expr) { expr.expectedType }
+
+	def package static INamedElement getResultType(STStructInitElement expr) { getDeclaredResultType(expr) }
+
+	def package static INamedElement getDeclaredResultType(STStructInitElement expr) { expr.variable.featureType }
+
 	def package static Map<INamedElement, STExpression> getMappedInputArguments(STFeatureExpression expr) {
 		val feature = expr.feature
 		if (feature instanceof ICallable) {
@@ -305,6 +317,18 @@ final package class ExpressionAnnotations {
 					namedArguments.get(parameter)?.argument
 				].unmodifiableView
 			}
+		} else
+			emptyMap
+	}
+
+	def package static Map<INamedElement, STInitializerExpression> getMappedStructInitElements(
+		STStructInitializerExpression expr) {
+		val struct = expr.resultType
+		if (struct instanceof StructuredType) {
+			val namedInitElements = expr.values.toMap[variable]
+			struct.memberVariables.toInvertedMap [ parameter |
+				namedInitElements.get(parameter)?.value
+			].unmodifiableView
 		} else
 			emptyMap
 	}

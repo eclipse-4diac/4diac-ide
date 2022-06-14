@@ -273,6 +273,14 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTCommentAdapter();
 			}
 			@Override
+			public Adapter caseSTStructInitializerExpression(STStructInitializerExpression object) {
+				return createSTStructInitializerExpressionAdapter();
+			}
+			@Override
+			public Adapter caseSTStructInitElement(STStructInitElement object) {
+				return createSTStructInitElementAdapter();
+			}
+			@Override
 			public Adapter caseINamedElement(INamedElement object) {
 				return createINamedElementAdapter();
 			}
@@ -955,6 +963,34 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTCommentAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression <em>ST Struct Initializer Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression
+	 * @generated
+	 */
+	public Adapter createSTStructInitializerExpressionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement <em>ST Struct Init Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement
+	 * @generated
+	 */
+	public Adapter createSTStructInitElementAdapter() {
 		return null;
 	}
 

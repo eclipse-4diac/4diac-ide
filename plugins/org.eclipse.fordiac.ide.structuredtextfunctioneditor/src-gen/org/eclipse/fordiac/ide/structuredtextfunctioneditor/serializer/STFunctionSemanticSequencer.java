@@ -38,6 +38,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
@@ -157,6 +159,12 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 				return; 
 			case STCorePackage.ST_STRING_LITERAL:
 				sequence_STStringLiteral(context, (STStringLiteral) semanticObject); 
+				return; 
+			case STCorePackage.ST_STRUCT_INIT_ELEMENT:
+				sequence_STStructInitElement(context, (STStructInitElement) semanticObject); 
+				return; 
+			case STCorePackage.ST_STRUCT_INITIALIZER_EXPRESSION:
+				sequence_STStructInitializerExpression(context, (STStructInitializerExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_TIME_LITERAL:
 				sequence_STTimeLiteral(context, (STTimeLiteral) semanticObject); 

@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
@@ -48,6 +47,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifier
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
@@ -58,6 +58,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
@@ -110,6 +111,17 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected CharSequence generateMultiArrayInitElement(STArrayInitElement elem) //
 	'''«FOR i : 0..<(elem.indexOrInitExpression as STElementaryInitializerExpression).value.integerFromConstantExpression SEPARATOR ", "»«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateInitializerExpression»«ENDFOR»«ENDFOR»'''
+
+	def protected dispatch CharSequence generateInitializerExpression(STStructInitializerExpression expr) //
+	'''{«FOR elem : expr.generateStructInitElements SEPARATOR ", "»«elem»«ENDFOR»}'''
+
+	def protected Iterable<CharSequence> generateStructInitElements(STStructInitializerExpression expr) {
+		expr.mappedStructInitElements.entrySet.map[key.generateStructInitElement(value)]
+	}
+
+	def protected CharSequence generateStructInitElement(INamedElement variable, STInitializerExpression value) {
+		if(value === null) variable.generateVariableDefaultValue else value.generateInitializerExpression
+	}
 
 	def protected CharSequence generateStatementList(List<STStatement> statements) '''
 		«FOR statement : statements»

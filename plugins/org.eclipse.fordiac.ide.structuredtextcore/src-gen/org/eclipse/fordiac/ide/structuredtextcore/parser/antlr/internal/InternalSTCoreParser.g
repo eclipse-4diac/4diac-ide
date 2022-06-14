@@ -394,6 +394,15 @@ ruleSTInitializerExpression returns [EObject current=null]
 			$current = $this_STArrayInitializerExpression_1.current;
 			afterParserOrEnumRuleCall();
 		}
+		    |
+		{
+			newCompositeNode(grammarAccess.getSTInitializerExpressionAccess().getSTStructInitializerExpressionParserRuleCall_2());
+		}
+		this_STStructInitializerExpression_2=ruleSTStructInitializerExpression
+		{
+			$current = $this_STStructInitializerExpression_2.current;
+			afterParserOrEnumRuleCall();
+		}
 	)
 ;
 
@@ -593,6 +602,135 @@ ruleSTArrayInitElement returns [EObject current=null]
 				newLeafNode(otherlv_5, grammarAccess.getSTArrayInitElementAccess().getRightParenthesisKeyword_1_3());
 			}
 		)?
+	)
+;
+
+// Entry rule entryRuleSTStructInitializerExpression
+entryRuleSTStructInitializerExpression returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTStructInitializerExpressionRule()); }
+	iv_ruleSTStructInitializerExpression=ruleSTStructInitializerExpression
+	{ $current=$iv_ruleSTStructInitializerExpression.current; }
+	EOF;
+
+// Rule STStructInitializerExpression
+ruleSTStructInitializerExpression returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		otherlv_0=LeftParenthesis
+		{
+			newLeafNode(otherlv_0, grammarAccess.getSTStructInitializerExpressionAccess().getLeftParenthesisKeyword_0());
+		}
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTStructInitializerExpressionAccess().getValuesSTStructInitElementParserRuleCall_1_0());
+				}
+				lv_values_1_0=ruleSTStructInitElement
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTStructInitializerExpressionRule());
+					}
+					add(
+						$current,
+						"values",
+						lv_values_1_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STStructInitElement");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		(
+			otherlv_2=Comma
+			{
+				newLeafNode(otherlv_2, grammarAccess.getSTStructInitializerExpressionAccess().getCommaKeyword_2_0());
+			}
+			(
+				(
+					{
+						newCompositeNode(grammarAccess.getSTStructInitializerExpressionAccess().getValuesSTStructInitElementParserRuleCall_2_1_0());
+					}
+					lv_values_3_0=ruleSTStructInitElement
+					{
+						if ($current==null) {
+							$current = createModelElementForParent(grammarAccess.getSTStructInitializerExpressionRule());
+						}
+						add(
+							$current,
+							"values",
+							lv_values_3_0,
+							"org.eclipse.fordiac.ide.structuredtextcore.STCore.STStructInitElement");
+						afterParserOrEnumRuleCall();
+					}
+				)
+			)
+		)*
+		otherlv_4=RightParenthesis
+		{
+			newLeafNode(otherlv_4, grammarAccess.getSTStructInitializerExpressionAccess().getRightParenthesisKeyword_3());
+		}
+	)
+;
+
+// Entry rule entryRuleSTStructInitElement
+entryRuleSTStructInitElement returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTStructInitElementRule()); }
+	iv_ruleSTStructInitElement=ruleSTStructInitElement
+	{ $current=$iv_ruleSTStructInitElement.current; }
+	EOF;
+
+// Rule STStructInitElement
+ruleSTStructInitElement returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			(
+				{
+					if ($current==null) {
+						$current = createModelElement(grammarAccess.getSTStructInitElementRule());
+					}
+				}
+				{
+					newCompositeNode(grammarAccess.getSTStructInitElementAccess().getVariableINamedElementCrossReference_0_0());
+				}
+				ruleSTFeatureName
+				{
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		otherlv_1=ColonEqualsSign
+		{
+			newLeafNode(otherlv_1, grammarAccess.getSTStructInitElementAccess().getColonEqualsSignKeyword_1());
+		}
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTStructInitElementAccess().getValueSTInitializerExpressionParserRuleCall_2_0());
+				}
+				lv_value_2_0=ruleSTInitializerExpression
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTStructInitElementRule());
+					}
+					set(
+						$current,
+						"value",
+						lv_value_2_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STInitializerExpression");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
 	)
 ;
 

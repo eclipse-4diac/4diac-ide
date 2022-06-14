@@ -38,6 +38,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
@@ -156,6 +158,12 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				return; 
 			case STCorePackage.ST_STRING_LITERAL:
 				sequence_STStringLiteral(context, (STStringLiteral) semanticObject); 
+				return; 
+			case STCorePackage.ST_STRUCT_INIT_ELEMENT:
+				sequence_STStructInitElement(context, (STStructInitElement) semanticObject); 
+				return; 
+			case STCorePackage.ST_STRUCT_INITIALIZER_EXPRESSION:
+				sequence_STStructInitializerExpression(context, (STStructInitializerExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_TIME_LITERAL:
 				sequence_STTimeLiteral(context, (STTimeLiteral) semanticObject); 
@@ -862,6 +870,44 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 * </pre>
 	 */
 	protected void sequence_STStringLiteral(ISerializationContext context, STStringLiteral semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     STStructInitElement returns STStructInitElement
+	 *
+	 * Constraint:
+	 *     (variable=[INamedElement|STFeatureName] value=STInitializerExpression)
+	 * </pre>
+	 */
+	protected void sequence_STStructInitElement(ISerializationContext context, STStructInitElement semanticObject) {
+		if (errorAcceptor != null) {
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_STRUCT_INIT_ELEMENT__VARIABLE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_STRUCT_INIT_ELEMENT__VARIABLE));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_STRUCT_INIT_ELEMENT__VALUE) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_STRUCT_INIT_ELEMENT__VALUE));
+		}
+		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
+		feeder.accept(grammarAccess.getSTStructInitElementAccess().getVariableINamedElementSTFeatureNameParserRuleCall_0_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_STRUCT_INIT_ELEMENT__VARIABLE, false));
+		feeder.accept(grammarAccess.getSTStructInitElementAccess().getValueSTInitializerExpressionParserRuleCall_2_0(), semanticObject.getValue());
+		feeder.finish();
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     STInitializerExpression returns STStructInitializerExpression
+	 *     STStructInitializerExpression returns STStructInitializerExpression
+	 *
+	 * Constraint:
+	 *     (values+=STStructInitElement values+=STStructInitElement*)
+	 * </pre>
+	 */
+	protected void sequence_STStructInitializerExpression(ISerializationContext context, STStructInitializerExpression semanticObject) {
 		genericSequencer.createSequence(context, semanticObject);
 	}
 	

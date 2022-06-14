@@ -68,6 +68,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpres
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitElement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
@@ -248,6 +250,8 @@ final class STCoreUtil {
 					expectedType
 				else
 					ElementaryTypes.INT
+			STStructInitElement:
+				variable.featureType
 			STCallNamedInputArgument:
 				// get parameter (target) but don't resolve
 				switch (parameter: parameterNoresolve) {
@@ -267,7 +271,9 @@ final class STCoreUtil {
 		switch (it : expression.eContainer) {
 			STVarDeclaration: type
 			STArrayInitElement: expectedType
+			STStructInitElement: variable.featureType
 			STArrayInitializerExpression: expectedType
+			STStructInitializerExpression: expectedType
 		}
 	}
 

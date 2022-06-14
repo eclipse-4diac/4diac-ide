@@ -459,6 +459,24 @@ public interface STCoreFactory extends EFactory {
 	STComment createSTComment();
 
 	/**
+	 * Returns a new object of class '<em>ST Struct Initializer Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Struct Initializer Expression</em>'.
+	 * @generated
+	 */
+	STStructInitializerExpression createSTStructInitializerExpression();
+
+	/**
+	 * Returns a new object of class '<em>ST Struct Init Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Struct Init Element</em>'.
+	 * @generated
+	 */
+	STStructInitElement createSTStructInitElement();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

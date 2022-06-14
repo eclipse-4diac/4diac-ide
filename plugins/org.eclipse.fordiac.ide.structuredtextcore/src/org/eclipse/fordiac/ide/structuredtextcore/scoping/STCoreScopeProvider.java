@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression;
 import org.eclipse.xtext.naming.QualifiedName;
 import org.eclipse.xtext.resource.EObjectDescription;
 import org.eclipse.xtext.resource.IEObjectDescription;
@@ -142,6 +143,14 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 			}
 		} else if (reference == STCorePackage.Literals.ST_FOR_STATEMENT__VARIABLE) {
 			return filterScope(super.getScope(context, reference), this::isApplicableForVariableReference);
+		} else if (reference == STCorePackage.Literals.ST_STRUCT_INIT_ELEMENT__VARIABLE) {
+			final var container = context.eContainer();
+			if (container instanceof STStructInitializerExpression) {
+				final var initializerType = ((STStructInitializerExpression) container).getResultType();
+				if (initializerType instanceof StructuredType) {
+					return scopeFor(((StructuredType) initializerType).getMemberVariables());
+				}
+			}
 		}
 		return IScope.NULLSCOPE;
 	}

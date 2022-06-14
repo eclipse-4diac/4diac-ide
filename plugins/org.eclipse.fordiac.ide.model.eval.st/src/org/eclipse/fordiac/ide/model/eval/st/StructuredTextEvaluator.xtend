@@ -68,6 +68,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStructInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
@@ -145,6 +146,15 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 					}
 				}
 			}
+		}
+		variable
+	}
+
+	def protected dispatch Variable<?> evaluateInitializerExpression(Variable<?> variable,
+		STStructInitializerExpression expression) {
+		val value = variable.value as StructValue
+		for (elem : expression.values) {
+			value.get(elem.variable.name).evaluateInitializerExpression(elem.value)
 		}
 		variable
 	}

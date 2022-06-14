@@ -123,6 +123,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION: return createSTMultibitPartialExpression();
 			case STCorePackage.ST_STANDARD_FUNCTION: return createSTStandardFunction();
 			case STCorePackage.ST_COMMENT: return createSTComment();
+			case STCorePackage.ST_STRUCT_INITIALIZER_EXPRESSION: return createSTStructInitializerExpression();
+			case STCorePackage.ST_STRUCT_INIT_ELEMENT: return createSTStructInitElement();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -709,6 +711,28 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	public STComment createSTComment() {
 		STCommentImpl stComment = new STCommentImpl();
 		return stComment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STStructInitializerExpression createSTStructInitializerExpression() {
+		STStructInitializerExpressionImpl stStructInitializerExpression = new STStructInitializerExpressionImpl();
+		return stStructInitializerExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STStructInitElement createSTStructInitElement() {
+		STStructInitElementImpl stStructInitElement = new STStructInitElementImpl();
+		return stStructInitElement;
 	}
 
 	/**

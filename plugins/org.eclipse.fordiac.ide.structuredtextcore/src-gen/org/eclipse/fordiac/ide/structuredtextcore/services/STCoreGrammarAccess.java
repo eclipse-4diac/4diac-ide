@@ -472,12 +472,13 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final RuleCall cSTElementaryInitializerExpressionParserRuleCall_0 = (RuleCall)cAlternatives.eContents().get(0);
 		private final RuleCall cSTArrayInitializerExpressionParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
+		private final RuleCall cSTStructInitializerExpressionParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
 		
 		//STInitializerExpression:
-		//    STElementaryInitializerExpression | STArrayInitializerExpression;
+		//    STElementaryInitializerExpression | STArrayInitializerExpression | STStructInitializerExpression;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//STElementaryInitializerExpression | STArrayInitializerExpression
+		//STElementaryInitializerExpression | STArrayInitializerExpression | STStructInitializerExpression
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//STElementaryInitializerExpression
@@ -485,6 +486,9 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//STArrayInitializerExpression
 		public RuleCall getSTArrayInitializerExpressionParserRuleCall_1() { return cSTArrayInitializerExpressionParserRuleCall_1; }
+		
+		//STStructInitializerExpression
+		public RuleCall getSTStructInitializerExpressionParserRuleCall_2() { return cSTStructInitializerExpressionParserRuleCall_2; }
 	}
 	public class STElementaryInitializerExpressionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STElementaryInitializerExpression");
@@ -602,6 +606,84 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//')'
 		public Keyword getRightParenthesisKeyword_1_3() { return cRightParenthesisKeyword_1_3; }
+	}
+	public class STStructInitializerExpressionElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STStructInitializerExpression");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Keyword cLeftParenthesisKeyword_0 = (Keyword)cGroup.eContents().get(0);
+		private final Assignment cValuesAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cValuesSTStructInitElementParserRuleCall_1_0 = (RuleCall)cValuesAssignment_1.eContents().get(0);
+		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
+		private final Keyword cCommaKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
+		private final Assignment cValuesAssignment_2_1 = (Assignment)cGroup_2.eContents().get(1);
+		private final RuleCall cValuesSTStructInitElementParserRuleCall_2_1_0 = (RuleCall)cValuesAssignment_2_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_3 = (Keyword)cGroup.eContents().get(3);
+		
+		//STStructInitializerExpression:
+		//    '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
+		@Override public ParserRule getRule() { return rule; }
+		
+		//'(' values+=STStructInitElement (',' values+=STStructInitElement)* ')'
+		public Group getGroup() { return cGroup; }
+		
+		//'('
+		public Keyword getLeftParenthesisKeyword_0() { return cLeftParenthesisKeyword_0; }
+		
+		//values+=STStructInitElement
+		public Assignment getValuesAssignment_1() { return cValuesAssignment_1; }
+		
+		//STStructInitElement
+		public RuleCall getValuesSTStructInitElementParserRuleCall_1_0() { return cValuesSTStructInitElementParserRuleCall_1_0; }
+		
+		//(',' values+=STStructInitElement)*
+		public Group getGroup_2() { return cGroup_2; }
+		
+		//','
+		public Keyword getCommaKeyword_2_0() { return cCommaKeyword_2_0; }
+		
+		//values+=STStructInitElement
+		public Assignment getValuesAssignment_2_1() { return cValuesAssignment_2_1; }
+		
+		//STStructInitElement
+		public RuleCall getValuesSTStructInitElementParserRuleCall_2_1_0() { return cValuesSTStructInitElementParserRuleCall_2_1_0; }
+		
+		//')'
+		public Keyword getRightParenthesisKeyword_3() { return cRightParenthesisKeyword_3; }
+	}
+	public class STStructInitElementElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STStructInitElement");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Assignment cVariableAssignment_0 = (Assignment)cGroup.eContents().get(0);
+		private final CrossReference cVariableINamedElementCrossReference_0_0 = (CrossReference)cVariableAssignment_0.eContents().get(0);
+		private final RuleCall cVariableINamedElementSTFeatureNameParserRuleCall_0_0_1 = (RuleCall)cVariableINamedElementCrossReference_0_0.eContents().get(1);
+		private final Keyword cColonEqualsSignKeyword_1 = (Keyword)cGroup.eContents().get(1);
+		private final Assignment cValueAssignment_2 = (Assignment)cGroup.eContents().get(2);
+		private final RuleCall cValueSTInitializerExpressionParserRuleCall_2_0 = (RuleCall)cValueAssignment_2.eContents().get(0);
+		
+		//STStructInitElement:
+		//    variable=[libraryElement::INamedElement|STFeatureName] ':=' value=STInitializerExpression;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//variable=[libraryElement::INamedElement|STFeatureName] ':=' value=STInitializerExpression
+		public Group getGroup() { return cGroup; }
+		
+		//variable=[libraryElement::INamedElement|STFeatureName]
+		public Assignment getVariableAssignment_0() { return cVariableAssignment_0; }
+		
+		//[libraryElement::INamedElement|STFeatureName]
+		public CrossReference getVariableINamedElementCrossReference_0_0() { return cVariableINamedElementCrossReference_0_0; }
+		
+		//STFeatureName
+		public RuleCall getVariableINamedElementSTFeatureNameParserRuleCall_0_0_1() { return cVariableINamedElementSTFeatureNameParserRuleCall_0_0_1; }
+		
+		//':='
+		public Keyword getColonEqualsSignKeyword_1() { return cColonEqualsSignKeyword_1; }
+		
+		//value=STInitializerExpression
+		public Assignment getValueAssignment_2() { return cValueAssignment_2; }
+		
+		//STInitializerExpression
+		public RuleCall getValueSTInitializerExpressionParserRuleCall_2_0() { return cValueSTInitializerExpressionParserRuleCall_2_0; }
 	}
 	public class STStatementElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STStatement");
@@ -3466,6 +3548,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final STElementaryInitializerExpressionElements pSTElementaryInitializerExpression;
 	private final STArrayInitializerExpressionElements pSTArrayInitializerExpression;
 	private final STArrayInitElementElements pSTArrayInitElement;
+	private final STStructInitializerExpressionElements pSTStructInitializerExpression;
+	private final STStructInitElementElements pSTStructInitElement;
 	private final STStatementElements pSTStatement;
 	private final STAssignmentStatementElements pSTAssignmentStatement;
 	private final STCallStatementElements pSTCallStatement;
@@ -3573,6 +3657,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pSTElementaryInitializerExpression = new STElementaryInitializerExpressionElements();
 		this.pSTArrayInitializerExpression = new STArrayInitializerExpressionElements();
 		this.pSTArrayInitElement = new STArrayInitElementElements();
+		this.pSTStructInitializerExpression = new STStructInitializerExpressionElements();
+		this.pSTStructInitElement = new STStructInitElementElements();
 		this.pSTStatement = new STStatementElements();
 		this.pSTAssignmentStatement = new STAssignmentStatementElements();
 		this.pSTCallStatement = new STCallStatementElements();
@@ -3773,7 +3859,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STInitializerExpression:
-	//    STElementaryInitializerExpression | STArrayInitializerExpression;
+	//    STElementaryInitializerExpression | STArrayInitializerExpression | STStructInitializerExpression;
 	public STInitializerExpressionElements getSTInitializerExpressionAccess() {
 		return pSTInitializerExpression;
 	}
@@ -3811,6 +3897,26 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	public ParserRule getSTArrayInitElementRule() {
 		return getSTArrayInitElementAccess().getRule();
+	}
+	
+	//STStructInitializerExpression:
+	//    '(' values+=STStructInitElement (',' values+=STStructInitElement)* ')';
+	public STStructInitializerExpressionElements getSTStructInitializerExpressionAccess() {
+		return pSTStructInitializerExpression;
+	}
+	
+	public ParserRule getSTStructInitializerExpressionRule() {
+		return getSTStructInitializerExpressionAccess().getRule();
+	}
+	
+	//STStructInitElement:
+	//    variable=[libraryElement::INamedElement|STFeatureName] ':=' value=STInitializerExpression;
+	public STStructInitElementElements getSTStructInitElementAccess() {
+		return pSTStructInitElement;
+	}
+	
+	public ParserRule getSTStructInitElementRule() {
+		return getSTStructInitElementAccess().getRule();
 	}
 	
 	//STStatement:

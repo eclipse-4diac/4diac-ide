@@ -314,5 +314,22 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STComment/text"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STComment/position"/>
     </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STStructInitializerExpression">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStructInitializerExpression/values"/>
+      <genOperations ecoreOperation="STCore.ecore#//STStructInitializerExpression/getResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STStructInitializerExpression/getDeclaredResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STStructInitializerExpression/getMappedStructInitElements"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedStructInitElements(this);"/>
+    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STStructInitElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference STCore.ecore#//STStructInitElement/variable"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STStructInitElement/value"/>
+      <genOperations ecoreOperation="STCore.ecore#//STStructInitElement/getResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STStructInitElement/getDeclaredResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>
