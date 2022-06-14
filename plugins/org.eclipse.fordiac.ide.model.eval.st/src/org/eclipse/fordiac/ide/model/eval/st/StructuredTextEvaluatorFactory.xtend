@@ -30,6 +30,8 @@ class StructuredTextEvaluatorFactory implements EvaluatorFactory {
 			new STMethodEvaluator(source, context, variables, parent)
 		} else if (source instanceof STFunction) {
 			new STFunctionEvaluator(source, context, variables, parent)
+		} else if (source instanceof String) {
+			new ScopedExpressionEvaluator(source, context, variables, parent)
 		}
 	}
 
@@ -39,5 +41,6 @@ class StructuredTextEvaluatorFactory implements EvaluatorFactory {
 		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(ECTransition, factory)
 		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(STMethod, factory)
 		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(STFunction, factory)
+		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(String, factory)
 	}
 }

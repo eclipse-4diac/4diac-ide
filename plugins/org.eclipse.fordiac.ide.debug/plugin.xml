@@ -28,5 +28,12 @@
             name="Evaluator Source Locator">
       </sourceLocator>
    </extension>
+   <extension
+         point="org.eclipse.debug.core.watchExpressionDelegates">
+      <watchExpressionDelegate
+            debugModel="org.eclipse.fordiac.ide.debug.model"
+            delegateClass="org.eclipse.fordiac.ide.debug.EvaluatorWatchExpressionDelegate">
+      </watchExpressionDelegate>
+   </extension>
 
 </plugin>
