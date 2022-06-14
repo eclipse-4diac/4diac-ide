@@ -43,6 +43,12 @@ public class FordiacConnectionDragCreationTool extends ConnectionDragCreationToo
 	}
 
 	@Override
+	public void deactivate() {
+		stopHover();
+		super.deactivate();
+	}
+
+	@Override
 	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
 		if (isActive() && viewer instanceof AdvancedScrollingGraphicalViewer) {
 			((AdvancedScrollingGraphicalViewer) viewer)
