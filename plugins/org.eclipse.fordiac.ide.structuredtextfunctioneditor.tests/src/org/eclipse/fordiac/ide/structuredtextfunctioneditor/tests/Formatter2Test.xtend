@@ -864,8 +864,8 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing
-				                                                               // elit, sed do eiusmod tempor incididunt ut labore et
-				                                                               // dolore magna aliqua.
+				// elit, sed do eiusmod tempor incididunt ut labore et
+				// dolore magna aliqua.
 					bol1 := TRUE;
 				END_IF;
 				
@@ -890,11 +890,11 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing
-				                                                               // elit, sed do eiusmod tempor incididunt ut labore et
-				                                                               // dolore magna aliqua. Ut enim ad minim veniam, quis
-				                                                               // nostrud exercitation ullamco laboris nisi ut aliquip
-				                                                               // ex ea commodo consequat. Duis aute irure dolor in
-				                                                               // reprehenderit
+				// elit, sed do eiusmod tempor incididunt ut labore et
+				// dolore magna aliqua. Ut enim ad minim veniam, quis
+				// nostrud exercitation ullamco laboris nisi ut aliquip
+				// ex ea commodo consequat. Duis aute irure dolor in
+				// reprehenderit
 					bol1 := TRUE;
 				END_IF;
 				
@@ -943,7 +943,7 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // DasisteinlangesWortdasdiemaximaleZeilenlängeüberschrei
-				                                                               // tensollohneLeerzeichen
+				// tensollohneLeerzeichen
 					bol1 := TRUE;
 				END_IF;
 				

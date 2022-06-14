@@ -461,8 +461,8 @@ class STCoreFormatter extends AbstractFormatter2 {
 		val matcher = pattern.matcher(commentString);
 
 		val replacement = (isML ? "(" : "") + matcher.replaceAll [ m |
-			spaceBeforeComment + (isML ? " * " : "// ") + (m.group(1) ?: m.group(2)) + lineSeparator
-		].trim + (isML ? " *)" : "\n");
+			(isML ? spaceBeforeComment : "") + (isML ? " * " : "// ") + (m.group(1) ?: m.group(2)) + lineSeparator
+		].trim + (isML ? " *)" : lineSeparator);
 
 		context.addReplacement(region.replaceWith(replacement))
 
