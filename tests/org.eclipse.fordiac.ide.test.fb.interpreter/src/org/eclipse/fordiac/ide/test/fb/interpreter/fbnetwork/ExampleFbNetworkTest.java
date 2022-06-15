@@ -20,6 +20,8 @@ public class ExampleFbNetworkTest extends AbstractInterpreterTest {
 		EList<Transaction> returnedTrasactions =
 				runFBNetworkTest(network, (Event) network.getFBNamed("E_SR").getInterfaceElement("S")); //$NON-NLS-1$ //$NON-NLS-2$
 		
+		
+		
 		System.out.println("Check each transaction and EventOcurrencce");
 	}
 	

@@ -36,7 +36,7 @@ public final class VariableUtils {
 	public static final Map<Class<?>, Consumer<Value>> initVariables =
 			Map.of(
 					AnyStringType.class, v -> v.setValue(""), //$NON-NLS-1$
-					AnyIntType.class, v -> v.setValue("0"), // TODO check: replace with AnyNumType? //$NON-NLS-1$
+					AnyIntType.class, v -> v.setValue("0"),  //$NON-NLS-1$
 					BoolType.class, v -> v.setValue("false") //$NON-NLS-1$
 					);
 
@@ -45,7 +45,10 @@ public final class VariableUtils {
 		if (varDeclaration.getType() == null) {
 			varDeclaration.setType(lib.getType(varDeclaration.getTypeName()));
 		}
-		if (varDeclaration.getValue() == null) {
+		//In case the value is incomplete we take a default value
+		if (varDeclaration.getValue() == null || 
+				varDeclaration.getValue().getValue() == null || 
+					varDeclaration.getValue().getValue().isBlank()) {
 			//TODO refactor to return the value...faster
 			final var value = LibraryElementFactory.eINSTANCE.createValue();
 			initVariables.entrySet().stream().forEach(entry -> {
