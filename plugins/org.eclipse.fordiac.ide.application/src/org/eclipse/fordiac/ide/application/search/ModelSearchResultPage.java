@@ -35,7 +35,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ColumnPixelData;
-import org.eclipse.jface.viewers.DoubleClickEvent;
+import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TableLayout;
@@ -46,6 +46,7 @@ import org.eclipse.search.ui.IContextMenuConstants;
 import org.eclipse.search.ui.ISearchResult;
 import org.eclipse.search.ui.text.AbstractTextSearchViewPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
@@ -113,12 +114,15 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		throw new IllegalStateException("Doesn't support tree mode."); //$NON-NLS-1$
 	}
 
+	@Override
+	protected TableViewer createTableViewer(Composite parent) {
+		return new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
+	}
 	// This method is called if the page was constructed with the flag FLAG_LAYOUT_FLAT (see constructor)
 	@Override
 	protected void configureTableViewer(final TableViewer viewer) {
 		contentProvider = new ModelSearchTableContentProvider(this);
 		viewer.setContentProvider(contentProvider);
-
 		final Table table = viewer.getTable();
 		table.setHeaderVisible(true);
 		table.setLinesVisible(true);
@@ -187,11 +191,10 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 			}
 
 		});
-		viewer.addDoubleClickListener(ModelSearchResultPage::jumpToBlock);
 	}
 
 	// Double click to access the element we looked for
-	private static void jumpToBlock(final DoubleClickEvent doubleClick) {
+	private static void jumpToBlock(final OpenEvent doubleClick) {
 		final StructuredSelection selectionList = (StructuredSelection) doubleClick.getSelection();
 		if (!selectionList.isEmpty()) {
 			final Object selection = selectionList.getFirstElement();
@@ -216,7 +219,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		}
 		if (eobj instanceof Application) {
 			return eobj;
-		} else if (eobj instanceof FBType) {
+		}
+		if (eobj instanceof FBType) {
 			return eobj;
 		}
 		return eobj.eContainer().eContainer();
@@ -235,14 +239,17 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 			final Device device = (Device) element;
 			// systemname.device
 			return device.getAutomationSystem().getName() + "." + device.getName(); //$NON-NLS-1$
-		} else if (element instanceof Resource) {
+		}
+		if (element instanceof Resource) {
 			final Resource res = (Resource) element;
 			// systemname.devicename.resource
 			return res.getDevice().getAutomationSystem().getName() + "." + res.getDevice().getName() + "."  //$NON-NLS-1$
 					+ res.getName();
-		} else if (element instanceof Application) {
+		}
+		if (element instanceof Application) {
 			return ((Application) element).getName();
-		} else if (element instanceof FBType) {
+		}
+		if (element instanceof FBType) {
 			return ((FBType) element).getName();
 		}
 		return element.toString();
@@ -262,6 +269,11 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	@Override
 	public StructuredViewer getViewer() {
 		return super.getViewer();
+	}
+
+	@Override
+	protected void handleOpen(OpenEvent event) {
+		ModelSearchResultPage.jumpToBlock(event);
 	}
 
 	public static void showResult(final EObject obj) {
