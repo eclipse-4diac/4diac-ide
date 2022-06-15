@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -41,6 +42,7 @@ public class CopyElementsToGroupCommand extends Command {
 		elementsToAdd.addAll(pasteCommand.getCopiedFBs());
 		addElements = new AddElementsToGroup(targetGroup, elementsToAdd, offset);
 		addElements.execute();
+		ElementSelector.selectViewObjects(elementsToAdd);
 	}
 
 	@Override
