@@ -209,18 +209,13 @@ final class ValueOperations {
 					new String(value.stringValue.getBytes(StandardCharsets.UTF_16BE), StandardCharsets.UTF_16LE))
 			WCharValue:
 				WCharValue.toWCharValue(Character.reverseBytes(value.charValue))
-			LDateValue:
-				LDateValue.toLDateValue(Long.reverseBytes(value.toNanos))
-			DateValue:
-				DateValue.toDateValue(Long.reverseBytes(value.toNanos))
-			LTimeOfDayValue:
-				LTimeOfDayValue.toLTimeOfDayValue(Long.reverseBytes(value.toNanos))
-			TimeOfDayValue:
-				TimeOfDayValue.toTimeOfDayValue(Long.reverseBytes(value.toNanos))
-			LDateAndTimeValue:
-				LDateAndTimeValue.toLDateAndTimeValue(Long.reverseBytes(value.toNanos))
+			LDateValue,
+			DateValue,
+			LTimeOfDayValue,
+			TimeOfDayValue,
+			LDateAndTimeValue,
 			DateAndTimeValue:
-				DateAndTimeValue.toDateAndTimeValue(Long.reverseBytes(value.toNanos))
+				value // do not convert
 			ArrayValue: {
 				val temp = new ArrayVariable("TEMP", value.type, value)
 				temp.forEach[variable|variable.value = variable.value.reverseBytes]

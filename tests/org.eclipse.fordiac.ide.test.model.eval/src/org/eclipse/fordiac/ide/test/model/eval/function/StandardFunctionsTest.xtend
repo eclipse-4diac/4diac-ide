@@ -981,17 +981,17 @@ class StandardFunctionsTest {
 		0x0417000000000000#L.toTimeValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toTimeValue))
 		0x0417000000000000#L.toLTimeValue.assertEquals(
 			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLTimeValue))
-		0x0417000000000000#L.toDateValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toDateValue))
-		0x0417000000000000#L.toLDateValue.assertEquals(
-			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLDateValue))
-		0x0417000000000000#L.toTimeOfDayValue.assertEquals(
-			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toTimeOfDayValue))
-		0x0417000000000000#L.toLTimeOfDayValue.assertEquals(
-			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLTimeOfDayValue))
-		0x0417000000000000#L.toDateAndTimeValue.assertEquals(
-			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toDateAndTimeValue))
-		0x0417000000000000#L.toLDateAndTimeValue.assertEquals(
-			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLDateAndTimeValue))
+		0x1704.toDateValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toDateValue)) // not converted
+		0x1704.toLDateValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLDateValue)) // not converted
+		0x1704.toTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toTimeOfDayValue)) // not converted
+		0x1704.toLTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLTimeOfDayValue)) // not converted
+		0x1704.toDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toDateAndTimeValue)) // not converted
+		0x1704.toLDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLDateAndTimeValue)) // not converted
 		'a'.toCharValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 'a'.toCharValue))
 		"abc".toStringValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", "abc".toStringValue))
 		'\u6100'.toWCharValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 'a'.toWCharValue))
@@ -1059,17 +1059,17 @@ class StandardFunctionsTest {
 		0x1704.toLTimeValue.assertEquals(
 			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toLTimeValue))
 		0x1704.toDateValue.assertEquals(
-			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toDateValue))
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toDateValue)) // not converted
 		0x1704.toLDateValue.assertEquals(
-			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toLDateValue))
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toLDateValue)) // not converted
 		0x1704.toTimeOfDayValue.assertEquals(
-			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toTimeOfDayValue))
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toTimeOfDayValue)) // not converted
 		0x1704.toLTimeOfDayValue.assertEquals(
-			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toLTimeOfDayValue))
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toLTimeOfDayValue)) // not converted
 		0x1704.toDateAndTimeValue.assertEquals(
-			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toDateAndTimeValue))
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toDateAndTimeValue)) // not converted
 		0x1704.toLDateAndTimeValue.assertEquals(
-			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toLDateAndTimeValue))
+			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toLDateAndTimeValue)) // not converted
 		'a'.toCharValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 'a'.toCharValue))
 		"abc".toStringValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", "abc".toStringValue))
 		'a'.toWCharValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", '\u6100'.toWCharValue))
