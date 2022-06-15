@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.eval.value
 
 import java.time.LocalTime
+import java.time.temporal.ChronoField
 import org.eclipse.fordiac.ide.model.data.LtodType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter
@@ -23,6 +24,7 @@ class LTimeOfDayValue implements AnyDateValue {
 	public static final LTimeOfDayValue DEFAULT = new LTimeOfDayValue(0)
 
 	private new(long value) {
+		ChronoField.NANO_OF_DAY.checkValidValue(value)
 		this.value = value;
 	}
 
