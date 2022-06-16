@@ -160,6 +160,10 @@ public class FBTImporter extends TypeImporter {
 			case LibraryElementTags.SERVICE_ELEMENT:
 				parseService(getElement());
 				break;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(getElement());
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				break;
 			default:
 				return false;
 			}
@@ -417,38 +421,17 @@ public class FBTImporter extends TypeImporter {
 	 * @throws TypeImportException the FBT import exception
 	 * @throws XMLStreamException */
 	private void parseBasicFB(final BasicFBType type) throws TypeImportException, XMLStreamException {
-		processChildren(LibraryElementTags.BASIC_F_B_ELEMENT, name -> {
-			switch (name) {
-			case LibraryElementTags.INTERNAL_VARS_ELEMENT:
-				parseInternalVars(type);
-				break;
-			case LibraryElementTags.ECC_ELEMENT:
-				parseECC(type);
-				break;
-			case LibraryElementTags.ALGORITHM_ELEMENT:
-				final Algorithm alg = parseAlgorithm();
-				if (null != alg) {
-					type.getCallables().add(alg);
-					final List<ECAction> list = algorithmNameECActionMapping.get(alg.getName());
-					if (null != list) {
-						for (final ECAction action : list) {
-							action.setAlgorithm(alg);
-						}
-					}
-				}
-				break;
-			case LibraryElementTags.METHOD_ELEMENT:
-				final Method method = parseMethod();
-				if (null != method) {
-					type.getCallables().add(method);
-				}
-				break;
-			default:
-				return false;
-			}
-			return true;
-		});
+		processChildren(LibraryElementTags.BASIC_F_B_ELEMENT, name -> handleBasicFBChildren(type, name));
 
+	}
+
+	private boolean handleBasicFBChildren(final BasicFBType type, final String name)
+			throws TypeImportException, XMLStreamException {
+		if (LibraryElementTags.ECC_ELEMENT.equals(name)) {
+			parseECC(type);
+			return true;
+		}
+		return handleBaseFBChildren(type, name);
 	}
 
 	/** This method parses a SimpleFBType.
@@ -458,28 +441,41 @@ public class FBTImporter extends TypeImporter {
 	 * @throws TypeImportException the FBT import exception
 	 * @throws XMLStreamException */
 	private void parseSimpleFB(final SimpleFBType type) throws TypeImportException, XMLStreamException {
-		processChildren(LibraryElementTags.SIMPLE_F_B_ELEMENT, name -> {
-			switch (name) {
-			case LibraryElementTags.INTERNAL_VARS_ELEMENT:
-				parseInternalVars(type);
-				break;
-			case LibraryElementTags.ALGORITHM_ELEMENT:
-				final Algorithm alg = parseAlgorithm();
-				if (null != alg) {
-					type.getCallables().add(alg);
+		processChildren(LibraryElementTags.SIMPLE_F_B_ELEMENT, name -> handleBaseFBChildren(type, name));
+	}
+
+	private boolean handleBaseFBChildren(final BaseFBType type, final String name)
+			throws TypeImportException, XMLStreamException {
+		switch (name) {
+		case LibraryElementTags.INTERNAL_VARS_ELEMENT:
+			parseInternalVars(type);
+			break;
+		case LibraryElementTags.ALGORITHM_ELEMENT:
+			final Algorithm alg = parseAlgorithm();
+			if (null != alg) {
+				type.getCallables().add(alg);
+				final List<ECAction> list = algorithmNameECActionMapping.get(alg.getName());
+				if (null != list) {
+					for (final ECAction action : list) {
+						action.setAlgorithm(alg);
+					}
 				}
-				break;
-			case LibraryElementTags.METHOD_ELEMENT:
-				final Method method = parseMethod();
-				if (null != method) {
-					type.getCallables().add(method);
-				}
-				break;
-			default:
-				return false;
 			}
-			return true;
-		});
+			break;
+		case LibraryElementTags.METHOD_ELEMENT:
+			final Method method = parseMethod();
+			if (null != method) {
+				type.getCallables().add(method);
+			}
+			break;
+		case LibraryElementTags.ATTRIBUTE_ELEMENT:
+			parseGenericAttributeNode(getElement());
+			proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+			break;
+		default:
+			return false;
+		}
+		return true;
 	}
 
 	/** This method parses an Algorithm.
