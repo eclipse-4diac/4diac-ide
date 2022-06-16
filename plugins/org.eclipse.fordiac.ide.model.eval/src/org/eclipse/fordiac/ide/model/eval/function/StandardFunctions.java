@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.model.eval.value.AnyBitValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyDurationValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyIntValue;
-import org.eclipse.fordiac.ide.model.eval.value.AnyMagnitudeValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyNumValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyRealValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue;
@@ -121,22 +120,22 @@ public interface StandardFunctions extends Functions {
 
 	@SuppressWarnings("unchecked")
 	@Comment("Calculate the sum of inputs")
-	static <T extends AnyMagnitudeValue> T ADD(@Comment("The input value {0}") final T... values) {
+	static <T extends AnyNumValue> T ADD(@Comment("The input value {0}") final T... values) {
 		return Stream.of(values).reduce((a, b) -> (T) ValueOperations.add(a, b)).orElseThrow();
 	}
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyMagnitudeValue> T MUL(final T... values) {
+	static <T extends AnyNumValue> T MUL(final T... values) {
 		return Stream.of(values).reduce((a, b) -> (T) ValueOperations.multiply(a, b)).orElseThrow();
 	}
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyMagnitudeValue> T SUB(final T first, final T second) {
+	static <T extends AnyNumValue> T SUB(final T first, final T second) {
 		return (T) ValueOperations.subtract(first, second);
 	}
 
 	@SuppressWarnings("unchecked")
-	static <T extends AnyMagnitudeValue> T DIV(final T first, final T second) {
+	static <T extends AnyNumValue> T DIV(final T first, final T second) {
 		return (T) ValueOperations.divideBy(first, second);
 	}
 

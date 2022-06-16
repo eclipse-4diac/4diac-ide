@@ -525,4 +525,8 @@ public final class FordiacKeywords {
 					}
 				}).collect(Collectors.toUnmodifiableSet());
 	}
+
+	public static boolean isReservedKeyword(final String nameProposal) {
+		return RESERVED_KEYWORDS.parallelStream().anyMatch(keyword -> keyword.equalsIgnoreCase(nameProposal));
+	}
 }

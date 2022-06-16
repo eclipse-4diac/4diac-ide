@@ -20,6 +20,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,6 +35,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -75,7 +77,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
-import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 
 /** Managing class for importing *.fbt files */
 
@@ -845,22 +846,35 @@ public class FBTImporter extends TypeImporter {
 				return true;
 			}
 			if (LibraryElementTags.FB_ELEMENT.equals(name)) {
-				final FB fb = LibraryElementFactory.eINSTANCE.createFB();
-				readNameCommentAttributes(fb);
-				final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-				final FBTypeEntry entry = getTypeEntry(typeFbElement);
-				if (null != entry) {
-					fb.setTypeEntry(entry);
-					fb.setInterface(fb.getType().getInterfaceList().copy());
-					parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
-					type.getInternalFbs().add(fb);
-					return true;
-				} else {
-					return false;
-				}
+				parseInternalFB(type);
+				return true;
 			}
 			return false;
 		});
+	}
+
+	private void parseInternalFB(final BaseFBType type) throws TypeImportException, XMLStreamException {
+		final FB fb = LibraryElementFactory.eINSTANCE.createFB();
+		readNameCommentAttributes(fb);
+		final String typeFbElement = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
+		fb.setTypeEntry(getTypeEntry(typeFbElement));
+		if (fb.getTypeEntry() != null) {
+			fb.setInterface(fb.getType().getInterfaceList().copy());
+		} else {
+			fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		}
+		parseFBChildren(fb, LibraryElementTags.FB_ELEMENT);
+		type.getInternalFbs().add(fb);
+
+		if (fb.getTypeEntry() == null) {
+			// we don't have a type create error marker.
+			// This can only be done after fb has been added to FB network,
+			// so that the error marker can determine the location!
+			final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarker(
+					MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", typeFbElement, fb.getName()), //$NON-NLS-1$
+					fb, getLineNumber());
+			errorMarkerAttributes.add(e);
+		}
 	}
 
 	/** This method parses a FBType to a BasicFBType.

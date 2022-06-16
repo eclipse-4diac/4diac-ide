@@ -61,7 +61,7 @@ public final class IdentifierVerifier {
 			return Optional.of(MessageFormat.format(Messages.IdentifierVerifier_ERROR_InvalidSymbolUsedInIdentifer,
 					invalidExpressionSymbolsMatcher.group(0)));
 		}
-		if (FordiacKeywords.RESERVED_KEYWORDS.contains(identifier)) {
+		if (FordiacKeywords.isReservedKeyword(identifier)) {
 			return Optional.of(MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, identifier));
 		}
 		return Optional.empty();

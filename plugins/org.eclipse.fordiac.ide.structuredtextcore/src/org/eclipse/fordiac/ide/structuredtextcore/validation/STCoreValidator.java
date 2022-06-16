@@ -114,7 +114,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Check
 	public void checkIdentiferForTrailingUnderscore(final INamedElement iNamedElement) {
-		if (iNamedElement.getName().charAt(iNamedElement.getName().length() - 1) == '_') {
+		if (iNamedElement.getName().endsWith("_")) { //$NON-NLS-1$
 			error(Messages.STCoreValidator_Trailing_Underscore_In_Identifier, iNamedElement,
 					LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, TRAILING_UNDERSCORE_IN_IDENTIFIER_ERROR,
 					iNamedElement.getName());

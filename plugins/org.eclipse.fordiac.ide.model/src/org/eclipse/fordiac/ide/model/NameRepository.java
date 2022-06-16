@@ -16,8 +16,6 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
-import static org.eclipse.fordiac.ide.model.FordiacKeywords.RESERVED_KEYWORDS;
-
 import java.text.MessageFormat;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -142,7 +140,7 @@ public final class NameRepository {
 					MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, nameProposal));
 			return false;
 		}
-		if (element instanceof IInterfaceElement && RESERVED_KEYWORDS.contains(nameProposal)) {
+		if (element instanceof IInterfaceElement && FordiacKeywords.isReservedKeyword(nameProposal)) {
 			ErrorMessenger
 			.popUpErrorMessage(MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, nameProposal));
 			return false;
@@ -274,7 +272,7 @@ public final class NameRepository {
 	}
 
 	private static String checkReservedKeyWords(final String name) {
-		if (RESERVED_KEYWORDS.contains(name.toUpperCase())) {
+		if (FordiacKeywords.isReservedKeyword(name)) {
 			return name + "1"; //$NON-NLS-1$
 		}
 		return name;

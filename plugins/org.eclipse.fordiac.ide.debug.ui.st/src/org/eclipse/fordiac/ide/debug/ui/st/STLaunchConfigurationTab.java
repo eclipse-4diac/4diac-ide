@@ -138,7 +138,7 @@ public class STLaunchConfigurationTab extends MainLaunchConfigurationTab {
 	@Override
 	protected boolean filterTargetResource(final IResource resource) throws CoreException {
 		if (resource instanceof IFile) {
-			return resource.getFileExtension().equalsIgnoreCase(FILE_EXTENSION);
+			return resource.getFileExtension() != null && resource.getFileExtension().equalsIgnoreCase(FILE_EXTENSION);
 		}
 		return super.filterTargetResource(resource);
 	}

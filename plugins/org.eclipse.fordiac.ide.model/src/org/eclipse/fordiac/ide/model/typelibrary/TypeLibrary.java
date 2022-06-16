@@ -190,7 +190,7 @@ public final class TypeLibrary {
 	public TypeEntry createTypeEntry(final IFile file) {
 		final TypeEntry entry = TypeEntryFactory.INSTANCE.createTypeEntry(file);
 		if (null != entry) {
-			if (!FordiacKeywords.RESERVED_KEYWORDS.contains(entry.getTypeName())) {
+			if (!FordiacKeywords.isReservedKeyword(entry.getTypeName())) {
 				addTypeEntry(entry);
 			} else {
 				final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
