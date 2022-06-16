@@ -16,12 +16,24 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
+
+import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+import org.eclipse.emf.ecore.impl.EObjectImpl;
 
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
+
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
@@ -37,12 +49,65 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl#getName <em>Name</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl#getAttributes <em>Attributes</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.TypedConfigureableObjectImpl#getTypeEntry <em>Type Entry</em>}</li>
  * </ul>
  *
  * @generated
  */
-public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl implements TypedConfigureableObject {
+public class TypedConfigureableObjectImpl extends EObjectImpl implements TypedConfigureableObject {
+	/**
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
+
+	/**
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getName()
+	 * @generated
+	 * @ordered
+	 */
+	protected String name = NAME_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String COMMENT_EDEFAULT = ""; //$NON-NLS-1$
+
+	/**
+	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected String comment = COMMENT_EDEFAULT;
+
+	/**
+	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAttributes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Attribute> attributes;
+
 	/**
 	 * The default value of the '{@link #getTypeEntry() <em>Type Entry</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -80,6 +145,65 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.TYPED_CONFIGUREABLE_OBJECT;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setName(String newName) {
+		String oldName = name;
+		name = newName;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__NAME, oldName, name));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getComment() {
+		return comment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setComment(String newComment) {
+		String oldComment = comment;
+		comment = newComment;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__COMMENT, oldComment, comment));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<Attribute> getAttributes() {
+		if (attributes == null) {
+			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES);
+		}
+		return attributes;
 	}
 
 	/**
@@ -141,8 +265,69 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	 * @generated
 	 */
 	@Override
+	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
+		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Attribute getAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getAttributeValue(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean deleteAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES:
+				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__NAME:
+				return getName();
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__COMMENT:
+				return getComment();
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES:
+				return getAttributes();
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY:
 				return getTypeEntry();
 			default:
@@ -155,9 +340,20 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__NAME:
+				setName((String)newValue);
+				return;
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__COMMENT:
+				setComment((String)newValue);
+				return;
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES:
+				getAttributes().clear();
+				getAttributes().addAll((Collection<? extends Attribute>)newValue);
+				return;
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY:
 				setTypeEntry((TypeEntry)newValue);
 				return;
@@ -175,6 +371,15 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__NAME:
+				setName(NAME_EDEFAULT);
+				return;
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__COMMENT:
+				setComment(COMMENT_EDEFAULT);
+				return;
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES:
+				getAttributes().clear();
+				return;
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY:
 				setTypeEntry(TYPE_ENTRY_EDEFAULT);
 				return;
@@ -192,6 +397,12 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__NAME:
+				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__COMMENT:
+				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES:
+				return attributes != null && !attributes.isEmpty();
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY:
 				return TYPE_ENTRY_EDEFAULT == null ? typeEntry != null : !TYPE_ENTRY_EDEFAULT.equals(typeEntry);
 			default:
@@ -205,11 +416,47 @@ public class TypedConfigureableObjectImpl extends ConfigurableObjectImpl impleme
 	 * @generated
 	 */
 	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == ConfigurableObject.class) {
+			switch (derivedFeatureID) {
+				case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES: return LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == ConfigurableObject.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (typeEntry: "); //$NON-NLS-1$
+		result.append(" (name: "); //$NON-NLS-1$
+		result.append(name);
+		result.append(", comment: "); //$NON-NLS-1$
+		result.append(comment);
+		result.append(", typeEntry: "); //$NON-NLS-1$
 		result.append(typeEntry);
 		result.append(')');
 		return result.toString();

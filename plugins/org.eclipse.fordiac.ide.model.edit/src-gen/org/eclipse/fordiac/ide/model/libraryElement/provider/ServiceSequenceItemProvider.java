@@ -108,7 +108,7 @@ public class ServiceSequenceItemProvider extends ItemProviderAdapter implements 
 				 true,
 				 false,
 				 true,
-				 null,
+				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
 				 null,
 				 null));
 	}

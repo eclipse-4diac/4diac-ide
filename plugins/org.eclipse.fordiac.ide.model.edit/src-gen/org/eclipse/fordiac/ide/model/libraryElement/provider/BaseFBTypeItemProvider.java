@@ -241,6 +241,11 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createFB()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
 				 LibraryElementFactory.eINSTANCE.createOtherAlgorithm()));
 
 		newChildDescriptors.add
@@ -266,6 +271,11 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createResourceTypeFB()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
 				 LibraryElementFactory.eINSTANCE.createAdapterFBType()));
 
 		newChildDescriptors.add
@@ -276,7 +286,27 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createAdapterFB()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
 				 LibraryElementFactory.eINSTANCE.createSimpleFBType()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createDemultiplexer()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createMultiplexer()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createCFBInstance()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -301,8 +331,9 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 		Object childObject = child;
 
 		boolean qualify =
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM ||
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES ||
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__METHODS;
 
 		if (qualify) {

@@ -17,9 +17,11 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
+
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
 
@@ -46,6 +48,7 @@ public class OtherMethodImpl extends TextMethodImpl implements OtherMethod {
 	 * @ordered
 	 */
 	protected static final String LANGUAGE_EDEFAULT = null;
+
 	/**
 	 * The cached value of the '{@link #getLanguage() <em>Language</em>}' attribute.
 	 * <!-- begin-user-doc -->

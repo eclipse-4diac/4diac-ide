@@ -113,9 +113,9 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 		} else {
 			super.notifyChanged(notification);
 			final int featureID = notification.getFeatureID(ConfigurableObject.class);
-			if (LibraryElementPackage.CONFIGURABLE_OBJECT__NAME == featureID
-					|| (LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT == featureID
-							&& notification.getNotifier() instanceof Group)) {
+			if (LibraryElementPackage.INAMED_ELEMENT == featureID
+					|| (LibraryElementPackage.INAMED_ELEMENT__COMMENT == featureID
+					&& notification.getNotifier() instanceof Group)) {
 				// trigger a resorting
 				distributedSystemWorkspaceChanged();
 			}

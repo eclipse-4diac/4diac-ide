@@ -1,6 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,23 +21,31 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Multiplexer</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>Multiplexer</b></em>'.
+ * <!-- end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class MultiplexerImpl extends StructManipulatorImpl implements Multiplexer {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	protected MultiplexerImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.MULTIPLEXER;
 	}
 
-} // MultiplexerImpl
+} //MultiplexerImpl

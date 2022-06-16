@@ -34,7 +34,6 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @generated
  */
 public interface OtherMethod extends TextMethod {
-
 	/**
 	 * Returns the value of the '<em><b>Language</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -57,4 +56,5 @@ public interface OtherMethod extends TextMethod {
 	 * @generated
 	 */
 	void setLanguage(String value);
+
 } // OtherMethod

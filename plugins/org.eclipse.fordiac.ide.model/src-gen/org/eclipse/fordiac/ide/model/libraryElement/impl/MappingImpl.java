@@ -1,98 +1,120 @@
-/********************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+/**
+ * *******************************************************************************
+ * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
- *  Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger
- *    - initial API and implementation and/or initial documentation
- ********************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
+ *      - initial API and implementation and/or initial documentation
+ * *******************************************************************************
+ */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.EObjectImpl;
+
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Mapping</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>Mapping</b></em>'.
+ * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl#getFrom <em>From</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl#getTo <em>To</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl#getFrom <em>From</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.MappingImpl#getTo <em>To</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public class MappingImpl extends EObjectImpl implements Mapping {
-	/** The cached value of the '{@link #getFrom() <em>From</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc
-	 * -->
-	 * 
+	/**
+	 * The cached value of the '{@link #getFrom() <em>From</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getFrom()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected FBNetworkElement from;
 
 	/**
 	 * The cached value of the '{@link #getTo() <em>To</em>}' reference.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getTo()
 	 * @generated
 	 * @ordered
 	 */
 	protected FBNetworkElement to;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	protected MappingImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.MAPPING;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public FBNetworkElement getFrom() {
 		if (from != null && from.eIsProxy()) {
-			InternalEObject oldFrom = (InternalEObject) from;
-			from = (FBNetworkElement) eResolveProxy(oldFrom);
+			InternalEObject oldFrom = (InternalEObject)from;
+			from = (FBNetworkElement)eResolveProxy(oldFrom);
 			if (from != oldFrom) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.MAPPING__FROM,
-							oldFrom, from));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.MAPPING__FROM, oldFrom, from));
 			}
 		}
 		return from;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public FBNetworkElement basicGetFrom() {
 		return from;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public void setFrom(FBNetworkElement newFrom) {
 		FBNetworkElement oldFrom = from;
@@ -101,33 +123,38 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.MAPPING__FROM, oldFrom, from));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public FBNetworkElement getTo() {
 		if (to != null && to.eIsProxy()) {
-			InternalEObject oldTo = (InternalEObject) to;
-			to = (FBNetworkElement) eResolveProxy(oldTo);
+			InternalEObject oldTo = (InternalEObject)to;
+			to = (FBNetworkElement)eResolveProxy(oldTo);
 			if (to != oldTo) {
 				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.MAPPING__TO, oldTo,
-							to));
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.MAPPING__TO, oldTo, to));
 			}
 		}
 		return to;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public FBNetworkElement basicGetTo() {
 		return to;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public void setTo(FBNetworkElement newTo) {
 		FBNetworkElement oldTo = to;
@@ -136,82 +163,90 @@ public class MappingImpl extends EObjectImpl implements Mapping {
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.MAPPING__TO, oldTo, to));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public AutomationSystem getAutomationSystem() {
 		return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-		case LibraryElementPackage.MAPPING__FROM:
-			if (resolve)
-				return getFrom();
-			return basicGetFrom();
-		case LibraryElementPackage.MAPPING__TO:
-			if (resolve)
-				return getTo();
-			return basicGetTo();
-		default:
-			return super.eGet(featureID, resolve, coreType);
+			case LibraryElementPackage.MAPPING__FROM:
+				if (resolve) return getFrom();
+				return basicGetFrom();
+			case LibraryElementPackage.MAPPING__TO:
+				if (resolve) return getTo();
+				return basicGetTo();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-		case LibraryElementPackage.MAPPING__FROM:
-			setFrom((FBNetworkElement) newValue);
-			return;
-		case LibraryElementPackage.MAPPING__TO:
-			setTo((FBNetworkElement) newValue);
-			return;
-		default:
-			super.eSet(featureID, newValue);
-			return;
+			case LibraryElementPackage.MAPPING__FROM:
+				setFrom((FBNetworkElement)newValue);
+				return;
+			case LibraryElementPackage.MAPPING__TO:
+				setTo((FBNetworkElement)newValue);
+				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.MAPPING__FROM:
-			setFrom((FBNetworkElement) null);
-			return;
-		case LibraryElementPackage.MAPPING__TO:
-			setTo((FBNetworkElement) null);
-			return;
-		default:
-			super.eUnset(featureID);
-			return;
+			case LibraryElementPackage.MAPPING__FROM:
+				setFrom((FBNetworkElement)null);
+				return;
+			case LibraryElementPackage.MAPPING__TO:
+				setTo((FBNetworkElement)null);
+				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-		case LibraryElementPackage.MAPPING__FROM:
-			return from != null;
-		case LibraryElementPackage.MAPPING__TO:
-			return to != null;
-		default:
-			return super.eIsSet(featureID);
+			case LibraryElementPackage.MAPPING__FROM:
+				return from != null;
+			case LibraryElementPackage.MAPPING__TO:
+				return to != null;
+			default:
+				return super.eIsSet(featureID);
 		}
 	}
 
-} // MappingImpl
+} //MappingImpl

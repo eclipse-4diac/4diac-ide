@@ -1,6 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2022 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,58 +17,74 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
+
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>FB</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>FB</b></em>'.
+ * <!-- end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class FBImpl extends FBNetworkElementImpl implements FB {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	protected FBImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.FB;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public boolean isResourceFB() {
 		return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceFB(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public boolean isResourceTypeFB() {
 		return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceTypeFB(this);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public FBType getType() {
-		// this cannot be moved to the annotation class because there we don't have the super access!!!
+		//this cannot be moved to the annotation class because there we don't have the super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
-		if (type instanceof FBType) {
-			return (FBType) type;
+		if(type instanceof FBType){
+		   return (FBType) type; 
 		}
 		return null;
 	}
@@ -112,4 +129,4 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);
 	}
 
-} // FBImpl
+} //FBImpl

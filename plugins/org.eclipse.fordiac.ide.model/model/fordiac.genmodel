@@ -409,7 +409,7 @@
     <genClasses ecoreClass="lib.ecore#//ServiceInterface">
       <genOperations ecoreOperation="lib.ecore#//ServiceInterface/getService" body="return (Service) this.eContainer();"/>
       <genOperations ecoreOperation="lib.ecore#//ServiceInterface/isLeftInterface"
-          body="&#x9;&#x9;final ServiceInterface leftInterface = getService().getLeftInterface();"/>
+          body="return this.equals(getService().getLeftInterface());"/>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//IInterfaceElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//IInterfaceElement/isInput"/>
