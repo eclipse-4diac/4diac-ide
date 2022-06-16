@@ -115,7 +115,7 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 			final int featureID = notification.getFeatureID(ConfigurableObject.class);
 			if (LibraryElementPackage.CONFIGURABLE_OBJECT__NAME == featureID
 					|| (LibraryElementPackage.CONFIGURABLE_OBJECT__COMMENT == featureID
-							&& notification.getNotifier() instanceof Group)) {
+					&& notification.getNotifier() instanceof Group)) {
 				// trigger a resorting
 				distributedSystemWorkspaceChanged();
 			}
@@ -125,7 +125,11 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	@Override
 	public void distributedSystemWorkspaceChanged() {
 		if (null != viewer && null != viewer.getControl() && null != viewer.getControl().getDisplay()) {
-			viewer.getControl().getDisplay().asyncExec(() -> viewer.refresh());
+			viewer.getControl().getDisplay().asyncExec(() -> {
+				if (null != viewer && null != viewer.getControl() && !viewer.getControl().isDisposed()) {
+					viewer.refresh();
+				}
+			});
 		}
 	}
 
