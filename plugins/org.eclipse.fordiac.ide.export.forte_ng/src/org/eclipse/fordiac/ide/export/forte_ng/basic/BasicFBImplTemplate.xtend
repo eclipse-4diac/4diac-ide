@@ -100,7 +100,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 			case conditionExpression.nullOrEmpty:
 				transitionLanguageSupport.get(transition)?.generate(emptyMap)
 			default:
-				"if(1)"
+				"1"
 		}
 	}
 
