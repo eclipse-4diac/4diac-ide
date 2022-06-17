@@ -16,6 +16,15 @@ package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
 import java.util.List
+import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.DateAndTimeType
+import org.eclipse.fordiac.ide.model.data.DateType
+import org.eclipse.fordiac.ide.model.data.LdateType
+import org.eclipse.fordiac.ide.model.data.LdtType
+import org.eclipse.fordiac.ide.model.data.LtimeType
+import org.eclipse.fordiac.ide.model.data.LtodType
+import org.eclipse.fordiac.ide.model.data.TimeOfDayType
+import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -74,14 +83,14 @@ abstract class ForteLibraryElementTemplate extends ForteNgExportTemplate {
 
 	def protected CharSequence generateName(VarDeclaration variable) '''var_«variable.name»'''
 
-	def protected getFORTEString(String s) '''g_nStringId«s»'''
+	def protected getFORTEStringId(String s) '''g_nStringId«s»'''
 
 	def protected getFORTENameList(List<? extends INamedElement> elements) {
-		elements.map[name.FORTEString].join(", ")
+		elements.map[name.FORTEStringId].join(", ")
 	}
 
 	def protected getFORTETypeList(List<? extends VarDeclaration> elements) {
-		elements.map['''«IF it.array»«"ARRAY".FORTEString», «it.arraySize», «ENDIF»«it.type.name.FORTEString»'''].join(", ")
+		elements.map['''«IF it.array»«"ARRAY".FORTEStringId», «it.arraySize», «ENDIF»«it.type.generateTypeNamePlain.FORTEStringId»'''].join(", ")
 	}
 
 }

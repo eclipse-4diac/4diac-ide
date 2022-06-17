@@ -72,18 +72,21 @@ final class ForteNgExportUtil {
 	def static CharSequence generateTypeName(VarDeclaration variable) //
 	'''«IF variable.array»CIEC_ARRAY_COMMON<«ENDIF»«variable.type.generateTypeName»«IF variable.array»>«ENDIF»'''
 
-	def static CharSequence generateTypeName(DataType type) {
+	def static CharSequence generateTypeName(DataType type) '''CIEC_«type.generateTypeNamePlain»'''
+
+  	def static String generateTypeNamePlain(DataType type) {
 		switch (type) {
 			TimeType,
-			LtimeType: "CIEC_TIME"
+			LtimeType: "TIME"
 			DateType,
-			LdateType: "CIEC_DATE"
+			LdateType: "DATE"
 			TimeOfDayType,
-			LtodType: "CIEC_TIME_OF_DAY"
+			LtodType: "TIME_OF_DAY"
 			DateAndTimeType,
-			LdtType: "CIEC_DATE_AND_TIME"
-			ArrayType: "CIEC_ARRAY"
-			default: '''CIEC_«type.name»'''
+			LdtType: "DATE_AND_TIME"
+			ArrayType: "ARRAY"
+			default: type.name
 		}
 	}
+	
 }
