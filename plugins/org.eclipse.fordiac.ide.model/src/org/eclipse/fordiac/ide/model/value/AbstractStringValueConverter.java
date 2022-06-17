@@ -139,7 +139,7 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 			}
 			break;
 		default:
-			if (value > 0x0020 && value < 0x007e) {
+			if (value >= 0x0020 && value <= 0x007e) {
 				result.append(value);
 			} else if (wide) {
 				result.append(String.format("$%04X", Integer.valueOf(value))); //$NON-NLS-1$
