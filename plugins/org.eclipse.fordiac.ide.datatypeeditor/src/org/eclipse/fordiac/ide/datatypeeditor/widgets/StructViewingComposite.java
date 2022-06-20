@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
@@ -223,7 +224,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			case COMMENT:
 				return memVar.getComment();
 			case INIT:
-				return (memVar.getValue() == null) ? "" : memVar.getValue().getValue(); //$NON-NLS-1$
+				return InitialValueHelper.getInitalOrDefaultValue(element);
 			case ARRAY:
 				return (memVar.getArraySize() > 0) ? Integer.toString(memVar.getArraySize()) : ""; //$NON-NLS-1$
 			default:
