@@ -25,13 +25,15 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter;
+import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public class ExportFBs extends Task {
 
 	protected static final String ANT_EXPORT_TASK_DIRECTORY_NAME = "exported_FBs"; //$NON-NLS-1$
 
 	protected String projectNameString;
-	protected boolean withSubfolders = false;
+	protected boolean exportCMakeList = false;
 	protected IWorkspace workspace;
 	protected IProject project;
 
@@ -39,8 +41,8 @@ public class ExportFBs extends Task {
 		projectNameString = value;
 	}
 
-	public void setWithSubfolders(final boolean value) {
-		withSubfolders = value;
+	public void setExportCMakeList(final boolean value) {
+		exportCMakeList = value;
 	}
 
 	@Override
@@ -61,7 +63,10 @@ public class ExportFBs extends Task {
 	// recursively call directories and save fbt Files
 	public List<File> getFBsFiles(final List<File> files, final File dir, final String singleFBName,
 			final List<String> excludeSubfolder) {
-		if (!dir.isDirectory() && dir.getName().endsWith(".fbt")
+		if (!dir.isDirectory()
+				&& (dir.getName().toUpperCase().endsWith(TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT)
+						|| dir.getName().toUpperCase().endsWith(TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT)
+						|| dir.getName().toUpperCase().endsWith(TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT))
 				&& (singleFBName == null || singleFBName.equals(dir.getName()))) {
 			files.add(dir);
 			return files;
@@ -94,7 +99,10 @@ public class ExportFBs extends Task {
 				System.out.println(ifile.getLocation().toString());
 
 				try {
-					filter.export(ifile, folder.getPath(), true, null);
+					filter.export(ifile, folder.getPath(), true);
+					if (exportCMakeList) {
+						filter.export(null, folder.getPath(), true, new CMakeListsMarker());
+					}
 				} catch (final ExportException e) {
 					throw new BuildException("Could not export: " + e.getMessage());//$NON-NLS-1$
 				}
