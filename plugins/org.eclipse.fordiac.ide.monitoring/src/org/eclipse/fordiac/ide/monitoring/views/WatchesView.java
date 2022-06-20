@@ -14,6 +14,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - added removing the watch listener on dispose
  *   Fabio Gandolfi - added selection handling & context menu
+ *   				  added filtering by forced elements
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.views;
 
@@ -45,7 +46,6 @@ import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueEditingSupport;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueLabelProvider;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPart;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
@@ -64,10 +64,8 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.ISelectionListener;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.part.ViewPart;
@@ -75,11 +73,10 @@ import org.eclipse.ui.part.ViewPart;
 public class WatchesView extends ViewPart implements ISelectionListener {
 
 	private Composite root;
-	private FilteredTree filteredTree;
+	protected FilteredTree filteredTree;
 	private final WatchesContentProvider provider = new WatchesContentProvider();
 	private boolean visible = false;
-	private boolean selectionActive = false;
-	private Action toggleSelection;
+	private WatchesViewSelectionFilterAction toggleSelection;
 
 	private final IMonitoringListener listener = new IMonitoringListener() {
 
@@ -106,6 +103,7 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 			if (!filteredTree.isDisposed()) {
 				filteredTree.getViewer().refresh();
 			}
+			expandItems();
 		}
 	};
 
@@ -114,10 +112,9 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 
 		root = new Composite(parent, SWT.NONE);
 		root.setLayout(new GridLayout());
-		final PatternFilter patternFilter = new PatternFilter();
 
 		filteredTree = new FilteredTree(root, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION,
-				patternFilter, true,
+				getPatternFilter(), true,
 				true);
 
 		final GridData treeGridData = new GridData();
@@ -145,6 +142,16 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 
 		contributeToActionBars();
 
+		createPartListener();
+
+		addWatchesAdapters();
+	}
+
+	protected PatternFilter getPatternFilter() {
+		return new PatternFilter();
+	}
+
+	protected void createPartListener() {
 		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		getSite().getPage().addPartListener(new IPartListener2() {
 			@Override
@@ -163,9 +170,8 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 				}
 			}
 		});
-
-		addWatchesAdapters();
 	}
+
 
 	private void createNameColumn() {
 		final TreeViewerColumn nameColumn = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
@@ -202,8 +208,12 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 		MonitoringManager.getInstance().registerMonitoringListener(listener);
 	}
 
+	protected void expandItems() {
+		// no need to expand
+	}
+
 	/** Contribute to action bars. */
-	private void contributeToActionBars() {
+	protected void contributeToActionBars() {
 		final IActionBars bars = getViewSite().getActionBars();
 		fillLocalToolBar(bars.getToolBarManager());
 	}
@@ -212,24 +222,18 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 	 *
 	 * @param manager the manager */
 	private void fillLocalToolBar(final IToolBarManager manager) {
-		toggleSelection = new Action(Messages.MonitoringManagerUtils_SelectionFilteringActive,
-				IAction.AS_RADIO_BUTTON) {
-			@Override
-			public void run() {
-				selectionActive = !selectionActive;
-				toggleSelection.setChecked(selectionActive);
-				if (!selectionActive) {
-					update();
-				} else {
-					selectionChanged(getSite().getPart(), getSite().getPage().getActiveEditor().getEditorSite()
-							.getSelectionProvider().getSelection());
-				}
-			}
-		};
-		toggleSelection.setImageDescriptor(
-				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ELCL_SYNCED));
-		toggleSelection.setToolTipText(Messages.MonitoringManagerUtils_SelectionFilteringActive);
+		toggleSelection = new WatchesViewSelectionFilterAction(Messages.MonitoringManagerUtils_SelectionFilteringActive,
+				IAction.AS_CHECK_BOX, this);
 		manager.add(toggleSelection);
+	}
+
+	public void updateSelectionFilter(final boolean selectionActive) {
+		if (!selectionActive) {
+			update();
+		} else {
+			selectionChanged(getSite().getPart(),
+					getSite().getPage().getActiveEditor().getEditorSite().getSelectionProvider().getSelection());
+		}
 	}
 
 	@Override
@@ -246,7 +250,7 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 
-		if (visible && (null != root) && (!root.isDisposed()) && selectionActive
+		if (visible && (null != root) && (!root.isDisposed()) && toggleSelection.getSelectionActive()
 				&& selection instanceof StructuredSelection) {
 
 			final Collection<MonitoringBaseElement> activeElements = new ArrayList<>();
