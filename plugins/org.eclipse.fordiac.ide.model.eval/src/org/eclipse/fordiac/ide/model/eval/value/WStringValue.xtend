@@ -16,7 +16,7 @@ import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.value.WStringValueConverter
 
-class WStringValue implements AnyStringValue {
+class WStringValue implements AnyStringValue, AnyWCharsValue {
 	final String value;
 
 	public static final WStringValue DEFAULT = new WStringValue("")

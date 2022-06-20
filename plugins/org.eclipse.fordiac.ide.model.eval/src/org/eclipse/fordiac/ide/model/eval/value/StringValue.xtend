@@ -18,7 +18,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import java.util.Arrays
 import org.eclipse.fordiac.ide.model.value.StringValueConverter
 
-class StringValue implements AnyStringValue {
+class StringValue implements AnyStringValue, AnySCharsValue {
 	final byte[] value;
 
 	public static final StringValue DEFAULT = new StringValue(#[])

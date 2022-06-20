@@ -426,7 +426,7 @@ public interface Functions {
 		} else if (Value.class.isAssignableFrom(ptype) && Value.class.isAssignableFrom(atype)) {
 			final DataType type1 = ValueOperations.dataType(ptype.asSubclass(Value.class));
 			final DataType type2 = ValueOperations.dataType(atype.asSubclass(Value.class));
-			return type1.isAssignableFrom(type2);
+			return type1 != null && type2 != null && type1.isAssignableFrom(type2);
 		}
 		return false;
 	}

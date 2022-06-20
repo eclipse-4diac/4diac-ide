@@ -570,20 +570,26 @@ class StandardFunctionsTest {
 	def void testConcat() {
 		// STRING
 		"".toStringValue.assertEquals(StandardFunctions.invoke("CONCAT", "".toStringValue))
+		"a".toStringValue.assertEquals(StandardFunctions.invoke("CONCAT", 'a'.toCharValue))
 		"Test".toStringValue.assertEquals(StandardFunctions.invoke("CONCAT", "Test".toStringValue))
 		"".toStringValue.assertEquals(StandardFunctions.invoke("CONCAT", "".toStringValue, "".toStringValue))
 		"TestString".toStringValue.assertEquals(
 			StandardFunctions.invoke("CONCAT", "Test".toStringValue, "String".toStringValue))
 		"4diac IDE".toStringValue.assertEquals(
 			StandardFunctions.invoke("CONCAT", "4diac".toStringValue, " ".toStringValue, "IDE".toStringValue))
+		"4diac IDE".toStringValue.assertEquals(
+			StandardFunctions.invoke("CONCAT", "4diac".toStringValue, " ".toCharValue, "IDE".toStringValue))
 		// WSTRING
 		"".toWStringValue.assertEquals(StandardFunctions.invoke("CONCAT", "".toWStringValue))
+		"a".toWStringValue.assertEquals(StandardFunctions.invoke("CONCAT", 'a'.toWCharValue))
 		"Test".toWStringValue.assertEquals(StandardFunctions.invoke("CONCAT", "Test".toWStringValue))
 		"".toWStringValue.assertEquals(StandardFunctions.invoke("CONCAT", "".toWStringValue, "".toWStringValue))
 		"TestString".toWStringValue.assertEquals(
 			StandardFunctions.invoke("CONCAT", "Test".toWStringValue, "String".toWStringValue))
 		"4diac IDE".toWStringValue.assertEquals(
 			StandardFunctions.invoke("CONCAT", "4diac".toWStringValue, " ".toWStringValue, "IDE".toWStringValue))
+		"4diac IDE".toWStringValue.assertEquals(
+			StandardFunctions.invoke("CONCAT", "4diac".toWStringValue, " ".toWCharValue, "IDE".toWStringValue))
 	}
 
 	@Test
@@ -597,6 +603,8 @@ class StandardFunctionsTest {
 			StandardFunctions.invoke("INSERT", "Test".toStringValue, "String".toStringValue, 4.toIntValue))
 		"4diac IDE".toStringValue.assertEquals(
 			StandardFunctions.invoke("INSERT", "4diacIDE".toStringValue, " ".toStringValue, 5.toIntValue))
+		"4diac IDE".toStringValue.assertEquals(
+			StandardFunctions.invoke("INSERT", "4diacIDE".toStringValue, " ".toCharValue, 5.toIntValue))
 		// WSTRING
 		"".toWStringValue.assertEquals(
 			StandardFunctions.invoke("INSERT", "".toWStringValue, "".toWStringValue, 0.toIntValue))
@@ -606,6 +614,8 @@ class StandardFunctionsTest {
 			StandardFunctions.invoke("INSERT", "Test".toWStringValue, "String".toWStringValue, 4.toIntValue))
 		"4diac IDE".toWStringValue.assertEquals(
 			StandardFunctions.invoke("INSERT", "4diacIDE".toWStringValue, " ".toWStringValue, 5.toIntValue))
+		"4diac IDE".toWStringValue.assertEquals(
+			StandardFunctions.invoke("INSERT", "4diacIDE".toWStringValue, " ".toWCharValue, 5.toIntValue))
 	}
 
 	@Test
@@ -636,6 +646,8 @@ class StandardFunctionsTest {
 		"4diac FORTE".toStringValue.assertEquals(
 			StandardFunctions.invoke("REPLACE", "4diac IDE".toStringValue, "FORT".toStringValue, 2.toIntValue,
 				7.toIntValue))
+		"4diac-IDE".toStringValue.assertEquals(
+			StandardFunctions.invoke("REPLACE", "4diac IDE".toStringValue, "-".toCharValue, 1.toIntValue, 6.toIntValue))
 		// WSTRING
 		"".toWStringValue.assertEquals(
 			StandardFunctions.invoke("REPLACE", "".toWStringValue, "".toWStringValue, 0.toIntValue, 1.toIntValue))
@@ -645,6 +657,9 @@ class StandardFunctionsTest {
 		"4diac FORTE".toWStringValue.assertEquals(
 			StandardFunctions.invoke("REPLACE", "4diac IDE".toWStringValue, "FORT".toWStringValue, 2.toIntValue,
 				7.toIntValue))
+		"4diac-IDE".toWStringValue.assertEquals(
+			StandardFunctions.invoke("REPLACE", "4diac IDE".toWStringValue, "-".toWCharValue, 1.toIntValue,
+				6.toIntValue))
 	}
 
 	@Test
@@ -656,6 +671,7 @@ class StandardFunctionsTest {
 		5.toULIntValue.assertEquals(
 			StandardFunctions.invoke("FIND", "TestString".toStringValue, "String".toStringValue))
 		6.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "4diac IDE".toStringValue, " ".toStringValue))
+		6.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "4diac IDE".toStringValue, " ".toCharValue))
 		// WSTRING
 		1.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "".toWStringValue, "".toWStringValue))
 		0.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "".toWStringValue, "Test".toWStringValue))
@@ -663,6 +679,7 @@ class StandardFunctionsTest {
 		5.toULIntValue.assertEquals(
 			StandardFunctions.invoke("FIND", "TestString".toWStringValue, "String".toWStringValue))
 		6.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "4diac IDE".toWStringValue, " ".toWStringValue))
+		6.toULIntValue.assertEquals(StandardFunctions.invoke("FIND", "4diac IDE".toWStringValue, " ".toWCharValue))
 	}
 
 	@Test
@@ -982,14 +999,10 @@ class StandardFunctionsTest {
 		0x0417000000000000#L.toLTimeValue.assertEquals(
 			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLTimeValue))
 		0x1704.toDateValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toDateValue)) // not converted
-		0x1704.toLDateValue.assertEquals(
-			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLDateValue)) // not converted
-		0x1704.toTimeOfDayValue.assertEquals(
-			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toTimeOfDayValue)) // not converted
-		0x1704.toLTimeOfDayValue.assertEquals(
-			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLTimeOfDayValue)) // not converted
-		0x1704.toDateAndTimeValue.assertEquals(
-			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toDateAndTimeValue)) // not converted
+		0x1704.toLDateValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLDateValue)) // not converted
+		0x1704.toTimeOfDayValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toTimeOfDayValue)) // not converted
+		0x1704.toLTimeOfDayValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLTimeOfDayValue)) // not converted
+		0x1704.toDateAndTimeValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toDateAndTimeValue)) // not converted
 		0x1704.toLDateAndTimeValue.assertEquals(
 			StandardFunctions.invoke("TO_LITTLE_ENDIAN", 0x1704.toLDateAndTimeValue)) // not converted
 		'a'.toCharValue.assertEquals(StandardFunctions.invoke("TO_LITTLE_ENDIAN", 'a'.toCharValue))
@@ -1058,14 +1071,10 @@ class StandardFunctionsTest {
 			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toTimeValue))
 		0x1704.toLTimeValue.assertEquals(
 			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x0417000000000000#L.toLTimeValue))
-		0x1704.toDateValue.assertEquals(
-			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toDateValue)) // not converted
-		0x1704.toLDateValue.assertEquals(
-			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toLDateValue)) // not converted
-		0x1704.toTimeOfDayValue.assertEquals(
-			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toTimeOfDayValue)) // not converted
-		0x1704.toLTimeOfDayValue.assertEquals(
-			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toLTimeOfDayValue)) // not converted
+		0x1704.toDateValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toDateValue)) // not converted
+		0x1704.toLDateValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toLDateValue)) // not converted
+		0x1704.toTimeOfDayValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toTimeOfDayValue)) // not converted
+		0x1704.toLTimeOfDayValue.assertEquals(StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toLTimeOfDayValue)) // not converted
 		0x1704.toDateAndTimeValue.assertEquals(
 			StandardFunctions.invoke("FROM_LITTLE_ENDIAN", 0x1704.toDateAndTimeValue)) // not converted
 		0x1704.toLDateAndTimeValue.assertEquals(
