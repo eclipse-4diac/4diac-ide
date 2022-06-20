@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<System Name="CounterNetwork" Comment="">
+	<VersionInfo Version="1.0" Author="AK115394" Date="2022-06-20">
+	</VersionInfo>
+	<Application Name="CounterNetworkApp" Comment="">
+		<SubAppNetwork>
+			<FB Name="E_SR" Type="E_SR" Comment="" x="980.0" y="1600.0">
+			</FB>
+			<FB Name="E_SWITCH" Type="E_SWITCH" Comment="" x="1786.6666666666667" y="1600.0">
+			</FB>
+			<FB Name="E_SPLIT" Type="E_SPLIT" Comment="" x="-26.666666666666668" y="1560.0">
+			</FB>
+			<FB Name="E_SR_1" Type="E_SR" Comment="" x="993.3333333333334" y="2406.666666666667">
+			</FB>
+			<FB Name="E_SWITCH_1" Type="E_SWITCH" Comment="" x="1773.3333333333335" y="2426.666666666667">
+			</FB>
+			<FB Name="E_MERGE" Type="E_MERGE" Comment="" x="2940.0" y="2080.0">
+			</FB>
+			<FB Name="E_CTUD" Type="E_CTUD" Comment="" x="3893.3333333333335" y="2133.3333333333335">
+				<Parameter Name="PV" Value="1"/>
+			</FB>
+			<EventConnections>
+				<Connection Source="E_SPLIT.EO1" Destination="E_SR.S" Comment="" dx1="226.66666666666669"/>
+				<Connection Source="E_SR.EO" Destination="E_SWITCH.EI" Comment=""/>
+				<Connection Source="E_SPLIT.EO2" Destination="E_SR_1.S" Comment="" dx1="200.0" dx2="200.0" dy="0.0"/>
+				<Connection Source="E_SR_1.EO" Destination="E_SWITCH_1.EI" Comment="" dx1="226.66666666666669"/>
+				<Connection Source="E_SWITCH.EO1" Destination="E_MERGE.EI1" Comment="" dx1="333.33333333333337"/>
+				<Connection Source="E_SWITCH_1.EO1" Destination="E_MERGE.EI2" Comment="" dx1="340.0"/>
+				<Connection Source="E_MERGE.EO" Destination="E_CTUD.CU" Comment="" dx1="186.66666666666669"/>
+			</EventConnections>
+			<DataConnections>
+				<Connection Source="E_SR.Q" Destination="E_SWITCH.G" Comment=""/>
+				<Connection Source="E_SR_1.Q" Destination="E_SWITCH_1.G" Comment="" dx1="226.66666666666669" dx2="226.66666666666669" dy="0.0"/>
+			</DataConnections>
+		</SubAppNetwork>
+	</Application>
+</System>
