@@ -78,10 +78,11 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	private IInterfaceElement sourcePin = null;
 	private Adapter sourcePinAdapter = null;
 
-	private boolean showInstanceName = Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SHOW_COMMENT_AT_PIN);
+	private String pinLabelStyle = Activator.getDefault().getPreferenceStore()
+			.getString(DiagramPreferences.PIN_LABEL_STYLE);
 	private final IPropertyChangeListener preferenceListener = event -> {
-		if (event.getProperty().equals(DiagramPreferences.SHOW_COMMENT_AT_PIN)) {
-			showInstanceName = ((Boolean) event.getNewValue()).booleanValue();
+		if (event.getProperty().equals(DiagramPreferences.PIN_LABEL_STYLE)) {
+			pinLabelStyle = ((String) event.getNewValue());
 			refreshLabelText();
 		}
 	};
@@ -118,11 +119,28 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	protected String getLabelText() {
-		final String comment = getSourcePinInstanceName();
-		if (isShowInput() && !comment.isBlank()) {
-			return comment;
+		final String altText = getAlternativePinLabelText();
+		return (!altText.isBlank()) ? altText : getModel().getName();
+	}
+
+	private String getAlternativePinLabelText() {
+		switch (pinLabelStyle) {
+		case DiagramPreferences.PIN_LABEL_STYLE_PIN_COMMENT:
+			if (getModel().getFBNetworkElement() != null) {
+				// only return the comment for instances and not for type editors
+				return getModel().getComment();
+			}
+			break;
+		case DiagramPreferences.PIN_LABEL_STYLE_SRC_PIN_NAME:
+			if (isShowInput()) {
+				return getSourcePinInstanceName();
+			}
+			break;
+		default:
+			// in the default case we don't nothing and fall back to the default value below
+			break;
 		}
-		return getModel().getName();
+		return ""; //$NON-NLS-1$
 	}
 
 	private void refreshLabelText() {
@@ -130,7 +148,8 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 	}
 
 	private boolean isShowInput() {
-		return showInstanceName && isInput() && !getModel().getInputConnections().isEmpty();
+		return DiagramPreferences.PIN_LABEL_STYLE_SRC_PIN_NAME.equals(pinLabelStyle) && isInput()
+				&& !getModel().getInputConnections().isEmpty();
 	}
 
 	private void addPreferenceListener() {
@@ -348,7 +367,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 		return contentAdapter;
 	}
 
-	// Allows childclasses to provide their own content adapters
+	// Allows child classes to provide their own content adapters
 	protected Adapter createContentAdapter() {
 		return new AdapterImpl() {
 			@Override
@@ -356,7 +375,8 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getIInterfaceElement_InputConnections().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_OutputConnections().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)) {
+						|| LibraryElementPackage.eINSTANCE.getINamedElement_Name().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)) {
 					refresh();
 				}
 				super.notifyChanged(notification);
