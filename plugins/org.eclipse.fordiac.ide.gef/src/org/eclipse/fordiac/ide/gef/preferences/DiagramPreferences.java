@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.gef.Messages;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
+import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -51,6 +52,11 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	public static final String SHOW_RULERS = "ShowRulers"; //$NON-NLS-1$
 
+	public static final String PIN_LABEL_STYLE = "PinLabelStyle"; //$NON-NLS-1$
+	public static final String PIN_LABEL_STYLE_PIN_NAME = "PinLabelStyle_PinName"; //$NON-NLS-1$
+	public static final String PIN_LABEL_STYLE_PIN_COMMENT = "PinLabelStyle_PinComment"; //$NON-NLS-1$
+	public static final String PIN_LABEL_STYLE_SRC_PIN_NAME = "PinLabelStyle_SourcePinName"; //$NON-NLS-1$
+
 	public static final String SHOW_COMMENT_AT_PIN = "ShowCommentAtPin"; //$NON-NLS-1$
 
 	public static final String MAX_VALUE_LABEL_SIZE = "MaxValueLabelSize"; //$NON-NLS-1$
@@ -67,7 +73,6 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	public DiagramPreferences() {
 		super(GRID);
 		setPreferenceStore(Activator.getDefault().getPreferenceStore());
-		setDescription(Messages.DiagramPreferences_GeneralDiagramPreferences);
 	}
 
 	/*
@@ -190,11 +195,11 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	}
 
 	private void createGroupInterfacePins() {
-		final Group group = createGroup(Messages.DiagramPreferences_InterfacePins);
-		final BooleanFieldEditor showInput = new BooleanFieldEditor(SHOW_COMMENT_AT_PIN,
-				Messages.DiagramPreferences_InterfacePins_ShowInputComment, group);
-		addField(showInput);
-		configGroup(group);
+		addField(new RadioGroupFieldEditor(PIN_LABEL_STYLE, Messages.DiagramPreferences_PinLabelText, 1,
+				new String[][] { { Messages.DiagramPreferences_ShowPinName, PIN_LABEL_STYLE_PIN_NAME },
+			{ Messages.DiagramPreferences_ShowPinComment, PIN_LABEL_STYLE_PIN_COMMENT },
+			{ Messages.DiagramPreferences_ShowConnectedOutputPinName, PIN_LABEL_STYLE_SRC_PIN_NAME } },
+				getFieldEditorParent(), true));
 	}
 
 	@Override

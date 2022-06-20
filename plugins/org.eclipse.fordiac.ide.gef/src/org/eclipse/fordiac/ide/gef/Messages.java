@@ -54,8 +54,11 @@ public final class Messages extends NLS {
 	public static String DiagramPreferences_FieldEditors_ShowGrid;
 	public static String DiagramPreferences_FieldEditors_ShowRuler;
 	public static String DiagramPreferences_FieldEditors_SnapToGrid;
-	public static String DiagramPreferences_InterfacePins;
-	public static String DiagramPreferences_InterfacePins_ShowInputComment;
+
+	public static String DiagramPreferences_PinLabelText;
+	public static String DiagramPreferences_ShowPinName;
+	public static String DiagramPreferences_ShowPinComment;
+	public static String DiagramPreferences_ShowConnectedOutputPinName;
 
 	public static String DiagramPreferences_Restart;
 	public static String FBFigure_TYPE_NOT_SET;

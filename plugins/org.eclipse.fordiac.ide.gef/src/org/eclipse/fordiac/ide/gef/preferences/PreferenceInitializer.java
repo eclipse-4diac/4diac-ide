@@ -30,6 +30,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 		store.setDefault(DiagramPreferences.SNAP_TO_GRID, true);
 		store.setDefault(DiagramPreferences.SHOW_GRID, true);
 		store.setDefault(DiagramPreferences.GRID_SPACING, 20);
+
+		store.setDefault(DiagramPreferences.PIN_LABEL_STYLE, DiagramPreferences.PIN_LABEL_STYLE_PIN_NAME);
+
 		store.setDefault(DiagramPreferences.MAX_VALUE_LABEL_SIZE, 25); // big enough to fully show an ip address and
 		// port
 		store.setDefault(DiagramPreferences.MAX_PIN_LABEL_SIZE, 12);
