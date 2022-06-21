@@ -271,10 +271,6 @@ LD : ('L'|'l')('D'|'d');
 
 LT : ('L'|'l')('T'|'t');
 
-MS : ('M'|'m')('S'|'s');
-
-NS : ('N'|'n')('S'|'s');
-
 OF : ('O'|'o')('F'|'f');
 
 ON : ('O'|'o')('N'|'n');
@@ -282,8 +278,6 @@ ON : ('O'|'o')('N'|'n');
 OR : ('O'|'o')('R'|'r');
 
 TO : ('T'|'t')('O'|'o');
-
-US : ('U'|'u')('S'|'s');
 
 NumberSign : '#';
 
@@ -317,27 +311,39 @@ GreaterThanSign : '>';
 
 D : ('D'|'d');
 
-H : ('H'|'h');
-
-M : ('M'|'m');
-
-S : ('S'|'s');
-
 T : ('T'|'t');
 
 LeftSquareBracket : '[';
 
 RightSquareBracket : ']';
 
-KW__ : '_';
-
 fragment RULE_HEX_DIGIT : ('0'..'9'|'a'..'f'|'A'..'F'|'_');
 
 RULE_NON_DECIMAL : ('2#'|'8#'|'16#') RULE_HEX_DIGIT+;
 
-RULE_EXT_INT : RULE_INT ('e'|'E') ('-'|'+')? RULE_INT;
-
 RULE_INT : '0'..'9' ('_'? '0'..'9')*;
+
+fragment RULE_EXT_INT : RULE_INT ('e'|'E') ('-'|'+')? RULE_INT;
+
+RULE_NUMBER : RULE_INT '.' (RULE_EXT_INT|RULE_INT);
+
+RULE_TIME_VALUE : (RULE_TIME_PART '_'?)+;
+
+fragment RULE_TIME_PART : (RULE_INT|RULE_NUMBER) (RULE_TIME_DAYS|RULE_TIME_HOURS|RULE_TIME_MINUTES|RULE_TIME_SECONDS|RULE_TIME_MILLIS|RULE_TIME_MICROS|RULE_TIME_NANOS);
+
+fragment RULE_TIME_DAYS : ('D'|'d');
+
+fragment RULE_TIME_HOURS : ('H'|'h');
+
+fragment RULE_TIME_MINUTES : ('M'|'m');
+
+fragment RULE_TIME_SECONDS : ('S'|'s');
+
+fragment RULE_TIME_MILLIS : ('M'|'m') ('S'|'s');
+
+fragment RULE_TIME_MICROS : ('U'|'u') ('S'|'s');
+
+fragment RULE_TIME_NANOS : ('N'|'n') ('S'|'s');
 
 RULE_ID : '^'? ('a'..'z'|'A'..'Z'|'_') ('a'..'z'|'A'..'Z'|'_'|'0'..'9')*;
 

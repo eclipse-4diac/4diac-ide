@@ -965,7 +965,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	
 	//STNumericLiteral:
 	//    (type=[datatype::DataType|STNumericLiteralType] '#')?
-	//    value=(BoolLiteral | Number | NON_DECIMAL);
+	//    value=Numeric;
 	public STCoreGrammarAccess.STNumericLiteralElements getSTNumericLiteralAccess() {
 		return gaSTCore.getSTNumericLiteralAccess();
 	}
@@ -1164,24 +1164,24 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return getQualifiedNameAccess().getRule();
 	}
 	
-	//BoolLiteral returns ecore::EJavaObject:
-	//    'TRUE' | 'FALSE';
-	public STCoreGrammarAccess.BoolLiteralElements getBoolLiteralAccess() {
-		return gaSTCore.getBoolLiteralAccess();
+	//Numeric returns ecore::EJavaObject:
+	//    'TRUE' | 'FALSE' | (('+' | '-')? (INT | NUMBER)) | NON_DECIMAL;
+	public STCoreGrammarAccess.NumericElements getNumericAccess() {
+		return gaSTCore.getNumericAccess();
 	}
 	
-	public ParserRule getBoolLiteralRule() {
-		return getBoolLiteralAccess().getRule();
+	public ParserRule getNumericRule() {
+		return getNumericAccess().getRule();
 	}
 	
-	//Number returns ecore::EJavaObject:
-	//    ('+' | '-')? INT (=>'.' (EXT_INT | INT))?;
-	public STCoreGrammarAccess.NumberElements getNumberAccess() {
-		return gaSTCore.getNumberAccess();
+	//Time returns STTime:
+	//    ('+' | '-')? TIME_VALUE;
+	public STCoreGrammarAccess.TimeElements getTimeAccess() {
+		return gaSTCore.getTimeAccess();
 	}
 	
-	public ParserRule getNumberRule() {
-		return getNumberAccess().getRule();
+	public ParserRule getTimeRule() {
+		return getTimeAccess().getRule();
 	}
 	
 	//Date returns STDate:
@@ -1195,7 +1195,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//DateAndTime returns STDateAndTime:
-	//    INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?;
+	//    INT '-' INT '-' INT '-' INT ':' INT ':' (INT | NUMBER);
 	public STCoreGrammarAccess.DateAndTimeElements getDateAndTimeAccess() {
 		return gaSTCore.getDateAndTimeAccess();
 	}
@@ -1205,23 +1205,13 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//TimeOfDay returns STTimeOfDay:
-	//    INT ':' INT ':' INT (=>'.' INT)?;
+	//    INT ':' INT ':' (INT | NUMBER);
 	public STCoreGrammarAccess.TimeOfDayElements getTimeOfDayAccess() {
 		return gaSTCore.getTimeOfDayAccess();
 	}
 	
 	public ParserRule getTimeOfDayRule() {
 		return getTimeOfDayAccess().getRule();
-	}
-	
-	//Time returns STTime:
-	//    (Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
-	public STCoreGrammarAccess.TimeElements getTimeAccess() {
-		return gaSTCore.getTimeAccess();
-	}
-	
-	public ParserRule getTimeRule() {
-		return getTimeAccess().getRule();
 	}
 	
 	//enum STAccessSpecifier:
@@ -1256,16 +1246,10 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return gaSTCore.getHEX_DIGITRule();
 	}
 	
-	//terminal NON_DECIMAL returns ecore::EJavaObject:
+	//terminal NON_DECIMAL:
 	//    ('2#' | '8#' | '16#') HEX_DIGIT+;
 	public TerminalRule getNON_DECIMALRule() {
 		return gaSTCore.getNON_DECIMALRule();
-	}
-	
-	//terminal EXT_INT:
-	//    INT ('e' | 'E') ('-' | '+')? INT;
-	public TerminalRule getEXT_INTRule() {
-		return gaSTCore.getEXT_INTRule();
 	}
 	
 	//terminal INT returns ecore::EBigInteger:
@@ -1274,6 +1258,68 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 		return gaSTCore.getINTRule();
 	}
 	
+	//terminal fragment EXT_INT:
+	//    INT ('e' | 'E') ('-' | '+')? INT;
+	public TerminalRule getEXT_INTRule() {
+		return gaSTCore.getEXT_INTRule();
+	}
+	
+	//terminal NUMBER:
+	//    INT '.' (EXT_INT | INT);
+	public TerminalRule getNUMBERRule() {
+		return gaSTCore.getNUMBERRule();
+	}
+	
+	//terminal TIME_VALUE:
+	//    (TIME_PART ('_')?)+;
+	public TerminalRule getTIME_VALUERule() {
+		return gaSTCore.getTIME_VALUERule();
+	}
+	
+	//terminal fragment TIME_PART:
+	//    (INT | NUMBER) (TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS);
+	public TerminalRule getTIME_PARTRule() {
+		return gaSTCore.getTIME_PARTRule();
+	}
+	
+	//terminal fragment TIME_DAYS: 'D'|'d';
+	public TerminalRule getTIME_DAYSRule() {
+		return gaSTCore.getTIME_DAYSRule();
+	}
+	
+	//terminal fragment TIME_HOURS: 'H'|'h';
+	public TerminalRule getTIME_HOURSRule() {
+		return gaSTCore.getTIME_HOURSRule();
+	}
+	
+	//terminal fragment TIME_MINUTES: 'M'|'m';
+	public TerminalRule getTIME_MINUTESRule() {
+		return gaSTCore.getTIME_MINUTESRule();
+	}
+	
+	//terminal fragment TIME_SECONDS: 'S'|'s';
+	public TerminalRule getTIME_SECONDSRule() {
+		return gaSTCore.getTIME_SECONDSRule();
+	}
+	
+	//terminal fragment TIME_MILLIS: ('M'|'m')('S'|'s');
+	public TerminalRule getTIME_MILLISRule() {
+		return gaSTCore.getTIME_MILLISRule();
+	}
+	
+	// // MS
+	//terminal fragment TIME_MICROS: ('U'|'u')('S'|'s');
+	public TerminalRule getTIME_MICROSRule() {
+		return gaSTCore.getTIME_MICROSRule();
+	}
+	
+	// // US
+	//terminal fragment TIME_NANOS: ('N'|'n')('S'|'s');
+	public TerminalRule getTIME_NANOSRule() {
+		return gaSTCore.getTIME_NANOSRule();
+	}
+	
+	// // NS
 	//terminal ID:
 	//    '^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 	public TerminalRule getIDRule() {

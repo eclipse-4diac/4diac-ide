@@ -48,7 +48,7 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 			val inferredType = literal.resultType
 			if (inferredType !== null) {
 				NodeModelUtils.findActualNodeFor(literal).asTreeIterable.filter [
-					STNumericLiteralAccess.valueAlternatives_1_0.elements.contains(grammarElement)
+					STNumericLiteralAccess.valueNumericParserRuleCall_1_0.equals(grammarElement)
 				].forEach [ value |
 					acceptor.accept(createNewLineContentCodeMining(value.offset, '''«inferredType.name»#'''))
 				]

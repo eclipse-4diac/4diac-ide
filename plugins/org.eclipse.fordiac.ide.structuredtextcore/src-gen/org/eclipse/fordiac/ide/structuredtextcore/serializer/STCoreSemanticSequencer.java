@@ -748,7 +748,7 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 *     STNumericLiteral returns STNumericLiteral
 	 *
 	 * Constraint:
-	 *     (type=[DataType|STNumericLiteralType]? (value=BoolLiteral | value=Number | value=NON_DECIMAL))
+	 *     (type=[DataType|STNumericLiteralType]? value=Numeric)
 	 * </pre>
 	 */
 	protected void sequence_STNumericLiteral(ISerializationContext context, STNumericLiteral semanticObject) {

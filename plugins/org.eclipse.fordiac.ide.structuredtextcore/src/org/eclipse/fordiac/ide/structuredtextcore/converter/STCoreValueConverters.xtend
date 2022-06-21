@@ -46,21 +46,11 @@ class STCoreValueConverters extends AbstractDeclarativeValueConverterService {
 	@Inject
 	STStringValueConverter stringValueConverter
 
-	@ValueConverter(rule="Number")
-	def IValueConverter<Object> Number() {
+	@ValueConverter(rule="Numeric")
+	def IValueConverter<Object> Numeric() {
 		return numericValueConverter;
 	}
 	
-	@ValueConverter(rule="BoolLiteral")
-	def IValueConverter<Object> BOOL_LITERAL() {
-		return numericValueConverter;
-	}
-	
-	@ValueConverter(rule="NON_DECIMAL")
-	def IValueConverter<Object> NON_DECIMAL() {
-		return numericValueConverter;
-	}
-
 	@ValueConverter(rule="Time")
 	def IValueConverter<Duration> Time() {
 		return timeValueConverter;

@@ -64,9 +64,7 @@ public class STFunctionSyntacticSequencer extends AbstractSyntacticSequencer {
 	 *     (rule start) (ambiguity) type=[DataType|STNumericLiteralType]
 	 *     (rule start) (ambiguity) type=[DataType|STTimeLiteralType]
 	 *     (rule start) (ambiguity) type=[DataType|STTimeOfDayType]
-	 *     (rule start) (ambiguity) value=BoolLiteral
-	 *     (rule start) (ambiguity) value=NON_DECIMAL
-	 *     (rule start) (ambiguity) value=Number
+	 *     (rule start) (ambiguity) value=Numeric
 	 *     (rule start) (ambiguity) value=STRING
 	 *     (rule start) (ambiguity) {STArrayAccessExpression.receiver=}
 	 *     (rule start) (ambiguity) {STBinaryExpression.left=}

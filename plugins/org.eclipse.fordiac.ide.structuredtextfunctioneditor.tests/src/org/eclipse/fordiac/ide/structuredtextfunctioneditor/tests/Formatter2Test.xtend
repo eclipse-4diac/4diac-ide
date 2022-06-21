@@ -66,9 +66,9 @@ class Formatter2Test {
 					real1 : REAL;
 					real1 : REAL := REAL#+1.0;
 					real1 : REAL := REAL#-1;
-					real1 : REAL := REAL#1.4e3;
-					real1 : REAL := REAL#-1.4e+3;
-					real1 : REAL := REAL#+1.4e-3;
+					real1 : REAL := REAL#1.4E3;
+					real1 : REAL := REAL#-1.4E+3;
+					real1 : REAL := REAL#+1.4E-3;
 					int1 : INT := 2#10001;
 					int1 : INT := 8#723;
 					int3 : INT := 16#AFFE;
@@ -269,11 +269,14 @@ class Formatter2Test {
 					bol1 : BOOL := 2#100 < 100;
 					int1 : INT := 8#723 >= 33;
 					int2 : INT := 16#AFFE;
-					real1 : REAL := REAL#-1.4e+3 + 3.0;
-					real2 : REAL := REAL#+1.4e-3 ** 2;
+					real1 : REAL := REAL#-1.4E+3 + 3.0;
+					real2 : REAL := REAL#+1.4E-3 ** 2;
 				END_VAR
 				END_FUNCTION
 			'''
+			// workaround to fix a problem in Xtext due to differences between the node model and serialized model
+			// (different rule calls) when using expressions in elementary initializers
+			useSerializer = false
 		]
 	}
 
@@ -283,20 +286,20 @@ class Formatter2Test {
 			toBeFormatted = '''
 				FUNCTION hubert
 				VAR_OUTPUT
-				    arr1:ARRAY [1..5] OF INT:=[1,2,3,4,5];
-				    arr2:ARRAY [1..2,3..4] OF INT:=[1,3(7)];
-				    arr3:ARRAY [1..2,2..3,3..4] OF INT:=[2(0),4(4),2,3];
-				    arr4:ARRAY [1..5] OF INT:=[1+3,2+3,3*8,4,5];
+				    arr1:ARRAY [1 .. 5] OF INT:=[1,2,3,4,5];
+				    arr2:ARRAY [1 .. 2,3 .. 4] OF INT:=[1,3(7)];
+				    arr3:ARRAY [1 .. 2,2 .. 3,3 .. 4] OF INT:=[2(0),4(4),2,3];
+				    arr4:ARRAY [1 .. 5] OF INT:=[1+3,2+3,3*8,4,5];
 				END_VAR
 				END_FUNCTION
 			'''
 			expectation = '''
 				FUNCTION hubert
 				VAR_OUTPUT
-					arr1 : ARRAY[1..5] OF INT := [1, 2, 3, 4, 5];
-					arr2 : ARRAY[1..2, 3..4] OF INT := [1, 3(7)];
-					arr3 : ARRAY[1..2, 2..3, 3..4] OF INT := [2(0), 4(4), 2, 3];
-					arr4 : ARRAY[1..5] OF INT := [1 + 3, 2 + 3, 3 * 8, 4, 5];
+					arr1 : ARRAY[1 .. 5] OF INT := [1, 2, 3, 4, 5];
+					arr2 : ARRAY[1 .. 2, 3 .. 4] OF INT := [1, 3(7)];
+					arr3 : ARRAY[1 .. 2, 2 .. 3, 3 .. 4] OF INT := [2(0), 4(4), 2, 3];
+					arr4 : ARRAY[1 .. 5] OF INT := [1 + 3, 2 + 3, 3 * 8, 4, 5];
 				END_VAR
 				END_FUNCTION
 			'''
@@ -312,7 +315,7 @@ class Formatter2Test {
 			toBeFormatted = '''
 				FUNCTION hubert
 				VAR_OUTPUT
-					arr1 : ARRAY [1..5] OF INT := [1, 2, 3, 4, 5];
+					arr1 : ARRAY [1 .. 5] OF INT := [1, 2, 3, 4, 5];
 				END_VAR
 				arr[1]:=2;
 				arr[1,2,3]:=3;
@@ -321,7 +324,7 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				VAR_OUTPUT
-					arr1 : ARRAY[1..5] OF INT := [1, 2, 3, 4, 5];
+					arr1 : ARRAY[1 .. 5] OF INT := [1, 2, 3, 4, 5];
 				END_VAR
 				arr[1] := 2;
 				arr[1, 2, 3] := 3;

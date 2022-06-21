@@ -233,7 +233,7 @@ STNumericLiteralType:
 
 STNumericLiteral:
 	(type=[datatype::DataType|STNumericLiteralType] '#')?
-	value=(BoolLiteral | Number | NON_DECIMAL);
+	value=Numeric;
 
 STDateLiteralType:
 	STDateType |
@@ -299,23 +299,20 @@ STAnyCharsType:
 QualifiedName:
 	ID ('.' ID)*;
 
-BoolLiteral returns ecore::EJavaObject:
-	'TRUE' | 'FALSE';
-
-Number returns ecore::EJavaObject:
-	('+' | '-')? INT (=>'.' (EXT_INT | INT))?;
+Numeric returns ecore::EJavaObject:
+	'TRUE' | 'FALSE' | (('+' | '-')? (INT | NUMBER)) | NON_DECIMAL;
+	
+Time returns STTime:
+	('+' | '-')? TIME_VALUE;
 
 Date returns STDate:
 	INT '-' INT '-' INT;
 
 DateAndTime returns STDateAndTime:
-	INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?;
+	INT '-' INT '-' INT '-' INT ':' INT ':' (INT | NUMBER);
 
 TimeOfDay returns STTimeOfDay:
-	INT ':' INT ':' INT (=>'.' INT)?;
-
-Time returns STTime:
-	(Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
+	INT ':' INT ':' (INT | NUMBER);
 
 enum STAccessSpecifier:
 	PROTECTED='PROTECTED' | PUBLIC='PUBLIC' | PRIVATE='PRIVATE' | INTERNAL='INTERNAL';
@@ -332,14 +329,31 @@ RESERVED_KEYWORDS:
 terminal fragment HEX_DIGIT:
 	'0'..'9' | 'a'..'f' | 'A'..'F' | '_';
 
-terminal NON_DECIMAL returns ecore::EJavaObject:
+terminal NON_DECIMAL:
 	('2#' | '8#' | '16#') HEX_DIGIT+;
-
-terminal EXT_INT:
-	INT ('e' | 'E') ('-' | '+')? INT;
 
 terminal INT returns ecore::EBigInteger:
 	('0'..'9') ('_'? '0'..'9')*;
+
+terminal fragment EXT_INT:
+	INT ('e' | 'E') ('-' | '+')? INT;
+
+terminal NUMBER:
+    INT '.' (EXT_INT | INT);
+
+terminal TIME_VALUE:
+    (TIME_PART ('_')?)+;
+
+terminal fragment TIME_PART:
+    (INT | NUMBER) (TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS);
+    
+terminal fragment TIME_DAYS: 'D'|'d';
+terminal fragment TIME_HOURS: 'H'|'h';
+terminal fragment TIME_MINUTES: 'M'|'m';
+terminal fragment TIME_SECONDS: 'S'|'s';
+terminal fragment TIME_MILLIS: ('M'|'m')('S'|'s'); // MS
+terminal fragment TIME_MICROS: ('U'|'u')('S'|'s'); // US
+terminal fragment TIME_NANOS: ('N'|'n')('S'|'s'); // NS
 
 terminal ID:
 	'^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;

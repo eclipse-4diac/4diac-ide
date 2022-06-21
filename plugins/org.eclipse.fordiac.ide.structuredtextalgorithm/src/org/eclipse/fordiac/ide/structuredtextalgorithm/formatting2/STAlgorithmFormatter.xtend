@@ -33,7 +33,7 @@ class STAlgorithmFormatter extends STCoreFormatter {
 		sTAlgorithmSource.allSemanticRegions.filter [
 			switch (element : grammarElement) {
 				Keyword case element.value.matches("[_a-zA-Z]+"): true
-				RuleCall case element.rule == boolLiteralRule: true
+				RuleCall case element.rule == numericRule: true
 				RuleCall case element.rule == STNumericLiteralTypeRule: true
 				RuleCall case element.rule == STDateLiteralTypeRule: true
 				RuleCall case element.rule == STTimeLiteralTypeRule: true

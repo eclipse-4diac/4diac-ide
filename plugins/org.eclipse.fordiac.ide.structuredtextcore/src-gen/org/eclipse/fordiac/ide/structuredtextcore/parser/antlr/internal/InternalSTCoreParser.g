@@ -3133,54 +3133,21 @@ ruleSTNumericLiteral returns [EObject current=null]
 		)?
 		(
 			(
-				(
-					{
-						newCompositeNode(grammarAccess.getSTNumericLiteralAccess().getValueBoolLiteralParserRuleCall_1_0_0());
+				{
+					newCompositeNode(grammarAccess.getSTNumericLiteralAccess().getValueNumericParserRuleCall_1_0());
+				}
+				lv_value_2_0=ruleNumeric
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTNumericLiteralRule());
 					}
-					lv_value_2_1=ruleBoolLiteral
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getSTNumericLiteralRule());
-						}
-						set(
-							$current,
-							"value",
-							lv_value_2_1,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.BoolLiteral");
-						afterParserOrEnumRuleCall();
-					}
-					    |
-					{
-						newCompositeNode(grammarAccess.getSTNumericLiteralAccess().getValueNumberParserRuleCall_1_0_1());
-					}
-					lv_value_2_2=ruleNumber
-					{
-						if ($current==null) {
-							$current = createModelElementForParent(grammarAccess.getSTNumericLiteralRule());
-						}
-						set(
-							$current,
-							"value",
-							lv_value_2_2,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.Number");
-						afterParserOrEnumRuleCall();
-					}
-					    |
-					lv_value_2_3=RULE_NON_DECIMAL
-					{
-						newLeafNode(lv_value_2_3, grammarAccess.getSTNumericLiteralAccess().getValueNON_DECIMALTerminalRuleCall_1_0_2());
-					}
-					{
-						if ($current==null) {
-							$current = createModelElement(grammarAccess.getSTNumericLiteralRule());
-						}
-						setWithLastConsumed(
-							$current,
-							"value",
-							lv_value_2_3,
-							"org.eclipse.fordiac.ide.structuredtextcore.STCore.NON_DECIMAL");
-					}
-				)
+					set(
+						$current,
+						"value",
+						lv_value_2_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.Numeric");
+					afterParserOrEnumRuleCall();
+				}
 			)
 		)
 	)
@@ -4032,15 +3999,15 @@ ruleSTAnyCharsType returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRule
 	)
 ;
 
-// Entry rule entryRuleBoolLiteral
-entryRuleBoolLiteral returns [String current=null]:
-	{ newCompositeNode(grammarAccess.getBoolLiteralRule()); }
-	iv_ruleBoolLiteral=ruleBoolLiteral
-	{ $current=$iv_ruleBoolLiteral.current.getText(); }
+// Entry rule entryRuleNumeric
+entryRuleNumeric returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getNumericRule()); }
+	iv_ruleNumeric=ruleNumeric
+	{ $current=$iv_ruleNumeric.current.getText(); }
 	EOF;
 
-// Rule BoolLiteral
-ruleBoolLiteral returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+// Rule Numeric
+ruleNumeric returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
 @init {
 	enterRule();
 }
@@ -4051,26 +4018,67 @@ ruleBoolLiteral returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleTok
 		kw=TRUE
 		{
 			$current.merge(kw);
-			newLeafNode(kw, grammarAccess.getBoolLiteralAccess().getTRUEKeyword_0());
+			newLeafNode(kw, grammarAccess.getNumericAccess().getTRUEKeyword_0());
 		}
 		    |
 		kw=FALSE
 		{
 			$current.merge(kw);
-			newLeafNode(kw, grammarAccess.getBoolLiteralAccess().getFALSEKeyword_1());
+			newLeafNode(kw, grammarAccess.getNumericAccess().getFALSEKeyword_1());
+		}
+		    |
+		(
+			(
+				kw=PlusSign
+				{
+					$current.merge(kw);
+					newLeafNode(kw, grammarAccess.getNumericAccess().getPlusSignKeyword_2_0_0());
+				}
+				    |
+				kw=HyphenMinus
+				{
+					$current.merge(kw);
+					newLeafNode(kw, grammarAccess.getNumericAccess().getHyphenMinusKeyword_2_0_1());
+				}
+			)?
+			(
+				this_INT_4=RULE_INT
+				{
+					$current.merge(this_INT_4);
+				}
+				{
+					newLeafNode(this_INT_4, grammarAccess.getNumericAccess().getINTTerminalRuleCall_2_1_0());
+				}
+				    |
+				this_NUMBER_5=RULE_NUMBER
+				{
+					$current.merge(this_NUMBER_5);
+				}
+				{
+					newLeafNode(this_NUMBER_5, grammarAccess.getNumericAccess().getNUMBERTerminalRuleCall_2_1_1());
+				}
+			)
+		)
+		    |
+		this_NON_DECIMAL_6=RULE_NON_DECIMAL
+		{
+			$current.merge(this_NON_DECIMAL_6);
+		}
+		{
+			newLeafNode(this_NON_DECIMAL_6, grammarAccess.getNumericAccess().getNON_DECIMALTerminalRuleCall_3());
 		}
 	)
 ;
 
-// Entry rule entryRuleNumber
-entryRuleNumber returns [String current=null]:
-	{ newCompositeNode(grammarAccess.getNumberRule()); }
-	iv_ruleNumber=ruleNumber
-	{ $current=$iv_ruleNumber.current.getText(); }
+// Entry rule entryRuleTime
+entryRuleTime returns [String current=null]:
+	{ newCompositeNode(grammarAccess.getTimeRule()); }
+	iv_ruleTime=ruleTime
+	{ $current=$iv_ruleTime.current.getText(); }
 	EOF;
 
-// Rule Number
-ruleNumber returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+// Rule Time
+ruleTime returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
 @init {
 	enterRule();
 }
@@ -4082,49 +4090,22 @@ ruleNumber returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
 			kw=PlusSign
 			{
 				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getNumberAccess().getPlusSignKeyword_0_0());
+				newLeafNode(kw, grammarAccess.getTimeAccess().getPlusSignKeyword_0_0());
 			}
 			    |
 			kw=HyphenMinus
 			{
 				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getNumberAccess().getHyphenMinusKeyword_0_1());
+				newLeafNode(kw, grammarAccess.getTimeAccess().getHyphenMinusKeyword_0_1());
 			}
 		)?
-		this_INT_2=RULE_INT
+		this_TIME_VALUE_2=RULE_TIME_VALUE
 		{
-			$current.merge(this_INT_2);
+			$current.merge(this_TIME_VALUE_2);
 		}
 		{
-			newLeafNode(this_INT_2, grammarAccess.getNumberAccess().getINTTerminalRuleCall_1());
+			newLeafNode(this_TIME_VALUE_2, grammarAccess.getTimeAccess().getTIME_VALUETerminalRuleCall_1());
 		}
-		(
-			(
-				(FullStop)=>
-				kw=FullStop
-				{
-					$current.merge(kw);
-					newLeafNode(kw, grammarAccess.getNumberAccess().getFullStopKeyword_2_0());
-				}
-			)
-			(
-				this_EXT_INT_4=RULE_EXT_INT
-				{
-					$current.merge(this_EXT_INT_4);
-				}
-				{
-					newLeafNode(this_EXT_INT_4, grammarAccess.getNumberAccess().getEXT_INTTerminalRuleCall_2_1_0());
-				}
-				    |
-				this_INT_5=RULE_INT
-				{
-					$current.merge(this_INT_5);
-				}
-				{
-					newLeafNode(this_INT_5, grammarAccess.getNumberAccess().getINTTerminalRuleCall_2_1_1());
-				}
-			)
-		)?
 	)
 ;
 
@@ -4254,30 +4235,23 @@ ruleDateAndTime returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleTok
 			$current.merge(kw);
 			newLeafNode(kw, grammarAccess.getDateAndTimeAccess().getColonKeyword_9());
 		}
-		this_INT_10=RULE_INT
-		{
-			$current.merge(this_INT_10);
-		}
-		{
-			newLeafNode(this_INT_10, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_10());
-		}
 		(
-			(
-				(FullStop)=>
-				kw=FullStop
-				{
-					$current.merge(kw);
-					newLeafNode(kw, grammarAccess.getDateAndTimeAccess().getFullStopKeyword_11_0());
-				}
-			)
-			this_INT_12=RULE_INT
+			this_INT_10=RULE_INT
 			{
-				$current.merge(this_INT_12);
+				$current.merge(this_INT_10);
 			}
 			{
-				newLeafNode(this_INT_12, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_11_1());
+				newLeafNode(this_INT_10, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_10_0());
 			}
-		)?
+			    |
+			this_NUMBER_11=RULE_NUMBER
+			{
+				$current.merge(this_NUMBER_11);
+			}
+			{
+				newLeafNode(this_NUMBER_11, grammarAccess.getDateAndTimeAccess().getNUMBERTerminalRuleCall_10_1());
+			}
+		)
 	)
 ;
 
@@ -4321,110 +4295,24 @@ ruleTimeOfDay returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken
 			$current.merge(kw);
 			newLeafNode(kw, grammarAccess.getTimeOfDayAccess().getColonKeyword_3());
 		}
-		this_INT_4=RULE_INT
-		{
-			$current.merge(this_INT_4);
-		}
-		{
-			newLeafNode(this_INT_4, grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_4());
-		}
 		(
-			(
-				(FullStop)=>
-				kw=FullStop
-				{
-					$current.merge(kw);
-					newLeafNode(kw, grammarAccess.getTimeOfDayAccess().getFullStopKeyword_5_0());
-				}
-			)
-			this_INT_6=RULE_INT
+			this_INT_4=RULE_INT
 			{
-				$current.merge(this_INT_6);
+				$current.merge(this_INT_4);
 			}
 			{
-				newLeafNode(this_INT_6, grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_5_1());
-			}
-		)?
-	)
-;
-
-// Entry rule entryRuleTime
-entryRuleTime returns [String current=null]:
-	{ newCompositeNode(grammarAccess.getTimeRule()); }
-	iv_ruleTime=ruleTime
-	{ $current=$iv_ruleTime.current.getText(); }
-	EOF;
-
-// Rule Time
-ruleTime returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
-@init {
-	enterRule();
-}
-@after {
-	leaveRule();
-}:
-	(
-		{
-			newCompositeNode(grammarAccess.getTimeAccess().getNumberParserRuleCall_0());
-		}
-		this_Number_0=ruleNumber
-		{
-			$current.merge(this_Number_0);
-		}
-		{
-			afterParserOrEnumRuleCall();
-		}
-		(
-			kw=D
-			{
-				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getTimeAccess().getDKeyword_1_0());
+				newLeafNode(this_INT_4, grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_4_0());
 			}
 			    |
-			kw=H
+			this_NUMBER_5=RULE_NUMBER
 			{
-				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getTimeAccess().getHKeyword_1_1());
+				$current.merge(this_NUMBER_5);
 			}
-			    |
-			kw=M
 			{
-				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getTimeAccess().getMKeyword_1_2());
-			}
-			    |
-			kw=S
-			{
-				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getTimeAccess().getSKeyword_1_3());
-			}
-			    |
-			kw=MS
-			{
-				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getTimeAccess().getMSKeyword_1_4());
-			}
-			    |
-			kw=US
-			{
-				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getTimeAccess().getUSKeyword_1_5());
-			}
-			    |
-			kw=NS
-			{
-				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getTimeAccess().getNSKeyword_1_6());
+				newLeafNode(this_NUMBER_5, grammarAccess.getTimeOfDayAccess().getNUMBERTerminalRuleCall_4_1());
 			}
 		)
-		(
-			kw=KW__
-			{
-				$current.merge(kw);
-				newLeafNode(kw, grammarAccess.getTimeAccess().get_Keyword_2());
-			}
-		)?
-	)+
+	)
 ;
 
 // Rule SubrangeOperator

@@ -2107,18 +2107,15 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cTypeDataTypeSTNumericLiteralTypeParserRuleCall_0_0_0_1 = (RuleCall)cTypeDataTypeCrossReference_0_0_0.eContents().get(1);
 		private final Keyword cNumberSignKeyword_0_1 = (Keyword)cGroup_0.eContents().get(1);
 		private final Assignment cValueAssignment_1 = (Assignment)cGroup.eContents().get(1);
-		private final Alternatives cValueAlternatives_1_0 = (Alternatives)cValueAssignment_1.eContents().get(0);
-		private final RuleCall cValueBoolLiteralParserRuleCall_1_0_0 = (RuleCall)cValueAlternatives_1_0.eContents().get(0);
-		private final RuleCall cValueNumberParserRuleCall_1_0_1 = (RuleCall)cValueAlternatives_1_0.eContents().get(1);
-		private final RuleCall cValueNON_DECIMALTerminalRuleCall_1_0_2 = (RuleCall)cValueAlternatives_1_0.eContents().get(2);
+		private final RuleCall cValueNumericParserRuleCall_1_0 = (RuleCall)cValueAssignment_1.eContents().get(0);
 		
 		//STNumericLiteral:
 		//    (type=[datatype::DataType|STNumericLiteralType] '#')?
-		//    value=(BoolLiteral | Number | NON_DECIMAL);
+		//    value=Numeric;
 		@Override public ParserRule getRule() { return rule; }
 		
 		//(type=[datatype::DataType|STNumericLiteralType] '#')?
-		//value=(BoolLiteral | Number | NON_DECIMAL)
+		//value=Numeric
 		public Group getGroup() { return cGroup; }
 		
 		//(type=[datatype::DataType|STNumericLiteralType] '#')?
@@ -2136,20 +2133,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'#'
 		public Keyword getNumberSignKeyword_0_1() { return cNumberSignKeyword_0_1; }
 		
-		//value=(BoolLiteral | Number | NON_DECIMAL)
+		//value=Numeric
 		public Assignment getValueAssignment_1() { return cValueAssignment_1; }
 		
-		//(BoolLiteral | Number | NON_DECIMAL)
-		public Alternatives getValueAlternatives_1_0() { return cValueAlternatives_1_0; }
-		
-		//BoolLiteral
-		public RuleCall getValueBoolLiteralParserRuleCall_1_0_0() { return cValueBoolLiteralParserRuleCall_1_0_0; }
-		
-		//Number
-		public RuleCall getValueNumberParserRuleCall_1_0_1() { return cValueNumberParserRuleCall_1_0_1; }
-		
-		//NON_DECIMAL
-		public RuleCall getValueNON_DECIMALTerminalRuleCall_1_0_2() { return cValueNON_DECIMALTerminalRuleCall_1_0_2; }
+		//Numeric
+		public RuleCall getValueNumericParserRuleCall_1_0() { return cValueNumericParserRuleCall_1_0; }
 	}
 	public class STDateLiteralTypeElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STDateLiteralType");
@@ -2697,17 +2685,25 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//ID
 		public RuleCall getIDTerminalRuleCall_1_1() { return cIDTerminalRuleCall_1_1; }
 	}
-	public class BoolLiteralElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.BoolLiteral");
+	public class NumericElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.Numeric");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final Keyword cTRUEKeyword_0 = (Keyword)cAlternatives.eContents().get(0);
 		private final Keyword cFALSEKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
+		private final Group cGroup_2 = (Group)cAlternatives.eContents().get(2);
+		private final Alternatives cAlternatives_2_0 = (Alternatives)cGroup_2.eContents().get(0);
+		private final Keyword cPlusSignKeyword_2_0_0 = (Keyword)cAlternatives_2_0.eContents().get(0);
+		private final Keyword cHyphenMinusKeyword_2_0_1 = (Keyword)cAlternatives_2_0.eContents().get(1);
+		private final Alternatives cAlternatives_2_1 = (Alternatives)cGroup_2.eContents().get(1);
+		private final RuleCall cINTTerminalRuleCall_2_1_0 = (RuleCall)cAlternatives_2_1.eContents().get(0);
+		private final RuleCall cNUMBERTerminalRuleCall_2_1_1 = (RuleCall)cAlternatives_2_1.eContents().get(1);
+		private final RuleCall cNON_DECIMALTerminalRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
 		
-		//BoolLiteral returns ecore::EJavaObject:
-		//    'TRUE' | 'FALSE';
+		//Numeric returns ecore::EJavaObject:
+		//    'TRUE' | 'FALSE' | (('+' | '-')? (INT | NUMBER)) | NON_DECIMAL;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'TRUE' | 'FALSE'
+		//'TRUE' | 'FALSE' | (('+' | '-')? (INT | NUMBER)) | NON_DECIMAL
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//'TRUE'
@@ -2715,25 +2711,44 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//'FALSE'
 		public Keyword getFALSEKeyword_1() { return cFALSEKeyword_1; }
+		
+		//(('+' | '-')? (INT | NUMBER))
+		public Group getGroup_2() { return cGroup_2; }
+		
+		//('+' | '-')?
+		public Alternatives getAlternatives_2_0() { return cAlternatives_2_0; }
+		
+		//'+'
+		public Keyword getPlusSignKeyword_2_0_0() { return cPlusSignKeyword_2_0_0; }
+		
+		//'-'
+		public Keyword getHyphenMinusKeyword_2_0_1() { return cHyphenMinusKeyword_2_0_1; }
+		
+		//(INT | NUMBER)
+		public Alternatives getAlternatives_2_1() { return cAlternatives_2_1; }
+		
+		//INT
+		public RuleCall getINTTerminalRuleCall_2_1_0() { return cINTTerminalRuleCall_2_1_0; }
+		
+		//NUMBER
+		public RuleCall getNUMBERTerminalRuleCall_2_1_1() { return cNUMBERTerminalRuleCall_2_1_1; }
+		
+		//NON_DECIMAL
+		public RuleCall getNON_DECIMALTerminalRuleCall_3() { return cNON_DECIMALTerminalRuleCall_3; }
 	}
-	public class NumberElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.Number");
+	public class TimeElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.Time");
 		private final Group cGroup = (Group)rule.eContents().get(1);
 		private final Alternatives cAlternatives_0 = (Alternatives)cGroup.eContents().get(0);
 		private final Keyword cPlusSignKeyword_0_0 = (Keyword)cAlternatives_0.eContents().get(0);
 		private final Keyword cHyphenMinusKeyword_0_1 = (Keyword)cAlternatives_0.eContents().get(1);
-		private final RuleCall cINTTerminalRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
-		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
-		private final Keyword cFullStopKeyword_2_0 = (Keyword)cGroup_2.eContents().get(0);
-		private final Alternatives cAlternatives_2_1 = (Alternatives)cGroup_2.eContents().get(1);
-		private final RuleCall cEXT_INTTerminalRuleCall_2_1_0 = (RuleCall)cAlternatives_2_1.eContents().get(0);
-		private final RuleCall cINTTerminalRuleCall_2_1_1 = (RuleCall)cAlternatives_2_1.eContents().get(1);
+		private final RuleCall cTIME_VALUETerminalRuleCall_1 = (RuleCall)cGroup.eContents().get(1);
 		
-		//Number returns ecore::EJavaObject:
-		//    ('+' | '-')? INT (=>'.' (EXT_INT | INT))?;
+		//Time returns STTime:
+		//    ('+' | '-')? TIME_VALUE;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//('+' | '-')? INT (=>'.' (EXT_INT | INT))?
+		//('+' | '-')? TIME_VALUE
 		public Group getGroup() { return cGroup; }
 		
 		//('+' | '-')?
@@ -2745,23 +2760,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'-'
 		public Keyword getHyphenMinusKeyword_0_1() { return cHyphenMinusKeyword_0_1; }
 		
-		//INT
-		public RuleCall getINTTerminalRuleCall_1() { return cINTTerminalRuleCall_1; }
-		
-		//(=>'.' (EXT_INT | INT))?
-		public Group getGroup_2() { return cGroup_2; }
-		
-		//=>'.'
-		public Keyword getFullStopKeyword_2_0() { return cFullStopKeyword_2_0; }
-		
-		//(EXT_INT | INT)
-		public Alternatives getAlternatives_2_1() { return cAlternatives_2_1; }
-		
-		//EXT_INT
-		public RuleCall getEXT_INTTerminalRuleCall_2_1_0() { return cEXT_INTTerminalRuleCall_2_1_0; }
-		
-		//INT
-		public RuleCall getINTTerminalRuleCall_2_1_1() { return cINTTerminalRuleCall_2_1_1; }
+		//TIME_VALUE
+		public RuleCall getTIME_VALUETerminalRuleCall_1() { return cTIME_VALUETerminalRuleCall_1; }
 	}
 	public class DateElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.Date");
@@ -2807,16 +2807,15 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cColonKeyword_7 = (Keyword)cGroup.eContents().get(7);
 		private final RuleCall cINTTerminalRuleCall_8 = (RuleCall)cGroup.eContents().get(8);
 		private final Keyword cColonKeyword_9 = (Keyword)cGroup.eContents().get(9);
-		private final RuleCall cINTTerminalRuleCall_10 = (RuleCall)cGroup.eContents().get(10);
-		private final Group cGroup_11 = (Group)cGroup.eContents().get(11);
-		private final Keyword cFullStopKeyword_11_0 = (Keyword)cGroup_11.eContents().get(0);
-		private final RuleCall cINTTerminalRuleCall_11_1 = (RuleCall)cGroup_11.eContents().get(1);
+		private final Alternatives cAlternatives_10 = (Alternatives)cGroup.eContents().get(10);
+		private final RuleCall cINTTerminalRuleCall_10_0 = (RuleCall)cAlternatives_10.eContents().get(0);
+		private final RuleCall cNUMBERTerminalRuleCall_10_1 = (RuleCall)cAlternatives_10.eContents().get(1);
 		
 		//DateAndTime returns STDateAndTime:
-		//    INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?;
+		//    INT '-' INT '-' INT '-' INT ':' INT ':' (INT | NUMBER);
 		@Override public ParserRule getRule() { return rule; }
 		
-		//INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?
+		//INT '-' INT '-' INT '-' INT ':' INT ':' (INT | NUMBER)
 		public Group getGroup() { return cGroup; }
 		
 		//INT
@@ -2849,17 +2848,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//':'
 		public Keyword getColonKeyword_9() { return cColonKeyword_9; }
 		
-		//INT
-		public RuleCall getINTTerminalRuleCall_10() { return cINTTerminalRuleCall_10; }
-		
-		//(=>'.' INT)?
-		public Group getGroup_11() { return cGroup_11; }
-		
-		//=>'.'
-		public Keyword getFullStopKeyword_11_0() { return cFullStopKeyword_11_0; }
+		//(INT | NUMBER)
+		public Alternatives getAlternatives_10() { return cAlternatives_10; }
 		
 		//INT
-		public RuleCall getINTTerminalRuleCall_11_1() { return cINTTerminalRuleCall_11_1; }
+		public RuleCall getINTTerminalRuleCall_10_0() { return cINTTerminalRuleCall_10_0; }
+		
+		//NUMBER
+		public RuleCall getNUMBERTerminalRuleCall_10_1() { return cNUMBERTerminalRuleCall_10_1; }
 	}
 	public class TimeOfDayElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TimeOfDay");
@@ -2868,16 +2864,15 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Keyword cColonKeyword_1 = (Keyword)cGroup.eContents().get(1);
 		private final RuleCall cINTTerminalRuleCall_2 = (RuleCall)cGroup.eContents().get(2);
 		private final Keyword cColonKeyword_3 = (Keyword)cGroup.eContents().get(3);
-		private final RuleCall cINTTerminalRuleCall_4 = (RuleCall)cGroup.eContents().get(4);
-		private final Group cGroup_5 = (Group)cGroup.eContents().get(5);
-		private final Keyword cFullStopKeyword_5_0 = (Keyword)cGroup_5.eContents().get(0);
-		private final RuleCall cINTTerminalRuleCall_5_1 = (RuleCall)cGroup_5.eContents().get(1);
+		private final Alternatives cAlternatives_4 = (Alternatives)cGroup.eContents().get(4);
+		private final RuleCall cINTTerminalRuleCall_4_0 = (RuleCall)cAlternatives_4.eContents().get(0);
+		private final RuleCall cNUMBERTerminalRuleCall_4_1 = (RuleCall)cAlternatives_4.eContents().get(1);
 		
 		//TimeOfDay returns STTimeOfDay:
-		//    INT ':' INT ':' INT (=>'.' INT)?;
+		//    INT ':' INT ':' (INT | NUMBER);
 		@Override public ParserRule getRule() { return rule; }
 		
-		//INT ':' INT ':' INT (=>'.' INT)?
+		//INT ':' INT ':' (INT | NUMBER)
 		public Group getGroup() { return cGroup; }
 		
 		//INT
@@ -2892,68 +2887,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//':'
 		public Keyword getColonKeyword_3() { return cColonKeyword_3; }
 		
-		//INT
-		public RuleCall getINTTerminalRuleCall_4() { return cINTTerminalRuleCall_4; }
-		
-		//(=>'.' INT)?
-		public Group getGroup_5() { return cGroup_5; }
-		
-		//=>'.'
-		public Keyword getFullStopKeyword_5_0() { return cFullStopKeyword_5_0; }
+		//(INT | NUMBER)
+		public Alternatives getAlternatives_4() { return cAlternatives_4; }
 		
 		//INT
-		public RuleCall getINTTerminalRuleCall_5_1() { return cINTTerminalRuleCall_5_1; }
-	}
-	public class TimeElements extends AbstractParserRuleElementFinder {
-		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.Time");
-		private final Group cGroup = (Group)rule.eContents().get(1);
-		private final RuleCall cNumberParserRuleCall_0 = (RuleCall)cGroup.eContents().get(0);
-		private final Alternatives cAlternatives_1 = (Alternatives)cGroup.eContents().get(1);
-		private final Keyword cDKeyword_1_0 = (Keyword)cAlternatives_1.eContents().get(0);
-		private final Keyword cHKeyword_1_1 = (Keyword)cAlternatives_1.eContents().get(1);
-		private final Keyword cMKeyword_1_2 = (Keyword)cAlternatives_1.eContents().get(2);
-		private final Keyword cSKeyword_1_3 = (Keyword)cAlternatives_1.eContents().get(3);
-		private final Keyword cMSKeyword_1_4 = (Keyword)cAlternatives_1.eContents().get(4);
-		private final Keyword cUSKeyword_1_5 = (Keyword)cAlternatives_1.eContents().get(5);
-		private final Keyword cNSKeyword_1_6 = (Keyword)cAlternatives_1.eContents().get(6);
-		private final Keyword c_Keyword_2 = (Keyword)cGroup.eContents().get(2);
+		public RuleCall getINTTerminalRuleCall_4_0() { return cINTTerminalRuleCall_4_0; }
 		
-		//Time returns STTime:
-		//    (Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
-		@Override public ParserRule getRule() { return rule; }
-		
-		//(Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+
-		public Group getGroup() { return cGroup; }
-		
-		//Number
-		public RuleCall getNumberParserRuleCall_0() { return cNumberParserRuleCall_0; }
-		
-		//('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS')
-		public Alternatives getAlternatives_1() { return cAlternatives_1; }
-		
-		//'D'
-		public Keyword getDKeyword_1_0() { return cDKeyword_1_0; }
-		
-		//'H'
-		public Keyword getHKeyword_1_1() { return cHKeyword_1_1; }
-		
-		//'M'
-		public Keyword getMKeyword_1_2() { return cMKeyword_1_2; }
-		
-		//'S'
-		public Keyword getSKeyword_1_3() { return cSKeyword_1_3; }
-		
-		//'MS'
-		public Keyword getMSKeyword_1_4() { return cMSKeyword_1_4; }
-		
-		//'US'
-		public Keyword getUSKeyword_1_5() { return cUSKeyword_1_5; }
-		
-		//'NS'
-		public Keyword getNSKeyword_1_6() { return cNSKeyword_1_6; }
-		
-		//('_')?
-		public Keyword get_Keyword_2() { return c_Keyword_2; }
+		//NUMBER
+		public RuleCall getNUMBERTerminalRuleCall_4_1() { return cNUMBERTerminalRuleCall_4_1; }
 	}
 	public class RESERVED_KEYWORDSElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.RESERVED_KEYWORDS");
@@ -3588,18 +3529,27 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final STDateAndTimeTypeElements pSTDateAndTimeType;
 	private final STAnyCharsTypeElements pSTAnyCharsType;
 	private final QualifiedNameElements pQualifiedName;
-	private final BoolLiteralElements pBoolLiteral;
-	private final NumberElements pNumber;
+	private final NumericElements pNumeric;
+	private final TimeElements pTime;
 	private final DateElements pDate;
 	private final DateAndTimeElements pDateAndTime;
 	private final TimeOfDayElements pTimeOfDay;
-	private final TimeElements pTime;
 	private final STAccessSpecifierElements eSTAccessSpecifier;
 	private final RESERVED_KEYWORDSElements pRESERVED_KEYWORDS;
 	private final TerminalRule tHEX_DIGIT;
 	private final TerminalRule tNON_DECIMAL;
-	private final TerminalRule tEXT_INT;
 	private final TerminalRule tINT;
+	private final TerminalRule tEXT_INT;
+	private final TerminalRule tNUMBER;
+	private final TerminalRule tTIME_VALUE;
+	private final TerminalRule tTIME_PART;
+	private final TerminalRule tTIME_DAYS;
+	private final TerminalRule tTIME_HOURS;
+	private final TerminalRule tTIME_MINUTES;
+	private final TerminalRule tTIME_SECONDS;
+	private final TerminalRule tTIME_MILLIS;
+	private final TerminalRule tTIME_MICROS;
+	private final TerminalRule tTIME_NANOS;
 	private final TerminalRule tID;
 	private final TerminalRule tSTRING;
 	private final TerminalRule tML_COMMENT;
@@ -3686,18 +3636,27 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pSTDateAndTimeType = new STDateAndTimeTypeElements();
 		this.pSTAnyCharsType = new STAnyCharsTypeElements();
 		this.pQualifiedName = new QualifiedNameElements();
-		this.pBoolLiteral = new BoolLiteralElements();
-		this.pNumber = new NumberElements();
+		this.pNumeric = new NumericElements();
+		this.pTime = new TimeElements();
 		this.pDate = new DateElements();
 		this.pDateAndTime = new DateAndTimeElements();
 		this.pTimeOfDay = new TimeOfDayElements();
-		this.pTime = new TimeElements();
 		this.eSTAccessSpecifier = new STAccessSpecifierElements();
 		this.pRESERVED_KEYWORDS = new RESERVED_KEYWORDSElements();
 		this.tHEX_DIGIT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.HEX_DIGIT");
 		this.tNON_DECIMAL = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.NON_DECIMAL");
-		this.tEXT_INT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.EXT_INT");
 		this.tINT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.INT");
+		this.tEXT_INT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.EXT_INT");
+		this.tNUMBER = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.NUMBER");
+		this.tTIME_VALUE = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_VALUE");
+		this.tTIME_PART = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_PART");
+		this.tTIME_DAYS = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_DAYS");
+		this.tTIME_HOURS = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_HOURS");
+		this.tTIME_MINUTES = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_MINUTES");
+		this.tTIME_SECONDS = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_SECONDS");
+		this.tTIME_MILLIS = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_MILLIS");
+		this.tTIME_MICROS = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_MICROS");
+		this.tTIME_NANOS = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.TIME_NANOS");
 		this.tID = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.ID");
 		this.tSTRING = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STRING");
 		this.tML_COMMENT = (TerminalRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.ML_COMMENT");
@@ -4322,7 +4281,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	//STNumericLiteral:
 	//    (type=[datatype::DataType|STNumericLiteralType] '#')?
-	//    value=(BoolLiteral | Number | NON_DECIMAL);
+	//    value=Numeric;
 	public STNumericLiteralElements getSTNumericLiteralAccess() {
 		return pSTNumericLiteral;
 	}
@@ -4521,24 +4480,24 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return getQualifiedNameAccess().getRule();
 	}
 	
-	//BoolLiteral returns ecore::EJavaObject:
-	//    'TRUE' | 'FALSE';
-	public BoolLiteralElements getBoolLiteralAccess() {
-		return pBoolLiteral;
+	//Numeric returns ecore::EJavaObject:
+	//    'TRUE' | 'FALSE' | (('+' | '-')? (INT | NUMBER)) | NON_DECIMAL;
+	public NumericElements getNumericAccess() {
+		return pNumeric;
 	}
 	
-	public ParserRule getBoolLiteralRule() {
-		return getBoolLiteralAccess().getRule();
+	public ParserRule getNumericRule() {
+		return getNumericAccess().getRule();
 	}
 	
-	//Number returns ecore::EJavaObject:
-	//    ('+' | '-')? INT (=>'.' (EXT_INT | INT))?;
-	public NumberElements getNumberAccess() {
-		return pNumber;
+	//Time returns STTime:
+	//    ('+' | '-')? TIME_VALUE;
+	public TimeElements getTimeAccess() {
+		return pTime;
 	}
 	
-	public ParserRule getNumberRule() {
-		return getNumberAccess().getRule();
+	public ParserRule getTimeRule() {
+		return getTimeAccess().getRule();
 	}
 	
 	//Date returns STDate:
@@ -4552,7 +4511,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//DateAndTime returns STDateAndTime:
-	//    INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?;
+	//    INT '-' INT '-' INT '-' INT ':' INT ':' (INT | NUMBER);
 	public DateAndTimeElements getDateAndTimeAccess() {
 		return pDateAndTime;
 	}
@@ -4562,23 +4521,13 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//TimeOfDay returns STTimeOfDay:
-	//    INT ':' INT ':' INT (=>'.' INT)?;
+	//    INT ':' INT ':' (INT | NUMBER);
 	public TimeOfDayElements getTimeOfDayAccess() {
 		return pTimeOfDay;
 	}
 	
 	public ParserRule getTimeOfDayRule() {
 		return getTimeOfDayAccess().getRule();
-	}
-	
-	//Time returns STTime:
-	//    (Number ('D' | 'H' | 'M' | 'S' | 'MS' | 'US' | 'NS') ('_')?)+;
-	public TimeElements getTimeAccess() {
-		return pTime;
-	}
-	
-	public ParserRule getTimeRule() {
-		return getTimeAccess().getRule();
 	}
 	
 	//enum STAccessSpecifier:
@@ -4613,16 +4562,10 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return tHEX_DIGIT;
 	}
 	
-	//terminal NON_DECIMAL returns ecore::EJavaObject:
+	//terminal NON_DECIMAL:
 	//    ('2#' | '8#' | '16#') HEX_DIGIT+;
 	public TerminalRule getNON_DECIMALRule() {
 		return tNON_DECIMAL;
-	}
-	
-	//terminal EXT_INT:
-	//    INT ('e' | 'E') ('-' | '+')? INT;
-	public TerminalRule getEXT_INTRule() {
-		return tEXT_INT;
 	}
 	
 	//terminal INT returns ecore::EBigInteger:
@@ -4631,6 +4574,68 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		return tINT;
 	}
 	
+	//terminal fragment EXT_INT:
+	//    INT ('e' | 'E') ('-' | '+')? INT;
+	public TerminalRule getEXT_INTRule() {
+		return tEXT_INT;
+	}
+	
+	//terminal NUMBER:
+	//    INT '.' (EXT_INT | INT);
+	public TerminalRule getNUMBERRule() {
+		return tNUMBER;
+	}
+	
+	//terminal TIME_VALUE:
+	//    (TIME_PART ('_')?)+;
+	public TerminalRule getTIME_VALUERule() {
+		return tTIME_VALUE;
+	}
+	
+	//terminal fragment TIME_PART:
+	//    (INT | NUMBER) (TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS);
+	public TerminalRule getTIME_PARTRule() {
+		return tTIME_PART;
+	}
+	
+	//terminal fragment TIME_DAYS: 'D'|'d';
+	public TerminalRule getTIME_DAYSRule() {
+		return tTIME_DAYS;
+	}
+	
+	//terminal fragment TIME_HOURS: 'H'|'h';
+	public TerminalRule getTIME_HOURSRule() {
+		return tTIME_HOURS;
+	}
+	
+	//terminal fragment TIME_MINUTES: 'M'|'m';
+	public TerminalRule getTIME_MINUTESRule() {
+		return tTIME_MINUTES;
+	}
+	
+	//terminal fragment TIME_SECONDS: 'S'|'s';
+	public TerminalRule getTIME_SECONDSRule() {
+		return tTIME_SECONDS;
+	}
+	
+	//terminal fragment TIME_MILLIS: ('M'|'m')('S'|'s');
+	public TerminalRule getTIME_MILLISRule() {
+		return tTIME_MILLIS;
+	}
+	
+	// // MS
+	//terminal fragment TIME_MICROS: ('U'|'u')('S'|'s');
+	public TerminalRule getTIME_MICROSRule() {
+		return tTIME_MICROS;
+	}
+	
+	// // US
+	//terminal fragment TIME_NANOS: ('N'|'n')('S'|'s');
+	public TerminalRule getTIME_NANOSRule() {
+		return tTIME_NANOS;
+	}
+	
+	// // NS
 	//terminal ID:
 	//    '^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;
 	public TerminalRule getIDRule() {
