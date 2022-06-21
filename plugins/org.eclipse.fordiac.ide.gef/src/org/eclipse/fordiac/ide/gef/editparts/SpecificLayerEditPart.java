@@ -11,7 +11,7 @@
  *   Gerhard Ebenhofer
  *     - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application;
+package org.eclipse.fordiac.ide.gef.editparts;
 
 /**
  * The Interface SpecificLayerEditPart.

@@ -13,17 +13,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
 /**
@@ -116,37 +113,6 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 		// handles constraint changes of model elements and creation of new
 		// model elements
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBNetworkXYLayoutEditPolicy());
-	}
-
-	@Override
-	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		if (childEditPart instanceof SpecificLayerEditPart) {
-			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
-			final IFigure layerFig = getLayer(layer);
-			if (layerFig != null) {
-				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-				layerFig.add(child);
-				return;
-			}
-		}
-		// as some of the children are in a different layer we can not use the index
-		// given.
-		// Currently -1 seems to be the best option
-		super.addChildVisual(childEditPart, -1);
-	}
-
-	@Override
-	protected void removeChildVisual(final EditPart childEditPart) {
-		if (childEditPart instanceof SpecificLayerEditPart) {
-			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
-			final IFigure layerFig = getLayer(layer);
-			if (layerFig != null) {
-				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-				layerFig.remove(child);
-				return;
-			}
-		}
-		super.removeChildVisual(childEditPart);
 	}
 
 }

@@ -29,6 +29,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
 
 public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart {
 
@@ -69,6 +71,37 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 	@Override
 	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
 		return new MoveableRouter();
+	}
+
+	@Override
+	protected void addChildVisual(final EditPart childEditPart, final int index) {
+		if (childEditPart instanceof SpecificLayerEditPart) {
+			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
+			final IFigure layerFig = getLayer(layer);
+			if (layerFig != null) {
+				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+				layerFig.add(child);
+				return;
+			}
+		}
+		// as some of the children are in a different layer we can not use the index
+		// given.
+		// Currently -1 seems to be the best option
+		super.addChildVisual(childEditPart, -1);
+	}
+
+	@Override
+	protected void removeChildVisual(final EditPart childEditPart) {
+		if (childEditPart instanceof SpecificLayerEditPart) {
+			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
+			final IFigure layerFig = getLayer(layer);
+			if (layerFig != null) {
+				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
+				layerFig.remove(child);
+				return;
+			}
+		}
+		super.removeChildVisual(childEditPart);
 	}
 
 	/**

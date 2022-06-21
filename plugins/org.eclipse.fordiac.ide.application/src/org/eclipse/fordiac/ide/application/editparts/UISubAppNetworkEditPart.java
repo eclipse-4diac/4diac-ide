@@ -17,19 +17,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
-import org.eclipse.draw2d.IFigure;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.util.EContentAdapter;
-import org.eclipse.fordiac.ide.application.SpecificLayerEditPart;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
 public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
@@ -102,38 +98,6 @@ public class UISubAppNetworkEditPart extends EditorWithInterfaceEditPart {
 
 	public SubApp getSubApp() {
 		return (SubApp) getModel().eContainer();
-	}
-
-	@Override
-	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		if (childEditPart instanceof SpecificLayerEditPart) {
-			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
-			final IFigure layerFig = getLayer(layer);
-			if (layerFig != null) {
-				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-				layerFig.add(child);
-			} else { // if layer does not exist use default layer
-				super.addChildVisual(childEditPart, index);
-			}
-		} else {
-			super.addChildVisual(childEditPart, index);
-		}
-	}
-
-	@Override
-	protected void removeChildVisual(final EditPart childEditPart) {
-		if (childEditPart instanceof SpecificLayerEditPart) {
-			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
-			final IFigure layerFig = getLayer(layer);
-			if (layerFig != null) {
-				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-				layerFig.remove(child);
-			} else { // if layer does not exist use default layer
-				super.removeChildVisual(childEditPart);
-			}
-		} else {
-			super.removeChildVisual(childEditPart);
-		}
 	}
 
 	@Override
