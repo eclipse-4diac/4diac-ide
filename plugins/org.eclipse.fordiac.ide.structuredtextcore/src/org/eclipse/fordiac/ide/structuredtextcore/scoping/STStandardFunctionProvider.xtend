@@ -78,7 +78,7 @@ class STStandardFunctionProvider {
 		inputParameters.addAll(method.inferParameterVariables(argumentTypes, true))
 		outputParameters.addAll(method.inferParameterVariables(argumentTypes, false))
 		onlySupportedBy.addAll(method.getAnnotationsByType(OnlySupportedBy).flatMap[value.toList])
-		signature = '''«name»(«(inputParameters.filter(STVarDeclaration).map[type.name] + outputParameters.filter(STVarDeclaration).map['''&«type.name»''']).join(",")»)'''
+		signature = '''«name»(«(inputParameters.filter(STVarDeclaration).map[type?.name ?: "NULL"] + outputParameters.filter(STVarDeclaration).map['''&«type?.name ?: "NULL"»''']).join(",")»)'''
 		functionResource.contents.add(it)
 	}
 
