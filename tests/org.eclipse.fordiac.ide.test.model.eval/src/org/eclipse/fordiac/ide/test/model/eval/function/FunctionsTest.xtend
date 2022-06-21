@@ -33,7 +33,7 @@ import static extension org.junit.jupiter.api.Assertions.*
 class FunctionsTest {
 	@Test
 	def void testNotFound() {
-		NoSuchMethodError.assertThrows[SampleFunctions.findMethodFromDataTypes("ILLEGAL_NAME", ElementaryTypes.INT)]
+		NoSuchMethodException.assertThrows[SampleFunctions.findMethodFromDataTypes("ILLEGAL_NAME", ElementaryTypes.INT)]
 	}
 
 	@Test
@@ -41,7 +41,7 @@ class FunctionsTest {
 		// lookup
 		SampleFunctions.findMethodFromDataTypes("SIMPLE", ElementaryTypes.INT).assertNotNull
 		// wrong argument type
-		NoSuchMethodError.assertThrows[SampleFunctions.findMethodFromDataTypes("SIMPLE", ElementaryTypes.STRING)]
+		NoSuchMethodException.assertThrows[SampleFunctions.findMethodFromDataTypes("SIMPLE", ElementaryTypes.STRING)]
 		// return type
 		ElementaryTypes.INT.assertEquals(SampleFunctions.inferReturnTypeFromDataTypes("SIMPLE", ElementaryTypes.INT))
 		// parameter types
@@ -56,7 +56,9 @@ class FunctionsTest {
 		// lookup
 		SampleFunctions.findMethodFromDataTypes("GENERIC_PARAM", ElementaryTypes.INT).assertNotNull
 		// wrong argument type
-		NoSuchMethodError.assertThrows[SampleFunctions.findMethodFromDataTypes("GENERIC_PARAM", ElementaryTypes.STRING)]
+		NoSuchMethodException.assertThrows [
+			SampleFunctions.findMethodFromDataTypes("GENERIC_PARAM", ElementaryTypes.STRING)
+		]
 		// return type
 		ElementaryTypes.INT.assertEquals(
 			SampleFunctions.inferReturnTypeFromDataTypes("GENERIC_PARAM", ElementaryTypes.LINT))
@@ -72,7 +74,7 @@ class FunctionsTest {
 		// lookup
 		SampleFunctions.findMethodFromDataTypes("GENERIC_RETURN", ElementaryTypes.INT).assertNotNull
 		// wrong argument type
-		NoSuchMethodError.assertThrows [
+		NoSuchMethodException.assertThrows [
 			SampleFunctions.findMethodFromDataTypes("GENERIC_RETURN", ElementaryTypes.STRING)
 		]
 		// return type
@@ -95,7 +97,7 @@ class FunctionsTest {
 		SampleFunctions.findMethodFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.INT, ElementaryTypes.LINT).
 			assertNotNull
 		// wrong argument type
-		NoSuchMethodError.assertThrows [
+		NoSuchMethodException.assertThrows [
 			SampleFunctions.findMethodFromDataTypes("MULTI_GENERIC_PARAM", ElementaryTypes.STRING,
 				ElementaryTypes.STRING)
 		]
@@ -134,7 +136,7 @@ class FunctionsTest {
 		SampleFunctions.findMethodFromDataTypes("VARARGS", ElementaryTypes.INT, ElementaryTypes.INT,
 			ElementaryTypes.INT).assertNotNull
 		// wrong argument type
-		NoSuchMethodError.assertThrows[SampleFunctions.findMethodFromDataTypes("VARARGS", ElementaryTypes.STRING)]
+		NoSuchMethodException.assertThrows[SampleFunctions.findMethodFromDataTypes("VARARGS", ElementaryTypes.STRING)]
 		// return type
 		ElementaryTypes.INT.assertEquals(SampleFunctions.inferReturnTypeFromDataTypes("VARARGS"))
 		ElementaryTypes.INT.assertEquals(SampleFunctions.inferReturnTypeFromDataTypes("VARARGS", ElementaryTypes.INT))
@@ -169,7 +171,7 @@ class FunctionsTest {
 		SampleFunctions.findMethodFromDataTypes("VARARGS_GENERIC", ElementaryTypes.LINT, ElementaryTypes.INT,
 			ElementaryTypes.SINT).assertNotNull
 		// wrong argument type
-		NoSuchMethodError.assertThrows [
+		NoSuchMethodException.assertThrows [
 			SampleFunctions.findMethodFromDataTypes("VARARGS_GENERIC", ElementaryTypes.STRING)
 		]
 		// return type

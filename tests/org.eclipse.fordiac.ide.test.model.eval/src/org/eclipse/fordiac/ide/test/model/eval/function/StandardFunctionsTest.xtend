@@ -685,11 +685,15 @@ class StandardFunctionsTest {
 	@Test
 	def void testAddTime() {
 		Duration.ofSeconds(21).toTimeValue.assertEquals(
+			StandardFunctions.invoke("ADD", Duration.ofSeconds(17).toTimeValue, Duration.ofSeconds(4).toTimeValue))
+		Duration.ofSeconds(21).toTimeValue.assertEquals(
 			StandardFunctions.invoke("ADD_TIME", Duration.ofSeconds(17).toTimeValue, Duration.ofSeconds(4).toTimeValue))
 	}
 
 	@Test
 	def void testAddLTime() {
+		Duration.ofSeconds(21).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("ADD", Duration.ofSeconds(17).toLTimeValue, Duration.ofSeconds(4).toLTimeValue))
 		Duration.ofSeconds(21).toLTimeValue.assertEquals(
 			StandardFunctions.invoke("ADD_LTIME", Duration.ofSeconds(17).toLTimeValue,
 				Duration.ofSeconds(4).toLTimeValue))
@@ -698,12 +702,18 @@ class StandardFunctionsTest {
 	@Test
 	def void testAddTodTime() {
 		LocalTime.of(21, 42).toTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("ADD", LocalTime.of(17, 21).toTimeOfDayValue,
+				Duration.ofHours(4).plusMinutes(21).toTimeValue))
+		LocalTime.of(21, 42).toTimeOfDayValue.assertEquals(
 			StandardFunctions.invoke("ADD_TOD_TIME", LocalTime.of(17, 21).toTimeOfDayValue,
 				Duration.ofHours(4).plusMinutes(21).toTimeValue))
 	}
 
 	@Test
 	def void testAddLTodLTime() {
+		LocalTime.of(21, 42).toLTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("ADD", LocalTime.of(17, 21).toLTimeOfDayValue,
+				Duration.ofHours(4).plusMinutes(21).toLTimeValue))
 		LocalTime.of(21, 42).toLTimeOfDayValue.assertEquals(
 			StandardFunctions.invoke("ADD_LTOD_LTIME", LocalTime.of(17, 21).toLTimeOfDayValue,
 				Duration.ofHours(4).plusMinutes(21).toLTimeValue))
@@ -712,12 +722,18 @@ class StandardFunctionsTest {
 	@Test
 	def void testAddDTTime() {
 		LocalDateTime.of(2017, 4, 21, 21, 42).toDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("ADD", LocalDateTime.of(2017, 4, 21, 17, 21).toDateAndTimeValue,
+				Duration.ofHours(4).plusMinutes(21).toTimeValue))
+		LocalDateTime.of(2017, 4, 21, 21, 42).toDateAndTimeValue.assertEquals(
 			StandardFunctions.invoke("ADD_DT_TIME", LocalDateTime.of(2017, 4, 21, 17, 21).toDateAndTimeValue,
 				Duration.ofHours(4).plusMinutes(21).toTimeValue))
 	}
 
 	@Test
 	def void testAddLDTLTime() {
+		LocalDateTime.of(2017, 4, 21, 21, 42).toLDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("ADD", LocalDateTime.of(2017, 4, 21, 17, 21).toLDateAndTimeValue,
+				Duration.ofHours(4).plusMinutes(21).toLTimeValue))
 		LocalDateTime.of(2017, 4, 21, 21, 42).toLDateAndTimeValue.assertEquals(
 			StandardFunctions.invoke("ADD_LDT_LTIME", LocalDateTime.of(2017, 4, 21, 17, 21).toLDateAndTimeValue,
 				Duration.ofHours(4).plusMinutes(21).toLTimeValue))
@@ -726,11 +742,15 @@ class StandardFunctionsTest {
 	@Test
 	def void testSubTime() {
 		Duration.ofSeconds(17).toTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB", Duration.ofSeconds(21).toTimeValue, Duration.ofSeconds(4).toTimeValue))
+		Duration.ofSeconds(17).toTimeValue.assertEquals(
 			StandardFunctions.invoke("SUB_TIME", Duration.ofSeconds(21).toTimeValue, Duration.ofSeconds(4).toTimeValue))
 	}
 
 	@Test
 	def void testSubLTime() {
+		Duration.ofSeconds(17).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB", Duration.ofSeconds(21).toLTimeValue, Duration.ofSeconds(4).toLTimeValue))
 		Duration.ofSeconds(17).toLTimeValue.assertEquals(
 			StandardFunctions.invoke("SUB_LTIME", Duration.ofSeconds(21).toLTimeValue,
 				Duration.ofSeconds(4).toLTimeValue))
@@ -739,12 +759,18 @@ class StandardFunctionsTest {
 	@Test
 	def void testSubDate() {
 		Duration.ofDays(17).toTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB", LocalDate.of(2021, 4, 21).toDateValue,
+				LocalDate.of(2021, 4, 4).toDateValue))
+		Duration.ofDays(17).toTimeValue.assertEquals(
 			StandardFunctions.invoke("SUB_DATE_DATE", LocalDate.of(2021, 4, 21).toDateValue,
 				LocalDate.of(2021, 4, 4).toDateValue))
 	}
 
 	@Test
 	def void testSubLDate() {
+		Duration.ofDays(17).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB", LocalDate.of(2021, 4, 21).toLDateValue,
+				LocalDate.of(2021, 4, 4).toLDateValue))
 		Duration.ofDays(17).toLTimeValue.assertEquals(
 			StandardFunctions.invoke("SUB_LDATE_LDATE", LocalDate.of(2021, 4, 21).toLDateValue,
 				LocalDate.of(2021, 4, 4).toLDateValue))
@@ -753,12 +779,18 @@ class StandardFunctionsTest {
 	@Test
 	def void testSubTodTime() {
 		LocalTime.of(17, 21).toTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("SUB", LocalTime.of(21, 42).toTimeOfDayValue,
+				Duration.ofHours(4).plusMinutes(21).toTimeValue))
+		LocalTime.of(17, 21).toTimeOfDayValue.assertEquals(
 			StandardFunctions.invoke("SUB_TOD_TIME", LocalTime.of(21, 42).toTimeOfDayValue,
 				Duration.ofHours(4).plusMinutes(21).toTimeValue))
 	}
 
 	@Test
 	def void testSubLTodLTime() {
+		LocalTime.of(17, 21).toLTimeOfDayValue.assertEquals(
+			StandardFunctions.invoke("SUB", LocalTime.of(21, 42).toLTimeOfDayValue,
+				Duration.ofHours(4).plusMinutes(21).toLTimeValue))
 		LocalTime.of(17, 21).toLTimeOfDayValue.assertEquals(
 			StandardFunctions.invoke("SUB_LTOD_LTIME", LocalTime.of(21, 42).toLTimeOfDayValue,
 				Duration.ofHours(4).plusMinutes(21).toLTimeValue))
@@ -767,12 +799,18 @@ class StandardFunctionsTest {
 	@Test
 	def void testSubTod() {
 		Duration.ofHours(4).plusMinutes(21).toTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB", LocalTime.of(21, 42).toTimeOfDayValue,
+				LocalTime.of(17, 21).toTimeOfDayValue))
+		Duration.ofHours(4).plusMinutes(21).toTimeValue.assertEquals(
 			StandardFunctions.invoke("SUB_TOD_TOD", LocalTime.of(21, 42).toTimeOfDayValue,
 				LocalTime.of(17, 21).toTimeOfDayValue))
 	}
 
 	@Test
 	def void testSubLTod() {
+		Duration.ofHours(4).plusMinutes(21).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB", LocalTime.of(21, 42).toLTimeOfDayValue,
+				LocalTime.of(17, 21).toLTimeOfDayValue))
 		Duration.ofHours(4).plusMinutes(21).toLTimeValue.assertEquals(
 			StandardFunctions.invoke("SUB_LTOD_LTOD", LocalTime.of(21, 42).toLTimeOfDayValue,
 				LocalTime.of(17, 21).toLTimeOfDayValue))
@@ -781,12 +819,18 @@ class StandardFunctionsTest {
 	@Test
 	def void testSubDTTime() {
 		LocalDateTime.of(2017, 4, 21, 17, 21).toDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB", LocalDateTime.of(2017, 4, 21, 21, 42).toDateAndTimeValue,
+				Duration.ofHours(4).plusMinutes(21).toTimeValue))
+		LocalDateTime.of(2017, 4, 21, 17, 21).toDateAndTimeValue.assertEquals(
 			StandardFunctions.invoke("SUB_DT_TIME", LocalDateTime.of(2017, 4, 21, 21, 42).toDateAndTimeValue,
 				Duration.ofHours(4).plusMinutes(21).toTimeValue))
 	}
 
 	@Test
 	def void testSubLDTLTime() {
+		LocalDateTime.of(2017, 4, 21, 17, 21).toLDateAndTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB", LocalDateTime.of(2017, 4, 21, 21, 42).toLDateAndTimeValue,
+				Duration.ofHours(4).plusMinutes(21).toLTimeValue))
 		LocalDateTime.of(2017, 4, 21, 17, 21).toLDateAndTimeValue.assertEquals(
 			StandardFunctions.invoke("SUB_LDT_LTIME", LocalDateTime.of(2017, 4, 21, 21, 42).toLDateAndTimeValue,
 				Duration.ofHours(4).plusMinutes(21).toLTimeValue))
@@ -795,6 +839,9 @@ class StandardFunctionsTest {
 	@Test
 	def void testSubDT() {
 		Duration.ofHours(4).plusMinutes(21).toTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB", LocalDateTime.of(2017, 4, 21, 21, 42).toDateAndTimeValue,
+				LocalDateTime.of(2017, 4, 21, 17, 21).toDateAndTimeValue))
+		Duration.ofHours(4).plusMinutes(21).toTimeValue.assertEquals(
 			StandardFunctions.invoke("SUB_DT_DT", LocalDateTime.of(2017, 4, 21, 21, 42).toDateAndTimeValue,
 				LocalDateTime.of(2017, 4, 21, 17, 21).toDateAndTimeValue))
 	}
@@ -802,12 +849,19 @@ class StandardFunctionsTest {
 	@Test
 	def void testSubLDT() {
 		Duration.ofHours(4).plusMinutes(21).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("SUB", LocalDateTime.of(2017, 4, 21, 21, 42).toLDateAndTimeValue,
+				LocalDateTime.of(2017, 4, 21, 17, 21).toLDateAndTimeValue))
+		Duration.ofHours(4).plusMinutes(21).toLTimeValue.assertEquals(
 			StandardFunctions.invoke("SUB_LDT_LDT", LocalDateTime.of(2017, 4, 21, 21, 42).toLDateAndTimeValue,
 				LocalDateTime.of(2017, 4, 21, 17, 21).toLDateAndTimeValue))
 	}
 
 	@Test
 	def void testMulTime() {
+		Duration.ofSeconds(42).toTimeValue.assertEquals(
+			StandardFunctions.invoke("MUL", Duration.ofSeconds(21).toTimeValue, 2.toIntValue))
+		Duration.ofSeconds(42).toTimeValue.assertEquals(
+			StandardFunctions.invoke("MUL", Duration.ofSeconds(21).toTimeValue, 2.toRealValue))
 		Duration.ofSeconds(42).toTimeValue.assertEquals(
 			StandardFunctions.invoke("MUL_TIME", Duration.ofSeconds(21).toTimeValue, 2.toIntValue))
 		Duration.ofSeconds(42).toTimeValue.assertEquals(
@@ -817,6 +871,10 @@ class StandardFunctionsTest {
 	@Test
 	def void testMulLTime() {
 		Duration.ofSeconds(42).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("MUL", Duration.ofSeconds(21).toLTimeValue, 2.toIntValue))
+		Duration.ofSeconds(42).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("MUL", Duration.ofSeconds(21).toLTimeValue, 2.toRealValue))
+		Duration.ofSeconds(42).toLTimeValue.assertEquals(
 			StandardFunctions.invoke("MUL_LTIME", Duration.ofSeconds(21).toLTimeValue, 2.toIntValue))
 		Duration.ofSeconds(42).toLTimeValue.assertEquals(
 			StandardFunctions.invoke("MUL_LTIME", Duration.ofSeconds(21).toLTimeValue, 2.toRealValue))
@@ -825,6 +883,10 @@ class StandardFunctionsTest {
 	@Test
 	def void testDivTime() {
 		Duration.ofSeconds(21).toTimeValue.assertEquals(
+			StandardFunctions.invoke("DIV", Duration.ofSeconds(42).toTimeValue, 2.toIntValue))
+		Duration.ofSeconds(21).toTimeValue.assertEquals(
+			StandardFunctions.invoke("DIV", Duration.ofSeconds(42).toTimeValue, 2.toRealValue))
+		Duration.ofSeconds(21).toTimeValue.assertEquals(
 			StandardFunctions.invoke("DIV_TIME", Duration.ofSeconds(42).toTimeValue, 2.toIntValue))
 		Duration.ofSeconds(21).toTimeValue.assertEquals(
 			StandardFunctions.invoke("DIV_TIME", Duration.ofSeconds(42).toTimeValue, 2.toRealValue))
@@ -832,6 +894,10 @@ class StandardFunctionsTest {
 
 	@Test
 	def void testDivLTime() {
+		Duration.ofSeconds(21).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("DIV", Duration.ofSeconds(42).toLTimeValue, 2.toIntValue))
+		Duration.ofSeconds(21).toLTimeValue.assertEquals(
+			StandardFunctions.invoke("DIV", Duration.ofSeconds(42).toLTimeValue, 2.toRealValue))
 		Duration.ofSeconds(21).toLTimeValue.assertEquals(
 			StandardFunctions.invoke("DIV_LTIME", Duration.ofSeconds(42).toLTimeValue, 2.toIntValue))
 		Duration.ofSeconds(21).toLTimeValue.assertEquals(
@@ -1165,7 +1231,7 @@ class StandardFunctionsTest {
 		val exists = try {
 				StandardFunctions.findMethodFromDataTypes('''«typeName»_TO_«castTypeName»''', type)
 				true
-			} catch (NoSuchMethodError e) {
+			} catch (NoSuchMethodException e) {
 				false
 			}
 		if (exists) {
