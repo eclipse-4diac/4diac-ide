@@ -37,9 +37,11 @@ import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.ui.xml.XMLConfiguration;
 import org.eclipse.fordiac.ide.deployment.ui.xml.XMLPartitionScanner;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.providers.SourceViewerColorProvider;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.text.BadLocationException;
 import org.eclipse.jface.text.DefaultInformationControl;
 import org.eclipse.jface.text.Document;
 import org.eclipse.jface.text.IDocument;
@@ -361,9 +363,6 @@ public class Output extends ViewPart implements IDeploymentListener {
 		}
 	}
 
-	/** The buffer. */
-	private StringBuilder buffer = new StringBuilder();
-
 	@Override
 	public void connectionOpened() {
 		// nothing to do
@@ -371,35 +370,40 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 	@Override
 	public void postResponseReceived(final String response, final String source) {
-		Display.getDefault().asyncExec(() -> {
-			buffer.append("\n");//$NON-NLS-1$
-			buffer.append(getFormattedXML(response));
-		});
+		final String rspMessage = "\n" + //$NON-NLS-1$
+				getFormattedXML(response);
+		addMessage(rspMessage);
 	}
 
 	@Override
 	public void postCommandSent(final String info, final String destination, final String command) {
-		Display.getDefault().asyncExec(() -> {
-
-			final String temp = MessageFormat.format(Messages.Output_Comment, info);
-			buffer.append("\n\n");//$NON-NLS-1$
-			buffer.append(temp);
-			buffer.append("\n");//$NON-NLS-1$
-			buffer.append(getFormattedXML(command));
-		});
+		final String sendMessage = "\n\n" + //$NON-NLS-1$
+				MessageFormat.format(Messages.Output_Comment, info) + "\n" + //$NON-NLS-1$
+				getFormattedXML(command);
+		addMessage(sendMessage);
 	}
 
 	@Override
 	public void connectionClosed() {
-		final IDocument document = sv.getDocument();
-		if (null != document) {
-			Display.getDefault().asyncExec(() -> document.set(buffer.toString()));
-		}
+		// nothing to do
 	}
 
 	public void clearOutput() {
 		sv.getDocument().set(""); //$NON-NLS-1$
-		buffer = buffer.delete(0, buffer.length());
+	}
+
+	private void addMessage(final String msg) {
+		Display.getDefault().asyncExec(() -> {
+			final IDocument document = sv.getDocument();
+			if (null != document) {
+				try {
+					document.replace(document.getLength(), 0, msg);
+				} catch (final BadLocationException e) {
+					FordiacLogHelper.logWarning("Can not add message to deploy output", e); //$NON-NLS-1$
+				}
+			}
+
+		});
 	}
 
 }
