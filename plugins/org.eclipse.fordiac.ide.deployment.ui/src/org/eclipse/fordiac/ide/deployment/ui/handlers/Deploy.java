@@ -22,23 +22,32 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
+import org.eclipse.fordiac.ide.deployment.ui.views.Output;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.ISources;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class Deploy extends AbstractHandler {
+
+	private static final String DEPLOYMENT_CONSOLE_ID = "org.eclipse.fordiac.ide.deployment.ui.views.Output"; //$NON-NLS-1$
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final Collection<EObject> selected = getDeployableObjects(HandlerUtil.getCurrentSelection(event));
 		if (!selected.isEmpty()) {
+			clearDeploymentConsole();
 			DeploymentCoordinator.INSTANCE.performDeployment(selected.toArray(new EObject[selected.size()]));
 		}
 		return null;
@@ -92,6 +101,20 @@ public class Deploy extends AbstractHandler {
 		for (final Resource res : dev.getResource()) {
 			retVal.add(res);
 		}
+	}
+
+	private static void clearDeploymentConsole() {
+		final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+
+		try {
+			final IViewPart viewPart = page.showView(DEPLOYMENT_CONSOLE_ID);
+			if (viewPart instanceof Output) {
+				((Output) viewPart).clearOutput();
+			}
+		} catch (final PartInitException e) {
+			FordiacLogHelper.logInfo("Couldn't get the depolyment console: " + e.getMessage()); //$NON-NLS-1$
+		}
+
 	}
 
 }

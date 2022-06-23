@@ -125,7 +125,11 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 	@Override
 	public void distributedSystemWorkspaceChanged() {
 		if (null != viewer && null != viewer.getControl() && null != viewer.getControl().getDisplay()) {
-			viewer.getControl().getDisplay().asyncExec(() -> viewer.refresh());
+			viewer.getControl().getDisplay().asyncExec(() -> {
+				if (null != viewer && null != viewer.getControl() && !viewer.getControl().isDisposed()) {
+					viewer.refresh();
+				}
+			});
 		}
 	}
 

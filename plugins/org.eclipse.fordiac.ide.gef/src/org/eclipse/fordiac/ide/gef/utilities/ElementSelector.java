@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.gef.utilities;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -59,13 +60,11 @@ public final class ElementSelector {
 
 	private static List<EditPart> getSelectableEditParts(final GraphicalViewer viewer, final Collection<?> viewObjects) {
 		final List<EditPart> selectableChildren = new ArrayList<>();
-		final List<?> children = viewer.getContents().getChildren();
+		final Map<Object, Object> editPartRegistry = viewer.getEditPartRegistry();
 		for (final Object view : viewObjects) {
-			for (final Object child : children) {
-				if ((child instanceof EditPart) && ((EditPart) child).getModel().equals(view)) {
-					selectableChildren.add((EditPart) child);
-					break;
-				}
+			final Object child = editPartRegistry.get(view);
+			if ((child instanceof EditPart) && ((EditPart) child).getModel().equals(view)) {
+				selectableChildren.add((EditPart) child);
 			}
 		}
 		return selectableChildren;

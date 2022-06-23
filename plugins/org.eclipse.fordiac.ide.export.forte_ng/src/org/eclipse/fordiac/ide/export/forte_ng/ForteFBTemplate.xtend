@@ -90,7 +90,7 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 	'''
 
 	def protected generateFBDefinition() '''
-		DEFINE_FIRMWARE_FB(«FBClassName», «type.name.FORTEString»)
+		DEFINE_FIRMWARE_FB(«FBClassName», «type.name.FORTEStringId»)
 	'''
 
 	def protected generateFBInterfaceDeclaration() '''
@@ -204,7 +204,7 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 			
 			«IF !type.interfaceList.sockets.empty || !type.interfaceList.plugs.empty»
 				const SAdapterInstanceDef «FBClassName»::scm_astAdapterInstances[] = {
-				  «FOR adapter : (type.interfaceList.sockets + type.interfaceList.plugs) SEPARATOR ",\n"»{«adapter.typeName.FORTEString», «adapter.name.FORTEString», «!adapter.isInput»}«ENDFOR»
+				  «FOR adapter : (type.interfaceList.sockets + type.interfaceList.plugs) SEPARATOR ",\n"»{«adapter.typeName.FORTEStringId», «adapter.name.FORTEStringId», «!adapter.isInput»}«ENDFOR»
 				};
 			«ENDIF»
 		'''
@@ -340,7 +340,7 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 
 	def generateInteralFbDeclarations(BaseFBType type) '''
 		const SCFB_FBInstanceData «FBClassName»::scmInternalFBs[] = {
-		  «FOR elem : type.internalFbs SEPARATOR ",\n"»{«elem.name.FORTEString», «elem.type.name.FORTEString»}«ENDFOR»
+		  «FOR elem : type.internalFbs SEPARATOR ",\n"»{«elem.name.FORTEStringId», «elem.type.name.FORTEStringId»}«ENDFOR»
 		};
 	'''
 }

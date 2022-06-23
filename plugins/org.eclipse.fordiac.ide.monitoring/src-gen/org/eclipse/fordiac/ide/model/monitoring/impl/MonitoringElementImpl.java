@@ -1,6 +1,7 @@
-/*******************************************************************************
+/**
+ * ******************************************************************************
  * Copyright (c) 2012, 2013, 2015 - 2017 Profactor GmbH, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -8,12 +9,12 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
- *     - initial API and implementation and/or initial documentation
- *******************************************************************************/
+ *    Gerhard Ebenhofer, Alois Zoitl, Gerd Kainz
+ *      - initial API and implementation and/or initial documentation
+ * ******************************************************************************
+ *
+ */
 package org.eclipse.fordiac.ide.model.monitoring.impl;
-
-import java.util.ArrayList;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
@@ -25,8 +26,9 @@ import org.eclipse.fordiac.ide.monitoring.editparts.MonitoringEditPart;
 import org.eclipse.gef.EditPart;
 
 /**
- * <!-- begin-user-doc --> An implementation of the model object '
- * <em><b>Element</b></em>'. <!-- end-user-doc -->
+ * <!-- begin-user-doc -->
+ * An implementation of the model object '<em><b>Element</b></em>'.
+ * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
@@ -42,9 +44,9 @@ import org.eclipse.gef.EditPart;
  */
 public class MonitoringElementImpl extends MonitoringBaseElementImpl implements MonitoringElement {
 	/**
-	 * The default value of the '{@link #isForce() <em>Force</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #isForce() <em>Force</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #isForce()
 	 * @generated
 	 * @ordered
@@ -52,9 +54,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	protected static final boolean FORCE_EDEFAULT = false;
 
 	/**
-	 * The cached value of the '{@link #isForce() <em>Force</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #isForce() <em>Force</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #isForce()
 	 * @generated
 	 * @ordered
@@ -63,7 +65,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 
 	/**
 	 * The default value of the '{@link #getForceValue() <em>Force Value</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getForceValue()
 	 * @generated
 	 * @ordered
@@ -72,7 +75,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 
 	/**
 	 * The cached value of the '{@link #getForceValue() <em>Force Value</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getForceValue()
 	 * @generated
 	 * @ordered
@@ -81,7 +85,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 
 	/**
 	 * The default value of the '{@link #getCurrentValue() <em>Current Value</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getCurrentValue()
 	 * @generated
 	 * @ordered
@@ -90,7 +95,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 
 	/**
 	 * The cached value of the '{@link #getCurrentValue() <em>Current Value</em>}' attribute.
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getCurrentValue()
 	 * @generated
 	 * @ordered
@@ -98,9 +104,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	protected String currentValue = CURRENT_VALUE_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getSec() <em>Sec</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getSec() <em>Sec</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getSec()
 	 * @generated
 	 * @ordered
@@ -108,9 +114,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	protected static final long SEC_EDEFAULT = 0L;
 
 	/**
-	 * The cached value of the '{@link #getSec() <em>Sec</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getSec() <em>Sec</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getSec()
 	 * @generated
 	 * @ordered
@@ -118,9 +124,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	protected long sec = SEC_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getUsec() <em>Usec</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The default value of the '{@link #getUsec() <em>Usec</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getUsec()
 	 * @generated
 	 * @ordered
@@ -128,9 +134,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	protected static final long USEC_EDEFAULT = 0L;
 
 	/**
-	 * The cached value of the '{@link #getUsec() <em>Usec</em>}' attribute. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 * The cached value of the '{@link #getUsec() <em>Usec</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @see #getUsec()
 	 * @generated
 	 * @ordered
@@ -138,7 +144,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	protected long usec = USEC_EDEFAULT;
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected MonitoringElementImpl() {
@@ -146,7 +153,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -154,10 +162,9 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 		return MonitoringPackage.Literals.MONITORING_ELEMENT;
 	}
 
-	// private String[] monitoringElementAsArray;
-
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -166,7 +173,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -178,7 +186,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -187,7 +196,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -208,12 +218,6 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 		return (null == currentValue) ? "N/A" : currentValue;
 	}
 
-	private int nrOfHistory = 120;
-	private ArrayList<String> historyValues = new ArrayList<String>(120);
-	private ArrayList<Long> historySec = new ArrayList<Long>(120);
-	private ArrayList<Long> historyUSec = new ArrayList<Long>(120);
-	private int currentInt = 0;
-
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
@@ -221,22 +225,26 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	 */
 	@Override
 	public void setCurrentValue(String newCurrentValue) {
-		if (currentValue == null || ((currentValue != null) && !currentValue.equals(newCurrentValue))) {
-			String oldCurrentValue = currentValue;
-			currentValue = newCurrentValue;
-			if (eNotificationRequired()) {
-				eNotify(new ENotificationImpl(this, Notification.SET,
-						MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE, oldCurrentValue, currentValue));
-			}
+		if (currentValue == null || !currentValue.equals(newCurrentValue)) {
+			setCurrentValueGen(newCurrentValue);
 		}
-		historyValues.add(currentInt % nrOfHistory, newCurrentValue);
-		historySec.add(currentInt % nrOfHistory, getSec());
-		historyUSec.add(currentInt % nrOfHistory, getUsec());
-		currentInt++;
+	}
+	
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setCurrentValueGen(String newCurrentValue) {
+		String oldCurrentValue = currentValue;
+		currentValue = newCurrentValue;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, MonitoringPackage.MONITORING_ELEMENT__CURRENT_VALUE, oldCurrentValue, currentValue));
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -245,7 +253,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -257,7 +266,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -266,7 +276,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -294,7 +305,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -316,7 +328,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -344,7 +357,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -372,7 +386,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -394,7 +409,8 @@ public class MonitoringElementImpl extends MonitoringBaseElementImpl implements 
 	}
 
 	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override

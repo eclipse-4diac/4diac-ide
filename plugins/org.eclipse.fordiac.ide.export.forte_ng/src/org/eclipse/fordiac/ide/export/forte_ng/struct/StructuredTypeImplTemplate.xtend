@@ -27,10 +27,10 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 
 		«generateImplIncludes»
 
-		DEFINE_FIRMWARE_DATATYPE(«type.name», «type.name.FORTEString»);
+		DEFINE_FIRMWARE_DATATYPE(«type.name», «type.name.FORTEStringId»);
 		
 		«structClassName»::«structClassName»() :
-		    CIEC_STRUCT(«type.name.FORTEString», «type.memberVariables.size», scmElementTypes, scmElementNames, e_APPLICATION + e_CONSTRUCTED + 1) {
+		    CIEC_STRUCT(«type.name.FORTEStringId», «type.memberVariables.size», scmElementTypes, scmElementNames, e_APPLICATION + e_CONSTRUCTED + 1) {
 		}
 		
 		const CStringDictionary::TStringId «structClassName»::scmElementNames[] = {«type.memberVariables.FORTENameList»};

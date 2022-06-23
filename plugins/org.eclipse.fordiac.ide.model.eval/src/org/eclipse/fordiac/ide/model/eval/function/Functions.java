@@ -22,7 +22,9 @@ import java.lang.reflect.Type;
 import java.lang.reflect.TypeVariable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -70,9 +72,11 @@ public interface Functions {
 	 * @param name   The name of the function
 	 * @param atypes The argument types used to select the function
 	 * @return The method reference corresponding to the function
-	 * @throws NoSuchMethodError     if no applicable method could be found
+	 * @throws SecurityException     if access to the method is denied
+	 * @throws NoSuchMethodException if no applicable method could be found
 	 * @throws IllegalStateException if multiple candidate methods match */
-	static Method findMethod(final Class<? extends Functions> clazz, final String name, final Class<?>... atypes) {
+	static Method findMethod(final Class<? extends Functions> clazz, final String name, final Class<?>... atypes)
+			throws NoSuchMethodException, SecurityException {
 		return findMethod(clazz, name, List.of(atypes));
 	}
 
@@ -82,20 +86,27 @@ public interface Functions {
 	 * @param name   The name of the function
 	 * @param atypes The argument types used to select the function
 	 * @return The method reference corresponding to the function
-	 * @throws NoSuchMethodError     if no applicable method could be found
+	 * @throws SecurityException     if access to the method is denied
+	 * @throws NoSuchMethodException if no applicable method could be found
 	 * @throws IllegalStateException if multiple candidate methods match */
-	static Method findMethod(final Class<? extends Functions> clazz, final String name, final List<Class<?>> atypes) {
-		final List<Method> methods = Stream.of(clazz.getMethods())
-				.filter(method -> method.getName().equals(name)
-						&& isAssignableFrom(List.of(method.getParameterTypes()), atypes, method.isVarArgs()))
-				.collect(Collectors.toList());
-		if (methods.isEmpty()) {
-			throw new NoSuchMethodError(String.format("No method with name %s in class %s", name, clazz.getName())); //$NON-NLS-1$
-		} else if (methods.size() > 1) {
-			throw new IllegalStateException(String
-					.format("Multiple candidates found for method with name %s in class %s", name, clazz.getName())); //$NON-NLS-1$
+	static Method findMethod(final Class<? extends Functions> clazz, final String name, final List<Class<?>> atypes)
+			throws NoSuchMethodException, SecurityException {
+		try { // try exact match first
+			return clazz.getMethod(name, atypes.toArray(new Class[atypes.size()]));
+		} catch (final NoSuchMethodException e) { // try inexact match
+			final List<Method> methods = Stream.of(clazz.getMethods())
+					.filter(method -> method.getName().equals(name)
+							&& isAssignableFrom(List.of(method.getParameterTypes()), atypes, method.isVarArgs()))
+					.collect(Collectors.toList());
+			if (methods.isEmpty()) {
+				throw new NoSuchMethodException(
+						String.format("No method with name %s in class %s", name, clazz.getName())); //$NON-NLS-1$
+			} else if (methods.size() > 1) {
+				throw new IllegalStateException(String.format(
+						"Multiple candidates found for method with name %s in class %s", name, clazz.getName())); //$NON-NLS-1$
+			}
+			return methods.get(0);
 		}
-		return methods.get(0);
 	}
 
 	/** Find all functions from {@code clazz} with the given name
@@ -114,8 +125,14 @@ public interface Functions {
 	 * @param atypes The argument types used to select the function
 	 * @return The method references corresponding to the functions */
 	static List<Method> findMethods(final Class<? extends Functions> clazz, final List<Class<?>> atypes) {
-		return Stream.of(clazz.getMethods())
-				.filter(method -> isAssignableFrom(List.of(method.getParameterTypes()), atypes, method.isVarArgs()))
+		final Map<String, Method> exactMatches = Stream.of(clazz.getMethods())
+				.filter(method -> List.of(method.getParameterTypes()).equals(atypes))
+				.collect(Collectors.toMap(Method::getName, Function.identity()));
+		return Stream.concat(exactMatches.values().stream(), // first add exact matches
+				// add inexact matches only if there is no exact match
+				Stream.of(clazz.getMethods())
+				.filter(method -> !exactMatches.containsKey(method.getName())
+						&& isAssignableFrom(List.of(method.getParameterTypes()), atypes, method.isVarArgs())))
 				.collect(Collectors.toList());
 	}
 
@@ -133,10 +150,11 @@ public interface Functions {
 	 * @param name   The name of the function
 	 * @param atypes The argument types used to select the function and infer the return type
 	 * @return The concrete return type of the function based on the argument types
-	 * @throws NoSuchMethodError     if no applicable method could be found
+	 * @throws SecurityException     if access to the method is denied
+	 * @throws NoSuchMethodException if no applicable method could be found
 	 * @throws IllegalStateException if multiple candidate methods match */
 	static Class<? extends Value> inferReturnType(final Class<? extends Functions> clazz, final String name,
-			final List<Class<?>> atypes) {
+			final List<Class<?>> atypes) throws NoSuchMethodException, SecurityException {
 		return inferReturnType(findMethod(clazz, name, atypes), atypes);
 	}
 
@@ -172,10 +190,11 @@ public interface Functions {
 	 * @param name   The name of the function
 	 * @param atypes The argument types used to select the function and infer the return type
 	 * @return The concrete parameter types of the function based on the argument types
-	 * @throws NoSuchMethodError     if no applicable method could be found
+	 * @throws SecurityException     if access to the method is denied
+	 * @throws NoSuchMethodException if no applicable method could be found
 	 * @throws IllegalStateException if multiple candidate methods match */
 	static List<Class<? extends Value>> inferParameterTypes(final Class<? extends Functions> clazz, final String name,
-			final List<Class<?>> atypes) {
+			final List<Class<?>> atypes) throws NoSuchMethodException, SecurityException {
 		return inferParameterTypes(findMethod(clazz, name, atypes), atypes);
 	}
 
@@ -228,10 +247,11 @@ public interface Functions {
 	 * @param name   The name of the function
 	 * @param atypes The argument types used to select the function
 	 * @return The method reference corresponding to the function
-	 * @throws NoSuchMethodError     if no applicable method could be found
+	 * @throws SecurityException     if access to the method is denied
+	 * @throws NoSuchMethodException if no applicable method could be found
 	 * @throws IllegalStateException if multiple candidate methods match */
 	static Method findMethodFromDataTypes(final Class<? extends Functions> clazz, final String name,
-			final DataType... atypes) {
+			final DataType... atypes) throws NoSuchMethodException, SecurityException {
 		return findMethodFromDataTypes(clazz, name, List.of(atypes));
 	}
 
@@ -241,10 +261,11 @@ public interface Functions {
 	 * @param name   The name of the function
 	 * @param atypes The argument types used to select the function
 	 * @return The method reference corresponding to the function
-	 * @throws NoSuchMethodError     if no applicable method could be found
+	 * @throws SecurityException     if access to the method is denied
+	 * @throws NoSuchMethodException if no applicable method could be found
 	 * @throws IllegalStateException if multiple candidate methods match */
 	static Method findMethodFromDataTypes(final Class<? extends Functions> clazz, final String name,
-			final List<DataType> atypes) {
+			final List<DataType> atypes) throws NoSuchMethodException, SecurityException {
 		return findMethod(clazz, name, getValueTypes(atypes));
 	}
 
@@ -263,10 +284,11 @@ public interface Functions {
 	 * @param name   The name of the function
 	 * @param atypes The argument types used to select the function and infer the return type
 	 * @return The concrete return type of the function based on the argument types
-	 * @throws NoSuchMethodError     if no applicable method could be found
+	 * @throws SecurityException     if access to the method is denied
+	 * @throws NoSuchMethodException if no applicable method could be found
 	 * @throws IllegalStateException if multiple candidate methods match */
 	static DataType inferReturnTypeFromDataTypes(final Class<? extends Functions> clazz, final String name,
-			final DataType... atypes) {
+			final DataType... atypes) throws NoSuchMethodException, SecurityException {
 		return inferReturnTypeFromDataTypes(clazz, name, List.of(atypes));
 	}
 
@@ -276,10 +298,11 @@ public interface Functions {
 	 * @param name   The name of the function
 	 * @param atypes The argument types used to select the function and infer the return type
 	 * @return The concrete return type of the function based on the argument types
-	 * @throws NoSuchMethodError     if no applicable method could be found
+	 * @throws SecurityException     if access to the method is denied
+	 * @throws NoSuchMethodException if no applicable method could be found
 	 * @throws IllegalStateException if multiple candidate methods match */
 	static DataType inferReturnTypeFromDataTypes(final Class<? extends Functions> clazz, final String name,
-			final List<DataType> atypes) {
+			final List<DataType> atypes) throws NoSuchMethodException, SecurityException {
 		return ValueOperations.dataType(inferReturnType(clazz, name, getValueTypes(atypes)));
 	}
 
@@ -296,9 +319,11 @@ public interface Functions {
 	 *
 	 * @param method The method reference corresponding to the function
 	 * @param atypes The argument types used to infer the return type
-	 * @return The concrete return type of the function based on the argument types */
+	 * @return The concrete return type of the function based on the argument types
+	 * @throws SecurityException     if access to the method is denied
+	 * @throws NoSuchMethodException if no applicable method could be found */
 	static List<DataType> inferParameterTypesFromDataTypes(final Class<? extends Functions> clazz, final String name,
-			final DataType... atypes) {
+			final DataType... atypes) throws NoSuchMethodException, SecurityException {
 		return inferParameterTypesFromDataTypes(clazz, name, List.of(atypes));
 	}
 
@@ -308,10 +333,11 @@ public interface Functions {
 	 * @param name   The name of the function
 	 * @param atypes The argument types used to select the function and infer the return type
 	 * @return The concrete parameter types of the function based on the argument types
-	 * @throws NoSuchMethodError     if no applicable method could be found
+	 * @throws SecurityException     if access to the method is denied
+	 * @throws NoSuchMethodException if no applicable method could be found
 	 * @throws IllegalStateException if multiple candidate methods match */
 	static List<DataType> inferParameterTypesFromDataTypes(final Class<? extends Functions> clazz, final String name,
-			final List<DataType> atypes) {
+			final List<DataType> atypes) throws NoSuchMethodException, SecurityException {
 		return inferParameterTypes(clazz, name, getValueTypes(atypes)).stream().map(ValueOperations::dataType)
 				.collect(Collectors.toList());
 	}
@@ -442,7 +468,7 @@ public interface Functions {
 		} else if (Value.class.isAssignableFrom(ptype) && Value.class.isAssignableFrom(atype)) {
 			final DataType type1 = ValueOperations.dataType(ptype.asSubclass(Value.class));
 			final DataType type2 = ValueOperations.dataType(atype.asSubclass(Value.class));
-			return type1.isAssignableFrom(type2);
+			return type1 != null && type2 != null && type1.isAssignableFrom(type2);
 		}
 		return false;
 	}

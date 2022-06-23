@@ -16,7 +16,7 @@ import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.value.StringValueConverter
 
-class CharValue implements AnyCharValue {
+class CharValue implements AnyCharValue, AnySCharsValue {
 	final byte value;
 
 	public static final CharValue DEFAULT = new CharValue(0 as byte)

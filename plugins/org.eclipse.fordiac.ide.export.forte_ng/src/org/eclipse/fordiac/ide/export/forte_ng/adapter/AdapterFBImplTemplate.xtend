@@ -44,7 +44,7 @@ class AdapterFBImplTemplate extends ForteFBTemplate {
 	'''
 
 	override protected generateFBDefinition() '''
-		DEFINE_ADAPTER_TYPE(«FBClassName», «type.name.FORTEString»)
+		DEFINE_ADAPTER_TYPE(«FBClassName», «type.name.FORTEStringId»)
 	'''
 	
 	def generateFBInterfaceSpecSocket()

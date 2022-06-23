@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
@@ -46,7 +47,7 @@ public class FBNetworkSelectAllAction extends SelectAllAction {
 		final List<?> children = viewer.getContents().getChildren();
 
 		for (final Object child : children) {
-			if (child instanceof AbstractFBNElementEditPart) {
+			if ((child instanceof AbstractFBNElementEditPart) || (child instanceof GroupEditPart)) {
 				final EditPart childPart = (EditPart) child;
 				if (childPart.isSelectable()) {
 					selectableChildren.add(childPart);

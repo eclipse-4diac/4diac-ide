@@ -65,7 +65,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 	def protected generateFBNetwork() '''
 		«IF type.FBNetwork.networkElements.exists[!(it.type instanceof AdapterFBType)]»
 		const SCFB_FBInstanceData «FBClassName»::scm_astInternalFBs[] = {
-		  «FOR elem : fbs SEPARATOR ",\n"»{«elem.name.FORTEString», «elem.type.name.FORTEString»}«ENDFOR»
+		  «FOR elem : fbs SEPARATOR ",\n"»{«elem.name.FORTEStringId», «elem.type.name.FORTEStringId»}«ENDFOR»
 		};
 		«ENDIF»
 
@@ -98,9 +98,9 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 
 	def protected generateConnectionPortID(IInterfaceElement iface, FBNetworkElement elem) {
 		return if(type.FBNetwork.networkElements.contains(elem))
-			'''GENERATE_CONNECTION_PORT_ID_2_ARG(«elem.name.FORTEString», «iface.name.FORTEString»), «elem.fbId»'''
+			'''GENERATE_CONNECTION_PORT_ID_2_ARG(«elem.name.FORTEStringId», «iface.name.FORTEStringId»), «elem.fbId»'''
 		else
-			'''GENERATE_CONNECTION_PORT_ID_1_ARG(«iface.name.FORTEString»), -1'''
+			'''GENERATE_CONNECTION_PORT_ID_1_ARG(«iface.name.FORTEStringId»), -1'''
 	}
 
 	def protected dispatch fbId(FBNetworkElement elem)

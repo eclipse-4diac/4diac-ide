@@ -30,9 +30,11 @@ import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyIntValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyNumValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyRealValue;
+import org.eclipse.fordiac.ide.model.eval.value.AnySCharsValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyUnsignedValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyValue;
+import org.eclipse.fordiac.ide.model.eval.value.AnyWCharsValue;
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue;
 import org.eclipse.fordiac.ide.model.eval.value.ByteValue;
 import org.eclipse.fordiac.ide.model.eval.value.CharValue;
@@ -297,43 +299,87 @@ public interface StandardFunctions extends Functions {
 		return ULIntValue.toULIntValue(string.length());
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue> T LEFT(final T string, final U length) {
+	static <U extends AnyIntValue> StringValue LEFT(final StringValue string, final U length) {
 		return apply(string, value -> value.substring(0, length.intValue()));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue> T RIGHT(final T string, final U length) {
+	static <U extends AnyIntValue> WStringValue LEFT(final WStringValue string, final U length) {
+		return apply(string, value -> value.substring(0, length.intValue()));
+	}
+
+	static <U extends AnyIntValue> StringValue RIGHT(final StringValue string, final U length) {
 		return apply(string, value -> value.substring(value.length() - length.intValue()));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T MID(final T string,
-			final U length, final V position) {
+	static <U extends AnyIntValue> WStringValue RIGHT(final WStringValue string, final U length) {
+		return apply(string, value -> value.substring(value.length() - length.intValue()));
+	}
+
+	static <U extends AnyIntValue, V extends AnyIntValue> StringValue MID(final StringValue string, final U length,
+			final V position) {
+		return apply(string,
+				value -> value.substring(position.intValue() - 1, position.intValue() + length.intValue() - 1));
+	}
+
+	static <U extends AnyIntValue, V extends AnyIntValue> WStringValue MID(final WStringValue string, final U length,
+			final V position) {
 		return apply(string,
 				value -> value.substring(position.intValue() - 1, position.intValue() + length.intValue() - 1));
 	}
 
 	@SafeVarargs
-	static <T extends AnyStringValue> T CONCAT(final T... strings) {
-		return Stream.of(strings).reduce((value1, value2) -> apply(value1, value2, String::concat)).orElseThrow();
+	static StringValue CONCAT(final AnySCharsValue... strings) {
+		return StringValue.toStringValue(
+				Stream.of(strings).reduce((value1, value2) -> apply(value1, value2, String::concat)).orElseThrow());
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue> T INSERT(final T first, final T second, final U position) {
+	@SafeVarargs
+	static WStringValue CONCAT(final AnyWCharsValue... strings) {
+		return WStringValue.toWStringValue(
+				Stream.of(strings).reduce((value1, value2) -> apply(value1, value2, String::concat)).orElseThrow());
+	}
+
+	static <U extends AnyIntValue> StringValue INSERT(final StringValue first, final AnySCharsValue second,
+			final U position) {
 		return apply(first, value -> value.substring(0, position.intValue()).concat(second.stringValue())
 				.concat(value.substring(position.intValue())));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T DELETE(final T string,
-			final U length, final V position) {
+	static <U extends AnyIntValue> WStringValue INSERT(final WStringValue first, final AnyWCharsValue second,
+			final U position) {
+		return apply(first, value -> value.substring(0, position.intValue()).concat(second.stringValue())
+				.concat(value.substring(position.intValue())));
+	}
+
+	static <U extends AnyIntValue, V extends AnyIntValue> StringValue DELETE(final StringValue string, final U length,
+			final V position) {
 		return apply(string, value -> value.substring(0, position.intValue() - 1)
 				.concat(value.substring(position.intValue() + length.intValue() - 1)));
 	}
 
-	static <T extends AnyStringValue, U extends AnyIntValue, V extends AnyIntValue> T REPLACE(final T first,
-			final T second, final U length, final V position) {
+	static <U extends AnyIntValue, V extends AnyIntValue> WStringValue DELETE(final WStringValue string, final U length,
+			final V position) {
+		return apply(string, value -> value.substring(0, position.intValue() - 1)
+				.concat(value.substring(position.intValue() + length.intValue() - 1)));
+	}
+
+	static <U extends AnyIntValue, V extends AnyIntValue> StringValue REPLACE(final StringValue first,
+			final AnySCharsValue second, final U length, final V position) {
 		return apply(first, value -> value.substring(0, position.intValue() - 1).concat(second.stringValue())
 				.concat(value.substring(position.intValue() + length.intValue() - 1)));
 	}
 
-	static <T extends AnyStringValue> ULIntValue FIND(final T first, final T second) {
+	static <U extends AnyIntValue, V extends AnyIntValue> WStringValue REPLACE(final WStringValue first,
+			final AnyWCharsValue second, final U length, final V position) {
+		return apply(first, value -> value.substring(0, position.intValue() - 1).concat(second.stringValue())
+				.concat(value.substring(position.intValue() + length.intValue() - 1)));
+	}
+
+	static ULIntValue FIND(final StringValue first, final AnySCharsValue second) {
+		return ULIntValue.toULIntValue(first.stringValue().indexOf(second.stringValue()) + 1L);
+	}
+
+	static ULIntValue FIND(final WStringValue first, final AnyWCharsValue second) {
 		return ULIntValue.toULIntValue(first.stringValue().indexOf(second.stringValue()) + 1L);
 	}
 
@@ -1892,20 +1938,21 @@ public interface StandardFunctions extends Functions {
 		return (T) LRealValue.toLRealValue(operator.applyAsDouble(value1.doubleValue(), value2.doubleValue()));
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T extends AnyStringValue> T apply(final T value, final UnaryOperator<String> operator) {
-		if (value instanceof StringValue) {
-			return (T) StringValue.toStringValue(operator.apply(value.stringValue()));
-		}
-		return (T) WStringValue.toWStringValue(operator.apply(value.stringValue()));
+	private static StringValue apply(final StringValue value, final UnaryOperator<String> operator) {
+		return StringValue.toStringValue(operator.apply(value.stringValue()));
 	}
 
-	@SuppressWarnings("unchecked")
-	private static <T extends AnyStringValue> T apply(final T value1, final T value2,
+	private static WStringValue apply(final WStringValue value, final UnaryOperator<String> operator) {
+		return WStringValue.toWStringValue(operator.apply(value.stringValue()));
+	}
+
+	private static StringValue apply(final AnySCharsValue value1, final AnySCharsValue value2,
 			final BinaryOperator<String> operator) {
-		if (value1 instanceof StringValue) {
-			return (T) StringValue.toStringValue(operator.apply(value1.stringValue(), value2.stringValue()));
-		}
-		return (T) WStringValue.toWStringValue(operator.apply(value1.stringValue(), value2.stringValue()));
+		return StringValue.toStringValue(operator.apply(value1.stringValue(), value2.stringValue()));
+	}
+
+	private static WStringValue apply(final AnyWCharsValue value1, final AnyWCharsValue value2,
+			final BinaryOperator<String> operator) {
+		return WStringValue.toWStringValue(operator.apply(value1.stringValue(), value2.stringValue()));
 	}
 }
