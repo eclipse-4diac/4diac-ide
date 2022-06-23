@@ -12,6 +12,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.model.eval.st,
+ org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor,
  org.eclipse.debug.core,
  org.eclipse.xtext

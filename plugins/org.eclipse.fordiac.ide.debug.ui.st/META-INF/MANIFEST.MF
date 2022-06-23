@@ -21,9 +21,12 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.model.eval.st,
  org.eclipse.fordiac.ide.structuredtextcore.ui,
+ org.eclipse.fordiac.ide.structuredtextalgorithm,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ui,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.emf.common.ui,
- org.eclipse.emf.edit.ui
+ org.eclipse.emf.edit.ui,
+ org.eclipse.fordiac.ide.ui
 Export-Package: org.eclipse.fordiac.ide.debug.ui.st,
  org.eclipse.fordiac.ide.debug.ui.st.breakpoint

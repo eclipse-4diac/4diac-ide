@@ -33,5 +33,77 @@
          </adapter>
       </factory>
    </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            class="org.eclipse.fordiac.ide.debug.ui.st.breakpoint.STBreakpointPropertyPage"
+            id="org.eclipse.fordiac.ide.debug.ui.st.breakpoint.propertyPage"
+            name="Breakpoint">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.fordiac.ide.debug.st.breakpoint.STLineBreakpoint">
+            </adapt>
+         </enabledWhen>
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.detailPaneFactories">
+      <detailFactories
+            class="org.eclipse.fordiac.ide.debug.ui.st.breakpoint.STBreakpointDetailPaneFactory"
+            id="org.eclipse.fordiac.ide.debug.ui.st.breakpoint.detailFactory">
+         <enablement>
+            <with
+                  variable="selection">
+               <count
+                     value="1">
+               </count>
+               <iterate>
+                  <adapt
+                        type="org.eclipse.fordiac.ide.debug.st.breakpoint.STLineBreakpoint">
+                  </adapt>
+               </iterate>
+            </with>
+         </enablement>
+      </detailFactories>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.eclipse.fordiac.ide.debug.ui.st.breakpointProperties"
+            name="Breakpoint Properties">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.fordiac.ide.debug.ui.st.breakpoint.STBreakpointPropertyHandler"
+            commandId="org.eclipse.fordiac.ide.debug.ui.st.breakpointProperties">
+         <enabledWhen>
+            <with
+                  variable="selection">
+               <count
+                     value="1">
+               </count>
+               <iterate>
+                  <adapt
+                        type="org.eclipse.fordiac.ide.debug.st.breakpoint.STLineBreakpoint">
+                  </adapt>
+               </iterate>
+            </with>
+         </enabledWhen>
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.debug.ui.BreakpointView?after=additions">
+         <command
+               commandId="org.eclipse.fordiac.ide.debug.ui.st.breakpointProperties"
+               label="Breakpoint Properties..."
+               style="push">
+         </command>
+      </menuContribution>
+   </extension>
 
 </plugin>

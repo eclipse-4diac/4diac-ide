@@ -24,6 +24,11 @@ public class EvaluatorLineBreakpoint extends LineBreakpoint {
 
 	public static final String BREAKPOINT_MARKER = "org.eclipse.fordiac.ide.debug.evaluatorLineBreakpointMarker"; //$NON-NLS-1$
 
+	public static final String CONDITION = "org.eclipse.fordiac.ide.debug.st.stLineBreakpoint.condition"; //$NON-NLS-1$
+	public static final String CONDITION_ENABLED = "org.eclipse.fordiac.ide.debug.st.stLineBreakpoint.conditionEnabled"; //$NON-NLS-1$
+
+	private static final String CONDITION_DEFAULT = "TRUE"; //$NON-NLS-1$
+
 	public EvaluatorLineBreakpoint() {
 	}
 
@@ -40,6 +45,30 @@ public class EvaluatorLineBreakpoint extends LineBreakpoint {
 		marker.setAttribute(IBreakpoint.PERSISTED, true);
 		marker.setAttribute(IBreakpoint.ID, getModelIdentifier());
 		return marker;
+	}
+
+	public boolean isConditionEnabled() {
+		final IMarker m = getMarker();
+		if (m != null) {
+			return m.getAttribute(CONDITION_ENABLED, false);
+		}
+		return false;
+	}
+
+	public void setConditionEnabled(final boolean enabled) throws CoreException {
+		setAttribute(CONDITION_ENABLED, enabled);
+	}
+
+	public String getCondition() {
+		final IMarker m = getMarker();
+		if (m != null) {
+			return m.getAttribute(CONDITION, CONDITION_DEFAULT);
+		}
+		return CONDITION_DEFAULT;
+	}
+
+	public void setCondition(final String condition) throws CoreException {
+		setAttribute(CONDITION, condition);
 	}
 
 	public String getMarkerId() {

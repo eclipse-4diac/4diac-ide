@@ -37,6 +37,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.debug.breakpoint.EvaluatorLineBreakpoint;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorDebugger;
+import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
+import org.eclipse.fordiac.ide.model.eval.value.Value;
+import org.eclipse.fordiac.ide.model.eval.value.ValueOperations;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
@@ -158,6 +161,9 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 				final EvaluatorLineBreakpoint evaluatorLineBreakpoint = (EvaluatorLineBreakpoint) breakpoint;
 				if (Objects.equal(breakpoint.getMarker().getResource(), resource)
 						&& evaluatorLineBreakpoint.getLineNumber() == lineNumber) {
+					if (evaluatorLineBreakpoint.isConditionEnabled()) {
+						return evaluateBreakpointCondition(evaluatorLineBreakpoint, frame);
+					}
 					return true;
 				}
 			}
@@ -166,6 +172,22 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			// ignore (we don't care about broken breakpoints)
 		}
 		return false;
+	}
+
+	protected static boolean evaluateBreakpointCondition(final EvaluatorLineBreakpoint breakpoint,
+			final EvaluatorDebugStackFrame frame) {
+		try {
+			final Evaluator evaluator = EvaluatorFactory.createEvaluator(breakpoint.getCondition(), String.class, null,
+					null, frame.getEvaluator());
+			final Value result = evaluator.evaluate();
+			return ValueOperations.asBoolean(result);
+		} catch (final InterruptedException e) {
+			Thread.currentThread().interrupt();
+			return false;
+		} catch (final Exception e) {
+			FordiacLogHelper.logWarning("Couldn't evaluate breakpoint condition: " + e.getMessage(), e); //$NON-NLS-1$
+			return false;
+		}
 	}
 
 	public IResource getResource(final Object context) {
