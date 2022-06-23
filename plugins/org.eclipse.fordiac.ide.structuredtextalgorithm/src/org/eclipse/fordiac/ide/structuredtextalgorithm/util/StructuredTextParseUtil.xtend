@@ -148,11 +148,8 @@ class StructuredTextParseUtil {
 		resourceSet.resources.add(resource)
 		resource.entryPoint = entryPoint
 		resource.fbType = fbType
+		if(!additionalContent.nullOrEmpty) resource.additionalContent.addAll(additionalContent)
 		resource.load(new LazyStringInputStream(text), resourceSet.loadOptions)
-		if (!additionalContent.nullOrEmpty) {
-			resource.contents.addAll(additionalContent.copyAll)
-			resource.resolveAll
-		}
 		val validator = resource.resourceServiceProvider.resourceValidator
 		issues.addAll(validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl))
 		return resource.parseResult

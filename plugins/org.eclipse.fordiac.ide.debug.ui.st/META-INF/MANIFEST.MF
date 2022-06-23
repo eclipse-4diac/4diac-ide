@@ -29,4 +29,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.edit.ui,
  org.eclipse.fordiac.ide.ui
 Export-Package: org.eclipse.fordiac.ide.debug.ui.st,
- org.eclipse.fordiac.ide.debug.ui.st.breakpoint
+ org.eclipse.fordiac.ide.debug.ui.st.breakpoint,
+ org.eclipse.fordiac.ide.debug.ui.st.util

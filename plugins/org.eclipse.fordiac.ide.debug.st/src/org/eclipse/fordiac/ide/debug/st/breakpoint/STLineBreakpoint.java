@@ -12,9 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.st.breakpoint;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.debug.breakpoint.EvaluatorLineBreakpoint;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public class STLineBreakpoint extends EvaluatorLineBreakpoint {
 	public static final String BREAKPOINT_MARKER = "org.eclipse.fordiac.ide.debug.st.stLineBreakpointMarker"; //$NON-NLS-1$
@@ -25,6 +31,20 @@ public class STLineBreakpoint extends EvaluatorLineBreakpoint {
 
 	public STLineBreakpoint(final IResource resource, final int lineNumber) throws CoreException {
 		super(resource, lineNumber);
+	}
+
+	public FBType getFBType() {
+		final IMarker m = getMarker();
+		if (m != null) {
+			final IResource resource = m.getResource();
+			if (resource instanceof IFile) {
+				final TypeEntry typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource);
+				if (typeEntry instanceof FBTypeEntry) {
+					return ((FBTypeEntry) typeEntry).getType();
+				}
+			}
+		}
+		return null;
 	}
 
 	@Override
