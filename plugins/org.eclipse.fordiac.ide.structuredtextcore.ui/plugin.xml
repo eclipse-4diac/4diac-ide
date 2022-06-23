@@ -232,6 +232,9 @@
 			id="stcore.check.fast"
 			name="4diac IDE Structured Text Problem"
 			point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.emf.ecore.diagnostic">
+    </super>
 		<super type="org.eclipse.xtext.ui.check.fast"/>
   <super
         type="org.eclipse.fordiac.ide.model.problem">
@@ -242,6 +245,9 @@
 			id="stcore.check.normal"
 			name="4diac IDE Structured Text Problem"
 			point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.emf.ecore.diagnostic">
+    </super>
 		<super type="org.eclipse.xtext.ui.check.normal"/>
   <super
         type="org.eclipse.fordiac.ide.model.problem">
@@ -252,6 +258,9 @@
 			id="stcore.check.expensive"
 			name="4diac IDE Structured Text Problem"
 			point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.emf.ecore.diagnostic">
+    </super>
 		<super type="org.eclipse.xtext.ui.check.expensive"/>
   <super
         type="org.eclipse.fordiac.ide.model.problem">
