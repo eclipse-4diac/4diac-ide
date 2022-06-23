@@ -13,6 +13,7 @@
  *       - initial API and implementation and/or initial documentation
  *       - adds check for trailing underscore on identifiers
  *       - validation for unqualified FB calls (exactly one input event)
+ *       - validation for partial bit access
  *   Ulzii Jargalsaikhan
  *       - custom validation for identifiers
  *   Martin Jobst
@@ -31,6 +32,7 @@ import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
@@ -54,6 +56,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
@@ -102,6 +106,13 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	public static final String ICALLABLE_NOT_VISIBLE = ISSUE_CODE_PREFIX + "iCallableNotVisible"; //$NON-NLS-1$
 	public static final String ICALLABLE_HAS_NO_RETURN_TYPE = ISSUE_CODE_PREFIX + "iCallableHasNoReturnType"; //$NON-NLS-1$
+	public static final String BIT_ACCESS_INDEX_OUT_OF_RANGE = ISSUE_CODE_PREFIX + "bitAccessIndexOutOfRange"; //$NON-NLS-1$
+	public static final String BIT_ACCESS_INDEX_INVALID_EXPRESSION = ISSUE_CODE_PREFIX + "bitAccessInvalidExpression"; //$NON-NLS-1$
+	public static final String BIT_ACCESS_INVALID_FOR_TYPE = ISSUE_CODE_PREFIX + "bitAccessInvalidForType"; //$NON-NLS-1$
+	public static final String BIT_ACCESS_INVALID_RECEIVER = ISSUE_CODE_PREFIX + "bitAccessInvalidForReceiver"; //$NON-NLS-1$
+
+	public static final String BIT_ACCESS_EXPRESSION_NOT_OF_TYPE_ANY_INT = ISSUE_CODE_PREFIX
+			+ "bitAccessExpressionNotOfTypeAnyInt"; //$NON-NLS-1$
 
 	@Check
 	public void checkConsecutiveUnderscoresInIdentifier(final INamedElement iNamedElement) {
@@ -400,6 +411,58 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 						STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, ICALLABLE_HAS_NO_RETURN_TYPE);
 			}
 		}
+	}
+
+	@Check
+	public void checkIndexOfBitwiseAccessExpression(final STMultibitPartialExpression expression) {
+		final STMemberAccessExpression memberAccessExpr = (STMemberAccessExpression) expression.eContainer();
+		final var receiverExpression = memberAccessExpr.getReceiver();
+		final DataType accessType = (DataType) memberAccessExpr.getResultType();
+		final DataType receiverType = (DataType) receiverExpression.getResultType();
+		// Valid target receiver is a variable or a function name usable as variable
+		if (memberAccessExpr.getReceiver() instanceof STFeatureExpression
+				&& !((STFeatureExpression) memberAccessExpr.getReceiver()).isCall()) {
+			checkMultibitPartialExpression(expression, accessType, receiverType);
+
+		} else {
+			error(Messages.STCoreValidator_BitAccessInvalidForReciever,
+					STCorePackage.Literals.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION, BIT_ACCESS_INVALID_RECEIVER);
+		}
+	}
+
+	/* Here we already know that we have a MultibitPartialExpression. This function checks bound on static access
+	 * (without "()") */
+	private void checkMultibitPartialExpression(final STMultibitPartialExpression expression,
+			final DataType accessorType, final DataType receiverType) {
+		if (receiverType instanceof AnyBitType) {
+			if (expression.getIndex() != null
+					&& expression.getIndex().intValue() > getBitAccessMaxIndex(accessorType, receiverType)) {
+				error(MessageFormat.format(Messages.STCoreValidator_BitAccessOutOfRange,
+						expression.getSpecifier().getLiteral() + expression.getIndex()),
+						STCorePackage.Literals.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION,
+						BIT_ACCESS_INDEX_OUT_OF_RANGE);
+			} else if (expression.getExpression() != null) {
+				final DataType multiBitAccessExpressionType = (DataType) (expression.getExpression().getResultType());
+				if (!(multiBitAccessExpressionType instanceof AnyIntType)) {
+					error(MessageFormat.format(Messages.STCoreValidator_BitAccessExpressionNotOfTypeAnyInt,
+							multiBitAccessExpressionType.getName()),
+							STCorePackage.Literals.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION,
+							BIT_ACCESS_EXPRESSION_NOT_OF_TYPE_ANY_INT);
+				}
+			}
+		} else { // member is an STMultibitPartialExpression but receiver is not ANY_BIT
+			error(MessageFormat.format(Messages.STCoreValidator_BitAccessInvalidForType, receiverType.getName()),
+					STCorePackage.Literals.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION, BIT_ACCESS_INVALID_FOR_TYPE);
+		}
+	}
+
+	protected static int getBitAccessMaxIndex(final DataType accessorType, final DataType receiverType) {
+		if (accessorType instanceof AnyBitType && receiverType instanceof AnyBitType) {
+			final var bitSize = ((AnyBitType) receiverType).getBitSize();
+			final var bitFactor = ((AnyBitType) accessorType).getBitSize();
+			return bitFactor > 0 && bitSize > bitFactor ? bitSize / bitFactor - 1 : -1;
+		}
+		return -1;
 	}
 
 	protected static ICallable getICallableContainer(final EObject eObject) {

@@ -14,6 +14,8 @@
  *   Martin Jobst
  *       - validation for reserved identifiers
  *       - validation for calls
+ *   Martin Melik Merkumians
+ * 		- validation for duplicate names on FUNCTIONs
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 
