@@ -277,12 +277,12 @@ class ValueOperationsTest {
 		// both type and partialType must be ANY_BIT types and the partialType must be smaller than type
 		if (type instanceof AnyBitType && partialType instanceof AnyBitType && type != partialType &&
 			type.isAssignableFrom(partialType)) {
-			for (index : 0 ..< (type.bitSize / partialType.bitSize)) {
+			for (index : 0 ..< (type as AnyBitType).bitSize / (partialType as AnyBitType).bitSize) {
 				partialType.defaultValue.assertEquals(type.defaultValue.partial(partialType, index))
-				(0xffffffff >>> (32 - partialType.bitSize)).wrapValue(partialType).assertEquals(
+				(0xffffffff >>> (32 - (partialType as AnyBitType).bitSize)).wrapValue(partialType).assertEquals(
 					0xffffffffffffffff#L.wrapValue(type).partial(partialType, index))
 				type.defaultValue.assertEquals(type.defaultValue.partial(partialType, index, partialType.defaultValue))
-				(0x1#L << (index * partialType.bitSize)).wrapValue(type).assertEquals(
+				(0x1#L << (index * (partialType as AnyBitType).bitSize)).wrapValue(type).assertEquals(
 					type.defaultValue.partial(partialType, index, 1.wrapValue(partialType)))
 			}
 		} else {

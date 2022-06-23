@@ -36,4 +36,12 @@ public interface AnyBitType extends AnyElementaryType {
 	 */
 	boolean isAssignableFrom(DataType other);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	int getBitSize();
+
 } // AnyBitType

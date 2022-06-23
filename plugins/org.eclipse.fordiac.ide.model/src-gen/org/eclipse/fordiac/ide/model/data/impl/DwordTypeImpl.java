@@ -59,4 +59,14 @@ public class DwordTypeImpl extends AnyBitTypeImpl implements DwordType {
 		return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getBitSize() {
+		return 32;
+	}
+
 } //DwordTypeImpl

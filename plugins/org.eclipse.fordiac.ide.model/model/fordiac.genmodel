@@ -804,31 +804,37 @@
       <genOperations ecoreOperation="data.ecore#//AnyBitType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//AnyBitType/isAssignableFrom/other"/>
       </genOperations>
+      <genOperations ecoreOperation="data.ecore#//AnyBitType/getBitSize" body="return 0;"/>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//BoolType">
       <genOperations ecoreOperation="data.ecore#//BoolType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//BoolType/isAssignableFrom/other"/>
       </genOperations>
+      <genOperations ecoreOperation="data.ecore#//BoolType/getBitSize" body="return 1;"/>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//ByteType">
       <genOperations ecoreOperation="data.ecore#//ByteType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//ByteType/isAssignableFrom/other"/>
       </genOperations>
+      <genOperations ecoreOperation="data.ecore#//ByteType/getBitSize" body="return 8;"/>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//WordType">
       <genOperations ecoreOperation="data.ecore#//WordType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//WordType/isAssignableFrom/other"/>
       </genOperations>
+      <genOperations ecoreOperation="data.ecore#//WordType/getBitSize" body="return 16;"/>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//DwordType">
       <genOperations ecoreOperation="data.ecore#//DwordType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//DwordType/isAssignableFrom/other"/>
       </genOperations>
+      <genOperations ecoreOperation="data.ecore#//DwordType/getBitSize" body="return 32;"/>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//LwordType">
       <genOperations ecoreOperation="data.ecore#//LwordType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//LwordType/isAssignableFrom/other"/>
       </genOperations>
+      <genOperations ecoreOperation="data.ecore#//LwordType/getBitSize" body="return 64;"/>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyCharsType">
       <genOperations ecoreOperation="data.ecore#//AnyCharsType/isAssignableFrom" body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">

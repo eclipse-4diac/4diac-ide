@@ -786,18 +786,7 @@ final class ValueOperations {
 		value.bitwiseXor(value.bitwiseXor(partial).bitwiseAnd(mask)) // (value & ~mask) | (partial & mask)
 	}
 
-	def static int bitSize(DataType type) {
-		switch (type) {
-			BoolType: 1
-			ByteType: 8
-			WordType: 16
-			DwordType: 32
-			LwordType: 64
-			default: throw new UnsupportedOperationException('''The bit size is not defined for type «type.name»''')
-		}
-	}
-
-	def static long bitMask(DataType type) {
+	def static long bitMask(AnyBitType type) {
 		(0xffffffffffffffff#L >>> (64 - type.bitSize))
 	}
 

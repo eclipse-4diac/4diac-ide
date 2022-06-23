@@ -364,6 +364,11 @@
       </eAnnotations>
       <eParameters name="other" eType="#//DataType"/>
     </eOperations>
+    <eOperations name="getBitSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return 0;"/>
+      </eAnnotations>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BoolType" eSuperTypes="#//AnyBitType">
     <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
@@ -371,6 +376,11 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
       <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
+    <eOperations name="getBitSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return 1;"/>
+      </eAnnotations>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ByteType" eSuperTypes="#//AnyBitType">
@@ -380,6 +390,11 @@
       </eAnnotations>
       <eParameters name="other" eType="#//DataType"/>
     </eOperations>
+    <eOperations name="getBitSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return 8;"/>
+      </eAnnotations>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="WordType" eSuperTypes="#//AnyBitType">
     <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
@@ -387,6 +402,11 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
       <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
+    <eOperations name="getBitSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return 16;"/>
+      </eAnnotations>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="DwordType" eSuperTypes="#//AnyBitType">
@@ -396,6 +416,11 @@
       </eAnnotations>
       <eParameters name="other" eType="#//DataType"/>
     </eOperations>
+    <eOperations name="getBitSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return 32;"/>
+      </eAnnotations>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="LwordType" eSuperTypes="#//AnyBitType">
     <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
@@ -403,6 +428,11 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);"/>
       </eAnnotations>
       <eParameters name="other" eType="#//DataType"/>
+    </eOperations>
+    <eOperations name="getBitSize" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return 64;"/>
+      </eAnnotations>
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AnyCharsType" eSuperTypes="#//AnyElementaryType">

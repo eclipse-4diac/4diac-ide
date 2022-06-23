@@ -59,4 +59,14 @@ public class AnyBitTypeImpl extends AnyElementaryTypeImpl implements AnyBitType 
 		return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);
 	}
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int getBitSize() {
+		return 0;
+	}
+
 } //AnyBitTypeImpl
