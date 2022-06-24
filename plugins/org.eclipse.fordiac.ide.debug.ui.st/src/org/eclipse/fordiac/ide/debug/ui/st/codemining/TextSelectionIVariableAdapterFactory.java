@@ -118,9 +118,13 @@ public class TextSelectionIVariableAdapterFactory implements IAdapterFactory {
 	}
 
 	protected static EvaluatorDebugStackFrame getFrame() {
-		final IAdaptable adaptable = DebugUITools.getDebugContext();
-		if (adaptable != null) {
-			return adaptable.getAdapter(EvaluatorDebugStackFrame.class);
+		try {
+			final IAdaptable adaptable = DebugUITools.getDebugContext();
+			if (adaptable != null) {
+				return adaptable.getAdapter(EvaluatorDebugStackFrame.class);
+			}
+		} catch (final IllegalStateException e) {
+			// ignore (debug framework causes sporadic exceptions when under high load)
 		}
 		return null;
 	}
