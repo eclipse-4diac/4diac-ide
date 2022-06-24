@@ -130,7 +130,7 @@ class StructuredTextParseUtil {
 		resource.URI = fbType?.typeEntry?.file?.fullPath?.toString?.createPlatformResourceURI(true) ?: SYNTHETIC_URI
 		resourceSet.resources.add(resource)
 		resource.entryPoint = entryPoint
-		resource.fbType = fbType?.copy
+		resource.fbType = fbType
 		resource.load(new LazyStringInputStream(text), resourceSet.loadOptions)
 		val validator = resource.resourceServiceProvider.resourceValidator
 		issues.addAll(validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl))

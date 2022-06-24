@@ -54,7 +54,6 @@ class STAlgorithmDocumentFBTypeUpdater extends Job {
 				val libraryElement = typeEntry.typeEditable
 				if (libraryElement instanceof FBType) {
 					resource.fbType = libraryElement
-					resource.relink
 				}
 			}
 		}

@@ -114,7 +114,6 @@ class STAlgorithmDocumentProvider extends XtextDocumentProvider {
 					document.internalModify [ resource |
 						if (resource instanceof STAlgorithmResource) {
 							resource.fbType = libraryElement
-							resource.relink
 						}
 						null
 					]

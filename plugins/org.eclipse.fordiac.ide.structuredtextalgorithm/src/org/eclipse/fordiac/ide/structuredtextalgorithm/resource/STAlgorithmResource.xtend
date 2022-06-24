@@ -73,6 +73,7 @@ class STAlgorithmResource extends LazyLinkingResource {
 		clearInternalFBType
 		if (!contents.nullOrEmpty && fbType !== null) {
 			contents.add(fbType.copy)
+			relink
 		}
 	}
 

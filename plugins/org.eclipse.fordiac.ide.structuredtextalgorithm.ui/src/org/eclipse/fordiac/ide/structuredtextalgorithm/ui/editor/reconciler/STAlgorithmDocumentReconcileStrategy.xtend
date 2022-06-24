@@ -16,6 +16,7 @@ import com.google.inject.Inject
 import org.eclipse.core.runtime.IProgressMonitor
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmPartitioner
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmReconciler
 import org.eclipse.swt.widgets.Display
@@ -36,8 +37,10 @@ class STAlgorithmDocumentReconcileStrategy extends XtextDocumentReconcileStrateg
 		if (resource instanceof STAlgorithmResource) {
 			val fbType = resource.fbType
 			if (fbType instanceof BaseFBType) {
-				val partition = resource.partition
-				Display.^default.asyncExec[fbType.callables.reconcile(partition)]
+				if (resource.parseResult?.rootASTElement instanceof STAlgorithmSource) {
+					val partition = resource.partition
+					Display.^default.asyncExec[fbType.callables.reconcile(partition)]
+				}
 			}
 		}
 	}
