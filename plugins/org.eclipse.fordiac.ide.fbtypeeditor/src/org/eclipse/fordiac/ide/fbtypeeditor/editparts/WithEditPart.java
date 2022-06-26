@@ -32,6 +32,10 @@ import org.eclipse.gef.requests.GroupRequest;
 
 public class WithEditPart extends AbstractConnectionEditPart {
 
+	private static final int WITH_BOX_SIZE = 15;
+	private static final float WITH_SCALE = 0.2f;
+	private static final int SCALED_WITH_DISTANCE = (int) (WithAnchor.WITH_DISTANCE / WITH_SCALE);
+
 	public With getCastedModel() {
 		return (With) getModel();
 	}
@@ -69,44 +73,55 @@ public class WithEditPart extends AbstractConnectionEditPart {
 	}
 
 	private void updateConnection(final PolylineConnection connection) {
-		final int h = 15;
-		final float scale = 0.2f;
+
 		final int withPos = InterfaceEditPart.calculateWithPos(getCastedModel(),isInput());
-		// creating top rectangle
-		final PointList rect = createPointList(h, withPos);
-		// creating bottom rectangle
-		final PointList targetRect = createPointList(h, withPos);
 
 		final PolygonDecoration rectDec = new PolygonDecoration();
-		rectDec.setTemplate(targetRect.getCopy());
-		rectDec.setScale(scale, scale);
+		rectDec.setTemplate(createPointList(withPos, false));
+		rectDec.setScale(WITH_SCALE, WITH_SCALE);
 		rectDec.setFill(false);
 		connection.setTargetDecoration(rectDec);
 
 		final PolygonDecoration rectDec2 = new PolygonDecoration();
-		rectDec2.setTemplate(rect.getCopy());
-		rectDec2.setScale(scale, scale);
+		rectDec2.setTemplate(createPointList(withPos, true));
+		rectDec2.setScale(WITH_SCALE, WITH_SCALE);
 		rectDec2.setFill(false);
 		connection.setSourceDecoration(rectDec2);
 	}
 
-	private PointList createPointList(final int h, final int withPos) {
-		final PointList rect = new PointList();
-		rect.addPoint(-h, -h);
-		rect.addPoint(-h, h);
-		rect.addPoint(h, h);
-		rect.addPoint(h, -h);
-		rect.addPoint(-h, -h);
-		rect.addPoint(0, -h);
+	private PointList createPointList(final int withPos, final boolean top) {
+		final PointList rect = new PointList(9);
+		rect.addPoint(-WITH_BOX_SIZE, -WITH_BOX_SIZE);
+		rect.addPoint(-WITH_BOX_SIZE, WITH_BOX_SIZE);
+		rect.addPoint(WITH_BOX_SIZE, WITH_BOX_SIZE);
+		rect.addPoint(WITH_BOX_SIZE, -WITH_BOX_SIZE);
+		rect.addPoint(-WITH_BOX_SIZE, -WITH_BOX_SIZE);
+		rect.addPoint(0, -WITH_BOX_SIZE);
 		if (isInput()) {
-			rect.addPoint(0, -h - 45);
-			rect.addPoint(0, +h + 45 * withPos);
+			if (top) {
+				addRightAlignedLine(withPos, rect);
+			} else {
+				addLeftAlignedLine(withPos, rect);
+			}
 		} else {
-			rect.addPoint(0, -h - 45 * withPos);
-			rect.addPoint(0, +h + 45);
+			if (top) {
+				addLeftAlignedLine(withPos, rect);
+			} else {
+				addRightAlignedLine(withPos, rect);
+			}
 		}
-		rect.addPoint(0, -h);
+		rect.addPoint(0, -WITH_BOX_SIZE);
 		return rect;
+	}
+
+	private static void addLeftAlignedLine(final int withPos, final PointList rect) {
+		rect.addPoint(0, -WITH_BOX_SIZE - SCALED_WITH_DISTANCE * withPos);
+		rect.addPoint(0, +WITH_BOX_SIZE + SCALED_WITH_DISTANCE);
+	}
+
+	private static void addRightAlignedLine(final int withPos, final PointList rect) {
+		rect.addPoint(0, -WITH_BOX_SIZE - SCALED_WITH_DISTANCE);
+		rect.addPoint(0, +WITH_BOX_SIZE + SCALED_WITH_DISTANCE * withPos);
 	}
 
 	public void updateWithPos() {
