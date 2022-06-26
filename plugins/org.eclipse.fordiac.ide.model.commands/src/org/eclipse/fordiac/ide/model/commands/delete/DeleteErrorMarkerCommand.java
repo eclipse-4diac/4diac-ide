@@ -19,40 +19,47 @@ import org.eclipse.gef.commands.Command;
 
 public class DeleteErrorMarkerCommand extends Command {
 
-	private final DeleteInterfaceCommand deleteErrorMarkerIECmd;
+	private final ErrorMarkerInterface errorIe;
+	private DeleteInterfaceCommand deleteErrorMarkerIECmd;
 	private final DeleteFBNetworkElementCommand deleteErrorMarkerFBN;
 
 	public DeleteErrorMarkerCommand(final ErrorMarkerInterface errorIe, final FBNetworkElement errorFb) {
 		super();
-		deleteErrorMarkerIECmd = new DeleteInterfaceCommand(errorIe);
+		this.errorIe = errorIe;
 		deleteErrorMarkerFBN = createDeleteFBNCommand(errorIe, errorFb);
 	}
 
 	@Override
 	public void execute() {
-		performDeletion();
-	}
-
-	private void performDeletion() {
-		deleteErrorMarkerIECmd.execute();
-		if (deleteErrorMarkerFBN != null) {
-			deleteErrorMarkerFBN.execute();
+		// if the error interface element has no container it was already deleted by another command (e.g., connection
+		// and pin where selected at the same time and connection got deleted first)
+		if (errorIe.eContainer() != null) {
+			deleteErrorMarkerIECmd = new DeleteInterfaceCommand(errorIe);
+			deleteErrorMarkerIECmd.execute();
+			if (deleteErrorMarkerFBN != null) {
+				deleteErrorMarkerFBN.execute();
+			}
 		}
 	}
+
 
 	@Override
 	public void undo() {
-		if (deleteErrorMarkerFBN != null) {
-			deleteErrorMarkerFBN.undo();
+		if (deleteErrorMarkerIECmd != null) {
+			if (deleteErrorMarkerFBN != null) {
+				deleteErrorMarkerFBN.undo();
+			}
+			deleteErrorMarkerIECmd.undo();
 		}
-		deleteErrorMarkerIECmd.undo();
 	}
 
 	@Override
 	public void redo() {
-		deleteErrorMarkerIECmd.redo();
-		if (deleteErrorMarkerFBN != null) {
-			deleteErrorMarkerFBN.redo();
+		if (deleteErrorMarkerIECmd != null) {
+			deleteErrorMarkerIECmd.redo();
+			if (deleteErrorMarkerFBN != null) {
+				deleteErrorMarkerFBN.redo();
+			}
 		}
 	}
 
