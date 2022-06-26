@@ -222,6 +222,8 @@ abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
 		type.interfaceList.eventOutputs.exists[!it.with.empty]
 	}
 
+    // changes to this method require a recheck of the two methods generateFBInterfaceSpecSocket, generateFBInterfaceSpecPlug of AdapterFBImplTemplate
+    // as there this code is duplicated
 	def protected generateFBInterfaceSpecDefinition() '''
 		const SFBInterfaceSpec «FBClassName»::scm_stFBInterfaceSpec = {
 		  «type.interfaceList.eventInputs.size», «IF type.interfaceList.eventInputs.empty»nullptr, nullptr, nullptr«ELSE»scm_anEventInputNames, «IF hasInputWith»scm_anEIWith«ELSE»nullptr«ENDIF», scm_anEIWithIndexes«ENDIF»,
