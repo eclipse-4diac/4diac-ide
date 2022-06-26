@@ -48,11 +48,11 @@ class AdapterFBHeaderTemplate extends ForteFBTemplate {
 		
 		  «generateFBInterfaceSpecDeclaration»
 		
+		public:
 		  «type.interfaceList.inputVars.generateAccessors("getDI", "getDO")»
 		  «type.interfaceList.outputVars.generateAccessors("getDO", "getDI")»
 		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
 		
-		public:
 		  «type.interfaceList.eventInputs.generateEventAccessors»
 		  «type.interfaceList.eventOutputs.generateEventAccessors»
 		
