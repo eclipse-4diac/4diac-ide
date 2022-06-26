@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SEGImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
 import org.eclipse.fordiac.ide.model.dataimport.TypeImporter;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
@@ -68,8 +69,14 @@ public class TypeFromTemplateCreator {
 		return null;
 	}
 
+	@SuppressWarnings("static-method")  // allow subclasses to override
 	protected void performTypeSpecificSetup(final LibraryElement type) {
 		// hook for subclasses to perform any type specific setup, e.g., saveassubapptype -> setup interface and network
+		if (type instanceof AdapterType) {
+			// for adapter types we need to also set the name for the adapterfbtype entry
+			final AdapterType adpType = (AdapterType) type;
+			adpType.getAdapterFBType().setName(type.getName());
+		}
 	}
 
 	private TypeImporter getTypeImporter(final TypeEntry entry) {

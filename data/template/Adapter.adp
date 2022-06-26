@@ -37,8 +37,6 @@
 <AdapterType Name="Adapter" Comment="Adapter Interface" >
   <Identification Standard="61499-1" />
   <VersionInfo Organization="4DIAC-Consortium" Version="0.0" Author="GE" Date="2008-04-22" />
-  <CompilerInfo header="package fb.test;" >
-  </CompilerInfo>
   <InterfaceList>
     <EventInputs>
       <Event Name="REQ" Comment="Request from Socket" >
