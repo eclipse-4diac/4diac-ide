@@ -559,12 +559,7 @@ public class FBTImporter extends TypeImporter {
 		if (null != text) {
 			alg.setText(text);
 		} else {
-			final StringBuilder algText = new StringBuilder();
-			// the parser my split the content of several parts therefore this while loop
-			while ((getReader().hasNext()) && (XMLStreamConstants.CHARACTERS == getReader().next())) {
-				algText.append(getReader().getText());
-			}
-			alg.setText(algText.toString());
+			alg.setText(readCDataSection());
 		}
 	}
 
@@ -669,12 +664,7 @@ public class FBTImporter extends TypeImporter {
 		if (null != text) {
 			method.setText(text);
 		} else {
-			final StringBuilder algText = new StringBuilder();
-			// the parser my split the content of several parts therefore this while loop
-			while ((getReader().hasNext()) && (XMLStreamConstants.CHARACTERS == getReader().next())) {
-				algText.append(getReader().getText());
-			}
-			method.setText(algText.toString());
+			method.setText(readCDataSection());
 		}
 	}
 

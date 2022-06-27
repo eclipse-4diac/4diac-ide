@@ -20,8 +20,6 @@
 package org.eclipse.fordiac.ide.model.dataexport;
 
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -41,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.TextMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -50,8 +47,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
  * The Class FbtExporter.
  */
 class FbtExporter extends AbstractBlockTypeExporter {
-
-	private static final Pattern CDATA_END_PATTERN = Pattern.compile("\\]\\]>"); //$NON-NLS-1$
 
 	/**
 	 * Instantiates a new fbt exporter.
@@ -105,29 +100,13 @@ class FbtExporter extends AbstractBlockTypeExporter {
 		getWriter().writeAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE,
 				(null != algorithm.getLanguage()) ? algorithm.getLanguage() : ""); //$NON-NLS-1$
 
-		writeTextAlgorithmText(algorithm);
+		writeAlgorithmText(algorithm.getText());
 		addInlineEndElement();
 	}
 
-	private void writeTextAlgorithmText(final TextAlgorithm algorithm) throws XMLStreamException {
-		if (null != algorithm.getText()) {
-			final Matcher endPatternMatcher = CDATA_END_PATTERN.matcher(algorithm.getText());
-			int currentPosition = 0;
-			if (endPatternMatcher.find()) { // Check if we have at least one CData end pattern in the string
-				do {
-					getWriter().writeCData(algorithm.getText().substring(currentPosition, endPatternMatcher.start()));
-					getWriter().writeCharacters("]]>"); //$NON-NLS-1$
-					currentPosition = endPatternMatcher.end();
-				} while (endPatternMatcher.find());
-
-				if (currentPosition < algorithm.getText().length()) {
-					// there is some text after the last CData end pattern
-					getWriter().writeCData(algorithm.getText().substring(currentPosition));
-				}
-			} else {
-				// no CData end pattern write the algorithm text as whole
-				getWriter().writeCData(algorithm.getText());
-			}
+	private void writeAlgorithmText(final String text) throws XMLStreamException {
+		if (null != text) {
+			writeCDataSection(text);
 		} else {
 			getWriter().writeCharacters(""); //$NON-NLS-1$
 		}
@@ -141,7 +120,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	 */
 	private void addSTAlgorithm(final STAlgorithm algorithm) throws XMLStreamException {
 		addStartElement(LibraryElementTags.ST_ELEMENT);
-		writeTextAlgorithmText(algorithm);
+		writeAlgorithmText(algorithm.getText());
 		addInlineEndElement();
 	}
 
@@ -303,7 +282,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	 * @throws XMLStreamException */
 	private void addSTMethod(final STMethod method) throws XMLStreamException {
 		addStartElement(LibraryElementTags.ST_ELEMENT);
-		writeTextMethodText(method);
+		writeAlgorithmText(method.getText());
 		addInlineEndElement();
 		writeTextMethodParameters(method);
 	}
@@ -317,7 +296,7 @@ class FbtExporter extends AbstractBlockTypeExporter {
 		getWriter().writeAttribute(LibraryElementTags.LANGUAGE_ATTRIBUTE,
 				(null != method.getLanguage()) ? method.getLanguage() : ""); //$NON-NLS-1$
 
-		writeTextMethodText(method);
+		writeAlgorithmText(method.getText());
 		addInlineEndElement();
 		writeTextMethodParameters(method);
 	}
@@ -337,30 +316,6 @@ class FbtExporter extends AbstractBlockTypeExporter {
 	private void addParameter(final INamedElement element) throws XMLStreamException {
 		if (element instanceof VarDeclaration) {
 			addVarDeclaration((VarDeclaration) element);
-		}
-	}
-
-	private void writeTextMethodText(final TextMethod method) throws XMLStreamException {
-		if (null != method.getText()) {
-			final Matcher endPatternMatcher = CDATA_END_PATTERN.matcher(method.getText());
-			int currentPosition = 0;
-			if (endPatternMatcher.find()) { // Check if we have at least one CData end pattern in the string
-				do {
-					getWriter().writeCData(method.getText().substring(currentPosition, endPatternMatcher.start()));
-					getWriter().writeCharacters("]]>"); //$NON-NLS-1$
-					currentPosition = endPatternMatcher.end();
-				} while (endPatternMatcher.find());
-
-				if (currentPosition < method.getText().length()) {
-					// there is some text after the last CData end pattern
-					getWriter().writeCData(method.getText().substring(currentPosition));
-				}
-			} else {
-				// no CData end pattern write the algorithm text as whole
-				getWriter().writeCData(method.getText());
-			}
-		} else {
-			getWriter().writeCharacters(""); //$NON-NLS-1$
 		}
 	}
 

@@ -27,6 +27,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
@@ -44,6 +46,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.PreferenceConstants;
+import org.eclipse.fordiac.ide.model.data.BaseType1;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
@@ -171,6 +174,7 @@ class CommonElementExporter {
 
 	public static final String LINE_END = "\n"; //$NON-NLS-1$
 	public static final String TAB = "\t"; //$NON-NLS-1$
+	private static final Pattern CDATA_END_PATTERN = Pattern.compile("\\]\\]>"); //$NON-NLS-1$
 
 	private final XMLStreamWriter writer;
 	private ByteBufferOutputStream outputStream;
@@ -250,12 +254,22 @@ class CommonElementExporter {
 
 	protected void addAttributeElement(final String name, final String type, final String value, final String comment)
 			throws XMLStreamException {
-		addEmptyStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
+		if (BaseType1.WSTRING.getName().equals(type)) {
+			addStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
+		} else {
+			addEmptyStartElement(LibraryElementTags.ATTRIBUTE_ELEMENT);
+		}
 		getWriter().writeAttribute(LibraryElementTags.NAME_ATTRIBUTE, name);
 		getWriter().writeAttribute(LibraryElementTags.TYPE_ATTRIBUTE, type);
-		getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
+		if (!BaseType1.WSTRING.getName().equals(type)) {
+			getWriter().writeAttribute(LibraryElementTags.VALUE_ATTRIBUTE, value);
+		}
 		if ((null != comment) && (!comment.isBlank())) {
 			getWriter().writeAttribute(LibraryElementTags.COMMENT_ATTRIBUTE, comment);
+		}
+		if (BaseType1.WSTRING.getName().equals(type)) {
+			writeCDataSection(value);
+			addInlineEndElement();
 		}
 	}
 
@@ -489,6 +503,26 @@ class CommonElementExporter {
 	protected void addXYAttributes(final int x, final int y) throws XMLStreamException {
 		writer.writeAttribute(LibraryElementTags.X_ATTRIBUTE, CoordinateConverter.INSTANCE.convertTo1499XML(x));
 		writer.writeAttribute(LibraryElementTags.Y_ATTRIBUTE, CoordinateConverter.INSTANCE.convertTo1499XML(y));
+	}
+
+	protected void writeCDataSection(final String cdataText) throws XMLStreamException {
+		final Matcher endPatternMatcher = CDATA_END_PATTERN.matcher(cdataText);
+		int currentPosition = 0;
+		if (endPatternMatcher.find()) { // Check if we have at least one CData end pattern in the string
+			do {
+				getWriter().writeCData(cdataText.substring(currentPosition, endPatternMatcher.start()));
+				getWriter().writeCharacters("]]>"); //$NON-NLS-1$
+				currentPosition = endPatternMatcher.end();
+			} while (endPatternMatcher.find());
+
+			if (currentPosition < cdataText.length()) {
+				// there is some text after the last CData end pattern
+				getWriter().writeCData(cdataText.substring(currentPosition));
+			}
+		} else {
+			// no CData end pattern write the algorithm text as whole
+			getWriter().writeCData(cdataText);
+		}
 	}
 
 }
