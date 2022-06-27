@@ -1,7 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2013, 2016 AIT, fortiss GmbH
- * 				 2018 Johannes Kepler University
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2013, 2022 AIT, fortiss GmbH, Johannes Kepler University,
+ *                               Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,14 +22,15 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 /** This policy creates an AddFBToSubAppCommand when user moves selected FBs over a subapp. When this is possible the
@@ -40,18 +40,27 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 
 	@Override
 	protected Command getAddCommand(final Request request) {
-
-		if (isDragAndDropRequestFromSubAppToSubApp(request, getTargetEditPart(request))) {
+		if (isDragAndDropRequestForSubapp(request)) {
 			final List<EditPart> editParts = ((ChangeBoundsRequest) request).getEditParts();
-			final SubApp dropSubApp = (SubApp) getTargetEditPart(request).getModel();
-			final List<FBNetworkElement> fbEls = collectDraggedFBs(editParts, dropSubApp);
+			final List<EditPart> moveFrom = collectMoveFromElements(editParts);
+			final List<EditPart> addTo = collectAddToElements(editParts);
 			final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
 
-			if (!fbEls.isEmpty()) {
-				return new MoveElementsFromSubAppCommand(fbEls,
-						new org.eclipse.swt.graphics.Point(destination.x, destination.y));
+			final CompoundCommand cmd = new CompoundCommand();
+			if (!moveFrom.isEmpty()) {
+				final List<FBNetworkElement> fbEls = moveFrom.stream().map(ep -> (FBNetworkElement) ep.getModel())
+						.collect(Collectors.toList());
+				cmd.add(new MoveElementsFromSubAppCommand(fbEls,
+						new org.eclipse.swt.graphics.Point(destination.x, destination.y)));
 			}
-			return new AddElementsToSubAppCommand(dropSubApp, editParts);
+
+			if (!addTo.isEmpty()) {
+				cmd.add(new AddElementsToSubAppCommand(getParentModel(), editParts));
+			}
+
+			if (!cmd.isEmpty()) {
+				return cmd;
+			}
 		}
 		return super.getAddCommand(request);
 	}
@@ -61,26 +70,28 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 		return (SubApp) super.getParentModel();
 	}
 
-	private static List<FBNetworkElement> collectDraggedFBs(final List<EditPart> editParts,
-			final SubApp dropSubApp) {
+	private boolean isDragAndDropRequestForSubapp(final Request request) {
+		return (request instanceof ChangeBoundsRequest) && (getHost() == getTargetEditPart(request));
+	}
+
+	private List<EditPart> collectMoveFromElements(final List<EditPart> editParts) {
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
-				.map(ep -> (FBNetworkElement) ep.getModel())
-				.filter(el -> el.isNestedInSubApp() && isChildFromDropTarget(el, dropSubApp))
+				.filter(ep -> isInChild((FBNetworkElement) ep.getModel())).collect(Collectors.toList());
+	}
+
+	private boolean isInChild(final FBNetworkElement fbne) {
+		final FBNetworkElement firstOuter = fbne.getOuterFBNetworkElement();
+		if (firstOuter != null) {
+			return getParentModel().equals(firstOuter.getOuterFBNetworkElement());
+		}
+		return false;
+	}
+
+	private List<EditPart> collectAddToElements(final List<EditPart> editParts) {
+		final EObject outerFBN = getParentModel().eContainer();
+		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
+				.filter(ep -> outerFBN.equals(((FBNetworkElement) ep.getModel()).getFbNetwork()))
 				.collect(Collectors.toList());
 	}
-
-	public static boolean isDragAndDropRequestFromSubAppToSubApp(final Request generic, final EditPart targetEditPart) {
-		return (generic instanceof ChangeBoundsRequest) && (targetEditPart instanceof SubAppForFBNetworkEditPart);
-	}
-
-	private static boolean isChildFromDropTarget(final FBNetworkElement draggedFB, final SubApp dropTarget) {
-		if ((draggedFB.getOuterFBNetworkElement() == null)
-				|| (draggedFB.getOuterFBNetworkElement().getOuterFBNetworkElement() == null)) {
-			return false;
-
-		}
-		return draggedFB.getOuterFBNetworkElement().getOuterFBNetworkElement().equals(dropTarget);
-	}
-
 
 }
