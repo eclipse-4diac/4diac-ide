@@ -17,8 +17,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.fordiac.ide.model.edit,
- org.eclipse.fordiac.ide.systemmanagement
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.fordiac.ide.typemanagement
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.fordiac.ide.datatypeeditor
 Bundle-ActivationPolicy: lazy
-Import-Package: org.eclipse.fordiac.ide.typemanagement.preferences
