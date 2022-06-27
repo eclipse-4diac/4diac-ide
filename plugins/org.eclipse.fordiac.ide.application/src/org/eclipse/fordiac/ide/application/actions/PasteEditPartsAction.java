@@ -15,15 +15,19 @@
  *   Alois Zoitl - fixed copy/paste handling
  *   Bianca Wiesmayr - fixed copy/paste position
  *   Bianca Wiesmayr, Daniel Lindhuber, Lukas Wais - fixed ctrl+c, ctrl+v, ctrl+v
+ *   Fabio Gandolfi - growing frame for copy in group
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.actions.CopyPasteMessage.CopyStatus;
 import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
@@ -41,7 +45,9 @@ import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
@@ -83,12 +89,45 @@ public class PasteEditPartsAction extends SelectionAction {
 			final PasteCommand pasteCommand = new PasteCommand(getClipboardContents(), fbNetwork, pasteRefPosition);
 			final GroupContentEditPart group = findGroupUnderMouse(fbNetwork);
 			if (group != null) {
-				return new CopyElementsToGroupCommand(group.getModel().getGroup(), pasteCommand,
-						getOffsetPosition(group));
+
+				final Rectangle newContentBounds = getNewContentBounds(getClipboardContents(), false);
+				final Rectangle newContentBoundsWithValueBounds = getNewContentBounds(getClipboardContents(), true);
+				newContentBoundsWithValueBounds.x = pasteRefPosition.x
+						- (newContentBoundsWithValueBounds.width - newContentBounds.width);
+				newContentBoundsWithValueBounds.y = pasteRefPosition.y;
+
+				final Rectangle groupContentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(group);
+
+				if (!groupContentBounds.contains(newContentBoundsWithValueBounds)) {
+					// we need to increase the size of the group
+					return CopyElementsToGroupAndResizeCommand(group.getModel().getGroup(),
+							new CopyElementsToGroupCommand(group.getModel().getGroup(), pasteCommand,
+									getOffsetPosition(group)),
+							groupContentBounds,
+							newContentBoundsWithValueBounds);
+				} else {
+					return new CopyElementsToGroupCommand(group.getModel().getGroup(), pasteCommand,
+							getOffsetPosition(group));
+				}
+
 			}
 			return pasteCommand;
 		}
 		return new CompoundCommand();
+	}
+
+	private static Command CopyElementsToGroupAndResizeCommand(final Group dropGroup,
+			final CopyElementsToGroupCommand copyElementsToGroup, final Rectangle groupContentBounds,
+			final Rectangle newContentBounds) {
+		final CompoundCommand cmd = new CompoundCommand();
+		newContentBounds.union(groupContentBounds);
+		cmd.add(ContainerContentLayoutPolicy.createChangeBoundsCommand(dropGroup, groupContentBounds,
+				newContentBounds));
+		final org.eclipse.draw2d.geometry.Point offset = copyElementsToGroup.getOffset();
+		offset.translate(newContentBounds.x - groupContentBounds.x, newContentBounds.y - groupContentBounds.y);
+		copyElementsToGroup.setOffset(offset);
+		cmd.add(copyElementsToGroup);
+		return cmd;
 	}
 
 	private GroupContentEditPart findGroupUnderMouse(final FBNetwork fbNetwork) {
@@ -109,6 +148,42 @@ public class PasteEditPartsAction extends SelectionAction {
 			}
 		}
 		return null;
+	}
+
+	private Rectangle getNewContentBounds(final List<? extends Object> list, final boolean withValueBounds) {
+		Rectangle selectionExtend = null;
+		for (final Object selElem : list) {
+			final GraphicalViewer graphicalViewer = getWorkbenchPart().getAdapter(GraphicalViewer.class);
+			final Object object = graphicalViewer.getEditPartRegistry().get(selElem);
+
+			if (object instanceof GraphicalEditPart && ((EditPart) object).getModel() instanceof FBNetworkElement) {
+				// only consider the selected FBNetworkElements
+				final Rectangle fbBounds = ((GraphicalEditPart) object).getFigure().getBounds();
+
+				if (selectionExtend == null) {
+					selectionExtend = fbBounds.getCopy();
+				} else {
+					selectionExtend.union(fbBounds);
+				}
+
+				if (withValueBounds) {
+					addValueBounds((FBNetworkElement) ((EditPart) object).getModel(), selectionExtend, graphicalViewer);
+				}
+			}
+		}
+		return (selectionExtend != null) ? selectionExtend : new Rectangle();
+	}
+
+	private static void addValueBounds(final FBNetworkElement model, final Rectangle selectionExtend,
+			final GraphicalViewer graphicalViewer) {
+		final Map<Object, Object> editPartRegistry = graphicalViewer.getEditPartRegistry();
+		model.getInterface().getInputVars().stream().filter(Objects::nonNull)
+		.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
+		.forEach(ep -> {
+			final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds();
+			selectionExtend.union(pin);
+
+		});
 	}
 
 	private org.eclipse.draw2d.geometry.Point getOffsetPosition(final GroupContentEditPart group) {
