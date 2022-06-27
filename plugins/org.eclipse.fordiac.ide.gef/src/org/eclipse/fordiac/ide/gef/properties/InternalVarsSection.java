@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableComma
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -209,6 +210,8 @@ public class InternalVarsSection extends AbstractSection implements I4diacTableU
 				return varInternal.getComment();
 			case IV_ARRAY:
 				return Integer.toString(varInternal.getArraySize());
+			case IV_INIT:
+				return InitialValueHelper.getInitalOrDefaultValue(element);
 			default:
 				return varInternal.getValue() == null ? "" : varInternal.getValue().getValue(); //$NON-NLS-1$
 			}
