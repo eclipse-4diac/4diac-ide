@@ -59,6 +59,7 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		addInterfaceList(getType().getInterfaceList());
 		createBlockTypeSpecificXMLEntries();
 		addService(getType());
+		addAttributes(getType().getAttributes());
 	}
 
 	protected abstract void createBlockTypeSpecificXMLEntries() throws XMLStreamException;
