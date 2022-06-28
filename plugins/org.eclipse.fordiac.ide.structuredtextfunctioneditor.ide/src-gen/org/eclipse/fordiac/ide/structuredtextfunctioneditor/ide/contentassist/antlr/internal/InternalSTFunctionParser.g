@@ -92,12 +92,14 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.services.STFunctionG
 		tokenNameToValue.put("DINT", "'DINT'");
 		tokenNameToValue.put("ELSE", "'ELSE'");
 		tokenNameToValue.put("EXIT", "'EXIT'");
+		tokenNameToValue.put("FROM", "'FROM'");
 		tokenNameToValue.put("LINT", "'LINT'");
 		tokenNameToValue.put("LTOD", "'LTOD'");
 		tokenNameToValue.put("NULL", "'NULL'");
 		tokenNameToValue.put("REAL", "'REAL'");
 		tokenNameToValue.put("SINT", "'SINT'");
 		tokenNameToValue.put("STEP", "'STEP'");
+		tokenNameToValue.put("TASK", "'TASK'");
 		tokenNameToValue.put("THEN", "'THEN'");
 		tokenNameToValue.put("THIS", "'THIS'");
 		tokenNameToValue.put("TIME", "'TIME'");
@@ -116,14 +118,17 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.services.STFunctionG
 		tokenNameToValue.put("LREAL", "'LREAL'");
 		tokenNameToValue.put("LTIME", "'LTIME'");
 		tokenNameToValue.put("LWORD", "'LWORD'");
+		tokenNameToValue.put("SUPER", "'SUPER'");
 		tokenNameToValue.put("UDINT", "'UDINT'");
 		tokenNameToValue.put("ULINT", "'ULINT'");
 		tokenNameToValue.put("UNTIL", "'UNTIL'");
+		tokenNameToValue.put("USING", "'USING'");
 		tokenNameToValue.put("USINT", "'USINT'");
 		tokenNameToValue.put("WCHAR", "'WCHAR'");
 		tokenNameToValue.put("WHILE", "'WHILE'");
 		tokenNameToValue.put("ACTION", "'ACTION'");
 		tokenNameToValue.put("END_IF", "'END_IF'");
+		tokenNameToValue.put("METHOD", "'METHOD'");
 		tokenNameToValue.put("PUBLIC", "'PUBLIC'");
 		tokenNameToValue.put("REF_TO", "'REF_TO'");
 		tokenNameToValue.put("REPEAT", "'REPEAT'");
@@ -135,6 +140,7 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.services.STFunctionG
 		tokenNameToValue.put("END_FOR", "'END_FOR'");
 		tokenNameToValue.put("END_VAR", "'END_VAR'");
 		tokenNameToValue.put("EXTENDS", "'EXTENDS'");
+		tokenNameToValue.put("INTERAL", "'INTERAL'");
 		tokenNameToValue.put("OVERLAP", "'OVERLAP'");
 		tokenNameToValue.put("PRIVATE", "'PRIVATE'");
 		tokenNameToValue.put("PROGRAM", "'PROGRAM'");
@@ -160,6 +166,7 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.services.STFunctionG
 		tokenNameToValue.put("READ_ONLY", "'READ_ONLY'");
 		tokenNameToValue.put("VAR_INPUT", "'VAR_INPUT'");
 		tokenNameToValue.put("END_ACTION", "'END_ACTION'");
+		tokenNameToValue.put("END_METHOD", "'END_METHOD'");
 		tokenNameToValue.put("END_REPEAT", "'END_REPEAT'");
 		tokenNameToValue.put("END_STRUCT", "'END_STRUCT'");
 		tokenNameToValue.put("IMPLEMENTS", "'IMPLEMENTS'");

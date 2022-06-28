@@ -3097,69 +3097,85 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
 		private final Keyword cABSTRACTKeyword_0 = (Keyword)cAlternatives.eContents().get(0);
 		private final Keyword cACTIONKeyword_1 = (Keyword)cAlternatives.eContents().get(1);
-		private final Keyword cEND_ACTIONKeyword_2 = (Keyword)cAlternatives.eContents().get(2);
-		private final Keyword cCLASSKeyword_3 = (Keyword)cAlternatives.eContents().get(3);
-		private final Keyword cEND_CLASSKeyword_4 = (Keyword)cAlternatives.eContents().get(4);
-		private final Keyword cCONFIGURATIONKeyword_5 = (Keyword)cAlternatives.eContents().get(5);
+		private final Keyword cCLASSKeyword_2 = (Keyword)cAlternatives.eContents().get(2);
+		private final Keyword cCONFIGURATIONKeyword_3 = (Keyword)cAlternatives.eContents().get(3);
+		private final Keyword cEND_ACTIONKeyword_4 = (Keyword)cAlternatives.eContents().get(4);
+		private final Keyword cEND_CLASSKeyword_5 = (Keyword)cAlternatives.eContents().get(5);
 		private final Keyword cEND_CONFIGURATIONKeyword_6 = (Keyword)cAlternatives.eContents().get(6);
-		private final Keyword cFUNCTION_BLOCKKeyword_7 = (Keyword)cAlternatives.eContents().get(7);
+		private final Keyword cEND_FUNCTIONKeyword_7 = (Keyword)cAlternatives.eContents().get(7);
 		private final Keyword cEND_FUNCTION_BLOCKKeyword_8 = (Keyword)cAlternatives.eContents().get(8);
-		private final Keyword cINTERFACEKeyword_9 = (Keyword)cAlternatives.eContents().get(9);
-		private final Keyword cEND_INTERFACEKeyword_10 = (Keyword)cAlternatives.eContents().get(10);
-		private final Keyword cNAMESPACEKeyword_11 = (Keyword)cAlternatives.eContents().get(11);
-		private final Keyword cEND_NAMESPACEKeyword_12 = (Keyword)cAlternatives.eContents().get(12);
-		private final Keyword cPROGRAMKeyword_13 = (Keyword)cAlternatives.eContents().get(13);
-		private final Keyword cEND_PROGRAMKeyword_14 = (Keyword)cAlternatives.eContents().get(14);
-		private final Keyword cRESOURCEKeyword_15 = (Keyword)cAlternatives.eContents().get(15);
-		private final Keyword cEND_RESOURCEKeyword_16 = (Keyword)cAlternatives.eContents().get(16);
-		private final Keyword cSTEPKeyword_17 = (Keyword)cAlternatives.eContents().get(17);
-		private final Keyword cEND_STEPKeyword_18 = (Keyword)cAlternatives.eContents().get(18);
-		private final Keyword cSTRUCTKeyword_19 = (Keyword)cAlternatives.eContents().get(19);
-		private final Keyword cEND_STRUCTKeyword_20 = (Keyword)cAlternatives.eContents().get(20);
-		private final Keyword cTRANSITIONKeyword_21 = (Keyword)cAlternatives.eContents().get(21);
-		private final Keyword cEND_TRANSITIONKeyword_22 = (Keyword)cAlternatives.eContents().get(22);
-		private final Keyword cTYPEKeyword_23 = (Keyword)cAlternatives.eContents().get(23);
-		private final Keyword cEND_TYPEKeyword_24 = (Keyword)cAlternatives.eContents().get(24);
-		private final Keyword cEXTENDSKeyword_25 = (Keyword)cAlternatives.eContents().get(25);
-		private final Keyword cFINALKeyword_26 = (Keyword)cAlternatives.eContents().get(26);
-		private final Keyword cIMPLEMENTSKeyword_27 = (Keyword)cAlternatives.eContents().get(27);
-		private final Keyword cINITIAL_STEPKeyword_28 = (Keyword)cAlternatives.eContents().get(28);
-		private final Keyword cINTERVALKeyword_29 = (Keyword)cAlternatives.eContents().get(29);
-		private final Keyword cRETAINKeyword_30 = (Keyword)cAlternatives.eContents().get(30);
-		private final Keyword cNON_RETAINKeyword_31 = (Keyword)cAlternatives.eContents().get(31);
-		private final Keyword cNULLKeyword_32 = (Keyword)cAlternatives.eContents().get(32);
-		private final Keyword cONKeyword_33 = (Keyword)cAlternatives.eContents().get(33);
-		private final Keyword cOVERLAPKeyword_34 = (Keyword)cAlternatives.eContents().get(34);
-		private final Keyword cOVERRIDEKeyword_35 = (Keyword)cAlternatives.eContents().get(35);
-		private final Keyword cPRIORITYKeyword_36 = (Keyword)cAlternatives.eContents().get(36);
-		private final Keyword cREAD_ONLYKeyword_37 = (Keyword)cAlternatives.eContents().get(37);
-		private final Keyword cREAD_WRITEKeyword_38 = (Keyword)cAlternatives.eContents().get(38);
-		private final Keyword cREFKeyword_39 = (Keyword)cAlternatives.eContents().get(39);
-		private final Keyword cREF_TOKeyword_40 = (Keyword)cAlternatives.eContents().get(40);
-		private final Keyword cSINGLEKeyword_41 = (Keyword)cAlternatives.eContents().get(41);
-		private final Keyword cTHISKeyword_42 = (Keyword)cAlternatives.eContents().get(42);
-		private final Keyword cVAR_ACCESSKeyword_43 = (Keyword)cAlternatives.eContents().get(43);
-		private final Keyword cVAR_CONFIGKeyword_44 = (Keyword)cAlternatives.eContents().get(44);
-		private final Keyword cVAR_EXTERNALKeyword_45 = (Keyword)cAlternatives.eContents().get(45);
-		private final Keyword cVAR_GLOBALKeyword_46 = (Keyword)cAlternatives.eContents().get(46);
-		private final Keyword cWITHKeyword_47 = (Keyword)cAlternatives.eContents().get(47);
+		private final Keyword cEND_INTERFACEKeyword_9 = (Keyword)cAlternatives.eContents().get(9);
+		private final Keyword cEND_METHODKeyword_10 = (Keyword)cAlternatives.eContents().get(10);
+		private final Keyword cEND_NAMESPACEKeyword_11 = (Keyword)cAlternatives.eContents().get(11);
+		private final Keyword cEND_PROGRAMKeyword_12 = (Keyword)cAlternatives.eContents().get(12);
+		private final Keyword cEND_RESOURCEKeyword_13 = (Keyword)cAlternatives.eContents().get(13);
+		private final Keyword cEND_STEPKeyword_14 = (Keyword)cAlternatives.eContents().get(14);
+		private final Keyword cEND_STRUCTKeyword_15 = (Keyword)cAlternatives.eContents().get(15);
+		private final Keyword cEND_TRANSITIONKeyword_16 = (Keyword)cAlternatives.eContents().get(16);
+		private final Keyword cEND_TYPEKeyword_17 = (Keyword)cAlternatives.eContents().get(17);
+		private final Keyword cEXTENDSKeyword_18 = (Keyword)cAlternatives.eContents().get(18);
+		private final Keyword cFINALKeyword_19 = (Keyword)cAlternatives.eContents().get(19);
+		private final Keyword cFROMKeyword_20 = (Keyword)cAlternatives.eContents().get(20);
+		private final Keyword cFUNCTIONKeyword_21 = (Keyword)cAlternatives.eContents().get(21);
+		private final Keyword cFUNCTION_BLOCKKeyword_22 = (Keyword)cAlternatives.eContents().get(22);
+		private final Keyword cIMPLEMENTSKeyword_23 = (Keyword)cAlternatives.eContents().get(23);
+		private final Keyword cINITIAL_STEPKeyword_24 = (Keyword)cAlternatives.eContents().get(24);
+		private final Keyword cINTERFACEKeyword_25 = (Keyword)cAlternatives.eContents().get(25);
+		private final Keyword cINTERALKeyword_26 = (Keyword)cAlternatives.eContents().get(26);
+		private final Keyword cINTERVALKeyword_27 = (Keyword)cAlternatives.eContents().get(27);
+		private final Keyword cMETHODKeyword_28 = (Keyword)cAlternatives.eContents().get(28);
+		private final Keyword cNAMESPACEKeyword_29 = (Keyword)cAlternatives.eContents().get(29);
+		private final Keyword cNON_RETAINKeyword_30 = (Keyword)cAlternatives.eContents().get(30);
+		private final Keyword cNULLKeyword_31 = (Keyword)cAlternatives.eContents().get(31);
+		private final Keyword cONKeyword_32 = (Keyword)cAlternatives.eContents().get(32);
+		private final Keyword cOVERLAPKeyword_33 = (Keyword)cAlternatives.eContents().get(33);
+		private final Keyword cOVERRIDEKeyword_34 = (Keyword)cAlternatives.eContents().get(34);
+		private final Keyword cPRIORITYKeyword_35 = (Keyword)cAlternatives.eContents().get(35);
+		private final Keyword cPRIVATEKeyword_36 = (Keyword)cAlternatives.eContents().get(36);
+		private final Keyword cPROGRAMKeyword_37 = (Keyword)cAlternatives.eContents().get(37);
+		private final Keyword cPROTECTEDKeyword_38 = (Keyword)cAlternatives.eContents().get(38);
+		private final Keyword cPUBLICKeyword_39 = (Keyword)cAlternatives.eContents().get(39);
+		private final Keyword cREAD_ONLYKeyword_40 = (Keyword)cAlternatives.eContents().get(40);
+		private final Keyword cREAD_WRITEKeyword_41 = (Keyword)cAlternatives.eContents().get(41);
+		private final Keyword cREFKeyword_42 = (Keyword)cAlternatives.eContents().get(42);
+		private final Keyword cREF_TOKeyword_43 = (Keyword)cAlternatives.eContents().get(43);
+		private final Keyword cRESOURCEKeyword_44 = (Keyword)cAlternatives.eContents().get(44);
+		private final Keyword cRETAINKeyword_45 = (Keyword)cAlternatives.eContents().get(45);
+		private final Keyword cSINGLEKeyword_46 = (Keyword)cAlternatives.eContents().get(46);
+		private final Keyword cSTEPKeyword_47 = (Keyword)cAlternatives.eContents().get(47);
+		private final Keyword cSTRUCTKeyword_48 = (Keyword)cAlternatives.eContents().get(48);
+		private final Keyword cSUPERKeyword_49 = (Keyword)cAlternatives.eContents().get(49);
+		private final Keyword cTASKKeyword_50 = (Keyword)cAlternatives.eContents().get(50);
+		private final Keyword cTHISKeyword_51 = (Keyword)cAlternatives.eContents().get(51);
+		private final Keyword cTRANSITIONKeyword_52 = (Keyword)cAlternatives.eContents().get(52);
+		private final Keyword cTYPEKeyword_53 = (Keyword)cAlternatives.eContents().get(53);
+		private final Keyword cUSINGKeyword_54 = (Keyword)cAlternatives.eContents().get(54);
+		private final Keyword cVAR_ACCESSKeyword_55 = (Keyword)cAlternatives.eContents().get(55);
+		private final Keyword cVAR_CONFIGKeyword_56 = (Keyword)cAlternatives.eContents().get(56);
+		private final Keyword cVAR_EXTERNALKeyword_57 = (Keyword)cAlternatives.eContents().get(57);
+		private final Keyword cVAR_GLOBALKeyword_58 = (Keyword)cAlternatives.eContents().get(58);
+		private final Keyword cWITHKeyword_59 = (Keyword)cAlternatives.eContents().get(59);
 		
 		///** Keep in sync with fordiac keywords */
 		//RESERVED_KEYWORDS:
-		//    'ABSTRACT' | 'ACTION' | 'END_ACTION' | 'CLASS' | 'END_CLASS' | 'CONFIGURATION' | 'END_CONFIGURATION' |
-		//    'FUNCTION_BLOCK' | 'END_FUNCTION_BLOCK' | 'INTERFACE' | 'END_INTERFACE' | 'NAMESPACE' | 'END_NAMESPACE' | 'PROGRAM'
-		//    | 'END_PROGRAM' | 'RESOURCE' | 'END_RESOURCE' | 'STEP' | 'END_STEP' | 'STRUCT' | 'END_STRUCT' | 'TRANSITION' |
-		//    'END_TRANSITION' | 'TYPE' | 'END_TYPE' | 'EXTENDS' | 'FINAL' | 'IMPLEMENTS' | 'INITIAL_STEP' | 'INTERVAL' | 'RETAIN'
-		//    | 'NON_RETAIN' | 'NULL' | 'ON' | 'OVERLAP' | 'OVERRIDE' | 'PRIORITY' | 'READ_ONLY' | 'READ_WRITE' | 'REF' | 'REF_TO'
-		//    | 'SINGLE' | 'THIS' | 'VAR_ACCESS' | 'VAR_CONFIG' | 'VAR_EXTERNAL' | 'VAR_GLOBAL' | 'WITH';
+		//    'ABSTRACT' | 'ACTION' | 'CLASS' | 'CONFIGURATION' | 'END_ACTION' | 'END_CLASS' | 'END_CONFIGURATION' |
+		//    'END_FUNCTION' | 'END_FUNCTION_BLOCK' | 'END_INTERFACE' | 'END_METHOD' | 'END_NAMESPACE' | 'END_PROGRAM' |
+		//    'END_RESOURCE' | 'END_STEP' | 'END_STRUCT' | 'END_TRANSITION' | 'END_TYPE' | 'EXTENDS' | 'FINAL' | 'FROM' |
+		//    'FUNCTION' | 'FUNCTION_BLOCK' | 'IMPLEMENTS' | 'INITIAL_STEP' | 'INTERFACE' | 'INTERAL' | 'INTERVAL' | 'METHOD' |
+		//    'NAMESPACE' | 'NON_RETAIN' | 'NULL' | 'ON' | 'OVERLAP' | 'OVERRIDE' | 'PRIORITY' | 'PRIVATE' | 'PROGRAM' |
+		//    'PROTECTED' | 'PUBLIC' | 'READ_ONLY' | 'READ_WRITE' | 'REF' | 'REF_TO' | 'RESOURCE' | 'RETAIN' | 'SINGLE' | 'STEP' |
+		//    'STRUCT' | 'SUPER' | 'TASK' | 'THIS' | 'TRANSITION' | 'TYPE' |
+		//    'USING' | 'VAR_ACCESS' | 'VAR_CONFIG' | 'VAR_EXTERNAL' | 'VAR_GLOBAL' | 'WITH';
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'ABSTRACT' | 'ACTION' | 'END_ACTION' | 'CLASS' | 'END_CLASS' | 'CONFIGURATION' | 'END_CONFIGURATION' |
-		//'FUNCTION_BLOCK' | 'END_FUNCTION_BLOCK' | 'INTERFACE' | 'END_INTERFACE' | 'NAMESPACE' | 'END_NAMESPACE' | 'PROGRAM'
-		//| 'END_PROGRAM' | 'RESOURCE' | 'END_RESOURCE' | 'STEP' | 'END_STEP' | 'STRUCT' | 'END_STRUCT' | 'TRANSITION' |
-		//'END_TRANSITION' | 'TYPE' | 'END_TYPE' | 'EXTENDS' | 'FINAL' | 'IMPLEMENTS' | 'INITIAL_STEP' | 'INTERVAL' | 'RETAIN'
-		//| 'NON_RETAIN' | 'NULL' | 'ON' | 'OVERLAP' | 'OVERRIDE' | 'PRIORITY' | 'READ_ONLY' | 'READ_WRITE' | 'REF' | 'REF_TO'
-		//| 'SINGLE' | 'THIS' | 'VAR_ACCESS' | 'VAR_CONFIG' | 'VAR_EXTERNAL' | 'VAR_GLOBAL' | 'WITH'
+		//'ABSTRACT' | 'ACTION' | 'CLASS' | 'CONFIGURATION' | 'END_ACTION' | 'END_CLASS' | 'END_CONFIGURATION' |
+		//'END_FUNCTION' | 'END_FUNCTION_BLOCK' | 'END_INTERFACE' | 'END_METHOD' | 'END_NAMESPACE' | 'END_PROGRAM' |
+		//'END_RESOURCE' | 'END_STEP' | 'END_STRUCT' | 'END_TRANSITION' | 'END_TYPE' | 'EXTENDS' | 'FINAL' | 'FROM' |
+		//'FUNCTION' | 'FUNCTION_BLOCK' | 'IMPLEMENTS' | 'INITIAL_STEP' | 'INTERFACE' | 'INTERAL' | 'INTERVAL' | 'METHOD' |
+		//'NAMESPACE' | 'NON_RETAIN' | 'NULL' | 'ON' | 'OVERLAP' | 'OVERRIDE' | 'PRIORITY' | 'PRIVATE' | 'PROGRAM' |
+		//'PROTECTED' | 'PUBLIC' | 'READ_ONLY' | 'READ_WRITE' | 'REF' | 'REF_TO' | 'RESOURCE' | 'RETAIN' | 'SINGLE' | 'STEP' |
+		//'STRUCT' | 'SUPER' | 'TASK' | 'THIS' | 'TRANSITION' | 'TYPE' |
+		//'USING' | 'VAR_ACCESS' | 'VAR_CONFIG' | 'VAR_EXTERNAL' | 'VAR_GLOBAL' | 'WITH'
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//'ABSTRACT'
@@ -3168,143 +3184,179 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//'ACTION'
 		public Keyword getACTIONKeyword_1() { return cACTIONKeyword_1; }
 		
-		//'END_ACTION'
-		public Keyword getEND_ACTIONKeyword_2() { return cEND_ACTIONKeyword_2; }
-		
 		//'CLASS'
-		public Keyword getCLASSKeyword_3() { return cCLASSKeyword_3; }
-		
-		//'END_CLASS'
-		public Keyword getEND_CLASSKeyword_4() { return cEND_CLASSKeyword_4; }
+		public Keyword getCLASSKeyword_2() { return cCLASSKeyword_2; }
 		
 		//'CONFIGURATION'
-		public Keyword getCONFIGURATIONKeyword_5() { return cCONFIGURATIONKeyword_5; }
+		public Keyword getCONFIGURATIONKeyword_3() { return cCONFIGURATIONKeyword_3; }
+		
+		//'END_ACTION'
+		public Keyword getEND_ACTIONKeyword_4() { return cEND_ACTIONKeyword_4; }
+		
+		//'END_CLASS'
+		public Keyword getEND_CLASSKeyword_5() { return cEND_CLASSKeyword_5; }
 		
 		//'END_CONFIGURATION'
 		public Keyword getEND_CONFIGURATIONKeyword_6() { return cEND_CONFIGURATIONKeyword_6; }
 		
-		//'FUNCTION_BLOCK'
-		public Keyword getFUNCTION_BLOCKKeyword_7() { return cFUNCTION_BLOCKKeyword_7; }
+		//'END_FUNCTION'
+		public Keyword getEND_FUNCTIONKeyword_7() { return cEND_FUNCTIONKeyword_7; }
 		
 		//'END_FUNCTION_BLOCK'
 		public Keyword getEND_FUNCTION_BLOCKKeyword_8() { return cEND_FUNCTION_BLOCKKeyword_8; }
 		
-		//'INTERFACE'
-		public Keyword getINTERFACEKeyword_9() { return cINTERFACEKeyword_9; }
-		
 		//'END_INTERFACE'
-		public Keyword getEND_INTERFACEKeyword_10() { return cEND_INTERFACEKeyword_10; }
+		public Keyword getEND_INTERFACEKeyword_9() { return cEND_INTERFACEKeyword_9; }
 		
-		//'NAMESPACE'
-		public Keyword getNAMESPACEKeyword_11() { return cNAMESPACEKeyword_11; }
+		//'END_METHOD'
+		public Keyword getEND_METHODKeyword_10() { return cEND_METHODKeyword_10; }
 		
 		//'END_NAMESPACE'
-		public Keyword getEND_NAMESPACEKeyword_12() { return cEND_NAMESPACEKeyword_12; }
-		
-		//'PROGRAM'
-		public Keyword getPROGRAMKeyword_13() { return cPROGRAMKeyword_13; }
+		public Keyword getEND_NAMESPACEKeyword_11() { return cEND_NAMESPACEKeyword_11; }
 		
 		//'END_PROGRAM'
-		public Keyword getEND_PROGRAMKeyword_14() { return cEND_PROGRAMKeyword_14; }
-		
-		//'RESOURCE'
-		public Keyword getRESOURCEKeyword_15() { return cRESOURCEKeyword_15; }
+		public Keyword getEND_PROGRAMKeyword_12() { return cEND_PROGRAMKeyword_12; }
 		
 		//'END_RESOURCE'
-		public Keyword getEND_RESOURCEKeyword_16() { return cEND_RESOURCEKeyword_16; }
-		
-		//'STEP'
-		public Keyword getSTEPKeyword_17() { return cSTEPKeyword_17; }
+		public Keyword getEND_RESOURCEKeyword_13() { return cEND_RESOURCEKeyword_13; }
 		
 		//'END_STEP'
-		public Keyword getEND_STEPKeyword_18() { return cEND_STEPKeyword_18; }
-		
-		//'STRUCT'
-		public Keyword getSTRUCTKeyword_19() { return cSTRUCTKeyword_19; }
+		public Keyword getEND_STEPKeyword_14() { return cEND_STEPKeyword_14; }
 		
 		//'END_STRUCT'
-		public Keyword getEND_STRUCTKeyword_20() { return cEND_STRUCTKeyword_20; }
-		
-		//'TRANSITION'
-		public Keyword getTRANSITIONKeyword_21() { return cTRANSITIONKeyword_21; }
+		public Keyword getEND_STRUCTKeyword_15() { return cEND_STRUCTKeyword_15; }
 		
 		//'END_TRANSITION'
-		public Keyword getEND_TRANSITIONKeyword_22() { return cEND_TRANSITIONKeyword_22; }
-		
-		//'TYPE'
-		public Keyword getTYPEKeyword_23() { return cTYPEKeyword_23; }
+		public Keyword getEND_TRANSITIONKeyword_16() { return cEND_TRANSITIONKeyword_16; }
 		
 		//'END_TYPE'
-		public Keyword getEND_TYPEKeyword_24() { return cEND_TYPEKeyword_24; }
+		public Keyword getEND_TYPEKeyword_17() { return cEND_TYPEKeyword_17; }
 		
 		//'EXTENDS'
-		public Keyword getEXTENDSKeyword_25() { return cEXTENDSKeyword_25; }
+		public Keyword getEXTENDSKeyword_18() { return cEXTENDSKeyword_18; }
 		
 		//'FINAL'
-		public Keyword getFINALKeyword_26() { return cFINALKeyword_26; }
+		public Keyword getFINALKeyword_19() { return cFINALKeyword_19; }
+		
+		//'FROM'
+		public Keyword getFROMKeyword_20() { return cFROMKeyword_20; }
+		
+		//'FUNCTION'
+		public Keyword getFUNCTIONKeyword_21() { return cFUNCTIONKeyword_21; }
+		
+		//'FUNCTION_BLOCK'
+		public Keyword getFUNCTION_BLOCKKeyword_22() { return cFUNCTION_BLOCKKeyword_22; }
 		
 		//'IMPLEMENTS'
-		public Keyword getIMPLEMENTSKeyword_27() { return cIMPLEMENTSKeyword_27; }
+		public Keyword getIMPLEMENTSKeyword_23() { return cIMPLEMENTSKeyword_23; }
 		
 		//'INITIAL_STEP'
-		public Keyword getINITIAL_STEPKeyword_28() { return cINITIAL_STEPKeyword_28; }
+		public Keyword getINITIAL_STEPKeyword_24() { return cINITIAL_STEPKeyword_24; }
+		
+		//'INTERFACE'
+		public Keyword getINTERFACEKeyword_25() { return cINTERFACEKeyword_25; }
+		
+		//'INTERAL'
+		public Keyword getINTERALKeyword_26() { return cINTERALKeyword_26; }
 		
 		//'INTERVAL'
-		public Keyword getINTERVALKeyword_29() { return cINTERVALKeyword_29; }
+		public Keyword getINTERVALKeyword_27() { return cINTERVALKeyword_27; }
 		
-		//'RETAIN'
-		public Keyword getRETAINKeyword_30() { return cRETAINKeyword_30; }
+		//'METHOD'
+		public Keyword getMETHODKeyword_28() { return cMETHODKeyword_28; }
+		
+		//'NAMESPACE'
+		public Keyword getNAMESPACEKeyword_29() { return cNAMESPACEKeyword_29; }
 		
 		//'NON_RETAIN'
-		public Keyword getNON_RETAINKeyword_31() { return cNON_RETAINKeyword_31; }
+		public Keyword getNON_RETAINKeyword_30() { return cNON_RETAINKeyword_30; }
 		
 		//'NULL'
-		public Keyword getNULLKeyword_32() { return cNULLKeyword_32; }
+		public Keyword getNULLKeyword_31() { return cNULLKeyword_31; }
 		
 		//'ON'
-		public Keyword getONKeyword_33() { return cONKeyword_33; }
+		public Keyword getONKeyword_32() { return cONKeyword_32; }
 		
 		//'OVERLAP'
-		public Keyword getOVERLAPKeyword_34() { return cOVERLAPKeyword_34; }
+		public Keyword getOVERLAPKeyword_33() { return cOVERLAPKeyword_33; }
 		
 		//'OVERRIDE'
-		public Keyword getOVERRIDEKeyword_35() { return cOVERRIDEKeyword_35; }
+		public Keyword getOVERRIDEKeyword_34() { return cOVERRIDEKeyword_34; }
 		
 		//'PRIORITY'
-		public Keyword getPRIORITYKeyword_36() { return cPRIORITYKeyword_36; }
+		public Keyword getPRIORITYKeyword_35() { return cPRIORITYKeyword_35; }
+		
+		//'PRIVATE'
+		public Keyword getPRIVATEKeyword_36() { return cPRIVATEKeyword_36; }
+		
+		//'PROGRAM'
+		public Keyword getPROGRAMKeyword_37() { return cPROGRAMKeyword_37; }
+		
+		//'PROTECTED'
+		public Keyword getPROTECTEDKeyword_38() { return cPROTECTEDKeyword_38; }
+		
+		//'PUBLIC'
+		public Keyword getPUBLICKeyword_39() { return cPUBLICKeyword_39; }
 		
 		//'READ_ONLY'
-		public Keyword getREAD_ONLYKeyword_37() { return cREAD_ONLYKeyword_37; }
+		public Keyword getREAD_ONLYKeyword_40() { return cREAD_ONLYKeyword_40; }
 		
 		//'READ_WRITE'
-		public Keyword getREAD_WRITEKeyword_38() { return cREAD_WRITEKeyword_38; }
+		public Keyword getREAD_WRITEKeyword_41() { return cREAD_WRITEKeyword_41; }
 		
 		//'REF'
-		public Keyword getREFKeyword_39() { return cREFKeyword_39; }
+		public Keyword getREFKeyword_42() { return cREFKeyword_42; }
 		
 		//'REF_TO'
-		public Keyword getREF_TOKeyword_40() { return cREF_TOKeyword_40; }
+		public Keyword getREF_TOKeyword_43() { return cREF_TOKeyword_43; }
+		
+		//'RESOURCE'
+		public Keyword getRESOURCEKeyword_44() { return cRESOURCEKeyword_44; }
+		
+		//'RETAIN'
+		public Keyword getRETAINKeyword_45() { return cRETAINKeyword_45; }
 		
 		//'SINGLE'
-		public Keyword getSINGLEKeyword_41() { return cSINGLEKeyword_41; }
+		public Keyword getSINGLEKeyword_46() { return cSINGLEKeyword_46; }
+		
+		//'STEP'
+		public Keyword getSTEPKeyword_47() { return cSTEPKeyword_47; }
+		
+		//'STRUCT'
+		public Keyword getSTRUCTKeyword_48() { return cSTRUCTKeyword_48; }
+		
+		//'SUPER'
+		public Keyword getSUPERKeyword_49() { return cSUPERKeyword_49; }
+		
+		//'TASK'
+		public Keyword getTASKKeyword_50() { return cTASKKeyword_50; }
 		
 		//'THIS'
-		public Keyword getTHISKeyword_42() { return cTHISKeyword_42; }
+		public Keyword getTHISKeyword_51() { return cTHISKeyword_51; }
+		
+		//'TRANSITION'
+		public Keyword getTRANSITIONKeyword_52() { return cTRANSITIONKeyword_52; }
+		
+		//'TYPE'
+		public Keyword getTYPEKeyword_53() { return cTYPEKeyword_53; }
+		
+		//'USING'
+		public Keyword getUSINGKeyword_54() { return cUSINGKeyword_54; }
 		
 		//'VAR_ACCESS'
-		public Keyword getVAR_ACCESSKeyword_43() { return cVAR_ACCESSKeyword_43; }
+		public Keyword getVAR_ACCESSKeyword_55() { return cVAR_ACCESSKeyword_55; }
 		
 		//'VAR_CONFIG'
-		public Keyword getVAR_CONFIGKeyword_44() { return cVAR_CONFIGKeyword_44; }
+		public Keyword getVAR_CONFIGKeyword_56() { return cVAR_CONFIGKeyword_56; }
 		
 		//'VAR_EXTERNAL'
-		public Keyword getVAR_EXTERNALKeyword_45() { return cVAR_EXTERNALKeyword_45; }
+		public Keyword getVAR_EXTERNALKeyword_57() { return cVAR_EXTERNALKeyword_57; }
 		
 		//'VAR_GLOBAL'
-		public Keyword getVAR_GLOBALKeyword_46() { return cVAR_GLOBALKeyword_46; }
+		public Keyword getVAR_GLOBALKeyword_58() { return cVAR_GLOBALKeyword_58; }
 		
 		//'WITH'
-		public Keyword getWITHKeyword_47() { return cWITHKeyword_47; }
+		public Keyword getWITHKeyword_59() { return cWITHKeyword_59; }
 	}
 	
 	public class SubrangeOperatorElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
@@ -4811,12 +4863,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	///** Keep in sync with fordiac keywords */
 	//RESERVED_KEYWORDS:
-	//    'ABSTRACT' | 'ACTION' | 'END_ACTION' | 'CLASS' | 'END_CLASS' | 'CONFIGURATION' | 'END_CONFIGURATION' |
-	//    'FUNCTION_BLOCK' | 'END_FUNCTION_BLOCK' | 'INTERFACE' | 'END_INTERFACE' | 'NAMESPACE' | 'END_NAMESPACE' | 'PROGRAM'
-	//    | 'END_PROGRAM' | 'RESOURCE' | 'END_RESOURCE' | 'STEP' | 'END_STEP' | 'STRUCT' | 'END_STRUCT' | 'TRANSITION' |
-	//    'END_TRANSITION' | 'TYPE' | 'END_TYPE' | 'EXTENDS' | 'FINAL' | 'IMPLEMENTS' | 'INITIAL_STEP' | 'INTERVAL' | 'RETAIN'
-	//    | 'NON_RETAIN' | 'NULL' | 'ON' | 'OVERLAP' | 'OVERRIDE' | 'PRIORITY' | 'READ_ONLY' | 'READ_WRITE' | 'REF' | 'REF_TO'
-	//    | 'SINGLE' | 'THIS' | 'VAR_ACCESS' | 'VAR_CONFIG' | 'VAR_EXTERNAL' | 'VAR_GLOBAL' | 'WITH';
+	//    'ABSTRACT' | 'ACTION' | 'CLASS' | 'CONFIGURATION' | 'END_ACTION' | 'END_CLASS' | 'END_CONFIGURATION' |
+	//    'END_FUNCTION' | 'END_FUNCTION_BLOCK' | 'END_INTERFACE' | 'END_METHOD' | 'END_NAMESPACE' | 'END_PROGRAM' |
+	//    'END_RESOURCE' | 'END_STEP' | 'END_STRUCT' | 'END_TRANSITION' | 'END_TYPE' | 'EXTENDS' | 'FINAL' | 'FROM' |
+	//    'FUNCTION' | 'FUNCTION_BLOCK' | 'IMPLEMENTS' | 'INITIAL_STEP' | 'INTERFACE' | 'INTERAL' | 'INTERVAL' | 'METHOD' |
+	//    'NAMESPACE' | 'NON_RETAIN' | 'NULL' | 'ON' | 'OVERLAP' | 'OVERRIDE' | 'PRIORITY' | 'PRIVATE' | 'PROGRAM' |
+	//    'PROTECTED' | 'PUBLIC' | 'READ_ONLY' | 'READ_WRITE' | 'REF' | 'REF_TO' | 'RESOURCE' | 'RETAIN' | 'SINGLE' | 'STEP' |
+	//    'STRUCT' | 'SUPER' | 'TASK' | 'THIS' | 'TRANSITION' | 'TYPE' |
+	//    'USING' | 'VAR_ACCESS' | 'VAR_CONFIG' | 'VAR_EXTERNAL' | 'VAR_GLOBAL' | 'WITH';
 	public RESERVED_KEYWORDSElements getRESERVED_KEYWORDSAccess() {
 		return pRESERVED_KEYWORDS;
 	}

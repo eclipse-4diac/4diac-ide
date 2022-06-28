@@ -92,12 +92,14 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGramm
 		tokenNameToValue.put("DINT", "'DINT'");
 		tokenNameToValue.put("ELSE", "'ELSE'");
 		tokenNameToValue.put("EXIT", "'EXIT'");
+		tokenNameToValue.put("FROM", "'FROM'");
 		tokenNameToValue.put("LINT", "'LINT'");
 		tokenNameToValue.put("LTOD", "'LTOD'");
 		tokenNameToValue.put("NULL", "'NULL'");
 		tokenNameToValue.put("REAL", "'REAL'");
 		tokenNameToValue.put("SINT", "'SINT'");
 		tokenNameToValue.put("STEP", "'STEP'");
+		tokenNameToValue.put("TASK", "'TASK'");
 		tokenNameToValue.put("THEN", "'THEN'");
 		tokenNameToValue.put("THIS", "'THIS'");
 		tokenNameToValue.put("TIME", "'TIME'");
@@ -116,9 +118,11 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGramm
 		tokenNameToValue.put("LREAL", "'LREAL'");
 		tokenNameToValue.put("LTIME", "'LTIME'");
 		tokenNameToValue.put("LWORD", "'LWORD'");
+		tokenNameToValue.put("SUPER", "'SUPER'");
 		tokenNameToValue.put("UDINT", "'UDINT'");
 		tokenNameToValue.put("ULINT", "'ULINT'");
 		tokenNameToValue.put("UNTIL", "'UNTIL'");
+		tokenNameToValue.put("USING", "'USING'");
 		tokenNameToValue.put("USINT", "'USINT'");
 		tokenNameToValue.put("WCHAR", "'WCHAR'");
 		tokenNameToValue.put("WHILE", "'WHILE'");
@@ -136,6 +140,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGramm
 		tokenNameToValue.put("END_FOR", "'END_FOR'");
 		tokenNameToValue.put("END_VAR", "'END_VAR'");
 		tokenNameToValue.put("EXTENDS", "'EXTENDS'");
+		tokenNameToValue.put("INTERAL", "'INTERAL'");
 		tokenNameToValue.put("OVERLAP", "'OVERLAP'");
 		tokenNameToValue.put("PRIVATE", "'PRIVATE'");
 		tokenNameToValue.put("PROGRAM", "'PROGRAM'");
@@ -146,6 +151,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGramm
 		tokenNameToValue.put("END_CASE", "'END_CASE'");
 		tokenNameToValue.put("END_STEP", "'END_STEP'");
 		tokenNameToValue.put("END_TYPE", "'END_TYPE'");
+		tokenNameToValue.put("FUNCTION", "'FUNCTION'");
 		tokenNameToValue.put("INTERNAL", "'INTERNAL'");
 		tokenNameToValue.put("INTERVAL", "'INTERVAL'");
 		tokenNameToValue.put("OVERRIDE", "'OVERRIDE'");
@@ -175,6 +181,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.services.STAlgorithmGramm
 		tokenNameToValue.put("VAR_OUTPUT", "'VAR_OUTPUT'");
 		tokenNameToValue.put("END_PROGRAM", "'END_PROGRAM'");
 		tokenNameToValue.put("TIME_OF_DAY", "'TIME_OF_DAY'");
+		tokenNameToValue.put("END_FUNCTION", "'END_FUNCTION'");
 		tokenNameToValue.put("END_RESOURCE", "'END_RESOURCE'");
 		tokenNameToValue.put("INITIAL_STEP", "'INITIAL_STEP'");
 		tokenNameToValue.put("LTIME_OF_DAY", "'LTIME_OF_DAY'");

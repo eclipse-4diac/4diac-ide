@@ -23,183 +23,190 @@ import java.util.HashMap;
 @SuppressWarnings("all")
 public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
     public static final String[] tokenNames = new String[] {
-        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "END_FUNCTION_BLOCK", "END_CONFIGURATION", "END_TRANSITION", "FUNCTION_BLOCK", "LDATE_AND_TIME", "CONFIGURATION", "DATE_AND_TIME", "END_INTERFACE", "END_NAMESPACE", "END_FUNCTION", "END_RESOURCE", "INITIAL_STEP", "LTIME_OF_DAY", "VAR_EXTERNAL", "END_PROGRAM", "TIME_OF_DAY", "END_ACTION", "END_REPEAT", "END_STRUCT", "IMPLEMENTS", "NON_RETAIN", "READ_WRITE", "TRANSITION", "VAR_ACCESS", "VAR_CONFIG", "VAR_GLOBAL", "VAR_IN_OUT", "VAR_OUTPUT", "END_CLASS", "END_WHILE", "INTERFACE", "NAMESPACE", "PROTECTED", "READ_ONLY", "VAR_INPUT", "ABSTRACT", "CONSTANT", "CONTINUE", "END_CASE", "END_STEP", "END_TYPE", "FUNCTION", "INTERNAL", "INTERVAL", "OVERRIDE", "PRIORITY", "RESOURCE", "VAR_TEMP", "END_FOR", "END_VAR", "EXTENDS", "OVERLAP", "PRIVATE", "PROGRAM", "WSTRING", "ACTION", "END_IF", "PUBLIC", "REF_TO", "REPEAT", "RETAIN", "RETURN", "SINGLE", "STRING", "STRUCT", "ARRAY", "CLASS", "DWORD", "ELSIF", "FALSE", "FINAL", "LDATE", "LREAL", "LTIME", "LWORD", "UDINT", "ULINT", "UNTIL", "USINT", "WCHAR", "WHILE", "BOOL", "BYTE", "CASE", "CHAR", "DATE", "DINT", "ELSE", "EXIT", "LINT", "LTOD", "NULL", "REAL", "SINT", "STEP", "THEN", "THIS", "TIME", "TRUE", "TYPE", "UINT", "WITH", "WORD", "AND", "FOR", "INT", "LDT", "MOD", "NOT", "REF", "TOD", "VAR", "XOR", "B", "D_1", "L", "W", "X", "AsteriskAsterisk", "FullStopFullStop", "ColonEqualsSign", "LessThanSignEqualsSign", "LessThanSignGreaterThanSign", "EqualsSignGreaterThanSign", "GreaterThanSignEqualsSign", "AT", "BY", "DO", "DT", "IF", "LD", "LT", "OF", "ON", "OR", "TO", "NumberSign", "Ampersand", "LeftParenthesis", "RightParenthesis", "Asterisk", "PlusSign", "Comma", "HyphenMinus", "FullStop", "Solidus", "Colon", "Semicolon", "LessThanSign", "EqualsSign", "GreaterThanSign", "D", "T", "LeftSquareBracket", "RightSquareBracket", "RULE_HEX_DIGIT", "RULE_NON_DECIMAL", "RULE_INT", "RULE_DECIMAL", "RULE_TIME_PART", "RULE_TIME_VALUE", "RULE_TIME_DAYS", "RULE_TIME_HOURS", "RULE_TIME_MINUTES", "RULE_TIME_SECONDS", "RULE_TIME_MILLIS", "RULE_TIME_MICROS", "RULE_TIME_NANOS", "RULE_ID", "RULE_STRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER"
+        "<invalid>", "<EOR>", "<DOWN>", "<UP>", "END_FUNCTION_BLOCK", "END_CONFIGURATION", "END_TRANSITION", "FUNCTION_BLOCK", "LDATE_AND_TIME", "CONFIGURATION", "DATE_AND_TIME", "END_INTERFACE", "END_NAMESPACE", "END_FUNCTION", "END_RESOURCE", "INITIAL_STEP", "LTIME_OF_DAY", "VAR_EXTERNAL", "END_PROGRAM", "TIME_OF_DAY", "END_ACTION", "END_METHOD", "END_REPEAT", "END_STRUCT", "IMPLEMENTS", "NON_RETAIN", "READ_WRITE", "TRANSITION", "VAR_ACCESS", "VAR_CONFIG", "VAR_GLOBAL", "VAR_IN_OUT", "VAR_OUTPUT", "END_CLASS", "END_WHILE", "INTERFACE", "NAMESPACE", "PROTECTED", "READ_ONLY", "VAR_INPUT", "ABSTRACT", "CONSTANT", "CONTINUE", "END_CASE", "END_STEP", "END_TYPE", "FUNCTION", "INTERNAL", "INTERVAL", "OVERRIDE", "PRIORITY", "RESOURCE", "VAR_TEMP", "END_FOR", "END_VAR", "EXTENDS", "INTERAL", "OVERLAP", "PRIVATE", "PROGRAM", "WSTRING", "ACTION", "END_IF", "METHOD", "PUBLIC", "REF_TO", "REPEAT", "RETAIN", "RETURN", "SINGLE", "STRING", "STRUCT", "ARRAY", "CLASS", "DWORD", "ELSIF", "FALSE", "FINAL", "LDATE", "LREAL", "LTIME", "LWORD", "SUPER", "UDINT", "ULINT", "UNTIL", "USING", "USINT", "WCHAR", "WHILE", "BOOL", "BYTE", "CASE", "CHAR", "DATE", "DINT", "ELSE", "EXIT", "FROM", "LINT", "LTOD", "NULL", "REAL", "SINT", "STEP", "TASK", "THEN", "THIS", "TIME", "TRUE", "TYPE", "UINT", "WITH", "WORD", "AND", "FOR", "INT", "LDT", "MOD", "NOT", "REF", "TOD", "VAR", "XOR", "B", "D_1", "L", "W", "X", "AsteriskAsterisk", "FullStopFullStop", "ColonEqualsSign", "LessThanSignEqualsSign", "LessThanSignGreaterThanSign", "EqualsSignGreaterThanSign", "GreaterThanSignEqualsSign", "AT", "BY", "DO", "DT", "IF", "LD", "LT", "OF", "ON", "OR", "TO", "NumberSign", "Ampersand", "LeftParenthesis", "RightParenthesis", "Asterisk", "PlusSign", "Comma", "HyphenMinus", "FullStop", "Solidus", "Colon", "Semicolon", "LessThanSign", "EqualsSign", "GreaterThanSign", "D", "T", "LeftSquareBracket", "RightSquareBracket", "RULE_HEX_DIGIT", "RULE_NON_DECIMAL", "RULE_INT", "RULE_DECIMAL", "RULE_TIME_PART", "RULE_TIME_VALUE", "RULE_TIME_DAYS", "RULE_TIME_HOURS", "RULE_TIME_MINUTES", "RULE_TIME_SECONDS", "RULE_TIME_MILLIS", "RULE_TIME_MICROS", "RULE_TIME_NANOS", "RULE_ID", "RULE_STRING", "RULE_ML_COMMENT", "RULE_SL_COMMENT", "RULE_WS", "RULE_ANY_OTHER"
     };
-    public static final int LWORD=78;
-    public static final int LessThanSignGreaterThanSign=126;
+    public static final int LWORD=81;
+    public static final int LessThanSignGreaterThanSign=133;
     public static final int FUNCTION_BLOCK=7;
-    public static final int EqualsSignGreaterThanSign=127;
-    public static final int VAR=115;
-    public static final int END_IF=60;
-    public static final int ULINT=80;
-    public static final int END_CASE=42;
-    public static final int LessThanSign=152;
-    public static final int RULE_TIME_HOURS=166;
-    public static final int LeftParenthesis=142;
-    public static final int INTERFACE=34;
-    public static final int VAR_CONFIG=28;
-    public static final int BYTE=86;
-    public static final int INTERNAL=46;
-    public static final int ELSE=91;
-    public static final int REF_TO=62;
-    public static final int TYPE=103;
-    public static final int IF=133;
-    public static final int LINT=93;
-    public static final int GreaterThanSign=154;
-    public static final int WORD=106;
+    public static final int EqualsSignGreaterThanSign=134;
+    public static final int VAR=122;
+    public static final int END_IF=62;
+    public static final int ULINT=84;
+    public static final int END_CASE=43;
+    public static final int LessThanSign=159;
+    public static final int RULE_TIME_HOURS=173;
+    public static final int LeftParenthesis=149;
+    public static final int INTERFACE=35;
+    public static final int VAR_CONFIG=29;
+    public static final int BYTE=91;
+    public static final int INTERNAL=47;
+    public static final int ELSE=96;
+    public static final int REF_TO=65;
+    public static final int TYPE=110;
+    public static final int IF=140;
+    public static final int LINT=99;
+    public static final int GreaterThanSign=161;
+    public static final int WORD=113;
     public static final int DATE_AND_TIME=10;
-    public static final int RULE_ID=172;
+    public static final int RULE_ID=179;
     public static final int CONFIGURATION=9;
-    public static final int TOD=114;
-    public static final int DINT=90;
-    public static final int FUNCTION=45;
-    public static final int UDINT=79;
-    public static final int RULE_TIME_NANOS=171;
-    public static final int CASE=87;
-    public static final int GreaterThanSignEqualsSign=128;
-    public static final int AT=129;
-    public static final int PlusSign=145;
-    public static final int RULE_INT=161;
-    public static final int END_FOR=52;
-    public static final int RULE_TIME_DAYS=165;
-    public static final int RULE_ML_COMMENT=174;
-    public static final int PUBLIC=61;
-    public static final int THEN=99;
-    public static final int XOR=116;
-    public static final int LeftSquareBracket=157;
-    public static final int PROGRAM=57;
-    public static final int EXIT=92;
+    public static final int TOD=121;
+    public static final int DINT=95;
+    public static final int FUNCTION=46;
+    public static final int UDINT=83;
+    public static final int RULE_TIME_NANOS=178;
+    public static final int CASE=92;
+    public static final int GreaterThanSignEqualsSign=135;
+    public static final int AT=136;
+    public static final int PlusSign=152;
+    public static final int RULE_INT=168;
+    public static final int END_FOR=53;
+    public static final int RULE_TIME_DAYS=172;
+    public static final int RULE_ML_COMMENT=181;
+    public static final int PUBLIC=64;
+    public static final int THEN=106;
+    public static final int XOR=123;
+    public static final int LeftSquareBracket=164;
+    public static final int PROGRAM=59;
+    public static final int EXIT=97;
     public static final int TIME_OF_DAY=19;
-    public static final int B=117;
+    public static final int B=124;
     public static final int LDATE_AND_TIME=8;
-    public static final int REPEAT=63;
-    public static final int D=155;
-    public static final int CHAR=88;
-    public static final int L=119;
-    public static final int LTIME=77;
-    public static final int Comma=146;
-    public static final int HyphenMinus=147;
-    public static final int T=156;
-    public static final int W=120;
-    public static final int BY=130;
-    public static final int X=121;
-    public static final int ELSIF=72;
-    public static final int END_REPEAT=21;
-    public static final int LessThanSignEqualsSign=125;
-    public static final int Solidus=149;
-    public static final int PROTECTED=36;
-    public static final int VAR_INPUT=38;
-    public static final int RESOURCE=50;
-    public static final int INTERVAL=47;
-    public static final int FullStop=148;
-    public static final int RULE_TIME_SECONDS=168;
-    public static final int VAR_TEMP=51;
-    public static final int CONSTANT=40;
-    public static final int RULE_TIME_VALUE=164;
-    public static final int PRIVATE=56;
-    public static final int TRANSITION=26;
-    public static final int CONTINUE=41;
-    public static final int Semicolon=151;
-    public static final int REF=113;
-    public static final int LD=134;
-    public static final int VAR_OUTPUT=31;
-    public static final int STRING=67;
-    public static final int RULE_HEX_DIGIT=159;
-    public static final int TO=139;
-    public static final int END_TYPE=44;
-    public static final int UINT=104;
+    public static final int REPEAT=66;
+    public static final int D=162;
+    public static final int CHAR=93;
+    public static final int L=126;
+    public static final int LTIME=80;
+    public static final int Comma=153;
+    public static final int HyphenMinus=154;
+    public static final int T=163;
+    public static final int W=127;
+    public static final int BY=137;
+    public static final int X=128;
+    public static final int ELSIF=75;
+    public static final int END_REPEAT=22;
+    public static final int LessThanSignEqualsSign=132;
+    public static final int Solidus=156;
+    public static final int PROTECTED=37;
+    public static final int VAR_INPUT=39;
+    public static final int RESOURCE=51;
+    public static final int INTERVAL=48;
+    public static final int FullStop=155;
+    public static final int RULE_TIME_SECONDS=175;
+    public static final int VAR_TEMP=52;
+    public static final int INTERAL=56;
+    public static final int CONSTANT=41;
+    public static final int RULE_TIME_VALUE=171;
+    public static final int PRIVATE=58;
+    public static final int TRANSITION=27;
+    public static final int CONTINUE=42;
+    public static final int Semicolon=158;
+    public static final int REF=120;
+    public static final int LD=141;
+    public static final int VAR_OUTPUT=32;
+    public static final int STRING=70;
+    public static final int RULE_HEX_DIGIT=166;
+    public static final int TO=146;
+    public static final int END_TYPE=45;
+    public static final int UINT=111;
     public static final int INITIAL_STEP=15;
-    public static final int LTOD=94;
-    public static final int NAMESPACE=35;
-    public static final int EXTENDS=54;
-    public static final int SINGLE=66;
-    public static final int ARRAY=69;
-    public static final int LT=135;
-    public static final int PRIORITY=49;
-    public static final int CLASS=70;
-    public static final int DO=131;
-    public static final int WSTRING=58;
-    public static final int READ_WRITE=25;
+    public static final int LTOD=100;
+    public static final int NAMESPACE=36;
+    public static final int EXTENDS=55;
+    public static final int SINGLE=69;
+    public static final int ARRAY=72;
+    public static final int LT=142;
+    public static final int PRIORITY=50;
+    public static final int CLASS=73;
+    public static final int FROM=98;
+    public static final int DO=138;
+    public static final int WSTRING=60;
+    public static final int READ_WRITE=26;
     public static final int END_CONFIGURATION=5;
-    public static final int DT=132;
-    public static final int END_VAR=53;
-    public static final int END_STEP=43;
-    public static final int END_STRUCT=22;
-    public static final int RULE_TIME_PART=163;
-    public static final int FullStopFullStop=123;
-    public static final int OVERLAP=55;
-    public static final int Ampersand=141;
+    public static final int DT=139;
+    public static final int END_VAR=54;
+    public static final int END_STEP=44;
+    public static final int END_STRUCT=23;
+    public static final int RULE_TIME_PART=170;
+    public static final int FullStopFullStop=130;
+    public static final int OVERLAP=57;
+    public static final int Ampersand=148;
     public static final int END_NAMESPACE=12;
     public static final int END_ACTION=20;
-    public static final int RightSquareBracket=158;
-    public static final int NULL=95;
-    public static final int USINT=82;
-    public static final int DWORD=71;
-    public static final int FOR=108;
-    public static final int RightParenthesis=143;
-    public static final int TRUE=102;
-    public static final int FINAL=74;
-    public static final int ColonEqualsSign=124;
+    public static final int RightSquareBracket=165;
+    public static final int TASK=105;
+    public static final int NULL=101;
+    public static final int USINT=87;
+    public static final int DWORD=74;
+    public static final int FOR=115;
+    public static final int RightParenthesis=150;
+    public static final int TRUE=109;
+    public static final int FINAL=77;
+    public static final int ColonEqualsSign=131;
     public static final int END_FUNCTION=13;
-    public static final int END_WHILE=33;
-    public static final int RULE_DECIMAL=162;
-    public static final int DATE=89;
-    public static final int NOT=112;
-    public static final int LDATE=75;
-    public static final int AND=107;
-    public static final int NumberSign=140;
-    public static final int REAL=96;
-    public static final int AsteriskAsterisk=122;
-    public static final int THIS=100;
-    public static final int SINT=97;
-    public static final int NON_RETAIN=24;
-    public static final int STRUCT=68;
+    public static final int END_WHILE=34;
+    public static final int USING=86;
+    public static final int RULE_DECIMAL=169;
+    public static final int DATE=94;
+    public static final int NOT=119;
+    public static final int LDATE=78;
+    public static final int AND=114;
+    public static final int NumberSign=147;
+    public static final int REAL=102;
+    public static final int AsteriskAsterisk=129;
+    public static final int METHOD=63;
+    public static final int THIS=107;
+    public static final int SINT=103;
+    public static final int NON_RETAIN=25;
+    public static final int STRUCT=71;
     public static final int LTIME_OF_DAY=16;
     public static final int END_TRANSITION=6;
-    public static final int LREAL=76;
-    public static final int VAR_GLOBAL=29;
-    public static final int WCHAR=83;
+    public static final int LREAL=79;
+    public static final int VAR_GLOBAL=30;
+    public static final int WCHAR=88;
     public static final int END_FUNCTION_BLOCK=4;
     public static final int VAR_EXTERNAL=17;
-    public static final int RULE_STRING=173;
-    public static final int VAR_ACCESS=27;
-    public static final int ABSTRACT=39;
-    public static final int READ_ONLY=37;
-    public static final int INT=109;
-    public static final int RULE_SL_COMMENT=175;
-    public static final int RETURN=65;
-    public static final int EqualsSign=153;
-    public static final int OF=136;
+    public static final int RULE_STRING=180;
+    public static final int VAR_ACCESS=28;
+    public static final int ABSTRACT=40;
+    public static final int READ_ONLY=38;
+    public static final int INT=116;
+    public static final int RULE_SL_COMMENT=182;
+    public static final int RETURN=68;
+    public static final int EqualsSign=160;
+    public static final int OF=143;
+    public static final int END_METHOD=21;
     public static final int END_RESOURCE=14;
-    public static final int Colon=150;
+    public static final int Colon=157;
     public static final int EOF=-1;
-    public static final int LDT=110;
-    public static final int Asterisk=144;
-    public static final int RULE_TIME_MILLIS=169;
-    public static final int ON=137;
-    public static final int MOD=111;
-    public static final int OR=138;
-    public static final int RETAIN=64;
-    public static final int RULE_WS=176;
-    public static final int VAR_IN_OUT=30;
+    public static final int LDT=117;
+    public static final int Asterisk=151;
+    public static final int RULE_TIME_MILLIS=176;
+    public static final int ON=144;
+    public static final int SUPER=82;
+    public static final int MOD=118;
+    public static final int OR=145;
+    public static final int RETAIN=67;
+    public static final int RULE_WS=183;
+    public static final int VAR_IN_OUT=31;
     public static final int END_INTERFACE=11;
-    public static final int IMPLEMENTS=23;
-    public static final int STEP=98;
-    public static final int TIME=101;
-    public static final int RULE_ANY_OTHER=177;
-    public static final int UNTIL=81;
-    public static final int WITH=105;
-    public static final int RULE_TIME_MINUTES=167;
-    public static final int END_CLASS=32;
-    public static final int OVERRIDE=48;
-    public static final int ACTION=59;
-    public static final int BOOL=85;
-    public static final int D_1=118;
-    public static final int FALSE=73;
-    public static final int WHILE=84;
-    public static final int RULE_TIME_MICROS=170;
+    public static final int IMPLEMENTS=24;
+    public static final int STEP=104;
+    public static final int TIME=108;
+    public static final int RULE_ANY_OTHER=184;
+    public static final int UNTIL=85;
+    public static final int WITH=112;
+    public static final int RULE_TIME_MINUTES=174;
+    public static final int END_CLASS=33;
+    public static final int OVERRIDE=49;
+    public static final int ACTION=61;
+    public static final int BOOL=90;
+    public static final int D_1=125;
+    public static final int FALSE=76;
+    public static final int WHILE=89;
+    public static final int RULE_TIME_MICROS=177;
     public static final int END_PROGRAM=18;
-    public static final int RULE_NON_DECIMAL=160;
+    public static final int RULE_NON_DECIMAL=167;
 
     // delegates
     // delegators
@@ -787,7 +794,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
                 int alt5=2;
                 int LA5_0 = input.LA(1);
 
-                if ( (LA5_0==LDATE_AND_TIME||LA5_0==DATE_AND_TIME||LA5_0==LTIME_OF_DAY||LA5_0==TIME_OF_DAY||LA5_0==CONTINUE||LA5_0==WSTRING||LA5_0==REPEAT||LA5_0==RETURN||LA5_0==STRING||LA5_0==DWORD||LA5_0==FALSE||(LA5_0>=LDATE && LA5_0<=ULINT)||(LA5_0>=USINT && LA5_0<=DINT)||(LA5_0>=EXIT && LA5_0<=LTOD)||(LA5_0>=REAL && LA5_0<=SINT)||(LA5_0>=THIS && LA5_0<=TRUE)||LA5_0==UINT||(LA5_0>=WORD && LA5_0<=MOD)||LA5_0==TOD||LA5_0==XOR||(LA5_0>=DT && LA5_0<=LT)||LA5_0==OR||LA5_0==LeftParenthesis||LA5_0==PlusSign||LA5_0==HyphenMinus||LA5_0==Semicolon||(LA5_0>=D && LA5_0<=T)||(LA5_0>=RULE_NON_DECIMAL && LA5_0<=RULE_DECIMAL)||(LA5_0>=RULE_ID && LA5_0<=RULE_STRING)) ) {
+                if ( (LA5_0==LDATE_AND_TIME||LA5_0==DATE_AND_TIME||LA5_0==LTIME_OF_DAY||LA5_0==TIME_OF_DAY||LA5_0==CONTINUE||LA5_0==WSTRING||LA5_0==REPEAT||LA5_0==RETURN||LA5_0==STRING||LA5_0==DWORD||LA5_0==FALSE||(LA5_0>=LDATE && LA5_0<=LWORD)||(LA5_0>=UDINT && LA5_0<=ULINT)||(LA5_0>=USINT && LA5_0<=DINT)||LA5_0==EXIT||(LA5_0>=LINT && LA5_0<=LTOD)||(LA5_0>=REAL && LA5_0<=SINT)||(LA5_0>=THIS && LA5_0<=TRUE)||LA5_0==UINT||(LA5_0>=WORD && LA5_0<=MOD)||LA5_0==TOD||LA5_0==XOR||(LA5_0>=DT && LA5_0<=LT)||LA5_0==OR||LA5_0==LeftParenthesis||LA5_0==PlusSign||LA5_0==HyphenMinus||LA5_0==Semicolon||(LA5_0>=D && LA5_0<=T)||(LA5_0>=RULE_NON_DECIMAL && LA5_0<=RULE_DECIMAL)||(LA5_0>=RULE_ID && LA5_0<=RULE_STRING)) ) {
                     alt5=1;
                 }
 
@@ -2087,7 +2094,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
                     if ( (LA19_0==LeftSquareBracket) ) {
                         int LA19_1 = input.LA(2);
 
-                        if ( (LA19_1==LDATE_AND_TIME||LA19_1==DATE_AND_TIME||LA19_1==LTIME_OF_DAY||LA19_1==TIME_OF_DAY||LA19_1==WSTRING||LA19_1==STRING||LA19_1==DWORD||LA19_1==FALSE||(LA19_1>=LDATE && LA19_1<=ULINT)||(LA19_1>=USINT && LA19_1<=WCHAR)||(LA19_1>=BOOL && LA19_1<=BYTE)||(LA19_1>=CHAR && LA19_1<=DINT)||(LA19_1>=LINT && LA19_1<=LTOD)||(LA19_1>=REAL && LA19_1<=SINT)||(LA19_1>=THIS && LA19_1<=TRUE)||LA19_1==UINT||(LA19_1>=WORD && LA19_1<=AND)||(LA19_1>=INT && LA19_1<=NOT)||LA19_1==TOD||LA19_1==XOR||LA19_1==DT||(LA19_1>=LD && LA19_1<=LT)||LA19_1==OR||LA19_1==LeftParenthesis||LA19_1==PlusSign||LA19_1==HyphenMinus||(LA19_1>=D && LA19_1<=T)||(LA19_1>=RULE_NON_DECIMAL && LA19_1<=RULE_DECIMAL)||(LA19_1>=RULE_ID && LA19_1<=RULE_STRING)) ) {
+                        if ( (LA19_1==LDATE_AND_TIME||LA19_1==DATE_AND_TIME||LA19_1==LTIME_OF_DAY||LA19_1==TIME_OF_DAY||LA19_1==WSTRING||LA19_1==STRING||LA19_1==DWORD||LA19_1==FALSE||(LA19_1>=LDATE && LA19_1<=LWORD)||(LA19_1>=UDINT && LA19_1<=ULINT)||(LA19_1>=USINT && LA19_1<=WCHAR)||(LA19_1>=BOOL && LA19_1<=BYTE)||(LA19_1>=CHAR && LA19_1<=DINT)||(LA19_1>=LINT && LA19_1<=LTOD)||(LA19_1>=REAL && LA19_1<=SINT)||(LA19_1>=THIS && LA19_1<=TRUE)||LA19_1==UINT||(LA19_1>=WORD && LA19_1<=AND)||(LA19_1>=INT && LA19_1<=NOT)||LA19_1==TOD||LA19_1==XOR||LA19_1==DT||(LA19_1>=LD && LA19_1<=LT)||LA19_1==OR||LA19_1==LeftParenthesis||LA19_1==PlusSign||LA19_1==HyphenMinus||(LA19_1>=D && LA19_1<=T)||(LA19_1>=RULE_NON_DECIMAL && LA19_1<=RULE_DECIMAL)||(LA19_1>=RULE_ID && LA19_1<=RULE_STRING)) ) {
                             alt19=1;
                         }
                         else if ( (LA19_1==Asterisk) ) {
@@ -3689,7 +3696,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
             int alt29=2;
             int LA29_0 = input.LA(1);
 
-            if ( (LA29_0==LDATE_AND_TIME||LA29_0==DATE_AND_TIME||LA29_0==LTIME_OF_DAY||LA29_0==TIME_OF_DAY||LA29_0==CONTINUE||LA29_0==WSTRING||LA29_0==REPEAT||LA29_0==RETURN||LA29_0==STRING||LA29_0==DWORD||LA29_0==FALSE||(LA29_0>=LDATE && LA29_0<=ULINT)||(LA29_0>=USINT && LA29_0<=DINT)||(LA29_0>=EXIT && LA29_0<=LTOD)||(LA29_0>=REAL && LA29_0<=SINT)||(LA29_0>=THIS && LA29_0<=TRUE)||LA29_0==UINT||(LA29_0>=WORD && LA29_0<=MOD)||LA29_0==TOD||LA29_0==XOR||(LA29_0>=DT && LA29_0<=LT)||LA29_0==OR||LA29_0==LeftParenthesis||LA29_0==PlusSign||LA29_0==HyphenMinus||(LA29_0>=D && LA29_0<=T)||(LA29_0>=RULE_NON_DECIMAL && LA29_0<=RULE_DECIMAL)||(LA29_0>=RULE_ID && LA29_0<=RULE_STRING)) ) {
+            if ( (LA29_0==LDATE_AND_TIME||LA29_0==DATE_AND_TIME||LA29_0==LTIME_OF_DAY||LA29_0==TIME_OF_DAY||LA29_0==CONTINUE||LA29_0==WSTRING||LA29_0==REPEAT||LA29_0==RETURN||LA29_0==STRING||LA29_0==DWORD||LA29_0==FALSE||(LA29_0>=LDATE && LA29_0<=LWORD)||(LA29_0>=UDINT && LA29_0<=ULINT)||(LA29_0>=USINT && LA29_0<=DINT)||LA29_0==EXIT||(LA29_0>=LINT && LA29_0<=LTOD)||(LA29_0>=REAL && LA29_0<=SINT)||(LA29_0>=THIS && LA29_0<=TRUE)||LA29_0==UINT||(LA29_0>=WORD && LA29_0<=MOD)||LA29_0==TOD||LA29_0==XOR||(LA29_0>=DT && LA29_0<=LT)||LA29_0==OR||LA29_0==LeftParenthesis||LA29_0==PlusSign||LA29_0==HyphenMinus||(LA29_0>=D && LA29_0<=T)||(LA29_0>=RULE_NON_DECIMAL && LA29_0<=RULE_DECIMAL)||(LA29_0>=RULE_ID && LA29_0<=RULE_STRING)) ) {
                 alt29=1;
             }
             else if ( (LA29_0==Semicolon) ) {
@@ -4494,7 +4501,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
                         throw nvae;
                     }
                 }
-                else if ( (LA30_3==LDATE_AND_TIME||LA30_3==DATE_AND_TIME||LA30_3==LTIME_OF_DAY||LA30_3==TIME_OF_DAY||LA30_3==WSTRING||LA30_3==STRING||LA30_3==DWORD||LA30_3==FALSE||(LA30_3>=LDATE && LA30_3<=ULINT)||(LA30_3>=USINT && LA30_3<=WCHAR)||(LA30_3>=BOOL && LA30_3<=BYTE)||(LA30_3>=CHAR && LA30_3<=DINT)||(LA30_3>=LINT && LA30_3<=LTOD)||(LA30_3>=REAL && LA30_3<=SINT)||(LA30_3>=THIS && LA30_3<=TRUE)||LA30_3==UINT||(LA30_3>=WORD && LA30_3<=AND)||(LA30_3>=INT && LA30_3<=NOT)||LA30_3==TOD||LA30_3==XOR||LA30_3==DT||(LA30_3>=LD && LA30_3<=LT)||LA30_3==OR||LA30_3==LeftParenthesis||LA30_3==PlusSign||LA30_3==HyphenMinus||(LA30_3>=D && LA30_3<=T)||(LA30_3>=RULE_NON_DECIMAL && LA30_3<=RULE_DECIMAL)||LA30_3==RULE_STRING) ) {
+                else if ( (LA30_3==LDATE_AND_TIME||LA30_3==DATE_AND_TIME||LA30_3==LTIME_OF_DAY||LA30_3==TIME_OF_DAY||LA30_3==WSTRING||LA30_3==STRING||LA30_3==DWORD||LA30_3==FALSE||(LA30_3>=LDATE && LA30_3<=LWORD)||(LA30_3>=UDINT && LA30_3<=ULINT)||(LA30_3>=USINT && LA30_3<=WCHAR)||(LA30_3>=BOOL && LA30_3<=BYTE)||(LA30_3>=CHAR && LA30_3<=DINT)||(LA30_3>=LINT && LA30_3<=LTOD)||(LA30_3>=REAL && LA30_3<=SINT)||(LA30_3>=THIS && LA30_3<=TRUE)||LA30_3==UINT||(LA30_3>=WORD && LA30_3<=AND)||(LA30_3>=INT && LA30_3<=NOT)||LA30_3==TOD||LA30_3==XOR||LA30_3==DT||(LA30_3>=LD && LA30_3<=LT)||LA30_3==OR||LA30_3==LeftParenthesis||LA30_3==PlusSign||LA30_3==HyphenMinus||(LA30_3>=D && LA30_3<=T)||(LA30_3>=RULE_NON_DECIMAL && LA30_3<=RULE_DECIMAL)||LA30_3==RULE_STRING) ) {
                     alt30=1;
                 }
                 else {
@@ -5174,7 +5181,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
                 int alt32=2;
                 int LA32_0 = input.LA(1);
 
-                if ( (LA32_0==LDATE_AND_TIME||LA32_0==DATE_AND_TIME||LA32_0==LTIME_OF_DAY||LA32_0==TIME_OF_DAY||LA32_0==CONTINUE||LA32_0==WSTRING||LA32_0==REPEAT||LA32_0==RETURN||LA32_0==STRING||LA32_0==DWORD||LA32_0==FALSE||(LA32_0>=LDATE && LA32_0<=ULINT)||(LA32_0>=USINT && LA32_0<=DINT)||(LA32_0>=EXIT && LA32_0<=LTOD)||(LA32_0>=REAL && LA32_0<=SINT)||(LA32_0>=THIS && LA32_0<=TRUE)||LA32_0==UINT||(LA32_0>=WORD && LA32_0<=MOD)||LA32_0==TOD||LA32_0==XOR||(LA32_0>=DT && LA32_0<=LT)||LA32_0==OR||LA32_0==LeftParenthesis||LA32_0==PlusSign||LA32_0==HyphenMinus||LA32_0==Semicolon||(LA32_0>=D && LA32_0<=T)||(LA32_0>=RULE_NON_DECIMAL && LA32_0<=RULE_DECIMAL)||(LA32_0>=RULE_ID && LA32_0<=RULE_STRING)) ) {
+                if ( (LA32_0==LDATE_AND_TIME||LA32_0==DATE_AND_TIME||LA32_0==LTIME_OF_DAY||LA32_0==TIME_OF_DAY||LA32_0==CONTINUE||LA32_0==WSTRING||LA32_0==REPEAT||LA32_0==RETURN||LA32_0==STRING||LA32_0==DWORD||LA32_0==FALSE||(LA32_0>=LDATE && LA32_0<=LWORD)||(LA32_0>=UDINT && LA32_0<=ULINT)||(LA32_0>=USINT && LA32_0<=DINT)||LA32_0==EXIT||(LA32_0>=LINT && LA32_0<=LTOD)||(LA32_0>=REAL && LA32_0<=SINT)||(LA32_0>=THIS && LA32_0<=TRUE)||LA32_0==UINT||(LA32_0>=WORD && LA32_0<=MOD)||LA32_0==TOD||LA32_0==XOR||(LA32_0>=DT && LA32_0<=LT)||LA32_0==OR||LA32_0==LeftParenthesis||LA32_0==PlusSign||LA32_0==HyphenMinus||LA32_0==Semicolon||(LA32_0>=D && LA32_0<=T)||(LA32_0>=RULE_NON_DECIMAL && LA32_0<=RULE_DECIMAL)||(LA32_0>=RULE_ID && LA32_0<=RULE_STRING)) ) {
                     alt32=1;
                 }
 
@@ -5465,7 +5472,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
                 int alt35=2;
                 int LA35_0 = input.LA(1);
 
-                if ( (LA35_0==LDATE_AND_TIME||LA35_0==DATE_AND_TIME||LA35_0==LTIME_OF_DAY||LA35_0==TIME_OF_DAY||LA35_0==CONTINUE||LA35_0==WSTRING||LA35_0==REPEAT||LA35_0==RETURN||LA35_0==STRING||LA35_0==DWORD||LA35_0==FALSE||(LA35_0>=LDATE && LA35_0<=ULINT)||(LA35_0>=USINT && LA35_0<=DINT)||(LA35_0>=EXIT && LA35_0<=LTOD)||(LA35_0>=REAL && LA35_0<=SINT)||(LA35_0>=THIS && LA35_0<=TRUE)||LA35_0==UINT||(LA35_0>=WORD && LA35_0<=MOD)||LA35_0==TOD||LA35_0==XOR||(LA35_0>=DT && LA35_0<=LT)||LA35_0==OR||LA35_0==LeftParenthesis||LA35_0==PlusSign||LA35_0==HyphenMinus||LA35_0==Semicolon||(LA35_0>=D && LA35_0<=T)||(LA35_0>=RULE_NON_DECIMAL && LA35_0<=RULE_DECIMAL)||(LA35_0>=RULE_ID && LA35_0<=RULE_STRING)) ) {
+                if ( (LA35_0==LDATE_AND_TIME||LA35_0==DATE_AND_TIME||LA35_0==LTIME_OF_DAY||LA35_0==TIME_OF_DAY||LA35_0==CONTINUE||LA35_0==WSTRING||LA35_0==REPEAT||LA35_0==RETURN||LA35_0==STRING||LA35_0==DWORD||LA35_0==FALSE||(LA35_0>=LDATE && LA35_0<=LWORD)||(LA35_0>=UDINT && LA35_0<=ULINT)||(LA35_0>=USINT && LA35_0<=DINT)||LA35_0==EXIT||(LA35_0>=LINT && LA35_0<=LTOD)||(LA35_0>=REAL && LA35_0<=SINT)||(LA35_0>=THIS && LA35_0<=TRUE)||LA35_0==UINT||(LA35_0>=WORD && LA35_0<=MOD)||LA35_0==TOD||LA35_0==XOR||(LA35_0>=DT && LA35_0<=LT)||LA35_0==OR||LA35_0==LeftParenthesis||LA35_0==PlusSign||LA35_0==HyphenMinus||LA35_0==Semicolon||(LA35_0>=D && LA35_0<=T)||(LA35_0>=RULE_NON_DECIMAL && LA35_0<=RULE_DECIMAL)||(LA35_0>=RULE_ID && LA35_0<=RULE_STRING)) ) {
                     alt35=1;
                 }
 
@@ -5655,7 +5662,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
                 int alt36=2;
                 int LA36_0 = input.LA(1);
 
-                if ( (LA36_0==LDATE_AND_TIME||LA36_0==DATE_AND_TIME||LA36_0==LTIME_OF_DAY||LA36_0==TIME_OF_DAY||LA36_0==WSTRING||LA36_0==STRING||LA36_0==DWORD||LA36_0==FALSE||(LA36_0>=LDATE && LA36_0<=ULINT)||(LA36_0>=USINT && LA36_0<=WCHAR)||(LA36_0>=BOOL && LA36_0<=BYTE)||(LA36_0>=CHAR && LA36_0<=DINT)||(LA36_0>=LINT && LA36_0<=LTOD)||(LA36_0>=REAL && LA36_0<=SINT)||(LA36_0>=THIS && LA36_0<=TRUE)||LA36_0==UINT||(LA36_0>=WORD && LA36_0<=AND)||(LA36_0>=INT && LA36_0<=NOT)||LA36_0==TOD||LA36_0==XOR||LA36_0==DT||(LA36_0>=LD && LA36_0<=LT)||LA36_0==OR||LA36_0==LeftParenthesis||LA36_0==PlusSign||LA36_0==HyphenMinus||(LA36_0>=D && LA36_0<=T)||(LA36_0>=RULE_NON_DECIMAL && LA36_0<=RULE_DECIMAL)||(LA36_0>=RULE_ID && LA36_0<=RULE_STRING)) ) {
+                if ( (LA36_0==LDATE_AND_TIME||LA36_0==DATE_AND_TIME||LA36_0==LTIME_OF_DAY||LA36_0==TIME_OF_DAY||LA36_0==WSTRING||LA36_0==STRING||LA36_0==DWORD||LA36_0==FALSE||(LA36_0>=LDATE && LA36_0<=LWORD)||(LA36_0>=UDINT && LA36_0<=ULINT)||(LA36_0>=USINT && LA36_0<=WCHAR)||(LA36_0>=BOOL && LA36_0<=BYTE)||(LA36_0>=CHAR && LA36_0<=DINT)||(LA36_0>=LINT && LA36_0<=LTOD)||(LA36_0>=REAL && LA36_0<=SINT)||(LA36_0>=THIS && LA36_0<=TRUE)||LA36_0==UINT||(LA36_0>=WORD && LA36_0<=AND)||(LA36_0>=INT && LA36_0<=NOT)||LA36_0==TOD||LA36_0==XOR||LA36_0==DT||(LA36_0>=LD && LA36_0<=LT)||LA36_0==OR||LA36_0==LeftParenthesis||LA36_0==PlusSign||LA36_0==HyphenMinus||(LA36_0>=D && LA36_0<=T)||(LA36_0>=RULE_NON_DECIMAL && LA36_0<=RULE_DECIMAL)||(LA36_0>=RULE_ID && LA36_0<=RULE_STRING)) ) {
                     alt36=1;
                 }
 
@@ -6108,7 +6115,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
                 int alt40=2;
                 int LA40_0 = input.LA(1);
 
-                if ( (LA40_0==LDATE_AND_TIME||LA40_0==DATE_AND_TIME||LA40_0==LTIME_OF_DAY||LA40_0==TIME_OF_DAY||LA40_0==CONTINUE||LA40_0==WSTRING||LA40_0==REPEAT||LA40_0==RETURN||LA40_0==STRING||LA40_0==DWORD||LA40_0==FALSE||(LA40_0>=LDATE && LA40_0<=ULINT)||(LA40_0>=USINT && LA40_0<=DINT)||(LA40_0>=EXIT && LA40_0<=LTOD)||(LA40_0>=REAL && LA40_0<=SINT)||(LA40_0>=THIS && LA40_0<=TRUE)||LA40_0==UINT||(LA40_0>=WORD && LA40_0<=MOD)||LA40_0==TOD||LA40_0==XOR||(LA40_0>=DT && LA40_0<=LT)||LA40_0==OR||LA40_0==LeftParenthesis||LA40_0==PlusSign||LA40_0==HyphenMinus||LA40_0==Semicolon||(LA40_0>=D && LA40_0<=T)||(LA40_0>=RULE_NON_DECIMAL && LA40_0<=RULE_DECIMAL)||(LA40_0>=RULE_ID && LA40_0<=RULE_STRING)) ) {
+                if ( (LA40_0==LDATE_AND_TIME||LA40_0==DATE_AND_TIME||LA40_0==LTIME_OF_DAY||LA40_0==TIME_OF_DAY||LA40_0==CONTINUE||LA40_0==WSTRING||LA40_0==REPEAT||LA40_0==RETURN||LA40_0==STRING||LA40_0==DWORD||LA40_0==FALSE||(LA40_0>=LDATE && LA40_0<=LWORD)||(LA40_0>=UDINT && LA40_0<=ULINT)||(LA40_0>=USINT && LA40_0<=DINT)||LA40_0==EXIT||(LA40_0>=LINT && LA40_0<=LTOD)||(LA40_0>=REAL && LA40_0<=SINT)||(LA40_0>=THIS && LA40_0<=TRUE)||LA40_0==UINT||(LA40_0>=WORD && LA40_0<=MOD)||LA40_0==TOD||LA40_0==XOR||(LA40_0>=DT && LA40_0<=LT)||LA40_0==OR||LA40_0==LeftParenthesis||LA40_0==PlusSign||LA40_0==HyphenMinus||LA40_0==Semicolon||(LA40_0>=D && LA40_0<=T)||(LA40_0>=RULE_NON_DECIMAL && LA40_0<=RULE_DECIMAL)||(LA40_0>=RULE_ID && LA40_0<=RULE_STRING)) ) {
                     alt40=1;
                 }
 
@@ -6433,7 +6440,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
                 int alt42=2;
                 int LA42_0 = input.LA(1);
 
-                if ( (LA42_0==LDATE_AND_TIME||LA42_0==DATE_AND_TIME||LA42_0==LTIME_OF_DAY||LA42_0==TIME_OF_DAY||LA42_0==CONTINUE||LA42_0==WSTRING||LA42_0==REPEAT||LA42_0==RETURN||LA42_0==STRING||LA42_0==DWORD||LA42_0==FALSE||(LA42_0>=LDATE && LA42_0<=ULINT)||(LA42_0>=USINT && LA42_0<=DINT)||(LA42_0>=EXIT && LA42_0<=LTOD)||(LA42_0>=REAL && LA42_0<=SINT)||(LA42_0>=THIS && LA42_0<=TRUE)||LA42_0==UINT||(LA42_0>=WORD && LA42_0<=MOD)||LA42_0==TOD||LA42_0==XOR||(LA42_0>=DT && LA42_0<=LT)||LA42_0==OR||LA42_0==LeftParenthesis||LA42_0==PlusSign||LA42_0==HyphenMinus||LA42_0==Semicolon||(LA42_0>=D && LA42_0<=T)||(LA42_0>=RULE_NON_DECIMAL && LA42_0<=RULE_DECIMAL)||(LA42_0>=RULE_ID && LA42_0<=RULE_STRING)) ) {
+                if ( (LA42_0==LDATE_AND_TIME||LA42_0==DATE_AND_TIME||LA42_0==LTIME_OF_DAY||LA42_0==TIME_OF_DAY||LA42_0==CONTINUE||LA42_0==WSTRING||LA42_0==REPEAT||LA42_0==RETURN||LA42_0==STRING||LA42_0==DWORD||LA42_0==FALSE||(LA42_0>=LDATE && LA42_0<=LWORD)||(LA42_0>=UDINT && LA42_0<=ULINT)||(LA42_0>=USINT && LA42_0<=DINT)||LA42_0==EXIT||(LA42_0>=LINT && LA42_0<=LTOD)||(LA42_0>=REAL && LA42_0<=SINT)||(LA42_0>=THIS && LA42_0<=TRUE)||LA42_0==UINT||(LA42_0>=WORD && LA42_0<=MOD)||LA42_0==TOD||LA42_0==XOR||(LA42_0>=DT && LA42_0<=LT)||LA42_0==OR||LA42_0==LeftParenthesis||LA42_0==PlusSign||LA42_0==HyphenMinus||LA42_0==Semicolon||(LA42_0>=D && LA42_0<=T)||(LA42_0>=RULE_NON_DECIMAL && LA42_0<=RULE_DECIMAL)||(LA42_0>=RULE_ID && LA42_0<=RULE_STRING)) ) {
                     alt42=1;
                 }
 
@@ -6626,7 +6633,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
                 int alt43=2;
                 int LA43_0 = input.LA(1);
 
-                if ( (LA43_0==LDATE_AND_TIME||LA43_0==DATE_AND_TIME||LA43_0==LTIME_OF_DAY||LA43_0==TIME_OF_DAY||LA43_0==CONTINUE||LA43_0==WSTRING||LA43_0==REPEAT||LA43_0==RETURN||LA43_0==STRING||LA43_0==DWORD||LA43_0==FALSE||(LA43_0>=LDATE && LA43_0<=ULINT)||(LA43_0>=USINT && LA43_0<=DINT)||(LA43_0>=EXIT && LA43_0<=LTOD)||(LA43_0>=REAL && LA43_0<=SINT)||(LA43_0>=THIS && LA43_0<=TRUE)||LA43_0==UINT||(LA43_0>=WORD && LA43_0<=MOD)||LA43_0==TOD||LA43_0==XOR||(LA43_0>=DT && LA43_0<=LT)||LA43_0==OR||LA43_0==LeftParenthesis||LA43_0==PlusSign||LA43_0==HyphenMinus||LA43_0==Semicolon||(LA43_0>=D && LA43_0<=T)||(LA43_0>=RULE_NON_DECIMAL && LA43_0<=RULE_DECIMAL)||(LA43_0>=RULE_ID && LA43_0<=RULE_STRING)) ) {
+                if ( (LA43_0==LDATE_AND_TIME||LA43_0==DATE_AND_TIME||LA43_0==LTIME_OF_DAY||LA43_0==TIME_OF_DAY||LA43_0==CONTINUE||LA43_0==WSTRING||LA43_0==REPEAT||LA43_0==RETURN||LA43_0==STRING||LA43_0==DWORD||LA43_0==FALSE||(LA43_0>=LDATE && LA43_0<=LWORD)||(LA43_0>=UDINT && LA43_0<=ULINT)||(LA43_0>=USINT && LA43_0<=DINT)||LA43_0==EXIT||(LA43_0>=LINT && LA43_0<=LTOD)||(LA43_0>=REAL && LA43_0<=SINT)||(LA43_0>=THIS && LA43_0<=TRUE)||LA43_0==UINT||(LA43_0>=WORD && LA43_0<=MOD)||LA43_0==TOD||LA43_0==XOR||(LA43_0>=DT && LA43_0<=LT)||LA43_0==OR||LA43_0==LeftParenthesis||LA43_0==PlusSign||LA43_0==HyphenMinus||LA43_0==Semicolon||(LA43_0>=D && LA43_0<=T)||(LA43_0>=RULE_NON_DECIMAL && LA43_0<=RULE_DECIMAL)||(LA43_0>=RULE_ID && LA43_0<=RULE_STRING)) ) {
                     alt43=1;
                 }
 
@@ -6778,7 +6785,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
                 int alt44=2;
                 int LA44_0 = input.LA(1);
 
-                if ( (LA44_0==LDATE_AND_TIME||LA44_0==DATE_AND_TIME||LA44_0==LTIME_OF_DAY||LA44_0==TIME_OF_DAY||LA44_0==CONTINUE||LA44_0==WSTRING||LA44_0==REPEAT||LA44_0==RETURN||LA44_0==STRING||LA44_0==DWORD||LA44_0==FALSE||(LA44_0>=LDATE && LA44_0<=ULINT)||(LA44_0>=USINT && LA44_0<=DINT)||(LA44_0>=EXIT && LA44_0<=LTOD)||(LA44_0>=REAL && LA44_0<=SINT)||(LA44_0>=THIS && LA44_0<=TRUE)||LA44_0==UINT||(LA44_0>=WORD && LA44_0<=MOD)||LA44_0==TOD||LA44_0==XOR||(LA44_0>=DT && LA44_0<=LT)||LA44_0==OR||LA44_0==LeftParenthesis||LA44_0==PlusSign||LA44_0==HyphenMinus||LA44_0==Semicolon||(LA44_0>=D && LA44_0<=T)||(LA44_0>=RULE_NON_DECIMAL && LA44_0<=RULE_DECIMAL)||(LA44_0>=RULE_ID && LA44_0<=RULE_STRING)) ) {
+                if ( (LA44_0==LDATE_AND_TIME||LA44_0==DATE_AND_TIME||LA44_0==LTIME_OF_DAY||LA44_0==TIME_OF_DAY||LA44_0==CONTINUE||LA44_0==WSTRING||LA44_0==REPEAT||LA44_0==RETURN||LA44_0==STRING||LA44_0==DWORD||LA44_0==FALSE||(LA44_0>=LDATE && LA44_0<=LWORD)||(LA44_0>=UDINT && LA44_0<=ULINT)||(LA44_0>=USINT && LA44_0<=DINT)||LA44_0==EXIT||(LA44_0>=LINT && LA44_0<=LTOD)||(LA44_0>=REAL && LA44_0<=SINT)||(LA44_0>=THIS && LA44_0<=TRUE)||LA44_0==UINT||(LA44_0>=WORD && LA44_0<=MOD)||LA44_0==TOD||LA44_0==XOR||(LA44_0>=DT && LA44_0<=LT)||LA44_0==OR||LA44_0==LeftParenthesis||LA44_0==PlusSign||LA44_0==HyphenMinus||LA44_0==Semicolon||(LA44_0>=D && LA44_0<=T)||(LA44_0>=RULE_NON_DECIMAL && LA44_0<=RULE_DECIMAL)||(LA44_0>=RULE_ID && LA44_0<=RULE_STRING)) ) {
                     alt44=1;
                 }
 
@@ -10013,7 +10020,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
                     int alt60=2;
                     int LA60_0 = input.LA(1);
 
-                    if ( (LA60_0==LDATE_AND_TIME||LA60_0==DATE_AND_TIME||LA60_0==LTIME_OF_DAY||LA60_0==TIME_OF_DAY||LA60_0==WSTRING||LA60_0==STRING||LA60_0==DWORD||LA60_0==FALSE||(LA60_0>=LDATE && LA60_0<=ULINT)||(LA60_0>=USINT && LA60_0<=WCHAR)||(LA60_0>=BOOL && LA60_0<=BYTE)||(LA60_0>=CHAR && LA60_0<=DINT)||(LA60_0>=LINT && LA60_0<=LTOD)||(LA60_0>=REAL && LA60_0<=SINT)||(LA60_0>=THIS && LA60_0<=TRUE)||LA60_0==UINT||(LA60_0>=WORD && LA60_0<=AND)||(LA60_0>=INT && LA60_0<=NOT)||LA60_0==TOD||LA60_0==XOR||LA60_0==DT||(LA60_0>=LD && LA60_0<=LT)||LA60_0==OR||LA60_0==LeftParenthesis||LA60_0==PlusSign||LA60_0==HyphenMinus||(LA60_0>=D && LA60_0<=T)||(LA60_0>=RULE_NON_DECIMAL && LA60_0<=RULE_DECIMAL)||(LA60_0>=RULE_ID && LA60_0<=RULE_STRING)) ) {
+                    if ( (LA60_0==LDATE_AND_TIME||LA60_0==DATE_AND_TIME||LA60_0==LTIME_OF_DAY||LA60_0==TIME_OF_DAY||LA60_0==WSTRING||LA60_0==STRING||LA60_0==DWORD||LA60_0==FALSE||(LA60_0>=LDATE && LA60_0<=LWORD)||(LA60_0>=UDINT && LA60_0<=ULINT)||(LA60_0>=USINT && LA60_0<=WCHAR)||(LA60_0>=BOOL && LA60_0<=BYTE)||(LA60_0>=CHAR && LA60_0<=DINT)||(LA60_0>=LINT && LA60_0<=LTOD)||(LA60_0>=REAL && LA60_0<=SINT)||(LA60_0>=THIS && LA60_0<=TRUE)||LA60_0==UINT||(LA60_0>=WORD && LA60_0<=AND)||(LA60_0>=INT && LA60_0<=NOT)||LA60_0==TOD||LA60_0==XOR||LA60_0==DT||(LA60_0>=LD && LA60_0<=LT)||LA60_0==OR||LA60_0==LeftParenthesis||LA60_0==PlusSign||LA60_0==HyphenMinus||(LA60_0>=D && LA60_0<=T)||(LA60_0>=RULE_NON_DECIMAL && LA60_0<=RULE_DECIMAL)||(LA60_0>=RULE_ID && LA60_0<=RULE_STRING)) ) {
                         alt60=1;
                     }
                     switch (alt60) {
@@ -10569,7 +10576,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
                     int alt64=2;
                     int LA64_0 = input.LA(1);
 
-                    if ( (LA64_0==LDATE_AND_TIME||LA64_0==DATE_AND_TIME||LA64_0==LTIME_OF_DAY||LA64_0==TIME_OF_DAY||LA64_0==WSTRING||LA64_0==STRING||LA64_0==DWORD||LA64_0==FALSE||(LA64_0>=LDATE && LA64_0<=ULINT)||(LA64_0>=USINT && LA64_0<=WCHAR)||(LA64_0>=BOOL && LA64_0<=BYTE)||(LA64_0>=CHAR && LA64_0<=DINT)||(LA64_0>=LINT && LA64_0<=LTOD)||(LA64_0>=REAL && LA64_0<=SINT)||(LA64_0>=THIS && LA64_0<=TRUE)||LA64_0==UINT||(LA64_0>=WORD && LA64_0<=AND)||(LA64_0>=INT && LA64_0<=NOT)||LA64_0==TOD||LA64_0==XOR||LA64_0==DT||(LA64_0>=LD && LA64_0<=LT)||LA64_0==OR||LA64_0==LeftParenthesis||LA64_0==PlusSign||LA64_0==HyphenMinus||(LA64_0>=D && LA64_0<=T)||(LA64_0>=RULE_NON_DECIMAL && LA64_0<=RULE_DECIMAL)||(LA64_0>=RULE_ID && LA64_0<=RULE_STRING)) ) {
+                    if ( (LA64_0==LDATE_AND_TIME||LA64_0==DATE_AND_TIME||LA64_0==LTIME_OF_DAY||LA64_0==TIME_OF_DAY||LA64_0==WSTRING||LA64_0==STRING||LA64_0==DWORD||LA64_0==FALSE||(LA64_0>=LDATE && LA64_0<=LWORD)||(LA64_0>=UDINT && LA64_0<=ULINT)||(LA64_0>=USINT && LA64_0<=WCHAR)||(LA64_0>=BOOL && LA64_0<=BYTE)||(LA64_0>=CHAR && LA64_0<=DINT)||(LA64_0>=LINT && LA64_0<=LTOD)||(LA64_0>=REAL && LA64_0<=SINT)||(LA64_0>=THIS && LA64_0<=TRUE)||LA64_0==UINT||(LA64_0>=WORD && LA64_0<=AND)||(LA64_0>=INT && LA64_0<=NOT)||LA64_0==TOD||LA64_0==XOR||LA64_0==DT||(LA64_0>=LD && LA64_0<=LT)||LA64_0==OR||LA64_0==LeftParenthesis||LA64_0==PlusSign||LA64_0==HyphenMinus||(LA64_0>=D && LA64_0<=T)||(LA64_0>=RULE_NON_DECIMAL && LA64_0<=RULE_DECIMAL)||(LA64_0>=RULE_ID && LA64_0<=RULE_STRING)) ) {
                         alt64=1;
                     }
                     switch (alt64) {
@@ -11494,7 +11501,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
             int alt70=2;
             int LA70_0 = input.LA(1);
 
-            if ( (LA70_0==DWORD||LA70_0==LREAL||(LA70_0>=LWORD && LA70_0<=ULINT)||LA70_0==USINT||(LA70_0>=BOOL && LA70_0<=BYTE)||LA70_0==DINT||LA70_0==LINT||(LA70_0>=REAL && LA70_0<=SINT)||LA70_0==UINT||LA70_0==WORD||LA70_0==INT) ) {
+            if ( (LA70_0==DWORD||LA70_0==LREAL||LA70_0==LWORD||(LA70_0>=UDINT && LA70_0<=ULINT)||LA70_0==USINT||(LA70_0>=BOOL && LA70_0<=BYTE)||LA70_0==DINT||LA70_0==LINT||(LA70_0>=REAL && LA70_0<=SINT)||LA70_0==UINT||LA70_0==WORD||LA70_0==INT) ) {
                 alt70=1;
             }
             switch (alt70) {
@@ -12790,7 +12797,7 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
             if ( (LA74_0==RULE_ID) ) {
                 alt74=1;
             }
-            else if ( (LA74_0==LDATE_AND_TIME||LA74_0==DATE_AND_TIME||LA74_0==LTIME_OF_DAY||LA74_0==TIME_OF_DAY||LA74_0==WSTRING||LA74_0==STRING||LA74_0==DWORD||(LA74_0>=LDATE && LA74_0<=ULINT)||(LA74_0>=USINT && LA74_0<=WCHAR)||(LA74_0>=BOOL && LA74_0<=BYTE)||(LA74_0>=CHAR && LA74_0<=DINT)||(LA74_0>=LINT && LA74_0<=LTOD)||(LA74_0>=REAL && LA74_0<=SINT)||LA74_0==TIME||LA74_0==UINT||LA74_0==WORD||(LA74_0>=INT && LA74_0<=LDT)||LA74_0==TOD||LA74_0==DT) ) {
+            else if ( (LA74_0==LDATE_AND_TIME||LA74_0==DATE_AND_TIME||LA74_0==LTIME_OF_DAY||LA74_0==TIME_OF_DAY||LA74_0==WSTRING||LA74_0==STRING||LA74_0==DWORD||(LA74_0>=LDATE && LA74_0<=LWORD)||(LA74_0>=UDINT && LA74_0<=ULINT)||(LA74_0>=USINT && LA74_0<=WCHAR)||(LA74_0>=BOOL && LA74_0<=BYTE)||(LA74_0>=CHAR && LA74_0<=DINT)||(LA74_0>=LINT && LA74_0<=LTOD)||(LA74_0>=REAL && LA74_0<=SINT)||LA74_0==TIME||LA74_0==UINT||LA74_0==WORD||(LA74_0>=INT && LA74_0<=LDT)||LA74_0==TOD||LA74_0==DT) ) {
                 alt74=2;
             }
             else {
@@ -17023,13 +17030,13 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
     protected DFA61 dfa61 = new DFA61(this);
     protected DFA65 dfa65 = new DFA65(this);
     static final String dfa_1s = "\16\uffff";
-    static final String dfa_2s = "\2\10\2\uffff\11\153\1\uffff";
-    static final String dfa_3s = "\2\u00ad\2\uffff\11\u009d\1\uffff";
+    static final String dfa_2s = "\2\10\2\uffff\11\162\1\uffff";
+    static final String dfa_3s = "\2\u00b4\2\uffff\11\u00a4\1\uffff";
     static final String dfa_4s = "\2\uffff\1\1\1\2\11\uffff\1\3";
     static final String dfa_5s = "\16\uffff}>";
     static final String[] dfa_6s = {
-            "\1\2\1\uffff\1\2\5\uffff\1\2\2\uffff\1\2\46\uffff\1\2\10\uffff\1\2\3\uffff\1\2\1\uffff\1\2\1\uffff\6\2\1\uffff\2\2\1\uffff\2\2\1\uffff\3\2\2\uffff\2\2\1\uffff\2\2\2\uffff\3\2\1\uffff\1\2\1\uffff\2\2\1\uffff\4\2\1\uffff\1\2\1\uffff\1\2\17\uffff\1\2\1\uffff\2\2\2\uffff\1\2\3\uffff\1\1\2\uffff\1\2\1\uffff\1\2\7\uffff\2\2\1\3\2\uffff\3\2\11\uffff\2\2",
-            "\1\2\1\uffff\1\2\5\uffff\1\2\2\uffff\1\2\46\uffff\1\2\10\uffff\1\2\3\uffff\1\2\1\uffff\1\2\1\uffff\6\2\1\uffff\2\2\1\uffff\2\2\1\uffff\3\2\2\uffff\2\2\1\uffff\2\2\2\uffff\3\2\1\uffff\1\2\1\uffff\1\2\1\6\1\uffff\2\2\1\11\1\2\1\uffff\1\2\1\uffff\1\10\17\uffff\1\13\1\uffff\1\14\1\5\2\uffff\1\7\3\uffff\1\2\2\uffff\1\2\1\uffff\1\2\7\uffff\1\12\1\2\3\uffff\3\2\11\uffff\1\4\1\2",
+            "\1\2\1\uffff\1\2\5\uffff\1\2\2\uffff\1\2\50\uffff\1\2\11\uffff\1\2\3\uffff\1\2\1\uffff\1\2\1\uffff\4\2\1\uffff\2\2\2\uffff\2\2\1\uffff\2\2\1\uffff\3\2\3\uffff\2\2\1\uffff\2\2\3\uffff\3\2\1\uffff\1\2\1\uffff\2\2\1\uffff\4\2\1\uffff\1\2\1\uffff\1\2\17\uffff\1\2\1\uffff\2\2\2\uffff\1\2\3\uffff\1\1\2\uffff\1\2\1\uffff\1\2\7\uffff\2\2\1\3\2\uffff\3\2\11\uffff\2\2",
+            "\1\2\1\uffff\1\2\5\uffff\1\2\2\uffff\1\2\50\uffff\1\2\11\uffff\1\2\3\uffff\1\2\1\uffff\1\2\1\uffff\4\2\1\uffff\2\2\2\uffff\2\2\1\uffff\2\2\1\uffff\3\2\3\uffff\2\2\1\uffff\2\2\3\uffff\3\2\1\uffff\1\2\1\uffff\1\2\1\6\1\uffff\2\2\1\11\1\2\1\uffff\1\2\1\uffff\1\10\17\uffff\1\13\1\uffff\1\14\1\5\2\uffff\1\7\3\uffff\1\2\2\uffff\1\2\1\uffff\1\2\7\uffff\1\12\1\2\3\uffff\3\2\11\uffff\1\4\1\2",
             "",
             "",
             "\1\2\3\uffff\1\2\4\uffff\1\2\5\uffff\2\2\1\15\2\2\1\uffff\1\2\11\uffff\1\2\2\uffff\5\2\1\uffff\3\2\2\uffff\3\2\2\uffff\1\2",
@@ -17070,11 +17077,11 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
     }
     static final String dfa_7s = "\75\uffff";
     static final String dfa_8s = "\1\10\5\uffff\62\0\5\uffff";
-    static final String dfa_9s = "\1\u00ad\5\uffff\62\0\5\uffff";
+    static final String dfa_9s = "\1\u00b4\5\uffff\62\0\5\uffff";
     static final String dfa_10s = "\1\uffff\1\1\1\2\1\3\1\4\1\5\62\uffff\1\10\1\11\1\12\1\6\1\7";
     static final String dfa_11s = "\6\uffff\1\0\1\1\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\11\1\12\1\13\1\14\1\15\1\16\1\17\1\20\1\21\1\22\1\23\1\24\1\25\1\26\1\27\1\30\1\31\1\32\1\33\1\34\1\35\1\36\1\37\1\40\1\41\1\42\1\43\1\44\1\45\1\46\1\47\1\50\1\51\1\52\1\53\1\54\1\55\1\56\1\57\1\60\1\61\5\uffff}>";
     static final String[] dfa_12s = {
-            "\1\61\1\uffff\1\60\5\uffff\1\55\2\uffff\1\54\25\uffff\1\71\20\uffff\1\64\4\uffff\1\5\1\uffff\1\70\1\uffff\1\63\3\uffff\1\24\1\uffff\1\41\1\uffff\1\50\1\37\1\52\1\25\1\34\1\35\1\uffff\1\32\1\66\1\4\1\21\1\22\1\2\1\65\1\47\1\30\1\uffff\1\72\1\31\1\57\1\uffff\1\36\1\26\2\uffff\1\20\1\51\1\40\1\uffff\1\33\1\uffff\1\23\1\11\1\3\1\27\1\62\1\14\2\uffff\1\56\1\uffff\1\13\17\uffff\1\16\1\1\1\17\1\10\2\uffff\1\12\3\uffff\1\6\2\uffff\1\42\1\uffff\1\43\7\uffff\1\15\1\53\3\uffff\1\46\1\44\1\45\11\uffff\1\7\1\67",
+            "\1\61\1\uffff\1\60\5\uffff\1\55\2\uffff\1\54\26\uffff\1\71\21\uffff\1\64\5\uffff\1\5\1\uffff\1\70\1\uffff\1\63\3\uffff\1\24\1\uffff\1\41\1\uffff\1\50\1\37\1\52\1\25\1\uffff\1\34\1\35\2\uffff\1\32\1\66\1\4\1\21\1\22\1\2\1\65\1\47\1\30\1\uffff\1\72\1\uffff\1\31\1\57\1\uffff\1\36\1\26\3\uffff\1\20\1\51\1\40\1\uffff\1\33\1\uffff\1\23\1\11\1\3\1\27\1\62\1\14\2\uffff\1\56\1\uffff\1\13\17\uffff\1\16\1\1\1\17\1\10\2\uffff\1\12\3\uffff\1\6\2\uffff\1\42\1\uffff\1\43\7\uffff\1\15\1\53\3\uffff\1\46\1\44\1\45\11\uffff\1\7\1\67",
             "",
             "",
             "",
@@ -17925,11 +17932,11 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
     static final String dfa_13s = "\100\uffff";
     static final String dfa_14s = "\1\1\77\uffff";
     static final String dfa_15s = "\1\10\2\uffff\62\0\13\uffff";
-    static final String dfa_16s = "\1\u00ad\2\uffff\62\0\13\uffff";
+    static final String dfa_16s = "\1\u00b4\2\uffff\62\0\13\uffff";
     static final String dfa_17s = "\1\uffff\1\2\65\uffff\11\1";
     static final String dfa_18s = "\1\0\2\uffff\1\1\1\2\1\3\1\4\1\5\1\6\1\7\1\10\1\11\1\12\1\13\1\14\1\15\1\16\1\17\1\20\1\21\1\22\1\23\1\24\1\25\1\26\1\27\1\30\1\31\1\32\1\33\1\34\1\35\1\36\1\37\1\40\1\41\1\42\1\43\1\44\1\45\1\46\1\47\1\50\1\51\1\52\1\53\1\54\1\55\1\56\1\57\1\60\1\61\1\62\13\uffff}>";
     static final String[] dfa_19s = {
-            "\1\56\1\uffff\1\55\5\uffff\1\52\2\uffff\1\51\25\uffff\1\75\1\1\17\uffff\1\61\4\uffff\1\73\1\uffff\1\74\1\uffff\1\60\3\uffff\1\21\1\uffff\1\36\1\uffff\1\45\1\34\1\47\1\22\1\31\1\32\1\uffff\1\27\1\63\1\72\1\16\1\17\1\70\1\62\1\44\1\25\1\1\1\76\1\26\1\54\1\uffff\1\33\1\23\2\uffff\1\15\1\46\1\35\1\uffff\1\30\1\uffff\1\20\1\6\1\71\1\24\1\57\1\11\1\1\1\uffff\1\53\1\uffff\1\10\17\uffff\1\13\1\67\1\14\1\5\2\uffff\1\7\3\uffff\1\3\2\uffff\1\37\1\uffff\1\40\3\uffff\1\77\3\uffff\1\12\1\50\3\uffff\1\43\1\41\1\42\11\uffff\1\4\1\64",
+            "\1\56\1\uffff\1\55\5\uffff\1\52\2\uffff\1\51\26\uffff\1\75\1\1\20\uffff\1\61\5\uffff\1\73\1\uffff\1\74\1\uffff\1\60\3\uffff\1\21\1\uffff\1\36\1\uffff\1\45\1\34\1\47\1\22\1\uffff\1\31\1\32\2\uffff\1\27\1\63\1\72\1\16\1\17\1\70\1\62\1\44\1\25\1\1\1\76\1\uffff\1\26\1\54\1\uffff\1\33\1\23\3\uffff\1\15\1\46\1\35\1\uffff\1\30\1\uffff\1\20\1\6\1\71\1\24\1\57\1\11\1\1\1\uffff\1\53\1\uffff\1\10\17\uffff\1\13\1\67\1\14\1\5\2\uffff\1\7\3\uffff\1\3\2\uffff\1\37\1\uffff\1\40\3\uffff\1\77\3\uffff\1\12\1\50\3\uffff\1\43\1\41\1\42\11\uffff\1\4\1\64",
             "",
             "",
             "\1\uffff",
@@ -18914,11 +18921,11 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
     }
     static final String dfa_20s = "\64\uffff";
     static final String dfa_21s = "\1\10\34\uffff\2\0\25\uffff";
-    static final String dfa_22s = "\1\u00ad\34\uffff\2\0\25\uffff";
+    static final String dfa_22s = "\1\u00b4\34\uffff\2\0\25\uffff";
     static final String dfa_23s = "\1\uffff\34\1\2\uffff\24\1\1\2";
     static final String dfa_24s = "\1\0\34\uffff\1\2\1\1\25\uffff}>";
     static final String[] dfa_25s = {
-            "\1\54\1\uffff\1\53\5\uffff\1\50\2\uffff\1\47\46\uffff\1\57\10\uffff\1\56\3\uffff\1\17\1\uffff\1\34\1\uffff\1\43\1\32\1\45\1\20\1\27\1\30\1\uffff\1\25\1\61\1\uffff\1\14\1\15\1\uffff\1\60\1\42\1\23\2\uffff\1\24\1\52\1\uffff\1\31\1\21\2\uffff\1\13\1\44\1\33\1\uffff\1\26\1\uffff\1\16\1\4\1\uffff\1\22\1\55\1\7\1\63\1\uffff\1\51\1\uffff\1\6\17\uffff\1\11\1\uffff\1\12\1\3\2\uffff\1\5\3\uffff\1\1\2\uffff\1\35\1\uffff\1\36\7\uffff\1\10\1\46\3\uffff\1\41\1\37\1\40\11\uffff\1\2\1\62",
+            "\1\54\1\uffff\1\53\5\uffff\1\50\2\uffff\1\47\50\uffff\1\57\11\uffff\1\56\3\uffff\1\17\1\uffff\1\34\1\uffff\1\43\1\32\1\45\1\20\1\uffff\1\27\1\30\2\uffff\1\25\1\61\1\uffff\1\14\1\15\1\uffff\1\60\1\42\1\23\3\uffff\1\24\1\52\1\uffff\1\31\1\21\3\uffff\1\13\1\44\1\33\1\uffff\1\26\1\uffff\1\16\1\4\1\uffff\1\22\1\55\1\7\1\63\1\uffff\1\51\1\uffff\1\6\17\uffff\1\11\1\uffff\1\12\1\3\2\uffff\1\5\3\uffff\1\1\2\uffff\1\35\1\uffff\1\36\7\uffff\1\10\1\46\3\uffff\1\41\1\37\1\40\11\uffff\1\2\1\62",
             "",
             "",
             "",
@@ -19152,12 +19159,12 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
     }
     static final String dfa_26s = "\43\uffff";
     static final String dfa_27s = "\1\2\42\uffff";
-    static final String dfa_28s = "\1\25\1\0\41\uffff";
-    static final String dfa_29s = "\1\u009e\1\0\41\uffff";
+    static final String dfa_28s = "\1\26\1\0\41\uffff";
+    static final String dfa_29s = "\1\u00a5\1\0\41\uffff";
     static final String dfa_30s = "\2\uffff\1\2\37\uffff\1\1";
     static final String dfa_31s = "\1\uffff\1\0\41\uffff}>";
     static final String[] dfa_32s = {
-            "\1\2\115\uffff\1\2\7\uffff\1\2\3\uffff\1\2\4\uffff\1\2\5\uffff\5\2\1\uffff\1\2\1\uffff\2\2\4\uffff\1\2\1\uffff\2\2\1\uffff\1\2\1\1\14\2\2\uffff\2\2",
+            "\1\2\123\uffff\1\2\7\uffff\1\2\3\uffff\1\2\4\uffff\1\2\5\uffff\5\2\1\uffff\1\2\1\uffff\2\2\4\uffff\1\2\1\uffff\2\2\1\uffff\1\2\1\1\14\2\2\uffff\2\2",
             "\1\uffff",
             "",
             "",
@@ -19293,69 +19300,69 @@ public class InternalSTFunctionParser extends AbstractInternalAntlrParser {
 
     public static final BitSet FOLLOW_1 = new BitSet(new long[]{0x0000000000000000L});
     public static final BitSet FOLLOW_2 = new BitSet(new long[]{0x0000000000000002L});
-    public static final BitSet FOLLOW_3 = new BitSet(new long[]{0x0000200000000002L});
-    public static final BitSet FOLLOW_4 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000100000000000L});
-    public static final BitSet FOLLOW_5 = new BitSet(new long[]{0x84080240C0092500L,0x001CFD7377FDFA8AL,0x0000300718CA44F0L});
-    public static final BitSet FOLLOW_6 = new BitSet(new long[]{0x0400000000090500L,0x00046523676DF888L,0x0000100000000010L});
-    public static final BitSet FOLLOW_7 = new BitSet(new long[]{0x84080240C0092500L,0x001CFD7377FDFA8AL,0x00003007188A44F0L});
-    public static final BitSet FOLLOW_8 = new BitSet(new long[]{0x8400020000092500L,0x0014FD7377FDFA8AL,0x00003007188A44F0L});
-    public static final BitSet FOLLOW_9 = new BitSet(new long[]{0x0020010000000000L,0x0000000000000000L,0x0000100000000000L});
-    public static final BitSet FOLLOW_10 = new BitSet(new long[]{0x0020000000000000L,0x0000000000000000L,0x0000100000000000L});
-    public static final BitSet FOLLOW_11 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000400002L});
-    public static final BitSet FOLLOW_12 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000400000L});
-    public static final BitSet FOLLOW_13 = new BitSet(new long[]{0x0400000000090500L,0x00046523676DF8A8L,0x0000100000000010L});
-    public static final BitSet FOLLOW_14 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000020000000L});
-    public static final BitSet FOLLOW_15 = new BitSet(new long[]{0x0400000000090500L,0x0015ED73676DFA88L,0x00003007180A44D0L});
-    public static final BitSet FOLLOW_16 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000040040000L});
-    public static final BitSet FOLLOW_17 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000100L});
-    public static final BitSet FOLLOW_18 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000010000L});
-    public static final BitSet FOLLOW_19 = new BitSet(new long[]{0x0000000000000000L,0x1000000000000000L,0x0000000020800000L});
-    public static final BitSet FOLLOW_20 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000040000000L});
-    public static final BitSet FOLLOW_21 = new BitSet(new long[]{0x0000000000000000L,0x1000000000000000L,0x0000000000800000L});
-    public static final BitSet FOLLOW_22 = new BitSet(new long[]{0x0400000000090500L,0x0015ED73676DFA88L,0x00003007380A44D0L});
-    public static final BitSet FOLLOW_23 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000800000L});
-    public static final BitSet FOLLOW_24 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000004000L});
-    public static final BitSet FOLLOW_25 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000048000L});
-    public static final BitSet FOLLOW_26 = new BitSet(new long[]{0x0000000000000000L,0x0010880000000000L,0x00001000080004D0L});
-    public static final BitSet FOLLOW_27 = new BitSet(new long[]{0x0000000000000000L,0x1000000000000000L});
-    public static final BitSet FOLLOW_28 = new BitSet(new long[]{0x0000000000000000L,0x8000000000000000L});
-    public static final BitSet FOLLOW_29 = new BitSet(new long[]{0x0000000000000000L,0x0000000800000000L});
-    public static final BitSet FOLLOW_30 = new BitSet(new long[]{0x9400020000090500L,0x0014FD737FFDFB8AL,0x00003007188A44F0L});
-    public static final BitSet FOLLOW_31 = new BitSet(new long[]{0x1000000000000000L,0x0000000008000100L});
-    public static final BitSet FOLLOW_32 = new BitSet(new long[]{0x1000000000000000L});
-    public static final BitSet FOLLOW_33 = new BitSet(new long[]{0x8400020000090502L,0x0014FD7377FDFA8AL,0x00003007188A44F0L});
-    public static final BitSet FOLLOW_34 = new BitSet(new long[]{0x0400040000090500L,0x0015ED736F6DFA88L,0x00003007180A44D0L});
-    public static final BitSet FOLLOW_35 = new BitSet(new long[]{0x0000040000000000L});
-    public static final BitSet FOLLOW_36 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000440000L});
-    public static final BitSet FOLLOW_37 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000800L});
-    public static final BitSet FOLLOW_38 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x000000000000000CL});
-    public static final BitSet FOLLOW_39 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000008L});
-    public static final BitSet FOLLOW_40 = new BitSet(new long[]{0x8410020000090500L,0x0014FD7377FDFA8AL,0x00003007188A44F0L});
-    public static final BitSet FOLLOW_41 = new BitSet(new long[]{0x8400020200090500L,0x0014FD7377FDFA8AL,0x00003007188A44F0L});
-    public static final BitSet FOLLOW_42 = new BitSet(new long[]{0x8400020000090500L,0x0014FD7377FFFA8AL,0x00003007188A44F0L});
-    public static final BitSet FOLLOW_43 = new BitSet(new long[]{0x0000000000200000L});
-    public static final BitSet FOLLOW_44 = new BitSet(new long[]{0x0000000000000002L,0x0800000000000000L});
-    public static final BitSet FOLLOW_45 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000000400L});
-    public static final BitSet FOLLOW_46 = new BitSet(new long[]{0x0000000000000002L,0x0010000000000000L});
-    public static final BitSet FOLLOW_47 = new BitSet(new long[]{0x0000000000000002L,0x0000080000000000L,0x0000000000002000L});
-    public static final BitSet FOLLOW_48 = new BitSet(new long[]{0x0000000000000002L,0x4000000000000000L,0x0000000002000000L});
-    public static final BitSet FOLLOW_49 = new BitSet(new long[]{0x0000000000000002L,0x2000000000000000L,0x0000000005000001L});
-    public static final BitSet FOLLOW_50 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x00000000000A0000L});
-    public static final BitSet FOLLOW_51 = new BitSet(new long[]{0x0000000000000002L,0x0000800000000000L,0x0000000000210000L});
-    public static final BitSet FOLLOW_52 = new BitSet(new long[]{0x0000000000000002L,0x0400000000000000L});
-    public static final BitSet FOLLOW_53 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000020100000L});
-    public static final BitSet FOLLOW_54 = new BitSet(new long[]{0x0000000000000000L,0x03F0880000000000L,0x00001002080044D0L});
-    public static final BitSet FOLLOW_55 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000008000L});
-    public static final BitSet FOLLOW_56 = new BitSet(new long[]{0x0400000000090500L,0x0015ED73676DFA88L,0x00003007180AC4D0L});
-    public static final BitSet FOLLOW_57 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000200004000L});
-    public static final BitSet FOLLOW_58 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000001000L});
-    public static final BitSet FOLLOW_59 = new BitSet(new long[]{0x0000000000000000L,0x000025432465D280L,0x00000007000A0000L});
-    public static final BitSet FOLLOW_60 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000200000000L});
-    public static final BitSet FOLLOW_61 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x00000010000A0000L});
-    public static final BitSet FOLLOW_62 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000200000000000L});
-    public static final BitSet FOLLOW_63 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000600000000L});
-    public static final BitSet FOLLOW_64 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000100000L});
-    public static final BitSet FOLLOW_65 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000001000000000L});
-    public static final BitSet FOLLOW_66 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000080000L});
+    public static final BitSet FOLLOW_3 = new BitSet(new long[]{0x0000400000000002L});
+    public static final BitSet FOLLOW_4 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0008000000000000L});
+    public static final BitSet FOLLOW_5 = new BitSet(new long[]{0x1010048180092500L,0x0E7EB8DAFF9BD454L,0x0018038C65227800L});
+    public static final BitSet FOLLOW_6 = new BitSet(new long[]{0x1000000000090500L,0x023290D8ED9BC440L,0x0008000000000800L});
+    public static final BitSet FOLLOW_7 = new BitSet(new long[]{0x1010048180092500L,0x0E7EB8DAFF9BD454L,0x0018038C45227800L});
+    public static final BitSet FOLLOW_8 = new BitSet(new long[]{0x1000040000092500L,0x0A7EB8DAFF9BD454L,0x0018038C45227800L});
+    public static final BitSet FOLLOW_9 = new BitSet(new long[]{0x0040020000000000L,0x0000000000000000L,0x0008000000000000L});
+    public static final BitSet FOLLOW_10 = new BitSet(new long[]{0x0040000000000000L,0x0000000000000000L,0x0008000000000000L});
+    public static final BitSet FOLLOW_11 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000020000100L});
+    public static final BitSet FOLLOW_12 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000020000000L});
+    public static final BitSet FOLLOW_13 = new BitSet(new long[]{0x1000000000090500L,0x023290D8ED9BC540L,0x0008000000000800L});
+    public static final BitSet FOLLOW_14 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000001000000000L});
+    public static final BitSet FOLLOW_15 = new BitSet(new long[]{0x1000000000090500L,0x0AF6B8D8ED9BD440L,0x0018038C05226800L});
+    public static final BitSet FOLLOW_16 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000002002000000L});
+    public static final BitSet FOLLOW_17 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000008000L});
+    public static final BitSet FOLLOW_18 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000800000L});
+    public static final BitSet FOLLOW_19 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000001040000008L});
+    public static final BitSet FOLLOW_20 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000002000000000L});
+    public static final BitSet FOLLOW_21 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000040000008L});
+    public static final BitSet FOLLOW_22 = new BitSet(new long[]{0x1000000000090500L,0x0AF6B8D8ED9BD440L,0x0018039C05226800L});
+    public static final BitSet FOLLOW_23 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000040000000L});
+    public static final BitSet FOLLOW_24 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000200000L});
+    public static final BitSet FOLLOW_25 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000002400000L});
+    public static final BitSet FOLLOW_26 = new BitSet(new long[]{0x0000000000000000L,0x0844000000000000L,0x0008000400026800L});
+    public static final BitSet FOLLOW_27 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000008L});
+    public static final BitSet FOLLOW_28 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000040L});
+    public static final BitSet FOLLOW_29 = new BitSet(new long[]{0x0000000000000000L,0x0000040000000000L});
+    public static final BitSet FOLLOW_30 = new BitSet(new long[]{0x5000040000090500L,0x0A7EB8DBFF9BDC54L,0x0018038C45227800L});
+    public static final BitSet FOLLOW_31 = new BitSet(new long[]{0x4000000000000000L,0x0000000100000800L});
+    public static final BitSet FOLLOW_32 = new BitSet(new long[]{0x4000000000000000L});
+    public static final BitSet FOLLOW_33 = new BitSet(new long[]{0x1000040000090502L,0x0A7EB8DAFF9BD454L,0x0018038C45227800L});
+    public static final BitSet FOLLOW_34 = new BitSet(new long[]{0x1000080000090500L,0x0AF6B8D9ED9BD440L,0x0018038C05226800L});
+    public static final BitSet FOLLOW_35 = new BitSet(new long[]{0x0000080000000000L});
+    public static final BitSet FOLLOW_36 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000022000000L});
+    public static final BitSet FOLLOW_37 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000040000L});
+    public static final BitSet FOLLOW_38 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000600L});
+    public static final BitSet FOLLOW_39 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000000400L});
+    public static final BitSet FOLLOW_40 = new BitSet(new long[]{0x1020040000090500L,0x0A7EB8DAFF9BD454L,0x0018038C45227800L});
+    public static final BitSet FOLLOW_41 = new BitSet(new long[]{0x1000040400090500L,0x0A7EB8DAFF9BD454L,0x0018038C45227800L});
+    public static final BitSet FOLLOW_42 = new BitSet(new long[]{0x1000040000090500L,0x0A7EB8DAFFBBD454L,0x0018038C45227800L});
+    public static final BitSet FOLLOW_43 = new BitSet(new long[]{0x0000000000400000L});
+    public static final BitSet FOLLOW_44 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000000004L});
+    public static final BitSet FOLLOW_45 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000020000L});
+    public static final BitSet FOLLOW_46 = new BitSet(new long[]{0x0000000000000002L,0x0800000000000000L});
+    public static final BitSet FOLLOW_47 = new BitSet(new long[]{0x0000000000000002L,0x0004000000000000L,0x0000000000100000L});
+    public static final BitSet FOLLOW_48 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000100000020L});
+    public static final BitSet FOLLOW_49 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000280000090L});
+    public static final BitSet FOLLOW_50 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000005000000L});
+    public static final BitSet FOLLOW_51 = new BitSet(new long[]{0x0000000000000002L,0x0040000000000000L,0x0000000010800000L});
+    public static final BitSet FOLLOW_52 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000000000002L});
+    public static final BitSet FOLLOW_53 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000001008000000L});
+    public static final BitSet FOLLOW_54 = new BitSet(new long[]{0x0000000000000000L,0xF844000000000000L,0x0008010400226801L});
+    public static final BitSet FOLLOW_55 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000400000L});
+    public static final BitSet FOLLOW_56 = new BitSet(new long[]{0x1000000000090500L,0x0AF6B8D8ED9BD440L,0x0018038C05626800L});
+    public static final BitSet FOLLOW_57 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000010000200000L});
+    public static final BitSet FOLLOW_58 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000000080000L});
+    public static final BitSet FOLLOW_59 = new BitSet(new long[]{0x0000000000000000L,0x0012A0C88C9A9400L,0x0000038005000000L});
+    public static final BitSet FOLLOW_60 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000010000000000L});
+    public static final BitSet FOLLOW_61 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000080005000000L});
+    public static final BitSet FOLLOW_62 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0010000000000000L});
+    public static final BitSet FOLLOW_63 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000030000000000L});
+    public static final BitSet FOLLOW_64 = new BitSet(new long[]{0x0000000000000002L,0x0000000000000000L,0x0000000008000000L});
+    public static final BitSet FOLLOW_65 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000080000000000L});
+    public static final BitSet FOLLOW_66 = new BitSet(new long[]{0x0000000000000000L,0x0000000000000000L,0x0000000004000000L});
 
 }
