@@ -34,6 +34,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.application.wizards.StructChangedSaveForAll;
 import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
@@ -66,10 +67,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IEditorReference;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.EditorPart;
@@ -85,6 +88,9 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	private Composite errorComposite;
 	private boolean importFailed;
 	private boolean outsideWorkspace;
+	private static final int DEFAULT_BUTTON_INDEX = 0; // This would be the "Save" button
+	private static final int SAVE_AS_BUTTON_INDEX = 1;
+	private static final int CANCEL_BUTTON_INDEX = 2;
 
 	private ActionRegistry actionRegistry;
 	private final List<String> selectionActions = new ArrayList<>();
@@ -92,6 +98,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	private final List<String> propertyActions = new ArrayList<>();
 
 	private DataTypeEntry dataTypeEntry;
+	private StructChangedSaveForAll structSaveDialog;
 
 	private final Adapter adapter = new AdapterImpl() {
 
@@ -148,11 +155,35 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	@Override
 	public void doSave(final IProgressMonitor monitor) {
 		removeListenerFromDataTypeObj();
-		AbstractTypeExporter.saveType(dataTypeEntry);
-		addListenerToDataTypeObj();
+		loadAllOpenEditors();
+		createSaveDialog();
+	}
 
-		commandStack.markSaveLocation();
-		firePropertyChange(IEditorPart.PROP_DIRTY);
+	private void createSaveDialog() {
+		final String[] labels = { Messages.StructAlteringButton_Save, Messages.StructAlteringButton_SaveAs,
+				Messages.StructAlteringButton_Cancel };
+
+		structSaveDialog = new StructChangedSaveForAll(null, Messages.StructViewingComposite_Headline, null, "",
+				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, dataTypeEntry);
+
+		// Depending on the button clicked:
+		switch (structSaveDialog.open()) {
+		case DEFAULT_BUTTON_INDEX:
+			AbstractTypeExporter.saveType(dataTypeEntry);
+			addListenerToDataTypeObj();
+			commandStack.markSaveLocation();
+			firePropertyChange(IEditorPart.PROP_DIRTY);
+			break;
+		case SAVE_AS_BUTTON_INDEX:
+			doSaveAs();
+			break;
+		case CANCEL_BUTTON_INDEX:
+			MessageDialog.openInformation(null, Messages.StructViewingComposite_Headline,
+					Messages.WarningDialog_StructNotSaved);
+			break;
+		default:
+			break;
+		}
 	}
 
 	@Override
@@ -160,6 +191,14 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		if (dataTypeEntry.getTypeEditable() instanceof StructuredType) {
 			final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
 			new WizardDialog(null, new SaveAsStructTypeWizard(structuredType, this)).open();
+		}
+	}
+
+	private static void loadAllOpenEditors() {
+		final IEditorReference[] openEditors = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getEditorReferences();
+		for (final IEditorReference iEditorReference : openEditors) {
+			iEditorReference.getEditor(true);
 		}
 	}
 
@@ -347,7 +386,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 			addListenerToDataTypeObj();
 		} catch (final PartInitException e) {
 			FordiacLogHelper
-					.logError("Error during refreshing struct table after file change detection: " + e.toString(), e); //$NON-NLS-1$
+			.logError("Error during refreshing struct table after file change detection: " + e.toString(), e); //$NON-NLS-1$
 		}
 
 	}

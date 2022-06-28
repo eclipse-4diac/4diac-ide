@@ -224,7 +224,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		return eobj.eContainer().eContainer();
 	}
 
-	private static String hierarchicalName(final Object element) {
+	public static String hierarchicalName(final Object element) {
 		if (element instanceof FBNetworkElement) {
 			return FBNetworkHelper.getFullHierarchicalName((FBNetworkElement) element);
 		}
