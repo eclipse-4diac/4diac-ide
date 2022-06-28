@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.model.commands.create;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
@@ -61,8 +62,12 @@ public class CreateInterfaceElementCommand extends Command implements CreationCo
 		this.dataType = dataType;
 		this.index = index;
 		this.targetInterfaceList = interfaceList;
-		this.name = (null != name) ? name : getNameProposal(dataType, isInput);
+		this.name = ((null != name) && isValidName(name)) ? name : getNameProposal(dataType, isInput);
 		this.value = ""; //$NON-NLS-1$
+	}
+
+	private boolean isValidName(final String name) {
+		return !IdentifierVerifier.verifyIdentifier(name).isPresent();
 	}
 
 	public CreateInterfaceElementCommand(final DataType dataType, final InterfaceList interfaceList,
@@ -114,14 +119,12 @@ public class CreateInterfaceElementCommand extends Command implements CreationCo
 			} else {
 				this.interfaceElementList = interfaceList.getInputVars();
 			}
+		} else if (dataType instanceof EventType) {
+			this.interfaceElementList = interfaceList.getEventOutputs();
+		} else if (dataType instanceof AdapterType) {
+			this.interfaceElementList = interfaceList.getPlugs();
 		} else {
-			if (dataType instanceof EventType) {
-				this.interfaceElementList = interfaceList.getEventOutputs();
-			} else if (dataType instanceof AdapterType) {
-				this.interfaceElementList = interfaceList.getPlugs();
-			} else {
-				this.interfaceElementList = interfaceList.getOutputVars();
-			}
+			this.interfaceElementList = interfaceList.getOutputVars();
 		}
 	}
 

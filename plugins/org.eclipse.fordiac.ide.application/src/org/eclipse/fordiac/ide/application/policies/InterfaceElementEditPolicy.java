@@ -12,7 +12,7 @@
  * Contributors:
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Daniel Lindhuber
+ *   Daniel Lindhuber, Bianca Wiesmayr
  *     - connections across subapp borders
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.policies;
@@ -45,7 +45,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 		final FBNetwork newParent = checkConnectionParent(command.getSource(), command.getDestination(),
 				command.getParent());
-		if (newParent != null) {
+		if (connectingWithinFbNetwork(command, newParent)) {
 			command.setParent(newParent);
 			return command;
 		}
@@ -54,6 +54,24 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 			return processBorderCrossingConnection(command.getSource(), command.getDestination());
 		}
 		return null;
+	}
+
+	private boolean connectingWithinFbNetwork(AbstractConnectionCreateCommand command, FBNetwork newParent) {
+		if (newParent == null) {
+			return false;
+		}
+		if ((command.getSource().getFBNetworkElement() instanceof SubApp) && (command.getDestination().getFBNetworkElement() instanceof SubApp)) {
+			// make sure that connection from nested subapp input to parent subapp output is handled correctly
+			SubApp source = (SubApp) command.getSource().getFBNetworkElement();
+			SubApp destination = (SubApp) command.getDestination().getFBNetworkElement();
+			if ((newParent == source.getSubAppNetwork()) && (source.getSubAppNetwork() == destination.getFbNetwork())) {
+				return true;
+			}
+			if ((newParent == destination.getSubAppNetwork()) && (destination.getSubAppNetwork()  == source.getFbNetwork())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private static boolean canExistConnection(final AbstractConnectionCreateCommand command) {
@@ -75,31 +93,76 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 			final IInterfaceElement destination) {
 		final List<FBNetwork> sourceNetworks = buildHierarchy(source);
 		final List<FBNetwork> destinationNetworks = buildHierarchy(destination);
-
-		final FBNetwork match = findMostSpecificMatch(sourceNetworks, destinationNetworks);
-
-		return new CreateSubAppCrossingConnectionsCommand(source, destination, sourceNetworks, destinationNetworks, match);
+		final FBNetwork match = findMostSpecificMatch(source, destination, sourceNetworks, destinationNetworks);
+		if (isSwapNeeded(source, destination, sourceNetworks, destinationNetworks, match)) {
+			return new CreateSubAppCrossingConnectionsCommand(destination, source, destinationNetworks, sourceNetworks,
+					match);
+		}
+		return new CreateSubAppCrossingConnectionsCommand(source, destination, sourceNetworks, destinationNetworks,
+				match);
 	}
 
-	private static FBNetwork findMostSpecificMatch(final List<FBNetwork> sourceNetworks,
-			final List<FBNetwork> destinationNetworks) {
+	private static boolean isSwapNeeded(IInterfaceElement source, IInterfaceElement destination,
+			List<FBNetwork> sourceNetworks, List<FBNetwork> destinationNetworks, FBNetwork match) {
+		boolean sourceIsInput = isInputElement(source, sourceNetworks, match);
+		boolean destinationIsInput = isInputElement(destination, destinationNetworks, match);
+		return sourceIsInput && !destinationIsInput;
+	}
+
+	private static boolean isInputElement(IInterfaceElement iel, List<FBNetwork> networkList, FBNetwork match) {
+		if (iel.getFBNetworkElement() instanceof SubApp) {
+			SubApp subapp = (SubApp) iel.getFBNetworkElement();
+			FBNetwork search = subapp.getSubAppNetwork();
+			if (match == search) {
+				return !iel.isIsInput();
+			}
+		}
+		return iel.isIsInput();
+	}
+
+	private static FBNetwork findMostSpecificMatch(final IInterfaceElement source, IInterfaceElement destination,
+			final List<FBNetwork> sourceNetworks, final List<FBNetwork> destinationNetworks) {
+		FBNetwork sourceSubAppNetwork = addSubAppNetworkToList(source, sourceNetworks);
+		FBNetwork destSubAppNetwork = addSubAppNetworkToList(destination, destinationNetworks);
+
 		int sourceIndex = sourceNetworks.size() - 1;
 		int destinationIndex = destinationNetworks.size() - 1;
 		FBNetwork match = sourceNetworks.get(0);
 
 		// breaks when the networks don't match anymore
-		while (sourceIndex >= 0 && destinationIndex >= 0
-				&& sourceNetworks.get(sourceIndex) == destinationNetworks.get(destinationIndex)) {
+		while ((sourceIndex >= 0) && (destinationIndex >= 0)
+				&& (sourceNetworks.get(sourceIndex) == destinationNetworks.get(destinationIndex))) {
 			match = sourceNetworks.get(sourceIndex);
 			sourceIndex--;
 			destinationIndex--;
 		}
 
+		checkIfSubAppNetworkIsNeeded(sourceNetworks, sourceSubAppNetwork, match);
+		checkIfSubAppNetworkIsNeeded(destinationNetworks, destSubAppNetwork, match);
 		return match;
+	}
+
+	private static FBNetwork addSubAppNetworkToList(final IInterfaceElement ie, final List<FBNetwork> networkList) {
+		FBNetwork subAppNetwork = null;
+		if (ie.getFBNetworkElement() instanceof SubApp) {
+			subAppNetwork = ((SubApp) ie.getFBNetworkElement()).getSubAppNetwork();
+			networkList.add(0, subAppNetwork);
+		}
+		return subAppNetwork;
+	}
+
+	private static void checkIfSubAppNetworkIsNeeded(final List<FBNetwork> networkList, FBNetwork addedSubappNetwork,
+			FBNetwork match) {
+		if ((addedSubappNetwork != null) && (match != networkList.get(0))) {
+			networkList.remove(addedSubappNetwork);
+		}
 	}
 
 	private static List<FBNetwork> buildHierarchy(final IInterfaceElement source) {
 		final List<FBNetwork> list = new ArrayList<>();
+		if (source.getFBNetworkElement() instanceof SubApp) {
+			list.add(((SubApp) source.getFBNetworkElement()).getSubAppNetwork());
+		}
 		EObject current = source.eContainer();
 		while (current != null) {
 			if (current instanceof FBNetwork) {
@@ -143,17 +206,17 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		final FBNetwork srcParent = getFBNetwork4Pin(source);
 		final FBNetwork dstParent = getFBNetwork4Pin(destination);
 
-		if (srcParent != null && dstParent != null) {
+		if ((srcParent != null) && (dstParent != null)) {
 			if (srcParent == dstParent) {
 				return checkParentInSameNetwork(source, parent, srcParent);
 			}
-			if (source.getFBNetworkElement() instanceof SubApp
-					&& ((SubApp) source.getFBNetworkElement()).getSubAppNetwork() == dstParent) {
+			if ((source.getFBNetworkElement() instanceof SubApp)
+					&& (((SubApp) source.getFBNetworkElement()).getSubAppNetwork() == dstParent)) {
 				// we have a connection from a subapp pin to an internal FB
 				return dstParent;
 			}
-			if (destination.getFBNetworkElement() instanceof SubApp
-					&& ((SubApp) destination.getFBNetworkElement()).getSubAppNetwork() == srcParent) {
+			if ((destination.getFBNetworkElement() instanceof SubApp)
+					&& (((SubApp) destination.getFBNetworkElement()).getSubAppNetwork() == srcParent)) {
 				// we have a connection from a subapp pin to an internal FB
 				return srcParent;
 			}
@@ -166,8 +229,8 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		if (srcParent == parent) {
 			return parent;
 		}
-		if (source.getFBNetworkElement() instanceof SubApp
-				&& ((SubApp) source.getFBNetworkElement()).getSubAppNetwork() == parent) {
+		if ((source.getFBNetworkElement() instanceof SubApp)
+				&& (((SubApp) source.getFBNetworkElement()).getSubAppNetwork() == parent)) {
 			// we have a subapp pin to pin connection inside of a subapp
 			return parent;
 		}

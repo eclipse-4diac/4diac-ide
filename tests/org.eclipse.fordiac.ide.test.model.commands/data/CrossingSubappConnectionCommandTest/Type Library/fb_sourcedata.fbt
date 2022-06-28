@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="fb_sourcedata" Comment="Event-driven bistable">
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2017 fortiss GmbH &#10;  &#10;This program and the accompanying materials are made &#10;available under the terms of the Eclipse Public License 2.0 &#10;which is available at https://www.eclipse.org/legal/epl-2.0/ &#10; &#10;SPDX-License-Identifier: EPL-2.0" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-22" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="v" Type="Event" Comment="Set output Q">
+			</Event>
+			<Event Name="R" Type="Event" Comment="Reset output Q">
+				<With Var="source"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="EO" Type="Event" Comment="Output Q has changed">
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="source" Type="BOOL" Comment=""/>
+		</InputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="500.0" y="380.0">
+			</ECState>
+			<ECState Name="SET" Comment="" x="1200.0" y="400.0">
+				<ECAction Output="EO"/>
+			</ECState>
+			<ECState Name="RESET" Comment="" x="1160.0" y="840.0">
+				<ECAction Output="EO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="SET" Condition="v" Comment="" x="993.3333333333334" y="453.33333333333337"/>
+			<ECTransition Source="SET" Destination="RESET" Condition="R" Comment="" x="1200.0" y="680.0"/>
+			<ECTransition Source="RESET" Destination="SET" Condition="v" Comment="" x="1460.0" y="673.3333333333334"/>
+		</ECC>
+	</BasicFB>
+</FBType>
