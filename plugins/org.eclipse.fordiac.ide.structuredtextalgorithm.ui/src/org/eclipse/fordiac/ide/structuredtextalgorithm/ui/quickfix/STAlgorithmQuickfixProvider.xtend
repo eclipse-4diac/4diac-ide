@@ -13,6 +13,9 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.quickfix
 
 import java.text.MessageFormat
+import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType
+import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmFactory
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.Messages
@@ -26,8 +29,10 @@ class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 	@Fix(STAlgorithmValidator.NO_ALGORITHM_FOR_INPUT_EVENT)
 	def void fixNoAlgorithmForInputEvent(Issue issue, IssueResolutionAcceptor acceptor) {
 		val String eventName = issue.getData().get(0)
-		acceptor.accept(issue, MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Add_missing_algorithm, eventName),
-			MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Add_missing_algorithm_for_input_event, eventName), null) [ element, context |
+		acceptor.accept(issue,
+			MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Add_missing_algorithm, eventName),
+			MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Add_missing_algorithm_for_input_event, eventName),
+			null) [ element, context |
 			if (element instanceof STAlgorithmSource) {
 				element.elements += STAlgorithmFactory.eINSTANCE.createSTAlgorithm => [
 					name = eventName
@@ -41,10 +46,28 @@ class STAlgorithmQuickfixProvider extends STCoreQuickfixProvider {
 	def void fixNoInputEventForAlgorithm(Issue issue, IssueResolutionAcceptor acceptor) {
 		val String name = issue.getData().get(0)
 		acceptor.accept(issue, MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Remove_unused_algorithm, name),
-			MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Remove_unused_algorithm_for_input_event, name), null) [ element, context |
+			MessageFormat.format(Messages.STAlgorithmQuickfixProvider_Remove_unused_algorithm_for_input_event, name),
+			null) [ element, context |
 			val container = element.eContainer
 			if (container instanceof STAlgorithmSource) {
 				container.elements.remove(element)
+			}
+		]
+		acceptor.accept(issue, Messages.STAlgorithmQuickfixProvider_Remove_all_unused_algorithms,
+			Messages.STAlgorithmQuickfixProvider_Remove_all_unused_algorithms, null) [ element, context |
+			val container = element.eContainer
+			if (container instanceof STAlgorithmSource) {
+				val resource = container.eResource
+				if (resource instanceof STAlgorithmResource) {
+					val fbType = resource.fbType
+					if (fbType instanceof SimpleFBType) {
+						container.elements.removeIf [ sourceElement |
+							sourceElement instanceof STAlgorithm && !fbType.interfaceList.eventInputs.exists [ event |
+								event.name == sourceElement.name
+							]
+						]
+					}
+				}
 			}
 		]
 	}
