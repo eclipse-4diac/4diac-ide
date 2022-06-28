@@ -288,7 +288,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		}
 		commandStack = commandStackBuffer;
 	}
-	
+
 	protected void setTableInput() {
 		inputsViewer.setInput(getType());
 		outputsViewer.setInput(getType());

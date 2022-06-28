@@ -20,14 +20,11 @@ import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -57,14 +54,7 @@ public class RenameApplication extends AbstractHandler {
 						return Messages.NewApplicationPage_ErrorMessageInvalidAppName;
 					}
 					return null;
-				}) {
-			@Override
-			protected Control createDialogArea(final Composite parent) {
-				final Control retval = super.createDialogArea(parent);
-				getText().addVerifyListener(new IdentifierVerifyListener());
-				return retval;
-			}
-		};
+				});
 		final int ret = dialog.open();
 		if (ret == Window.OK) {
 			return dialog.getValue();

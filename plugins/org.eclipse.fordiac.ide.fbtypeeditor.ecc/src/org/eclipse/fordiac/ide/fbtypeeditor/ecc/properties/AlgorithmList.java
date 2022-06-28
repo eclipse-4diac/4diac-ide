@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -55,7 +54,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class AlgorithmList implements CommandExecutor {
@@ -197,9 +195,7 @@ public class AlgorithmList implements CommandExecutor {
 	}
 
 	private static CellEditor[] createAlgorithmCellEditors(final Table table) {
-		final TextCellEditor algorithmNameEditor = new TextCellEditor(table);
-		((Text) algorithmNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-		return new CellEditor[] { algorithmNameEditor, ComboBoxWidgetFactory.createComboBoxCellEditor(table,
+		return new CellEditor[] { new TextCellEditor(table), ComboBoxWidgetFactory.createComboBoxCellEditor(table,
 				ECCSection.getLanguages().toArray(new String[0]), SWT.READ_ONLY), new TextCellEditor(table) };
 	}
 

@@ -33,7 +33,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.DeleteInterfaceEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
-import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.gef.figures.InteractionStyleFigure;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -41,13 +40,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.ConnectionEditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.NodeEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.tools.DirectEditManager;
 
 public class InterfaceEditPart extends AbstractInterfaceElementEditPart implements NodeEditPart {
 
@@ -262,10 +259,5 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	@Override
 	public INamedElement getINamedElement() {
 		return getCastedModel();
-	}
-
-	@Override
-	protected DirectEditManager createDirectEditManager() {
-		return new LabelDirectEditManager(this, getNameLabel(), new IdentifierVerifyListener());
 	}
 }

@@ -44,7 +44,6 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -63,7 +62,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InternalVarsSection extends AbstractSection implements I4diacTableUtil {
@@ -160,10 +158,9 @@ public class InternalVarsSection extends AbstractSection implements I4diacTableU
 	}
 
 	private CellEditor[] createCellEditors(final Table table) {
-		final TextCellEditor varNameEditor = new TextCellEditor(table);
-		((Text) varNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
 		typeDropDown = new DataTypeDropdown(() -> getDataTypeLib().getDataTypesSorted(), internalVarsViewer);
-		return new CellEditor[] { varNameEditor, typeDropDown, new TextCellEditor(table), new TextCellEditor(table),
+		return new CellEditor[] { new TextCellEditor(table), typeDropDown, new TextCellEditor(table),
+				new TextCellEditor(table),
 				new TextCellEditor(table) };
 	}
 
