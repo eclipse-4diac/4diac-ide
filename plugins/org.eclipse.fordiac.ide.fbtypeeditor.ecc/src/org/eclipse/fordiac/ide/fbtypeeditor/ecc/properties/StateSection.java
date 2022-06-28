@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -50,7 +49,7 @@ public class StateSection extends AbstractSection {
 	}
 
 	@Override
-	protected Object getInputType(Object input) {
+	protected Object getInputType(final Object input) {
 		if (input instanceof ECStateEditPart) {
 			return ((ECStateEditPart) input).getModel();
 		}
@@ -73,12 +72,11 @@ public class StateSection extends AbstractSection {
 	}
 
 	public void createStateNameControls(final Composite parent) {
-		Composite nameComposite = getWidgetFactory().createComposite(parent);
+		final Composite nameComposite = getWidgetFactory().createComposite(parent);
 		nameComposite.setLayout(new GridLayout(2, false));
 		nameComposite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(nameComposite, Messages.StateSection_Name);
 		stateNameText = createGroupText(nameComposite, true);
-		stateNameText.addVerifyListener(new IdentifierVerifyListener());
 		stateNameText.addListener(SWT.Modify, e -> {
 			removeContentAdapter();
 			executeCommand(new ChangeNameCommand(getType(), stateNameText.getText()));
@@ -87,7 +85,7 @@ public class StateSection extends AbstractSection {
 	}
 
 	public void createStateCommentControls(final Composite parent) {
-		Composite commentComposite = getWidgetFactory().createComposite(parent);
+		final Composite commentComposite = getWidgetFactory().createComposite(parent);
 		commentComposite.setLayout(new GridLayout(2, false));
 		commentComposite.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 		getWidgetFactory().createCLabel(commentComposite, Messages.StateSection_Comment);
@@ -109,7 +107,7 @@ public class StateSection extends AbstractSection {
 	public void refresh() {
 		actionGroup.refresh();
 		transitionGroup.refresh();
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if (null != type) {
 			stateCommentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$

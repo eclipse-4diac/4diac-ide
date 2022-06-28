@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -56,7 +55,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InternalFbsSection extends AbstractSection implements I4diacTableUtil {
@@ -144,14 +142,12 @@ public class InternalFbsSection extends AbstractSection implements I4diacTableUt
 	}
 
 	private CellEditor[] createCellEditors(final Table table) {
-		final TextCellEditor fbNameEditor = new TextCellEditor(table);
-		((Text) fbNameEditor.getControl()).addVerifyListener(new IdentifierVerifyListener());
-
 		final NewInstanceCellEditor fbTypeEditor = new InternalFBNewInstanceCellEditor(table, SWT.ON_TOP, true);
 		fbTypeEditor.setTypeLibrary(getTypeLibrary());
 		fbTypeEditor.getMenuButton().dispose();
 
-		return new CellEditor[] { fbNameEditor, fbTypeEditor, new TextCellEditor(table), new TextCellEditor(table),
+		return new CellEditor[] { new TextCellEditor(table), fbTypeEditor, new TextCellEditor(table),
+				new TextCellEditor(table),
 				new TextCellEditor(table) };
 	}
 

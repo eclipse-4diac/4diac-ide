@@ -109,7 +109,7 @@ public class DeleteConnectionCommand extends Command {
 	}
 
 	private DeleteConnectionCommand checkAndDeleteMirroredConnection() {
-		Connection opposite = ConnectionsHelper.getOppositeConnection(connection);
+		final Connection opposite = ConnectionsHelper.getOppositeConnection(connection);
 		if (null != opposite) {
 			final DeleteConnectionCommand cmd = new DeleteConnectionCommand(opposite);
 			cmd.setPerformMappingCheck(false); // as this is the command for the mirrored connection we don't
@@ -124,16 +124,22 @@ public class DeleteConnectionCommand extends Command {
 	}
 
 	private void checkErrorMarker() {
-		if (source instanceof ErrorMarkerInterface && getConnectionCount(source) == 0) {
+		if (isErrorMarkerToDelete(source)) {
 			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
 		}
-		if (destination instanceof ErrorMarkerInterface && getConnectionCount(destination) == 0) {
+		if (isErrorMarkerToDelete(destination)) {
 			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
 		}
 	}
 
-	private static int getConnectionCount(final IInterfaceElement ie) {
-		return ie.isIsInput() ? ie.getInputConnections().size() : ie.getOutputConnections().size();
+	private static boolean isErrorMarkerToDelete(final IInterfaceElement ie) {
+		// we only have to remove the error marker interface if it is one, if it is still in the model (i.e., has not
+		// already been deleted by someone else) and it has no further connections
+		return ie instanceof ErrorMarkerInterface && ie.eContainer() != null && hasNoConnections(ie);
+	}
+
+	private static boolean hasNoConnections(final IInterfaceElement ie) {
+		return ie.isIsInput() ? ie.getInputConnections().isEmpty() : ie.getOutputConnections().isEmpty();
 	}
 
 }

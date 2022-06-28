@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.util.IdentifierVerifyListener;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -81,7 +80,6 @@ public class NewApplicationPage extends WizardPage {
 		applicationName = new Text(composite, SWT.SINGLE | SWT.BORDER);
 		applicationName.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		applicationName.addModifyListener(e -> setPageComplete(validatePage()));
-		applicationName.addVerifyListener(new IdentifierVerifyListener());
 
 	}
 

@@ -18,8 +18,10 @@ package org.eclipse.fordiac.ide.model.dataimport;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 
@@ -44,6 +46,12 @@ public class ADPImporter extends TypeImporter {
 		adapterFBType.setAdapterType(newType);
 		adapterFBType.setService(LibraryElementFactory.eINSTANCE.createService());
 		return newType;
+	}
+
+	@Override
+	protected void readNameCommentAttributes(final INamedElement namedElement) throws TypeImportException {
+		super.readNameCommentAttributes(namedElement);
+		adapterFBType.setName(getElement().getName());
 	}
 
 	@Override

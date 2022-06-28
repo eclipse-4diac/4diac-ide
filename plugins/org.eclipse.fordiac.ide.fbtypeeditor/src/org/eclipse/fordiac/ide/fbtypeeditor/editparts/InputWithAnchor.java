@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -20,19 +20,19 @@ import org.eclipse.gef.EditPart;
 
 public class InputWithAnchor extends WithAnchor {
 
-	public InputWithAnchor(IFigure figure, int pos, EditPart editPart) {
+	public InputWithAnchor(final IFigure figure, final int pos, final EditPart editPart) {
 		super(figure, pos, editPart);
 	}
 
 	@Override
 	public Point getLocation(final Point reference) {
-		Rectangle r = Rectangle.SINGLETON;
+		final Rectangle r = Rectangle.SINGLETON;
 		r.setBounds(getBox());
 		r.translate(-1, -1);
 		r.resize(1, 1);
 		getOwner().translateToAbsolute(r);
-		int leftX = (int) (r.x - (float) ((10.0 * getZoomFactor()) * getPos()));
-		int centerY = (int) (r.y + 0.5f * r.height);
+		final int leftX = (int) (r.x - (float) ((WITH_DISTANCE * getZoomFactor()) * getPos()));
+		final int centerY = r.y + r.height / 2;
 		return new Point(leftX, centerY);
 	}
 }

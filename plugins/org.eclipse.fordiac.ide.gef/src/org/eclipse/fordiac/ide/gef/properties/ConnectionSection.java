@@ -124,9 +124,19 @@ public class ConnectionSection extends AbstractSection {
 	protected Connection getInputType(final Object input) {
 		final Object inputHelper = input instanceof EditPart ? ((EditPart) input).getModel() : input;
 		if (inputHelper instanceof Connection) {
-			return ((Connection) inputHelper);
+			final Connection con = (Connection) inputHelper;
+			if (isValidConnection(con)) {
+				return con;
+			}
 		}
 		return null;
+	}
+
+	private static boolean isValidConnection(final Connection con) {
+		// only allow connections that are fully included in the model. In rare cases it can be that during command
+		// execution we may get half updated connections. This should protect against it.
+		return con.eContainer() != null && con.getSource() != null && con.getDestination() != null
+				&& con.getSource().eContainer() != null && con.getDestination().eContainer() != null;
 	}
 
 	private static String getFBNameFromIInterfaceElement(final IInterfaceElement element) {

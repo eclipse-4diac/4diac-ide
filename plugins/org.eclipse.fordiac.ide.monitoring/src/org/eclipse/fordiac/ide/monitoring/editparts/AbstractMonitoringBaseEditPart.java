@@ -219,8 +219,10 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 	public void addNetwork(final FBNetworkElement fbNetworkElement) {
 		if (fbNetworkElement != null) {
 			final FBNetwork fbNetwork = fbNetworkElement.getFbNetwork();
-			fBnetworks.add(fbNetwork);
-			fbNetwork.eAdapters().add(deleteInterfaceAdapter);
+			if (fbNetwork != null) {
+				fBnetworks.add(fbNetwork);
+				fbNetwork.eAdapters().add(deleteInterfaceAdapter);
+			}
 		}
 	}
 
