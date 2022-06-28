@@ -208,7 +208,7 @@ public class InterfaceElementSection extends AbstractSection {
 				instanceCommentText.setMessage(getInstanceComment());
 			}
 
-			if (getType() instanceof VarDeclaration) {
+			if ((getType() instanceof VarDeclaration) && !(getType() instanceof AdapterDeclaration)) {
 				setParameter();
 			} else if (getType() instanceof ErrorMarkerInterface) {
 				setErrorParam();
