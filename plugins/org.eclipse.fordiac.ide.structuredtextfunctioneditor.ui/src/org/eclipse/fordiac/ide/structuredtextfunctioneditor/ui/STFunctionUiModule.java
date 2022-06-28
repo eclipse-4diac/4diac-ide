@@ -11,6 +11,7 @@
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
  *       - registers hover provider and configures comment regex for documentation
+ *   Hesam Rezaee - registers classes for custom highlighting
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui;
 
@@ -18,13 +19,19 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMining
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.document.STFunctionDocument;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
+import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
 import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeIdMapper;
+import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration;
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
 
 import com.google.inject.Binder;
@@ -67,8 +74,23 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 	}
 
 	@SuppressWarnings("static-method")
+
 	public void configureCodeMinings(final Binder binder) {
 		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("codeMiningInitializer")) //$NON-NLS-1$
-		.to(STCoreCodeMiningPreferences.Initializer.class);
+				.to(STCoreCodeMiningPreferences.Initializer.class);
+	}
+
+	public Class<? extends IHighlightingConfiguration> bindIHighlightingConfiguration() {
+		return STCoreHighlightingConfiguration.class;
+	}
+
+	@SuppressWarnings("static-method")
+	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
+		return STCoreSemanticHighlightingCalculator.class;
+	}
+
+	@SuppressWarnings("static-method")
+	public Class<? extends DefaultAntlrTokenToAttributeIdMapper> bindDefaultAntlrTokenToAttributeIdMapper() {
+		return STCoreAntlrTokenToAttributeIdMapper.class;
 	}
 }
