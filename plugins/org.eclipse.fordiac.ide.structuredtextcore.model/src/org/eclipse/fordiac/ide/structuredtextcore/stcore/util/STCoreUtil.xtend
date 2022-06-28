@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore.util
 
 import java.math.BigDecimal
 import java.math.BigInteger
+import org.eclipse.emf.ecore.EClassifier
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.data.AnyBitType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
@@ -400,5 +402,14 @@ final class STCoreUtil {
 			UlintType: ElementaryTypes.LWORD
 			default: null
 		}
+	}
+
+	def static boolean isAncestor(EClassifier clazz, EObject object) {
+		if (object === null)
+			false
+		else if (clazz.isInstance(object))
+			true
+		else
+			clazz.isAncestor(object.eContainer)
 	}
 }
