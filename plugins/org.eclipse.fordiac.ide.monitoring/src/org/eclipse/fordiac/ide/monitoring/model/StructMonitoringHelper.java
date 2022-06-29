@@ -8,34 +8,34 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Daniel Lindhuber 
+ *   Daniel Lindhuber
  *   	- initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.model;
 
 public class StructMonitoringHelper {
-	
+
 	private static final String SEPARATOR = System.lineSeparator();
 	private static final String TAB = "\t";
-	
+
 	public static String format(final String model) {
 		if (model == null || model.length() < 2) {
 			return null;
 		}
-		
+
 		final StringBuilder builder = new StringBuilder(model);
 		int level = -1; // the outer parenthesis will set this to 0
 		boolean isStringLiteral = false;
-		
-		for (int i = 0; i < builder.length() - 1 /* skip last parenthesis */; i++) {			
+
+		for (int i = 0; i < builder.length() - 1 /* skip last parenthesis */; i++) {
 			final char c = builder.charAt(i);
-			
+
 			// check if inside of string or wstring literal
 			if (c == '\'' || c == '\"') {
 				isStringLiteral = !isStringLiteral;
 				continue;
 			}
-			
+
 			// not inside of string or wstring literal, can insert tabs and linebreaks
 			if (!isStringLiteral) {
 				if (c == '(' || c == '[') {
@@ -44,7 +44,7 @@ public class StructMonitoringHelper {
 				}
 				if (c == ')' || c == ']') {
 					addLinebreak(builder, level, i - 1);
-					i = i + level + 1; // skip inserted characters
+					i = i + level + SEPARATOR.length(); // skip inserted characters
 					level--;
 				}
 				if (c == ',') {
@@ -52,20 +52,20 @@ public class StructMonitoringHelper {
 				}
 			}
 		}
-		
+
 		// separate last (outer) parenthesis from the struct "body"
 		builder.insert(builder.length() - 1, System.lineSeparator());
-		
+
 		return builder.toString();
 	}
-	
+
 	private static void addLinebreak(final StringBuilder builder, final int level, final int i) {
 		if (i < builder.length()) {
 			// level tells us how many tabs we need
 			builder.insert(i + 1, createLinebreak(level));
 		}
 	}
-	
+
 	private static String createLinebreak(final int level) {
 		final StringBuilder builder = new StringBuilder(SEPARATOR);
 		for (int i = 0; i < level; i++) {
@@ -73,13 +73,13 @@ public class StructMonitoringHelper {
 		}
 		return builder.toString();
 	}
-	
+
 	public static String removeFormatting(final String model) {
 		return model.replace(SEPARATOR, "").replace(TAB, "");
 	}
-	
+
 	private StructMonitoringHelper() {
 		super();
 	}
-	
+
 }
