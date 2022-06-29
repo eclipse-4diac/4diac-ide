@@ -752,7 +752,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//STPrimaryExpression returns STExpression:
-	//    '(' STExpression ')' | STFeatureExpression | STLiteralExpressions;
+	//    '(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression | STLiteralExpressions;
 	public STCoreGrammarAccess.STPrimaryExpressionElements getSTPrimaryExpressionAccess() {
 		return gaSTCore.getSTPrimaryExpressionAccess();
 	}
@@ -780,6 +780,27 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	
 	public ParserRule getSTFeatureNameRule() {
 		return getSTFeatureNameAccess().getRule();
+	}
+	
+	//STBuiltinFeatureExpression returns STExpression:
+	//    {STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
+	//    (',' parameters+=STCallArgument)*)? ')')?;
+	public STCoreGrammarAccess.STBuiltinFeatureExpressionElements getSTBuiltinFeatureExpressionAccess() {
+		return gaSTCore.getSTBuiltinFeatureExpressionAccess();
+	}
+	
+	public ParserRule getSTBuiltinFeatureExpressionRule() {
+		return getSTBuiltinFeatureExpressionAccess().getRule();
+	}
+	
+	//enum STBuiltinFeature:
+	//    THIS;
+	public STCoreGrammarAccess.STBuiltinFeatureElements getSTBuiltinFeatureAccess() {
+		return gaSTCore.getSTBuiltinFeatureAccess();
+	}
+	
+	public EnumRule getSTBuiltinFeatureRule() {
+		return getSTBuiltinFeatureAccess().getRule();
 	}
 	
 	//enum STMultiBitAccessSpecifier:
@@ -1128,13 +1149,13 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//terminal INT returns ecore::EBigInteger:
-	//    '0'..'9' ('0'..'9'|'_')*;
+	//    '0'..'9' ('0'..'9' | '_')*;
 	public TerminalRule getINTRule() {
 		return gaSTCore.getINTRule();
 	}
 	
 	//terminal DECIMAL:
-	//    INT (('e'|'E') ('+'|'-')? INT)?;
+	//    INT (('e' | 'E') ('+' | '-')? INT)?;
 	public TerminalRule getDECIMALRule() {
 		return gaSTCore.getDECIMALRule();
 	}

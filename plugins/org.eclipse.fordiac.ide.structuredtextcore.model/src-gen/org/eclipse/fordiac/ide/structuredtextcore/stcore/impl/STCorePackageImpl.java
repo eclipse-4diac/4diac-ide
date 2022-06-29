@@ -43,6 +43,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpre
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeature;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument;
@@ -414,6 +416,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	private EClass stBuiltinFeatureExpressionEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	private EClass stMultibitPartialExpressionEClass = null;
 
 	/**
@@ -464,6 +473,13 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	private EEnum stMultiBitAccessSpecifierEEnum = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EEnum stBuiltinFeatureEEnum = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -1725,6 +1741,46 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	 * @generated
 	 */
 	@Override
+	public EClass getSTBuiltinFeatureExpression() {
+		return stBuiltinFeatureExpressionEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSTBuiltinFeatureExpression_Feature() {
+		return (EAttribute)stBuiltinFeatureExpressionEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EAttribute getSTBuiltinFeatureExpression_Call() {
+		return (EAttribute)stBuiltinFeatureExpressionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTBuiltinFeatureExpression_Parameters() {
+		return (EReference)stBuiltinFeatureExpressionEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSTMultibitPartialExpression() {
 		return stMultibitPartialExpressionEClass;
 	}
@@ -1947,6 +2003,16 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 	@Override
 	public EEnum getSTMultiBitAccessSpecifier() {
 		return stMultiBitAccessSpecifierEEnum;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EEnum getSTBuiltinFeature() {
+		return stBuiltinFeatureEEnum;
 	}
 
 	/**
@@ -2206,6 +2272,11 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		createEAttribute(stFeatureExpressionEClass, ST_FEATURE_EXPRESSION__CALL);
 		createEReference(stFeatureExpressionEClass, ST_FEATURE_EXPRESSION__PARAMETERS);
 
+		stBuiltinFeatureExpressionEClass = createEClass(ST_BUILTIN_FEATURE_EXPRESSION);
+		createEAttribute(stBuiltinFeatureExpressionEClass, ST_BUILTIN_FEATURE_EXPRESSION__FEATURE);
+		createEAttribute(stBuiltinFeatureExpressionEClass, ST_BUILTIN_FEATURE_EXPRESSION__CALL);
+		createEReference(stBuiltinFeatureExpressionEClass, ST_BUILTIN_FEATURE_EXPRESSION__PARAMETERS);
+
 		stMultibitPartialExpressionEClass = createEClass(ST_MULTIBIT_PARTIAL_EXPRESSION);
 		createEAttribute(stMultibitPartialExpressionEClass, ST_MULTIBIT_PARTIAL_EXPRESSION__SPECIFIER);
 		createEAttribute(stMultibitPartialExpressionEClass, ST_MULTIBIT_PARTIAL_EXPRESSION__INDEX);
@@ -2235,6 +2306,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stBinaryOperatorEEnum = createEEnum(ST_BINARY_OPERATOR);
 		stUnaryOperatorEEnum = createEEnum(ST_UNARY_OPERATOR);
 		stMultiBitAccessSpecifierEEnum = createEEnum(ST_MULTI_BIT_ACCESS_SPECIFIER);
+		stBuiltinFeatureEEnum = createEEnum(ST_BUILTIN_FEATURE);
 		stAccessSpecifierEEnum = createEEnum(ST_ACCESS_SPECIFIER);
 		stCommentPositionEEnum = createEEnum(ST_COMMENT_POSITION);
 
@@ -2312,6 +2384,7 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		stMemberAccessExpressionEClass.getESuperTypes().add(this.getSTExpression());
 		stArrayAccessExpressionEClass.getESuperTypes().add(this.getSTExpression());
 		stFeatureExpressionEClass.getESuperTypes().add(this.getSTExpression());
+		stBuiltinFeatureExpressionEClass.getESuperTypes().add(this.getSTExpression());
 		stMultibitPartialExpressionEClass.getESuperTypes().add(this.getSTExpression());
 		stStandardFunctionEClass.getESuperTypes().add(theLibraryElementPackage.getICallable());
 		stStructInitializerExpressionEClass.getESuperTypes().add(this.getSTInitializerExpression());
@@ -2579,6 +2652,39 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		g1.getETypeArguments().add(g2);
 		initEOperation(op, g1);
 
+		initEClass(stBuiltinFeatureExpressionEClass, STBuiltinFeatureExpression.class, "STBuiltinFeatureExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getSTBuiltinFeatureExpression_Feature(), this.getSTBuiltinFeature(), "feature", null, 0, 1, STBuiltinFeatureExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEAttribute(getSTBuiltinFeatureExpression_Call(), ecorePackage.getEBoolean(), "call", null, 0, 1, STBuiltinFeatureExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSTBuiltinFeatureExpression_Parameters(), this.getSTCallArgument(), null, "parameters", null, 0, -1, STBuiltinFeatureExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stBuiltinFeatureExpressionEClass, theLibraryElementPackage.getINamedElement(), "getResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(stBuiltinFeatureExpressionEClass, theLibraryElementPackage.getINamedElement(), "getDeclaredResultType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		op = addEOperation(stBuiltinFeatureExpressionEClass, null, "getMappedInputArguments", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(this.getSTExpression());
+		g1.getETypeArguments().add(g2);
+		initEOperation(op, g1);
+
+		op = addEOperation(stBuiltinFeatureExpressionEClass, null, "getMappedOutputArguments", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(this.getSTExpression());
+		g1.getETypeArguments().add(g2);
+		initEOperation(op, g1);
+
+		op = addEOperation(stBuiltinFeatureExpressionEClass, null, "getMappedInOutArguments", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		g1 = createEGenericType(ecorePackage.getEMap());
+		g2 = createEGenericType(theLibraryElementPackage.getINamedElement());
+		g1.getETypeArguments().add(g2);
+		g2 = createEGenericType(this.getSTExpression());
+		g1.getETypeArguments().add(g2);
+		initEOperation(op, g1);
+
 		initEClass(stMultibitPartialExpressionEClass, STMultibitPartialExpression.class, "STMultibitPartialExpression", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getSTMultibitPartialExpression_Specifier(), this.getSTMultiBitAccessSpecifier(), "specifier", null, 0, 1, STMultibitPartialExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getSTMultibitPartialExpression_Index(), ecorePackage.getEBigInteger(), "index", null, 0, 1, STMultibitPartialExpression.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -2655,6 +2761,9 @@ public class STCorePackageImpl extends EPackageImpl implements STCorePackage {
 		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.W);
 		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.D);
 		addEEnumLiteral(stMultiBitAccessSpecifierEEnum, STMultiBitAccessSpecifier.L);
+
+		initEEnum(stBuiltinFeatureEEnum, STBuiltinFeature.class, "STBuiltinFeature"); //$NON-NLS-1$
+		addEEnumLiteral(stBuiltinFeatureEEnum, STBuiltinFeature.THIS);
 
 		initEEnum(stAccessSpecifierEEnum, STAccessSpecifier.class, "STAccessSpecifier"); //$NON-NLS-1$
 		addEEnumLiteral(stAccessSpecifierEEnum, STAccessSpecifier.PUBLIC);

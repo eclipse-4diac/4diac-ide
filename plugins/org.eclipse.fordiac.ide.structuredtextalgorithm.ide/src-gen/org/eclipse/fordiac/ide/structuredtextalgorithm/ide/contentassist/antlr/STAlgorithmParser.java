@@ -156,6 +156,10 @@ public class STAlgorithmParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTFeatureExpressionAccess().getGroup_2(), "rule__STFeatureExpression__Group_2__0");
 			builder.put(grammarAccess.getSTFeatureExpressionAccess().getGroup_2_1(), "rule__STFeatureExpression__Group_2_1__0");
 			builder.put(grammarAccess.getSTFeatureExpressionAccess().getGroup_2_1_1(), "rule__STFeatureExpression__Group_2_1_1__0");
+			builder.put(grammarAccess.getSTBuiltinFeatureExpressionAccess().getGroup(), "rule__STBuiltinFeatureExpression__Group__0");
+			builder.put(grammarAccess.getSTBuiltinFeatureExpressionAccess().getGroup_2(), "rule__STBuiltinFeatureExpression__Group_2__0");
+			builder.put(grammarAccess.getSTBuiltinFeatureExpressionAccess().getGroup_2_1(), "rule__STBuiltinFeatureExpression__Group_2_1__0");
+			builder.put(grammarAccess.getSTBuiltinFeatureExpressionAccess().getGroup_2_1_1(), "rule__STBuiltinFeatureExpression__Group_2_1_1__0");
 			builder.put(grammarAccess.getSTMultibitPartialExpressionAccess().getGroup(), "rule__STMultibitPartialExpression__Group__0");
 			builder.put(grammarAccess.getSTMultibitPartialExpressionAccess().getGroup_2_1(), "rule__STMultibitPartialExpression__Group_2_1__0");
 			builder.put(grammarAccess.getSTNumericLiteralAccess().getGroup(), "rule__STNumericLiteral__Group__0");
@@ -275,6 +279,10 @@ public class STAlgorithmParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getSTFeatureExpressionAccess().getCallAssignment_2_0(), "rule__STFeatureExpression__CallAssignment_2_0");
 			builder.put(grammarAccess.getSTFeatureExpressionAccess().getParametersAssignment_2_1_0(), "rule__STFeatureExpression__ParametersAssignment_2_1_0");
 			builder.put(grammarAccess.getSTFeatureExpressionAccess().getParametersAssignment_2_1_1_1(), "rule__STFeatureExpression__ParametersAssignment_2_1_1_1");
+			builder.put(grammarAccess.getSTBuiltinFeatureExpressionAccess().getFeatureAssignment_1(), "rule__STBuiltinFeatureExpression__FeatureAssignment_1");
+			builder.put(grammarAccess.getSTBuiltinFeatureExpressionAccess().getCallAssignment_2_0(), "rule__STBuiltinFeatureExpression__CallAssignment_2_0");
+			builder.put(grammarAccess.getSTBuiltinFeatureExpressionAccess().getParametersAssignment_2_1_0(), "rule__STBuiltinFeatureExpression__ParametersAssignment_2_1_0");
+			builder.put(grammarAccess.getSTBuiltinFeatureExpressionAccess().getParametersAssignment_2_1_1_1(), "rule__STBuiltinFeatureExpression__ParametersAssignment_2_1_1_1");
 			builder.put(grammarAccess.getSTMultibitPartialExpressionAccess().getSpecifierAssignment_1(), "rule__STMultibitPartialExpression__SpecifierAssignment_1");
 			builder.put(grammarAccess.getSTMultibitPartialExpressionAccess().getIndexAssignment_2_0(), "rule__STMultibitPartialExpression__IndexAssignment_2_0");
 			builder.put(grammarAccess.getSTMultibitPartialExpressionAccess().getExpressionAssignment_2_1_1(), "rule__STMultibitPartialExpression__ExpressionAssignment_2_1_1");

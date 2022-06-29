@@ -1657,6 +1657,52 @@ public interface STCorePackage extends EPackage {
 	int ST_FEATURE_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STBuiltinFeatureExpressionImpl <em>ST Builtin Feature Expression</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STBuiltinFeatureExpressionImpl
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBuiltinFeatureExpression()
+	 * @generated
+	 */
+	int ST_BUILTIN_FEATURE_EXPRESSION = 44;
+
+	/**
+	 * The feature id for the '<em><b>Feature</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_BUILTIN_FEATURE_EXPRESSION__FEATURE = ST_EXPRESSION_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Call</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_BUILTIN_FEATURE_EXPRESSION__CALL = ST_EXPRESSION_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Parameters</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_BUILTIN_FEATURE_EXPRESSION__PARAMETERS = ST_EXPRESSION_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>ST Builtin Feature Expression</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_BUILTIN_FEATURE_EXPRESSION_FEATURE_COUNT = ST_EXPRESSION_FEATURE_COUNT + 3;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STMultibitPartialExpressionImpl <em>ST Multibit Partial Expression</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1664,7 +1710,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTMultibitPartialExpression()
 	 * @generated
 	 */
-	int ST_MULTIBIT_PARTIAL_EXPRESSION = 44;
+	int ST_MULTIBIT_PARTIAL_EXPRESSION = 45;
 
 	/**
 	 * The feature id for the '<em><b>Specifier</b></em>' attribute.
@@ -1710,7 +1756,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTStandardFunction()
 	 * @generated
 	 */
-	int ST_STANDARD_FUNCTION = 45;
+	int ST_STANDARD_FUNCTION = 46;
 
 	/**
 	 * The feature id for the '<em><b>Name</b></em>' attribute.
@@ -1801,7 +1847,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTComment()
 	 * @generated
 	 */
-	int ST_COMMENT = 46;
+	int ST_COMMENT = 47;
 
 	/**
 	 * The feature id for the '<em><b>Context</b></em>' reference.
@@ -1847,7 +1893,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTStructInitializerExpression()
 	 * @generated
 	 */
-	int ST_STRUCT_INITIALIZER_EXPRESSION = 47;
+	int ST_STRUCT_INITIALIZER_EXPRESSION = 48;
 
 	/**
 	 * The feature id for the '<em><b>Values</b></em>' containment reference list.
@@ -1875,7 +1921,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTStructInitElement()
 	 * @generated
 	 */
-	int ST_STRUCT_INIT_ELEMENT = 48;
+	int ST_STRUCT_INIT_ELEMENT = 49;
 
 	/**
 	 * The feature id for the '<em><b>Variable</b></em>' reference.
@@ -1912,7 +1958,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBinaryOperator()
 	 * @generated
 	 */
-	int ST_BINARY_OPERATOR = 49;
+	int ST_BINARY_OPERATOR = 50;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator <em>ST Unary Operator</em>}' enum.
@@ -1922,7 +1968,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTUnaryOperator()
 	 * @generated
 	 */
-	int ST_UNARY_OPERATOR = 50;
+	int ST_UNARY_OPERATOR = 51;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultiBitAccessSpecifier <em>ST Multi Bit Access Specifier</em>}' enum.
@@ -1932,7 +1978,17 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTMultiBitAccessSpecifier()
 	 * @generated
 	 */
-	int ST_MULTI_BIT_ACCESS_SPECIFIER = 51;
+	int ST_MULTI_BIT_ACCESS_SPECIFIER = 52;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeature <em>ST Builtin Feature</em>}' enum.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeature
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBuiltinFeature()
+	 * @generated
+	 */
+	int ST_BUILTIN_FEATURE = 53;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAccessSpecifier <em>ST Access Specifier</em>}' enum.
@@ -1942,7 +1998,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTAccessSpecifier()
 	 * @generated
 	 */
-	int ST_ACCESS_SPECIFIER = 52;
+	int ST_ACCESS_SPECIFIER = 54;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCommentPosition <em>ST Comment Position</em>}' enum.
@@ -1952,7 +2008,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTCommentPosition()
 	 * @generated
 	 */
-	int ST_COMMENT_POSITION = 53;
+	int ST_COMMENT_POSITION = 55;
 
 	/**
 	 * The meta object id for the '<em>ST Date</em>' data type.
@@ -1962,7 +2018,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDate()
 	 * @generated
 	 */
-	int ST_DATE = 54;
+	int ST_DATE = 56;
 
 	/**
 	 * The meta object id for the '<em>ST Time</em>' data type.
@@ -1972,7 +2028,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTime()
 	 * @generated
 	 */
-	int ST_TIME = 55;
+	int ST_TIME = 57;
 
 	/**
 	 * The meta object id for the '<em>ST Time Of Day</em>' data type.
@@ -1982,7 +2038,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTTimeOfDay()
 	 * @generated
 	 */
-	int ST_TIME_OF_DAY = 56;
+	int ST_TIME_OF_DAY = 58;
 
 	/**
 	 * The meta object id for the '<em>ST Date And Time</em>' data type.
@@ -1992,7 +2048,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTDateAndTime()
 	 * @generated
 	 */
-	int ST_DATE_AND_TIME = 57;
+	int ST_DATE_AND_TIME = 59;
 
 	/**
 	 * The meta object id for the '<em>ST String</em>' data type.
@@ -2002,7 +2058,7 @@ public interface STCorePackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTString()
 	 * @generated
 	 */
-	int ST_STRING = 58;
+	int ST_STRING = 60;
 
 
 	/**
@@ -3216,6 +3272,49 @@ public interface STCorePackage extends EPackage {
 	EReference getSTFeatureExpression_Parameters();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression <em>ST Builtin Feature Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ST Builtin Feature Expression</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
+	 * @generated
+	 */
+	EClass getSTBuiltinFeatureExpression();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression#getFeature <em>Feature</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Feature</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression#getFeature()
+	 * @see #getSTBuiltinFeatureExpression()
+	 * @generated
+	 */
+	EAttribute getSTBuiltinFeatureExpression_Feature();
+
+	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression#isCall <em>Call</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Call</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression#isCall()
+	 * @see #getSTBuiltinFeatureExpression()
+	 * @generated
+	 */
+	EAttribute getSTBuiltinFeatureExpression_Call();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression#getParameters <em>Parameters</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Parameters</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression#getParameters()
+	 * @see #getSTBuiltinFeatureExpression()
+	 * @generated
+	 */
+	EReference getSTBuiltinFeatureExpression_Parameters();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression <em>ST Multibit Partial Expression</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3459,6 +3558,16 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	EEnum getSTMultiBitAccessSpecifier();
+
+	/**
+	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeature <em>ST Builtin Feature</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for enum '<em>ST Builtin Feature</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeature
+	 * @generated
+	 */
+	EEnum getSTBuiltinFeature();
 
 	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAccessSpecifier <em>ST Access Specifier</em>}'.
@@ -4558,6 +4667,40 @@ public interface STCorePackage extends EPackage {
 		EReference ST_FEATURE_EXPRESSION__PARAMETERS = eINSTANCE.getSTFeatureExpression_Parameters();
 
 		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STBuiltinFeatureExpressionImpl <em>ST Builtin Feature Expression</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STBuiltinFeatureExpressionImpl
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBuiltinFeatureExpression()
+		 * @generated
+		 */
+		EClass ST_BUILTIN_FEATURE_EXPRESSION = eINSTANCE.getSTBuiltinFeatureExpression();
+
+		/**
+		 * The meta object literal for the '<em><b>Feature</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ST_BUILTIN_FEATURE_EXPRESSION__FEATURE = eINSTANCE.getSTBuiltinFeatureExpression_Feature();
+
+		/**
+		 * The meta object literal for the '<em><b>Call</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ST_BUILTIN_FEATURE_EXPRESSION__CALL = eINSTANCE.getSTBuiltinFeatureExpression_Call();
+
+		/**
+		 * The meta object literal for the '<em><b>Parameters</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_BUILTIN_FEATURE_EXPRESSION__PARAMETERS = eINSTANCE.getSTBuiltinFeatureExpression_Parameters();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STMultibitPartialExpressionImpl <em>ST Multibit Partial Expression</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4756,6 +4899,16 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EEnum ST_MULTI_BIT_ACCESS_SPECIFIER = eINSTANCE.getSTMultiBitAccessSpecifier();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeature <em>ST Builtin Feature</em>}' enum.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeature
+		 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCorePackageImpl#getSTBuiltinFeature()
+		 * @generated
+		 */
+		EEnum ST_BUILTIN_FEATURE = eINSTANCE.getSTBuiltinFeature();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STAccessSpecifier <em>ST Access Specifier</em>}' enum.

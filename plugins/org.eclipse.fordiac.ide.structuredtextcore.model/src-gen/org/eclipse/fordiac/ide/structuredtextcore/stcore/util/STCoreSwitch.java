@@ -381,6 +381,13 @@ public class STCoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case STCorePackage.ST_BUILTIN_FEATURE_EXPRESSION: {
+				STBuiltinFeatureExpression stBuiltinFeatureExpression = (STBuiltinFeatureExpression)theEObject;
+				T result = caseSTBuiltinFeatureExpression(stBuiltinFeatureExpression);
+				if (result == null) result = caseSTExpression(stBuiltinFeatureExpression);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION: {
 				STMultibitPartialExpression stMultibitPartialExpression = (STMultibitPartialExpression)theEObject;
 				T result = caseSTMultibitPartialExpression(stMultibitPartialExpression);
@@ -1076,6 +1083,21 @@ public class STCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSTFeatureExpression(STFeatureExpression object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Builtin Feature Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Builtin Feature Expression</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTBuiltinFeatureExpression(STBuiltinFeatureExpression object) {
 		return null;
 	}
 

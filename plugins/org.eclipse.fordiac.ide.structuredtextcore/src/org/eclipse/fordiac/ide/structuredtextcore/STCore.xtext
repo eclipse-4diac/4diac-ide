@@ -210,7 +210,7 @@ STAccessExpression returns STExpression:
 	({STArrayAccessExpression.receiver=current} '[' index+=STExpression (',' index+=STExpression)* ']'))*;
 
 STPrimaryExpression returns STExpression:
-	'(' STExpression ')' | STFeatureExpression | STLiteralExpressions;
+	'(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression | STLiteralExpressions;
 
 STFeatureExpression returns STExpression:
 	{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] (=>call?='(' (parameters+=STCallArgument
@@ -218,6 +218,13 @@ STFeatureExpression returns STExpression:
 
 STFeatureName:
 	ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
+
+STBuiltinFeatureExpression returns STExpression:
+	{STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
+	(',' parameters+=STCallArgument)*)? ')')?;
+
+enum STBuiltinFeature:
+	THIS;
 
 enum STMultiBitAccessSpecifier:
 	L='%L' | D='%D' | W='%W' | B='%B' | X='%X';
@@ -342,10 +349,10 @@ terminal NON_DECIMAL:
 	('2#' | '8#' | '16#') HEX_DIGIT+;
 
 terminal INT returns ecore::EBigInteger:
-	'0'..'9' ('0'..'9'|'_')*;
-	
+	'0'..'9' ('0'..'9' | '_')*;
+
 terminal DECIMAL:
-	INT (('e'|'E') ('+'|'-')? INT)?;
+	INT (('e' | 'E') ('+' | '-')? INT)?;
 
 terminal TIME_VALUE:
 	(TIME_PART ('_')?)+;

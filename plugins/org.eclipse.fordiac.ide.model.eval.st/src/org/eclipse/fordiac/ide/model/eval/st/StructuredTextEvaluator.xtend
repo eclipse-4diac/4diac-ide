@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
@@ -393,27 +394,9 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				val event = fb.type.interfaceList.eventInputs.head
 				fb.evaluateFBCall(event, expr.mappedInputArguments, expr.mappedOutputArguments)
 			}
-			ICallable case expr.call: {
-				val arguments = (expr.mappedInputArguments.entrySet.filter[value !== null].map [
-					newVariable(key, value.evaluateExpression)
-				] + expr.mappedInOutArguments.entrySet.filter[value !== null].map [
-					newVariable(key, value.evaluateVariable.value)
-				]).toList
-				val eval = EvaluatorFactory.createEvaluator(feature,
-					feature.eClass.instanceClass as Class<? extends ICallable>, context, arguments, this)
-				if (eval === null) {
-					error('''Cannot create evaluator for callable «feature.eClass.name»''')
-					throw new UnsupportedOperationException('''Cannot create evaluator for callable «feature.eClass.name»''')
-				}
-				val result = eval.evaluate
-				expr.mappedInOutArguments.forEach [ parameter, argument |
-					if(argument !== null) argument.evaluateVariable.value = eval.variables.get(parameter.name).value
-				]
-				expr.mappedOutputArguments.forEach [ parameter, argument |
-					if(argument !== null) argument.evaluateVariable.value = eval.variables.get(parameter.name).value
-				]
-				result
-			}
+			ICallable case expr.call:
+				context.evaluateCall(feature, expr.mappedInputArguments, expr.mappedOutputArguments,
+					expr.mappedInOutArguments)
 			default: {
 				error('''The feature «feature.eClass.name» is not supported''')
 				throw new UnsupportedOperationException('''The feature «feature.eClass.name» is not supported''')
@@ -421,8 +404,20 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 	}
 
+	def protected dispatch Value evaluateExpression(STBuiltinFeatureExpression expr) {
+		switch (expr.feature) {
+			case THIS:
+				if (expr.call) {
+					val fb = context.value as FBValue
+					val event = fb.type.interfaceList.eventInputs.head
+					fb.evaluateFBCall(event, expr.mappedInputArguments, expr.mappedOutputArguments)
+				} else
+					context.value
+		}
+	}
+
 	def protected dispatch Value evaluateExpression(STMemberAccessExpression expr) {
-		expr.member.evaluateExpression(expr.receiver.evaluateExpression)
+		expr.member.evaluateExpression(expr.receiver.evaluateVariable)
 	}
 
 	def protected dispatch Value evaluateExpression(STArrayAccessExpression expr) {
@@ -436,30 +431,45 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 	}
 
-	def protected dispatch Value evaluateExpression(STExpression expr, Value receiver) {
+	def protected dispatch Value evaluateExpression(STExpression expr, Variable<?> receiver) {
 		error('''The expression «expr.eClass.name» is not supported''')
 		throw new UnsupportedOperationException('''The expression «expr.eClass.name» is not supported''')
 	}
 
-	def protected dispatch Value evaluateExpression(STMultibitPartialExpression expr, Value receiver) {
-		receiver.partial(expr.resultType as DataType,
+	def protected dispatch Value evaluateExpression(STMultibitPartialExpression expr, Variable<?> receiver) {
+		receiver.value.partial(expr.resultType as DataType,
 			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
 	}
 
-	def protected dispatch Value evaluateExpression(STFeatureExpression expr, Value receiver) {
-		error('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
-		throw new UnsupportedOperationException('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
-	}
-
-	def protected dispatch Value evaluateExpression(STFeatureExpression expr, StructValue receiver) {
-		receiver.get(expr.feature.name).value
-	}
-
-	def protected dispatch Value evaluateExpression(STFeatureExpression expr, FBValue receiver) {
-		if (expr.call)
-			receiver.evaluateFBCall(expr.feature as Event, expr.mappedInputArguments, expr.mappedOutputArguments)
-		else
-			receiver.get(expr.feature.name).value
+	def protected dispatch Value evaluateExpression(STFeatureExpression expr, Variable<?> receiver) {
+		switch (value : receiver.value) {
+			StructValue:
+				value.get(expr.feature.name).value
+			FBValue:
+				switch (feature : expr.feature) {
+					VarDeclaration,
+					FB case !expr.call:
+						value.get(expr.feature.name).value
+					FB case expr.call: {
+						val fb = value.get(expr.feature.name).value as FBValue
+						val event = fb.type.interfaceList.eventInputs.head
+						fb.evaluateFBCall(event, expr.mappedInputArguments, expr.mappedOutputArguments)
+					}
+					Event case expr.call:
+						value.evaluateFBCall(feature, expr.mappedInputArguments, expr.mappedOutputArguments)
+					ICallable case expr.call:
+						receiver.evaluateCall(feature, expr.mappedInputArguments, expr.mappedOutputArguments,
+							expr.mappedInOutArguments)
+					default: {
+						error('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
+						throw new UnsupportedOperationException('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
+					}
+				}
+			default: {
+				error('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
+				throw new UnsupportedOperationException('''The feature «expr.feature.eClass.name» is not supported on «receiver.type.name»''')
+			}
+		}
 	}
 
 	def protected dispatch Variable<?> evaluateVariable(STExpression expr) {
@@ -477,6 +487,12 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				error('''The feature «feature.eClass.name» is not supported''')
 				throw new UnsupportedOperationException('''The feature «feature.eClass.name» is not supported''')
 			}
+		}
+	}
+
+	def protected dispatch Variable<?> evaluateVariable(STBuiltinFeatureExpression expr) {
+		switch (expr.feature) {
+			case THIS: context
 		}
 	}
 
@@ -515,6 +531,11 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		receiver.value.get(expr.feature.name)
 	}
 
+	def protected dispatch Variable<?> evaluateVariable(STBuiltinFeatureExpression expr, Variable<?> receiver) {
+		error('''The feature «expr.feature.getName» is not supported on «receiver.type.name»''')
+		throw new UnsupportedOperationException('''The feature «expr.feature.getName» is not supported on «receiver.type.name»''')
+	}
+
 	def protected dispatch Variable<?> evaluateVariable(STMultibitPartialExpression expr, Variable<?> receiver) {
 		new PartialVariable(receiver, expr.resultType as DataType,
 			if(expr.expression !== null) expr.expression.evaluateExpression.asInteger else expr.index.intValueExact)
@@ -534,6 +555,29 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 
 	def protected static dispatch Variable<?> newVariable(STVarDeclaration v, Value value) {
 		STVariableOperations.newVariable(v, value)
+	}
+
+	def protected Value evaluateCall(Variable<?> receiver, ICallable feature, Map<INamedElement, STExpression> inputs,
+		Map<INamedElement, STExpression> outputs, Map<INamedElement, STExpression> inouts) {
+		val arguments = (inputs.entrySet.filter[value !== null].map [
+			newVariable(key, value.evaluateExpression)
+		] + inouts.entrySet.filter[value !== null].map [
+			newVariable(key, value.evaluateVariable.value)
+		]).toList
+		val eval = EvaluatorFactory.createEvaluator(feature, feature.eClass.instanceClass as Class<? extends ICallable>,
+			receiver, arguments, this)
+		if (eval === null) {
+			error('''Cannot create evaluator for callable «feature.eClass.name»''')
+			throw new UnsupportedOperationException('''Cannot create evaluator for callable «feature.eClass.name»''')
+		}
+		val result = eval.evaluate
+		inouts.forEach [ parameter, argument |
+			if(argument !== null) argument.evaluateVariable.value = eval.variables.get(parameter.name).value
+		]
+		outputs.forEach [ parameter, argument |
+			if(argument !== null) argument.evaluateVariable.value = eval.variables.get(parameter.name).value
+		]
+		result
 	}
 
 	def protected Value evaluateFBCall(FBValue fb, Event event, Map<INamedElement, STExpression> inputs,

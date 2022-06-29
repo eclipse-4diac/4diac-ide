@@ -1911,13 +1911,14 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		private final RuleCall cSTExpressionParserRuleCall_0_1 = (RuleCall)cGroup_0.eContents().get(1);
 		private final Keyword cRightParenthesisKeyword_0_2 = (Keyword)cGroup_0.eContents().get(2);
 		private final RuleCall cSTFeatureExpressionParserRuleCall_1 = (RuleCall)cAlternatives.eContents().get(1);
-		private final RuleCall cSTLiteralExpressionsParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
+		private final RuleCall cSTBuiltinFeatureExpressionParserRuleCall_2 = (RuleCall)cAlternatives.eContents().get(2);
+		private final RuleCall cSTLiteralExpressionsParserRuleCall_3 = (RuleCall)cAlternatives.eContents().get(3);
 		
 		//STPrimaryExpression returns STExpression:
-		//    '(' STExpression ')' | STFeatureExpression | STLiteralExpressions;
+		//    '(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression | STLiteralExpressions;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'(' STExpression ')' | STFeatureExpression | STLiteralExpressions
+		//'(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression | STLiteralExpressions
 		public Alternatives getAlternatives() { return cAlternatives; }
 		
 		//'(' STExpression ')'
@@ -1935,8 +1936,11 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		//STFeatureExpression
 		public RuleCall getSTFeatureExpressionParserRuleCall_1() { return cSTFeatureExpressionParserRuleCall_1; }
 		
+		//STBuiltinFeatureExpression
+		public RuleCall getSTBuiltinFeatureExpressionParserRuleCall_2() { return cSTBuiltinFeatureExpressionParserRuleCall_2; }
+		
 		//STLiteralExpressions
-		public RuleCall getSTLiteralExpressionsParserRuleCall_2() { return cSTLiteralExpressionsParserRuleCall_2; }
+		public RuleCall getSTLiteralExpressionsParserRuleCall_3() { return cSTLiteralExpressionsParserRuleCall_3; }
 	}
 	public class STFeatureExpressionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STFeatureExpression");
@@ -2059,6 +2063,77 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		//'LD'
 		public Keyword getLDKeyword_8() { return cLDKeyword_8; }
+	}
+	public class STBuiltinFeatureExpressionElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STBuiltinFeatureExpression");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cSTBuiltinFeatureExpressionAction_0 = (Action)cGroup.eContents().get(0);
+		private final Assignment cFeatureAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cFeatureSTBuiltinFeatureEnumRuleCall_1_0 = (RuleCall)cFeatureAssignment_1.eContents().get(0);
+		private final Group cGroup_2 = (Group)cGroup.eContents().get(2);
+		private final Assignment cCallAssignment_2_0 = (Assignment)cGroup_2.eContents().get(0);
+		private final Keyword cCallLeftParenthesisKeyword_2_0_0 = (Keyword)cCallAssignment_2_0.eContents().get(0);
+		private final Group cGroup_2_1 = (Group)cGroup_2.eContents().get(1);
+		private final Assignment cParametersAssignment_2_1_0 = (Assignment)cGroup_2_1.eContents().get(0);
+		private final RuleCall cParametersSTCallArgumentParserRuleCall_2_1_0_0 = (RuleCall)cParametersAssignment_2_1_0.eContents().get(0);
+		private final Group cGroup_2_1_1 = (Group)cGroup_2_1.eContents().get(1);
+		private final Keyword cCommaKeyword_2_1_1_0 = (Keyword)cGroup_2_1_1.eContents().get(0);
+		private final Assignment cParametersAssignment_2_1_1_1 = (Assignment)cGroup_2_1_1.eContents().get(1);
+		private final RuleCall cParametersSTCallArgumentParserRuleCall_2_1_1_1_0 = (RuleCall)cParametersAssignment_2_1_1_1.eContents().get(0);
+		private final Keyword cRightParenthesisKeyword_2_2 = (Keyword)cGroup_2.eContents().get(2);
+		
+		//STBuiltinFeatureExpression returns STExpression:
+		//    {STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
+		//    (',' parameters+=STCallArgument)*)? ')')?;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//{STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
+		//(',' parameters+=STCallArgument)*)? ')')?
+		public Group getGroup() { return cGroup; }
+		
+		//{STBuiltinFeatureExpression}
+		public Action getSTBuiltinFeatureExpressionAction_0() { return cSTBuiltinFeatureExpressionAction_0; }
+		
+		//feature=STBuiltinFeature
+		public Assignment getFeatureAssignment_1() { return cFeatureAssignment_1; }
+		
+		//STBuiltinFeature
+		public RuleCall getFeatureSTBuiltinFeatureEnumRuleCall_1_0() { return cFeatureSTBuiltinFeatureEnumRuleCall_1_0; }
+		
+		//(=>call?='(' (parameters+=STCallArgument
+		//   (',' parameters+=STCallArgument)*)? ')')?
+		public Group getGroup_2() { return cGroup_2; }
+		
+		//=>call?='('
+		public Assignment getCallAssignment_2_0() { return cCallAssignment_2_0; }
+		
+		//'('
+		public Keyword getCallLeftParenthesisKeyword_2_0_0() { return cCallLeftParenthesisKeyword_2_0_0; }
+		
+		//(parameters+=STCallArgument
+		//   (',' parameters+=STCallArgument)*)?
+		public Group getGroup_2_1() { return cGroup_2_1; }
+		
+		//parameters+=STCallArgument
+		public Assignment getParametersAssignment_2_1_0() { return cParametersAssignment_2_1_0; }
+		
+		//STCallArgument
+		public RuleCall getParametersSTCallArgumentParserRuleCall_2_1_0_0() { return cParametersSTCallArgumentParserRuleCall_2_1_0_0; }
+		
+		//(',' parameters+=STCallArgument)*
+		public Group getGroup_2_1_1() { return cGroup_2_1_1; }
+		
+		//','
+		public Keyword getCommaKeyword_2_1_1_0() { return cCommaKeyword_2_1_1_0; }
+		
+		//parameters+=STCallArgument
+		public Assignment getParametersAssignment_2_1_1_1() { return cParametersAssignment_2_1_1_1; }
+		
+		//STCallArgument
+		public RuleCall getParametersSTCallArgumentParserRuleCall_2_1_1_1_0() { return cParametersSTCallArgumentParserRuleCall_2_1_1_1_0; }
+		
+		//')'
+		public Keyword getRightParenthesisKeyword_2_2() { return cRightParenthesisKeyword_2_2; }
 	}
 	public class STMultibitPartialExpressionElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STMultibitPartialExpression");
@@ -3481,6 +3556,20 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		
 		public Keyword getNOTNOTKeyword_2_0() { return cNOTNOTKeyword_2_0; }
 	}
+	public class STBuiltinFeatureElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
+		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STBuiltinFeature");
+		private final EnumLiteralDeclaration cTHISEnumLiteralDeclaration = (EnumLiteralDeclaration)rule.eContents().get(1);
+		private final Keyword cTHISTHISKeyword_0 = (Keyword)cTHISEnumLiteralDeclaration.eContents().get(0);
+		
+		//enum STBuiltinFeature:
+		//    THIS;
+		public EnumRule getRule() { return rule; }
+		
+		//THIS
+		public EnumLiteralDeclaration getTHISEnumLiteralDeclaration() { return cTHISEnumLiteralDeclaration; }
+		
+		public Keyword getTHISTHISKeyword_0() { return cTHISTHISKeyword_0; }
+	}
 	public class STMultiBitAccessSpecifierElements extends AbstractElementFinder.AbstractEnumRuleElementFinder {
 		private final EnumRule rule = (EnumRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.structuredtextcore.STCore.STMultiBitAccessSpecifier");
 		private final Alternatives cAlternatives = (Alternatives)rule.eContents().get(1);
@@ -3629,6 +3718,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	private final STPrimaryExpressionElements pSTPrimaryExpression;
 	private final STFeatureExpressionElements pSTFeatureExpression;
 	private final STFeatureNameElements pSTFeatureName;
+	private final STBuiltinFeatureExpressionElements pSTBuiltinFeatureExpression;
+	private final STBuiltinFeatureElements eSTBuiltinFeature;
 	private final STMultiBitAccessSpecifierElements eSTMultiBitAccessSpecifier;
 	private final STMultibitPartialExpressionElements pSTMultibitPartialExpression;
 	private final STLiteralExpressionsElements pSTLiteralExpressions;
@@ -3738,6 +3829,8 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 		this.pSTPrimaryExpression = new STPrimaryExpressionElements();
 		this.pSTFeatureExpression = new STFeatureExpressionElements();
 		this.pSTFeatureName = new STFeatureNameElements();
+		this.pSTBuiltinFeatureExpression = new STBuiltinFeatureExpressionElements();
+		this.eSTBuiltinFeature = new STBuiltinFeatureElements();
 		this.eSTMultiBitAccessSpecifier = new STMultiBitAccessSpecifierElements();
 		this.pSTMultibitPartialExpression = new STMultibitPartialExpressionElements();
 		this.pSTLiteralExpressions = new STLiteralExpressionsElements();
@@ -4348,7 +4441,7 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//STPrimaryExpression returns STExpression:
-	//    '(' STExpression ')' | STFeatureExpression | STLiteralExpressions;
+	//    '(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression | STLiteralExpressions;
 	public STPrimaryExpressionElements getSTPrimaryExpressionAccess() {
 		return pSTPrimaryExpression;
 	}
@@ -4376,6 +4469,27 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	
 	public ParserRule getSTFeatureNameRule() {
 		return getSTFeatureNameAccess().getRule();
+	}
+	
+	//STBuiltinFeatureExpression returns STExpression:
+	//    {STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
+	//    (',' parameters+=STCallArgument)*)? ')')?;
+	public STBuiltinFeatureExpressionElements getSTBuiltinFeatureExpressionAccess() {
+		return pSTBuiltinFeatureExpression;
+	}
+	
+	public ParserRule getSTBuiltinFeatureExpressionRule() {
+		return getSTBuiltinFeatureExpressionAccess().getRule();
+	}
+	
+	//enum STBuiltinFeature:
+	//    THIS;
+	public STBuiltinFeatureElements getSTBuiltinFeatureAccess() {
+		return eSTBuiltinFeature;
+	}
+	
+	public EnumRule getSTBuiltinFeatureRule() {
+		return getSTBuiltinFeatureAccess().getRule();
 	}
 	
 	//enum STMultiBitAccessSpecifier:
@@ -4724,13 +4838,13 @@ public class STCoreGrammarAccess extends AbstractElementFinder.AbstractGrammarEl
 	}
 	
 	//terminal INT returns ecore::EBigInteger:
-	//    '0'..'9' ('0'..'9'|'_')*;
+	//    '0'..'9' ('0'..'9' | '_')*;
 	public TerminalRule getINTRule() {
 		return tINT;
 	}
 	
 	//terminal DECIMAL:
-	//    INT (('e'|'E') ('+'|'-')? INT)?;
+	//    INT (('e' | 'E') ('+' | '-')? INT)?;
 	public TerminalRule getDECIMALRule() {
 		return tDECIMAL;
 	}

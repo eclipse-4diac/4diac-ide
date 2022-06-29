@@ -44,6 +44,9 @@
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/D"/>
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STMultiBitAccessSpecifier/L"/>
     </genEnums>
+    <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//STBuiltinFeature">
+      <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STBuiltinFeature/THIS"/>
+    </genEnums>
     <genEnums typeSafeEnumCompatible="false" ecoreEnum="STCore.ecore#//STAccessSpecifier">
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STAccessSpecifier/PUBLIC"/>
       <genEnumLiterals ecoreEnumLiteral="STCore.ecore#//STAccessSpecifier/PROTECTED"/>
@@ -290,6 +293,21 @@
       <genOperations ecoreOperation="STCore.ecore#//STFeatureExpression/getMappedOutputArguments"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedOutputArguments(this);"/>
       <genOperations ecoreOperation="STCore.ecore#//STFeatureExpression/getMappedInOutArguments"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedInOutArguments(this);"/>
+    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STBuiltinFeatureExpression">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STBuiltinFeatureExpression/feature"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute STCore.ecore#//STBuiltinFeatureExpression/call"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STBuiltinFeatureExpression/parameters"/>
+      <genOperations ecoreOperation="STCore.ecore#//STBuiltinFeatureExpression/getResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STBuiltinFeatureExpression/getDeclaredResultType"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STBuiltinFeatureExpression/getMappedInputArguments"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedInputArguments(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STBuiltinFeatureExpression/getMappedOutputArguments"
+          body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedOutputArguments(this);"/>
+      <genOperations ecoreOperation="STCore.ecore#//STBuiltinFeatureExpression/getMappedInOutArguments"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedInOutArguments(this);"/>
     </genClasses>
     <genClasses ecoreClass="STCore.ecore#//STMultibitPartialExpression">

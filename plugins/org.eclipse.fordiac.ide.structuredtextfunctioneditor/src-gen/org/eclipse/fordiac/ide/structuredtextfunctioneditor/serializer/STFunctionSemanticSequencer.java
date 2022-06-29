@@ -13,6 +13,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement;
@@ -87,6 +88,9 @@ public class STFunctionSemanticSequencer extends STCoreSemanticSequencer {
 				return; 
 			case STCorePackage.ST_BINARY_EXPRESSION:
 				sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(context, (STBinaryExpression) semanticObject); 
+				return; 
+			case STCorePackage.ST_BUILTIN_FEATURE_EXPRESSION:
+				sequence_STBuiltinFeatureExpression(context, (STBuiltinFeatureExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT:
 				sequence_STCallNamedInputArgument(context, (STCallNamedInputArgument) semanticObject); 
