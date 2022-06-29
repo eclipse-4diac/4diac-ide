@@ -154,4 +154,8 @@ public class DeleteInterfaceCommand extends Command {
 			}
 		}
 	}
+
+	public InterfaceList getParent() {
+		return parent;
+	}
 }

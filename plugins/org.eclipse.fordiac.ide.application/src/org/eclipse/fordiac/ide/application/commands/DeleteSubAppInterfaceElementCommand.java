@@ -55,4 +55,8 @@ public class DeleteSubAppInterfaceElementCommand extends DeleteInterfaceCommand 
 		}
 	}
 
+	public DeleteInterfaceCommand getOpposite() {
+		return opposite;
+	}
+
 }
