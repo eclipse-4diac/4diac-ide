@@ -306,19 +306,22 @@ QualifiedName:
 	ID ('.' ID)*;
 
 Numeric returns ecore::EJavaObject:
-	'TRUE' | 'FALSE' | (('+' | '-')? (INT | NUMBER)) | NON_DECIMAL;
-	
-Time returns STTime:
+	'TRUE' | 'FALSE' | Number | NON_DECIMAL;
+
+Number hidden():
+	('+' | '-')? (INT | DECIMAL) (=>'.' (INT | DECIMAL))?;
+
+Time returns STTime hidden():
 	('+' | '-')? TIME_VALUE;
 
 Date returns STDate:
 	INT '-' INT '-' INT;
 
 DateAndTime returns STDateAndTime:
-	INT '-' INT '-' INT '-' INT ':' INT ':' (INT | NUMBER);
+	INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?;
 
 TimeOfDay returns STTimeOfDay:
-	INT ':' INT ':' (INT | NUMBER);
+	INT ':' INT ':' INT (=>'.' INT)?;
 
 enum STAccessSpecifier:
 	PROTECTED='PROTECTED' | PUBLIC='PUBLIC' | PRIVATE='PRIVATE' | INTERNAL='INTERNAL';
@@ -339,27 +342,37 @@ terminal NON_DECIMAL:
 	('2#' | '8#' | '16#') HEX_DIGIT+;
 
 terminal INT returns ecore::EBigInteger:
-	('0'..'9') ('_'? '0'..'9')*;
-
-terminal fragment EXT_INT:
-	INT ('e' | 'E') ('-' | '+')? INT;
-
-terminal NUMBER:
-    INT '.' (EXT_INT | INT);
+	'0'..'9' ('0'..'9'|'_')*;
+	
+terminal DECIMAL:
+	INT (('e'|'E') ('+'|'-')? INT)?;
 
 terminal TIME_VALUE:
-    (TIME_PART ('_')?)+;
+	(TIME_PART ('_')?)+;
 
 terminal fragment TIME_PART:
-    (INT | NUMBER) (TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS);
-    
-terminal fragment TIME_DAYS: 'D'|'d';
-terminal fragment TIME_HOURS: 'H'|'h';
-terminal fragment TIME_MINUTES: 'M'|'m';
-terminal fragment TIME_SECONDS: 'S'|'s';
-terminal fragment TIME_MILLIS: ('M'|'m')('S'|'s'); // MS
-terminal fragment TIME_MICROS: ('U'|'u')('S'|'s'); // US
-terminal fragment TIME_NANOS: ('N'|'n')('S'|'s'); // NS
+	INT (TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS);
+
+terminal fragment TIME_DAYS:
+	'D' | 'd';
+
+terminal fragment TIME_HOURS:
+	'H' | 'h';
+
+terminal fragment TIME_MINUTES:
+	'M' | 'm';
+
+terminal fragment TIME_SECONDS:
+	'S' | 's';
+
+terminal fragment TIME_MILLIS:
+	('M' | 'm') ('S' | 's'); // MS
+
+terminal fragment TIME_MICROS:
+	('U' | 'u') ('S' | 's'); // US
+
+terminal fragment TIME_NANOS:
+	('N' | 'n') ('S' | 's'); // NS
 
 terminal ID:
 	'^'? ('a'..'z' | 'A'..'Z' | '_') ('a'..'z' | 'A'..'Z' | '_' | '0'..'9')*;

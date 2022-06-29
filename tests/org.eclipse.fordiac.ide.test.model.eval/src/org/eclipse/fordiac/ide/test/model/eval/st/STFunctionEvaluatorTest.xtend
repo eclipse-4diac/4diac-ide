@@ -211,14 +211,14 @@ class STFunctionEvaluatorTest {
 		42.toIntValue.assertEquals('''
 			FUNCTION TEST : INT
 			VAR_TEMP
-				X: ARRAY [0 .. 2] OF INT := [17, 4, 21];
+				X: ARRAY [0..2] OF INT := [17, 4, 21];
 			END_VAR
 			TEST := TEST_CALL(X);
 			END_FUNCTION
 			
 			FUNCTION TEST_CALL : INT
 			VAR_INPUT
-				X: ARRAY [0 .. 2] OF INT;
+				X: ARRAY [0..2] OF INT;
 			END_VAR
 			TEST_CALL := ADD(X[0], X[1], X[2]);
 			END_FUNCTION
@@ -230,8 +230,8 @@ class STFunctionEvaluatorTest {
 		42.toIntValue.assertEquals('''
 			FUNCTION TEST : INT
 			VAR_TEMP
-				X: ARRAY [0 .. 2] OF INT := [17, 4, 21];
-				Y: ARRAY [0 .. 2] OF INT;
+				X: ARRAY [0..2] OF INT := [17, 4, 21];
+				Y: ARRAY [0..2] OF INT;
 			END_VAR
 			TEST_CALL(X, Y);
 			TEST := ADD(X[0], X[1], X[2]);
@@ -239,10 +239,10 @@ class STFunctionEvaluatorTest {
 			
 			FUNCTION TEST_CALL
 			VAR_INPUT
-				X: ARRAY [0 .. 2] OF INT;
+				X: ARRAY [0..2] OF INT;
 			END_VAR
 			VAR_OUTPUT
-				Y: ARRAY [0 .. 2] OF INT;
+				Y: ARRAY [0..2] OF INT;
 			END_VAR
 			Y[0] := X[2];
 			Y[1] := X[1];
@@ -256,8 +256,8 @@ class STFunctionEvaluatorTest {
 		42.toIntValue.assertEquals('''
 			FUNCTION TEST : INT
 			VAR_TEMP
-				X: ARRAY [0 .. 2] OF INT := [17, 4, 21];
-				Y: ARRAY [0 .. 2] OF INT;
+				X: ARRAY [0..2] OF INT := [17, 4, 21];
+				Y: ARRAY [0..2] OF INT;
 			END_VAR
 			TEST_CALL(X, Y);
 			TEST := ADD(X[0], X[1], X[2]);
@@ -268,7 +268,7 @@ class STFunctionEvaluatorTest {
 				X: ARRAY [*] OF INT;
 			END_VAR
 			VAR_OUTPUT
-				Y: ARRAY [0 .. 2] OF INT;
+				Y: ARRAY [0..2] OF INT;
 			END_VAR
 			Y[0] := X[2];
 			Y[1] := X[1];

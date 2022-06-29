@@ -29,7 +29,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 	def exportValidBasicFB() {
 		functionBlock.getCallables().add(createSTAlgorithm(ALGORITHM_NAME, '''
 		VAR_TEMP
-		  «VARIABLE_NAME» : ARRAY [0 .. 31] OF DWORD;
+		  «VARIABLE_NAME» : ARRAY [0..31] OF DWORD;
 		END_VAR'''))
 
 		val exports = generateFunctionBlock(functionBlock);

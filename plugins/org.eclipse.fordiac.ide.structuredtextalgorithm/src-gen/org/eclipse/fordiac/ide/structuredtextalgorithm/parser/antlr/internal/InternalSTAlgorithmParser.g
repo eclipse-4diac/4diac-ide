@@ -4797,60 +4797,129 @@ ruleNumeric returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()
 			newLeafNode(kw, grammarAccess.getNumericAccess().getFALSEKeyword_1());
 		}
 		    |
-		(
-			(
-				kw=PlusSign
-				{
-					$current.merge(kw);
-					newLeafNode(kw, grammarAccess.getNumericAccess().getPlusSignKeyword_2_0_0());
-				}
-				    |
-				kw=HyphenMinus
-				{
-					$current.merge(kw);
-					newLeafNode(kw, grammarAccess.getNumericAccess().getHyphenMinusKeyword_2_0_1());
-				}
-			)?
-			(
-				this_INT_4=RULE_INT
-				{
-					$current.merge(this_INT_4);
-				}
-				{
-					newLeafNode(this_INT_4, grammarAccess.getNumericAccess().getINTTerminalRuleCall_2_1_0());
-				}
-				    |
-				this_NUMBER_5=RULE_NUMBER
-				{
-					$current.merge(this_NUMBER_5);
-				}
-				{
-					newLeafNode(this_NUMBER_5, grammarAccess.getNumericAccess().getNUMBERTerminalRuleCall_2_1_1());
-				}
-			)
-		)
-		    |
-		this_NON_DECIMAL_6=RULE_NON_DECIMAL
 		{
-			$current.merge(this_NON_DECIMAL_6);
+			newCompositeNode(grammarAccess.getNumericAccess().getNumberParserRuleCall_2());
+		}
+		this_Number_2=ruleNumber
+		{
+			$current.merge(this_Number_2);
 		}
 		{
-			newLeafNode(this_NON_DECIMAL_6, grammarAccess.getNumericAccess().getNON_DECIMALTerminalRuleCall_3());
+			afterParserOrEnumRuleCall();
+		}
+		    |
+		this_NON_DECIMAL_3=RULE_NON_DECIMAL
+		{
+			$current.merge(this_NON_DECIMAL_3);
+		}
+		{
+			newLeafNode(this_NON_DECIMAL_3, grammarAccess.getNumericAccess().getNON_DECIMALTerminalRuleCall_3());
 		}
 	)
 ;
 
+// Entry rule entryRuleNumber
+entryRuleNumber returns [String current=null]@init {
+	HiddenTokens myHiddenTokenState = ((XtextTokenStream)input).setHiddenTokens();
+}:
+	{ newCompositeNode(grammarAccess.getNumberRule()); }
+	iv_ruleNumber=ruleNumber
+	{ $current=$iv_ruleNumber.current.getText(); }
+	EOF;
+finally {
+	myHiddenTokenState.restore();
+}
+
+// Rule Number
+ruleNumber returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
+@init {
+	enterRule();
+	HiddenTokens myHiddenTokenState = ((XtextTokenStream)input).setHiddenTokens();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			kw=PlusSign
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getNumberAccess().getPlusSignKeyword_0_0());
+			}
+			    |
+			kw=HyphenMinus
+			{
+				$current.merge(kw);
+				newLeafNode(kw, grammarAccess.getNumberAccess().getHyphenMinusKeyword_0_1());
+			}
+		)?
+		(
+			this_INT_2=RULE_INT
+			{
+				$current.merge(this_INT_2);
+			}
+			{
+				newLeafNode(this_INT_2, grammarAccess.getNumberAccess().getINTTerminalRuleCall_1_0());
+			}
+			    |
+			this_DECIMAL_3=RULE_DECIMAL
+			{
+				$current.merge(this_DECIMAL_3);
+			}
+			{
+				newLeafNode(this_DECIMAL_3, grammarAccess.getNumberAccess().getDECIMALTerminalRuleCall_1_1());
+			}
+		)
+		(
+			(
+				(FullStop)=>
+				kw=FullStop
+				{
+					$current.merge(kw);
+					newLeafNode(kw, grammarAccess.getNumberAccess().getFullStopKeyword_2_0());
+				}
+			)
+			(
+				this_INT_5=RULE_INT
+				{
+					$current.merge(this_INT_5);
+				}
+				{
+					newLeafNode(this_INT_5, grammarAccess.getNumberAccess().getINTTerminalRuleCall_2_1_0());
+				}
+				    |
+				this_DECIMAL_6=RULE_DECIMAL
+				{
+					$current.merge(this_DECIMAL_6);
+				}
+				{
+					newLeafNode(this_DECIMAL_6, grammarAccess.getNumberAccess().getDECIMALTerminalRuleCall_2_1_1());
+				}
+			)
+		)?
+	)
+;
+finally {
+	myHiddenTokenState.restore();
+}
+
 // Entry rule entryRuleTime
-entryRuleTime returns [String current=null]:
+entryRuleTime returns [String current=null]@init {
+	HiddenTokens myHiddenTokenState = ((XtextTokenStream)input).setHiddenTokens();
+}:
 	{ newCompositeNode(grammarAccess.getTimeRule()); }
 	iv_ruleTime=ruleTime
 	{ $current=$iv_ruleTime.current.getText(); }
 	EOF;
+finally {
+	myHiddenTokenState.restore();
+}
 
 // Rule Time
 ruleTime returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
 @init {
 	enterRule();
+	HiddenTokens myHiddenTokenState = ((XtextTokenStream)input).setHiddenTokens();
 }
 @after {
 	leaveRule();
@@ -4878,6 +4947,9 @@ ruleTime returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken()]
 		}
 	)
 ;
+finally {
+	myHiddenTokenState.restore();
+}
 
 // Entry rule entryRuleDate
 entryRuleDate returns [String current=null]:
@@ -5005,23 +5077,30 @@ ruleDateAndTime returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleTok
 			$current.merge(kw);
 			newLeafNode(kw, grammarAccess.getDateAndTimeAccess().getColonKeyword_9());
 		}
+		this_INT_10=RULE_INT
+		{
+			$current.merge(this_INT_10);
+		}
+		{
+			newLeafNode(this_INT_10, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_10());
+		}
 		(
-			this_INT_10=RULE_INT
+			(
+				(FullStop)=>
+				kw=FullStop
+				{
+					$current.merge(kw);
+					newLeafNode(kw, grammarAccess.getDateAndTimeAccess().getFullStopKeyword_11_0());
+				}
+			)
+			this_INT_12=RULE_INT
 			{
-				$current.merge(this_INT_10);
+				$current.merge(this_INT_12);
 			}
 			{
-				newLeafNode(this_INT_10, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_10_0());
+				newLeafNode(this_INT_12, grammarAccess.getDateAndTimeAccess().getINTTerminalRuleCall_11_1());
 			}
-			    |
-			this_NUMBER_11=RULE_NUMBER
-			{
-				$current.merge(this_NUMBER_11);
-			}
-			{
-				newLeafNode(this_NUMBER_11, grammarAccess.getDateAndTimeAccess().getNUMBERTerminalRuleCall_10_1());
-			}
-		)
+		)?
 	)
 ;
 
@@ -5065,23 +5144,30 @@ ruleTimeOfDay returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleToken
 			$current.merge(kw);
 			newLeafNode(kw, grammarAccess.getTimeOfDayAccess().getColonKeyword_3());
 		}
+		this_INT_4=RULE_INT
+		{
+			$current.merge(this_INT_4);
+		}
+		{
+			newLeafNode(this_INT_4, grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_4());
+		}
 		(
-			this_INT_4=RULE_INT
+			(
+				(FullStop)=>
+				kw=FullStop
+				{
+					$current.merge(kw);
+					newLeafNode(kw, grammarAccess.getTimeOfDayAccess().getFullStopKeyword_5_0());
+				}
+			)
+			this_INT_6=RULE_INT
 			{
-				$current.merge(this_INT_4);
+				$current.merge(this_INT_6);
 			}
 			{
-				newLeafNode(this_INT_4, grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_4_0());
+				newLeafNode(this_INT_6, grammarAccess.getTimeOfDayAccess().getINTTerminalRuleCall_5_1());
 			}
-			    |
-			this_NUMBER_5=RULE_NUMBER
-			{
-				$current.merge(this_NUMBER_5);
-			}
-			{
-				newLeafNode(this_NUMBER_5, grammarAccess.getTimeOfDayAccess().getNUMBERTerminalRuleCall_4_1());
-			}
-		)
+		)?
 	)
 ;
 

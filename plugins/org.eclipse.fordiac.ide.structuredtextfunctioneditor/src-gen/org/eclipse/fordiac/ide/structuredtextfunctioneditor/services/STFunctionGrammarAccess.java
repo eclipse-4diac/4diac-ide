@@ -1030,7 +1030,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//Numeric returns ecore::EJavaObject:
-	//    'TRUE' | 'FALSE' | (('+' | '-')? (INT | NUMBER)) | NON_DECIMAL;
+	//    'TRUE' | 'FALSE' | Number | NON_DECIMAL;
 	public STCoreGrammarAccess.NumericElements getNumericAccess() {
 		return gaSTCore.getNumericAccess();
 	}
@@ -1039,7 +1039,17 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 		return getNumericAccess().getRule();
 	}
 	
-	//Time returns STTime:
+	//Number hidden():
+	//    ('+' | '-')? (INT | DECIMAL) (=>'.' (INT | DECIMAL))?;
+	public STCoreGrammarAccess.NumberElements getNumberAccess() {
+		return gaSTCore.getNumberAccess();
+	}
+	
+	public ParserRule getNumberRule() {
+		return getNumberAccess().getRule();
+	}
+	
+	//Time returns STTime hidden():
 	//    ('+' | '-')? TIME_VALUE;
 	public STCoreGrammarAccess.TimeElements getTimeAccess() {
 		return gaSTCore.getTimeAccess();
@@ -1060,7 +1070,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//DateAndTime returns STDateAndTime:
-	//    INT '-' INT '-' INT '-' INT ':' INT ':' (INT | NUMBER);
+	//    INT '-' INT '-' INT '-' INT ':' INT ':' INT (=>'.' INT)?;
 	public STCoreGrammarAccess.DateAndTimeElements getDateAndTimeAccess() {
 		return gaSTCore.getDateAndTimeAccess();
 	}
@@ -1070,7 +1080,7 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//TimeOfDay returns STTimeOfDay:
-	//    INT ':' INT ':' (INT | NUMBER);
+	//    INT ':' INT ':' INT (=>'.' INT)?;
 	public STCoreGrammarAccess.TimeOfDayElements getTimeOfDayAccess() {
 		return gaSTCore.getTimeOfDayAccess();
 	}
@@ -1118,21 +1128,15 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//terminal INT returns ecore::EBigInteger:
-	//    ('0'..'9') ('_'? '0'..'9')*;
+	//    '0'..'9' ('0'..'9'|'_')*;
 	public TerminalRule getINTRule() {
 		return gaSTCore.getINTRule();
 	}
 	
-	//terminal fragment EXT_INT:
-	//    INT ('e' | 'E') ('-' | '+')? INT;
-	public TerminalRule getEXT_INTRule() {
-		return gaSTCore.getEXT_INTRule();
-	}
-	
-	//terminal NUMBER:
-	//    INT '.' (EXT_INT | INT);
-	public TerminalRule getNUMBERRule() {
-		return gaSTCore.getNUMBERRule();
+	//terminal DECIMAL:
+	//    INT (('e'|'E') ('+'|'-')? INT)?;
+	public TerminalRule getDECIMALRule() {
+		return gaSTCore.getDECIMALRule();
 	}
 	
 	//terminal TIME_VALUE:
@@ -1142,44 +1146,51 @@ public class STFunctionGrammarAccess extends AbstractElementFinder.AbstractGramm
 	}
 	
 	//terminal fragment TIME_PART:
-	//    (INT | NUMBER) (TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS);
+	//    INT (TIME_DAYS | TIME_HOURS | TIME_MINUTES | TIME_SECONDS | TIME_MILLIS | TIME_MICROS | TIME_NANOS);
 	public TerminalRule getTIME_PARTRule() {
 		return gaSTCore.getTIME_PARTRule();
 	}
 	
-	//terminal fragment TIME_DAYS: 'D'|'d';
+	//terminal fragment TIME_DAYS:
+	//    'D' | 'd';
 	public TerminalRule getTIME_DAYSRule() {
 		return gaSTCore.getTIME_DAYSRule();
 	}
 	
-	//terminal fragment TIME_HOURS: 'H'|'h';
+	//terminal fragment TIME_HOURS:
+	//    'H' | 'h';
 	public TerminalRule getTIME_HOURSRule() {
 		return gaSTCore.getTIME_HOURSRule();
 	}
 	
-	//terminal fragment TIME_MINUTES: 'M'|'m';
+	//terminal fragment TIME_MINUTES:
+	//    'M' | 'm';
 	public TerminalRule getTIME_MINUTESRule() {
 		return gaSTCore.getTIME_MINUTESRule();
 	}
 	
-	//terminal fragment TIME_SECONDS: 'S'|'s';
+	//terminal fragment TIME_SECONDS:
+	//    'S' | 's';
 	public TerminalRule getTIME_SECONDSRule() {
 		return gaSTCore.getTIME_SECONDSRule();
 	}
 	
-	//terminal fragment TIME_MILLIS: ('M'|'m')('S'|'s');
+	//terminal fragment TIME_MILLIS:
+	//    ('M' | 'm') ('S' | 's');
 	public TerminalRule getTIME_MILLISRule() {
 		return gaSTCore.getTIME_MILLISRule();
 	}
 	
 	// // MS
-	//terminal fragment TIME_MICROS: ('U'|'u')('S'|'s');
+	//terminal fragment TIME_MICROS:
+	//    ('U' | 'u') ('S' | 's');
 	public TerminalRule getTIME_MICROSRule() {
 		return gaSTCore.getTIME_MICROSRule();
 	}
 	
 	// // US
-	//terminal fragment TIME_NANOS: ('N'|'n')('S'|'s');
+	//terminal fragment TIME_NANOS:
+	//    ('N' | 'n') ('S' | 's');
 	public TerminalRule getTIME_NANOSRule() {
 		return gaSTCore.getTIME_NANOSRule();
 	}
