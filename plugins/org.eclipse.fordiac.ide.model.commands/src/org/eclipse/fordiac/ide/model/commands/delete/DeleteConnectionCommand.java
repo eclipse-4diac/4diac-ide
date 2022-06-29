@@ -150,4 +150,8 @@ public class DeleteConnectionCommand extends Command {
 		return destination;
 	}
 
+	public FBNetwork getConnectionParent() {
+		return connectionParent;
+	}
+
 }
