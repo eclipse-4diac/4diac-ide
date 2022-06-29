@@ -142,4 +142,12 @@ public class DeleteConnectionCommand extends Command {
 		return ie.isIsInput() ? ie.getInputConnections().isEmpty() : ie.getOutputConnections().isEmpty();
 	}
 
+	public IInterfaceElement getSource() {
+		return source;
+	}
+
+	public IInterfaceElement getDestination() {
+		return destination;
+	}
+
 }
