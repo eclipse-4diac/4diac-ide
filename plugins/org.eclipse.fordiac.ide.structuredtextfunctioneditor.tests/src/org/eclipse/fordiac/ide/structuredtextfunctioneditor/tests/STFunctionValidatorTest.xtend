@@ -198,7 +198,7 @@ class STFunctionValidatorTest {
 				bool1 := usint1;
 				word1 := ltime1;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NO_CAST_AVAILABLE)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
@@ -217,7 +217,7 @@ class STFunctionValidatorTest {
 			testArray2[0] := testArray2[1];
 			testArray2[0, 2] := 5;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NO_CAST_AVAILABLE)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
@@ -239,11 +239,9 @@ class STFunctionValidatorTest {
 			END_VAR
 				ltod1 := LDT_TO_LTOD(ldt1);
 				dword1 := WCHAR_TO_DWORD(wchar1);
-				char1 := byte1;
 				int1 := sint1;
-				char1 := wchar1;
 			END_FUNCTION
-		'''.parse.assertNoErrors(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NO_CAST_AVAILABLE);
+		'''.parse.assertNoErrors(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES);
 	}
 
 	@Test
@@ -328,7 +326,7 @@ class STFunctionValidatorTest {
 				int1 := 17;
 			END_IF;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STIfStatement, STCoreValidator.NO_CAST_AVAILABLE)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STIfStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
@@ -343,7 +341,7 @@ class STFunctionValidatorTest {
 				int1 := 17;
 			END_WHILE;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STWhileStatement, STCoreValidator.NO_CAST_AVAILABLE)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STWhileStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
@@ -359,7 +357,7 @@ class STFunctionValidatorTest {
 			UNTIL int1
 			END_REPEAT;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STRepeatStatement, STCoreValidator.NO_CAST_AVAILABLE)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STRepeatStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
@@ -418,7 +416,7 @@ class STFunctionValidatorTest {
 				int1 := 17;
 			END_FOR;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NO_CAST_AVAILABLE)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STForStatement, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
