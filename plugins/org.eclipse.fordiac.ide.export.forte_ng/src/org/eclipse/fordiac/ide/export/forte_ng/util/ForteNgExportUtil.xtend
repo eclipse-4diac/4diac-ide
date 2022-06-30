@@ -76,14 +76,14 @@ final class ForteNgExportUtil {
 
   	def static String generateTypeNamePlain(DataType type) {
 		switch (type) {
-			TimeType,
-			LtimeType: "TIME"
-			DateType,
-			LdateType: "DATE"
-			TimeOfDayType,
+			TimeType: "TIME"
+			LtimeType: "LTIME"
+			DateType: "DATE"
+			LdateType: "LDATE"
+			TimeOfDayType: "LTIME_OF_DAY"
 			LtodType: "TIME_OF_DAY"
-			DateAndTimeType,
-			LdtType: "DATE_AND_TIME"
+			DateAndTimeType: "DATE_AND_TIME"
+			LdtType: "LDATE_AND_TIME"
 			ArrayType: "ARRAY"
 			default: type.name
 		}
