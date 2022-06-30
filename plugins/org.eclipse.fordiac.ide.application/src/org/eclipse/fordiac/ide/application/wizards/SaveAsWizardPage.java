@@ -76,7 +76,10 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 
 	@Override
 	protected void createAdvancedControls(final Composite parent) {
-		createReplaceSourceEntry(parent);
+		if (replaceSourceText != null) {
+			createReplaceSourceEntry(parent);
+		}
+
 		super.createAdvancedControls(parent);
 	}
 
@@ -163,6 +166,6 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 				Messages.SaveAsWizardPage_SaveAsStructType_Description,
 				Messages.SaveAsWizardPage_SaveAsStructType_PageName,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType,
-				Messages.SaveAsWizardPage_SaveAsStructTypeReplaceDialogText);
+				null);
 	}
 }

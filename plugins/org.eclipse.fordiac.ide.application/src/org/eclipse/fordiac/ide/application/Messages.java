@@ -179,8 +179,6 @@ public final class Messages extends NLS {
 
 	public static String SaveAsWizardPage_SaveAsStructType_WizardPageTitle;
 
-	public static String SaveAsWizardPage_SaveAsStructTypeReplaceDialogText;
-
 	public static String SearchFor;
 
 	public static String SearchHeaderName;
