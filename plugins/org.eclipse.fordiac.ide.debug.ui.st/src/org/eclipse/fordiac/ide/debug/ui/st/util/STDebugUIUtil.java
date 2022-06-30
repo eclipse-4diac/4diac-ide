@@ -73,7 +73,7 @@ public final class STDebugUIUtil {
 		if (sourceElement instanceof STAlgorithm) {
 			return ((STAlgorithm) sourceElement).getBody().getVarTempDeclarations();
 		} else if (sourceElement instanceof STMethod) {
-			return ((STAlgorithm) sourceElement).getBody().getVarTempDeclarations();
+			return ((STMethod) sourceElement).getBody().getVarDeclarations();
 		} else if (sourceElement instanceof STFunction) {
 			return ((STFunction) sourceElement).getVarDeclarations();
 		}
