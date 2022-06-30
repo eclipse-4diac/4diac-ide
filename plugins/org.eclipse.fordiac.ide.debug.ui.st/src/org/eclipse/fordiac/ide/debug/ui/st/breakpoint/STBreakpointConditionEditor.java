@@ -136,7 +136,8 @@ public class STBreakpointConditionEditor {
 
 	public void setInput(final STLineBreakpoint input) {
 		if (this.input == input) {
-			if (conditionEditorModelAccess != null && input != null) {
+			if (conditionEditorModelAccess != null && input != null
+					&& !input.getCondition().equals(conditionEditorModelAccess.getEditablePart())) {
 				conditionEditorModelAccess.updateModel(input.getCondition());
 			}
 		} else {
