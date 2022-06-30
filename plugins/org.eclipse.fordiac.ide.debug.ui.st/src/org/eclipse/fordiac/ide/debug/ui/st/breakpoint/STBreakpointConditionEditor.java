@@ -64,7 +64,9 @@ public class STBreakpointConditionEditor {
 		conditional.setText(Messages.STBreakpointConditionEditor_Conditional);
 		conditional.setEnabled(false);
 		conditional.addSelectionListener(SelectionListener.widgetSelectedAdapter(e -> {
-			conditionEditor.getViewer().setEditable(input != null && conditional.getSelection());
+			if (conditionEditor != null) {
+				conditionEditor.getViewer().setEditable(input != null && conditional.getSelection());
+			}
 			firePropertyChange(PROP_CONDITION_ENABLED);
 			setDirty(true);
 		}));
