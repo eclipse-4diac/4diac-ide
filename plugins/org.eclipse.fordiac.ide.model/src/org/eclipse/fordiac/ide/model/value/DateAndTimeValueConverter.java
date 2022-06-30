@@ -37,8 +37,11 @@ public final class DateAndTimeValueConverter implements ValueConverter<LocalDate
 
 	@Override
 	public LocalDateTime toValue(final String string) {
+		if (string.indexOf("__") != -1) { //$NON-NLS-1$
+			throw new IllegalArgumentException(Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
+		}
 		try {
-			return LocalDateTime.parse(string, DATE_AND_TIME);
+			return LocalDateTime.parse(string.replace("_", ""), DATE_AND_TIME); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (final Exception e) {
 			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_DATE_AND_TIME_FORMAT, e);
 		}
