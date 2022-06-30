@@ -17,13 +17,16 @@ import java.math.BigInteger
 import java.util.Collection
 import java.util.Map
 import org.eclipse.fordiac.ide.model.data.AnyBitType
+import org.eclipse.fordiac.ide.model.data.AnyDateType
 import org.eclipse.fordiac.ide.model.data.AnyDurationType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.LtimeType
 import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.data.StructuredType
+import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.libraryElement.FB
@@ -75,12 +78,20 @@ final package class ExpressionAnnotations {
 		if (left instanceof DataType) {
 			if (right instanceof DataType) {
 				if (expr.op.arithmetic || expr.op.logical) {
-					if (left.isAssignableFrom(right))
+					if (left instanceof AnyDurationType && right instanceof AnyNumType)
+						left
+					else if (left instanceof AnyDateType && right instanceof TimeType)
+						left
+					else if (left instanceof AnyDateType && right instanceof LtimeType)
+						left.equivalentAnyLDateType
+					else if (left.instanceofAnySDateType && right.instanceofAnySDateType)
+						ElementaryTypes.TIME
+					else if (left instanceof AnyDateType && right instanceof AnyDateType)
+						ElementaryTypes.LTIME
+					else if (left.isAssignableFrom(right))
 						left
 					else if (right.isAssignableFrom(left))
 						right
-					else if (left instanceof AnyDurationType && right instanceof AnyNumType)
-						left
 					else
 						null
 				} else if (expr.op.comparison)

@@ -275,6 +275,34 @@ final class ValueOperations {
 		}
 	}
 
+	def static dispatch AnyDateValue add(AnyDateValue first, TimeValue second) {
+		switch (first) {
+			TimeOfDayValue:
+				TimeOfDayValue.toTimeOfDayValue(first.toNanos + second.longValue)
+			LTimeOfDayValue:
+				LTimeOfDayValue.toLTimeOfDayValue(first.toNanos + second.longValue)
+			DateAndTimeValue:
+				DateAndTimeValue.toDateAndTimeValue(first.toNanos + second.longValue)
+			LDateAndTimeValue:
+				LDateAndTimeValue.toLDateAndTimeValue(first.toNanos + second.longValue)
+			default:
+				throw new UnsupportedOperationException('''The add operation is not supported for types «first.type.name» and «second.type.name»''')
+		}
+	}
+
+	def static dispatch AnyDateValue add(AnyDateValue first, LTimeValue second) {
+		switch (first) {
+			TimeOfDayValue,
+			LTimeOfDayValue:
+				LTimeOfDayValue.toLTimeOfDayValue(first.toNanos + second.longValue)
+			DateAndTimeValue,
+			LDateAndTimeValue:
+				LDateAndTimeValue.toLDateAndTimeValue(first.toNanos + second.longValue)
+			default:
+				throw new UnsupportedOperationException('''The add operation is not supported for types «first.type.name» and «second.type.name»''')
+		}
+	}
+
 	def static dispatch Value subtract(Value first, Value second) {
 		throw new UnsupportedOperationException('''The subtract operation is not supported for types «first.type.name» and «second.type.name»''')
 	}
@@ -305,6 +333,47 @@ final class ValueOperations {
 				LTimeValue.toLTimeValue(first.longValue - second.longValue)
 			TimeType:
 				TimeValue.toTimeValue(first.longValue - second.longValue)
+		}
+	}
+
+	def static dispatch AnyDateValue subtract(AnyDateValue first, TimeValue second) {
+		switch (first) {
+			TimeOfDayValue:
+				TimeOfDayValue.toTimeOfDayValue(first.toNanos - second.longValue)
+			LTimeOfDayValue:
+				LTimeOfDayValue.toLTimeOfDayValue(first.toNanos - second.longValue)
+			DateAndTimeValue:
+				DateAndTimeValue.toDateAndTimeValue(first.toNanos - second.longValue)
+			LDateAndTimeValue:
+				LDateAndTimeValue.toLDateAndTimeValue(first.toNanos - second.longValue)
+			default:
+				throw new UnsupportedOperationException('''The subtract operation is not supported for types «first.type.name» and «second.type.name»''')
+		}
+	}
+
+	def static dispatch AnyDateValue subtract(AnyDateValue first, LTimeValue second) {
+		switch (first) {
+			TimeOfDayValue,
+			LTimeOfDayValue:
+				LTimeOfDayValue.toLTimeOfDayValue(first.toNanos - second.longValue)
+			DateAndTimeValue,
+			LDateAndTimeValue:
+				LDateAndTimeValue.toLDateAndTimeValue(first.toNanos - second.longValue)
+			default:
+				throw new UnsupportedOperationException('''The subtract operation is not supported for types «first.type.name» and «second.type.name»''')
+		}
+	}
+
+	def static dispatch AnyDurationValue subtract(AnyDateValue first, AnyDateValue second) {
+		switch (first.type.resultType(second.type)) {
+			DateType,
+			TimeOfDayType,
+			DateAndTimeType:
+				TimeValue.toTimeValue(first.toNanos - second.toNanos)
+			LdateType,
+			LtodType,
+			LdtType:
+				LTimeValue.toLTimeValue(first.toNanos - second.toNanos)
 		}
 	}
 
