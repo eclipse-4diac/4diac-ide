@@ -18,6 +18,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.ILogListener;
@@ -60,14 +61,20 @@ public class FordiacLogListener implements ILogListener {
 		}
 	}
 
+	private final AtomicBoolean singleWindow = new AtomicBoolean();
+
 	@Override
 	public void logging(final IStatus status, final String plugin) {
-
-		if ((status.getSeverity() == IStatus.ERROR) && (null != status.getException())) {
+		if ((status.getSeverity() == IStatus.ERROR) && (null != status.getException())
+				&& !singleWindow.getAndSet(true)) {
 			// inform the user that an error has happened
-			// we currently only treat errors with exception and from a 4diac IDE plug-in as
-			// noteworthy
-			showErrorDialog(createStatusWithStackTrace(status));
+			// we currently only treat errors with exception and from a 4diac IDE plug-in as noteworthy
+			// if a error dialog is already showing we will not show another one.
+			try {
+				showErrorDialog(createStatusWithStackTrace(status));
+			} finally {
+				singleWindow.set(false);
+			}
 		}
 	}
 
