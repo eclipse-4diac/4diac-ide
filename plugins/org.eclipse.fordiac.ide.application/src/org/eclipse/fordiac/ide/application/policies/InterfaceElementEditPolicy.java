@@ -50,25 +50,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 			return command;
 		}
 		// if we are here it is not a direct connection try border crossing command
-		if (canExistConnection(command)) {
-			return processBorderCrossingConnection(command.getSource(), command.getDestination());
-		}
-		return null;
-	}
-
-	private static boolean canExistConnection(final AbstractConnectionCreateCommand command) {
-		final AbstractConnectionCreateCommand compatibilityCheck = AbstractConnectionCreateCommand
-				.createCommand(command.getSource(), getSourceNetwork(command));
-		compatibilityCheck.setSource(command.getSource());
-		compatibilityCheck.setDestination(command.getDestination());
-		return compatibilityCheck.canExecute();
-	}
-
-	private static FBNetwork getSourceNetwork(final AbstractConnectionCreateCommand command) {
-		if (command.getSource().getFBNetworkElement() != null) {
-			return command.getSource().getFBNetworkElement().getFbNetwork();
-		}
-		return command.getParent();
+		return processBorderCrossingConnection(command.getSource(), command.getDestination());
 	}
 
 	private static Command processBorderCrossingConnection(final IInterfaceElement source,
@@ -76,7 +58,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		final List<FBNetwork> sourceNetworks = buildHierarchy(source);
 		final List<FBNetwork> destinationNetworks = buildHierarchy(destination);
 		final FBNetwork match = findMostSpecificMatch(source, destination, sourceNetworks, destinationNetworks);
-		if (isSwapNeeded(source, destination, sourceNetworks, destinationNetworks, match)) {
+		if (isSwapNeeded(source, destination, sourceNetworks, destinationNetworks)) {
 			return new CreateSubAppCrossingConnectionsCommand(destination, source, destinationNetworks, sourceNetworks,
 					match);
 		}
@@ -85,17 +67,17 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 	}
 
 	private static boolean isSwapNeeded(final IInterfaceElement source, final IInterfaceElement destination,
-			final List<FBNetwork> sourceNetworks, final List<FBNetwork> destinationNetworks, final FBNetwork match) {
-		final boolean sourceIsInput = isInputElement(source, sourceNetworks, match);
-		final boolean destinationIsInput = isInputElement(destination, destinationNetworks, match);
+			final List<FBNetwork> sourceNetworks, final List<FBNetwork> destinationNetworks) {
+		final boolean sourceIsInput = isInputElement(source, sourceNetworks);
+		final boolean destinationIsInput = isInputElement(destination, destinationNetworks);
 		return sourceIsInput && !destinationIsInput;
 	}
 
-	private static boolean isInputElement(final IInterfaceElement iel, final List<FBNetwork> networkList, final FBNetwork match) {
+	private static boolean isInputElement(final IInterfaceElement iel, final List<FBNetwork> networkList) {
 		if (iel.getFBNetworkElement() instanceof SubApp) {
 			final SubApp subapp = (SubApp) iel.getFBNetworkElement();
 			final FBNetwork search = subapp.getSubAppNetwork();
-			if (match == search) {
+			if (networkList.get(0) == search) {
 				return !iel.isIsInput();
 			}
 		}
@@ -142,9 +124,6 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 	private static List<FBNetwork> buildHierarchy(final IInterfaceElement source) {
 		final List<FBNetwork> list = new ArrayList<>();
-		if (source.getFBNetworkElement() instanceof SubApp) {
-			list.add(((SubApp) source.getFBNetworkElement()).getSubAppNetwork());
-		}
 		EObject current = source.eContainer();
 		while (current != null) {
 			if (current instanceof FBNetwork) {
@@ -239,5 +218,4 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		}
 		return null;
 	}
-
 }

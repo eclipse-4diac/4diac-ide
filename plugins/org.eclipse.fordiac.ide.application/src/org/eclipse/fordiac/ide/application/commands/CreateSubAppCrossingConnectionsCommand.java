@@ -46,6 +46,15 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 	}
 
 	@Override
+	public boolean canExecute() {
+		final AbstractConnectionCreateCommand compatibilityCheck = AbstractConnectionCreateCommand.createCommand(source,
+				sourceNetworks.get(0));  // the first sourceNetwork tells us if we are input or output
+		compatibilityCheck.setSource(source);
+		compatibilityCheck.setDestination(destination);
+		return compatibilityCheck.canExecute();
+	}
+
+	@Override
 	public void execute() {
 		final IInterfaceElement left = buildPath(source, sourceNetworks, false);
 		final IInterfaceElement right = buildPath(destination, destinationNetworks, true);
@@ -76,7 +85,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 		return ie;
 	}
 
-	private IInterfaceElement createInterfaceElement(final boolean isRightPath, IInterfaceElement ie,
+	private IInterfaceElement createInterfaceElement(final boolean isRightPath, final IInterfaceElement ie,
 			final SubApp subapp) {
 
 		if (emptyPinAlreadyExists(subapp, ie, isRightPath)) {
@@ -90,8 +99,8 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 		return pinCmd.getCreatedElement();
 	}
 
-	private boolean emptyPinAlreadyExists(final SubApp subapp, final IInterfaceElement ie, boolean isRightPath) {
-		IInterfaceElement pin = subapp.getInterfaceElement(ie.getName());
+	private boolean emptyPinAlreadyExists(final SubApp subapp, final IInterfaceElement ie, final boolean isRightPath) {
+		final IInterfaceElement pin = subapp.getInterfaceElement(ie.getName());
 		if ((pin != null) && pin.getInputConnections().isEmpty() && pin.getOutputConnections().isEmpty()
 				&& compatibleTypes(pin)) {
 			return (pin.isIsInput() && isRightPath) || (!pin.isIsInput() && !isRightPath);
@@ -99,7 +108,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 		return false;
 	}
 
-	private boolean compatibleTypes(IInterfaceElement pin) {
+	private boolean compatibleTypes(final IInterfaceElement pin) {
 		if (pin.getType() == null) {
 			return false;
 		}
@@ -121,7 +130,7 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 	@Override
 	public void undo() {
 		// iterate backwards
-		ListIterator<Command> iterator = commands.listIterator(commands.size());
+		final ListIterator<Command> iterator = commands.listIterator(commands.size());
 		while (iterator.hasPrevious()) {
 			iterator.previous().undo();
 		}
