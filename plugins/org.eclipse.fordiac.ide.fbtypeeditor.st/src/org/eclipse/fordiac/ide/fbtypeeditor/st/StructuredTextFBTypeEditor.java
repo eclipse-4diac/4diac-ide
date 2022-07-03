@@ -50,9 +50,6 @@ public class StructuredTextFBTypeEditor extends XtextEditor implements IFBTEdito
 	@Inject
 	private STAlgorithmDocumentFBTypeUpdater fbTypeUpdater;
 
-	public StructuredTextFBTypeEditor() {
-	}
-
 	@Override
 	public void init(final IEditorSite site, IEditorInput input) throws PartInitException {
 		if (input instanceof FBTypeEditorInput) {

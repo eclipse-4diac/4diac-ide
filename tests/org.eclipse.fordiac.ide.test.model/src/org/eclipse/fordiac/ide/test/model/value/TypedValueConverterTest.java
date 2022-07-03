@@ -54,9 +54,9 @@ class TypedValueConverterTest {
 
 	@Test
 	void toValueOptionalInvalidPrefix() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			new TypedValueConverter(ElementaryTypes.BOOL).toValue("INT#17"); //$NON-NLS-1$
-		}, Messages.VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE);
+		assertThrowsExactly(IllegalArgumentException.class,
+				() -> new TypedValueConverter(ElementaryTypes.BOOL).toValue("INT#17"), //$NON-NLS-1$
+				Messages.VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE);
 	}
 
 	@Test
@@ -96,16 +96,16 @@ class TypedValueConverterTest {
 
 	@Test
 	void toValueRequiredInvalidPrefix() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			new TypedValueConverter(ElementaryTypes.TIME).toValue("LTIME#17s"); //$NON-NLS-1$
-		}, Messages.VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE);
+		assertThrowsExactly(IllegalArgumentException.class,
+				() -> new TypedValueConverter(ElementaryTypes.TIME).toValue("LTIME#17s"), //$NON-NLS-1$
+				Messages.VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE);
 	}
 
 	@Test
 	void toValueRequiredMissingPrefix() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			new TypedValueConverter(ElementaryTypes.TIME).toValue("17s"); //$NON-NLS-1$
-		}, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier);
+		assertThrowsExactly(IllegalArgumentException.class,
+				() -> new TypedValueConverter(ElementaryTypes.TIME).toValue("17s"), //$NON-NLS-1$
+				Messages.VALIDATOR_DatatypeRequiresTypeSpecifier);
 	}
 
 	@Test
@@ -117,15 +117,15 @@ class TypedValueConverterTest {
 
 	@Test
 	void toValueRequiredAnyInvalidPrefix() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			new TypedValueConverter(GenericTypes.ANY_INT).toValue("REAL#3.1415"); //$NON-NLS-1$
-		}, Messages.VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE);
+		assertThrowsExactly(IllegalArgumentException.class,
+				() -> new TypedValueConverter(GenericTypes.ANY_INT).toValue("REAL#3.1415"), //$NON-NLS-1$
+				Messages.VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE);
 	}
 
 	@Test
 	void toValueRequiredAnyMissingPrefix() {
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			new TypedValueConverter(GenericTypes.ANY_INT).toValue("17"); //$NON-NLS-1$
-		}, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier);
+		assertThrowsExactly(IllegalArgumentException.class,
+				() -> new TypedValueConverter(GenericTypes.ANY_INT).toValue("17"), //$NON-NLS-1$
+				Messages.VALIDATOR_DatatypeRequiresTypeSpecifier);
 	}
 }

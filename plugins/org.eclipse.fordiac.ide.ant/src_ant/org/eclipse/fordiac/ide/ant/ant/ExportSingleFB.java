@@ -32,7 +32,7 @@ public class ExportSingleFB extends ExportFBs {
 		super.execute();
 
 		final List<File> files = new LinkedList<>();
-		getFBsFiles(files, new File(project.getLocationURI()), fBNameString, new ArrayList<>());
+		getFBsFiles(files, new File(getFordiacProject().getLocationURI()), fBNameString, new ArrayList<>());
 		exportFiles(files);
 	}
 

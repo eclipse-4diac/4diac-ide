@@ -24,6 +24,8 @@ import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+
 public final class FordiacKeywords {
 
 	@SuppressWarnings("squid:S2386") // This is a final, immutable Set
@@ -520,7 +522,7 @@ public final class FordiacKeywords {
 					try {
 						return (String) field.get(null); // Static field, so get with null
 					} catch (final IllegalArgumentException | IllegalAccessException e) {
-						e.printStackTrace();
+						FordiacLogHelper.logError("Exception in keyword access", e); //$NON-NLS-1$
 						throw new RuntimeException(e);// NOSONAR
 					}
 				}).collect(Collectors.toUnmodifiableSet());

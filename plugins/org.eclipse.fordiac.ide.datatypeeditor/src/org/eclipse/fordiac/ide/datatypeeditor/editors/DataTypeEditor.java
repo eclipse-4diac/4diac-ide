@@ -99,16 +99,14 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			final Object feature = notification.getFeature();
-			if (null != feature) {
-				if (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass())) {
-					Display.getDefault().asyncExec(() -> {
-						if (null != dataTypeEntry) {
-							setPartName(dataTypeEntry.getFile().getName());
-							setInput(new FileEditorInput(dataTypeEntry.getFile()));
-						}
-					});
-
-				}
+			if ((null != feature)
+					&& (LibraryElementPackage.LIBRARY_ELEMENT__NAME == notification.getFeatureID(feature.getClass()))) {
+				Display.getDefault().asyncExec(() -> {
+					if (null != dataTypeEntry) {
+						setPartName(dataTypeEntry.getFile().getName());
+						setInput(new FileEditorInput(dataTypeEntry.getFile()));
+					}
+				});
 			}
 		}
 	};
@@ -349,7 +347,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 			addListenerToDataTypeObj();
 		} catch (final PartInitException e) {
 			FordiacLogHelper
-			.logError("Error during refreshing struct table after file change detection: " + e.toString()); //$NON-NLS-1$
+					.logError("Error during refreshing struct table after file change detection: " + e.toString(), e); //$NON-NLS-1$
 		}
 
 	}

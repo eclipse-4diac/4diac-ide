@@ -17,7 +17,6 @@
 package org.eclipse.fordiac.ide.model.edit.providers;
 
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
 
 /**
@@ -44,8 +43,4 @@ public class DataLabelProvider extends InitialValueLabelProvider {
 		return element.toString();
 	}
 
-	@Override
-	public Color getForeground(final Object element, final int columnIndex) {
-		return super.getForeground(element, columnIndex);
-	}
 }

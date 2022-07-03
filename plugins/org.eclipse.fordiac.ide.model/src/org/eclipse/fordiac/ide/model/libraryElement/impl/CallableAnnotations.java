@@ -27,18 +27,22 @@ final class CallableAnnotations {
 	private CallableAnnotations() {
 	}
 
+	@SuppressWarnings("unused")
 	static EList<INamedElement> getInputParameters(final Algorithm algorithm) {
 		return ECollections.emptyEList(); // algorithms may not have parameters
 	}
 
+	@SuppressWarnings("unused")
 	static EList<INamedElement> getOutputParameters(final Algorithm algorithm) {
 		return ECollections.emptyEList(); // algorithms may not have parameters
 	}
 
+	@SuppressWarnings("unused")
 	static EList<INamedElement> getInOutParameters(final Algorithm algorithm) {
 		return ECollections.emptyEList(); // algorithms may not have parameters
 	}
 
+	@SuppressWarnings("unused")
 	static DataType getReturnType(final Algorithm algorithm) {
 		return null; // algorithms may not have a return type
 	}
@@ -51,10 +55,12 @@ final class CallableAnnotations {
 		return ECollections.unmodifiableEList(type.getInterfaceList().getOutputVars());
 	}
 
+	@SuppressWarnings("unused")
 	static EList<INamedElement> getInOutParameters(final FBType type) {
 		return ECollections.emptyEList(); // FB types may not have in/out parameters
 	}
 
+	@SuppressWarnings("unused")
 	static DataType getReturnType(final FBType type) {
 		return null; // FB types may not have a return type
 	}
@@ -73,10 +79,12 @@ final class CallableAnnotations {
 		return ECollections.emptyEList();
 	}
 
+	@SuppressWarnings("unused")
 	static EList<INamedElement> getInOutParameters(final Event event) {
 		return ECollections.emptyEList(); // events may not have in/out parameters
 	}
 
+	@SuppressWarnings("unused")
 	static DataType getReturnType(final Event event) {
 		return null; // events may not have a return type
 	}
@@ -89,10 +97,12 @@ final class CallableAnnotations {
 		return ECollections.unmodifiableEList(fb.getInterface().getOutputVars());
 	}
 
+	@SuppressWarnings("unused")
 	static EList<INamedElement> getInOutParameters(final FB fb) {
 		return ECollections.emptyEList(); // FBs may not have in/out parameters
 	}
 
+	@SuppressWarnings("unused")
 	static DataType getReturnType(final FB fb) {
 		return null; // FBs may not have a return type
 	}

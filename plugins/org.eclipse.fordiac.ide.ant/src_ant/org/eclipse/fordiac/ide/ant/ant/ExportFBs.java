@@ -35,7 +35,7 @@ public class ExportFBs extends Task {
 	protected String projectNameString;
 	protected boolean exportCMakeList = false;
 	protected IWorkspace workspace;
-	protected IProject project;
+	private IProject fordiacProject;
 
 	public void setProjectName(final String value) {
 		projectNameString = value;
@@ -53,8 +53,8 @@ public class ExportFBs extends Task {
 		}
 
 		workspace = ResourcesPlugin.getWorkspace();
-		project = workspace.getRoot().getProject(projectNameString);
-		if (project == null) {
+		fordiacProject = workspace.getRoot().getProject(projectNameString);
+		if (fordiacProject == null) {
 			throw new BuildException("Project named '" + projectNameString + "' not in workspace in Workspace");//$NON-NLS-1$ //$NON-NLS-2$
 		}
 
@@ -96,7 +96,6 @@ public class ExportFBs extends Task {
 
 				final IPath location = Path.fromOSString(file.getAbsolutePath());
 				final IFile ifile = workspace.getRoot().getFileForLocation(location);
-				System.out.println(ifile.getLocation().toString());
 
 				try {
 					filter.export(ifile, folder.getPath(), true);
@@ -104,10 +103,14 @@ public class ExportFBs extends Task {
 						filter.export(null, folder.getPath(), true, new CMakeListsMarker());
 					}
 				} catch (final ExportException e) {
-					throw new BuildException("Could not export: " + e.getMessage());//$NON-NLS-1$
+					throw new BuildException("Could not export: " + e.getMessage(), e);//$NON-NLS-1$
 				}
 			}
 		}
+	}
+
+	protected IProject getFordiacProject() {
+		return fordiacProject;
 	}
 
 }
