@@ -393,7 +393,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		try {
 			String result = sendREQ(res.getName(), request);
 			if (result != null) {
-				result = result.replaceFirst("<Response ID=\"[0-9]+\">\n", ""); //$NON-NLS-1$ //$NON-NLS-2$
+				result = result.replaceFirst("<Response ID=\"\\d+\">\n", ""); //$NON-NLS-1$ //$NON-NLS-2$
 				result = result.replaceFirst("</Response>", ""); //$NON-NLS-1$ //$NON-NLS-2$
 				if (!result.contains("Reason=\"UNSUPPORTED_TYPE\"") && !result.contains("Reason=\"UNSUPPORTED_CMD\"")) { //$NON-NLS-1$ //$NON-NLS-2$
 					final AutomationSystem system = res.getDevice().getAutomationSystem();

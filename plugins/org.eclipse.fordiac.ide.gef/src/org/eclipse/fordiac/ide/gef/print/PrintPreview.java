@@ -55,7 +55,7 @@ import org.eclipse.swt.widgets.Text;
  */
 public class PrintPreview extends Dialog {
 
-	private static final String ONLY_DIGIT_REGEX = "^[0-9]*$"; //$NON-NLS-1$
+	private static final String ONLY_DIGIT_REGEX = "^\\d*$"; //$NON-NLS-1$
 	private static final Pattern ONLY_DIGIT_PATTERN = Pattern.compile(ONLY_DIGIT_REGEX, Pattern.MULTILINE);
 
 	/**
