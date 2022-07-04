@@ -17,6 +17,8 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.debug.breakpoint.EvaluatorLineBreakpoint;
+import org.eclipse.fordiac.ide.model.eval.Evaluator;
+import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -45,6 +47,11 @@ public class STLineBreakpoint extends EvaluatorLineBreakpoint {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public boolean isApplicable(final Evaluator evaluator) {
+		return evaluator instanceof StructuredTextEvaluator;
 	}
 
 	@Override

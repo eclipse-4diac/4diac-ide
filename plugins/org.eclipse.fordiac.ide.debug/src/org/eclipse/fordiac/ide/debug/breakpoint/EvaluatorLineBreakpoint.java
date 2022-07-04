@@ -17,8 +17,9 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.model.IBreakpoint;
 import org.eclipse.debug.core.model.LineBreakpoint;
+import org.eclipse.fordiac.ide.model.eval.Evaluator;
 
-public class EvaluatorLineBreakpoint extends LineBreakpoint {
+public abstract class EvaluatorLineBreakpoint extends LineBreakpoint {
 
 	public static final String DEBUG_MODEL = "org.eclipse.fordiac.ide.debug.model"; //$NON-NLS-1$
 
@@ -71,6 +72,9 @@ public class EvaluatorLineBreakpoint extends LineBreakpoint {
 		setAttribute(CONDITION, condition);
 	}
 
+	public abstract boolean isApplicable(Evaluator evaluator);
+
+	@SuppressWarnings("static-method")
 	public String getMarkerId() {
 		return BREAKPOINT_MARKER;
 	}
