@@ -8,22 +8,27 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
+import org.junit.Test;
 
 /** small fb network consisting of e_sr, e_switch, and e_ctud */
-public class ExampleFbNetworkTest extends AbstractInterpreterTest {
+public class SimpleEventConnectionTest extends AbstractInterpreterTest {
 
 	@Override
 	public void test() {
-		final FBNetwork network = loadFbNetwork("ExampleFbNetwork", "ExampleFbNetwork"); //$NON-NLS-1$ //$NON-NLS-2$
+		
+		final FBNetwork network = loadFbNetwork("ReferenceExamples", "ReferenceExamples", "EventConnections"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		assertNotNull(network);
 
-		final EList<Transaction> returnedTrasactions =
-				runFBNetworkTest(network, (Event) network.getFBNamed("E_SR").getInterfaceElement("S")); //$NON-NLS-1$ //$NON-NLS-2$
+		SubApp subApp = network.getSubAppNamed("Ex1a");
+		
+		EList<Transaction> returnedTrasactions =
+				runFBNetworkTest(subApp.getSubAppNetwork(), (Event) subApp.getSubAppNetwork().getFBNamed("E_SPLIT").getInterfaceElement("EI")); //$NON-NLS-1$ //$NON-NLS-2$
 		
 		
-		assertTrue(returnedTrasactions.size() == 3);
+		assertTrue(returnedTrasactions.size() == 4);
 		assertTrue(returnedTrasactions.get(0).getInputEventOccurrence().getEvent().getName().equals("S")); //$NON-NLS-1$
 		assertTrue(returnedTrasactions.get(0).getInputEventOccurrence().getParentFB().getName().equals("E_SR")); //$NON-NLS-1$
 		

@@ -15,7 +15,9 @@ package org.eclipse.fordiac.ide.fb.interpreter;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -52,6 +54,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
@@ -65,9 +69,18 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 public class DefaultRunFBType implements IRunFBTypeVisitor{
 
 	private final EventOccurrence eventOccurrence;
+	private final Map<String, FBNetworkElement> nameToFBNetwork;
 
 	public DefaultRunFBType(final EventOccurrence eventOccurrence) {
 		this.eventOccurrence = eventOccurrence;
+		this.nameToFBNetwork = new HashMap<>();
+		if (this.eventOccurrence.getFbRuntime() instanceof FBNetworkRuntime) {
+			final FBNetworkRuntime fbNetworkRuntime = (FBNetworkRuntime) this.eventOccurrence.getFbRuntime();
+			final FBNetwork fbNetwork = fbNetworkRuntime.getFbnetwork();
+			fbNetwork.getNetworkElements().forEach(networkElement -> {
+				nameToFBNetwork.put(networkElement.getName(), networkElement);
+			});
+		}
 	}
 
 	public static Function<Object,Object> of(final IRunFBTypeVisitor runTypeVisitor, final EventManager eventManager) {
@@ -248,6 +261,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		// TODO reuse the runtimes
 		final BasicFBTypeRuntime runtime = OperationalSemanticsFactory.eINSTANCE.createBasicFBTypeRuntime();
 		runtime.setBasicfbtype((BasicFBType) EcoreUtil.copy(eventOccurrence.getParentFB().getType()));
+		//this.nameToFBNetwork.get(eventOccurrence.getParentFB().getType().getName())
+		//TODO is this copy correct?
 		runtime.setActiveState(runtime.getBasicfbtype().getECC().getStart());
 
 		//Sample Data Input
