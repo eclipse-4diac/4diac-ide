@@ -40,7 +40,12 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 			final ServiceSequence seq = getSequence(selected);
 			if (seq != null) {
 				try {
-					AbstractInterpreterTest.runFBTest((BasicFBType) seq.getService().getFBType(), seq);
+					if (seq.getStartState() != null && !seq.getStartState().isBlank()) { //$NON-NLS-1$
+						AbstractInterpreterTest.runTest((BasicFBType) seq.getService().getFBType(), seq,
+								seq.getStartState());
+					} else {
+						AbstractInterpreterTest.runFBTest((BasicFBType) seq.getService().getFBType(), seq);
+					}
 					MessageDialog.openInformation(HandlerUtil.getActiveShell(event), Messages.RunServiceSequenceHandler_Success,
 							Messages.RunServiceSequenceHandler_SequenceMatchesECC);
 

@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -39,18 +40,21 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSeq
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -68,7 +72,6 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 
 	private static final int CANCEL = -1;
 
-
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
@@ -78,7 +81,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 				final List<String> events = new ArrayList<>();
 				final List<String> parameters = new ArrayList<>();
 				final RecordSequenceDialog dialog = new RecordSequenceDialog(HandlerUtil.getActiveShell(event), events,
-						parameters);
+						parameters, seq);
 				final int returnCode = dialog.open();
 				if (returnCode != CANCEL) {
 					try {
@@ -191,16 +194,20 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	private static class RecordSequenceDialog extends MessageDialog {
 		private Text inputEventText;
 		private Text inputParameterText;
+		private CCombo inputStartStateCombo;
 		private Button appendCheckbox;
 		private final List<String> events;
 		private final List<String> parameters;
 		private boolean append;
+		private final ServiceSequence serviceSequence;
 
-		public RecordSequenceDialog(final Shell parentShell, final List<String> events, final List<String> parameters) {
+		public RecordSequenceDialog(final Shell parentShell, final List<String> events, final List<String> parameters,
+				final ServiceSequence serviceSequence) {
 			super(parentShell, "Record Sequence (separated by ;)", null, "Configuration", MessageDialog.INFORMATION, 0,
 					"Run");
 			this.events = events;
 			this.parameters = parameters;
+			this.serviceSequence = serviceSequence;
 		}
 
 		@Override
@@ -227,6 +234,24 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 
 			inputParameterText = new Text(group, SWT.NONE);
 			inputParameterText.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
+
+			label = new Label(group, SWT.None);
+			label.setText("Start State");
+
+			inputStartStateCombo = ComboBoxWidgetFactory.createCombo(group);
+			inputStartStateCombo.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
+			final FBType fbtype = serviceSequence.getService().getFBType();
+			if (fbtype instanceof BasicFBType) {
+				final String[] startnames = Stream
+						.concat(((BasicFBType) fbtype).getECC().getECState().stream().map(ECState::getName),
+								Stream.of("")) //$NON-NLS-1$
+						.toArray(String[]::new);
+				inputStartStateCombo.setItems(startnames);
+				inputStartStateCombo.select(Arrays.asList(startnames).indexOf("")); //$NON-NLS-1$
+				inputStartStateCombo.select(CANCEL);
+			} else {
+				inputStartStateCombo.setEnabled(false);
+			}
 
 			appendCheckbox = new Button(group, SWT.CHECK);
 			appendCheckbox.setText("Append");

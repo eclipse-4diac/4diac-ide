@@ -18,7 +18,9 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceNameCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceStartStateCommand;
@@ -30,10 +32,14 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSeq
 import org.eclipse.fordiac.ide.model.ServiceSequenceTypes;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTransactionOrderCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
+import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -60,7 +66,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 	private TableViewer transactionsViewer;
 	private Text nameText;
 	private Text commentText;
-	private Text startState;
+	private CCombo startState;
 	private CCombo serviceSequencetype;
 
 	private static final String INDEX = "index"; //$NON-NLS-1$
@@ -128,7 +134,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		});
 
 		getWidgetFactory().createCLabel(typeAndCommentGroup, Messages.ServiceSection_StartState);
-		startState = createGroupText(typeAndCommentGroup, true);
+		startState = createStartStateSelector(typeAndCommentGroup);
 		startState.setLayoutData(new GridData(SWT.FILL, SWT.NONE, true, false));
 		startState.addModifyListener(e -> {
 			final Command cmd = new ChangeSequenceStartStateCommand(startState.getText(), getType());
@@ -160,6 +166,10 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 		final List<String> items = ServiceSequenceTypes.getAllTypes();
 		combo.setItems(items.toArray(new String[0]));
 		return combo;
+	}
+
+	private CCombo createStartStateSelector(final Group parent) {
+		return ComboBoxWidgetFactory.createCombo(parent);
 	}
 
 	private void configureButtonList(final AddDeleteReorderListWidget buttons, final TableViewer transactionsViewer) {
@@ -220,8 +230,26 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			final int i = Arrays.asList(serviceSequencetype.getItems()).indexOf(getType().getServiceSequenceType());
 			serviceSequencetype.select(i >= 0 ? i : 0);
-			startState.setText(getType().getStartState() != null ? getType().getStartState() : ""); //$NON-NLS-1$
+			final FBType fbtype = getType().getService().getFBType();
+			if (fbtype instanceof BasicFBType) {
+				final EList<ECState> states = ((BasicFBType) fbtype).getECC().getECState();
+				final String[] statenames = Stream.concat(states.stream().map(ECState::getName), Stream.of("")) //$NON-NLS-1$
+						.toArray(String[]::new);
+				startState.setItems(statenames);
+				int idx = getType().getStartState() != null
+						? Arrays.asList(statenames).indexOf(getType().getStartState())
+								: -1;
+				if (idx == -1) {
+					idx = Arrays.asList(statenames).indexOf(""); //$NON-NLS-1$
+				}
+				startState.select(idx);
+				startState.setEnabled(true);
+			} else {
+				startState.setEnabled(false);
+			}
+
 			transactionsViewer.setInput(getType());
+
 		}
 		commandStack = commandStackBuffer;
 	}
