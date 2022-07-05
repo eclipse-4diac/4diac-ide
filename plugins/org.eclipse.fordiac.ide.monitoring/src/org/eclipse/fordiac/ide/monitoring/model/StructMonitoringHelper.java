@@ -17,6 +17,9 @@ public class StructMonitoringHelper {
 
 	private static final String SEPARATOR = System.lineSeparator();
 	private static final String TAB = "\t";
+	private static final String ESCAPED_SEPARATOR = SEPARATOR.length() > 1 ? "$r$n" : "$n";
+	private static final String ESCAPED_TAB = "$t";
+	private static final String REGEX = String.format("(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)(?=(?:[^\']*\'[^\']*\')*[^\']*$)[%s%s]", SEPARATOR, TAB);
 
 	public static String format(final String model) {
 		if (model == null || model.length() < 2) {
@@ -56,7 +59,8 @@ public class StructMonitoringHelper {
 		// separate last (outer) parenthesis from the struct "body"
 		builder.insert(builder.length() - 1, System.lineSeparator());
 
-		return builder.toString();
+		// forte returns tabs and separators escaped (e.g. $n)
+		return builder.toString().replace(ESCAPED_TAB, TAB).replace(ESCAPED_SEPARATOR, SEPARATOR);
 	}
 
 	private static void addLinebreak(final StringBuilder builder, final int level, final int i) {
@@ -75,7 +79,7 @@ public class StructMonitoringHelper {
 	}
 
 	public static String removeFormatting(final String model) {
-		return model.replace(SEPARATOR, "").replace(TAB, "");
+		return model.replaceAll(REGEX, "");
 	}
 
 	private StructMonitoringHelper() {
