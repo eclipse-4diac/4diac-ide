@@ -139,7 +139,7 @@ public class FlattenSubAppCommand extends Command {
 		createCommands.undo();
 		parent.getNetworkElements().removeAll(elements);
 		subapp.getSubAppNetwork().getNetworkElements().addAll(elements);
-		FBNetworkHelper.removeXYOffsetForFBNetwork(elements); // ??
+		FBNetworkHelper.moveFBNetworkByOffset(elements, getOriginalPositionX(), getOriginalPositionY());
 
 		parent.getEventConnections().removeAll(transferEventConnections);
 		subapp.getSubAppNetwork().getEventConnections().addAll(transferEventConnections);
@@ -189,7 +189,7 @@ public class FlattenSubAppCommand extends Command {
 					for (final Connection inboundConn : connection.getSource().getInputConnections()) {
 						for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
 							createCommands
-									.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
+							.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
 						}
 					}
 				} else if (connection.getSourceElement() == subapp) {
