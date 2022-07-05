@@ -15,15 +15,21 @@
 package org.eclipse.fordiac.ide.model.eval.function;
 
 import java.math.BigInteger;
+import java.time.Clock;
+import java.time.Duration;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.temporal.ChronoUnit;
 import java.util.function.BinaryOperator;
 import java.util.function.DoubleBinaryOperator;
 import java.util.function.DoubleUnaryOperator;
 import java.util.function.UnaryOperator;
 import java.util.stream.Stream;
 
+import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator;
 import org.eclipse.fordiac.ide.model.eval.value.AnyBitValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyDurationValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue;
@@ -1773,7 +1779,14 @@ public interface StandardFunctions extends Functions {
 	}
 
 	static TimeValue NOW_MONOTONIC() {
-		return TimeValue.toTimeValue(System.nanoTime());
+		return TimeValue.toTimeValue(Instant.EPOCH.until(AbstractEvaluator.currentClock().instant(), ChronoUnit.NANOS));
+	}
+
+	@OnlySupportedBy("4diac IDE")
+	static void OVERRIDE_NOW_MONOTONIC(final TimeValue value) {
+		final Duration duration = value.toDuration();
+		final Instant instant = Instant.ofEpochSecond(duration.getSeconds(), duration.getNano());
+		AbstractEvaluator.setClock(Clock.fixed(instant, ZoneId.systemDefault()));
 	}
 
 	/* Date and Time conversions */
