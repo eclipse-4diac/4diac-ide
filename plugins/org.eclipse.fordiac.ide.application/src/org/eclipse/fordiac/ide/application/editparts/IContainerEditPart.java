@@ -23,19 +23,21 @@ public interface IContainerEditPart extends GraphicalEditPart {
 
 	Rectangle getCommentBounds();
 
+	int getCommentWidth();
+
 	default Rectangle getMinContentBounds() {
-		Rectangle selectionExtend = null;
+		Rectangle selectionExtent = null;
 		for (final Object child : getContentEP().getChildren()) {
 			if (child instanceof GraphicalEditPart) {
 				final Rectangle fbBounds = getBoundsForEditPart((GraphicalEditPart) child);
-				if (selectionExtend == null) {
-					selectionExtend = fbBounds.getCopy();
+				if (selectionExtent == null) {
+					selectionExtent = fbBounds.getCopy();
 				} else {
-					selectionExtend.union(fbBounds);
+					selectionExtent.union(fbBounds);
 				}
 			}
 		}
-		return (selectionExtend != null) ? selectionExtend : getDefaultContentBounds();
+		return (selectionExtent != null) ? selectionExtent : getDefaultContentBounds();
 	}
 
 	private static Rectangle getBoundsForEditPart(final GraphicalEditPart ep) {

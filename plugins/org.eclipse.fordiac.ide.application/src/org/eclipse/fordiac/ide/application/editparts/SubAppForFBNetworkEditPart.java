@@ -269,7 +269,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	}
 
 	private boolean subAppIsMapped(final SubApp subApp) {
-		return null == getModel().getTypeEntry() && (null == subApp.getSubAppNetwork()) && subApp.isMapped();
+		return (null == getModel().getTypeEntry()) && (null == subApp.getSubAppNetwork()) && subApp.isMapped();
 	}
 
 	@Override
@@ -288,12 +288,10 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 				installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new ContainerResizePolicy());
 				installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy());
 			}
-		} else {
-			if (getFigure().getExpandedMainFigure() != null) {
-				installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new TypeDirectEditPolicy());
-				installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new ModifiedNonResizeableEditPolicy());
-				installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBAddToSubAppLayoutEditPolicy());
-			}
+		} else if (getFigure().getExpandedMainFigure() != null) {
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new TypeDirectEditPolicy());
+			installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new ModifiedNonResizeableEditPolicy());
+			installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBAddToSubAppLayoutEditPolicy());
 		}
 	}
 
@@ -358,4 +356,10 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 		}
 		return super.getAdapter(key);
 	}
+
+	@Override
+	public int getCommentWidth() {
+		return getCommentFigure().getTextWidth();
+	}
+
 }

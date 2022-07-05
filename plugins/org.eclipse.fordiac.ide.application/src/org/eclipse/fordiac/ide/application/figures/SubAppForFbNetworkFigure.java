@@ -25,7 +25,6 @@ import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
-import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.ToolbarLayout;
@@ -89,10 +88,8 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 			if (expandedMainFigure == null) {
 				transformToExpandedSubapp();
 			}
-		} else {
-			if (expandedMainFigure != null) {
-				transformToCollapsedSubapp();
-			}
+		} else if (expandedMainFigure != null) {
+			transformToCollapsedSubapp();
 		}
 	}
 
@@ -104,10 +101,10 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		setConstraint(getFbFigureContainer(), layoutConstraint);
 
 		createExpandedMainFigure();
-		removeTopMiddleBotom();
+		removeTopMiddleBottom();
 		addComment();
 		createExpandedInputs();
-		crateExpandedOutputs();
+		createExpandedOutputs();
 		// ensure recalculation of the pins as they now have two connection endpoints
 		getFbFigureContainer().invalidateTree();
 	}
@@ -123,7 +120,8 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		addMiddle();
 		addBottom();
 		addBottomIOs();
-		// ensure recalculation of the pins as they now have only one connection ednpoint
+		// ensure recalculation of the pins as they now have only one connection
+		// ednpoint
 		getFbFigureContainer().invalidateTree();
 	}
 
@@ -131,7 +129,8 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure = new BorderedRoundedRectangle() {
 			@Override
 			public Insets getInsets() {
-				// the insets are needed to correctly get the bottom margin for the selection area
+				// the insets are needed to correctly get the bottom margin for the selection
+				// area
 				// left and right need to be 0 so that the pins are directly at the border
 				final Insets insets = super.getInsets();
 				insets.left = 0;
@@ -142,10 +141,9 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure.setOutline(false);
 		expandedMainFigure.setOpaque(false);
 		expandedMainFigure
-		.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
+				.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 		expandedMainFigure.setBorder(new RoundedRectangleShadowBorder());
 		final GridLayout expandedMainLayout = createTopBottomLayout();
-		expandedMainLayout.marginHeight = 5;
 		expandedMainFigure.setLayoutManager(expandedMainLayout);
 		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
@@ -160,7 +158,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		inputFigure.add(getBottomInputArea(), createExpandedIOLayoutData(), -1);
 	}
 
-	private void crateExpandedOutputs() {
+	private void createExpandedOutputs() {
 		final Figure outputFigure = new Figure();
 		outputFigure.setLayoutManager(createExpandedIOLayout());
 		expandedMainFigure.add(outputFigure, createExpandedIOLayoutData(), -1);
@@ -180,7 +178,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		return outputsLayoutData;
 	}
 
-	private void removeTopMiddleBotom() {
+	private void removeTopMiddleBottom() {
 		getFbFigureContainer().remove(getTop());
 		getFbFigureContainer().remove(getMiddleContainer());
 		getFbFigureContainer().remove(getBottom());
@@ -189,7 +187,6 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	private void addComment() {
 		final Figure commentContainer = new Figure();
 		commentContainer.setLayoutManager(new ToolbarLayout());
-		commentContainer.setBorder(new MarginBorder(2, 2, 2, 2));
 		expandedMainFigure.add(commentContainer, createCommentLayoutData(), 0);
 
 		commentFigure = new InstanceCommentFigure();
