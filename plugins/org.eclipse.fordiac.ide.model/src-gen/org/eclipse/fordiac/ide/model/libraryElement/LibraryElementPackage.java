@@ -202,124 +202,6 @@ public interface LibraryElementPackage extends EPackage {
 	int IINTERFACE_ELEMENT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl <em>Var Declaration</em>}' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclaration()
-	 * @generated
-	 */
-	int VAR_DECLARATION = 39;
-
-	/**
-	 * The feature id for the '<em><b>Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION__NAME = IINTERFACE_ELEMENT__NAME;
-
-	/**
-	 * The feature id for the '<em><b>Comment</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION__COMMENT = IINTERFACE_ELEMENT__COMMENT;
-
-	/**
-	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION__ATTRIBUTES = IINTERFACE_ELEMENT__ATTRIBUTES;
-
-	/**
-	 * The feature id for the '<em><b>Is Input</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION__IS_INPUT = IINTERFACE_ELEMENT__IS_INPUT;
-
-	/**
-	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION__INPUT_CONNECTIONS = IINTERFACE_ELEMENT__INPUT_CONNECTIONS;
-
-	/**
-	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION__OUTPUT_CONNECTIONS = IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
-
-	/**
-	 * The feature id for the '<em><b>Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION__TYPE = IINTERFACE_ELEMENT__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Type Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION__TYPE_NAME = IINTERFACE_ELEMENT__TYPE_NAME;
-
-	/**
-	 * The feature id for the '<em><b>Array Size</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION__ARRAY_SIZE = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
-	 * The feature id for the '<em><b>Withs</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION__WITHS = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION__VALUE = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
-
-	/**
-	 * The number of structural features of the '<em>Var Declaration</em>' class.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
-
-	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl <em>Adapter Declaration</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -336,7 +218,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION__NAME = VAR_DECLARATION__NAME;
+	int ADAPTER_DECLARATION__NAME = IINTERFACE_ELEMENT__NAME;
 
 	/**
 	 * The feature id for the '<em><b>Comment</b></em>' attribute.
@@ -345,7 +227,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION__COMMENT = VAR_DECLARATION__COMMENT;
+	int ADAPTER_DECLARATION__COMMENT = IINTERFACE_ELEMENT__COMMENT;
 
 	/**
 	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
@@ -354,7 +236,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION__ATTRIBUTES = VAR_DECLARATION__ATTRIBUTES;
+	int ADAPTER_DECLARATION__ATTRIBUTES = IINTERFACE_ELEMENT__ATTRIBUTES;
 
 	/**
 	 * The feature id for the '<em><b>Is Input</b></em>' attribute.
@@ -363,7 +245,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION__IS_INPUT = VAR_DECLARATION__IS_INPUT;
+	int ADAPTER_DECLARATION__IS_INPUT = IINTERFACE_ELEMENT__IS_INPUT;
 
 	/**
 	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
@@ -372,7 +254,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION__INPUT_CONNECTIONS = VAR_DECLARATION__INPUT_CONNECTIONS;
+	int ADAPTER_DECLARATION__INPUT_CONNECTIONS = IINTERFACE_ELEMENT__INPUT_CONNECTIONS;
 
 	/**
 	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
@@ -381,7 +263,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION__OUTPUT_CONNECTIONS = VAR_DECLARATION__OUTPUT_CONNECTIONS;
+	int ADAPTER_DECLARATION__OUTPUT_CONNECTIONS = IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
 
 	/**
 	 * The feature id for the '<em><b>Type</b></em>' reference.
@@ -390,7 +272,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION__TYPE = VAR_DECLARATION__TYPE;
+	int ADAPTER_DECLARATION__TYPE = IINTERFACE_ELEMENT__TYPE;
 
 	/**
 	 * The feature id for the '<em><b>Type Name</b></em>' attribute.
@@ -399,34 +281,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION__TYPE_NAME = VAR_DECLARATION__TYPE_NAME;
-
-	/**
-	 * The feature id for the '<em><b>Array Size</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_DECLARATION__ARRAY_SIZE = VAR_DECLARATION__ARRAY_SIZE;
-
-	/**
-	 * The feature id for the '<em><b>Withs</b></em>' reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_DECLARATION__WITHS = VAR_DECLARATION__WITHS;
-
-	/**
-	 * The feature id for the '<em><b>Value</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_DECLARATION__VALUE = VAR_DECLARATION__VALUE;
+	int ADAPTER_DECLARATION__TYPE_NAME = IINTERFACE_ELEMENT__TYPE_NAME;
 
 	/**
 	 * The feature id for the '<em><b>Adapter FB</b></em>' reference.
@@ -435,7 +290,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION__ADAPTER_FB = VAR_DECLARATION_FEATURE_COUNT + 0;
+	int ADAPTER_DECLARATION__ADAPTER_FB = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
@@ -444,7 +299,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION__TYPE_ENTRY = VAR_DECLARATION_FEATURE_COUNT + 1;
+	int ADAPTER_DECLARATION__TYPE_ENTRY = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Adapter Declaration</em>' class.
@@ -453,7 +308,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION_FEATURE_COUNT = VAR_DECLARATION_FEATURE_COUNT + 2;
+	int ADAPTER_DECLARATION_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl <em>Library Element</em>}' class.
@@ -4002,6 +3857,124 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int AUTOMATION_SYSTEM_FEATURE_COUNT = LIBRARY_ELEMENT_FEATURE_COUNT + 5;
+
+	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl <em>Var Declaration</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclaration()
+	 * @generated
+	 */
+	int VAR_DECLARATION = 39;
+
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VAR_DECLARATION__NAME = IINTERFACE_ELEMENT__NAME;
+
+	/**
+	 * The feature id for the '<em><b>Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VAR_DECLARATION__COMMENT = IINTERFACE_ELEMENT__COMMENT;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VAR_DECLARATION__ATTRIBUTES = IINTERFACE_ELEMENT__ATTRIBUTES;
+
+	/**
+	 * The feature id for the '<em><b>Is Input</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VAR_DECLARATION__IS_INPUT = IINTERFACE_ELEMENT__IS_INPUT;
+
+	/**
+	 * The feature id for the '<em><b>Input Connections</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VAR_DECLARATION__INPUT_CONNECTIONS = IINTERFACE_ELEMENT__INPUT_CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Output Connections</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VAR_DECLARATION__OUTPUT_CONNECTIONS = IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS;
+
+	/**
+	 * The feature id for the '<em><b>Type</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VAR_DECLARATION__TYPE = IINTERFACE_ELEMENT__TYPE;
+
+	/**
+	 * The feature id for the '<em><b>Type Name</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VAR_DECLARATION__TYPE_NAME = IINTERFACE_ELEMENT__TYPE_NAME;
+
+	/**
+	 * The feature id for the '<em><b>Array Size</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VAR_DECLARATION__ARRAY_SIZE = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
+
+	/**
+	 * The feature id for the '<em><b>Withs</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VAR_DECLARATION__WITHS = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VAR_DECLARATION__VALUE = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
+
+	/**
+	 * The number of structural features of the '<em>Var Declaration</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int VAR_DECLARATION_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.VersionInfoImpl <em>Version Info</em>}' class.

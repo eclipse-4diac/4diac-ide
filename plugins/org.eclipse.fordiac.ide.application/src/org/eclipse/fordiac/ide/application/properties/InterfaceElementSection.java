@@ -30,7 +30,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -206,7 +205,7 @@ public class InterfaceElementSection extends AbstractSection {
 			instanceCommentText.setText(getInstanceComment());
 			instanceCommentText.setForeground(getForegroundColor());
 
-			if ((getType() instanceof VarDeclaration) && !(getType() instanceof AdapterDeclaration)) {
+			if (getType() instanceof VarDeclaration) {
 				setParameter();
 			} else if (getType() instanceof ErrorMarkerInterface) {
 				setErrorParam();
@@ -277,7 +276,7 @@ public class InterfaceElementSection extends AbstractSection {
 		if (getType() instanceof ErrorMarkerInterface) {
 			return !(getType().getType() instanceof EventType) && !(getType().getType() instanceof AdapterType);
 		}
-		return (getType() instanceof VarDeclaration) && !(getType() instanceof AdapterDeclaration);
+		return (getType() instanceof VarDeclaration);
 	}
 
 	private void setEditable(final boolean editable) {

@@ -43,7 +43,7 @@ public class FilterProperties {
 		if (o instanceof Value) {
 			return isDataPin(((Value) o).getParentIE());
 		}
-		return o instanceof VarDeclaration && !(o instanceof AdapterDeclaration);
+		return o instanceof VarDeclaration;
 	}
 
 	public static boolean isEventPin(final Object o) {
