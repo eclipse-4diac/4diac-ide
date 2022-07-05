@@ -468,8 +468,8 @@
 					</FB>
 				</SubAppNetwork>
 				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
-				<Attribute Name="width" Type="LREAL" Value="5073.333333333334"/>
-				<Attribute Name="height" Type="LREAL" Value="1553.3333333333335"/>
+				<Attribute Name="width" Type="LREAL" Value="5133.333333333334"/>
+				<Attribute Name="height" Type="LREAL" Value="1626.6666666666667"/>
 			</SubApp>
 			<SubApp Name="Test8Solution" Comment="" x="5140.0" y="15893.333333333334">
 				<SubAppInterfaceList>
@@ -1353,6 +1353,154 @@
 				<Attribute Name="width" Type="LREAL" Value="1333.3333333333335"/>
 				<Attribute Name="height" Type="LREAL" Value="666.6666666666667"/>
 			</SubApp>
+			<SubApp Name="Test17" Comment="interface to interface across hierarchies, swap" x="646.6666666666667" y="33933.333333333336">
+				<SubAppInterfaceList>
+					<SubAppEventOutputs>
+						<SubAppEvent Name="source" Type="Event" Comment="">
+						</SubAppEvent>
+					</SubAppEventOutputs>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+					<SubApp Name="SubApp_1" Comment="" x="286.6666666666667" y="0.0">
+						<SubAppInterfaceList>
+						</SubAppInterfaceList>
+						<SubAppNetwork>
+							<SubApp Name="SubApp" Comment="" x="126.66666666666667" y="40.0">
+								<SubAppInterfaceList>
+									<SubAppEventOutputs>
+										<SubAppEvent Name="destination" Type="Event" Comment="">
+										</SubAppEvent>
+									</SubAppEventOutputs>
+								</SubAppInterfaceList>
+								<SubAppNetwork>
+								</SubAppNetwork>
+								<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+								<Attribute Name="width" Type="LREAL" Value="1333.3333333333335"/>
+								<Attribute Name="height" Type="LREAL" Value="666.6666666666667"/>
+							</SubApp>
+						</SubAppNetwork>
+						<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+						<Attribute Name="width" Type="LREAL" Value="2480.0"/>
+						<Attribute Name="height" Type="LREAL" Value="1100.0"/>
+					</SubApp>
+				</SubAppNetwork>
+				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+				<Attribute Name="width" Type="LREAL" Value="3113.3333333333335"/>
+				<Attribute Name="height" Type="LREAL" Value="1480.0"/>
+			</SubApp>
+			<SubApp Name="Test18" Comment="interface to interface across hierarchies, no swap" x="573.3333333333334" y="35760.0">
+				<SubAppInterfaceList>
+					<SubAppEventOutputs>
+						<SubAppEvent Name="destination" Type="Event" Comment="">
+						</SubAppEvent>
+					</SubAppEventOutputs>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+					<SubApp Name="SubApp_1" Comment="" x="286.6666666666667" y="0.0">
+						<SubAppInterfaceList>
+						</SubAppInterfaceList>
+						<SubAppNetwork>
+							<SubApp Name="SubApp" Comment="" x="126.66666666666667" y="40.0">
+								<SubAppInterfaceList>
+									<SubAppEventOutputs>
+										<SubAppEvent Name="source" Type="Event" Comment="">
+										</SubAppEvent>
+									</SubAppEventOutputs>
+								</SubAppInterfaceList>
+								<SubAppNetwork>
+								</SubAppNetwork>
+								<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+								<Attribute Name="width" Type="LREAL" Value="1333.3333333333335"/>
+								<Attribute Name="height" Type="LREAL" Value="666.6666666666667"/>
+							</SubApp>
+						</SubAppNetwork>
+						<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+						<Attribute Name="width" Type="LREAL" Value="2480.0"/>
+						<Attribute Name="height" Type="LREAL" Value="1100.0"/>
+					</SubApp>
+				</SubAppNetwork>
+				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+				<Attribute Name="width" Type="LREAL" Value="3640.0"/>
+				<Attribute Name="height" Type="LREAL" Value="1480.0"/>
+			</SubApp>
+			<SubApp Name="Test19" Comment="" x="706.6666666666667" y="37766.66666666667">
+				<SubAppInterfaceList>
+					<SubAppEventInputs>
+						<SubAppEvent Name="source" Type="Event" Comment="">
+						</SubAppEvent>
+					</SubAppEventInputs>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+					<SubApp Name="SubApp" Comment="" x="126.66666666666667" y="40.0">
+						<SubAppInterfaceList>
+							<SubAppEventOutputs>
+								<SubAppEvent Name="destination" Type="Event" Comment="">
+								</SubAppEvent>
+							</SubAppEventOutputs>
+						</SubAppInterfaceList>
+						<SubAppNetwork>
+						</SubAppNetwork>
+						<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+						<Attribute Name="width" Type="LREAL" Value="1333.3333333333335"/>
+						<Attribute Name="height" Type="LREAL" Value="666.6666666666667"/>
+					</SubApp>
+				</SubAppNetwork>
+				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+				<Attribute Name="width" Type="LREAL" Value="2480.0"/>
+				<Attribute Name="height" Type="LREAL" Value="1100.0"/>
+			</SubApp>
+			<SubApp Name="Test20" Comment="" x="873.3333333333334" y="39260.0">
+				<SubAppInterfaceList>
+					<SubAppEventInputs>
+						<SubAppEvent Name="destination" Type="Event" Comment="">
+						</SubAppEvent>
+					</SubAppEventInputs>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+					<SubApp Name="SubApp" Comment="" x="126.66666666666667" y="40.0">
+						<SubAppInterfaceList>
+							<SubAppEventOutputs>
+								<SubAppEvent Name="source" Type="Event" Comment="">
+								</SubAppEvent>
+							</SubAppEventOutputs>
+						</SubAppInterfaceList>
+						<SubAppNetwork>
+						</SubAppNetwork>
+						<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+						<Attribute Name="width" Type="LREAL" Value="1333.3333333333335"/>
+						<Attribute Name="height" Type="LREAL" Value="666.6666666666667"/>
+					</SubApp>
+				</SubAppNetwork>
+				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+				<Attribute Name="width" Type="LREAL" Value="2480.0"/>
+				<Attribute Name="height" Type="LREAL" Value="1100.0"/>
+			</SubApp>
+			<SubApp Name="Test21" Comment="" x="933.3333333333334" y="40840.0">
+				<SubAppInterfaceList>
+					<SubAppEventOutputs>
+						<SubAppEvent Name="destination" Type="Event" Comment="">
+						</SubAppEvent>
+					</SubAppEventOutputs>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+					<SubApp Name="SubApp" Comment="" x="126.66666666666667" y="40.0">
+						<SubAppInterfaceList>
+							<SubAppEventInputs>
+								<SubAppEvent Name="source" Type="Event" Comment="">
+								</SubAppEvent>
+							</SubAppEventInputs>
+						</SubAppInterfaceList>
+						<SubAppNetwork>
+						</SubAppNetwork>
+						<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+						<Attribute Name="width" Type="LREAL" Value="1333.3333333333335"/>
+						<Attribute Name="height" Type="LREAL" Value="666.6666666666667"/>
+					</SubApp>
+				</SubAppNetwork>
+				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+				<Attribute Name="width" Type="LREAL" Value="2480.0"/>
+				<Attribute Name="height" Type="LREAL" Value="1100.0"/>
+			</SubApp>
 			<EventConnections>
 				<Connection Source="fb_destinationevent_1.destination" Destination="Test4Solution.destination" Comment="" dx1="206.66666666666669"/>
 				<Connection Source="Test5Solution.destination" Destination="fb_destinationevent_3.source" Comment="" dx1="80.0" dx2="80.0" dy="-560.0"/>
@@ -1965,7 +2113,7 @@
 			</FB>
 			<FB Name="fb_destinationevent_6" Type="fb_sourcedata" Comment="" x="-1393.3333333333335" y="14393.333333333334">
 			</FB>
-			<SubApp Name="Test18" Comment="crossing connection from FB to FB in nested subapp, data pin of same name  &amp;#10;already exists" x="260.0" y="32113.333333333336">
+			<SubApp Name="Test18" Comment="crossing connection from FB to FB in nested subapp, data pin of same name   &amp;#10;already exists" x="260.0" y="32113.333333333336">
 				<SubAppInterfaceList>
 					<OutputVars>
 						<VarDeclaration Name="destination" Type="BOOL" Comment=""/>
@@ -2604,7 +2752,7 @@
 				<Attribute Name="width" Type="LREAL" Value="1333.3333333333335"/>
 				<Attribute Name="height" Type="LREAL" Value="666.6666666666667"/>
 			</SubApp>
-			<SubApp Name="Test20" Comment="crossing connection from FB to FB in nested subapp, data pin of same name  &amp;#10;already exists" x="6153.333333333334" y="32220.0">
+			<SubApp Name="Test20" Comment="crossing connection from FB to FB in nested subapp, data pin of same name   &amp;#10;already exists" x="6153.333333333334" y="32220.0">
 				<SubAppInterfaceList>
 					<OutputVars>
 						<VarDeclaration Name="destination" Type="BOOL" Comment=""/>
