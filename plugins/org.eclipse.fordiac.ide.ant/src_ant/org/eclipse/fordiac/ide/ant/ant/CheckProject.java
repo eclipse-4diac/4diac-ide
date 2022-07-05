@@ -79,9 +79,27 @@ public class CheckProject extends Task {
 	}
 
 	private static String markerToLogString(final IMarker marker) throws CoreException {
-		return "PROBLEM: " + marker.getAttribute("message").toString() + " | " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				+ marker.getResource().getLocation().lastSegment() + " : " //$NON-NLS-1$
-				+ marker.getAttribute("lineNumber").toString();
+		String markerString = "PROBLEM: "; //$NON-NLS-1$
+		if (marker != null) {
+			if (marker.getAttribute("message") != null) {
+				markerString += marker.getAttribute("message").toString() + " | "; //$NON-NLS-1$
+			} else {
+				markerString += "NO ERROR MESSAGE | ";
+			}
+
+			if (marker.getResource().getLocation() != null) {
+				markerString += marker.getResource().getLocation().lastSegment() + " : "; //$NON-NLS-1$
+			} else {
+				markerString += "NO PATH : "; //$NON-NLS-1$
+			}
+
+			if (marker.getAttribute("lineNumber") != null) {
+				markerString += marker.getAttribute("lineNumber").toString();
+			} else {
+				markerString += "NO LINE NUMBER"; //$NON-NLS-1$
+			}
+		}
+		return markerString;
 	}
 
 	public static void waitMarkerJobsComplete() {
