@@ -18,6 +18,7 @@
 package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
@@ -59,6 +60,7 @@ public class FlattenSubAppCommand extends Command {
 	private final CompoundCommand mappCommands = new CompoundCommand();
 	private final CompoundCommand setUniqueName = new CompoundCommand();
 	private final Point fbnetworkPosInSubapp;
+	private boolean select = true;
 
 	public FlattenSubAppCommand(final SubApp subapp) {
 		super(Messages.FlattenSubAppCommand_LABEL_FlattenSubAppCommand);
@@ -66,6 +68,11 @@ public class FlattenSubAppCommand extends Command {
 		parent = subapp.getFbNetwork();
 		fbnetworkPosInSubapp = FBNetworkHelper
 				.getTopLeftCornerOfFBNetwork(subapp.getSubAppNetwork().getNetworkElements());
+	}
+
+	public FlattenSubAppCommand(final SubApp subapp, final boolean select) {
+		this(subapp);
+		this.select = select;
 	}
 
 	@Override
@@ -101,7 +108,9 @@ public class FlattenSubAppCommand extends Command {
 		}
 		setUniqueName.execute();
 
-		ElementSelector.selectViewObjects(elements);
+		if (select) {
+			ElementSelector.selectViewObjects(elements);
+		}
 	}
 
 	private void ensureUniqueName(final FBNetworkElement element) {
@@ -131,6 +140,10 @@ public class FlattenSubAppCommand extends Command {
 		createCommands.redo();
 		setUniqueName.redo();
 		mappCommands.redo();
+
+		if (select) {
+			ElementSelector.selectViewObjects(elements);
+		}
 	}
 
 	@Override
@@ -152,6 +165,10 @@ public class FlattenSubAppCommand extends Command {
 
 		setUniqueName.undo();
 		deleteCommands.undo();
+
+		if (select) {
+			ElementSelector.selectViewObjects(Arrays.asList(subapp));
+		}
 	}
 
 	private void checkConnections() {
@@ -189,7 +206,7 @@ public class FlattenSubAppCommand extends Command {
 					for (final Connection inboundConn : connection.getSource().getInputConnections()) {
 						for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
 							createCommands
-							.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
+									.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
 						}
 					}
 				} else if (connection.getSourceElement() == subapp) {

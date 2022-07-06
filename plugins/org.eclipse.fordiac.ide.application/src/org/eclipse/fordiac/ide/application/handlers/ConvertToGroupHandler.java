@@ -19,7 +19,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.commands.ConvertSubappToGroupCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -30,11 +29,9 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class ConvertToGroupHandler extends AbstractHandler implements CommandStackEventListener {
-	private CommandStack commandStack;
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -42,11 +39,9 @@ public class ConvertToGroupHandler extends AbstractHandler implements CommandSta
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		final SubApp subApp = getSelectedSubApp(selection);
 		if (null != subApp) {
-			commandStack = HandlerHelper.getCommandStack(editor);
-			ConvertSubappToGroupCommand cmd = new ConvertSubappToGroupCommand(subApp);
+			final CommandStack commandStack = HandlerHelper.getCommandStack(editor);
+			final ConvertSubappToGroupCommand cmd = new ConvertSubappToGroupCommand(subApp);
 			commandStack.execute(cmd);
-
-			refreshSelection(cmd.getCreatedElement());
 
 			commandStack.addCommandStackEventListener(this);
 			SystemManager.INSTANCE.notifyListeners();
@@ -86,18 +81,7 @@ public class ConvertToGroupHandler extends AbstractHandler implements CommandSta
 
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
-		if ((event.getCommand() instanceof ConvertSubappToGroupCommand)
-				&& ((event.getDetail() == CommandStack.POST_UNDO) || (event.getDetail() == CommandStack.POST_REDO))) {
-			refreshSelection(((ConvertSubappToGroupCommand) event.getCommand()).getCreatedElement());
-			// TODO for undo it should be the subapp
-		}
-	}
-
-	private void refreshSelection(final Group group) {
-		final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActiveEditor();
-		HandlerHelper.getViewer(editor).deselectAll();
-		HandlerHelper.selectElement(group, HandlerHelper.getViewer(editor));
+		// nothing to do here, selection is handled by command
 	}
 
 }
