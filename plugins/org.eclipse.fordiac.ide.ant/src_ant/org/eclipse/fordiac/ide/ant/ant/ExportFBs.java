@@ -108,6 +108,14 @@ public class ExportFBs extends Task {
 					if (exportCMakeList) {
 						filter.export(null, folder.getPath(), true, new CMakeListsMarker());
 					}
+
+					if (!filter.getErrors().isEmpty()) {
+						for (final String error : filter.getErrors()) {
+							System.out.println(error);
+						}
+						throw new BuildException("Could not export without errors");
+					}
+
 				} catch (final ExportException e) {
 					throw new BuildException("Could not export: " + e.getMessage());//$NON-NLS-1$
 				}
