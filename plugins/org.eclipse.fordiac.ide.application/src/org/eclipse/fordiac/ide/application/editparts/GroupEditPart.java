@@ -297,4 +297,9 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 		return commentFigure.getTextWidth();
 	}
 
+	@Override
+	public int getMinHeight() {
+		return 0;
+	}
+
 }

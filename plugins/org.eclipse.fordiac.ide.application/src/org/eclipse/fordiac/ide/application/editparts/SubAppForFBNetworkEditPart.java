@@ -101,8 +101,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			if (notification.getNewValue() instanceof IInterfaceElement) {
 				refreshChildren();
 			}
-			if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
-					.equals(notification.getFeature())) {
+			if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(notification.getFeature())) {
 				refreshVisuals();
 				refreshChildren();
 				refreshInterfaceEditParts();
@@ -114,8 +113,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			if (notification.getOldValue() instanceof IInterfaceElement) {
 				refreshChildren();
 			}
-			if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes()
-					.equals(notification.getFeature())) {
+			if (LibraryElementPackage.eINSTANCE.getConfigurableObject_Attributes().equals(notification.getFeature())) {
 				refreshVisuals();
 				refreshChildren();
 				refreshInterfaceEditParts();
@@ -360,6 +358,14 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	@Override
 	public int getCommentWidth() {
 		return getCommentFigure().getTextWidth();
+	}
+
+	@Override
+	public int getMinHeight() {
+		if (getModel().isUnfolded()) {
+			return getFigure().getExpandedIOHeight();
+		}
+		return 0;
 	}
 
 }

@@ -25,6 +25,8 @@ public interface IContainerEditPart extends GraphicalEditPart {
 
 	int getCommentWidth();
 
+	int getMinHeight();
+
 	default Rectangle getMinContentBounds() {
 		Rectangle selectionExtent = null;
 		for (final Object child : getContentEP().getChildren()) {
@@ -37,7 +39,11 @@ public interface IContainerEditPart extends GraphicalEditPart {
 				}
 			}
 		}
-		return (selectionExtent != null) ? selectionExtent : getDefaultContentBounds();
+		if (selectionExtent != null) {
+			selectionExtent.setHeight(Math.max(selectionExtent.height, getMinHeight()));
+			return selectionExtent;
+		}
+		return getDefaultContentBounds();
 	}
 
 	private static Rectangle getBoundsForEditPart(final GraphicalEditPart ep) {

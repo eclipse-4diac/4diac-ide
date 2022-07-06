@@ -25,6 +25,7 @@ import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.ToolbarLayout;
@@ -48,6 +49,8 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 
 	private InstanceCommentFigure commentFigure;
 	private RoundedRectangle expandedMainFigure;
+	private IFigure expandedInputFigure;
+	private IFigure expandedOutputFigure;
 
 	public SubAppForFbNetworkFigure(final SubApp model, final SubAppForFBNetworkEditPart editPart) {
 		super(model, editPart);
@@ -138,6 +141,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 				return insets;
 			}
 		};
+
 		expandedMainFigure.setOutline(false);
 		expandedMainFigure.setOpaque(false);
 		expandedMainFigure
@@ -151,19 +155,19 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	}
 
 	private void createExpandedInputs() {
-		final Figure inputFigure = new Figure();
-		inputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(inputFigure, createExpandedIOLayoutData(), -1);
-		inputFigure.add(getEventInputs(), createExpandedIOLayoutData(), -1);
-		inputFigure.add(getBottomInputArea(), createExpandedIOLayoutData(), -1);
+		expandedInputFigure = new Figure();
+		expandedInputFigure.setLayoutManager(createExpandedIOLayout());
+		expandedMainFigure.add(expandedInputFigure, createExpandedIOLayoutData(), -1);
+		expandedInputFigure.add(getEventInputs(), createExpandedIOLayoutData(), -1);
+		expandedInputFigure.add(getBottomInputArea(), createExpandedIOLayoutData(), -1);
 	}
 
 	private void createExpandedOutputs() {
-		final Figure outputFigure = new Figure();
-		outputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(outputFigure, createExpandedIOLayoutData(), -1);
-		outputFigure.add(getEventOutputs(), createExpandedOutputLayoutData(), -1);
-		outputFigure.add(getBottomOutputArea(), createExpandedOutputLayoutData(), -1);
+		expandedOutputFigure = new Figure();
+		expandedOutputFigure.setLayoutManager(createExpandedIOLayout());
+		expandedMainFigure.add(expandedOutputFigure, createExpandedIOLayoutData(), -1);
+		expandedOutputFigure.add(getEventOutputs(), createExpandedOutputLayoutData(), -1);
+		expandedOutputFigure.add(getBottomOutputArea(), createExpandedOutputLayoutData(), -1);
 	}
 
 	private static GridData createExpandedIOLayoutData() {
@@ -209,5 +213,13 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		topLayout.verticalSpacing = 0;
 		topLayout.horizontalSpacing = 0;
 		return topLayout;
+	}
+
+	public int getExpandedIOHeight() {
+		if (getModel().isUnfolded()) {
+			return Math.max(expandedInputFigure.getPreferredSize().height,
+					expandedOutputFigure.getPreferredSize().height);
+		}
+		return -1;
 	}
 }
