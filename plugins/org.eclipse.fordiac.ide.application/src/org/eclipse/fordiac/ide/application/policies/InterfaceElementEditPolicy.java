@@ -45,7 +45,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 		final FBNetwork newParent = checkConnectionParent(command.getSource(), command.getDestination(),
 				command.getParent());
-		if (connectingWithinFbNetwork(command, newParent)) {
+		if (newParent != null) {
 			command.setParent(newParent);
 			return command;
 		}
@@ -54,24 +54,6 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 			return processBorderCrossingConnection(command.getSource(), command.getDestination());
 		}
 		return null;
-	}
-
-	private boolean connectingWithinFbNetwork(AbstractConnectionCreateCommand command, FBNetwork newParent) {
-		if (newParent == null) {
-			return false;
-		}
-		if ((command.getSource().getFBNetworkElement() instanceof SubApp) && (command.getDestination().getFBNetworkElement() instanceof SubApp)) {
-			// make sure that connection from nested subapp input to parent subapp output is handled correctly
-			SubApp source = (SubApp) command.getSource().getFBNetworkElement();
-			SubApp destination = (SubApp) command.getDestination().getFBNetworkElement();
-			if ((newParent == source.getSubAppNetwork()) && (source.getSubAppNetwork() == destination.getFbNetwork())) {
-				return true;
-			}
-			if ((newParent == destination.getSubAppNetwork()) && (destination.getSubAppNetwork()  == source.getFbNetwork())) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	private static boolean canExistConnection(final AbstractConnectionCreateCommand command) {
@@ -102,17 +84,17 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 				match);
 	}
 
-	private static boolean isSwapNeeded(IInterfaceElement source, IInterfaceElement destination,
-			List<FBNetwork> sourceNetworks, List<FBNetwork> destinationNetworks, FBNetwork match) {
-		boolean sourceIsInput = isInputElement(source, sourceNetworks, match);
-		boolean destinationIsInput = isInputElement(destination, destinationNetworks, match);
+	private static boolean isSwapNeeded(final IInterfaceElement source, final IInterfaceElement destination,
+			final List<FBNetwork> sourceNetworks, final List<FBNetwork> destinationNetworks, final FBNetwork match) {
+		final boolean sourceIsInput = isInputElement(source, sourceNetworks, match);
+		final boolean destinationIsInput = isInputElement(destination, destinationNetworks, match);
 		return sourceIsInput && !destinationIsInput;
 	}
 
-	private static boolean isInputElement(IInterfaceElement iel, List<FBNetwork> networkList, FBNetwork match) {
+	private static boolean isInputElement(final IInterfaceElement iel, final List<FBNetwork> networkList, final FBNetwork match) {
 		if (iel.getFBNetworkElement() instanceof SubApp) {
-			SubApp subapp = (SubApp) iel.getFBNetworkElement();
-			FBNetwork search = subapp.getSubAppNetwork();
+			final SubApp subapp = (SubApp) iel.getFBNetworkElement();
+			final FBNetwork search = subapp.getSubAppNetwork();
 			if (match == search) {
 				return !iel.isIsInput();
 			}
@@ -120,10 +102,10 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		return iel.isIsInput();
 	}
 
-	private static FBNetwork findMostSpecificMatch(final IInterfaceElement source, IInterfaceElement destination,
+	private static FBNetwork findMostSpecificMatch(final IInterfaceElement source, final IInterfaceElement destination,
 			final List<FBNetwork> sourceNetworks, final List<FBNetwork> destinationNetworks) {
-		FBNetwork sourceSubAppNetwork = addSubAppNetworkToList(source, sourceNetworks);
-		FBNetwork destSubAppNetwork = addSubAppNetworkToList(destination, destinationNetworks);
+		final FBNetwork sourceSubAppNetwork = addSubAppNetworkToList(source, sourceNetworks);
+		final FBNetwork destSubAppNetwork = addSubAppNetworkToList(destination, destinationNetworks);
 
 		int sourceIndex = sourceNetworks.size() - 1;
 		int destinationIndex = destinationNetworks.size() - 1;
@@ -151,8 +133,8 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		return subAppNetwork;
 	}
 
-	private static void checkIfSubAppNetworkIsNeeded(final List<FBNetwork> networkList, FBNetwork addedSubappNetwork,
-			FBNetwork match) {
+	private static void checkIfSubAppNetworkIsNeeded(final List<FBNetwork> networkList, final FBNetwork addedSubappNetwork,
+			final FBNetwork match) {
 		if ((addedSubappNetwork != null) && (match != networkList.get(0))) {
 			networkList.remove(addedSubappNetwork);
 		}
