@@ -22,12 +22,14 @@ import org.eclipse.jface.resource.JFaceResources;
 
 public class InstanceNameFigure extends Label implements IFontUpdateListener {
 
+	public static final int INSTANCE_LABEL_MARGIN = AbstractShadowBorder.SHADOW_INSETS.top + 2;
+
 	public InstanceNameFigure() {
 		super();
 		setFont();
 		setTextAlignment(PositionConstants.CENTER);
 		setLabelAlignment(PositionConstants.CENTER);
-		setBorder(new MarginBorder(0, 0, AbstractShadowBorder.SHADOW_INSETS.top + 2, 0));
+		setBorder(new MarginBorder(0, 0, INSTANCE_LABEL_MARGIN, 0));
 	}
 
 	private void setFont() {

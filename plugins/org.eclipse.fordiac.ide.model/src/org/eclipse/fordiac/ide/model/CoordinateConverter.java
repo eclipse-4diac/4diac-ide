@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2019 Johannes Kepler University, Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -29,10 +29,11 @@ public enum CoordinateConverter {
 
 	/**
 	 * The scaler transformation value for coordinate conversion.
-	 * 
+	 *
 	 * In general it the lineHeigth / 100 as defined in IEC 61499-2 Annex B.1
 	 */
 	private double transformationScale;
+	private double lineHeight;
 
 	private static class LineHeightRunnable implements Runnable {
 		private double lineHeight;
@@ -43,22 +44,23 @@ public enum CoordinateConverter {
 
 		@Override
 		public void run() {
-			Font diagramFont = JFaceResources.getFont(PreferenceConstants.DIAGRAM_FONT);
+			final Font diagramFont = JFaceResources.getFont(PreferenceConstants.DIAGRAM_FONT);
 			lineHeight = FigureUtilities.getFontMetrics(diagramFont).getHeight();
 		}
 	}
 
 	private CoordinateConverter() {
-		LineHeightRunnable lineHeight = new LineHeightRunnable();
+		final LineHeightRunnable lineHeightCalc = new LineHeightRunnable();
 
-		Display.getDefault().syncExec(lineHeight);
-		transformationScale = lineHeight.getLineHeight() / 100.0;
+		Display.getDefault().syncExec(lineHeightCalc);
+		lineHeight = lineHeightCalc.getLineHeight();
+		transformationScale = lineHeight / 100.0;
 	}
 
 	/**
 	 * Take the string representing the value from the 61499-2 XML file to an 4diac
 	 * IDE internal coordinate
-	 * 
+	 *
 	 * @param value string representation of a coordinate value
 	 * @return 4diac IDE internal coordinate value
 	 */
@@ -73,12 +75,16 @@ public enum CoordinateConverter {
 	/**
 	 * Take an 4diac IDE internal coordinate and transform it to a string
 	 * representation suitable for an IEC 61499-2 XML
-	 * 
+	 *
 	 * @param value 4diac IDE internal coordinate
 	 * @return string representation of the value in IEC 61499-2 format
 	 */
 	public String convertTo1499XML(final int value) {
 		return Double.toString(value / transformationScale);
+	}
+
+	public double getLineHeight() {
+		return lineHeight;
 	}
 
 }

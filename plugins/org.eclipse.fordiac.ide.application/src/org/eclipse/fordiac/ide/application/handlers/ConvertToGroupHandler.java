@@ -41,8 +41,9 @@ public class ConvertToGroupHandler extends AbstractHandler implements CommandSta
 		if (null != subApp) {
 			final CommandStack commandStack = HandlerHelper.getCommandStack(editor);
 			final ConvertSubappToGroupCommand cmd = new ConvertSubappToGroupCommand(subApp);
-			commandStack.execute(cmd);
-
+			if (cmd.canExecute()) {
+				commandStack.execute(cmd);
+			}
 			commandStack.addCommandStackEventListener(this);
 			SystemManager.INSTANCE.notifyListeners();
 		}

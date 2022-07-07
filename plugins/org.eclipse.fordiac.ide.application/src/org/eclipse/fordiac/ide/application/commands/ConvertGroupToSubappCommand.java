@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
+import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteGroupCommand;
@@ -40,7 +42,8 @@ public class ConvertGroupToSubappCommand extends Command {
 		createSubappCmd.execute();
 		final SubApp destinationSubapp = createSubappCmd.getElement();
 		destinationSubapp.setWidth(sourceGroup.getWidth());
-		destinationSubapp.setHeight(sourceGroup.getHeight());
+		destinationSubapp.setHeight((int) (sourceGroup.getHeight() + CoordinateConverter.INSTANCE.getLineHeight()
+				+ InstanceNameFigure.INSTANCE_LABEL_MARGIN));
 
 		// copy instance comment of group
 		copyCommentCmd = new ChangeCommentCommand(destinationSubapp, sourceGroup.getComment());
