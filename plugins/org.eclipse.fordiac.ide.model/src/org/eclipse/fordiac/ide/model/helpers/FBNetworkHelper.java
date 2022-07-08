@@ -170,8 +170,6 @@ public final class FBNetworkHelper {
 		return pt;
 	}
 
-	public static final int Y_OFFSET_FROM_TOP_LEFT_CORNER = 80; // from top-left corner of container
-	public static final int X_OFFSET_FROM_TOP_LEFT_CORNER = 150;
 
 	public static void moveFBNetworkByOffset(final Iterable<FBNetworkElement> fbNetwork, final int xOffset, final int yOffset) {
 		for (final FBNetworkElement el : fbNetwork) {
@@ -184,8 +182,8 @@ public final class FBNetworkHelper {
 
 	public static Point removeXYOffsetForFBNetwork(final List<FBNetworkElement> fbNetwork) {
 		final Point offset = getTopLeftCornerOfFBNetwork(fbNetwork);
-		moveFBNetworkByOffset(fbNetwork, -offset.x + X_OFFSET_FROM_TOP_LEFT_CORNER,
-				-offset.y + Y_OFFSET_FROM_TOP_LEFT_CORNER);
+		moveFBNetworkByOffset(fbNetwork, -offset.x,
+				-offset.y);
 		return offset;
 	}
 
@@ -210,7 +208,7 @@ public final class FBNetworkHelper {
 	}
 
 	public static boolean isTypeInsertionSave(final FBType type, final EObject element) {
-		if (type == null || element == null) {
+		if ((type == null) || (element == null)) {
 			return true;
 		}
 		final FBType editorType = getRootType(element);
@@ -299,7 +297,7 @@ public final class FBNetworkHelper {
 	}
 
 	private static boolean hasNetwork(final FBNetworkElement networkElement) {
-		return (networkElement instanceof SubApp || networkElement instanceof CFBInstance);
+		return ((networkElement instanceof SubApp) || (networkElement instanceof CFBInstance));
 	}
 
 	/** Got through the containment of the FB and generate a name for all containers the FB is contained in up to the
@@ -316,15 +314,14 @@ public final class FBNetworkHelper {
 			do {
 				final FBNetworkElement runner = (FBNetworkElement) container;
 				container = runner.getFbNetwork().eContainer();
-				if (container instanceof INamedElement) {
+				if (!(container instanceof INamedElement)) {
+					break;
+				}
+				names.addFirst("."); //$NON-NLS-1$
+				names.addFirst(((INamedElement) container).getName());
+				if (container instanceof Resource) {
 					names.addFirst("."); //$NON-NLS-1$
-					names.addFirst(((INamedElement) container).getName());
-					if (container instanceof Resource) {
-						names.addFirst("."); //$NON-NLS-1$
-						names.addFirst(((Resource) container).getDevice().getName());
-						break;
-					}
-				} else {
+					names.addFirst(((Resource) container).getDevice().getName());
 					break;
 				}
 			} while (container instanceof FBNetworkElement); // we are still in a subapp, try to find the resource or

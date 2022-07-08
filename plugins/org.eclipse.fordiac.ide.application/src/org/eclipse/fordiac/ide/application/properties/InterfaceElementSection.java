@@ -46,10 +46,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
@@ -135,11 +137,10 @@ public class InterfaceElementSection extends AbstractSection {
 		getWidgetFactory().createCLabel(composite, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		instanceCommentText = createGroupText(composite, false);
 		instanceCommentText.setLayoutData(new GridData(SWT.FILL, SWT.None, true, false));
-		instanceCommentText.selectAll();
-
 		instanceCommentText.addModifyListener(e -> {
 			removeContentAdapter();
 			executeCommand(new ChangeCommentCommand(getType(), instanceCommentText.getText()));
+			instanceCommentText.setForeground(getForegroundColor());
 			addContentAdapter();
 		});
 
@@ -202,11 +203,8 @@ public class InterfaceElementSection extends AbstractSection {
 					((getType().getType() instanceof StructuredType) && !"ANY_STRUCT".equals(getType().getType().getName()))
 					|| (getType().getType() instanceof AdapterType));
 
-			if (hasComment()) {
-				instanceCommentText.setText(getInstanceComment());
-			} else {
-				instanceCommentText.setMessage(getInstanceComment());
-			}
+			instanceCommentText.setText(getInstanceComment());
+			instanceCommentText.setForeground(getForegroundColor());
 
 			if ((getType() instanceof VarDeclaration) && !(getType() instanceof AdapterDeclaration)) {
 				setParameter();
@@ -254,6 +252,13 @@ public class InterfaceElementSection extends AbstractSection {
 			return getType().getComment();
 		}
 		return getTypeComment();
+	}
+
+	private Color getForegroundColor() {
+		if (!hasComment()) {
+			return Display.getCurrent().getSystemColor(SWT.COLOR_DARK_GRAY);
+		}
+		return null;
 	}
 
 	private Object getPinName() {

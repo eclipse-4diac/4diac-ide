@@ -16,15 +16,22 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.commands.ConvertGroupToSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
+import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.fordiac.ide.application.editparts.InstanceCommentEditPart;
+import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.UntypeSubAppCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -49,15 +56,37 @@ public class ConvertToSubappHandler extends AbstractHandler implements CommandSt
 			}
 
 			commandStack = HandlerHelper.getCommandStack(editor);
-			ConvertGroupToSubappCommand command = new ConvertGroupToSubappCommand(group);
-			commandStack.execute(command);
-
-			refreshSelection(command.getCreatedElement());
+			final ConvertGroupToSubappCommand conversion = new ConvertGroupToSubappCommand(group);
+			if (conversion.canExecute()) {
+				commandStack.execute(conversion);
+				refreshSelection(conversion.getCreatedElement());
+				final GraphicalViewer v = editor.getAdapter(GraphicalViewer.class);
+				v.flush();
+				final EditPart newSubappEP = (EditPart) v.getEditPartRegistry().get(conversion.getCreatedElement());
+				adjustMinBounds(commandStack, newSubappEP);
+			}
 
 			commandStack.addCommandStackEventListener(this);
 			SystemManager.INSTANCE.notifyListeners();
 		}
 		return Status.OK_STATUS;
+	}
+
+	private void adjustMinBounds(final CommandStack cmdStack, final EditPart subappEP) {
+		// similar adjustment as trimming (cf. TrimHandler)
+		final IContainerEditPart containerEditPart = (IContainerEditPart) subappEP;
+		final GraphicalEditPart contentEP = containerEditPart.getContentEP();
+
+		final Rectangle contentContainerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(contentEP);
+		final Rectangle subappContentBounds = containerEditPart.getMinContentBounds();
+		subappContentBounds.setWidth(Math.max(subappContentBounds.width, contentEP.getFigure().getSize().width));
+		subappContentBounds.setHeight(Math.max(subappContentBounds.height, contentEP.getFigure().getSize().height));
+
+		final Command cmd = ContainerContentLayoutPolicy.createChangeBoundsCommand(
+				(FBNetworkElement) containerEditPart.getModel(), contentContainerBounds, subappContentBounds);
+		if (cmd.canExecute()) {
+			cmdStack.execute(cmd);
+		}
 	}
 
 	@Override
@@ -85,7 +114,7 @@ public class ConvertToSubappHandler extends AbstractHandler implements CommandSt
 			return ((GroupEditPart) currentElement).getModel();
 		}
 		if (currentElement instanceof InstanceCommentEditPart) {
-			FBNetworkElement el = ((InstanceCommentEditPart) currentElement).getModel().getRefElement();
+			final FBNetworkElement el = ((InstanceCommentEditPart) currentElement).getModel().getRefElement();
 			if (el instanceof Group) {
 				return (Group) el;
 			}

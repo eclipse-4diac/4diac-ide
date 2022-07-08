@@ -45,48 +45,12 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 		final FBNetwork newParent = checkConnectionParent(command.getSource(), command.getDestination(),
 				command.getParent());
-		if (connectingWithinFbNetwork(command, newParent)) {
+		if (newParent != null) {
 			command.setParent(newParent);
 			return command;
 		}
 		// if we are here it is not a direct connection try border crossing command
-		if (canExistConnection(command)) {
-			return processBorderCrossingConnection(command.getSource(), command.getDestination());
-		}
-		return null;
-	}
-
-	private boolean connectingWithinFbNetwork(AbstractConnectionCreateCommand command, FBNetwork newParent) {
-		if (newParent == null) {
-			return false;
-		}
-		if ((command.getSource().getFBNetworkElement() instanceof SubApp) && (command.getDestination().getFBNetworkElement() instanceof SubApp)) {
-			// make sure that connection from nested subapp input to parent subapp output is handled correctly
-			SubApp source = (SubApp) command.getSource().getFBNetworkElement();
-			SubApp destination = (SubApp) command.getDestination().getFBNetworkElement();
-			if ((newParent == source.getSubAppNetwork()) && (source.getSubAppNetwork() == destination.getFbNetwork())) {
-				return true;
-			}
-			if ((newParent == destination.getSubAppNetwork()) && (destination.getSubAppNetwork()  == source.getFbNetwork())) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	private static boolean canExistConnection(final AbstractConnectionCreateCommand command) {
-		final AbstractConnectionCreateCommand compatibilityCheck = AbstractConnectionCreateCommand
-				.createCommand(command.getSource(), getSourceNetwork(command));
-		compatibilityCheck.setSource(command.getSource());
-		compatibilityCheck.setDestination(command.getDestination());
-		return compatibilityCheck.canExecute();
-	}
-
-	private static FBNetwork getSourceNetwork(final AbstractConnectionCreateCommand command) {
-		if (command.getSource().getFBNetworkElement() != null) {
-			return command.getSource().getFBNetworkElement().getFbNetwork();
-		}
-		return command.getParent();
+		return processBorderCrossingConnection(command.getSource(), command.getDestination());
 	}
 
 	private static Command processBorderCrossingConnection(final IInterfaceElement source,
@@ -94,7 +58,7 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		final List<FBNetwork> sourceNetworks = buildHierarchy(source);
 		final List<FBNetwork> destinationNetworks = buildHierarchy(destination);
 		final FBNetwork match = findMostSpecificMatch(source, destination, sourceNetworks, destinationNetworks);
-		if (isSwapNeeded(source, destination, sourceNetworks, destinationNetworks, match)) {
+		if (isSwapNeeded(source, destination, sourceNetworks, destinationNetworks)) {
 			return new CreateSubAppCrossingConnectionsCommand(destination, source, destinationNetworks, sourceNetworks,
 					match);
 		}
@@ -102,28 +66,28 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 				match);
 	}
 
-	private static boolean isSwapNeeded(IInterfaceElement source, IInterfaceElement destination,
-			List<FBNetwork> sourceNetworks, List<FBNetwork> destinationNetworks, FBNetwork match) {
-		boolean sourceIsInput = isInputElement(source, sourceNetworks, match);
-		boolean destinationIsInput = isInputElement(destination, destinationNetworks, match);
+	private static boolean isSwapNeeded(final IInterfaceElement source, final IInterfaceElement destination,
+			final List<FBNetwork> sourceNetworks, final List<FBNetwork> destinationNetworks) {
+		final boolean sourceIsInput = isInputElement(source, sourceNetworks);
+		final boolean destinationIsInput = isInputElement(destination, destinationNetworks);
 		return sourceIsInput && !destinationIsInput;
 	}
 
-	private static boolean isInputElement(IInterfaceElement iel, List<FBNetwork> networkList, FBNetwork match) {
+	private static boolean isInputElement(final IInterfaceElement iel, final List<FBNetwork> networkList) {
 		if (iel.getFBNetworkElement() instanceof SubApp) {
-			SubApp subapp = (SubApp) iel.getFBNetworkElement();
-			FBNetwork search = subapp.getSubAppNetwork();
-			if (match == search) {
+			final SubApp subapp = (SubApp) iel.getFBNetworkElement();
+			final FBNetwork search = subapp.getSubAppNetwork();
+			if (networkList.get(0) == search) {
 				return !iel.isIsInput();
 			}
 		}
 		return iel.isIsInput();
 	}
 
-	private static FBNetwork findMostSpecificMatch(final IInterfaceElement source, IInterfaceElement destination,
+	private static FBNetwork findMostSpecificMatch(final IInterfaceElement source, final IInterfaceElement destination,
 			final List<FBNetwork> sourceNetworks, final List<FBNetwork> destinationNetworks) {
-		FBNetwork sourceSubAppNetwork = addSubAppNetworkToList(source, sourceNetworks);
-		FBNetwork destSubAppNetwork = addSubAppNetworkToList(destination, destinationNetworks);
+		final FBNetwork sourceSubAppNetwork = addSubAppNetworkToList(source, sourceNetworks);
+		final FBNetwork destSubAppNetwork = addSubAppNetworkToList(destination, destinationNetworks);
 
 		int sourceIndex = sourceNetworks.size() - 1;
 		int destinationIndex = destinationNetworks.size() - 1;
@@ -151,8 +115,8 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		return subAppNetwork;
 	}
 
-	private static void checkIfSubAppNetworkIsNeeded(final List<FBNetwork> networkList, FBNetwork addedSubappNetwork,
-			FBNetwork match) {
+	private static void checkIfSubAppNetworkIsNeeded(final List<FBNetwork> networkList, final FBNetwork addedSubappNetwork,
+			final FBNetwork match) {
 		if ((addedSubappNetwork != null) && (match != networkList.get(0))) {
 			networkList.remove(addedSubappNetwork);
 		}
@@ -160,9 +124,6 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 
 	private static List<FBNetwork> buildHierarchy(final IInterfaceElement source) {
 		final List<FBNetwork> list = new ArrayList<>();
-		if (source.getFBNetworkElement() instanceof SubApp) {
-			list.add(((SubApp) source.getFBNetworkElement()).getSubAppNetwork());
-		}
 		EObject current = source.eContainer();
 		while (current != null) {
 			if (current instanceof FBNetwork) {
@@ -257,5 +218,4 @@ public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy
 		}
 		return null;
 	}
-
 }

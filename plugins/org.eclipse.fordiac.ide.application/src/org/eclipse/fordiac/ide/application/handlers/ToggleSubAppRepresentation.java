@@ -47,7 +47,9 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 		final ToggleSubAppRepresentationCommand cmd = new ToggleSubAppRepresentationCommand(subapp);
 
 		final CommandStack commandStack = HandlerUtil.getActiveEditor(event).getAdapter(CommandStack.class);
-		commandStack.execute(cmd);
+		if (cmd.canExecute()) {
+			commandStack.execute(cmd);
+		}
 		// requesting a change is needed for the Source dropdown menu
 		requestChange();
 		return Status.OK_STATUS;
@@ -97,7 +99,8 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 	private static SubApp getSubApp(final Object currentElement) {
 		if (currentElement instanceof SubApp) {
 			return (SubApp) currentElement;
-		} else if (currentElement instanceof SubAppForFBNetworkEditPart) {
+		}
+		if (currentElement instanceof SubAppForFBNetworkEditPart) {
 			return ((SubAppForFBNetworkEditPart) currentElement).getModel();
 		} else if (currentElement instanceof UISubAppNetworkEditPart) {
 			return (SubApp) ((UISubAppNetworkEditPart) currentElement).getModel().eContainer();

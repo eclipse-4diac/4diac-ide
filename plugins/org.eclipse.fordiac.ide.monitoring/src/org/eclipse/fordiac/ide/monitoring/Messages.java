@@ -19,6 +19,7 @@ public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.monitoring.messages"; //$NON-NLS-1$
 	public static String MonitoringManagerUtils_NoSubappAnchor;
 	public static String MonitoringManagerUtils_SelectionFilteringActive;
+	public static String MonitoringManagerUtils_SelectionFilteringForce;
 
 	public static String MonitoringPreferences_WatchColor;
 	public static String MonitoringPreferences_ForceColor;

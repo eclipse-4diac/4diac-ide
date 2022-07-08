@@ -241,7 +241,11 @@ public class ConnectionDisplayWidget {
 					case TARGET_COL_INDEX:
 						if (null != ie.getFBNetworkElement()) {
 							return ie.getFBNetworkElement().getName();
-						} else if (ie.eContainer().eContainer() instanceof CompositeFBType) {
+						}
+						if (ie.eContainer() == null) { // broken connection
+							return ""; //$NON-NLS-1$
+						}
+						if (ie.eContainer().eContainer() instanceof CompositeFBType) {
 							return ((CompositeFBType) ie.eContainer().eContainer()).getName();
 						}
 						break;

@@ -37,15 +37,19 @@ public class TrimHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final IContainerEditPart conatainerEditPart = getConatinerEditPart(HandlerUtil.getCurrentSelection(event));
+		final IContainerEditPart containerEditPart = getContainerEditPart(HandlerUtil.getCurrentSelection(event));
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
-		if (conatainerEditPart != null && editor != null) {
-			final GraphicalEditPart contentEP = conatainerEditPart.getContentEP();
+		if ((containerEditPart != null) && (editor != null)) {
+			final GraphicalEditPart contentEP = containerEditPart.getContentEP();
 			if(contentEP != null) {
 				final Rectangle contentContainerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(contentEP);
-				final Rectangle groupContentBounds = conatainerEditPart.getMinContentBounds();
+				Rectangle groupContentBounds = containerEditPart.getMinContentBounds();
+				if (groupContentBounds.equals(IContainerEditPart.getDefaultContentBounds())) {
+					groupContentBounds.setLocation(contentContainerBounds.getLocation());
+				}
+				groupContentBounds.setWidth(Math.max(groupContentBounds.width, containerEditPart.getCommentWidth()));
 				final Command cmd = ContainerContentLayoutPolicy.createChangeBoundsCommand(
-						(FBNetworkElement) conatainerEditPart.getModel(),
+						(FBNetworkElement) containerEditPart.getModel(),
 						contentContainerBounds, groupContentBounds);
 				getCommandStack(editor).execute(cmd);
 			}
@@ -57,22 +61,21 @@ public class TrimHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		setBaseEnabled(getConatinerEditPart(selection) != null);
+		setBaseEnabled(getContainerEditPart(selection) != null);
 	}
 
-	private static IContainerEditPart getConatinerEditPart(final ISelection selection) {
+	private static IContainerEditPart getContainerEditPart(final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			final IStructuredSelection structSel = (IStructuredSelection) selection;
 			if (structSel.size() == 1) {
 				final Object firstElement = structSel.getFirstElement();
 				if (firstElement instanceof IContainerEditPart) {
 					final IContainerEditPart containerEP = (IContainerEditPart) firstElement;
-					if (containerEP.getModel() instanceof SubApp) {
-						// if we have a subapp only accept if it is expanded
-						if (((SubApp) containerEP.getModel()).isUnfolded()) {
-							return containerEP;
-						}
-					} else {
+					if (!(containerEP.getModel() instanceof SubApp)) {
+						return containerEP;
+					}
+					// if we have a subapp only accept if it is expanded
+					if (((SubApp) containerEP.getModel()).isUnfolded()) {
 						return containerEP;
 					}
 				}

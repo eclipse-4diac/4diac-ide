@@ -54,4 +54,8 @@ public class InstanceCommentFigure extends Figure implements IFontUpdateListener
 		// no need to update fonts
 	}
 
+	public int getTextWidth() {
+		return textFlow.getSize().width();
+	}
+
 }

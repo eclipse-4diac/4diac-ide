@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
+import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
+import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteGroupCommand;
@@ -20,6 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 
 public class ConvertGroupToSubappCommand extends Command {
+
 	private final Group sourceGroup;
 
 	private NewSubAppCommand createSubappCmd;
@@ -27,7 +30,7 @@ public class ConvertGroupToSubappCommand extends Command {
 	private ToggleSubAppRepresentationCommand expandCommand;
 	private DeleteGroupCommand deleteGroupCmd;
 
-	public ConvertGroupToSubappCommand(Group source) {
+	public ConvertGroupToSubappCommand(final Group source) {
 		this.sourceGroup = source;
 	}
 
@@ -37,9 +40,10 @@ public class ConvertGroupToSubappCommand extends Command {
 		createSubappCmd = new NewSubAppCommand(sourceGroup.getFbNetwork(), sourceGroup.getGroupElements(),
 				sourceGroup.getPosition().getX(), sourceGroup.getPosition().getY());
 		createSubappCmd.execute();
-		SubApp destinationSubapp = createSubappCmd.getElement();
+		final SubApp destinationSubapp = createSubappCmd.getElement();
 		destinationSubapp.setWidth(sourceGroup.getWidth());
-		destinationSubapp.setHeight(sourceGroup.getHeight());
+		destinationSubapp.setHeight((int) (sourceGroup.getHeight() + CoordinateConverter.INSTANCE.getLineHeight()
+				+ InstanceNameFigure.INSTANCE_LABEL_MARGIN));
 
 		// copy instance comment of group
 		copyCommentCmd = new ChangeCommentCommand(destinationSubapp, sourceGroup.getComment());

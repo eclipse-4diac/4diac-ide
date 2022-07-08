@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
@@ -119,8 +120,9 @@ public class ErrorMessageHandler {
 			return Display.getCurrent().getSystemColor(SWT.COLOR_INFO_FOREGROUND);
 		}
 
-		private ErrorMessageDialog(final ErrorMessageHandler container, final String errorMsg, final int timeout) {
-			super(null, HOVER_SHELLSTYLE, false, false, false, false, false, null, null);
+		private ErrorMessageDialog(final Shell parent, final ErrorMessageHandler container, final String errorMsg,
+				final int timeout) {
+			super(parent, HOVER_SHELLSTYLE, false, false, false, false, false, null, null);
 			this.errorMsg = errorMsg;
 			this.timeout = timeout;
 			this.container = container;
@@ -370,10 +372,18 @@ public class ErrorMessageHandler {
 		if(!messages.isEmpty()) {
 			final String dialogContent = messages.stream().map(ErrorMessage::getMessage).collect(Collectors.joining("\n")); //$NON-NLS-1$
 
-			final ErrorMessageDialog dialog = new ErrorMessageDialog(this, dialogContent, m.getTimeout());
+			final ErrorMessageDialog dialog = new ErrorMessageDialog(getShell(), this, dialogContent, m.getTimeout());
 			dialog.open();
 			windows.push(dialog.getShell());
 		}
+	}
+
+	private static Shell getShell() {
+		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
+		if (window != null) {
+			return window.getShell();
+		}
+		return null;
 	}
 
 	private final EventHandler receiver = (final Event event) -> {

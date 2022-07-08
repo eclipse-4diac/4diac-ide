@@ -27,6 +27,17 @@
             restorable="true">
       </view>
    </extension>
+      <extension
+         point="org.eclipse.ui.views">
+       <view
+       		category="org.eclipse.fordiac.ide.view.category"
+            class="org.eclipse.fordiac.ide.monitoring.views.ForcesView"
+            icon="fordiacimage://ICON_FORCE_VALUE"
+            id="org.eclipse.fordiac.ide.monitoring.views.ForcesView"
+            name="Forces"
+            restorable="true">
+      </view>
+   </extension>
    <extension point="org.eclipse.ui.perspectiveExtensions">
 	  <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
          <view

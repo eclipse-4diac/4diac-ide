@@ -33,6 +33,7 @@ public class ExportFBs extends Task {
 	protected static final String ANT_EXPORT_TASK_DIRECTORY_NAME = "exported_FBs"; //$NON-NLS-1$
 
 	protected String projectNameString;
+	protected String exportDirectory = ANT_EXPORT_TASK_DIRECTORY_NAME;
 	protected boolean exportCMakeList = false;
 	protected IWorkspace workspace;
 	private IProject fordiacProject;
@@ -43,6 +44,10 @@ public class ExportFBs extends Task {
 
 	public void setExportCMakeList(final boolean value) {
 		exportCMakeList = value;
+	}
+
+	public void setExportDirectory(final String value) {
+		exportDirectory = value;
 	}
 
 	@Override
@@ -87,7 +92,7 @@ public class ExportFBs extends Task {
 
 			final ForteNgExportFilter filter = new ForteNgExportFilter();
 
-			final File folder = new File(ANT_EXPORT_TASK_DIRECTORY_NAME);
+			final File folder = new File(exportDirectory);
 			if (!folder.exists()) {
 				folder.mkdir();
 			}
@@ -102,6 +107,14 @@ public class ExportFBs extends Task {
 					if (exportCMakeList) {
 						filter.export(null, folder.getPath(), true, new CMakeListsMarker());
 					}
+
+					if (!filter.getErrors().isEmpty()) {
+						for (final String error : filter.getErrors()) {
+							System.out.println(error);
+						}
+						throw new BuildException("Could not export without errors");
+					}
+
 				} catch (final ExportException e) {
 					throw new BuildException("Could not export: " + e.getMessage(), e);//$NON-NLS-1$
 				}
