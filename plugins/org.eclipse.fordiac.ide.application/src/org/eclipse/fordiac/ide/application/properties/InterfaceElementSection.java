@@ -27,9 +27,12 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.gef.widgets.ConnectionDisplayWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -70,7 +73,6 @@ public class InterfaceElementSection extends AbstractSection {
 	private Section infoSection;
 	private ConnectionDisplayWidget connectionDisplayWidget;
 
-
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
@@ -83,8 +85,6 @@ public class InterfaceElementSection extends AbstractSection {
 	private void createConnectionDisplaySection(final Composite parent) {
 		connectionDisplayWidget = new ConnectionDisplayWidget(getWidgetFactory(), parent, this);
 	}
-
-
 
 	private void createTypeInfoSection(final Composite parent) {
 		// textfields in this section without a button need to span 2 cols so that all
@@ -111,9 +111,6 @@ public class InterfaceElementSection extends AbstractSection {
 
 		openEditorButton = new Button(typeText.getParent(), SWT.PUSH);
 		openEditorButton.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
-
-		openEditorButton.addListener(SWT.Selection, ev -> OpenStructMenu
-				.openStructEditor(((VarDeclaration) getType()).getType().getTypeEntry().getFile()));
 
 		parameterTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.DefaultValue + ":"); //$NON-NLS-1$
 		parameterText = createGroupText(composite, false);
@@ -143,8 +140,7 @@ public class InterfaceElementSection extends AbstractSection {
 			addContentAdapter();
 		});
 
-		currentParameterTextCLabel = getWidgetFactory().createCLabel(composite,
-				FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
+		currentParameterTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		currentParameterText = createGroupText(composite, true);
 		currentParameterText.addFocusListener(new FocusAdapter() {
 
@@ -198,9 +194,7 @@ public class InterfaceElementSection extends AbstractSection {
 			}
 			typeCommentText.setText(getTypeComment());
 
-			openEditorButton.setEnabled(
-					((getType().getType() instanceof StructuredType) && !"ANY_STRUCT".equals(getType().getType().getName()))
-					|| (getType().getType() instanceof AdapterType));
+			configureOpenEditorButton();
 
 			instanceCommentText.setText(getInstanceComment());
 			instanceCommentText.setForeground(getForegroundColor());
@@ -223,6 +217,26 @@ public class InterfaceElementSection extends AbstractSection {
 		commandStack = commandStackBuffer;
 	}
 
+	private void configureOpenEditorButton() {
+		final DataType dtp = getDataType();
+		if (dtp != null) {
+			openEditorButton.addListener(SWT.Selection,
+					ev -> OpenStructMenu.openStructEditor(dtp.getTypeEntry().getFile()));
+			openEditorButton.setEnabled(((dtp instanceof StructuredType) || (dtp instanceof AdapterType))
+					&& !IecTypes.GenericTypes.isAnyType(dtp));
+		}
+	}
+
+	private DataType getDataType() {
+		if (getType() instanceof VarDeclaration) {
+			return ((VarDeclaration) getType()).getType();
+		}
+		if (getType() instanceof AdapterDeclaration) {
+			return ((AdapterDeclaration) getType()).getAdapterType();
+		}
+		return null;
+	}
+
 	private String getPinTypeName() {
 		if (getType().getType() instanceof StructuredType) {
 			return getStructTypes((StructuredType) getType().getType());
@@ -239,7 +253,7 @@ public class InterfaceElementSection extends AbstractSection {
 				return interfaceElement.getComment() != null ? interfaceElement.getComment() : ""; //$NON-NLS-1$
 			}
 		}
-		return "";   //$NON-NLS-1$
+		return ""; //$NON-NLS-1$
 	}
 
 	private boolean hasComment() {
