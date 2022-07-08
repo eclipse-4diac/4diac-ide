@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.st.breakpoint;
 
+import java.util.Set;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -46,6 +48,10 @@ import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.util.ITextRegionWithLineInformation;
 
 public class STToggleBreakpointsTargetExtension implements IAdapterFactory, IToggleBreakpointsTargetExtension {
+
+	private static final Set<String> APPLICABLE_LANGUAGES = Set.of(
+			"org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm", //$NON-NLS-1$
+			"org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction"); //$NON-NLS-1$
 
 	@Override
 	public void toggleLineBreakpoints(final IWorkbenchPart part, final ISelection selection) throws CoreException {
@@ -179,10 +185,16 @@ public class STToggleBreakpointsTargetExtension implements IAdapterFactory, ITog
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getAdapter(final Object adaptableObject, final Class<T> adapterType) {
-		if (adaptableObject instanceof XtextEditor && adapterType == IToggleBreakpointsTarget.class) {
+		if (adaptableObject instanceof XtextEditor && isApplicable((XtextEditor) adaptableObject)
+				&& adapterType == IToggleBreakpointsTarget.class) {
 			return (T) this;
 		}
 		return null;
+	}
+
+	@SuppressWarnings("static-method")
+	protected boolean isApplicable(final XtextEditor editor) {
+		return APPLICABLE_LANGUAGES.contains(editor.getLanguageName());
 	}
 
 	@Override

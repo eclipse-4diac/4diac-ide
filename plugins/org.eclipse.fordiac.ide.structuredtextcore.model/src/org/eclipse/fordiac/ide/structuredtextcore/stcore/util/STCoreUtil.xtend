@@ -14,7 +14,10 @@ package org.eclipse.fordiac.ide.structuredtextcore.stcore.util
 
 import java.math.BigDecimal
 import java.math.BigInteger
+import org.eclipse.emf.ecore.EClassifier
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.data.AnyBitType
+import org.eclipse.fordiac.ide.model.data.AnyDurationType
 import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
@@ -26,16 +29,22 @@ import org.eclipse.fordiac.ide.model.data.ByteType
 import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.DateAndTimeType
+import org.eclipse.fordiac.ide.model.data.DateType
 import org.eclipse.fordiac.ide.model.data.DintType
 import org.eclipse.fordiac.ide.model.data.DwordType
 import org.eclipse.fordiac.ide.model.data.IntType
+import org.eclipse.fordiac.ide.model.data.LdateType
+import org.eclipse.fordiac.ide.model.data.LdtType
 import org.eclipse.fordiac.ide.model.data.LintType
 import org.eclipse.fordiac.ide.model.data.LrealType
+import org.eclipse.fordiac.ide.model.data.LtodType
 import org.eclipse.fordiac.ide.model.data.LwordType
 import org.eclipse.fordiac.ide.model.data.RealType
 import org.eclipse.fordiac.ide.model.data.SintType
 import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.data.Subrange
+import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.UdintType
 import org.eclipse.fordiac.ide.model.data.UintType
 import org.eclipse.fordiac.ide.model.data.UlintType
@@ -143,23 +152,37 @@ final class STCoreUtil {
 
 	def static boolean isApplicableTo(STBinaryOperator operator, INamedElement first, INamedElement second) {
 		switch (operator) {
-			case ADD,
-			case SUB: first instanceof AnyMagnitudeType && second instanceof AnyMagnitudeType
+			case ADD:
+				(first instanceof AnyMagnitudeType && second instanceof AnyMagnitudeType) ||
+					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) ||
+					(first.instanceofAnyDateAndTimeType && second instanceof AnyDurationType)
+			case SUB:
+				(first instanceof AnyMagnitudeType && second instanceof AnyMagnitudeType) ||
+					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) ||
+					(first.instanceofAnyDateAndTimeType && second instanceof AnyDurationType) ||
+					(first.instanceofAnySimpleDateType && second.instanceofAnySimpleDateType) ||
+					(first.instanceofAnyDateAndTimeType && second.instanceofAnyDateAndTimeType) ||
+					(first.instanceofAnyTimeOfDayType && second.instanceofAnyTimeOfDayType)
 			case MUL,
-			case DIV: first instanceof AnyMagnitudeType && second instanceof AnyNumType
-			case MOD: first instanceof AnyIntType && second instanceof AnyIntType
-			case POWER: first instanceof AnyRealType && second instanceof AnyNumType
+			case DIV:
+				first instanceof AnyMagnitudeType && second instanceof AnyNumType
+			case MOD:
+				first instanceof AnyIntType && second instanceof AnyIntType
+			case POWER:
+				first instanceof AnyRealType && second instanceof AnyNumType
 			case AMPERSAND,
 			case AND,
 			case OR,
-			case XOR: first instanceof AnyBitType && second instanceof AnyBitType
+			case XOR:
+				first instanceof AnyBitType && second instanceof AnyBitType
 			case EQ,
 			case NE,
 			case GE,
 			case GT,
 			case LE,
 			case LT,
-			case RANGE: true
+			case RANGE:
+				true
 		}
 	}
 
@@ -400,5 +423,44 @@ final class STCoreUtil {
 			UlintType: ElementaryTypes.LWORD
 			default: null
 		}
+	}
+
+	def static getEquivalentAnyLDateType(INamedElement type) {
+		switch (type) {
+			case type.instanceofAnyLDateType: type
+			DateType: ElementaryTypes.LDATE
+			TimeOfDayType: ElementaryTypes.LTOD
+			DateAndTimeType: ElementaryTypes.LDT
+			default: null
+		}
+	}
+
+	def static boolean isInstanceofAnySimpleDateType(INamedElement type) {
+		return type instanceof DateType || type instanceof LdateType
+	}
+
+	def static boolean isInstanceofAnyTimeOfDayType(INamedElement type) {
+		return type instanceof TimeOfDayType || type instanceof LtodType
+	}
+
+	def static boolean isInstanceofAnyDateAndTimeType(INamedElement type) {
+		return type instanceof DateAndTimeType || type instanceof LdtType
+	}
+
+	def static boolean isInstanceofAnySDateType(INamedElement type) {
+		return type instanceof DateType || type instanceof TimeOfDayType || type instanceof DateAndTimeType
+	}
+
+	def static boolean isInstanceofAnyLDateType(INamedElement type) {
+		return type instanceof LdateType || type instanceof LtodType || type instanceof LdtType
+	}
+
+	def static boolean isAncestor(EClassifier clazz, EObject object) {
+		if (object === null)
+			false
+		else if (clazz.isInstance(object))
+			true
+		else
+			clazz.isAncestor(object.eContainer)
 	}
 }

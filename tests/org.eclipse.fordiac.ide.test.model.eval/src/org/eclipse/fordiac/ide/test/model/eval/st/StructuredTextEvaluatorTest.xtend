@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.junit.jupiter.api.BeforeAll
@@ -88,7 +89,6 @@ import static extension org.eclipse.fordiac.ide.model.eval.value.WStringValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.WordValue.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.junit.jupiter.api.Assertions.*
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
 
 class StructuredTextEvaluatorTest {
 
@@ -464,6 +464,66 @@ class StructuredTextEvaluatorTest {
 		Duration.ofSeconds(4).toLTimeValue.assertEquals("LT#21s - T#17s".evaluateExpression)
 		Duration.ofSeconds(21).toLTimeValue.assertEquals("T#17s + LT#4s".evaluateExpression)
 		Duration.ofSeconds(4).toLTimeValue.assertEquals("T#21s - LT#17s".evaluateExpression)
+	}
+
+	@Test
+	def void testBinaryExpressionDateAndTimeArithmetic() {
+		// TOD
+		LocalTime.of(21, 21, 42).toTimeOfDayValue.assertEquals("TOD#17:04:21 + T#4h17m21s".evaluateExpression)
+		LocalTime.of(17, 04, 21).toTimeOfDayValue.assertEquals("TOD#21:21:42 - T#4h17m21s".evaluateExpression)
+		// LTOD
+		LocalTime.of(21, 21, 42).toLTimeOfDayValue.assertEquals("LTOD#17:04:21 + LT#4h17m21s".evaluateExpression)
+		LocalTime.of(17, 04, 21).toLTimeOfDayValue.assertEquals("LTOD#21:21:42 - LT#4h17m21s".evaluateExpression)
+		// DT
+		LocalDateTime.of(2021, 04, 17, 21, 21, 42).toDateAndTimeValue.assertEquals(
+			"DT#2021-04-17-17:04:21 + T#4h17m21s".evaluateExpression)
+		LocalDateTime.of(2021, 04, 17, 17, 04, 21).toDateAndTimeValue.assertEquals(
+			"DT#2021-04-17-21:21:42 - T#4h17m21s".evaluateExpression)
+		// LDT
+		LocalDateTime.of(2021, 04, 17, 21, 21, 42).toLDateAndTimeValue.assertEquals(
+			"LDT#2021-04-17-17:04:21 + LT#4h17m21s".evaluateExpression)
+		LocalDateTime.of(2021, 04, 17, 17, 04, 21).toLDateAndTimeValue.assertEquals(
+			"LDT#2021-04-17-21:21:42 - LT#4h17m21s".evaluateExpression)
+		// promotion
+		LocalTime.of(21, 21, 42).toLTimeOfDayValue.assertEquals("LTOD#17:04:21 + T#4h17m21s".evaluateExpression)
+		LocalTime.of(21, 21, 42).toLTimeOfDayValue.assertEquals("TOD#17:04:21 + LT#4h17m21s".evaluateExpression)
+		LocalTime.of(17, 04, 21).toLTimeOfDayValue.assertEquals("LTOD#21:21:42 - T#4h17m21s".evaluateExpression)
+		LocalTime.of(17, 04, 21).toLTimeOfDayValue.assertEquals("TOD#21:21:42 - LT#4h17m21s".evaluateExpression)
+		LocalDateTime.of(2021, 04, 17, 21, 21, 42).toLDateAndTimeValue.assertEquals(
+			"LDT#2021-04-17-17:04:21 + T#4h17m21s".evaluateExpression)
+		LocalDateTime.of(2021, 04, 17, 21, 21, 42).toLDateAndTimeValue.assertEquals(
+			"DT#2021-04-17-17:04:21 + LT#4h17m21s".evaluateExpression)
+		LocalDateTime.of(2021, 04, 17, 17, 04, 21).toLDateAndTimeValue.assertEquals(
+			"LDT#2021-04-17-21:21:42 - T#4h17m21s".evaluateExpression)
+		LocalDateTime.of(2021, 04, 17, 17, 04, 21).toLDateAndTimeValue.assertEquals(
+			"DT#2021-04-17-21:21:42 - LT#4h17m21s".evaluateExpression)
+	}
+
+	@Test
+	def void testBinaryExpressionDateArithmetic() {
+		// DATE
+		Duration.ofDays(4).toTimeValue.assertEquals("D#2021-04-21 - D#2021-04-17".evaluateExpression)
+		// LDATE
+		Duration.ofDays(4).toLTimeValue.assertEquals("LD#2021-04-21 - LD#2021-04-17".evaluateExpression)
+		// TOD
+		Duration.ofSeconds(4).toTimeValue.assertEquals("TOD#21:04:21 - TOD#21:04:17".evaluateExpression)
+		// LTOD
+		Duration.ofSeconds(4).toLTimeValue.assertEquals("LTOD#21:04:21 - LTOD#21:04:17".evaluateExpression)
+		// DT
+		Duration.ofSeconds(4).toTimeValue.assertEquals(
+			"DT#2021-04-17-21:04:21 - DT#2021-04-17-21:04:17".evaluateExpression)
+		// LDT
+		Duration.ofSeconds(4).toLTimeValue.assertEquals(
+			"LDT#2021-04-17-21:04:21 - LDT#2021-04-17-21:04:17".evaluateExpression)
+		// promotion
+		Duration.ofDays(4).toLTimeValue.assertEquals("LD#2021-04-21 - D#2021-04-17".evaluateExpression)
+		Duration.ofDays(4).toLTimeValue.assertEquals("D#2021-04-21 - LD#2021-04-17".evaluateExpression)
+		Duration.ofSeconds(4).toLTimeValue.assertEquals("LTOD#21:04:21 - TOD#21:04:17".evaluateExpression)
+		Duration.ofSeconds(4).toLTimeValue.assertEquals("TOD#21:04:21 - LTOD#21:04:17".evaluateExpression)
+		Duration.ofSeconds(4).toLTimeValue.assertEquals(
+			"LDT#2021-04-17-21:04:21 - DT#2021-04-17-21:04:17".evaluateExpression)
+		Duration.ofSeconds(4).toLTimeValue.assertEquals(
+			"DT#2021-04-17-21:04:21 - LDT#2021-04-17-21:04:17".evaluateExpression)
 	}
 
 	@Test

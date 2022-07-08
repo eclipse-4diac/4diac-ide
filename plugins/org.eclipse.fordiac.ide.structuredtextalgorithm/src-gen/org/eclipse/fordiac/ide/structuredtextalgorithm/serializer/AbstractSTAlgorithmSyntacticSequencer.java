@@ -56,6 +56,7 @@ public abstract class AbstractSTAlgorithmSyntacticSequencer extends AbstractSynt
 	 *     '('*
 	 *
 	 * This ambiguous syntax occurs at:
+	 *     (rule start) (ambiguity) feature=STBuiltinFeature
 	 *     (rule start) (ambiguity) feature=[INamedElement|STFeatureName]
 	 *     (rule start) (ambiguity) op=UnaryOperator
 	 *     (rule start) (ambiguity) type=[DataType|STAnyCharsType]

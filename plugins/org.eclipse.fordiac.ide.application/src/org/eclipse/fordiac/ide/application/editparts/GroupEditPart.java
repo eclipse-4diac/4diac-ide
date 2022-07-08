@@ -131,7 +131,8 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 				super.notifyChanged(notification);
 				final Object feature = notification.getFeature();
 				if (LibraryElementPackage.eINSTANCE.getGroup_GroupElements().equals(feature)) {
-					// group elements changed tell the parent that fbs may now be at different places
+					// group elements changed tell the parent that fbs may now be at different
+					// places
 					getParent().refresh();
 				} else if (LibraryElementPackage.eINSTANCE.getGroup_Width().equals(feature)
 						|| LibraryElementPackage.eINSTANCE.getGroup_Height().equals(feature)) {
@@ -177,7 +178,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 	}
 
 	@Override
-	protected List getModelChildren() {
+	protected List<Object> getModelChildren() {
 		final List<Object> children = new ArrayList<>(2);
 		children.add(getSubappContents());
 		return children;
@@ -185,12 +186,14 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 
 	@Override
 	public void performRequest(final Request request) {
-		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN)
-				&& (request instanceof SelectionRequest)) {
-			// if it is direct edit request and inside of the content area forward request to there so we are creating
+		if (((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
+				|| (request.getType() == RequestConstants.REQ_OPEN)) && (request instanceof SelectionRequest)) {
+			// if it is direct edit request and inside of the content area forward request
+			// to there so we are creating
 			// fbs inside
 			final GroupContentEditPart groupContentEP = getGroupContentEP();
-			if (groupContentEP != null && isGroupContentTargetingRequest((SelectionRequest) request, groupContentEP)) {
+			if ((groupContentEP != null)
+					&& isGroupContentTargetingRequest((SelectionRequest) request, groupContentEP)) {
 				groupContentEP.performRequest(request);
 				return;
 			}
@@ -245,7 +248,8 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 	public DragTracker getDragTracker(final Request request) {
 		if (request instanceof SelectionRequest) {
 			final GroupContentEditPart groupContentEP = getGroupContentEP();
-			if (groupContentEP != null && isGroupContentTargetingRequest((SelectionRequest) request, groupContentEP)) {
+			if ((groupContentEP != null)
+					&& isGroupContentTargetingRequest((SelectionRequest) request, groupContentEP)) {
 				return groupContentEP.getDragTracker(request);
 			}
 		}
@@ -286,6 +290,16 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 		final Point location = request.getLocation().getCopy();
 		getFigure().translateToRelative(location);
 		return ((groupContentEP != null) && (groupContentEP.getFigure().getBounds().contains(location)));
+	}
+
+	@Override
+	public int getCommentWidth() {
+		return commentFigure.getTextWidth();
+	}
+
+	@Override
+	public int getMinHeight() {
+		return 0;
 	}
 
 }

@@ -432,6 +432,15 @@ public interface STCoreFactory extends EFactory {
 	STFeatureExpression createSTFeatureExpression();
 
 	/**
+	 * Returns a new object of class '<em>ST Builtin Feature Expression</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Builtin Feature Expression</em>'.
+	 * @generated
+	 */
+	STBuiltinFeatureExpression createSTBuiltinFeatureExpression();
+
+	/**
 	 * Returns a new object of class '<em>ST Multibit Partial Expression</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

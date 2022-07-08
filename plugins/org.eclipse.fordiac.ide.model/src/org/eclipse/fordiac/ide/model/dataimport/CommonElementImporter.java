@@ -422,11 +422,17 @@ public abstract class CommonElementImporter {
 		}
 	}
 
-	protected void parseGenericAttributeNode(final ConfigurableObject confObject) {
+	protected void parseGenericAttributeNode(final ConfigurableObject confObject) throws XMLStreamException {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		final String type = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
-		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
+
+		if (null == value) {
+			// we don't have a value attribute check for a CData value
+			value = readCDataSection();
+		}
+
 		if ((null != name) && (null != value)) {
 			confObject.setAttribute(name, null == type ? IecTypes.ElementaryTypes.STRING.getName() : type, value,
 					comment);
@@ -683,6 +689,15 @@ public abstract class CommonElementImporter {
 				createParamters(resource);
 			}
 		}
+	}
+
+	protected String readCDataSection() throws XMLStreamException {
+		final StringBuilder algText = new StringBuilder();
+		// the parser my split the content of several parts therefore this while loop
+		while ((getReader().hasNext()) && (XMLStreamConstants.CHARACTERS == getReader().next())) {
+			algText.append(getReader().getText());
+		}
+		return algText.toString();
 	}
 
 	/** Creates the values. */

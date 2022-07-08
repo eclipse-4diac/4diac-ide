@@ -16,6 +16,7 @@ import com.google.inject.Inject
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.util.EcoreUtil
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
 import org.eclipse.jface.text.BadLocationException
@@ -26,6 +27,8 @@ import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.ui.codemining.AbstractXtextCodeMiningProvider
 import org.eclipse.xtext.util.CancelIndicator
 import org.eclipse.xtext.util.IAcceptor
+
+import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 
 class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 	@Inject extension STCoreGrammarAccess
@@ -44,7 +47,9 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 
 	def dispatch void createCodeMinings(STNumericLiteral literal,
 		IAcceptor<? super ICodeMining> acceptor) throws BadLocationException {
-		if (isEnableLiteralTypeCodeMinings && literal.declaredResultType === null) {
+		if (isEnableLiteralTypeCodeMinings && literal.declaredResultType === null &&
+			STCorePackage.eINSTANCE.STStatement.isAncestor(literal) ||
+			STCorePackage.eINSTANCE.STInitializerExpression.isAncestor(literal)) {
 			val inferredType = literal.resultType
 			if (inferredType !== null) {
 				NodeModelUtils.findActualNodeFor(literal).asTreeIterable.filter [
@@ -58,7 +63,9 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 
 	def dispatch void createCodeMinings(STStringLiteral literal,
 		IAcceptor<? super ICodeMining> acceptor) throws BadLocationException {
-		if (isEnableLiteralTypeCodeMinings && literal.declaredResultType === null) {
+		if (isEnableLiteralTypeCodeMinings && literal.declaredResultType === null &&
+			STCorePackage.eINSTANCE.STStatement.isAncestor(literal) ||
+			STCorePackage.eINSTANCE.STInitializerExpression.isAncestor(literal)) {
 			val inferredType = literal.resultType
 			if (inferredType !== null) {
 				NodeModelUtils.findActualNodeFor(literal).asTreeIterable.filter [

@@ -120,6 +120,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 			case STCorePackage.ST_MEMBER_ACCESS_EXPRESSION: return createSTMemberAccessExpression();
 			case STCorePackage.ST_ARRAY_ACCESS_EXPRESSION: return createSTArrayAccessExpression();
 			case STCorePackage.ST_FEATURE_EXPRESSION: return createSTFeatureExpression();
+			case STCorePackage.ST_BUILTIN_FEATURE_EXPRESSION: return createSTBuiltinFeatureExpression();
 			case STCorePackage.ST_MULTIBIT_PARTIAL_EXPRESSION: return createSTMultibitPartialExpression();
 			case STCorePackage.ST_STANDARD_FUNCTION: return createSTStandardFunction();
 			case STCorePackage.ST_COMMENT: return createSTComment();
@@ -144,6 +145,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 				return createSTUnaryOperatorFromString(eDataType, initialValue);
 			case STCorePackage.ST_MULTI_BIT_ACCESS_SPECIFIER:
 				return createSTMultiBitAccessSpecifierFromString(eDataType, initialValue);
+			case STCorePackage.ST_BUILTIN_FEATURE:
+				return createSTBuiltinFeatureFromString(eDataType, initialValue);
 			case STCorePackage.ST_ACCESS_SPECIFIER:
 				return createSTAccessSpecifierFromString(eDataType, initialValue);
 			case STCorePackage.ST_COMMENT_POSITION:
@@ -177,6 +180,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 				return convertSTUnaryOperatorToString(eDataType, instanceValue);
 			case STCorePackage.ST_MULTI_BIT_ACCESS_SPECIFIER:
 				return convertSTMultiBitAccessSpecifierToString(eDataType, instanceValue);
+			case STCorePackage.ST_BUILTIN_FEATURE:
+				return convertSTBuiltinFeatureToString(eDataType, instanceValue);
 			case STCorePackage.ST_ACCESS_SPECIFIER:
 				return convertSTAccessSpecifierToString(eDataType, instanceValue);
 			case STCorePackage.ST_COMMENT_POSITION:
@@ -686,6 +691,17 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * @generated
 	 */
 	@Override
+	public STBuiltinFeatureExpression createSTBuiltinFeatureExpression() {
+		STBuiltinFeatureExpressionImpl stBuiltinFeatureExpression = new STBuiltinFeatureExpressionImpl();
+		return stBuiltinFeatureExpression;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public STMultibitPartialExpression createSTMultibitPartialExpression() {
 		STMultibitPartialExpressionImpl stMultibitPartialExpression = new STMultibitPartialExpressionImpl();
 		return stMultibitPartialExpression;
@@ -792,6 +808,26 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * @generated
 	 */
 	public String convertSTMultiBitAccessSpecifierToString(EDataType eDataType, Object instanceValue) {
+		return instanceValue == null ? null : instanceValue.toString();
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public STBuiltinFeature createSTBuiltinFeatureFromString(EDataType eDataType, String initialValue) {
+		STBuiltinFeature result = STBuiltinFeature.get(initialValue);
+		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		return result;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSTBuiltinFeatureToString(EDataType eDataType, Object instanceValue) {
 		return instanceValue == null ? null : instanceValue.toString();
 	}
 

@@ -28,7 +28,7 @@ public class CopyElementsToGroupCommand extends Command {
 	private final PasteCommand pasteCommand;
 	private AddElementsToGroup addElements;
 	private final List<FBNetworkElement> elementsToAdd = new ArrayList<>();
-	private final Point offset;
+	private Point offset;
 
 	public CopyElementsToGroupCommand(final Group targetGroup, final PasteCommand pasteCommand, final Point offset) {
 		this.targetGroup = targetGroup;
@@ -55,6 +55,15 @@ public class CopyElementsToGroupCommand extends Command {
 	public void redo() {
 		pasteCommand.redo();
 		addElements.redo();
+	}
+
+	public Point getOffset() {
+		return offset;
+	}
+
+	public void setOffset(final Point offset) {
+		this.offset = offset;
+
 	}
 
 }

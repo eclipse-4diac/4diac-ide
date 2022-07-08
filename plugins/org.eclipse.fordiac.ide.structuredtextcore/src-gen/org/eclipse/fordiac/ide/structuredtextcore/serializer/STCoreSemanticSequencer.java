@@ -13,6 +13,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement;
@@ -86,6 +87,9 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 				return; 
 			case STCorePackage.ST_BINARY_EXPRESSION:
 				sequence_STAddSubExpression_STAndExpression_STComparisonExpression_STEqualityExpression_STMulDivModExpression_STOrExpression_STPowerExpression_STSubrangeExpression_STXorExpression(context, (STBinaryExpression) semanticObject); 
+				return; 
+			case STCorePackage.ST_BUILTIN_FEATURE_EXPRESSION:
+				sequence_STBuiltinFeatureExpression(context, (STBuiltinFeatureExpression) semanticObject); 
 				return; 
 			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT:
 				sequence_STCallNamedInputArgument(context, (STCallNamedInputArgument) semanticObject); 
@@ -371,6 +375,44 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 		feeder.accept(grammarAccess.getSTAssignmentStatementAccess().getLeftSTAccessExpressionParserRuleCall_0_0(), semanticObject.getLeft());
 		feeder.accept(grammarAccess.getSTAssignmentStatementAccess().getRightSTExpressionParserRuleCall_2_0(), semanticObject.getRight());
 		feeder.finish();
+	}
+	
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     STExpression returns STBuiltinFeatureExpression
+	 *     STSubrangeExpression returns STBuiltinFeatureExpression
+	 *     STSubrangeExpression.STBinaryExpression_1_0_0 returns STBuiltinFeatureExpression
+	 *     STOrExpression returns STBuiltinFeatureExpression
+	 *     STOrExpression.STBinaryExpression_1_0_0 returns STBuiltinFeatureExpression
+	 *     STXorExpression returns STBuiltinFeatureExpression
+	 *     STXorExpression.STBinaryExpression_1_0_0 returns STBuiltinFeatureExpression
+	 *     STAndExpression returns STBuiltinFeatureExpression
+	 *     STAndExpression.STBinaryExpression_1_0_0 returns STBuiltinFeatureExpression
+	 *     STEqualityExpression returns STBuiltinFeatureExpression
+	 *     STEqualityExpression.STBinaryExpression_1_0_0 returns STBuiltinFeatureExpression
+	 *     STComparisonExpression returns STBuiltinFeatureExpression
+	 *     STComparisonExpression.STBinaryExpression_1_0_0 returns STBuiltinFeatureExpression
+	 *     STAddSubExpression returns STBuiltinFeatureExpression
+	 *     STAddSubExpression.STBinaryExpression_1_0_0 returns STBuiltinFeatureExpression
+	 *     STMulDivModExpression returns STBuiltinFeatureExpression
+	 *     STMulDivModExpression.STBinaryExpression_1_0_0 returns STBuiltinFeatureExpression
+	 *     STPowerExpression returns STBuiltinFeatureExpression
+	 *     STPowerExpression.STBinaryExpression_1_0_0 returns STBuiltinFeatureExpression
+	 *     STUnaryExpression returns STBuiltinFeatureExpression
+	 *     STAccessExpression returns STBuiltinFeatureExpression
+	 *     STAccessExpression.STMemberAccessExpression_1_0_0 returns STBuiltinFeatureExpression
+	 *     STAccessExpression.STArrayAccessExpression_1_1_0 returns STBuiltinFeatureExpression
+	 *     STPrimaryExpression returns STBuiltinFeatureExpression
+	 *     STBuiltinFeatureExpression returns STBuiltinFeatureExpression
+	 *
+	 * Constraint:
+	 *     (feature=STBuiltinFeature (call?='(' (parameters+=STCallArgument parameters+=STCallArgument*)?)?)
+	 * </pre>
+	 */
+	protected void sequence_STBuiltinFeatureExpression(ISerializationContext context, STBuiltinFeatureExpression semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
 	}
 	
 	

@@ -31,7 +31,6 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_For_Variable_Not_Integral_Type;
 	public static String STCoreValidator_Mixing_Formal_And_NonFormal;
 	public static String STCoreValidator_BinaryOperator_Not_Applicable;
-	public static String STCoreValidator_No_Cast_Available;
 	public static String STCoreValidator_Non_Compatible_Types;
 	public static String STCoreValidator_Wrong_Name_Case;
 	public static String STCoreValidator_Wrong_Number_Of_Arguments;

@@ -3341,11 +3341,20 @@ ruleSTPrimaryExpression returns [EObject current=null]
 		}
 		    |
 		{
-			newCompositeNode(grammarAccess.getSTPrimaryExpressionAccess().getSTLiteralExpressionsParserRuleCall_2());
+			newCompositeNode(grammarAccess.getSTPrimaryExpressionAccess().getSTBuiltinFeatureExpressionParserRuleCall_2());
 		}
-		this_STLiteralExpressions_4=ruleSTLiteralExpressions
+		this_STBuiltinFeatureExpression_4=ruleSTBuiltinFeatureExpression
 		{
-			$current = $this_STLiteralExpressions_4.current;
+			$current = $this_STBuiltinFeatureExpression_4.current;
+			afterParserOrEnumRuleCall();
+		}
+		    |
+		{
+			newCompositeNode(grammarAccess.getSTPrimaryExpressionAccess().getSTLiteralExpressionsParserRuleCall_3());
+		}
+		this_STLiteralExpressions_5=ruleSTLiteralExpressions
+		{
+			$current = $this_STLiteralExpressions_5.current;
 			afterParserOrEnumRuleCall();
 		}
 	)
@@ -3534,6 +3543,121 @@ ruleSTFeatureName returns [AntlrDatatypeRuleToken current=new AntlrDatatypeRuleT
 			$current.merge(kw);
 			newLeafNode(kw, grammarAccess.getSTFeatureNameAccess().getLDKeyword_8());
 		}
+	)
+;
+
+// Entry rule entryRuleSTBuiltinFeatureExpression
+entryRuleSTBuiltinFeatureExpression returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTBuiltinFeatureExpressionRule()); }
+	iv_ruleSTBuiltinFeatureExpression=ruleSTBuiltinFeatureExpression
+	{ $current=$iv_ruleSTBuiltinFeatureExpression.current; }
+	EOF;
+
+// Rule STBuiltinFeatureExpression
+ruleSTBuiltinFeatureExpression returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			{
+				$current = forceCreateModelElement(
+					grammarAccess.getSTBuiltinFeatureExpressionAccess().getSTBuiltinFeatureExpressionAction_0(),
+					$current);
+			}
+		)
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTBuiltinFeatureExpressionAccess().getFeatureSTBuiltinFeatureEnumRuleCall_1_0());
+				}
+				lv_feature_1_0=ruleSTBuiltinFeature
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTBuiltinFeatureExpressionRule());
+					}
+					set(
+						$current,
+						"feature",
+						lv_feature_1_0,
+						"org.eclipse.fordiac.ide.structuredtextcore.STCore.STBuiltinFeature");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)
+		(
+			(
+				((
+					LeftParenthesis
+				)
+				)=>
+				(
+					lv_call_2_0=LeftParenthesis
+					{
+						newLeafNode(lv_call_2_0, grammarAccess.getSTBuiltinFeatureExpressionAccess().getCallLeftParenthesisKeyword_2_0_0());
+					}
+					{
+						if ($current==null) {
+							$current = createModelElement(grammarAccess.getSTBuiltinFeatureExpressionRule());
+						}
+						setWithLastConsumed($current, "call", lv_call_2_0 != null, "(");
+					}
+				)
+			)
+			(
+				(
+					(
+						{
+							newCompositeNode(grammarAccess.getSTBuiltinFeatureExpressionAccess().getParametersSTCallArgumentParserRuleCall_2_1_0_0());
+						}
+						lv_parameters_3_0=ruleSTCallArgument
+						{
+							if ($current==null) {
+								$current = createModelElementForParent(grammarAccess.getSTBuiltinFeatureExpressionRule());
+							}
+							add(
+								$current,
+								"parameters",
+								lv_parameters_3_0,
+								"org.eclipse.fordiac.ide.structuredtextcore.STCore.STCallArgument");
+							afterParserOrEnumRuleCall();
+						}
+					)
+				)
+				(
+					otherlv_4=Comma
+					{
+						newLeafNode(otherlv_4, grammarAccess.getSTBuiltinFeatureExpressionAccess().getCommaKeyword_2_1_1_0());
+					}
+					(
+						(
+							{
+								newCompositeNode(grammarAccess.getSTBuiltinFeatureExpressionAccess().getParametersSTCallArgumentParserRuleCall_2_1_1_1_0());
+							}
+							lv_parameters_5_0=ruleSTCallArgument
+							{
+								if ($current==null) {
+									$current = createModelElementForParent(grammarAccess.getSTBuiltinFeatureExpressionRule());
+								}
+								add(
+									$current,
+									"parameters",
+									lv_parameters_5_0,
+									"org.eclipse.fordiac.ide.structuredtextcore.STCore.STCallArgument");
+								afterParserOrEnumRuleCall();
+							}
+						)
+					)
+				)*
+			)?
+			otherlv_6=RightParenthesis
+			{
+				newLeafNode(otherlv_6, grammarAccess.getSTBuiltinFeatureExpressionAccess().getRightParenthesisKeyword_2_2());
+			}
+		)?
 	)
 ;
 
@@ -5311,6 +5435,23 @@ ruleUnaryOperator returns [Enumerator current=null]
 				newLeafNode(enumLiteral_2, grammarAccess.getUnaryOperatorAccess().getNOTEnumLiteralDeclaration_2());
 			}
 		)
+	)
+;
+
+// Rule STBuiltinFeature
+ruleSTBuiltinFeature returns [Enumerator current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		enumLiteral_0=THIS
+		{
+			$current = grammarAccess.getSTBuiltinFeatureAccess().getTHISEnumLiteralDeclaration().getEnumLiteral().getInstance();
+			newLeafNode(enumLiteral_0, grammarAccess.getSTBuiltinFeatureAccess().getTHISEnumLiteralDeclaration());
+		}
 	)
 ;
 

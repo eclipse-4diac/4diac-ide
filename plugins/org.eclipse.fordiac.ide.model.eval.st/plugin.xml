@@ -17,6 +17,9 @@
          <source
                type="org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction">
          </source>
+         <source
+               type="java.lang.String">
+         </source>
       </factory>
    </extension>
 

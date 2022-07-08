@@ -261,6 +261,10 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTFeatureExpressionAdapter();
 			}
 			@Override
+			public Adapter caseSTBuiltinFeatureExpression(STBuiltinFeatureExpression object) {
+				return createSTBuiltinFeatureExpressionAdapter();
+			}
+			@Override
 			public Adapter caseSTMultibitPartialExpression(STMultibitPartialExpression object) {
 				return createSTMultibitPartialExpressionAdapter();
 			}
@@ -921,6 +925,20 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTFeatureExpressionAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression <em>ST Builtin Feature Expression</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
+	 * @generated
+	 */
+	public Adapter createSTBuiltinFeatureExpressionAdapter() {
 		return null;
 	}
 

@@ -31,7 +31,7 @@ class DelegatingValueConverter<T> extends AbstractNullSafeConverter<T> {
 		try {
 			delegate.toValue(string)
 		} catch (Exception e) {
-			throw new ValueConverterException(e.message, node, e.cause as Exception)
+			throw new ValueConverterException(e.message, node, e)
 		}
 	}
 }

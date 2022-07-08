@@ -210,7 +210,7 @@ STAccessExpression returns STExpression:
 	({STArrayAccessExpression.receiver=current} '[' index+=STExpression (',' index+=STExpression)* ']'))*;
 
 STPrimaryExpression returns STExpression:
-	'(' STExpression ')' | STFeatureExpression | STLiteralExpressions;
+	'(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression | STLiteralExpressions;
 
 STFeatureExpression returns STExpression:
 	{STFeatureExpression} feature=[libraryElement::INamedElement|STFeatureName] (=>call?='(' (parameters+=STCallArgument
@@ -218,6 +218,13 @@ STFeatureExpression returns STExpression:
 
 STFeatureName:
 	ID | 'LT' | 'AND' | 'OR' | 'XOR' | 'MOD' | 'D' | 'DT' | 'LD';
+
+STBuiltinFeatureExpression returns STExpression:
+	{STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
+	(',' parameters+=STCallArgument)*)? ')')?;
+
+enum STBuiltinFeature:
+	THIS;
 
 enum STMultiBitAccessSpecifier:
 	L='%L' | D='%D' | W='%W' | B='%B' | X='%X';
@@ -328,12 +335,14 @@ enum STAccessSpecifier:
 
 /** Keep in sync with fordiac keywords */
 RESERVED_KEYWORDS:
-	'ABSTRACT' | 'ACTION' | 'END_ACTION' | 'CLASS' | 'END_CLASS' | 'CONFIGURATION' | 'END_CONFIGURATION' |
-	'FUNCTION_BLOCK' | 'END_FUNCTION_BLOCK' | 'INTERFACE' | 'END_INTERFACE' | 'NAMESPACE' | 'END_NAMESPACE' | 'PROGRAM'
-	| 'END_PROGRAM' | 'RESOURCE' | 'END_RESOURCE' | 'STEP' | 'END_STEP' | 'STRUCT' | 'END_STRUCT' | 'TRANSITION' |
-	'END_TRANSITION' | 'TYPE' | 'END_TYPE' | 'EXTENDS' | 'FINAL' | 'IMPLEMENTS' | 'INITIAL_STEP' | 'INTERVAL' | 'RETAIN'
-	| 'NON_RETAIN' | 'NULL' | 'ON' | 'OVERLAP' | 'OVERRIDE' | 'PRIORITY' | 'READ_ONLY' | 'READ_WRITE' | 'REF' | 'REF_TO'
-	| 'SINGLE' | 'THIS' | 'VAR_ACCESS' | 'VAR_CONFIG' | 'VAR_EXTERNAL' | 'VAR_GLOBAL' | 'WITH';
+	'ABSTRACT' | 'ACTION' | 'CLASS' | 'CONFIGURATION' | 'END_ACTION' | 'END_CLASS' | 'END_CONFIGURATION' |
+	'END_FUNCTION' | 'END_FUNCTION_BLOCK' | 'END_INTERFACE' | 'END_METHOD' | 'END_NAMESPACE' | 'END_PROGRAM' |
+	'END_RESOURCE' | 'END_STEP' | 'END_STRUCT' | 'END_TRANSITION' | 'END_TYPE' | 'EXTENDS' | 'FINAL' | 'FROM' |
+	'FUNCTION' | 'FUNCTION_BLOCK' | 'IMPLEMENTS' | 'INITIAL_STEP' | 'INTERFACE' | 'INTERAL' | 'INTERVAL' | 'METHOD' |
+	'NAMESPACE' | 'NON_RETAIN' | 'NULL' | 'ON' | 'OVERLAP' | 'OVERRIDE' | 'PRIORITY' | 'PRIVATE' | 'PROGRAM' |
+	'PROTECTED' | 'PUBLIC' | 'READ_ONLY' | 'READ_WRITE' | 'REF' | 'REF_TO' | 'RESOURCE' | 'RETAIN' | 'SINGLE' | 'STEP' |
+	'STRUCT' | 'SUPER' | 'TASK' | 'THIS' | 'TRANSITION' | 'TYPE' |
+	'USING' | 'VAR_ACCESS' | 'VAR_CONFIG' | 'VAR_EXTERNAL' | 'VAR_GLOBAL' | 'WITH';
 
 terminal fragment HEX_DIGIT:
 	'0'..'9' | 'a'..'f' | 'A'..'F' | '_';
@@ -342,10 +351,10 @@ terminal NON_DECIMAL:
 	('2#' | '8#' | '16#') HEX_DIGIT+;
 
 terminal INT returns ecore::EBigInteger:
-	'0'..'9' ('0'..'9'|'_')*;
-	
+	'0'..'9' ('0'..'9' | '_')*;
+
 terminal DECIMAL:
-	INT (('e'|'E') ('+'|'-')? INT)?;
+	INT (('e' | 'E') ('+' | '-')? INT)?;
 
 terminal TIME_VALUE:
 	(TIME_PART ('_')?)+;

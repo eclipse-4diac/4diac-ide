@@ -147,4 +147,8 @@ public class DeleteFBNetworkElementCommand extends Command {
 		valueErrorMarkers.clear();
 	}
 
+	public FBNetwork getFbParent() {
+		return fbParent;
+	}
+
 }

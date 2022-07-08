@@ -88,7 +88,6 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			+ "identiferEndsInUnderscoreError"; //$NON-NLS-1$
 	public static final String NOT_ASSIGNABLE = ISSUE_CODE_PREFIX + "notAssignable"; //$NON-NLS-1$
 	public static final String NON_COMPATIBLE_TYPES = ISSUE_CODE_PREFIX + "nonCompatibleTypes"; //$NON-NLS-1$
-	public static final String NO_CAST_AVAILABLE = ISSUE_CODE_PREFIX + "noCastAvailable"; //$NON-NLS-1$
 	public static final String WRONG_NAME_CASE = ISSUE_CODE_PREFIX + "wrongNameCase"; //$NON-NLS-1$
 	public static final String RESERVED_IDENTIFIER_ERROR = ISSUE_CODE_PREFIX + "reservedIdentifierError"; //$NON-NLS-1$
 	public static final String UNQUALIFIED_FB_CALL_ON_FB_WITH_INPUT_EVENT_SIZE_NOT_ONE = ISSUE_CODE_PREFIX
@@ -492,18 +491,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	protected void checkTypeCompatibility(final DataType destination, final DataType source,
 			final EStructuralFeature feature, final int index) {
 		if (!destination.isAssignableFrom(source)) {
-			final String castName = source.getName() + "_TO_" + destination.getName(); //$NON-NLS-1$
-			final boolean castPossible = StreamSupport.stream(standardFunctionProvider.get().spliterator(), true)
-					.anyMatch(func -> func.getName().equals(castName));
-			if (castPossible) {
-				error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
-						destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
-						destination.getName());
-			} else {
-				error(MessageFormat.format(Messages.STCoreValidator_No_Cast_Available, source.getName(),
-						destination.getName()), feature, index, NO_CAST_AVAILABLE, source.getName(),
-						destination.getName());
-			}
+			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
+					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
+					destination.getName());
 		}
 	}
 }

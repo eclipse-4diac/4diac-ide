@@ -113,8 +113,15 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testAdd(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyMagnitudeType: type.defaultValue.assertEquals(type.defaultValue + type.defaultValue)
-			default: UnsupportedOperationException.assertThrows[type.defaultValue + type.defaultValue]
+			AnyMagnitudeType:
+				type.defaultValue.assertEquals(type.defaultValue + type.defaultValue)
+			TimeOfDayType,
+			LtodType,
+			DateAndTimeType,
+			LdtType:
+				type.defaultValue.assertEquals(type.defaultValue + TimeValue.DEFAULT)
+			default:
+				UnsupportedOperationException.assertThrows[type.defaultValue + type.defaultValue]
 		}
 	}
 
@@ -122,8 +129,24 @@ class ValueOperationsTest {
 	@MethodSource("typeArgumentsProvider")
 	def void testSubtract(String typeName) {
 		switch (type : ElementaryTypes.getTypeByName(typeName)) {
-			AnyMagnitudeType: type.defaultValue.assertEquals(type.defaultValue - type.defaultValue)
-			default: UnsupportedOperationException.assertThrows[type.defaultValue - type.defaultValue]
+			AnyMagnitudeType:
+				type.defaultValue.assertEquals(type.defaultValue - type.defaultValue)
+			TimeOfDayType,
+			DateAndTimeType: {
+				type.defaultValue.assertEquals(type.defaultValue - TimeValue.DEFAULT)
+				TimeValue.DEFAULT.assertEquals(type.defaultValue - type.defaultValue)
+			}
+			LtodType,
+			LdtType: {
+				type.defaultValue.assertEquals(type.defaultValue - TimeValue.DEFAULT)
+				LTimeValue.DEFAULT.assertEquals(type.defaultValue - type.defaultValue)
+			}
+			DateType:
+				TimeValue.DEFAULT.assertEquals(type.defaultValue - type.defaultValue)
+			LdateType:
+				LTimeValue.DEFAULT.assertEquals(type.defaultValue - type.defaultValue)
+			default:
+				UnsupportedOperationException.assertThrows[type.defaultValue - type.defaultValue]
 		}
 	}
 

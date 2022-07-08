@@ -58,6 +58,11 @@ public class TablePasteAction extends Action {
 		final int[] pasteIndices = table.getSelectionIndices();
 		final Object content = Clipboard.getDefault().getContents();
 		final Object[] entries = createEntriesFromContent(content);
+		
+		// catch wrong clipboard contents
+		if (entries == null) {
+			return;
+		}
 
 		int index = getInsertionStartIndex(pasteIndices, table);
 

@@ -13,44 +13,57 @@
 package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateGroupCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 
 public class ConvertSubappToGroupCommand extends Command {
 	private final SubApp sourceSubapp;
 
 	private CreateGroupCommand createGroupCmd;
-	private ChangeCommentCommand copyCommentCmd;
-	private FlattenSubAppCommand deleteSubappCmd;
+	private final CompoundCommand convertToGroupCmd = new CompoundCommand();
 
-	public ConvertSubappToGroupCommand(SubApp source) {
+	public ConvertSubappToGroupCommand(final SubApp source) {
 		this.sourceSubapp = source;
 	}
 
 	@Override
 	public void execute() {
-		// create new group from subapp network
-		List<?> subappContents = new ArrayList<>(sourceSubapp.getSubAppNetwork().getNetworkElements());
-		Rectangle bounds = new Rectangle(sourceSubapp.getPosition().getX(), sourceSubapp.getPosition().getY(), sourceSubapp.getWidth(), sourceSubapp.getHeight());
-		createGroupCmd = new CreateGroupCommand(sourceSubapp.getFbNetwork(), subappContents, bounds);
-		createGroupCmd.execute();
-		Group destination = createGroupCmd.getElement();
+		createConvertToGroupCommand();
+		convertToGroupCmd.execute();
+
+		// force same size as subapp
+		final Group destination = createGroupCmd.getElement();
 		destination.setWidth(sourceSubapp.getWidth());
 		destination.setHeight(sourceSubapp.getHeight());
 
 		// copy instance comment of subapp
-		copyCommentCmd = new ChangeCommentCommand(destination, sourceSubapp.getComment());
+		final ChangeCommentCommand copyCommentCmd = new ChangeCommentCommand(destination, sourceSubapp.getComment());
 		copyCommentCmd.execute();
+		convertToGroupCmd.add(copyCommentCmd);
 
+		ElementSelector.selectViewObjects(Arrays.asList(destination));
+	}
+
+	private void createConvertToGroupCommand() {
+		final FBNetwork appNetwork = sourceSubapp.getFbNetwork();
+		final List<?> subappContents = new ArrayList<>(sourceSubapp.getSubAppNetwork().getNetworkElements());
 		// delete subapp
-		deleteSubappCmd = new FlattenSubAppCommand(sourceSubapp);
-		deleteSubappCmd.execute();
+		convertToGroupCmd.add(new FlattenSubAppCommand(sourceSubapp, false));
+		// create new group from subapp network
+		final Rectangle bounds = new Rectangle(sourceSubapp.getPosition().getX(), sourceSubapp.getPosition().getY(),
+				sourceSubapp.getWidth(), sourceSubapp.getHeight());
+		createGroupCmd = new CreateGroupCommand(appNetwork, subappContents, bounds);
+		convertToGroupCmd.add(createGroupCmd);
 	}
 
 	@Override
@@ -58,22 +71,20 @@ public class ConvertSubappToGroupCommand extends Command {
 		return (sourceSubapp != null) && isUntypedSubapp(sourceSubapp);
 	}
 
-	private boolean isUntypedSubapp(SubApp subapp) {
+	private boolean isUntypedSubapp(final SubApp subapp) {
 		return !(subapp.isTyped() || subapp.isContainedInTypedInstance());
 	}
 
 	@Override
 	public void undo() {
-		deleteSubappCmd.undo();
-		copyCommentCmd.undo();
-		createGroupCmd.undo();
+		convertToGroupCmd.undo();
+		ElementSelector.selectViewObjects(Arrays.asList(sourceSubapp));
 	}
 
 	@Override
 	public void redo() {
-		createGroupCmd.redo();
-		copyCommentCmd.redo();
-		deleteSubappCmd.redo();
+		convertToGroupCmd.redo();
+		ElementSelector.selectViewObjects(Arrays.asList(createGroupCmd.getElement()));
 	}
 
 	public Group getCreatedElement() {

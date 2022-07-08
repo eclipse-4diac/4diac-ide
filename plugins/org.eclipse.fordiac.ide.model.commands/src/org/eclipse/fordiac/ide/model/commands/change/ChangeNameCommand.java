@@ -71,8 +71,12 @@ public class ChangeNameCommand extends Command {
 		}
 	}
 
-	protected INamedElement getElement() {
+	public INamedElement getElement() {
 		return element;
+	}
+
+	public String getOldName() {
+		return oldName;
 	}
 
 }

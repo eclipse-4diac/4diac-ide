@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
@@ -236,6 +237,26 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				expr.mappedOutputArguments.entrySet.map[key.generateOutputCallArgument(value)]
 		} catch (IndexOutOfBoundsException e) {
 			errors.add('''Not enough arguments for «expr.feature.name»''')
+			emptyList
+		} catch (ClassCastException e) {
+			errors.add('''Mixing named and unnamed arguments is not allowed''')
+			emptyList
+		}
+	}
+
+	def protected dispatch CharSequence generateExpression(STBuiltinFeatureExpression expr) {
+		switch (expr.feature) {
+			case THIS: '''(*this)«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
+		}
+	}
+
+	def protected Iterable<CharSequence> generateCallArguments(STBuiltinFeatureExpression expr) {
+		try {
+			expr.mappedInputArguments.entrySet.map[key.generateInputCallArgument(value)] +
+				expr.mappedInOutArguments.entrySet.map[key.generateInOutCallArgument(value)] +
+				expr.mappedOutputArguments.entrySet.map[key.generateOutputCallArgument(value)]
+		} catch (IndexOutOfBoundsException e) {
+			errors.add('''Not enough arguments for «expr.feature.getName»''')
 			emptyList
 		} catch (ClassCastException e) {
 			errors.add('''Mixing named and unnamed arguments is not allowed''')

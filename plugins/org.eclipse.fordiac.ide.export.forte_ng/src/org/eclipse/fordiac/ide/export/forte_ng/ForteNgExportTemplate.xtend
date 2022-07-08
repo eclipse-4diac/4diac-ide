@@ -50,14 +50,14 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 
 	def protected generateTypeInclude(DataType type) {
 		switch (type) {
-			TimeType,
-			LtimeType: "forte_time.h"
-			DateType,
-			LdateType: "forte_date.h"
-			TimeOfDayType,
-			LtodType: "forte_time_of_day.h"
-			DateAndTimeType,
-			LdtType: "forte_date_and_time.h"
+			TimeType: "forte_time.h"
+			LtimeType: "forte_ltime.h"
+			DateType: "forte_date.h"
+			LdateType: "forte_ldate.h"
+			TimeOfDayType: "forte_time_of_day.h"
+			LtodType: "forte_ltime_of_day.h"
+			DateAndTimeType: "forte_date_and_time.h"
+			LdtType: "forte_ldate_and_time.h"
 			default: '''forte_«type.name.toLowerCase».h'''
 		}
 	}

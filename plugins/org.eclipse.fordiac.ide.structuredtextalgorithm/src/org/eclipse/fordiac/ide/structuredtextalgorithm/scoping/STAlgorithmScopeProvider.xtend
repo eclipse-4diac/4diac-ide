@@ -18,8 +18,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmPackage
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.xtext.resource.IEObjectDescription
+
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 
 /**
  * This class contains custom scoping description.
@@ -32,6 +37,19 @@ class STAlgorithmScopeProvider extends AbstractSTAlgorithmScopeProvider {
 		if (reference == STAlgorithmPackage.Literals.ST_METHOD__RETURN_TYPE) {
 			val globalScope = super.getScope(context, reference)
 			return scopeFor(DataTypeLibrary.nonUserDefinedDataTypes, globalScope)
+		} else if (reference == STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE) {
+			switch (receiver : context.receiver) {
+				STBuiltinFeatureExpression: {
+					switch (receiver.feature) {
+						case THIS: {
+							val source = context.rootContainer
+							if (source instanceof STAlgorithmSource) {
+								return scopeFor(source.elements.filter(STMethod), super.getScope(context, reference))
+							}
+						}
+					}
+				}
+			}
 		}
 		return super.getScope(context, reference)
 	}

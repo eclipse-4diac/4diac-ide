@@ -25,7 +25,7 @@ import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
-import org.eclipse.draw2d.MarginBorder;
+import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.ToolbarLayout;
@@ -49,6 +49,8 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 
 	private InstanceCommentFigure commentFigure;
 	private RoundedRectangle expandedMainFigure;
+	private IFigure expandedInputFigure;
+	private IFigure expandedOutputFigure;
 
 	public SubAppForFbNetworkFigure(final SubApp model, final SubAppForFBNetworkEditPart editPart) {
 		super(model, editPart);
@@ -89,10 +91,8 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 			if (expandedMainFigure == null) {
 				transformToExpandedSubapp();
 			}
-		} else {
-			if (expandedMainFigure != null) {
-				transformToCollapsedSubapp();
-			}
+		} else if (expandedMainFigure != null) {
+			transformToCollapsedSubapp();
 		}
 	}
 
@@ -104,10 +104,10 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		setConstraint(getFbFigureContainer(), layoutConstraint);
 
 		createExpandedMainFigure();
-		removeTopMiddleBotom();
+		removeTopMiddleBottom();
 		addComment();
 		createExpandedInputs();
-		crateExpandedOutputs();
+		createExpandedOutputs();
 		// ensure recalculation of the pins as they now have two connection endpoints
 		getFbFigureContainer().invalidateTree();
 	}
@@ -123,7 +123,8 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		addMiddle();
 		addBottom();
 		addBottomIOs();
-		// ensure recalculation of the pins as they now have only one connection ednpoint
+		// ensure recalculation of the pins as they now have only one connection
+		// ednpoint
 		getFbFigureContainer().invalidateTree();
 	}
 
@@ -131,7 +132,8 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure = new BorderedRoundedRectangle() {
 			@Override
 			public Insets getInsets() {
-				// the insets are needed to correctly get the bottom margin for the selection area
+				// the insets are needed to correctly get the bottom margin for the selection
+				// area
 				// left and right need to be 0 so that the pins are directly at the border
 				final Insets insets = super.getInsets();
 				insets.left = 0;
@@ -139,13 +141,17 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 				return insets;
 			}
 		};
+
 		expandedMainFigure.setOutline(false);
 		expandedMainFigure.setOpaque(false);
 		expandedMainFigure
-		.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
+				.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 		expandedMainFigure.setBorder(new RoundedRectangleShadowBorder());
 		final GridLayout expandedMainLayout = createTopBottomLayout();
 		expandedMainLayout.marginHeight = 5;
+		expandedMainLayout.marginWidth = 5;
+		expandedMainLayout.horizontalSpacing = 0;
+		expandedMainLayout.verticalSpacing = 0;
 		expandedMainFigure.setLayoutManager(expandedMainLayout);
 		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
@@ -153,19 +159,19 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	}
 
 	private void createExpandedInputs() {
-		final Figure inputFigure = new Figure();
-		inputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(inputFigure, createExpandedIOLayoutData(), -1);
-		inputFigure.add(getEventInputs(), createExpandedIOLayoutData(), -1);
-		inputFigure.add(getBottomInputArea(), createExpandedIOLayoutData(), -1);
+		expandedInputFigure = new Figure();
+		expandedInputFigure.setLayoutManager(createExpandedIOLayout());
+		expandedMainFigure.add(expandedInputFigure, createExpandedIOLayoutData(), -1);
+		expandedInputFigure.add(getEventInputs(), createExpandedIOLayoutData(), -1);
+		expandedInputFigure.add(getBottomInputArea(), createExpandedIOLayoutData(), -1);
 	}
 
-	private void crateExpandedOutputs() {
-		final Figure outputFigure = new Figure();
-		outputFigure.setLayoutManager(createExpandedIOLayout());
-		expandedMainFigure.add(outputFigure, createExpandedIOLayoutData(), -1);
-		outputFigure.add(getEventOutputs(), createExpandedOutputLayoutData(), -1);
-		outputFigure.add(getBottomOutputArea(), createExpandedOutputLayoutData(), -1);
+	private void createExpandedOutputs() {
+		expandedOutputFigure = new Figure();
+		expandedOutputFigure.setLayoutManager(createExpandedIOLayout());
+		expandedMainFigure.add(expandedOutputFigure, createExpandedIOLayoutData(), -1);
+		expandedOutputFigure.add(getEventOutputs(), createExpandedOutputLayoutData(), -1);
+		expandedOutputFigure.add(getBottomOutputArea(), createExpandedOutputLayoutData(), -1);
 	}
 
 	private static GridData createExpandedIOLayoutData() {
@@ -180,7 +186,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		return outputsLayoutData;
 	}
 
-	private void removeTopMiddleBotom() {
+	private void removeTopMiddleBottom() {
 		getFbFigureContainer().remove(getTop());
 		getFbFigureContainer().remove(getMiddleContainer());
 		getFbFigureContainer().remove(getBottom());
@@ -189,7 +195,6 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	private void addComment() {
 		final Figure commentContainer = new Figure();
 		commentContainer.setLayoutManager(new ToolbarLayout());
-		commentContainer.setBorder(new MarginBorder(2, 2, 2, 2));
 		expandedMainFigure.add(commentContainer, createCommentLayoutData(), 0);
 
 		commentFigure = new InstanceCommentFigure();
@@ -212,5 +217,13 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		topLayout.verticalSpacing = 0;
 		topLayout.horizontalSpacing = 0;
 		return topLayout;
+	}
+
+	public int getExpandedIOHeight() {
+		if (getModel().isUnfolded()) {
+			return Math.max(expandedInputFigure.getPreferredSize().height,
+					expandedOutputFigure.getPreferredSize().height);
+		}
+		return -1;
 	}
 }

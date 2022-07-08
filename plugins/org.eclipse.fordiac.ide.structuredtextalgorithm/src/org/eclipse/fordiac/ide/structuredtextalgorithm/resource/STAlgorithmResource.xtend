@@ -15,9 +15,11 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.resource
 import com.google.inject.Inject
 import java.io.IOException
 import java.io.InputStream
+import java.util.List
 import java.util.Map
 import org.eclipse.core.resources.ResourcesPlugin
 import org.eclipse.core.runtime.Path
+import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmPartitioner
@@ -25,13 +27,16 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtext.linking.lazy.LazyLinkingResource
 import org.eclipse.xtext.util.LazyStringInputStream
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 
 class STAlgorithmResource extends LazyLinkingResource {
 	public static final String OPTION_PLAIN_ST = STAlgorithmResource.name + ".PLAIN_ST";
 
 	@Accessors
 	FBType fbType
+
+	@Accessors
+	final List<EObject> additionalContent = newArrayList
 
 	@Inject
 	extension STAlgorithmPartitioner partitioner
@@ -71,14 +76,16 @@ class STAlgorithmResource extends LazyLinkingResource {
 
 	def protected void updateInternalFBType() {
 		clearInternalFBType
-		if (!contents.nullOrEmpty && fbType !== null) {
-			contents.add(fbType.copy)
+		if (!contents.nullOrEmpty) {
+			if(fbType !== null) contents.add(fbType.copy)
+			contents.addAll(additionalContent.copyAll)
 			relink
 		}
 	}
 
 	def protected void clearInternalFBType() {
 		contents?.removeIf[it instanceof FBType]
+		contents?.removeAll(additionalContent)
 	}
 
 	override synchronized getEObject(String uriFragment) {

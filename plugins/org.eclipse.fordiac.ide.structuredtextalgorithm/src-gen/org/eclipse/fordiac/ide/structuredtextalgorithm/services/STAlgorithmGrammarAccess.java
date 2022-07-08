@@ -907,7 +907,7 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//STPrimaryExpression returns STExpression:
-	//    '(' STExpression ')' | STFeatureExpression | STLiteralExpressions;
+	//    '(' STExpression ')' | STFeatureExpression | STBuiltinFeatureExpression | STLiteralExpressions;
 	public STCoreGrammarAccess.STPrimaryExpressionElements getSTPrimaryExpressionAccess() {
 		return gaSTCore.getSTPrimaryExpressionAccess();
 	}
@@ -935,6 +935,27 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	
 	public ParserRule getSTFeatureNameRule() {
 		return getSTFeatureNameAccess().getRule();
+	}
+	
+	//STBuiltinFeatureExpression returns STExpression:
+	//    {STBuiltinFeatureExpression} feature=STBuiltinFeature (=>call?='(' (parameters+=STCallArgument
+	//    (',' parameters+=STCallArgument)*)? ')')?;
+	public STCoreGrammarAccess.STBuiltinFeatureExpressionElements getSTBuiltinFeatureExpressionAccess() {
+		return gaSTCore.getSTBuiltinFeatureExpressionAccess();
+	}
+	
+	public ParserRule getSTBuiltinFeatureExpressionRule() {
+		return getSTBuiltinFeatureExpressionAccess().getRule();
+	}
+	
+	//enum STBuiltinFeature:
+	//    THIS;
+	public STCoreGrammarAccess.STBuiltinFeatureElements getSTBuiltinFeatureAccess() {
+		return gaSTCore.getSTBuiltinFeatureAccess();
+	}
+	
+	public EnumRule getSTBuiltinFeatureRule() {
+		return getSTBuiltinFeatureAccess().getRule();
 	}
 	
 	//enum STMultiBitAccessSpecifier:
@@ -1256,12 +1277,14 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	
 	///** Keep in sync with fordiac keywords */
 	//RESERVED_KEYWORDS:
-	//    'ABSTRACT' | 'ACTION' | 'END_ACTION' | 'CLASS' | 'END_CLASS' | 'CONFIGURATION' | 'END_CONFIGURATION' |
-	//    'FUNCTION_BLOCK' | 'END_FUNCTION_BLOCK' | 'INTERFACE' | 'END_INTERFACE' | 'NAMESPACE' | 'END_NAMESPACE' | 'PROGRAM'
-	//    | 'END_PROGRAM' | 'RESOURCE' | 'END_RESOURCE' | 'STEP' | 'END_STEP' | 'STRUCT' | 'END_STRUCT' | 'TRANSITION' |
-	//    'END_TRANSITION' | 'TYPE' | 'END_TYPE' | 'EXTENDS' | 'FINAL' | 'IMPLEMENTS' | 'INITIAL_STEP' | 'INTERVAL' | 'RETAIN'
-	//    | 'NON_RETAIN' | 'NULL' | 'ON' | 'OVERLAP' | 'OVERRIDE' | 'PRIORITY' | 'READ_ONLY' | 'READ_WRITE' | 'REF' | 'REF_TO'
-	//    | 'SINGLE' | 'THIS' | 'VAR_ACCESS' | 'VAR_CONFIG' | 'VAR_EXTERNAL' | 'VAR_GLOBAL' | 'WITH';
+	//    'ABSTRACT' | 'ACTION' | 'CLASS' | 'CONFIGURATION' | 'END_ACTION' | 'END_CLASS' | 'END_CONFIGURATION' |
+	//    'END_FUNCTION' | 'END_FUNCTION_BLOCK' | 'END_INTERFACE' | 'END_METHOD' | 'END_NAMESPACE' | 'END_PROGRAM' |
+	//    'END_RESOURCE' | 'END_STEP' | 'END_STRUCT' | 'END_TRANSITION' | 'END_TYPE' | 'EXTENDS' | 'FINAL' | 'FROM' |
+	//    'FUNCTION' | 'FUNCTION_BLOCK' | 'IMPLEMENTS' | 'INITIAL_STEP' | 'INTERFACE' | 'INTERAL' | 'INTERVAL' | 'METHOD' |
+	//    'NAMESPACE' | 'NON_RETAIN' | 'NULL' | 'ON' | 'OVERLAP' | 'OVERRIDE' | 'PRIORITY' | 'PRIVATE' | 'PROGRAM' |
+	//    'PROTECTED' | 'PUBLIC' | 'READ_ONLY' | 'READ_WRITE' | 'REF' | 'REF_TO' | 'RESOURCE' | 'RETAIN' | 'SINGLE' | 'STEP' |
+	//    'STRUCT' | 'SUPER' | 'TASK' | 'THIS' | 'TRANSITION' | 'TYPE' |
+	//    'USING' | 'VAR_ACCESS' | 'VAR_CONFIG' | 'VAR_EXTERNAL' | 'VAR_GLOBAL' | 'WITH';
 	public STCoreGrammarAccess.RESERVED_KEYWORDSElements getRESERVED_KEYWORDSAccess() {
 		return gaSTCore.getRESERVED_KEYWORDSAccess();
 	}
@@ -1283,13 +1306,13 @@ public class STAlgorithmGrammarAccess extends AbstractElementFinder.AbstractGram
 	}
 	
 	//terminal INT returns ecore::EBigInteger:
-	//    '0'..'9' ('0'..'9'|'_')*;
+	//    '0'..'9' ('0'..'9' | '_')*;
 	public TerminalRule getINTRule() {
 		return gaSTCore.getINTRule();
 	}
 	
 	//terminal DECIMAL:
-	//    INT (('e'|'E') ('+'|'-')? INT)?;
+	//    INT (('e' | 'E') ('+' | '-')? INT)?;
 	public TerminalRule getDECIMALRule() {
 		return gaSTCore.getDECIMALRule();
 	}

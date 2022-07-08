@@ -42,8 +42,11 @@ public final class TimeOfDayValueConverter implements ValueConverter<LocalTime> 
 
 	@Override
 	public LocalTime toValue(final String string) {
+		if (string.indexOf("__") != -1) { //$NON-NLS-1$
+			throw new IllegalArgumentException(Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
+		}
 		try {
-			return LocalTime.parse(string, TIME_OF_DAY_FORMATTER);
+			return LocalTime.parse(string.replace("_", ""), TIME_OF_DAY_FORMATTER); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (final Exception e) {
 			throw new IllegalArgumentException(Messages.VALIDATOR_InvalidTimeOfDayLiteral, e);
 		}

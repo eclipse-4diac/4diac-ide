@@ -110,20 +110,12 @@ public class AddElementsToSubAppCommand extends Command {
 		changedSubAppIEs.undo();
 		movedConns.forEach(con -> targetSubApp.getFbNetwork().addConnection(con));
 
-		FBNetworkHelper.moveFBNetworkByOffset(elementsToAdd, getOriginalPositionX(), getOriginalPositionY());
+		FBNetworkHelper.moveFBNetworkByOffset(elementsToAdd, offset.x, offset.y);
 
 		elementsToAdd.forEach(element -> targetSubApp.getFbNetwork().getNetworkElements().add(element));
 		setUniqueName.undo();
 		removeFromOtherGroups.undo();
 		unmappingCmds.undo();
-	}
-
-	private int getOriginalPositionX() {
-		return offset.x - FBNetworkHelper.X_OFFSET_FROM_TOP_LEFT_CORNER;
-	}
-
-	private int getOriginalPositionY() {
-		return offset.y - FBNetworkHelper.Y_OFFSET_FROM_TOP_LEFT_CORNER;
 	}
 
 	private void fillElementList(final List<?> selection) {
