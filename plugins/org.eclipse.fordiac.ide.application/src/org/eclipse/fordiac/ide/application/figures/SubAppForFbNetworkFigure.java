@@ -148,10 +148,6 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 				.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 		expandedMainFigure.setBorder(new RoundedRectangleShadowBorder());
 		final GridLayout expandedMainLayout = createTopBottomLayout();
-		expandedMainLayout.marginHeight = 5;
-		expandedMainLayout.marginWidth = 5;
-		expandedMainLayout.horizontalSpacing = 0;
-		expandedMainLayout.verticalSpacing = 0;
 		expandedMainFigure.setLayoutManager(expandedMainLayout);
 		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
