@@ -256,10 +256,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		final EList<EventOccurrence> outputEvents = runBasicFBType(runtime);
 
 		final EList<EventOccurrence> networkEvents = new BasicEList<>();
-		outputEvents.forEach(event -> {
-
-			createNetworkEvent(networkEvents, event);
-		});
+		outputEvents.forEach(event -> createNetworkEvent(networkEvents, event));
 
 		eventConnections(fBNetworkRuntime, manager, networkEvents);
 

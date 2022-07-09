@@ -30,10 +30,10 @@ public abstract class EvaluatorLineBreakpoint extends LineBreakpoint {
 
 	private static final String CONDITION_DEFAULT = "TRUE"; //$NON-NLS-1$
 
-	public EvaluatorLineBreakpoint() {
+	protected EvaluatorLineBreakpoint() {
 	}
 
-	public EvaluatorLineBreakpoint(final IResource resource, final int lineNumber) throws CoreException {
+	protected EvaluatorLineBreakpoint(final IResource resource, final int lineNumber) throws CoreException {
 		run(getMarkerRule(resource), monitor -> createMarker(resource, lineNumber));
 	}
 

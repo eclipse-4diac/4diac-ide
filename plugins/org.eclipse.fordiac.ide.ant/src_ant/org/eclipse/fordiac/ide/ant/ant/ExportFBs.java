@@ -96,29 +96,29 @@ public class ExportFBs extends Task {
 			if (!folder.exists()) {
 				folder.mkdir();
 			}
+			files.forEach(file -> exportFile(filter, folder, file));
+		}
+	}
 
-			for (final File file : files) {
+	private void exportFile(final ForteNgExportFilter filter, final File folder, final File file) {
+		final IPath location = Path.fromOSString(file.getAbsolutePath());
+		final IFile ifile = workspace.getRoot().getFileForLocation(location);
 
-				final IPath location = Path.fromOSString(file.getAbsolutePath());
-				final IFile ifile = workspace.getRoot().getFileForLocation(location);
-
-				try {
-					filter.export(ifile, folder.getPath(), true);
-					if (exportCMakeList) {
-						filter.export(null, folder.getPath(), true, new CMakeListsMarker());
-					}
-
-					if (!filter.getErrors().isEmpty()) {
-						for (final String error : filter.getErrors()) {
-							System.out.println(error);
-						}
-						throw new BuildException("Could not export without errors");
-					}
-
-				} catch (final ExportException e) {
-					throw new BuildException("Could not export: " + e.getMessage(), e);//$NON-NLS-1$
-				}
+		try {
+			filter.export(ifile, folder.getPath(), true);
+			if (exportCMakeList) {
+				filter.export(null, folder.getPath(), true, new CMakeListsMarker());
 			}
+
+			if (!filter.getErrors().isEmpty()) {
+				for (final String error : filter.getErrors()) {
+					log(error);
+				}
+				throw new BuildException("Could not export without errors"); //$NON-NLS-1$
+			}
+
+		} catch (final ExportException e) {
+			throw new BuildException("Could not export: " + e.getMessage(), e);//$NON-NLS-1$
 		}
 	}
 

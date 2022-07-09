@@ -18,9 +18,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.commands.ConvertGroupToSubappCommand;
-import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
-import org.eclipse.fordiac.ide.application.editparts.InstanceCommentEditPart;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.UntypeSubAppCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -72,7 +70,7 @@ public class ConvertToSubappHandler extends AbstractHandler implements CommandSt
 		return Status.OK_STATUS;
 	}
 
-	private void adjustMinBounds(final CommandStack cmdStack, final EditPart subappEP) {
+	private static void adjustMinBounds(final CommandStack cmdStack, final EditPart subappEP) {
 		// similar adjustment as trimming (cf. TrimHandler)
 		final IContainerEditPart containerEditPart = (IContainerEditPart) subappEP;
 		final GraphicalEditPart contentEP = containerEditPart.getContentEP();
@@ -107,17 +105,13 @@ public class ConvertToSubappHandler extends AbstractHandler implements CommandSt
 	}
 
 	private static Group getGroup(final Object currentElement) {
-		if (currentElement instanceof Group) {
+		Object elementToCheck = currentElement;
+		if(elementToCheck instanceof EditPart) {
+			elementToCheck = ((EditPart) elementToCheck).getModel();
+		}
+
+		if (elementToCheck instanceof Group) {
 			return (Group) currentElement;
-		}
-		if (currentElement instanceof GroupEditPart) {
-			return ((GroupEditPart) currentElement).getModel();
-		}
-		if (currentElement instanceof InstanceCommentEditPart) {
-			final FBNetworkElement el = ((InstanceCommentEditPart) currentElement).getModel().getRefElement();
-			if (el instanceof Group) {
-				return (Group) el;
-			}
 		}
 		return null;
 	}
@@ -130,7 +124,7 @@ public class ConvertToSubappHandler extends AbstractHandler implements CommandSt
 		}
 	}
 
-	private void refreshSelection(final SubApp subapp) {
+	private static void refreshSelection(final SubApp subapp) {
 		final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		HandlerHelper.getViewer(editor).deselectAll();

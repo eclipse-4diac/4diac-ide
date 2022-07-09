@@ -100,7 +100,7 @@ public class PasteEditPartsAction extends SelectionAction {
 
 				if (!groupContentBounds.contains(newContentBoundsWithValueBounds)) {
 					// we need to increase the size of the group
-					return CopyElementsToGroupAndResizeCommand(group.getModel().getGroup(),
+					return createCopyElementsToGroupAndResizeCommand(group.getModel().getGroup(),
 							new CopyElementsToGroupCommand(group.getModel().getGroup(), pasteCommand,
 									getOffsetPosition(group)),
 							groupContentBounds,
@@ -116,7 +116,7 @@ public class PasteEditPartsAction extends SelectionAction {
 		return new CompoundCommand();
 	}
 
-	private static Command CopyElementsToGroupAndResizeCommand(final Group dropGroup,
+	private static Command createCopyElementsToGroupAndResizeCommand(final Group dropGroup,
 			final CopyElementsToGroupCommand copyElementsToGroup, final Rectangle groupContentBounds,
 			final Rectangle newContentBounds) {
 		final CompoundCommand cmd = new CompoundCommand();
