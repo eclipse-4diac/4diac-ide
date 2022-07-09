@@ -72,7 +72,11 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 
 			@Override
 			public void focusGained(final FocusEvent e) {
-				parent.getDisplay().asyncExec(() -> initValueText.setSelection(0, initValueText.getText().length()));
+				parent.getDisplay().asyncExec(() -> {
+					if (!initValueText.isDisposed()) {
+						initValueText.setSelection(0, initValueText.getText().length());
+					}
+				});
 			}
 
 			@Override
