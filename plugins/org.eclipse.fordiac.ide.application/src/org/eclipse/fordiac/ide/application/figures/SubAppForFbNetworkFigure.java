@@ -26,6 +26,7 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.ToolbarLayout;
@@ -50,6 +51,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	private InstanceCommentFigure commentFigure;
 	private RoundedRectangle expandedMainFigure;
 	private IFigure expandedInputFigure;
+	private IFigure expandedContentArea;
 	private IFigure expandedOutputFigure;
 
 	public SubAppForFbNetworkFigure(final SubApp model, final SubAppForFBNetworkEditPart editPart) {
@@ -80,6 +82,10 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		return expandedMainFigure;
 	}
 
+	public IFigure getExpandedContentArea() {
+		return expandedContentArea;
+	}
+
 	public void refreshComment() {
 		if (commentFigure != null) {
 			commentFigure.setText(getModel().getComment());
@@ -107,11 +113,11 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		removeTopMiddleBottom();
 		addComment();
 		createExpandedInputs();
+		createContentContainer();
 		createExpandedOutputs();
 		// ensure recalculation of the pins as they now have two connection endpoints
 		getFbFigureContainer().invalidateTree();
 	}
-
 	private void transformToCollapsedSubapp() {
 		getFbFigureContainer().setBorder(null);
 		setConstraint(getFbFigureContainer(), createDefaultFBContainerLayoutData());
@@ -145,7 +151,7 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure.setOutline(false);
 		expandedMainFigure.setOpaque(false);
 		expandedMainFigure
-				.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
+		.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 		expandedMainFigure.setBorder(new RoundedRectangleShadowBorder());
 		final GridLayout expandedMainLayout = createTopBottomLayout();
 		expandedMainFigure.setLayoutManager(expandedMainLayout);
@@ -160,6 +166,14 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		expandedMainFigure.add(expandedInputFigure, createExpandedIOLayoutData(), -1);
 		expandedInputFigure.add(getEventInputs(), createExpandedIOLayoutData(), -1);
 		expandedInputFigure.add(getBottomInputArea(), createExpandedIOLayoutData(), -1);
+	}
+
+	private void createContentContainer() {
+		expandedContentArea = new Figure();
+		expandedContentArea.setLayoutManager(new GridLayout());
+		final GridData gridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
+				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
+		expandedMainFigure.add(expandedContentArea, gridData, -1);
 	}
 
 	private void createExpandedOutputs() {
@@ -192,6 +206,9 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 		final Figure commentContainer = new Figure();
 		commentContainer.setLayoutManager(new ToolbarLayout());
 		expandedMainFigure.add(commentContainer, createCommentLayoutData(), 0);
+		// create a grid layout to get the default margin which is also used in groups
+		final GridLayout marginGetter = new GridLayout();
+		commentContainer.setBorder(new MarginBorder(marginGetter.marginHeight));
 
 		commentFigure = new InstanceCommentFigure();
 		commentFigure.setBorder(new AdvancedLineBorder(PositionConstants.SOUTH));
