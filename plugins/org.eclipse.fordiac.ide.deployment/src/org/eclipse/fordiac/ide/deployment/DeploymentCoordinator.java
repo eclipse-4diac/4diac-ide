@@ -18,18 +18,16 @@ package org.eclipse.fordiac.ide.deployment;
 import java.lang.reflect.InvocationTargetException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.deployment.data.DeviceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
+import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.swt.SWT;
@@ -39,46 +37,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.PlatformUI;
 
-public enum DeploymentCoordinator {
-	INSTANCE;
+public final class DeploymentCoordinator {
 
 	private static final String OUTPUT_VIEW_ID = "org.eclipse.fordiac.ide.deployment.ui.views.Output"; //$NON-NLS-1$
-
-	private final Map<Device, List<VarDeclaration>> deployedDeviceProperties = new HashMap<>();
-
-	public void addDeviceProperty(final Device dev, final VarDeclaration property) {
-		if (deployedDeviceProperties.containsKey(dev)) {
-			final List<VarDeclaration> temp = deployedDeviceProperties.get(dev);
-			if (!temp.contains(property)) {
-				temp.add(property);
-			}
-		} else {
-			final ArrayList<VarDeclaration> temp = new ArrayList<>();
-			temp.add(property);
-			deployedDeviceProperties.put(dev, temp);
-		}
-	}
-
-	public void setDeviceProperties(final Device dev, final List<VarDeclaration> properties) {
-		deployedDeviceProperties.put(dev, properties);
-	}
-
-	public void removeDeviceProperty(final Device dev, final VarDeclaration property) {
-		if (deployedDeviceProperties.containsKey(dev)) {
-			final List<VarDeclaration> temp = deployedDeviceProperties.get(dev);
-			if (temp.contains(property)) {
-				temp.remove(property);
-			}
-		}
-	}
-
-	public List<VarDeclaration> getSelectedDeviceProperties(final Device dev) {
-		List<VarDeclaration> retVal = deployedDeviceProperties.get(dev);
-		if (null == retVal) {
-			retVal = Collections.emptyList();
-		}
-		return retVal;
-	}
 
 	public static void printUnsupportedDeviceProfileMessageBox(final Device device, final Resource res) {
 		Display.getDefault().asyncExec(() -> {
@@ -86,7 +47,7 @@ public enum DeploymentCoordinator {
 					SWT.ICON_ERROR | SWT.OK);
 			final String resName = (null != res) ? res.getName() : ""; //$NON-NLS-1$
 
-			if (null != device.getProfile() && !device.getProfile().equals("")) { //$NON-NLS-1$
+			if (null != device.getProfile() && !device.getProfile().isEmpty()) {
 				messageBox.setMessage(
 						MessageFormat.format(Messages.DeploymentCoordinator_MESSAGE_DefinedProfileNotSupported,
 								device.getProfile(), device.getName(), resName));
@@ -106,7 +67,7 @@ public enum DeploymentCoordinator {
 	 *                                  communication should be used instead the one
 	 *                                  derived from the device profile.
 	 */
-	public void performDeployment(final Object[] selection,
+	public static void performDeployment(final Object[] selection,
 			final IDeviceManagementCommunicationHandler overrideDevMgmCommHandler, final String profile) {
 		final IDeploymentListener outputView = (IDeploymentListener) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 				.getActivePage().findView(OUTPUT_VIEW_ID);
@@ -123,7 +84,7 @@ public enum DeploymentCoordinator {
 		}
 	}
 
-	public void performDeployment(final Object[] selection) {
+	public static void performDeployment(final Object[] selection) {
 		performDeployment(selection, null, null);
 	}
 
@@ -132,7 +93,7 @@ public enum DeploymentCoordinator {
 	 *
 	 * @param executor the executor
 	 */
-	public void enableOutput(final IDeviceManagementInteractor interactor) {
+	public static void enableOutput(final IDeviceManagementInteractor interactor) {
 		final IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(OUTPUT_VIEW_ID);
 		if (null != view) {
 			interactor.addDeploymentListener((IDeploymentListener) view);
@@ -144,14 +105,14 @@ public enum DeploymentCoordinator {
 	 *
 	 * @param executor the executor
 	 */
-	public void disableOutput(final IDeviceManagementInteractor interactor) {
+	public static void disableOutput(final IDeviceManagementInteractor interactor) {
 		final IViewPart view = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().findView(OUTPUT_VIEW_ID);
 		if (null != view) {
 			interactor.removeDeploymentListener((IDeploymentListener) view);
 		}
 	}
 
-	private List<DeviceDeploymentData> createDeploymentdata(final Object[] selection) {
+	private static List<DeviceDeploymentData> createDeploymentdata(final Object[] selection) {
 		final List<DeviceDeploymentData> data = new ArrayList<>();
 		for (final Object object : selection) {
 			if (object instanceof Resource) {
@@ -161,7 +122,9 @@ public enum DeploymentCoordinator {
 			} else if (object instanceof Device) {
 				final Device dev = (Device) object;
 				final DeviceDeploymentData devData = getDevData(data, dev);
-				devData.setSeltectedDevParams(getSelectedDeviceProperties((Device) object));
+				devData.setSeltectedDevParams(dev.getVarDeclarations().stream()
+						.filter(devVar -> !DeploymentHelper.MGR_ID.equalsIgnoreCase(devVar.getName()))
+						.collect(Collectors.toList()));
 			}
 		}
 		return data;
@@ -180,6 +143,10 @@ public enum DeploymentCoordinator {
 			data.add(retVal);
 		}
 		return retVal;
+	}
+
+	private DeploymentCoordinator() {
+		throw new UnsupportedOperationException("Utility class should not be instantiated!"); //$NON-NLS-1$
 	}
 
 }

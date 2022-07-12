@@ -59,7 +59,7 @@ public class GetResourcesHandler extends AbstractHandler {
 		final IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE
 				.getDeviceManagementInteractor(device);
 		if (interactor instanceof DynamicTypeLoadDeploymentExecutor) {
-			DeploymentCoordinator.INSTANCE.enableOutput(interactor);
+			DeploymentCoordinator.enableOutput(interactor);
 			try {
 				interactor.connect();
 				((DynamicTypeLoadDeploymentExecutor) interactor).queryResourcesWithNetwork(device);
@@ -72,7 +72,7 @@ public class GetResourcesHandler extends AbstractHandler {
 					FordiacLogHelper.logError(e.getMessage(), e);
 				}
 			}
-			DeploymentCoordinator.INSTANCE.disableOutput(interactor);
+			DeploymentCoordinator.disableOutput(interactor);
 		}
 	}
 }

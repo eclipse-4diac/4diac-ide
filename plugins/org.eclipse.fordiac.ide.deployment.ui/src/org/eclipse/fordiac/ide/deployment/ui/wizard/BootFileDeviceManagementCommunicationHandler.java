@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014 - 2018 fortiss GmbH, Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -22,10 +22,10 @@ import org.eclipse.swt.widgets.Shell;
 
 public class BootFileDeviceManagementCommunicationHandler extends AbstractFileManagementHandler {
 
-	public static void createBootFile(List<Object> workList, String fileName, Shell shell) {
+	public static void createBootFile(final List<Object> workList, final String fileName, final Shell shell) {
 		if (null != fileName) {
-			BootFileDeviceManagementCommunicationHandler bootFileHandler = new BootFileDeviceManagementCommunicationHandler();
-			DeploymentCoordinator.INSTANCE.performDeployment(workList.toArray(), bootFileHandler, null);
+			final BootFileDeviceManagementCommunicationHandler bootFileHandler = new BootFileDeviceManagementCommunicationHandler();
+			DeploymentCoordinator.performDeployment(workList.toArray(), bootFileHandler, null);
 			bootFileHandler.writeToBootFile(fileName, false, shell);
 		}
 	}

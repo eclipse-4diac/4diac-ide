@@ -19,12 +19,14 @@ import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
 public interface DeploymentHelper {
 
-	static String getVariableValue(VarDeclaration varDecl, AutomationSystem system) {
-		Value value = varDecl.getValue();
+	String MGR_ID = "MGR_ID";  //$NON-NLS-1$
+
+	static String getVariableValue(final VarDeclaration varDecl, final AutomationSystem system) {
+		final Value value = varDecl.getValue();
 		if (null != value && !value.getValue().isEmpty()) {
 			String val = value.getValue();
 			if (val.contains("%")) { //$NON-NLS-1$
-				String replaced = SystemManager.INSTANCE.getReplacedString(system, val);
+				final String replaced = SystemManager.INSTANCE.getReplacedString(system, val);
 				if (replaced != null) {
 					val = replaced;
 				}
@@ -35,9 +37,9 @@ public interface DeploymentHelper {
 	}
 
 	static String getMgrID(final Device dev) {
-		for (VarDeclaration varDecl : dev.getVarDeclarations()) {
-			if (varDecl.getName().equalsIgnoreCase("MGR_ID")) { //$NON-NLS-1$
-				String val = DeploymentHelper.getVariableValue(varDecl, dev.getAutomationSystem());
+		for (final VarDeclaration varDecl : dev.getVarDeclarations()) {
+			if (MGR_ID.equalsIgnoreCase(varDecl.getName())) {
+				final String val = DeploymentHelper.getVariableValue(varDecl, dev.getAutomationSystem());
 				if (null != val) {
 					return val;
 				}

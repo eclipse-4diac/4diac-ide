@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
@@ -30,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
-import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProvider;
@@ -38,13 +36,10 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -55,16 +50,6 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 	private static final String DOWNLOAD_DEV_SELECTION = "DOWNLOAD_DEV_SELECTION"; //$NON-NLS-1$
 	private static final String DOWNLOAD_DEV_MGRID = "DOWNLOAD_DEV_MGRID"; //$NON-NLS-1$
 	private static final String DOWNLOAD_DEV_PROPERTIES = "DOWNLOAD_DEV_PROPERTIES"; //$NON-NLS-1$
-
-	static void initSelectedProperties(final Device device) {
-		final List<VarDeclaration> selectedProperties = new ArrayList<>();
-		for (final VarDeclaration varDecl : device.getVarDeclarations()) {
-			if (!"mgr_id".equalsIgnoreCase(varDecl.getName())) { //$NON-NLS-1$
-				selectedProperties.add(varDecl);
-			}
-		}
-		DeploymentCoordinator.INSTANCE.setDeviceProperties(device, selectedProperties);
-	}
 
 	/**
 	 * The Class ViewContentProvider.
@@ -108,9 +93,6 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 				return devList.toArray();
 			}
 			if (parent instanceof Device) {
-				final Device device = (Device) parent;
-				initSelectedProperties(device);
-
 				final List<Resource> resource = new ArrayList<>();
 				for (final Resource res : ((Device) parent).getResource()) {
 					if (!res.isDeviceTypeResource()) {
@@ -248,46 +230,27 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 			}
 		});
 
-		setCellEditors(new CellEditor[] { new TextCellEditor(), new TextCellEditor(), new DialogCellEditor(getTree()) {
-			@Override
-			protected Object openDialogBox(final Control cellEditorWindow) {
-				final DeviceParametersDialog dialog = new DeviceParametersDialog(cellEditorWindow.getShell());
-				if (((TreeSelection) getSelection()).getFirstElement() instanceof Device) {
-					dialog.setDevice((Device) ((TreeSelection) getSelection()).getFirstElement());
-					if (Window.OK == dialog.open()) {
-						DeploymentCoordinator.INSTANCE.setDeviceProperties(dialog.getDevice(),
-								dialog.getSelectedProperties());
-						refresh(dialog.getDevice(), true);
-					}
-				}
-				return null;
-			}
-
-		} });
+		setCellEditors(new CellEditor[] { new TextCellEditor(), new TextCellEditor(), null });
 
 		setColumnProperties(new String[] { DOWNLOAD_DEV_SELECTION, DOWNLOAD_DEV_MGRID, DOWNLOAD_DEV_PROPERTIES });
 	}
 
 	private static String getSelectedString(final Object element) {
-		final List<VarDeclaration> temp = DeploymentCoordinator.INSTANCE.getSelectedDeviceProperties((Device) element);
-		if (temp != null) {
-			final StringBuilder buffer = new StringBuilder();
-			buffer.append("["); //$NON-NLS-1$
-			boolean first = true;
-			for (final VarDeclaration varDeclaration : temp) {
-				if (first) {
-					first = false;
-				} else {
-					buffer.append(", "); //$NON-NLS-1$
-				}
-				buffer.append(varDeclaration.getName());
-				buffer.append("="); //$NON-NLS-1$
-				buffer.append(varDeclaration.getValue() != null ? varDeclaration.getValue().getValue() : ""); //$NON-NLS-1$
+		final StringBuilder buffer = new StringBuilder();
+		buffer.append("["); //$NON-NLS-1$
+		boolean first = true;
+		for (final VarDeclaration varDeclaration : ((Device) element).getVarDeclarations()) {
+			if (first) {
+				first = false;
+			} else {
+				buffer.append(", "); //$NON-NLS-1$
 			}
-			buffer.append("]"); //$NON-NLS-1$
-			return buffer.toString();
+			buffer.append(varDeclaration.getName());
+			buffer.append("="); //$NON-NLS-1$
+			buffer.append(varDeclaration.getValue() != null ? varDeclaration.getValue().getValue() : ""); //$NON-NLS-1$
 		}
-		return "[]"; //$NON-NLS-1$
+		buffer.append("]"); //$NON-NLS-1$
+		return buffer.toString();
 	}
 
 }
