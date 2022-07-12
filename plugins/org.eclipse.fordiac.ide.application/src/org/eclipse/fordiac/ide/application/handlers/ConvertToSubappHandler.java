@@ -111,7 +111,7 @@ public class ConvertToSubappHandler extends AbstractHandler implements CommandSt
 		}
 
 		if (elementToCheck instanceof Group) {
-			return (Group) currentElement;
+			return (Group) elementToCheck;
 		}
 		return null;
 	}
