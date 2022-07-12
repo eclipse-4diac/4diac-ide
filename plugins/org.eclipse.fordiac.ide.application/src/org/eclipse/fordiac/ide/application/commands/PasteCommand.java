@@ -226,11 +226,19 @@ public class PasteCommand extends Command {
 			if ((null != copiedSrc) || (null != copiedDest)) {
 				// Only copy if one end of the connection is copied as well otherwise we will
 				// get a duplicate connection
-				final AbstractConnectionCreateCommand cmd = getConnectionCreateCmd(connRef.getSource());
-				if (null != cmd) {
-					copyConnection(connRef, copiedSrc, copiedDest, cmd);
+
+				if ((dstFBNetwork.isSubApplicationNetwork() || srcFBNetwork.isSubApplicationNetwork())) {
+					final Command cmd = copyConnectionToSubApp(connRef, copiedSrc, copiedDest);
 					if (cmd.canExecute()) { // checks if the resulting connection is valid
 						connCreateCmds.add(cmd);
+					}
+				} else {
+					final AbstractConnectionCreateCommand cmd = getConnectionCreateCmd(connRef.getSource());
+					if (null != cmd) {
+						copyConnection(connRef, copiedSrc, copiedDest, cmd);
+						if (cmd.canExecute()) { // checks if the resulting connection is valid
+							connCreateCmds.add(cmd);
+						}
 					}
 				}
 			}
@@ -261,11 +269,21 @@ public class PasteCommand extends Command {
 		cmd.setVisible(connRef.isVisible());
 	}
 
+	private Command copyConnectionToSubApp(final ConnectionReference connRef, final FBNetworkElement copiedSrc,
+			final FBNetworkElement copiedDest) {
+		final IInterfaceElement source = getInterfaceElement(connRef.getSource(), copiedSrc);
+		final IInterfaceElement destination = getInterfaceElement(connRef.getDestination(), copiedDest);
+
+		return CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, destination);
+
+	}
+
 	private IInterfaceElement getInterfaceElement(final IInterfaceElement orig, final FBNetworkElement copiedElement) {
 		if (null != copiedElement) {
 			// we have a copied connection target get the interface element from it
 			return copiedElement.getInterfaceElement(orig.getName());
-		} else if (dstFBNetwork.equals(srcFBNetwork)) {
+		} else if (dstFBNetwork.equals(srcFBNetwork)
+				|| (dstFBNetwork.isSubApplicationNetwork() || srcFBNetwork.isSubApplicationNetwork())) {
 			// we have a connection target to an existing FBNElement, only retrieve the
 			// interface element if the target FBNetwrok is the same as the source. In this
 			// case it is save to return the original interface element.
