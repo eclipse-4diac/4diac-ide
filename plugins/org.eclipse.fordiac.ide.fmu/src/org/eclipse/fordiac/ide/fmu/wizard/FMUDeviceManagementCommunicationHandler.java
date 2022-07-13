@@ -245,13 +245,8 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 				final String outputName = device.getAutomationSystem().getName() + "_" + device.getName(); //$NON-NLS-1$
 				final FMUDeviceManagementCommunicationHandler fmuFileHandler = new FMUDeviceManagementCommunicationHandler(
 						device);
-				DeploymentCoordinator.INSTANCE.performDeployment(resources.toArray(), fmuFileHandler, null); // will
-				// call
-				// the
-				// callbacks,
-				// sendREQ
-				// among
-				// them
+				DeploymentCoordinator.performDeployment(resources.toArray(), fmuFileHandler, null); // will
+				// call the callbacks, sendREQ among them
 				monitor.worked(TOTAL_MONITOR / 2);
 
 				final File destZipFile = createZipFile(directory, outputName, shell);

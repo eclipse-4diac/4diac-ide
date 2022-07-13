@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 				 2019 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -130,7 +130,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 				final IDeviceManagementInteractor interactor = DeviceManagementInteractorFactory.INSTANCE
 						.getDeviceManagementInteractor(device);
 				if (null != interactor) {
-					DeploymentCoordinator.INSTANCE.enableOutput(interactor);
+					DeploymentCoordinator.enableOutput(interactor);
 					final OnlineDeploymentErrorCheckListener errorChecker = new OnlineDeploymentErrorCheckListener(this);
 					interactor.addDeploymentListener(errorChecker);
 
@@ -143,7 +143,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 						errorChecker.showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID(device), this, true);
 					}
 					interactor.removeDeploymentListener(errorChecker);
-					DeploymentCoordinator.INSTANCE.disableOutput(interactor);
+					DeploymentCoordinator.disableOutput(interactor);
 				} else {
 					manageExecutorError();
 				}

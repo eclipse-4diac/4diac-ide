@@ -299,7 +299,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			final IFigure contentFigure = ((UnfoldedSubappContentEditPart) childEditPart).getFigure();
 			final GridData contentGridData = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 					| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
-			getFigure().getExpandedMainFigure().add(contentFigure, contentGridData, 2);
+			getFigure().getExpandedContentArea().add(contentFigure, contentGridData, -1);
 		} else {
 			super.addChildVisual(childEditPart, index);
 		}
