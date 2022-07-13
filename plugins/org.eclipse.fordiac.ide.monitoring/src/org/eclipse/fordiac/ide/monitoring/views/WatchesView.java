@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueEditingSupport;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueLabelProvider;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPart;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelection;
@@ -64,8 +65,10 @@ import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.IWorkbenchPartReference;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.part.ViewPart;
@@ -221,10 +224,37 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 	/** Fill local tool bar.
 	 *
 	 * @param manager the manager */
-	private void fillLocalToolBar(final IToolBarManager manager) {
+	protected void fillLocalToolBar(final IToolBarManager manager) {
 		toggleSelection = new WatchesViewSelectionFilterAction(Messages.MonitoringManagerUtils_SelectionFilteringActive,
 				IAction.AS_CHECK_BOX, this);
 		manager.add(toggleSelection);
+
+		createExpandItemsInLocalToolBar(manager);
+	}
+
+	protected void createExpandItemsInLocalToolBar(final IToolBarManager manager) {
+		final Action expandAllItems = new Action(Messages.MonitoringManagerUtils_ExpandAll, IAction.AS_PUSH_BUTTON) {
+			@Override
+			public void run() {
+				filteredTree.getViewer().expandAll();
+			}
+		};
+
+		expandAllItems.setImageDescriptor(FordiacImage.ICON_EXPAND_ALL.getImageDescriptor());
+		manager.add(expandAllItems);
+
+		final Action collapseAllItems = new Action(Messages.MonitoringManagerUtils_CollapseAll,
+				IAction.AS_PUSH_BUTTON) {
+			@Override
+			public void run() {
+				filteredTree.getViewer().collapseAll();
+			}
+
+		};
+		collapseAllItems.setImageDescriptor(
+				PlatformUI.getWorkbench().getSharedImages()
+				.getImageDescriptor(ISharedImages.IMG_ELCL_COLLAPSEALL));
+		manager.add(collapseAllItems);
 	}
 
 	public void updateSelectionFilter(final boolean selectionActive) {

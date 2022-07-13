@@ -16,10 +16,8 @@ package org.eclipse.fordiac.ide.monitoring.views;
 import java.util.ArrayList;
 
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.ui.IPartListener2;
-import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.IWorkbenchPartReference;
 import org.eclipse.ui.dialogs.PatternFilter;
 
 public class ForcesView extends WatchesView {
@@ -44,21 +42,13 @@ public class ForcesView extends WatchesView {
 	}
 
 	@Override
-	protected void contributeToActionBars() {
-		// needs no ActionBar
+	protected void fillLocalToolBar(final IToolBarManager manager) {
+		super.createExpandItemsInLocalToolBar(manager);
 	}
 
 	@Override
 	protected void createPartListener() {
-		getSite().getPage().addPartListener(new IPartListener2() {
-			@Override
-			public void partVisible(final IWorkbenchPartReference ref) {
-				final IWorkbenchPart part = ref.getPart(false);
-				if (part instanceof ForcesView) {
-					expandItems();
-				}
-			}
-		});
+		// need no listener
 	}
 
 	@Override
