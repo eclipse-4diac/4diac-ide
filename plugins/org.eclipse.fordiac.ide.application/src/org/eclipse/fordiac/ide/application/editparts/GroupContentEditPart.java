@@ -15,12 +15,14 @@ package org.eclipse.fordiac.ide.application.editparts;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupCommand;
 import org.eclipse.fordiac.ide.application.policies.GroupXYLayoutPolicy;
 import org.eclipse.fordiac.ide.model.commands.create.CreateFBElementInGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.commands.Command;
 
 public class GroupContentEditPart extends AbstractContainerContentEditPart {
 
@@ -41,8 +43,10 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 		installEditPolicy(EditPolicy.LAYOUT_ROLE, new GroupXYLayoutPolicy());
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractCreateInstanceDirectEditPolicy() {
 			@Override
-			public CreateFBElementInGroupCommand getElementCreateCommand(final TypeEntry type, final Point refPoint) {
-				return new CreateFBElementInGroupCommand(type, getModel().getGroup(), refPoint.x, refPoint.y);
+			public Command getElementCreateCommand(final TypeEntry type, final Point refPoint) {
+				return new ResizeGroupCommand(
+						new CreateFBElementInGroupCommand(type, getModel().getGroup(), refPoint.x, refPoint.y),
+						getViewer(), this.getHost());
 			}
 		});
 	}

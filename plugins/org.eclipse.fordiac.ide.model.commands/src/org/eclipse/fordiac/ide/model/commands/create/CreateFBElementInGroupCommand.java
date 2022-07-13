@@ -30,7 +30,7 @@ public class CreateFBElementInGroupCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return group != null && elementCreateCmd != null && elementCreateCmd.canExecute();
+		return getGroup() != null && getElementCreateCmd() != null && getElementCreateCmd().canExecute();
 	}
 
 	@Override
@@ -41,14 +41,22 @@ public class CreateFBElementInGroupCommand extends Command {
 
 	@Override
 	public void undo() {
-		group.getGroupElements().remove(elementCreateCmd.getElement());
-		elementCreateCmd.undo();
+		getGroup().getGroupElements().remove(getElementCreateCmd().getElement());
+		getElementCreateCmd().undo();
 	}
 
 	@Override
 	public void redo() {
-		elementCreateCmd.redo();
-		group.getGroupElements().add(elementCreateCmd.getElement());
+		getElementCreateCmd().redo();
+		getGroup().getGroupElements().add(getElementCreateCmd().getElement());
+	}
+
+	public AbstractCreateFBNetworkElementCommand getElementCreateCmd() {
+		return elementCreateCmd;
+	}
+
+	public Group getGroup() {
+		return group;
 	}
 
 }
