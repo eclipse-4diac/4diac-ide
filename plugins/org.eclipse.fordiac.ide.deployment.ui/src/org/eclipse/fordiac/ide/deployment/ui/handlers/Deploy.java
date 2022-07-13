@@ -48,7 +48,7 @@ public class Deploy extends AbstractHandler {
 		final Collection<EObject> selected = getDeployableObjects(HandlerUtil.getCurrentSelection(event));
 		if (!selected.isEmpty()) {
 			clearDeploymentConsole();
-			DeploymentCoordinator.INSTANCE.performDeployment(selected.toArray(new EObject[selected.size()]));
+			DeploymentCoordinator.performDeployment(selected.toArray(new EObject[selected.size()]));
 		}
 		return null;
 	}

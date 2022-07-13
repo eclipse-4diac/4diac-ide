@@ -146,7 +146,11 @@ public class InterfaceElementSection extends AbstractSection {
 
 			@Override
 			public void focusGained(final FocusEvent e) {
-				parent.getDisplay().asyncExec(() -> currentParameterText.selectAll());
+				parent.getDisplay().asyncExec(() -> {
+					if (!currentParameterText.isDisposed()) {
+						currentParameterText.selectAll();
+					}
+				});
 			}
 
 			@Override
