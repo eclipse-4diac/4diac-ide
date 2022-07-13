@@ -126,7 +126,8 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 		editor.setText(getFbType().getIdentification().getDescription());
 
 		editor.addModifyListener(e -> {
-			if (!editor.getText().equals(getFbType().getIdentification().getDescription())) {
+			if (editor != null && editor.getText() != null
+					&& !editor.getText().equals(getFbType().getIdentification().getDescription())) {
 				executeCommand(new ChangeDescriptionCommand(getFbType(), editor.getText()));
 			}
 		});
