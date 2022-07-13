@@ -48,8 +48,8 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 	def dispatch void createCodeMinings(STNumericLiteral literal,
 		IAcceptor<? super ICodeMining> acceptor) throws BadLocationException {
 		if (isEnableLiteralTypeCodeMinings && literal.declaredResultType === null &&
-			STCorePackage.eINSTANCE.STStatement.isAncestor(literal) ||
-			STCorePackage.eINSTANCE.STInitializerExpression.isAncestor(literal)) {
+			(STCorePackage.eINSTANCE.STStatement.isAncestor(literal) ||
+				STCorePackage.eINSTANCE.STInitializerExpression.isAncestor(literal))) {
 			val inferredType = literal.resultType
 			if (inferredType !== null) {
 				NodeModelUtils.findActualNodeFor(literal).asTreeIterable.filter [
@@ -64,8 +64,8 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 	def dispatch void createCodeMinings(STStringLiteral literal,
 		IAcceptor<? super ICodeMining> acceptor) throws BadLocationException {
 		if (isEnableLiteralTypeCodeMinings && literal.declaredResultType === null &&
-			STCorePackage.eINSTANCE.STStatement.isAncestor(literal) ||
-			STCorePackage.eINSTANCE.STInitializerExpression.isAncestor(literal)) {
+			(STCorePackage.eINSTANCE.STStatement.isAncestor(literal) ||
+				STCorePackage.eINSTANCE.STInitializerExpression.isAncestor(literal))) {
 			val inferredType = literal.resultType
 			if (inferredType !== null) {
 				NodeModelUtils.findActualNodeFor(literal).asTreeIterable.filter [
