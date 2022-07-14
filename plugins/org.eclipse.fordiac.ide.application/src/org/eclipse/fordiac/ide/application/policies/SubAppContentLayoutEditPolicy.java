@@ -44,10 +44,10 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 			final List<EditPart> editParts = ((ChangeBoundsRequest) request).getEditParts();
 			final List<EditPart> moveFrom = collectMoveFromElements(editParts);
 			final List<EditPart> addTo = collectAddToElements(editParts);
-			final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
 
 			final CompoundCommand cmd = new CompoundCommand();
 			if (!moveFrom.isEmpty()) {
+				final Point destination = getTranslatedAndZoomedPoint((ChangeBoundsRequest) request);
 				final List<FBNetworkElement> fbEls = moveFrom.stream().map(ep -> (FBNetworkElement) ep.getModel())
 						.collect(Collectors.toList());
 				cmd.add(new MoveElementsFromSubAppCommand(fbEls,
@@ -55,7 +55,10 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 			}
 
 			if (!addTo.isEmpty()) {
-				cmd.add(new AddElementsToSubAppCommand(getParentModel(), editParts));
+				final Point moveDelta = getScaledMoveDelta((ChangeBoundsRequest) request);
+				cmd.add(new AddElementsToSubAppCommand(getParentModel(), editParts,
+						new org.eclipse.swt.graphics.Point(moveDelta.x - getHostFigure().getBounds().x,
+								moveDelta.y - getHostFigure().getBounds().y)));
 			}
 
 			if (!cmd.isEmpty()) {

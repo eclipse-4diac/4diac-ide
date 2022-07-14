@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
+import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -44,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.swt.graphics.Point;
 
 public class AddElementsToSubAppCommand extends Command {
 
@@ -56,11 +58,20 @@ public class AddElementsToSubAppCommand extends Command {
 	private final CompoundCommand changedSubAppIEs = new CompoundCommand();
 	private final CompoundCommand setUniqueName = new CompoundCommand();
 	private final CompoundCommand removeFromOtherGroups = new CompoundCommand();
+	private final CompoundCommand setPositionCommands = new CompoundCommand();
 
 	private org.eclipse.swt.graphics.Point offset;
+	private org.eclipse.swt.graphics.Point moveDelta;
 
 	public AddElementsToSubAppCommand(final SubApp targetSubApp, final List<?> selection) {
 		this.targetSubApp = targetSubApp;
+		fillElementList(selection);
+	}
+
+	public AddElementsToSubAppCommand(final SubApp targetSubApp, final List<?> selection, final Point moveDelta) {
+		this.targetSubApp = targetSubApp;
+		this.moveDelta = moveDelta;
+
 		fillElementList(selection);
 	}
 
@@ -75,12 +86,21 @@ public class AddElementsToSubAppCommand extends Command {
 		unmappingCmds.execute();
 		removeFromOtherGroups.execute();
 		final EList<FBNetworkElement> fbNetwork = targetSubApp.getSubAppNetwork().getNetworkElements();
-		offset = FBNetworkHelper.removeXYOffsetForFBNetwork(elementsToAdd);
 		for (final FBNetworkElement fbNetworkElement : elementsToAdd) {
+			if (moveDelta != null) {
+				final Point pos = FBNetworkHelper.getTopLeftCornerOfFBNetwork(elementsToAdd);
+				pos.x = pos.x + moveDelta.x;
+				pos.y = pos.y + moveDelta.y;
+				setPositionCommands
+				.add(new SetPositionCommand(fbNetworkElement, pos.x,
+						pos.y));
+			}
 			fbNetwork.add(fbNetworkElement);
 			checkElementConnections(fbNetworkElement);
 			ensureUniqueName(fbNetworkElement);
 		}
+		offset = FBNetworkHelper.removeXYOffsetForFBNetwork(elementsToAdd);
+		setPositionCommands.execute();
 		setUniqueName.execute();
 		modifiedConns.execute();
 		ElementSelector.selectViewObjects(elementsToAdd);
@@ -102,6 +122,7 @@ public class AddElementsToSubAppCommand extends Command {
 		elementsToAdd.forEach(element -> targetSubApp.getSubAppNetwork().getNetworkElements().add(element));
 		movedConns.forEach(con -> targetSubApp.getSubAppNetwork().addConnection(con));
 		changedSubAppIEs.redo();
+		setPositionCommands.redo();
 		setUniqueName.redo();
 		modifiedConns.redo();
 	}
@@ -110,10 +131,10 @@ public class AddElementsToSubAppCommand extends Command {
 	public void undo() {
 		modifiedConns.undo();
 		changedSubAppIEs.undo();
+		setPositionCommands.undo();
 		movedConns.forEach(con -> targetSubApp.getFbNetwork().addConnection(con));
 
 		FBNetworkHelper.moveFBNetworkByOffset(elementsToAdd, offset.x, offset.y);
-
 		elementsToAdd.forEach(element -> targetSubApp.getFbNetwork().getNetworkElements().add(element));
 		setUniqueName.undo();
 		removeFromOtherGroups.undo();
