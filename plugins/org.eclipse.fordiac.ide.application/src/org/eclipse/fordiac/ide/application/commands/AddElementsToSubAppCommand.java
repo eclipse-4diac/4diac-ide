@@ -12,6 +12,7 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - fix positioning of elements
  *   Daniel Lindhuber - reuse pins for same source
+ *   Fabio Gandolfi - Add elements with coordinates/moveDelta
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
