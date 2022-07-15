@@ -95,6 +95,7 @@ class STAlgorithmValidator extends AbstractSTAlgorithmValidator {
 			val fbType = resource.fbType
 			if (fbType instanceof SimpleFBType) {
 				fbType.interfaceList.eventInputs.reject [ event |
+					fbType.algorithm.exists[alg|alg.name == event.name] ||
 					source.elements.filter(STAlgorithm).exists[alg|alg.name == event.name]
 				].forEach [ event |
 					acceptError(
