@@ -21,7 +21,6 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
-import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -69,7 +68,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		} else if (modelElement instanceof IInterfaceElement) {
 			part = createInterfaceEditPart(modelElement, context);
 		} else if (modelElement instanceof Value) {
-			part = new ValueEditPart();
+			part = new FBNValueEditPart();
 		} else {
 			throw createEditpartCreationException(modelElement);
 		}
