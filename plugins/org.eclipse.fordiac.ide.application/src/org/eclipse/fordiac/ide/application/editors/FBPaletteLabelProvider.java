@@ -17,6 +17,10 @@ package org.eclipse.fordiac.ide.application.editors;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.typemanagement.navigator.FBTypeLabelProvider;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.resource.ResourceManager;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
@@ -31,6 +35,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
 public class FBPaletteLabelProvider extends LabelProvider {
 
 	private final WorkbenchLabelProvider wbLabelProvider = new WorkbenchLabelProvider();
+	ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
 
 	@Override
 	public String getText(final Object element) {
@@ -44,7 +49,8 @@ public class FBPaletteLabelProvider extends LabelProvider {
 	@Override
 	public Image getImage(final Object element) {
 		if (element instanceof IFile) {
-			return FBTypeLabelProvider.getImageForFile((IFile) element);
+			final ImageDescriptor imageDescriptor = FBTypeLabelProvider.getImageForFile((IFile) element);
+			return (Image) resourceManager.get(imageDescriptor);
 		}
 		return wbLabelProvider.getImage(element);
 	}

@@ -17,9 +17,7 @@ package org.eclipse.fordiac.ide.ui.imageprovider;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.util.HashMap;
 import java.util.ListResourceBundle;
-import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
@@ -117,25 +115,6 @@ public enum FordiacImage {
 		return bundle;
 	}
 
-	private static Map<Image, Image> errorImages = new HashMap<>();
-	private static int count = 0;
-
-	// FIXME: find a better way to handle overlay images
-	public static Image getErrorOverlayImage(final Image image) {
-		if (image == null) {
-			return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_DEC_FIELD_ERROR);
-		}
-
-		return errorImages.computeIfAbsent(image, img -> {
-			final DecorationOverlayIcon overlay = new DecorationOverlayIcon(image,
-					PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR),
-					IDecoration.TOP_LEFT);
-			count++;
-			FordiacLogHelper.logInfo("createErrorOverlayImage " + count); //$NON-NLS-1$
-			return overlay.createImage();
-		});
-	}
-
 	FordiacImage() {
 	}
 
@@ -177,6 +156,7 @@ public enum FordiacImage {
 			final ImageDescriptor id = ImageDescriptor.createFromURL(fileLocation);
 			JFaceResources.getImageRegistry().put(name, id);
 		} catch (MissingResourceException | IllegalArgumentException e) {
+			FordiacLogHelper.logError("Could not load image", e); //$NON-NLS-1$
 			return false;
 		}
 		return true;
