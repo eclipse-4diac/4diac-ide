@@ -30,6 +30,11 @@ class STAlgorithmFormatter extends STCoreFormatter {
 	@Inject extension STAlgorithmGrammarAccess
 
 	def dispatch void format(STAlgorithmSource sTAlgorithmSource, extension IFormattableDocument document) {
+		val regions = textRegionAccess.regionForRootEObject.allSemanticRegions;
+		regions.forEach [
+			it.append[autowrap]
+		]
+
 		sTAlgorithmSource.allSemanticRegions.filter [
 			switch (element : grammarElement) {
 				Keyword case element.value.matches("[_a-zA-Z]+"): true
