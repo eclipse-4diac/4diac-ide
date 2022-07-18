@@ -866,7 +866,7 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN    // Lorem ipsum dolor sit amet, consectetur adipiscing
 				// elit, sed do eiusmod tempor incididunt ut labore et
 				// dolore magna aliqua.
 					bol1 := TRUE;
@@ -892,12 +892,12 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN    // Lorem ipsum dolor sit amet, consectetur adipiscing
 				// elit, sed do eiusmod tempor incididunt ut labore et
 				// dolore magna aliqua. Ut enim ad minim veniam, quis
-				// nostrud exercitation ullamco laboris nisi ut aliquip
-				// ex ea commodo consequat. Duis aute irure dolor in
-				// reprehenderit
+				// nostrud exercitation ullamco laboris nisi ut
+				// aliquip ex ea commodo consequat. Duis aute irure
+				// dolor in reprehenderit
 					bol1 := TRUE;
 				END_IF;
 				
@@ -912,7 +912,7 @@ class Formatter2Test {
 			toBeFormatted = '''
 				FUNCTION hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing eli
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet , consectetur adipiscing
 					bol1 := TRUE;
 				END_IF;
 				
@@ -921,7 +921,7 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // Lorem ipsum dolor sit amet, consectetur adipiscing eli
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN    // Lorem ipsum dolor sit amet , consectetur adipiscing
 					bol1 := TRUE;
 				END_IF;
 				
@@ -945,8 +945,8 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				
-				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN // DasisteinlangesWortdasdiemaximaleZeilenlängeüberschrei
-				// tensollohneLeerzeichen
+				IF langerVariablenBezeichner OR langerVariablenBezeichner THEN    // DasisteinlangesWortdasdiemaximaleZeilenlängeübersch
+				// reitensollohneLeerzeichen
 					bol1 := TRUE;
 				END_IF;
 				
@@ -981,7 +981,7 @@ class Formatter2Test {
 			'''
 		]
 	}
-	
+
 	@Test
 	def void trailingLineMLCommentTest() {
 		assertFormatted[
@@ -1000,12 +1000,27 @@ class Formatter2Test {
 				
 				bol1 := TRUE; (* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
 				               * et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris *)
-
+				
 				bol1 := TRUE;
 				
 				END_FUNCTION
 			'''
 		]
 	}
-	
+
+	@Test
+	def void spacesAfterOneLineCommentTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				int1 := 3;//x
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				int1 := 3;    // x
+				END_FUNCTION
+			'''
+		]
+	}
 }
