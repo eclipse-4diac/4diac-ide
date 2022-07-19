@@ -111,6 +111,8 @@ public final class Messages extends NLS {
 
 	public static String InstanceName;
 
+	public static String Jokers;
+
 	public static String ListFBCreateCommand_FBTypeNotFound;
 
 	public static String Location;

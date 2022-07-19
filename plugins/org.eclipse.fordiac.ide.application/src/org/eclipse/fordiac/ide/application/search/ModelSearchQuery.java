@@ -172,7 +172,10 @@ public class ModelSearchQuery implements ISearchQuery {
 	}
 
 	private boolean compareStrings(final String toTest) {
-		// TODO: think what makes sense, this can be done in a couple of ways
+		final ModelSearchPattern pattern = new ModelSearchPattern(toTest, modelQuerySpec);
+		if (pattern.matchSearchString()) {
+			return true;
+		}
 		if (modelQuerySpec.isCheckExactMatching()) {
 			return toTest.equals(modelQuerySpec.getSearchString());
 		}
