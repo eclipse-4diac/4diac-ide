@@ -27,14 +27,13 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -161,11 +160,13 @@ public class ModelSearchQuery implements ISearchQuery {
 				return true;
 			}
 		}
-		if (modelQuerySpec.isCheckedType() && modelElement instanceof TypedConfigureableObject) {
-			final LibraryElement type = ((TypedConfigureableObject) modelElement).getType();
-			final boolean matchType = type != null && compareStrings(type.getName());
-			if (matchType) {
-				return true;
+		if (modelQuerySpec.isCheckedType()) {
+			if (modelElement instanceof INamedElement) {
+				final INamedElement namElem = (INamedElement) modelElement;
+				return compareStrings(namElem.getName());
+			} else if (modelElement instanceof ConfigurableObject) {
+				final ConfigurableObject config = (ConfigurableObject) modelElement;
+				return compareStrings(config.getClass().getSimpleName());
 			}
 		}
 		return false;
