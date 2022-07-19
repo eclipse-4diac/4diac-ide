@@ -97,6 +97,7 @@ public final class EditorUtils {
 		if (view instanceof PropertySheet) {
 			final ISelection selection = activeEditor.getSite().getSelectionProvider().getSelection();
 			((PropertySheet) view).selectionChanged(activeEditor, selection);
+			PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().activate(view);
 		}
 	}
 }
