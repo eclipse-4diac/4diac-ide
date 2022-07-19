@@ -183,6 +183,8 @@ public final class Messages extends NLS {
 
 	public static String SaveAsWizardPage_SaveAsStructType_WizardPageTitle;
 
+	public static String Scope;
+
 	public static String SearchFor;
 
 	public static String SearchHeaderName;
@@ -214,6 +216,8 @@ public final class Messages extends NLS {
 
 	public static String PinName;
 
+	public static String ProjectScope;
+
 	public static String ToggleSubAppRepresentation_Collapse;
 
 	public static String ToggleSubAppRepresentation_Expand;
@@ -223,6 +227,8 @@ public final class Messages extends NLS {
 	public static String TypeQuery;
 
 	public static String Warning;
+
+	public static String WorkspaceScope;
 
 	static {
 		// initialize resource bundle
