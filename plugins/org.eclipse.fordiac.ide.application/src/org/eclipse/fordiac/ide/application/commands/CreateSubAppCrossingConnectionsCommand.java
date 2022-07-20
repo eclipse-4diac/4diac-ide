@@ -15,15 +15,22 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ListIterator;
 
+import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
 
 public class CreateSubAppCrossingConnectionsCommand extends Command {
@@ -47,12 +54,42 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		final AbstractConnectionCreateCommand compatibilityCheck = AbstractConnectionCreateCommand.createCommand(source,
-				sourceNetworks.get(0));  // the first sourceNetwork tells us if we are input or output
-		compatibilityCheck.setSource(source);
-		compatibilityCheck.setDestination(destination);
-		return compatibilityCheck.canExecute();
+		// as not all checks of the createconnection command are valid we need to do our own checks
+		// first the generic checks
+		if (source == null || destination == null) {
+			return false;
+		}
+
+		// equal types for source and dest
+		if (!source.getClass().equals(destination.getClass())) {
+			ErrorMessenger.popUpErrorMessage(Messages.ConnectingIncompatibleInterfaceTypes);
+			return false;
+		}
+
+		// source and dest check
+		if (!LinkConstraints.isValidConnSource(source, sourceNetworks.get(0))
+				|| !LinkConstraints.isValidConnDestination(destination, destinationNetworks.get(0))) {
+			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
+			return false;
+		}
+
+		if (source instanceof Event) {
+			// the only event specific connection we currently have is duplicate connection which makes no sense here so
+			// we can return true
+			return true;
+		}
+
+		if (source instanceof VarDeclaration) {
+			return dataConnectionChecks();
+		}
+
+		if (source instanceof AdapterDeclaration) {
+			return adapterConnectionChecks();
+		}
+
+		return false;
 	}
+
 
 	@Override
 	public void execute() {
@@ -139,6 +176,46 @@ public class CreateSubAppCrossingConnectionsCommand extends Command {
 	@Override
 	public void redo() {
 		commands.forEach(Command::redo);
+	}
+
+	private boolean dataConnectionChecks() {
+		if (!LinkConstraints.hasAlreadyInputConnectionsCheck(source, destination, null)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat
+					.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, destination.getName()));
+			return false;
+		}
+
+		if (!LinkConstraints.typeCheck(source, destination)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
+					(null != source.getType()) ? source.getType().getName() : FordiacMessages.NA,
+							(null != destination.getType()) ? destination.getType().getName() : FordiacMessages.NA));
+			return false;
+		}
+
+		return LinkConstraints.isWithConstraintOK(source) && LinkConstraints.isWithConstraintOK(destination);
+	}
+
+	private boolean adapterConnectionChecks() {
+		if (!LinkConstraints.hasAlreadyInputConnectionsCheck(source, destination, null)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat
+					.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyInputConnection, destination.getName()));
+			return false;
+		}
+
+		if (LinkConstraints.hasAlreadyOutputConnectionsCheck(source, null)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat
+					.format(Messages.LinkConstraints_STATUSMessage_hasAlreadyOutputConnection, source.getName()));
+			return false;
+		}
+
+		if (!LinkConstraints.adapaterTypeCompatibilityCheck(source, destination)) {
+			ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.LinkConstraints_STATUSMessage_NotCompatible,
+					(null != source.getType()) ? source.getType().getName() : FordiacMessages.ND,
+							(null != destination.getType()) ? destination.getType().getName() : FordiacMessages.ND));
+			return false;
+		}
+
+		return true;
 	}
 
 }

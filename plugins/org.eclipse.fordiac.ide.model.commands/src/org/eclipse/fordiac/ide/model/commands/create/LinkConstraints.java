@@ -77,7 +77,7 @@ public final class LinkConstraints {
 			target = temp;
 		}
 
-		if (!sourceAndDestCheck(source, target)) {
+		if (!sourceAndDestCheck(source, target, parent)) {
 			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
 			return false;
 		}
@@ -124,7 +124,7 @@ public final class LinkConstraints {
 		return true;
 	}
 
-	private static boolean hasAlreadyOutputConnectionsCheck(final IInterfaceElement source, final Connection con) {
+	public static boolean hasAlreadyOutputConnectionsCheck(final IInterfaceElement source, final Connection con) {
 		for (final Connection connection : source.getOutputConnections()) {
 			if (!connection.equals(con)) {
 				return true;
@@ -156,7 +156,7 @@ public final class LinkConstraints {
 	 * @param con
 	 *
 	 * @return true, if successful */
-	private static boolean hasAlreadyInputConnectionsCheck(final IInterfaceElement src, final IInterfaceElement target,
+	public static boolean hasAlreadyInputConnectionsCheck(final IInterfaceElement src, final IInterfaceElement target,
 			final Connection con) {
 		boolean hasOnlyBrokenCons = true;
 
@@ -218,27 +218,39 @@ public final class LinkConstraints {
 	 * @param target the target
 	 *
 	 * @return true, if successful */
-	private static boolean sourceAndDestCheck(final IInterfaceElement source, final IInterfaceElement target) {
-		boolean canExist = (source.isIsInput() && !target.isIsInput()) || (!source.isIsInput() && target.isIsInput());
+	private static boolean sourceAndDestCheck(final IInterfaceElement source, final IInterfaceElement target,
+			final FBNetwork parent) {
+		return isValidConnSource(source, parent) && isValidConnDestination(target, parent);
+	}
 
-		if (!canExist) {
-			if ((source.isIsInput() && target.isIsInput()) || (!source.isIsInput() && !target.isIsInput())) {
-				final EObject sourceCont = source.eContainer().eContainer();
-				final EObject destCont = target.eContainer().eContainer();
-				// the connection can exist in this case if it is of an interface element of the
-				// container (e.g., SubApp, CFB) and an internal FB
-				canExist = (sourceCont != destCont) && (isTypeContainer(sourceCont) || isTypeContainer(destCont))
-						&& (sourceCont.eContainer() != destCont.eContainer()); // and they are not on the same level
-				// (e.g., two subapps in the same
-				// subapplication/application
-			}
+	public static boolean isValidConnSource(final IInterfaceElement source, final FBNetwork parent) {
+		final EObject sourceCont = source.eContainer().eContainer();
+		if (!source.isIsInput()) {
+			// an output can only be a connection source if its container is part of the parent
+			return sourceCont != null && parent == sourceCont.eContainer();
 		}
-		return canExist;
+		// an input can only be a connection source if its a type input or the parent is the inside of the subapp
+		return isTypeContainer(sourceCont) || isInsideSubapp(sourceCont, parent);
+	}
+
+	public static boolean isValidConnDestination(final IInterfaceElement dst, final FBNetwork parent) {
+		final EObject dstCont = dst.eContainer().eContainer();
+		if (dst.isIsInput()) {
+			// an input can only be a connection source if its container is part of the parent
+			return dstCont != null && parent == dstCont.eContainer();
+		}
+		// an output can only be a connection source if its a type input or the parent is the inside of the subapp
+		return isTypeContainer(dstCont) || isInsideSubapp(dstCont, parent);
 	}
 
 	private static boolean isTypeContainer(final EObject cont) {
-		return (cont instanceof SubApp) || (cont instanceof SubAppType) || (cont instanceof CompositeFBType);
+		return (cont instanceof SubAppType) || (cont instanceof CompositeFBType);
 	}
+
+	private static boolean isInsideSubapp(final EObject cont, final FBNetwork parent) {
+		return (cont instanceof SubApp) && ((SubApp) cont).getSubAppNetwork() == parent;
+	}
+
 
 	/** Can exist event connection.
 	 *
@@ -263,7 +275,7 @@ public final class LinkConstraints {
 		if (duplicateConnection(source, target)) {
 			return false;
 		}
-		return sourceAndDestCheck(source, target);
+		return sourceAndDestCheck(source, target, parent);
 	}
 
 	public static boolean duplicateConnection(final IInterfaceElement source, final IInterfaceElement destination) {
@@ -299,7 +311,7 @@ public final class LinkConstraints {
 			target = temp;
 		}
 
-		if (!sourceAndDestCheck(source, target)) {
+		if (!sourceAndDestCheck(source, target, parent)) {
 			ErrorMessenger.popUpErrorMessage(Messages.LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed);
 			return false;
 		}
@@ -333,7 +345,7 @@ public final class LinkConstraints {
 	}
 
 
-	private static boolean adapaterTypeCompatibilityCheck(final IInterfaceElement source,
+	public static boolean adapaterTypeCompatibilityCheck(final IInterfaceElement source,
 			final IInterfaceElement target) {
 		if (((source.getType().getName().equals(ANY_ADAPTER)) && (!target.getType().getName().equals(ANY_ADAPTER)))
 				|| ((!source.getType().getName().equals(ANY_ADAPTER))
