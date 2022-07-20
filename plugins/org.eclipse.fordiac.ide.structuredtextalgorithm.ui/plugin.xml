@@ -335,14 +335,31 @@
 			id="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm.CodeMiningProvider"
 			label="STAlgorithm Codemining">
 			<enabledWhen>
-				<with variable="editorInput">
-					<adapt type="org.eclipse.core.resources.IFile">
-						<test
-							property="org.eclipse.core.resources.extension"
-							value="fbt">
-						</test>
-					</adapt>
-				</with>
+      <and>
+         <with
+               variable="viewer">
+            <instanceof
+                  value="org.eclipse.xtext.ui.editor.XtextSourceViewer">
+            </instanceof>
+         </with>
+        <with
+              variable="editor">
+           <test
+                 property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+                 value="org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithm">
+           </test>
+        </with>
+         <with
+               variable="editorInput">
+            <adapt
+                  type="org.eclipse.core.resources.IFile">
+               <test
+                     property="org.eclipse.core.resources.extension"
+                     value="fbt">
+               </test>
+            </adapt>
+         </with>
+      </and>
 			</enabledWhen>
 		</codeMiningProvider>
 	</extension>
