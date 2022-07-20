@@ -1782,6 +1782,11 @@ public interface StandardFunctions extends Functions {
 		return TimeValue.toTimeValue(Instant.EPOCH.until(AbstractEvaluator.currentClock().instant(), ChronoUnit.NANOS));
 	}
 
+	static DateAndTimeValue NOW() {
+		return DateAndTimeValue
+				.toDateAndTimeValue(Instant.EPOCH.until(AbstractEvaluator.currentClock().instant(), ChronoUnit.NANOS));
+	}
+
 	@OnlySupportedBy("4diac IDE")
 	static void OVERRIDE_NOW_MONOTONIC(final TimeValue value) {
 		final Duration duration = value.toDuration();
