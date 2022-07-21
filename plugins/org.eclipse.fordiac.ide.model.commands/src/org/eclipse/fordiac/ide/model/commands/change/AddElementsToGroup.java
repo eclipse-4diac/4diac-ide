@@ -66,6 +66,7 @@ public class AddElementsToGroup extends Command {
 		removeFromOtherGroups.execute();
 		FBNetworkHelper.moveFBNetworkByOffset(elementsToAdd, -getOriginalPositionX(), -getOriginalPositionY());
 		addElementsToGroup();
+		FBNetworkHelper.selectElements(elementsToAdd);
 	}
 
 	@Override

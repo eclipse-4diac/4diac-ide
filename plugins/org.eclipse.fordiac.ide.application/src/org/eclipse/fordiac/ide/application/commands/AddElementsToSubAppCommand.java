@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
@@ -82,6 +83,7 @@ public class AddElementsToSubAppCommand extends Command {
 		}
 		setUniqueName.execute();
 		modifiedConns.execute();
+		ElementSelector.selectViewObjects(elementsToAdd);
 	}
 
 	private void ensureUniqueName(final FBNetworkElement element) {

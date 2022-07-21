@@ -19,6 +19,8 @@ import java.text.MessageFormat;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.BasicEList;
@@ -48,7 +50,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PlatformUI;
 
 public final class FBNetworkHelper {
 
@@ -225,6 +231,20 @@ public final class FBNetworkHelper {
 			}
 		}
 		return true;
+	}
+
+	public static void selectElements(final List<FBNetworkElement> elements) {
+		final IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+				.getActivePart();
+		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
+		if (viewer != null) {
+			final List<EditPart> eps = elements.stream().map(el -> (EditPart) viewer.getEditPartRegistry().get(el))
+					.filter(Objects::nonNull)
+					.collect(Collectors.toList());
+			if (eps != null) {
+				viewer.setSelection(new StructuredSelection(eps));
+			}
+		}
 	}
 
 	private static EList<? extends FBNetworkElement> getChildFBNElements(final FBNetworkElement networkElem) {
