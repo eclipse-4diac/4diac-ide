@@ -23,7 +23,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.xtext.ui,
  org.eclipse.core.expressions,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
- org.eclipse.fordiac.ide.structuredtextalgorithm.ui
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ui,
+ org.eclipse.fordiac.ide.structuredtextcore
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier
@@ -32,6 +33,7 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.typemanagement;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Export-Package: org.eclipse.fordiac.ide.typemanagement,
+ org.eclipse.fordiac.ide.typemanagement.handlers,
  org.eclipse.fordiac.ide.typemanagement.navigator,
  org.eclipse.fordiac.ide.typemanagement.preferences,
  org.eclipse.fordiac.ide.typemanagement.util,
