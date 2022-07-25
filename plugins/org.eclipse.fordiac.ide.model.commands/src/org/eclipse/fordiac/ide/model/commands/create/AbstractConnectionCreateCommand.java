@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
@@ -181,8 +182,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 				final IInterfaceElement opSrcIE = opSource.getInterfaceElement(source.getName());
 				final IInterfaceElement opDstIE = opDestination.getInterfaceElement(destination.getName());
 
-				if ((opSrcIE != null && opDstIE != null && opSource.getFbNetwork() == opDestination.getFbNetwork()
-						&& !LinkConstraints.duplicateConnection(opSrcIE, opDstIE))) {
+				if (requiresOppositeConnection(opSource, opDestination, opSrcIE, opDstIE)) {
 					final AbstractConnectionCreateCommand cmd = createMirroredConnectionCommand(
 							opSource.getFbNetwork());
 					// as this is the command for the mirrored connection we don't want again to check
@@ -195,6 +195,26 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 			}
 		}
 		return null;
+	}
+
+	private boolean requiresOppositeConnection(final FBNetworkElement opSource, final FBNetworkElement opDestination,
+			final IInterfaceElement opSrcIE, final IInterfaceElement opDstIE) {
+		if (opSrcIE == null || opDstIE == null) {
+			return false;
+		}
+
+		if (opSource.getFbNetwork() != opDestination.getFbNetwork()) {
+			return false;
+		}
+
+		if (opSource == opDestination && opSource instanceof SubApp
+				&& ((SubApp) getSource().getFBNetworkElement()).getSubAppNetwork() == getParent()) {
+			// we have a connection inside of the subapp, currently we don't need to create this connection in the
+			// resource
+			return false;
+		}
+
+		return !LinkConstraints.duplicateConnection(opSrcIE, opDstIE);
 	}
 
 	/**
@@ -221,7 +241,7 @@ public abstract class AbstractConnectionCreateCommand extends Command {
 			mirroredConnection.setVisible(visible);
 		}
 	}
-	
+
 	public static AbstractConnectionCreateCommand createCommand(final IInterfaceElement ie, final FBNetwork network) {
 		if (ie instanceof Event) {
 			return new EventConnectionCreateCommand(network);

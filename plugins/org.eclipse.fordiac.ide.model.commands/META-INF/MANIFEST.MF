@@ -13,7 +13,8 @@ Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.jface,
  org.eclipse.fordiac.ide.ui.errormessages,
  org.eclipse.core.resources
-Export-Package: org.eclipse.fordiac.ide.model.commands.change,
+Export-Package: org.eclipse.fordiac.ide.model.commands,
+ org.eclipse.fordiac.ide.model.commands.change,
  org.eclipse.fordiac.ide.model.commands.create,
  org.eclipse.fordiac.ide.model.commands.delete,
  org.eclipse.fordiac.ide.model.commands.insert
