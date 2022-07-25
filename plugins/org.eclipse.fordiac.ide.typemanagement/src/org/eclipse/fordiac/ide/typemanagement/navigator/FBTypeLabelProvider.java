@@ -16,6 +16,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement.navigator;
 
+import java.util.Arrays;
 import java.util.Scanner;
 
 import org.eclipse.core.resources.IFile;
@@ -35,10 +36,20 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.JFaceResources;
+import org.eclipse.jface.resource.LocalResourceManager;
+import org.eclipse.jface.resource.ResourceManager;
+import org.eclipse.jface.viewers.DecorationOverlayIcon;
+import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.IDescriptionProvider;
 
 public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements IDescriptionProvider {
+
+	ResourceManager resourceManager = new LocalResourceManager(JFaceResources.getResources());
 
 	public FBTypeLabelProvider() {
 		super(FBTypeComposedAdapterFactory.getAdapterFactory());
@@ -47,81 +58,110 @@ public class FBTypeLabelProvider extends AdapterFactoryLabelProvider implements 
 	@Override
 	public Image getImage(final Object element) {
 		if (element instanceof IFile && ((IFile) element).exists()) {
-			return getImageForFile((IFile) element);
+			ImageDescriptor imageDescriptor = getImageForFile((IFile) element);
+			if (imageDescriptor != null) {
+				imageDescriptor = decorateImage((IFile) element, imageDescriptor);
+				return (Image) resourceManager.get(imageDescriptor);
+			}
+			return null;
 		}
 		return super.getImage(element);
 	}
 
-	public static Image getImageForFile(final IFile element) {
-		Image image = null;
-
+	public static ImageDescriptor getImageForFile(final IFile element) {
 		if (TypeLibraryTags.ADAPTER_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			image = FordiacImage.ICON_ADAPTER_TYPE.getImage();
-		} else if (TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			image = FordiacImage.ICON_SUB_APP_TYPE.getImage();
-		} else if (TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
-			image = getImageForFBTypeFile(element);
+			return FordiacImage.ICON_ADAPTER_TYPE.getImageDescriptor();
 		}
-
-		if (null != image && fileHasProblems(element)) {
-			return FordiacImage.getErrorOverlayImage(image);
+		if (TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
+			return FordiacImage.ICON_SUB_APP_TYPE.getImageDescriptor();
 		}
-
-		return image;
+		if (TypeLibraryTags.FB_TYPE_FILE_ENDING.equalsIgnoreCase(element.getFileExtension())) {
+			return getImageForFBTypeFile(element);
+		}
+		return null;
 	}
 
-	private static Image getImageForFBTypeFile(final IFile element) {
+	private static ImageDescriptor getImageForFBTypeFile(final IFile element) {
 		final FBType type = getFBTypeFromFile(element);
 
 		if (type instanceof BasicFBType) {
-			return FordiacImage.ICON_BASIC_FB.getImage();
-		} else if (type instanceof CompositeFBType) {
-			return FordiacImage.ICON_COMPOSITE_FB.getImage();
-		} else if (type instanceof SimpleFBType) {
-			return FordiacImage.ICON_SIMPLE_FB.getImage();
-		} else if (type instanceof ServiceInterfaceFBType) {
-			return FordiacImage.ICON_SIFB.getImage();
+			return FordiacImage.ICON_BASIC_FB.getImageDescriptor();
+		}
+		if (type instanceof CompositeFBType) {
+			return FordiacImage.ICON_COMPOSITE_FB.getImageDescriptor();
+		}
+		if (type instanceof SimpleFBType) {
+			return FordiacImage.ICON_SIMPLE_FB.getImageDescriptor();
+		}
+		if (type instanceof ServiceInterfaceFBType) {
+			return FordiacImage.ICON_SIFB.getImageDescriptor();
 		}
 
 		// partly load file to determine type
 		return checkUnloadedFBType(element);
 	}
 
-	private static boolean fileHasProblems(final IFile element) {
-		IMarker[] problems = null;
-		if (element.exists()) {
-			try {
-				problems = element.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
-		}
-		return ((null != problems) && (0 < problems.length));
-	}
-
-	private static Image checkUnloadedFBType(final IFile element) {
-		Image image = null;
+	private static ImageDescriptor checkUnloadedFBType(final IFile element) {
 		try (Scanner scanner = new Scanner(element.getContents())) {
 			if (null != scanner.findWithinHorizon("BasicFB", 0)) { //$NON-NLS-1$
-				image = FordiacImage.ICON_BASIC_FB.getImage();
-			} else {
-				scanner.reset();
-				if (null != scanner.findWithinHorizon("FBNetwork", 0)) { //$NON-NLS-1$
-					image = FordiacImage.ICON_COMPOSITE_FB.getImage();
-				} else {
-					scanner.reset();
-					if (null != scanner.findWithinHorizon("SimpleFB", 0)) { //$NON-NLS-1$
-						image = FordiacImage.ICON_SIMPLE_FB.getImage();
-					} else {
-						image = FordiacImage.ICON_SIFB.getImage();
-					}
-				}
+				return FordiacImage.ICON_BASIC_FB.getImageDescriptor();
 			}
+
+			scanner.reset();
+			if (null != scanner.findWithinHorizon("FBNetwork", 0)) { //$NON-NLS-1$
+				return FordiacImage.ICON_COMPOSITE_FB.getImageDescriptor();
+			}
+
+			scanner.reset();
+			if (null != scanner.findWithinHorizon("SimpleFB", 0)) { //$NON-NLS-1$
+				return FordiacImage.ICON_SIMPLE_FB.getImageDescriptor();
+			}
+
+			return FordiacImage.ICON_SIFB.getImageDescriptor();
 		} catch (final Exception e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
 
-		return image;
+		return null;
+	}
+
+	/** If the file has a problem an error/warning overlay is created
+	 *
+	 * This code is based on org.eclipse.ui.internal.navigator.resources.workbench.ResourceExtensionLabelProvider, which
+	 * can not directly be used as this class is an Eclipse internal class. */
+	private static ImageDescriptor decorateImage(final IResource element, final ImageDescriptor imageDescriptor) {
+		final ImageDescriptor overlay = getErrorOverlay(element);
+		if (overlay != null) {
+			return new DecorationOverlayIcon(imageDescriptor, overlay, IDecoration.BOTTOM_LEFT);
+		}
+		return imageDescriptor;
+	}
+
+	private static ImageDescriptor getErrorOverlay(final IResource element) {
+		ImageDescriptor overlay = null;
+		try {
+			final IMarker[] problems = element.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+			if (problems.length > 0) {
+				final int problemSeverity = Arrays.stream(problems).map(p -> p.getAttribute(IMarker.SEVERITY, -1))
+						.max(Integer::compare).orElse(-1);
+
+				switch (problemSeverity) {
+				case IMarker.SEVERITY_ERROR:
+					overlay = PlatformUI.getWorkbench().getSharedImages()
+					.getImageDescriptor(ISharedImages.IMG_DEC_FIELD_ERROR);
+					break;
+				case IMarker.SEVERITY_WARNING:
+					overlay = PlatformUI.getWorkbench().getSharedImages()
+					.getImageDescriptor(ISharedImages.IMG_DEC_FIELD_WARNING);
+					break;
+				default:
+					break;
+				}
+			}
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
+		return overlay;
 	}
 
 	@Override

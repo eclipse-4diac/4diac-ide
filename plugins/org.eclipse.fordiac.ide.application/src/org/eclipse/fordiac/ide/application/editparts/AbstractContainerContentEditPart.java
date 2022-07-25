@@ -23,7 +23,6 @@ import java.util.List;
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -34,7 +33,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editors.NewInstanceDirectEditManager;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart.FBNetworkMarqueeDragTracker;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
-import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -153,16 +151,6 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 		final FBNetworkMarqueeDragTracker dragTracker = new ContainerMarqueeDragTracker(this);
 		dragTracker.setMarqueeBehavior(MarqueeSelectionTool.BEHAVIOR_NODES_CONTAINED_AND_RELATED_CONNECTIONS);
 		return dragTracker;
-	}
-
-	@Override
-	public void setLayoutConstraint(final EditPart child, final IFigure childFigure, final Object constraint) {
-		if ((constraint instanceof Rectangle) && (child instanceof ValueEditPart)) {
-			final Rectangle rectConstraint = (Rectangle) constraint;
-			final Point topLeft = getFigure().getClientArea().getTopLeft();
-			rectConstraint.performTranslate(-topLeft.x, -topLeft.y);
-		}
-		super.setLayoutConstraint(child, childFigure, constraint);
 	}
 
 	@Override

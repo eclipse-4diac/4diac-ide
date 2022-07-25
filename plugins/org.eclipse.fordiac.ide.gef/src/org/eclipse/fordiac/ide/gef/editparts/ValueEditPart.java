@@ -115,7 +115,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	}
 
-	private Point calculatePos() {
+	protected Point calculatePos() {
 		if (parentPart != null) {
 			final Rectangle bounds = parentPart.getFigure().getBounds();
 			int x = 0;

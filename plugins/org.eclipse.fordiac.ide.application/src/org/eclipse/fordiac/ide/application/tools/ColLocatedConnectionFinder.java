@@ -12,10 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.tools;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
@@ -28,33 +29,19 @@ final class ColLocatedConnectionFinder {
 	public static List<ConnectionEditPart> getCoLocatedConnections(final ConnectionEditPart connEP,
 			final EditPartViewer viewer, final Point loc) {
 		final Set<Connection> conns = getAllRelatedConnections(connEP);
-		final List<ConnectionEditPart> retVal = new ArrayList<>();
 		final Point location = getRelativeLocation(connEP.getFigure(), loc);
-		conns.forEach(con -> {
-			final ConnectionEditPart conEditPart = (ConnectionEditPart) viewer.getEditPartRegistry().get(con);
-			if (conEditPart.getFigure().findFigureAt(location) != null) {
-				// the figure if the connection is under the mouse
-				retVal.add(conEditPart);
-			}
-		});
-
-		return retVal;
+		return conns.stream().map(con -> (ConnectionEditPart) viewer.getEditPartRegistry().get(con))
+				.filter(Objects::nonNull)
+				.filter(ep -> ep.getFigure().findFigureAt(location) != null).collect(Collectors.toList());
 	}
 
 	public static List<ConnectionEditPart> getLeftCoLocatedConnections(final ConnectionEditPart connEP,
 			final EditPartViewer viewer, final Point loc) {
 		final Set<Connection> conns = getAllRelatedConnections(connEP);
-		final List<ConnectionEditPart> retVal = new ArrayList<>();
 		final Point location = getRelativeLocation(connEP.getFigure(), loc);
-		conns.forEach(con -> {
-			final ConnectionEditPart conEditPart = (ConnectionEditPart) viewer.getEditPartRegistry().get(con);
-			if (conEditPart.getFigure().findFigureAt(location) == null) {
-				// the figure if the connection is under the mouse
-				retVal.add(conEditPart);
-			}
-		});
-
-		return retVal;
+		return conns.stream().map(con -> (ConnectionEditPart) viewer.getEditPartRegistry().get(con))
+				.filter(Objects::nonNull).filter(ep -> ep.getFigure().findFigureAt(location) == null)
+				.collect(Collectors.toList());
 	}
 
 	private static Set<Connection> getAllRelatedConnections(final ConnectionEditPart connEP) {
