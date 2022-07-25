@@ -75,13 +75,13 @@ public class ModelSearchQuery implements ISearchQuery {
 		return Status.OK_STATUS;
 	}
 
-	private void searchApplications(final AutomationSystem sys) {
+	public void searchApplications(final AutomationSystem sys) {
 		for (final Application app : sys.getApplication()) {
 			searchApplication(app);
 		}
 	}
 
-	private void searchApplication(final Application app) {
+	public void searchApplication(final Application app) {
 		if (matchEObject(app)) {
 			searchResult.addResult(app);
 		}
