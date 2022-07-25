@@ -54,6 +54,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.TreeViewerColumn;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.MenuListener;
@@ -115,10 +116,8 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 
 		root = new Composite(parent, SWT.NONE);
 		root.setLayout(new GridLayout());
-
-		filteredTree = new FilteredTree(root, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION,
-				getPatternFilter(), true,
-				true);
+		filteredTree = new FilteredTree(root, SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION, getPatternFilter(),
+				true, true);
 
 		final GridData treeGridData = new GridData();
 		treeGridData.grabExcessHorizontalSpace = true;
@@ -150,8 +149,23 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 		addWatchesAdapters();
 	}
 
+	@SuppressWarnings("static-method")
 	protected PatternFilter getPatternFilter() {
-		return new PatternFilter();
+		return new PatternFilter() {
+			@Override
+			protected boolean isLeafMatch(final Viewer viewer, final Object element) {
+
+				WatchValueTreeNode node = null;
+
+				if (element instanceof WatchValueTreeNode) {
+					node = (WatchValueTreeNode) element;
+				} else {
+					return false;
+				}
+				return wordMatches(WatchesTypeLabelProvider.getTypeText(node))
+						|| wordMatches(node.getWatchedElementString()) || wordMatches(node.getValue());
+			}
+		};
 	}
 
 	protected void createPartListener() {
@@ -174,7 +188,6 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 			}
 		});
 	}
-
 
 	private void createNameColumn() {
 		final TreeViewerColumn nameColumn = new TreeViewerColumn(filteredTree.getViewer(), SWT.None);
@@ -205,7 +218,6 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 		commentColumn.getColumn().setWidth(340);
 		commentColumn.setLabelProvider(new WatchesCommentLabelProvider());
 	}
-
 
 	private void addWatchesAdapters() {
 		MonitoringManager.getInstance().registerMonitoringListener(listener);
@@ -252,8 +264,7 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 
 		};
 		collapseAllItems.setImageDescriptor(
-				PlatformUI.getWorkbench().getSharedImages()
-				.getImageDescriptor(ISharedImages.IMG_ELCL_COLLAPSEALL));
+				PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_ELCL_COLLAPSEALL));
 		manager.add(collapseAllItems);
 	}
 
@@ -386,15 +397,12 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 					final MonitoringManager manager = MonitoringManager.getInstance();
 					final StructuredSelection selection = (StructuredSelection) filteredTree.getViewer().getSelection();
 					if (selection.getFirstElement() instanceof WatchValueTreeNode) {
-						final IInterfaceElement interfaceElement = ((WatchValueTreeNode) selection.getFirstElement()).getMonitoringBaseElement().getPort()
-								.getInterfaceElement();
-						final MonitoringBaseElement element = manager
-								.getMonitoringElement(interfaceElement);
-						forceMenuItem
-						.setEnabled(!(interfaceElement.getType() instanceof EventType) &&  !((WatchValueTreeNode) selection
-								.getFirstElement()).hasChildren());
-						clearForceMenuItem.setEnabled(
-								!(interfaceElement.getType() instanceof EventType)
+						final IInterfaceElement interfaceElement = ((WatchValueTreeNode) selection.getFirstElement())
+								.getMonitoringBaseElement().getPort().getInterfaceElement();
+						final MonitoringBaseElement element = manager.getMonitoringElement(interfaceElement);
+						forceMenuItem.setEnabled(!(interfaceElement.getType() instanceof EventType)
+								&& !((WatchValueTreeNode) selection.getFirstElement()).hasChildren());
+						clearForceMenuItem.setEnabled(!(interfaceElement.getType() instanceof EventType)
 								&& ((MonitoringElement) element).isForce());
 						triggerMenuItem.setEnabled(interfaceElement.getType() instanceof EventType);
 					}
@@ -419,8 +427,7 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 				final StructuredSelection sel = (StructuredSelection) viewer.getSelection();
 				if (sel.getFirstElement() instanceof WatchValueTreeNode) {
 					final WatchValueTreeNode treeNode = (WatchValueTreeNode) sel.getFirstElement();
-					if (treeNode.getMonitoringBaseElement().getPort()
-							.getInterfaceElement() instanceof VarDeclaration) {
+					if (treeNode.getMonitoringBaseElement().getPort().getInterfaceElement() instanceof VarDeclaration) {
 						final VarDeclaration variable = (VarDeclaration) treeNode.getMonitoringBaseElement().getPort()
 								.getInterfaceElement();
 						if (treeNode.isStructNode()) {
@@ -446,7 +453,8 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 				if (sel.getFirstElement() instanceof WatchValueTreeNode) {
 					final WatchValueTreeNode treeNode = (WatchValueTreeNode) sel.getFirstElement();
 					if (treeNode.getMonitoringBaseElement().getPort().getInterfaceElement() instanceof VarDeclaration) {
-						final VarDeclaration variable = (VarDeclaration) treeNode.getMonitoringBaseElement().getPort().getInterfaceElement();
+						final VarDeclaration variable = (VarDeclaration) treeNode.getMonitoringBaseElement().getPort()
+								.getInterfaceElement();
 						ClearForceHandler.processHandler(variable);
 						viewer.refresh();
 					}

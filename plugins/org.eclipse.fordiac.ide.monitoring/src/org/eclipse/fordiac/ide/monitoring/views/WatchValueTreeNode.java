@@ -205,4 +205,9 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 	public String getVarName() {
 		return varName;
 	}
+
+	@Override
+	public String toString() {
+		return getWatchedElementString();
+	}
 }
