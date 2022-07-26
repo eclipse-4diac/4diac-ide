@@ -87,7 +87,9 @@ public class MonitoringManager extends AbstractMonitoringManager {
 				if (fbNetworkElement instanceof AdapterFB) {
 					return getAutomationSystem(((AdapterFB) fbNetworkElement).getAdapterDecl());
 				}
-				return fbNetworkElement.getFbNetwork().getAutomationSystem();
+				if (fbNetworkElement.getFbNetwork() != null) {
+					return fbNetworkElement.getFbNetwork().getAutomationSystem();
+				}
 			}
 		}
 		return null;

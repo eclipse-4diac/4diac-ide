@@ -22,17 +22,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.application.editparts.GroupContentNetwork;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentNetwork;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.IMonitoringListener;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IChildrenProvider;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 
 
 public class MonitoringChildren implements IMonitoringListener, IChildrenProvider {
@@ -53,32 +51,28 @@ public class MonitoringChildren implements IMonitoringListener, IChildrenProvide
 
 	private static boolean shouldBeAdded(final MonitoringBaseElement element, final FBNetwork fbNetwork) {
 		if (element != null && element.getPort().getFb().getFbNetwork() != null) {
-			if (element.getPort().getFb().getFbNetwork().equals(fbNetwork)) {
+			if (element.getPort().getFb().getGroup() != null) {
+				return checkGroup(element, fbNetwork);
+			} if (fbNetwork instanceof UnfoldedSubappContentNetwork) {
+				return checkExpandedSubApp(element, fbNetwork);
+			} else if (element.getPort().getFb().getFbNetwork().equals(fbNetwork)) {
 				return true;
-			} else if (element instanceof SubappMonitoringElement || checkResource(element)) {
-				final Object parent = element.getPort().getFb().getFbNetwork().eContainer();
-				return isInsideMonitoredSubApp(parent, fbNetwork);
 			}
 		}
 		return false;
 	}
 
-	private static boolean checkResource(final MonitoringBaseElement element) {
-		final FBNetworkElement fb = element.getPort().getFb();
-		return element.getPort().getFb().getResource() != null && (fb instanceof FB) && (!((FB) fb).isResourceFB());
+	private static boolean checkExpandedSubApp(final MonitoringBaseElement element, final FBNetwork fbNetwork) {
+		final FBNetwork content = ((UnfoldedSubappContentNetwork) fbNetwork).getSubappContent();
+		return element.getPort().getFb().getFbNetwork() == content;
 	}
 
-	private static boolean isInsideMonitoredSubApp(final Object parent, final FBNetwork network) {
-		if (parent instanceof SubApp) {
-			final SubApp subapp = (SubApp) parent;
-			if (network.equals(subapp.getSubAppNetwork())) {
+	private static boolean checkGroup(final MonitoringBaseElement element, final FBNetwork fbNetwork) {
+		if (fbNetwork instanceof GroupContentNetwork) {
+			final Group group = ((GroupContentNetwork) fbNetwork).getGroup();
+			if (element.getPort().getFb().getGroup() == group) {
 				return true;
-			} else if (subapp.isUnfolded()) {
-				return isInsideMonitoredSubApp(subapp.eContainer().eContainer(), network);
 			}
-		}
-		if (parent instanceof Application) {
-			return network.equals(((Application) parent).getFBNetwork());
 		}
 		return false;
 	}

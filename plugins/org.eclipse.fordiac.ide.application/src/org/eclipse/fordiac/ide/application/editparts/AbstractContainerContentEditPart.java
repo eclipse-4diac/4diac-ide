@@ -17,9 +17,6 @@
 
 package org.eclipse.fordiac.ide.application.editparts;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.XYLayout;
@@ -74,13 +71,6 @@ public abstract class AbstractContainerContentEditPart extends FBNetworkEditPart
 			super.notifyChanged(notification);
 		}
 	};
-
-	@Override
-	protected List<?> getModelChildren() {
-		final List<Object> children = new ArrayList<>(getNetworkElements());
-		children.addAll(getFBValues());
-		return children;
-	}
 
 	@Override
 	public void activate() {
