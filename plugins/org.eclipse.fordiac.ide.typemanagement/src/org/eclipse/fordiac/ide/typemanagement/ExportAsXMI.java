@@ -41,12 +41,19 @@ public class ExportAsXMI {
 	static final String XMI_EXTENSION = "xmi"; // $NON-NLS-1$
 
 	public Object export(final IFile file) {
-		final URI uri = URI.createPlatformResourceURI(file.getFullPath().toString(), true);
-		final URI xmiUri = uri.trimFileExtension().appendFileExtension(XMI_EXTENSION);
+		final URI uri = URI.createPlatformResourceURI(file.getParent().getFullPath().toString(), true);
+		return export(file, uri);
+	}
+
+	public Object export(final IFile file, final URI saveLocation) {
+		final URI xmiUri = saveLocation.appendSegment(file.getName()).trimFileExtension()
+				.appendFileExtension(XMI_EXTENSION);
+		System.out.println(xmiUri);
 		final XtextResourceSet resourceSet = new XtextResourceSet();
 		new STAlgorithmResourceSetInitializer().initialize(resourceSet, file.getProject());
 		resourceSet.addLoadOption(LazyLinkingResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
-		final Resource resource = resourceSet.getResource(uri, true);
+		final Resource resource = resourceSet.getResource(URI.createPlatformResourceURI(file.getFullPath().toString()),
+				true);
 
 		if (resource instanceof XtextResource) {
 			final STSource source = (STSource) resource.getContents().get(0);
@@ -71,6 +78,7 @@ public class ExportAsXMI {
 			xmiRessource.save(options);
 		} catch (final Exception e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
+			System.out.println(e.getMessage() + " " + e); // log it in console for ANT Tasks
 		}
 
 		return null;
