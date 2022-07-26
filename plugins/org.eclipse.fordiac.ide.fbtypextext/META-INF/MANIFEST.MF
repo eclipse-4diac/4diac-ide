@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Fbtypextext
+Bundle-SymbolicName: org.eclipse.fordiac.ide.fbtypextext
+Bundle-Version: 1.0.0.qualifier
+Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypextext
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtend.lib,
+ org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.xtext.ui,
+ org.eclipse.ui.ide
+Import-Package: org.apache.log4j
+Export-Package: org.eclipse.fordiac.ide.fbtypextext,
+ org.eclipse.fordiac.ide.fbtypextext.ui

@@ -26,22 +26,15 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResou
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.xtext.ParserRule
-import org.eclipse.xtext.diagnostics.Severity
 import org.eclipse.xtext.parser.IParseResult
 import org.eclipse.xtext.parser.IParser
 import org.eclipse.xtext.resource.IResourceServiceProvider
-import org.eclipse.xtext.resource.XtextResource
 import org.eclipse.xtext.resource.XtextResourceSet
-import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
-import org.eclipse.xtext.util.CancelIndicator
-import org.eclipse.xtext.util.LazyStringInputStream
-import org.eclipse.xtext.validation.CheckMode
 import org.eclipse.xtext.validation.Issue
 
-import static extension org.eclipse.emf.common.util.URI.createPlatformResourceURI
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 
-class StructuredTextParseUtil {
+class StructuredTextParseUtil extends ParseUtil{
 	static final URI SYNTHETIC_URI = URI.createURI("__synthetic.stalg")
 	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.
 		getResourceServiceProvider(SYNTHETIC_URI)
@@ -122,13 +115,7 @@ class StructuredTextParseUtil {
 		List<String> infos) {
 		val issues = newArrayList
 		val parseResult = text.parse(entryPoint, fbType, additionalContent, issues)
-		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''«name» at «lineNumber»: «message» '''])
-		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''«name» at «lineNumber»: «message» '''])
-		infos?.addAll(issues.filter[severity == Severity.INFO].map['''«name» at «lineNumber»: «message» '''])
-		if (issues.exists[severity == Severity.ERROR]) {
-			return null
-		}
-		return parseResult
+		name.postProcess(errors,warnings,infos,issues,parseResult)
 	}
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, FBType fbType, List<Issue> issues) {
@@ -139,19 +126,8 @@ class StructuredTextParseUtil {
 		Collection<? extends EObject> additionalContent, List<Issue> issues) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		resourceSet.loadOptions.putAll(#{
-			XtextResource.OPTION_RESOLVE_ALL -> Boolean.TRUE,
-			STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE,
-			ResourceDescriptionsProvider.PERSISTED_DESCRIPTIONS -> Boolean.TRUE
+			STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE
 		})
-		val resource = SERVICE_PROVIDER.get(XtextResource) as STAlgorithmResource
-		resource.URI = fbType?.typeEntry?.file?.fullPath?.toString?.createPlatformResourceURI(true) ?: SYNTHETIC_URI
-		resourceSet.resources.add(resource)
-		resource.entryPoint = entryPoint
-		resource.fbType = fbType
-		if(!additionalContent.nullOrEmpty) resource.additionalContent.addAll(additionalContent)
-		resource.load(new LazyStringInputStream(text), resourceSet.loadOptions)
-		val validator = resource.resourceServiceProvider.resourceValidator
-		issues.addAll(validator.validate(resource, CheckMode.ALL, CancelIndicator.NullImpl))
-		return resource.parseResult
+		SERVICE_PROVIDER.postProcess(resourceSet,text,entryPoint,fbType,null,issues,SYNTHETIC_URI)
 	}
 }

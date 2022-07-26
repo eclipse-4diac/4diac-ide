@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.scoping
 
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
+import org.eclipse.fordiac.ide.fbtypextext.FBTypeXtextResource
 import org.eclipse.xtext.scoping.impl.ImportedNamespaceAwareLocalScopeProvider
 
 class STAlgorithmImportedNamespaceAwareLocalScopeProvider extends ImportedNamespaceAwareLocalScopeProvider {
@@ -21,7 +21,7 @@ class STAlgorithmImportedNamespaceAwareLocalScopeProvider extends ImportedNamesp
 		val result = super.internalGetImportedNamespaceResolvers(context, ignoreCase)
 		if (context.eContainer === null) {
 			val resource = context.eResource
-			if (resource instanceof STAlgorithmResource) {
+			if (resource instanceof FBTypeXtextResource) {
 				val fbType = resource.fbType
 				if (fbType !== null && fbType.name !== null) {
 					val fbTypeName = qualifiedNameConverter.toQualifiedName(fbType.name)
@@ -31,6 +31,7 @@ class STAlgorithmImportedNamespaceAwareLocalScopeProvider extends ImportedNamesp
 		}
 		return result
 	}
-
+	
 	override isRelativeImport() { false }
+	
 }

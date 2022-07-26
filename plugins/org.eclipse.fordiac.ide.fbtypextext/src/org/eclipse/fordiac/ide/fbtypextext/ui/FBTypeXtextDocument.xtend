@@ -9,18 +9,30 @@
  * 
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ * 	 Christoph Binder - Extracted code from STAlgorithmDocument, to enable possibility to reuse this class for multiple xtexteditors
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document
+package org.eclipse.fordiac.ide.fbtypextext.ui
 
 import com.google.inject.Inject
-import org.eclipse.fordiac.ide.fbtypextext.ui.FBTypeXtextDocument
+import org.eclipse.core.runtime.IAdaptable
+import org.eclipse.fordiac.ide.fbtypextext.FBTypeXtextResource
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.xtext.ui.editor.model.DocumentTokenSource
+import org.eclipse.xtext.ui.editor.model.XtextDocument
 import org.eclipse.xtext.ui.editor.model.edit.ITextEditComposer
 
-class STAlgorithmDocument extends FBTypeXtextDocument{
-
+class FBTypeXtextDocument extends XtextDocument implements IAdaptable {
+	
 	@Inject
 	new(DocumentTokenSource tokenSource, ITextEditComposer composer) {
 		super(tokenSource, composer)
+	}
+
+	override <T> T getAdapter(Class<T> adapterType) {
+		if(FBType.equals(adapterType)) adapterType.cast(FBType) else super.getAdapter(adapterType);
+	}
+
+	def FBType getFBType() {
+		readOnly[resource|if(resource instanceof FBTypeXtextResource) resource.fbType else null]
 	}
 }

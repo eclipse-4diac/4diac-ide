@@ -259,7 +259,7 @@ United States, other countries, or both.\n
          install-size="0"
          version="0.0.0"
          unpack="false"/>
- 
+
    <plugin
          id="org.eclipse.fordiac.ide.datatypeeditor"
          download-size="0"
@@ -269,6 +269,13 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.eclipse.fordiac.ide.fbtypeeditor.doc"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.fordiac.ide.fbtypextext"
          download-size="0"
          install-size="0"
          version="0.0.0"
