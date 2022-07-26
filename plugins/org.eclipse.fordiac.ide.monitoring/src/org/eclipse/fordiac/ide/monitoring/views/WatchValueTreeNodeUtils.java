@@ -20,6 +20,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.AbstractStructTreeNode;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
+import org.eclipse.fordiac.ide.model.data.AnyRealType;
 import org.eclipse.fordiac.ide.model.data.BoolType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StringType;
@@ -101,9 +102,14 @@ public final class WatchValueTreeNodeUtils {
 		}
 		return convertIntegerToHexString(parseInt);
 	}
-	
-	public static String decorateInitialCellValue(final DataType type, final String value) {
-		if (type instanceof WstringType) {
+
+	public static String decorateCellValue(final DataType type, final String value) {
+		if (type instanceof AnyRealType) {
+			// display integers as decimals
+			if (!value.contains(".")) { //$NON-NLS-1$
+				return value + ".0"; //$NON-NLS-1$
+			}
+		} else if (type instanceof WstringType) {
 			return StringValueConverter.INSTANCE.toString(value, true);
 		} else if (type instanceof StringType) {
 			return StringValueConverter.INSTANCE.toString(value, false);
