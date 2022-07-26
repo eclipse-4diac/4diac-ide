@@ -81,4 +81,67 @@ class STAlgorithmFormattingTest {
 		]
 	}
 
+	@Test
+	def void testEmptyLinesInMethod_0() {
+		assertFormatted[
+			toBeFormatted = '''
+				METHOD ADD_IN_ADD : INT
+				
+				
+				
+				ADD_IN_ADD := In + AddI;
+				END_METHOD
+			'''
+
+			expectation = '''
+				METHOD ADD_IN_ADD : INT
+				
+				ADD_IN_ADD := In + AddI;
+				END_METHOD
+				
+			'''
+		]
+	}
+
+	@Test
+	def void testEmptyLinesInMethod_1() {
+		assertFormatted[
+			toBeFormatted = '''
+				METHOD SUB_DIFF
+				
+				
+				VAR_INPUT
+					Start : INT;
+				END_VAR
+				
+				
+				VAR_OUTPUT
+					Result : INT;
+				END_VAR
+				
+				
+				Result := Start - DiffI;
+				
+				
+				END_METHOD
+			'''
+
+			expectation = '''
+				METHOD SUB_DIFF
+				
+				VAR_INPUT
+					Start : INT;
+				END_VAR
+				
+				VAR_OUTPUT
+					Result : INT;
+				END_VAR
+				
+				Result := Start - DiffI;
+				
+				END_METHOD
+				
+			'''
+		]
+	}
 }
