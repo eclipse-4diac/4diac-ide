@@ -82,7 +82,7 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 
 		if (isFeedbackRequest(request) && (null == selectionFeedback) && (null == handles)) {
 			// we don't have already a feedback showing and we are not selected
-			selectionFeedback = createSelectionFeedbackFigure(getHost(), arc);
+			selectionFeedback = createSelectionFeedbackFigure();
 			if (null != selectionFeedback) {
 				addFeedback(selectionFeedback);
 			}
@@ -99,6 +99,10 @@ public class ModifiedNonResizeableEditPolicy extends NonResizableEditPolicy {
 				&& ((AbstractConnectableEditPart) getHost()).isConnectable()
 				&& (REQ_RECONNECT_SOURCE.equals(request.getType()) || REQ_RECONNECT_TARGET.equals(request.getType())
 						|| REQ_CONNECTION_END.equals(request.getType()));
+	}
+
+	protected RoundedRectangle createSelectionFeedbackFigure() {
+		return createSelectionFeedbackFigure(getHost(), arc);
 	}
 
 	public static RoundedRectangle createSelectionFeedbackFigure(final EditPart editPart, final int arc) {
