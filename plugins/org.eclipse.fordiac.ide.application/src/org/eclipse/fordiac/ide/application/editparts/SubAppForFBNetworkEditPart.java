@@ -308,8 +308,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		if (childEditPart instanceof UnfoldedSubappContentEditPart) {
-			if (getFigure().getExpandedMainFigure() != null) {
-				getFigure().getExpandedMainFigure().remove(((UnfoldedSubappContentEditPart) childEditPart).getFigure());
+			if (getFigure().getExpandedContentArea() != null) {
+				getFigure().getExpandedContentArea()
+						.remove(((UnfoldedSubappContentEditPart) childEditPart).getFigure());
 			}
 		} else {
 			super.removeChildVisual(childEditPart);
