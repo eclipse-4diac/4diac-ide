@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.gef.listeners.DiagramFontChangeListener;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeAdapterTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
@@ -155,11 +156,10 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 						final String typeName = combo.getItem(index);
 						ChangeDataTypeCommand cmd;
 						if (getCastedModel() instanceof AdapterDeclaration) {
-							// TODO change to own command in order to update cfb internals
-							cmd = new ChangeDataTypeCommand((VarDeclaration) getCastedModel(),
+							cmd = new ChangeAdapterTypeCommand((AdapterDeclaration) getCastedModel(),
 									typeLib.getAdapterTypeEntry(typeName).getType());
 						} else {
-							cmd = new ChangeDataTypeCommand((VarDeclaration) getCastedModel(),
+							cmd = new ChangeDataTypeCommand(getCastedModel(),
 									typeLib.getDataTypeLibrary().getType(typeName));
 						}
 						return cmd;
@@ -179,8 +179,8 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 			request.setType(RequestConstants.REQ_DIRECT_EDIT);
 		}
 		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
-			// allow direct edit only for VarDeclarations
-			if (getCastedModel() instanceof VarDeclaration) {
+			// allow direct edit only for VarDeclarations and AdapterDeclarations
+			if ((getCastedModel() instanceof VarDeclaration) || (getCastedModel() instanceof AdapterDeclaration)) {
 				super.performRequest(request);
 			}
 		} else {

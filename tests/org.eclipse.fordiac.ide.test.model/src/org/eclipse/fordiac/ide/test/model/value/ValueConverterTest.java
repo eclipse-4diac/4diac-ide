@@ -40,12 +40,10 @@ class ValueConverterTest {
 		assertEquals(BigInteger.valueOf(100), NumericValueConverter.INSTANCE.toValue("1_00")); //$NON-NLS-1$
 		assertEquals(BigInteger.valueOf(16), NumericValueConverter.INSTANCE.toValue("16#10")); //$NON-NLS-1$
 		assertEquals(BigDecimal.valueOf(3.1415), NumericValueConverter.INSTANCE.toValue("3.1415")); //$NON-NLS-1$
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			NumericValueConverter.INSTANCE.toValue("NoNumber"); //$NON-NLS-1$
-		}, Messages.VALIDATOR_INVALID_NUMBER_LITERAL);
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			NumericValueConverter.INSTANCE.toValue("1__00"); //$NON-NLS-1$
-		}, Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
+		assertThrowsExactly(IllegalArgumentException.class, () -> NumericValueConverter.INSTANCE.toValue("NoNumber"), //$NON-NLS-1$
+				Messages.VALIDATOR_INVALID_NUMBER_LITERAL);
+		assertThrowsExactly(IllegalArgumentException.class, () -> NumericValueConverter.INSTANCE.toValue("1__00"), //$NON-NLS-1$
+				Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
 	}
 
 	@Test
@@ -63,21 +61,16 @@ class ValueConverterTest {
 	@Test
 	void toValueStringTest() {
 		assertEquals("", StringValueConverter.INSTANCE.toValue("''")); //$NON-NLS-1$ //$NON-NLS-2$
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			StringValueConverter.INSTANCE.toValue("\"\""); //$NON-NLS-1$
-		}, Messages.VALIDATOR_IllegalStringLiteral);
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			StringValueConverter.INSTANCE.toValue(""); //$NON-NLS-1$
-		}, Messages.VALIDATOR_IllegalStringLiteral);
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			StringValueConverter.INSTANCE.toValue("'"); //$NON-NLS-1$
-		}, Messages.VALIDATOR_IllegalStringLiteral);
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			StringValueConverter.INSTANCE.toValue("'\""); //$NON-NLS-1$
-		}, Messages.VALIDATOR_UnevenlyQuotedStringLiteral);
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			StringValueConverter.INSTANCE.toValue("aa"); //$NON-NLS-1$
-		}, Messages.VALIDATOR_UnevenlyQuotedStringLiteral);
+		assertThrowsExactly(IllegalArgumentException.class, () -> StringValueConverter.INSTANCE.toValue("\"\""), //$NON-NLS-1$
+				Messages.VALIDATOR_IllegalStringLiteral);
+		assertThrowsExactly(IllegalArgumentException.class, () -> StringValueConverter.INSTANCE.toValue(""), //$NON-NLS-1$
+				Messages.VALIDATOR_IllegalStringLiteral);
+		assertThrowsExactly(IllegalArgumentException.class, () -> StringValueConverter.INSTANCE.toValue("'"), //$NON-NLS-1$
+				Messages.VALIDATOR_IllegalStringLiteral);
+		assertThrowsExactly(IllegalArgumentException.class, () -> StringValueConverter.INSTANCE.toValue("'\""), //$NON-NLS-1$
+				Messages.VALIDATOR_UnevenlyQuotedStringLiteral);
+		assertThrowsExactly(IllegalArgumentException.class, () -> StringValueConverter.INSTANCE.toValue("aa"), //$NON-NLS-1$
+				Messages.VALIDATOR_UnevenlyQuotedStringLiteral);
 		assertEquals("abc", StringValueConverter.INSTANCE.toValue("'abc'")); //$NON-NLS-1$ //$NON-NLS-2$
 		assertEquals("4diac'IDE", StringValueConverter.INSTANCE.toValue("'4diac$'IDE'")); //$NON-NLS-1$ //$NON-NLS-2$
 		assertEquals("4diac\"IDE", StringValueConverter.INSTANCE.toValue("'4diac\"IDE'")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -91,21 +84,16 @@ class ValueConverterTest {
 	@Test
 	void toValueWStringTest() {
 		assertEquals("", WStringValueConverter.INSTANCE.toValue("\"\"")); //$NON-NLS-1$ //$NON-NLS-2$
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			WStringValueConverter.INSTANCE.toValue("''"); //$NON-NLS-1$
-		}, Messages.VALIDATOR_IllegalStringLiteral);
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			WStringValueConverter.INSTANCE.toValue(""); //$NON-NLS-1$
-		}, Messages.VALIDATOR_IllegalStringLiteral);
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			WStringValueConverter.INSTANCE.toValue("\""); //$NON-NLS-1$
-		}, Messages.VALIDATOR_IllegalStringLiteral);
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			WStringValueConverter.INSTANCE.toValue("\"'"); //$NON-NLS-1$
-		}, Messages.VALIDATOR_UnevenlyQuotedStringLiteral);
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			WStringValueConverter.INSTANCE.toValue("aa"); //$NON-NLS-1$
-		}, Messages.VALIDATOR_IllegalStringLiteral);
+		assertThrowsExactly(IllegalArgumentException.class, () -> WStringValueConverter.INSTANCE.toValue("''"), //$NON-NLS-1$
+				Messages.VALIDATOR_IllegalStringLiteral);
+		assertThrowsExactly(IllegalArgumentException.class, () -> WStringValueConverter.INSTANCE.toValue(""), //$NON-NLS-1$
+				Messages.VALIDATOR_IllegalStringLiteral);
+		assertThrowsExactly(IllegalArgumentException.class, () -> WStringValueConverter.INSTANCE.toValue("\""), //$NON-NLS-1$
+				Messages.VALIDATOR_IllegalStringLiteral);
+		assertThrowsExactly(IllegalArgumentException.class, () -> WStringValueConverter.INSTANCE.toValue("\"'"), //$NON-NLS-1$
+				Messages.VALIDATOR_UnevenlyQuotedStringLiteral);
+		assertThrowsExactly(IllegalArgumentException.class, () -> WStringValueConverter.INSTANCE.toValue("aa"), //$NON-NLS-1$
+				Messages.VALIDATOR_IllegalStringLiteral);
 		assertEquals("abc", WStringValueConverter.INSTANCE.toValue("\"abc\"")); //$NON-NLS-1$ //$NON-NLS-2$
 		assertEquals("4diac'IDE", StringValueConverter.INSTANCE.toValue("'4diac'IDE'")); //$NON-NLS-1$ //$NON-NLS-2$
 		assertEquals("4diac\"IDE", StringValueConverter.INSTANCE.toValue("'4diac$\"IDE'")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -113,9 +101,9 @@ class ValueConverterTest {
 		assertEquals("4diac\nIDE", WStringValueConverter.INSTANCE.toValue("\"4diac$NIDE\"")); //$NON-NLS-1$ //$NON-NLS-2$
 		assertEquals("4diac\f\r\tIDE", WStringValueConverter.INSTANCE.toValue("\"4diac$P$R$TIDE\"")); //$NON-NLS-1$ //$NON-NLS-2$
 		assertEquals("4diac IDE", WStringValueConverter.INSTANCE.toValue("\"4diac$0020IDE\"")); //$NON-NLS-1$ //$NON-NLS-2$
-		assertThrowsExactly(IllegalArgumentException.class, () -> {
-			WStringValueConverter.INSTANCE.toValue("\"4diac$20IDE\""); //$NON-NLS-1$
-		}, Messages.VALIDATOR_IllegalStringLiteral);
+		assertThrowsExactly(IllegalArgumentException.class,
+				() -> WStringValueConverter.INSTANCE.toValue("\"4diac$20IDE\""), //$NON-NLS-1$
+				Messages.VALIDATOR_IllegalStringLiteral);
 	}
 
 	@Test

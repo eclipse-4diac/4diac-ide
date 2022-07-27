@@ -50,10 +50,10 @@ public class FBInterfaceEditPartFactory extends Abstract4diacEditPartFactory {
 			return new InterfaceEditPart();
 		}
 		if (modelElement instanceof VarDeclaration) {
-			if (modelElement instanceof AdapterDeclaration) {
-				return new AdapterInterfaceEditPart(typeLib);
-			}
 			return createInterfaceEditPart();
+		}
+		if (modelElement instanceof AdapterDeclaration) {
+			return new AdapterInterfaceEditPart(typeLib);
 		}
 		if (modelElement instanceof With) {
 			return new WithEditPart();

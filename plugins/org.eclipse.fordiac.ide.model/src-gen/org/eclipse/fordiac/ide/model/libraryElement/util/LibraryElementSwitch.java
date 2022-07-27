@@ -170,7 +170,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.ADAPTER_DECLARATION: {
 				AdapterDeclaration adapterDeclaration = (AdapterDeclaration)theEObject;
 				T result = caseAdapterDeclaration(adapterDeclaration);
-				if (result == null) result = caseVarDeclaration(adapterDeclaration);
 				if (result == null) result = caseIInterfaceElement(adapterDeclaration);
 				if (result == null) result = caseINamedElement(adapterDeclaration);
 				if (result == null) result = caseConfigurableObject(adapterDeclaration);

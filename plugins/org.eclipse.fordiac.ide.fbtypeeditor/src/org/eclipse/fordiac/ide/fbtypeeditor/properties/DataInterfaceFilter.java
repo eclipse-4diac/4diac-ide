@@ -17,7 +17,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.jface.viewers.IFilter;
 
@@ -26,7 +25,7 @@ public class DataInterfaceFilter implements IFilter {
 	@Override
 	public boolean select(final Object toTest) {
 		final Object selection = InterfaceFilterSelection.getSelectableInterfaceElementOfType(toTest);
-		return (!(selection instanceof AdapterDeclaration) && (selection instanceof VarDeclaration));
+		return (selection instanceof VarDeclaration);
 	}
 
 }

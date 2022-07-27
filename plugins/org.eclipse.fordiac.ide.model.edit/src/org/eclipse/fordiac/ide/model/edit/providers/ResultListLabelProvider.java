@@ -106,7 +106,7 @@ public class ResultListLabelProvider extends LabelProvider implements IStyledLab
 	private void validateSearchString() {
 		searchString = searchString[0].split("[\\*\\?]+", -1); //$NON-NLS-1$
 		for (int i = 0; i < searchString.length; i++) {
-			searchString[i] = searchString[i].replaceAll("[^a-zA-Z0-9_]", "");  //$NON-NLS-1$//$NON-NLS-2$
+			searchString[i] = searchString[i].replaceAll("\\W", "");  //$NON-NLS-1$//$NON-NLS-2$
 		}
 	}
 

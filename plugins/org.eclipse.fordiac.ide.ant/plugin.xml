@@ -49,6 +49,30 @@
             name="fordiac.exportFolderFBs">
       </antTask>
    </extension>
+      <extension
+         point="org.eclipse.ant.core.antTasks">
+      <antTask
+            class="org.eclipse.fordiac.ide.ant.ant.ExportProjectFBsAsXMI"
+            library="ant_tasks/ant-ant.jar"
+            name="fordiac.exportProjectFBsAsXMI">
+      </antTask>
+   </extension>
+   <extension
+         point="org.eclipse.ant.core.antTasks">
+      <antTask
+            class="org.eclipse.fordiac.ide.ant.ant.ExportSingleFBAsXMI"
+            library="ant_tasks/ant-ant.jar"
+            name="fordiac.exportSingleFBAsXMI">
+      </antTask>
+   </extension>
+   <extension
+         point="org.eclipse.ant.core.antTasks">
+      <antTask
+            class="org.eclipse.fordiac.ide.ant.ant.ExportFolderFBsAsXMI"
+            library="ant_tasks/ant-ant.jar"
+            name="fordiac.exportFolderFBsAsXMI">
+      </antTask>
+   </extension>
    <extension
          point="org.eclipse.ant.core.extraClasspathEntries">
       <extraClasspathEntry

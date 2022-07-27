@@ -153,7 +153,12 @@ public final class ValueValidator {
 				return Double.isFinite(((BigDecimal) value).doubleValue());
 			}
 		} else if (value instanceof BigInteger) {
-			if (type instanceof SintType) {
+			if (type instanceof RealType) {
+				if (type instanceof LrealType) {
+					return Double.isFinite(((BigInteger) value).doubleValue());
+				}
+				return Float.isFinite(((BigInteger) value).floatValue());
+			} else if (type instanceof SintType) {
 				return checkRange((BigInteger) value, Byte.MIN_VALUE, Byte.MAX_VALUE);
 			} else if (type instanceof IntType) {
 				return checkRange((BigInteger) value, Short.MIN_VALUE, Short.MAX_VALUE);

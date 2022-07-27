@@ -93,6 +93,8 @@ public final class Messages extends NLS {
 	/** The Flatten sub app command_ labe l_ flatten sub app command. */
 	public static String FlattenSubAppCommand_LABEL_FlattenSubAppCommand;
 
+	public static String FunctionBlock;
+
 	public static String InstanceCommentEditPart_EMPTY_COMMENT;
 
 	public static String InterfaceElementSection_ConnectionGroup;
@@ -111,12 +113,18 @@ public final class Messages extends NLS {
 
 	public static String ListFBCreateCommand_FBTypeNotFound;
 
+	public static String Location;
+
 	/** The Map sub app to command_ staus message_ already mapped. */
 	public static String MapSubAppToCommand_STAUSMessage_AlreadyMapped;
 
 	public static String MapToContributionItem_No_Device;
 
 	public static String MapToContributionItem_No_FB_Or_SubApp_Selected;
+
+	public static String MapToDialog_Message;
+
+	public static String MapToDialog_Title;
 
 	public static String MonitoringEditPart_Not_Available;
 
@@ -179,7 +187,7 @@ public final class Messages extends NLS {
 
 	public static String SaveAsWizardPage_SaveAsStructType_WizardPageTitle;
 
-	public static String SaveAsWizardPage_SaveAsStructTypeReplaceDialogText;
+	public static String Scope;
 
 	public static String SearchFor;
 
@@ -212,6 +220,8 @@ public final class Messages extends NLS {
 
 	public static String PinName;
 
+	public static String ProjectScope;
+
 	public static String ToggleSubAppRepresentation_Collapse;
 
 	public static String ToggleSubAppRepresentation_Expand;
@@ -221,6 +231,8 @@ public final class Messages extends NLS {
 	public static String TypeQuery;
 
 	public static String Warning;
+
+	public static String WorkspaceScope;
 
 	static {
 		// initialize resource bundle

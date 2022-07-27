@@ -79,8 +79,12 @@ public abstract class AbstractInterpreterTest {
 	protected static FBType loadFBType(final String name) {
 		return loadFBType(name, true);
 	}
-
-	protected static FBNetwork loadFbNetwork(final String projectName, String appName) {
+	
+	protected static FBNetwork loadFbNetwork(final String projectName, String systemName) {
+		return loadFbNetwork(projectName, systemName, null);
+	}
+	
+	protected static FBNetwork loadFbNetwork(final String projectName, String systemName, final String appName) {
 		Path projectPath = new Path("data/" + projectName); //$NON-NLS-1$
 		FordiacProjectLoader loader;
 		try {
@@ -89,8 +93,12 @@ public abstract class AbstractInterpreterTest {
 			return null;
 		}
 
-		AutomationSystem system = loader.getAutomationSystem(appName);
-		return system.getApplication().get(0).getFBNetwork();
+		AutomationSystem system = loader.getAutomationSystem(systemName);
+		if (appName == null) {
+			return system.getApplication().get(0).getFBNetwork();
+		} else {
+			return system.getApplication().stream().filter(app -> app.getName().equals(appName)).findAny().orElseThrow().getFBNetwork();
+		}
 	}
 
 	protected static FBType loadFBType(final String name, final boolean emptyService) {

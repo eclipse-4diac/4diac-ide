@@ -42,6 +42,8 @@ import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.search2.internal.ui.SearchView;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 
 public class ModelSearchQuery implements ISearchQuery {
 
@@ -58,11 +60,22 @@ public class ModelSearchQuery implements ISearchQuery {
 		final List<AutomationSystem> searchRootSystems = new ArrayList<>();
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
-		for (final IProject proj : root.getProjects()) {
-			if (proj.isOpen()) {
-				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj).values());
+		if (modelQuerySpec.isCheckWorkspaceScope()) { // If it's workspace, search all
+			for (final IProject proj : root.getProjects()) {
+				if (proj.isOpen()) {
+					searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj).values());
+				}
 			}
+		} else {
+			Display.getDefault().syncExec(() -> {
+				final IEditorPart openEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+						.getActiveEditor();
+				final IProject project = openEditor.getAdapter(FBNetwork.class).getAutomationSystem().getTypeLibrary()
+						.getProject();
+				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(project).values());
+			});
 		}
+
 		for (final AutomationSystem sys : searchRootSystems) {
 			searchApplications(sys);
 			searchResources(sys);
@@ -75,13 +88,13 @@ public class ModelSearchQuery implements ISearchQuery {
 		return Status.OK_STATUS;
 	}
 
-	private void searchApplications(final AutomationSystem sys) {
+	public void searchApplications(final AutomationSystem sys) {
 		for (final Application app : sys.getApplication()) {
 			searchApplication(app);
 		}
 	}
 
-	private void searchApplication(final Application app) {
+	public void searchApplication(final Application app) {
 		if (matchEObject(app)) {
 			searchResult.addResult(app);
 		}

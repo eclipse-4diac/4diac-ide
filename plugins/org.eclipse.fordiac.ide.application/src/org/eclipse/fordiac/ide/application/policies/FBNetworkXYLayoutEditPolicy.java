@@ -66,6 +66,11 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 				|| (child.getModel() instanceof SubApp && ((SubApp) child.getModel()).isUnfolded())) {
 			return new ContainerResizePolicy();
 		}
+
+		if (child.getModel() instanceof FBNetworkElement) {
+			return new FBNetworkElementNonResizeableEP();
+		}
+
 		return new ModifiedNonResizeableEditPolicy();
 	}
 

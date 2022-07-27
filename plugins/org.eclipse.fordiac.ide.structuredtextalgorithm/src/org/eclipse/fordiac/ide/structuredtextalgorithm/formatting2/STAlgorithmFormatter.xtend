@@ -30,6 +30,11 @@ class STAlgorithmFormatter extends STCoreFormatter {
 	@Inject extension STAlgorithmGrammarAccess
 
 	def dispatch void format(STAlgorithmSource sTAlgorithmSource, extension IFormattableDocument document) {
+		val regions = textRegionAccess.regionForRootEObject.allSemanticRegions;
+		regions.forEach [
+			it.append[autowrap]
+		]
+
 		sTAlgorithmSource.allSemanticRegions.filter [
 			switch (element : grammarElement) {
 				Keyword case element.value.matches("[_a-zA-Z]+"): true
@@ -66,7 +71,14 @@ class STAlgorithmFormatter extends STCoreFormatter {
 
 	def dispatch void format(STMethod sTMethod, extension IFormattableDocument document) {
 		sTMethod.regionFor.keyword("METHOD").prepend[noIndentation].append[oneSpace]
-		sTMethod.regionFor.assignment(STMethodAccess.nameAssignment_1).append[setNewLines(1, 1, 2)]
+		if (sTMethod.returnType !== null) {
+			sTMethod.regionFor.keyword(STMethodAccess.colonKeyword_2_0).surround[oneSpace]
+			sTMethod.regionFor.assignment(STMethodAccess.returnTypeAssignment_2_1).append [
+				setNewLines(1, 1, 2)
+			]
+		} else {
+			sTMethod.regionFor.assignment(STMethodAccess.nameAssignment_1).append[setNewLines(1, 1, 2)]
+		}
 		sTMethod.regionFor.keyword("END_METHOD").prepend[noIndentation].append[setNewLines(2, 2, 2)]
 
 		sTMethod.body.format

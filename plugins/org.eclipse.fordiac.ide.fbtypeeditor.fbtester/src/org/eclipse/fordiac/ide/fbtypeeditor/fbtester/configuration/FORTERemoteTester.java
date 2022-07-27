@@ -273,7 +273,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 			for (final Port p : fb.getPorts()) {
 				for (final Data d : p.getDataValues()) {
 					final TestElement element = testElements.get(res.getName() + "." + fb.getName() //$NON-NLS-1$
-							+ "." + p.getName()); //$NON-NLS-1$
+					+ "." + p.getName()); //$NON-NLS-1$
 					if (element != null) {
 						element.updateValue(d.getValue(), 0);
 					}
@@ -300,13 +300,11 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 	 * @param element */
 	@Override
 	public void sendEvent(final TestElement element) {
-		if (isRunning()) {
-			if (element != null) {
-				try {
-					testDeploymentExecutor.sendEvent(element);
-				} catch (final DeploymentException e) {
-					FordiacLogHelper.logError(e.getMessage(), e);
-				}
+		if (isRunning() && (element != null)) {
+			try {
+				testDeploymentExecutor.sendEvent(element);
+			} catch (final DeploymentException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 	}

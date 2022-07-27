@@ -432,6 +432,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 	}
 
 	override ITextReplacer createCommentReplacer(IComment comment) {
+		val tabWidth = getPreference(FormatterPreferenceKeys.tabWidth);
 		var grammarElement = comment.getGrammarElement()
 		if (grammarElement instanceof AbstractRule) {
 			val ruleName = grammarElement.getName()
@@ -457,6 +458,10 @@ class STCoreFormatter extends AbstractFormatter2 {
 							val region = access.regionForOffset(comment.offset, comment.length)
 							commentReplacementContext(context, region, ruleName)
 						}
+
+						override configureWhitespace(WhitespaceReplacer leading, WhitespaceReplacer trailing) {
+							leading.formatting.setSpace(" ".repeat(tabWidth))
+						}
 					}
 				else
 					return new SinglelineCodeCommentReplacer(comment, "//") {
@@ -464,6 +469,10 @@ class STCoreFormatter extends AbstractFormatter2 {
 							var ITextRegionAccess access = comment.getTextRegionAccess();
 							val region = access.regionForOffset(comment.offset, comment.length)
 							commentReplacementContext(context, region, ruleName)
+						}
+
+						override configureWhitespace(WhitespaceReplacer leading, WhitespaceReplacer trailing) {
+							leading.formatting.setSpace(" ".repeat(tabWidth))
 						}
 					}
 			}

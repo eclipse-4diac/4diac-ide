@@ -52,9 +52,10 @@ public final class ECCContentAndLabelProvider {
 			events.addAll(type.getInterfaceList().getEventOutputs());
 			type.getInterfaceList().getSockets().stream().filter(socket -> (null != socket.getType()))
 			.forEach(socket -> events.addAll(
-					createAdapterEventList(socket.getType().getInterfaceList().getEventInputs(), socket)));
+							createAdapterEventList(socket.getAdapterType().getInterfaceList().getEventInputs(),
+									socket)));
 			type.getInterfaceList().getPlugs().stream().filter(plug -> (null != plug.getType())).forEach(plug -> events
-					.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventOutputs(), plug)));
+					.addAll(createAdapterEventList(plug.getAdapterType().getInterfaceList().getEventOutputs(), plug)));
 			Collections.sort(events, NamedElementComparator.INSTANCE);
 		}
 
@@ -73,10 +74,12 @@ public final class ECCContentAndLabelProvider {
 			transitionConditions.addAll(type.getInterfaceList().getEventInputs());
 			type.getInterfaceList().getSockets().stream().filter(socket -> (null != socket.getType()))
 			.forEach(socket -> transitionConditions.addAll(
-					createAdapterEventList(socket.getType().getInterfaceList().getEventOutputs(), socket)));
+							createAdapterEventList(socket.getAdapterType().getInterfaceList().getEventOutputs(),
+									socket)));
 			type.getInterfaceList().getPlugs().stream().filter(plug -> (null != plug.getType()))
 			.forEach(plug -> transitionConditions
-					.addAll(createAdapterEventList(plug.getType().getInterfaceList().getEventInputs(), plug)));
+							.addAll(createAdapterEventList(plug.getAdapterType().getInterfaceList().getEventInputs(),
+									plug)));
 			Collections.sort(transitionConditions, NamedElementComparator.INSTANCE);
 		}
 		return transitionConditions;

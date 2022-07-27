@@ -39,12 +39,6 @@ public class InitialNameGroup extends Composite {
 
 	private boolean blockListeners = false;
 
-	private final Listener applicationNameModifyListener = e -> {
-		if (!blockListeners) {
-			nameManuallyChanged = true;
-		}
-	};
-
 	public InitialNameGroup(final Composite parent, final String labelText) {
 		super(parent, SWT.NONE);
 		final GridLayout layout = new GridLayout();
@@ -61,7 +55,11 @@ public class InitialNameGroup extends Composite {
 		final GridData data = new GridData(GridData.FILL_HORIZONTAL);
 		name.setLayoutData(data);
 		name.setFont(parent.getFont());
-		name.addListener(SWT.Modify, applicationNameModifyListener);
+		name.addListener(SWT.Modify, e -> {
+			if (!blockListeners) {
+				nameManuallyChanged = true;
+			}
+		});
 	}
 
 	public String getInitialName() {

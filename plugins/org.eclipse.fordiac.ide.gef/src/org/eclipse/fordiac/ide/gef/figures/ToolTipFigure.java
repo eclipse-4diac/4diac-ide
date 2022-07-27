@@ -20,6 +20,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
@@ -40,14 +41,14 @@ public class ToolTipFigure extends Figure {
 	 * @param element the element
 	 */
 	public ToolTipFigure(final INamedElement element) {
-		ToolbarLayout mainLayout = new ToolbarLayout(false);
+		final ToolbarLayout mainLayout = new ToolbarLayout(false);
 		setLayoutManager(mainLayout);
 		mainLayout.setStretchMinorAxis(true);
 
 		String nameLine = element.getName();
 
-		if ((element instanceof VarDeclaration) && (((VarDeclaration) element).getType() != null)) {
-			nameLine += " - " + ((VarDeclaration) element).getType().getName(); //$NON-NLS-1$
+		if ((element instanceof IInterfaceElement) && (((IInterfaceElement) element).getType() != null)) {
+			nameLine += " - " + ((IInterfaceElement) element).getType().getName(); //$NON-NLS-1$
 		}
 
 		add(new Label(nameLine));
@@ -55,7 +56,7 @@ public class ToolTipFigure extends Figure {
 		line = new VerticalLineCompartmentFigure();
 		add(line);
 
-		String comment = element.getComment();
+		final String comment = element.getComment();
 		if ((comment != null) && (!comment.isEmpty())) {
 			line.add(new Label(comment));
 		}
@@ -70,12 +71,12 @@ public class ToolTipFigure extends Figure {
 		return line;
 	}
 
-	private void addWiths(Event element) {
-		List<With> withs = element.getWith();
+	private void addWiths(final Event element) {
+		final List<With> withs = element.getWith();
 		if (!withs.isEmpty()) {
 			boolean first = true;
-			StringBuilder withText = new StringBuilder(FordiacMessages.With + ": ["); //$NON-NLS-1$
-			for (With with : withs) {
+			final StringBuilder withText = new StringBuilder(FordiacMessages.With + ": ["); //$NON-NLS-1$
+			for (final With with : withs) {
 				if (first) {
 					first = false;
 				} else {
@@ -91,8 +92,8 @@ public class ToolTipFigure extends Figure {
 
 	}
 
-	private void addVarDefaultValue(VarDeclaration variable) {
-		VarDeclaration typeVar = getTypevariable(variable);
+	private void addVarDefaultValue(final VarDeclaration variable) {
+		final VarDeclaration typeVar = getTypevariable(variable);
 		if (null != typeVar && null != typeVar.getValue()) {
 			String initvalue = FordiacMessages.InitialValue + ": "; //$NON-NLS-1$
 			if (!typeVar.getValue().getValue().isEmpty()) {
@@ -102,11 +103,11 @@ public class ToolTipFigure extends Figure {
 		}
 	}
 
-	private static VarDeclaration getTypevariable(VarDeclaration variable) {
+	private static VarDeclaration getTypevariable(final VarDeclaration variable) {
 		if (variable.eContainer() instanceof Device) {
-			Device dev = (Device) variable.eContainer();
+			final Device dev = (Device) variable.eContainer();
 			if (null != dev.getType()) {
-				for (VarDeclaration typeVar : dev.getType().getVarDeclaration()) {
+				for (final VarDeclaration typeVar : dev.getType().getVarDeclaration()) {
 					if (typeVar.getName().equals(variable.getName())) {
 						return typeVar;
 					}

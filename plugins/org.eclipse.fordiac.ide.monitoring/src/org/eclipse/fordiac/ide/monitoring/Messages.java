@@ -20,6 +20,8 @@ public final class Messages extends NLS {
 	public static String MonitoringManagerUtils_NoSubappAnchor;
 	public static String MonitoringManagerUtils_SelectionFilteringActive;
 	public static String MonitoringManagerUtils_SelectionFilteringForce;
+	public static String MonitoringManagerUtils_ExpandAll;
+	public static String MonitoringManagerUtils_CollapseAll;
 
 	public static String MonitoringPreferences_WatchColor;
 	public static String MonitoringPreferences_ForceColor;
@@ -41,7 +43,7 @@ public final class Messages extends NLS {
 	public static String MonitoringWatchesView_ClearForce;
 	public static String MonitoringWatchesView_ForceValue;
 	public static String MonitoringWatchesView_TriggerEvent;
-	
+
 	public static String StructForceDialog_Title;
 	public static String StructForceDialog_Force_Button_Text;
 

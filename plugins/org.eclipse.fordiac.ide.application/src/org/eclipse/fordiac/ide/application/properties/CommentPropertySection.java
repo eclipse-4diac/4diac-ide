@@ -26,10 +26,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.CellEditor;
@@ -42,6 +44,8 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -51,7 +55,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class CommentPropertySection extends AbstractSection {
+public class CommentPropertySection extends AbstractSection implements I4diacTableUtil {
 
 	private static final int ONE_COLUMN = 1;
 	private static final int TWO_COLUMNS = 2;
@@ -68,6 +72,8 @@ public class CommentPropertySection extends AbstractSection {
 
 	private CommentLabelProvider commentLabelProvider;
 	private InitialValueColumLabelProvider initialValueLabelProvider;
+	
+	private boolean isInputsViewer;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -79,6 +85,8 @@ public class CommentPropertySection extends AbstractSection {
 		createTableSection(parent);
 		configureTableViewer(inputCommentsViewer, new InputViewerContentProvider());
 		configureTableViewer(outputCommentsViewer, new OutputViewerContentProvider());
+		setFocusListeners();
+		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
 	}
 
 	@Override
@@ -92,6 +100,35 @@ public class CommentPropertySection extends AbstractSection {
 			outputCommentsViewer.setInput(getType());
 			commandStack = commandStackBuffer;
 		}
+	}
+	
+	private void setFocusListeners() {
+		outputCommentsViewer.getTable().addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(final FocusEvent e) {
+				isInputsViewer = false;
+			}
+
+			@Override
+			public void focusLost(final FocusEvent e) {
+				// Nothing to do
+			}
+
+		});
+		inputCommentsViewer.getTable().addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(final FocusEvent e) {
+				isInputsViewer = true;
+			}
+
+			@Override
+			public void focusLost(final FocusEvent e) {
+				// Nothing to do
+			}
+
+		});
 	}
 
 	private void configureTableViewer(final TableViewer tableViewer,
@@ -304,5 +341,28 @@ public class CommentPropertySection extends AbstractSection {
 
 	}
 
+	@Override
+	public TableViewer getViewer() {
+		return isInputsViewer ? inputCommentsViewer : outputCommentsViewer;
+	}
+	
+	// NOTE These methods are supposed to work for table rows, but here we use them for single cells.
+	//		An inconsistency that will be redressed once the new copy/paste handling has been approved.
+
+	@Override
+	public void addEntry(Object entry, int index, CompoundCommand cmd) {
+		// nothing to do here
+	}
+
+	@Override
+	public Object removeEntry(int index, CompoundCommand cmd) {
+		// nothing to do here
+		return null;
+	}
+
+	@Override
+	public void executeCompoundCommand(CompoundCommand cmd) {
+		commandStack.execute(cmd);
+	}
 
 }

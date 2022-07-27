@@ -88,9 +88,10 @@ public class SpiderChartBFBMeasures extends AbstractCodeMetricAnalyzer {
 		count += interfaceList.getOutputVars().size();
 		count += interfaceList.getEventInputs().size();
 		count += interfaceList.getEventOutputs().size();
-		interfaceList.getPlugs().forEach(plug -> adpCount[0] += countInterfaceElements(plug.getType().getInterfaceList()));
+		interfaceList.getPlugs()
+				.forEach(plug -> adpCount[0] += countInterfaceElements(plug.getAdapterType().getInterfaceList()));
 		interfaceList.getSockets()
-		.forEach(socket -> adpCount[0] += countInterfaceElements(socket.getType().getInterfaceList()));
+				.forEach(socket -> adpCount[0] += countInterfaceElements(socket.getAdapterType().getInterfaceList()));
 		count += adpCount[0];
 		return count;
 	}

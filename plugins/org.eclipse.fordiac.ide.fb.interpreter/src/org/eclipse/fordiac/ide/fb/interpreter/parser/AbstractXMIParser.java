@@ -8,7 +8,7 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Antonio Garmendía, Bianca Wiesmayr
+ *   Antonio Garmendï¿½a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.parser;
@@ -40,7 +40,7 @@ public abstract class AbstractXMIParser {
 		this.resourceSet = (XtextResourceSet) SERVICE_PROVIDER.get(ResourceSet.class);
 	}
 
-	protected AbstractXMIParser(XtextResourceSet resourceSet) {
+	protected AbstractXMIParser(final XtextResourceSet resourceSet) {
 		this.resourceSet = resourceSet;
 	}
 
@@ -48,7 +48,7 @@ public abstract class AbstractXMIParser {
 
 	protected abstract Resource createFBResource(BasicFBType fbType);
 
-	protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
+	protected URI computeUnusedUri(final ResourceSet resourceSet, final String fileExtension) {
 		for (int i = 0; i < Integer.MAX_VALUE; i++) {
 			final var syntheticUri = URI.createURI(SYNTHETIC_URI_NAME + i + URI_SEPERATOR + fileExtension); // $NON-NLS-1$
 			if (resourceSet.getResource(syntheticUri, false) == null) {
@@ -58,12 +58,12 @@ public abstract class AbstractXMIParser {
 		throw new IllegalStateException("Cannot compute the URI"); //$NON-NLS-1$
 	}
 
-	protected void createAdapterResource(XtextResourceSet resourceSet, AdapterDeclaration adapter) {
+	protected void createAdapterResource(final XtextResourceSet resourceSet, final AdapterDeclaration adapter) {
 		final var adapterResource = resourceSet.createResource(computeUnusedUri(resourceSet, FB_URI_EXTENSION));
-		adapterResource.getContents().add(adapter.getType().getAdapterFBType());
+		adapterResource.getContents().add(adapter.getAdapterType().getAdapterFBType());
 	}
 
-	protected void createStructResource(XtextResourceSet resourceSet, VarDeclaration variable) {
+	protected void createStructResource(final XtextResourceSet resourceSet, final VarDeclaration variable) {
 		if (variable.getType() instanceof StructuredType) {
 			final var structResource = resourceSet.createResource(computeUnusedUri(resourceSet, FB_URI_EXTENSION));
 			final var type = (StructuredType) variable.getType();

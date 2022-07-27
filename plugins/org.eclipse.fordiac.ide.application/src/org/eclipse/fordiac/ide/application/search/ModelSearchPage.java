@@ -26,6 +26,7 @@ import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -36,6 +37,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 	public static final String EXTENSION_POINT_ID = "org.eclipse.fordiac.ide.application.search.ModelSearchPage"; //$NON-NLS-1$
 	public static final String ID = "ModelSearchPage"; //$NON-NLS-1$
 	public static final int NUMBER_OF_SEARCH_OPTIONS = 4;
+	public static final int NUMBER_OF_SCOPES = 2;
 
 	private ISearchPageContainer container;
 	private Button instanceName;
@@ -45,6 +47,8 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 	private Text query;
 	private Button caseSensitive;
 	private Button exactNameMatching;
+	private Button workspaceScope;
+	private Button projectScope;
 
 	public Button getInstanceName() {
 		return instanceName;
@@ -107,6 +111,19 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		exactNameMatching = WidgetFactory.button(SWT.CHECK).text(Messages.ExactNameMatching)
 				.create(composite);
 
+		final Group radioButtonScope = new Group(composite, SWT.NONE);
+		radioButtonScope.setLayout(new RowLayout(SWT.HORIZONTAL));
+		radioButtonScope.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
+		radioButtonScope.setLayout(new GridLayout(NUMBER_OF_SCOPES, false));
+		radioButtonScope.setText(Messages.Scope);
+
+		projectScope = new Button(radioButtonScope, SWT.RADIO);
+		projectScope.setText(Messages.ProjectScope);
+
+		workspaceScope = new Button(radioButtonScope, SWT.RADIO);
+		workspaceScope.setText(Messages.WorkspaceScope);
+		workspaceScope.setEnabled(true); // This is the default
+
 		setControl(composite);
 	}
 
@@ -119,6 +136,9 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		final boolean isCheckedComment = comment.getSelection();
 		final boolean isCaseSensitive = caseSensitive.getSelection();
 		final boolean isExactNameMatching = exactNameMatching.getSelection();
+		// Where to look for it
+		final boolean isWorkspaceScope = workspaceScope.getSelection();
+		final boolean isProjectScope = projectScope.getSelection();
 
 		// Search string aka the name of it
 		final String searchString = query.getText();
@@ -128,7 +148,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		if (!"".equals(searchString) && optionSelected) { //$NON-NLS-1$
 
 			final ModelQuerySpec modelQuerySpec = new ModelQuerySpec(searchString, isCheckedInstanceName,
-					isCheckedPinName, isCheckedType, isCheckedComment, isCaseSensitive, isExactNameMatching);
+					isCheckedPinName, isCheckedType, isCheckedComment, isCaseSensitive, isExactNameMatching, isWorkspaceScope, isProjectScope);
 
 			final ModelSearchQuery searchJob = new ModelSearchQuery(modelQuerySpec);
 			NewSearchUI.runQueryInBackground(searchJob, NewSearchUI.getSearchResultView());

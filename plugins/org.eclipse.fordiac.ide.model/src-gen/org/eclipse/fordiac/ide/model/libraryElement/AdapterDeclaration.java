@@ -35,7 +35,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
  * @model
  * @generated
  */
-public interface AdapterDeclaration extends VarDeclaration {
+public interface AdapterDeclaration extends IInterfaceElement {
 	/**
 	 * Returns the value of the '<em><b>Adapter FB</b></em>' reference.
 	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl <em>Adapter Decl</em>}'.
@@ -88,6 +88,6 @@ public interface AdapterDeclaration extends VarDeclaration {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	AdapterType getType();
+	AdapterType getAdapterType();
 
 } // AdapterDeclaration

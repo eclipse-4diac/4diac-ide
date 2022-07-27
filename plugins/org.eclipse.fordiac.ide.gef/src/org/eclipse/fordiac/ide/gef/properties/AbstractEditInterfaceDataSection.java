@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -122,7 +121,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
-		if ((entry instanceof VarDeclaration) && !(entry instanceof AdapterDeclaration)) {
+		if (entry instanceof VarDeclaration) {
 			cmd.add(newInsertCommand((IInterfaceElement) entry, isInputsViewer(), index));
 		}
 	}

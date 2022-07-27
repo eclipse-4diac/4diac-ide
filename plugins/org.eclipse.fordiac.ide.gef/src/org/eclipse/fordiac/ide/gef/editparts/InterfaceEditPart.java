@@ -451,7 +451,7 @@ implements NodeEditPart, IDeactivatableConnectionHandleRoleEditPart {
 		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 				|| (request.getType() == RequestConstants.REQ_OPEN)) {
 			final ValueEditPart part = getReferencedValueEditPart();
-			if ((part != null) && (isVariable()) && (!(getModel() instanceof AdapterDeclaration))) {
+			if ((part != null) && (isVariable())) {
 				part.performRequest(request);
 			}
 		} else {

@@ -12,16 +12,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval
 
-import java.lang.ThreadGroup
-import org.eclipse.xtend.lib.annotations.Accessors
-import org.eclipse.xtend.lib.annotations.AccessorType
-import java.util.concurrent.ConcurrentHashMap
+import java.time.Clock
 import java.util.Set
+import java.util.concurrent.ConcurrentHashMap
+import org.eclipse.xtend.lib.annotations.Accessors
 
 class EvaluatorThreadGroup extends ThreadGroup {
-	@Accessors(AccessorType.PUBLIC_GETTER) EvaluatorDebugger debugger = DefaultEvaluatorDebugger.INSTANCE
+	@Accessors(PUBLIC_GETTER) EvaluatorDebugger debugger = DefaultEvaluatorDebugger.INSTANCE
 	@Accessors final Set<EvaluatorMonitor> monitorSet = ConcurrentHashMap.newKeySet
-	
+	@Accessors Clock clock = AbstractEvaluator.MonotonicClock.UTC
+
 	new(String name) {
 		super(name)
 		daemon = true

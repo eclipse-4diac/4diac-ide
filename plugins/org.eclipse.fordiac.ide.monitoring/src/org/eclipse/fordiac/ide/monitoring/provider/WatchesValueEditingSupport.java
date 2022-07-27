@@ -66,7 +66,7 @@ public class WatchesValueEditingSupport extends EditingSupport {
 							ie.getType())) {
 				return WatchValueTreeNodeUtils.decorateHexNumber(value);
 			}
-			return WatchValueTreeNodeUtils.decorateInitialCellValue(ie.getType(), value);
+			return WatchValueTreeNodeUtils.decorateCellValue(ie.getType(), value);
 		}
 		return ""; //$NON-NLS-1$
 	}

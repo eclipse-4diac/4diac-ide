@@ -36,7 +36,7 @@ public class ExportFBs extends Task {
 	protected String exportDirectory = ANT_EXPORT_TASK_DIRECTORY_NAME;
 	protected boolean exportCMakeList = false;
 	protected IWorkspace workspace;
-	protected IProject project;
+	private IProject fordiacProject;
 
 	public void setProjectName(final String value) {
 		projectNameString = value;
@@ -58,8 +58,8 @@ public class ExportFBs extends Task {
 		}
 
 		workspace = ResourcesPlugin.getWorkspace();
-		project = workspace.getRoot().getProject(projectNameString);
-		if (project == null) {
+		fordiacProject = workspace.getRoot().getProject(projectNameString);
+		if (fordiacProject == null) {
 			throw new BuildException("Project named '" + projectNameString + "' not in workspace in Workspace");//$NON-NLS-1$ //$NON-NLS-2$
 		}
 
@@ -96,31 +96,34 @@ public class ExportFBs extends Task {
 			if (!folder.exists()) {
 				folder.mkdir();
 			}
-
-			for (final File file : files) {
-
-				final IPath location = Path.fromOSString(file.getAbsolutePath());
-				final IFile ifile = workspace.getRoot().getFileForLocation(location);
-				System.out.println(ifile.getLocation().toString());
-
-				try {
-					filter.export(ifile, folder.getPath(), true);
-					if (exportCMakeList) {
-						filter.export(null, folder.getPath(), true, new CMakeListsMarker());
-					}
-
-					if (!filter.getErrors().isEmpty()) {
-						for (final String error : filter.getErrors()) {
-							System.out.println(error);
-						}
-						throw new BuildException("Could not export without errors");
-					}
-
-				} catch (final ExportException e) {
-					throw new BuildException("Could not export: " + e.getMessage());//$NON-NLS-1$
-				}
-			}
+			files.forEach(file -> exportFile(filter, folder, file));
 		}
+	}
+
+	private void exportFile(final ForteNgExportFilter filter, final File folder, final File file) {
+		final IPath location = Path.fromOSString(file.getAbsolutePath());
+		final IFile ifile = workspace.getRoot().getFileForLocation(location);
+
+		try {
+			filter.export(ifile, folder.getPath(), true);
+			if (exportCMakeList) {
+				filter.export(null, folder.getPath(), true, new CMakeListsMarker());
+			}
+
+			if (!filter.getErrors().isEmpty()) {
+				for (final String error : filter.getErrors()) {
+					log(error);
+				}
+				throw new BuildException("Could not export without errors"); //$NON-NLS-1$
+			}
+
+		} catch (final ExportException e) {
+			throw new BuildException("Could not export: " + e.getMessage(), e);//$NON-NLS-1$
+		}
+	}
+
+	protected IProject getFordiacProject() {
+		return fordiacProject;
 	}
 
 }

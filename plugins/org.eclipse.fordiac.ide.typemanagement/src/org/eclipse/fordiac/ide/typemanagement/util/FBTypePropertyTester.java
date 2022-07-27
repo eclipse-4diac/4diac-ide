@@ -21,9 +21,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public class FBTypePropertyTester extends PropertyTester {
 
-	public FBTypePropertyTester() {
-	}
-
 	@Override
 	public boolean test(final Object receiver, final String property, final Object[] args, final Object expectedValue) {
 		if (receiver instanceof IFile) {

@@ -51,6 +51,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.LayerConstants;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -479,6 +480,22 @@ public abstract class EditorWithInterfaceEditPart extends AbstractFBNetworkEditP
 	@Override
 	public DragTracker getDragTracker(final Request req) {
 		return getParent().getDragTracker(req);
+	}
+
+	@Override
+	public void refresh() {
+		super.refresh();
+		for (final Object ep : getChildren()) {
+			if (ep instanceof IContainerEditPart) {
+				final IContainerEditPart container = (IContainerEditPart) ep;
+				final GraphicalEditPart contentEP = container.getContentEP();
+				container.refresh();
+				// unfolded subapps and groups do have a content network
+				if (contentEP != null) {
+					contentEP.refresh();
+				}
+			}
+		}
 	}
 
 }
