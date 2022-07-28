@@ -38,6 +38,10 @@ public final class PreferenceConstants {
 
 	public static final Boolean P_MONITORING_STARTMONITORINGWITHOUTASKING_VALUE = false;
 
+	public static final String P_MONITORING_WRITEBACKONLINEVALUES = "writeBackOnlineValue"; //$NON-NLS-1$
+
+	public static final Boolean P_MONITORING_WRITEBACKONLINEVALUES_VALUE = false;
+
 	public static int getPollingInterval() {
 		int timeout = Activator.getDefault().getPreferenceStore().getInt(PreferenceConstants.P_POLLING_INTERVAL);
 		if (0 == timeout) {

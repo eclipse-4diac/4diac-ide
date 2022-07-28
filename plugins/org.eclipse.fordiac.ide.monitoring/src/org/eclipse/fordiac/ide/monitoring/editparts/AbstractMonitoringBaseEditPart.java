@@ -60,7 +60,7 @@ import org.eclipse.swt.graphics.FontMetrics;
 
 public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPart implements SpecificLayerEditPart {
 
-	private InterfaceEditPart parentPart;
+	protected InterfaceEditPart parentPart;
 	private final List<EObject> fBnetworks = new ArrayList<>();
 	public static final int MONITORING_VALUE_LR_MARGIN = 5;
 

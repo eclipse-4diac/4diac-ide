@@ -60,6 +60,11 @@ public class MonitoringPreferences extends FieldEditorPreferencePage implements 
 		monitoringTransparency.setValidRange(100, 255);
 		addField(monitoringTransparency);
 
+		final BooleanFieldEditor writeBackOnlineValue = new BooleanFieldEditor(
+				PreferenceConstants.P_MONITORING_WRITEBACKONLINEVALUES,
+				Messages.MonitoringPreferences_WriteBackOnlineValues, getFieldEditorParent());
+		addField(writeBackOnlineValue);
+
 		final BooleanFieldEditor dontAskAgain = new BooleanFieldEditor(
 				PreferenceConstants.P_MONITORING_STARTMONITORINGWITHOUTASKING,
 				Messages.MonitoringPreferences_StartMonitoringWithoutAsking, getFieldEditorParent());
