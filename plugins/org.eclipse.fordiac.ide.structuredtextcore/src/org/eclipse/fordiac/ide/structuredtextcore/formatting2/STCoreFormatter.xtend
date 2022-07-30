@@ -65,6 +65,7 @@ import org.eclipse.xtext.formatting2.regionaccess.ITextSegment
 import org.eclipse.xtext.grammaranalysis.impl.GrammarElementTitleSwitch
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage.Literals.*
+import java.util.ArrayList
 
 class STCoreFormatter extends AbstractFormatter2 {
 
@@ -493,18 +494,25 @@ class STCoreFormatter extends AbstractFormatter2 {
 		val commentLineLength = maxLineWidth - lengthBeforeComment - (isML ? 6 : 3)
 
 		val commentString = if (isML)
-				region.text.replaceFirst("^[(/]\\*", "").replaceFirst("\\*[)/]$", "").replaceAll("(?m)^\\s*\\* ", "").
-					replaceAll("\\s+", " ").trim
+				region.text.replaceFirst("^[(/]\\*", "").replaceFirst("\\*[)/]$", "").replaceAll(
+					"(?m)^[\\s&&[^\r\n]]*\\* ", "").replaceAll("[\\s&&[^\r\n]]+", " ").trim
 			else
 				region.text.replaceFirst("^//", "").replaceFirst("\n$", "").replaceAll("\\s+", " ").trim
 
-		val pattern = Pattern.compile("\\s*(?:(\\S{" + commentLineLength + "})|([\\s\\S]{1," + commentLineLength +
-			"})(?!\\S))");
-		val matcher = pattern.matcher(commentString);
+		val pattern = Pattern.compile(
+			"[\\s&&[^\r\n]]*(?:(\\S{" + commentLineLength + "})|([[\\s&&[^\r\n]]\\S]{1," + commentLineLength +
+				"}(?!\\S)[\r\n]*))");
+		val matcher = pattern.matcher(commentString)
 
-		val replacement = (isML ? "(" : "") + matcher.replaceAll [ m |
-			(isML ? spaceBeforeComment : "") + (isML ? " * " : "// ") + (m.group(1) ?: m.group(2)) + lineSeparator
+		var replacement = (isML ? "(" : "") + matcher.replaceAll [ m |
+			var g = m.group(1) ?: m.group(2)
+			(isML ? spaceBeforeComment : "") + (isML ? " * " : "// ") + (
+				g
+			) + (g.indexOf(lineSeparator) === -1 ? lineSeparator : "")
 		].trim + (isML ? " *)" : lineSeparator);
+
+		replacement = replacement.replaceAll(lineSeparator + "(?=" + lineSeparator + ")",
+			lineSeparator + spaceBeforeComment + " * ")
 
 		context.addReplacement(region.replaceWith(replacement))
 
