@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2018 Johannes Kepler University
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -41,26 +41,26 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 	@Override
 	public void connect() throws DeploymentException {
 		commHandler.connect(DeploymentHelper.getMgrID(device));
-		for (IDeploymentListener listener : listeners) {
-			listener.connectionOpened();
+		for (final IDeploymentListener listener : listeners) {
+			listener.connectionOpened(device);
 		}
 	}
 
 	@Override
 	public void disconnect() throws DeploymentException {
 		commHandler.disconnect();
-		for (IDeploymentListener listener : listeners) {
-			listener.connectionClosed();
+		for (final IDeploymentListener listener : listeners) {
+			listener.connectionClosed(device);
 		}
 	}
 
-	public synchronized String sendREQ(String destination, String request) throws IOException {
-		String response = commHandler.sendREQ(destination, request);
-		for (IDeploymentListener listener : listeners) {
+	public synchronized String sendREQ(final String destination, final String request) throws IOException {
+		final String response = commHandler.sendREQ(destination, request);
+		for (final IDeploymentListener listener : listeners) {
 			listener.postCommandSent(commHandler.getInfo(destination), destination, request); // do something with info
 		}
 		if (0 != response.length()) {
-			for (IDeploymentListener listener : listeners) {
+			for (final IDeploymentListener listener : listeners) {
 				listener.postResponseReceived(response, destination);
 			}
 		}
@@ -81,7 +81,7 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 		}
 	}
 
-	protected AbstractDeviceManagementInteractor(Device dev, IDeviceManagementCommunicationHandler overrideHandler) {
+	protected AbstractDeviceManagementInteractor(final Device dev, final IDeviceManagementCommunicationHandler overrideHandler) {
 		this.device = dev;
 		resetTypes();
 		this.commHandler = (null != overrideHandler) ? overrideHandler : createCommunicationHandler(dev);
@@ -95,7 +95,7 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 		return fbTypes;
 	}
 
-	protected void setTypes(Set<String> types) {
+	protected void setTypes(final Set<String> types) {
 		fbTypes = (null != types) ? types : Collections.emptySet();
 	}
 
@@ -103,7 +103,7 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 		return adapterTypes;
 	}
 
-	protected void setAdapterTypes(Set<String> types) {
+	protected void setAdapterTypes(final Set<String> types) {
 		adapterTypes = (null != types) ? types : Collections.emptySet();
 	}
 
@@ -114,7 +114,7 @@ public abstract class AbstractDeviceManagementInteractor implements IDeviceManag
 
 	/**
 	 * create a device managment communication handler suitable for the given device
-	 * 
+	 *
 	 * @param dev the device to be checked
 	 * @return the created handler
 	 */
