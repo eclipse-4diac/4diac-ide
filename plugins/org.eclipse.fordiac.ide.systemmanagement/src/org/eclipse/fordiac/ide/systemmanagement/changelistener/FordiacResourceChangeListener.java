@@ -477,7 +477,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			if (null != entry) {
 				srcTypeLib.removeTypeEntry(entry);
 				entry.setFile(dst);
-				final TypeLibrary dstTypeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(src.getProject());
+				final TypeLibrary dstTypeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(dst.getProject());
 				dstTypeLib.addTypeEntry(entry);
 			}
 		}
