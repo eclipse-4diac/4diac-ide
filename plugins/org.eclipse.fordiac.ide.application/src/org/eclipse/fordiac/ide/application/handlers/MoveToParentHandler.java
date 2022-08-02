@@ -22,7 +22,6 @@ import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.getCommandS
 import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.getFBNetwork;
 import static org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper.openEditor;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -32,7 +31,6 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -41,7 +39,6 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.ui.IEditorPart;
@@ -56,7 +53,7 @@ public class MoveToParentHandler extends AbstractHandler {
 
 		if (null != editor) {
 			final ISelection selection = HandlerUtil.getCurrentSelection(event);
-			final List<FBNetworkElement> fbelements = getSelectedFBNElements(selection);
+			final List<FBNetworkElement> fbelements = HandlerHelper.getSelectedFBNElements(selection);
 
 			if (!fbelements.isEmpty()) {
 				final Rectangle bounds = getParentSubappBounds(editor, fbelements);
@@ -105,7 +102,7 @@ public class MoveToParentHandler extends AbstractHandler {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 
-		final List<FBNetworkElement> fbelements = getSelectedFBNElements(selection);
+		final List<FBNetworkElement> fbelements = HandlerHelper.getSelectedFBNElements(selection);
 		if ((!fbelements.isEmpty()) && (fbelements.get(0).getFbNetwork().eContainer() instanceof SubApp)) {
 			// we are inside of a subapp
 			final FBNetwork parent = fbelements.get(0).getFbNetwork();
@@ -116,17 +113,6 @@ public class MoveToParentHandler extends AbstractHandler {
 		}
 
 		setBaseEnabled(false);
-	}
-
-	private static List<FBNetworkElement> getSelectedFBNElements(final ISelection selection) {
-		if ((selection instanceof IStructuredSelection) && !selection.isEmpty()) {
-			final IStructuredSelection sel = (IStructuredSelection) selection;
-			return ((List<?>) sel.toList()).stream()
-					.filter(AbstractFBNElementEditPart.class::isInstance)
-					.map(ep -> ((AbstractFBNElementEditPart) ep).getModel())
-					.collect(Collectors.toList());
-		}
-		return Collections.emptyList();
 	}
 
 	private static FBNetwork getParentOfParent(final FBNetworkElement fbNetworkElement) {

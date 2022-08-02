@@ -9,38 +9,36 @@
  *
  * Contributors:
  *   Michael Oberlehner, Daniel Lindhuber - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - fixed the system retrieval and did some clean-up
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -48,56 +46,45 @@ public class MapHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final CompoundCommand mapCommands = openDialog(event);
-		final CommandStack cmdstack = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-				.getActiveEditor().getAdapter(CommandStack.class);
-		cmdstack.execute(mapCommands);
-		return null;
+		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
+		final List<FBNetworkElement> fbelements = HandlerHelper.getSelectedFBNElements(selection);
+		final AutomationSystem system = getSystem(editor);
+
+		if (system != null && !fbelements.isEmpty()) {
+			final CompoundCommand mapCommands = openDialog(editor.getSite().getShell(), system, fbelements);
+			if (!mapCommands.isEmpty()) {
+				HandlerHelper.getCommandStack(editor).execute(mapCommands);
+			}
+		}
+
+		return Status.OK_STATUS;
 	}
 
-	@SuppressWarnings("unchecked")
-	private static CompoundCommand openDialog(final ExecutionEvent event) {
+	private static CompoundCommand openDialog(final Shell shell, final AutomationSystem system,
+			final List<FBNetworkElement> fbelements) {
 		final CompoundCommand mapCommands = new CompoundCommand();
-		final ITreeContentProvider treeProvider = createTreeContentProvider();
-		final LabelProvider labelProvider =  createTreeLabelProvider();
 
-
-		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
-		final Object firstElement = selection.getFirstElement();
-		if (firstElement instanceof AbstractFBNElementEditPart) {
-			final FBNetworkElement fb = ((AbstractFBNElementEditPart) firstElement).getModel();
-			if (fb == null) {
-				return new CompoundCommand();
-			}
-			// save system for the auto select with one resource
-			final AutomationSystem system = fb.getFbNetwork().getAutomationSystem();
-			final ElementTreeSelectionDialog dialog = createDialog(event, treeProvider, labelProvider, system);
-			dialog.setInput(system);
-			dialog.setTitle(Messages.MapToDialog_Title);
-			dialog.setMessage(Messages.MapToDialog_Message);
-			dialog.setHelpAvailable(false);
-			dialog.setAllowMultiple(false);
-
-			if (Window.OK == dialog.open()) {
-				final Object firstResult = dialog.getFirstResult();
-				if (firstResult instanceof Resource) {
-					selection.forEach(sel -> {
-						if (sel instanceof AbstractFBNElementEditPart) {
-							final FBNetworkElement f = ((AbstractFBNElementEditPart) sel).getModel();
-							mapCommands.add(new MapToCommand(f, (Resource) firstResult));
-						}
-					});
-				}
+		// save system for the auto select with one resource
+		final ElementTreeSelectionDialog dialog = createDialog(shell, system);
+		if (Window.OK == dialog.open()) {
+			final Object firstResult = dialog.getFirstResult();
+			if (firstResult instanceof Resource) {
+				fbelements.forEach(fb -> {
+					final MapToCommand cmd = new MapToCommand(fb, (Resource) firstResult);
+					if (cmd.canExecute()) {
+						mapCommands.add(cmd);
+					}
+				});
 			}
 		}
 		return mapCommands;
 	}
 
-	private static ElementTreeSelectionDialog createDialog(final ExecutionEvent event,
-			final ITreeContentProvider treeProvider,
-			final LabelProvider labelProvider, final AutomationSystem system) {
-		return new ElementTreeSelectionDialog(HandlerUtil.getActiveEditor(event).getSite().getShell(),
-				labelProvider, treeProvider) {
+	private static ElementTreeSelectionDialog createDialog(final Shell shell, final AutomationSystem system) {
+		final ITreeContentProvider treeProvider = createTreeContentProvider();
+		final ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(shell, createTreeLabelProvider(),
+				treeProvider) {
 			@Override
 			public int open() {
 				final Object[] elements = treeProvider.getElements(system);
@@ -109,6 +96,14 @@ public class MapHandler extends AbstractHandler {
 				return super.open();
 			}
 		};
+
+		dialog.setInput(system);
+		dialog.setTitle(Messages.MapToDialog_Title);
+		dialog.setMessage(Messages.MapToDialog_Message);
+		dialog.setHelpAvailable(false);
+		dialog.setAllowMultiple(false);
+
+		return dialog;
 	}
 
 
@@ -148,40 +143,23 @@ public class MapHandler extends AbstractHandler {
 
 			@Override
 			public Object[] getElements(final Object inputElement) {
-
-				if (inputElement instanceof AutomationSystem) {
-					final AutomationSystem system = (AutomationSystem) inputElement;
-
-					final List<Object> elements = new ArrayList<>();
-					system.getSystemConfiguration().getDevices()
-					.forEach(d -> elements.addAll(d.getResource()));
-
-					return elements.toArray();
-				}
-
-				if (inputElement instanceof Device) {
-					final Device device = (Device) inputElement;
-
-					return device.getResource().toArray();
-
-				}
-
-				return null;
+				return getChildren(inputElement);
 			}
 
 			@Override
 			public Object[] getChildren(final Object parentElement) {
+				if (parentElement instanceof AutomationSystem) {
+					final AutomationSystem system = (AutomationSystem) parentElement;
+					return system.getSystemConfiguration().getDevices().stream()
+							.flatMap(dev -> dev.getResource().stream())
+							.toArray(Resource[]::new);
+				}
+
 				if (parentElement instanceof Device) {
 					final Device device = (Device) parentElement;
 					return device.getResource().toArray();
 				}
-
-				if (parentElement instanceof Resource) {
-					final Device device = (Device) parentElement;
-					return device.getResource().toArray();
-				}
-
-				return null;
+				return new Object[0];
 			}
 		};
 	}
@@ -197,17 +175,7 @@ public class MapHandler extends AbstractHandler {
 	private static boolean isValidSelection(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		if (selection instanceof StructuredSelection) {
-			@SuppressWarnings("unchecked")
-			final Iterator<Object> iterator = ((StructuredSelection) selection).iterator();
-			while (iterator.hasNext()) {
-				// enable handler if selection contains one valid element
-				if (iterator.next() instanceof AbstractFBNElementEditPart) {
-					return true;
-				}
-			}
-		}
-		return false;
+		return !HandlerHelper.getSelectedFBNElements(selection).isEmpty();
 	}
 
 	private static boolean hasDevices(final FBNetwork network) {
@@ -218,6 +186,11 @@ public class MapHandler extends AbstractHandler {
 	public static boolean isMapable(final FBNetwork network) {
 		return ((network != null) && !(network.isSubApplicationNetwork() || network.isCFBTypeNetwork()
 				|| network.eContainer() instanceof Resource));
+	}
+
+	private static AutomationSystem getSystem(final IEditorPart editor) {
+		final FBNetwork fbNetwork = HandlerHelper.getFBNetwork(editor);
+		return fbNetwork.getAutomationSystem();
 	}
 
 }
