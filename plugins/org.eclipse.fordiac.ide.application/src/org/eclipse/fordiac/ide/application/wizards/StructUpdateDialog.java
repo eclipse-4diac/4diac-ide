@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -42,14 +43,17 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 
 public class StructUpdateDialog extends MessageDialog {
 
-	private final DataTypeEntry dataTypeEntry;
+	protected final DataTypeEntry dataTypeEntry;
 
 	private static final int NUMBER_OF_COLLUMNS = 1;
 	private static final int TABLE_COL_WIDTH = 150;
-	private static final int CHECK_BOX_COL_WIDTH = 25;
+	private static final int CHECK_BOX_COL_WIDTH = 30;
+	private boolean selectAll = true;
 
 	private Set<StructManipulator> updatedTypes;
 
@@ -73,9 +77,7 @@ public class StructUpdateDialog extends MessageDialog {
 		searchResArea.setLayout(new GridLayout(1, true));
 		searchResArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final StructSearch structSearch = new StructSearch(dataTypeEntry);
-		final List<INamedElement> result = structSearch.getAllTypesWithStruct();
-
+		final List<INamedElement> result = performStructSearch();
 		if (result.isEmpty()) {
 			// No results - display just the info
 			final Label warningLabel = LabelFactory.newLabel(NONE).create(searchResArea);
@@ -87,6 +89,11 @@ public class StructUpdateDialog extends MessageDialog {
 			viewer.setInput(result.toArray());
 		}
 		return parent;
+	}
+
+	protected List<INamedElement> performStructSearch() {
+		final StructSearch structSearch = new StructSearch(dataTypeEntry);
+		return structSearch.getAllTypesWithStruct();
 	}
 
 	private static TableViewer createTableViewer(final Composite parent) {
@@ -119,6 +126,21 @@ public class StructUpdateDialog extends MessageDialog {
 
 		// Check-box column
 		final TableViewerColumn colCheckBox = new TableViewerColumn(viewer, SWT.WRAP);
+		colCheckBox.getColumn()
+		.setImage(FordiacImage.ICON_EXPAND_ALL.getImage());
+		colCheckBox.getColumn().addListener(SWT.Selection, event -> {
+			changeSelectionState(table, selectAll);
+			if (selectAll) {
+				changeSelectionState(table, selectAll);
+				colCheckBox.getColumn().setImage(
+						PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_ELCL_COLLAPSEALL));
+			} else {
+				changeSelectionState(table, selectAll);
+				colCheckBox.getColumn().setImage(FordiacImage.ICON_EXPAND_ALL.getImage());
+			}
+			selectAll = !selectAll;
+		});
+
 		colCheckBox.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
@@ -173,6 +195,17 @@ public class StructUpdateDialog extends MessageDialog {
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
 		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
 		return layout;
+	}
+
+	void changeSelectionState(final Table table, final boolean state) {
+		for (int i = 0; i < table.getItemCount(); i++) {
+			table.getItems()[i].setChecked(state);
+		}
+	}
+
+	@Override
+	protected boolean isResizable() {
+		return true;
 	}
 
 }

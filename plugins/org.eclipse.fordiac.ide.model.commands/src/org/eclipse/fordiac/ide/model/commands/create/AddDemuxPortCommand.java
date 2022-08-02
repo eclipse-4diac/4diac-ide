@@ -79,6 +79,7 @@ public class AddDemuxPortCommand extends Command {
 			varDecls.add(variable);
 		}
 		configuredStruct.getMemberVariables().addAll(varDecls);
+		configuredStruct.setTypeEntry(type.getStructType().getTypeEntry());
 		cmd = new ChangeStructCommand(type, configuredStruct);
 	}
 

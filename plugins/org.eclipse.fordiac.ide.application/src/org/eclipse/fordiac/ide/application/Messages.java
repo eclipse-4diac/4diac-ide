@@ -29,6 +29,8 @@ public final class Messages extends NLS {
 
 	public static String AddFBBookMark_EnterBookmarkName;
 
+	public static String Cancel;
+
 	public static String CaseSensitive;
 
 	public static String Comment;
@@ -208,6 +210,10 @@ public final class Messages extends NLS {
 	public static String StructManipulatorSection_STRUCTURED_TYPE;
 
 	public static String StructManipulatorSection_Contained_variables;
+
+	public static String TransferInstanceComments_WizardTitle;
+
+	public static String TransferInstanceComments_TransferLabel;
 
 	/** The UIFB network context menu provider_ labe l_ hardware mapping. */
 	public static String UIFBNetworkContextMenuProvider_LABEL_HardwareMapping;
