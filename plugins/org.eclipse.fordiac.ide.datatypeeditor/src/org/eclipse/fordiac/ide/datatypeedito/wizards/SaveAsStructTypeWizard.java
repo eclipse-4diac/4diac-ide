@@ -121,9 +121,9 @@ public class SaveAsStructTypeWizard extends AbstractSaveAsWizard {
 		final TypeEntry entry = createTypeEntry(targetFile);
 		final StructuredType type = DataFactory.eINSTANCE.createStructuredType();
 		type.setName(structuredType.getName());
+		type.setComment(structuredType.getComment());
 		entry.setType(type);
 		InterfaceListCopier.copyVarList(type.getMemberVariables(), structuredType.getMemberVariables(), true);
-
 		TypeManagementPreferencesHelper.setupVersionInfo(type);
 		type.setName(newName);
 		AbstractTypeExporter.saveType(entry);
