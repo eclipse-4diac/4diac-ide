@@ -66,7 +66,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class DefaultRunFBType implements IRunFBTypeVisitor{
+public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	private final EventOccurrence eventOccurrence;
 	private final Map<String, FBNetworkElement> nameToFBNetwork;
@@ -83,16 +83,15 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		}
 	}
 
-	public static Function<Object,Object> of(final IRunFBTypeVisitor runTypeVisitor, final EventManager eventManager) {
-		return new LambdaVisitor<>()
-				.on(BasicFBTypeRuntime.class).then(runTypeVisitor::runBasicFBType)
-				.on(SimpleFBTypeRuntime.class).then(runTypeVisitor::runSimpleFBType)
-				.on(FBNetworkRuntime.class).then(fb -> runTypeVisitor.runFBNetwork(fb, eventManager))
-				;
+	public static Function<Object, Object> of(final IRunFBTypeVisitor runTypeVisitor, final EventManager eventManager) {
+		return new LambdaVisitor<>().on(BasicFBTypeRuntime.class).then(runTypeVisitor::runBasicFBType)
+				.on(SimpleFBTypeRuntime.class).then(runTypeVisitor::runSimpleFBType).on(FBNetworkRuntime.class)
+				.then(fb -> runTypeVisitor.runFBNetwork(fb, eventManager));
 	}
 
 	@SuppressWarnings("unchecked")
-	public static EList<EventOccurrence> runFBType(final FBRuntimeAbstract fbTypeRuntime, final EventOccurrence eventOccurrence, final EventManager eventManager) {
+	public static EList<EventOccurrence> runFBType(final FBRuntimeAbstract fbTypeRuntime,
+			final EventOccurrence eventOccurrence, final EventManager eventManager) {
 		final var defaultRun = new DefaultRunFBType(eventOccurrence);
 		return (EList<EventOccurrence>) of(defaultRun, eventManager).apply(fbTypeRuntime);
 	}
@@ -103,7 +102,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		VariableUtils.fBVariableInitialization(basicFBTypeRuntime.getBasicfbtype());
 		final var outputEvents = new BasicEList<EventOccurrence>();
 		final var eCC = basicFBTypeRuntime.getBasicfbtype().getECC();
-		//Create a resource if the BasicFBType does not have one
+		// Create a resource if the BasicFBType does not have one
 		final var fBTypeResource = new DefaultParserXMI().createFBResource(basicFBTypeRuntime.getBasicfbtype());
 		// Active State
 		final var eCState = basicFBTypeRuntime.getActiveState();
@@ -117,7 +116,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 			outputEvents.addAll(performEntryAction(basicFBTypeRuntime));
 			firedTransition = evaluateOutTransitions(basicFBTypeRuntime, fBTypeResource);
 		}
-		basicFBTypeRuntime.setBasicfbtype((BasicFBType)fBTypeResource.getContents().get(0));
+		basicFBTypeRuntime.setBasicfbtype((BasicFBType) fBTypeResource.getContents().get(0));
 		// TODO can probably be improved by copying better
 		for (final EventOccurrence eo : outputEvents) {
 			((BasicFBTypeRuntime) eo.getFbRuntime()).setActiveState(basicFBTypeRuntime.getActiveState());
@@ -134,7 +133,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 				processAlgorithmWithEvaluator(executedFbtype, action.getAlgorithm());
 			}
 			if (action.getOutput() != null) {
-				processOutputEvent(basicFBTypeRuntime, action.getOutput(), outputEvents, /*fBTypeResource, */ executedFbtype);
+				processOutputEvent(basicFBTypeRuntime, action.getOutput(), outputEvents,
+						/* fBTypeResource, */ executedFbtype);
 			}
 		}
 		return outputEvents;
@@ -156,16 +156,16 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		} else if (basefbtype instanceof SimpleFBType) {
 			baseFBClass = SimpleFBType.class;
 		}
-		final Evaluator fbEval = EvaluatorFactory.createEvaluator(basefbtype, baseFBClass, fbVar,
-				vars, null);
+		final Evaluator fbEval = EvaluatorFactory.createEvaluator(basefbtype, baseFBClass, fbVar, vars, null);
 		final Evaluator algoEval = fbEval.getChildren().entrySet().stream()
-				.filter(entry -> entry.getKey().getName().equals(algorithm.getName())).findAny()
-				.map(Entry::getValue).orElse(null);
+				.filter(entry -> entry.getKey().getName().equals(algorithm.getName())).findAny().map(Entry::getValue)
+				.orElse(null);
 		if (algoEval != null) {
 			try {
 				algoEval.evaluate();
 				vars.forEach(v -> {
-					final VarDeclaration varDecl = varDecls.stream().filter(vd -> vd.getName().equals(v.getName())).findAny().orElse(null);
+					final VarDeclaration varDecl = varDecls.stream().filter(vd -> vd.getName().equals(v.getName()))
+							.findAny().orElse(null);
 					final String value = v.getValue().toString();
 					varDecl.getValue().setValue(value);
 				});
@@ -179,12 +179,13 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 	}
 
 	private static void processOutputEvent(final FBRuntimeAbstract runtime, final Event output,
-			final BasicEList<EventOccurrence> outputEvents/*, Resource fBTypeResource*/, final FBType executedFbtype) {
+			final BasicEList<EventOccurrence> outputEvents/* , Resource fBTypeResource */,
+			final FBType executedFbtype) {
 		// Copy FBTypeRuntime
 		final FBRuntimeAbstract newFBTypeRT = EcoreUtil.copy(runtime);
 		// Copy FBType
 		final FBType copyFBType = EcoreUtil.copy(executedFbtype);
-		//Add copy FBType to the RuntimeFBType
+		// Add copy FBType to the RuntimeFBType
 		if (runtime instanceof BasicFBTypeRuntime) {
 			((BasicFBTypeRuntime) newFBTypeRT).setBasicfbtype((BasicFBType) copyFBType);
 		} else if (runtime instanceof SimpleFBTypeRuntime) {
@@ -199,7 +200,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		outputEvents.add(newEventOccurrence);
 	}
 
-	private ECTransition evaluateOutTransitions(final BasicFBTypeRuntime basicFBTypeRuntime, final Resource fBTypeResource) {
+	private ECTransition evaluateOutTransitions(final BasicFBTypeRuntime basicFBTypeRuntime,
+			final Resource fBTypeResource) {
 		final var outTransitions = basicFBTypeRuntime.getActiveState().getOutTransitions();
 		for (final ECTransition outTransition : outTransitions) {
 			if (transitionCanFire(outTransition, fBTypeResource)) {
@@ -230,8 +232,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 	}
 
 	private boolean transitionHoldsFor(final Event event) {
-		return (event == null) ||
-				(event.getName().equals(this.eventOccurrence.getEvent().getName()) && this.eventOccurrence.isActive());
+		return (event == null) || (event.getName().equals(this.eventOccurrence.getEvent().getName())
+				&& this.eventOccurrence.isActive());
 	}
 
 	private void isConsumed() {
@@ -246,12 +248,13 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		final SimpleFBType simpleFBType = simpleFBTypeRuntime.getSimpleFBType();
 		VariableUtils.fBVariableInitialization(simpleFBType);
 		final var outputEvents = new BasicEList<EventOccurrence>();
-		//Make a copy to execute the SimpleFBType
+		// Make a copy to execute the SimpleFBType
 		final SimpleFBType executedSimpleFBType = EcoreUtil.copy(simpleFBType);
 		processAlgorithmWithEvaluator(executedSimpleFBType, simpleFBType.getAlgorithm().get(0));
 		isConsumed();
 		final Event event = simpleFBType.getInterfaceList().getEventOutputs().get(0);
-		processOutputEvent(simpleFBTypeRuntime, event, outputEvents, executedSimpleFBType/*(FBType) fBTypeResource.getContents().get(0)*/);
+		processOutputEvent(simpleFBTypeRuntime, event, outputEvents,
+				executedSimpleFBType/* (FBType) fBTypeResource.getContents().get(0) */);
 		return outputEvents;
 	}
 
@@ -261,11 +264,11 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		// TODO reuse the runtimes
 		final BasicFBTypeRuntime runtime = OperationalSemanticsFactory.eINSTANCE.createBasicFBTypeRuntime();
 		runtime.setBasicfbtype((BasicFBType) EcoreUtil.copy(eventOccurrence.getParentFB().getType()));
-		//this.nameToFBNetwork.get(eventOccurrence.getParentFB().getType().getName())
-		//TODO is this copy correct?
+		// this.nameToFBNetwork.get(eventOccurrence.getParentFB().getType().getName())
+		// TODO is this copy correct?
 		runtime.setActiveState(runtime.getBasicfbtype().getECC().getStart());
 
-		//Sample Data Input
+		// Sample Data Input
 		sampleDataInput(runtime, fBNetworkRuntime);
 
 		final EList<EventOccurrence> outputEvents = runBasicFBType(runtime);
@@ -279,17 +282,17 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 	}
 
 	private void createNetworkEvent(final EList<EventOccurrence> networkEvents, final EventOccurrence event) {
-		final EventOccurrence newEventOccurrence =  OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
+		final EventOccurrence newEventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 		newEventOccurrence.setParentFB(eventOccurrence.getParentFB());
 		newEventOccurrence.setFbRuntime(EcoreUtil.copy(event.getFbRuntime()));
 		final Event mappedEvent = (Event) eventOccurrence.getParentFB().getInterfaceElement(event.getEvent().getName());
 		newEventOccurrence.setEvent(mappedEvent);
-		//Extract the returned values from the FBTypeRuntime to FBNetwork
-		final Event returnedEvent = (Event)((BasicFBTypeRuntime)event.getFbRuntime())
-				.getBasicfbtype().getInterfaceList().getInterfaceElement(event.getEvent().getName());
+		// Extract the returned values from the FBTypeRuntime to FBNetwork
+		final Event returnedEvent = (Event) ((BasicFBTypeRuntime) event.getFbRuntime()).getBasicfbtype()
+				.getInterfaceList().getInterfaceElement(event.getEvent().getName());
 		returnedEvent.getWith().stream().forEach(
 				w -> ((VarDeclaration) eventOccurrence.getParentFB().getInterfaceElement(w.getVariables().getName()))
-				.setValue(EcoreUtil.copy(w.getVariables().getValue())));
+						.setValue(EcoreUtil.copy(w.getVariables().getValue())));
 
 		networkEvents.add(newEventOccurrence);
 	}
@@ -299,18 +302,19 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		networkVarsSample.forEach(varDec -> {
 			Value value = null;
 			if (varDec.getInputConnections().isEmpty()) {
-				//Input parameter
+				// Input parameter
 				value = varDec.getValue();
 			} else {
-				//Only one data input allowed
+				// Only one data input allowed
 				final Connection conn = varDec.getInputConnections().get(0);
 				value = fBNetworkRuntime.getTransferData().get(conn);
-				//TODO check? value.getValue().isBlank()
+				// TODO check? value.getValue().isBlank()
 				if (value == null) {
 					value = varDec.getValue();
 				}
 			}
-			final VarDeclaration typeVarDec = (VarDeclaration) runtime.getBasicfbtype().getInterfaceList().getInterfaceElement(varDec.getName());
+			final VarDeclaration typeVarDec = (VarDeclaration) runtime.getBasicfbtype().getInterfaceList()
+					.getInterfaceElement(varDec.getName());
 			typeVarDec.setValue(EcoreUtil.copy(value));
 		});
 	}
@@ -318,11 +322,11 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 	private static void eventConnections(final FBNetworkRuntime fBNetworkRuntime, final EventManager manager,
 			final EList<EventOccurrence> networkEvents) {
 		networkEvents.forEach(e -> {
-			//e.getEvent().getc
+			// e.getEvent().getc
 			if (e.getEvent().isIsInput()) {
 				manager.getTransactions().add(createNewInitialTransaction(e.getEvent(), fBNetworkRuntime, e));
 			} else {
-				//Find the Original Pins
+				// Find the Original Pins
 				final List<IInterfaceElement> destinations = findConnectedPins(e.getEvent());
 				for (final IInterfaceElement dest : destinations) {
 					manager.getTransactions().add(createNewTransaction(dest, fBNetworkRuntime, e));
@@ -331,21 +335,9 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		});
 	}
 
-	//TODO remove
-	//	private EventOccurrence mapFBTypeEventToFBNetworkInstance(EventOccurrence e) throws IllegalAccessError {
-	//		IInterfaceElement networkEvent = eventOccurrence.getParentFB().getInterface().getAllInterfaceElements().stream()
-	//				.filter(iel -> e.getEvent().getName().equals(iel.getName()))
-	//				.findFirst().orElseThrow(() -> new IllegalAccessError("Cannot find the event:" + e.getEvent().getName()));
-	//
-	//		final EventOccurrence networkEo = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
-	//		networkEo.setEvent((Event) EcoreUtil.copy(networkEvent));
-	//		networkEo.setParentFB(networkEvent.getFBNetworkElement());
-	//		networkEo.setActive(true);
-	//		return networkEo;
-	//	}
-
-	//TODO refactor createNewTransaction
-	private static FBTransaction createNewInitialTransaction(final IInterfaceElement dest, final FBNetworkRuntime fBNetworkRuntime, final EventOccurrence sourceEventOcurrence) {
+	// TODO refactor createNewTransaction
+	private static FBTransaction createNewInitialTransaction(final IInterfaceElement dest,
+			final FBNetworkRuntime fBNetworkRuntime, final EventOccurrence sourceEventOcurrence) {
 		final EventOccurrence destinationEventOccurence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 		destinationEventOccurence.setEvent((Event) EcoreUtil.copy(dest));
 		final FBNetworkRuntime copyFBNetworkRuntime = EcoreUtil.copy(fBNetworkRuntime);
@@ -357,7 +349,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		return transaction;
 	}
 
-	private static FBTransaction createNewTransaction(final IInterfaceElement dest, final FBNetworkRuntime fBNetworkRuntime, final EventOccurrence sourceEventOcurrence) {
+	private static FBTransaction createNewTransaction(final IInterfaceElement dest,
+			final FBNetworkRuntime fBNetworkRuntime, final EventOccurrence sourceEventOcurrence) {
 		final EventOccurrence destinationEventOccurence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 		destinationEventOccurence.setEvent((Event) EcoreUtil.copy(dest));
 		final FBNetworkRuntime copyFBNetworkRuntime = EcoreUtil.copy(fBNetworkRuntime);
@@ -371,13 +364,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 		return transaction;
 	}
 
-	private static void sampleDataOutput(final EventOccurrence sourceEventOcurrence, final EventOccurrence destinationEventOccurence,
-			final FBNetworkRuntime copyFBNetworkRuntime, final FBTransaction transaction) {
+	private static void sampleDataOutput(final EventOccurrence sourceEventOcurrence,
+			final EventOccurrence destinationEventOccurence, final FBNetworkRuntime copyFBNetworkRuntime,
+			final FBTransaction transaction) {
 
 		final EList<VarDeclaration> networkVarsSample = sampleData(sourceEventOcurrence);
 
 		final EMap<Connection, Value> map = copyFBNetworkRuntime.getTransferData();
-		//TODO this should be a mapTo?
+		// TODO this should be a mapTo?
 		networkVarsSample.forEach(variable -> variable.getOutputConnections().stream()
 				.forEach(outputConnection -> map.put(outputConnection, EcoreUtil.copy(variable.getValue()))));
 
@@ -385,23 +379,25 @@ public class DefaultRunFBType implements IRunFBTypeVisitor{
 	}
 
 	private static EList<VarDeclaration> sampleData(final EventOccurrence sourceEventOcurrence) {
-		//Sample data
+		// Sample data
 		final Event sourceTypeEvent = (Event) findPinInNetwork(sourceEventOcurrence);
 		final EList<VarDeclaration> varsToSample = sourceTypeEvent.getWith().stream().map(With::getVariables)
 				.collect(Collectors.toCollection(BasicEList::new));
 
-		//Find the pins on the network
+		// Find the pins on the network
 		final EList<VarDeclaration> networkVarsSample = new BasicEList<>();
-		//TODO this should be a mapTo?
+		// TODO this should be a mapTo?
 		varsToSample.forEach(iel -> {
-			final IInterfaceElement interfaceElement = sourceEventOcurrence.getParentFB().getInterface().getInterfaceElement(iel.getName());
+			final IInterfaceElement interfaceElement = sourceEventOcurrence.getParentFB().getInterface()
+					.getInterfaceElement(iel.getName());
 			networkVarsSample.add((VarDeclaration) interfaceElement);
 		});
 		return networkVarsSample;
 	}
 
 	private static IInterfaceElement findPinInNetwork(final EventOccurrence sourceEventOcurrence) {
-		return sourceEventOcurrence.getParentFB().getType().getInterfaceList().getInterfaceElement(sourceEventOcurrence.getEvent().getName());
+		return sourceEventOcurrence.getParentFB().getType().getInterfaceList()
+				.getInterfaceElement(sourceEventOcurrence.getEvent().getName());
 	}
 
 	private static List<IInterfaceElement> findConnectedPins(final IInterfaceElement interfaceElement) {
