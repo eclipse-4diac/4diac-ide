@@ -42,7 +42,6 @@ public class AddDemuxPortCommand extends Command {
 	private ChangeStructCommand cmd;
 	private final CheckableStructTreeNode node;
 
-
 	public AddDemuxPortCommand(final Demultiplexer type, final CheckableStructTreeNode node) {
 		this.node = node;
 		this.type = type;
@@ -52,7 +51,6 @@ public class AddDemuxPortCommand extends Command {
 
 	@Override
 	public void execute() {
-
 		node.updateNode(true);
 
 		if (null == newVisibleChildren) {
@@ -76,6 +74,7 @@ public class AddDemuxPortCommand extends Command {
 				node)) {
 			final VarDeclaration variable = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 			variable.setName(varDeclaration.getName());
+			variable.setComment(varDeclaration.getComment());
 			variable.setType(varDeclaration.getType());
 			varDecls.add(variable);
 		}
@@ -111,8 +110,6 @@ public class AddDemuxPortCommand extends Command {
 	private void setVisibleChildrenAttribute(final String value) {
 		type.setAttribute(DEMUX_VISIBLE_CHILDREN, FordiacKeywords.STRING, value, ""); //$NON-NLS-1$
 	}
-
-
 
 	public Demultiplexer getType() {
 		return type;
