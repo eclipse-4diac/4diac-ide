@@ -65,6 +65,9 @@ import org.eclipse.xtext.formatting2.regionaccess.ITextSegment
 import org.eclipse.xtext.grammaranalysis.impl.GrammarElementTitleSwitch
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage.Literals.*
+import org.eclipse.xtext.formatting2.IHiddenRegionFormatting
+import org.eclipse.xtext.formatting2.regionaccess.IHiddenRegion
+import org.eclipse.xtext.formatting2.regionaccess.IHiddenRegionPart
 
 class STCoreFormatter extends AbstractFormatter2 {
 
@@ -292,7 +295,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		assignmentStatement.regionFor.keyword(";").surround[noSpace]
 		assignmentStatement.left.format
 		assignmentStatement.right.format
-		assignmentStatement.append[setNewLines(1, 1, 2)]
+		assignmentStatement.append[setNewLines(1, 2, 2)]
 	}
 
 	/** Formats the STCallStatement */
@@ -429,6 +432,40 @@ class STCoreFormatter extends AbstractFormatter2 {
 			append[oneSpace]
 		]
 		arrayAccessExpression.receiver.format
+	}
+
+	override ITextReplacer createWhitespaceReplacer(ITextSegment hiddens, IHiddenRegionFormatting formatting) {
+		return new WhitespaceReplacer(hiddens, formatting) {
+			override int computeNewLineCount(ITextReplacerContext context) {
+				val newLineDefault = formatting.getNewLineDefault();
+				val newLineMin = formatting.getNewLineMin();
+				val newLineMax = formatting.getNewLineMax();
+				if (newLineMin !== null || newLineDefault !== null || newLineMax !== null) {
+					if (region instanceof IHiddenRegion && (region as IHiddenRegion).isUndefined()) {
+						if (newLineDefault !== null)
+							return newLineDefault;
+						if (newLineMin !== null)
+							return newLineMin;
+						if (newLineMax !== null)
+							return newLineMax;
+					} else {
+						var lineCount = 0
+						if (region instanceof IHiddenRegionPart) {
+							lineCount = (region as IHiddenRegionPart).previousHiddenPart instanceof IComment
+								? region.getLineCount()
+								: region.getLineCount() - 1;
+						} else
+							lineCount = region.getLineCount() - 1;
+						if (newLineMin !== null && newLineMin > lineCount)
+							lineCount = newLineMin;
+						if (newLineMax !== null && newLineMax < lineCount)
+							lineCount = newLineMax;
+						return lineCount;
+					}
+				}
+				return 0;
+			}
+		};
 	}
 
 	override ITextReplacer createCommentReplacer(IComment comment) {
