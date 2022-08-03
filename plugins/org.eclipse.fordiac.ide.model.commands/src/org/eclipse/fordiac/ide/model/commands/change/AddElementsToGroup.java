@@ -48,8 +48,7 @@ public class AddElementsToGroup extends Command {
 			entry.add(el);
 		});
 		// for each entry in the map create one RemoveFromGroupCommand
-		groupMap.forEach(
-				(group, list) -> removeFromOtherGroups.add(new RemoveElementsFromGroup(list)));
+		groupMap.forEach((group, list) -> removeFromOtherGroups.add(new RemoveElementsFromGroup(list)));
 	}
 
 	public List<FBNetworkElement> getElementsToAdd() {
@@ -58,7 +57,11 @@ public class AddElementsToGroup extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return !elementsToAdd.isEmpty() && targetIsInSameFbNetwork();
+		return !elementsToAdd.isEmpty() && noGroupsContained() && targetIsInSameFbNetwork();
+	}
+
+	private boolean noGroupsContained() {
+		return elementsToAdd.stream().noneMatch(Group.class::isInstance);
 	}
 
 	@Override
@@ -92,7 +95,8 @@ public class AddElementsToGroup extends Command {
 
 	private boolean targetIsInSameFbNetwork() {
 		final FBNetwork fbNetwork = targetGroup.getFbNetwork();
-		// if any of the elements is not in the same fbNetwork do not allow to add it to the group
+		// if any of the elements is not in the same fbNetwork do not allow to add it to
+		// the group
 		return elementsToAdd.stream().allMatch(el -> fbNetwork.equals(el.getFbNetwork()));
 	}
 

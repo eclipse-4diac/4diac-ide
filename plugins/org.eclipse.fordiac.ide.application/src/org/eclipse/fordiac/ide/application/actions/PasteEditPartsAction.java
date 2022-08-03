@@ -70,9 +70,11 @@ public class PasteEditPartsAction extends SelectionAction {
 
 	private Point pasteRefPosition;
 
-	/** Instantiates a new paste edit parts action.
+	/**
+	 * Instantiates a new paste edit parts action.
 	 *
-	 * @param editor the editor */
+	 * @param editor the editor
+	 */
 	public PasteEditPartsAction(final IWorkbenchPart editor) {
 		super(editor);
 	}
@@ -91,7 +93,8 @@ public class PasteEditPartsAction extends SelectionAction {
 			if (editPart != null) {
 				final Rectangle newContentBoundsWithValueBounds = getNewContentBoundsWithValueBounds();
 				final Rectangle editPartContentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(editPart);
-				if (editPart instanceof GroupContentEditPart) {
+				if ((editPart instanceof GroupContentEditPart)
+						&& getClipboardContents().stream().noneMatch(Group.class::isInstance)) {
 					return createPasteCommandForGroup((GroupContentEditPart) editPart, newContentBoundsWithValueBounds,
 							editPartContentBounds);
 				}
@@ -117,12 +120,10 @@ public class PasteEditPartsAction extends SelectionAction {
 
 		if (!subAppContentBounds.contains(contentBoundsWithValueBounds)) {
 			// we need to increase the size of the SubApp
-			return copyElementsToSubAppAndResizeCommand(subApp.getModel().getSubapp(),
-					pasteCommand, subAppContentBounds,
-					contentBoundsWithValueBounds);
-		} else {
-			return pasteCommand;
+			return copyElementsToSubAppAndResizeCommand(subApp.getModel().getSubapp(), pasteCommand,
+					subAppContentBounds, contentBoundsWithValueBounds);
 		}
+		return pasteCommand;
 	}
 
 	private Command createPasteCommandForGroup(final GroupContentEditPart group,
@@ -135,9 +136,8 @@ public class PasteEditPartsAction extends SelectionAction {
 			return createCopyElementsToGroupAndResizeCommand(group.getModel().getGroup(),
 					new CopyElementsToGroupCommand(group.getModel().getGroup(), pasteCommand, getOffsetPosition(group)),
 					groupContentBounds, contentBoundsWithValueBounds);
-		} else {
-			return new CopyElementsToGroupCommand(group.getModel().getGroup(), pasteCommand, getOffsetPosition(group));
 		}
+		return new CopyElementsToGroupCommand(group.getModel().getGroup(), pasteCommand, getOffsetPosition(group));
 	}
 
 	private static Command createCopyElementsToGroupAndResizeCommand(final Group dropGroup,
@@ -155,8 +155,7 @@ public class PasteEditPartsAction extends SelectionAction {
 	}
 
 	private static Command copyElementsToSubAppAndResizeCommand(final SubApp dropSubApp,
-			final PasteCommand pasteCommand, final Rectangle subAppContentBounds,
-			final Rectangle newContentBounds) {
+			final PasteCommand pasteCommand, final Rectangle subAppContentBounds, final Rectangle newContentBounds) {
 		final CompoundCommand cmd = new CompoundCommand();
 		newContentBounds.union(subAppContentBounds);
 		cmd.add(ContainerContentLayoutPolicy.createChangeBoundsCommand(dropSubApp, subAppContentBounds,
@@ -187,7 +186,7 @@ public class PasteEditPartsAction extends SelectionAction {
 			final GraphicalViewer graphicalViewer = getWorkbenchPart().getAdapter(GraphicalViewer.class);
 			final Object object = graphicalViewer.getEditPartRegistry().get(selElem);
 
-			if (object instanceof GraphicalEditPart && ((EditPart) object).getModel() instanceof FBNetworkElement) {
+			if ((object instanceof GraphicalEditPart) && (((EditPart) object).getModel() instanceof FBNetworkElement)) {
 				// only consider the selected FBNetworkElements
 				final Rectangle fbBounds = ((GraphicalEditPart) object).getFigure().getBounds();
 
@@ -219,12 +218,12 @@ public class PasteEditPartsAction extends SelectionAction {
 			final GraphicalViewer graphicalViewer) {
 		final Map<Object, Object> editPartRegistry = graphicalViewer.getEditPartRegistry();
 		model.getInterface().getInputVars().stream().filter(Objects::nonNull)
-		.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
-		.forEach(ep -> {
-			final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds();
-			selectionExtend.union(pin);
+				.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
+				.forEach(ep -> {
+					final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds();
+					selectionExtend.union(pin);
 
-		});
+				});
 	}
 
 	private static org.eclipse.draw2d.geometry.Point getOffsetPosition(final GroupContentEditPart group) {
@@ -277,9 +276,11 @@ public class PasteEditPartsAction extends SelectionAction {
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
 	 *
-	 * @see org.eclipse.jface.action.Action#run() */
+	 * @see org.eclipse.jface.action.Action#run()
+	 */
 	@Override
 	public void run() {
 		final Clipboard clipboard = Clipboard.getDefault();
@@ -288,8 +289,8 @@ public class PasteEditPartsAction extends SelectionAction {
 			if ((pasteRefPosition != null) && (copyPasteMessage.getCutAndPasteFromSubAppCommandos() != null)) {
 				copyPasteMessage.getCutAndPasteFromSubAppCommandos().setPastePos(pasteRefPosition);
 			}
-			if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_PASTED
-					|| copyPasteMessage.getCopyStatus() == CopyStatus.COPY) {
+			if ((copyPasteMessage.getCopyStatus() == CopyStatus.CUT_PASTED)
+					|| (copyPasteMessage.getCopyStatus() == CopyStatus.COPY)) {
 				execute(createPasteCommand());
 			} else if (isCutFromSubappToParent(copyPasteMessage)) {
 				handleCutFromSubappToParent(copyPasteMessage);
@@ -311,10 +312,9 @@ public class PasteEditPartsAction extends SelectionAction {
 			execute(copyPasteMessage.getDeleteCommandos());
 		}
 		final Command createPasteCommand = createPasteCommand();
-		if (createPasteCommand instanceof PasteCommand
-				&& copyPasteMessage.getCutAndPasteFromSubAppCommandos() != null) {
-			((PasteCommand) createPasteCommand)
-			.setCutPasteCmd(copyPasteMessage.getCutAndPasteFromSubAppCommandos());
+		if ((createPasteCommand instanceof PasteCommand)
+				&& (copyPasteMessage.getCutAndPasteFromSubAppCommandos() != null)) {
+			((PasteCommand) createPasteCommand).setCutPasteCmd(copyPasteMessage.getCutAndPasteFromSubAppCommandos());
 		}
 
 		execute(createPasteCommand);
@@ -322,7 +322,7 @@ public class PasteEditPartsAction extends SelectionAction {
 
 	@Override
 	protected void execute(final Command command) {
-		if (command.canExecute()) {
+		if ((command != null) && command.canExecute()) {
 			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) Clipboard.getDefault().getContents();
 			if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_ROOT) {
 				copyPasteMessage.setCopyInfo(CopyStatus.CUT_PASTED);
@@ -347,7 +347,8 @@ public class PasteEditPartsAction extends SelectionAction {
 		final List<FBNetworkElement> elements = copyPasteMessage.getCutAndPasteFromSubAppCommandos().getElements();
 
 		if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_SUBAPP) {
-			// we need to undo the delete because otherwise it would not be possible to check whether they are in the
+			// we need to undo the delete because otherwise it would not be possible to
+			// check whether they are in the
 			// same network
 			copyPasteMessage.getCutAndPasteFromSubAppCommandos().undo();
 			if (!FBNetworkHelper.targetSubappIsInSameFbNetwork(elements, targetSubapp)) {

@@ -41,20 +41,28 @@ public class CopyElementsToGroupCommand extends Command {
 		pasteCommand.execute();
 		elementsToAdd.addAll(pasteCommand.getCopiedFBs());
 		addElements = new AddElementsToGroup(targetGroup, elementsToAdd, offset);
-		addElements.execute();
+		if (addElements.canExecute()) {
+			addElements.execute();
+		} else {
+			addElements = null;
+		}
 		ElementSelector.selectViewObjects(elementsToAdd);
 	}
 
 	@Override
 	public void undo() {
-		addElements.undo();
+		if (addElements != null) {
+			addElements.undo();
+		}
 		pasteCommand.undo();
 	}
 
 	@Override
 	public void redo() {
 		pasteCommand.redo();
-		addElements.redo();
+		if (addElements != null) {
+			addElements.redo();
+		}
 	}
 
 	public Point getOffset() {
