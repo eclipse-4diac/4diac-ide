@@ -70,7 +70,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 	protected final CompoundCommand reconnCmds = new CompoundCommand();
 	protected final CompoundCommand resourceConnCreateCmds = new CompoundCommand();
 
-	protected MapToCommand mapCmd = null;
+	protected Command mapCmd = null;
 	protected UnmapCommand unmapCmd = null;
 
 	/** The updated version of the FBNetworkElement */
@@ -127,7 +127,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 		// Map FB
 		if (resource != null) {
-			mapCmd = new MapToCommand(newElement, resource);
+			mapCmd = MapToCommand.createMapToCommand(newElement, resource);
 			if (mapCmd.canExecute()) {
 				mapCmd.execute();
 				recreateResourceConns(resourceConns);

@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -71,7 +72,7 @@ public class MapHandler extends AbstractHandler {
 			final Object firstResult = dialog.getFirstResult();
 			if (firstResult instanceof Resource) {
 				fbelements.forEach(fb -> {
-					final MapToCommand cmd = new MapToCommand(fb, (Resource) firstResult);
+					final Command cmd = MapToCommand.createMapToCommand(fb, (Resource) firstResult);
 					if (cmd.canExecute()) {
 						mapCommands.add(cmd);
 					}
