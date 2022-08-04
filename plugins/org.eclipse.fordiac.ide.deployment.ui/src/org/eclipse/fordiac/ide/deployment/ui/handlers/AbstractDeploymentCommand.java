@@ -73,7 +73,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 		}
 
 		@Override
-		public void connectionOpened() {
+		public void connectionOpened(final Device dev) {
 			// nothing to do here
 		}
 
@@ -91,7 +91,7 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 		}
 
 		@Override
-		public void connectionClosed() {
+		public void connectionClosed(final Device dev) {
 			// nothing to do here
 		}
 

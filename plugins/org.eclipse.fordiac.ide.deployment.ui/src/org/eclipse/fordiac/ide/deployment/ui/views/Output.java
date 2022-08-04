@@ -26,8 +26,10 @@ import java.util.Map.Entry;
 import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
@@ -37,6 +39,7 @@ import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.ui.xml.XMLConfiguration;
 import org.eclipse.fordiac.ide.deployment.ui.xml.XMLPartitionScanner;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.providers.SourceViewerColorProvider;
 import org.eclipse.jface.action.Action;
@@ -84,6 +87,11 @@ public class Output extends ViewPart implements IDeploymentListener {
 
 	/** The sourceViewer. */
 	private SourceViewer sv;
+
+	private String lastInfo;
+	private String lastCommand;
+	private static Transformer transformer;
+	private static DocumentBuilder documentBuilder;
 
 	/**
 	 * Instantiates a new output.
@@ -330,58 +338,77 @@ public class Output extends ViewPart implements IDeploymentListener {
 	 *                                              configuration error
 	 */
 	private static String getFormattedXML(final String command) throws TransformerFactoryConfigurationError {
-		final DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
-		documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");  //$NON-NLS-1$
-		documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); //$NON-NLS-1$
-		DocumentBuilder documentBuilder;
 		try {
-			documentBuilder = documentBuilderFactory.newDocumentBuilder();
-
-			final org.w3c.dom.Document doc = documentBuilder.parse(new InputSource(new StringReader(command)));
-
-			final TransformerFactory transformerFactory = TransformerFactory.newInstance();
-			transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); //$NON-NLS-1$
-			transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, ""); //$NON-NLS-1$
-			final Transformer transformer = transformerFactory.newTransformer();
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
-			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes"); //$NON-NLS-1$
-
-			transformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", "2"); //$NON-NLS-1$ //$NON-NLS-2$
-
+			final var doc = getDocumentBuilder().parse(new InputSource(new StringReader(command)));
 			final DOMSource domSource = new DOMSource(doc);
-
 			final OutputStream outputStream = new ByteArrayOutputStream();
 			final StreamResult streamResult = new StreamResult(outputStream);
-			transformer.transform(domSource, streamResult);
+			getTransformer().transform(domSource, streamResult);
 			return outputStream.toString();
 		} catch (final Exception e) {
 			return MessageFormat.format(Messages.Output_FormattedXML, command, e.getMessage());
 		}
 	}
 
+	private static DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {
+		if (documentBuilder == null) {
+			final var documentBuilderFactory = DocumentBuilderFactory.newInstance();
+			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, "");  //$NON-NLS-1$
+			documentBuilderFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_SCHEMA, ""); //$NON-NLS-1$
+			documentBuilder = documentBuilderFactory.newDocumentBuilder();
+		}
+		return documentBuilder;
+	}
+
+	private static Transformer getTransformer()
+			throws TransformerFactoryConfigurationError, TransformerConfigurationException {
+		if (transformer == null) {
+			final TransformerFactory transformerFactory = TransformerFactory.newInstance();
+			transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); //$NON-NLS-1$
+			transformerFactory.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, ""); //$NON-NLS-1$
+			transformer = transformerFactory.newTransformer();
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes"); //$NON-NLS-1$
+			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes"); //$NON-NLS-1$
+			transformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", "4"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		return transformer;
+	}
+
 	@Override
-	public void connectionOpened() {
-		// nothing to do
+	public void connectionOpened(final Device dev) {
+		final String connectMsg = "<!--  Connected to device: " + dev.getName() + " -->\n\n"; //$NON-NLS-1$ //$NON-NLS-2$
+		addMessage(connectMsg);
 	}
 
 	@Override
 	public void postResponseReceived(final String response, final String source) {
-		final String rspMessage = "\n" + //$NON-NLS-1$
-				getFormattedXML(response);
-		addMessage(rspMessage);
+		if (response.contains("Reason")) { //$NON-NLS-1$
+			final StringBuilder errorMessage = new StringBuilder();
+			if (lastInfo != null && lastCommand != null) {
+				errorMessage.append("<!-- "); //$NON-NLS-1$
+				errorMessage.append(lastInfo);
+				errorMessage.append(" -->\n"); //$NON-NLS-1$
+				errorMessage.append(getFormattedXML(lastCommand));
+				errorMessage.append("\n"); //$NON-NLS-1$
+			}
+			errorMessage.append(getFormattedXML(response));
+			errorMessage.append("\n\n"); //$NON-NLS-1$
+			addMessage(errorMessage.toString());
+			lastInfo = null;
+			lastCommand = null;
+		}
 	}
 
 	@Override
 	public void postCommandSent(final String info, final String destination, final String command) {
-		final String sendMessage = "\n\n" + //$NON-NLS-1$
-				MessageFormat.format(Messages.Output_Comment, info) + "\n" + //$NON-NLS-1$
-				getFormattedXML(command);
-		addMessage(sendMessage);
+		lastInfo = info;
+		lastCommand = command;
 	}
 
 	@Override
-	public void connectionClosed() {
-		// nothing to do
+	public void connectionClosed(final Device dev) {
+		final String connectMsg = "<!--  Disconnected from device: " + dev.getName() + " -->\n\n"; //$NON-NLS-1$ //$NON-NLS-2$
+		addMessage(connectMsg);
 	}
 
 	public void clearOutput() {

@@ -399,7 +399,7 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 
 
 	@Override
-	public void connectionOpened() {
+	public void connectionOpened(final Device dev) {
 		// we don't need to do anything on connection opened
 	}
 
@@ -416,7 +416,7 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 	}
 
 	@Override
-	public void connectionClosed() {
+	public void connectionClosed(final Device dev) {
 		// we don't need to do anything on connection closed
 	}
 
