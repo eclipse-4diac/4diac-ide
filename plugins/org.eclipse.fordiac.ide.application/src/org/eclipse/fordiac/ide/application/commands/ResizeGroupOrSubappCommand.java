@@ -151,7 +151,11 @@ public class ResizeGroupOrSubappCommand extends Command {
 			if (object instanceof GraphicalEditPart) {
 				final IFigure fbFigure = ((GraphicalEditPart) object).getFigure();
 				if (fbFigure != null) {
-					fbBounds = fbFigure.getBounds();
+					if (fbBounds == null) {
+						fbBounds = fbFigure.getBounds().getCopy();
+					} else {
+						fbBounds.union(fbFigure.getBounds().getCopy());
+					}
 				}
 
 				// add bounds of input pins
@@ -160,9 +164,10 @@ public class ResizeGroupOrSubappCommand extends Command {
 				fbnetworkElements.forEach(el -> el.getInterface().getInputVars().stream().filter(Objects::nonNull)
 						.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
 						.forEach(ep -> {
-							final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds();
+							final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds().getCopy();
 							pinBounds.union(pin);
 						}));
+				fbBounds = pinBounds;
 			}
 		}
 
