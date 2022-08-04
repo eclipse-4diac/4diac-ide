@@ -13,12 +13,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
-import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
@@ -40,18 +43,20 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 			final ServiceSequence seq = getSequence(selected);
 			if (seq != null) {
 				try {
-					if (seq.getStartState() != null && !seq.getStartState().isBlank()) { //$NON-NLS-1$
+					if ((seq.getStartState() != null) && !seq.getStartState().isBlank()) { // $NON-NLS-1$
 						AbstractInterpreterTest.runTest((BasicFBType) seq.getService().getFBType(), seq,
 								seq.getStartState());
 					} else {
 						AbstractInterpreterTest.runFBTest((BasicFBType) seq.getService().getFBType(), seq);
 					}
-					MessageDialog.openInformation(HandlerUtil.getActiveShell(event), Messages.RunServiceSequenceHandler_Success,
+					MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
+							Messages.RunServiceSequenceHandler_Success,
 							Messages.RunServiceSequenceHandler_SequenceMatchesECC);
 
 				} catch (final Exception e) {
 					FordiacLogHelper.logError("Service Sequence was inconsistent", e); //$NON-NLS-1$
-					MessageDialog.openError(HandlerUtil.getActiveShell(event), Messages.RunServiceSequenceHandler_InconsistencyDetected,
+					MessageDialog.openError(HandlerUtil.getActiveShell(event),
+							Messages.RunServiceSequenceHandler_InconsistencyDetected,
 							Messages.RunServiceSequenceHandler_SequenceDoesNotMatchECC);
 				}
 
@@ -64,21 +69,23 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		if (selection instanceof StructuredSelection) {
-			Object selected = ((StructuredSelection) selection).getFirstElement();
-			if (selected instanceof EditPart) {
-				selected = ((EditPart) selected).getModel();
-			}
-			if (selected instanceof ServiceSequence) {
-				setBaseEnabled(((ServiceSequence) selected).getService().getFBType() instanceof BasicFBType);
-			}
-		}
+		setBaseEnabled(!getSelectedSequences(selection).isEmpty());
 	}
 
-	private static ServiceSequence getSequence(final Object selected) {
-		if (selected instanceof ServiceSequenceEditPart) {
-			return ((ServiceSequenceEditPart) selected).getModel();
-		} else if (selected instanceof ServiceSequence) {
+	private static List<ServiceSequence> getSelectedSequences(final ISelection selection) {
+		if (selection instanceof StructuredSelection) {
+			return (List<ServiceSequence>) ((StructuredSelection) selection).toList().stream()
+					.map(RunServiceSequenceHandler::getSequence).filter(ServiceSequence.class::isInstance)
+					.collect(Collectors.toList());
+		}
+		return Collections.emptyList();
+	}
+
+	private static ServiceSequence getSequence(Object selected) {
+		if (selected instanceof EditPart) {
+			selected = ((EditPart) selected).getModel();
+		}
+		if (selected instanceof ServiceSequence) {
 			return (ServiceSequence) selected;
 		}
 		return null;
