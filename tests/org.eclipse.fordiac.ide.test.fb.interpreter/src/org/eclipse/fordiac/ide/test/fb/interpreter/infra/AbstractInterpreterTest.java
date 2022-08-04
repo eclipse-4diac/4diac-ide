@@ -76,7 +76,7 @@ public abstract class AbstractInterpreterTest {
 	@Test
 	public abstract void test() throws IllegalArgumentException;
 
-	protected static FBType loadFBType(final String name) {
+	public static FBType loadFBType(final String name) {
 		return loadFBType(name, true);
 	}
 
