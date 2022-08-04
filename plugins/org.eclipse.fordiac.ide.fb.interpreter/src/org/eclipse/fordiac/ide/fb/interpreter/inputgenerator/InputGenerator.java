@@ -60,8 +60,7 @@ public class InputGenerator {
 	 * @return A list of events of length count */
 	public static List<Event> getRandomEventsSequence(final FBNetworkElement fb, final int count, final long seed) {
 		random.setSeed(seed);
-		final List<Event> randomEvents = getRandomEventsSequence(fb, count);
-		return randomEvents;
+		return getRandomEventsSequence(fb, count);
 	}
 
 	public static List<VarDeclaration> getRandomDataSequence(final Event event) {
@@ -78,7 +77,7 @@ public class InputGenerator {
 		return vars;
 	}
 
-	public static List<VarDeclaration> getRandomDataSequence(final Event event, final int count, final long seed) {
+	public static List<VarDeclaration> getRandomDataSequence(final Event event, final long seed) {
 		final ValueRandom oldrandom = randomV;
 		randomV.setSeed(seed);
 		final List<VarDeclaration> randomData = getRandomDataSequence(event);

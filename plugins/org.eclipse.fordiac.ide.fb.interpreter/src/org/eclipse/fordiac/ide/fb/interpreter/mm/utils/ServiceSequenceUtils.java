@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Johannes Kepler University Linz
+ * Copyright (c) 2021 Johannes Kepler University Linz and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * Contributors:
  *   Antonio Garmenda, Bianca Wiesmayr
  *       - initial implementation and/or documentation
+ *   Paul Pavlicek - cleanup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
 
@@ -24,7 +25,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
-import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
@@ -32,7 +33,9 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.fb.interpreter.api.EventOccFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -135,10 +138,8 @@ public final class ServiceSequenceUtils {
 				if (eventPin == null) {
 					throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist"); //$NON-NLS-1$//$NON-NLS-2$
 				}
-				final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
-				eventOccurrence.setEvent(eventPin);
-				final Transaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
-				transaction.setInputEventOccurrence(eventOccurrence);
+				final EventOccurrence eventOccurrence = EventOccFactory.createFrom(eventPin, EcoreUtil.copy(runtime));
+				final Transaction transaction = TransactionFactory.createFrom(eventOccurrence);
 				// process parameter and set variables
 				final String inputParameters = st.getInputPrimitive().getParameters();
 				final var paramList = getParametersFromString(inputParameters);
@@ -148,11 +149,6 @@ public final class ServiceSequenceUtils {
 				transactions.add(transaction);
 			}
 		}
-		// The first transaction has a copy of the BasicFBTypeRuntime
-		final Copier copier = new Copier();
-		final FBRuntimeAbstract runtimeCopy = (FBRuntimeAbstract) copier.copy(runtime);
-		copier.copyReferences();
-		transactions.get(0).getInputEventOccurrence().setFbRuntime(runtimeCopy);
 		return transactions;
 	}
 

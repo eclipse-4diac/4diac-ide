@@ -20,31 +20,31 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 
 public class TransactionFactory {
 
-	public static Transaction createFrom(final EventOccurrence inputEO) {
+	public static FBTransaction createFrom(final EventOccurrence inputEO) {
 		final FBTransaction createdTr = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
 		createdTr.setInputEventOccurrence(inputEO);
-		return null;
+		return createdTr;
 	}
 
-	public static List<Transaction> createFrom(final List<EventOccurrence> inputEOs) {
+	public static List<FBTransaction> createFrom(final List<EventOccurrence> inputEOs) {
 		final int size = inputEOs.size();
-		final List<Transaction> trans = new ArrayList<>();
+		final List<FBTransaction> trans = new ArrayList<>();
 		for (int i = 0; i < size; i++) {
 			trans.add(createFrom(inputEOs.get(i)));
 		}
 		return trans;
 	}
 
-	public static Transaction createFrom(final Event inputEvent, final FBRuntimeAbstract runtime) {
+	public static FBTransaction createFrom(final Event inputEvent, final FBRuntimeAbstract runtime) {
 		return createFrom(EventOccFactory.createFrom(inputEvent, runtime));
 	}
 
-	public static List<Transaction> createFrom(final List<Event> inputEvents, final FBRuntimeAbstract initialRuntime) {
+	public static List<FBTransaction> createFrom(final List<Event> inputEvents,
+			final FBRuntimeAbstract initialRuntime) {
 		return createFrom(EventOccFactory.createFrom(inputEvents, initialRuntime));
 	}
 
