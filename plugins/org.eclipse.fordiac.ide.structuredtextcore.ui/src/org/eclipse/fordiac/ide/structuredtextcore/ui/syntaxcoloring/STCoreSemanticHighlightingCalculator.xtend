@@ -64,7 +64,7 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 			if (n.grammarElement == ga.STVarDeclarationAccess.nameIDTerminalRuleCall_1_0) {
 				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.STATIC_VAR_ID);
 			}
-			if ((n.grammarElement.eContainer == ga.STAnyTypeRule.alternatives)) {
+			if ((n.grammarElement?.eContainer == ga.STAnyTypeRule.alternatives)) {
 				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.DATA_TYPE_ID);
 			}
 		}

@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
@@ -53,7 +54,7 @@ public class MapToCommand extends Command {
 	private final Mapping mapping = LibraryElementFactory.eINSTANCE.createMapping();
 	private final CompoundCommand createdConnections = new CompoundCommand();
 
-	public MapToCommand(final FBNetworkElement srcElement, final Resource resource) {
+	private MapToCommand(final FBNetworkElement srcElement, final Resource resource) {
 		this.srcElement = srcElement;
 		this.resource = resource;
 	}
@@ -321,5 +322,14 @@ public class MapToCommand extends Command {
 	 * informUser.setMessage(
 	 * "Remapping required deletion of Connections added within the Resource - please check your network" );
 	 * informUser.open(); // TODO check whether markers could be used! } } */
+
+	public static Command createMapToCommand(final FBNetworkElement srcElement, final Resource resource) {
+		if (srcElement instanceof Group) {
+			final CompoundCommand cmd = new CompoundCommand();
+			((Group) srcElement).getGroupElements().forEach(el -> cmd.add(new MapToCommand(el, resource)));
+			return cmd;
+		}
+		return new MapToCommand(srcElement, resource);
+	}
 
 }

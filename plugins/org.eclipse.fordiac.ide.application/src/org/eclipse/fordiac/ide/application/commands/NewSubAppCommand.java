@@ -28,11 +28,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
+import org.eclipse.gef.commands.Command;
 
 public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	private final List<?> parts;
 	private final AddElementsToSubAppCommand addElements;
-	private MapToCommand mapSubappCmd; // can not be in the compound command as it needs to be performed when
+	private Command mapSubappCmd; // can not be in the compound command as it needs to be performed when
 	// subapp interface is finished
 
 	public NewSubAppCommand(final FBNetwork fbNetwork, final List<?> selection, final int x, final int y) {
@@ -107,7 +108,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 			}
 		}
 		if (null != res) {
-			mapSubappCmd = new MapToCommand(getElement(), res);
+			mapSubappCmd = MapToCommand.createMapToCommand(getElement(), res);
 		}
 	}
 

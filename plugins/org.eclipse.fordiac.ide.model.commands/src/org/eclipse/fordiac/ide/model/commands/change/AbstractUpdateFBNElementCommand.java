@@ -29,12 +29,14 @@ import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
@@ -42,9 +44,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.gef.commands.Command;
@@ -66,7 +70,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 	protected final CompoundCommand reconnCmds = new CompoundCommand();
 	protected final CompoundCommand resourceConnCreateCmds = new CompoundCommand();
 
-	protected MapToCommand mapCmd = null;
+	protected Command mapCmd = null;
 	protected UnmapCommand unmapCmd = null;
 
 	/** The updated version of the FBNetworkElement */
@@ -103,7 +107,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		}
 
 		createNewFB();
-		checkGroup(oldElement, newElement);  // needs to be done before anything is changed on the old element Bug
+		checkGroup(oldElement, newElement); // needs to be done before anything is changed on the old element Bug
 		// 579570
 
 		network.getNetworkElements().add(newElement);
@@ -123,7 +127,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 		// Map FB
 		if (resource != null) {
-			mapCmd = new MapToCommand(newElement, resource);
+			mapCmd = MapToCommand.createMapToCommand(newElement, resource);
 			if (mapCmd.canExecute()) {
 				mapCmd.execute();
 				recreateResourceConns(resourceConns);
@@ -197,6 +201,18 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		}
 	}
 
+	public void setInterface() {
+		newElement.setInterface(newElement.getType().getInterfaceList().copy());
+		if (newElement instanceof Multiplexer) {
+			((Multiplexer) newElement).setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry).getType()
+					.getInterfaceList().getOutputVars().get(0).getType());
+		}
+		if (newElement instanceof Demultiplexer) {
+			((Demultiplexer) newElement).setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry)
+					.getType().getInterfaceList().getInputVars().get(0).getType());
+		}
+	}
+
 	protected void recreateResourceConns(final List<ConnData> resourceConns) {
 		final FBNetworkElement orgMappedElement = unmapCmd.getMappedFBNetworkElement();
 		final FBNetworkElement copiedMappedElement = newElement.getOpposite();
@@ -253,6 +269,16 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 			inVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			checkSourceParam(inVar);
 		}
+	}
+
+	protected void transferInstanceComments() {
+		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getComment().isBlank())
+				.forEach(ie -> {
+					final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
+					if (newIE != null) {
+						newIE.setComment(ie.getComment());
+					}
+				});
 	}
 
 	private void checkSourceParam(final VarDeclaration variable) {
@@ -373,14 +399,13 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	private IInterfaceElement createErrorMarker(final FBNetworkElement newElement, final IInterfaceElement oldInterface,
 			final String errorMessage) {
-		final boolean markerExists = newElement.getInterface().getErrorMarker().stream()
-				.anyMatch(e -> e.getName().equals(oldInterface.getName()) && (e.isIsInput() == oldInterface.isIsInput()));
+		final boolean markerExists = newElement.getInterface().getErrorMarker().stream().anyMatch(
+				e -> e.getName().equals(oldInterface.getName()) && (e.isIsInput() == oldInterface.isIsInput()));
 
 		final ErrorMarkerInterface interfaceElement = ConnectionHelper.createErrorMarkerInterface(
 				oldInterface.getType(), oldInterface.getName(), oldInterface.isIsInput(), newElement.getInterface());
 
-		if (isVariable(oldInterface)
-				&& !((VarDeclaration) oldInterface).getValue().getValue().isBlank()) {
+		if (isVariable(oldInterface) && !((VarDeclaration) oldInterface).getValue().getValue().isBlank()) {
 			final Value value = LibraryElementFactory.eINSTANCE.createValue();
 			value.setValue(((VarDeclaration) oldInterface).getValue().getValue());
 			interfaceElement.setValue(value);

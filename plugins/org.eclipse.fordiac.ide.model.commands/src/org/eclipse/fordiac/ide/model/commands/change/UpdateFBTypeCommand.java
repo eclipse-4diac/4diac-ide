@@ -17,16 +17,12 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
@@ -65,30 +61,6 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		transferInstanceComments();
 	}
 
-	private void transferInstanceComments() {
-		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getComment().isBlank())
-		.forEach(ie -> {
-			final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
-			if (newIE != null) {
-				newIE.setComment(ie.getComment());
-			}
-		});
-	}
-
-	public void setInterface() {
-		newElement.setInterface(newElement.getType().getInterfaceList().copy());
-		if (newElement instanceof Multiplexer) {
-			((Multiplexer) newElement)
-					.setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry).getType()
-					.getInterfaceList().getOutputVars().get(0).getType());
-		}
-		if(newElement instanceof Demultiplexer){
-			((Demultiplexer) newElement)
-					.setStructTypeElementsAtInterface((StructuredType) ((FBTypeEntry) entry).getType()
-					.getInterfaceList().getInputVars().get(0).getType());
-		}
-	}
-
 	protected void setEntry(final TypeEntry entry) {
 		this.entry = entry;
 	}
@@ -108,7 +80,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 			((AdapterFB) copy).setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
 		} else if (entry.getType() instanceof CompositeFBType) {
 			copy = LibraryElementFactory.eINSTANCE.createCFBInstance();
-		} else if (isMultiplexer()) {	// $NON-NLS-1$
+		} else if (isMultiplexer()) { // $NON-NLS-1$
 			copy = createMultiplexer();
 		} else {
 			copy = LibraryElementFactory.eINSTANCE.createFB();
@@ -119,8 +91,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	public boolean invalidType() {
-		return (entry.getFile() == null || !entry.getFile().exists())
-				&& !reloadErrorType();
+		return ((entry.getFile() == null) || !entry.getFile().exists()) && !reloadErrorType();
 	}
 
 	private FBNetworkElement createMultiplexer() {
@@ -134,14 +105,14 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	private boolean isMultiplexer() {
-		return entry instanceof FBTypeEntry && entry.getType() instanceof ServiceInterfaceFBType
+		return (entry instanceof FBTypeEntry) && (entry.getType() instanceof ServiceInterfaceFBType)
 				&& entry.getType().getName().startsWith("STRUCT");
 	}
 
 	public boolean reloadErrorType() {
 		final TypeLibrary typeLibrary = entry.getTypeLibrary();
 		final TypeEntry reloadedType = typeLibrary.find(entry.getTypeName());
-		if (reloadedType != null && reloadedType.getFile() != null && reloadedType.getFile().exists()) {
+		if ((reloadedType != null) && (reloadedType.getFile() != null) && reloadedType.getFile().exists()) {
 			typeLibrary.removeErrorTypeEntry(entry);
 			entry = reloadedType;
 			return true;

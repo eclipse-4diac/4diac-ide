@@ -107,6 +107,8 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		query.setFocus();
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(query);
 
+		labelFactory.text(Messages.Jokers).create(composite);
+
 		caseSensitive = WidgetFactory.button(SWT.CHECK).text(Messages.CaseSensitive).create(composite);
 		exactNameMatching = WidgetFactory.button(SWT.CHECK).text(Messages.ExactNameMatching)
 				.create(composite);

@@ -14,6 +14,8 @@
 
 package org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring
 
+import org.eclipse.swt.SWT
+import org.eclipse.swt.graphics.RGB
 import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultHighlightingConfiguration
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfigurationAcceptor
 
@@ -38,12 +40,12 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 
 		// lexical highlighting Styles
 		acceptor.acceptDefaultHighlighting(KEYWORD_ID, "Keyword", keywordTextStyle());
-		acceptor.acceptDefaultHighlighting(VAR_KEYWORD_ID, "Variable Keyword", commentTextStyle());
-		acceptor.acceptDefaultHighlighting(DATA_TYPE_ID, "Date Types", commentTextStyle());
-		acceptor.acceptDefaultHighlighting(FUNCTIONS_ID, "Functions", commentTextStyle());
-		acceptor.acceptDefaultHighlighting(METHOD_BLOCK_ID, "MethodBlock", commentTextStyle());
-		acceptor.acceptDefaultHighlighting(ALGORITHM_BLOCK_ID, "AlgorithmBlock", commentTextStyle());
-		acceptor.acceptDefaultHighlighting(FUNCTION_BLOCK_ID, "FunctionBlock", commentTextStyle());
+		acceptor.acceptDefaultHighlighting(VAR_KEYWORD_ID, "Variable Keyword", varKeywordTextStyle());
+		acceptor.acceptDefaultHighlighting(DATA_TYPE_ID, "Date Types", dataTypeTextStyle());
+		acceptor.acceptDefaultHighlighting(FUNCTIONS_ID, "Functions", functionsTextStyle());
+		acceptor.acceptDefaultHighlighting(METHOD_BLOCK_ID, "MethodBlock", methodBlockTextStyle());
+		acceptor.acceptDefaultHighlighting(ALGORITHM_BLOCK_ID, "AlgorithmBlock", algorithmTextStyle());
+		acceptor.acceptDefaultHighlighting(FUNCTION_BLOCK_ID, "FunctionBlock", functionBockTextStyle());
 		acceptor.acceptDefaultHighlighting(PUNCTUATION_ID, "Punctuation character", punctuationTextStyle());
 		acceptor.acceptDefaultHighlighting(COMMENT_ID, "Comment", commentTextStyle());
 		acceptor.acceptDefaultHighlighting(TASK_ID, "Task Tag", taskTextStyle());
@@ -53,12 +55,107 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 		acceptor.acceptDefaultHighlighting(INVALID_TOKEN_ID, "Invalid Symbol", errorTextStyle());
 
 		// Semantic highlighting Styles	
-		acceptor.acceptDefaultHighlighting(CALL_FUNCTION_ID, "CallFunction", keywordTextStyle());
-		acceptor.acceptDefaultHighlighting(STATIC_VAR_ID, "StaticVar", keywordTextStyle());
-		acceptor.acceptDefaultHighlighting(OUTPUT_FUNCTION_ID, "OutputFunctionVar", keywordTextStyle());
-		acceptor.acceptDefaultHighlighting(RETURN_FUNCTION_ID, "ReturnFunctionVar", keywordTextStyle());
-		acceptor.acceptDefaultHighlighting(FUNCTIONS_NAME_ID, "FunctionsName", commentTextStyle());
+		acceptor.acceptDefaultHighlighting(CALL_FUNCTION_ID, "CallFunction", callFunctionTextStyle());
+		acceptor.acceptDefaultHighlighting(STATIC_VAR_ID, "StaticVar", staticVarTextStyle());
+		acceptor.acceptDefaultHighlighting(OUTPUT_FUNCTION_ID, "OutputFunctionVar", outputFunctionTextStyle());
+		acceptor.acceptDefaultHighlighting(RETURN_FUNCTION_ID, "ReturnFunctionVar", returnFunctionTextStyle());
+		acceptor.acceptDefaultHighlighting(FUNCTIONS_NAME_ID, "FunctionsName", functionNameTextStyle());
 
 	}
+	
+	def algorithmTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(128, 0, 128));
+		textStyle.setStyle(SWT.BOLD);
+		return textStyle;
+	}
 
+	def callFunctionTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(0, 128, 255));
+		return textStyle;
+	}
+	
+	def dataTypeTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(128, 128, 255));
+		return textStyle;
+	}
+	
+	override defaultTextStyle() {
+		var textStyle = super.defaultTextStyle().copy();
+		textStyle.setColor(new RGB(64, 0, 0));
+		return textStyle;
+	}
+	
+	def functionBockTextStyle(){
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(128, 0, 128));
+		textStyle.setStyle(SWT.BOLD);
+		return textStyle;
+	}
+
+	def functionsTextStyle(){
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(128, 0, 128));
+		textStyle.setStyle(SWT.BOLD);
+		return textStyle;
+	}
+	
+	def functionNameTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(0, 0, 0));
+		return textStyle;
+	}
+	
+	override keywordTextStyle(){
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(255, 128, 0));
+		return textStyle;
+	}
+	
+	def methodBlockTextStyle(){
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(128, 0, 128));
+		textStyle.setStyle(SWT.BOLD);
+		return textStyle;
+	}
+	
+	override numberTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(0, 164, 164));
+		return textStyle;
+	}
+	
+	def outputFunctionTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(0, 0, 0));
+		return textStyle;
+	}
+	
+	def returnFunctionTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(0, 0, 0));
+		return textStyle;
+	}
+	
+	def staticVarTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(0, 0, 0));
+		return textStyle;
+	}
+	
+	override stringTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(0, 0, 255));
+		return textStyle;
+	}
+	
+	
+	def varKeywordTextStyle(){
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(128, 128, 255));
+		textStyle.setStyle(SWT.BOLD);
+		return textStyle;
+	}
 }

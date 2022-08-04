@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.TestingManager;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.configuration.internal.TestDeploymentExecutor;
 import org.eclipse.fordiac.ide.fbtypeeditor.fbtester.model.TestElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -320,7 +321,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 	}
 
 	@Override
-	public void connectionOpened() {
+	public void connectionOpened(final Device dev) {
 		//currently not used method
 	}
 
@@ -354,7 +355,7 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 	}
 
 	@Override
-	public void connectionClosed() {
+	public void connectionClosed(final Device dev) {
 		//currently not used method
 	}
 
