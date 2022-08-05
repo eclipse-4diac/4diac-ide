@@ -55,14 +55,11 @@ public class ExportFolderFBsAsXMI extends ExportFBsAsXMI {
 		}
 
 		if (dir.listFiles() != null) {
-			File returnValue = null;
+			File foundFile = null;
 			for (final File file : dir.listFiles()) {
-				if (returnValue == null) {
-					if (file.isDirectory()) {
-						returnValue = findFolderInProject(file, dirName);
-					}
-				} else {
-					return returnValue;
+				foundFile = findFolderInProject(file, dirName);
+				if (foundFile != null) {
+					return foundFile;
 				}
 			}
 		}
