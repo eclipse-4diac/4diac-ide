@@ -18,6 +18,7 @@ import java.util.Set;
 
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.search.ModelSearchResultPage;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -134,6 +135,9 @@ public class StructUpdateDialog extends MessageDialog {
 			public String getText(final Object element) {
 				if (element instanceof INamedElement) {
 					return ((INamedElement) element).getName();
+				}
+				if (element instanceof FBNetworkElement) {
+					return ((FBNetworkElement) element).getName();
 				}
 				return super.getText(element);
 			}
