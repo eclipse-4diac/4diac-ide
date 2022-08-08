@@ -159,6 +159,12 @@ public class ValueRandom {
 	}
 
 	public String getRandom(final DataType dataType) {
+		if (dataType instanceof IntType) {
+			return nextInteger();
+		}
+		if (dataType instanceof UintType) {
+			return nextUint();
+		}
 		if (dataType instanceof BoolType) {
 			return nextBool();
 		}
