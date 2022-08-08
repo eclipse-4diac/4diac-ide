@@ -22,12 +22,13 @@ import java.util.stream.Collectors;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 
-public class InputGenerator {
+public final class InputGenerator {
 
 	private static Random random = new Random();
 	private static ValueRandom randomV = new ValueRandom();
@@ -40,8 +41,25 @@ public class InputGenerator {
 	 * @param count The number of generated input events
 	 * @return A list of events of length count */
 	public static List<Event> getRandomEventsSequence(final FBNetworkElement fb, final int count) {
+		if (fb == null || count == 0) {
+			throw new IllegalArgumentException();
+		}
+		return createRandomEventSequence(fb.getInterface().getEventInputs(), count);
+	}
+
+	public static List<Event> getRandomEventsSequence(final FBType fb, final int count) {
+		if (fb == null || count == 0) {
+			throw new IllegalArgumentException();
+		}
+		return createRandomEventSequence(fb.getInterfaceList().getEventInputs(), count);
+	}
+
+	private static List<Event> createRandomEventSequence(final EList<Event> fbEvents, final int count) {
+		if ((!fbEvents.isEmpty()) || count == 0) {
+			throw new IllegalArgumentException();
+		}
+
 		final List<Event> randomEvents = new ArrayList<>();
-		final EList<Event> fbEvents = fb.getInterface().getEventInputs();
 		final int numberPossibleEvents = fbEvents.size();
 		for (int i = 0; i < count; i++) {
 			final Event randomEvent = fbEvents.get(random.nextInt(numberPossibleEvents));
@@ -63,30 +81,32 @@ public class InputGenerator {
 		return getRandomEventsSequence(fb, count);
 	}
 
-	public static List<VarDeclaration> getRandomDataSequence(final Event event) {
+	public static void setRandomDataSequence(final Event event) {
+		if (event == null) {
+			throw new IllegalArgumentException();
+		}
 		final List<VarDeclaration> vars = event.getWith().stream().map(With::getVariables).filter(Objects::nonNull)
 				.collect(Collectors.toList());
-		for (final VarDeclaration variabe : vars) {
-			if (variabe.getValue() == null) {
+		for (final VarDeclaration variable : vars) {
+			if (variable.getValue() == null) {
 				final Value v = LibraryElementFactory.eINSTANCE.createValue();
-				variabe.setValue(v);
+				variable.setValue(v);
 			}
-			variabe.getValue().setValue(getRandom(variabe));
+			variable.getValue().setValue(getRandom(variable));
 
 		}
-		return vars;
 	}
 
-	public static List<VarDeclaration> getRandomDataSequence(final Event event, final long seed) {
+	public static void setRandomDataSequence(final Event event, final long seed) {
 		final ValueRandom oldrandom = randomV;
+		randomV = new ValueRandom();
 		randomV.setSeed(seed);
-		final List<VarDeclaration> randomData = getRandomDataSequence(event);
+		setRandomDataSequence(event);
 		randomV = oldrandom;
-		return randomData;
 	}
 
 	private static String getRandom(final VarDeclaration x) {
-		return randomV.getRandom(x.getType().getClass());
+		return randomV.getRandom(x.getType());
 	}
 
 	private InputGenerator() {

@@ -19,17 +19,31 @@ import org.eclipse.fordiac.ide.model.data.BoolType;
 import org.eclipse.fordiac.ide.model.data.ByteType;
 import org.eclipse.fordiac.ide.model.data.CharType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.DintType;
 import org.eclipse.fordiac.ide.model.data.DwordType;
 import org.eclipse.fordiac.ide.model.data.IntType;
+import org.eclipse.fordiac.ide.model.data.LintType;
 import org.eclipse.fordiac.ide.model.data.LrealType;
 import org.eclipse.fordiac.ide.model.data.LwordType;
 import org.eclipse.fordiac.ide.model.data.RealType;
+import org.eclipse.fordiac.ide.model.data.SintType;
+import org.eclipse.fordiac.ide.model.data.UdintType;
 import org.eclipse.fordiac.ide.model.data.UintType;
+import org.eclipse.fordiac.ide.model.data.UlintType;
+import org.eclipse.fordiac.ide.model.data.UsintType;
 import org.eclipse.fordiac.ide.model.data.WcharType;
 import org.eclipse.fordiac.ide.model.data.WordType;
 
 @SuppressWarnings("serial")
 public class ValueRandom {
+
+	private static final int MAX_BYTE = 256;
+	private static final int MAXEXP_FLOAT = 38;
+	private static final int MAXEXP_DOUBLE = 308;
+	private static final int EXP = 10;
+	private static final int INT_LENGTH = 32;
+	private static final int WORD_LENGTH = 16;
+	private static final int BYTE_LENGTH = 8;
 
 	private static final class LocalRandom extends Random {
 		int nextbits(final int bits) {
@@ -44,48 +58,73 @@ public class ValueRandom {
 	}
 
 	public String nextByte() {
-		return "16#" + Integer.toBinaryString(random.nextbits(8)); //$NON-NLS-1$
+		return "16#" + Integer.toBinaryString(random.nextbits(BYTE_LENGTH)); //$NON-NLS-1$
+	}
+
+	public String nextSint() {
+		return "SINT#" + (random.nextbits(BYTE_LENGTH) - (MAX_BYTE / 2) - 1);//$NON-NLS-1$
 	}
 
 	public String nextUint() {
-		return "UINT#" + random.nextbits(16);//$NON-NLS-1$
+		return "UINT#" + random.nextbits(WORD_LENGTH);//$NON-NLS-1$
 	}
 
 	public String nextInteger() {
-		return "INT#" + (random.nextbits(16) + Short.MIN_VALUE);//$NON-NLS-1$
+		return "INT#" + (random.nextbits(WORD_LENGTH) + Short.MIN_VALUE);//$NON-NLS-1$
 	}
 
 	public String nextWord() {
-		return "16#" + Integer.toBinaryString(random.nextbits(16));//$NON-NLS-1$
+		return "16#" + Integer.toBinaryString(random.nextbits(WORD_LENGTH));//$NON-NLS-1$
 	}
 
 	public String nextDword() {
-		return "16#" + Integer.toBinaryString(random.nextbits(32));//$NON-NLS-1$
+		return "16#" + Integer.toBinaryString(random.nextbits(INT_LENGTH));//$NON-NLS-1$
 	}
 
 	public String nextLword() {
-		return "16#" + Integer.toBinaryString(random.nextbits(32)) + Integer.toBinaryString(random.nextbits(32));//$NON-NLS-1$
+		return "16#" + Integer.toBinaryString(random.nextbits(INT_LENGTH)) //$NON-NLS-1$
+				+ Integer.toBinaryString(random.nextbits(INT_LENGTH));
 	}
 
 	public String nextChar() {
-		return "CHAR#" + String.valueOf(random.nextbits(8)); //$NON-NLS-1$
+		return "CHAR#" + random.nextbits(BYTE_LENGTH); //$NON-NLS-1$
 	}
 
 	public String nextWchar() {
-		return "WCHAR#" + String.valueOf(random.nextbits(16)); //$NON-NLS-1$
+		return "WCHAR#" + random.nextbits(WORD_LENGTH); //$NON-NLS-1$
+	}
+
+	public String nextDint() {
+		return "DINT#" + (random.nextbits(INT_LENGTH) - (Math.pow(2, 31) - 1)); //$NON-NLS-1$
+	}
+
+	public String nextLint() {
+		return "LINT#" + (random.nextLong() - (Math.pow(2, 63) - 1)); //$NON-NLS-1$
+	}
+
+	public String nextUsint() {
+		return "USINT#" + random.nextbits(BYTE_LENGTH); //$NON-NLS-1$
+	}
+
+	public String nextUdint() {
+		return "UDINT#" + random.nextbits(INT_LENGTH); //$NON-NLS-1$
+	}
+
+	public String nextUlint() {
+		return "ULINT#" + random.nextLong();//$NON-NLS-1$
 	}
 
 	public String nextReal() {
 		if (random.nextBoolean()) {
 			if (random.nextBoolean()) {
-				return "REAL#" + random.nextFloat() * (Math.pow(10, random.nextInt(38)) * -1);//$NON-NLS-1$
+				return "REAL#" + random.nextFloat() * (Math.pow(EXP, random.nextInt(MAXEXP_FLOAT)) * -1);//$NON-NLS-1$
 			}
-			return "REAL#" + random.nextFloat() / (Math.pow(10, random.nextInt(38))) * -1;//$NON-NLS-1$
+			return "REAL#" + random.nextFloat() / (Math.pow(EXP, random.nextInt(MAXEXP_FLOAT)));//$NON-NLS-1$
 		}
 		if (random.nextBoolean()) {
-			return "REAL#" + random.nextFloat() * (Math.pow(10, random.nextInt(38)));//$NON-NLS-1$
+			return "REAL#" + random.nextFloat() * Math.pow(EXP, random.nextInt(MAXEXP_FLOAT));//$NON-NLS-1$
 		}
-		return "REAL#" + random.nextFloat() * (Math.pow(10, random.nextInt(38))) * -1;//$NON-NLS-1$
+		return "REAL#" + random.nextFloat() / (Math.pow(EXP, random.nextInt(MAXEXP_FLOAT)) * -1);//$NON-NLS-1$
 	}
 
 	public String nextRealEqui() {
@@ -98,14 +137,14 @@ public class ValueRandom {
 	public String nextLreal() {
 		if (random.nextBoolean()) {
 			if (random.nextBoolean()) {
-				return "LREAL#" + random.nextFloat() * (Math.pow(10, random.nextInt(308)) * -1);//$NON-NLS-1$
+				return "LREAL#" + random.nextFloat() * (Math.pow(EXP, random.nextInt(MAXEXP_DOUBLE)) * -1);//$NON-NLS-1$
 			}
-			return "LREAL#" + random.nextFloat() / (Math.pow(10, random.nextInt(308))) * -1;//$NON-NLS-1$
+			return "LREAL#" + random.nextFloat() / (Math.pow(EXP, random.nextInt(MAXEXP_DOUBLE)));//$NON-NLS-1$
 		}
 		if (random.nextBoolean()) {
-			return "LREAL#" + random.nextFloat() * (Math.pow(10, random.nextInt(308)));//$NON-NLS-1$
+			return "LREAL#" + random.nextFloat() * Math.pow(EXP, random.nextInt(MAXEXP_DOUBLE));//$NON-NLS-1$
 		}
-		return "LREAL#" + random.nextFloat() * (Math.pow(10, random.nextInt(308))) * -1;//$NON-NLS-1$
+		return "LREAL#" + random.nextFloat() / (Math.pow(EXP, random.nextInt(MAXEXP_DOUBLE))) * -1;//$NON-NLS-1$
 	}
 
 	public String nextLrealEqui() {
@@ -119,38 +158,56 @@ public class ValueRandom {
 		random.setSeed(seed);
 	}
 
-	public String getRandom(final Class<? extends DataType> clazz) {
-		if (clazz == IntType.class) {
-			return nextInteger();
-		}
-		if (clazz == UintType.class) {
-			return nextUint();
-		}
-		if (clazz == BoolType.class) {
+	public String getRandom(final DataType dataType) {
+		if (dataType instanceof BoolType) {
 			return nextBool();
 		}
-		if (clazz == ByteType.class) {
+		if (dataType instanceof SintType) {
+			return nextSint();
+		}
+		if (dataType instanceof IntType) {
+			return nextInteger();
+		}
+		if (dataType instanceof DintType) {
+			return nextDint();
+		}
+		if (dataType instanceof LintType) {
+			return nextLint();
+		}
+		if (dataType instanceof UsintType) {
+			return nextUsint();
+		}
+		if (dataType instanceof UintType) {
+			return nextUint();
+		}
+		if (dataType instanceof UdintType) {
+			return nextUdint();
+		}
+		if (dataType instanceof UlintType) {
+			return nextUlint();
+		}
+		if (dataType instanceof ByteType) {
 			return nextByte();
 		}
-		if (clazz == WordType.class) {
+		if (dataType instanceof WordType) {
 			return nextWord();
 		}
-		if (clazz == DwordType.class) {
+		if (dataType instanceof DwordType) {
 			return nextDword();
 		}
-		if (clazz == LwordType.class) {
+		if (dataType instanceof LwordType) {
 			return nextLword();
 		}
-		if (clazz == CharType.class) {
+		if (dataType instanceof CharType) {
 			return nextChar();
 		}
-		if (clazz == WcharType.class) {
+		if (dataType instanceof WcharType) {
 			return nextWchar();
 		}
-		if (clazz == RealType.class) {
+		if (dataType instanceof RealType) {
 			return nextReal();
 		}
-		if (clazz == LrealType.class) {
+		if (dataType instanceof LrealType) {
 			return nextLreal();
 		}
 		return "";//$NON-NLS-1$

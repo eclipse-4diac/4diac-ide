@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventOccFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
@@ -45,11 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
@@ -57,6 +54,8 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -88,7 +87,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 					try {
 						final FBType fbType = seq.getService().getFBType();
 						setParameters(fbType, parameters);
-						runInterpreter(seq, events, dialog.isAppend(), fbType);
+						runInterpreter(seq, events, dialog.isAppend(), dialog.isRandom(), fbType);
 					} catch (final Exception e) {
 						FordiacLogHelper.logError(e.getMessage(), e);
 						MessageDialog.openError(HandlerUtil.getActiveShell(event),
@@ -101,15 +100,26 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		return Status.OK_STATUS;
 	}
 
-	private static void runInterpreter(final ServiceSequence seq, final List<String> events, final boolean isAppend,
-			final FBType fbType) {
-		final EventManager eventManager = createEventManager(fbType, events);
+	private static void runInterpreter(final ServiceSequence seq, final List<String> eventNames, final boolean isAppend,
+			final boolean isRandom, final FBType fbType) {
+		final List<Event> events;
+		final FBType typeCopy = fbType;// EcoreUtil.copy(fbType);
+		if (isRandom) {
+			events = InputGenerator.getRandomEventsSequence(typeCopy, 10);
+			if (!events.isEmpty()) {
+				InputGenerator.setRandomDataSequence(events.get(0));
+			}
+		} else {
+			events = eventNames.stream().map(name -> findEvent(typeCopy, name)).filter(Objects::nonNull)
+					.collect(Collectors.toList());
+		}
+		final EventManager eventManager = createEventManager(typeCopy, events);
 		EventManagerUtils.process(eventManager);
 		if (!isAppend) {
 			seq.getServiceTransaction().clear();
 		}
 		for (final Transaction transaction : eventManager.getTransactions()) {
-			convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
+			ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
 		}
 	}
 
@@ -123,23 +133,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		}
 	}
 
-	private static void convertTransactionToServiceModel(final ServiceSequence seq, final FBType fbType,
-			final FBTransaction transaction) {
-		final ServiceTransaction serviceTransaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
-		seq.getServiceTransaction().add(serviceTransaction);
-		final InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
-		inputPrimitive.setEvent(transaction.getInputEventOccurrence().getEvent().getName());
-		inputPrimitive.setInterface(fbType.getService().getLeftInterface());
-		serviceTransaction.setInputPrimitive(inputPrimitive);
-		for (final EventOccurrence outputEvent : transaction.getOutputEventOccurrences()) {
-			final OutputPrimitive outputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
-			outputPrimitive.setEvent(outputEvent.getEvent().getName());
-			outputPrimitive.setInterface(fbType.getService().getLeftInterface());
-			serviceTransaction.getOutputPrimitive().add(outputPrimitive);
-		}
-	}
-
-	private static EventManager createEventManager(final FBType fbType, final List<String> eventNames) {
+	private static EventManager createEventManager(final FBType fbType, final List<Event> events) {
 		if (fbType.getService() == null) {
 			fbType.setService(ServiceSequenceUtils.createEmptyServiceModel());
 		}
@@ -149,8 +143,6 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
 		resource.getContents().add(eventManager);
 
-		final List<Event> events = eventNames.stream().map(name -> findEvent(fbType, name)).filter(Objects::nonNull)
-				.collect(Collectors.toList());
 		final List<EventOccurrence> createEos = EventOccFactory.createFrom(events, RuntimeFactory.createFrom(fbType));
 
 		for (final EventOccurrence eventOccurrence : createEos) {
@@ -183,15 +175,18 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		private Text inputEventText;
 		private Text inputParameterText;
 		private Button appendCheckbox;
+		private Button randomCheckbox;
 		private final List<String> events;
 		private final List<String> parameters;
 		private boolean append;
+		private boolean random;
+
 		private final ServiceSequence serviceSequence;
 
 		public RecordSequenceDialog(final Shell parentShell, final List<String> events, final List<String> parameters,
 				final ServiceSequence serviceSequence) {
-			super(parentShell, "Record Sequence (separated by ;)", null, "Configuration", MessageDialog.INFORMATION, 0,
-					"Run");
+			super(parentShell, "Record Sequence (separated by ;)", null, "Configuration", MessageDialog.INFORMATION, 0, //$NON-NLS-1$//$NON-NLS-2$
+					"Run"); //$NON-NLS-1$
 			this.events = events;
 			this.parameters = parameters;
 			this.serviceSequence = serviceSequence;
@@ -223,7 +218,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			inputParameterText.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
 
 			label = new Label(group, SWT.None);
-			label.setText("Start State");
+			label.setText("Start State");//$NON-NLS-1$
 
 			final CCombo inputStartStateCombo = ComboBoxWidgetFactory.createCombo(group);
 			inputStartStateCombo.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
@@ -243,6 +238,23 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			appendCheckbox = new Button(group, SWT.CHECK);
 			appendCheckbox.setText(Messages.RecordServiceSequenceHandler_APPEND);
 			appendCheckbox.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
+
+			randomCheckbox = new Button(group, SWT.CHECK);
+			randomCheckbox.setText(Messages.RecordServiceSequenceHandler_RANDOM);
+			randomCheckbox.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
+			randomCheckbox.addSelectionListener(new SelectionListener() {
+
+				@Override
+				public void widgetSelected(final SelectionEvent e) {
+					inputEventText.setEnabled(!randomCheckbox.getSelection());
+					inputParameterText.setEnabled(!randomCheckbox.getSelection());
+				}
+
+				@Override
+				public void widgetDefaultSelected(final SelectionEvent e) {
+					// is never called
+				}
+			});
 			return dialogArea;
 		}
 
@@ -251,6 +263,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			events.addAll(getEvents());
 			parameters.addAll(getParameters());
 			append = appendCheckbox.getSelection();
+			random = randomCheckbox.getSelection();
 			super.buttonPressed(buttonId);
 		}
 
@@ -264,6 +277,10 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 
 		public boolean isAppend() {
 			return append;
+		}
+
+		public boolean isRandom() {
+			return random;
 		}
 	}
 }

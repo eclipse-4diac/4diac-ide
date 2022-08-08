@@ -10,7 +10,7 @@
  * Contributors:
  *   Antonio Garmenda, Bianca Wiesmayr
  *       - initial implementation and/or documentation
- *   Paul Pavlicek - cleanup
+ *   Paul Pavlicek - cleanup and added factory methods
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
 
@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
@@ -255,6 +256,52 @@ public final class ServiceSequenceUtils {
 			return (val != null) && expectedValue.equalsIgnoreCase(val.getValue());
 		}
 		return false;
+	}
+
+	private static InputPrimitive createInputPrimitive(final FBType fbType, final FBTransaction transaction) {
+		final InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
+		inputPrimitive.setEvent(transaction.getInputEventOccurrence().getEvent().getName());
+		inputPrimitive.setInterface(fbType.getService().getLeftInterface());
+		inputPrimitive.setParameters(summarizeParameters(fbType.getInterfaceList().getInputVars()));
+		return inputPrimitive;
+	}
+
+	private static String summarizeParameters(final EList<VarDeclaration> inputVars) {
+		final StringBuilder builder = new StringBuilder();
+		inputVars.forEach(variable -> {
+			builder.append(variable.getName());
+			builder.append(":="); //$NON-NLS-1$
+			if (variable.getValue() != null) {
+				builder.append(variable.getValue().getValue());
+			}
+			builder.append(";\n"); //$NON-NLS-1$
+		});
+		return builder.toString();
+	}
+
+	private static OutputPrimitive createOutputPrimitive(final EventOccurrence outputEvent, final FBType fbType) {
+		final OutputPrimitive outputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
+		outputPrimitive.setEvent(outputEvent.getEvent().getName());
+		outputPrimitive.setInterface(fbType.getService().getLeftInterface());
+		outputPrimitive.setParameters(summarizeParameters(fbType.getInterfaceList().getOutputVars()));
+		return outputPrimitive;
+	}
+
+	public static void convertTransactionToServiceModel(final ServiceSequence seq, final FBType fbType,
+			final FBTransaction transaction) {
+		final ServiceTransaction serviceTransaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
+		seq.getServiceTransaction().add(serviceTransaction);
+		serviceTransaction.setInputPrimitive(
+				createInputPrimitive(getFbTypeFromRuntime(transaction.getInputEventOccurrence()), transaction));
+		for (final EventOccurrence outputEvent : transaction.getOutputEventOccurrences()) {
+			serviceTransaction.getOutputPrimitive()
+					.add(createOutputPrimitive(outputEvent, getFbTypeFromRuntime(outputEvent)));
+		}
+	}
+
+	private static BasicFBType getFbTypeFromRuntime(final EventOccurrence eo) {
+		final BasicFBTypeRuntime runtime = (BasicFBTypeRuntime) eo.getFbRuntime();
+		return runtime.getBasicfbtype(); // TODO this only works for basic fbs for now!
 	}
 
 	private ServiceSequenceUtils() {
