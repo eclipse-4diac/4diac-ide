@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
+import org.eclipse.fordiac.ide.gef.widgets.PinValueDirectEditManager;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -54,11 +55,8 @@ import org.eclipse.gef.editparts.AbstractGraphicalEditPart;
 import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
-import org.eclipse.swt.events.KeyAdapter;
-import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.FontMetrics;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Text;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
@@ -365,23 +363,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 *
 	 * @return the manager */
 	public DirectEditManager createDirectEditManager() {
-		return new LabelDirectEditManager(this, getFigure()) {
-
-			@Override
-			protected void initCellEditor() {
-				super.initCellEditor();
-				((Text) getCellEditor().getControl()).addKeyListener(new KeyAdapter() {
-					// hook enter key pressed to save also default values in pin
-					@Override
-					public void keyPressed(final KeyEvent e) {
-						if(e.character == '\r') {
-							setDirty(true);
-						}
-					}
-				});
-			}
-		};
-
+		return new PinValueDirectEditManager(this, getFigure());
 	}
 
 	/** performs the directEdit. */
