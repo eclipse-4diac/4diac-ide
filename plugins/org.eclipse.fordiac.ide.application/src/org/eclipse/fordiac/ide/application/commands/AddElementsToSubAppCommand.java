@@ -90,11 +90,9 @@ public class AddElementsToSubAppCommand extends Command {
 		for (final FBNetworkElement fbNetworkElement : elementsToAdd) {
 			if (moveDelta != null) {
 				final Point pos = FBNetworkHelper.getTopLeftCornerOfFBNetwork(elementsToAdd);
-				pos.x = pos.x + moveDelta.x;
-				pos.y = pos.y + moveDelta.y;
-				setPositionCommands
-				.add(new SetPositionCommand(fbNetworkElement, pos.x,
-						pos.y));
+				pos.x -= moveDelta.x;
+				pos.y -= moveDelta.y;
+				setPositionCommands.add(new SetPositionCommand(fbNetworkElement, pos.x, pos.y));
 			}
 			fbNetwork.add(fbNetworkElement);
 			checkElementConnections(fbNetworkElement);

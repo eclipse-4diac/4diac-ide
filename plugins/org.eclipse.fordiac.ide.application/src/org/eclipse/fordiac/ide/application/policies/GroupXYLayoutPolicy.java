@@ -88,6 +88,7 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 			final List<FBNetworkElement> fbEls) {
 		final Rectangle groupContentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(getHost());
 		final Point topLeft = groupContentBounds.getTopLeft();
+		translateToRelative(getHost(), topLeft);
 		final Point moveDelta = getScaledMoveDelta(request);
 		topLeft.translate(-moveDelta.x, -moveDelta.y);
 		final AddElementsToGroup addElementsToGroup = new AddElementsToGroup(dropGroup, fbEls, topLeft);
