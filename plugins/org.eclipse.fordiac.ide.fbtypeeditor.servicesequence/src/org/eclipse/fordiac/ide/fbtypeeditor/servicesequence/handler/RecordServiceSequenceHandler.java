@@ -83,11 +83,12 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 				final RecordSequenceDialog dialog = new RecordSequenceDialog(HandlerUtil.getActiveShell(event), events,
 						parameters, seq);
 				final int returnCode = dialog.open();
+				final int count = dialog.getCount();
 				if (returnCode != CANCEL) {
 					try {
 						final FBType fbType = seq.getService().getFBType();
 						setParameters(fbType, parameters);
-						runInterpreter(seq, events, dialog.isAppend(), dialog.isRandom(), fbType);
+						runInterpreter(seq, events, dialog.isAppend(), dialog.isRandom(), fbType, count);
 					} catch (final Exception e) {
 						FordiacLogHelper.logError(e.getMessage(), e);
 						MessageDialog.openError(HandlerUtil.getActiveShell(event),
@@ -101,17 +102,18 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	}
 
 	private static void runInterpreter(final ServiceSequence seq, final List<String> eventNames, final boolean isAppend,
-			final boolean isRandom, final FBType fbType) {
-		final List<Event> events;
+			final boolean isRandom, final FBType fbType, final int count) {
+		List<Event> events;
 		final FBType typeCopy = fbType;// EcoreUtil.copy(fbType);
+		events = eventNames.stream().map(name -> findEvent(typeCopy, name)).filter(Objects::nonNull)
+				.collect(Collectors.toList());
 		if (isRandom) {
-			events = InputGenerator.getRandomEventsSequence(typeCopy, 10);
+			if (count > 0) {
+				events.addAll(InputGenerator.getRandomEventsSequence(typeCopy, count));
+			}
 			if (!events.isEmpty()) {
 				InputGenerator.setRandomDataSequence(events.get(0));
 			}
-		} else {
-			events = eventNames.stream().map(name -> findEvent(typeCopy, name)).filter(Objects::nonNull)
-					.collect(Collectors.toList());
 		}
 		final EventManager eventManager = createEventManager(typeCopy, events);
 		EventManagerUtils.process(eventManager);
@@ -172,21 +174,25 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	}
 
 	private static class RecordSequenceDialog extends MessageDialog {
+		private static final int DEFAULT_RANDOMCOUNT = 10;
 		private Text inputEventText;
 		private Text inputParameterText;
+		private Text inputCount;
 		private Button appendCheckbox;
 		private Button randomCheckbox;
 		private final List<String> events;
 		private final List<String> parameters;
 		private boolean append;
 		private boolean random;
+		private int count;
 
 		private final ServiceSequence serviceSequence;
 
 		public RecordSequenceDialog(final Shell parentShell, final List<String> events, final List<String> parameters,
 				final ServiceSequence serviceSequence) {
-			super(parentShell, "Record Sequence (separated by ;)", null, "Configuration", MessageDialog.INFORMATION, 0, //$NON-NLS-1$//$NON-NLS-2$
-					"Run"); //$NON-NLS-1$
+			super(parentShell, "Record Sequence ", null, //$NON-NLS-1$
+					"Configuration \nInputEvent(s) seperated by ; \nParameters seperated by ; and overwritten when Random ticked \nCount is integernumber for number of random elements \nAppend appends the sequence to privios record \nRandom generates random sequence or appends them after InputEvent(s) ", //$NON-NLS-1$
+					MessageDialog.INFORMATION, 0, "Run");
 			this.events = events;
 			this.parameters = parameters;
 			this.serviceSequence = serviceSequence;
@@ -216,6 +222,12 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 
 			inputParameterText = new Text(group, SWT.NONE);
 			inputParameterText.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
+
+			label = new Label(group, SWT.None);
+			label.setText(Messages.RecordServiceSequenceHandler_COUNT);
+
+			inputCount = new Text(group, SWT.NONE);
+			inputCount.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
 
 			label = new Label(group, SWT.None);
 			label.setText("Start State");//$NON-NLS-1$
@@ -264,6 +276,12 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			parameters.addAll(getParameters());
 			append = appendCheckbox.getSelection();
 			random = randomCheckbox.getSelection();
+			if (!getCountText().isBlank()) {
+				count = Integer.parseInt(getCountText());
+			} else {
+				count = DEFAULT_RANDOMCOUNT;
+
+			}
 			super.buttonPressed(buttonId);
 		}
 
@@ -275,12 +293,20 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			return Arrays.asList(inputParameterText.getText().split(";")); //$NON-NLS-1$
 		}
 
+		private String getCountText() {
+			return (inputCount.getText());
+		}
+
 		public boolean isAppend() {
 			return append;
 		}
 
 		public boolean isRandom() {
 			return random;
+		}
+
+		public int getCount() {
+			return count;
 		}
 	}
 }

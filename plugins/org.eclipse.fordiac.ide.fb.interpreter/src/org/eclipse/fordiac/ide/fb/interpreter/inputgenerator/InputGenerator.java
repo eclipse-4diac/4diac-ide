@@ -55,7 +55,7 @@ public final class InputGenerator {
 	}
 
 	private static List<Event> createRandomEventSequence(final EList<Event> fbEvents, final int count) {
-		if ((!fbEvents.isEmpty()) || count == 0) {
+		if ((fbEvents.isEmpty()) || count == 0) {
 			throw new IllegalArgumentException();
 		}
 

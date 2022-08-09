@@ -79,13 +79,13 @@ public abstract class AbstractInterpreterTest {
 	protected static FBType loadFBType(final String name) {
 		return loadFBType(name, true);
 	}
-	
-	protected static FBNetwork loadFbNetwork(final String projectName, String systemName) {
+
+	protected static FBNetwork loadFbNetwork(final String projectName, final String systemName) {
 		return loadFbNetwork(projectName, systemName, null);
 	}
-	
-	protected static FBNetwork loadFbNetwork(final String projectName, String systemName, final String appName) {
-		Path projectPath = new Path("data/" + projectName); //$NON-NLS-1$
+
+	protected static FBNetwork loadFbNetwork(final String projectName, final String systemName, final String appName) {
+		final Path projectPath = new Path("data/" + projectName); //$NON-NLS-1$
 		FordiacProjectLoader loader;
 		try {
 			loader = new FordiacProjectLoader(bundle, projectPath);
@@ -93,11 +93,12 @@ public abstract class AbstractInterpreterTest {
 			return null;
 		}
 
-		AutomationSystem system = loader.getAutomationSystem(systemName);
+		final AutomationSystem system = loader.getAutomationSystem(systemName);
 		if (appName == null) {
 			return system.getApplication().get(0).getFBNetwork();
 		} else {
-			return system.getApplication().stream().filter(app -> app.getName().equals(appName)).findAny().orElseThrow().getFBNetwork();
+			return system.getApplication().stream().filter(app -> app.getName().equals(appName)).findAny().orElseThrow()
+					.getFBNetwork();
 		}
 	}
 
@@ -156,7 +157,14 @@ public abstract class AbstractInterpreterTest {
 			((VarDeclaration) el).setValue(LibraryElementFactory.eINSTANCE.createValue());
 		}
 		final ValueConverter<?> conv = ValueConverterFactory.createValueConverter(el.getType());
-		final Object convertedValue = conv.toValue(value);
+		Object convertedValue;
+		final int prefixIndex = value.indexOf('#');
+
+		if (prefixIndex == -1) {
+			convertedValue = conv.toValue(value);
+		} else {
+			convertedValue = conv.toValue(value.substring(prefixIndex + 1, value.length() - 1));
+		}
 		((VarDeclaration) el).getValue().setValue(convertedValue.toString());
 	}
 
@@ -192,7 +200,9 @@ public abstract class AbstractInterpreterTest {
 			final String inputParameters = st.getInputPrimitive().getParameters();
 			final var paramList = getParametersFromString(inputParameters);
 			for (final List<String> parameter : paramList) {
-				setVariable(fb, parameter.get(0), parameter.get(1));
+				if (parameter.size() == 2) {
+					setVariable(fb, parameter.get(0), parameter.get(1));
+				}
 			}
 			return transaction;
 		}
@@ -206,9 +216,9 @@ public abstract class AbstractInterpreterTest {
 		return runSimpleFBTest((SimpleFBType) fb, seq);
 	}
 
-	public static EList<Transaction> runFBNetworkTest(final FBNetwork network, Event event) {
+	public static EList<Transaction> runFBNetworkTest(final FBNetwork network, final Event event) {
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
-		//network.eResource().getContents().add(eventManager);
+		// network.eResource().getContents().add(eventManager);
 		// TODO create convenience methods in eventManagerUtils
 		final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 		eventOccurrence.setEvent(event);
@@ -224,10 +234,10 @@ public abstract class AbstractInterpreterTest {
 		eventManager.getTransactions().add(transaction);
 
 		EventManagerUtils.processNetwork(eventManager);
-		return eventManager.getTransactions();		
+		return eventManager.getTransactions();
 	}
 
-	private static BaseFBType runSimpleFBTest(SimpleFBType fb, ServiceSequence seq) {
+	private static BaseFBType runSimpleFBTest(final SimpleFBType fb, final ServiceSequence seq) {
 		final ResourceSet reset = new ResourceSetImpl();
 		final Resource resource = reset.createResource(URI.createURI("platform:/resource/" + fb.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
@@ -341,8 +351,7 @@ public abstract class AbstractInterpreterTest {
 			return true;
 		}
 		final int length = result.getOutputEventOccurrences().size();
-		final FBRuntimeAbstract captured = result.getOutputEventOccurrences().get(length - 1)
-				.getFbRuntime();
+		final FBRuntimeAbstract captured = result.getOutputEventOccurrences().get(length - 1).getFbRuntime();
 		final var parameterList = getParametersFromString(parameters);
 		for (final List<String> assumption : parameterList) {
 			if (!processParameter(assumption.get(0), assumption.get(1), getFBType(captured))) {
@@ -373,7 +382,7 @@ public abstract class AbstractInterpreterTest {
 		final List<String> statementList = splitParameterList(parameters);
 		final var parameterList = new ArrayList<List<String>>();
 		for (final String element : statementList) {
-			final List<String> statement = Arrays.asList(element.split(":=")); //$NON-NLS-1$
+			final List<String> statement = Arrays.asList(element.split(":=", 0)); //$NON-NLS-1$
 			parameterList.add(statement);
 		}
 		return parameterList;

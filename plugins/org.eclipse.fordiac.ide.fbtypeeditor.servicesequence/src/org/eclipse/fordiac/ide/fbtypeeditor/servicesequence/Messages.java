@@ -69,6 +69,7 @@ public final class Messages extends NLS {
 	public static String RecordServiceSequenceHandler_RECORD_SEQUENCE;
 	public static String RecordServiceSequenceHandler_RUN;
 	public static String RecordServiceSequenceHandler_RANDOM;
+	public static String RecordServiceSequenceHandler_COUNT;
 
 	static {
 		// initialize resource bundle
