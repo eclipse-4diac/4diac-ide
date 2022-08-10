@@ -22,7 +22,7 @@ package org.eclipse.fordiac.ide.application.actions;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.fordiac.ide.application.commands.ResizeGroupCommand;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
@@ -68,18 +68,17 @@ public class FBNetworkElementInsertAction extends WorkbenchPartAction {
 				pt);
 
 		if (abstractContainerContentEditPart instanceof GroupContentEditPart) {
-			return new ResizeGroupCommand(new CreateFBElementInGroupCommand(typeEntry,
-					((GroupContentEditPart) abstractContainerContentEditPart).getModel().getGroup(),
-					pt.x - abstractContainerContentEditPart.getFigure().getBounds().x,
-					pt.y - abstractContainerContentEditPart.getFigure().getBounds().y),
-					abstractContainerContentEditPart.getViewer(),
-					abstractContainerContentEditPart);
+			return new ResizeGroupOrSubappCommand(abstractContainerContentEditPart,
+					new CreateFBElementInGroupCommand(typeEntry,
+							((GroupContentEditPart) abstractContainerContentEditPart).getModel().getGroup(),
+							pt.x - abstractContainerContentEditPart.getFigure().getBounds().x,
+							pt.y - abstractContainerContentEditPart.getFigure().getBounds().y));
 		} else if (abstractContainerContentEditPart instanceof UnfoldedSubappContentEditPart) {
-
-			return AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry,
+			return new ResizeGroupOrSubappCommand(abstractContainerContentEditPart,
+					AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry,
 					abstractContainerContentEditPart.getModel(),
 					pt.x - abstractContainerContentEditPart.getFigure().getBounds().x,
-					pt.y - abstractContainerContentEditPart.getFigure().getBounds().y);
+							pt.y - abstractContainerContentEditPart.getFigure().getBounds().y));
 		}
 		return AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, fbNetwork, pt.x, pt.y);
 	}

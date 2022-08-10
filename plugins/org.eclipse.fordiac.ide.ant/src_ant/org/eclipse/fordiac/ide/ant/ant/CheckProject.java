@@ -61,8 +61,11 @@ public class CheckProject extends Task {
 		// log Markers, only visible in console output
 		try {
 			final IMarker[] markers = project.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_INFINITE);
+
 			printMarkers(markers, this);
-			if (markers.length > 0) {
+
+			if (project.findMaxProblemSeverity(IMarker.PROBLEM, true,
+					IResource.DEPTH_INFINITE) == IMarker.SEVERITY_ERROR) {
 				throw new BuildException(
 						String.format("%d problems found in loaded project %s", markers.length, projectNameString)); //$NON-NLS-1$
 			}
@@ -79,12 +82,31 @@ public class CheckProject extends Task {
 	}
 
 	private static String markerToLogString(final IMarker marker) throws CoreException {
-		String markerString = "PROBLEM: "; //$NON-NLS-1$
+		String markerString = ""; //$NON-NLS-1$
 		if (marker != null) {
-			if (marker.getAttribute("message") != null) {
-				markerString += marker.getAttribute("message").toString() + " | "; //$NON-NLS-1$
+			if (marker.getAttribute(IMarker.SEVERITY) != null) {
+				switch ((int) marker.getAttribute(IMarker.SEVERITY)) {
+				case IMarker.SEVERITY_INFO:
+					markerString += "INFO: "; //$NON-NLS-1$
+					break;
+				case IMarker.SEVERITY_WARNING:
+					markerString += "WARNING: "; //$NON-NLS-1$
+					break;
+				case IMarker.SEVERITY_ERROR:
+					markerString += "ERROR: "; //$NON-NLS-1$
+					break;
+				default:
+					markerString += "PROBLEM :";//$NON-NLS-1$
+					break;
+				}
 			} else {
-				markerString += "NO ERROR MESSAGE | ";
+				markerString += "PROBLEM :";//$NON-NLS-1$
+			}
+
+			if (marker.getAttribute(IMarker.MESSAGE) != null) {
+				markerString += marker.getAttribute(IMarker.MESSAGE).toString() + " | "; //$NON-NLS-1$
+			} else {
+				markerString += "NO ERROR MESSAGE | ";//$NON-NLS-1$
 			}
 
 			if (marker.getResource().getLocation() != null) {
@@ -93,8 +115,8 @@ public class CheckProject extends Task {
 				markerString += "NO PATH : "; //$NON-NLS-1$
 			}
 
-			if (marker.getAttribute("lineNumber") != null) {
-				markerString += marker.getAttribute("lineNumber").toString();
+			if (marker.getAttribute(IMarker.LINE_NUMBER) != null) {
+				markerString += marker.getAttribute(IMarker.LINE_NUMBER).toString();
 			} else {
 				markerString += "NO LINE NUMBER"; //$NON-NLS-1$
 			}

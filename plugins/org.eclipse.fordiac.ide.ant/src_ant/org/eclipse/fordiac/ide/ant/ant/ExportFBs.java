@@ -13,7 +13,9 @@
 package org.eclipse.fordiac.ide.ant.ant;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -23,6 +25,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter;
 import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
@@ -62,6 +65,8 @@ public class ExportFBs extends Task {
 		if (fordiacProject == null) {
 			throw new BuildException("Project named '" + projectNameString + "' not in workspace in Workspace");//$NON-NLS-1$ //$NON-NLS-2$
 		}
+
+		waitBuilderJobsComplete();
 
 	}
 
@@ -124,6 +129,26 @@ public class ExportFBs extends Task {
 
 	protected IProject getFordiacProject() {
 		return fordiacProject;
+	}
+
+	public static void waitBuilderJobsComplete() {
+		Job[] jobs = Job.getJobManager().find(null); // get all current scheduled jobs
+
+		while (buildJobExists(jobs)) {
+			try {
+				Thread.sleep(50);
+			} catch (final InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+			jobs = Job.getJobManager().find(null); // update the job list
+		}
+	}
+
+	private static boolean buildJobExists(final Job[] jobs) {
+		final Optional<Job> findAny = Arrays.stream(jobs)
+				.filter(j -> (j.getState() != Job.NONE && j.getName().startsWith("Building"))) //$NON-NLS-1$
+				.findAny();
+		return findAny.isPresent();
 	}
 
 }

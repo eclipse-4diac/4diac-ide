@@ -51,15 +51,21 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 
 		if (isDragAndDropRequestForGroup(request, getTargetEditPart(request))) {
 			final ChangeBoundsRequest changeBoundsRequest = (ChangeBoundsRequest) request;
+			@SuppressWarnings("unchecked")
 			final List<EditPart> editParts = changeBoundsRequest.getEditParts();
 			final Group dropGroup = ((GroupContentNetwork) getTargetEditPart(request).getModel()).getGroup();
 			final List<FBNetworkElement> fbEls = collectDraggedFBs(editParts, dropGroup);
-			if (!fbEls.isEmpty()) {
+			if (containsOnlyFbsAndSubapps(fbEls)) {
 				return createAddToGroupCommand(changeBoundsRequest, dropGroup, fbEls);
 			}
 		}
-		// currently we don't want to allow any other add command in the future maybe drop from pallette
+		// currently we don't want to allow any other add command in the future maybe
+		// drop from palette
 		return null;
+	}
+
+	private boolean containsOnlyFbsAndSubapps(final List<FBNetworkElement> fbEls) {
+		return !fbEls.isEmpty() && !(fbEls.stream().anyMatch(Group.class::isInstance));
 	}
 
 	private static List<FBNetworkElement> collectDraggedFBs(final List<EditPart> editParts, final Group dropGroup) {
@@ -89,7 +95,7 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 		final Rectangle newContentBounds = getNewContentBounds(request.getEditParts());
 		newContentBounds.translate(moveDelta);
 		if (!groupContentBounds.contains(newContentBounds)) {
-			//we need to increase the size of the group
+			// we need to increase the size of the group
 			return createAddGroupAndResizeCommand(dropGroup, addElementsToGroup, groupContentBounds, newContentBounds);
 		}
 
@@ -97,10 +103,12 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 	}
 
 	private static Command createAddGroupAndResizeCommand(final Group dropGroup,
-			final AddElementsToGroup addElementsToGroup, final Rectangle groupContentBounds, final Rectangle newContentBounds) {
+			final AddElementsToGroup addElementsToGroup, final Rectangle groupContentBounds,
+			final Rectangle newContentBounds) {
 		final CompoundCommand cmd = new CompoundCommand();
 		newContentBounds.union(groupContentBounds);
-		cmd.add(ContainerContentLayoutPolicy.createChangeBoundsCommand(dropGroup, groupContentBounds, newContentBounds));
+		cmd.add(ContainerContentLayoutPolicy.createChangeBoundsCommand(dropGroup, groupContentBounds,
+				newContentBounds));
 		final Point offset = addElementsToGroup.getOffset();
 		offset.translate(newContentBounds.x - groupContentBounds.x, newContentBounds.y - groupContentBounds.y);
 		addElementsToGroup.setOffset(offset);

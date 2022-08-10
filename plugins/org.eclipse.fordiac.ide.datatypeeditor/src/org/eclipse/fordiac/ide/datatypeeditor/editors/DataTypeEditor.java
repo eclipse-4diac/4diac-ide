@@ -34,13 +34,15 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.application.wizards.StructChangedSaveForAll;
+import org.eclipse.fordiac.ide.application.wizards.StructUpdateDialog;
 import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
@@ -98,7 +100,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	private final List<String> propertyActions = new ArrayList<>();
 
 	private DataTypeEntry dataTypeEntry;
-	private StructChangedSaveForAll structSaveDialog;
+	private StructUpdateDialog structSaveDialog;
 
 	private final Adapter adapter = new AdapterImpl() {
 
@@ -160,10 +162,10 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	}
 
 	private void createSaveDialog() {
-		final String[] labels = { Messages.StructAlteringButton_Save, Messages.StructAlteringButton_SaveAs,
+		final String[] labels = { Messages.StructAlteringButton_SaveAndUpdate, Messages.StructAlteringButton_SaveAs,
 				Messages.StructAlteringButton_Cancel };
 
-		structSaveDialog = new StructChangedSaveForAll(null, Messages.StructViewingComposite_Headline, null, "",
+		structSaveDialog = new StructUpdateDialog(null, Messages.StructViewingComposite_Headline, null, "",
 				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, dataTypeEntry);
 
 		// Depending on the button clicked:
@@ -173,6 +175,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 			addListenerToDataTypeObj();
 			commandStack.markSaveLocation();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
+			updateStructs();
 			break;
 		case SAVE_AS_BUTTON_INDEX:
 			doSaveAs();
@@ -191,6 +194,16 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		if (dataTypeEntry.getTypeEditable() instanceof StructuredType) {
 			final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
 			new WizardDialog(null, new SaveAsStructTypeWizard(structuredType, this)).open();
+		}
+	}
+
+	private void updateStructs() {
+		if (structSaveDialog.getUpdatedTypes() != null) {
+			for (final StructManipulator mux : structSaveDialog.getUpdatedTypes()) {
+				final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
+				final ChangeStructCommand cmd = new ChangeStructCommand(mux, structuredType);
+				cmd.execute();
+			}
 		}
 	}
 

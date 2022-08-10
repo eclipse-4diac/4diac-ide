@@ -9,29 +9,19 @@
  *
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
- *                 - Search partially taken from ModelSearchQuery
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.wizards;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.search.ModelSearchResultPage;
-import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -51,21 +41,28 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 
-public class StructChangedSaveForAll extends MessageDialog {
+public class StructUpdateDialog extends MessageDialog {
 
-	private StructChangedSearchResult searchResult;
 	private final DataTypeEntry dataTypeEntry;
 
 	private static final int NUMBER_OF_COLLUMNS = 1;
-	private static final int WIDGET_WIDTH = 200;
+	private static final int TABLE_COL_WIDTH = 150;
+	private static final int CHECK_BOX_COL_WIDTH = 25;
 
-	public StructChangedSaveForAll(final Shell parentShell, final String dialogTitle, final Image dialogTitleImage,
+	private Set<StructManipulator> updatedTypes;
+
+	public StructUpdateDialog(final Shell parentShell, final String dialogTitle, final Image dialogTitleImage,
 			final String dialogMessage, final int dialogImageType, final String[] dialogButtonLabels,
 			final int defaultIndex, final DataTypeEntry dataTypeEntry) {
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels,
 				defaultIndex);
 		this.dataTypeEntry = dataTypeEntry;
+	}
+
+	public Set<StructManipulator> getUpdatedTypes() {
+		return updatedTypes;
 	}
 
 	@Override
@@ -76,9 +73,10 @@ public class StructChangedSaveForAll extends MessageDialog {
 		searchResArea.setLayout(new GridLayout(1, true));
 		searchResArea.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		getAllTypesWithStruct();
+		final StructSearch structSearch = new StructSearch(dataTypeEntry);
+		final List<INamedElement> result = structSearch.getAllTypesWithStruct();
 
-		if (searchResult.getStructSearchResults().isEmpty()) {
+		if (result.isEmpty()) {
 			// No results - display just the info
 			final Label warningLabel = LabelFactory.newLabel(NONE).create(searchResArea);
 			warningLabel.setText("No additional function blocks or types have been affected by this change!"); //$NON-NLS-1$
@@ -86,18 +84,18 @@ public class StructChangedSaveForAll extends MessageDialog {
 			final TableViewer viewer = createTableViewer(searchResArea);
 			configureTableViewer(viewer);
 
-			viewer.setInput(searchResult.getStructSearchResults().toArray());
-
+			viewer.setInput(result.toArray());
 		}
 		return parent;
-
 	}
 
 	private static TableViewer createTableViewer(final Composite parent) {
-		return TableWidgetFactory.createTableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+		return TableWidgetFactory.createTableViewer(parent,
+				SWT.CHECK | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
 	}
 
-	private static void configureTableViewer(final TableViewer viewer) {
+	private void configureTableViewer(final TableViewer viewer) {
+		updatedTypes = new HashSet<>();
 		viewer.setContentProvider(new ArrayContentProvider());
 		final Table table = viewer.getTable();
 
@@ -105,11 +103,33 @@ public class StructChangedSaveForAll extends MessageDialog {
 		table.setLinesVisible(true);
 		table.setLayout(createTableLayout());
 
+		table.addListener(SWT.Selection, event -> {
+			if (event.detail == SWT.CHECK) {
+				final TableItem tableItem = (TableItem) event.item;
+				if (tableItem.getData() instanceof StructManipulator) {
+					if (tableItem.getChecked()) {
+						updatedTypes.add((StructManipulator) tableItem.getData());
+					} else {
+						updatedTypes.remove(tableItem.getData());
+					}
+				}
 
-		// FB-name column
-		final TableViewerColumn colFB = new TableViewerColumn(viewer, SWT.LEAD);
-		colFB.getColumn().setText(Messages.FunctionBlock);
-		colFB.setLabelProvider(new ColumnLabelProvider() {
+			}
+		});
+
+		// Check-box column
+		final TableViewerColumn colCheckBox = new TableViewerColumn(viewer, SWT.WRAP);
+		colCheckBox.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				return ""; //$NON-NLS-1$
+			}
+		});
+
+		// Element column
+		final TableViewerColumn colElement = new TableViewerColumn(viewer, SWT.LEAD);
+		colElement.getColumn().setText(Messages.Element);
+		colElement.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
 				if (element instanceof INamedElement) {
@@ -129,66 +149,30 @@ public class StructChangedSaveForAll extends MessageDialog {
 			}
 		});
 
+		// Type name column
+		final TableViewerColumn colType = new TableViewerColumn(viewer, SWT.LEAD);
+		colType.getColumn().setText(Messages.Type);
+		colType.setLabelProvider(new ColumnLabelProvider() {
+			@Override
+			public String getText(final Object element) {
+				if (element instanceof IInterfaceElement) {
+					return ((IInterfaceElement) element).getTypeName();
+				} else if (element instanceof StructManipulator) {
+					return ((StructManipulator) element).getTypeName();
+				}
+				return super.getText(element);
+			}
+		});
+
 	}
 
 	private static TableLayout createTableLayout() {
 		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(WIDGET_WIDTH));
-		layout.addColumnData(new ColumnPixelData(WIDGET_WIDTH));
+		layout.addColumnData(new ColumnPixelData(CHECK_BOX_COL_WIDTH));
+		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
+		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
+		layout.addColumnData(new ColumnPixelData(TABLE_COL_WIDTH));
 		return layout;
-	}
-
-
-
-
-	private List<INamedElement> getAllTypesWithStruct() {
-		searchResult = new StructChangedSearchResult();
-		final List<AutomationSystem> searchRootSystems = new ArrayList<>();
-		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
-
-		for (final IProject proj : root.getProjects()) {
-			if (proj.isOpen()) {
-				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj).values());
-			}
-		}
-
-		for (final AutomationSystem sys : searchRootSystems) {
-			searchApplications(sys);
-		}
-
-		return searchResult.getStructSearchResults();
-	}
-
-	private void searchApplications(final AutomationSystem sys) {
-		for (final Application app : sys.getApplication()) {
-			searchApplication(app);
-		}
-	}
-
-	private void searchApplication(final Application app) {
-		searchFBNetwork(app.getFBNetwork());
-	}
-
-	private void searchFBNetwork(final FBNetwork network) {
-		if (network != null) {
-			for (final FBNetworkElement fbnetworkElement : network.getNetworkElements()) {
-				matchStruct(fbnetworkElement);
-				if (fbnetworkElement instanceof SubApp) {
-					searchFBNetwork(((SubApp) fbnetworkElement).getSubAppNetwork());
-				}
-			}
-		}
-	}
-
-	private void matchStruct(final EObject possibleStruct) {
-		if (possibleStruct instanceof StructManipulator) {
-			final StructManipulator sm = ((StructManipulator) possibleStruct);
-			for (final IInterfaceElement interfaceElem : sm.getInterface().getAllInterfaceElements()) {
-				if (interfaceElem.getType().getName().equalsIgnoreCase(dataTypeEntry.getTypeName())) {
-					searchResult.addResults(sm); // Adding the actual FB that should be in there
-				}
-			}
-		}
 	}
 
 }

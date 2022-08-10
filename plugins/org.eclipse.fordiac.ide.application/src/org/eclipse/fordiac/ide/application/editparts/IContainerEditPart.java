@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.GraphicalEditPart;
 
@@ -50,8 +49,8 @@ public interface IContainerEditPart extends GraphicalEditPart {
 		return ep.getFigure().getBounds().getCopy();
 	}
 
-	static Rectangle getDefaultContentBounds() {
-		return new Rectangle(new Point(0, 0), IFigure.MIN_DIMENSION);
+	default Rectangle getDefaultContentBounds() {
+		return new Rectangle(getContentEP().getFigure().getBounds().getTopLeft(), IFigure.MIN_DIMENSION);
 	}
 
 }

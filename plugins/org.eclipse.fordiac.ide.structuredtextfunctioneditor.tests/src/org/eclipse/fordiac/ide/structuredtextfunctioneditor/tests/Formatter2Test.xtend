@@ -961,7 +961,7 @@ class Formatter2Test {
 			toBeFormatted = '''
 				FUNCTION hubert
 				
-				IF int1 < int2 THEN(*Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+				IF int1 < int2 THEN(*Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 				Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit*)
 					bol1 := TRUE;
 				END_IF;
@@ -972,8 +972,9 @@ class Formatter2Test {
 				FUNCTION hubert
 				
 				IF int1 < int2 THEN (* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-				                     * labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-				                     * laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit *)
+				                     * labore et dolore magna aliqua.
+				                     * Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea
+				                     * commodo consequat. Duis aute irure dolor in reprehenderit *)
 					bol1 := TRUE;
 				END_IF;
 				
@@ -998,8 +999,8 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				
-				bol1 := TRUE; (* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-				               * et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris *)
+				bol1 := TRUE; (* Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+				               * labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris *)
 				
 				bol1 := TRUE;
 				
@@ -1019,6 +1020,70 @@ class Formatter2Test {
 			expectation = '''
 				FUNCTION hubert
 				int1 := 3;    // x
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void retainLineBreaksInMLCommentTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				(*	
+				@brief This is an awesome piece of code
+				
+				   This demonstrates the need to keep newlines in case of auto-format, because my carefully crafted newline would be gone otherwise
+				
+				  @param awesomeIn - Some data
+				  @return cool?
+				*)
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				(* @brief This is an awesome piece of code
+				 * 
+				 * This demonstrates the need to keep newlines in case of auto-format, because my carefully crafted newline would be
+				 * gone otherwise
+				 * 
+				 * @param awesomeIn - Some data
+				 * @return cool? *)
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void multiLineCommentTest2() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				IF int1 < int2 THEN (* This piece of code demonstrates the formatting of bulleted lists
+				
+										- While the preceding line does not reach the 120 character
+											limit, the linebreak persists
+				
+										-Though, indentation is ignored for now
+									*)
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				IF int1 < int2 THEN (* This piece of code demonstrates the formatting of bulleted lists
+				                     * 
+				                     * - While the preceding line does not reach the 120 character
+				                     * limit, the linebreak persists
+				                     * 
+				                     * -Though, indentation is ignored for now *)
+					bol1 := TRUE;
+				END_IF;
+				
 				END_FUNCTION
 			'''
 		]

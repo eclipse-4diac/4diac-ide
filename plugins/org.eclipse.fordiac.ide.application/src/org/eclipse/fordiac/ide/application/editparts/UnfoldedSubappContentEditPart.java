@@ -18,6 +18,7 @@
 package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.policies.SubAppContentLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -36,8 +37,8 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new AbstractCreateInstanceDirectEditPolicy() {
 			@Override
 			protected Command getElementCreateCommand(final TypeEntry value, final Point refPoint) {
-				return AbstractCreateFBNetworkElementCommand.createCreateCommand(value, getModel().getSubappContent(),
-						refPoint.x, refPoint.y);
+				return new ResizeGroupOrSubappCommand(getHost(), AbstractCreateFBNetworkElementCommand
+						.createCreateCommand(value, getModel().getSubappContent(), refPoint.x, refPoint.y));
 			}
 		});
 	}

@@ -60,6 +60,8 @@ public class ExportFBsAsXMI extends Task {
 			throw new BuildException("Project named '" + projectNameString + "' not in workspace in Workspace");//$NON-NLS-1$ //$NON-NLS-2$
 		}
 
+		ExportFBs.waitBuilderJobsComplete();
+
 	}
 
 	// recursively call directories and save fbt Files
@@ -102,10 +104,9 @@ public class ExportFBsAsXMI extends Task {
 		final IPath location = Path.fromOSString(file.getAbsolutePath());
 		final IFile ifile = workspace.getRoot().getFileForLocation(location);
 
-		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(ifile);
-		// Export only SimpleFBs, remove this line to export all FB Types
-		if (null != entry && entry.getType() instanceof SimpleFBType) {
-
+		// Export only SimpleFBs or STFunc, remove this line to export all FB Types
+		if (isSimpleFBType(ifile)
+				|| file.getName().toUpperCase().endsWith(TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT)) {
 			final URI folderURI = URI.createFileURI(folder.getAbsolutePath());
 			try {
 				exporter.export(ifile, folderURI);
@@ -114,6 +115,14 @@ public class ExportFBsAsXMI extends Task {
 				throw new BuildException("Could not export: " + e.getMessage(), e);//$NON-NLS-1$
 			}
 		}
+	}
+
+	private static boolean isSimpleFBType(final IFile ifile) {
+		if (ifile.getName().toUpperCase().endsWith(TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT)) {
+			final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(ifile);
+			return null != entry && entry.getType() instanceof SimpleFBType;
+		}
+		return false;
 	}
 
 	protected IProject getFordiacProject() {

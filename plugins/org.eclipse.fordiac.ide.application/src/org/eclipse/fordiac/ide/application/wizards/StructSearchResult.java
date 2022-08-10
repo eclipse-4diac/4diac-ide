@@ -17,11 +17,11 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
-public class StructChangedSearchResult {
+public class StructSearchResult {
 
 	private final List<INamedElement> structSearchResults;
 
-	public StructChangedSearchResult() {
+	public StructSearchResult() {
 		this.structSearchResults = new ArrayList<>();
 	}
 
@@ -29,8 +29,12 @@ public class StructChangedSearchResult {
 		return structSearchResults;
 	}
 
-	public void addResults(final INamedElement result) {
+	public void addResult(final INamedElement result) {
 		structSearchResults.add(result);
+	}
+
+	public void addResults(final List<INamedElement> results) {
+		structSearchResults.addAll(results);
 	}
 
 }

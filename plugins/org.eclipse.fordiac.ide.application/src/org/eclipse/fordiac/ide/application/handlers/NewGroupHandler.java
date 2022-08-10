@@ -18,6 +18,12 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.gef.EditPart;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.ui.ISources;
+import org.eclipse.ui.handlers.HandlerUtil;
 
 public class NewGroupHandler extends AbstractContainerElementHandler {
 
@@ -25,6 +31,27 @@ public class NewGroupHandler extends AbstractContainerElementHandler {
 	protected AbstractCreateFBNetworkElementCommand createContainerCreationCommand(final List<?> selection,
 			final FBNetwork network, final Rectangle posSizeRef) {
 		return new CreateGroupCommand(network, selection, posSizeRef);
+	}
+
+	@Override
+	public void setEnabled(final Object evaluationContext) {
+		final ISelection sel = (ISelection) HandlerUtil.getVariable(evaluationContext,
+				ISources.ACTIVE_CURRENT_SELECTION_NAME);
+		boolean notInGroup = false;
+		if (sel instanceof StructuredSelection) {
+			final StructuredSelection selection = (StructuredSelection) sel;
+			notInGroup = selection.toList().stream().map(ep -> getModelElement(ep))
+					.filter(FBNetworkElement.class::isInstance)
+					.noneMatch(fbel -> ((FBNetworkElement) fbel).isInGroup());
+		}
+		setBaseEnabled(notInGroup);
+	}
+
+	private Object getModelElement(final Object ep) {
+		if (ep instanceof EditPart) {
+			return ((EditPart) ep).getModel();
+		}
+		return ep;
 	}
 
 }
