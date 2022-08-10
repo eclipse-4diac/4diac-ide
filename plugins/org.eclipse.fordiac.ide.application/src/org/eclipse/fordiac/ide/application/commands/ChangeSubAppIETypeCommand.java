@@ -20,12 +20,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 public class ChangeSubAppIETypeCommand extends ChangeDataTypeCommand {
 	private ChangeDataTypeCommand mirroredElement = null;
 
-	public ChangeSubAppIETypeCommand(VarDeclaration interfaceElement, DataType dataType) {
+	public ChangeSubAppIETypeCommand(final VarDeclaration interfaceElement, final DataType dataType) {
 		super(interfaceElement, dataType);
 
 		if (interfaceElement.getFBNetworkElement().isMapped()) {
-			mirroredElement = new ChangeDataTypeCommand((VarDeclaration) interfaceElement.getFBNetworkElement()
-					.getOpposite().getInterfaceElement(interfaceElement.getName()), dataType);
+			mirroredElement = new ChangeDataTypeCommand(interfaceElement.getFBNetworkElement().getOpposite()
+					.getInterfaceElement(interfaceElement.getName()), dataType);
 		}
 	}
 

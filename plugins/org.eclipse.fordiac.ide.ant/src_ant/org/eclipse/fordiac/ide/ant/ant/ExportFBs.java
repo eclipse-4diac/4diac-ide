@@ -13,7 +13,9 @@
 package org.eclipse.fordiac.ide.ant.ant;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -23,6 +25,7 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter;
 import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
@@ -36,7 +39,7 @@ public class ExportFBs extends Task {
 	protected String exportDirectory = ANT_EXPORT_TASK_DIRECTORY_NAME;
 	protected boolean exportCMakeList = false;
 	protected IWorkspace workspace;
-	protected IProject project;
+	private IProject fordiacProject;
 
 	public void setProjectName(final String value) {
 		projectNameString = value;
@@ -58,10 +61,12 @@ public class ExportFBs extends Task {
 		}
 
 		workspace = ResourcesPlugin.getWorkspace();
-		project = workspace.getRoot().getProject(projectNameString);
-		if (project == null) {
+		fordiacProject = workspace.getRoot().getProject(projectNameString);
+		if (fordiacProject == null) {
 			throw new BuildException("Project named '" + projectNameString + "' not in workspace in Workspace");//$NON-NLS-1$ //$NON-NLS-2$
 		}
+
+		waitBuilderJobsComplete();
 
 	}
 
@@ -96,31 +101,54 @@ public class ExportFBs extends Task {
 			if (!folder.exists()) {
 				folder.mkdir();
 			}
-
-			for (final File file : files) {
-
-				final IPath location = Path.fromOSString(file.getAbsolutePath());
-				final IFile ifile = workspace.getRoot().getFileForLocation(location);
-				System.out.println(ifile.getLocation().toString());
-
-				try {
-					filter.export(ifile, folder.getPath(), true);
-					if (exportCMakeList) {
-						filter.export(null, folder.getPath(), true, new CMakeListsMarker());
-					}
-
-					if (!filter.getErrors().isEmpty()) {
-						for (final String error : filter.getErrors()) {
-							System.out.println(error);
-						}
-						throw new BuildException("Could not export without errors");
-					}
-
-				} catch (final ExportException e) {
-					throw new BuildException("Could not export: " + e.getMessage());//$NON-NLS-1$
-				}
-			}
+			files.forEach(file -> exportFile(filter, folder, file));
 		}
+	}
+
+	private void exportFile(final ForteNgExportFilter filter, final File folder, final File file) {
+		final IPath location = Path.fromOSString(file.getAbsolutePath());
+		final IFile ifile = workspace.getRoot().getFileForLocation(location);
+
+		try {
+			filter.export(ifile, folder.getPath(), true);
+			if (exportCMakeList) {
+				filter.export(null, folder.getPath(), true, new CMakeListsMarker());
+			}
+
+			if (!filter.getErrors().isEmpty()) {
+				for (final String error : filter.getErrors()) {
+					log(error);
+				}
+				throw new BuildException("Could not export without errors"); //$NON-NLS-1$
+			}
+
+		} catch (final ExportException e) {
+			throw new BuildException("Could not export: " + e.getMessage(), e);//$NON-NLS-1$
+		}
+	}
+
+	protected IProject getFordiacProject() {
+		return fordiacProject;
+	}
+
+	public static void waitBuilderJobsComplete() {
+		Job[] jobs = Job.getJobManager().find(null); // get all current scheduled jobs
+
+		while (buildJobExists(jobs)) {
+			try {
+				Thread.sleep(50);
+			} catch (final InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+			jobs = Job.getJobManager().find(null); // update the job list
+		}
+	}
+
+	private static boolean buildJobExists(final Job[] jobs) {
+		final Optional<Job> findAny = Arrays.stream(jobs)
+				.filter(j -> (j.getState() != Job.NONE && j.getName().startsWith("Building"))) //$NON-NLS-1$
+				.findAny();
+		return findAny.isPresent();
 	}
 
 }

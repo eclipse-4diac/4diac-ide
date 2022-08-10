@@ -301,13 +301,11 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 	 * @param element */
 	@Override
 	public void sendEvent(final TestElement element) {
-		if (isRunning()) {
-			if (element != null) {
-				try {
-					testDeploymentExecutor.sendEvent(element);
-				} catch (final DeploymentException e) {
-					FordiacLogHelper.logError(e.getMessage(), e);
-				}
+		if (isRunning() && (element != null)) {
+			try {
+				testDeploymentExecutor.sendEvent(element);
+			} catch (final DeploymentException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
 			}
 		}
 	}

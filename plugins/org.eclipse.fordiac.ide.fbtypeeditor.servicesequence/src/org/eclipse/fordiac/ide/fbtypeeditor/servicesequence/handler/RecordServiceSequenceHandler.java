@@ -67,7 +67,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class RecordServiceSequenceHandler extends AbstractHandler {
 
 	private static final int CANCEL = -1;
-	private static boolean append;
+
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -79,20 +79,20 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 				final List<String> parameters = new ArrayList<>();
 				final RecordSequenceDialog dialog = new RecordSequenceDialog(HandlerUtil.getActiveShell(event), events,
 						parameters);
-				int returnCode = dialog.open();
+				final int returnCode = dialog.open();
 				if (returnCode != CANCEL) {
 					try {
 						final BasicFBType fbType = (BasicFBType) seq.getService().getFBType();
 						setParameters(fbType, parameters);
 						final EventManager eventManager = createEventManager(fbType, events);
 						EventManagerUtils.process(eventManager);
-						if (!append) {
+						if (!dialog.isAppend()) {
 							seq.getServiceTransaction().clear();
 						}
 						for (final Transaction transaction : eventManager.getTransactions()) {
 							convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
 						}
-					} catch (Exception e) {
+					} catch (final Exception e) {
 						MessageDialog.openError(HandlerUtil.getActiveShell(event), "Problem",
 								"The input data specification was incorrect. Please try again and check the variable names");
 					}
@@ -102,10 +102,10 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		return Status.OK_STATUS;
 	}
 
-	private void setParameters(BasicFBType fbType, List<String> parameters) {
+	private static void setParameters(final BasicFBType fbType, final List<String> parameters) {
 		// parameter: format "VarName:=Value"
-		for (String param : parameters) {
-			String[] paramValues = param.split(":="); //$NON-NLS-1$
+		for (final String param : parameters) {
+			final String[] paramValues = param.split(":="); //$NON-NLS-1$
 			if (paramValues.length == 2) {
 				AbstractInterpreterTest.setVariable(fbType, paramValues[0], paramValues[1]);
 			}
@@ -128,7 +128,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		}
 	}
 
-	private static EventManager createEventManager(BasicFBType fb, List<String> events) {
+	private static EventManager createEventManager(final BasicFBType fb, final List<String> events) {
 		if (fb.getService() == null) {
 			fb.setService(ServiceSequenceUtils.createEmptyServiceModel());
 		}
@@ -164,7 +164,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	}
 
 	@Override
-	public void setEnabled(Object evaluationContext) {
+	public void setEnabled(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection instanceof StructuredSelection) {
@@ -194,8 +194,9 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		private Button appendCheckbox;
 		private final List<String> events;
 		private final List<String> parameters;
+		private boolean append;
 
-		public RecordSequenceDialog(Shell parentShell, List<String> events, List<String> parameters) {
+		public RecordSequenceDialog(final Shell parentShell, final List<String> events, final List<String> parameters) {
 			super(parentShell, "Record Sequence (separated by ;)", null, "Configuration", MessageDialog.INFORMATION, 0,
 					"Run");
 			this.events = events;
@@ -203,7 +204,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		}
 
 		@Override
-		protected Control createCustomArea(Composite parent) {
+		protected Control createCustomArea(final Composite parent) {
 			parent.setLayout(new FillLayout());
 			final Composite dialogArea = new Composite(parent, SWT.NONE);
 			final GridLayout layout = new GridLayout(2, false);
@@ -234,7 +235,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		}
 
 		@Override
-		protected void buttonPressed(int buttonId) {
+		protected void buttonPressed(final int buttonId) {
 			events.addAll(getEvents());
 			parameters.addAll(getParameters());
 			append = appendCheckbox.getSelection();
@@ -247,6 +248,10 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 
 		private List<String> getParameters() {
 			return Arrays.asList(inputParameterText.getText().split(";")); //$NON-NLS-1$
+		}
+
+		public boolean isAppend() {
+			return append;
 		}
 	}
 }

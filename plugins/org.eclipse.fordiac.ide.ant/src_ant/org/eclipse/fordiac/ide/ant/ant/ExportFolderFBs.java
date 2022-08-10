@@ -30,18 +30,18 @@ public class ExportFolderFBs extends ExportFBs {
 	}
 
 	public void setExcludeSubfolder(final String value) {
-		this.excludeSubfolder = new ArrayList<>(Arrays.asList(value.split(",")));
+		this.excludeSubfolder = new ArrayList<>(Arrays.asList(value.split(","))); //$NON-NLS-1$
 	}
 
 	@Override
 	public void execute() throws BuildException {
 		super.execute();
 
-		final File folder = findFolderInProject(new File(project.getLocationURI()), folderNameString);
+		final File folder = findFolderInProject(new File(getFordiacProject().getLocationURI()), folderNameString);
 
 		if (folder == null) {
 			throw new BuildException(
-					"No folder named '" + folderNameString + "' in Project '" + project.getName() + "'");//$NON-NLS-1$ //$NON-NLS-2$
+					"No folder named '" + folderNameString + "' in Project '" + getFordiacProject().getName() + "'");//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
 
 		final List<File> files = new LinkedList<>();
@@ -55,14 +55,11 @@ public class ExportFolderFBs extends ExportFBs {
 		}
 
 		if (dir.listFiles() != null) {
-			File returnValue = null;
+			File foundFile = null;
 			for (final File file : dir.listFiles()) {
-				if (returnValue == null) {
-					if (file.isDirectory()) {
-						returnValue = findFolderInProject(file, dirName);
-					}
-				} else {
-					return returnValue;
+				foundFile = findFolderInProject(file, dirName);
+				if (foundFile != null) {
+					return foundFile;
 				}
 			}
 		}

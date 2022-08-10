@@ -90,7 +90,7 @@ public class DatetimeLiteral {
 	// prepare the "cheap" regex'es for splitting the string apart
 	static final String DIGIT_SEPERATOR = "(_)?"; //$NON-NLS-1$
 	@SuppressWarnings("squid:S5998") // input length is limited to MAX_INPUT_LENGTH
-	static final String UNSIGNED_INT_REGEX = "[0-9](" + DIGIT_SEPERATOR + "[0-9])*"; //$NON-NLS-1$ //$NON-NLS-2$
+	static final String UNSIGNED_INT_REGEX = "\\d(" + DIGIT_SEPERATOR + "\\d)*"; //$NON-NLS-1$ //$NON-NLS-2$
 	static final String DECIMAL_REGEX = "\\." + UNSIGNED_INT_REGEX; //$NON-NLS-1$
 	static final String FIXPOINT_REGEX = UNSIGNED_INT_REGEX + "(" + DECIMAL_REGEX + ")?"; //$NON-NLS-1$ //$NON-NLS-2$
 	static final String UNIT_REGEX = "(ns|us|ms|s|m|h|d)"; //$NON-NLS-1$

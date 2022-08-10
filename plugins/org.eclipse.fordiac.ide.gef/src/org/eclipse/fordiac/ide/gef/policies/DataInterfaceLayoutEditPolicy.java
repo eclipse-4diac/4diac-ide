@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.gef.policies;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.gef.EditPart;
@@ -31,7 +30,7 @@ public class DataInterfaceLayoutEditPolicy extends LayoutEditPolicy {
 
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
-		if ((getHost().getModel() instanceof VarDeclaration) && (!(getHost().getModel() instanceof AdapterDeclaration))
+		if ((getHost().getModel() instanceof VarDeclaration)
 				&& (!(request.getNewObjectType() instanceof ResourceTypeEntry))) {
 			return new ChangeValueCommand((VarDeclaration) getHost().getModel(),
 					request.getNewObject() != null ? request.getNewObject().toString() : ""); //$NON-NLS-1$

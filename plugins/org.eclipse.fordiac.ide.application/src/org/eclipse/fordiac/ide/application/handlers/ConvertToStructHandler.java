@@ -34,7 +34,6 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEdit
 import org.eclipse.fordiac.ide.application.wizards.ExtractStructTypeWizard;
 import org.eclipse.fordiac.ide.model.commands.create.CreateStructFromInterfaceElementsCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -120,7 +119,7 @@ public class ConvertToStructHandler extends AbstractHandler {
 		if (sel instanceof StructuredSelection) {
 			return (List<VarDeclaration>) ((IStructuredSelection) sel).toList().stream()
 					.filter(EditPart.class::isInstance).map(ep -> ((EditPart) ep).getModel())
-					.filter(el -> (el instanceof VarDeclaration) && !(el instanceof AdapterDeclaration))
+					.filter(el -> (el instanceof VarDeclaration))
 					.collect(Collectors.toList());
 		}
 		return Collections.emptyList();

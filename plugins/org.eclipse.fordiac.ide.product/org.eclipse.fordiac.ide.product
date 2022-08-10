@@ -103,6 +103,7 @@
       <feature id="org.eclipse.jgit.gpg.bc" installMode="root"/>
       <feature id="org.eclipse.jgit.ssh.jsch" installMode="root"/>
       <feature id="org.eclipse.elk.algorithms.feature" installMode="root"/>
+      <feature id="org.eclipse.nebula.widgets.richtext.feature" installMode="root"/>
    </features>
 
    <configurations>

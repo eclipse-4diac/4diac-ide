@@ -3,24 +3,27 @@
 <target name="4diac-ide Target" sequenceNumber="21">
 	<locations>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/elk/updates/releases/0.7.1"/>
-			<unit id="org.eclipse.elk.algorithms.feature.feature.group" version="0.7.1"/>
-			<unit id="org.eclipse.elk.feature.feature.group" version="0.7.1"/>
+			<repository location="https://download.eclipse.org/eclipse/updates/4.24"/>
+			<unit id="org.eclipse.jdt.feature.group" version="3.18.1200.v20220607-0700"/>
+			<unit id="org.eclipse.pde.feature.group" version="3.14.1200.v20220607-0700"/>
+			<unit id="org.eclipse.platform.sdk" version="4.24.0.I20220607-0700"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/eclipse/updates/4.23"/>
-			<unit id="org.eclipse.jdt.feature.group" version="3.18.1100.v20220308-0310"/>
-			<unit id="org.eclipse.pde.feature.group" version="3.14.1100.v20220308-0310"/>
-			<unit id="org.eclipse.platform.sdk" version="4.23.0.I20220308-0310"/>
-		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/releases/2022-03"/>
-			<unit id="org.eclipse.egit.feature.group" version="6.1.0.202203080745-r"/>
-			<unit id="org.eclipse.emf.sdk.feature.group" version="2.29.0.v20220226-1304"/>
+			<repository location="https://download.eclipse.org/releases/2022-06"/>
+			<unit id="org.eclipse.egit.feature.group" version="6.2.0.202206071550-r"/>
+			<unit id="org.eclipse.emf.sdk.feature.group" version="2.30.0.v20220516-1117"/>
 			<unit id="org.eclipse.gef.sdk.feature.group" version="3.11.0.201606061308"/>
 			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.17.1.v20220309-0840"/>
-			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.26.0.v20220228-0901"/>
-			<unit id="org.eclipse.ecf.filetransfer.httpclient5.feature.feature.group" version="1.1.600.v20220215-0126"/>
+			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.27.0.v20220530-0508"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://download.eclipse.org/elk/updates/releases/0.8.1/"/>
+			<unit id="org.eclipse.elk.algorithms.feature.feature.group" version="0.8.1"/>
+			<unit id="org.eclipse.elk.feature.feature.group" version="0.8.1"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://download.eclipse.org/nebula/releases/2.5.0/"/>
+			<unit id="org.eclipse.nebula.feature.feature.group" version="2.5.0.202106201019"/>
 		</location>
 	</locations>
 </target>

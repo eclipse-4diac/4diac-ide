@@ -56,6 +56,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.DragTracker;
 import org.eclipse.gef.EditPart;
@@ -70,6 +71,7 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.ui.part.EditorPart;
 
 /** This class implements an EditPart for a FunctionBlock. */
 public abstract class AbstractFBNElementEditPart extends AbstractPositionableElementEditPart {
@@ -419,8 +421,13 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	@Override
 	public void performRequest(final Request request) {
+
 		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT)
 				|| (request.getType() == RequestConstants.REQ_OPEN)) {
+
+			if (request.getType() == RequestConstants.REQ_OPEN) {
+				selectPropertySheet();
+			}
 			// forward direct edit request to instance name
 			final List<EditPart> children = getChildren();
 			children.stream().filter(InstanceNameEditPart.class::isInstance)
@@ -428,6 +435,14 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			return;
 		}
 		super.performRequest(request);
+	}
+
+	public void selectPropertySheet() {
+		if (null != getViewer()) {
+			getViewer().flush();
+			EditorUtils.refreshPropertySheetWithSelection((EditorPart) EditorUtils.getCurrentActiveEditor(),
+					getViewer(), this);
+		}
 	}
 
 	@Override

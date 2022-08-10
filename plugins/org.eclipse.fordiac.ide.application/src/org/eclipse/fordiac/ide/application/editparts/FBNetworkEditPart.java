@@ -19,8 +19,8 @@ import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.policies.FBNetworkXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractFBNetworkEditPart;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
 /**
@@ -95,8 +95,14 @@ public class FBNetworkEditPart extends AbstractFBNetworkEditPart {
 	public void refresh() {
 		super.refresh();
 		for (final Object ep : getChildren()) {
-			if (ep instanceof SubAppForFBNetworkEditPart) {
-				((EditPart) ep).refresh();
+			if (ep instanceof IContainerEditPart) {
+				final IContainerEditPart container = (IContainerEditPart) ep;
+				final GraphicalEditPart contentEP = container.getContentEP();
+				container.refresh();
+				// unfolded subapps and groups do have a content network
+				if (contentEP != null) {
+					contentEP.refresh();
+				}
 			}
 		}
 	}

@@ -375,6 +375,12 @@
              id="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"
              name="Update All Types">
     </command>
+          <command
+            categoryId="org.eclipse.fordiac.ide.commands.category"
+            description="Map Element to Resource"
+            id="org.eclipse.fordiac.ide.application.commands.mapTo"
+            name="Map To ...">
+    </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              id="org.eclipse.fordiac.ide.application.unmap"
              name="Unmap">
@@ -410,14 +416,14 @@
           name="Convert Untyped Subapp To Group">
     </command>
     <command
-          categoryId="org.eclipse.fordiac.ide.commands.category"
+          categoryId="org.eclipse.fordiacpopup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.rest.ide.commands.category"
           defaultHandler="org.eclipse.fordiac.ide.application.handlers.ConvertToSubappHandler"
           id="org.eclipse.fordiac.ide.application.commands.convertToSubapp"
           name="Convert Group to Untyped Subapp">
     </command>
+
   </extension>
   <extension point="org.eclipse.ui.handlers">
-  
   
  <!-- HANDLER FOR FOLLOW LEFT CONNECTION, SECOND IS FOR OVERRIDING THE CONFLICTING SHORTCUT -->
     <handler class="org.eclipse.fordiac.ide.application.handlers.FollowLeftConnectionHandler"
@@ -573,6 +579,13 @@
     <handler class="org.eclipse.fordiac.ide.application.handlers.UnmapHandler"
              commandId="org.eclipse.fordiac.ide.application.unmap">
     </handler>
+     <handler class="org.eclipse.fordiac.ide.application.handlers.MapHandler"
+           commandId="org.eclipse.fordiac.ide.application.commands.mapTo">
+      <activeWhen>
+        <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor">
+        </reference>
+      </activeWhen>
+    </handler>
     <handler class="org.eclipse.fordiac.ide.application.handlers.UnmapAllHandler"
              commandId="org.eclipse.fordiac.ide.application.unmapAll">
       <activeWhen>
@@ -652,6 +665,12 @@
          contextId="org.eclipse.ui.contexts.window"
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          sequence="M1+T">
+    </key>
+    <key
+          commandId="org.eclipse.fordiac.ide.application.commands.mapTo"
+          contextId="org.eclipse.ui.contexts.window"
+          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+          sequence="M1+M2+M">
     </key>
   </extension>
   <extension point="org.eclipse.ui.menus">
@@ -767,23 +786,10 @@
           <test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
         </visibleWhen>
       </command>
-      <menu id="org.eclipse.4diac.ide.mapto.menu"
-            label="Map To ...">
-        <dynamic class="org.eclipse.fordiac.ide.application.handlers.MapToContributionItem"
-                 id="org.eclipse.fordiac.ide.application.commands.mapTo">
-          <visibleWhen checkEnabled="true">
-            <and>
-              <with variable="activeEditor">
-                <and>
-                  <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork">
-                  </adapt>
-                  <test property="org.eclipse.fordiac.ide.application.utilities.isMapableFBNetwork" />
-                </and>
-              </with>
-            </and>
-          </visibleWhen>
-        </dynamic>
-      </menu>
+      
+      <command commandId="org.eclipse.fordiac.ide.application.commands.mapTo"
+               label="Map To ...">
+      </command>
       <command commandId="org.eclipse.fordiac.ide.application.unmap"
                label="Unmap">
       </command>
@@ -1018,24 +1024,12 @@
       </command>
     </menuContribution>
     <menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.rest">
-      <menu id="org.eclipse.4diac.ide.mapto.menu"
-            label="Map To ...">
-        <dynamic class="org.eclipse.fordiac.ide.application.handlers.MapToContributionItem"
-                 id="org.eclipse.fordiac.ide.application.commands.mapTo">
-          <visibleWhen checkEnabled="true">
-            <and>
-              <with variable="activeEditor">
-                <and>
-                  <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
-                  <test property="org.eclipse.fordiac.ide.application.utilities.isMapableFBNetwork" />
-                </and>
-              </with>
-              <reference definitionId="org.eclipse.fordiac.ide.application.FBNSelection">
-              </reference>
-            </and>
-          </visibleWhen>
-        </dynamic>
-      </menu>
+    <command commandId="org.eclipse.fordiac.ide.application.commands.mapTo"
+               label="Map To ...">
+		<visibleWhen>
+          <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor" />
+        </visibleWhen>
+      </command> 
       <command commandId="org.eclipse.fordiac.ide.application.unmap"
                label="Unmap"
                style="push">

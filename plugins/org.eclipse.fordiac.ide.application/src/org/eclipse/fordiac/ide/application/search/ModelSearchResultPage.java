@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -115,10 +114,12 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	}
 
 	@Override
-	protected TableViewer createTableViewer(Composite parent) {
+	protected TableViewer createTableViewer(final Composite parent) {
 		return new TableViewer(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.FULL_SELECTION);
 	}
-	// This method is called if the page was constructed with the flag FLAG_LAYOUT_FLAT (see constructor)
+
+	// This method is called if the page was constructed with the flag
+	// FLAG_LAYOUT_FLAT (see constructor)
 	@Override
 	protected void configureTableViewer(final TableViewer viewer) {
 		contentProvider = new ModelSearchTableContentProvider(this);
@@ -174,8 +175,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 					final LibraryElement type = ((TypedConfigureableObject) element).getType();
 					return type != null ? type.getName() : "untyped";
 				}
-				if (element instanceof VarDeclaration) {
-					final LibraryElement type = ((VarDeclaration) element).getType();
+				if (element instanceof IInterfaceElement) {
+					final LibraryElement type = ((IInterfaceElement) element).getType();
 					return type != null ? type.getName() : "unknown";
 				}
 				return super.getText(element);
@@ -217,16 +218,13 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		if (eobj instanceof Device) {
 			return ((Device) eobj).getPosition().eContainer().eContainer();
 		}
-		if (eobj instanceof Application) {
-			return eobj;
-		}
-		if (eobj instanceof FBType) {
+		if ((eobj instanceof Application) || (eobj instanceof FBType)) {
 			return eobj;
 		}
 		return eobj.eContainer().eContainer();
 	}
 
-	private static String hierarchicalName(final Object element) {
+	public static String hierarchicalName(final Object element) {
 		if (element instanceof FBNetworkElement) {
 			return FBNetworkHelper.getFullHierarchicalName((FBNetworkElement) element);
 		}
@@ -243,7 +241,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		if (element instanceof Resource) {
 			final Resource res = (Resource) element;
 			// systemname.devicename.resource
-			return res.getDevice().getAutomationSystem().getName() + "." + res.getDevice().getName() + "."  //$NON-NLS-1$
+			return res.getDevice().getAutomationSystem().getName() + "." + res.getDevice().getName() + "." //$NON-NLS-1$
 					+ res.getName();
 		}
 		if (element instanceof Application) {
@@ -272,14 +270,14 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	}
 
 	@Override
-	protected void handleOpen(OpenEvent event) {
+	protected void handleOpen(final OpenEvent event) {
 		ModelSearchResultPage.jumpToBlock(event);
 	}
 
 	public static void showResult(final EObject obj) {
 		EObject toOpen = obj;
-		if (obj instanceof VarDeclaration) {
-			toOpen = ((VarDeclaration) obj).getFBNetworkElement();
+		if (obj instanceof IInterfaceElement) {
+			toOpen = ((IInterfaceElement) obj).getFBNetworkElement();
 		}
 		if (obj instanceof SubApp) {
 			toOpen = ((SubApp) toOpen).getOuterFBNetworkElement();

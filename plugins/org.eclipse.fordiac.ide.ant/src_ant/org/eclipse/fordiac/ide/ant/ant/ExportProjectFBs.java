@@ -25,14 +25,14 @@ public class ExportProjectFBs extends ExportFBs {
 	private List<String> excludeSubfolder = new ArrayList<>();
 
 	public void setExcludeSubfolder(final String value) {
-		this.excludeSubfolder = new ArrayList<>(Arrays.asList(value.split(",")));
+		this.excludeSubfolder = new ArrayList<>(Arrays.asList(value.split(","))); //$NON-NLS-1$
 	}
 
 	@Override
 	public void execute() throws BuildException {
 		super.execute();
 		final List<File> files = new LinkedList<>();
-		getFBsFiles(files, new File(project.getLocationURI()), null, excludeSubfolder);
+		getFBsFiles(files, new File(getFordiacProject().getLocationURI()), null, excludeSubfolder);
 		exportFiles(files);
 	}
 

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.provider;
 
+import org.eclipse.fordiac.ide.model.data.RealType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.Activator;
@@ -29,9 +30,14 @@ public class WatchesValueLabelProvider extends ColumnLabelProvider {
 	public String getText(final Object element) {
 
 		if (element instanceof WatchValueTreeNode) {
-
 			final WatchValueTreeNode tn = (WatchValueTreeNode) element;
 			final IInterfaceElement ie = tn.getMonitoringBaseElement().getPort().getInterfaceElement();
+			if (ie.getType() instanceof RealType) {
+				// display integers as decimals
+				if (!tn.getValue().contains(".")) { //$NON-NLS-1$
+					return tn.getValue() + ".0"; //$NON-NLS-1$
+				}
+			}
 			if (tn.isStructNode()) { // if element is of type struct, then convert all strings of that struct which are
 				// of type ANY_BIT to 16#xx
 				WatchValueTreeNodeUtils.adaptAnyBitValues(tn.getChildren());

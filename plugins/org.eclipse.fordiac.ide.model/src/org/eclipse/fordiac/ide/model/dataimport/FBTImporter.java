@@ -968,13 +968,14 @@ public class FBTImporter extends TypeImporter {
 				a.setIsInput(isInput);
 				adapters.put(a.getName(), a);
 				adpaterList.add(a);
-				if ((null != a.getType()) && (null != a.getType().getInterfaceList())) {
+				final InterfaceList adapterInterfaceList = a.getAdapterType().getInterfaceList();
+				if ((null != a.getType()) && (null != adapterInterfaceList)) {
 					if (isInput) {
-						addAdapterEventInputs(a.getType().getInterfaceList().getEventOutputs(), a);
-						addAdapterEventOutputs(a.getType().getInterfaceList().getEventInputs(), a);
+						addAdapterEventInputs(adapterInterfaceList.getEventOutputs(), a);
+						addAdapterEventOutputs(adapterInterfaceList.getEventInputs(), a);
 					} else {
-						addAdapterEventInputs(a.getType().getInterfaceList().getEventInputs(), a);
-						addAdapterEventOutputs(a.getType().getInterfaceList().getEventOutputs(), a);
+						addAdapterEventInputs(adapterInterfaceList.getEventInputs(), a);
+						addAdapterEventOutputs(adapterInterfaceList.getEventOutputs(), a);
 					}
 				}
 				return true;

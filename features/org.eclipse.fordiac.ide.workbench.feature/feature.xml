@@ -203,7 +203,6 @@ United States, other countries, or both.\n
       <import plugin="org.eclipse.emf.mwe2.runtime" version="2.9.1" match="greaterOrEqual"/>
       <import plugin="org.antlr.runtime"/>
       <import plugin="org.eclipse.emf.common"/>
-      <import plugin="org.apache.commons.lang" version="2.0.0" match="compatible"/>
       <import plugin="org.apache.commons.logging" version="1.0.0" match="compatible"/>
       <import plugin="org.eclipse.core.expressions"/>
       <import plugin="org.eclipse.jface.text"/>
@@ -213,19 +212,13 @@ United States, other countries, or both.\n
       <import plugin="org.apache.commons.lang" version="2.6.0" match="compatible"/>
       <import plugin="com.google.guava"/>
       <import plugin="org.eclipse.osgi"/>
-      <import plugin="org.eclipse.core.runtime" version="3.5.0" match="compatible"/>
-      <import plugin="org.eclipse.core.resources" version="3.5.0" match="compatible"/>
-      <import plugin="org.eclipse.emf.ecore" version="2.13.0" match="compatible"/>
       <import plugin="org.eclipse.emf.codegen" version="2.12.0" match="compatible"/>
-      <import plugin="org.eclipse.emf.ecore.xmi" version="2.13.0" match="compatible"/>
       <import plugin="org.eclipse.text" version="3.5.0" match="compatible"/>
-      <import plugin="org.eclipse.emf.common" version="2.13.0" match="compatible"/>
       <import plugin="org.eclipse.debug.core" version="3.5.0" match="compatible"/>
       <import feature="org.eclipse.xtext.xbase.lib" version="2.10.0.v201605250459"/>
       <import feature="org.eclipse.xtext.xbase" version="2.10.0.v201605250459"/>
       <import feature="org.eclipse.xtext.redist" version="2.11.0.v20170201-0242"/>
       <import feature="org.eclipse.xtend.sdk" version="2.11.0.v20170201-0242"/>
-      <import plugin="org.eclipse.jface" version="3.3.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.jdt.core" match="compatible"/>
       <import plugin="org.eclipse.jdt.launching"/>
       <import plugin="org.eclipse.ocl.ecore"/>

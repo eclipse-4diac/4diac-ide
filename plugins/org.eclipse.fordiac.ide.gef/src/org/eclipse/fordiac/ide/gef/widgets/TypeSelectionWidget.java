@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -86,7 +87,7 @@ public class TypeSelectionWidget {
 		tableViewer.setCellModifier(new ICellModifier() {
 			@Override
 			public void modify(final Object element, final String property, final Object value) {
-				if (TYPE.equals(property) && element != null && !((TableItem) element).getData().equals(value)) {
+				if (TYPE.equals(property) && (element != null) && !((TableItem) element).getData().equals(value)) {
 					disableOpenEditorForAnyType();
 					handleSelectionChanged.accept(value.toString());
 				}
@@ -116,7 +117,7 @@ public class TypeSelectionWidget {
 				dataType = ((IInterfaceElement) configurableObject).getType();
 			}
 
-			if (dataType != null && dataType.getTypeEntry() != null) {
+			if ((dataType != null) && (dataType.getTypeEntry() != null)) {
 				OpenStructMenu.openStructEditor(dataType.getTypeEntry().getFile());
 			}
 		});
@@ -178,8 +179,8 @@ public class TypeSelectionWidget {
 	private void disableOpenEditorForAnyType() {
 		if (configurableObject instanceof StructManipulator) {
 			openEditorButton.setEnabled(
-					!"ANY_STRUCT".contentEquals(((StructManipulator) configurableObject).getStructType().getName()));	//$NON-NLS-1$
-		} else if (configurableObject instanceof Event || configurableObject instanceof AdapterDeclaration) {
+					!"ANY_STRUCT".contentEquals(((StructManipulator) configurableObject).getStructType().getName())); //$NON-NLS-1$
+		} else if ((configurableObject instanceof Event) || (configurableObject instanceof AdapterDeclaration)) {
 			// reset parent composite and dispose button
 			final Composite typeComp = tableViewer.getTable().getParent();
 			final GridLayout gridLayout = new GridLayout(1, false);
@@ -189,8 +190,8 @@ public class TypeSelectionWidget {
 			typeComp.setLayoutData(new GridData(SWT.FILL, 0, true, false));
 			openEditorButton.dispose();
 		} else if (configurableObject instanceof VarDeclaration) {
-			openEditorButton.setEnabled(((VarDeclaration) configurableObject).getType() instanceof StructuredType
-					&& !"ANY_STRUCT".contentEquals(((VarDeclaration) configurableObject).getTypeName()));		//$NON-NLS-1$
+			final DataType dtp = ((VarDeclaration) configurableObject).getType();
+			openEditorButton.setEnabled((dtp instanceof StructuredType) && IecTypes.GenericTypes.isAnyType(dtp)); // $NON-NLS-1$
 		}
 	}
 }

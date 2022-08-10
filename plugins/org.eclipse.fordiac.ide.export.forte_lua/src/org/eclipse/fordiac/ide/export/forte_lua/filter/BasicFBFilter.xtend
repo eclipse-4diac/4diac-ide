@@ -61,18 +61,18 @@ class BasicFBFilter {
 		  local «luaStateVariable()» = «luaFBStateVariable()»
 		  «variables.luaFBVariablesPrefix»
 		  «FOR adapter : adapterSocketsVariables.keySet»
-		  	«FOR input: adapter.type.adapterFBType.interfaceList.inputVars» 
+		  	«FOR input: adapter.getAdapterType.adapterFBType.interfaceList.inputVars» 
 		  		«input.luaFBAdapterInECCVariablesPrefix(adapter.name, false)»
 		  	«ENDFOR»
-		  	«FOR output: adapter.type.adapterFBType.interfaceList.outputVars» 
+		  	«FOR output: adapter.getAdapterType.adapterFBType.interfaceList.outputVars» 
 		  		«output.luaFBAdapterInECCVariablesPrefix(adapter.name, false)»
 		  	«ENDFOR»
 		  «ENDFOR»
 		  «FOR adapter : adapterPlugsVariables.keySet»
-		  	«FOR input: adapter.type.adapterFBType.interfaceList.inputVars» 
+		  	«FOR input: adapter.getAdapterType.adapterFBType.interfaceList.inputVars» 
 		  		«input.luaFBAdapterInECCVariablesPrefix(adapter.name, true)»
 		  	«ENDFOR»
-		  	«FOR output: adapter.type.adapterFBType.interfaceList.outputVars» 
+		  	«FOR output: adapter.getAdapterType.adapterFBType.interfaceList.outputVars» 
 		  		«output.luaFBAdapterInECCVariablesPrefix(adapter.name, true)»
 		  	«ENDFOR»
 		  «ENDFOR»

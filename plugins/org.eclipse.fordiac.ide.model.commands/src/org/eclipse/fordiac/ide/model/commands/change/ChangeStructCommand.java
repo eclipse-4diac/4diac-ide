@@ -19,6 +19,7 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -44,15 +45,21 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 			newElement = LibraryElementFactory.eINSTANCE.createDemultiplexer();
 		}
 		newElement.setTypeEntry(entry);
-		newElement.setInterface(EcoreUtil.copy(oldElement.getType().getInterfaceList()));
+		setInterface();
 		newElement.setName(oldElement.getName());
 
 		newElement.setPosition(EcoreUtil.copy(oldElement.getPosition()));
-		newElement.getAttributes().addAll(EcoreUtil.copyAll(oldElement.getAttributes()));
-		newElement.deleteAttribute("VisibleChildren"); // TODO use constant
+		copyUnrelatedAttributes();
 		updateStruct(newStruct);
 		((StructManipulator) newElement).setStructTypeElementsAtInterface(newStruct);
 		createValues();
+		transferInstanceComments();
+	}
+
+	private void copyUnrelatedAttributes() {
+		newElement.getAttributes().addAll(EcoreUtil.copyAll(oldElement.getAttributes()));
+		newElement.deleteAttribute(LibraryElementTags.DEMUX_VISIBLE_CHILDREN);
+		newElement.deleteAttribute(LibraryElementTags.STRUCTURED_TYPE_ELEMENT);
 	}
 
 	public StructManipulator getNewMux() {
@@ -63,18 +70,19 @@ public class ChangeStructCommand extends AbstractUpdateFBNElementCommand {
 		return (StructManipulator) oldElement;
 	}
 
-	// recursively update the struct's members because the lib only reloads them on startup
+	// recursively update the struct's members because the lib only reloads them on
+	// startup
 	private static void updateStruct(final StructuredType struct) {
 		if (struct.getTypeLibrary() != null) {
 			final DataTypeLibrary lib = struct.getTypeLibrary().getDataTypeLibrary();
 			struct.getMemberVariables().stream().filter(varDecl -> varDecl.getType() instanceof StructuredType)
-			.forEach(varDecl -> {
-				final StructuredType updatedStruct = lib.getStructuredType(varDecl.getTypeName());
-				if (updatedStruct != null) {
-					varDecl.setType(updatedStruct);
-				}
-				updateStruct(updatedStruct);
-			});
+					.forEach(varDecl -> {
+						final StructuredType updatedStruct = lib.getStructuredType(varDecl.getTypeName());
+						if (updatedStruct != null) {
+							varDecl.setType(updatedStruct);
+						}
+						updateStruct(updatedStruct);
+					});
 		}
 	}
 }

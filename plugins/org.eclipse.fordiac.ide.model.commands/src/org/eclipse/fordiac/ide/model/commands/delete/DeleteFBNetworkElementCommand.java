@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -74,7 +75,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 			cmds.add(new UnmapCommand(element));
 		}
 		collectDeleteCommands(element);
-		handleValueErrorMarkers();
+		handleErrorMarkers();
 		// Before removing the fbnetwork element the connections, value error markers, and mapping should be removed
 		if (cmds.canExecute()) {
 			cmds.execute();
@@ -108,7 +109,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (cmds.canRedo()) {
 			cmds.redo();
 		}
-		handleValueErrorMarkers();
+		handleErrorMarkers();
 		if (element instanceof ErrorMarkerRef) {
 			errorMarker = ErrorMarkerBuilder.deleteErrorMarker((ErrorMarkerRef) element);
 		}
@@ -132,12 +133,16 @@ public class DeleteFBNetworkElementCommand extends Command {
 				&& (subapp.getSubAppNetwork() == ((I4diacModelEditor) editor).getModel())));
 	}
 
-	private void handleValueErrorMarkers() {
+	private void handleErrorMarkers() {
 		for (final VarDeclaration varIn : element.getInterface().getInputVars()) {
 			if ((varIn.getValue() != null) && (varIn.getValue().hasError())) {
 				valueErrorMarkers.add(ErrorMarkerBuilder.deleteErrorMarker(varIn.getValue()));
 			}
 		}
+		for (final ErrorMarkerInterface errorMarkerInterf : element.getInterface().getErrorMarker()) {
+				valueErrorMarkers.add(ErrorMarkerBuilder.deleteErrorMarker(errorMarkerInterf));
+		}
+
 	}
 
 	private void restoreValueErrorMarkers() {

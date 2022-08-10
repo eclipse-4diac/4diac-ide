@@ -29,7 +29,6 @@ public class RemoveElementsFromGroup extends Command {
 	private final Point offset;
 	private final List<FBNetworkElement> elements;
 
-
 	public RemoveElementsFromGroup(final Collection<FBNetworkElement> elements, final Point offset) {
 		this.elements = new ArrayList<>(elements);
 		this.sourceGroup = getGroup(this.elements);
@@ -44,13 +43,14 @@ public class RemoveElementsFromGroup extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return (null != sourceGroup) && allElementsFromSameGroup();
+		return elements.isEmpty() || ((null != sourceGroup) && allElementsFromSameGroup());
 	}
 
 	@Override
 	public void execute() {
 		performRemove();
 	}
+
 	@Override
 	public void undo() {
 		elements.forEach(el -> el.setGroup(sourceGroup));
@@ -65,6 +65,7 @@ public class RemoveElementsFromGroup extends Command {
 	private void performRemove() {
 		elements.forEach(el -> el.setGroup(null));
 		FBNetworkHelper.moveFBNetworkByOffset(elements, offset.x, offset.y);
+		FBNetworkHelper.selectElements(elements);
 	}
 
 	private static Group getGroup(final List<FBNetworkElement> elements) {
@@ -85,5 +86,4 @@ public class RemoveElementsFromGroup extends Command {
 		}
 		return new Point();
 	}
-
 }

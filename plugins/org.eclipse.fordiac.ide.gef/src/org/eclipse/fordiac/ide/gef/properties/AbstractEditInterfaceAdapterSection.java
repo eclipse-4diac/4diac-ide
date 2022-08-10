@@ -54,7 +54,7 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		}
 		final EList<AdapterDeclaration> adapterList = getAdapterList(interfaceList, isInput);
 		if (!adapterList.isEmpty()) {
-			return adapterList.get(adapterList.size() - 1).getType();
+			return adapterList.get(adapterList.size() - 1).getAdapterType();
 		}
 		return getTypeLibrary().getAdapterTypes().values().iterator().next().getType();
 	}

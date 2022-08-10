@@ -189,7 +189,7 @@ public class FlattenSubAppCommand extends Command {
 	private void createMapCommands() {
 		if (subapp.isMapped()) {
 			for (final FBNetworkElement fbNetworkElement : elements) {
-				mappCommands.add(new MapToCommand(fbNetworkElement, subapp.getResource()));
+				mappCommands.add(MapToCommand.createMapToCommand(fbNetworkElement, subapp.getResource()));
 			}
 		}
 	}
@@ -206,7 +206,7 @@ public class FlattenSubAppCommand extends Command {
 					for (final Connection inboundConn : connection.getSource().getInputConnections()) {
 						for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
 							createCommands
-									.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
+							.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
 						}
 					}
 				} else if (connection.getSourceElement() == subapp) {

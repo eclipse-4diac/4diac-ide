@@ -15,7 +15,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.wizards;
 
+import java.util.Optional;
+
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -76,7 +79,10 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 
 	@Override
 	protected void createAdvancedControls(final Composite parent) {
-		createReplaceSourceEntry(parent);
+		if (replaceSourceText != null) {
+			createReplaceSourceEntry(parent);
+		}
+
 		super.createAdvancedControls(parent);
 	}
 
@@ -94,6 +100,18 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 			openType = settings.getBoolean(STORE_OPEN_TYPE_ID);
 			replaceSourceSubapp.setSelection(settings.getBoolean(STORE_REPLACE_SOURCE_ID));
 		}
+	}
+
+	@Override
+	protected boolean validatePage() {
+		// use super.getFileName here to get the type name without extension
+		final Optional<String> errorMessage = IdentifierVerifier.verifyIdentifier(super.getFileName());
+		if (errorMessage.isPresent()) {
+			setErrorMessage(errorMessage.get());
+			return false;
+		}
+
+		return super.validatePage();
 	}
 
 	@Override
@@ -163,6 +181,6 @@ public class SaveAsWizardPage extends WizardNewFileCreationPage {
 				Messages.SaveAsWizardPage_SaveAsStructType_Description,
 				Messages.SaveAsWizardPage_SaveAsStructType_PageName,
 				Messages.SaveAsSubApplicationTypeAction_WizardPageOpenType,
-				Messages.SaveAsWizardPage_SaveAsStructTypeReplaceDialogText);
+				null);
 	}
 }

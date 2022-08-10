@@ -150,10 +150,10 @@ public class TransitionSection extends AbstractSection {
 	 *
 	 * @param parent
 	 */
-	private void createConditionEditingPlaceHolder(Composite parent) {
+	private void createConditionEditingPlaceHolder(final Composite parent) {
 		conditionEditingContainer = getWidgetFactory().createComposite(parent);
 		conditionEditingContainer.setLayout(new GridLayout(4, false));
-		GridData compositeLayoutData = new GridData(SWT.FILL, 0, true, false);
+		final GridData compositeLayoutData = new GridData(SWT.FILL, 0, true, false);
 		compositeLayoutData.verticalIndent = 0;
 		conditionEditingContainer.setLayoutData(compositeLayoutData);
 
@@ -184,43 +184,43 @@ public class TransitionSection extends AbstractSection {
 		eventCombo.setEnabled(false);
 	}
 
-	private void createTransitionEditor(Composite parent) {
-		FBType fbType = getBasicFBType();
+	private void createTransitionEditor(final Composite parent) {
+		final FBType fbType = getBasicFBType();
 
-		IEditedResourceProvider resourceProvider = new IEditedResourceProvider() {
+		final IEditedResourceProvider resourceProvider = new IEditedResourceProvider() {
 
 			@Override
 			public XtextResource createResource() {
-				XtextResourceSet resourceSet = resourceSetProvider.get();
-				EcoreUtil.Copier copier = new EcoreUtil.Copier();
-				Resource fbResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
+				final XtextResourceSet resourceSet = resourceSetProvider.get();
+				final EcoreUtil.Copier copier = new EcoreUtil.Copier();
+				final Resource fbResource = resourceSet.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
 				fbResource.getContents().add(copier.copy(EcoreUtil.getRootContainer(fbType)));
-				for (AdapterDeclaration adapter : fbType.getInterfaceList().getSockets()) {
+				for (final AdapterDeclaration adapter : fbType.getInterfaceList().getSockets()) {
 					createAdapterResource(resourceSet, copier, adapter);
 				}
-				for (AdapterDeclaration adapter : fbType.getInterfaceList().getPlugs()) {
+				for (final AdapterDeclaration adapter : fbType.getInterfaceList().getPlugs()) {
 					createAdapterResource(resourceSet, copier, adapter);
 				}
 				copier.copyReferences();
-				Resource resource = resourceSet.createResource(computeUnusedUri(resourceSet, fileExtension));
+				final Resource resource = resourceSet.createResource(computeUnusedUri(resourceSet, fileExtension));
 				return (XtextResource) resource;
 			}
 
-			private void createAdapterResource(XtextResourceSet resourceSet, EcoreUtil.Copier copier,
-					AdapterDeclaration adapter) {
-				if ((null != adapter.getType()) && (null != adapter.getType().getAdapterFBType())) {
-					Resource adapterResource = resourceSet
+			private void createAdapterResource(final XtextResourceSet resourceSet, final EcoreUtil.Copier copier,
+					final AdapterDeclaration adapter) {
+				if ((null != adapter.getType()) && (null != adapter.getAdapterType().getAdapterFBType())) {
+					final Resource adapterResource = resourceSet
 							.createResource(computeUnusedUri(resourceSet, LINKING_FILE_EXTENSION));
 					copier.copy(adapter.getType());
 					adapterResource.getContents()
-							.add(copier.copy(EcoreUtil.getRootContainer(adapter.getType().getAdapterFBType())));
+					.add(copier.copy(EcoreUtil.getRootContainer(adapter.getAdapterType().getAdapterFBType())));
 				}
 			}
 
-			protected URI computeUnusedUri(ResourceSet resourceSet, String fileExtension) {
-				String name = "__synthetic"; //$NON-NLS-1$
+			protected URI computeUnusedUri(final ResourceSet resourceSet, final String fileExtension) {
+				final String name = "__synthetic"; //$NON-NLS-1$
 				for (int i = 0; i < Integer.MAX_VALUE; i++) {
-					URI syntheticUri = URI.createURI(name + i + "." + fileExtension); //$NON-NLS-1$
+					final URI syntheticUri = URI.createURI(name + i + "." + fileExtension); //$NON-NLS-1$
 					if (resourceSet.getResource(syntheticUri, false) == null) {
 						return syntheticUri;
 					}
@@ -230,7 +230,7 @@ public class TransitionSection extends AbstractSection {
 		};
 
 		editor = editorFactory.newEditor(resourceProvider).withParent(parent);
-		StyledText conditionText = (StyledText) editor.getViewer().getControl();
+		final StyledText conditionText = (StyledText) editor.getViewer().getControl();
 		conditionText.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false));
 		conditionText.moveAbove(closingBracket);
 
@@ -241,7 +241,7 @@ public class TransitionSection extends AbstractSection {
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if ((null != type) && (null != getBasicFBType())) {
 			fillEventConditionDropdown();
@@ -253,21 +253,21 @@ public class TransitionSection extends AbstractSection {
 			} else {
 				eventCombo.select(getType().getConditionEvent() != null
 						? eventCombo.indexOf(getType().getConditionEvent().getName())
-						: (eventCombo.getItemCount() - 1));
+								: (eventCombo.getItemCount() - 1));
 			}
 			setExpressionTextboxEnablement();
 		}
 		commandStack = commandStackBuffer;
 	}
 
-	private void updateConditionExpressionText(String conditionExpression) {
+	private void updateConditionExpressionText(final String conditionExpression) {
 		if (null != embeddedEditorModelAccess) {
 			embeddedEditorModelAccess.updateModel((null != conditionExpression) ? conditionExpression : ""); //$NON-NLS-1$
 		}
 	}
 
 	private void setExpressionTextboxEnablement() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if ((getType().getConditionExpression() != null)
 				&& getType().getConditionExpression().equals(ECCContentAndLabelProvider.ONE_CONDITION)) {
@@ -282,6 +282,6 @@ public class TransitionSection extends AbstractSection {
 	public void fillEventConditionDropdown() {
 		eventCombo.removeAll();
 		ECCContentAndLabelProvider.getTransitionConditionEventNames(getBasicFBType()).stream()
-				.forEach(name -> eventCombo.add(name));
+		.forEach(name -> eventCombo.add(name));
 	}
 }

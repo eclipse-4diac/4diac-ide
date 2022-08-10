@@ -13,6 +13,10 @@
 
 package org.eclipse.fordiac.ide.model.ui.editors;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -22,6 +26,8 @@ import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IEditorPart;
 
 public final class HandlerHelper {
@@ -90,5 +96,15 @@ public final class HandlerHelper {
 			}
 		}
 		return true;
+	}
+
+	public static List<FBNetworkElement> getSelectedFBNElements(final ISelection selection) {
+		if ((selection instanceof IStructuredSelection) && !selection.isEmpty()) {
+			final IStructuredSelection sel = (IStructuredSelection) selection;
+			return ((List<?>) sel.toList()).stream().filter(EditPart.class::isInstance)
+					.filter(ep -> ((EditPart) ep).getModel() instanceof FBNetworkElement)
+					.map(ep -> (FBNetworkElement) ((EditPart) ep).getModel()).collect(Collectors.toList());
+		}
+		return Collections.emptyList();
 	}
 }

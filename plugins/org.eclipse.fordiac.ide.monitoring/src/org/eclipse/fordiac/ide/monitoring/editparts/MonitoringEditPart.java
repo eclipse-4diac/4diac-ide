@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -291,15 +292,15 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 			final Label figure = (Label) getFigure();
 			if (isVariable()) {
 				final VarDeclaration varDeclaration = (VarDeclaration) getInterfaceElement();
-				// decorate WString and String
-				final String value = WatchValueTreeNodeUtils.decorateInitialCellValue(varDeclaration.getType(), input);
+				final DataType type = varDeclaration.getType();
+				final String value = WatchValueTreeNodeUtils.decorateCellValue(type, input);
 				if (isForced()) {
 					figure.setText(MessageFormat.format(Messages.MonitoringEditPart_Forced_ValueDisplay,
 							getModel().getForceValue(),
-							WatchValueTreeNodeUtils.decorateHexValue(value, varDeclaration.getType(), getModel())));
+							WatchValueTreeNodeUtils.decorateHexValue(value, type, getModel())));
 				} else {
 					figure.setText(
-							WatchValueTreeNodeUtils.decorateHexValue(value, varDeclaration.getType(), getModel()));
+							WatchValueTreeNodeUtils.decorateHexValue(value, type, getModel()));
 				}
 			} else {
 				figure.setText(input);

@@ -159,7 +159,8 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 			final int lineNumber = getLineNumber(context);
 			if (breakpoint instanceof EvaluatorLineBreakpoint) {
 				final EvaluatorLineBreakpoint evaluatorLineBreakpoint = (EvaluatorLineBreakpoint) breakpoint;
-				if (Objects.equal(breakpoint.getMarker().getResource(), resource)
+				if (evaluatorLineBreakpoint.isApplicable(frame.getEvaluator())
+						&& Objects.equal(breakpoint.getMarker().getResource(), resource)
 						&& evaluatorLineBreakpoint.getLineNumber() == lineNumber) {
 					if (evaluatorLineBreakpoint.isConditionEnabled()) {
 						return evaluateBreakpointCondition(evaluatorLineBreakpoint, frame);

@@ -22,13 +22,16 @@ public class ModelQuerySpec {
 	private boolean checkComments;
 	private boolean checkCaseSensitive;
 	private boolean checkExactMatching;
+	private boolean checkWorkspaceScope;
+	private boolean checkProjectScope;
 
 	public ModelQuerySpec() {
 	}
 
 	public ModelQuerySpec(final String searchString, final boolean isCheckedInstanceName,
 			final boolean isCheckedPinName, final boolean isCheckedType, final boolean isCheckedComment,
-			final boolean isCaseSensitive, final boolean isExactNameMatching) {
+			final boolean isCaseSensitive, final boolean isExactNameMatching, final boolean isWorkspaceScope,
+			final boolean isProjectScope) {
 		this.searchString = searchString;
 		this.checkInstanceName = isCheckedInstanceName;
 		this.checkPinName = isCheckedPinName;
@@ -36,6 +39,8 @@ public class ModelQuerySpec {
 		this.checkComments = isCheckedComment;
 		this.checkCaseSensitive = isCaseSensitive;
 		this.checkExactMatching = isExactNameMatching;
+		this.checkWorkspaceScope = isWorkspaceScope;
+		this.checkProjectScope = isProjectScope;
 	}
 
 	public String getSearchString() {
@@ -64,6 +69,14 @@ public class ModelQuerySpec {
 
 	public boolean isCheckExactMatching() {
 		return checkExactMatching;
+	}
+
+	public boolean isCheckWorkspaceScope() {
+		return checkWorkspaceScope;
+	}
+
+	public boolean isCheckProjectScope() {
+		return checkProjectScope;
 	}
 
 	public void setCheckCaseSensitive(final boolean checkCaseSensitive) {

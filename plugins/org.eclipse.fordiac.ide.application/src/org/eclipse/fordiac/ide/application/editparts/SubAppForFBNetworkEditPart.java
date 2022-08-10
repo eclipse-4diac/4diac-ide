@@ -40,12 +40,12 @@ import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.ContainerResizePolicy;
 import org.eclipse.fordiac.ide.application.policies.FBAddToSubAppLayoutEditPolicy;
+import org.eclipse.fordiac.ide.application.policies.FBNetworkElementNonResizeableEP;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
-import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -288,7 +288,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			}
 		} else if (getFigure().getExpandedMainFigure() != null) {
 			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new TypeDirectEditPolicy());
-			installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new ModifiedNonResizeableEditPolicy());
+			installEditPolicy(EditPolicy.PRIMARY_DRAG_ROLE, new FBNetworkElementNonResizeableEP());
 			installEditPolicy(EditPolicy.LAYOUT_ROLE, new FBAddToSubAppLayoutEditPolicy());
 		}
 	}

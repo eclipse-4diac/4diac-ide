@@ -23,19 +23,22 @@ public class WatchesTypeLabelProvider extends ColumnLabelProvider {
 	public String getText(final Object element) {
 
 		if (element instanceof WatchValueTreeNode) {
-			final WatchValueTreeNode tn = (WatchValueTreeNode) element;
-			IInterfaceElement ie;
-			if (tn.getVariable() == null) {
-				ie = tn.getMonitoringBaseElement().getPort().getInterfaceElement();
-			} else {
-				ie = tn.getVariable();
-			}
-			if (ie instanceof VarDeclaration) {
-				return ie.getTypeName();
-			}
-			return FordiacMessages.Event.toUpperCase();
+			return getTypeText((WatchValueTreeNode) element);
 		}
 
 		return ""; //$NON-NLS-1$
+	}
+
+	public static String getTypeText(final WatchValueTreeNode tn) {
+		IInterfaceElement ie;
+		if (tn.getVariable() == null) {
+			ie = tn.getMonitoringBaseElement().getPort().getInterfaceElement();
+		} else {
+			ie = tn.getVariable();
+		}
+		if (ie instanceof VarDeclaration) {
+			return ie.getTypeName();
+		}
+		return FordiacMessages.Event.toUpperCase();
 	}
 }

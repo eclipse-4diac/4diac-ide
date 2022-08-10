@@ -27,14 +27,13 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -42,6 +41,8 @@ import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.search2.internal.ui.SearchView;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.PlatformUI;
 
 public class ModelSearchQuery implements ISearchQuery {
 
@@ -58,11 +59,22 @@ public class ModelSearchQuery implements ISearchQuery {
 		final List<AutomationSystem> searchRootSystems = new ArrayList<>();
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
-		for (final IProject proj : root.getProjects()) {
-			if (proj.isOpen()) {
-				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj).values());
+		if (modelQuerySpec.isCheckWorkspaceScope()) { // If it's workspace, search all
+			for (final IProject proj : root.getProjects()) {
+				if (proj.isOpen()) {
+					searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj).values());
+				}
 			}
+		} else {
+			Display.getDefault().syncExec(() -> {
+				final IEditorPart openEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+						.getActiveEditor();
+				final IProject project = openEditor.getAdapter(FBNetwork.class).getAutomationSystem().getTypeLibrary()
+						.getProject();
+				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(project).values());
+			});
 		}
+
 		for (final AutomationSystem sys : searchRootSystems) {
 			searchApplications(sys);
 			searchResources(sys);
@@ -75,13 +87,13 @@ public class ModelSearchQuery implements ISearchQuery {
 		return Status.OK_STATUS;
 	}
 
-	private void searchApplications(final AutomationSystem sys) {
+	public void searchApplications(final AutomationSystem sys) {
 		for (final Application app : sys.getApplication()) {
 			searchApplication(app);
 		}
 	}
 
-	private void searchApplication(final Application app) {
+	public void searchApplication(final Application app) {
 		if (matchEObject(app)) {
 			searchResult.addResult(app);
 		}
@@ -148,18 +160,23 @@ public class ModelSearchQuery implements ISearchQuery {
 				return true;
 			}
 		}
-		if (modelQuerySpec.isCheckedType() && modelElement instanceof TypedConfigureableObject) {
-			final LibraryElement type = ((TypedConfigureableObject) modelElement).getType();
-			final boolean matchType = type != null && compareStrings(type.getName());
-			if (matchType) {
-				return true;
+		if (modelQuerySpec.isCheckedType()) {
+			if (modelElement instanceof INamedElement) {
+				final INamedElement namElem = (INamedElement) modelElement;
+				return compareStrings(namElem.getName());
+			} else if (modelElement instanceof ConfigurableObject) {
+				final ConfigurableObject config = (ConfigurableObject) modelElement;
+				return compareStrings(config.getClass().getSimpleName());
 			}
 		}
 		return false;
 	}
 
 	private boolean compareStrings(final String toTest) {
-		// TODO: think what makes sense, this can be done in a couple of ways
+		final ModelSearchPattern pattern = new ModelSearchPattern(toTest, modelQuerySpec);
+		if (pattern.matchSearchString()) {
+			return true;
+		}
 		if (modelQuerySpec.isCheckExactMatching()) {
 			return toTest.equals(modelQuerySpec.getSearchString());
 		}

@@ -12,6 +12,7 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Martin Melik Merkumians - registers hover provider and sets regex for
  * 		comments/documentation
+ *   Hesam Rezaee - registers classes for custom highlighting
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui
 
@@ -25,8 +26,11 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMining
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider
+import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper
+import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider
+import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator
 import org.eclipse.xtext.resource.IContainer
 import org.eclipse.xtext.resource.containers.StateBasedContainerManager
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider
@@ -35,8 +39,11 @@ import org.eclipse.xtext.ui.editor.model.XtextDocument
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer
 import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy
+import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeIdMapper
+import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument
 import org.eclipse.xtext.ui.shared.Access
+import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator
 
 /**
  * Use this class to register components to be used within the Eclipse IDE.
@@ -87,5 +94,17 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 	def void configureCodeMinings(Binder binder) {
 		binder.bind(IPreferenceStoreInitializer).annotatedWith(Names.named("codeMiningInitializer")).to(
 			STCoreCodeMiningPreferences.Initializer);
+	}
+	
+	def Class<? extends DefaultAntlrTokenToAttributeIdMapper> bindDefaultAntlrTokenToAttributeIdMapper() {
+		return STCoreAntlrTokenToAttributeIdMapper;
+	}
+	
+	def Class<? extends IHighlightingConfiguration> bindIHighlightingConfiguration() {
+		return STCoreHighlightingConfiguration;
+	}
+
+	def Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
+		return STCoreSemanticHighlightingCalculator;
 	}
 }

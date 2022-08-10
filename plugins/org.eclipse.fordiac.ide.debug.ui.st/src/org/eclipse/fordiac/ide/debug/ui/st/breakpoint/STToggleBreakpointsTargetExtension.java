@@ -117,11 +117,11 @@ public class STToggleBreakpointsTargetExtension implements IAdapterFactory, ITog
 		return true;
 	}
 
-	protected static STLineBreakpoint createBreakpoint(final IResource res, final int line) throws CoreException {
+	private static STLineBreakpoint createBreakpoint(final IResource res, final int line) throws CoreException {
 		return new STLineBreakpoint(res, line);
 	}
 
-	protected static STLineBreakpoint findExistingBreakpoint(final IResource res, final int line) throws CoreException {
+	private static STLineBreakpoint findExistingBreakpoint(final IResource res, final int line) throws CoreException {
 		final IBreakpointManager manager = DebugPlugin.getDefault().getBreakpointManager();
 		final IBreakpoint[] breakpoints = manager.getBreakpoints(EvaluatorLineBreakpoint.DEBUG_MODEL);
 		for (final IBreakpoint breakpoint : breakpoints) {
@@ -136,16 +136,16 @@ public class STToggleBreakpointsTargetExtension implements IAdapterFactory, ITog
 		return null;
 	}
 
-	protected static boolean isValidLineForBreakPoint(final XtextResource resource, final int line) {
+	private static boolean isValidLineForBreakPoint(final XtextResource resource, final int line) {
 		final IParseResult parseResult = resource.getParseResult();
 		if (parseResult == null) {
 			return false;
 		}
 		final ICompositeNode node = parseResult.getRootNode();
-		return isValidLineForBreakpoint(node, line);
+		return isValidLineForBreakPoint(node, line);
 	}
 
-	protected static boolean isValidLineForBreakpoint(final ICompositeNode node, final int line) {
+	private static boolean isValidLineForBreakPoint(final ICompositeNode node, final int line) {
 		for (final INode n : node.getChildren()) {
 			final ITextRegionWithLineInformation textRegion = n.getTextRegionWithLineInformation();
 			if (textRegion.getLineNumber() <= line && textRegion.getEndLineNumber() >= line) {
@@ -155,7 +155,7 @@ public class STToggleBreakpointsTargetExtension implements IAdapterFactory, ITog
 						return true;
 					}
 				}
-				if (n instanceof ICompositeNode && isValidLineForBreakpoint((ICompositeNode) n, line)) {
+				if (n instanceof ICompositeNode && isValidLineForBreakPoint((ICompositeNode) n, line)) {
 					return true;
 				}
 			}
@@ -166,7 +166,7 @@ public class STToggleBreakpointsTargetExtension implements IAdapterFactory, ITog
 		return false;
 	}
 
-	protected static boolean isValidSematicElementForBreakpoint(final EObject element) {
+	private static boolean isValidSematicElementForBreakpoint(final EObject element) {
 		if (element instanceof STExpression) {
 			final EObject container = element.eContainer();
 			if (container instanceof STAssignmentStatement) {
