@@ -60,6 +60,8 @@ public class ExportFBsAsXMI extends Task {
 			throw new BuildException("Project named '" + projectNameString + "' not in workspace in Workspace");//$NON-NLS-1$ //$NON-NLS-2$
 		}
 
+		ExportFBs.waitBuilderJobsComplete();
+
 	}
 
 	// recursively call directories and save fbt Files
