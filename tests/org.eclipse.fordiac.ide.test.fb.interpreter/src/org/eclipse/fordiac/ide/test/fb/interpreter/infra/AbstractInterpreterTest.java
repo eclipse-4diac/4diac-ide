@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Johannes Kepler University Linz
+ * Copyright (c) 2021, 2022 Johannes Kepler University Linz and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,14 +10,14 @@
  * Contributors:
  *   Antonio Garmenda, Bianca Wiesmayr
  *       - initial implementation and/or documentation
+ *   Paul Pavlicek
+ *   	 -cleanup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,8 +41,8 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.SequenceMatcher;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
-import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -148,9 +148,9 @@ public abstract class AbstractInterpreterTest {
 	}
 
 	public static void setVariable(final FBType fb, final String name, final String value) {
-		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name);
+		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name.strip());
 		if (!(el instanceof VarDeclaration)) {
-			throw new IllegalArgumentException("variable does not exist in FB"); //$NON-NLS-1$
+			throw new IllegalArgumentException("variable " + name + " does not exist in FB"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		final Value val = ((VarDeclaration) el).getValue();
 		if (val == null) {
@@ -198,7 +198,7 @@ public abstract class AbstractInterpreterTest {
 			transaction.setInputEventOccurrence(eventOccurrence);
 			// process parameter and set variables
 			final String inputParameters = st.getInputPrimitive().getParameters();
-			final var paramList = getParametersFromString(inputParameters);
+			final var paramList = ServiceSequenceUtils.getParametersFromString(inputParameters);
 			for (final List<String> parameter : paramList) {
 				if (parameter.size() == 2) {
 					setVariable(fb, parameter.get(0), parameter.get(1));
@@ -248,7 +248,9 @@ public abstract class AbstractInterpreterTest {
 			seq.getServiceTransaction().add(LibraryElementFactory.eINSTANCE.createServiceTransaction());
 		}
 		final FBTransaction transaction = createTransaction(fb, seq.getServiceTransaction().get(0));
-		transaction.getInputEventOccurrence().setFbRuntime(simpleFBTypeRT);
+		if (transaction != null && transaction.getInputEventOccurrence() != null) {
+			transaction.getInputEventOccurrence().setFbRuntime(simpleFBTypeRT);
+		}
 		eventManager.getTransactions().add(transaction);
 
 		EventManagerUtils.process(eventManager);
@@ -352,10 +354,15 @@ public abstract class AbstractInterpreterTest {
 		}
 		final int length = result.getOutputEventOccurrences().size();
 		final FBRuntimeAbstract captured = result.getOutputEventOccurrences().get(length - 1).getFbRuntime();
-		final var parameterList = getParametersFromString(parameters);
+		final var parameterList = ServiceSequenceUtils.getParametersFromString(parameters);
+		final SequenceMatcher sm=  new SequenceMatcher(getFBType(captured));
+
 		for (final List<String> assumption : parameterList) {
-			if (!processParameter(assumption.get(0), assumption.get(1), getFBType(captured))) {
-				return false;
+			if (assumption.size() >= 2) {
+				if (sm.matchVariable(parameters, false)) {
+					// !processParameter(assumption.get(0), assumption.get(1), getFBType(captured))) {
+					return false;
+				}
 			}
 		}
 		return true;
@@ -369,51 +376,5 @@ public abstract class AbstractInterpreterTest {
 			return ((SimpleFBTypeRuntime) captured).getSimpleFBType();
 		}
 		return null;
-	}
-
-	private static List<String> splitParameterList(final String parameters) {
-		if (parameters == null) {
-			return Collections.emptyList();
-		}
-		return Arrays.asList(parameters.split(";")); //$NON-NLS-1$
-	}
-
-	private static List<List<String>> getParametersFromString(final String parameters) {
-		final List<String> statementList = splitParameterList(parameters);
-		final var parameterList = new ArrayList<List<String>>();
-		for (final String element : statementList) {
-			final List<String> statement = Arrays.asList(element.split(":=", 0)); //$NON-NLS-1$
-			parameterList.add(statement);
-		}
-		return parameterList;
-	}
-
-	private static boolean processParameter(final String varName, String expectedValue, final FBType fbtype) {
-		if ((expectedValue == null) || expectedValue.isBlank()) {
-			return true;
-		}
-		final IInterfaceElement el = fbtype.getInterfaceList().getInterfaceElement(varName);
-		if (el instanceof VarDeclaration) {
-			final Value val = ((VarDeclaration) el).getValue();
-			// special treatment for bools: 1 = TRUE, 0 = FALSE
-			if (FordiacKeywords.BOOL.equalsIgnoreCase(((VarDeclaration) el).getTypeName())) {
-				final String BOOL_FALSE = "FALSE"; //$NON-NLS-1$
-				final String BOOL_TRUE = "TRUE"; //$NON-NLS-1$
-				final String BOOL_ZERO = "0"; //$NON-NLS-1$
-				final String BOOL_ONE = "1"; //$NON-NLS-1$
-				if (BOOL_ONE.equals(val.getValue())) {
-					val.setValue(BOOL_TRUE);
-				} else if (BOOL_ZERO.equals(val.getValue())) {
-					val.setValue(BOOL_FALSE);
-				} else if (BOOL_ONE.equals(expectedValue)) {
-					expectedValue = BOOL_TRUE;
-				} else if (BOOL_ZERO.equals(expectedValue)) {
-					expectedValue = BOOL_FALSE;
-				}
-			}
-			// compare the value from the BasicFBType with the primitive
-			return (val != null) && expectedValue.equalsIgnoreCase(val.getValue());
-		}
-		return false;
 	}
 }

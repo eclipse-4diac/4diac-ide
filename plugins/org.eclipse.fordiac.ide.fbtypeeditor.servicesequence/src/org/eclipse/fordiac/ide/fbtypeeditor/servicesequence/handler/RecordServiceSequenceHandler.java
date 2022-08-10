@@ -192,7 +192,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 				final ServiceSequence serviceSequence) {
 			super(parentShell, "Record Sequence ", null, //$NON-NLS-1$
 					"Configuration \nInputEvent(s) seperated by ; \nParameters seperated by ; and overwritten when Random ticked \nCount is integernumber for number of random elements \nAppend appends the sequence to privios record \nRandom generates random sequence or appends them after InputEvent(s) ", //$NON-NLS-1$
-					MessageDialog.INFORMATION, 0, "Run");
+					MessageDialog.INFORMATION, 0, "Run"); //$NON-NLS-1$
 			this.events = events;
 			this.parameters = parameters;
 			this.serviceSequence = serviceSequence;
@@ -286,11 +286,16 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		}
 
 		private List<String> getEvents() {
-			return Arrays.asList(inputEventText.getText().split(";")); //$NON-NLS-1$
+			return splitAndCleanList(inputEventText.getText());
+		}
+
+		private static List<String> splitAndCleanList(final String text) {
+			return Arrays.asList(text.split(";", 0)).stream().filter(s -> !s.isBlank()) //$NON-NLS-1$
+					.map(String::strip).collect(Collectors.toList());
 		}
 
 		private List<String> getParameters() {
-			return Arrays.asList(inputParameterText.getText().split(";")); //$NON-NLS-1$
+			return splitAndCleanList(inputParameterText.getText());
 		}
 
 		private String getCountText() {

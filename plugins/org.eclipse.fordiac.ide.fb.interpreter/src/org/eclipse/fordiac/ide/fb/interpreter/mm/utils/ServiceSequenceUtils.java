@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Johannes Kepler University Linz and others
+ * Copyright (c) 2021, 2022 Johannes Kepler University Linz and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,7 +10,7 @@
  * Contributors:
  *   Antonio Garmenda, Bianca Wiesmayr
  *       - initial implementation and/or documentation
- *   Paul Pavlicek - cleanup and added factory methods
+ *   Paul Pavlicek - cleanup and factory methods
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
 
@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
@@ -212,21 +213,38 @@ public final class ServiceSequenceUtils {
 		return true;
 	}
 
-	private static List<List<String>> getParametersFromString(final String parameters) {
-		final List<String> statementList = splitParameterList(parameters);
+	public static List<List<String>> getParametersFromString(final String parameters) {
+		final List<String> statementList = splitList(parameters);
 		final var parameterList = new ArrayList<List<String>>();
 		for (final String element : statementList) {
-			final List<String> statement = Arrays.asList(element.split(":=")); //$NON-NLS-1$
+			final List<String> statement = splitParameter(element);
 			parameterList.add(statement);
 		}
 		return parameterList;
 	}
 
-	private static List<String> splitParameterList(final String parameters) {
-		if (parameters == null) {
+	public static List<String> splitAndCleanList(final String text, final String separator) {
+		if (text == null) {
 			return Collections.emptyList();
 		}
-		return Arrays.asList(parameters.split(";")); //$NON-NLS-1$
+		return Arrays.asList(text.split(separator, 0)).stream().filter(s -> !s.isBlank())
+				.map(String::strip).collect(Collectors.toList());
+	}
+
+	public static List<String> splitList(final String parameters) {
+		return splitAndCleanList(parameters, ";"); //$NON-NLS-1$
+	}
+
+	public static String removeKeyword(final String parameters) {
+		final List<String> para = splitAndCleanList(parameters, "#"); //$NON-NLS-1$
+		if (para.size() == 2) {
+			return para.get(1);
+		}
+		return parameters;
+	}
+
+	public static List<String> splitParameter(final String parameter) {
+		return splitAndCleanList(parameter, ":="); //$NON-NLS-1$
 	}
 
 	private static boolean processParameter(final String varName, String expectedValue, final BasicFBType basicfbtype) {
@@ -295,7 +313,7 @@ public final class ServiceSequenceUtils {
 				createInputPrimitive(getFbTypeFromRuntime(transaction.getInputEventOccurrence()), transaction));
 		for (final EventOccurrence outputEvent : transaction.getOutputEventOccurrences()) {
 			serviceTransaction.getOutputPrimitive()
-					.add(createOutputPrimitive(outputEvent, getFbTypeFromRuntime(outputEvent)));
+			.add(createOutputPrimitive(outputEvent, getFbTypeFromRuntime(outputEvent)));
 		}
 	}
 

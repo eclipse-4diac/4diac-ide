@@ -11,7 +11,7 @@ import org.junit.Test;
 public class SequenceExecutorTest {
 
 	@Test
-	public void test() {
+	public static void test() {
 		final FBType fBType = AbstractInterpreterTest.loadFBType("E_CTU"); //$NON-NLS-1$
 		assertNotNull(fBType);
 		final EList<Transaction> trans = SequenceExecutor.executeRandomSequence(fBType, 3, true);
