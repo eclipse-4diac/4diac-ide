@@ -88,7 +88,7 @@ class ContainerResizeTracker extends ResizeTracker {
 			minBounds.width += containerBounds.width - contentFigureBounds.width;
 			minBounds.height += containerBounds.height - contentFigureBounds.height;
 		} else {
-			minBounds = IContainerEditPart.getDefaultContentBounds();
+			minBounds = getOwner().getDefaultContentBounds();
 		}
 	}
 

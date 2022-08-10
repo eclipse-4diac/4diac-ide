@@ -43,10 +43,7 @@ public class TrimHandler extends AbstractHandler {
 			final GraphicalEditPart contentEP = containerEditPart.getContentEP();
 			if(contentEP != null) {
 				final Rectangle contentContainerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(contentEP);
-				Rectangle groupContentBounds = containerEditPart.getMinContentBounds();
-				if (groupContentBounds.equals(IContainerEditPart.getDefaultContentBounds())) {
-					groupContentBounds.setLocation(contentContainerBounds.getLocation());
-				}
+				final Rectangle groupContentBounds = containerEditPart.getMinContentBounds();
 				groupContentBounds.setWidth(Math.max(groupContentBounds.width, containerEditPart.getCommentWidth()));
 				final Command cmd = ContainerContentLayoutPolicy.createChangeBoundsCommand(
 						(FBNetworkElement) containerEditPart.getModel(),
