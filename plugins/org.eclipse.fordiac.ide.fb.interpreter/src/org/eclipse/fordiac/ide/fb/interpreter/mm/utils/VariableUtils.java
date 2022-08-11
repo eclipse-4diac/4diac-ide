@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -30,6 +31,15 @@ public final class VariableUtils {
 			varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
 		}
 		varDecl.getValue().setValue(value);
+	}
+
+	public static void setVariable(final FBType fb, final String name, final String value) {
+		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name.strip());
+		if (!(el instanceof VarDeclaration)) {
+			throw new IllegalArgumentException("variable " + name + " does not exist in FB"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+
+		setVariable((VarDeclaration) el, ServiceSequenceUtils.removeKeyword(value));
 	}
 
 	public static void initVariable(final VarDeclaration varDeclaration, final DataTypeLibrary lib) {

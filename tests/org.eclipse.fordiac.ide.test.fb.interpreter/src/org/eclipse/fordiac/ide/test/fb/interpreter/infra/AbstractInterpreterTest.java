@@ -11,13 +11,11 @@
  *   Antonio Garmenda, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *   Paul Pavlicek
- *   	 -cleanup
+ *   	 -cleanup and us factory methods
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +28,6 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
@@ -40,9 +37,13 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.fb.interpreter.api.EventOccFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.SequenceMatcher;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -50,7 +51,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -58,13 +58,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.Value;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.value.ValueConverter;
-import org.eclipse.fordiac.ide.model.value.ValueConverterFactory;
 import org.eclipse.fordiac.ide.systemmanagement.FordiacProjectLoader;
 import org.junit.Test;
 import org.osgi.framework.Bundle;
@@ -96,10 +92,9 @@ public abstract class AbstractInterpreterTest {
 		final AutomationSystem system = loader.getAutomationSystem(systemName);
 		if (appName == null) {
 			return system.getApplication().get(0).getFBNetwork();
-		} else {
-			return system.getApplication().stream().filter(app -> app.getName().equals(appName)).findAny().orElseThrow()
-					.getFBNetwork();
 		}
+		return system.getApplication().stream().filter(app -> app.getName().equals(appName)).findAny().orElseThrow()
+				.getFBNetwork();
 	}
 
 	protected static FBType loadFBType(final String name, final boolean emptyService) {
@@ -147,67 +142,7 @@ public abstract class AbstractInterpreterTest {
 		return transaction;
 	}
 
-	public static void setVariable(final FBType fb, final String name, final String value) {
-		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name.strip());
-		if (!(el instanceof VarDeclaration)) {
-			throw new IllegalArgumentException("variable " + name + " does not exist in FB"); //$NON-NLS-1$ //$NON-NLS-2$
-		}
-		final Value val = ((VarDeclaration) el).getValue();
-		if (val == null) {
-			((VarDeclaration) el).setValue(LibraryElementFactory.eINSTANCE.createValue());
-		}
-		final ValueConverter<?> conv = ValueConverterFactory.createValueConverter(el.getType());
-		Object convertedValue;
-		final int prefixIndex = value.indexOf('#');
 
-		if (prefixIndex == -1) {
-			convertedValue = conv.toValue(value);
-		} else {
-			convertedValue = conv.toValue(value.substring(prefixIndex + 1, value.length() - 1));
-		}
-		((VarDeclaration) el).getValue().setValue(convertedValue.toString());
-	}
-
-	private static Collection<Transaction> createTransactions(final BasicFBType fb, final ServiceSequence seq,
-			final BasicFBTypeRuntime runtime) {
-		final List<Transaction> transactions = new ArrayList<>();
-		for (final ServiceTransaction st : seq.getServiceTransaction()) {
-			final FBTransaction t = createTransaction(fb, st);
-			if (t != null) {
-				transactions.add(t);
-			}
-		}
-		// The first transaction has a copy of the BasicFBTypeRuntime
-		final Copier copier = new Copier();
-		final BasicFBTypeRuntime copyBasicFBTypeRuntime = (BasicFBTypeRuntime) copier.copy(runtime);
-		copier.copyReferences();
-		transactions.get(0).getInputEventOccurrence().setFbRuntime(copyBasicFBTypeRuntime);
-		return transactions;
-	}
-
-	private static FBTransaction createTransaction(final FBType fb, final ServiceTransaction st) {
-		final String inputEvent = st.getInputPrimitive().getEvent();
-		if (inputEvent != null) {
-			final Event eventPin = (Event) fb.getInterfaceList().getInterfaceElement(inputEvent);
-			if (eventPin == null) {
-				throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist"); //$NON-NLS-1$//$NON-NLS-2$
-			}
-			final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
-			eventOccurrence.setEvent(eventPin);
-			final FBTransaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
-			transaction.setInputEventOccurrence(eventOccurrence);
-			// process parameter and set variables
-			final String inputParameters = st.getInputPrimitive().getParameters();
-			final var paramList = ServiceSequenceUtils.getParametersFromString(inputParameters);
-			for (final List<String> parameter : paramList) {
-				if (parameter.size() == 2) {
-					setVariable(fb, parameter.get(0), parameter.get(1));
-				}
-			}
-			return transaction;
-		}
-		return null;
-	}
 
 	public static BaseFBType runFBTest(final BaseFBType fb, final ServiceSequence seq) throws IllegalArgumentException {
 		if (fb instanceof BasicFBType) {
@@ -220,17 +155,14 @@ public abstract class AbstractInterpreterTest {
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
 		// network.eResource().getContents().add(eventManager);
 		// TODO create convenience methods in eventManagerUtils
-		final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
-		eventOccurrence.setEvent(event);
-		eventOccurrence.setParentFB(event.getFBNetworkElement());
-		eventOccurrence.setActive(true);
 
+		final EventOccurrence eventOccurrence = EventOccFactory.createFrom(event);
+		// final FBNetworkRuntime runtime = RuntimeFactory.createFrom(network);
 		final FBNetworkRuntime runtime = OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime();
 		runtime.setFbnetwork(EcoreUtil.copy(network));
 		eventOccurrence.setFbRuntime(runtime);
 
-		final FBTransaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
-		transaction.setInputEventOccurrence(eventOccurrence);
+		final FBTransaction transaction = TransactionFactory.createFrom(eventOccurrence);
 		eventManager.getTransactions().add(transaction);
 
 		EventManagerUtils.processNetwork(eventManager);
@@ -247,7 +179,7 @@ public abstract class AbstractInterpreterTest {
 		if (seq.getServiceTransaction().isEmpty()) {
 			seq.getServiceTransaction().add(LibraryElementFactory.eINSTANCE.createServiceTransaction());
 		}
-		final FBTransaction transaction = createTransaction(fb, seq.getServiceTransaction().get(0));
+		final FBTransaction transaction = TransactionFactory.createFrom(fb, seq.getServiceTransaction().get(0));
 		if (transaction != null && transaction.getInputEventOccurrence() != null) {
 			transaction.getInputEventOccurrence().setFbRuntime(simpleFBTypeRT);
 		}
@@ -266,15 +198,14 @@ public abstract class AbstractInterpreterTest {
 		final Resource resource = reset.createResource(URI.createURI("platform:/resource/" + fb.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
 		resource.getContents().add(eventManager);
-		final BasicFBTypeRuntime basicFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createBasicFBTypeRuntime();
-		basicFBTypeRT.setBasicfbtype(fb);
+		final BasicFBTypeRuntime basicFBTypeRT = ((BasicFBTypeRuntime) RuntimeFactory.createFrom(fb));
 		// set the start state
 		final EList<ECState> stateList = basicFBTypeRT.getBasicfbtype().getECC().getECState();
 		final ECState startState = stateList.stream().filter(s -> s.getName().equals(startStateName))
 				.collect(Collectors.toList()).get(0);
 		basicFBTypeRT.setActiveState(startState);
 
-		eventManager.getTransactions().addAll(createTransactions(fb, seq, basicFBTypeRT));
+		eventManager.getTransactions().addAll(TransactionFactory.createFrom(fb, seq, basicFBTypeRT));
 
 		EventManagerUtils.process(eventManager);
 		// TODO save the transactions
@@ -376,5 +307,10 @@ public abstract class AbstractInterpreterTest {
 			return ((SimpleFBTypeRuntime) captured).getSimpleFBType();
 		}
 		return null;
+	}
+
+	protected static void setVariable(final BaseFBType fb, final String string, final String string2) {
+		VariableUtils.setVariable(fb, string, string2);
+
 	}
 }

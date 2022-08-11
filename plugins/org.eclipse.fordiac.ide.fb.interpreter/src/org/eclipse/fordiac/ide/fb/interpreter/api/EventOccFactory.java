@@ -33,6 +33,9 @@ public class EventOccFactory {
 		return createdEo;
 	}
 
+	public static EventOccurrence createFrom(final Event event) {
+		return createFrom(event, null);
+	}
 	/** @param events
 	 * @return */
 	public static List<EventOccurrence> createFrom(final List<Event> events, final FBRuntimeAbstract initialRuntime) {

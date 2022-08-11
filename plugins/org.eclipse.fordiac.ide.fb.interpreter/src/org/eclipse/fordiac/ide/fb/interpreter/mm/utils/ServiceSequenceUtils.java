@@ -156,10 +156,11 @@ public final class ServiceSequenceUtils {
 
 	public static void setVariable(final FBType fb, final String name, final String value) {
 		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name);
-		if (!(el instanceof VarDeclaration)) {
+		if (el instanceof VarDeclaration) {
+			VariableUtils.setVariable((VarDeclaration) el, value);
+		} else {
 			throw new IllegalArgumentException("variable does not exist in FB"); //$NON-NLS-1$
 		}
-
 	}
 
 	private static void checkTransaction(final Transaction result, final ServiceTransaction expectedResult) {
@@ -305,7 +306,7 @@ public final class ServiceSequenceUtils {
 		return outputPrimitive;
 	}
 
-	public static void convertTransactionToServiceModel(final ServiceSequence seq, final FBType fbType,
+	public static void convertTransactionToServiceModel(final ServiceSequence seq,
 			final FBTransaction transaction) {
 		final ServiceTransaction serviceTransaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
 		seq.getServiceTransaction().add(serviceTransaction);

@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -47,7 +48,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -104,7 +104,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	private static void runInterpreter(final ServiceSequence seq, final List<String> eventNames, final boolean isAppend,
 			final boolean isRandom, final FBType fbType, final int count) {
 		List<Event> events;
-		final FBType typeCopy = fbType;// EcoreUtil.copy(fbType);
+		final FBType typeCopy = fbType;// ToDo EcoreUtil.copy(fbType);
 		events = eventNames.stream().map(name -> findEvent(typeCopy, name)).filter(Objects::nonNull)
 				.collect(Collectors.toList());
 		if (isRandom) {
@@ -121,7 +121,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			seq.getServiceTransaction().clear();
 		}
 		for (final Transaction transaction : eventManager.getTransactions()) {
-			ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
+			ServiceSequenceUtils.convertTransactionToServiceModel(seq, (FBTransaction) transaction);
 		}
 	}
 
@@ -130,7 +130,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		for (final String param : parameters) {
 			final String[] paramValues = param.split(":="); //$NON-NLS-1$
 			if (paramValues.length == 2) {
-				AbstractInterpreterTest.setVariable(fbType, paramValues[0], paramValues[1]);
+				VariableUtils.setVariable(fbType, paramValues[0], paramValues[1]);
 			}
 		}
 	}
