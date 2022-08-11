@@ -13,14 +13,13 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - cleaned command stack handling for property sections
  *   Melanie Winter - renewed section, use tableviewer
+ *   Felix Roithmayr - added startstate and type support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.properties;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Stream;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceNameCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.ChangeSequenceStartStateCommand;
@@ -29,11 +28,10 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateTrans
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteTransactionCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.contentprovider.ServiceSequenceContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets.StateComboHelper;
 import org.eclipse.fordiac.ide.model.ServiceSequenceTypes;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTransactionOrderCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
@@ -231,22 +229,7 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 			final int i = Arrays.asList(serviceSequencetype.getItems()).indexOf(getType().getServiceSequenceType());
 			serviceSequencetype.select(i >= 0 ? i : 0);
 			final FBType fbtype = getType().getService().getFBType();
-			if (fbtype instanceof BasicFBType) {
-				final EList<ECState> states = ((BasicFBType) fbtype).getECC().getECState();
-				final String[] statenames = Stream.concat(states.stream().map(ECState::getName), Stream.of("")) //$NON-NLS-1$
-						.toArray(String[]::new);
-				startState.setItems(statenames);
-				int idx = getType().getStartState() != null
-						? Arrays.asList(statenames).indexOf(getType().getStartState())
-								: -1;
-				if (idx == -1) {
-					idx = Arrays.asList(statenames).indexOf(""); //$NON-NLS-1$
-				}
-				startState.select(idx);
-				startState.setEnabled(true);
-			} else {
-				startState.setEnabled(false);
-			}
+			StateComboHelper.setup(fbtype, getType(), startState);
 
 			transactionsViewer.setInput(getType());
 

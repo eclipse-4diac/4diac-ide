@@ -13,6 +13,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr, Melanie Winter
  *     - extracted from ServiceSequenceEditPart, cleanup, allow expanding
+ *   Felix Roithmayr
+ *     - added startstate and type support
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.figures;
@@ -29,16 +31,23 @@ import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.ServiceConstants;
+import org.eclipse.fordiac.ide.model.ServiceSequenceTypes;
 import org.eclipse.fordiac.ide.util.ColorManager;
 import org.eclipse.swt.SWT;
 
 public final class SequenceFigure extends Layer {
 	private static final String TRIANGLE_RIGHTWARDS = "\u25B8  "; //$NON-NLS-1$
 	private static final String TRIANGLE_DOWNWARDS = "\u25BE  ";//$NON-NLS-1$
+	private static final String TYPE_POSSIBLE = "  "; //$NON-NLS-1$
+	private static final String TYPE_ALWAYS = "  \u2705  "; //$NON-NLS-1$
+	private static final String TYPE_FORBIDDEN = "  \u26D4  "; //$NON-NLS-1$
+	private static final String TYPE_CONDITIONAL = "  \u2753  "; //$NON-NLS-1$
 	private final Label nameLabel;
 	private final Label commentLabel;
 	private String name;
 	private String comment;
+	private String serviceSequenceType;
+	private String startState;
 
 	private final IFigure titleBar;
 
@@ -56,7 +65,7 @@ public final class SequenceFigure extends Layer {
 
 	public void setExpanded(final boolean isExpanded) {
 		this.isExpanded = isExpanded;
-		setLabelText(name, comment);
+		setLabelText(name, comment, serviceSequenceType, startState);
 	}
 
 	private void createVisuals() {
@@ -106,11 +115,19 @@ public final class SequenceFigure extends Layer {
 		return commentLabel;
 	}
 
-	public void setLabelText(final String name, final String comment) {
+	public void setLabelText(final String name, final String comment, final String serviceSequenceType,
+			final String startState) {
 		final String sequenceName = null != name ? name : ""; //$NON-NLS-1$
 		this.name = sequenceName;
+		final String sequenceType = null != serviceSequenceType ? serviceSequenceType : ""; //$NON-NLS-1$
+		this.serviceSequenceType = sequenceType;
+		final String sequenceStartState = null != startState ? startState : ""; //$NON-NLS-1$
+		this.startState = sequenceStartState;
 		final String symbol = isExpanded ? TRIANGLE_DOWNWARDS : TRIANGLE_RIGHTWARDS;
-		this.nameLabel.setText(symbol + sequenceName);
+		final String icon = sequenceType.equals(ServiceSequenceTypes.ALWAYS) ? TYPE_ALWAYS
+				: sequenceType.equals(ServiceSequenceTypes.FORBIDDEN) ? TYPE_FORBIDDEN
+						: sequenceType.equals(ServiceSequenceTypes.CONDITIONAL) ? TYPE_CONDITIONAL : TYPE_POSSIBLE;
+		this.nameLabel.setText(symbol + sequenceName + icon + sequenceStartState);
 
 		final String serviceComment = comment != null ? comment : ""; //$NON-NLS-1$
 		this.comment = comment;
