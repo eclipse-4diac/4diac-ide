@@ -48,7 +48,6 @@ public class ExportAsXMI {
 	public Object export(final IFile file, final URI saveLocation) {
 		final URI xmiUri = saveLocation.appendSegment(file.getName()).trimFileExtension()
 				.appendFileExtension(XMI_EXTENSION);
-		System.out.println(xmiUri);
 		final XtextResourceSet resourceSet = new XtextResourceSet();
 		new STAlgorithmResourceSetInitializer().initialize(resourceSet, file.getProject());
 		resourceSet.addLoadOption(LazyLinkingResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
