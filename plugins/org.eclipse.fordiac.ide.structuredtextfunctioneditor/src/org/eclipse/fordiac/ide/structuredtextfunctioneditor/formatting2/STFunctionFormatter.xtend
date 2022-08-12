@@ -65,7 +65,6 @@ class STFunctionFormatter extends STCoreFormatter {
 		for (stFunction : stFunctionSource.functions) {
 			stFunction.format
 		}
-
 	}
 
 	def dispatch void format(STFunction stFunction, extension IFormattableDocument document) {
