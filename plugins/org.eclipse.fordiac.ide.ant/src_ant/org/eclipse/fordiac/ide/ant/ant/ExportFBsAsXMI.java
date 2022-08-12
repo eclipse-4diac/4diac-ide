@@ -60,7 +60,7 @@ public class ExportFBsAsXMI extends AbstractExportFBs {
 			final URI folderURI = URI.createFileURI(folder.getAbsolutePath());
 			try {
 				exporter.export(ifile, folderURI);
-
+				System.out.println(ifile);// print it in console for ANT Tasks
 			} catch (final Exception e) {
 				throw new BuildException("Could not export: " + e.getMessage(), e);//$NON-NLS-1$
 			}
