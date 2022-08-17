@@ -22,7 +22,7 @@
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 		<sonar.java.source>11</sonar.java.source>
-		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/16/updates/release/16.0.2</org.eclipse.justj.jre.repository>
+		<org.eclipse.justj.jre.repository> https://download.eclipse.org/justj/jres/17/updates/release/17.0.4</org.eclipse.justj.jre.repository>
 		<xtend-version>2.27.0</xtend-version>
 	</properties>
 
