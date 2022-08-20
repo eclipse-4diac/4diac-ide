@@ -37,4 +37,12 @@ public interface FBRuntimeAbstract extends EObject {
 	 */
 	EList<EventOccurrence> run(EventManager eventManager);
 
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	EObject getModel();
+
 } // FBRuntimeAbstract

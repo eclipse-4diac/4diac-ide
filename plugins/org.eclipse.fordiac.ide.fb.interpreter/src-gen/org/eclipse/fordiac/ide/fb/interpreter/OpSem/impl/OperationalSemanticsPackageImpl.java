@@ -423,6 +423,16 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 * @generated
 	 */
 	@Override
+	public EReference getFBTransaction_InputVariables() {
+		return (EReference) fbTransactionEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
 	public EClass getConnectionToValueMap() {
 		return connectionToValueMapEClass;
 	}
@@ -508,6 +518,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 
 		fbTransactionEClass = createEClass(FB_TRANSACTION);
 		createEReference(fbTransactionEClass, FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES);
+		createEReference(fbTransactionEClass, FB_TRANSACTION__INPUT_VARIABLES);
 
 		connectionToValueMapEClass = createEClass(CONNECTION_TO_VALUE_MAP);
 		createEReference(connectionToValueMapEClass, CONNECTION_TO_VALUE_MAP__KEY);
@@ -592,6 +603,8 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		op = addEOperation(fbRuntimeAbstractEClass, this.getEventOccurrence(), "run", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getEventManager(), "eventManager", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		addEOperation(fbRuntimeAbstractEClass, ecorePackage.getEObject(), "getModel", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(basicFBTypeRuntimeEClass, BasicFBTypeRuntime.class, "BasicFBTypeRuntime", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getBasicFBTypeRuntime_Basicfbtype(), theLibraryElementPackage.getBasicFBType(), null,
@@ -601,11 +614,16 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 				null, 0, 1, BasicFBTypeRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		addEOperation(basicFBTypeRuntimeEClass, ecorePackage.getEObject(), "getModel", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(simpleFBTypeRuntimeEClass, SimpleFBTypeRuntime.class, "SimpleFBTypeRuntime", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSimpleFBTypeRuntime_SimpleFBType(), theLibraryElementPackage.getSimpleFBType(), null,
 				"simpleFBType", null, 1, 1, SimpleFBTypeRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(simpleFBTypeRuntimeEClass, theLibraryElementPackage.getLibraryElement(), "getModel", 1, 1, //$NON-NLS-1$
+				IS_UNIQUE, IS_ORDERED);
 
 		initEClass(transactionEClass, Transaction.class, "Transaction", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
@@ -625,11 +643,16 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 				0, -1, FBNetworkRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
+		addEOperation(fbNetworkRuntimeEClass, ecorePackage.getEObject(), "getModel", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(fbTransactionEClass, FBTransaction.class, "FBTransaction", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getFBTransaction_OutputEventOccurrences(), this.getEventOccurrence(), null,
 				"outputEventOccurrences", null, 0, -1, FBTransaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFBTransaction_InputVariables(), theLibraryElementPackage.getVarDeclaration(), null,
+				"inputVariables", null, 0, -1, FBTransaction.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
+				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(connectionToValueMapEClass, Map.Entry.class, "ConnectionToValueMap", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				!IS_GENERATED_INSTANCE_CLASS);

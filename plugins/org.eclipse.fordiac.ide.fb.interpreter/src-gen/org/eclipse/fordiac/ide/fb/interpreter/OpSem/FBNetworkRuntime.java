@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -89,5 +90,14 @@ public interface FBNetworkRuntime extends FBRuntimeAbstract {
 	 * @generated
 	 */
 	EMap<Connection, Value> getTransferData();
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	@Override
+	EObject getModel();
 
 } // FBNetworkRuntime
