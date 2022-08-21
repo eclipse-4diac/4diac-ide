@@ -44,7 +44,7 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 		CancelIndicator cancelIndicator) {
 		for (ILeafNode n : NodeModelUtils.findActualNodeFor(stFunction).getLeafNodes()) {
 
-			if ((n.grammarElement.eContainer == ga.STAnyBitTypeRule.alternatives)) {
+			if ((n.grammarElement?.eContainer == ga.STAnyBitTypeRule.alternatives)) {
 				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.OUTPUT_FUNCTION_ID);
 			}
 			if ((n.grammarElement instanceof RuleCallImpl) && (n.parent instanceof CompositeNodeWithSemanticElement)) {
@@ -75,9 +75,9 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 	def protected dispatch boolean highlightElement(STFeatureExpression featuresExpression,
 		IHighlightedPositionAcceptor acceptor, CancelIndicator cancelIndicator) {
 		for (ILeafNode n : NodeModelUtils.findActualNodeFor(featuresExpression).getLeafNodes()) {
-			if (( n.grammarElement.eContainer == ga.STFeatureNameRule.alternatives) && (featuresExpression.call)) {
+			if (( n.grammarElement?.eContainer == ga.STFeatureNameRule.alternatives) && (featuresExpression.call)) {
 				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.CALL_FUNCTION_ID);
-			} else if (( n.grammarElement.eContainer == ga.STFeatureNameRule.alternatives) &&
+			} else if (( n.grammarElement?.eContainer == ga.STFeatureNameRule.alternatives) &&
 				(featuresExpression.feature instanceof STVarDeclarationImpl)) {
 				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.STATIC_VAR_ID);
 			} else if (!(featuresExpression.call)) {
