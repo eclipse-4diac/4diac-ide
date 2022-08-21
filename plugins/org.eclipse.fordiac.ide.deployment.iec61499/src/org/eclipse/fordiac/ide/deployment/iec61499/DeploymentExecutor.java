@@ -233,7 +233,9 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void writeDeviceParameter(final Device device, final String parameter, final String value) throws DeploymentException {
-		final String request = MessageFormat.format(getWriteParameterMessage(), Integer.valueOf(id), value, parameter);
+		final String encodedValue = encodeXMLChars(value);
+		final String request = MessageFormat.format(getWriteParameterMessage(), Integer.valueOf(id), encodedValue,
+				parameter);
 		id++;
 		try {
 			sendREQ("", request); //$NON-NLS-1$
@@ -406,7 +408,9 @@ public class DeploymentExecutor extends AbstractDeviceManagementInteractor {
 
 	@Override
 	public void forceValue(final MonitoringBaseElement element, final String value) throws DeploymentException {
-		final String request = MessageFormat.format(FORCE_VALUE, getNextId(), value, element.getQualifiedString(), "true"); //$NON-NLS-1$
+		final String encodedValue = encodeXMLChars(value);
+		final String request = MessageFormat.format(FORCE_VALUE, getNextId(), encodedValue,
+				element.getQualifiedString(), "true"); //$NON-NLS-1$
 		try {
 			sendREQ(element.getResourceString(), request);
 		} catch (final IOException e) {

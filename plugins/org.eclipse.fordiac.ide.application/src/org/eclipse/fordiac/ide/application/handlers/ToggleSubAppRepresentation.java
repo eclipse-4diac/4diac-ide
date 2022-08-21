@@ -20,6 +20,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
@@ -50,6 +51,14 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 		if (cmd.canExecute()) {
 			commandStack.execute(cmd);
 		}
+
+		if (((EditPart) selection.getFirstElement()) instanceof SubAppForFBNetworkEditPart
+				&& ((SubAppForFBNetworkEditPart) selection.getFirstElement()).getContentEP() != null) {
+			commandStack.execute(
+					new ResizeGroupOrSubappCommand(
+							((SubAppForFBNetworkEditPart) selection.getFirstElement()).getContentEP()));
+		}
+
 		// requesting a change is needed for the Source dropdown menu
 		requestChange();
 		return Status.OK_STATUS;

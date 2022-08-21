@@ -13,18 +13,23 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.gef.GraphicalViewer;
 
 public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementCommand {
 
 	private CreateInterfaceElementCommand mirroredElement = null;
+	private ResizeGroupOrSubappCommand resizeCmd = null;
 
 	public CreateSubAppInterfaceElementCommand(final IInterfaceElement copySrc, final boolean isInput,
 			final InterfaceList targetInterfaceList,
-			int index) {
+			final int index) {
 		super(copySrc, isInput, targetInterfaceList, index);
 	}
 
@@ -56,6 +61,22 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 			// opposite entry
 			mirroredElement = createMirroredInterfaceElement();
 		}
+
+		if (EditorUtils.getCurrentActiveEditor() != null) {
+			final GraphicalViewer graphicalViewer = EditorUtils.getCurrentActiveEditor()
+					.getAdapter(GraphicalViewer.class);
+
+			if (graphicalViewer != null && getInterfaceList().eContainer() instanceof SubApp) {
+				final Object subAppforFBNetowrkEditPart = graphicalViewer.getEditPartRegistry()
+						.get((getInterfaceList().eContainer()));
+				if (subAppforFBNetowrkEditPart instanceof SubAppForFBNetworkEditPart
+						&& ((SubAppForFBNetworkEditPart) subAppforFBNetowrkEditPart).getContentEP() != null) {
+					resizeCmd = new ResizeGroupOrSubappCommand(
+							((SubAppForFBNetworkEditPart) subAppforFBNetowrkEditPart).getContentEP());
+					resizeCmd.execute();
+				}
+			}
+		}
 	}
 
 	@Override
@@ -64,11 +85,17 @@ public class CreateSubAppInterfaceElementCommand extends CreateInterfaceElementC
 		if (null != mirroredElement) {
 			mirroredElement.redo();
 		}
+		if (resizeCmd != null) {
+			resizeCmd.redo();
+		}
 	}
 
 	@Override
 	public void undo() {
 		super.undo();
+		if (resizeCmd != null) {
+			resizeCmd.undo();
+		}
 		if (null != mirroredElement) {
 			mirroredElement.undo();
 		}
