@@ -28,6 +28,8 @@ import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isStringValueValid;
 
 import java.text.MessageFormat;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EObject;
@@ -64,8 +66,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
+import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.validation.Check;
@@ -112,6 +116,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	public static final String BIT_ACCESS_EXPRESSION_NOT_OF_TYPE_ANY_INT = ISSUE_CODE_PREFIX
 			+ "bitAccessExpressionNotOfTypeAnyInt"; //$NON-NLS-1$
+
+	public static final String DUPLICATE_VARIABLE_NAME = ISSUE_CODE_PREFIX + "duplicateVariableName"; //$NON-NLS-1$
 
 	@Check
 	public void checkConsecutiveUnderscoresInIdentifier(final INamedElement iNamedElement) {
@@ -316,13 +322,13 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 		// check argument type
 		expression.getMappedInputArguments()
-		.forEach((param, arg) -> checkTypeCompatibility(getFeatureType(param), arg.getResultType(),
-				STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
-				expression.getParameters().indexOf(arg.eContainer())));
+				.forEach((param, arg) -> checkTypeCompatibility(getFeatureType(param), arg.getResultType(),
+						STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
+						expression.getParameters().indexOf(arg.eContainer())));
 		expression.getMappedOutputArguments()
-		.forEach((param, arg) -> checkTypeCompatibility(arg.getResultType(), getFeatureType(param),
-				STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
-				expression.getParameters().indexOf(arg.eContainer())));
+				.forEach((param, arg) -> checkTypeCompatibility(arg.getResultType(), getFeatureType(param),
+						STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
+						expression.getParameters().indexOf(arg.eContainer())));
 		expression.getMappedInOutArguments().forEach((param, arg) -> {
 			final INamedElement destination = getFeatureType(param);
 			final INamedElement source = arg.getResultType();
@@ -429,8 +435,22 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 	}
 
-	/* Here we already know that we have a MultibitPartialExpression. This function checks bound on static access
-	 * (without "()") */
+	@Check
+	public void checkDuplicateVariableNames(final STVarDeclaration varDeclaration) {
+		var varDeclarations = EcoreUtil2.getAllContentsOfType(varDeclaration.eContainer().eContainer(),
+				STVarDeclaration.class);
+		for (STVarDeclaration declaration : varDeclarations) {
+			if (declaration != varDeclaration && declaration.getName().equalsIgnoreCase(varDeclaration.getName())) {
+				error(MessageFormat.format(Messages.STCoreValidator_Duplicate_Variable_Name, varDeclaration.getName()),
+						varDeclaration, LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, DUPLICATE_VARIABLE_NAME);
+			}
+		}
+	}
+
+	/*
+	 * Here we already know that we have a MultibitPartialExpression. This function
+	 * checks bound on static access (without "()")
+	 */
 	private void checkMultibitPartialExpression(final STMultibitPartialExpression expression,
 			final DataType accessorType, final DataType receiverType) {
 		if (receiverType instanceof AnyBitType) {

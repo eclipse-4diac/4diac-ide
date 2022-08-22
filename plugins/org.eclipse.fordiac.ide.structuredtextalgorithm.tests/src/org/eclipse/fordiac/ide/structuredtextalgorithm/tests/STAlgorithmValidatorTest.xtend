@@ -25,6 +25,8 @@ import org.eclipse.xtext.testing.validation.ValidationTestHelper
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.^extension.ExtendWith
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
+import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator
 
 @ExtendWith(InjectionExtension)
 @InjectWith(STAlgorithmInjectorProvider)
@@ -73,4 +75,51 @@ class STAlgorithmValidatorTest {
 				"Duplicate METHOD or ALGORITHM named 'REQ'")
 		]
 	}
+
+	@Test
+	def void testDuplicateVariableNameIsForbiddenInMethod_0() {
+		'''
+			METHOD hubert
+			VAR_INPUT
+				bol1 : BOOL;
+				bol1 : BOOL;
+				bol1 : BOOL;
+			END_VAR
+			END_METHOD
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.DUPLICATE_VARIABLE_NAME,
+			"Variable with duplicate name bol1")
+	}
+
+	@Test
+	def void testDuplicateVariableNameIsForbiddenInMethod_1() {
+		'''
+			METHOD hubert
+			VAR_INPUT
+				bol1 : BOOL;
+			END_VAR
+			VAR_INPUT
+				bol1 : BOOL;
+			END_VAR
+			VAR_TEMP
+				bol1 : BOOL;
+			END_VAR
+			END_METHOD
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.DUPLICATE_VARIABLE_NAME,
+			"Variable with duplicate name bol1")
+	}
+	
+	@Test
+	def void testDuplicateVariableNameIsForbiddenInAlgorithm() {
+		'''
+			ALGORITHM hubert
+			VAR_TEMP
+				bol1 : BOOL;
+				bol1 : BOOL;
+				bol1 : BOOL;
+			END_VAR
+			END_ALGORITHM
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.DUPLICATE_VARIABLE_NAME,
+			"Variable with duplicate name bol1")
+	}
+	
 }
