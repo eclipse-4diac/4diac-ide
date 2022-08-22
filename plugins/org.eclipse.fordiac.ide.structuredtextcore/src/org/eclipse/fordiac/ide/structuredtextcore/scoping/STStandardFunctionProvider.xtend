@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.eval.function.Comment
 import org.eclipse.fordiac.ide.model.eval.function.Functions
 import org.eclipse.fordiac.ide.model.eval.function.OnlySupportedBy
+import org.eclipse.fordiac.ide.model.eval.function.ReturnValueComment
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory
@@ -74,6 +75,7 @@ class STStandardFunctionProvider {
 		List<DataType> argumentTypes) {
 		name = method.name
 		comment = method.getAnnotation(Comment)?.value ?: ""
+		returnValueComment = method.getAnnotation(ReturnValueComment)?.value ?: ""
 		returnType = method.inferReturnTypeFromDataTypes(argumentTypes)
 		inputParameters.addAll(method.inferParameterVariables(argumentTypes, true))
 		outputParameters.addAll(method.inferParameterVariables(argumentTypes, false))
@@ -92,7 +94,8 @@ class STStandardFunctionProvider {
 			if (input.xor(method.getParameterType(index) == Variable)) {
 				STCoreFactory.eINSTANCE.createSTVarDeclaration => [
 					name = '''«IF input»IN«ELSE»OUT«ENDIF»«index»'''
-					comment = MessageFormat.format(method.getParameter(index).getAnnotation(Comment)?.value ?: "", index)
+					comment = MessageFormat.format(method.getParameter(index).getAnnotation(Comment)?.value ?: "",
+						index)
 					type = ptypes.get(index)
 				]
 			}

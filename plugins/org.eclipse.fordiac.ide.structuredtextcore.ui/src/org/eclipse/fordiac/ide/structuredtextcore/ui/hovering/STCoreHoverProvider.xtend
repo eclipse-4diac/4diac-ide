@@ -10,6 +10,8 @@
  * Contributors:
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
+ *    Hesam Rezaee
+ *      - add Hovering features
  */
 package org.eclipse.fordiac.ide.structuredtextcore.ui.hovering
 
@@ -17,10 +19,12 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
@@ -73,7 +77,11 @@ class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 		if(object.eContainer instanceof StructuredType) return '''«(object.eContainer as StructuredType).name».'''
 	}
 
+	def dispatch getKind(STStandardFunction object) '''FUNCTION '''
+
 	def dispatch getKind(FB object) '''FUNCTION_BLOCK '''
+
+	def dispatch getKind(FBType object) '''FUNCTION_BLOCK '''
 
 	def dispatch getKind(StructuredType object) '''STRUCT '''
 

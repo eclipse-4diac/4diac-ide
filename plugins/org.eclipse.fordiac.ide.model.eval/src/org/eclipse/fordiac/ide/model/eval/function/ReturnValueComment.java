@@ -26,6 +26,6 @@ import java.lang.annotation.Target;
 @Documented
 @Retention(RUNTIME)
 @Target({ METHOD, PARAMETER })
-public @interface ReturnValue {
+public @interface ReturnValueComment {
 	String value();
 }
