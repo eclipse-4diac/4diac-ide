@@ -224,7 +224,9 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 				super.notifyChanged(notification);
 				Display.getDefault().asyncExec(() -> {
 					setValue(getModel().getCurrentValue());
-					refreshVisuals();
+					if (getFigure().getParent() != null) {
+						refreshVisuals();
+					}
 				});
 			}
 

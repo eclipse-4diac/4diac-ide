@@ -323,6 +323,27 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 		return super.understandsRequest(request);
 	}
 
+	@Override
+	public void removeNotify() {
+		if (isGrandParentDeletion()) {
+			// if a grandparent is removed or a subapp collapsed our figure is not removed as it is in a specific layer.
+			// Therefore we have to do it here separatly.
+			final IFigure layerFig = getLayer(getSpecificLayer());
+			if (layerFig != null && layerFig.equals(getFigure().getParent())) {
+				layerFig.remove(getFigure());
+				return;
+			}
+		}
+		super.removeNotify();
+	}
+
+	private boolean isGrandParentDeletion() {
+		// if the interface element has a fbnetworkelement and this fbnetworkelement a network a grandparent was deleted
+		// or an expanded subapp folded
+		return (getInterfaceElement().getFBNetworkElement() != null
+				&& getInterfaceElement().getFBNetworkElement().getFbNetwork() != null);
+	}
+
 	private Point calculatePos() {
 		if (parentPart != null) {
 			final Rectangle bounds = parentPart.getFigure().getBounds();
