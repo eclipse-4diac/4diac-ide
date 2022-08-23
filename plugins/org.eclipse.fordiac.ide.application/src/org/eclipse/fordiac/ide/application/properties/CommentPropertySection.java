@@ -10,6 +10,7 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - multline comments and cleanup
+ *   Sebastian Hollersbacher - change to nebula grid
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -27,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.NebulaGridWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -34,23 +36,29 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.jface.viewers.AbstractTableViewer;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnPixelData;
+import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.nebula.jface.gridviewer.GridColumnLayout;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
+import org.eclipse.nebula.widgets.grid.Grid;
+import org.eclipse.nebula.widgets.grid.GridColumn;
+import org.eclipse.nebula.widgets.grid.GridHeaderRenderer;
+import org.eclipse.nebula.widgets.grid.internal.DefaultColumnHeaderRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Item;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
@@ -59,20 +67,20 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 
 	private static final int ONE_COLUMN = 1;
 	private static final int TWO_COLUMNS = 2;
-	private static final int WIDTH_OF_COLUMNS = 150;
 	private static final String INITIAL_VALUE = "Initial Value"; //$NON-NLS-1$
 	private static final String COMMENT = "Comment"; //$NON-NLS-1$
 
 	private Text nameText;
 	private Text commentText;
 
-	private TableViewer inputCommentsViewer;
-	private TableViewer outputCommentsViewer;
+	private GridTableViewer inputCommentsViewer;
+	private GridTableViewer outputCommentsViewer;
+	private GridColumnLayout layout;
 	private TabbedPropertySheetPage tabbedPropertySheetPage;
 
 	private CommentLabelProvider commentLabelProvider;
 	private InitialValueColumLabelProvider initialValueLabelProvider;
-	
+
 	private boolean isInputsViewer;
 
 	@Override
@@ -101,9 +109,9 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 			commandStack = commandStackBuffer;
 		}
 	}
-	
+
 	private void setFocusListeners() {
-		outputCommentsViewer.getTable().addFocusListener(new FocusListener() {
+		outputCommentsViewer.getGrid().addFocusListener(new FocusListener() {
 
 			@Override
 			public void focusGained(final FocusEvent e) {
@@ -116,7 +124,7 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 			}
 
 		});
-		inputCommentsViewer.getTable().addFocusListener(new FocusListener() {
+		inputCommentsViewer.getGrid().addFocusListener(new FocusListener() {
 
 			@Override
 			public void focusGained(final FocusEvent e) {
@@ -131,53 +139,77 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 		});
 	}
 
-	private void configureTableViewer(final TableViewer tableViewer,
+	private void configureTableViewer(final GridTableViewer gridTableViewer,
 			final IStructuredContentProvider contentProvider) {
-		final Table table = tableViewer.getTable();
+		final Grid grid = gridTableViewer.getGrid();
 
 		final CellModifierForCommentSection modifier = new CellModifierForCommentSection();
-		tableViewer.setCellModifier(modifier);
+		gridTableViewer.setCellModifier(modifier);
 
-		final String[] cols = new String[] { FordiacMessages.Name, FordiacMessages.Type, FordiacMessages.InitialValue,
-				FordiacMessages.Comment };
-		tableViewer.setColumnProperties(cols);
+		gridTableViewer.setColumnProperties(new String[] { FordiacMessages.Name, FordiacMessages.Type,
+				FordiacMessages.InitialValue, FordiacMessages.Comment });
 
-		tableViewer
-		.setCellEditors(new CellEditor[] { null, null, new TextCellEditor(table), new TextCellEditor(table) });
+		gridTableViewer
+		.setCellEditors(new CellEditor[] { null, null, new TextCellEditor(grid), new TextCellEditor(grid) });
 
-		tableViewer.setContentProvider(contentProvider);
+		gridTableViewer.setContentProvider(contentProvider);
 
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-		table.setLayout(createTableLayout());
+		grid.setHeaderVisible(true);
+		grid.setLinesVisible(true);
+		grid.setCellSelectionEnabled(true);
+		grid.setAutoWidth(true);
 
-		final TableViewerColumn col1 = new TableViewerColumn(tableViewer, SWT.NONE);
-		col1.setLabelProvider(new NameLabelProvider());
-		col1.getColumn().setText(FordiacMessages.Name);
+		final GridViewerColumn col1 = new GridViewerColumn(gridTableViewer, SWT.NONE);
+		final GridViewerColumn col2 = new GridViewerColumn(gridTableViewer, SWT.NONE);
+		final GridViewerColumn col3 = new GridViewerColumn(gridTableViewer, SWT.NONE);
+		final GridViewerColumn col4 = new GridViewerColumn(gridTableViewer, SWT.NONE);
 
-		final TableViewerColumn col2 = new TableViewerColumn(tableViewer, SWT.NONE);
-		col2.setLabelProvider(new TypeLabelProvider());
-		col2.getColumn().setText(FordiacMessages.Type);
-
-		final TableViewerColumn col3 = new TableViewerColumn(tableViewer, SWT.NONE);
 		initialValueLabelProvider = new InitialValueColumLabelProvider();
-		col3.setLabelProvider(initialValueLabelProvider);
-		col3.getColumn().setText(FordiacMessages.InitialValue);
-
-		final TableViewerColumn col4 = new TableViewerColumn(tableViewer, SWT.NONE);
 		commentLabelProvider = new CommentLabelProvider();
+
+		col1.setLabelProvider(new NameLabelProvider());
+		col2.setLabelProvider(new TypeLabelProvider());
+		col3.setLabelProvider(initialValueLabelProvider);
 		col4.setLabelProvider(commentLabelProvider);
+
+		col1.getColumn().setText(FordiacMessages.Name);
+		col2.getColumn().setText(FordiacMessages.Type);
+		col3.getColumn().setText(FordiacMessages.InitialValue);
 		col4.getColumn().setText(FordiacMessages.Comment);
 
-	}
+		final GridHeaderRenderer headerRenderer = new DefaultColumnHeaderRenderer() {
+			@Override
+			public void paint(final GC gc, final Object value) {
+				final GridColumn column = (GridColumn) value;
+				final Color lineColor = getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
 
-	private static TableLayout createTableLayout() {
-		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(WIDTH_OF_COLUMNS));
-		layout.addColumnData(new ColumnPixelData(WIDTH_OF_COLUMNS));
-		layout.addColumnData(new ColumnPixelData(WIDTH_OF_COLUMNS));
-		layout.addColumnData(new ColumnPixelData(WIDTH_OF_COLUMNS));
-		return layout;
+				// get coordinates
+				final int x = getBounds().x;
+				final int y = getBounds().y;
+				final int width = getBounds().width;
+				final int height = getBounds().height;
+
+				// set foreground color and draw rectangle
+				final Color oldForeground = gc.getForeground();
+				gc.setForeground(lineColor);
+				gc.drawRectangle(x - 1, y - 1, width, height);
+				gc.setForeground(oldForeground);
+
+				// draw text
+				final String text = column.getText();
+				gc.drawString(text, x + 4, y + 2);
+			}
+		};
+
+		col1.getColumn().setHeaderRenderer(headerRenderer);
+		col2.getColumn().setHeaderRenderer(headerRenderer);
+		col3.getColumn().setHeaderRenderer(headerRenderer);
+		col4.getColumn().setHeaderRenderer(headerRenderer);
+
+		layout.setColumnData(col1.getColumn(), new ColumnWeightData(25));
+		layout.setColumnData(col2.getColumn(), new ColumnWeightData(25));
+		layout.setColumnData(col3.getColumn(), new ColumnWeightData(25));
+		layout.setColumnData(col4.getColumn(), new ColumnWeightData(25));
 	}
 
 	private void createTableSection(final Composite parent) {
@@ -194,8 +226,9 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 		inputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
 		outputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
 
-		inputCommentsViewer = TableWidgetFactory.createPropertyTableViewer(inputComposite, 0);
-		outputCommentsViewer = TableWidgetFactory.createPropertyTableViewer(outputComposite, 0);
+		layout = new GridColumnLayout();
+		inputCommentsViewer = NebulaGridWidgetFactory.createPropertyGridTableViewer(inputComposite, layout);
+		outputCommentsViewer = NebulaGridWidgetFactory.createPropertyGridTableViewer(outputComposite, layout);
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(outputComposite);
@@ -342,26 +375,26 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 	}
 
 	@Override
-	public TableViewer getViewer() {
+	public AbstractTableViewer getViewer() {
 		return isInputsViewer ? inputCommentsViewer : outputCommentsViewer;
 	}
-	
+
 	// NOTE These methods are supposed to work for table rows, but here we use them for single cells.
 	//		An inconsistency that will be redressed once the new copy/paste handling has been approved.
 
 	@Override
-	public void addEntry(Object entry, int index, CompoundCommand cmd) {
+	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		// nothing to do here
 	}
 
 	@Override
-	public Object removeEntry(int index, CompoundCommand cmd) {
+	public Object removeEntry(final int index, final CompoundCommand cmd) {
 		// nothing to do here
 		return null;
 	}
 
 	@Override
-	public void executeCompoundCommand(CompoundCommand cmd) {
+	public void executeCompoundCommand(final CompoundCommand cmd) {
 		commandStack.execute(cmd);
 	}
 

@@ -8,11 +8,13 @@
  *
  * Contributors:
  *   Daniel Lindhuber - initial API and implementation and/or initial documentation
+ *   Sebastian Hollersbacher - added support for multiple content
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui;
 
 import java.util.Stack;
 
+import org.eclipse.swt.dnd.FileTransfer;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 
@@ -36,6 +38,20 @@ public class FordiacClipboard {
 		cb.dispose();
 	}
 
+	public void setMultibleTableContents(final Object obj) {
+		final org.eclipse.swt.dnd.Clipboard cb = new org.eclipse.swt.dnd.Clipboard(null);
+		if (obj instanceof String[] && ((String[]) obj).length != 0) {
+			final String[] strings = ((String[]) obj);
+			for (int i = 0; i < strings.length; i++) {
+				if (strings[i].isEmpty()) {
+					strings[i] = " ";
+				}
+			}
+			cb.setContents(new Object[] { obj }, new Transfer[] { FileTransfer.getInstance() });
+		}
+		cb.dispose();
+	}
+
 	public Object getGraphicalContents() {
 		return graphicalStack.isEmpty() ? null : graphicalStack.peek();
 	}
@@ -43,6 +59,13 @@ public class FordiacClipboard {
 	public Object getTableContents() {
 		final org.eclipse.swt.dnd.Clipboard cb = new org.eclipse.swt.dnd.Clipboard(null);
 		final Object contents = cb.getContents(TextTransfer.getInstance());
+		cb.dispose();
+		return contents;
+	}
+
+	public Object getMultibleTableContents() {
+		final org.eclipse.swt.dnd.Clipboard cb = new org.eclipse.swt.dnd.Clipboard(null);
+		final Object contents = cb.getContents(FileTransfer.getInstance());
 		cb.dispose();
 		return contents;
 	}
