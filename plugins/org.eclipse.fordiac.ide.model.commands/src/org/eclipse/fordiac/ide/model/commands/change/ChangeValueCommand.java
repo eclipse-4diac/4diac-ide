@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -34,7 +35,8 @@ public class ChangeValueCommand extends Command {
 	private VarDeclaration mirroredVar; // the variable of the mapped entity
 	private String newValue;
 	private String oldValue;
-	private ErrorMarkerBuilder oldErrorMarker;
+	private ErrorMarkerBuilder errorMarker;
+	private String validationMsg = "";
 
 	public ChangeValueCommand(final VarDeclaration variable, final String value) {
 		this.variable = variable;
@@ -43,12 +45,17 @@ public class ChangeValueCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		if (variable == null || variable.getType() == null) {
+		if ((variable == null) || (variable.getType() == null)) {
 			return false;
 		}
-		if (!newValue.isBlank()) {
+		isValid(newValue);
+		return true;
+	}
+
+	private boolean isValid(final String value) {
+		if (!value.isBlank()) {
 			// if we have a non empty value check if it is a valid literal
-			final String validationMsg = ValueValidator.validateValue(variable, newValue);
+			validationMsg = ValueValidator.validateValue(variable, value);
 			if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
 				ErrorMessenger.popUpErrorMessage(validationMsg);
 				return false;
@@ -75,25 +82,33 @@ public class ChangeValueCommand extends Command {
 		}
 		variable.getValue().setValue(newValue);
 		setMirroredVar(newValue);
-		handleErrorMarker();
+		handleErrorMarker(newValue);
+	}
+
+	private void handleErrorMarker(final String value) {
+		if (isValid(value)) {
+			deleteErrorMarker();
+		} else {
+			createErrorMarker();
+		}
 	}
 
 	@Override
 	public void undo() {
 		variable.getValue().setValue(oldValue);
 		setMirroredVar(oldValue);
-		restoreErrorMarker();
+		handleErrorMarker(oldValue);
 	}
 
 	@Override
 	public void redo() {
 		variable.getValue().setValue(newValue);
 		setMirroredVar(newValue);
-		handleErrorMarker();
+		handleErrorMarker(newValue);
 	}
 
 	private VarDeclaration getMirroredVariable() {
-		if (null != variable.getFBNetworkElement() && variable.getFBNetworkElement().isMapped()) {
+		if ((null != variable.getFBNetworkElement()) && variable.getFBNetworkElement().isMapped()) {
 			final FBNetworkElement opposite = variable.getFBNetworkElement().getOpposite();
 			if (null != opposite) {
 				final IInterfaceElement element = opposite.getInterfaceElement(variable.getName());
@@ -111,15 +126,18 @@ public class ChangeValueCommand extends Command {
 		}
 	}
 
-	private void handleErrorMarker() {
+	private void deleteErrorMarker() {
 		if (variable.getValue().hasError()) {
-			oldErrorMarker = ErrorMarkerBuilder.deleteErrorMarker(variable.getValue());
+			errorMarker = ErrorMarkerBuilder.deleteErrorMarker(variable.getValue());
 		}
 	}
 
-	private void restoreErrorMarker() {
-		if (oldErrorMarker != null) {
-			oldErrorMarker.createMarkerInFile();
+	private void createErrorMarker() {
+		if (!variable.getValue().hasError()) {
+			if (errorMarker == null) {
+				errorMarker = FordiacMarkerHelper.createValueErrorMarkerBuilder(validationMsg, variable.getValue(), 0);
+			}
+			errorMarker.createMarkerInFile();
 		}
 	}
 }

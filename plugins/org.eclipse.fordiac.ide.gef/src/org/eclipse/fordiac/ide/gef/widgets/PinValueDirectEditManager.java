@@ -32,7 +32,7 @@ public class PinValueDirectEditManager extends LabelDirectEditManager {
 		@Override
 		public void keyPressed(final KeyEvent e) {
 			// hook enter key pressed to save also default values in pin
-			if(e.character == '\r') {
+			if (e.character == '\r') {
 				setDirty(true);
 			}
 		}
@@ -42,9 +42,9 @@ public class PinValueDirectEditManager extends LabelDirectEditManager {
 			final String value = (String) getCellEditor().getValue();
 			final IInterfaceElement ie = ((Value) getEditPart().getModel()).getParentIE();
 
-			if (!value.isBlank() && ie instanceof VarDeclaration) {
+			if (!value.isBlank() && (ie instanceof VarDeclaration)) {
 				final String validationMsg = ValueValidator.validateValue((VarDeclaration) ie, value);
-				isValid = !(validationMsg != null && !validationMsg.trim().isEmpty());
+				isValid = !((validationMsg != null) && !validationMsg.trim().isEmpty());
 				if (!isValid) {
 					ErrorMessenger.popUpErrorMessage(validationMsg);
 				}
@@ -60,14 +60,6 @@ public class PinValueDirectEditManager extends LabelDirectEditManager {
 	protected void initCellEditor() {
 		super.initCellEditor();
 		((Text) getCellEditor().getControl()).addKeyListener(listener);
-	}
-
-	@Override
-	protected void commit() {
-		if (!isValid) {
-			// TODO error marker
-		}
-		super.commit();
 	}
 
 }
