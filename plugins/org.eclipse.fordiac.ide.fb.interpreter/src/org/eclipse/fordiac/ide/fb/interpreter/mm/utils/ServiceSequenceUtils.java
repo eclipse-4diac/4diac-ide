@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -156,11 +157,10 @@ public final class ServiceSequenceUtils {
 
 	public static void setVariable(final FBType fb, final String name, final String value) {
 		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name);
-		if (el instanceof VarDeclaration) {
-			VariableUtils.setVariable((VarDeclaration) el, value);
-		} else {
+		if (!(el instanceof VarDeclaration)) {
 			throw new IllegalArgumentException("variable does not exist in FB"); //$NON-NLS-1$
 		}
+		VariableUtils.setVariable((VarDeclaration) el, value);
 	}
 
 	private static void checkTransaction(final Transaction result, final ServiceTransaction expectedResult) {
@@ -228,8 +228,8 @@ public final class ServiceSequenceUtils {
 		if (text == null) {
 			return Collections.emptyList();
 		}
-		return Arrays.asList(text.split(separator, 0)).stream().filter(s -> !s.isBlank())
-				.map(String::strip).collect(Collectors.toList());
+		return Arrays.asList(text.split(separator, 0)).stream().filter(s -> !s.isBlank()).map(String::strip)
+				.collect(Collectors.toList());
 	}
 
 	public static List<String> splitList(final String parameters) {
@@ -277,11 +277,12 @@ public final class ServiceSequenceUtils {
 		return false;
 	}
 
-	private static InputPrimitive createInputPrimitive(final FBType fbType, final FBTransaction transaction) {
+	private static InputPrimitive createInputPrimitive(final FBType dataSource, final FBType destType,
+			final FBTransaction transaction) {
 		final InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
 		inputPrimitive.setEvent(transaction.getInputEventOccurrence().getEvent().getName());
-		inputPrimitive.setInterface(fbType.getService().getLeftInterface());
-		inputPrimitive.setParameters(summarizeParameters(fbType.getInterfaceList().getInputVars()));
+		inputPrimitive.setInterface(destType.getService().getLeftInterface());
+		inputPrimitive.setParameters(summarizeParameters(dataSource.getInterfaceList().getInputVars()));
 		return inputPrimitive;
 	}
 
@@ -291,7 +292,12 @@ public final class ServiceSequenceUtils {
 			builder.append(variable.getName());
 			builder.append(":="); //$NON-NLS-1$
 			if (variable.getValue() != null) {
-				builder.append(variable.getValue().getValue());
+				final String value = variable.getValue().getValue();
+				if (value.contains("#")) { //$NON-NLS-1$
+					builder.append(value);
+				} else {
+					builder.append(variable.getTypeName() + "#" + value); //$NON-NLS-1$
+				}
 			}
 			builder.append(";\n"); //$NON-NLS-1$
 		});
@@ -306,21 +312,24 @@ public final class ServiceSequenceUtils {
 		return outputPrimitive;
 	}
 
-	public static void convertTransactionToServiceModel(final ServiceSequence seq,
+	public static void convertTransactionToServiceModel(final ServiceSequence seq, final FBType destType,
 			final FBTransaction transaction) {
 		final ServiceTransaction serviceTransaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
 		seq.getServiceTransaction().add(serviceTransaction);
-		serviceTransaction.setInputPrimitive(
-				createInputPrimitive(getFbTypeFromRuntime(transaction.getInputEventOccurrence()), transaction));
+		serviceTransaction.setInputPrimitive(createInputPrimitive(
+				getFbTypeFromRuntime(transaction.getInputEventOccurrence()), destType, transaction));
 		for (final EventOccurrence outputEvent : transaction.getOutputEventOccurrences()) {
 			serviceTransaction.getOutputPrimitive()
-			.add(createOutputPrimitive(outputEvent, getFbTypeFromRuntime(outputEvent)));
+					.add(createOutputPrimitive(outputEvent, getFbTypeFromRuntime(outputEvent)));
 		}
 	}
 
-	private static BasicFBType getFbTypeFromRuntime(final EventOccurrence eo) {
-		final BasicFBTypeRuntime runtime = (BasicFBTypeRuntime) eo.getFbRuntime();
-		return runtime.getBasicfbtype(); // TODO this only works for basic fbs for now!
+	private static FBType getFbTypeFromRuntime(final EventOccurrence eo) {
+		final EObject type = eo.getFbRuntime().getModel();
+		if (type instanceof FBType) {
+			return (FBType) type;
+		}
+		return null;
 	}
 
 	private ServiceSequenceUtils() {

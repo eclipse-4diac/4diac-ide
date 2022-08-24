@@ -14,7 +14,6 @@
  *     - extracted code from AbstractInterpreterTest, added factory methods
  *******************************************************************************/
 
-
 package org.eclipse.fordiac.ide.fb.interpreter.api;
 
 import java.util.ArrayList;
@@ -28,6 +27,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -39,22 +39,37 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 public class TransactionFactory {
 
 	public static FBTransaction createFrom(final EventOccurrence inputEO) {
+		return createFrom(inputEO);
+	}
+
+	private static FBTransaction createFrom(final EventOccurrence inputEO, final boolean addRandomData) {
 		final FBTransaction createdTr = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
 		createdTr.setInputEventOccurrence(inputEO);
+		if (addRandomData) {
+			createdTr.getInputVariables().addAll(InputGenerator.getRandomData(inputEO.getEvent()));
+		}
 		return createdTr;
 	}
 
 	public static List<FBTransaction> createFrom(final List<EventOccurrence> inputEOs) {
-		final int size = inputEOs.size();
-		final List<FBTransaction> trans = new ArrayList<>();
-		for (int i = 0; i < size; i++) {
-			trans.add(createFrom(inputEOs.get(i)));
+		return createFrom(inputEOs, false);
+	}
+
+	public static List<FBTransaction> createFrom(final List<EventOccurrence> inputEOs, final boolean addRandomData) {
+		final List<FBTransaction> transactions = new ArrayList<>();
+		for (final EventOccurrence eo : inputEOs) {
+			transactions.add(createFrom(eo, addRandomData));
 		}
-		return trans;
+		return transactions;
 	}
 
 	public static FBTransaction createFrom(final Event inputEvent, final FBRuntimeAbstract runtime) {
-		return createFrom(EventOccFactory.createFrom(inputEvent, runtime));
+		return createFrom(inputEvent, runtime, false);
+	}
+
+	public static FBTransaction createFrom(final Event inputEvent, final FBRuntimeAbstract runtime,
+			final boolean addRandomData) {
+		return createFrom(EventOccFactory.createFrom(inputEvent, runtime), addRandomData);
 	}
 
 	public static List<FBTransaction> createFrom(final List<Event> inputEvents,
@@ -101,6 +116,12 @@ public class TransactionFactory {
 		copier.copyReferences();
 		transactions.get(0).getInputEventOccurrence().setFbRuntime(copyBasicFBTypeRuntime);
 		return transactions;
+
+	}
+
+	public static List<FBTransaction> createFrom(final List<Event> inputEvents, final FBRuntimeAbstract initialRuntime,
+			final boolean addRandomData) {
+		return createFrom(EventOccFactory.createFrom(inputEvents, initialRuntime), addRandomData);
 	}
 
 	private TransactionFactory() {

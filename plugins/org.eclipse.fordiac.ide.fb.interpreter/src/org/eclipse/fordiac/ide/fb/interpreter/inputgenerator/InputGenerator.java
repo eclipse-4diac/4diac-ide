@@ -20,6 +20,7 @@ import java.util.Random;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -81,28 +82,29 @@ public final class InputGenerator {
 		return getRandomEventsSequence(fb, count);
 	}
 
-	public static void setRandomDataSequence(final Event event) {
+	public static List<VarDeclaration> getRandomData(final Event event) {
 		if (event == null) {
 			throw new IllegalArgumentException();
 		}
-		final List<VarDeclaration> vars = event.getWith().stream().map(With::getVariables).filter(Objects::nonNull)
-				.collect(Collectors.toList());
+		final List<VarDeclaration> vars = (List<VarDeclaration>) EcoreUtil.copyAll(
+				event.getWith().stream().map(With::getVariables).filter(Objects::nonNull).collect(Collectors.toList()));
 		for (final VarDeclaration variable : vars) {
 			if (variable.getValue() == null) {
 				final Value v = LibraryElementFactory.eINSTANCE.createValue();
 				variable.setValue(v);
 			}
 			variable.getValue().setValue(getRandom(variable));
-
 		}
+		return vars;
 	}
 
-	public static void setRandomDataSequence(final Event event, final long seed) {
+	public static List<VarDeclaration> getRandomData(final Event event, final long seed) {
 		final ValueRandom oldrandom = randomV;
 		randomV = new ValueRandom();
 		randomV.setSeed(seed);
-		setRandomDataSequence(event);
+		final List<VarDeclaration> result = getRandomData(event);
 		randomV = oldrandom;
+		return result;
 	}
 
 	private static String getRandom(final VarDeclaration x) {

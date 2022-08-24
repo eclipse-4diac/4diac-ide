@@ -36,11 +36,8 @@ public final class SequenceExecutor {
 		if (!events.isEmpty()) {
 			return null;
 		}
-		if (needRandomData) {
-			InputGenerator.setRandomDataSequence(events.get(0));
-
-		}
-		final List<FBTransaction> trans = TransactionFactory.createFrom(events, RuntimeFactory.createFrom(inputfb));
+		final List<FBTransaction> trans = TransactionFactory.createFrom(events, RuntimeFactory.createFrom(inputfb),
+				needRandomData);
 		final EventManager eventManager = EventManagerUtils.createFrom(trans);
 		EventManagerUtils.process(eventManager);
 		return eventManager.getTransactions();
