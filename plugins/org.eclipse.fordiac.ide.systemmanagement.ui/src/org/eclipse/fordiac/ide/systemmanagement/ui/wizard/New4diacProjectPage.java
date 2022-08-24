@@ -16,6 +16,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.wizard;
 
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.systemmanagement.ui.Messages;
 import org.eclipse.jface.dialogs.Dialog;
@@ -92,7 +94,7 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 		blockListeners = true;
 		try {
 			if (IdentifierVerifier.verifyIdentifier(getProjectName()).isPresent()) {
-				setErrorMessage(Messages.SystemNameNotValid);
+				setErrorMessage(Messages.New4diacProjectWizard_SystemNameNotValid);
 				return false;
 			}
 
@@ -104,10 +106,19 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 				return false;
 			}
 
-			return super.validatePage();
+			if (super.validatePage()) {
+				// if we are in the default project location area check if there is no directory with given name
+				if (useDefaults() && projectNameExistsinWSPath(getProjectName())) {
+					setErrorMessage(Messages.New4diacProjectWizard_DirectoryWithProjectNameAlreadyExistsInWorkspace);
+					return false;
+				}
+			} else {
+				return false;
+			}
 		} finally {
 			blockListeners = false;
 		}
+		return true;
 	}
 
 	public String getInitialSystemName() {
@@ -201,6 +212,12 @@ public class New4diacProjectPage extends WizardNewProjectCreationPage {
 
 	public boolean importDefaultTypeLibrary() {
 		return importDefaultTypeLib;
+	}
+
+	private boolean projectNameExistsinWSPath(final String projectName) {
+		final IPath wsPath = ResourcesPlugin.getWorkspace().getRoot().getLocation();
+		final IPath localProjectPath = wsPath.append(projectName);
+		return localProjectPath.toFile().exists();
 	}
 
 }
