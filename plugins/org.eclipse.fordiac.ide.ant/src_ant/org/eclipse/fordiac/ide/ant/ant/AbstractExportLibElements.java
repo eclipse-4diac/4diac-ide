@@ -20,10 +20,11 @@ import java.util.List;
 import org.apache.tools.ant.BuildException;
 import org.eclipse.core.resources.ResourcesPlugin;
 
-public abstract class AbstractExportFBs extends AbstractFBTask {
+public abstract class AbstractExportLibElements extends AbstractFBTask {
 
 	@Override
-	public final void execute() throws BuildException {
+	public void execute() throws BuildException {
+
 		if (getProjectNameString() == null) {
 			throw new BuildException("Project name not specified!"); //$NON-NLS-1$
 		}
@@ -32,14 +33,32 @@ public abstract class AbstractExportFBs extends AbstractFBTask {
 		setFordiacProject(workspace.getRoot().getProject(getProjectNameString()));
 		checkFordiacProject();
 
-		waitBuilderJobsComplete();
+		checkValidDestination();
 
 		final List<File> files = new ArrayList<>();
 
 		getFBsFiles(files, getDirectory(), getSingleFBName(), getExcludeSubfolder());
-		exportFiles(files);
+
+		convertFiles(files);
 
 	}
 
-	protected abstract void exportFiles(final List<File> files);
+	protected abstract void convertFiles(final List<File> files)
+			throws BuildException;
+
+	private void checkValidDestination() {
+
+		// check that folder outside of the project
+		final File folder = new File(exportDirectory);
+
+		if (folder.getAbsolutePath().replace("\\", "/")
+				.startsWith(getFordiacProject().getLocation().toString().replace("\\", "/"))) {
+			throw new BuildException("Export Directory needs to be outsite of the project");
+		}
+
+		if (!folder.exists()) {
+			folder.mkdir();
+		}
+
+	}
 }
