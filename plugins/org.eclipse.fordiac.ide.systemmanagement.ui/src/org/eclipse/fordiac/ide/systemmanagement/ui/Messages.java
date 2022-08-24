@@ -51,13 +51,14 @@ public final class Messages extends NLS {
 
 	public static String New4diacProjectWizard_InitialSystemName;
 	public static String New4diacProjectWizard_InitialApplicationName;
+	public static String New4diacProjectWizard_SystemNameNotValid;
+	public static String New4diacProjectWizard_DirectoryWithProjectNameAlreadyExistsInWorkspace;
 
 	public static String NewSystemWizardPage_CreateNewSystem;
 
 	/** The Palette management page_ labe l_ default palette. */
 	public static String PaletteManagementPage_LABEL_DefaultTypeLibrary;
 
-	public static String SystemNameNotValid;
 
 	static {
 		// initialize resource bundle
