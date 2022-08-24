@@ -32,6 +32,9 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants.*
 
+import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
+import java.util.Collections
+
 class BasicFBFilter {
 
 	@Accessors(PUBLIC_GETTER)
@@ -158,13 +161,21 @@ class BasicFBFilter {
 	}
 
 	def private dispatch luaAlgorithm(STAlgorithm alg) {
-		val result = '''
+		/*val result = '''
 			local function «alg.luaAlgorithmName»(fb)
 			  «stAlgorithmFilter.lua(alg)»
 			end
 		'''
 		errors.addAll(stAlgorithmFilter.errors.map['''Error in algorithm «alg.name»: «it»'''])
-		stAlgorithmFilter.errors.clear()
+		stAlgorithmFilter.errors.clear()*/
+		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", alg)
+		val result = '''
+			local function «alg.luaAlgorithmName»(fb)
+			  «lang.generate(Collections.emptyMap())»
+			end
+		'''
+		errors.addAll(lang.errors.map['''Error in algorithm «alg.name»: «it»'''])
+		lang.errors.clear()
 		return result
 	}
 

@@ -15,10 +15,15 @@ package org.eclipse.fordiac.ide.export.forte_lua.st
 
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.getAllProperContents
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariable
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 
 @FinalFieldsConstructor
 class STAlgorithmSupport extends StructuredTextSupport {
@@ -38,11 +43,26 @@ class STAlgorithmSupport extends StructuredTextSupport {
 		parseResult?.generateStructuredTextAlgorithm
 	}
 
-	def private CharSequence generateStructuredTextAlgorithm(STAlgorithm alg) '''
-		«alg.body.varTempDeclarations.generateLocalVariables(true)»
-		
-		«alg.body.statements.generateStatementList»
-	'''
+	def private CharSequence generateStructuredTextAlgorithm(STAlgorithm alg) {
+		if (algorithm.rootContainer instanceof BaseFBType) {
+			val container = algorithm.rootContainer as BaseFBType
+			return '''
+				«container.interfaceList.generateFBVariablePrefix»
+				«container.internalVars.generateInternalVariablePrefix»
+				«alg.body.varTempDeclarations.generateLocalVariables(true)»
+				
+				«alg.body.statements.generateStatementList»
+				«container.internalVars.generateInternalVariableSuffix»
+				«container.interfaceList.generateFBVariableSuffix»
+			'''
+		} else {
+			return '''
+				«alg.body.varTempDeclarations.generateLocalVariables(true)»
+				
+				«alg.body.statements.generateStatementList»
+			'''
+		}
+	}
 
 	override getDependencies(Map<?, ?> options) {
 		prepare(options)
