@@ -20,7 +20,6 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -34,78 +33,64 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>FB
- * Network Runtime</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>FB Network Runtime</b></em>'. <!--
+ * end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBNetworkRuntimeImpl#getFbnetwork
  * <em>Fbnetwork</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBNetworkRuntimeImpl#getFbRuntimes
- * <em>Fb Runtimes</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBNetworkRuntimeImpl#getTransferData
- * <em>Transfer Data</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBNetworkRuntimeImpl#getFbRuntimes <em>Fb
+ * Runtimes</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBNetworkRuntimeImpl#getTransferData <em>Transfer
+ * Data</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNetworkRuntime {
-	/**
-	 * The cached value of the '{@link #getFbnetwork() <em>Fbnetwork</em>}'
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getFbnetwork() <em>Fbnetwork</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @see #getFbnetwork()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected FBNetwork fbnetwork;
 
-	/**
-	 * The cached value of the '{@link #getFbRuntimes() <em>Fb Runtimes</em>}'
-	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getFbRuntimes() <em>Fb Runtimes</em>}' containment reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getFbRuntimes()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<FBRuntimeAbstract> fbRuntimes;
 
-	/**
-	 * The cached value of the '{@link #getTransferData() <em>Transfer Data</em>}'
-	 * map. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getTransferData() <em>Transfer Data</em>}' map. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @see #getTransferData()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EMap<Connection, Value> transferData;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	protected FBNetworkRuntimeImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return OperationalSemanticsPackage.Literals.FB_NETWORK_RUNTIME;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetwork getFbnetwork() {
 		if (fbnetwork != null && fbnetwork.eIsProxy()) {
@@ -120,20 +105,16 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 		return fbnetwork;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	public FBNetwork basicGetFbnetwork() {
 		return fbnetwork;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setFbnetwork(FBNetwork newFbnetwork) {
 		FBNetwork oldFbnetwork = fbnetwork;
@@ -143,11 +124,9 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 					OperationalSemanticsPackage.FB_NETWORK_RUNTIME__FBNETWORK, oldFbnetwork, fbnetwork));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<FBRuntimeAbstract> getFbRuntimes() {
 		if (fbRuntimes == null) {
@@ -157,11 +136,9 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 		return fbRuntimes;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EMap<Connection, Value> getTransferData() {
 		if (transferData == null) {
@@ -172,21 +149,17 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 		return transferData;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
-	public EObject getModel() {
+	public FBNetwork getModel() {
 		return this.getFbnetwork();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -194,15 +167,14 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 			return ((InternalEList<?>) getFbRuntimes()).basicRemove(otherEnd, msgs);
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TRANSFER_DATA:
 			return ((InternalEList<?>) getTransferData()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -217,15 +189,14 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 				return getTransferData();
 			else
 				return getTransferData().map();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -240,15 +211,15 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TRANSFER_DATA:
 			((EStructuralFeature.Setting) getTransferData()).set(newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -261,15 +232,15 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TRANSFER_DATA:
 			getTransferData().clear();
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -279,8 +250,9 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 			return fbRuntimes != null && !fbRuntimes.isEmpty();
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TRANSFER_DATA:
 			return transferData != null && !transferData.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // FBNetworkRuntimeImpl

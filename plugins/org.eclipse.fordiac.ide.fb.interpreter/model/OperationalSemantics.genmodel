@@ -50,7 +50,7 @@
     <genClasses ecoreClass="OperationalSemantics.ecore#//SimpleFBTypeRuntime">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//SimpleFBTypeRuntime/simpleFBType"/>
       <genOperations ecoreOperation="OperationalSemantics.ecore#//SimpleFBTypeRuntime/getModel"
-          body="return null;"/>
+          body="return simpleFBType;"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//Transaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//Transaction/inputEventOccurrence"/>
