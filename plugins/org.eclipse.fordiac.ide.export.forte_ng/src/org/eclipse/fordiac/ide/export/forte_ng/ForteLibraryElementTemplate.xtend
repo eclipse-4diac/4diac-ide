@@ -16,15 +16,6 @@ package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
 import java.util.List
-import org.eclipse.fordiac.ide.model.data.DataType
-import org.eclipse.fordiac.ide.model.data.DateAndTimeType
-import org.eclipse.fordiac.ide.model.data.DateType
-import org.eclipse.fordiac.ide.model.data.LdateType
-import org.eclipse.fordiac.ide.model.data.LdtType
-import org.eclipse.fordiac.ide.model.data.LtimeType
-import org.eclipse.fordiac.ide.model.data.LtodType
-import org.eclipse.fordiac.ide.model.data.TimeOfDayType
-import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration

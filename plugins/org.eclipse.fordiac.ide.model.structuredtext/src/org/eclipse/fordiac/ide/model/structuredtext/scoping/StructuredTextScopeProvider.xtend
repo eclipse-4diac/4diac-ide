@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.StructuredTextAlgorithm
 import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Variable
@@ -35,8 +36,6 @@ import org.eclipse.xtext.scoping.Scopes
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
 import org.eclipse.xtext.scoping.impl.SimpleScope
 import org.eclipse.xtext.util.SimpleAttributeResolver
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.FBCall
 
 /**
  * This class contains custom scoping description.
