@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
+import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.action.Action;
@@ -29,7 +30,7 @@ public class TableCopyAction extends Action {
 
 	private final Object part;
 
-	public TableCopyAction(Object part) {
+	public TableCopyAction(final Object part) {
 		this.part = part;
 		setId(ActionFactory.COPY.getId());
 		setText(FordiacMessages.TableCopyPaste_TEXT_Cut);
@@ -41,7 +42,7 @@ public class TableCopyAction extends Action {
 	@Override
 	public void run() {
 		final I4diacTableUtil editor = TableWidgetFactory.getTableEditor(part);
-		
+
 		if (editor != null) {
 			for (final CellEditor cell : editor.getViewer().getCellEditors()) {
 				// cell can be null if column is not editable
@@ -51,25 +52,26 @@ public class TableCopyAction extends Action {
 				}
 			}
 			// This IF will be removed once the new copy/paste handling has been approved.
-			String instanceClassName = "CommentPropertySection";
+			final String instanceClassName = "CommentPropertySection";
 			if (instanceClassName.equals(editor.getClass().getSimpleName())) {
 				handleInstancePropertySheet(editor);
 			} else {
-				Clipboard.getDefault().setContents(editor.getViewer().getStructuredSelection());				
+				Clipboard.getDefault().setContents(editor.getViewer().getStructuredSelection());
 			}
 		}
 	}
 
-	private static void handleInstancePropertySheet(I4diacTableUtil editor) {
-		TableViewer viewer = editor.getViewer();
-		ViewerCell focusCell = viewer.getColumnViewerEditor().getFocusCell();
-		ICellModifier modifier = viewer.getCellModifier();
-		
-		if (focusCell != null) {
-			TableItem item = viewer.getTable().getItem(viewer.getTable().getSelectionIndex());
-			String property = (String) viewer.getColumnProperties()[focusCell.getColumnIndex()];
+	private static void handleInstancePropertySheet(final I4diacTableUtil editor) {
+		final TableViewer viewer = editor.getViewer();
+		final ViewerCell focusCell = viewer.getColumnViewerEditor().getFocusCell();
+		final ICellModifier modifier = viewer.getCellModifier();
+		final int index = viewer.getTable().getSelectionIndex();
+
+		if (focusCell != null && index >= 0) {
+			final TableItem item = viewer.getTable().getItem(index);
+			final String property = (String) viewer.getColumnProperties()[focusCell.getColumnIndex()];
 			if (modifier.canModify(item, property)) {
-				Clipboard.getDefault().setContents(focusCell.getText());
+				FordiacClipboard.INSTANCE.setTableContents(focusCell.getText());
 			}
 		}
 	}

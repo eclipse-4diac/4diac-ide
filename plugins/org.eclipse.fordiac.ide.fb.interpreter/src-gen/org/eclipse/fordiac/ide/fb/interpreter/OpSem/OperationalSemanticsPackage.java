@@ -375,13 +375,22 @@ public interface OperationalSemanticsPackage extends EPackage {
 	int FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES = TRANSACTION_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Input Variables</b></em>' reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int FB_TRANSACTION__INPUT_VARIABLES = TRANSACTION_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>FB Transaction</em>' class.
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
 	 */
-	int FB_TRANSACTION_FEATURE_COUNT = TRANSACTION_FEATURE_COUNT + 1;
+	int FB_TRANSACTION_FEATURE_COUNT = TRANSACTION_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the
@@ -714,6 +723,18 @@ public interface OperationalSemanticsPackage extends EPackage {
 	EReference getFBTransaction_OutputEventOccurrences();
 
 	/**
+	 * Returns the meta object for the reference list
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getInputVariables
+	 * <em>Input Variables</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the reference list '<em>Input Variables</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getInputVariables()
+	 * @see #getFBTransaction()
+	 * @generated
+	 */
+	EReference getFBTransaction_InputVariables();
+
+	/**
 	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Connection
 	 * To Value Map</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -993,6 +1014,14 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES = eINSTANCE.getFBTransaction_OutputEventOccurrences();
+
+		/**
+		 * The meta object literal for the '<em><b>Input Variables</b></em>' reference
+		 * list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EReference FB_TRANSACTION__INPUT_VARIABLES = eINSTANCE.getFBTransaction_InputVariables();
 
 		/**
 		 * The meta object literal for the

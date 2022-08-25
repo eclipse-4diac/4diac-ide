@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
 /**
@@ -149,6 +150,16 @@ public class SimpleFBTypeRuntimeImpl extends FBRuntimeAbstractImpl implements Si
 			eNotify(new ENotificationImpl(this, Notification.SET,
 					OperationalSemanticsPackage.SIMPLE_FB_TYPE_RUNTIME__SIMPLE_FB_TYPE, newSimpleFBType,
 					newSimpleFBType));
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public LibraryElement getModel() {
+		return null;
 	}
 
 	/**

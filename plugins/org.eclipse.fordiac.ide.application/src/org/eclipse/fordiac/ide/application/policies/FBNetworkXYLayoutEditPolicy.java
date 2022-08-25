@@ -27,6 +27,8 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
+import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
@@ -48,6 +50,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
@@ -247,7 +250,18 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		final Point moveDelta = (isAlignRequest(request)) ? getAlignmentDelta(model, constraint) :
 			getScaledMoveDelta(request);
 		if (model instanceof FBNetworkElement) {
+			if (getHost() instanceof AbstractContainerContentEditPart) {
+				return new ResizeGroupOrSubappCommand((GraphicalEditPart) getHost(),
+						new FBNetworkElementSetPositionCommand((FBNetworkElement) model, moveDelta.x, moveDelta.y));
+
+			}
 			return new FBNetworkElementSetPositionCommand((FBNetworkElement) model, moveDelta.x, moveDelta.y);
+		}
+		if (getHost() instanceof AbstractContainerContentEditPart)
+		{
+			return new ResizeGroupOrSubappCommand((GraphicalEditPart) getHost(),
+					new SetPositionCommand(model, moveDelta.x, moveDelta.y));
+
 		}
 		return new SetPositionCommand(model, moveDelta.x, moveDelta.y);
 	}

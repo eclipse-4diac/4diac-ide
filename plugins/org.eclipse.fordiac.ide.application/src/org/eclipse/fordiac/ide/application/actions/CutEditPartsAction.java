@@ -22,9 +22,9 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementComma
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -64,7 +64,7 @@ public class CutEditPartsAction extends CopyEditPartsAction {
 			execute(fbDeleteCommands);
 		}
 		templates.add(getWorkbenchPart().getAdapter(FBNetwork.class));
-		Clipboard.getDefault().setContents(message);
+		FordiacClipboard.INSTANCE.setGraphicalContents(message);
 	}
 
 	private static Command getFBDeleteCommands(final List<Object> templates) {

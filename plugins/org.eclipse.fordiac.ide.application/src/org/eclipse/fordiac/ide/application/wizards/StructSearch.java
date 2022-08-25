@@ -49,7 +49,7 @@ public class StructSearch {
 		return searchResult;
 	}
 
-	protected List<INamedElement> getAllTypesWithStruct() {
+	public List<INamedElement> getAllTypesWithStruct() {
 		searchResult = new StructSearchResult();
 
 		final List<AutomationSystem> searchRootSystems = new ArrayList<>();

@@ -151,21 +151,7 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 
 	@SuppressWarnings("static-method")
 	protected PatternFilter getPatternFilter() {
-		return new PatternFilter() {
-			@Override
-			protected boolean isLeafMatch(final Viewer viewer, final Object element) {
-
-				WatchValueTreeNode node = null;
-
-				if (element instanceof WatchValueTreeNode) {
-					node = (WatchValueTreeNode) element;
-				} else {
-					return false;
-				}
-				return wordMatches(WatchesTypeLabelProvider.getTypeText(node))
-						|| wordMatches(node.getWatchedElementString()) || wordMatches(node.getValue());
-			}
-		};
+		return new WatchesViewPatternFilter();
 	}
 
 	protected void createPartListener() {
@@ -480,5 +466,21 @@ public class WatchesView extends ViewPart implements ISelectionListener {
 		triggerMenuItem.setText(Messages.MonitoringWatchesView_TriggerEvent);
 		triggerMenuItem.setImage(FordiacImage.ICON_TRIGGER_EVENT.getImage());
 		return triggerMenuItem;
+	}
+
+	protected static class WatchesViewPatternFilter extends PatternFilter {
+		@Override
+		protected boolean isLeafMatch(final Viewer viewer, final Object element) {
+
+			WatchValueTreeNode node = null;
+
+			if (element instanceof WatchValueTreeNode) {
+				node = (WatchValueTreeNode) element;
+			} else {
+				return false;
+			}
+			return wordMatches(WatchesTypeLabelProvider.getTypeText(node))
+					|| wordMatches(node.getWatchedElementString()) || wordMatches(node.getValue());
+		}
 	}
 }

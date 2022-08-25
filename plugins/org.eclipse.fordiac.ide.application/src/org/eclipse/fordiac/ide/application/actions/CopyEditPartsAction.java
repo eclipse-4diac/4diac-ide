@@ -29,8 +29,8 @@ import org.eclipse.fordiac.ide.application.commands.ConnectionReference;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISharedImages;
@@ -76,7 +76,7 @@ public class CopyEditPartsAction extends SelectionAction {
 		final List<Object> templates = getSelectedTemplates();
 
 		final CopyPasteMessage info = new CopyPasteMessage(CopyStatus.COPY, templates);
-		Clipboard.getDefault().setContents(info);
+		FordiacClipboard.INSTANCE.setGraphicalContents(info);
 	}
 
 	protected List<Object> getSelectedTemplates() {

@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.ant.ant;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
+import java.util.Collections;
 import java.util.List;
 
 import org.apache.tools.ant.BuildException;
@@ -23,7 +23,7 @@ import org.apache.tools.ant.BuildException;
 public class ExportFolderFBsAsXMI extends ExportFBsAsXMI {
 
 	private String folderNameString;
-	private List<String> excludeSubfolder = new ArrayList<>();
+	private List<String> excludeSubfolder = Collections.emptyList();
 
 	public void setFolderName(final String value) {
 		this.folderNameString = value;
@@ -33,37 +33,27 @@ public class ExportFolderFBsAsXMI extends ExportFBsAsXMI {
 		this.excludeSubfolder = new ArrayList<>(Arrays.asList(value.split(","))); //$NON-NLS-1$
 	}
 
-	@Override
-	public void execute() throws BuildException {
-		super.execute();
 
+	@Override
+	protected File getDirectory() {
 		final File folder = findFolderInProject(new File(getFordiacProject().getLocationURI()), folderNameString);
 
 		if (folder == null) {
 			throw new BuildException(
 					"No folder named '" + folderNameString + "' in Project '" + getFordiacProject().getName() + "'");//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		}
-
-		final List<File> files = new LinkedList<>();
-		getFBsFiles(files, folder, null, excludeSubfolder);
-		exportFiles(files);
+		return folder;
 	}
 
-	private static File findFolderInProject(final File dir, final String dirName) {
-		if (dir.isDirectory() && dir.getName().equals(dirName)) {
-			return dir;
-		}
-
-		if (dir.listFiles() != null) {
-			File foundFile = null;
-			for (final File file : dir.listFiles()) {
-				foundFile = findFolderInProject(file, dirName);
-				if (foundFile != null) {
-					return foundFile;
-				}
-			}
-		}
+	@Override
+	protected String getSingleFBName() {
 		return null;
 	}
+
+	@Override
+	protected List<String> getExcludeSubfolder() {
+		return excludeSubfolder;
+	}
+
 
 }

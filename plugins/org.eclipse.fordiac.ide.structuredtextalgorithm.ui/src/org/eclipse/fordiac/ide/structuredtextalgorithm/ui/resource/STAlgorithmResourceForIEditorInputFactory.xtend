@@ -9,9 +9,11 @@
  * 
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ * 	 Christoph Binder - Refactoring
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource
 
+import org.eclipse.fordiac.ide.fbtypextext.FBTypeXtextResource
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
@@ -29,9 +31,10 @@ class STAlgorithmResourceForIEditorInputFactory extends ResourceForIEditorInputF
 				if (typeEntry !== null) {
 					val libraryElement = typeEntry.typeEditable
 					if (libraryElement instanceof FBType) {
-						if (resource instanceof STAlgorithmResource) {
+						if (resource instanceof FBTypeXtextResource) {
 							resource.fbType = libraryElement
-							resource.defaultLoadOptions.put(STAlgorithmResource.OPTION_PLAIN_ST, Boolean.TRUE)
+							if(resource instanceof STAlgorithmResource)
+								resource.defaultLoadOptions.put(STAlgorithmResource.OPTION_PLAIN_ST, Boolean.TRUE)
 						}
 					}
 				}

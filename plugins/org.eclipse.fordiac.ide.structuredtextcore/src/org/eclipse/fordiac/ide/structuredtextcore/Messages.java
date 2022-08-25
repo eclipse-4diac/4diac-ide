@@ -42,6 +42,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_BitAccessInvalidForType;
 	public static String STCoreValidator_BitAccessInvalidForReciever;
 	public static String STCoreValidator_BitAccessExpressionNotOfTypeAnyInt;
+	public static String STCoreValidator_Duplicate_Variable_Name;
 
 	static {
 		// initialize resource bundle

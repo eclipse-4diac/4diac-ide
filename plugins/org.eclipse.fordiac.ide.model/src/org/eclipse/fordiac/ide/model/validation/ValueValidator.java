@@ -15,6 +15,7 @@
  *                             fixes handling of Arrays
  *   Alois Zoitl - migrated to value converters
  *   Martin Jobst - migrated to typed value converter
+ *   Daniel Lindhuber - prefix validation and ANY type handling
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.validation;
 
@@ -42,6 +43,7 @@ import org.eclipse.fordiac.ide.model.data.UintType;
 import org.eclipse.fordiac.ide.model.data.UlintType;
 import org.eclipse.fordiac.ide.model.data.UsintType;
 import org.eclipse.fordiac.ide.model.data.WordType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.value.ArrayValueConverter;
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
@@ -88,7 +90,13 @@ public final class ValueValidator {
 	public static String validateValue(final DataType type, final String value) {
 		try {
 			if (!checkVirtualDNS(value)) {
-				checkValue(type, new TypedValueConverter(type).toValue(value));
+				final Object convertedValue = new TypedValueConverter(type).toValue(value);
+				final DataType prefixType = getValidatedPrefixType(type, value, convertedValue);
+				if (prefixType != null) {
+					checkValue(prefixType, convertedValue);
+				} else {
+					checkValue(type, convertedValue);
+				}
 			}
 		} catch (final IllegalArgumentException e) {
 			return e.getMessage();
@@ -135,6 +143,18 @@ public final class ValueValidator {
 			return true;
 		}
 		return false;
+	}
+
+	private static DataType getValidatedPrefixType(final DataType type, final String value, final Object convertedValue) {
+		final String[] tokens = value.split("#"); //$NON-NLS-1$
+		if (tokens.length > 1) {
+			final DataType prefixType = ElementaryTypes.getTypeByName(tokens[0]);
+			if (prefixType != null && !type.isAssignableFrom(prefixType)) {
+				throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_NUMBER_LITERAL);
+			}
+			return prefixType;
+		}
+		return null;
 	}
 
 	private static void checkValue(final DataType type, final Object value) {

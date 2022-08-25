@@ -97,7 +97,10 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 			final IFigure layerFig = getLayer(layer);
 			if (layerFig != null) {
 				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-				layerFig.remove(child);
+				// Check if the figure was not yet removed
+				if (layerFig.equals(child.getParent())) {
+					layerFig.remove(child);
+				}
 				return;
 			}
 		}

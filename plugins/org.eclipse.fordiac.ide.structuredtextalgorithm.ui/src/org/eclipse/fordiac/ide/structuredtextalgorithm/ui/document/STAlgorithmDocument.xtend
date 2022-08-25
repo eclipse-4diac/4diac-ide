@@ -12,26 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document
 
-import org.eclipse.xtext.ui.editor.model.XtextDocument
-import org.eclipse.core.runtime.IAdaptable
+import com.google.inject.Inject
+import org.eclipse.fordiac.ide.fbtypextext.ui.FBTypeXtextDocument
 import org.eclipse.xtext.ui.editor.model.DocumentTokenSource
 import org.eclipse.xtext.ui.editor.model.edit.ITextEditComposer
-import com.google.inject.Inject
-import org.eclipse.fordiac.ide.model.libraryElement.FBType
-import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 
-class STAlgorithmDocument extends XtextDocument implements IAdaptable {
+class STAlgorithmDocument extends FBTypeXtextDocument{
 
 	@Inject
 	new(DocumentTokenSource tokenSource, ITextEditComposer composer) {
 		super(tokenSource, composer)
-	}
-
-	override <T> T getAdapter(Class<T> adapterType) {
-		if(FBType.equals(adapterType)) adapterType.cast(FBType) else super.getAdapter(adapterType);
-	}
-
-	def FBType getFBType() {
-		readOnly[resource|if(resource instanceof STAlgorithmResource) resource.fbType else null]
 	}
 }

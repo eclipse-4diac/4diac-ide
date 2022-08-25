@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
  * <!-- begin-user-doc --> A representation of the model object '<em><b>FB
@@ -25,6 +26,8 @@ import org.eclipse.emf.common.util.EList;
  * <ul>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getOutputEventOccurrences
  * <em>Output Event Occurrences</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getInputVariables
+ * <em>Input Variables</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBTransaction()
@@ -45,5 +48,18 @@ public interface FBTransaction extends Transaction {
 	 * @generated
 	 */
 	EList<EventOccurrence> getOutputEventOccurrences();
+
+	/**
+	 * Returns the value of the '<em><b>Input Variables</b></em>' reference list.
+	 * The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the value of the '<em>Input Variables</em>' reference list.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBTransaction_InputVariables()
+	 * @model
+	 * @generated
+	 */
+	EList<VarDeclaration> getInputVariables();
 
 } // FBTransaction

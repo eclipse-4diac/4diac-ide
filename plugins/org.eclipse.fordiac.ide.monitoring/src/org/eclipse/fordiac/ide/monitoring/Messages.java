@@ -29,6 +29,7 @@ public final class Messages extends NLS {
 	public static String MonitoringPreferences_PollingIntervallMs;
 	public static String MonitoringPreferences_SettingsTitle;
 	public static String MonitoringPreferences_StartMonitoringWithoutAsking;
+	public static String MonitoringPreferences_WriteBackOnlineValues;
 
 	public static String MonitoringDialog_EnableMonitoring;
 	public static String MonitoringDialog_EnableMonitoringQuestion;

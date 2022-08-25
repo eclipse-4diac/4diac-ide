@@ -20,6 +20,7 @@ import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
@@ -169,6 +170,16 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 					OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TRANSFER_DATA);
 		}
 		return transferData;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public EObject getModel() {
+		return this.getFbnetwork();
 	}
 
 	/**

@@ -25,7 +25,7 @@ public class InoutTest extends AbstractInterpreterTest {
 		final SimpleFBType fb = (SimpleFBType) loadFBType("inout"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
-		setVariable(fb, "IN", "1");
+		setVariable(fb, "IN", "1"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, FBTransaction.getSimpleFBTransaction("OUT:=1")); //$NON-NLS-1$
 		runFBTest(fb, seq);
 	}

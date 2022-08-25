@@ -909,4 +909,36 @@ class STFunctionValidatorTest {
 		'''.parse.assertError(STFunctionPackage.eINSTANCE.STFunction, STFunctionValidator.DUPLICATE_FUNCTION_NAME,
 			"FUNCTION with duplicate name 'duplicate' found in null")
 	}
+
+	@Test
+	def void testDuplicateVariableNameIsForbiddenInFunction_0() {
+		'''
+			FUNCTION hubert
+			VAR_INPUT
+				bol1 : BOOL;
+				bol1 : BOOL;
+				bol1 : BOOL;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.DUPLICATE_VARIABLE_NAME,
+			"Variable with duplicate name bol1")
+	}
+	
+	@Test
+	def void testDuplicateVariableNameIsForbiddenInFunction_1() {
+		'''
+			FUNCTION hubert
+			VAR_INPUT
+				bol1 : BOOL;
+			END_VAR
+			VAR_INPUT
+				bol1 : BOOL;
+			END_VAR
+			VAR_TEMP
+				bol1 : BOOL;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.DUPLICATE_VARIABLE_NAME,
+			"Variable with duplicate name bol1")
+	}
 }

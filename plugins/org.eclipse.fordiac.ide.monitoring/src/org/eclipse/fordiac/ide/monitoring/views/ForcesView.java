@@ -24,19 +24,20 @@ public class ForcesView extends WatchesView {
 
 	@Override
 	protected PatternFilter getPatternFilter() {
-		return new PatternFilter() {
+		return new WatchesViewPatternFilter() {
+
 			@Override
 			public Object[] filter(final Viewer viewer, final Object parent, final Object[] elements) {
 				final ArrayList<Object> returns = new ArrayList<>();
 				for (final Object element : elements) {
 					if (element instanceof WatchValueTreeNode
-							&& ((WatchValueTreeNode) element).getMonitoringBaseElement() instanceof MonitoringElement) {
-						if (((MonitoringElement) ((WatchValueTreeNode) element).getMonitoringBaseElement()).isForce()) {
+							&& ((WatchValueTreeNode) element).getMonitoringBaseElement() instanceof MonitoringElement
+							&& ((MonitoringElement) ((WatchValueTreeNode) element).getMonitoringBaseElement())
+									.isForce()) {
 							returns.add(element);
-						}
 					}
 				}
-				return returns.toArray();
+				return super.filter(viewer, parent, returns.toArray());
 			}
 		};
 	}

@@ -13,6 +13,7 @@
  */
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 
@@ -83,5 +84,14 @@ public interface BasicFBTypeRuntime extends FBRuntimeAbstract {
 	 * @generated
 	 */
 	void setActiveState(ECState value);
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	@Override
+	EObject getModel();
 
 } // BasicFBTypeRuntime

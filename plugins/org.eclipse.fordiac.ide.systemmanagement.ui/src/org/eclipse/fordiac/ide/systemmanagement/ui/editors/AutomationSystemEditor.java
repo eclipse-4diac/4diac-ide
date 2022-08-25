@@ -18,8 +18,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement.ui.editors;
 
-import java.util.Arrays;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
@@ -36,12 +34,12 @@ import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppIns
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
 import org.eclipse.fordiac.ide.gef.DiagramEditorWithFlyoutPalette;
 import org.eclipse.fordiac.ide.gef.DiagramOutlinePage;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -225,7 +223,8 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			final String[] nameList = itemPath.split("\\."); //$NON-NLS-1$
 			if (nameList.length > 1) {
 				// we have a child of the system
-				final EObject targetmodel = getTargetModel(Arrays.copyOfRange(nameList, 1, nameList.length));
+				final String searchPath = itemPath.substring(itemPath.indexOf('.') + 1);
+				final EObject targetmodel = FBNetworkHelper.getModelFromHierarchicalName(searchPath, system);
 				if (null != targetmodel) {
 					return targetmodel;
 				}
@@ -290,9 +289,11 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	protected void gotoFBNetworkElement(final Object object) {
-		final String[] split = ((String) object).split("\\."); //$NON-NLS-1$
+		final String name = (String) object;
+		final String[] split = name.split("\\."); //$NON-NLS-1$
 		if (split.length >= 2) {
-			final EObject targetmodel = getTargetModel(Arrays.copyOf(split, split.length - 1));
+			final String fullNameOfParent = name.substring(0, name.lastIndexOf('.'));
+			final EObject targetmodel = FBNetworkHelper.getModelFromHierarchicalName(fullNameOfParent, system);
 			if (null != targetmodel) {
 				getBreadcrumb().setInput(targetmodel);
 				final FBNetworkEditor fbEditor = getAdapter(FBNetworkEditor.class);
@@ -303,64 +304,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 				}
 			}
 		}
-	}
-
-	private EObject getTargetModel(final String[] path) {
-		EObject retVal = system.getApplicationNamed(path[0]);
-		if (null != retVal) {
-			if (path.length > 1) {
-				// we are within a subapplication in the application
-				retVal = parseSubappPath(((Application) retVal).getFBNetwork(),
-						Arrays.copyOfRange(path, 1, path.length));
-			}
-		} else if (path.length > 2) {
-			// we need to have at least a device and a resource in the path
-			retVal = system.getDeviceNamed(path[0]);
-			if (null != retVal) {
-				retVal = ((Device) retVal).getResourceNamed(path[1]);
-				if ((null != retVal) && (path.length > 2)) {
-					// we are within a subapplication in the resource
-					retVal = parseSubappPath(((Resource) retVal).getFBNetwork(),
-							Arrays.copyOfRange(path, 2, path.length));
-				}
-			}
-		}
-		return retVal;
-	}
-
-	private static EObject parseSubappPath(FBNetwork network, final String[] path) {
-		EObject retVal = null;
-		for (final String element : path) {
-			retVal = network.getElementNamed(element);
-			if (retVal instanceof SubApp) {
-				network = getSubAppNetwork((SubApp) retVal);
-			} else if (retVal instanceof CFBInstance) {
-				network = getCFBNetwork((CFBInstance) retVal);
-			} else {
-				return null;
-			}
-			if (null == network) {
-				// we couldn't load the network, memento seems to be broken
-				return null;
-			}
-		}
-		return retVal;
-	}
-
-	private static FBNetwork getSubAppNetwork(final SubApp subApp) {
-		FBNetwork network = subApp.getSubAppNetwork();
-		if (null == network) {
-			network = subApp.loadSubAppNetwork();
-		}
-		return network;
-	}
-
-	private static FBNetwork getCFBNetwork(final CFBInstance cfb) {
-		FBNetwork network = cfb.getCfbNetwork();
-		if (null == network) {
-			network = cfb.loadCFBNetwork();
-		}
-		return network;
 	}
 
 	@Override

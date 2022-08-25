@@ -143,6 +143,31 @@ public class ModelSearchQuery implements ISearchQuery {
 				searchResult.addResult(entry.getType());
 			}
 		}
+		for (final TypeEntry entry : lib.getAdapterTypes().values()) {
+			if (matchEObject(entry.getType())) {
+				searchResult.addResult(entry.getType());
+			}
+		}
+		for (final TypeEntry entry : lib.getDeviceTypes().values()) {
+			if (matchEObject(entry.getType())) {
+				searchResult.addResult(entry.getType());
+			}
+		}
+		for (final TypeEntry entry : lib.getResourceTypes().values()) {
+			if (matchEObject(entry.getType())) {
+				searchResult.addResult(entry.getType());
+			}
+		}
+		for (final TypeEntry entry : lib.getSegmentTypes().values()) {
+			if (matchEObject(entry.getType())) {
+				searchResult.addResult(entry.getType());
+			}
+		}
+		for (final TypeEntry entry : lib.getSubAppTypes().values()) {
+			if (matchEObject(entry.getType())) {
+				searchResult.addResult(entry.getType());
+			}
+		}
 	}
 
 	private boolean matchEObject(final EObject modelElement) {
