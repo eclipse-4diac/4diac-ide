@@ -15,12 +15,15 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
@@ -43,11 +46,12 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 			final ServiceSequence seq = getSequence(selected);
 			if (seq != null) {
 				try {
+					final BasicFBType fbType = EcoreUtil.copy((BasicFBType) seq.getService().getFBType());
 					if ((seq.getStartState() != null) && !seq.getStartState().isBlank()) { // $NON-NLS-1$
-						AbstractInterpreterTest.runTest((BasicFBType) seq.getService().getFBType(), seq,
+						AbstractInterpreterTest.runTest(fbType, seq,
 								seq.getStartState());
 					} else {
-						AbstractInterpreterTest.runFBTest((BasicFBType) seq.getService().getFBType(), seq);
+						AbstractInterpreterTest.runFBTest(fbType, seq);
 					}
 					MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
 							Messages.RunServiceSequenceHandler_Success,
@@ -74,8 +78,8 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 
 	private static List<ServiceSequence> getSelectedSequences(final ISelection selection) {
 		if (selection instanceof StructuredSelection) {
-			return (List<ServiceSequence>) ((StructuredSelection) selection).toList().stream()
-					.map(RunServiceSequenceHandler::getSequence).filter(ServiceSequence.class::isInstance)
+			return Stream.of((StructuredSelection) selection)
+					.map(RunServiceSequenceHandler::getSequence).filter(Objects::nonNull)
 					.collect(Collectors.toList());
 		}
 		return Collections.emptyList();
