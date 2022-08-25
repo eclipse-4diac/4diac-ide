@@ -12,6 +12,8 @@
  *     - initial API and implementation and/or initial documentation
  *  Paul Pavlicek
  *     - cleanup and extracting code, added random generation
+ *  Felix Roithmayr
+ *     - added extra support for context menu entry
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 
@@ -53,7 +55,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
@@ -68,6 +72,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class RecordServiceSequenceHandler extends AbstractHandler {
@@ -148,6 +153,16 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		final List<FBTransaction> transactions = TransactionFactory.createFrom(createEos, random);
 		eventManager.getTransactions().addAll(transactions);
 		return eventManager;
+	}
+
+	@Override
+	public void setEnabled(final Object evaluationContext) {
+		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
+				ISources.ACTIVE_CURRENT_SELECTION_NAME);
+		if (selection instanceof StructuredSelection) {
+			final StructuredSelection structuredSelection = (StructuredSelection) selection;
+			setBaseEnabled(structuredSelection.size() <= 1);
+		}
 	}
 
 	private static Event findEvent(final FBType fbType, final String eventName) {
