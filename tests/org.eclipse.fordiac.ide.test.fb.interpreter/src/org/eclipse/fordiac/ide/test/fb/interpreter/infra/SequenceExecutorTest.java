@@ -10,8 +10,9 @@ import org.junit.Test;
 
 public class SequenceExecutorTest {
 
+	@SuppressWarnings("static-method")
 	@Test
-	public static void test() {
+	public void test() {
 		final FBType fBType = AbstractInterpreterTest.loadFBType("E_CTU"); //$NON-NLS-1$
 		assertNotNull(fBType);
 		final EList<Transaction> trans = SequenceExecutor.executeRandomSequence(fBType, 3, true);

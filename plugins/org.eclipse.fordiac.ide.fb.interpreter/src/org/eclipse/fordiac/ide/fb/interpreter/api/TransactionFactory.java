@@ -39,7 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 public class TransactionFactory {
 
 	public static FBTransaction createFrom(final EventOccurrence inputEO) {
-		return createFrom(inputEO);
+		return createFrom(inputEO, false);
 	}
 
 	private static FBTransaction createFrom(final EventOccurrence inputEO, final boolean addRandomData) {
