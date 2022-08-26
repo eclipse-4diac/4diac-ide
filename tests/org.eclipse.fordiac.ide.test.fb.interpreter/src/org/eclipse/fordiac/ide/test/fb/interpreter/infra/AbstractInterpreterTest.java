@@ -20,7 +20,7 @@ import java.io.IOException;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.api.ServiceFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -78,7 +78,7 @@ public abstract class AbstractInterpreterTest {
 		final FBType fbt = typeEntry.getType();
 
 		if (emptyService) {
-			fbt.setService(ServiceSequenceUtils.createEmptyServiceModel());
+			fbt.setService(ServiceFactory.createDefaultServiceModel());
 		}
 		return fbt;
 	}

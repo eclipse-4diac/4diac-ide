@@ -15,7 +15,13 @@ package org.eclipse.fordiac.ide.fb.interpreter.api;
 
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -45,6 +51,24 @@ public final class EventManagerFactory {
 	public static EventManager createFrom(final Event event, final FBNetwork network) {
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
 		eventManager.getTransactions().add(TransactionFactory.createFrom(event, RuntimeFactory.createFrom(network)));
+		return eventManager;
+	}
+
+	public static EventManager createEventManager(final FBType fbType, final List<Event> events,
+			final boolean random) {
+		if (fbType.getService() == null) {
+			fbType.setService(ServiceFactory.createDefaultServiceModel());
+		}
+		final ResourceSet reset = new ResourceSetImpl();
+		final Resource resource = reset
+				.createResource(URI.createURI("platform:/resource/" + fbType.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
+		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
+		resource.getContents().add(eventManager);
+
+		final List<EventOccurrence> createEos = EventOccFactory.createFrom(events, RuntimeFactory.createFrom(fbType));
+
+		final List<FBTransaction> transactions = TransactionFactory.createFrom(createEos, random);
+		eventManager.getTransactions().addAll(transactions);
 		return eventManager;
 	}
 

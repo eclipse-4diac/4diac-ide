@@ -115,7 +115,9 @@ public final class TransactionFactory {
 				transactions.add(t);
 			}
 		}
-		transactions.get(0).getInputEventOccurrence().setFbRuntime(runtimecopy);
+		if (!transactions.isEmpty()) {
+			transactions.get(0).getInputEventOccurrence().setFbRuntime(runtimecopy);
+		}
 		return transactions;
 
 	}

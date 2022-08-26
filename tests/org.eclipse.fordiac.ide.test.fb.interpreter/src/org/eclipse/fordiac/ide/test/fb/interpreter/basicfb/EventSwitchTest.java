@@ -19,6 +19,7 @@ import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils.setV
 import static org.junit.Assert.assertNotNull;
 
 import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
+import org.eclipse.fordiac.ide.fb.interpreter.api.ServiceFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
@@ -30,7 +31,7 @@ public class EventSwitchTest extends AbstractInterpreterTest {
 	public void test() {
 		final BasicFBType fb = (BasicFBType) loadFBType("E_SWITCH"); //$NON-NLS-1$
 		assertNotNull(fb);
-		fb.setService(ServiceSequenceUtils.createEmptyServiceModel());
+		fb.setService(ServiceFactory.createDefaultServiceModel());
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "G", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$

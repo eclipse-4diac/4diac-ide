@@ -20,17 +20,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
+import org.eclipse.fordiac.ide.fb.interpreter.api.ServiceFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
-import org.eclipse.fordiac.ide.model.libraryElement.Service;
-import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -41,23 +38,10 @@ public final class ServiceSequenceUtils {
 	public static final String INTERNAL_INTERFACE = "internal"; //$NON-NLS-1$
 	public static final String START_STATE = "START"; //$NON-NLS-1$
 
-	public static Service createEmptyServiceModel() {
-		final Service s = LibraryElementFactory.eINSTANCE.createService();
-		final ServiceInterface left = LibraryElementFactory.eINSTANCE.createServiceInterface();
-		left.setName(EXTERNAL_INTERFACE);
-		final ServiceInterface right = LibraryElementFactory.eINSTANCE.createServiceInterface();
-		right.setName(INTERNAL_INTERFACE);
-		s.setLeftInterface(left);
-		s.setRightInterface(right);
-		addServiceSequence(s);
-		return s;
-	}
 
 	public static ServiceSequence addServiceSequence(final org.eclipse.fordiac.ide.model.libraryElement.Service s) {
-		final ServiceSequence seq = LibraryElementFactory.eINSTANCE.createServiceSequence();
-		seq.setName("Test" + s.getServiceSequence().size()); //$NON-NLS-1$
-		s.getServiceSequence().add(seq);
-		return seq;
+		return ServiceFactory.addServiceSequenceTo(s, "Test" + s.getServiceSequence().size(), //$NON-NLS-1$
+				Collections.emptyList());
 	}
 
 	public static void setVariable(final FBType fb, final String name, final String value) {
@@ -107,16 +91,7 @@ public final class ServiceSequenceUtils {
 		return splitAndCleanList(parameter, ":="); //$NON-NLS-1$
 	}
 
-	private static InputPrimitive createInputPrimitive(final FBType dataSource, final FBType destType,
-			final FBTransaction transaction) {
-		final InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
-		inputPrimitive.setEvent(transaction.getInputEventOccurrence().getEvent().getName());
-		inputPrimitive.setInterface(destType.getService().getLeftInterface());
-		inputPrimitive.setParameters(summarizeParameters(dataSource.getInterfaceList().getInputVars()));
-		return inputPrimitive;
-	}
-
-	private static String summarizeParameters(final EList<VarDeclaration> inputVars) {
+	public static String summarizeParameters(final Iterable<VarDeclaration> inputVars) {
 		final StringBuilder builder = new StringBuilder();
 		inputVars.forEach(variable ->
 		summarize(builder, variable)
@@ -138,24 +113,21 @@ public final class ServiceSequenceUtils {
 		builder.append(";\n"); //$NON-NLS-1$
 	}
 
-	private static OutputPrimitive createOutputPrimitive(final EventOccurrence outputEvent, final FBType fbType) {
-		final OutputPrimitive outputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
-		outputPrimitive.setEvent(outputEvent.getEvent().getName());
-		outputPrimitive.setInterface(fbType.getService().getLeftInterface());
-		outputPrimitive.setParameters(summarizeParameters(fbType.getInterfaceList().getOutputVars()));
-		return outputPrimitive;
-	}
 
 	public static void convertTransactionToServiceModel(final ServiceSequence seq, final FBType destType,
 			final FBTransaction transaction) {
-		final ServiceTransaction serviceTransaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
-		seq.getServiceTransaction().add(serviceTransaction);
-		serviceTransaction.setInputPrimitive(createInputPrimitive(
-				getFbTypeFromRuntime(transaction.getInputEventOccurrence()), destType, transaction));
+		final InputPrimitive ip = ServiceFactory.createInputPrimitiveFrom(destType.getService().getLeftInterface(),
+				transaction.getInputEventOccurrence().getEvent(), destType.getInterfaceList().getInputVars());
+		final List<OutputPrimitive> ops = new ArrayList<>();
 		for (final EventOccurrence outputEvent : transaction.getOutputEventOccurrences()) {
-			serviceTransaction.getOutputPrimitive()
-			.add(createOutputPrimitive(outputEvent, getFbTypeFromRuntime(outputEvent)));
+			final FBType type = getFbTypeFromRuntime(outputEvent);
+			if (type != null) {
+				ops.add(ServiceFactory.createOutputPrimitiveFrom(type.getService().getLeftInterface(),
+						outputEvent.getEvent(), type.getInterfaceList().getOutputVars()));
+			}
 		}
+		final ServiceTransaction serviceTransaction = ServiceFactory.createServiceTransactionFrom(ip, ops);
+		seq.getServiceTransaction().add(serviceTransaction);
 	}
 
 	private static FBType getFbTypeFromRuntime(final EventOccurrence eo) {

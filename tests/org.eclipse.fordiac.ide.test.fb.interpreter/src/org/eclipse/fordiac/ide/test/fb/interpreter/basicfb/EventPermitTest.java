@@ -18,6 +18,7 @@ import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFB
 import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils.setVariable;
 
 import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
+import org.eclipse.fordiac.ide.fb.interpreter.api.ServiceFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
@@ -28,7 +29,7 @@ public class EventPermitTest extends AbstractInterpreterTest {
 	@Override
 	public void test() {
 		final BasicFBType fb = (BasicFBType) loadFBType("E_PERMIT"); //$NON-NLS-1$
-		fb.setService(ServiceSequenceUtils.createEmptyServiceModel());
+		fb.setService(ServiceFactory.createDefaultServiceModel());
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		// input PERMIT is default 0, no output event sent

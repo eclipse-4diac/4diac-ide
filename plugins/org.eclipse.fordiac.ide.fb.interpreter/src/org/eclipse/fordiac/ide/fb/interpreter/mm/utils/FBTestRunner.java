@@ -27,7 +27,6 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -134,10 +133,6 @@ public class FBTestRunner {
 			return (FBType) type;
 		}
 		return null;
-	}
-
-	protected static void setVariable(final BaseFBType fb, final String name, final String value) {
-		VariableUtils.setVariable(fb, name, value);
 	}
 
 }

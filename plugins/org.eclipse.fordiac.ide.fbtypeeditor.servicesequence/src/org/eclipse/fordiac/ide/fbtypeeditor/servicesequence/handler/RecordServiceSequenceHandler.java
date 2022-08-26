@@ -28,19 +28,11 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
-import org.eclipse.fordiac.ide.fb.interpreter.api.EventOccFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
@@ -117,7 +109,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		if (isRandom && (count > 0)) {
 			events.addAll(InputGenerator.getRandomEventsSequence(typeCopy, count));
 		}
-		final EventManager eventManager = createEventManager(typeCopy, events, isRandom);
+		final EventManager eventManager = EventManagerFactory.createEventManager(typeCopy, events, isRandom);
 		EventManagerUtils.process(eventManager);
 		if (!isAppend) {
 			seq.getServiceTransaction().clear();
@@ -137,23 +129,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		}
 	}
 
-	private static EventManager createEventManager(final FBType fbType, final List<Event> events,
-			final boolean random) {
-		if (fbType.getService() == null) {
-			fbType.setService(ServiceSequenceUtils.createEmptyServiceModel());
-		}
-		final ResourceSet reset = new ResourceSetImpl();
-		final Resource resource = reset
-				.createResource(URI.createURI("platform:/resource/" + fbType.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
-		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
-		resource.getContents().add(eventManager);
 
-		final List<EventOccurrence> createEos = EventOccFactory.createFrom(events, RuntimeFactory.createFrom(fbType));
-
-		final List<FBTransaction> transactions = TransactionFactory.createFrom(createEos, random);
-		eventManager.getTransactions().addAll(transactions);
-		return eventManager;
-	}
 
 	@Override
 	public void setEnabled(final Object evaluationContext) {
