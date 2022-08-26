@@ -12,7 +12,7 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Martin Melik Merkumians - added some functions
  *   Hesam Rezaee - add Hovering features
- *       
+ *
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.function;
 
@@ -73,6 +73,7 @@ import org.eclipse.fordiac.ide.model.eval.value.WStringValue;
 import org.eclipse.fordiac.ide.model.eval.value.WordValue;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
+@SuppressWarnings("squid:S100") // ST Name conventions must be used here
 public interface StandardFunctions extends Functions {
 
 	@SuppressWarnings("unchecked")
