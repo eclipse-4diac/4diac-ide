@@ -140,7 +140,7 @@ public class UntypedSubAppInterfaceElementEditPart extends InterfaceEditPartForF
 			// we are unfolded and this is an internal connection
 			return new FixedAnchor(getFigure(), !isInput());
 		}
-		return new FixedAnchor(getFigure(), isInput());
+		return super.getTargetConnectionAnchor(connection);
 	}
 
 }

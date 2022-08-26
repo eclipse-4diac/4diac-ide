@@ -207,7 +207,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		if (getModel().getValue() != null) {
 			setVisible(true);
 			setBackground(getModel().hasError());
-			if (getOuterConnections().isEmpty()) {
+			if (getOuterConnections().isEmpty() || getModel().hasError()) {
 				if (!getModel().getValue().isBlank()) {
 					((ValueFigure) getFigure()).updateValue(getModel().getValue());
 					getFigure().setFont(null);
