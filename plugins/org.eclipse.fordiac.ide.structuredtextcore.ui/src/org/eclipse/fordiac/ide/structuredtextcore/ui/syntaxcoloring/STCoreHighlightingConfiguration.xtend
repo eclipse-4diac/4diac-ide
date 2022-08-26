@@ -32,9 +32,13 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 	// Semantic highlighting Styles
 	public static final String STATIC_VAR_ID = STCoreHighlightingStyles.STATIC_VAR_ID;
 	public static final String CALL_FUNCTION_ID = STCoreHighlightingStyles.CALL_FUNCTION_ID;
-	public static final String OUTPUT_FUNCTION_ID = STCoreHighlightingStyles.OUTPUT_FUNCTION_ID;
+	public static final String CALL_FUNCTION_BLOCK_ID = STCoreHighlightingStyles.CALL_FUNCTION_BLOCK_ID;
+	public static final String CALL_METHOD_ID = STCoreHighlightingStyles.CALL_METHOD_ID;
 	public static final String RETURN_FUNCTION_ID = STCoreHighlightingStyles.RETURN_FUNCTION_ID;
+	public static final String RETURN_METHOD_ID = STCoreHighlightingStyles.RETURN_METHOD_ID;
 	public static final String FUNCTIONS_NAME_ID = STCoreHighlightingStyles.FUNCTIONS_NAME_ID;
+	public static final String FUNCTIONS_BLOCK_NAME_ID = STCoreHighlightingStyles.FUNCTIONS_BLOCK_NAME_ID;
+	public static final String METHODS_NAME_ID = STCoreHighlightingStyles.METHODS_NAME_ID;
 
 	override configure(IHighlightingConfigurationAcceptor acceptor) {
 
@@ -56,10 +60,15 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 
 		// Semantic highlighting Styles	
 		acceptor.acceptDefaultHighlighting(CALL_FUNCTION_ID, "CallFunction", callFunctionTextStyle());
+		acceptor.acceptDefaultHighlighting(CALL_FUNCTION_BLOCK_ID, "CallFunctionBlock", callFunctionBlockTextStyle());
+		acceptor.acceptDefaultHighlighting(CALL_METHOD_ID, "CallMethod", callMethodTextStyle());
 		acceptor.acceptDefaultHighlighting(STATIC_VAR_ID, "StaticVar", staticVarTextStyle());
-		acceptor.acceptDefaultHighlighting(OUTPUT_FUNCTION_ID, "OutputFunctionVar", outputFunctionTextStyle());
 		acceptor.acceptDefaultHighlighting(RETURN_FUNCTION_ID, "ReturnFunctionVar", returnFunctionTextStyle());
+		acceptor.acceptDefaultHighlighting(RETURN_METHOD_ID, "ReturnMethodVar", returnMethodTextStyle());
 		acceptor.acceptDefaultHighlighting(FUNCTIONS_NAME_ID, "FunctionsName", functionNameTextStyle());
+		acceptor.acceptDefaultHighlighting(FUNCTIONS_BLOCK_NAME_ID, "FunctionsBlockName", functionBlockNameTextStyle());
+		acceptor.acceptDefaultHighlighting(METHODS_NAME_ID, "MethodsName", methodNameTextStyle());
+		
 
 	}
 	
@@ -73,6 +82,18 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 	def callFunctionTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 128, 255));
+		return textStyle;
+	}
+	
+	def callFunctionBlockTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(0, 128, 255));
+		return textStyle;
+	}
+	
+	def callMethodTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(0, 0, 255));
 		return textStyle;
 	}
 	
@@ -108,6 +129,18 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 		return textStyle;
 	}
 	
+	def functionBlockNameTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(0, 0, 0));
+		return textStyle;
+	}
+	
+	def methodNameTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(0, 0, 0));
+		return textStyle;
+	}
+	
 	override keywordTextStyle(){
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(255, 128, 0));
@@ -134,6 +167,12 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 	}
 	
 	def returnFunctionTextStyle() {
+		var textStyle = defaultTextStyle().copy();
+		textStyle.setColor(new RGB(0, 0, 0));
+		return textStyle;
+	}
+	
+	def returnMethodTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;

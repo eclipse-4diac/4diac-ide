@@ -28,8 +28,12 @@ interface STCoreHighlightingStyles extends HighlightingStyles {
 //Semantic highlighting Styles
 	String STATIC_VAR_ID = "StaticVar";
 	String CALL_FUNCTION_ID = "CallFunction";
-	String OUTPUT_FUNCTION_ID = "OutputFunction";
+	String CALL_FUNCTION_BLOCK_ID = "CallFunctionBlock";
+	String CALL_METHOD_ID = "CallMethod";
 	String RETURN_FUNCTION_ID = "ReturnFunction";
+	String RETURN_METHOD_ID = "ReturnMethod";
 	String FUNCTIONS_NAME_ID = "FunctionsName";
+	String FUNCTIONS_BLOCK_NAME_ID = "FunctionsBlockName";
+	String METHODS_NAME_ID = "MethodsName";
 
 }
