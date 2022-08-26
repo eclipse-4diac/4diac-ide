@@ -1,4 +1,4 @@
- /*******************************************************************************
+/*******************************************************************************
  * Copyright (c) 2021, 2022 Johannes Kepler University Linz and others
  *
  * This program and the accompanying materials are made available under the
@@ -79,9 +79,10 @@ public class SequenceMatcher {
 
 	private static boolean matchValue(final String typeValue, final String expectedValue, final DataType dtp) {
 		if (dtp instanceof BoolType) {
-			return matchBoolean(typeValue, Boolean.parseBoolean(expectedValue) || "1".equals(expectedValue)); //$NON-NLS-1$
+			return matchBoolean(typeValue,
+					Boolean.parseBoolean(expectedValue.strip()) || "1".equals(expectedValue.strip())); //$NON-NLS-1$
 		}
-		return typeValue.equals(expectedValue);
+		return typeValue.strip().equals(expectedValue.strip());
 	}
 
 	private static boolean matchBoolean(final String typeValue, final boolean expectedValue) {

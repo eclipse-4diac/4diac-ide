@@ -16,7 +16,6 @@
 package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.CoreException;
@@ -24,6 +23,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
@@ -142,8 +142,6 @@ public abstract class AbstractInterpreterTest {
 		return transaction;
 	}
 
-
-
 	public static BaseFBType runFBTest(final BaseFBType fb, final ServiceSequence seq) throws IllegalArgumentException {
 		if (fb instanceof BasicFBType) {
 			return runTest((BasicFBType) fb, seq, START_STATE);
@@ -170,17 +168,14 @@ public abstract class AbstractInterpreterTest {
 	}
 
 	private static BaseFBType runSimpleFBTest(final SimpleFBType fb, final ServiceSequence seq) {
-		final ResourceSet reset = new ResourceSetImpl();
-		final Resource resource = reset.createResource(URI.createURI("platform:/resource/" + fb.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
-		resource.getContents().add(eventManager);
 		final SimpleFBTypeRuntime simpleFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createSimpleFBTypeRuntime();
 		simpleFBTypeRT.setSimpleFBType(fb);
 		if (seq.getServiceTransaction().isEmpty()) {
 			seq.getServiceTransaction().add(LibraryElementFactory.eINSTANCE.createServiceTransaction());
 		}
 		final FBTransaction transaction = TransactionFactory.createFrom(fb, seq.getServiceTransaction().get(0));
-		if (transaction != null && transaction.getInputEventOccurrence() != null) {
+		if ((transaction != null) && (transaction.getInputEventOccurrence() != null)) {
 			transaction.getInputEventOccurrence().setFbRuntime(simpleFBTypeRT);
 		}
 		eventManager.getTransactions().add(transaction);
@@ -285,26 +280,21 @@ public abstract class AbstractInterpreterTest {
 		}
 		final int length = result.getOutputEventOccurrences().size();
 		final FBRuntimeAbstract captured = result.getOutputEventOccurrences().get(length - 1).getFbRuntime();
-		final var parameterList = ServiceSequenceUtils.getParametersFromString(parameters);
-		final SequenceMatcher sm=  new SequenceMatcher(getFBType(captured));
+		final var parameterList = ServiceSequenceUtils.splitAndCleanList(parameters, ";"); //$NON-NLS-1$
+		final SequenceMatcher sm = new SequenceMatcher(getFBType(captured));
 
-		for (final List<String> assumption : parameterList) {
-			if (assumption.size() >= 2) {
-				if (sm.matchVariable(parameters, false)) {
-					// !processParameter(assumption.get(0), assumption.get(1), getFBType(captured))) {
-					return false;
-				}
+		for (final String assumption : parameterList) {
+			if (!sm.matchVariable(assumption, false)) {
+				return false;
 			}
 		}
 		return true;
 	}
 
 	private static FBType getFBType(final FBRuntimeAbstract captured) {
-		if (captured instanceof BasicFBTypeRuntime) {
-			return ((BasicFBTypeRuntime) captured).getBasicfbtype();
-		}
-		if (captured instanceof SimpleFBTypeRuntime) {
-			return ((SimpleFBTypeRuntime) captured).getSimpleFBType();
+		final EObject model = captured.getModel();
+		if (model instanceof FBType) {
+			return (FBType) model;
 		}
 		return null;
 	}
