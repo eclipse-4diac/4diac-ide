@@ -24,13 +24,13 @@ public class StationCtrlTestAutomated extends AbstractInterpreterTest {
 		final BasicFBType fb = (BasicFBType) loadFBType("StationCtrl2", false); //$NON-NLS-1$
 
 		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
-		runTest(fb, seq, "START"); //$NON-NLS-1$
+		runFBTest(fb, seq, "START"); //$NON-NLS-1$
 
 		seq = fb.getService().getServiceSequence().get(1);
-		runTest(fb, seq, "START"); //$NON-NLS-1$
+		runFBTest(fb, seq, "START"); //$NON-NLS-1$
 
 		seq = fb.getService().getServiceSequence().get(2);
-		runTest(fb, seq, "processingPart"); //$NON-NLS-1$
+		runFBTest(fb, seq, "processingPart"); //$NON-NLS-1$
 	}
 
 

@@ -46,7 +46,7 @@ public class StationCtrlTest extends AbstractInterpreterTest {
 		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "ErrorCode", "2"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("Error", "StopConv")); //$NON-NLS-1$ //$NON-NLS-2$
-		runTest(fb, seq, "processingPart"); //$NON-NLS-1$
+		runFBTest(fb, seq, "processingPart"); //$NON-NLS-1$
 	}
 
 

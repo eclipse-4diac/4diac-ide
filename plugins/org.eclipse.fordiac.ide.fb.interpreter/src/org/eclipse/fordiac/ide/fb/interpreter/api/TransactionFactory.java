@@ -17,26 +17,23 @@
 package org.eclipse.fordiac.ide.fb.interpreter.api;
 
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.emf.ecore.util.EcoreUtil.Copier;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
-public class TransactionFactory {
+public final class TransactionFactory {
 
 	public static FBTransaction createFrom(final EventOccurrence inputEO) {
 		return createFrom(inputEO, false);
@@ -45,7 +42,7 @@ public class TransactionFactory {
 	private static FBTransaction createFrom(final EventOccurrence inputEO, final boolean addRandomData) {
 		final FBTransaction createdTr = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
 		createdTr.setInputEventOccurrence(inputEO);
-		if (addRandomData) {
+		if (addRandomData && null != inputEO) {
 			createdTr.getInputVariables().addAll(InputGenerator.getRandomData(inputEO.getEvent()));
 		}
 		return createdTr;
@@ -78,22 +75,23 @@ public class TransactionFactory {
 	}
 
 	public static FBTransaction createFrom(final FBType fb, final ServiceTransaction st) {
+		if (st == null || st.getInputPrimitive() == null) {
+			throw new IllegalArgumentException("TransactionFactory could not access ServiceTransaction: invalid"); //$NON-NLS-1$
+		}
 		final String inputEvent = st.getInputPrimitive().getEvent();
 		if (inputEvent != null) {
 			final Event eventPin = (Event) fb.getInterfaceList().getInterfaceElement(inputEvent);
 			if (eventPin == null) {
 				throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist"); //$NON-NLS-1$//$NON-NLS-2$
 			}
-			final EventOccurrence eventOccurrence = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
-			eventOccurrence.setEvent(eventPin);
-			final FBTransaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
-			transaction.setInputEventOccurrence(eventOccurrence);
+			final FBType copyFb = EcoreUtil.copy(fb);
+			final FBTransaction transaction = createFrom(eventPin, RuntimeFactory.createFrom(copyFb));
 			// process parameter and set variables
 			final String inputParameters = st.getInputPrimitive().getParameters();
 			final var paramList = ServiceSequenceUtils.getParametersFromString(inputParameters);
 			for (final List<String> parameter : paramList) {
 				if (parameter.size() == 2) {
-					VariableUtils.setVariable(fb, parameter.get(0), parameter.get(1));
+					VariableUtils.setVariable(copyFb, parameter.get(0), parameter.get(1));
 				}
 			}
 			return transaction;
@@ -101,20 +99,19 @@ public class TransactionFactory {
 		return null;
 	}
 
-	public static Collection<Transaction> createFrom(final BasicFBType fb, final ServiceSequence seq,
-			final BasicFBTypeRuntime runtime) {
-		final List<Transaction> transactions = new ArrayList<>();
+	public static List<FBTransaction> createFrom(final FBType fb, final ServiceSequence seq,
+			final FBRuntimeAbstract runtimecopy) {
+		if (seq.getServiceTransaction().isEmpty()) {
+			return Collections.emptyList();
+		}
+		final List<FBTransaction> transactions = new ArrayList<>();
 		for (final ServiceTransaction st : seq.getServiceTransaction()) {
 			final FBTransaction t = createFrom(fb, st);
 			if (t != null) {
 				transactions.add(t);
 			}
 		}
-		// The first transaction has a copy of the BasicFBTypeRuntime
-		final Copier copier = new Copier();
-		final BasicFBTypeRuntime copyBasicFBTypeRuntime = (BasicFBTypeRuntime) copier.copy(runtime);
-		copier.copyReferences();
-		transactions.get(0).getInputEventOccurrence().setFbRuntime(copyBasicFBTypeRuntime);
+		transactions.get(0).getInputEventOccurrence().setFbRuntime(runtimecopy);
 		return transactions;
 
 	}

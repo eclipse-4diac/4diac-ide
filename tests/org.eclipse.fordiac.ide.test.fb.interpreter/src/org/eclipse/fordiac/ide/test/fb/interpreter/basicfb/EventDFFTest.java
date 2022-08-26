@@ -41,31 +41,31 @@ public class EventDFFTest extends AbstractInterpreterTest {
 		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		runTest(fb, seq, "SET"); //$NON-NLS-1$
+		runFBTest(fb, seq, "SET"); //$NON-NLS-1$
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		runTest(fb, seq, "RESET"); //$NON-NLS-1$
+		runFBTest(fb, seq, "RESET"); //$NON-NLS-1$
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("CLK")); //$NON-NLS-1$
 
-		runTest(fb, seq, "SET"); //$NON-NLS-1$
+		runFBTest(fb, seq, "SET"); //$NON-NLS-1$
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
-		runTest(fb, seq, "SET"); //$NON-NLS-1$
+		runFBTest(fb, seq, "SET"); //$NON-NLS-1$
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransaction("CLK")); //$NON-NLS-1$
 
-		runTest(fb, seq, "RESET"); //$NON-NLS-1$
+		runFBTest(fb, seq, "RESET"); //$NON-NLS-1$
 	}
 
 	private static ServiceSequence newServiceSequence(final BasicFBType fb) {

@@ -29,10 +29,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class RuntimeFactory {
+public final class RuntimeFactory {
 
 	public static FBRuntimeAbstract createFrom(final FBNetworkElement fb) {
+		if (null == fb) {
+			return null;
+		}
 		if (fb instanceof SubApp) {
 			return (createFrom(fb.getFbNetwork()));
 		}
@@ -73,25 +77,34 @@ public class RuntimeFactory {
 	}
 
 	private static FBRuntimeAbstract createFrom(final CompositeFBType fb) {
-		final FBNetworkRuntime basicFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime();
-		basicFBTypeRT.setFbnetwork(fb.getFBNetwork());
-		return basicFBTypeRT;
+		final FBNetworkRuntime compositeRT = OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime();
+		compositeRT.setFbnetwork(fb.getFBNetwork());
+		return compositeRT;
 	}
 
 	public static FBRuntimeAbstract createFrom(final FBNetwork app) {
-		final FBNetworkRuntime basicFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime();
-		basicFBTypeRT.setFbnetwork(app);
-		return basicFBTypeRT;
+		final FBNetworkRuntime networkRT = OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime();
+		networkRT.setFbnetwork(app);
+		return networkRT;
 	}
 
 	public static void setStartState(final FBRuntimeAbstract fbRT, final String startStateName) {
 		if (fbRT instanceof BasicFBTypeRuntime) {
 			final BasicFBTypeRuntime basicFBTypeRT = (BasicFBTypeRuntime) fbRT;
-
-			final EList<ECState> stateList = basicFBTypeRT.getBasicfbtype().getECC().getECState();
-			final ECState startState = stateList.stream().filter(s -> s.getName().equals(startStateName))
-					.collect(Collectors.toList()).get(0);
-			basicFBTypeRT.setActiveState(startState);
+			if (basicFBTypeRT.getBasicfbtype() == null || basicFBTypeRT.getBasicfbtype().getECC() == null) {
+				FordiacLogHelper.logWarning("RuntimeFactory could not set start state of FBType"); //$NON-NLS-1$
+				return;
+			}
+			if (startStateName != null) {
+				final EList<ECState> stateList = basicFBTypeRT.getBasicfbtype().getECC().getECState();
+				final ECState startState = stateList.stream().filter(s -> s.getName().equals(startStateName))
+						.findFirst().orElse(null);
+				if (startState != null) {
+					basicFBTypeRT.setActiveState(startState);
+					return;
+				}
+			}
+			basicFBTypeRT.setActiveState(basicFBTypeRT.getBasicfbtype().getECC().getStart());
 		}
 	}
 

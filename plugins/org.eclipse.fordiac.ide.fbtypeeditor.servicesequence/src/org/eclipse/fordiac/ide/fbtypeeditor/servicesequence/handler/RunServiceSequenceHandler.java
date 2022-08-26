@@ -48,7 +48,7 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 				try {
 					final BasicFBType fbType = EcoreUtil.copy((BasicFBType) seq.getService().getFBType());
 					if ((seq.getStartState() != null) && !seq.getStartState().isBlank()) { // $NON-NLS-1$
-						AbstractInterpreterTest.runTest(fbType, seq,
+						AbstractInterpreterTest.runFBTest(fbType, seq,
 								seq.getStartState());
 					} else {
 						AbstractInterpreterTest.runFBTest(fbType, seq);

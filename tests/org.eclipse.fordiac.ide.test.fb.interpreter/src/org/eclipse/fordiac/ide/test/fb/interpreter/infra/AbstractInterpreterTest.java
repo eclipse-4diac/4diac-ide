@@ -16,28 +16,19 @@
 package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
-import org.eclipse.fordiac.ide.fb.interpreter.api.EventOccFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
@@ -46,8 +37,6 @@ import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -57,7 +46,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -142,86 +130,31 @@ public abstract class AbstractInterpreterTest {
 		return transaction;
 	}
 
-	public static BaseFBType runFBTest(final BaseFBType fb, final ServiceSequence seq) throws IllegalArgumentException {
-		if (fb instanceof BasicFBType) {
-			return runTest((BasicFBType) fb, seq, START_STATE);
-		}
-		return runSimpleFBTest((SimpleFBType) fb, seq);
-	}
-
 	public static EList<Transaction> runFBNetworkTest(final FBNetwork network, final Event event) {
-		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
-		// network.eResource().getContents().add(eventManager);
-		// TODO create convenience methods in eventManagerUtils
-
-		final EventOccurrence eventOccurrence = EventOccFactory.createFrom(event);
-		// final FBNetworkRuntime runtime = RuntimeFactory.createFrom(network);
-		final FBNetworkRuntime runtime = OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime();
-		runtime.setFbnetwork(EcoreUtil.copy(network));
-		eventOccurrence.setFbRuntime(runtime);
-
-		final FBTransaction transaction = TransactionFactory.createFrom(eventOccurrence);
-		eventManager.getTransactions().add(transaction);
-
+		final EventManager eventManager = EventManagerFactory.createFrom(event, EcoreUtil.copy(network));
 		EventManagerUtils.processNetwork(eventManager);
 		return eventManager.getTransactions();
 	}
 
-	private static BaseFBType runSimpleFBTest(final SimpleFBType fb, final ServiceSequence seq) {
-		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
-		final SimpleFBTypeRuntime simpleFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createSimpleFBTypeRuntime();
-		simpleFBTypeRT.setSimpleFBType(fb);
-		if (seq.getServiceTransaction().isEmpty()) {
-			seq.getServiceTransaction().add(LibraryElementFactory.eINSTANCE.createServiceTransaction());
-		}
-		final FBTransaction transaction = TransactionFactory.createFrom(fb, seq.getServiceTransaction().get(0));
-		if ((transaction != null) && (transaction.getInputEventOccurrence() != null)) {
-			transaction.getInputEventOccurrence().setFbRuntime(simpleFBTypeRT);
-		}
-		eventManager.getTransactions().add(transaction);
-
-		EventManagerUtils.process(eventManager);
-
-		checkResults(seq, eventManager);
-
-		return null;
+	public static FBType runFBTest(final FBType fb, final ServiceSequence seq) {
+		return runFBTest(fb, seq, null);
 	}
 
-	public static BasicFBType runTest(final BasicFBType fb, final ServiceSequence seq, final String startStateName)
+	public static FBType runFBTest(final FBType fb, final ServiceSequence seq, final String startStateName)
 			throws IllegalArgumentException {
-		final ResourceSet reset = new ResourceSetImpl();
-		final Resource resource = reset.createResource(URI.createURI("platform:/resource/" + fb.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
-		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
-		resource.getContents().add(eventManager);
-		final BasicFBTypeRuntime basicFBTypeRT = ((BasicFBTypeRuntime) RuntimeFactory.createFrom(fb));
-		// set the start state
-		final EList<ECState> stateList = basicFBTypeRT.getBasicfbtype().getECC().getECState();
-		final ECState startState = stateList.stream().filter(s -> s.getName().equals(startStateName))
-				.collect(Collectors.toList()).get(0);
-		basicFBTypeRT.setActiveState(startState);
-
-		eventManager.getTransactions().addAll(TransactionFactory.createFrom(fb, seq, basicFBTypeRT));
-
-		EventManagerUtils.process(eventManager);
-		// TODO save the transactions
-
-		checkResults(seq, eventManager);
-
-		final int nT = eventManager.getTransactions().size();
-		final FBTransaction t = (FBTransaction) eventManager.getTransactions().get(nT - 1);
-		BasicFBType next = null;
-		if (!t.getOutputEventOccurrences().isEmpty()) {
-			final int nEv = t.getOutputEventOccurrences().size();
-			final BasicFBTypeRuntime last = (BasicFBTypeRuntime) (t.getOutputEventOccurrences().get(nEv - 1)
-					.getFbRuntime());
-			next = last.getBasicfbtype();
-		} else {
-			next = fb;
+		if (seq.getServiceTransaction().isEmpty()) {
+			return fb;
 		}
-
-		eventManager.getTransactions().clear();
-		return next;
+		final FBRuntimeAbstract rt = RuntimeFactory.createFrom(fb);
+		RuntimeFactory.setStartState(rt, startStateName);
+		final List<FBTransaction> transaction = TransactionFactory.createFrom(fb, seq, rt);
+		final EventManager eventManager = EventManagerFactory.createFrom(transaction);
+		EventManagerUtils.process(eventManager);
+		checkResults(seq, eventManager);
+		return EventManagerUtils.getLastTypeFromSequence(fb, eventManager);
 	}
+
+
 
 	private static void checkResults(final ServiceSequence seq, final EventManager eventManager)
 			throws IllegalArgumentException {
@@ -292,15 +225,14 @@ public abstract class AbstractInterpreterTest {
 	}
 
 	private static FBType getFBType(final FBRuntimeAbstract captured) {
-		final EObject model = captured.getModel();
-		if (model instanceof FBType) {
-			return (FBType) model;
+		final EObject type = captured.getModel();
+		if (type instanceof FBType) {
+			return (FBType) type;
 		}
 		return null;
 	}
 
-	protected static void setVariable(final BaseFBType fb, final String string, final String string2) {
-		VariableUtils.setVariable(fb, string, string2);
-
+	protected static void setVariable(final BaseFBType fb, final String name, final String value) {
+		VariableUtils.setVariable(fb, name, value);
 	}
 }

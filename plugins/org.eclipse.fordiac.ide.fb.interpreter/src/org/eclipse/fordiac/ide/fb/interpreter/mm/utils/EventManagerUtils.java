@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Johannes Kepler University Linz
+ * Copyright (c) 2021, 2022 Johannes Kepler University Linz and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,10 +10,9 @@
  * Contributors:
  *   Antonio Garmend�a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
+ *   Paul Pavlicek - cleanup
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
-
-import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -21,33 +20,13 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
-import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-public class EventManagerUtils {
+public final class EventManagerUtils {
 
-	private EventManagerUtils() {
-		throw new AssertionError("This class cannot be inherited"); //$NON-NLS-1$
-	}
-
-	public static final EventManager createFrom(final List<? extends Transaction> trans) {
-		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
-		eventManager.getTransactions().addAll(trans);
-		return eventManager;
-	}
-
-	public static final EventManager createFrom(final List<Event> events, final FBType fbtype) {
-		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
-		eventManager.getTransactions().addAll(TransactionFactory.createFrom(events, RuntimeFactory.createFrom(fbtype)));
-		return eventManager;
-	}
-
-	public static final void process(final EventManager eventManager) {
+	public static void process(final EventManager eventManager) {
 		final var transactions = eventManager.getTransactions();
 		for (var i = 0; i < transactions.size(); i++) {
 			final var transaction = transactions.get(i);
@@ -62,13 +41,27 @@ public class EventManagerUtils {
 		}
 	}
 
-	private static FBRuntimeAbstract getLatestRuntime(final FBTransaction transaction) {
+	public static FBRuntimeAbstract getLatestRuntime(final FBTransaction transaction) {
 		// choose the latest: input event occurr. or last output event occurr.
 		if (transaction.getOutputEventOccurrences().isEmpty()) {
 			return transaction.getInputEventOccurrence().getFbRuntime();
 		}
 		return transaction.getOutputEventOccurrences().get(transaction.getOutputEventOccurrences().size() - 1)
 				.getFbRuntime();
+	}
+
+	public static FBType getLastTypeFromSequence(final FBType startFb, final EventManager eventManager) {
+		final int nT = eventManager.getTransactions().size();
+		final FBTransaction t = (FBTransaction) eventManager.getTransactions().get(nT - 1);
+		FBType next = null;
+		if (!t.getOutputEventOccurrences().isEmpty()) {
+			final int nEv = t.getOutputEventOccurrences().size();
+			final FBRuntimeAbstract last = (t.getOutputEventOccurrences().get(nEv - 1).getFbRuntime());
+			next = (FBType) last.getModel();
+		} else {
+			next = startFb;
+		}
+		return next;
 	}
 
 	private static boolean moreTransactionsLeft(final EList<Transaction> transactions, final int i) {
@@ -97,7 +90,7 @@ public class EventManagerUtils {
 		}
 	}
 
-	public static final void processNetwork(final EventManager eventManager) {
+	public static void processNetwork(final EventManager eventManager) {
 		final var transactions = eventManager.getTransactions();
 		for (var i = 0; i < transactions.size(); i++) {
 			final var transaction = transactions.get(i);
@@ -128,4 +121,7 @@ public class EventManagerUtils {
 		}
 	}
 
+	private EventManagerUtils() {
+		throw new AssertionError("This class cannot be inherited"); //$NON-NLS-1$
+	}
 }

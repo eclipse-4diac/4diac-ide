@@ -15,10 +15,12 @@ package org.eclipse.fordiac.ide.fb.interpreter.inputgenerator;
 
 import java.util.List;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
@@ -34,11 +36,11 @@ public final class SequenceExecutor {
 	public static EList<Transaction> executeRandomSequence(final FBType inputfb, final int count, final boolean needRandomData) {
 		final List<Event> events = InputGenerator.getRandomEventsSequence(inputfb, count);
 		if (!events.isEmpty()) {
-			return null;
+			return ECollections.emptyEList();
 		}
 		final List<FBTransaction> trans = TransactionFactory.createFrom(events, RuntimeFactory.createFrom(inputfb),
 				needRandomData);
-		final EventManager eventManager = EventManagerUtils.createFrom(trans);
+		final EventManager eventManager = EventManagerFactory.createFrom(trans);
 		EventManagerUtils.process(eventManager);
 		return eventManager.getTransactions();
 	}
