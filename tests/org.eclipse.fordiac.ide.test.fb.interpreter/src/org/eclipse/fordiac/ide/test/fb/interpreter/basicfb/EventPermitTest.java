@@ -13,11 +13,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBTest;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils.setVariable;
+
+import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
 
 public class EventPermitTest extends AbstractInterpreterTest {
 
@@ -28,14 +32,14 @@ public class EventPermitTest extends AbstractInterpreterTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		// input PERMIT is default 0, no output event sent
-		addTransaction(seq, new FBTransaction("EI")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("EI")); //$NON-NLS-1$
 		runFBTest(fb, seq);
 
 		// set input PERMIT to 1, event goes through
 		fb.getService().getServiceSequence().clear();
 		final ServiceSequence seq2 = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PERMIT", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq2, new FBTransaction("EI", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq2, new FBTransactionBuilder("EI", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
 
 	}
 

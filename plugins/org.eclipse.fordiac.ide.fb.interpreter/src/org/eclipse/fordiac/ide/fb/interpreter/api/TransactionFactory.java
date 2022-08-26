@@ -30,6 +30,10 @@ import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
+import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
@@ -121,6 +125,31 @@ public final class TransactionFactory {
 		return createFrom(EventOccFactory.createFrom(inputEvents, initialRuntime), addRandomData);
 	}
 
+	public static ServiceTransaction addTransaction(final ServiceSequence seq,
+			final org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder fbtrans) {
+		// TODO Move Somewere better
+		final ServiceTransaction transaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
+		seq.getServiceTransaction().add(transaction);
+		if (fbtrans.getInputEvent() != null) {
+			final InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
+			inputPrimitive.setEvent(fbtrans.getInputEvent());
+			transaction.setInputPrimitive(inputPrimitive);
+		}
+
+		if (!fbtrans.getOutputEvent().isEmpty()) {
+			for (final String event : fbtrans.getOutputEvent()) {
+				final OutputPrimitive outputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
+				outputPrimitive.setEvent(event);
+				outputPrimitive.setInterface(((Service) seq.eContainer()).getLeftInterface());
+				outputPrimitive.setParameters(""); //$NON-NLS-1$
+				for (final String parameter : fbtrans.getOutputParameter()) {
+					outputPrimitive.setParameters(outputPrimitive.getParameters() + parameter + ";"); //$NON-NLS-1$
+				}
+				transaction.getOutputPrimitive().add(outputPrimitive);
+			}
+		}
+		return transaction;
+	}
 	private TransactionFactory() {
 		throw new UnsupportedOperationException("this class should not be instantiated"); //$NON-NLS-1$
 	}

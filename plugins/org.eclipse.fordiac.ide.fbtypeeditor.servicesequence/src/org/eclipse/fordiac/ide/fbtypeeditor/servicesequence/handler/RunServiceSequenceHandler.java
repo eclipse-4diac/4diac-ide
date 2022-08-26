@@ -24,10 +24,10 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -48,10 +48,10 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 				try {
 					final BasicFBType fbType = EcoreUtil.copy((BasicFBType) seq.getService().getFBType());
 					if ((seq.getStartState() != null) && !seq.getStartState().isBlank()) { // $NON-NLS-1$
-						AbstractInterpreterTest.runFBTest(fbType, seq,
+						FBTestRunner.runFBTest(fbType, seq,
 								seq.getStartState());
 					} else {
-						AbstractInterpreterTest.runFBTest(fbType, seq);
+						FBTestRunner.runFBTest(fbType, seq);
 					}
 					MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
 							Messages.RunServiceSequenceHandler_Success,

@@ -11,13 +11,13 @@
  *   Antonio Garmend�a, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.test.fb.interpreter.infra;
+package org.eclipse.fordiac.ide.fb.interpreter.api;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class FBTransaction {
+public class FBTransactionBuilder {
 
 	private final String inputEvent;
 	private final List<String> outputEvent;
@@ -35,36 +35,36 @@ public class FBTransaction {
 		return outputParameter;
 	}
 
-	public FBTransaction(String inputEvent, List<String> outputEvent, List<String> outputParameter) {
+	public FBTransactionBuilder(final String inputEvent, final List<String> outputEvent, final List<String> outputParameter) {
 		super();
 		this.inputEvent = inputEvent;
 		this.outputEvent = outputEvent;
 		this.outputParameter = outputParameter;
 	}
 
-	public FBTransaction(String inputEvent, String outputEvent, String outputParameter) {
+	public FBTransactionBuilder(final String inputEvent, final String outputEvent, final String outputParameter) {
 		super();
 		this.inputEvent = inputEvent;
 		this.outputEvent = Arrays.asList(outputEvent);
 		this.outputParameter = Arrays.asList(outputParameter);
 	}
 
-	public FBTransaction(String inputEvent) {
+	public FBTransactionBuilder(final String inputEvent) {
 		super();
 		this.inputEvent = inputEvent;
 		this.outputEvent = Collections.emptyList();
 		this.outputParameter = Collections.emptyList();
 	}
 
-	public FBTransaction(String inputEvent, String outputEvent) {
+	public FBTransactionBuilder(final String inputEvent, final String outputEvent) {
 		this(inputEvent, outputEvent, ""); //$NON-NLS-1$
 	}
 
-	public FBTransaction(String inputEvent, List<String> outputEvents) {
+	public FBTransactionBuilder(final String inputEvent, final List<String> outputEvents) {
 		this(inputEvent, outputEvents, Collections.emptyList());
 	}
 
-	public static FBTransaction getSimpleFBTransaction(String parameters) {
-		return new FBTransaction("REQ", "CNF", parameters);
+	public static FBTransactionBuilder getSimpleFBTransaction(final String parameters) {
+		return new FBTransactionBuilder("REQ", "CNF", parameters);  //$NON-NLS-1$//$NON-NLS-2$
 	}
 }

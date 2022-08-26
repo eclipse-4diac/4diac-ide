@@ -13,11 +13,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBTest;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils.setVariable;
+
+import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
 
 public class EventDFFTest extends AbstractInterpreterTest {
 
@@ -27,43 +31,43 @@ public class EventDFFTest extends AbstractInterpreterTest {
 		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("CLK")); //$NON-NLS-1$
 
 		runFBTest(fb, seq);
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		runFBTest(fb, seq);
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		runFBTest(fb, seq, "SET"); //$NON-NLS-1$
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder("CLK", "EO", "Q:=TRUE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		runFBTest(fb, seq, "RESET"); //$NON-NLS-1$
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "TRUE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("CLK")); //$NON-NLS-1$
 
 		runFBTest(fb, seq, "SET"); //$NON-NLS-1$
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder("CLK", "EO", "Q:=FALSE")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		runFBTest(fb, seq, "SET"); //$NON-NLS-1$
 
 		seq = newServiceSequence(fb);
 		setVariable(fb, "D", "FALSE"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("CLK")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("CLK")); //$NON-NLS-1$
 
 		runFBTest(fb, seq, "RESET"); //$NON-NLS-1$
 	}

@@ -166,6 +166,7 @@ public final class ServiceSequenceUtils {
 		return null;
 	}
 
+
 	private ServiceSequenceUtils() {
 		throw new UnsupportedOperationException("utility class should not be instantiated"); //$NON-NLS-1$
 	}

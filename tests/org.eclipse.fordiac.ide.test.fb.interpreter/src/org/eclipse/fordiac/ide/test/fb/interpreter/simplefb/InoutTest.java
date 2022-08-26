@@ -13,10 +13,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.simplefb;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBTest;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils.setVariable;
+
+import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
 
 public class InoutTest extends AbstractInterpreterTest {
 
@@ -26,7 +30,7 @@ public class InoutTest extends AbstractInterpreterTest {
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "IN", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, FBTransaction.getSimpleFBTransaction("OUT:=1")); //$NON-NLS-1$
+		addTransaction(seq, FBTransactionBuilder.getSimpleFBTransaction("OUT:=1")); //$NON-NLS-1$
 		runFBTest(fb, seq);
 	}
 

@@ -1,5 +1,6 @@
 package org.eclipse.fordiac.ide.test.fb.interpreter.fbnetwork;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBNetworkTest;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
@@ -18,16 +19,16 @@ public class CounterNetworkTest extends AbstractInterpreterTest {
 		final FBNetwork network = loadFbNetwork("ExampleFbNetwork", "CounterNetwork"); //$NON-NLS-1$ //$NON-NLS-2$
 		assertNotNull(network);
 
-		EList<Transaction> returnedTransactions =
+		final EList<Transaction> returnedTransactions =
 				runFBNetworkTest(network, (Event) network.getFBNamed("E_SPLIT").getInterfaceElement("EI")); //$NON-NLS-1$ //$NON-NLS-2$
 
 
-		Transaction finalResult = returnedTransactions.get(returnedTransactions.size() - 1);
+		final Transaction finalResult = returnedTransactions.get(returnedTransactions.size() - 1);
 		assertTrue(finalResult.getInputEventOccurrence().getEvent().getName().equals("CU"));//$NON-NLS-1$
-		VarDeclaration quPin = (VarDeclaration) finalResult.getInputEventOccurrence().getParentFB().getInterfaceElement("QU");
-		assertTrue(quPin.getValue().getValue().equals("TRUE")); //$NON-NLS-1$ //$NON-NLS-2$
-		VarDeclaration cvPin = (VarDeclaration) finalResult.getInputEventOccurrence().getParentFB().getInterfaceElement("CV");
-		assertTrue(cvPin.getValue().getValue().equals("1")); //$NON-NLS-1$ //$NON-NLS-2$
+		final VarDeclaration quPin = (VarDeclaration) finalResult.getInputEventOccurrence().getParentFB().getInterfaceElement("QU");
+		assertTrue(quPin.getValue().getValue().equals("TRUE")); //$NON-NLS-1$
+		final VarDeclaration cvPin = (VarDeclaration) finalResult.getInputEventOccurrence().getParentFB().getInterfaceElement("CV");
+		assertTrue(cvPin.getValue().getValue().equals("1")); //$NON-NLS-1$
 
 	}
 }
