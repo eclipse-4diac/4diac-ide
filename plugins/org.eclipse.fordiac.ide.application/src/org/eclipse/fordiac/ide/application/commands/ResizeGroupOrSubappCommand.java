@@ -136,8 +136,6 @@ public class ResizeGroupOrSubappCommand extends Command {
 
 	private void checkAndCreateResizeCommand() {
 		graphicalEditPart.getViewer().flush();
-		Rectangle fbBounds = null;
-		Rectangle containerBounds = null;
 		final List<Object> objects = new ArrayList<>();
 		if (fbnetworkElements == null) {
 			fbnetworkElements = ((AbstractContainerContentEditPart) graphicalEditPart).getModel().getNetworkElements();
@@ -147,6 +145,23 @@ public class ResizeGroupOrSubappCommand extends Command {
 			objects.add(graphicalEditPart.getViewer().getEditPartRegistry().get(element));
 		}
 
+		final Rectangle fbBounds = getFBBounds(objects);
+		final Rectangle containerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(graphicalEditPart);
+		if (fbBounds != null && !containerBounds.contains(fbBounds)) {
+			fbBounds.union(containerBounds);
+			if (graphicalEditPart instanceof UnfoldedSubappContentEditPart) {
+				this.changeContainerBoundsCommand = ContainerContentLayoutPolicy.createChangeBoundsCommand(
+						((UnfoldedSubappContentEditPart) graphicalEditPart).getModel().getSubapp(), containerBounds,
+						fbBounds);
+			} else if (graphicalEditPart instanceof GroupContentEditPart) {
+				this.changeContainerBoundsCommand = ContainerContentLayoutPolicy.createChangeBoundsCommand(
+						((GroupContentEditPart) graphicalEditPart).getModel().getGroup(), containerBounds, fbBounds);
+			}
+		}
+	}
+
+	private Rectangle getFBBounds(final List<Object> objects) {
+		Rectangle fbBounds = null;
 		for (final Object object : objects) {
 			if (object instanceof GraphicalEditPart) {
 				final IFigure fbFigure = ((GraphicalEditPart) object).getFigure();
@@ -157,35 +172,20 @@ public class ResizeGroupOrSubappCommand extends Command {
 						fbBounds.union(fbFigure.getBounds().getCopy());
 					}
 				}
-
-				// add bounds of input pins
-				final Rectangle pinBounds = fbBounds;
-				final Map<Object, Object> editPartRegistry = graphicalEditPart.getViewer().getEditPartRegistry();
-				fbnetworkElements.forEach(el -> el.getInterface().getInputVars().stream().filter(Objects::nonNull)
-						.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
-						.forEach(ep -> {
-							final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds().getCopy();
-							pinBounds.union(pin);
-						}));
-				fbBounds = pinBounds;
+				addValueBounds(fbBounds);
 			}
 		}
+		return fbBounds;
+	}
 
-		if (graphicalEditPart instanceof GraphicalEditPart) {
-			containerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(graphicalEditPart);
-			if (fbBounds != null && !containerBounds.contains(fbBounds)) {
-				fbBounds.union(containerBounds);
-				if (graphicalEditPart instanceof UnfoldedSubappContentEditPart) {
-					this.changeContainerBoundsCommand = ContainerContentLayoutPolicy.createChangeBoundsCommand(
-							((UnfoldedSubappContentEditPart) graphicalEditPart).getModel().getSubapp(), containerBounds,
-							fbBounds);
-				} else if (graphicalEditPart instanceof GroupContentEditPart) {
-					this.changeContainerBoundsCommand = ContainerContentLayoutPolicy.createChangeBoundsCommand(
-							((GroupContentEditPart) graphicalEditPart).getModel().getGroup(), containerBounds,
-							fbBounds);
-				}
-			}
-		}
+	private void addValueBounds(final Rectangle fbBounds) {
+		final Map<Object, Object> editPartRegistry = graphicalEditPart.getViewer().getEditPartRegistry();
+		fbnetworkElements.forEach(el -> el.getInterface().getInputVars().stream().filter(Objects::nonNull)
+				.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
+				.forEach(ep -> {
+					final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds().getCopy();
+					fbBounds.union(pin);
+				}));
 	}
 
 }

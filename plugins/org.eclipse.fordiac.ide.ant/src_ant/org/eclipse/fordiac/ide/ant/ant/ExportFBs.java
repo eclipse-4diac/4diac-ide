@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.CMakeListsMarker;
 
 public class ExportFBs extends AbstractExportFBs {
 
-	private final String ANT_EXPORT_TASK_DIRECTORY_NAME = "exported_FBs"; //$NON-NLS-1$
+	private static final String ANT_EXPORT_TASK_DIRECTORY_NAME = "exported_FBs"; //$NON-NLS-1$
 
 	protected boolean exportCMakeList = false;
 

@@ -40,14 +40,14 @@ public class NewGroupHandler extends AbstractContainerElementHandler {
 		boolean notInGroup = false;
 		if (sel instanceof StructuredSelection) {
 			final StructuredSelection selection = (StructuredSelection) sel;
-			notInGroup = selection.toList().stream().map(ep -> getModelElement(ep))
+			notInGroup = selection.toList().stream().map(NewGroupHandler::getModelElement)
 					.filter(FBNetworkElement.class::isInstance)
 					.noneMatch(fbel -> ((FBNetworkElement) fbel).isInGroup());
 		}
 		setBaseEnabled(notInGroup);
 	}
 
-	private Object getModelElement(final Object ep) {
+	private static Object getModelElement(final Object ep) {
 		if (ep instanceof EditPart) {
 			return ((EditPart) ep).getModel();
 		}

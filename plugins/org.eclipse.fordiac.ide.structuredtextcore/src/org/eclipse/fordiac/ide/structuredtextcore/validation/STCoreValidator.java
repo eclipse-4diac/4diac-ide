@@ -28,8 +28,6 @@ import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isStringValueValid;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.StreamSupport;
 
 import org.eclipse.emf.ecore.EObject;
@@ -66,7 +64,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.xtext.EcoreUtil2;
@@ -437,9 +434,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Check
 	public void checkDuplicateVariableNames(final STVarDeclaration varDeclaration) {
-		var varDeclarations = EcoreUtil2.getAllContentsOfType(varDeclaration.eContainer().eContainer(),
+		final var varDeclarations = EcoreUtil2.getAllContentsOfType(varDeclaration.eContainer().eContainer(),
 				STVarDeclaration.class);
-		for (STVarDeclaration declaration : varDeclarations) {
+		for (final STVarDeclaration declaration : varDeclarations) {
 			if (declaration != varDeclaration && declaration.getName().equalsIgnoreCase(varDeclaration.getName())) {
 				error(MessageFormat.format(Messages.STCoreValidator_Duplicate_Variable_Name, varDeclaration.getName()),
 						varDeclaration, LibraryElementPackage.Literals.INAMED_ELEMENT__NAME, DUPLICATE_VARIABLE_NAME);
