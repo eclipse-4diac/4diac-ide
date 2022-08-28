@@ -34,7 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
-public class FBTestRunner {
+public final class FBTestRunner {
 	public static EList<Transaction> runFBNetworkTest(final FBNetwork network, final Event event) {
 		final EventManager eventManager = EventManagerFactory.createFrom(event, EcoreUtil.copy(network));
 		EventManagerUtils.processNetwork(eventManager);

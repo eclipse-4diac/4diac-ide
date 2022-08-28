@@ -34,86 +34,125 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-/** <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!--
+ * end-user-doc -->
  *
- * @generated */
+ * @generated
+ */
 public class OperationalSemanticsPackageImpl extends EPackageImpl implements OperationalSemanticsPackage {
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	private EClass eventOccurrenceEClass = null;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	private EClass eventManagerEClass = null;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	private EClass fbRuntimeAbstractEClass = null;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	private EClass basicFBTypeRuntimeEClass = null;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	private EClass simpleFBTypeRuntimeEClass = null;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	private EClass transactionEClass = null;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	private EClass fbNetworkRuntimeEClass = null;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	private EClass fbTransactionEClass = null;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	private EClass connectionToValueMapEClass = null;
 
-	/** Creates an instance of the model <b>Package</b>, registered with {@link org.eclipse.emf.ecore.EPackage.Registry
-	 * EPackage.Registry} by the package package URI value.
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	private EClass runtimeMapEClass = null;
+
+	/**
+	 * Creates an instance of the model <b>Package</b>, registered with
+	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the
+	 * package package URI value.
 	 * <p>
-	 * Note: the correct way to create the package is via the static factory method {@link #init init()}, which also
-	 * performs initialization of the package, or returns the registered package, if one already exists. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * Note: the correct way to create the package is via the static factory method
+	 * {@link #init init()}, which also performs initialization of the package, or
+	 * returns the registered package, if one already exists. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 *
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#eNS_URI
 	 * @see #init()
-	 * @generated */
+	 * @generated
+	 */
 	private OperationalSemanticsPackageImpl() {
 		super(eNS_URI, OperationalSemanticsFactory.eINSTANCE);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	private static boolean isInited = false;
 
-	/** Creates, registers, and initializes the <b>Package</b> for this model, and for any others upon which it depends.
+	/**
+	 * Creates, registers, and initializes the <b>Package</b> for this model, and
+	 * for any others upon which it depends.
 	 *
 	 * <p>
-	 * This method is used to initialize {@link OperationalSemanticsPackage#eINSTANCE} when that field is accessed.
-	 * Clients should not invoke it directly. Instead, they should simply access that field to obtain the package. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	 * This method is used to initialize
+	 * {@link OperationalSemanticsPackage#eINSTANCE} when that field is accessed.
+	 * Clients should not invoke it directly. Instead, they should simply access
+	 * that field to obtain the package. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @see #eNS_URI
 	 * @see #createPackageContents()
 	 * @see #initializePackageContents()
-	 * @generated */
+	 * @generated
+	 */
 	public static OperationalSemanticsPackage init() {
 		if (isInited)
 			return (OperationalSemanticsPackage) EPackage.Registry.INSTANCE
@@ -145,247 +184,340 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		return theOperationalSemanticsPackage;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EClass getEventOccurrence() {
 		return eventOccurrenceEClass;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getEventOccurrence_Event() {
 		return (EReference) eventOccurrenceEClass.getEStructuralFeatures().get(0);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EAttribute getEventOccurrence_Active() {
 		return (EAttribute) eventOccurrenceEClass.getEStructuralFeatures().get(1);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EAttribute getEventOccurrence_Ignored() {
 		return (EAttribute) eventOccurrenceEClass.getEStructuralFeatures().get(2);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getEventOccurrence_FbRuntime() {
 		return (EReference) eventOccurrenceEClass.getEStructuralFeatures().get(3);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getEventOccurrence_CreatedTransactions() {
 		return (EReference) eventOccurrenceEClass.getEStructuralFeatures().get(4);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getEventOccurrence_ParentFB() {
 		return (EReference) eventOccurrenceEClass.getEStructuralFeatures().get(5);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EClass getEventManager() {
 		return eventManagerEClass;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getEventManager_Transactions() {
 		return (EReference) eventManagerEClass.getEStructuralFeatures().get(0);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getEventManager_ReadyQueue() {
 		return (EReference) eventManagerEClass.getEStructuralFeatures().get(1);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EClass getFBRuntimeAbstract() {
 		return fbRuntimeAbstractEClass;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EClass getBasicFBTypeRuntime() {
 		return basicFBTypeRuntimeEClass;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getBasicFBTypeRuntime_Basicfbtype() {
 		return (EReference) basicFBTypeRuntimeEClass.getEStructuralFeatures().get(0);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getBasicFBTypeRuntime_ActiveState() {
 		return (EReference) basicFBTypeRuntimeEClass.getEStructuralFeatures().get(1);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EClass getSimpleFBTypeRuntime() {
 		return simpleFBTypeRuntimeEClass;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getSimpleFBTypeRuntime_SimpleFBType() {
 		return (EReference) simpleFBTypeRuntimeEClass.getEStructuralFeatures().get(0);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EClass getTransaction() {
 		return transactionEClass;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getTransaction_InputEventOccurrence() {
 		return (EReference) transactionEClass.getEStructuralFeatures().get(0);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EClass getFBNetworkRuntime() {
 		return fbNetworkRuntimeEClass;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getFBNetworkRuntime_Fbnetwork() {
 		return (EReference) fbNetworkRuntimeEClass.getEStructuralFeatures().get(0);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
-	public EReference getFBNetworkRuntime_FbRuntimes() {
+	public EReference getFBNetworkRuntime_TransferData() {
 		return (EReference) fbNetworkRuntimeEClass.getEStructuralFeatures().get(1);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
-	public EReference getFBNetworkRuntime_TransferData() {
+	public EReference getFBNetworkRuntime_TypeRuntimes() {
 		return (EReference) fbNetworkRuntimeEClass.getEStructuralFeatures().get(2);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EClass getFBTransaction() {
 		return fbTransactionEClass;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getFBTransaction_OutputEventOccurrences() {
 		return (EReference) fbTransactionEClass.getEStructuralFeatures().get(0);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getFBTransaction_InputVariables() {
 		return (EReference) fbTransactionEClass.getEStructuralFeatures().get(1);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EClass getConnectionToValueMap() {
 		return connectionToValueMapEClass;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getConnectionToValueMap_Key() {
 		return (EReference) connectionToValueMapEClass.getEStructuralFeatures().get(0);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EReference getConnectionToValueMap_Value() {
 		return (EReference) connectionToValueMapEClass.getEStructuralFeatures().get(1);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
+	@Override
+	public EClass getRuntimeMap() {
+		return runtimeMapEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public EReference getRuntimeMap_Key() {
+		return (EReference) runtimeMapEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public EReference getRuntimeMap_Value() {
+		return (EReference) runtimeMapEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
 	@Override
 	public OperationalSemanticsFactory getOperationalSemanticsFactory() {
 		return (OperationalSemanticsFactory) getEFactoryInstance();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	private boolean isCreated = false;
 
-	/** Creates the meta-model objects for the package. This method is guarded to have no affect on any invocation but
-	 * its first. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Creates the meta-model objects for the package. This method is guarded to
+	 * have no affect on any invocation but its first. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public void createPackageContents() {
 		if (isCreated)
 			return;
@@ -418,8 +550,8 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 
 		fbNetworkRuntimeEClass = createEClass(FB_NETWORK_RUNTIME);
 		createEReference(fbNetworkRuntimeEClass, FB_NETWORK_RUNTIME__FBNETWORK);
-		createEReference(fbNetworkRuntimeEClass, FB_NETWORK_RUNTIME__FB_RUNTIMES);
 		createEReference(fbNetworkRuntimeEClass, FB_NETWORK_RUNTIME__TRANSFER_DATA);
+		createEReference(fbNetworkRuntimeEClass, FB_NETWORK_RUNTIME__TYPE_RUNTIMES);
 
 		fbTransactionEClass = createEClass(FB_TRANSACTION);
 		createEReference(fbTransactionEClass, FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES);
@@ -428,17 +560,26 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		connectionToValueMapEClass = createEClass(CONNECTION_TO_VALUE_MAP);
 		createEReference(connectionToValueMapEClass, CONNECTION_TO_VALUE_MAP__KEY);
 		createEReference(connectionToValueMapEClass, CONNECTION_TO_VALUE_MAP__VALUE);
+
+		runtimeMapEClass = createEClass(RUNTIME_MAP);
+		createEReference(runtimeMapEClass, RUNTIME_MAP__KEY);
+		createEReference(runtimeMapEClass, RUNTIME_MAP__VALUE);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	private boolean isInitialized = false;
 
-	/** Complete the initialization of the package and its meta-model. This method is guarded to have no affect on any
-	 * invocation but its first. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Complete the initialization of the package and its meta-model. This method is
+	 * guarded to have no affect on any invocation but its first. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public void initializePackageContents() {
 		if (isInitialized)
 			return;
@@ -500,8 +641,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEClass(fbRuntimeAbstractEClass, FBRuntimeAbstract.class, "FBRuntimeAbstract", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
 
-		op = addEOperation(fbRuntimeAbstractEClass, this.getEventOccurrence(), "run", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getEventManager(), "eventManager", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(fbRuntimeAbstractEClass, this.getEventOccurrence(), "run", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(fbRuntimeAbstractEClass, ecorePackage.getEObject(), "getModel", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -537,12 +677,12 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEReference(getFBNetworkRuntime_Fbnetwork(), theLibraryElementPackage.getFBNetwork(), null, "fbnetwork", //$NON-NLS-1$
 				null, 1, 1, FBNetworkRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getFBNetworkRuntime_FbRuntimes(), this.getFBRuntimeAbstract(), null, "fbRuntimes", null, 0, -1, //$NON-NLS-1$
-				FBNetworkRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
-				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFBNetworkRuntime_TransferData(), this.getConnectionToValueMap(), null, "transferData", null, //$NON-NLS-1$
 				0, -1, FBNetworkRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFBNetworkRuntime_TypeRuntimes(), this.getRuntimeMap(), null, "typeRuntimes", null, 0, -1, //$NON-NLS-1$
+				FBNetworkRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(fbNetworkRuntimeEClass, theLibraryElementPackage.getFBNetwork(), "getModel", 1, 1, IS_UNIQUE, //$NON-NLS-1$
 				IS_ORDERED);
@@ -564,6 +704,15 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEReference(getConnectionToValueMap_Value(), theLibraryElementPackage.getValue(), null, "value", null, 0, 1, //$NON-NLS-1$
 				Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(runtimeMapEClass, Map.Entry.class, "RuntimeMap", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+				!IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getRuntimeMap_Key(), theLibraryElementPackage.getFBNetworkElement(), null, "key", null, 0, 1, //$NON-NLS-1$
+				Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRuntimeMap_Value(), this.getFBRuntimeAbstract(), null, "value", null, 0, 1, Map.Entry.class, //$NON-NLS-1$
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

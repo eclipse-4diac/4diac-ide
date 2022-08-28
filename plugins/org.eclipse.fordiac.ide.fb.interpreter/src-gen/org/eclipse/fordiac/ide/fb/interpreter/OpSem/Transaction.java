@@ -15,36 +15,47 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 
 import org.eclipse.emf.ecore.EObject;
 
-/** <!-- begin-user-doc --> A representation of the model object '<em><b>Transaction</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> A representation of the model object
+ * '<em><b>Transaction</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getInputEventOccurrence <em>Input Event
- * Occurrence</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getInputEventOccurrence
+ * <em>Input Event Occurrence</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getTransaction()
  * @model abstract="true" annotation="http://www.eclipse.org/emf/2002/GenModel"
- * @generated */
+ * @generated
+ */
 public interface Transaction extends EObject {
-	/** Returns the value of the '<em><b>Input Event Occurrence</b></em>' containment reference. <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	/**
+	 * Returns the value of the '<em><b>Input Event Occurrence</b></em>' containment
+	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @return the value of the '<em>Input Event Occurrence</em>' containment reference.
+	 * @return the value of the '<em>Input Event Occurrence</em>' containment
+	 *         reference.
 	 * @see #setInputEventOccurrence(EventOccurrence)
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getTransaction_InputEventOccurrence()
 	 * @model containment="true" resolveProxies="true" required="true"
-	 * @generated */
+	 * @generated
+	 */
 	EventOccurrence getInputEventOccurrence();
 
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getInputEventOccurrence
-	 * <em>Input Event Occurrence</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * Sets the value of the
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getInputEventOccurrence
+	 * <em>Input Event Occurrence</em>}' containment reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 *
-	 * @param value the new value of the '<em>Input Event Occurrence</em>' containment reference.
+	 * @param value the new value of the '<em>Input Event Occurrence</em>'
+	 *              containment reference.
 	 * @see #getInputEventOccurrence()
-	 * @generated */
+	 * @generated
+	 */
 	void setInputEventOccurrence(EventOccurrence value);
 
 } // Transaction

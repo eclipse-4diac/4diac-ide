@@ -23,43 +23,55 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 
-/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Transaction</b></em>'. <!-- end-user-doc -->
+/**
+ * <!-- begin-user-doc --> An implementation of the model object
+ * '<em><b>Transaction</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransactionImpl#getInputEventOccurrence <em>Input Event
- * Occurrence</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TransactionImpl#getInputEventOccurrence
+ * <em>Input Event Occurrence</em>}</li>
  * </ul>
  *
- * @generated */
+ * @generated
+ */
 public abstract class TransactionImpl extends MinimalEObjectImpl.Container implements Transaction {
-	/** The cached value of the '{@link #getInputEventOccurrence() <em>Input Event Occurrence</em>}' containment
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * The cached value of the '{@link #getInputEventOccurrence() <em>Input Event
+	 * Occurrence</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @see #getInputEventOccurrence()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EventOccurrence inputEventOccurrence;
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	protected TransactionImpl() {
 		super();
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	protected EClass eStaticClass() {
 		return OperationalSemanticsPackage.Literals.TRANSACTION;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public EventOccurrence getInputEventOccurrence() {
 		if (inputEventOccurrence != null && inputEventOccurrence.eIsProxy()) {
@@ -86,16 +98,20 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 		return inputEventOccurrence;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public EventOccurrence basicGetInputEventOccurrence() {
 		return inputEventOccurrence;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	public NotificationChain basicSetInputEventOccurrence(EventOccurrence newInputEventOccurrence,
 			NotificationChain msgs) {
 		EventOccurrence oldInputEventOccurrence = inputEventOccurrence;
@@ -112,9 +128,11 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 		return msgs;
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void setInputEventOccurrence(EventOccurrence newInputEventOccurrence) {
 		if (newInputEventOccurrence != inputEventOccurrence) {
@@ -136,22 +154,25 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 					newInputEventOccurrence));
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.TRANSACTION__INPUT_EVENT_OCCURRENCE:
 			return basicSetInputEventOccurrence(null, msgs);
-		default:
-			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -159,52 +180,52 @@ public abstract class TransactionImpl extends MinimalEObjectImpl.Container imple
 			if (resolve)
 				return getInputEventOccurrence();
 			return basicGetInputEventOccurrence();
-		default:
-			return super.eGet(featureID, resolve, coreType);
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.TRANSACTION__INPUT_EVENT_OCCURRENCE:
 			setInputEventOccurrence((EventOccurrence) newValue);
 			return;
-		default:
-			super.eSet(featureID, newValue);
-			return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.TRANSACTION__INPUT_EVENT_OCCURRENCE:
 			setInputEventOccurrence((EventOccurrence) null);
 			return;
-		default:
-			super.eUnset(featureID);
-			return;
 		}
+		super.eUnset(featureID);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated
+	 */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.TRANSACTION__INPUT_EVENT_OCCURRENCE:
 			return inputEventOccurrence != null;
-		default:
-			return super.eIsSet(featureID);
 		}
+		return super.eIsSet(featureID);
 	}
 
 } // TransactionImpl
