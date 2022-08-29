@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.inputgenerator;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -31,7 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 
 public final class InputGenerator {
 
-	private static Random random = new Random();
+	private static Random random = new SecureRandom();
 	private static ValueRandom randomV = new ValueRandom();
 
 	/** This method generates a sequence of input events for a given FB. All input events from the interface are
