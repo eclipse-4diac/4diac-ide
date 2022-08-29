@@ -15,14 +15,18 @@
 package org.eclipse.fordiac.ide.model.resource;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
+import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 
 
@@ -30,6 +34,16 @@ public class SystemResource extends ResourceImpl {
 
 	public SystemResource(final URI uri) {
 		super(uri);
+	}
+
+	@Override
+	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
+		final IFile fbtFile = ResourcesPlugin.getWorkspace().getRoot()
+				.getFile(new Path(this.uri.toPlatformString(true)));
+		final SystemImporter importer = new SystemImporter(fbtFile);
+		importer.loadElement();
+		final AutomationSystem element = importer.getElement();
+		getContents().add(element);
 	}
 
 	@Override
@@ -46,6 +60,11 @@ public class SystemResource extends ResourceImpl {
 		system.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
 		final SystemExporter systemExporter = new SystemExporter(system);
 		systemExporter.saveSystem(file);
+	}
+
+	@Override
+	protected void doUnload() {
+		getContents().clear();
 	}
 
 }
