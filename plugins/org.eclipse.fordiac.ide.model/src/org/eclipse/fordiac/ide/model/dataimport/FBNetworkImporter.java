@@ -27,6 +27,7 @@ import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
@@ -375,14 +376,12 @@ class FBNetworkImporter extends CommonElementImporter {
 	private static void createErrorMarkerInterface(final Connection connection,
 			final ConnectionBuilder connectionBuilder, final boolean isInput, final ErrorMarkerBuilder e) {
 
-		final String pinName = isInput ? connectionBuilder.getDestinationPinName()
-				: connectionBuilder.getSourcePinName();
+
 
 		final IInterfaceElement oppositeEndpoint = isInput ? connectionBuilder.getSourceEndpoint()
 				: connectionBuilder.getDestinationEndpoint();
 
-		final InterfaceList ieList = isInput ? connectionBuilder.getDestInterfaceList()
-				: connectionBuilder.getSrcInterfaceList();
+
 
 		// we need a special treatment for FB's that lost their type
 		if ((oppositeEndpoint == null)) {
@@ -395,6 +394,10 @@ class FBNetworkImporter extends CommonElementImporter {
 			type = IecTypes.GenericTypes.ANY;
 		}
 
+		final InterfaceList ieList = isInput ? connectionBuilder.getDestInterfaceList()
+				: connectionBuilder.getSrcInterfaceList();
+		final String pinName = isInput ? connectionBuilder.getDestinationPinName()
+				: connectionBuilder.getSourcePinName();
 		final ErrorMarkerInterface errorMarkerInterface = ConnectionHelper
 				.createErrorMarkerInterface(type,
 						pinName, isInput, ieList);
@@ -518,7 +521,7 @@ class FBNetworkImporter extends CommonElementImporter {
 				return il.getPlugs();
 			}
 		}
-		return null;
+		return ECollections.emptyEList();
 	}
 
 	protected FBNetworkElement findFBNetworkElement(final String fbName) {

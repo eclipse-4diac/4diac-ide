@@ -86,14 +86,21 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		}
 
 		private void handleSet(final Notification notification) {
-			if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)) {
-				if ((getAction().getOutput().getName().equals(notification.getNewValue()))
-						|| ((getAction().getOutput() instanceof AdapterEvent)
-								&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration().getName()
-										.equals(notification.getNewValue())))) {
-					refreshEventLabel();
-				}
+			if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)
+					&& ((isOutputEvent(notification) || isAdapterOutputEvent(notification)))) {
+
+				refreshEventLabel();
+
 			}
+		}
+
+		private boolean isOutputEvent(final Notification notification) {
+			return getAction().getOutput().getName().equals(notification.getNewValue());
+		}
+
+		private boolean isAdapterOutputEvent(final Notification notification) {
+			return (getAction().getOutput() instanceof AdapterEvent) && (((AdapterEvent) getAction().getOutput())
+					.getAdapterDeclaration().getName().equals(notification.getNewValue()));
 		}
 
 		private void handleRemove(final Notification notification) {

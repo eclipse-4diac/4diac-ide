@@ -232,7 +232,7 @@ class ValueValidatorTest {
 	@ParameterizedTest
 	@ValueSource(strings = { "2%sgsgs%2", "33%Hello%5", "ee%moduleValue%hello", "rr%r%" })
 
-	void validateInvalidDNSEntries_1(final String value) {
+	void validateInvalidDNSEntries1(final String value) {
 		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
 		assertEquals(INVALID_VIRTUAL_DNS_ENTRY_FORMAT_1, resultString);
 	}
@@ -241,7 +241,7 @@ class ValueValidatorTest {
 	@ParameterizedTest
 	@ValueSource(strings = { "%sg%sgs%", "%Hel%lo%", "%module%Value%", "%%%" })
 
-	void validateInvalidDNSEntries_2(final String value) {
+	void validateInvalidDNSEntries2(final String value) {
 		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
 		assertEquals(INVALID_VIRTUAL_DNS_ENTRY_FORMAT_2, resultString);
 	}
@@ -250,7 +250,7 @@ class ValueValidatorTest {
 	@ParameterizedTest
 	@ValueSource(strings = { "333%sg%sgs%222", "@me%Hel%lo%hi", "%module%Value%rain", "tt%s%ww%5 " })
 
-	void validateInvalidDNSEntries_3(final String value) {
+	void validateInvalidDNSEntries3(final String value) {
 		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
 		assertEquals(INVALID_VIRTUAL_DNS_ENTRY_FORMAT_3, resultString);
 	}

@@ -189,11 +189,11 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 
 		@Override
 		protected boolean handleButtonDown(final int button) {
-			if (3 == button) {
+			if (3 == button && getCurrentViewer() != null) {
 				// on right click deselect everything
-				if (getCurrentViewer() != null) {
-					getCurrentViewer().setSelection(getDefaultSelectionForRightMouseDown());
-				}
+
+				getCurrentViewer().setSelection(getDefaultSelectionForRightMouseDown());
+
 			}
 			return super.handleButtonDown(button);
 		}

@@ -91,7 +91,7 @@ public final class ValueValidator {
 		try {
 			if (!checkVirtualDNS(value)) {
 				final Object convertedValue = new TypedValueConverter(type).toValue(value);
-				final DataType prefixType = getValidatedPrefixType(type, value, convertedValue);
+				final DataType prefixType = getValidatedPrefixType(type, value);
 				if (prefixType != null) {
 					checkValue(prefixType, convertedValue);
 				} else {
@@ -145,7 +145,7 @@ public final class ValueValidator {
 		return false;
 	}
 
-	private static DataType getValidatedPrefixType(final DataType type, final String value, final Object convertedValue) {
+	private static DataType getValidatedPrefixType(final DataType type, final String value) {
 		final String[] tokens = value.split("#"); //$NON-NLS-1$
 		if (tokens.length > 1) {
 			final DataType prefixType = ElementaryTypes.getTypeByName(tokens[0]);

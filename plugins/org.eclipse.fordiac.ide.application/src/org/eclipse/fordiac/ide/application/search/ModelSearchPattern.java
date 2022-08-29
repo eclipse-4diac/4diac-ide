@@ -13,38 +13,38 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.search;
 
- import java.util.regex.Matcher;
- import java.util.regex.Pattern;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
- public class ModelSearchPattern { // extends SearchPattern
+public class ModelSearchPattern { // extends SearchPattern
 
-	 private final String toTest;
-	 private Pattern searchPattern;
-	 private final String searchString;
-	 private final ModelQuerySpec modelQuerySpec;
+	private final String toTest;
+	private Pattern searchPattern;
+	private final String searchString;
+	private final ModelQuerySpec modelQuerySpec;
 
-	 public ModelSearchPattern(final String toTest, final ModelQuerySpec modelQuerySpec) {
-		 this.toTest = toTest;
-		 this.searchString = modelQuerySpec.getSearchString();
-		 this.modelQuerySpec = modelQuerySpec;
-	 }
+	public ModelSearchPattern(final String toTest, final ModelQuerySpec modelQuerySpec) {
+		this.toTest = toTest;
+		this.searchString = modelQuerySpec.getSearchString();
+		this.modelQuerySpec = modelQuerySpec;
+	}
 
-	 private String convertSearchStringToPattern() {
-		 String temp = searchString;
-		 if (searchString.contains("?")) {
-			 temp = searchString.replace("?", "[a-zA-Z0-9_]");
-		 }
-		 if (searchString.contains("*")) {
-			 temp = searchString.replace("*", ".*");
-		 }
-		 return temp;
-	 }
+	private String convertSearchStringToPattern() {
+		String temp = searchString;
+			if (searchString.contains("?")) { //$NON-NLS-1$
+				temp = searchString.replace("?", "[a-zA-Z0-9_]"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+			if (searchString.contains("*")) { //$NON-NLS-1$
+				temp = searchString.replace("*", ".*");  //$NON-NLS-1$//$NON-NLS-2$
+		}
+		return temp;
+	}
 
-	 public boolean matchSearchString() {
-		 final String bah = convertSearchStringToPattern();
-		 searchPattern = Pattern.compile(bah);
-		 final Matcher matcher = searchPattern.matcher(toTest);
-		 return matcher.matches();
-	 }
+	public boolean matchSearchString() {
+		final String bah = convertSearchStringToPattern();
+		searchPattern = Pattern.compile(bah);
+		final Matcher matcher = searchPattern.matcher(toTest);
+		return matcher.matches();
+	}
 
- }
+}

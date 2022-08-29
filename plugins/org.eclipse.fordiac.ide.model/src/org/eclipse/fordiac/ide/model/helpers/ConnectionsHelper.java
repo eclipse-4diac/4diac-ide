@@ -14,6 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -29,7 +30,7 @@ public final class ConnectionsHelper {
 			return (fbOppostiteIE.isIsInput()) ? fbOppostiteIE.getInputConnections()
 					: fbOppostiteIE.getOutputConnections();
 		}
-		return null;
+		return ECollections.emptyEList();
 	}
 
 	public static IInterfaceElement getOppositeInterfaceElement(final IInterfaceElement ie,
@@ -52,9 +53,9 @@ public final class ConnectionsHelper {
 
 	public static Connection getOppositeConnection(final Connection connection) {
 		if (null != connection) {
-			IInterfaceElement source = connection.getSource();
-			IInterfaceElement dest = connection.getDestination();
-			
+			final IInterfaceElement source = connection.getSource();
+			final IInterfaceElement dest = connection.getDestination();
+
 			if (null != source && null != source.getFBNetworkElement() && null != dest
 					&& null != dest.getFBNetworkElement()) {
 				final FBNetworkElement opSource = source.getFBNetworkElement().getOpposite();

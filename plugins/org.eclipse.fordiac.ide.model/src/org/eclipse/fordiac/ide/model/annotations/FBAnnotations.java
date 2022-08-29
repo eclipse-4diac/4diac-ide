@@ -30,9 +30,7 @@ public final class FBAnnotations {
 		return false;
 	}
 
-	public static boolean isResourceTypeFB(final FB fb) {
-		return false;
-	}
+
 
 	public static FBNetwork loadCFBNetwork(final CFBInstance cfb) {
 		FBNetwork fbNetwork = cfb.getCfbNetwork();

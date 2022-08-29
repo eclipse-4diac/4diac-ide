@@ -425,31 +425,30 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 	}
 
 	private static AutomationSystem handleSystemTreeSelection(final TreeSelection selection) {
-		AutomationSystem retval = null;
+		
 		if (1 == selection.size()) {
 			final Object obj = selection.getFirstElement();
 			if ((obj instanceof IFile) && (SystemManager.isSystemFile(obj))) {
-				SystemManager.INSTANCE.getSystem((IFile) obj);
+				return SystemManager.INSTANCE.getSystem((IFile) obj);
 			} else if (obj instanceof AutomationSystem) {
-				retval = (AutomationSystem) obj;
+				return (AutomationSystem) obj;
 			} else if (obj instanceof SystemConfiguration) {
-				retval = ((SystemConfiguration) obj).getAutomationSystem();
+				return ((SystemConfiguration) obj).getAutomationSystem();
 			} else if (obj instanceof Device) {
-				retval = ((Device) obj).getAutomationSystem();
+				return ((Device) obj).getAutomationSystem();
 			} else if (obj instanceof Resource) {
-				retval = ((Resource) obj).getAutomationSystem();
+				return ((Resource) obj).getAutomationSystem();
 			} else if (obj instanceof Application) {
-				retval = ((Application) obj).getAutomationSystem();
+				return ((Application) obj).getAutomationSystem();
 			} else if (obj instanceof SubApp) {
-				getSystemForSubApp((SubApp) obj);
-			} else if (obj instanceof FB) {
-				if (((FB) obj).eContainer() instanceof FBNetwork) {
-					final FBNetwork fbNetwork = ((FBNetwork) ((FB) obj).eContainer());
-					retval = fbNetwork.getAutomationSystem();
-				}
+				return getSystemForSubApp((SubApp) obj);
+			} else if (obj instanceof FB && (((FB) obj).eContainer() instanceof FBNetwork)) {
+				final FBNetwork fbNetwork = ((FBNetwork) ((FB) obj).eContainer());
+				return fbNetwork.getAutomationSystem();
+
 			}
 		}
-		return retval;
+		return null;
 	}
 
 	private static AutomationSystem getSystemForSubApp(final SubApp obj) {
@@ -522,7 +521,8 @@ public class VirtualDNSViewer extends ViewPart implements ISelectionListener {
 			String nameToAssing = DEFAULT_VARIABLE_NAME;
 			int counter = 1;
 			while (variableNameAlreadyExists(null, nameToAssing)) {
-				nameToAssing = DEFAULT_VARIABLE_NAME + "_" + Integer.toString(counter++); //$NON-NLS-1$
+				nameToAssing = DEFAULT_VARIABLE_NAME + "_" + Integer.toString(counter); //$NON-NLS-1$
+				counter++;
 			}
 
 			entry.setName(nameToAssing);

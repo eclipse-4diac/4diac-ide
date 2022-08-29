@@ -73,7 +73,7 @@ public class DataTypeImporter extends TypeImporter {
 				getElement().setCompilerInfo(parseCompilerInfo());
 				break;
 			case LibraryElementTags.ASN1_TAG:
-				parseASN1Tag(getElement());
+				parseASN1Tag();
 				break;
 			case LibraryElementTags.STRUCTURED_TYPE_ELEMENT:
 				setElement(convertToStructuredType(getElement()));
@@ -87,7 +87,7 @@ public class DataTypeImporter extends TypeImporter {
 		};
 	}
 
-	private void parseASN1Tag(final AnyDerivedType type) throws XMLStreamException {
+	private void parseASN1Tag() throws XMLStreamException {
 		proceedToEndElementNamed(LibraryElementTags.ASN1_TAG);
 	}
 

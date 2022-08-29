@@ -289,7 +289,7 @@ public class DataTypeDropdown extends TextCellEditor {
 			final Menu openEditorMenu = new Menu(control);
 			final MenuItem openItem = new MenuItem(openEditorMenu, SWT.NONE);
 			openItem.addListener(SWT.Selection, e -> {
-				final StructuredType sel = getSelectedStructuredType(control);
+				final StructuredType sel = getSelectedStructuredType();
 				if (sel != null) {
 					handleShellCloseEvent();
 					setResult(null); // discard selection, do not update type
@@ -301,7 +301,7 @@ public class DataTypeDropdown extends TextCellEditor {
 			openEditorMenu.addMenuListener(new MenuListener() {
 				@Override
 				public void menuShown(final MenuEvent e) {
-					final StructuredType type = getSelectedStructuredType(control);
+					final StructuredType type = getSelectedStructuredType();
 					openItem.setEnabled((type != null) && (type != IecTypes.GenericTypes.ANY_STRUCT));
 				}
 
@@ -313,7 +313,7 @@ public class DataTypeDropdown extends TextCellEditor {
 			control.setMenu(openEditorMenu);
 		}
 
-		private StructuredType getSelectedStructuredType(final Control control) {
+		private StructuredType getSelectedStructuredType() {
 			final Object selected = ((TreeSelection) getTreeViewer().getSelection()).getFirstElement();
 			if (selected instanceof TypeNode) {
 				final DataType dtp = ((TypeNode) selected).getType();

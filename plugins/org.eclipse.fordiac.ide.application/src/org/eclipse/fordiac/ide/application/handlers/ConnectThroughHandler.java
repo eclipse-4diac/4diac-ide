@@ -82,14 +82,14 @@ public class ConnectThroughHandler extends AbstractHandler {
 	}
 
 	private static boolean checkSelectedIEs(final IInterfaceElement element1, final IInterfaceElement element2) {
-		if ((!element2.isIsInput()) && (element1.getClass().equals(element2.getClass()))) {
-			// the second element is an output, both are of the same type
-			if (!element1.getInputConnections().isEmpty() && !element2.getOutputConnections().isEmpty()) {
-				if (element1 instanceof VarDeclaration) {
-					return LinkConstraints.typeCheck(element1, element2);
-				}
-				return true;
+		if ((!element2.isIsInput()) && (element1.getClass().equals(element2.getClass()))
+				&& !element1.getInputConnections().isEmpty() && !element2.getOutputConnections().isEmpty()) {
+			// the second element is an output, both are of the same type and are not empty
+			if (element1 instanceof VarDeclaration) {
+				return LinkConstraints.typeCheck(element1, element2);
 			}
+			return true;
+
 		}
 		return false;
 	}

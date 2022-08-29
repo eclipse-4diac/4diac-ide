@@ -18,13 +18,12 @@ import java.util.Set;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.search.ui.text.AbstractTextSearchResult;
 
 // TODO: implement to the end
 public class ModelSearchTreeContentProvider implements ITreeContentProvider, IModelSearchContentProvider {
 
 	private final ModelSearchResultPage resultPage;
-	private AbstractTextSearchResult result;
+
 
 	private final AbstractTreeViewer treeViewer;
 	private Map<Object, Set<Object>> childrenMap;

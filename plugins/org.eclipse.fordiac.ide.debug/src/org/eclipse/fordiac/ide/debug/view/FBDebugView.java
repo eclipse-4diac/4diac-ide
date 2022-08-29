@@ -62,11 +62,11 @@ public class FBDebugView extends ViewPart {
 		.generateLayout(composite);
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(composite);
-		fbType = AbstractInterpreterTest.loadFBType("E_CTU");
+		fbType = AbstractInterpreterTest.loadFBType("E_CTU"); //$NON-NLS-1$
 		viewer = new ScrollingGraphicalViewer();
 		viewer.createControl(composite);
 		configureGraphicalViewer();
-		initializeGraphicalViewer(parent);
+		initializeGraphicalViewer();
 		hookGraphicalViewer();
 	}
 
@@ -76,11 +76,9 @@ public class FBDebugView extends ViewPart {
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditpartFactory());
 		viewer.setContextMenu(new FordiacContextMenuProvider(viewer, root.getZoomManager(), getActionRegistry()));
-		// viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
-
 	}
 
-	private void initializeGraphicalViewer(final Composite parent) {
+	private void initializeGraphicalViewer() {
 		viewer.setContents(fbType);
 	}
 
@@ -90,6 +88,7 @@ public class FBDebugView extends ViewPart {
 
 	@Override
 	public void setFocus() {
+		// nothing to do here
 	}
 
 	private ZoomScalableFreeformRootEditPart createRootEditPart() {
@@ -104,7 +103,6 @@ public class FBDebugView extends ViewPart {
 				final IFigure rootFigure = super.createFigure();
 				final GridLayer grid = (GridLayer) getLayer(GRID_LAYER);
 				if (grid != null) {
-					// TODO
 					// it does not make sense to have a grid in the interface layer so hide it
 					grid.setVisible(true);
 				}

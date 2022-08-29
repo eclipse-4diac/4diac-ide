@@ -94,7 +94,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		return list.toArray(new String[0]);
 	}
 
-	protected DataType getLastUsedDataType(final InterfaceList interfaceList, final boolean isInput,
+	protected static DataType getLastUsedDataType(final InterfaceList interfaceList, final boolean isInput,
 			final IInterfaceElement interfaceElement) {
 		if (null != interfaceElement) {
 			return interfaceElement.getType();

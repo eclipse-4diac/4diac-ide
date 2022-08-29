@@ -104,12 +104,12 @@ public class ZoomComboContributionItem extends WorkbenchWindowControlContributio
 		combo.addSelectionListener( new SelectionListener() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				handleComboSelected(e);
+				handleComboSelected();
 			}
 
 			@Override
 			public void widgetDefaultSelected(final SelectionEvent e) {
-				handleComboSelected(e);
+				handleComboSelected();
 			}
 		});
 		combo.addFocusListener(new FocusListener() {
@@ -213,7 +213,7 @@ public class ZoomComboContributionItem extends WorkbenchWindowControlContributio
 		combo.getParent().pack();
 	}
 
-	private void handleComboSelected(final SelectionEvent event) {
+	private void handleComboSelected() {
 		if (zoomManager != null) {
 			if (combo.getSelectionIndex() >= 0) {
 				zoomManager.setZoomAsText(combo.getItem(combo.getSelectionIndex()));

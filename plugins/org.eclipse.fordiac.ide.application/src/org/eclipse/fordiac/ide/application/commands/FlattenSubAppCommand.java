@@ -202,27 +202,32 @@ public class FlattenSubAppCommand extends Command {
 				transferConnectionList.add(connection);
 			} else {
 				deleteCommands.add(new DeleteConnectionCommand(connection));
-				if ((connection.getSourceElement() == subapp) && (connection.getDestinationElement() == subapp)) {
-					for (final Connection inboundConn : connection.getSource().getInputConnections()) {
-						for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
-							createCommands
-							.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
-						}
-					}
-				} else if (connection.getSourceElement() == subapp) {
-					// for each connection coming into the sub app create one connection in the
-					// outer fb network
-					for (final Connection inboundConn : connection.getSource().getInputConnections()) {
-						createCommands.add(createConnCreateCmd(inboundConn.getSource(), connection.getDestination()));
-					}
-				} else if (connection.getDestinationElement() == subapp) {
-					// for each connection going from the subapp outputs create one connection in
-					// the other fb network
-					for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
-						createCommands.add(createConnCreateCmd(connection.getSource(), outboundConn.getDestination()));
-					}
+				createCommandsFrom(connection);
+			}
+		}
+	}
+
+	private <T extends Connection> void createCommandsFrom(final T connection) {
+		if ((connection.getSourceElement() == subapp) && (connection.getDestinationElement() == subapp)) {
+			for (final Connection inboundConn : connection.getSource().getInputConnections()) {
+				for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
+					createCommands
+					.add(createConnCreateCmd(inboundConn.getSource(), outboundConn.getDestination()));
 				}
 			}
+		} else if (connection.getSourceElement() == subapp) {
+			// for each connection coming into the sub app create one connection in the
+			// outer fb network
+			for (final Connection inboundConn : connection.getSource().getInputConnections()) {
+				createCommands.add(createConnCreateCmd(inboundConn.getSource(), connection.getDestination()));
+			}
+		} else if (connection.getDestinationElement() == subapp) {
+			// for each connection going from the subapp outputs create one connection in
+			// the other fb network
+			for (final Connection outboundConn : connection.getDestination().getOutputConnections()) {
+				createCommands.add(createConnCreateCmd(connection.getSource(), outboundConn.getDestination()));
+			}
+
 		}
 	}
 
