@@ -14,29 +14,30 @@ package org.eclipse.fordiac.ide.model.annotations;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 
-public final class ConnectionAnnotations {
+public final class HiddenElementAnnotations {
 
-	public static void setVisible(final Connection connection, final boolean visible) {
+	public static void setVisible(final HiddenElement connection, final boolean visible) {
 		if (visible) {
 			// if we are visible the attribute can be removed
-			connection.deleteAttribute(LibraryElementTags.CONNECTION_VISIBLE);
+
+			connection.deleteAttribute(LibraryElementTags.ELEMENT_VISIBLE);
 		} else {
 			setVisible(connection, Boolean.toString(visible));
 		}
 	}
 
-	private static void setVisible(final Connection connection, final String visible) {
-		connection.setAttribute(LibraryElementTags.CONNECTION_VISIBLE, FordiacKeywords.STRING, visible, "");  //$NON-NLS-1$
+	private static void setVisible(final HiddenElement connection, final String visible) {
+		connection.setAttribute(LibraryElementTags.ELEMENT_VISIBLE, FordiacKeywords.STRING, visible, "");  //$NON-NLS-1$
 	}
 
-	public static boolean isVisible(final Connection connection) {
-		final String visibleAttribute = connection.getAttributeValue(LibraryElementTags.CONNECTION_VISIBLE);
+	public static boolean isVisible(final HiddenElement connection) {
+		final String visibleAttribute = connection.getAttributeValue(LibraryElementTags.ELEMENT_VISIBLE);
 		return !"false".equalsIgnoreCase(visibleAttribute); //$NON-NLS-1$
 	}
 
-	private ConnectionAnnotations() {
+	private HiddenElementAnnotations() {
 		throw new UnsupportedOperationException("Utility class should not be instantiated");
 	}
 }

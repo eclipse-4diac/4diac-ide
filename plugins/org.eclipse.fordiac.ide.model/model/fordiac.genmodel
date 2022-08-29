@@ -78,15 +78,8 @@
         <genParameters ecoreParameter="lib.ecore#//Connection/updateRoutingData/dy"/>
         <genParameters ecoreParameter="lib.ecore#//Connection/updateRoutingData/dx2"/>
       </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//Connection/setVisible" body="org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.setVisible(this,visible);">
-        <genParameters ecoreParameter="lib.ecore#//Connection/setVisible/visible"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//Connection/isVisible" body="return org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.isVisible(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/isInterfaceConnection"
           body="return org.eclipse.fordiac.ide.model.Annotations.isInterfaceConnection(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//Connection/setVisible" body="org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.setVisible(this,visible);">
-        <genParameters ecoreParameter="lib.ecore#//Connection/setVisible/visible"/>
-      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ConnectionRoutingData">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx1"/>
@@ -592,6 +585,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//OtherMethod/language"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//STMethod"/>
+    <genClasses ecoreClass="lib.ecore#//HiddenElement">
+      <genOperations ecoreOperation="lib.ecore#//HiddenElement/setVisible" body="org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);">
+        <genParameters ecoreParameter="lib.ecore#//HiddenElement/setVisible/visible"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//HiddenElement/isVisible" body="return org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.isVisible(this);"/>
+    </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">

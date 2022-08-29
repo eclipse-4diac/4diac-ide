@@ -455,11 +455,16 @@ public final class Annotations {
 			attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 			attribute.setName(attributeName);
 			attribute.setType(BaseType1.getByName(type));
+			attribute.setValue(value);
+			if (null != comment) {
+				attribute.setComment(comment);
+			}
 			object.getAttributes().add(attribute);
-		}
-		attribute.setValue(value);
-		if (null != comment) {
-			attribute.setComment(comment);
+		} else {
+			attribute.setValue(value);
+			if (null != comment) {
+				attribute.setComment(comment);
+			}
 		}
 	}
 

@@ -9,6 +9,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.e4.core.contexts,
  org.eclipse.fordiac.ide.ui.errormessages
 Export-Package: org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.annotations,
  org.eclipse.fordiac.ide.model.data,
  org.eclipse.fordiac.ide.model.data.impl,
  org.eclipse.fordiac.ide.model.data.util,

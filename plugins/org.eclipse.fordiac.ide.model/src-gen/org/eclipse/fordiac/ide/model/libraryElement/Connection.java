@@ -37,7 +37,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model abstract="true"
  * @generated
  */
-public interface Connection extends INamedElement, ConfigurableObject, ErrorMarkerRef {
+public interface Connection extends INamedElement, ConfigurableObject, ErrorMarkerRef, HiddenElement {
 	/**
 	 * Returns the value of the '<em><b>Res Type Connection</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -199,22 +199,6 @@ public interface Connection extends INamedElement, ConfigurableObject, ErrorMark
 	 * @generated
 	 */
 	void updateRoutingData(int dx1, int dy, int dx2);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model visibleDataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 * @generated
-	 */
-	void setVisible(boolean visible);
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
-	 * @generated
-	 */
-	boolean isVisible();
 
 	/**
 	 * <!-- begin-user-doc -->

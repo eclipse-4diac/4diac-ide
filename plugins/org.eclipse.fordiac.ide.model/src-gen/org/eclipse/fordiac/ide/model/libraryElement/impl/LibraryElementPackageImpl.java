@@ -76,6 +76,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -738,6 +739,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass stMethodEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass hiddenElementEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -3454,6 +3462,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EClass getHiddenElement() {
+		return hiddenElementEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getLanguage() {
 		return languageEEnum;
 	}
@@ -3892,6 +3910,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		stMethodEClass = createEClass(ST_METHOD);
 
+		hiddenElementEClass = createEClass(HIDDEN_ELEMENT);
+
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
 
@@ -3945,6 +3965,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		connectionEClass.getESuperTypes().add(this.getINamedElement());
 		connectionEClass.getESuperTypes().add(this.getConfigurableObject());
 		connectionEClass.getESuperTypes().add(this.getErrorMarkerRef());
+		connectionEClass.getESuperTypes().add(this.getHiddenElement());
 		deviceEClass.getESuperTypes().add(this.getTypedConfigureableObject());
 		deviceEClass.getESuperTypes().add(this.getPositionableElement());
 		deviceEClass.getESuperTypes().add(this.getColorizableElement());
@@ -3993,6 +4014,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		serviceInterfaceEClass.getESuperTypes().add(this.getINamedElement());
 		iInterfaceElementEClass.getESuperTypes().add(this.getINamedElement());
 		iInterfaceElementEClass.getESuperTypes().add(this.getConfigurableObject());
+		iInterfaceElementEClass.getESuperTypes().add(this.getHiddenElement());
 		valueEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		resourceTypeFBEClass.getESuperTypes().add(this.getFB());
 		segmentTypeEClass.getESuperTypes().add(this.getCompilableType());
@@ -4020,6 +4042,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		textMethodEClass.getESuperTypes().add(this.getMethod());
 		otherMethodEClass.getESuperTypes().add(this.getTextMethod());
 		stMethodEClass.getESuperTypes().add(this.getTextMethod());
+		hiddenElementEClass.getESuperTypes().add(this.getConfigurableObject());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterDeclarationEClass, AdapterDeclaration.class, "AdapterDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -4088,15 +4111,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEParameter(op, theXMLTypePackage.getInt(), "dy", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, theXMLTypePackage.getInt(), "dx2", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
-		op = addEOperation(connectionEClass, null, "setVisible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, theXMLTypePackage.getBoolean(), "visible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		addEOperation(connectionEClass, theXMLTypePackage.getBoolean(), "isVisible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
 		addEOperation(connectionEClass, ecorePackage.getEBoolean(), "isInterfaceConnection", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		op = addEOperation(connectionEClass, null, "setVisible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, theXMLTypePackage.getBoolean(), "visible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(connectionRoutingDataEClass, ConnectionRoutingData.class, "ConnectionRoutingData", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getConnectionRoutingData_Dx1(), theXMLTypePackage.getInt(), "dx1", "0", 0, 1, ConnectionRoutingData.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
@@ -4663,6 +4678,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEAttribute(getOtherMethod_Language(), theXMLTypePackage.getString(), "language", null, 1, 1, OtherMethod.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(stMethodEClass, STMethod.class, "STMethod", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(hiddenElementEClass, HiddenElement.class, "HiddenElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		op = addEOperation(hiddenElementEClass, null, "setVisible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEParameter(op, theXMLTypePackage.getBoolean(), "visible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(hiddenElementEClass, theXMLTypePackage.getBoolean(), "isVisible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$

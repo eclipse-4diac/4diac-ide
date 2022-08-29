@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
 import org.eclipse.fordiac.ide.gef.editparts.IEditPartCreator;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -141,6 +142,10 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 			@Override
 			public Adapter caseConfigurableObject(ConfigurableObject object) {
 				return createConfigurableObjectAdapter();
+			}
+			@Override
+			public Adapter caseHiddenElement(HiddenElement object) {
+				return createHiddenElementAdapter();
 			}
 			@Override
 			public Adapter caseIInterfaceElement(IInterfaceElement object) {
@@ -350,6 +355,20 @@ public class MonitoringAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createConfigurableObjectAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.HiddenElement <em>Hidden Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.HiddenElement
+	 * @generated
+	 */
+	public Adapter createHiddenElementAdapter() {
 		return null;
 	}
 

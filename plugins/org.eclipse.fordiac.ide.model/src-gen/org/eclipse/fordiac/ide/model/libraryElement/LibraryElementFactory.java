@@ -711,6 +711,15 @@ public interface LibraryElementFactory extends EFactory {
 	STMethod createSTMethod();
 
 	/**
+	 * Returns a new object of class '<em>Hidden Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Hidden Element</em>'.
+	 * @generated
+	 */
+	HiddenElement createHiddenElement();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -40,7 +40,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
  * @model interface="true" abstract="true"
  * @generated
  */
-public interface IInterfaceElement extends INamedElement, ConfigurableObject {
+public interface IInterfaceElement extends INamedElement, ConfigurableObject, HiddenElement {
 	/**
 	 * Returns the value of the '<em><b>Is Input</b></em>' attribute.
 	 * <!-- begin-user-doc -->
