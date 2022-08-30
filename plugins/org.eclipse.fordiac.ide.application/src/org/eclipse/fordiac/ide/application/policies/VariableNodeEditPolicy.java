@@ -18,10 +18,10 @@ import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectDataConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.CreateConnectionRequest;
 

@@ -14,14 +14,14 @@
  *   Alois Zoitl - Code cleanup, fixed adapter connection creation issue
  *               - reworked and harmonized source/target checking 551042
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.commands.create;
+package org.eclipse.fordiac.ide.model.validation;
 
 import static org.eclipse.fordiac.ide.model.FordiacKeywords.ANY_ADAPTER;
 
 import java.text.MessageFormat;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;

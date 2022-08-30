@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University Linz, Primetals Technologies Austria GmbH
+ *               2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,26 +11,33 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *               - extension for connection error markers
+ *   Michael Oberlehner
+ *               - Refactoring of API
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
+import java.util.List;
+
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper;
 import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -141,33 +149,6 @@ public final class FordiacMarkerHelper {
 
 	}
 
-	public static ErrorMarkerBuilder createValueErrorMarkerBuilder(final String message, final Value value,
-			final int lineNumber) {
-		final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
-		marker.addLineNumber(lineNumber);
-		marker.addMessage(message);
-
-		marker.addTargetIdentifier(value);
-		final IInterfaceElement ie = (IInterfaceElement) value.eContainer();
-		final String location = FordiacMarkerHelper.getLocation(ie.getFBNetworkElement()) + "." + ie.getName(); //$NON-NLS-1$
-
-		marker.addLocation(location);
-
-		marker.setErrorMarkerRef(value);
-		return marker;
-	}
-
-	public static ErrorMarkerBuilder createErrorMarker(final String message, final INamedElement errorLocation,
-			final int lineNumber) {
-		final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
-
-		marker.addLineNumber(lineNumber);
-		marker.addMessage(message);
-		marker.addLocation(errorLocation);
-		marker.addTargetIdentifier(errorLocation);
-		return marker;
-	}
-
 	public static ErrorMarkerFBNElement createErrorMarkerFB(final String name) {
 		final ErrorMarkerFBNElement createErrorMarkerFBNElement = LibraryElementFactory.eINSTANCE
 				.createErrorMarkerFBNElement();
@@ -186,6 +167,48 @@ public final class FordiacMarkerHelper {
 		final TypeEntry entry = typeLibrary.createErrorTypeEntry(typeFbElement, fbType);
 		errorFb.setTypeEntry(entry);
 		return errorFb;
+	}
+
+
+
+	public static ErrorMarkerInterface createWrongDataTypeMarker(final IInterfaceElement oldInterface,
+			final IInterfaceElement newInterface, final FBNetworkElement element,
+			final List<ErrorMarkerBuilder> errorPins,final String errorMessage) {
+
+		final ErrorMarkerInterface createErrorMarker = (ErrorMarkerInterface) createErrorMarker(element, oldInterface,
+				errorMessage, errorPins);
+		createErrorMarker.setErrorMessage(errorMessage);
+		return createErrorMarker;
+	}
+
+	public static IInterfaceElement createErrorMarker(final FBNetworkElement newElement,
+			final IInterfaceElement oldInterface, final String errorMessage, final List<ErrorMarkerBuilder> errorPins) {
+		final boolean markerExists = newElement.getInterface().getErrorMarker().stream().anyMatch(
+				e -> e.getName().equals(oldInterface.getName()) && (e.isIsInput() == oldInterface.isIsInput()));
+
+		final ErrorMarkerInterface interfaceElement = ConnectionHelper.createErrorMarkerInterface(
+				oldInterface.getType(), oldInterface.getName(), oldInterface.isIsInput(), newElement.getInterface());
+
+		if (isVariable(oldInterface) && !((VarDeclaration) oldInterface).getValue().getValue().isBlank()) {
+			final Value value = LibraryElementFactory.eINSTANCE.createValue();
+			value.setValue(((VarDeclaration) oldInterface).getValue().getValue());
+			interfaceElement.setValue(value);
+		}
+		System.out.println(markerExists);
+		// add to list because file is not exisiting yet for connection
+
+		if (!markerExists) {
+			final ErrorMarkerBuilder createErrorMarker = ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage, newElement,
+					0);
+			createErrorMarker.setErrorMarkerRef(interfaceElement);
+			createErrorMarker.createMarkerInFile();
+			errorPins.add(createErrorMarker);
+		}
+		return interfaceElement;
+	}
+
+	public static boolean isVariable(final IInterfaceElement oldInterface) {
+		return (oldInterface instanceof VarDeclaration) && !(oldInterface instanceof AdapterDeclaration);
 	}
 
 }

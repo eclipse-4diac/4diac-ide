@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
-import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -856,7 +855,7 @@ public class FBTImporter extends TypeImporter {
 			// we don't have a type create error marker.
 			// This can only be done after fb has been added to FB network,
 			// so that the error marker can determine the location!
-			final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarker(
+			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createErrorMarkerBuilder(
 					MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", typeFbElement, fb.getName()), //$NON-NLS-1$
 					fb, getLineNumber());
 			errorMarkerAttributes.add(e);

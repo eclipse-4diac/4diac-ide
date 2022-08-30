@@ -34,7 +34,9 @@ import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.swt.widgets.Display;
 
@@ -82,6 +84,29 @@ public class ErrorMarkerBuilder {
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError("Error Marker not found", e); //$NON-NLS-1$
 		}
+	}
+
+	public static ErrorMarkerBuilder createValueErrorMarkerBuilder(final String message, final Value value,
+			final int lineNumber) {
+		final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
+		marker.addLineNumber(lineNumber);
+		marker.addMessage(message);
+		marker.addTargetIdentifier(value);
+		final IInterfaceElement ie = (IInterfaceElement) value.eContainer();
+		final String location = FordiacMarkerHelper.getLocation(ie.getFBNetworkElement()) + "." + ie.getName(); //$NON-NLS-1$
+		marker.addLocation(location);
+		marker.setErrorMarkerRef(value);
+		return marker;
+	}
+
+	public static ErrorMarkerBuilder createErrorMarkerBuilder(final String message, final INamedElement errorLocation,
+			final int lineNumber) {
+		final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
+		marker.addLineNumber(lineNumber);
+		marker.addMessage(message);
+		marker.addLocation(errorLocation);
+		marker.addTargetIdentifier(errorLocation);
+		return marker;
 	}
 
 	public Map<String, Object> getAttributes() {
@@ -179,6 +204,10 @@ public class ErrorMarkerBuilder {
 
 	}
 
+	public ErrorMarkerBuilder deleteErrorMarker() {
+		return deleteErrorMarker(errorMarkerRef);
+	}
+
 	private static ErrorMarkerBuilder deleteMarkerInJob(final IFile f, final ErrorMarkerRef ie) {
 		final long markerId = ie.getFileMarkerId();
 		final IMarker marker = f.getMarker(markerId);
@@ -254,4 +283,6 @@ public class ErrorMarkerBuilder {
 		}
 
 	}
+
+
 }
