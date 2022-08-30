@@ -279,32 +279,44 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 		// mapping the output event occurrences to the network
 		final EList<EventOccurrence> networkEvents = new BasicEList<>();
-		outputEvents.forEach(event -> createNetworkEvent(networkEvents, event));
+		outputEvents.forEach(event -> createNetworkEvent(networkEvents, event, fBNetworkRuntime));
+
+		networkEvents.forEach(eo -> writeDataOutputsToConnections(eo, fBNetworkRuntime));
 
 		// create new transactions for the connected FBs in the network
 		final List<FBTransaction> generatedTransactions = processEventConns(fBNetworkRuntime, networkEvents);
 		eventOccurrence.getCreatedTransactions().addAll(generatedTransactions);
 
-		return networkEvents;
+		return outputEvents;
 	}
 
-	private void createNetworkEvent(final EList<EventOccurrence> networkEvents, final EventOccurrence event) {
+	private void createNetworkEvent(final EList<EventOccurrence> networkEvents, final EventOccurrence event,
+			final FBNetworkRuntime fBNetworkRuntime) {
 		final Event mappedEvent = (Event) eventOccurrence.getParentFB().getInterfaceElement(event.getEvent().getName());
 		final EventOccurrence newEventOccurrence = EventOccFactory.createFrom(mappedEvent,
-				EcoreUtil.copy(event.getFbRuntime()));
+				EcoreUtil.copy(fBNetworkRuntime));
 		newEventOccurrence.setParentFB(eventOccurrence.getParentFB());
 		// Extract the returned values from the FBTypeRuntime to FBNetwork
-		final Event returnedEvent = (Event) ((BasicFBTypeRuntime) event.getFbRuntime()).getBasicfbtype()
-				.getInterfaceList().getInterfaceElement(event.getEvent().getName());
-		returnedEvent.getWith().stream().forEach(
-				w -> ((VarDeclaration) eventOccurrence.getParentFB().getInterfaceElement(w.getVariables().getName()))
-						.setValue(EcoreUtil.copy(w.getVariables().getValue())));
+		extractOutputDataFromTypeRuntime(event);
 
 		networkEvents.add(newEventOccurrence);
 	}
 
+	private void extractOutputDataFromTypeRuntime(final EventOccurrence outputEo) {
+		final BasicFBType typeAfterExecution = ((BasicFBTypeRuntime) outputEo.getFbRuntime()).getBasicfbtype();
+		final Event returnedEvent = (Event) typeAfterExecution.getInterfaceList()
+				.getInterfaceElement(outputEo.getEvent().getName());
+		outputEo.setParentFB(eventOccurrence.getParentFB());
+		for (final With w : returnedEvent.getWith()) {
+			final VarDeclaration associatedVar = w.getVariables();
+			final VarDeclaration destVar = (VarDeclaration) eventOccurrence.getParentFB()
+					.getInterfaceElement(associatedVar.getName());
+			destVar.setValue(associatedVar.getValue());
+		}
+	}
+
 	private void sampleDataInput(final FBRuntimeAbstract runtime, final FBNetworkRuntime fBNetworkRuntime) {
-		final EList<VarDeclaration> networkVarsSample = sampleData(this.eventOccurrence);
+		final EList<VarDeclaration> networkVarsSample = getAssociatedDataPins(this.eventOccurrence);
 		networkVarsSample.forEach(varDec -> {
 			Value value = null;
 			if (varDec.getInputConnections().isEmpty()) {
@@ -356,26 +368,18 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 				copyFBNetworkRuntime);
 		destinationEventOccurence.setParentFB(dest.getFBNetworkElement());
 		final FBTransaction transaction = TransactionFactory.createFrom(destinationEventOccurence);
-
-		sampleDataOutput(sourceEventOcurrence, destinationEventOccurence, copyFBNetworkRuntime, transaction);
-
+		destinationEventOccurence.getCreatedTransactions().add(transaction);
 		return transaction;
 	}
 
-	private static void sampleDataOutput(final EventOccurrence sourceEventOcurrence,
-			final EventOccurrence destinationEventOccurence, final FBNetworkRuntime copyFBNetworkRuntime,
-			final FBTransaction transaction) {
-
-		final EList<VarDeclaration> networkVarsSample = sampleData(sourceEventOcurrence);
-
-		final EMap<Connection, Value> map = copyFBNetworkRuntime.getTransferData();
+	private static void writeDataOutputsToConnections(final EventOccurrence eo, final FBNetworkRuntime runtime) {
+		final EList<VarDeclaration> networkVarsSample = getAssociatedDataPins(eo);
+		final EMap<Connection, Value> map = runtime.getTransferData();
 		networkVarsSample.forEach(variable -> variable.getOutputConnections().stream()
 				.forEach(outputConnection -> map.put(outputConnection, EcoreUtil.copy(variable.getValue()))));
-
-		destinationEventOccurence.getCreatedTransactions().add(transaction);
 	}
 
-	private static EList<VarDeclaration> sampleData(final EventOccurrence sourceEventOcurrence) {
+	private static EList<VarDeclaration> getAssociatedDataPins(final EventOccurrence sourceEventOcurrence) {
 		// Sample data
 		final Event sourceTypeEvent = (Event) findTypeOfPinInNetwork(sourceEventOcurrence);
 		final EList<VarDeclaration> varsToSample = sourceTypeEvent.getWith().stream().map(With::getVariables)
