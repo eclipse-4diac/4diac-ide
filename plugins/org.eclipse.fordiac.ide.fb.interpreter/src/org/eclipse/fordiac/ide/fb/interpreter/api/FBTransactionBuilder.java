@@ -20,6 +20,7 @@ import java.util.List;
 public class FBTransactionBuilder {
 
 	private final String inputEvent;
+	private final String inputParameter;
 	private final List<String> outputEvent;
 	private final List<String> outputParameter;
 
@@ -35,25 +36,20 @@ public class FBTransactionBuilder {
 		return outputParameter;
 	}
 
-	public FBTransactionBuilder(final String inputEvent, final List<String> outputEvent, final List<String> outputParameter) {
-		super();
+	public FBTransactionBuilder(final String inputEvent, final String inputParameter, final List<String> outputEvent,
+			final List<String> outputParameter) {
 		this.inputEvent = inputEvent;
+		this.inputParameter = inputParameter;
 		this.outputEvent = outputEvent;
 		this.outputParameter = outputParameter;
 	}
 
 	public FBTransactionBuilder(final String inputEvent, final String outputEvent, final String outputParameter) {
-		super();
-		this.inputEvent = inputEvent;
-		this.outputEvent = Arrays.asList(outputEvent);
-		this.outputParameter = Arrays.asList(outputParameter);
+		this(inputEvent, null, Arrays.asList(outputEvent), Arrays.asList(outputParameter));
 	}
 
 	public FBTransactionBuilder(final String inputEvent) {
-		super();
-		this.inputEvent = inputEvent;
-		this.outputEvent = Collections.emptyList();
-		this.outputParameter = Collections.emptyList();
+		this(inputEvent, null, Collections.emptyList(), Collections.emptyList());
 	}
 
 	public FBTransactionBuilder(final String inputEvent, final String outputEvent) {
@@ -61,10 +57,10 @@ public class FBTransactionBuilder {
 	}
 
 	public FBTransactionBuilder(final String inputEvent, final List<String> outputEvents) {
-		this(inputEvent, outputEvents, Collections.emptyList());
+		this(inputEvent, null, outputEvents, Collections.emptyList());
 	}
 
 	public static FBTransactionBuilder getSimpleFBTransaction(final String parameters) {
-		return new FBTransactionBuilder("REQ", "CNF", parameters);  //$NON-NLS-1$//$NON-NLS-2$
+		return new FBTransactionBuilder("REQ", "CNF", parameters); //$NON-NLS-1$//$NON-NLS-2$
 	}
 }

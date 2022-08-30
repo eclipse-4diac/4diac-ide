@@ -35,7 +35,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
 public final class FBTestRunner {
-	public static EList<Transaction> runFBNetworkTest(final FBNetwork network, final Event event) {
+	public static EList<Transaction> runFBNetworkTest(final FBNetwork network, final String fbInstanceName,
+			final String pinName) {
+		final Event event = (Event) network.getFBNamed(fbInstanceName).getInterfaceElement(pinName);
 		final EventManager eventManager = EventManagerFactory.createFrom(event, EcoreUtil.copy(network));
 		EventManagerUtils.processNetwork(eventManager);
 		return eventManager.getTransactions();

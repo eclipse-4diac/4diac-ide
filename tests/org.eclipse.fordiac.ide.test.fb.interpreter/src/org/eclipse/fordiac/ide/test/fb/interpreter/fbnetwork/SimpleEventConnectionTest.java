@@ -22,7 +22,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
@@ -38,9 +37,7 @@ public class SimpleEventConnectionTest extends AbstractInterpreterTest {
 
 		final SubApp subApp = network.getSubAppNamed("Ex1a"); //$NON-NLS-1$
 
-		final EList<Transaction> returnedTransactions =
-				runFBNetworkTest(subApp.getSubAppNetwork(), (Event) subApp.getSubAppNetwork().getFBNamed("E_SPLIT").getInterfaceElement("EI")); //$NON-NLS-1$ //$NON-NLS-2$
-
+		final EList<Transaction> returnedTransactions = runFBNetworkTest(subApp.getSubAppNetwork(), "E_SPLIT", "EI"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		assertTrue(returnedTransactions.size() == 3);
 

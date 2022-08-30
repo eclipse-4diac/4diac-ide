@@ -21,7 +21,6 @@ import static org.junit.Assert.assertTrue;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
@@ -34,9 +33,7 @@ public class ExampleFbNetworkTest extends AbstractInterpreterTest {
 		final FBNetwork network = loadFbNetwork("ExampleFbNetwork", "ExampleFbNetwork"); //$NON-NLS-1$ //$NON-NLS-2$
 		assertNotNull(network);
 
-		final EList<Transaction> returnedTransactions =
-				runFBNetworkTest(network, (Event) network.getFBNamed("E_SR").getInterfaceElement("S")); //$NON-NLS-1$ //$NON-NLS-2$
-
+		final EList<Transaction> returnedTransactions = runFBNetworkTest(network, "E_SR", "S"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		assertTrue(returnedTransactions.size() == 3);
 
