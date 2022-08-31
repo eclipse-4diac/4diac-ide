@@ -27,7 +27,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 public final class ProtocolSelector {
 
 	private static final String CAN = "Can"; //$NON-NLS-1$
-	private static final String ETHERNET = "Ethernet"; //$NON-NLS-1$
+	private static final String ETH = "Ethernet"; //$NON-NLS-1$
 
 	public static void doAutomatedProtocolSelection(final CommunicationModel model) {
 		for (final CommunicationChannel channel : model.getChannels().values()) {
@@ -96,7 +96,7 @@ public final class ProtocolSelector {
 	}
 
 	private static String getProtocolIdForMetiaType(final Segment segment) {
-		if (segment.getType().getName().equalsIgnoreCase(ETHERNET)) {
+		if (segment.getType().getName().equalsIgnoreCase(ETH)) {
 			return EthernetPubSubGenerator.PROTOCOL_ID;
 		} else if (segment.getType().getName().equalsIgnoreCase(CAN)) {
 			return CanPubSubGenerator.PROTOCOL_ID;
@@ -106,24 +106,30 @@ public final class ProtocolSelector {
 
 	private static void sortSegments(final List<Segment> segmentList) {
 		Collections.sort(segmentList, (final Segment o1, final Segment o2) -> {
-			final String name1 = o1.getType().getName();
-			final String name2 = o2.getType().getName();
-
-			if (name1.equalsIgnoreCase(CAN)) {
-				if (name2.equalsIgnoreCase(CAN)) {
-					return 0;
-				}
-				return -1;
-			} else if (name1.equalsIgnoreCase(ETHERNET)) {
-				if (name2.equalsIgnoreCase(CAN)) {
-					return 1;
-				} else if (name2.equalsIgnoreCase(ETHERNET)) {
-					return 0;
-				}
+			final String[] n = getName(o1, o2);
+			if (equalETH(n[0]) && equalCAN(n[1])) {
+				return 1;
+			}
+			if (!equalCAN(n[1]) && (equalCAN(n[0]) || (equalETH(n[0]) && !equalETH(n[1])))) {
 				return -1;
 			}
 			return 0;
 		});
+	}
+
+	private static boolean equalETH(final String str) {
+		return str.equalsIgnoreCase(ETH);
+	}
+
+	private static boolean equalCAN(final String str) {
+		return str.equalsIgnoreCase(CAN);
+	}
+
+	private static String[] getName(final Segment o1, final Segment o2) {
+		final String[] name = new String[2];
+		name[0] = o1.getType().getName();
+		name[1] = o2.getType().getName();
+		return name;
 	}
 
 	private ProtocolSelector() {
