@@ -132,19 +132,19 @@ public final class TransactionFactory {
 		// TODO Move Somewere better
 		final ServiceTransaction transaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
 		seq.getServiceTransaction().add(transaction);
-		if (fbtrans.getInputEvent() != null) {
+		if (fbtrans.getInputEventName() != null) {
 			final InputPrimitive inputPrimitive = LibraryElementFactory.eINSTANCE.createInputPrimitive();
-			inputPrimitive.setEvent(fbtrans.getInputEvent());
+			inputPrimitive.setEvent(fbtrans.getInputEventName());
 			transaction.setInputPrimitive(inputPrimitive);
 		}
 
-		if (!fbtrans.getOutputEvent().isEmpty()) {
-			for (final String event : fbtrans.getOutputEvent()) {
+		if (!fbtrans.getOutputEventNames().isEmpty()) {
+			for (final String event : fbtrans.getOutputEventNames()) {
 				final OutputPrimitive outputPrimitive = LibraryElementFactory.eINSTANCE.createOutputPrimitive();
 				outputPrimitive.setEvent(event);
 				outputPrimitive.setInterface(((Service) seq.eContainer()).getLeftInterface());
 				outputPrimitive.setParameters(""); //$NON-NLS-1$
-				for (final String parameter : fbtrans.getOutputParameter()) {
+				for (final String parameter : fbtrans.getOutputParameters()) {
 					outputPrimitive.setParameters(outputPrimitive.getParameters() + parameter + ";"); //$NON-NLS-1$
 				}
 				transaction.getOutputPrimitive().add(outputPrimitive);

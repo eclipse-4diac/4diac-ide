@@ -14,14 +14,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.fbnetwork;
 
-import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBNetworkTest;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBNetworkTestRunner.runFBNetworkTest;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
+import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBNetworkTestRunner;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBNetworkTestRunner.IllegalTraceException;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
@@ -30,7 +31,7 @@ import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest
 public class SimpleEventConnectionTest extends AbstractInterpreterTest {
 
 	@Override
-	public void test() {
+	public void test() throws IllegalTraceException {
 
 		final FBNetwork network = loadFbNetwork("ReferenceExamples", "ReferenceExamples", "EventConnections"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		assertNotNull(network);
@@ -42,34 +43,17 @@ public class SimpleEventConnectionTest extends AbstractInterpreterTest {
 		assertTrue(returnedTransactions.size() == 3);
 
 		// transaction 0: initial trigger
-		final FBTransaction t0 = (FBTransaction) returnedTransactions.get(0);
-		assertTrue("EI".equals(t0.getInputEventOccurrence().getEvent().getName())); //$NON-NLS-1$
-		assertTrue("E_SPLIT".equals(t0.getInputEventOccurrence().getParentFB().getName())); //$NON-NLS-1$
-		assertTrue(t0.getOutputEventOccurrences().size() == 2);
-
-		final EventOccurrence eo1 = t0.getOutputEventOccurrences().get(0);
-		assertTrue("EO1".equals(eo1.getEvent().getName())); //$NON-NLS-1$
-		assertTrue("E_SPLIT".equals(eo1.getParentFB().getName())); //$NON-NLS-1$
-
-		final EventOccurrence eo2 = t0.getOutputEventOccurrences().get(1);
-		assertTrue("EO2".equals(eo2.getEvent().getName())); //$NON-NLS-1$
-		assertTrue("E_SPLIT".equals(eo2.getParentFB().getName())); //$NON-NLS-1$
+		FBTransactionBuilder expectedT = new FBTransactionBuilder("E_SPLIT.EI").addOutputEvent("E_SPLIT.EO1")
+				.addOutputEvent("E_SPLIT.EO2");
+		FBNetworkTestRunner.checkTransaction(returnedTransactions.get(0), expectedT);
 
 		// transaction 1: first event connection
-		final FBTransaction t1 = (FBTransaction) returnedTransactions.get(1);
-		assertTrue("EI1".equals(t1.getInputEventOccurrence().getEvent().getName())); //$NON-NLS-1$
-		assertTrue("E_REND".equals(t1.getInputEventOccurrence().getParentFB().getName())); //$NON-NLS-1$
-		assertTrue(t1.getOutputEventOccurrences().isEmpty());
+		expectedT = new FBTransactionBuilder("E_REND.EI1");
+		FBNetworkTestRunner.checkTransaction(returnedTransactions.get(1), expectedT);
 
 		// transaction 2: second event connection
-		final FBTransaction t2 = (FBTransaction) returnedTransactions.get(2);
-		assertTrue("EI2".equals(t2.getInputEventOccurrence().getEvent().getName())); //$NON-NLS-1$
-		assertTrue("E_REND".equals(t2.getInputEventOccurrence().getParentFB().getName())); //$NON-NLS-1$
-		assertTrue(t2.getOutputEventOccurrences().size() == 1);
-
-		final EventOccurrence eo21 = t2.getOutputEventOccurrences().get(0);
-		assertTrue("EO".equals(eo21.getEvent().getName())); //$NON-NLS-1$
-		assertTrue("E_REND".equals(eo21.getParentFB().getName())); //$NON-NLS-1$
+		expectedT = new FBTransactionBuilder("E_REND.EI2").addOutputEvent("E_REND.EO");
+		FBNetworkTestRunner.checkTransaction(returnedTransactions.get(2), expectedT);
 
 	}
 

@@ -19,7 +19,6 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
@@ -27,21 +26,12 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
 public final class FBTestRunner {
-	public static EList<Transaction> runFBNetworkTest(final FBNetwork network, final String fbInstanceName,
-			final String pinName) {
-		final Event event = (Event) network.getFBNamed(fbInstanceName).getInterfaceElement(pinName);
-		final EventManager eventManager = EventManagerFactory.createFrom(event, EcoreUtil.copy(network));
-		EventManagerUtils.processNetwork(eventManager);
-		return eventManager.getTransactions();
-	}
 
 	public static FBType runFBTest(final FBType fb, final ServiceSequence seq) {
 		return runFBTest(fb, seq, null);
@@ -137,4 +127,7 @@ public final class FBTestRunner {
 		return null;
 	}
 
+	private FBTestRunner() {
+		throw new UnsupportedOperationException();
+	}
 }

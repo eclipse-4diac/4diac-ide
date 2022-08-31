@@ -14,7 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.fbnetwork;
 
-import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBNetworkTest;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBNetworkTestRunner.runFBNetworkTest;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
