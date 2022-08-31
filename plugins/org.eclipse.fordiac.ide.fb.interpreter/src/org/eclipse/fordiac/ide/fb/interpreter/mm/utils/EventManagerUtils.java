@@ -95,7 +95,8 @@ public final class EventManagerUtils {
 			final var transaction = transactions.get(i);
 			if (transaction instanceof FBTransaction) {
 				processFbTransaction((FBTransaction) transaction);
-				eventManager.getTransactions().addAll(transaction.getInputEventOccurrence().getCreatedTransactions());
+				((FBTransaction) transaction).getOutputEventOccurrences()
+						.forEach(outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
 				if (moreTransactionsLeft(transactions, i)) {
 					final FBRuntimeAbstract newfbRuntime = EcoreUtil
 							.copy(getLatestNetworkRuntime((FBTransaction) transaction));
