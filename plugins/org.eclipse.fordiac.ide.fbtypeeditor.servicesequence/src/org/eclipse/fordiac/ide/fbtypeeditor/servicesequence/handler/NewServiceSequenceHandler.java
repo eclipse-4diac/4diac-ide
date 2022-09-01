@@ -19,6 +19,7 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.gef.EditPart;
@@ -50,7 +51,10 @@ public class NewServiceSequenceHandler extends AbstractHandler {
 		return Status.OK_STATUS;
 	}
 
-	private Command getCommand(final Object selected) {
+	private Command getCommand(Object selected) {
+		if (selected instanceof FBType) {
+			selected = ((FBType) selected).getService();
+		}
 		if (selected instanceof Service) {
 			return new CreateServiceSequenceCommand((Service) selected);
 		}
