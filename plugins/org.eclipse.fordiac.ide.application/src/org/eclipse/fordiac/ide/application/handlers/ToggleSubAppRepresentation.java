@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -45,18 +46,16 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final SubApp subapp = (SubApp) ((EditPart) selection.getFirstElement()).getModel();
-		final ToggleSubAppRepresentationCommand cmd = new ToggleSubAppRepresentationCommand(subapp);
+		Command cmd = new ToggleSubAppRepresentationCommand(subapp);
+
+		if (!subapp.isUnfolded() && (selection.getFirstElement() instanceof SubAppForFBNetworkEditPart)) {
+			//we are going to get unfolded wrap resize command
+			cmd = new ResizeGroupOrSubappCommand((SubAppForFBNetworkEditPart) selection.getFirstElement(), cmd);
+		}
 
 		final CommandStack commandStack = HandlerUtil.getActiveEditor(event).getAdapter(CommandStack.class);
 		if (cmd.canExecute()) {
 			commandStack.execute(cmd);
-		}
-
-		if (((EditPart) selection.getFirstElement()) instanceof SubAppForFBNetworkEditPart
-				&& ((SubAppForFBNetworkEditPart) selection.getFirstElement()).getContentEP() != null) {
-			commandStack.execute(
-					new ResizeGroupOrSubappCommand(
-							((SubAppForFBNetworkEditPart) selection.getFirstElement()).getContentEP()));
 		}
 
 		// requesting a change is needed for the Source dropdown menu
@@ -116,4 +115,5 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 		}
 		return null;
 	}
+
 }
