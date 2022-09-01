@@ -49,9 +49,9 @@ public class SequenceMatcher {
 		return false;
 	}
 
-	private boolean matchParameters(final String parameters, final boolean isInput) {
+	public boolean matchParameters(final String parameters, final boolean isInput) {
 		// split parameters at ";"
-		final List<String> params=ServiceSequenceUtils.splitList(parameters);
+		final List<String> params = ServiceSequenceUtils.splitList(parameters);
 
 		// parse each parameter assumption a:=b
 		return params.stream().allMatch(param -> matchVariable(param, isInput));

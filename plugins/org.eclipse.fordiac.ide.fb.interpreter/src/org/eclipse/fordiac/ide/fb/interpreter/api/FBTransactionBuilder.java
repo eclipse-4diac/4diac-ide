@@ -52,18 +52,18 @@ public class FBTransactionBuilder {
 	}
 
 	public FBTransactionBuilder addOutputEvent(final String name) {
-		addOutputEvent(name, "");
+		addOutputEvent(name, ""); //$NON-NLS-1$
 		return this;
 	}
 
-	private FBTransactionBuilder addOutputEvent(final String name, final String parameter) {
+	public FBTransactionBuilder addOutputEvent(final String name, final String parameter) {
 		outputEventNames.add(name);
 		outputParameter.add(parameter);
 		return this;
 	}
 
-	public FBTransactionBuilder addOutputEvents(final List<String> names) {
-		names.forEach(name -> addOutputEvent(name, ""));
+	public FBTransactionBuilder addOutputEvents(final Iterable<String> names) {
+		names.forEach(name -> addOutputEvent(name, "")); //$NON-NLS-1$
 		return this;
 	}
 
@@ -77,7 +77,7 @@ public class FBTransactionBuilder {
 
 	public String getOutputEventName(final int index) {
 		if (outputEventNames.size() <= index) {
-			throw new IllegalArgumentException("Less than " + index + " expected output events");
+			throw new IllegalArgumentException("Less than " + index + " expected output events"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 		return outputEventNames.get(index);
 	}

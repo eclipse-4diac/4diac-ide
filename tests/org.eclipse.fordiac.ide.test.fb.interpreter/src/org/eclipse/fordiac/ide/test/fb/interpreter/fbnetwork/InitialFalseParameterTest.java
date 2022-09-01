@@ -27,32 +27,25 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 
-/**
- * fb network including an E_SPLIT, E_REND, and another E_SPLIT tests parallel
- * paths (two output events sent in parallel by E_SPLIT)
- */
-public class DoubleEventConnectionTest extends AbstractInterpreterTest {
-	private static final String INITIAL_FB = "E_SPLIT";
-	private static final String INITIAL_PIN = "EI";
+/** fb network including an E_SPLIT, E_REND, and another E_SPLIT tests parallel paths (two output events sent in
+ * parallel by E_SPLIT) */
+public class InitialFalseParameterTest extends AbstractInterpreterTest {
+	private static final String INITIAL_FB = "E_PERMIT"; //$NON-NLS-1$
+	private static final String INITIAL_PIN = "EI"; //$NON-NLS-1$
 
 	@Override
 	public void test() throws IllegalTraceException {
 
 		final FBNetwork network = loadFbNetwork("ReferenceExamples", "ReferenceExamples", "EventConnections"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		assertNotNull(network);
-		final SubApp subApp = network.getSubAppNamed("Ex1b"); //$NON-NLS-1$
+		final SubApp subApp = network.getSubAppNamed("Ex4b"); //$NON-NLS-1$
 
 		final EList<Transaction> returnedTransactions = runFBNetworkTest(subApp.getSubAppNetwork(), INITIAL_FB,
-				INITIAL_PIN); // $NON-NLS-1$ //$NON-NLS-2$
+				INITIAL_PIN);
 
 		final List<FBTransactionBuilder> expectedTs = new ArrayList<>();
 
-		expectedTs.add(new FBTransactionBuilder(INITIAL_FB + "." + INITIAL_PIN).addOutputEvent("E_SPLIT.EO1") //$NON-NLS-2$
-				.addOutputEvent("E_SPLIT.EO2")); //$NON-NLS-1$
-		expectedTs.add(new FBTransactionBuilder("E_REND.EI1"));//$NON-NLS-1$
-		expectedTs.add(new FBTransactionBuilder("E_REND.EI2").addOutputEvent("E_REND.EO"));//$NON-NLS-1$ //$NON-NLS-2$
-		expectedTs.add(new FBTransactionBuilder("E_SPLIT2.EI").addOutputEvent("E_SPLIT2.EO1")//$NON-NLS-1$ //$NON-NLS-2$
-				.addOutputEvent("E_SPLIT2.EO2")); //$NON-NLS-1$
+		expectedTs.add(new FBTransactionBuilder(INITIAL_FB + "." + INITIAL_PIN)); //$NON-NLS-1$
 
 		checkNetworkResults(returnedTransactions, expectedTs);
 	}

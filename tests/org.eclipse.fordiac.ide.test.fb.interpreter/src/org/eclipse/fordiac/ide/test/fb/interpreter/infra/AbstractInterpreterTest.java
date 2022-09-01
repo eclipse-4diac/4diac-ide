@@ -89,7 +89,7 @@ public abstract class AbstractInterpreterTest {
 		return fbt;
 	}
 
-	protected void checkNetworkResults(final EList<Transaction> returnedTransactions,
+	protected static void checkNetworkResults(final EList<Transaction> returnedTransactions,
 			final List<FBTransactionBuilder> expectedTs) throws IllegalTraceException {
 		assert (returnedTransactions.size() == expectedTs.size());
 

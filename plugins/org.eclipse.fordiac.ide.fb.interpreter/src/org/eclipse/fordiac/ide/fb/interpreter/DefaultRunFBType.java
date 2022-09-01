@@ -308,7 +308,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	}
 
 	private void extractOutputDataFromTypeRuntime(final EventOccurrence outputEo) {
-		final BasicFBType typeAfterExecution = ((BasicFBTypeRuntime) outputEo.getFbRuntime()).getBasicfbtype();
+		final FBType typeAfterExecution = (FBType) outputEo.getFbRuntime().getModel();
 		final Event returnedEvent = (Event) typeAfterExecution.getInterfaceList()
 				.getInterfaceElement(outputEo.getEvent().getName());
 		for (final With w : returnedEvent.getWith()) {

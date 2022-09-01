@@ -43,16 +43,16 @@ public class SimpleEventConnectionTest extends AbstractInterpreterTest {
 		assertTrue(returnedTransactions.size() == 3);
 
 		// transaction 0: initial trigger
-		FBTransactionBuilder expectedT = new FBTransactionBuilder("E_SPLIT.EI").addOutputEvent("E_SPLIT.EO1")
-				.addOutputEvent("E_SPLIT.EO2");
+		FBTransactionBuilder expectedT = new FBTransactionBuilder("E_SPLIT.EI").addOutputEvent("E_SPLIT.EO1") //$NON-NLS-1$ //$NON-NLS-2$
+				.addOutputEvent("E_SPLIT.EO2"); //$NON-NLS-1$
 		FBNetworkTestRunner.checkTransaction(returnedTransactions.get(0), expectedT);
 
 		// transaction 1: first event connection
-		expectedT = new FBTransactionBuilder("E_REND.EI1");
+		expectedT = new FBTransactionBuilder("E_REND.EI1"); //$NON-NLS-1$
 		FBNetworkTestRunner.checkTransaction(returnedTransactions.get(1), expectedT);
 
 		// transaction 2: second event connection
-		expectedT = new FBTransactionBuilder("E_REND.EI2").addOutputEvent("E_REND.EO");
+		expectedT = new FBTransactionBuilder("E_REND.EI2").addOutputEvent("E_REND.EO"); //$NON-NLS-1$ //$NON-NLS-2$
 		FBNetworkTestRunner.checkTransaction(returnedTransactions.get(2), expectedT);
 
 	}

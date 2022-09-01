@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 public final class FBNetworkTestRunner {
 	public static EList<Transaction> runFBNetworkTest(final FBNetwork network, final String fbInstanceName,
@@ -56,27 +57,34 @@ public final class FBNetworkTestRunner {
 			throws IllegalTraceException {
 		final FBTransaction result = (FBTransaction) res;
 		checkEvent(result.getInputEventOccurrence(), expectedResult.getInputEventName());
+		// checkData(expectedResult.getInputParameter(), result.getInputEventOccurrence(), true);
 
 		if (result.getOutputEventOccurrences().size() != expectedResult.getOutputEventNames().size()) {
-			throw new IllegalTraceException("Expected " + expectedResult.getOutputEventNames().size()
-					+ " transactions, received " + result.getOutputEventOccurrences().size());
+			throw new IllegalTraceException("Expected " + expectedResult.getOutputEventNames().size() //$NON-NLS-1$
+					+ " transactions, received " + result.getOutputEventOccurrences().size()); //$NON-NLS-1$
 		}
 		for (int i = 0; i < result.getOutputEventOccurrences().size(); i++) {
 			checkEvent(result.getOutputEventOccurrences().get(i), expectedResult.getOutputEventName(i));
+			checkData(expectedResult.getOutputParameters().get(i), result.getOutputEventOccurrences().get(i), false);
 		}
+	}
+
+	private static void checkData(final String expectedResult, final EventOccurrence result, final boolean isInput) {
+		final FBType resultType = (FBType) result.getFbRuntime().getModel();
+		new SequenceMatcher(resultType).matchParameters(expectedResult, isInput);
 	}
 
 	private static void checkEvent(final EventOccurrence result, final String expectedEventName)
 			throws IllegalTraceException {
-		final String[] expectedEventNames = expectedEventName.split("\\."); //$NON-NLS-1$
 		if (result == null) {
-			throw new IllegalTraceException("Incomplete Transaction: input event occurrence was null");
+			throw new IllegalTraceException("Incomplete Transaction: input event occurrence was null"); //$NON-NLS-1$
 		}
+		final String[] expectedEventNames = expectedEventName.split("\\."); //$NON-NLS-1$
 		if (expectedEventNames.length == 2) {
 			if (!matchFbInstanceName(result, expectedEventNames)) {
 				throw new IllegalTraceException(
 						"Unexpected input event occurrence at FB " + result.getParentFB().getName() //$NON-NLS-1$
-								+ ", expected: " + expectedEventName);
+								+ ", expected: " + expectedEventName); //$NON-NLS-1$
 			}
 			if (!matchEventName(result, expectedEventNames[1])) {
 				throw new IllegalTraceException("Unexpected input event occurrence, expected: " + expectedEventName); //$NON-NLS-1$
