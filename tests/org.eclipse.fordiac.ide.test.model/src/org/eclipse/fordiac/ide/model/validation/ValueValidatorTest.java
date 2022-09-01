@@ -33,6 +33,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 @SuppressWarnings({ "static-method", "squid:S5960" })
 class ValueValidatorTest {
 
+	private static final String PI = "3.1415"; //$NON-NLS-1$
+	private static final String AFFE = "16#AFFE"; //$NON-NLS-1$
 	private static final String NO_ERROR = ""; //$NON-NLS-1$
 	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_1 = "Characters used outside boundaries!"; //$NON-NLS-1$
 	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_2 = "\'%\' symbols used inside boundaries!"; //$NON-NLS-1$
@@ -76,12 +78,11 @@ class ValueValidatorTest {
 						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "2", //$NON-NLS-1$
 						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
-				Arguments.of(IecTypes.ElementaryTypes.BOOL, "3.1415", //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.BOOL, PI, 
 						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "1970-01-30", //$NON-NLS-1$
 						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
-				Arguments.of(IecTypes.ElementaryTypes.BOOL, "16#AFFE", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
+				Arguments.of(IecTypes.ElementaryTypes.BOOL, AFFE, Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "12:00:00", //$NON-NLS-1$
 						Messages.VALIDATOR_INVALID_BOOL_LITERAL));
 	}
@@ -106,7 +107,7 @@ class ValueValidatorTest {
 				Arguments.of(IecTypes.ElementaryTypes.LREAL, "3.14", NO_ERROR), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.LREAL, "3.14e5", NO_ERROR), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.LREAL, "3.14e-5", NO_ERROR), //$NON-NLS-1$
-				Arguments.of(IecTypes.ElementaryTypes.WORD, "16#AFFE", NO_ERROR), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.WORD, AFFE, NO_ERROR),
 				Arguments.of(IecTypes.ElementaryTypes.LWORD, "16#FFFFFFFFFFFFFFFF", NO_ERROR)); //$NON-NLS-1$
 	}
 
@@ -137,8 +138,7 @@ class ValueValidatorTest {
 						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.UINT, "-17", //$NON-NLS-1$
 						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
-				Arguments.of(IecTypes.ElementaryTypes.BYTE, "16#AFFE", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+				Arguments.of(IecTypes.ElementaryTypes.BYTE, AFFE, Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.REAL, "3.14e120", //$NON-NLS-1$
 						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.LREAL, "3.14e1200", //$NON-NLS-1$
@@ -182,30 +182,20 @@ class ValueValidatorTest {
 				Arguments.of(IecTypes.GenericTypes.ANY_BIT, "-0", Messages.VALIDATOR_DatatypeRequiresTypeSpecifier), //$NON-NLS-1$
 				Arguments.of(IecTypes.GenericTypes.ANY_CHAR, "-342434", //$NON-NLS-1$
 						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_CHARS, "3.1415", //$NON-NLS-1$
+				Arguments.of(IecTypes.GenericTypes.ANY_CHARS, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_DATE, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_DERIVED, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_DURATION, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_ELEMENTARY, PI,
 						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_DATE, "3.1415", //$NON-NLS-1$
-						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_DERIVED, "3.1415", //$NON-NLS-1$
-						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_DURATION, "3.1415", //$NON-NLS-1$
-						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_ELEMENTARY, "3.1415", //$NON-NLS-1$
-						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_INT, "3.1415", Messages.VALIDATOR_DatatypeRequiresTypeSpecifier), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_MAGNITUDE, "3.1415", //$NON-NLS-1$
-						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_NUM, "3.1415", Messages.VALIDATOR_DatatypeRequiresTypeSpecifier), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_REAL, "3.1415", //$NON-NLS-1$
-						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_SIGNED, "3.1415", //$NON-NLS-1$
-						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_STRING, "3.1415", //$NON-NLS-1$
-						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_STRUCT, "3.1415", //$NON-NLS-1$
-						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_UNSIGNED, "3.1415", //$NON-NLS-1$
-						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier));
+				Arguments.of(IecTypes.GenericTypes.ANY_INT, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_MAGNITUDE, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_NUM, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_REAL, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_SIGNED, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_STRING, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_STRUCT, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_UNSIGNED, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier));
 	}
 
 	@DisplayName("Validator tests for mandatory type specifier for ANYs")
@@ -267,7 +257,7 @@ class ValueValidatorTest {
 	@DisplayName("Validator tests for several incorrectly typed virtual DNS entries")
 	@ParameterizedTest
 	@ValueSource(strings = { "%sgsgs%name%sigsev%", "%Hello%sign%milsev%", "a%moduleValue%cnt%what%b",
-	"e%sign%i%vile%f" })
+			"e%sign%i%vile%f" })
 
 	void validateMultipleInvalidDNSEntries_1(final String value) {
 		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
