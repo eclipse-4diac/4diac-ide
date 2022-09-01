@@ -42,6 +42,7 @@ import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.nebula.jface.gridviewer.GridColumnLayout;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
@@ -53,6 +54,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridLayout;
@@ -149,8 +152,14 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 		gridTableViewer.setColumnProperties(new String[] { FordiacMessages.Name, FordiacMessages.Type,
 				FordiacMessages.InitialValue, FordiacMessages.Comment });
 
-		gridTableViewer
-		.setCellEditors(new CellEditor[] { null, null, new TextCellEditor(grid), new TextCellEditor(grid) });
+		final TextCellEditor cellEditor = new TextCellEditor(grid) {
+			@Override
+			protected void doSetFocus() {
+				super.doSetFocus();
+				text.setSelection(text.getText().length());
+			}
+		};
+		gridTableViewer.setCellEditors(new CellEditor[] { null, null, cellEditor, cellEditor });
 
 		gridTableViewer.setContentProvider(contentProvider);
 
@@ -210,6 +219,20 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 		layout.setColumnData(col2.getColumn(), new ColumnWeightData(25));
 		layout.setColumnData(col3.getColumn(), new ColumnWeightData(25));
 		layout.setColumnData(col4.getColumn(), new ColumnWeightData(25));
+
+		grid.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(final KeyEvent e) {
+				final ViewerCell focusCell = gridTableViewer.getColumnViewerEditor().getFocusCell();
+				final CellEditor editor = gridTableViewer.getCellEditors()[focusCell.getColumnIndex()];
+
+				if (editor != null && !Character.isISOControl(e.character)) {
+					gridTableViewer.editElement(focusCell.getElement(), focusCell.getColumnIndex());
+					editor.setValue(Character.toString(e.character));
+					editor.setFocus();
+				}
+			}
+		});
 	}
 
 	private void createTableSection(final Composite parent) {
