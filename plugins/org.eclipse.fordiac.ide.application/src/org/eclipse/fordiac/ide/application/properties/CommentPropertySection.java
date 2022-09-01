@@ -47,17 +47,13 @@ import org.eclipse.nebula.jface.gridviewer.GridColumnLayout;
 import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
 import org.eclipse.nebula.jface.gridviewer.GridViewerColumn;
 import org.eclipse.nebula.widgets.grid.Grid;
-import org.eclipse.nebula.widgets.grid.GridColumn;
 import org.eclipse.nebula.widgets.grid.GridHeaderRenderer;
-import org.eclipse.nebula.widgets.grid.internal.DefaultColumnHeaderRenderer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
@@ -186,30 +182,8 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 		col3.getColumn().setText(FordiacMessages.InitialValue);
 		col4.getColumn().setText(FordiacMessages.Comment);
 
-		final GridHeaderRenderer headerRenderer = new DefaultColumnHeaderRenderer() {
-			@Override
-			public void paint(final GC gc, final Object value) {
-				final GridColumn column = (GridColumn) value;
-				final Color lineColor = getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND);
-
-				// get coordinates
-				final int x = getBounds().x;
-				final int y = getBounds().y;
-				final int width = getBounds().width;
-				final int height = getBounds().height;
-
-				// set foreground color and draw rectangle
-				final Color oldForeground = gc.getForeground();
-				gc.setForeground(lineColor);
-				gc.drawRectangle(x - 1, y - 1, width, height);
-				gc.setForeground(oldForeground);
-
-				// draw text
-				final String text = column.getText();
-				gc.drawString(text, x + 4, y + 2);
-			}
-		};
-
+		grid.setEmptyColumnHeaderRenderer(NebulaGridWidgetFactory.createSimpleEmptyColumnHeader());
+		final GridHeaderRenderer headerRenderer = NebulaGridWidgetFactory.createSimpleColumnHeader();
 		col1.getColumn().setHeaderRenderer(headerRenderer);
 		col2.getColumn().setHeaderRenderer(headerRenderer);
 		col3.getColumn().setHeaderRenderer(headerRenderer);
