@@ -68,6 +68,9 @@ import org.eclipse.xtext.formatting2.regionaccess.ITextSegment
 import org.eclipse.xtext.grammaranalysis.impl.GrammarElementTitleSwitch
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage.Literals.*
+import org.eclipse.xtext.formatting2.regionaccess.ISemanticRegion
+import java.util.ArrayList
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 
 class STCoreFormatter extends AbstractFormatter2 {
 
@@ -341,9 +344,46 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	/** Formats the STBinaryExpression */
 	def dispatch void format(STBinaryExpression binaryExpression, extension IFormattableDocument document) {
-		if (binaryExpression.op != STBinaryOperator.RANGE) {
-			binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP).surround[oneSpace]
+		val maxLineWidth = getPreference(FormatterPreferenceKeys.maxLineWidth)
+		if (!(binaryExpression.eContainer instanceof STBinaryExpression ||
+			binaryExpression.eContainer instanceof STCallArgument) ||
+			(binaryExpression.eContainer instanceof STCallArgument &&
+				binaryExpression.regionForEObject.length > maxLineWidth)) {
+			val iter = binaryExpression.allRegionsFor.features(ST_BINARY_EXPRESSION__OP).filter [
+				val line = it.lineRegions.get(0)
+
+				var semanticLength = line.length
+				var hidden = it.nextHiddenRegion
+				while (hidden !== null && line.contains(hidden.offset)) {
+					if(hidden.containsComment) semanticLength -= hidden.length
+					hidden = hidden.nextHiddenRegion
+				}
+
+				return semanticLength > maxLineWidth
+			].iterator
+
+			var offsetAdd = 0
+			while (iter.hasNext) {
+				val current = iter.next
+				val line = current.lineRegions.get(0)
+				val nextSemantic = current.nextSemanticRegion
+				val l = (nextSemantic.offset + nextSemantic.length + nextSemantic.nextHiddenRegion.length - line.offset)
+				val toAdd = current.offset - line.offset
+				if (l - offsetAdd > maxLineWidth) {
+					current.prepend[newLine]
+					current.surround[indent]
+					offsetAdd += toAdd
+				}
+			}
 		}
+
+		if (binaryExpression.op != STBinaryOperator.RANGE) {
+			val region = binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP)
+			if (region.previousHiddenRegion.text.indexOf("\n") === -1) {
+				region.surround[oneSpace]
+			}
+		}
+
 		if (binaryExpression.op == STBinaryOperator.AMPERSAND) {
 			document.addReplacer(
 				new AbstractTextReplacer(document, binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP)) {
@@ -380,9 +420,47 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	/** Formats the STFeatureExpression */
 	def dispatch void format(STFeatureExpression featureExpression, extension IFormattableDocument document) {
+		if (featureExpression.isCall) {
+			val maxLineWidth = getPreference(FormatterPreferenceKeys.maxLineWidth)
+			val commas = new ArrayList<ISemanticRegion>()
+			var iter = featureExpression.allRegionsFor.keywords(STFeatureExpressionAccess.commaKeyword_2_1_1_0).filter [
+				val line = it.lineRegions.get(0)
+				var semanticLength = line.length
+				var hidden = it.nextHiddenRegion
+				while (hidden !== null && line.contains(hidden.offset)) {
+					if(hidden.containsComment) semanticLength -= hidden.length
+					hidden = hidden.nextHiddenRegion
+				}
+
+				return semanticLength > maxLineWidth
+			]
+
+			for (ISemanticRegion commaRegion : iter) {
+				commas.add(commaRegion)
+			}
+
+			var offsetAdd = 0
+			for (var i = 0; i < commas.length; i++) {
+				val current = commas.get(i)
+				val line = current.lineRegions.get(0)
+				val nextRelevant = i < commas.length - 1
+						? commas.get(i + 1)
+						: featureExpression.regionFor.keyword(STFeatureExpressionAccess.rightParenthesisKeyword_2_2)
+				val l = (nextRelevant.offset + nextRelevant.length - line.offset)
+				if (line == nextRelevant.lineRegions.get(0)) {
+					val toAdd = current.offset - line.offset
+					if (l - offsetAdd > maxLineWidth) {
+						current.append[newLine]
+						current.nextSemanticRegion.surround[indent]
+						offsetAdd += toAdd
+					}
+				}
+			}
+		}
 		featureExpression.regionFor.keywords(STFeatureExpressionAccess.commaKeyword_2_1_1_0).forEach [
 			prepend[noSpace]
 			append[oneSpace]
+
 		]
 		featureExpression.regionFor.keyword(STFeatureExpressionAccess.callLeftParenthesisKeyword_2_0_0).surround [
 			noSpace
@@ -451,9 +529,8 @@ class STCoreFormatter extends AbstractFormatter2 {
 					} else {
 						var lineCount = 0
 						if (region instanceof IHiddenRegionPart) {
-							lineCount = (region as IHiddenRegionPart).previousHiddenPart instanceof IComment
-								? region.getLineCount()
-								: region.getLineCount() - 1;
+							lineCount = (region as IHiddenRegionPart).previousHiddenPart instanceof IComment ? region.
+								getLineCount() : region.getLineCount() - 1;
 						} else
 							lineCount = region.getLineCount() - 1;
 						if (newLineMin !== null && newLineMin > lineCount)

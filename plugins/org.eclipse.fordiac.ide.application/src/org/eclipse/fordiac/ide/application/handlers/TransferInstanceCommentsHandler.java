@@ -13,17 +13,23 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
 import org.eclipse.fordiac.ide.application.wizards.StructSearch;
 import org.eclipse.fordiac.ide.application.wizards.StructUpdateDialog;
 import org.eclipse.fordiac.ide.model.commands.change.TransferInstanceCommentsCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -48,8 +54,17 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 			@Override
 			protected final List<INamedElement> performStructSearch() {
 				final StructSearch structSearch = new StructSearch(dataTypeEntry);
-				final List<INamedElement> result = structSearch.getAllTypesWithStruct();
-				result.removeIf(el -> el.equals(struct.getModel()));
+
+				List<INamedElement> result = new ArrayList<>();
+
+				final EObject root = EcoreUtil.getRootContainer(struct.getModel());
+				if (root instanceof AutomationSystem) {
+					result = structSearch.getAllTypesWithStructFromSystem((AutomationSystem) root);
+				} else if (root instanceof SubAppType) {
+					result = structSearch.getAllTypesWithStructFromNetworkElements(
+							((SubAppType) root).getFBNetwork().getNetworkElements());
+				}
+				result.removeIf(el -> el.equals(struct.getModel()) || isTypedOrContainedInTypedInstance(el));
 				return result;
 			}
 		};
@@ -62,6 +77,12 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 			commandStack.execute(cmd);
 		}
 		return null;
+	}
+
+	private static boolean isTypedOrContainedInTypedInstance(final INamedElement element) {
+		return element.eContainer() != null && element.eContainer().eContainer() instanceof SubApp
+				&& (((SubApp) element.eContainer().eContainer()).isContainedInTypedInstance()
+						|| ((SubApp) element.eContainer().eContainer()).isTyped());
 	}
 
 }

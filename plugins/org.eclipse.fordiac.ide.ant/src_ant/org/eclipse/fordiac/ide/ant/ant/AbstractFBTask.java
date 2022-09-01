@@ -14,15 +14,12 @@
 package org.eclipse.fordiac.ide.ant.ant;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspace;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 
 public abstract class AbstractFBTask extends Task {
@@ -111,23 +108,4 @@ public abstract class AbstractFBTask extends Task {
 		return null;
 	}
 
-	public static void waitBuilderJobsComplete() {
-		Job[] jobs = Job.getJobManager().find(null); // get all current scheduled jobs
-
-		while (buildJobExists(jobs)) {
-			try {
-				Thread.sleep(50);
-			} catch (final InterruptedException e) {
-				Thread.currentThread().interrupt();
-			}
-			jobs = Job.getJobManager().find(null); // update the job list
-		}
-	}
-
-	private static boolean buildJobExists(final Job[] jobs) {
-		final Optional<Job> findAny = Arrays.stream(jobs)
-				.filter(j -> (j.getState() != Job.NONE && j.getName().startsWith("Building"))) //$NON-NLS-1$
-				.findAny();
-		return findAny.isPresent();
-	}
 }

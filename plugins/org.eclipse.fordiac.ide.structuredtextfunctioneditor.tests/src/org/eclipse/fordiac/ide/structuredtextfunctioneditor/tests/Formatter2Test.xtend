@@ -1087,4 +1087,145 @@ class Formatter2Test {
 			'''
 		]
 	}
+
+	@Test
+	def void splitOnSingleOperatorTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichner AND langerVariablenBezeichner THEN
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichnerlangerVariablenBezeichner
+					AND langerVariablenBezeichner THEN
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void splitOnMultipleOperatorsTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner XOR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner THEN
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+					XOR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner THEN
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void splitOnEndOfLineOperatorTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR a THEN
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				IF langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner
+					OR a THEN
+					bol1 := TRUE;
+				END_IF;
+				
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void splitOnCommaTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				func(langerVariablenBezeichner, langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner, langerVariablenBezeichner);
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				func(langerVariablenBezeichner, langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner,
+					langerVariablenBezeichner);
+				
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void splitOnCommaOnMultipleLinesTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				func(langerVariablenBezeichner OR langerVariablenBezeichner, langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner, langerVariablenBezeichner OR langerVariablenBezeichner);
+				
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert
+				
+				func(langerVariablenBezeichner OR langerVariablenBezeichner,
+					langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner,
+					langerVariablenBezeichner OR langerVariablenBezeichner);
+				
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void splitOnCommaAndOperatorTest() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert
+				
+				func(langerVariablenBezeichner OR langerVariablenBezeichner, langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner, langerVariablenBezeichner OR langerVariablenBezeichner);
+				
+				END_FUNCTION
+			'''
+			expectation = '''		
+				FUNCTION hubert
+				
+				func(langerVariablenBezeichner OR langerVariablenBezeichner,
+					langerVariablenBezeichner OR langerVariablenBezeichner
+					OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner OR langerVariablenBezeichner,
+					langerVariablenBezeichner OR langerVariablenBezeichner);
+				
+				END_FUNCTION
+			'''
+		]
+	}
 }

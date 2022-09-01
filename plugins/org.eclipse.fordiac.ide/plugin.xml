@@ -175,7 +175,6 @@
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.externaltools.*"/>
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.emf.mwe2.*"/>
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ant.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.emf.*"/> 
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtext.ui.shared.*"/>
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.cleanAction"/> 
     <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.buildProject"/>

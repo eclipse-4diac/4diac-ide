@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?pde version="3.5"?>
 
-<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="2.0.1.qualifier" useFeatures="true" includeLaunchers="true">
+<product name="4diac IDE" uid="org.eclipse.fordiac.ide.product" id="org.eclipse.fordiac.ide.product" application="org.eclipse.ui.ide.workbench" version="2.0.1.qualifier" useFeatures="true" includeLaunchers="true" autoIncludeRequirements="true">
 
    <aboutInfo>
       <image path="/org.eclipse.fordiac.ide.images/images/dialog.png"/>
@@ -102,8 +102,10 @@
       <feature id="org.eclipse.elk.feature" installMode="root"/>
       <feature id="org.eclipse.jgit.gpg.bc" installMode="root"/>
       <feature id="org.eclipse.jgit.ssh.jsch" installMode="root"/>
-      <feature id="org.eclipse.elk.algorithms.feature" installMode="root"/>
-      <feature id="org.eclipse.nebula.widgets.richtext.feature" installMode="root"/>
+      <feature id="org.eclipse.elk.algorithms.feature"/>
+      <feature id="org.eclipse.nebula.widgets.richtext.feature"/>
+      <feature id="org.eclipse.emf.compare"/>
+      <feature id="org.eclipse.emf.compare.ide.ui"/>
    </features>
 
    <configurations>

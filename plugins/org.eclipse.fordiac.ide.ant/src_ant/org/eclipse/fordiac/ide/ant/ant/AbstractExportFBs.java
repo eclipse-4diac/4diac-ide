@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
++ * Copyright (c) 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,6 +20,7 @@ import java.util.List;
 import org.apache.tools.ant.BuildException;
 import org.eclipse.core.resources.ResourcesPlugin;
 
+
 public abstract class AbstractExportFBs extends AbstractFBTask {
 
 	@Override
@@ -32,7 +33,7 @@ public abstract class AbstractExportFBs extends AbstractFBTask {
 		setFordiacProject(workspace.getRoot().getProject(getProjectNameString()));
 		checkFordiacProject();
 
-		waitBuilderJobsComplete();
+		CheckProject.waitBuilderJobsComplete();
 
 		final List<File> files = new ArrayList<>();
 
@@ -42,4 +43,5 @@ public abstract class AbstractExportFBs extends AbstractFBTask {
 	}
 
 	protected abstract void exportFiles(final List<File> files);
+
 }

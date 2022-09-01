@@ -10,6 +10,7 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *   			   - Search partially taken from ModelSearchQuery
+ *   Fabio Gandolfi - added search for transfer instance comments
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.wizards;
 
@@ -65,6 +66,20 @@ public class StructSearch {
 			searchApplications(sys);
 			searchTypeLibrary(sys);
 		}
+
+		return searchResult.getStructSearchResults();
+	}
+
+	public List<INamedElement> getAllTypesWithStructFromSystem(final AutomationSystem sys) {
+		searchResult = new StructSearchResult();
+		searchApplications(sys);
+
+		return searchResult.getStructSearchResults();
+	}
+
+	public List<INamedElement> getAllTypesWithStructFromNetworkElements(final EList<FBNetworkElement> elements) {
+		searchResult = new StructSearchResult();
+		searchGroupNetwork(elements);
 
 		return searchResult.getStructSearchResults();
 	}

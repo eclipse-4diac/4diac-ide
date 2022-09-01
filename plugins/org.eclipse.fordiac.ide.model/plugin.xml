@@ -74,63 +74,68 @@
             class="org.eclipse.fordiac.ide.model.PreferenceInitializer">
       </initializer>
    </extension>
-      <extension
-            point="org.eclipse.emf.ecore.extension_parser">
-         <parser
-               class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
-               type="fbt">
-         </parser>
-         <parser
-               class="org.eclipse.fordiac.ide.model.resource.SystemFactory"
-               type="sys">
-         </parser>
-         <parser
-               class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
-               type="adp">
-         </parser>
-         <parser
-               class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
-               type="SUB">
-         </parser>
-         <parser
-               class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
-               type="res">
-         </parser>
-         <parser
-               class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
-               type="dev">
-         </parser>
-         <parser
-               class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
-               type="seg">
-         </parser>
-         <parser
-               class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
-               type="dtp">
-         </parser>
-      </extension>
-      <extension
-            id="problem"
-            name="4diac IDE Problem"
-            point="org.eclipse.core.resources.markers">
-         <super
-               type="org.eclipse.core.resources.problemmarker">
-         </super>
-         <persistent
-               value="true">
-         </persistent>
-      </extension>
-      <extension
-            id="iec61499"
-            name="4diac IDE IEC 61499 Problem"
-            point="org.eclipse.core.resources.markers">
-         <super
-               type="org.eclipse.fordiac.ide.model.problem">
-         </super>
-         <persistent
-               value="true">
-         </persistent>
-      </extension>
+	<extension
+			point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="fbt">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.SystemFactory"
+			type="sys">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="adp">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="SUB">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="res">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="dev">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="seg">
+		</parser>
+		<parser
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
+			type="dtp">
+		</parser>
+	</extension>
+	<extension
+			id="problem"
+			name="4diac IDE Problem"
+			point="org.eclipse.core.resources.markers">
+		<super
+           type="org.eclipse.core.resources.problemmarker">
+		</super>
+		<persistent
+			value="true">
+		</persistent>
+ 	</extension>
+	<extension
+			id="iec61499"
+			name="4diac IDE IEC 61499 Problem"
+			point="org.eclipse.core.resources.markers">
+		<super
+			type="org.eclipse.fordiac.ide.model.problem">
+		</super>
+		<persistent
+			value="true">
+		</persistent>
+	</extension> 
+	<extension point="org.eclipse.core.contenttype.contentTypes">
+  		<file-association
+      		content-type="org.eclipse.emf.ecore.xmi"
+      		file-extensions="sys,fbt,sub,adp,dtp"/>
+	</extension>   
    <!-- this is needed to load old pre eclipse version projects -->
 null
 </plugin>
