@@ -17,7 +17,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -48,8 +47,7 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 				try {
 					final BasicFBType fbType = EcoreUtil.copy((BasicFBType) seq.getService().getFBType());
 					if ((seq.getStartState() != null) && !seq.getStartState().isBlank()) { // $NON-NLS-1$
-						FBTestRunner.runFBTest(fbType, seq,
-								seq.getStartState());
+						FBTestRunner.runFBTest(fbType, seq, seq.getStartState());
 					} else {
 						FBTestRunner.runFBTest(fbType, seq);
 					}
@@ -76,11 +74,11 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 		setBaseEnabled(!getSelectedSequences(selection).isEmpty());
 	}
 
+	@SuppressWarnings("unchecked")
 	private static List<ServiceSequence> getSelectedSequences(final ISelection selection) {
 		if (selection instanceof StructuredSelection) {
-			return Stream.of((StructuredSelection) selection)
-					.map(RunServiceSequenceHandler::getSequence).filter(Objects::nonNull)
-					.collect(Collectors.toList());
+			return (List<ServiceSequence>) ((StructuredSelection) selection).toList().stream()
+					.map(RunServiceSequenceHandler::getSequence).filter(Objects::nonNull).collect(Collectors.toList());
 		}
 		return Collections.emptyList();
 	}
