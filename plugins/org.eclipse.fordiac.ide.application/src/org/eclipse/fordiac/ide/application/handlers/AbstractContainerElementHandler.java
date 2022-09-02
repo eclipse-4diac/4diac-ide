@@ -46,8 +46,10 @@ import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 abstract class AbstractContainerElementHandler extends AbstractHandler {
@@ -63,18 +65,40 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 
 		final CommandStack cmdstack = activeEditor.getAdapter(CommandStack.class);
 		final FBNetwork network = getFBNetwork(selection, event);
-		final Rectangle posSizeRef = getPosSizeRef(event, viewer, selection, network);
-		Command cmd = createContainerCreationCommand(selection.toList(), network,
-				posSizeRef);
-		final FBNetworkElement newElement = ((AbstractCreateFBNetworkElementCommand) cmd).getElement();
-		if (group != null) {
-			cmd = cmd.chain(new AddElementsToGroup(group, List.of(newElement), new Point())); // point with 0,0 to keep
-			// the position
+		if (network != null) {
+			final Rectangle posSizeRef = getPosSizeRef(event, viewer, selection, network);
+			Command cmd = createContainerCreationCommand(selection.toList(), network, posSizeRef);
+			final FBNetworkElement newElement = ((AbstractCreateFBNetworkElementCommand) cmd).getElement();
+			if (group != null) {
+				cmd = cmd.chain(new AddElementsToGroup(group, List.of(newElement), new Point())); // point with 0,0 to
+				// keep
+				// the position
+			}
+			cmdstack.execute(cmd);
+			selectElement(newElement, viewer);
 		}
-		cmdstack.execute(cmd);
-		selectElement(newElement, viewer);
 
 		return Status.OK_STATUS;
+	}
+
+	@Override
+	public void setEnabled(final Object evaluationContext) {
+		final ISelection sel = (ISelection) HandlerUtil.getVariable(evaluationContext,
+				ISources.ACTIVE_CURRENT_SELECTION_NAME);
+
+		boolean enabeled = false;
+		if (sel instanceof StructuredSelection) {
+			final StructuredSelection selection = (StructuredSelection) sel;
+			if (createNewEmptyContainerElement(selection)) {
+				enabeled = true;
+			} else {
+				// only enable this handler if all FBNetworkElements are within the same parent network
+				enabeled = (selection.toList().stream().map(AbstractContainerElementHandler::getModelElement)
+						.filter(FBNetworkElement.class::isInstance)
+						.map(fbel -> ((FBNetworkElement) fbel).getFbNetwork()).distinct().count() == 1);
+			}
+		}
+		setBaseEnabled(enabeled);
 	}
 
 	protected abstract AbstractCreateFBNetworkElementCommand createContainerCreationCommand(
@@ -88,6 +112,9 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 			if (o instanceof EditPart) {
 				final Object model = ((EditPart) o).getModel();
 				if (model instanceof FBNetworkElement) {
+					// we check already in the setEnabled() that we are in the same group and same network so we can
+					// stop at the first element
+					group = ((FBNetworkElement) model).getGroup();
 					return ((FBNetworkElement) model).getFbNetwork();
 				}
 			}
@@ -168,6 +195,13 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 	private static boolean createNewEmptyContainerElement(final StructuredSelection selection) {
 		return (selection.size() == 1)
 				&& !(((EditPart) selection.getFirstElement()).getModel() instanceof FBNetworkElement);
+	}
+
+	protected static Object getModelElement(final Object ep) {
+		if (ep instanceof EditPart) {
+			return ((EditPart) ep).getModel();
+		}
+		return ep;
 	}
 
 }
