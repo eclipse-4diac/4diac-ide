@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.fbnetwork;
 
+
 import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
@@ -37,6 +38,8 @@ public class EventConnectionLoopTest extends AbstractInterpreterTest {
 		assertNotNull(network);
 		final SubApp subApp = network.getSubAppNamed("Ex6a"); //$NON-NLS-1$
 
+		// TODO EventConnectionLoopTest does not work correctly(does not terminate)
+		// TODO fix interpreter to solve the problem(test works)
 		// final EList<Transaction> returnedTransactions = runFBNetworkTest(subApp.getSubAppNetwork(), INITIAL_FB,
 		// INITIAL_PIN);
 

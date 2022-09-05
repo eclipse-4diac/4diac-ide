@@ -1,3 +1,16 @@
+/*******************************************************************************
+ * Copyright (c) 2022 Paul Pavlicek and others
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Paul Pavlicek, Bianca Wiesmayr
+ *       - initial implementation and/or documentation
+ *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.fbnetwork;
 
 import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBNetworkTestRunner.runFBNetworkTest;
@@ -21,13 +34,13 @@ public class CounterNetworkTest extends AbstractInterpreterTest {
 		final EList<Transaction> returnedTransactions = runFBNetworkTest(network, "E_SPLIT", "EI"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		final Transaction finalResult = returnedTransactions.get(returnedTransactions.size() - 1);
-		assertTrue(finalResult.getInputEventOccurrence().getEvent().getName().equals("CU"));//$NON-NLS-1$
+		assertTrue("CU".equals(finalResult.getInputEventOccurrence().getEvent().getName())); //$NON-NLS-1$
 		final VarDeclaration quPin = (VarDeclaration) finalResult.getInputEventOccurrence().getParentFB()
-				.getInterfaceElement("QU");
-		assertTrue(quPin.getValue().getValue().equals("TRUE")); //$NON-NLS-1$
+				.getInterfaceElement("QU"); //$NON-NLS-1$
+		assertTrue("TRUE".equals(quPin.getValue().getValue())); //$NON-NLS-1$
 		final VarDeclaration cvPin = (VarDeclaration) finalResult.getInputEventOccurrence().getParentFB()
-				.getInterfaceElement("CV");
-		assertTrue(cvPin.getValue().getValue().equals("1")); //$NON-NLS-1$
+				.getInterfaceElement("CV"); //$NON-NLS-1$
+		assertTrue("1".equals(cvPin.getValue().getValue())); //$NON-NLS-1$
 
 	}
 }

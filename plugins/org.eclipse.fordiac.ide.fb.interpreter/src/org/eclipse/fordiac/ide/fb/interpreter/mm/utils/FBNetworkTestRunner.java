@@ -57,7 +57,6 @@ public final class FBNetworkTestRunner {
 			throws IllegalTraceException {
 		final FBTransaction result = (FBTransaction) res;
 		checkEvent(result.getInputEventOccurrence(), expectedResult.getInputEventName());
-		// checkData(expectedResult.getInputParameter(), result.getInputEventOccurrence(), true);
 
 		if (result.getOutputEventOccurrences().size() != expectedResult.getOutputEventNames().size()) {
 			throw new IllegalTraceException("Expected " + expectedResult.getOutputEventNames().size() //$NON-NLS-1$

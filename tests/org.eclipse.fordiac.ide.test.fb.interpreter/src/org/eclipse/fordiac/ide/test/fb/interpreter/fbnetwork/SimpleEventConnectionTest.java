@@ -16,12 +16,13 @@ package org.eclipse.fordiac.ide.test.fb.interpreter.fbnetwork;
 
 import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBNetworkTestRunner.runFBNetworkTest;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBNetworkTestRunner;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBNetworkTestRunner.IllegalTraceException;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -29,6 +30,9 @@ import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest
 
 /** small fb network consisting of e_sr, e_switch, and e_ctud */
 public class SimpleEventConnectionTest extends AbstractInterpreterTest {
+
+	private static final String INITAIL_FB = "E_SPLIT"; //$NON-NLS-1$
+	private static final String INITIAL_PIN = "EI"; //$NON-NLS-1$
 
 	@Override
 	public void test() throws IllegalTraceException {
@@ -38,23 +42,17 @@ public class SimpleEventConnectionTest extends AbstractInterpreterTest {
 
 		final SubApp subApp = network.getSubAppNamed("Ex1a"); //$NON-NLS-1$
 
-		final EList<Transaction> returnedTransactions = runFBNetworkTest(subApp.getSubAppNetwork(), "E_SPLIT", "EI"); //$NON-NLS-1$ //$NON-NLS-2$
+		final EList<Transaction> returnedTransactions = runFBNetworkTest(subApp.getSubAppNetwork(), INITAIL_FB,
+				INITIAL_PIN);
 
-		assertTrue(returnedTransactions.size() == 3);
+		final List<FBTransactionBuilder> expectedTs = new ArrayList<>();
+		expectedTs.add(
+				new FBTransactionBuilder("E_SPLIT.EI").addOutputEvent("E_SPLIT.EO1").addOutputEvent("E_SPLIT.EO2"));  //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
+		expectedTs.add(new FBTransactionBuilder("E_REND.EI1")); //$NON-NLS-1$
+		expectedTs.add(new FBTransactionBuilder("E_REND.EI2").addOutputEvent("E_REND.EO")); //$NON-NLS-1$ //$NON-NLS-2$
 
-		// transaction 0: initial trigger
-		FBTransactionBuilder expectedT = new FBTransactionBuilder("E_SPLIT.EI").addOutputEvent("E_SPLIT.EO1") //$NON-NLS-1$ //$NON-NLS-2$
-				.addOutputEvent("E_SPLIT.EO2"); //$NON-NLS-1$
-		FBNetworkTestRunner.checkTransaction(returnedTransactions.get(0), expectedT);
 
-		// transaction 1: first event connection
-		expectedT = new FBTransactionBuilder("E_REND.EI1"); //$NON-NLS-1$
-		FBNetworkTestRunner.checkTransaction(returnedTransactions.get(1), expectedT);
-
-		// transaction 2: second event connection
-		expectedT = new FBTransactionBuilder("E_REND.EI2").addOutputEvent("E_REND.EO"); //$NON-NLS-1$ //$NON-NLS-2$
-		FBNetworkTestRunner.checkTransaction(returnedTransactions.get(2), expectedT);
-
+		checkNetworkResults(returnedTransactions, expectedTs);
 	}
 
 }
