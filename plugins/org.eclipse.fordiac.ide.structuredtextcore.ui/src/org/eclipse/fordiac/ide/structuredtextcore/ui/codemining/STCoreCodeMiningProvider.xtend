@@ -29,6 +29,8 @@ import org.eclipse.xtext.util.CancelIndicator
 import org.eclipse.xtext.util.IAcceptor
 
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 
 class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 	@Inject extension STCoreGrammarAccess
@@ -48,6 +50,8 @@ class STCoreCodeMiningProvider extends AbstractXtextCodeMiningProvider {
 	def dispatch void createCodeMinings(STNumericLiteral literal,
 		IAcceptor<? super ICodeMining> acceptor) throws BadLocationException {
 		if (isEnableLiteralTypeCodeMinings && literal.declaredResultType === null &&
+			!(literal.eContainer instanceof STArrayAccessExpression ||
+				literal.eContainer instanceof STMultibitPartialExpression) &&
 			(STCorePackage.eINSTANCE.STStatement.isAncestor(literal) ||
 				STCorePackage.eINSTANCE.STInitializerExpression.isAncestor(literal))) {
 			val inferredType = literal.resultType
