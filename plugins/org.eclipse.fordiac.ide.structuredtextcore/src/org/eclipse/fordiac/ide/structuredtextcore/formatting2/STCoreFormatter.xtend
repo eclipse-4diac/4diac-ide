@@ -189,10 +189,10 @@ class STCoreFormatter extends AbstractFormatter2 {
 		varDeclaration.regionFor.keyword(";").prepend[noSpace]
 
 		if (varDeclaration.type.name != "") {
-			document.addReplacer(
-				new KeywordCaseTextReplacer(document,
-					varDeclaration.regionFor.assignment(STVarDeclarationAccess.getTypeAssignment_5),
-					varDeclaration.type.name))
+			val typeRegion = varDeclaration.regionFor.assignment(STVarDeclarationAccess.getTypeAssignment_5)
+			if (typeRegion !== null) {
+				document.addReplacer(new KeywordCaseTextReplacer(document, typeRegion, varDeclaration.type.name))
+			}
 		}
 
 		if (varDeclaration.array) {
