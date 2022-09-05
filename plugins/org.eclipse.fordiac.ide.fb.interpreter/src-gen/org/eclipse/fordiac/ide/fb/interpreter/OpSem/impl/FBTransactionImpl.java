@@ -20,10 +20,12 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
  * <!-- begin-user-doc --> An implementation of the model object '<em><b>FB
@@ -34,6 +36,8 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
  * <ul>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBTransactionImpl#getOutputEventOccurrences
  * <em>Output Event Occurrences</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBTransactionImpl#getInputVariables
+ * <em>Input Variables</em>}</li>
  * </ul>
  *
  * @generated
@@ -49,6 +53,17 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 	 * @ordered
 	 */
 	protected EList<EventOccurrence> outputEventOccurrences;
+
+	/**
+	 * The cached value of the '{@link #getInputVariables() <em>Input
+	 * Variables</em>}' reference list. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 *
+	 * @see #getInputVariables()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VarDeclaration> inputVariables;
 
 	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -89,6 +104,20 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 	 * @generated
 	 */
 	@Override
+	public EList<VarDeclaration> getInputVariables() {
+		if (inputVariables == null) {
+			inputVariables = new EObjectResolvingEList<>(VarDeclaration.class, this,
+					OperationalSemanticsPackage.FB_TRANSACTION__INPUT_VARIABLES);
+		}
+		return inputVariables;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES:
@@ -107,6 +136,8 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 		switch (featureID) {
 		case OperationalSemanticsPackage.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES:
 			return getOutputEventOccurrences();
+		case OperationalSemanticsPackage.FB_TRANSACTION__INPUT_VARIABLES:
+			return getInputVariables();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -124,6 +155,10 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 			getOutputEventOccurrences().clear();
 			getOutputEventOccurrences().addAll((Collection<? extends EventOccurrence>) newValue);
 			return;
+		case OperationalSemanticsPackage.FB_TRANSACTION__INPUT_VARIABLES:
+			getInputVariables().clear();
+			getInputVariables().addAll((Collection<? extends VarDeclaration>) newValue);
+			return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -139,6 +174,9 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 		case OperationalSemanticsPackage.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES:
 			getOutputEventOccurrences().clear();
 			return;
+		case OperationalSemanticsPackage.FB_TRANSACTION__INPUT_VARIABLES:
+			getInputVariables().clear();
+			return;
 		}
 		super.eUnset(featureID);
 	}
@@ -153,6 +191,8 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 		switch (featureID) {
 		case OperationalSemanticsPackage.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES:
 			return outputEventOccurrences != null && !outputEventOccurrences.isEmpty();
+		case OperationalSemanticsPackage.FB_TRANSACTION__INPUT_VARIABLES:
+			return inputVariables != null && !inputVariables.isEmpty();
 		}
 		return super.eIsSet(featureID);
 	}

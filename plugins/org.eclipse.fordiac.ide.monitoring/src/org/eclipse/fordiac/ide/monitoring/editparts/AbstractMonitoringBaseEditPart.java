@@ -18,6 +18,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.editparts;
 
+import static org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants.DIAGRAM_FONT;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,13 +42,15 @@ import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.handlers.AbstractMonitoringHandler;
-import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
+import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -60,18 +64,21 @@ import org.eclipse.swt.graphics.FontMetrics;
 
 public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPart implements SpecificLayerEditPart {
 
-	private InterfaceEditPart parentPart;
-	private final List<EObject> fBnetworks = new ArrayList<>();
-	public static final int MONITORING_VALUE_LR_MARGIN = 5;
+	public static class DeleteInterfaceAdapter extends AdapterImpl {
 
-	private IPropertyChangeListener listener;
-	private final Adapter deleteInterfaceAdapter = new AdapterImpl() {
+		final AbstractMonitoringBaseEditPart host;
+
+		public DeleteInterfaceAdapter(final AbstractMonitoringBaseEditPart host) {
+			super();
+			this.host = host;
+		}
+
 		@Override
 		public void notifyChanged(final Notification notification) {
 			switch (notification.getEventType()) {
 			case Notification.REMOVE:
 			case Notification.REMOVE_MANY:
-				if (isElementOrParentDeleted(notification)) {
+				if (isElementOrParentDeleted(notification.getOldValue())) {
 					deleteMonitoringElement();
 				}
 				break;
@@ -80,27 +87,72 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 		}
 
 		public void deleteMonitoringElement() {
-			MonitoringManager.getInstance().removeMonitoringElement(getModel());
+			MonitoringManager.getInstance().removeMonitoringElement(host.getModel());
 			MonitoringManager.getInstance().notifyWatchesChanged();
-			if (getViewer() != null) {
-				final RootEditPart rootEditPart = getViewer().getRootEditPart();
+			if (host.getViewer() != null) {
+				final RootEditPart rootEditPart = host.getViewer().getRootEditPart();
 				if (rootEditPart != null) {
 					AbstractMonitoringHandler.refresh(rootEditPart);
 				}
 			}
 		}
-	};
 
-	public boolean isElementOrParentDeleted(final Notification notification) {
-		final FBNetworkElement fbNetworkElement = getInterfaceElement().getFBNetworkElement();
-		return fbNetworkElement == null || notification.getOldValue() == fbNetworkElement
-				|| fbNetworkElement.isNestedInSubApp() && fBnetworks.contains(fbNetworkElement.getFbNetwork());
+		public boolean isElementOrParentDeleted(final Object deletedElement) {
+			if (deletedElement == null) {
+				return false;
+			}
+
+			if (deletedElement.equals(host.getInterfaceElement())) {
+				//our interface element was deleted
+				return true;
+			}
+
+			if (deletedElement instanceof FBNetworkElement) {
+				if (deletedElement.equals(host.getInterfaceElement().getFBNetworkElement())) {
+					return true;
+				}
+
+				if (deletedElement instanceof SubApp) {
+					return host.getFBNetworks().contains(((SubApp) deletedElement).getSubAppNetwork());
+				}
+
+				if (deletedElement instanceof Group) {
+					return isParentGroupDeleted((Group) deletedElement);
+				}
+			}
+			return false;
+		}
+
+		private boolean isParentGroupDeleted(final Group deletedGroup) {
+			final FBNetworkElement parent = host.getInterfaceElement().getFBNetworkElement();
+			for (final FBNetworkElement element : deletedGroup.getGroupElements()) {
+				if (element.equals(parent)) {
+					return true;
+				}
+				if (element instanceof SubApp) {
+					return host.getFBNetworks().contains(((SubApp) element).getSubAppNetwork());
+				}
+			}
+			return false;
+		}
+
+
 	}
 
+	protected InterfaceEditPart parentPart;
+	private final List<FBNetwork> fBnetworks = new ArrayList<>();
+	private EObject parentModel;
+	public static final int MONITORING_VALUE_LR_MARGIN = 5;
+
+	private IPropertyChangeListener listener;
+	private final Adapter deleteInterfaceAdapter = new DeleteInterfaceAdapter(this);
 
 	@Override
 	public void deactivate() {
 		fBnetworks.forEach(n -> n.eAdapters().remove(deleteInterfaceAdapter));
+		if (null != parentModel) {
+			parentModel.eAdapters().remove(deleteInterfaceAdapter);
+		}
 		super.deactivate();
 	}
 
@@ -201,9 +253,12 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 			}
 		}
 
+		parentModel = getInterfaceElement().eContainer();
+		if (null != parentModel) {
+			parentModel.eAdapters().add(deleteInterfaceAdapter);
+		}
 		addDeleteAdapterToNetworks();
-		org.eclipse.fordiac.ide.monitoring.Activator.getDefault().getPreferenceStore()
-		.addPropertyChangeListener(getPreferenceChangeListener());
+		Activator.getDefault().getPreferenceStore().addPropertyChangeListener(getPreferenceChangeListener());
 		refreshVisuals();
 	}
 
@@ -240,10 +295,8 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 	public IPropertyChangeListener getPreferenceChangeListener() {
 		if (listener == null) {
 			listener = event -> {
-				if (event.getProperty()
-						.equals(org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants.P_WATCH_COLOR)
-						|| event.getProperty().equals(
-								org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants.P_FORCE_COLOR)) {
+				if (event.getProperty().equals(PreferenceConstants.P_WATCH_COLOR)
+						|| event.getProperty().equals(PreferenceConstants.P_FORCE_COLOR)) {
 					setBackgroundColor(getFigure());
 				}
 			};
@@ -268,6 +321,27 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 			return false;
 		}
 		return super.understandsRequest(request);
+	}
+
+	@Override
+	public void removeNotify() {
+		if (isGrandParentDeletion()) {
+			// if a grandparent is removed or a subapp collapsed our figure is not removed as it is in a specific layer.
+			// Therefore we have to do it here separatly.
+			final IFigure layerFig = getLayer(getSpecificLayer());
+			if (layerFig != null && layerFig.equals(getFigure().getParent())) {
+				layerFig.remove(getFigure());
+				return;
+			}
+		}
+		super.removeNotify();
+	}
+
+	private boolean isGrandParentDeletion() {
+		// if the interface element has a fbnetworkelement and this fbnetworkelement a network a grandparent was deleted
+		// or an expanded subapp folded
+		return (getInterfaceElement().getFBNetworkElement() != null
+				&& getInterfaceElement().getFBNetworkElement().getFbNetwork() != null);
 	}
 
 	private Point calculatePos() {
@@ -302,20 +376,17 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 			final int height = getHeight();
 			bounds = new Rectangle(p.x, p.y, width, height);
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), bounds);
-
 		}
 	}
 
 	private int getHeight() {
-		return FigureUtilities
-				.getFontMetrics(JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT))
-				.getHeight();
+		return FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry().get(DIAGRAM_FONT)).getHeight();
 	}
 
 
 	protected void setBackgroundColor(final IFigure l) {
 		l.setBackgroundColor(PreferenceGetter.getColor(Activator.getDefault().getPreferenceStore(),
-				org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants.P_WATCH_COLOR));
+				PreferenceConstants.P_WATCH_COLOR));
 	}
 
 	@Override
@@ -345,11 +416,14 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 			final IPreferenceStore preferenceStore = org.eclipse.fordiac.ide.gef.Activator.getDefault()
 					.getPreferenceStore();
 			final int maxLabelSize = preferenceStore.getInt(DiagramPreferences.MAX_VALUE_LABEL_SIZE);
-			final FontMetrics fm = FigureUtilities
-					.getFontMetrics(JFaceResources.getFontRegistry().get(PreferenceConstants.DIAGRAM_FONT));
+			final FontMetrics fm = FigureUtilities.getFontMetrics(JFaceResources.getFontRegistry().get(DIAGRAM_FONT));
 			maxLabelWidth = (int) ((maxLabelSize + 2) * fm.getAverageCharacterWidth()) + 2 * MONITORING_VALUE_LR_MARGIN;
-
 		}
 		return maxLabelWidth;
 	}
+
+	public List<FBNetwork> getFBNetworks() {
+		return fBnetworks;
+	}
+
 }

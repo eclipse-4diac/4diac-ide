@@ -62,6 +62,7 @@ public class DeleteDemuxPortCommand extends Command {
 				.asList(newVisibleChildren.trim().split(LibraryElementTags.VARIABLE_SEPARATOR));
 		configuredStruct.getMemberVariables()
 		.addAll(EcoreUtil.copyAll(CheckableStructTreeNode.getVarDeclarations(visibleChildrenNames, node)));
+		configuredStruct.setTypeEntry(type.getStructType().getTypeEntry());
 		cmd = new ChangeStructCommand(type, configuredStruct);
 	}
 

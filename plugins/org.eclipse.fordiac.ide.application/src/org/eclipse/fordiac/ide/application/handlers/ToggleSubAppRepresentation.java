@@ -20,6 +20,7 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
@@ -27,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -44,12 +46,18 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final StructuredSelection selection = (StructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final SubApp subapp = (SubApp) ((EditPart) selection.getFirstElement()).getModel();
-		final ToggleSubAppRepresentationCommand cmd = new ToggleSubAppRepresentationCommand(subapp);
+		Command cmd = new ToggleSubAppRepresentationCommand(subapp);
+
+		if (!subapp.isUnfolded() && (selection.getFirstElement() instanceof SubAppForFBNetworkEditPart)) {
+			//we are going to get unfolded wrap resize command
+			cmd = new ResizeGroupOrSubappCommand((SubAppForFBNetworkEditPart) selection.getFirstElement(), cmd);
+		}
 
 		final CommandStack commandStack = HandlerUtil.getActiveEditor(event).getAdapter(CommandStack.class);
 		if (cmd.canExecute()) {
 			commandStack.execute(cmd);
 		}
+
 		// requesting a change is needed for the Source dropdown menu
 		requestChange();
 		return Status.OK_STATUS;
@@ -107,4 +115,5 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 		}
 		return null;
 	}
+
 }

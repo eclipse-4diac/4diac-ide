@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.monitoring.provider.WatchesValueEditingSupport;
 import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNodeUtils;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceGetter;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
@@ -78,6 +79,10 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 			final MonitoringEditPart editPart = (MonitoringEditPart) getHost();
 			if (WatchesValueEditingSupport.isValid(value, editPart.getModel())) {
 				MonitoringManager.getInstance().writeValue(editPart.getModel(), value);
+				if (editPart.getParentPart() != null && editPart.getParentPart().getModel() != null
+						&& WatchesValueEditingSupport.needsOfflineSave(editPart.getParentPart().getModel())) {
+					WatchesValueEditingSupport.writeOnlineValueToOffline(editPart.getModel(), value);
+				}
 			}
 		}
 
@@ -89,7 +94,6 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 				editPart.getNameLabel().setText(value);
 			}
 		}
-
 	}
 
 	private static class StructFigureCellEditorLocator implements CellEditorLocator {
@@ -220,7 +224,9 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 				super.notifyChanged(notification);
 				Display.getDefault().asyncExec(() -> {
 					setValue(getModel().getCurrentValue());
-					refreshVisuals();
+					if (getFigure().getParent() != null) {
+						refreshVisuals();
+					}
 				});
 			}
 
@@ -317,6 +323,10 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 
 	private boolean isForced() {
 		return getModel().isForce() && (getModel().getForceValue() != null);
+	}
+
+	private EditPart getParentPart() {
+		return this.parentPart;
 	}
 
 }

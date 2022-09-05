@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
+import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.Clipboard;
@@ -32,7 +33,7 @@ public class TablePasteAction extends Action {
 
 	private final Object part;
 
-	public TablePasteAction(Object part) {
+	public TablePasteAction(final Object part) {
 		this.part = part;
 		setId(ActionFactory.PASTE.getId());
 		setText(FordiacMessages.TableCopyPaste_TEXT_Paste);
@@ -44,7 +45,7 @@ public class TablePasteAction extends Action {
 	@Override
 	public void run() {
 		final I4diacTableUtil editor = TableWidgetFactory.getTableEditor(part);
-		
+
 		if (editor != null) {
 			for (final CellEditor cell : editor.getViewer().getCellEditors()) {
 				// cell can be null if column is not editable
@@ -54,40 +55,41 @@ public class TablePasteAction extends Action {
 				}
 			}
 			// This IF will be removed once the new copy/paste handling has been approved.
-			String instanceClassName = "CommentPropertySection";
+			final String instanceClassName = "CommentPropertySection";
 			if (instanceClassName.equals(editor.getClass().getSimpleName())) {
 				handleInstancePropertySheet(editor);
 			} else {
-				pasteItems(editor);				
+				pasteItems(editor);
 			}
 		}
 	}
-	
-	private static void handleInstancePropertySheet(I4diacTableUtil editor) {
+
+	private static void handleInstancePropertySheet(final I4diacTableUtil editor) {
 		// cell selection does not support multi-selection so we do not have to
 		// care about more cells being selected
-		
-		TableViewer viewer = editor.getViewer();
-		ViewerCell focusCell = viewer.getColumnViewerEditor().getFocusCell();
-		ICellModifier modifier = viewer.getCellModifier();
-		Object content = Clipboard.getDefault().getContents();
-		
-		if (focusCell != null && content instanceof String) {
-			TableItem item = viewer.getTable().getItem(viewer.getTable().getSelectionIndex());
-			String property = (String) viewer.getColumnProperties()[focusCell.getColumnIndex()];
+
+		final TableViewer viewer = editor.getViewer();
+		final ViewerCell focusCell = viewer.getColumnViewerEditor().getFocusCell();
+		final ICellModifier modifier = viewer.getCellModifier();
+		final Object content = FordiacClipboard.INSTANCE.getTableContents();
+		final int index = viewer.getTable().getSelectionIndex();
+
+		if (focusCell != null && index >= 0 && content instanceof String) {
+			final TableItem item = viewer.getTable().getItem(index);
+			final String property = (String) viewer.getColumnProperties()[focusCell.getColumnIndex()];
 			if (modifier.canModify(item, property)) {
 				modifier.modify(item, property, content);
 			}
 		}
 	}
 
-	private static void pasteItems(I4diacTableUtil editor) {
+	private static void pasteItems(final I4diacTableUtil editor) {
 		final TableViewer viewer = editor.getViewer();
 		final Table table = viewer.getTable();
 		final int[] pasteIndices = table.getSelectionIndices();
 		final Object content = Clipboard.getDefault().getContents();
 		final Object[] entries = createEntriesFromContent(content);
-		
+
 		// catch wrong clipboard contents
 		if (entries == null) {
 			return;
@@ -112,7 +114,7 @@ public class TablePasteAction extends Action {
 		viewer.setSelection(viewer.getSelection());
 	}
 
-	private static Object[] createEntriesFromContent(Object content) {
+	private static Object[] createEntriesFromContent(final Object content) {
 		return (content instanceof StructuredSelection) ? ((StructuredSelection) content).toArray()
 				: (Object[]) content;
 	}

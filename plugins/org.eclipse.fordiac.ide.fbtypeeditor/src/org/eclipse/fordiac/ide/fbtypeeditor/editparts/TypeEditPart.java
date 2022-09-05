@@ -152,7 +152,7 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 				if (getHost() instanceof AbstractDirectEditableEditPart) {
 					final int index = ((Integer) request.getCellEditor().getValue()).intValue();
 					final CCombo combo = (CCombo) request.getCellEditor().getControl();
-					if (index > 0 && index < combo.getItemCount()) {
+					if (index >= 0 && index < combo.getItemCount()) {
 						final String typeName = combo.getItem(index);
 						ChangeDataTypeCommand cmd;
 						if (getCastedModel() instanceof AdapterDeclaration) {

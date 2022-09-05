@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteErrorMarkerCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -273,12 +274,12 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	protected void transferInstanceComments() {
 		oldElement.getInterface().getAllInterfaceElements().stream().filter(ie -> !ie.getComment().isBlank())
-				.forEach(ie -> {
-					final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
-					if (newIE != null) {
-						newIE.setComment(ie.getComment());
-					}
-				});
+		.forEach(ie -> {
+			final IInterfaceElement newIE = newElement.getInterfaceElement(ie.getName());
+			if (newIE != null) {
+				newIE.setComment(ie.getComment());
+			}
+		});
 	}
 
 	private void checkSourceParam(final VarDeclaration variable) {
@@ -358,6 +359,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 					final Value value = LibraryElementFactory.eINSTANCE.createValue();
 					value.setValue(erroMarker.getValue().getValue());
 					((VarDeclaration) updatedSelected).setValue(value);
+					if (erroMarker.isIsInput() && erroMarker.getInputConnections().isEmpty()) {
+						// remove errormarker because value was set to pin and no connection needs to be
+						// copied
+						reconnCmds.add(new DeleteErrorMarkerCommand(erroMarker, oldElement));
+					}
 				} else if ((erroMarker.isIsInput() && erroMarker.getInputConnections().isEmpty())
 						|| (!erroMarker.isIsInput() && erroMarker.getOutputConnections().isEmpty())) {
 					// unconnected error pin create a new error pin

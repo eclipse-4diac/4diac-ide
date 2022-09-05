@@ -53,6 +53,9 @@ public class CheckProject extends Task {
 		}
 
 		ValidateProject.clear(project);
+		// before loading all types we need to wait for all builder jobs so that the xtext builders have resolved all
+		// dependencies
+		waitBuilderJobsComplete();
 		ValidateProject.checkTypeLibraryInProjects(project);
 		ValidateProject.checkSTInProjects(project);
 
@@ -140,6 +143,26 @@ public class CheckProject extends Task {
 	private static boolean markerJobExists(final Job[] jobs) {
 		final Optional<Job> findAny = Arrays.stream(jobs)
 				.filter(j -> (j.getState() != Job.NONE && j.getName().startsWith("Add error marker to file"))) //$NON-NLS-1$
+				.findAny();
+		return findAny.isPresent();
+	}
+
+	public static void waitBuilderJobsComplete() {
+		Job[] jobs = Job.getJobManager().find(null); // get all current scheduled jobs
+
+		while (buildJobExists(jobs)) {
+			try {
+				Thread.sleep(50);
+			} catch (final InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+			jobs = Job.getJobManager().find(null); // update the job list
+		}
+	}
+
+	private static boolean buildJobExists(final Job[] jobs) {
+		final Optional<Job> findAny = Arrays.stream(jobs)
+				.filter(j -> (j.getState() != Job.NONE && j.getName().startsWith("Building"))) //$NON-NLS-1$
 				.findAny();
 		return findAny.isPresent();
 	}

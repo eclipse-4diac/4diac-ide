@@ -38,13 +38,19 @@
           body="&#x9;&#x9;if (this.eContainer instanceof EventOccurrence) {&#xA;&#x9;&#x9;&#x9;return DefaultRunFBType.runFBType(this, (EventOccurrence) this.eContainer, eventManager);&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;throw new IllegalArgumentException(&quot;The eContainer of the FBRuntimeAbstract object must be an EventOccurrence&quot;);&#xA;">
         <genParameters ecoreParameter="OperationalSemantics.ecore#//FBRuntimeAbstract/run/eventManager"/>
       </genOperations>
+      <genOperations ecoreOperation="OperationalSemantics.ecore#//FBRuntimeAbstract/getModel"
+          body="return null;"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//BasicFBTypeRuntime">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//BasicFBTypeRuntime/basicfbtype"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//BasicFBTypeRuntime/activeState"/>
+      <genOperations ecoreOperation="OperationalSemantics.ecore#//BasicFBTypeRuntime/getModel"
+          body="return this.getBasicfbtype();"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//SimpleFBTypeRuntime">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//SimpleFBTypeRuntime/simpleFBType"/>
+      <genOperations ecoreOperation="OperationalSemantics.ecore#//SimpleFBTypeRuntime/getModel"
+          body="return null;"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//Transaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//Transaction/inputEventOccurrence"/>
@@ -53,9 +59,12 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBNetworkRuntime/fbnetwork"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBNetworkRuntime/fbRuntimes"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBNetworkRuntime/transferData"/>
+      <genOperations ecoreOperation="OperationalSemantics.ecore#//FBNetworkRuntime/getModel"
+          body="return this.getFbnetwork();"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//FBTransaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/outputEventOccurrences"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/inputVariables"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//ConnectionToValueMap">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//ConnectionToValueMap/key"/>

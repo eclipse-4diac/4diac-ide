@@ -15,10 +15,7 @@ package org.eclipse.fordiac.ide.ant.ant;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-
-import org.apache.tools.ant.BuildException;
 
 public class ExportProjectFBsAsXMI extends ExportFBsAsXMI {
 
@@ -29,11 +26,18 @@ public class ExportProjectFBsAsXMI extends ExportFBsAsXMI {
 	}
 
 	@Override
-	public void execute() throws BuildException {
-		super.execute();
-		final List<File> files = new LinkedList<>();
-		getFBsFiles(files, new File(getFordiacProject().getLocationURI()), null, excludeSubfolder);
-		exportFiles(files);
+	protected File getDirectory() {
+		return new File(getFordiacProject().getLocationURI());
+	}
+
+	@Override
+	protected String getSingleFBName() {
+		return null;
+	}
+
+	@Override
+	protected List<String> getExcludeSubfolder() {
+		return excludeSubfolder;
 	}
 
 }

@@ -13,15 +13,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
 
-import java.util.Map;
-import java.util.function.Consumer;
-
-import org.eclipse.fordiac.ide.model.data.AnyIntType;
-import org.eclipse.fordiac.ide.model.data.AnyStringType;
-import org.eclipse.fordiac.ide.model.data.BoolType;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -29,38 +25,36 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 
 public final class VariableUtils {
 
-	private VariableUtils() {
-		throw new IllegalStateException("Utility class"); //$NON-NLS-1$
+	public static void setVariable(final VarDeclaration varDecl, final String value) {
+		final Value val = varDecl.getValue();
+		if (val == null) {
+			varDecl.setValue(LibraryElementFactory.eINSTANCE.createValue());
+		}
+		varDecl.getValue().setValue(value);
 	}
 
-	public static final Map<Class<?>, Consumer<Value>> initVariables =
-			Map.of(
-					AnyStringType.class, v -> v.setValue(""), //$NON-NLS-1$
-					AnyIntType.class, v -> v.setValue("0"),  //$NON-NLS-1$
-					BoolType.class, v -> v.setValue("false") //$NON-NLS-1$
-					);
+	public static void setVariable(final FBType fb, final String name, final String value) {
+		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name.strip());
+		if (!(el instanceof VarDeclaration)) {
+			throw new IllegalArgumentException("variable " + name + " does not exist in FB"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+
+		setVariable((VarDeclaration) el, ServiceSequenceUtils.removeKeyword(value));
+	}
 
 	public static void initVariable(final VarDeclaration varDeclaration, final DataTypeLibrary lib) {
 		// first set type, then add value
 		if (varDeclaration.getType() == null) {
 			varDeclaration.setType(lib.getType(varDeclaration.getTypeName()));
 		}
-		//In case the value is incomplete we take a default value
-		if (varDeclaration.getValue() == null || 
-				varDeclaration.getValue().getValue() == null || 
-					varDeclaration.getValue().getValue().isBlank()) {
-			//TODO refactor to return the value...faster
-			final var value = LibraryElementFactory.eINSTANCE.createValue();
-			initVariables.entrySet().stream().forEach(entry -> {
-				if (entry.getKey().isInstance(varDeclaration.getType()) ) {
-					entry.getValue().accept(value);
-				}
-			});
-			varDeclaration.setValue(value);
+		// if there is no initial value, we take a default value
+		if ((varDeclaration.getValue() == null) || (varDeclaration.getValue().getValue() == null)
+				|| varDeclaration.getValue().getValue().isBlank()) {
+			setVariable(varDeclaration, InitialValueHelper.getDefaultValue(varDeclaration));
 		}
 	}
 
-	//Init all FB Variables
+	// Init all FB Variables
 	public static void fBVariableInitialization(final BaseFBType baseFbType) {
 		final var lib = new DataTypeLibrary();
 		initInternalVars(baseFbType, lib);
@@ -85,4 +79,9 @@ public final class VariableUtils {
 	public static void initInternalVars(final BaseFBType basicFbType, final DataTypeLibrary lib) {
 		basicFbType.getInternalVars().forEach(interVar -> VariableUtils.initVariable(interVar, lib));
 	}
+
+	private VariableUtils() {
+		throw new IllegalStateException("Utility class"); //$NON-NLS-1$
+	}
+
 }

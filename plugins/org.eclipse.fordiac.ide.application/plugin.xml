@@ -375,7 +375,12 @@
              id="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"
              name="Update All Types">
     </command>
-          <command
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
+             description="Transfer all instance comments"
+             id="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"
+             name="Transfer all instance comments">
+    </command>
+    <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
             description="Map Element to Resource"
             id="org.eclipse.fordiac.ide.application.commands.mapTo"
@@ -604,6 +609,19 @@
         </or>
       </activeWhen>
     </handler>
+    <handler class="org.eclipse.fordiac.ide.application.handlers.TransferInstanceCommentsHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments">
+      <activeWhen>
+        <with variable="selection">
+          <count value="1" />
+          <iterate operator="and"
+                   ifEmpty="false">
+            <instanceof value="org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart">
+            </instanceof>
+          </iterate>
+        </with>
+      </activeWhen>
+    </handler>    
     <handler class="org.eclipse.fordiac.ide.application.handlers.ConvertToStructHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct">
       <activeWhen>
@@ -725,7 +743,8 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.moveToParent" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
-      <command commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes">
+      <command commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"/>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments">
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct"
                label="Extract Struct">
@@ -1043,6 +1062,11 @@
         <visibleWhen>
           <reference definitionId="org.eclipse.fordiac.ide.application.FBNetworkIsActiveEditor" />
         </visibleWhen>
+      </command>
+      <command
+            commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"
+            label="Transfer all instance comments"
+            style="push">
       </command>
     </menuContribution>
     <menuContribution locationURI="popup:org.eclipse.ui.popup.any?endof=org.fordiac.ide.group.navigate">

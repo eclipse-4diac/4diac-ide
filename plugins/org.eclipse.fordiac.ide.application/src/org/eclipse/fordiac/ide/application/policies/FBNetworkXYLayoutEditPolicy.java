@@ -27,6 +27,8 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
+import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
@@ -48,6 +50,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.commands.Command;
@@ -79,7 +82,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 			final Object constraint) {
 		if ((child.getModel() instanceof Group || child.getModel() instanceof SubApp)
 				&& RequestUtil.isResizeRequest(request)) {
-			return createChangeSizeCommand((FBNetworkElement) child.getModel(), request);
+			return createChangeSizeCommand((FBNetworkElement) child.getModel(), request, child);
 		}
 		if ((child.getModel() instanceof PositionableElement) && (RequestUtil.isMoveRequest(request))) {
 			return createMoveCommand((PositionableElement) child.getModel(), request, constraint);
@@ -87,26 +90,31 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return null;
 	}
 
-	private Command createChangeSizeCommand(final FBNetworkElement container, final ChangeBoundsRequest request) {
+	private Command createChangeSizeCommand(final FBNetworkElement container, final ChangeBoundsRequest request,
+			final EditPart child) {
 		final Dimension sizeDelta = getScaledSizeDelta(request);
 		if (sizeDelta.width == 0 && sizeDelta.height == 0) {
 			// we hit the min size and we are just moving, return a set position command
 			return createMoveCommand(container, request, null);
 		}
 		final Point moveDelta = getScaledMoveDelta(request);
-		final AbstractChangeContainerBoundsCommand changeGroupBoundsCommand = createChangeBoundsCommand(container,
+		Command changeBoundsCommand = createChangeBoundsCommand(container,
 				sizeDelta, moveDelta);
+		if (child.getParent() instanceof AbstractContainerContentEditPart) {
+			changeBoundsCommand = new ResizeGroupOrSubappCommand((GraphicalEditPart) child.getParent(),
+					changeBoundsCommand);
+		}
 
-		if (changeGroupBoundsCommand != null && isMoveWithResizing(sizeDelta, moveDelta)) {
+		if (changeBoundsCommand != null && isMoveWithResizing(sizeDelta, moveDelta)) {
 			// we have a move resize situation where we have to re-compensate FB positions
 			final int dx = moveDelta.x + sizeDelta.width;
 			final int dy = moveDelta.y + sizeDelta.height;
 			final CompoundCommand cmd = new CompoundCommand();
-			cmd.add(changeGroupBoundsCommand);
+			cmd.add(changeBoundsCommand);
 			getContainerChildren(container).forEach(el -> cmd.add(new SetPositionCommand(el, dx, dy)));
 			return cmd;
 		}
-		return changeGroupBoundsCommand;
+		return changeBoundsCommand;
 	}
 
 	private static List<FBNetworkElement> getContainerChildren(final FBNetworkElement container) {
@@ -247,7 +255,18 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		final Point moveDelta = (isAlignRequest(request)) ? getAlignmentDelta(model, constraint) :
 			getScaledMoveDelta(request);
 		if (model instanceof FBNetworkElement) {
+			if (getHost() instanceof AbstractContainerContentEditPart) {
+				return new ResizeGroupOrSubappCommand((GraphicalEditPart) getHost(),
+						new FBNetworkElementSetPositionCommand((FBNetworkElement) model, moveDelta.x, moveDelta.y));
+
+			}
 			return new FBNetworkElementSetPositionCommand((FBNetworkElement) model, moveDelta.x, moveDelta.y);
+		}
+		if (getHost() instanceof AbstractContainerContentEditPart)
+		{
+			return new ResizeGroupOrSubappCommand((GraphicalEditPart) getHost(),
+					new SetPositionCommand(model, moveDelta.x, moveDelta.y));
+
 		}
 		return new SetPositionCommand(model, moveDelta.x, moveDelta.y);
 	}

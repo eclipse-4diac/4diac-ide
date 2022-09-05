@@ -18,6 +18,9 @@ package org.eclipse.fordiac.ide.model.datatype.helper;
 
 import java.util.List;
 
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyCharType;
@@ -162,6 +165,10 @@ public final class IecTypes {
 					.orElse(null);
 		}
 
+		static {
+			ANY_ELEMENTARY_TYPES.forEach(IecTypes::addTypeToResource);
+		}
+
 		private ElementaryTypes() {
 			throw new UnsupportedOperationException();
 		}
@@ -231,10 +238,21 @@ public final class IecTypes {
 			return ALL_GENERIC_TYPES;
 		}
 
+		static {
+			ALL_GENERIC_TYPES.forEach(IecTypes::addTypeToResource);
+		}
+
 		private GenericTypes() {
 			throw new UnsupportedOperationException();
 		}
 
+	}
+
+	private static final String IEC_DATA_LIB_URI = "data.lib"; //$NON-NLS-1$
+	private static final Resource IEC_TYPES_RES = new ResourceImpl(URI.createURI(IEC_DATA_LIB_URI));
+
+	private static boolean addTypeToResource(final DataType type) {
+		return IEC_TYPES_RES.getContents().add(type);
 	}
 
 	private IecTypes() {

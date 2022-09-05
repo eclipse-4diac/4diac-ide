@@ -145,15 +145,18 @@ public class ErrorMarkerBuilder {
 	}
 
 	public void createMarkerInFile(final IFile file) {
-		Assert.isNotNull(file);
-		try {
-			final IMarker marker = file.createMarker(type, getAttributes());
-			if (marker.exists() && getErrorMarkerRef() != null) {
-				markers.put(Long.valueOf(marker.getId()), getErrorMarkerRef());
-				addId(marker.getId());
+		if (null != file) {
+			try {
+				final IMarker marker = file.createMarker(type, getAttributes());
+				if (marker.exists() && (getErrorMarkerRef() != null)) {
+					markers.put(Long.valueOf(marker.getId()), getErrorMarkerRef());
+					addId(marker.getId());
+				}
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError("could not create error marker", e); //$NON-NLS-1$
 			}
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError("could not create error marker", e); //$NON-NLS-1$
+		} else {
+			FordiacLogHelper.logWarning("could not locate file for creating an error marker");
 		}
 	}
 
@@ -165,7 +168,6 @@ public class ErrorMarkerBuilder {
 		} else if (rootContainer instanceof FBType) {
 			systemFile = ((FBType) rootContainer).getTypeEntry().getFile();
 		}
-		Assert.isNotNull(systemFile);
 		return systemFile;
 	}
 
@@ -180,7 +182,7 @@ public class ErrorMarkerBuilder {
 	private static ErrorMarkerBuilder deleteMarkerInJob(final IFile f, final ErrorMarkerRef ie) {
 		final long markerId = ie.getFileMarkerId();
 		final IMarker marker = f.getMarker(markerId);
-		ie.setFileMarkerId(0);  // remove errormarker id from errorMarkerref
+		ie.setFileMarkerId(0); // remove errormarker id from errorMarkerref
 		markers.remove(Long.valueOf(markerId));
 
 		final WorkspaceJob job = new WorkspaceJob(
@@ -233,7 +235,7 @@ public class ErrorMarkerBuilder {
 		Assert.isNotNull(iresource);
 		try {
 			final IMarker marker = iresource.createMarker(type, getAttributes());
-			if (marker.exists() && getErrorMarkerRef() != null) {
+			if (marker.exists() && (getErrorMarkerRef() != null)) {
 				Display.getDefault().asyncExec(() -> {
 					markers.put(Long.valueOf(marker.getId()), getErrorMarkerRef());
 					addId(marker.getId());

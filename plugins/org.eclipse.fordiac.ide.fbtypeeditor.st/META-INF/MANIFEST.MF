@@ -22,8 +22,10 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.util,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
- org.eclipse.fordiac.ide.structuredtextalgorithm.ui
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ui,
+ org.eclipse.fordiac.ide.fbtypextext
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor.st;singleton:=true
 Bundle-ActivationPolicy: lazy
+Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.st
 

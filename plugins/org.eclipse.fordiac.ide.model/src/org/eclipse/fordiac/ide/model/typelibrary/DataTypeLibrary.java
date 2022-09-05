@@ -17,8 +17,6 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -27,8 +25,6 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
@@ -39,15 +35,13 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public final class DataTypeLibrary extends ResourceImpl {
+public final class DataTypeLibrary {
 
-	private static final String DATA_LIB = "data.lib"; //$NON-NLS-1$
 	private final Map<String, DataType> typeMap = new HashMap<>();
 	private final Map<String, DataTypeEntry> derivedTypes = new HashMap<>();
 
 	/** Instantiates a new data type library. */
 	public DataTypeLibrary() {
-		setURI(URI.createURI(DATA_LIB));
 		initElementaryTypes();
 		initGenericTypes();
 	}
@@ -62,7 +56,6 @@ public final class DataTypeLibrary extends ResourceImpl {
 
 	private void addToTypeMap(final DataType type) {
 		typeMap.put(type.getName(), type);
-		getContents().add(type);
 	}
 
 	/** Inits the elementary types. */
@@ -166,11 +159,6 @@ public final class DataTypeLibrary extends ResourceImpl {
 		}
 		return (StructuredType) typeMap.get(FordiacKeywords.ANY_STRUCT);
 
-	}
-
-	@Override
-	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
-		// currently we do not need to do anything here
 	}
 
 }

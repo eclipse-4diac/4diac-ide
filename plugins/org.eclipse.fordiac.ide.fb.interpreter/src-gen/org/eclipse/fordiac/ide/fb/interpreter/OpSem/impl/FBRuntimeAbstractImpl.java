@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.DefaultRunFBType;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
@@ -60,6 +61,16 @@ public abstract class FBRuntimeAbstractImpl extends MinimalEObjectImpl.Container
 		}
 		throw new IllegalArgumentException("The eContainer of the FBRuntimeAbstract object must be an EventOccurrence");
 
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public EObject getModel() {
+		return null;
 	}
 
 } // FBRuntimeAbstractImpl

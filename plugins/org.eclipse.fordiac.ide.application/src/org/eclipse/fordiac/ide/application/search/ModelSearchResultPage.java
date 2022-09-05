@@ -15,8 +15,10 @@ package org.eclipse.fordiac.ide.application.search;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -179,6 +181,13 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 					final LibraryElement type = ((IInterfaceElement) element).getType();
 					return type != null ? type.getName() : "unknown";
 				}
+				if (element instanceof CompilableType) {
+					return ((CompilableType) element).getName();
+				}
+				if (element instanceof DataType) {
+					final DataType typeEntry = (DataType) element;
+					return typeEntry.getName();
+				}
 				return super.getText(element);
 			}
 		});
@@ -249,6 +258,12 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		}
 		if (element instanceof FBType) {
 			return ((FBType) element).getName();
+		}
+		if (element instanceof CompilableType) {
+			return ((CompilableType) element).getName();
+		}
+		if (element instanceof DataType) {
+			return ((DataType) element).getName();
 		}
 		return element.toString();
 	}

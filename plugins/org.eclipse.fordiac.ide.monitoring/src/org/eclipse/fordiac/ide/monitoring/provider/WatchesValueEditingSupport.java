@@ -13,16 +13,21 @@
 package org.eclipse.fordiac.ide.monitoring.provider;
 
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.validation.ValueValidator;
+import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
+import org.eclipse.fordiac.ide.monitoring.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.monitoring.views.StructParser;
 import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNode;
 import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNodeUtils;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
+import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ColumnViewer;
 import org.eclipse.jface.viewers.EditingSupport;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -47,9 +52,17 @@ public class WatchesValueEditingSupport extends EditingSupport {
 					MonitoringManager.getInstance().writeValue((MonitoringElement) monitoringBaseElement,
 							StructParser.changeStructNodeValue((MonitoringElement) monitoringBaseElement,
 									((WatchValueTreeNode) element).getVariable(), (String) value));
+					if (needsOfflineSave(monitoringBaseElement.getPort().getInterfaceElement())) {
+						writeOnlineValueToOffline((MonitoringElement) monitoringBaseElement,
+								StructParser.changeStructNodeValue((MonitoringElement) monitoringBaseElement,
+										((WatchValueTreeNode) element).getVariable(), (String) value));
+					}
 				} else {
 					MonitoringManager.getInstance().writeValue((MonitoringElement) monitoringBaseElement,
 							(String) value);
+					if (needsOfflineSave(monitoringBaseElement.getPort().getInterfaceElement())) {
+						writeOnlineValueToOffline((MonitoringElement) monitoringBaseElement, (String) value);
+					}
 				}
 			}
 		}
@@ -98,5 +111,22 @@ public class WatchesValueEditingSupport extends EditingSupport {
 			}
 		}
 		return true;
+	}
+
+	public static boolean needsOfflineSave(final Object element) {
+		// checks for preference, is input, has no connections, not in typedSubapp
+		return Activator.getDefault().getPreferenceStore()
+				.getBoolean(PreferenceConstants.P_MONITORING_WRITEBACKONLINEVALUES) && element instanceof VarDeclaration
+				&& ((VarDeclaration) element).isIsInput() && ((VarDeclaration) element).getInputConnections().isEmpty()
+				&& !FBNetworkElementHelper.isContainedInTypedInstance(((VarDeclaration) element).getFBNetworkElement());
+	}
+
+	public static void writeOnlineValueToOffline(final MonitoringElement element, final String value) {
+		if (element.getPort() != null
+				&& element.getPort().getSystem() != null
+				&& element.getPort().getSystem().getCommandStack() != null) {
+			final CommandStack cmdStack = element.getPort().getSystem().getCommandStack();
+			cmdStack.execute(new ChangeValueCommand((VarDeclaration) element.getPort().getInterfaceElement(), value));
+		}
 	}
 }

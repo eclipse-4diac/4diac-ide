@@ -30,6 +30,6 @@ public class ChangeSequenceStartStateCommand extends Command {
 	}
 
 	private void setStartState(final String startState) {
-		sequence.setStartState(startState);
+		sequence.setStartState("".equals(startState) ? null : startState); //$NON-NLS-1$
 	}
 }

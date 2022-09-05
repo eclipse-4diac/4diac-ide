@@ -26,6 +26,7 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
@@ -153,6 +154,18 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 			return new ChangeSubAppBoundsCommand((SubApp) container, dx, dy, dw, dh);
 		}
 		return null;
+	}
+
+	protected static void translateToRelative(final GraphicalEditPart graphicalEditPart, final Point topLeft) {
+		GraphicalEditPart parent = (GraphicalEditPart) graphicalEditPart.getParent();
+		while (parent != null) {
+			if (parent instanceof UnfoldedSubappContentEditPart) {
+				final Rectangle subappContentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(parent);
+				topLeft.translate(-subappContentBounds.x, -subappContentBounds.y);
+				return;
+			}
+			parent = (GraphicalEditPart) parent.getParent();
+		}
 	}
 
 }

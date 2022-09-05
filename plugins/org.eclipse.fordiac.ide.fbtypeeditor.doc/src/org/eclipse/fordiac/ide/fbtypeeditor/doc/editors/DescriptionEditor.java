@@ -10,6 +10,7 @@
  * Contributors:
  *   Alois Zoitl, Lukas Wais
  *                - initial API and implementation and/or initial documentation
+ *   Lukas Wais   - enable image inserting
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.doc.editors;
 
@@ -37,18 +38,17 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.part.EditorPart;
 
 public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
-
 	// @formatter:off
 	private static final String TOOLBAR_GROUP_CONFIGURATION =
-			"[" 	 															//$NON-NLS-1$
-			+ "{ name: 'clipboard', groups: [ 'undo', 'clipboard'] },"	//$NON-NLS-1$
-			+ "{ name: 'colors' },"  											//$NON-NLS-1$
-			+ "{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] }," 	//$NON-NLS-1$
-			+ "{ name: 'styles' }," 											//$NON-NLS-1$
-			+ "{ name: 'paragraph', groups: [ 'align', 'list', 'indent' ] }," 	//$NON-NLS-1$
-			+ "{ name: 'find'}," //$NON-NLS-1$
-			+ "{ name: 'other' }" 												//$NON-NLS-1$
-			+"]"; 																//$NON-NLS-1$
+			"[" 	 																	//$NON-NLS-1$
+			+ "{ name: 'clipboard', groups: [ 'undo', 'clipboard'] },"					//$NON-NLS-1$
+			+ "{ name: 'colors' },"  													//$NON-NLS-1$
+			+ "{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] }," 			//$NON-NLS-1$
+			+ "{ name: 'styles' }," 													//$NON-NLS-1$
+			+ "{ name: 'paragraph', groups: [ 'align', 'list', 'indent' ] }," 			//$NON-NLS-1$
+			+ "{ name: 'find'}," 														//$NON-NLS-1$
+			+ "{ name: 'insert' }," //$NON-NLS-1$
+			+ "]"; 																		//$NON-NLS-1$
 	// @formatter:on
 
 	private CommandStack commandStack;
@@ -119,19 +119,19 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 		GridLayoutFactory.fillDefaults().margins(0, 0).applyTo(parent);
 
 		final RichTextEditorConfiguration editorConfig = new RichTextEditorConfiguration();
-		editorConfig.setOption("toolbarGroups", TOOLBAR_GROUP_CONFIGURATION); //$NON-NLS-1$
 
+		editorConfig.setOption("toolbarGroups", TOOLBAR_GROUP_CONFIGURATION); //$NON-NLS-1$
+		editorConfig.removeDefaultToolbarButton("Flash", "Table", "HorizontalRule", "SpecialChar" + "", "Smiley", //$NON-NLS-5$ //$NON-NLS-6$
+				"PageBreak", "Iframe"); //$NON-NLS-1$ //$NON-NLS-2$
 		editor = new RichTextEditor(parent, editorConfig);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
 		editor.setText(getFbType().getIdentification().getDescription());
-
 		editor.addModifyListener(e -> {
 			if (editor != null && editor.getText() != null
 					&& !editor.getText().equals(getFbType().getIdentification().getDescription())) {
 				executeCommand(new ChangeDescriptionCommand(getFbType(), editor.getText()));
 			}
 		});
-
 	}
 
 	private void executeCommand(final ChangeDescriptionCommand cmd) {

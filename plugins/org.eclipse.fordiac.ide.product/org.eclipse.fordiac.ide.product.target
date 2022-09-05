@@ -15,6 +15,7 @@
 			<unit id="org.eclipse.gef.sdk.feature.group" version="3.11.0.201606061308"/>
 			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.17.1.v20220309-0840"/>
 			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.27.0.v20220530-0508"/>
+			<unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="3.3.18.202202240907"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/elk/updates/releases/0.8.1/"/>

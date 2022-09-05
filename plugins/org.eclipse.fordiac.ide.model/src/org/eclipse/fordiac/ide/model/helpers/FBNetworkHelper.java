@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.model.helpers;
 
 import java.text.MessageFormat;
 import java.util.ArrayDeque;
+import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
 import java.util.Objects;
@@ -31,11 +32,14 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.EventConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -355,6 +359,53 @@ public final class FBNetworkHelper {
 		}
 		return null;
 	}
-
-
+	
+	/** Get the model from the hierarchical path
+	 * 
+	 * @param fullHierarchicalName the complete path of the element separated by '.'
+	 * @param system the {@link AutomationSystem} in which to find the item in
+	 * @return the model as an {@link EObject} (can also return the {@link Application} 
+	 * 		   if the path does not include any other elements)
+	 */
+	public static EObject getModelFromHierarchicalName(final String fullHierarchicalName, final AutomationSystem system) {
+		final String[] path = fullHierarchicalName.split("\\."); //$NON-NLS-1$
+		EObject retVal = system.getApplicationNamed(path[0]);
+		if (null != retVal) {
+			if (path.length > 1) {
+				// we are within a subapplication in the application
+				retVal = parseSubappPath(((Application) retVal).getFBNetwork(),
+						Arrays.copyOfRange(path, 1, path.length));
+			}
+		} else if (path.length > 2) {
+			// we need to have at least a device and a resource in the path
+			retVal = system.getDeviceNamed(path[0]);
+			if (null != retVal) {
+				retVal = ((Device) retVal).getResourceNamed(path[1]);
+				if ((null != retVal) && (path.length > 2)) {
+					// we are within a subapplication in the resource
+					retVal = parseSubappPath(((Resource) retVal).getFBNetwork(),
+							Arrays.copyOfRange(path, 2, path.length));
+				}
+			}
+		}
+		return retVal;
+	}
+	private static EObject parseSubappPath(FBNetwork network, final String[] path) {
+		EObject retVal = null;
+		for (final String element : path) {
+			retVal = network.getElementNamed(element);
+			if (retVal instanceof SubApp) {
+				network = ((SubApp) retVal).loadSubAppNetwork();
+			} else if (retVal instanceof CFBInstance) {
+				network = ((CFBInstance) retVal).loadCFBNetwork();
+			} else {
+				return null;
+			}
+			if (null == network) {
+				// we couldn't load the network, memento seems to be broken
+				return null;
+			}
+		}
+		return retVal;
+	}
 }

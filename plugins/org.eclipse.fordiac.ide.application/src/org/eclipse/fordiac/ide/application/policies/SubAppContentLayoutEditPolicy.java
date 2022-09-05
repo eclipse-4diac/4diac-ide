@@ -64,9 +64,14 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 
 			if (!addTo.isEmpty()) {
 				final Point moveDelta = getScaledMoveDelta((ChangeBoundsRequest) request);
-				cmd.add(new AddElementsToSubAppCommand(getParentModel(), editParts,
-						new org.eclipse.swt.graphics.Point(moveDelta.x - getHostFigure().getBounds().x,
-								moveDelta.y - getHostFigure().getBounds().y)));
+				final Rectangle contentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(getHost());
+				final Point topLeft = contentBounds.getTopLeft();
+				translateToRelative(getHost(), topLeft);
+				topLeft.translate(-moveDelta.x, -moveDelta.y);
+				// needs a dummy (swt)point because swt and draw2d points are mixed
+				final org.eclipse.swt.graphics.Point dummyPoint = new org.eclipse.swt.graphics.Point(topLeft.x, topLeft.y);
+				cmd.add(new AddElementsToSubAppCommand(getParentModel(), editParts, dummyPoint));
+
 				final Rectangle newContentBounds = getContentBounds(editParts, moveDelta);
 				if (checkGroupNeedsResize(newContentBounds) && createChangeBoundsCommand(newContentBounds) != null) {
 					cmd.add(createChangeBoundsCommand(newContentBounds));

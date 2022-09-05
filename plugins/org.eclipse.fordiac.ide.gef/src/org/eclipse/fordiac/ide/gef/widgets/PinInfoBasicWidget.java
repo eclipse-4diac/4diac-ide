@@ -82,7 +82,7 @@ public class PinInfoBasicWidget implements CommandExecutor {
 		if (type != null) {
 			final Consumer<Command> commandExecutorBuffer = commandExecutor;
 			commandExecutor = null;
-			if (null != type.getName() && null != type.getComment()) {
+			if ((null != type.getName()) && (null != type.getComment())) {
 				nameText.setText(type.getName());
 				commentText.setText(type.getComment());
 				typeSelectionWidget.refresh();
@@ -111,9 +111,9 @@ public class PinInfoBasicWidget implements CommandExecutor {
 
 	protected boolean isTypeChangeable() {
 		if (type != null) {
-			// currently we have only one event type therefore we don't want it be changeable
-			return !(type instanceof Event)
-					&& hasNoConnections();
+			// currently we have only one event type therefore we don't want it be
+			// changeable
+			return !(type instanceof Event) && hasNoConnections();
 		}
 		return false;
 	}
@@ -138,7 +138,7 @@ public class PinInfoBasicWidget implements CommandExecutor {
 		if (getType() instanceof VarDeclaration) {
 			final DataType newType = getSelectedType(newTypeName);
 			if (newType != null) {
-				executeCommand(new ChangeDataTypeCommand((VarDeclaration) getType(), newType));
+				executeCommand(new ChangeDataTypeCommand(getType(), newType));
 				// ensure that the new value is shown
 				final Consumer<Command> commandExecutorBuffer = commandExecutor;
 				commandExecutor = null;

@@ -48,13 +48,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
+import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Display;
@@ -231,7 +231,7 @@ public class PasteEditPartsAction extends SelectionAction {
 	}
 
 	private static List<? extends Object> getClipboardContents() {
-		final Object obj = Clipboard.getDefault().getContents();
+		final Object obj = FordiacClipboard.INSTANCE.getGraphicalContents();
 		if (obj instanceof CopyPasteMessage) {
 			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) obj;
 			return copyPasteMessage.getData();
@@ -283,9 +283,9 @@ public class PasteEditPartsAction extends SelectionAction {
 	 */
 	@Override
 	public void run() {
-		final Clipboard clipboard = Clipboard.getDefault();
-		if (clipboard.getContents() instanceof CopyPasteMessage) {
-			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) Clipboard.getDefault().getContents();
+		final FordiacClipboard clipboard = FordiacClipboard.INSTANCE;
+		if (clipboard.getGraphicalContents() instanceof CopyPasteMessage) {
+			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) clipboard.getGraphicalContents();
 			if ((pasteRefPosition != null) && (copyPasteMessage.getCutAndPasteFromSubAppCommandos() != null)) {
 				copyPasteMessage.getCutAndPasteFromSubAppCommandos().setPastePos(pasteRefPosition);
 			}
@@ -323,7 +323,7 @@ public class PasteEditPartsAction extends SelectionAction {
 	@Override
 	protected void execute(final Command command) {
 		if ((command != null) && command.canExecute()) {
-			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) Clipboard.getDefault().getContents();
+			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) FordiacClipboard.INSTANCE.getGraphicalContents();
 			if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_ROOT) {
 				copyPasteMessage.setCopyInfo(CopyStatus.CUT_PASTED);
 			}
@@ -434,7 +434,7 @@ public class PasteEditPartsAction extends SelectionAction {
 
 	protected void handleCutFromSubappToParent(final CopyPasteMessage copyPasteMessage) {
 		execute(copyPasteMessage.getCutAndPasteFromSubAppCommandos());
-		Clipboard.getDefault().setContents(new Object()); // Clear clipboard afterwards to prevent double
+		FordiacClipboard.INSTANCE.setGraphicalContents(new Object()); // Clear clipboard afterwards to prevent double
 		// pasting
 	}
 
