@@ -133,7 +133,7 @@
 	</extension> 
 	<extension point="org.eclipse.core.contenttype.contentTypes">
   		<file-association
-      		content-type="org.eclipse.emf.ecore.xmi"
+      		content-type="org.eclipse.emf.compare.content.type"
       		file-extensions="sys,fbt,sub,adp,dtp"/>
 	</extension>   
    <!-- this is needed to load old pre eclipse version projects -->

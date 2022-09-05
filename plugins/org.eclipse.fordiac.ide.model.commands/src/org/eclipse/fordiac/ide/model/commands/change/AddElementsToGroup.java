@@ -96,8 +96,8 @@ public class AddElementsToGroup extends Command {
 	private boolean targetIsInSameFbNetwork() {
 		final FBNetwork fbNetwork = targetGroup.getFbNetwork();
 		// if any of the elements is not in the same fbNetwork do not allow to add it to
-		// the group
-		return elementsToAdd.stream().allMatch(el -> fbNetwork.equals(el.getFbNetwork()));
+		// the group, or the element is not yet added to anything
+		return elementsToAdd.stream().allMatch(el -> fbNetwork.equals(el.getFbNetwork()) || el.getFbNetwork() == null);
 	}
 
 	private static List<FBNetworkElement> createElementList(final List<?> selection) {
