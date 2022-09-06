@@ -31,6 +31,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
+import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
@@ -48,6 +49,9 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 
 	private Text nameText;
 	private Text commentText;
+
+	private NatTable inputTable;
+	private NatTable outputTable;
 
 	private VarDeclarationDataProvider inputDataProvider;
 	private VarDeclarationDataProvider outputDataProvider;
@@ -71,8 +75,6 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 			commandStack = null;
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			inputDataProvider.setInput(getType());
-			outputDataProvider.setInput(getType());
 			commandStack = commandStackBuffer;
 		}
 	}
@@ -94,8 +96,9 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 		inputDataProvider = new VarDeclarationDataProvider(true);
 		outputDataProvider = new VarDeclarationDataProvider(false);
 
-		NatTableWidgetFactory.createNatTable(inputComposite, inputDataProvider, new ColumnDataProvider());
-		NatTableWidgetFactory.createNatTable(outputComposite, outputDataProvider, new ColumnDataProvider());
+		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataProvider, new ColumnDataProvider());
+		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataProvider,
+				new ColumnDataProvider());
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(outputComposite);
@@ -160,7 +163,11 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 
 	@Override
 	protected void setInputInit() {
-		// Nothing for now
+		inputDataProvider.setInput(getType());
+		outputDataProvider.setInput(getType());
+
+		inputTable.refresh();
+		outputTable.refresh();
 	}
 
 	// @Override
