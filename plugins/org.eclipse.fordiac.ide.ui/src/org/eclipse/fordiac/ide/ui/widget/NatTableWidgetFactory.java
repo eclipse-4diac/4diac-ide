@@ -16,20 +16,28 @@ package org.eclipse.fordiac.ide.ui.widget;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
+import org.eclipse.nebula.widgets.nattable.config.AbstractUiBindingConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.DefaultNatTableStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
-import org.eclipse.nebula.widgets.nattable.edit.config.DefaultEditBindings;
+import org.eclipse.nebula.widgets.nattable.edit.action.KeyEditAction;
+import org.eclipse.nebula.widgets.nattable.edit.action.MouseEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.config.DefaultEditConfiguration;
 import org.eclipse.nebula.widgets.nattable.grid.GridRegion;
 import org.eclipse.nebula.widgets.nattable.grid.layer.ColumnHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.layer.CompositeLayer;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.ILayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
+import org.eclipse.nebula.widgets.nattable.ui.binding.UiBindingRegistry;
+import org.eclipse.nebula.widgets.nattable.ui.matcher.CellEditorMouseEventMatcher;
+import org.eclipse.nebula.widgets.nattable.ui.matcher.KeyEventMatcher;
+import org.eclipse.nebula.widgets.nattable.ui.matcher.LetterOrDigitKeyEventMatcher;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public final class NatTableWidgetFactory {
@@ -64,12 +72,36 @@ public final class NatTableWidgetFactory {
 		gridLayer.setChildLayer(GridRegion.BODY, viewportLayer, 0, 1);
 
 		gridLayer.addConfiguration(new DefaultEditConfiguration());
-		gridLayer.addConfiguration(new DefaultEditBindings());
+		gridLayer.addConfiguration(new AbstractUiBindingConfiguration() {
+			@Override
+			public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
+				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.NONE, SWT.SPACE), new KeyEditAction());
+				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.NONE, SWT.F2), new KeyEditAction());
+				uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(), new KeyEditAction());
+				uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(SWT.MOD2), new KeyEditAction());
+				uiBindingRegistry.registerDoubleClickBinding(new CellEditorMouseEventMatcher(GridRegion.BODY),
+						new MouseEditAction());
+			}
+		});
+
 		gridLayer.addConfiguration(new AbstractRegistryConfiguration() {
 			@Override
 			public void configureRegistry(final IConfigRegistry configRegistry) {
 				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE,
-						IEditableRule.ALWAYS_EDITABLE);
+						new IEditableRule() {
+					@Override
+					public boolean isEditable(final int columnIndex, final int rowIndex) {
+						return false;
+					}
+
+					@Override
+					public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
+						if (cell.getColumnIndex() == 2 || cell.getColumnIndex() == 3) {
+							return true;
+						}
+						return false;
+					}
+				});
 			}
 		});
 
