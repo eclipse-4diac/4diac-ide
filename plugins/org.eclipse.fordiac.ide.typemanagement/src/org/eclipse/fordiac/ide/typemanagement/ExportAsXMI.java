@@ -77,7 +77,7 @@ public class ExportAsXMI {
 			xmiRessource.save(options);
 		} catch (final Exception e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
-			System.out.println(e.getMessage() + " " + e); // log it in console for ANT Tasks
+			System.out.println(e.getMessage() + " " + e); // log it in console for ANT Tasks //$NON-NLS-1$
 		}
 
 		return null;

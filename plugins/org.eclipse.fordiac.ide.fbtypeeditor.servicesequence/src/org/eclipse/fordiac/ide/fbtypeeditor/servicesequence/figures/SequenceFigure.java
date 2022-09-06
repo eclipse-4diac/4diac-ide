@@ -124,9 +124,7 @@ public final class SequenceFigure extends Layer {
 		final String sequenceStartState = null != startState ? startState : ""; //$NON-NLS-1$
 		this.startState = sequenceStartState;
 		final String symbol = isExpanded ? TRIANGLE_DOWNWARDS : TRIANGLE_RIGHTWARDS;
-		final String icon = sequenceType.equals(ServiceSequenceTypes.ALWAYS) ? TYPE_ALWAYS
-				: sequenceType.equals(ServiceSequenceTypes.FORBIDDEN) ? TYPE_FORBIDDEN
-						: sequenceType.equals(ServiceSequenceTypes.CONDITIONAL) ? TYPE_CONDITIONAL : TYPE_POSSIBLE;
+		final String icon = getIconText(sequenceType);
 		this.nameLabel.setText(symbol + sequenceName + icon + sequenceStartState);
 
 		final String serviceComment = comment != null ? comment : ""; //$NON-NLS-1$
@@ -139,6 +137,19 @@ public final class SequenceFigure extends Layer {
 
 	public Layer getTransactionContainer() {
 		return transactionContainer;
+	}
+
+	private static String getIconText(final String serviceSequenceType) {
+		switch (serviceSequenceType) {
+		case ServiceSequenceTypes.ALWAYS:
+			return TYPE_ALWAYS;
+		case ServiceSequenceTypes.FORBIDDEN:
+			return TYPE_FORBIDDEN;
+		case ServiceSequenceTypes.CONDITIONAL:
+			return TYPE_CONDITIONAL;
+		default:
+			return TYPE_POSSIBLE;
+		}
 	}
 
 }

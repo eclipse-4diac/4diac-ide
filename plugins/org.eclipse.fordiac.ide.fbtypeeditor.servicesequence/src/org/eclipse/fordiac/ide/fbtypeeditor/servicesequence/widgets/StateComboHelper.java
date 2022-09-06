@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.swt.custom.CCombo;
 
-public class StateComboHelper {
+public final class StateComboHelper {
 	public static void setup(final FBType fbtype, final ServiceSequence type, final CCombo combo) {
 		if (fbtype instanceof BasicFBType) {
 			final EList<ECState> states = ((BasicFBType) fbtype).getECC().getECState();
@@ -39,5 +39,9 @@ public class StateComboHelper {
 		} else {
 			combo.setEnabled(false);
 		}
+	}
+
+	private StateComboHelper() {
+		throw new UnsupportedOperationException("Helper class should not be instantiated!"); //$NON-NLS-1$
 	}
 }

@@ -58,7 +58,7 @@ public class ExportFBs extends AbstractExportFBs {
 
 		try {
 			filter.export(ifile, folder.getPath(), true);
-			System.out.println(ifile);// print it in console for ANT Tasks
+			log(ifile.toString());// print it in console for ANT Tasks
 			if (exportCMakeList) {
 				filter.export(null, folder.getPath(), true, new CMakeListsMarker());
 			}

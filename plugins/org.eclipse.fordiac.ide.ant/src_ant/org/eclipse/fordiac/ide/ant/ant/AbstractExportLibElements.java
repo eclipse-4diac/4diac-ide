@@ -51,9 +51,9 @@ public abstract class AbstractExportLibElements extends AbstractFBTask {
 		// check that folder outside of the project
 		final File folder = new File(exportDirectory);
 
-		if (folder.getAbsolutePath().replace("\\", "/")
-				.startsWith(getFordiacProject().getLocation().toString().replace("\\", "/"))) {
-			throw new BuildException("Export Directory needs to be outsite of the project");
+		if (folder.getAbsolutePath().replace("\\", "/") //$NON-NLS-1$ //$NON-NLS-2$
+				.startsWith(getFordiacProject().getLocation().toString().replace("\\", "/"))) { //$NON-NLS-1$ //$NON-NLS-2$
+			throw new BuildException("Export Directory needs to be outsite of the project"); //$NON-NLS-1$
 		}
 
 		if (!folder.exists()) {

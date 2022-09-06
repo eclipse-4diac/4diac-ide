@@ -17,10 +17,12 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -35,11 +37,11 @@ import org.xml.sax.SAXException;
 
 public class ExportLibElements extends AbstractExportLibElements {
 
-	private final String ANT_CONVERT_TASK_DIRECTORY_NAME = "converted_FBs"; //$NON-NLS-1$
+	private static final String ANT_CONVERT_TASK_DIRECTORY_NAME = "converted_FBs"; //$NON-NLS-1$
 
-	private final String SIMPLEFB_XML_ATTRIBUTE = "SimpleFB"; //$NON-NLS-1$
-	private final String BASICFB_XML_ATTRIBUTE = "BasicFB"; //$NON-NLS-1$
-	private final String COMPOSITEFB_XML_ATTRIBUTE = "FBNetwork"; //$NON-NLS-1$
+	private static final String SIMPLEFB_XML_ATTRIBUTE = "SimpleFB"; //$NON-NLS-1$
+	private static final String BASICFB_XML_ATTRIBUTE = "BasicFB"; //$NON-NLS-1$
+	private static final String COMPOSITEFB_XML_ATTRIBUTE = "FBNetwork"; //$NON-NLS-1$
 
 	@Override
 	protected String getExportDirectoryDefault() {
@@ -51,22 +53,12 @@ public class ExportLibElements extends AbstractExportLibElements {
 			throws BuildException {
 		if (!files.isEmpty()) {
 
-			// read in
-			final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			// set all dtd and validation stuff to false
 			try {
-				factory.setFeature("http://xml.org/sax/features/namespaces", false);
-				factory.setFeature("http://xml.org/sax/features/validation", false);
-				factory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false);
-				factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false);
-				final DocumentBuilder builder = factory.newDocumentBuilder();
-
-				// save
-				final TransformerFactory tf = TransformerFactory.newInstance();
-				final Transformer transformer = tf.newTransformer();
+				final DocumentBuilder builder = getDocumentBuilder();
+				final Transformer transformer = getTransformer();
 
 				for (final File file : files) {
-					System.out.println("converted file: " + file.getName());
+					log("converted file: " + file.getName()); //$NON-NLS-1$
 					if (file.getName().toUpperCase().endsWith(TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT)) {
 
 						Document document = builder.parse(file);
@@ -80,14 +72,14 @@ public class ExportLibElements extends AbstractExportLibElements {
 					}
 				}
 			} catch (ParserConfigurationException | TransformerException | SAXException | IOException e) {
-				// TODO Auto-generated catch block
+				// rethrow the caught exception as build exception to inform build system about problems.
 				throw new BuildException(e);
 			}
 		}
 
 	}
 
-	private Document removeAllAlgorithms(final Document doc) {
+	private static Document removeAllAlgorithms(final Document doc) {
 		NodeList algo = doc.getElementsByTagName(SIMPLEFB_XML_ATTRIBUTE);
 		for (int i = 0; i < algo.getLength(); i++) {
 			final Node parent = algo.item(i).getParentNode();
@@ -107,6 +99,23 @@ public class ExportLibElements extends AbstractExportLibElements {
 		}
 
 		return doc;
+	}
+
+	private static DocumentBuilder getDocumentBuilder() throws ParserConfigurationException {
+		final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+		// set all dtd and validation stuff to false
+		factory.setFeature("http://xml.org/sax/features/namespaces", false); //$NON-NLS-1$
+		factory.setFeature("http://xml.org/sax/features/validation", false); //$NON-NLS-1$
+		factory.setFeature("http://apache.org/xml/features/nonvalidating/load-dtd-grammar", false); //$NON-NLS-1$
+		factory.setFeature("http://apache.org/xml/features/nonvalidating/load-external-dtd", false); //$NON-NLS-1$
+		return factory.newDocumentBuilder();
+	}
+
+	private static Transformer getTransformer() throws TransformerConfigurationException {
+		final TransformerFactory tf = TransformerFactory.newInstance();
+		tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_DTD, ""); //$NON-NLS-1$
+		tf.setAttribute(XMLConstants.ACCESS_EXTERNAL_STYLESHEET, ""); //$NON-NLS-1$
+		return tf.newTransformer();
 	}
 
 }

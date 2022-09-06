@@ -87,8 +87,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 
 		private void handleSet(final Notification notification) {
 			if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)
-					&& ((isOutputEvent(notification) || isAdapterOutputEvent(notification)))) {
-
+					&& (isOutputEvent(notification) || isAdapterOutputEvent(notification))) {
 				refreshEventLabel();
 
 			}
