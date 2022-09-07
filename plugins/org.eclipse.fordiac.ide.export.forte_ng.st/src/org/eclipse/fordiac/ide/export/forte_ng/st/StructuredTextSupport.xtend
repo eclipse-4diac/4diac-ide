@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
+ *               2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  * 
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians - updated exporter to correctly handle CHAR/WCHAR
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
@@ -74,6 +76,9 @@ import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExpo
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
+import org.eclipse.fordiac.ide.model.data.AnyStringType
+import org.eclipse.fordiac.ide.model.data.AnyCharsType
+import org.eclipse.fordiac.ide.model.data.WcharType
 
 abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
@@ -299,8 +304,14 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateExpression(STNumericLiteral expr) //
 	'''«(expr.resultType as DataType).generateTypeName»(«expr.value»)'''
 
-	def protected dispatch CharSequence generateExpression(STStringLiteral expr) //
-	'''«(expr.resultType as DataType).generateTypeName»("«expr.value.toString.convertToJavaString»")'''
+	def protected dispatch CharSequence generateExpression(STStringLiteral expr) {
+		val type = expr.resultType as DataType
+		'''«type.generateTypeName»''' + switch (type) {
+			AnyStringType: '''("«expr.value.toString.convertToJavaString»")'''
+			AnyCharsType: '''(«IF type instanceof WcharType»u«ENDIF»'«expr.value.toString.convertToJavaString»')'''
+		}
+
+	}
 
 	def protected dispatch CharSequence generateExpression(STDateLiteral expr) //
 	'''CIEC_DATE(«expr.value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L»)'''
