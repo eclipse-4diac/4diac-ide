@@ -61,6 +61,18 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 
 public class TypeInfoWidget implements CommandExecutor {
 
+	private static final int MAX_MINUS_T_MIN = 70;
+
+	private static final int MAX_MINUS_MIN = 90;
+
+	private static final int T_MIN = 30;
+
+	private static final int D_MIN = 20;
+
+	private static final int MAX = 100;
+
+	private static final int MIN = 10;
+
 	private final FormToolkit widgetFactory;
 
 	private Consumer<Command> commandExecutor;
@@ -115,7 +127,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.ApplicationDomain + ":"); //$NON-NLS-1$
 		domainText = createGroupText(identificationGroup, true);
 		domainText
-		.addModifyListener(e -> executeCommand(new ChangeApplicationDomainCommand(type, domainText.getText())));
+				.addModifyListener(e -> executeCommand(new ChangeApplicationDomainCommand(type, domainText.getText())));
 
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Function + ":"); //$NON-NLS-1$
 		functionText = createGroupText(identificationGroup, true);
@@ -132,7 +144,7 @@ public class TypeInfoWidget implements CommandExecutor {
 		final GridData descriptionTextData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		descriptionText.setLayoutData(descriptionTextData);
 		descriptionText
-		.addModifyListener(e -> executeCommand(new ChangeDescriptionCommand(type, descriptionText.getText())));
+				.addModifyListener(e -> executeCommand(new ChangeDescriptionCommand(type, descriptionText.getText())));
 	}
 
 	private void createVersionInfoGroup(final Composite parent) {
@@ -220,11 +232,11 @@ public class TypeInfoWidget implements CommandExecutor {
 		final TableColumn column5 = new TableColumn(table, SWT.LEFT);
 		column5.setText(FordiacMessages.Remarks);
 		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnWeightData(20, 70));
-		layout.addColumnData(new ColumnWeightData(20, 90));
-		layout.addColumnData(new ColumnWeightData(20, 90));
-		layout.addColumnData(new ColumnWeightData(10, 70));
-		layout.addColumnData(new ColumnWeightData(30, 100));
+		layout.addColumnData(new ColumnWeightData(D_MIN, MAX_MINUS_T_MIN));
+		layout.addColumnData(new ColumnWeightData(D_MIN, MAX_MINUS_MIN));
+		layout.addColumnData(new ColumnWeightData(D_MIN, MAX_MINUS_MIN));
+		layout.addColumnData(new ColumnWeightData(MIN, MAX_MINUS_T_MIN));
+		layout.addColumnData(new ColumnWeightData(T_MIN, MAX));
 		table.setLayout(layout);
 	}
 
@@ -253,19 +265,23 @@ public class TypeInfoWidget implements CommandExecutor {
 			final Consumer<Command> commandExecutorBuffer = commandExecutor;
 			commandExecutor = null;
 			if (null != type.getIdentification()) {
-				final Identification id = type.getIdentification();
-				standardText.setText((null != id.getStandard()) ? id.getStandard() : ""); //$NON-NLS-1$
-				classificationText.setText((null != id.getClassification()) ? id.getClassification() : ""); //$NON-NLS-1$
-				domainText.setText((null != id.getApplicationDomain()) ? id.getApplicationDomain() : ""); //$NON-NLS-1$
-				functionText.setText((null != id.getFunction()) ? id.getFunction() : ""); //$NON-NLS-1$
-				typeText.setText((null != id.getType()) ? id.getType() : ""); //$NON-NLS-1$
-				descriptionText.setText((null != id.getDescription()) ? id.getDescription() : ""); //$NON-NLS-1$
+				setIdentTextAll();
 			}
 			if (null != type.getVersionInfo()) {
 				versionViewer.setInput(type);
 			}
 			commandExecutor = commandExecutorBuffer;
 		}
+	}
+
+	private void setIdentTextAll() {
+		final Identification id = type.getIdentification();
+		standardText.setText((null != id.getStandard()) ? id.getStandard() : ""); //$NON-NLS-1$
+		classificationText.setText((null != id.getClassification()) ? id.getClassification() : ""); //$NON-NLS-1$
+		domainText.setText((null != id.getApplicationDomain()) ? id.getApplicationDomain() : ""); //$NON-NLS-1$
+		functionText.setText((null != id.getFunction()) ? id.getFunction() : ""); //$NON-NLS-1$
+		typeText.setText((null != id.getType()) ? id.getType() : ""); //$NON-NLS-1$
+		descriptionText.setText((null != id.getDescription()) ? id.getDescription() : ""); //$NON-NLS-1$
 	}
 
 	@Override
