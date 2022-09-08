@@ -24,6 +24,7 @@ import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.action.KeyEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.action.MouseEditAction;
+import org.eclipse.nebula.widgets.nattable.edit.command.DeleteSelectionCommandHandler;
 import org.eclipse.nebula.widgets.nattable.edit.config.DefaultEditConfiguration;
 import org.eclipse.nebula.widgets.nattable.grid.GridRegion;
 import org.eclipse.nebula.widgets.nattable.grid.layer.ColumnHeaderLayer;
@@ -32,6 +33,7 @@ import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.ILayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
+import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBindings;
 import org.eclipse.nebula.widgets.nattable.ui.binding.UiBindingRegistry;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.CellEditorMouseEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.KeyEventMatcher;
@@ -62,6 +64,17 @@ public final class NatTableWidgetFactory {
 		dataLayer.setColumnWidthPercentageByPosition(3, 25);
 
 		final SelectionLayer selectionLayer = new SelectionLayer(dataLayer);
+		selectionLayer.addConfiguration(new DefaultSelectionBindings() {
+			@Override
+			public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
+				super.configureUiBindings(uiBindingRegistry);
+				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'v'),
+						new PasteDataIntoTableAction());
+				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'), new CutDataFromTableAction());
+			}
+		});
+		selectionLayer.registerCommandHandler(new DeleteSelectionCommandHandler(selectionLayer));
+
 		final ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
 
 		final DataLayer columnHeaderDataLayer = new DataLayer(headerDataProvider);

@@ -47,6 +47,11 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 	private static final int ONE_COLUMN = 1;
 	private static final int TWO_COLUMNS = 2;
 
+	private static final int NAME = 0;
+	private static final int TYPE = 1;
+	private static final int INITIAL_VALUE = 2;
+	private static final int COMMENT = 3;
+
 	private Text nameText;
 	private Text commentText;
 
@@ -222,13 +227,13 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 			}
 
 			switch (columnIndex) {
-			case 0:
+			case NAME:
 				return item.getName();
-			case 1:
+			case TYPE:
 				return item.getTypeName();
-			case 2:
+			case INITIAL_VALUE:
 				return InitialValueHelper.getInitalOrDefaultValue(item);
-			case 3:
+			case COMMENT:
 				return item.getComment();
 
 			default:
@@ -240,12 +245,13 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 		public void setDataValue(final int columnIndex, final int rowIndex, final Object newValue) {
 			Command cmd = null;
 			switch (columnIndex) {
-			case 2:
+			case INITIAL_VALUE:
 				cmd = new ChangeValueCommand(varList.get(rowIndex), (String) newValue);
 				break;
-			case 3:
+			case COMMENT:
 				cmd = new ChangeCommentCommand(varList.get(rowIndex), (String) newValue);
 				break;
+
 			default:
 				return;
 			}
@@ -274,15 +280,15 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 		@Override
 		public Object getDataValue(final int columnIndex, final int rowIndex) {
 			switch (columnIndex) {
-
-			case 0:
+			case NAME:
 				return FordiacMessages.Name;
-			case 1:
+			case TYPE:
 				return FordiacMessages.Type;
-			case 2:
+			case INITIAL_VALUE:
 				return FordiacMessages.InitialValue;
-			case 3:
+			case COMMENT:
 				return FordiacMessages.Comment;
+
 			default:
 				return FordiacMessages.EmptyField;
 			}
