@@ -33,7 +33,6 @@ interface STCoreHighlightingStyles extends HighlightingStyles {
 	String RETURN_FUNCTION_ID = "ReturnFunction";
 	String RETURN_METHOD_ID = "ReturnMethod";
 	String FUNCTIONS_NAME_ID = "FunctionsName";
-	String FUNCTIONS_BLOCK_NAME_ID = "FunctionsBlockName";
 	String METHODS_NAME_ID = "MethodsName";
 
 }

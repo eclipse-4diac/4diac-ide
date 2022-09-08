@@ -37,7 +37,6 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 	public static final String RETURN_FUNCTION_ID = STCoreHighlightingStyles.RETURN_FUNCTION_ID;
 	public static final String RETURN_METHOD_ID = STCoreHighlightingStyles.RETURN_METHOD_ID;
 	public static final String FUNCTIONS_NAME_ID = STCoreHighlightingStyles.FUNCTIONS_NAME_ID;
-	public static final String FUNCTIONS_BLOCK_NAME_ID = STCoreHighlightingStyles.FUNCTIONS_BLOCK_NAME_ID;
 	public static final String METHODS_NAME_ID = STCoreHighlightingStyles.METHODS_NAME_ID;
 
 	override configure(IHighlightingConfigurationAcceptor acceptor) {
@@ -66,12 +65,10 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 		acceptor.acceptDefaultHighlighting(RETURN_FUNCTION_ID, "ReturnFunctionVar", returnFunctionTextStyle());
 		acceptor.acceptDefaultHighlighting(RETURN_METHOD_ID, "ReturnMethodVar", returnMethodTextStyle());
 		acceptor.acceptDefaultHighlighting(FUNCTIONS_NAME_ID, "FunctionsName", functionNameTextStyle());
-		acceptor.acceptDefaultHighlighting(FUNCTIONS_BLOCK_NAME_ID, "FunctionsBlockName", functionBlockNameTextStyle());
 		acceptor.acceptDefaultHighlighting(METHODS_NAME_ID, "MethodsName", methodNameTextStyle());
-		
 
 	}
-	
+
 	def algorithmTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(128, 0, 128));
@@ -84,114 +81,107 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 		textStyle.setColor(new RGB(0, 128, 255));
 		return textStyle;
 	}
-	
+
 	def callFunctionBlockTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 128, 255));
 		return textStyle;
 	}
-	
+
 	def callMethodTextStyle() {
 		var textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(0, 0, 255));
+		textStyle.setColor(new RGB(0, 128, 255));
 		return textStyle;
 	}
-	
+
 	def dataTypeTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(128, 128, 255));
 		return textStyle;
 	}
-	
+
 	override defaultTextStyle() {
 		var textStyle = super.defaultTextStyle().copy();
 		textStyle.setColor(new RGB(64, 0, 0));
 		return textStyle;
 	}
-	
-	def functionBockTextStyle(){
+
+	def functionBockTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(128, 0, 128));
 		textStyle.setStyle(SWT.BOLD);
 		return textStyle;
 	}
 
-	def functionsTextStyle(){
+	def functionsTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(128, 0, 128));
 		textStyle.setStyle(SWT.BOLD);
 		return textStyle;
 	}
-	
+
 	def functionNameTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
-	
-	def functionBlockNameTextStyle() {
-		var textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(0, 0, 0));
-		return textStyle;
-	}
-	
+
 	def methodNameTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
-	
-	override keywordTextStyle(){
+
+	override keywordTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(255, 128, 0));
 		return textStyle;
 	}
-	
-	def methodBlockTextStyle(){
+
+	def methodBlockTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(128, 0, 128));
 		textStyle.setStyle(SWT.BOLD);
 		return textStyle;
 	}
-	
+
 	override numberTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 164, 164));
 		return textStyle;
 	}
-	
+
 	def outputFunctionTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
-	
+
 	def returnFunctionTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
-	
+
 	def returnMethodTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
-	
+
 	def staticVarTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
-	
+
 	override stringTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 255));
 		return textStyle;
 	}
-	
-	
-	def varKeywordTextStyle(){
+
+	def varKeywordTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(128, 128, 255));
 		textStyle.setStyle(SWT.BOLD);
