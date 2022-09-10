@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document
 
 import com.google.inject.Inject
-import org.eclipse.fordiac.ide.fbtypextext.ui.FBTypeXtextDocument
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.FBTypeXtextDocument
 import org.eclipse.xtext.ui.editor.model.DocumentTokenSource
 import org.eclipse.xtext.ui.editor.model.edit.ITextEditComposer
 

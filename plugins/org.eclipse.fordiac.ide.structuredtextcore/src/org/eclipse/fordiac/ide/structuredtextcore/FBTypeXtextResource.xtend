@@ -11,7 +11,7 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  * 	 Christoph Binder - Extracted code from STAlgorithmResource, to enable possibility to reuse this class for multiple xtexteditors
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypextext
+package org.eclipse.fordiac.ide.structuredtextcore
 
 import java.util.List
 import org.eclipse.emf.ecore.EObject

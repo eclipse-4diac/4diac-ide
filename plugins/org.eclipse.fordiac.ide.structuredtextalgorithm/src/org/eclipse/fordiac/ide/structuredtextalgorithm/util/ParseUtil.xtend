@@ -18,9 +18,9 @@ import java.util.Collection
 import java.util.List
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.fordiac.ide.fbtypextext.FBTypeXtextResource
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
+import org.eclipse.fordiac.ide.structuredtextcore.FBTypeXtextResource
 import org.eclipse.xtext.ParserRule
 import org.eclipse.xtext.diagnostics.Severity
 import org.eclipse.xtext.parser.IParseResult

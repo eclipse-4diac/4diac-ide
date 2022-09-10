@@ -12,18 +12,18 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  * 	 Christoph Binder - Extracted code from STAlgorithmDocumentProvider, to enable possibility to reuse this class for multiple xtexteditors
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypextext.ui
+package org.eclipse.fordiac.ide.structuredtextcore.ui.document
 
 import org.eclipse.core.runtime.IProgressMonitor
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
+import org.eclipse.fordiac.ide.structuredtextcore.FBTypeXtextResource
 import org.eclipse.jface.text.IDocument
+import org.eclipse.ui.IEditorInput
 import org.eclipse.ui.IFileEditorInput
 import org.eclipse.ui.texteditor.ResourceMarkerAnnotationModel
 import org.eclipse.xtext.ui.editor.model.XtextDocument
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider
-import org.eclipse.ui.IEditorInput
-import org.eclipse.fordiac.ide.fbtypextext.FBTypeXtextResource
 
 abstract class FBTypeXtextDocumentProvider extends XtextDocumentProvider {
 	

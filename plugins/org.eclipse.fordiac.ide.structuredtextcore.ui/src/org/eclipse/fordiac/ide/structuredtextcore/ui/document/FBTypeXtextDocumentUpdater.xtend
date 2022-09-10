@@ -12,15 +12,15 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  * 	 Christoph Binder - Extracted code from STAlgorithmDocumentFBTypeUpdater, to enable possibility to reuse this class for multiple xtexteditors
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fbtypextext.ui
+package org.eclipse.fordiac.ide.structuredtextcore.ui.document
 
 import org.eclipse.core.runtime.IProgressMonitor
 import org.eclipse.core.runtime.Status
 import org.eclipse.core.runtime.jobs.Job
 import org.eclipse.emf.common.notify.Notification
 import org.eclipse.emf.ecore.util.EContentAdapter
-import org.eclipse.fordiac.ide.fbtypextext.FBTypeXtextResource
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.structuredtextcore.FBTypeXtextResource
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
