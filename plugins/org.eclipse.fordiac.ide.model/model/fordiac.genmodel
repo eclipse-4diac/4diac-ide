@@ -203,6 +203,10 @@
       <genOperations ecoreOperation="lib.ecore#//FBType/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBType/getInOutParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBType/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBType/setDocumentation" body="org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.setDocumentation(this, value);">
+        <genParameters ecoreParameter="lib.ecore#//FBType/setDocumentation/value"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBType/getDocumentation" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.getDocumentation(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Identification">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Identification/applicationDomain"/>

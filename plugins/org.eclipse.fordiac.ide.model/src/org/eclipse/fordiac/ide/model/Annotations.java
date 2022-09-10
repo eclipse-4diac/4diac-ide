@@ -454,14 +454,12 @@ public final class Annotations {
 		if (attribute == null) {
 			attribute = LibraryElementFactory.eINSTANCE.createAttribute();
 			attribute.setName(attributeName);
-			attribute.setValue(value);
 			attribute.setType(BaseType1.getByName(type));
-			if (null != comment) {
-				attribute.setComment(comment);
-			}
 			object.getAttributes().add(attribute);
-		} else {
-			attribute.setValue(value);
+		}
+		attribute.setValue(value);
+		if (null != comment) {
+			attribute.setComment(comment);
 		}
 	}
 
