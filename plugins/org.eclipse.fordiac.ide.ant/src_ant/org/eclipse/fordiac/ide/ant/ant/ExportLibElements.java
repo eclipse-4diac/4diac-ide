@@ -59,7 +59,8 @@ public class ExportLibElements extends AbstractExportLibElements {
 
 				for (final File file : files) {
 					log("converted file: " + file.getName()); //$NON-NLS-1$
-					if (file.getName().toUpperCase().endsWith(TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT)) {
+					if (file.getName().toUpperCase().endsWith(TypeLibraryTags.FB_TYPE_FILE_ENDING_WITH_DOT)
+							|| file.getName().toUpperCase().endsWith(TypeLibraryTags.DATA_TYPE_FILE_ENDING_WITH_DOT)) {
 
 						Document document = builder.parse(file);
 						document = removeAllAlgorithms(document);

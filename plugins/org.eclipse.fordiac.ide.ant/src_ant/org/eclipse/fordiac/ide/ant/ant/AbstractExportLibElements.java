@@ -35,6 +35,8 @@ public abstract class AbstractExportLibElements extends AbstractFBTask {
 
 		checkValidDestination();
 
+		CheckProject.waitBuilderJobsComplete();
+
 		final List<File> files = new ArrayList<>();
 
 		getFBsFiles(files, getDirectory(), getSingleFBName(), getExcludeSubfolder());
