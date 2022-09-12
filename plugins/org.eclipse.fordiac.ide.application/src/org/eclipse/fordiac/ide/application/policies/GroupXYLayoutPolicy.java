@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentNetwork;
 import org.eclipse.fordiac.ide.model.commands.change.AddElementsToGroup;
@@ -27,7 +28,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 import org.eclipse.gef.requests.CreateRequest;
 
@@ -51,7 +51,6 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 
 		if (isDragAndDropRequestForGroup(request, getTargetEditPart(request))) {
 			final ChangeBoundsRequest changeBoundsRequest = (ChangeBoundsRequest) request;
-			@SuppressWarnings("unchecked")
 			final List<EditPart> editParts = changeBoundsRequest.getEditParts();
 			final Group dropGroup = ((GroupContentNetwork) getTargetEditPart(request).getModel()).getGroup();
 			final List<FBNetworkElement> fbEls = collectDraggedFBs(editParts, dropGroup);
@@ -64,7 +63,7 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 		return null;
 	}
 
-	private boolean containsOnlyFbsAndSubapps(final List<FBNetworkElement> fbEls) {
+	private static boolean containsOnlyFbsAndSubapps(final List<FBNetworkElement> fbEls) {
 		return !fbEls.isEmpty() && !(fbEls.stream().anyMatch(Group.class::isInstance));
 	}
 
@@ -93,28 +92,7 @@ public class GroupXYLayoutPolicy extends ContainerContentLayoutPolicy {
 		topLeft.translate(-moveDelta.x, -moveDelta.y);
 		final AddElementsToGroup addElementsToGroup = new AddElementsToGroup(dropGroup, fbEls, topLeft);
 
-		final Rectangle newContentBounds = getNewContentBounds(request.getEditParts());
-		newContentBounds.translate(moveDelta);
-		if (!groupContentBounds.contains(newContentBounds)) {
-			// we need to increase the size of the group
-			return createAddGroupAndResizeCommand(dropGroup, addElementsToGroup, groupContentBounds, newContentBounds);
-		}
-
-		return addElementsToGroup;
-	}
-
-	private static Command createAddGroupAndResizeCommand(final Group dropGroup,
-			final AddElementsToGroup addElementsToGroup, final Rectangle groupContentBounds,
-			final Rectangle newContentBounds) {
-		final CompoundCommand cmd = new CompoundCommand();
-		newContentBounds.union(groupContentBounds);
-		cmd.add(ContainerContentLayoutPolicy.createChangeBoundsCommand(dropGroup, groupContentBounds,
-				newContentBounds));
-		final Point offset = addElementsToGroup.getOffset();
-		offset.translate(newContentBounds.x - groupContentBounds.x, newContentBounds.y - groupContentBounds.y);
-		addElementsToGroup.setOffset(offset);
-		cmd.add(addElementsToGroup);
-		return cmd;
+		return new ResizeGroupOrSubappCommand(getHost(), addElementsToGroup);
 	}
 
 }
