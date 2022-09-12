@@ -30,14 +30,18 @@ import org.eclipse.nebula.widgets.nattable.grid.GridRegion;
 import org.eclipse.nebula.widgets.nattable.grid.layer.ColumnHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.layer.CompositeLayer;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.ILayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
+import org.eclipse.nebula.widgets.nattable.layer.config.DefaultColumnHeaderStyleConfiguration;
+import org.eclipse.nebula.widgets.nattable.painter.NatTableBorderOverlayPainter;
+import org.eclipse.nebula.widgets.nattable.painter.cell.TextPainter;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBindings;
+import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.ui.binding.UiBindingRegistry;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.CellEditorMouseEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.KeyEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.LetterOrDigitKeyEventMatcher;
+import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -45,23 +49,9 @@ import org.eclipse.swt.widgets.Composite;
 public final class NatTableWidgetFactory {
 	public static NatTable createNatTable(final Composite parent, final IDataProvider dataProvider,
 			final IDataProvider headerDataProvider) {
-		final NatTable table = new NatTable(parent, createLayer(dataProvider, headerDataProvider), false);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 
-		table.addConfiguration(new DefaultNatTableStyleConfiguration());
-		table.configure();
-
-		return table;
-	}
-
-	private static ILayer createLayer(final IDataProvider dataProvider, final IDataProvider headerDataProvider) {
 		final DataLayer dataLayer = new DataLayer(dataProvider);
-
 		dataLayer.setColumnPercentageSizing(true);
-		dataLayer.setColumnWidthPercentageByPosition(0, 25);
-		dataLayer.setColumnWidthPercentageByPosition(1, 25);
-		dataLayer.setColumnWidthPercentageByPosition(2, 25);
-		dataLayer.setColumnWidthPercentageByPosition(3, 25);
 
 		final SelectionLayer selectionLayer = new SelectionLayer(dataLayer);
 		selectionLayer.addConfiguration(new DefaultSelectionBindings() {
@@ -74,11 +64,11 @@ public final class NatTableWidgetFactory {
 			}
 		});
 		selectionLayer.registerCommandHandler(new DeleteSelectionCommandHandler(selectionLayer));
-
 		final ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
 
 		final DataLayer columnHeaderDataLayer = new DataLayer(headerDataProvider);
-		final ILayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, viewportLayer, selectionLayer);
+		final ColumnHeaderLayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, viewportLayer,
+				selectionLayer);
 
 		final CompositeLayer gridLayer = new CompositeLayer(1, 2);
 		gridLayer.setChildLayer(GridRegion.COLUMN_HEADER, columnHeaderLayer, 0, 0);
@@ -118,6 +108,35 @@ public final class NatTableWidgetFactory {
 			}
 		});
 
-		return gridLayer;
+		final NatTable table = new NatTable(parent, gridLayer, false);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
+
+		final DefaultNatTableStyleConfiguration tableStyle = new DefaultNatTableStyleConfiguration();
+		final DefaultSelectionStyleConfiguration selectionStyle = new DefaultSelectionStyleConfiguration();
+		final DefaultColumnHeaderStyleConfiguration headerStyle = new DefaultColumnHeaderStyleConfiguration();
+
+		tableStyle.bgColor = GUIHelper.COLOR_WHITE;
+		tableStyle.cellPainter = new TextPainter();
+
+		selectionStyle.fullySelectedHeaderBgColor = GUIHelper.COLOR_WHITE;
+		selectionStyle.selectedHeaderBgColor = GUIHelper.COLOR_WHITE;
+		selectionStyle.selectedHeaderFgColor = GUIHelper.COLOR_BLACK;
+		selectionStyle.selectedHeaderFont = GUIHelper.DEFAULT_FONT;
+		selectionStyle.anchorBgColor = GUIHelper.COLOR_TITLE_INACTIVE_BACKGROUND;
+		selectionStyle.anchorFgColor = GUIHelper.COLOR_BLACK;
+
+		headerStyle.bgColor = GUIHelper.COLOR_WHITE;
+		headerStyle.renderGridLines = Boolean.TRUE;
+		headerStyle.cellPainter = new TextPainter();
+
+		table.setBackground(GUIHelper.COLOR_WHITE);
+		table.addOverlayPainter(new NatTableBorderOverlayPainter());
+
+		table.addConfiguration(tableStyle);
+		selectionLayer.addConfiguration(selectionStyle);
+		columnHeaderLayer.addConfiguration(headerStyle);
+
+		table.configure();
+		return table;
 	}
 }
