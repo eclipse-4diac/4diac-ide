@@ -100,7 +100,8 @@ public class ResizeGroupOrSubappCommand extends Command {
 
 	@Override
 	public boolean canUndo() {
-		return !changeContainerBoundsCommandList.isEmpty();
+		return (cmdToExecuteBefore != null && cmdToExecuteBefore.canUndo())
+				|| !changeContainerBoundsCommandList.isEmpty();
 	}
 
 	@Override
@@ -117,7 +118,8 @@ public class ResizeGroupOrSubappCommand extends Command {
 
 	@Override
 	public boolean canRedo() {
-		return !changeContainerBoundsCommandList.isEmpty();
+		return (cmdToExecuteBefore != null && cmdToExecuteBefore.canRedo())
+				|| !changeContainerBoundsCommandList.isEmpty();
 	}
 
 	private GraphicalEditPart getTargetContainerEP() {
