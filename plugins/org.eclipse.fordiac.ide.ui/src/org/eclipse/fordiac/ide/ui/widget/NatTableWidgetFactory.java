@@ -30,7 +30,6 @@ import org.eclipse.nebula.widgets.nattable.grid.GridRegion;
 import org.eclipse.nebula.widgets.nattable.grid.layer.ColumnHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.layer.CompositeLayer;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultColumnHeaderStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.painter.NatTableBorderOverlayPainter;
 import org.eclipse.nebula.widgets.nattable.painter.cell.TextPainter;
@@ -48,7 +47,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public final class NatTableWidgetFactory {
 	public static NatTable createNatTable(final Composite parent, final IDataProvider dataProvider,
-			final IDataProvider headerDataProvider) {
+			final IDataProvider headerDataProvider, final IEditableRule editableRule) {
 
 		final DataLayer dataLayer = new DataLayer(dataProvider);
 		dataLayer.setColumnPercentageSizing(true);
@@ -90,21 +89,7 @@ public final class NatTableWidgetFactory {
 		gridLayer.addConfiguration(new AbstractRegistryConfiguration() {
 			@Override
 			public void configureRegistry(final IConfigRegistry configRegistry) {
-				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE,
-						new IEditableRule() {
-					@Override
-					public boolean isEditable(final int columnIndex, final int rowIndex) {
-						return false;
-					}
-
-					@Override
-					public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
-						if (cell.getColumnIndex() == 2 || cell.getColumnIndex() == 3) {
-							return true;
-						}
-						return false;
-					}
-				});
+				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE, editableRule);
 			}
 		});
 

@@ -32,7 +32,10 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
+import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridLayout;
@@ -101,9 +104,10 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 		inputDataProvider = new VarDeclarationDataProvider(true);
 		outputDataProvider = new VarDeclarationDataProvider(false);
 
-		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataProvider, new ColumnDataProvider());
+		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataProvider, new ColumnDataProvider(),
+				inputDataProvider.getEditableRule());
 		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataProvider,
-				new ColumnDataProvider());
+				new ColumnDataProvider(), outputDataProvider.getEditableRule());
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(outputComposite);
@@ -175,31 +179,6 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 		outputTable.refresh();
 	}
 
-	// @Override
-	// public AbstractTableViewer getViewer() {
-	// // return isInputsViewer ? inputCommentsViewer : outputCommentsViewer;
-	// return null;
-	// }
-	//
-	// // NOTE These methods are supposed to work for table rows, but here we use them for single cells.
-	// // An inconsistency that will be redressed once the new copy/paste handling has been approved.
-	//
-	// @Override
-	// public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
-	// // nothing to do here
-	// }
-	//
-	// @Override
-	// public Object removeEntry(final int index, final CompoundCommand cmd) {
-	// // nothing to do here
-	// return null;
-	// }
-	//
-	// @Override
-	// public void executeCompoundCommand(final CompoundCommand cmd) {
-	// commandStack.execute(cmd);
-	// }
-
 
 	private class VarDeclarationDataProvider implements IDataProvider {
 		private final boolean isInputData;
@@ -217,6 +196,23 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 					varList = ((FBNetworkElement) inputElement).getInterface().getOutputVars();
 				}
 			}
+		}
+
+		public IEditableRule getEditableRule() {
+			return new IEditableRule() {
+				@Override
+				public boolean isEditable(final int columnIndex, final int rowIndex) {
+					return false;
+				}
+
+				@Override
+				public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
+					if ((cell.getColumnIndex() == INITIAL_VALUE && isInputData) || cell.getColumnIndex() == COMMENT) {
+						return true;
+					}
+					return false;
+				}
+			};
 		}
 
 		@Override
@@ -246,6 +242,9 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 			Command cmd = null;
 			switch (columnIndex) {
 			case INITIAL_VALUE:
+				if (!isInputData) {
+					return;
+				}
 				cmd = new ChangeValueCommand(varList.get(rowIndex), (String) newValue);
 				break;
 			case COMMENT:
