@@ -61,7 +61,6 @@ public class AddElementsToSubAppCommand extends Command {
 	private final CompoundCommand removeFromOtherGroups = new CompoundCommand();
 	private final CompoundCommand setPositionCommands = new CompoundCommand();
 
-	private org.eclipse.swt.graphics.Point offset;
 	private org.eclipse.swt.graphics.Point moveDelta;
 
 	public AddElementsToSubAppCommand(final SubApp targetSubApp, final List<?> selection) {
@@ -86,38 +85,16 @@ public class AddElementsToSubAppCommand extends Command {
 		collectElementsToRemoveFromGroup();
 		unmappingCmds.execute();
 		removeFromOtherGroups.execute();
-		final EList<FBNetworkElement> fbNetwork = targetSubApp.getSubAppNetwork().getNetworkElements();
-		for (final FBNetworkElement fbNetworkElement : elementsToAdd) {
-			if (moveDelta != null) {
-				final Point pos = FBNetworkHelper.getTopLeftCornerOfFBNetwork(elementsToAdd);
-				pos.x -= moveDelta.x;
-				pos.y -= moveDelta.y;
-				setPositionCommands.add(new SetPositionCommand(fbNetworkElement, pos.x, pos.y));
-			}
-			fbNetwork.add(fbNetworkElement);
-			checkElementConnections(fbNetworkElement);
-			ensureUniqueName(fbNetworkElement);
-		}
-		offset = FBNetworkHelper.removeXYOffsetForFBNetwork(elementsToAdd);
-		setPositionCommands.execute();
+		processElementsToAdd();
 		setUniqueName.execute();
 		modifiedConns.execute();
 		ElementSelector.selectViewObjects(elementsToAdd);
-	}
-
-	private void ensureUniqueName(final FBNetworkElement element) {
-		// ensure unique name in new network
-		if (!NameRepository.isValidName(element, element.getName())) {
-			final String uniqueName = NameRepository.createUniqueName(element, element.getName());
-			setUniqueName.add(new ChangeNameCommand(element, uniqueName));
-		}
 	}
 
 	@Override
 	public void redo() {
 		unmappingCmds.redo();
 		removeFromOtherGroups.redo();
-		FBNetworkHelper.removeXYOffsetForFBNetwork(elementsToAdd);
 		elementsToAdd.forEach(element -> targetSubApp.getSubAppNetwork().getNetworkElements().add(element));
 		movedConns.forEach(con -> targetSubApp.getSubAppNetwork().addConnection(con));
 		changedSubAppIEs.redo();
@@ -132,12 +109,42 @@ public class AddElementsToSubAppCommand extends Command {
 		changedSubAppIEs.undo();
 		setPositionCommands.undo();
 		movedConns.forEach(con -> targetSubApp.getFbNetwork().addConnection(con));
-
-		FBNetworkHelper.moveFBNetworkByOffset(elementsToAdd, offset.x, offset.y);
 		elementsToAdd.forEach(element -> targetSubApp.getFbNetwork().getNetworkElements().add(element));
 		setUniqueName.undo();
 		removeFromOtherGroups.undo();
 		unmappingCmds.undo();
+	}
+
+	private void processElementsToAdd() {
+		final EList<FBNetworkElement> fbNetwork = targetSubApp.getSubAppNetwork().getNetworkElements();
+
+		final Point posOffset = getFBOffset();
+		for (final FBNetworkElement fbNetworkElement : elementsToAdd) {
+			final SetPositionCommand command = new SetPositionCommand(fbNetworkElement, posOffset.x, posOffset.y);
+			// the set position command needs to be executed before the connections are checked as there interface
+			// elements are added which can result in container size changes
+			command.execute();
+			setPositionCommands.add(command);
+			fbNetwork.add(fbNetworkElement);
+			checkElementConnections(fbNetworkElement);
+			ensureUniqueName(fbNetworkElement);
+		}
+	}
+
+	private Point getFBOffset() {
+		if (moveDelta != null) {
+			return new Point(-moveDelta.x, -moveDelta.y);
+		}
+		final org.eclipse.swt.graphics.Point offset = FBNetworkHelper.getTopLeftCornerOfFBNetwork(elementsToAdd);
+		return new Point(-offset.x, -offset.y);
+	}
+
+	private void ensureUniqueName(final FBNetworkElement element) {
+		// ensure unique name in new network
+		if (!NameRepository.isValidName(element, element.getName())) {
+			final String uniqueName = NameRepository.createUniqueName(element, element.getName());
+			setUniqueName.add(new ChangeNameCommand(element, uniqueName));
+		}
 	}
 
 	private void fillElementList(final List<?> selection) {
