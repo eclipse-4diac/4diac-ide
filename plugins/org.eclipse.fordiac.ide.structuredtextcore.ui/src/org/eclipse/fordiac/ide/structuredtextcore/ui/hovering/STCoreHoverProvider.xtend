@@ -38,7 +38,9 @@ class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 
 	override protected getFirstLine(EObject o) {
 		var label = getLabel(o);
-		if (o instanceof FB) label = o.typeName;
+		if (o instanceof VarDeclaration) {
+			label = label + " : " + o.type.name
+		}
 		return o.getKind() + ( (label !== null) ? "<b>" + label + "</b>" : "");
 	}
 
@@ -65,19 +67,18 @@ class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 			if (interfaceList.outputVars.contains(object)) {
 				return '''OUTPUT '''
 			}
-			if (interfaceList.eContainer instanceof BaseFBType) {
-				var baseFbType = interfaceList.eContainer as BaseFBType
-				if (baseFbType.internalVars.contains(object)) {
-					return '''VAR '''
-				}
-				if (baseFbType.internalFbs.contains(object)) {
-					return '''FUNCTION_BLOCK '''
-				}
+		}
+		if (object.eContainer instanceof BaseFBType) {
+			var baseFbType = object.eContainer as BaseFBType
+			if (baseFbType.internalVars.contains(object)) {
+				return '''VAR '''
+			}
+			if (baseFbType.internalFbs.contains(object)) {
+				return '''FUNCTION_BLOCK '''
 			}
 		}
 		if(object.eContainer instanceof StructuredType) return '''«(object.eContainer as StructuredType).name».'''
 	}
-
 
 	def dispatch getKind(STStandardFunction object) '''FUNCTION '''
 
