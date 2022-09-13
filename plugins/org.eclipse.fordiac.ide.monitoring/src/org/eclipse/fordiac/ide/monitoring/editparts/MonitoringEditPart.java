@@ -18,8 +18,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.editparts;
 
-import java.text.MessageFormat;
-
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
@@ -300,14 +298,7 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 				final VarDeclaration varDeclaration = (VarDeclaration) getInterfaceElement();
 				final DataType type = varDeclaration.getType();
 				final String value = WatchValueTreeNodeUtils.decorateCellValue(type, input);
-				if (isForced()) {
-					figure.setText(MessageFormat.format(Messages.MonitoringEditPart_Forced_ValueDisplay,
-							getModel().getForceValue(),
-							WatchValueTreeNodeUtils.decorateHexValue(value, type, getModel())));
-				} else {
-					figure.setText(
-							WatchValueTreeNodeUtils.decorateHexValue(value, type, getModel()));
-				}
+				figure.setText(WatchValueTreeNodeUtils.decorateHexValue(value, type, getModel()));
 			} else {
 				figure.setText(input);
 			}
