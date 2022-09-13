@@ -16,7 +16,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -100,7 +99,8 @@ public class ResizeGroupOrSubappCommand extends Command {
 
 	@Override
 	public boolean canUndo() {
-		return !changeContainerBoundsCommandList.isEmpty();
+		return (cmdToExecuteBefore != null && cmdToExecuteBefore.canUndo())
+				|| !changeContainerBoundsCommandList.isEmpty();
 	}
 
 	@Override
@@ -117,7 +117,8 @@ public class ResizeGroupOrSubappCommand extends Command {
 
 	@Override
 	public boolean canRedo() {
-		return !changeContainerBoundsCommandList.isEmpty();
+		return (cmdToExecuteBefore != null && cmdToExecuteBefore.canRedo())
+				|| !changeContainerBoundsCommandList.isEmpty();
 	}
 
 	private GraphicalEditPart getTargetContainerEP() {
@@ -137,13 +138,13 @@ public class ResizeGroupOrSubappCommand extends Command {
 
 	private AbstractChangeContainerBoundsCommand checkAndCreateResizeCommand(final GraphicalEditPart containerEP,
 			List<FBNetworkElement> children) {
+		getViewer().flush();
+
 		if (children == null) {
 			children = ((AbstractContainerContentEditPart) containerEP).getModel().getNetworkElements();
 		}
 
-		final List<Object> objects = children.stream().map(el -> getViewer().getEditPartRegistry().get(el))
-				.collect(Collectors.toList());
-		final Rectangle fbBounds = getFBBounds(objects, children);
+		final Rectangle fbBounds = getFBBounds(children);
 		final Rectangle containerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(containerEP);
 		if (fbBounds != null && !containerBounds.contains(fbBounds)) {
 			fbBounds.union(containerBounds);
@@ -164,7 +165,6 @@ public class ResizeGroupOrSubappCommand extends Command {
 		if (cmd != null && cmd.canExecute()) {
 			changeContainerBoundsCommandList.add(cmd);
 			cmd.execute();
-			getViewer().flush();
 		}
 	}
 
@@ -172,9 +172,12 @@ public class ResizeGroupOrSubappCommand extends Command {
 		return graphicalEditPart.getViewer();
 	}
 
-	private Rectangle getFBBounds(final List<Object> objects, final List<FBNetworkElement> children) {
+	private Rectangle getFBBounds(final List<FBNetworkElement> children) {
+		final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
 		Rectangle fbBounds = null;
-		for (final Object object : objects) {
+
+		for (final FBNetworkElement fbe : children) {
+			final Object object = editPartRegistry.get(fbe);
 			if (object instanceof GraphicalEditPart) {
 				final IFigure fbFigure = ((GraphicalEditPart) object).getFigure();
 				if (fbFigure != null) {
@@ -184,21 +187,20 @@ public class ResizeGroupOrSubappCommand extends Command {
 						fbBounds.union(fbFigure.getBounds().getCopy());
 					}
 				}
-				addValueBounds(fbBounds, children);
 			}
+			addValueBounds(fbBounds, fbe, editPartRegistry);
 		}
 		return fbBounds;
 	}
 
-	private void addValueBounds(final Rectangle fbBounds, final List<FBNetworkElement> children) {
-		final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
-		children.forEach(el -> el.getInterface().getInputVars().stream().filter(Objects::nonNull)
-				.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
-				.forEach(ep -> {
-					final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds().getCopy();
-					fbBounds.union(pin);
-				}));
+	private static void addValueBounds(final Rectangle fbBounds, final FBNetworkElement fbe,
+			final Map<Object, Object> editPartRegistry) {
+		fbe.getInterface().getInputVars().stream().filter(Objects::nonNull)
+		.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
+		.forEach(ep -> {
+			final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds().getCopy();
+			fbBounds.union(pin);
+		});
 	}
-
 
 }

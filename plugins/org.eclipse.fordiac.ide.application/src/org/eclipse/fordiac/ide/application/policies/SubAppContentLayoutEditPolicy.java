@@ -21,8 +21,6 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.draw2d.geometry.Point;
@@ -30,12 +28,10 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppCommand;
-import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
-import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -71,15 +67,10 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 				// needs a dummy (swt)point because swt and draw2d points are mixed
 				final org.eclipse.swt.graphics.Point dummyPoint = new org.eclipse.swt.graphics.Point(topLeft.x, topLeft.y);
 				cmd.add(new AddElementsToSubAppCommand(getParentModel(), editParts, dummyPoint));
-
-				final Rectangle newContentBounds = getContentBounds(editParts, moveDelta);
-				if (checkGroupNeedsResize(newContentBounds) && createChangeBoundsCommand(newContentBounds) != null) {
-					cmd.add(createChangeBoundsCommand(newContentBounds));
-				}
 			}
 
 			if (!cmd.isEmpty()) {
-				return cmd;
+				return new ResizeGroupOrSubappCommand(getHost(), cmd);
 			}
 		}
 		return super.getAddCommand(request);
@@ -112,51 +103,6 @@ public class SubAppContentLayoutEditPolicy extends ContainerContentLayoutPolicy 
 		return editParts.stream().filter(ep -> ep.getModel() instanceof FBNetworkElement)
 				.filter(ep -> outerFBN.equals(((FBNetworkElement) ep.getModel()).getFbNetwork()))
 				.collect(Collectors.toList());
-	}
-
-	private boolean checkGroupNeedsResize(final Rectangle newContentBounds) {
-		return getHost() instanceof AbstractContainerContentEditPart
-				&& !getHostFigure().getBounds().contains(newContentBounds);
-	}
-
-	private AbstractChangeContainerBoundsCommand createChangeBoundsCommand(final Rectangle newContentBounds) {
-		if (!getHostFigure().getBounds().contains(newContentBounds)) {
-			return ContainerContentLayoutPolicy.createChangeBoundsCommand(getParentModel(), getHostFigure().getBounds(),
-					newContentBounds.union(getHostFigure().getBounds()));
-		}
-		return null;
-	}
-
-	public Rectangle getContentBounds(final List<EditPart> list, final Point moveDelta) {
-		Rectangle selectionExtend = null;
-		for (final EditPart selElem : list) {
-
-			if (selElem instanceof GraphicalEditPart && selElem.getModel() instanceof FBNetworkElement) {
-				// only consider the selected FBNetworkElements
-				final Rectangle fbBounds = ((GraphicalEditPart) selElem).getFigure().getBounds().getCopy();
-				fbBounds.x += moveDelta.x;
-				fbBounds.y += moveDelta.y;
-				if (selectionExtend == null) {
-					selectionExtend = fbBounds;
-				} else {
-					selectionExtend.union(fbBounds);
-				}
-				addValueBounds((FBNetworkElement) selElem.getModel(), selectionExtend, moveDelta);
-			}
-		}
-		return (selectionExtend != null) ? selectionExtend : new Rectangle();
-	}
-
-	private void addValueBounds(final FBNetworkElement model, final Rectangle selectionExtend, final Point moveDelta) {
-		final Map<Object, Object> editPartRegistry = getHost().getViewer().getEditPartRegistry();
-		model.getInterface().getInputVars().stream().filter(Objects::nonNull)
-		.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
-		.forEach(ep -> {
-			final Rectangle pinBounds = ((GraphicalEditPart) ep).getFigure().getBounds().getCopy();
-			pinBounds.x += moveDelta.x;
-			pinBounds.y += moveDelta.y;
-			selectionExtend.union(pinBounds);
-		});
 	}
 
 }

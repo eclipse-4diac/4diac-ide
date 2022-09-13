@@ -21,8 +21,6 @@ package org.eclipse.fordiac.ide.application.actions;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
@@ -34,6 +32,7 @@ import org.eclipse.fordiac.ide.application.commands.AddElementsToSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.CopyElementsToGroupCommand;
 import org.eclipse.fordiac.ide.application.commands.CutAndPasteFromSubAppCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
@@ -49,7 +48,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.FordiacClipboard;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.Command;
@@ -91,17 +89,17 @@ public class PasteEditPartsAction extends SelectionAction {
 		if (null != fbNetwork) {
 			final AbstractContainerContentEditPart editPart = findAbstractContainerContentEditPartUnderMouse(fbNetwork);
 			if (editPart != null) {
-				final Rectangle newContentBoundsWithValueBounds = getNewContentBoundsWithValueBounds();
-				final Rectangle editPartContentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(editPart);
+				Command cmd = null;
 				if ((editPart instanceof GroupContentEditPart)
 						&& getClipboardContents().stream().noneMatch(Group.class::isInstance)) {
-					return createPasteCommandForGroup((GroupContentEditPart) editPart, newContentBoundsWithValueBounds,
-							editPartContentBounds);
+					cmd = createPasteCommandForGroup((GroupContentEditPart) editPart);
 				}
 
 				if (editPart instanceof UnfoldedSubappContentEditPart) {
-					return createPasteCommandForSubApp((UnfoldedSubappContentEditPart) editPart,
-							newContentBoundsWithValueBounds, editPartContentBounds);
+					cmd = createPasteCommandForSubApp((UnfoldedSubappContentEditPart) editPart);
+				}
+				if (cmd != null) {
+					return new ResizeGroupOrSubappCommand(editPart, cmd);
 				}
 			}
 			return new PasteCommand(getClipboardContents(), fbNetwork, pasteRefPosition);
@@ -109,59 +107,18 @@ public class PasteEditPartsAction extends SelectionAction {
 		return new CompoundCommand();
 	}
 
-	private Command createPasteCommandForSubApp(final UnfoldedSubappContentEditPart subApp,
-			final Rectangle contentBoundsWithValueBounds, final Rectangle subAppContentBounds) {
-
+	private Command createPasteCommandForSubApp(final UnfoldedSubappContentEditPart subApp) {
+		final Rectangle subAppContentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(subApp);
 		final Point pastePointInSubApp = new Point(pasteRefPosition.x - subAppContentBounds.x,
 				pasteRefPosition.y - subAppContentBounds.y);
-
-		final PasteCommand pasteCommand = new PasteCommand(getClipboardContents(),
-				subApp.getModel().getSubapp().getSubAppNetwork(), pastePointInSubApp);
-
-		if (!subAppContentBounds.contains(contentBoundsWithValueBounds)) {
-			// we need to increase the size of the SubApp
-			return copyElementsToSubAppAndResizeCommand(subApp.getModel().getSubapp(), pasteCommand,
-					subAppContentBounds, contentBoundsWithValueBounds);
-		}
-		return pasteCommand;
+		return new PasteCommand(getClipboardContents(), subApp.getModel().getSubapp().getSubAppNetwork(),
+				pastePointInSubApp);
 	}
 
-	private Command createPasteCommandForGroup(final GroupContentEditPart group,
-			final Rectangle contentBoundsWithValueBounds, final Rectangle groupContentBounds) {
+	private Command createPasteCommandForGroup(final GroupContentEditPart group) {
 		final PasteCommand pasteCommand = new PasteCommand(getClipboardContents(),
 				group.getModel().getGroup().getFbNetwork(), pasteRefPosition);
-
-		if (!groupContentBounds.contains(contentBoundsWithValueBounds)) {
-			// we need to increase the size of the group
-			return createCopyElementsToGroupAndResizeCommand(group.getModel().getGroup(),
-					new CopyElementsToGroupCommand(group.getModel().getGroup(), pasteCommand, getOffsetPosition(group)),
-					groupContentBounds, contentBoundsWithValueBounds);
-		}
 		return new CopyElementsToGroupCommand(group.getModel().getGroup(), pasteCommand, getOffsetPosition(group));
-	}
-
-	private static Command createCopyElementsToGroupAndResizeCommand(final Group dropGroup,
-			final CopyElementsToGroupCommand copyElementsToGroup, final Rectangle groupContentBounds,
-			final Rectangle newContentBounds) {
-		final CompoundCommand cmd = new CompoundCommand();
-		newContentBounds.union(groupContentBounds);
-		cmd.add(ContainerContentLayoutPolicy.createChangeBoundsCommand(dropGroup, groupContentBounds,
-				newContentBounds));
-		final org.eclipse.draw2d.geometry.Point offset = copyElementsToGroup.getOffset();
-		offset.translate(newContentBounds.x - groupContentBounds.x, newContentBounds.y - groupContentBounds.y);
-		copyElementsToGroup.setOffset(offset);
-		cmd.add(copyElementsToGroup);
-		return cmd;
-	}
-
-	private static Command copyElementsToSubAppAndResizeCommand(final SubApp dropSubApp,
-			final PasteCommand pasteCommand, final Rectangle subAppContentBounds, final Rectangle newContentBounds) {
-		final CompoundCommand cmd = new CompoundCommand();
-		newContentBounds.union(subAppContentBounds);
-		cmd.add(ContainerContentLayoutPolicy.createChangeBoundsCommand(dropSubApp, subAppContentBounds,
-				newContentBounds));
-		cmd.add(pasteCommand);
-		return cmd;
 	}
 
 	private AbstractContainerContentEditPart findAbstractContainerContentEditPartUnderMouse(final FBNetwork fbNetwork) {
@@ -178,52 +135,6 @@ public class PasteEditPartsAction extends SelectionAction {
 			}
 		}
 		return null;
-	}
-
-	private Rectangle getNewContentBounds(final List<? extends Object> list, final boolean withValueBounds) {
-		Rectangle selectionExtend = null;
-		for (final Object selElem : list) {
-			final GraphicalViewer graphicalViewer = getWorkbenchPart().getAdapter(GraphicalViewer.class);
-			final Object object = graphicalViewer.getEditPartRegistry().get(selElem);
-
-			if ((object instanceof GraphicalEditPart) && (((EditPart) object).getModel() instanceof FBNetworkElement)) {
-				// only consider the selected FBNetworkElements
-				final Rectangle fbBounds = ((GraphicalEditPart) object).getFigure().getBounds();
-
-				if (selectionExtend == null) {
-					selectionExtend = fbBounds.getCopy();
-				} else {
-					selectionExtend.union(fbBounds);
-				}
-
-				if (withValueBounds) {
-					addValueBounds((FBNetworkElement) ((EditPart) object).getModel(), selectionExtend, graphicalViewer);
-				}
-			}
-		}
-		return (selectionExtend != null) ? selectionExtend : new Rectangle();
-	}
-
-	private Rectangle getNewContentBoundsWithValueBounds() {
-		final Rectangle newContentBounds = getNewContentBounds(getClipboardContents(), false);
-		final Rectangle newContentBoundsWithValueBounds = getNewContentBounds(getClipboardContents(), true);
-		newContentBoundsWithValueBounds.x = pasteRefPosition.x
-				- (newContentBoundsWithValueBounds.width - newContentBounds.width);
-		newContentBoundsWithValueBounds.y = pasteRefPosition.y;
-
-		return newContentBoundsWithValueBounds;
-	}
-
-	private static void addValueBounds(final FBNetworkElement model, final Rectangle selectionExtend,
-			final GraphicalViewer graphicalViewer) {
-		final Map<Object, Object> editPartRegistry = graphicalViewer.getEditPartRegistry();
-		model.getInterface().getInputVars().stream().filter(Objects::nonNull)
-				.map(ie -> editPartRegistry.get(ie.getValue())).filter(GraphicalEditPart.class::isInstance)
-				.forEach(ep -> {
-					final Rectangle pin = ((GraphicalEditPart) ep).getFigure().getBounds();
-					selectionExtend.union(pin);
-
-				});
 	}
 
 	private static org.eclipse.draw2d.geometry.Point getOffsetPosition(final GroupContentEditPart group) {

@@ -16,10 +16,10 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring
 
 import com.google.inject.Inject
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationImpl
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.xtext.ide.editor.syntaxcoloring.DefaultSemanticHighlightingCalculator
 import org.eclipse.xtext.ide.editor.syntaxcoloring.IHighlightedPositionAcceptor
@@ -37,27 +37,34 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 	def protected dispatch boolean highlightElement(EObject object, IHighlightedPositionAcceptor acceptor,
 		CancelIndicator cancelIndicator) {
 		return super.highlightElement(object, acceptor, cancelIndicator);
+
 	}
 
-	// semantic highlighting for Name of Function by defining the Function and output of Function by defining the Function	 
+	// semantic highlighting for Name of Method by defining the Method 
+	def protected dispatch boolean highlightElement(STMethod stMethod, IHighlightedPositionAcceptor acceptor,
+		CancelIndicator cancelIndicator) {
+		for (ILeafNode n : NodeModelUtils.findActualNodeFor(stMethod).getLeafNodes()) {
+			if ((n.grammarElement instanceof RuleCallImpl) && (n.parent instanceof CompositeNodeWithSemanticElement) &&
+				(n.grammarElement.eContainer.eContainer != ga.STVarDeclarationRule.alternatives)) {
+				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.METHODS_NAME_ID);
+			}
+		}
+		return super.highlightElement(stMethod, acceptor, cancelIndicator);
+	}
+
+	// semantic highlighting for Name of Function by defining the Function 
 	def protected dispatch boolean highlightElement(STFunction stFunction, IHighlightedPositionAcceptor acceptor,
 		CancelIndicator cancelIndicator) {
 		for (ILeafNode n : NodeModelUtils.findActualNodeFor(stFunction).getLeafNodes()) {
-
-			if ((n.grammarElement?.eContainer == ga.STAnyBitTypeRule.alternatives)) {
-				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.OUTPUT_FUNCTION_ID);
+			if ((n.grammarElement instanceof RuleCallImpl) && (n.parent instanceof CompositeNodeWithSemanticElement) &&
+				(n.grammarElement.eContainer.eContainer != ga.STVarDeclarationRule.alternatives)) {
+				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.FUNCTIONS_NAME_ID);
 			}
-			if ((n.grammarElement instanceof RuleCallImpl) && (n.parent instanceof CompositeNodeWithSemanticElement)) {
-				if (n.grammarElement.eContainer.eContainingFeature.name.equals("elements")) {
-					acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.FUNCTIONS_NAME_ID);
-				}
-			}
-
 		}
 		return super.highlightElement(stFunction, acceptor, cancelIndicator);
 	}
 
-// semantic highlighting for variables and some data types
+	// semantic highlighting for variables and some data types
 	def protected dispatch boolean highlightElement(STVarDeclaration varDeclaration,
 		IHighlightedPositionAcceptor acceptor, CancelIndicator cancelIndicator) {
 		for (ILeafNode n : NodeModelUtils.findActualNodeFor(varDeclaration).getLeafNodes()) {
@@ -71,20 +78,28 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 		return super.highlightElement(varDeclaration, acceptor, cancelIndicator);
 	}
 
-	// semantic highlighting for assignment and expressions
+	// semantic highlighting for calls of functions and methods and static variables
 	def protected dispatch boolean highlightElement(STFeatureExpression featuresExpression,
 		IHighlightedPositionAcceptor acceptor, CancelIndicator cancelIndicator) {
+
+		val style = switch (featuresExpression.feature) {
+			STMethod case featuresExpression.call:
+				STCoreHighlightingStyles.CALL_METHOD_ID
+			STMethod case !featuresExpression.call:
+				STCoreHighlightingStyles.RETURN_METHOD_ID
+			STFunction case featuresExpression.call:
+				STCoreHighlightingStyles.CALL_FUNCTION_ID
+			STFunction case !featuresExpression.call:
+				STCoreHighlightingStyles.RETURN_FUNCTION_ID
+			STVarDeclaration:
+				STCoreHighlightingStyles.STATIC_VAR_ID
+		}
+
 		for (ILeafNode n : NodeModelUtils.findActualNodeFor(featuresExpression).getLeafNodes()) {
-			if (( n.grammarElement?.eContainer == ga.STFeatureNameRule.alternatives) && (featuresExpression.call)) {
-				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.CALL_FUNCTION_ID);
-			} else if (( n.grammarElement?.eContainer == ga.STFeatureNameRule.alternatives) &&
-				(featuresExpression.feature instanceof STVarDeclarationImpl)) {
-				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.STATIC_VAR_ID);
-			} else if (!(featuresExpression.call)) {
-				acceptor.addPosition(n.getOffset(), n.getLength(), STCoreHighlightingStyles.RETURN_FUNCTION_ID);
+			if (n.grammarElement?.eContainer == ga.STFeatureNameRule.alternatives) {
+				acceptor.addPosition(n.getOffset(), n.getLength(), style)
 			}
 		}
-		return super.highlightElement(featuresExpression, acceptor, cancelIndicator);
 	}
 
 }
