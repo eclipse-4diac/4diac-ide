@@ -44,9 +44,9 @@ public class PasteDataIntoTableAction implements IKeyAction {
 		final List<String> c = new ArrayList<>();
 		for (int i = 0; i < content.get(0).length; i++) {
 			for (final String[] str : content) {
-				if (!str[i].isEmpty()) {
-					c.add(str[i]);
-				}
+				// if (!str[i].isEmpty()) {
+				c.add(str[i]);
+				// }
 			}
 		}
 		return c.toArray(new String[0]);

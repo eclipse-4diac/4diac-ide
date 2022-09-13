@@ -14,7 +14,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.emf.common.util.EList;
+import java.util.List;
+
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
@@ -34,7 +35,10 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
@@ -45,7 +49,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class CommentPropertySection extends AbstractSection { // implements I4diacTableUtil {
+public class CommentPropertySection extends AbstractSection {
 
 	private static final int ONE_COLUMN = 1;
 	private static final int TWO_COLUMNS = 2;
@@ -61,8 +65,8 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 	private NatTable inputTable;
 	private NatTable outputTable;
 
-	private VarDeclarationDataProvider inputDataProvider;
-	private VarDeclarationDataProvider outputDataProvider;
+	private VarDeclarationListProvider inputDataProvider;
+	private VarDeclarationListProvider outputDataProvider;
 
 	private TabbedPropertySheetPage tabbedPropertySheetPage;
 
@@ -101,18 +105,48 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 		inputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
 		outputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
 
-		inputDataProvider = new VarDeclarationDataProvider(true);
-		outputDataProvider = new VarDeclarationDataProvider(false);
+		inputDataProvider = new VarDeclarationListProvider(null, true);
+		outputDataProvider = new VarDeclarationListProvider(null, false);
 
-		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataProvider, new ColumnDataProvider(),
+		final DataLayer inputDataLayer = new DataLayer(inputDataProvider);
+		configureDataLayerLabels(inputDataLayer, true);
+		final DataLayer outputDataLayer = new DataLayer(outputDataProvider);
+		configureDataLayerLabels(outputDataLayer, false);
+
+		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, new ColumnDataProvider(),
 				inputDataProvider.getEditableRule());
-		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataProvider,
+		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer,
 				new ColumnDataProvider(), outputDataProvider.getEditableRule());
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(outputComposite);
 
 		tableSectionComposite.layout();
+	}
+
+	private void configureDataLayerLabels(final DataLayer dataLayer, final boolean isInput) {
+		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
+			final VarDeclaration rowItem;
+			final String defaultComment;
+			if (isInput) {
+				rowItem = inputDataProvider.getRowObject(rowPosition);
+				defaultComment = rowItem.getFBNetworkElement().getType().getInterfaceList().getInputVars()
+						.get(rowPosition).getComment();
+
+				if (columnPosition == INITIAL_VALUE && rowItem.getValue().hasError()) {
+					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_LABEL);
+				}
+			} else {
+				rowItem = outputDataProvider.getRowObject(rowPosition);
+				defaultComment = rowItem.getFBNetworkElement().getType().getInterfaceList().getOutputVars()
+						.get(rowPosition).getComment();
+			}
+
+			if (columnPosition == INITIAL_VALUE && !InitialValueHelper.hasInitalValue(rowItem)
+					|| columnPosition == COMMENT && rowItem.getComment().equals(defaultComment)) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_LABEL);
+			}
+		});
 	}
 
 	@Override
@@ -180,20 +214,30 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 	}
 
 
-	private class VarDeclarationDataProvider implements IDataProvider {
+	private class VarDeclarationListProvider extends ListDataProvider<VarDeclaration> {
 		private final boolean isInputData;
-		private EList<VarDeclaration> varList;
 
-		public VarDeclarationDataProvider(final boolean isInputData) {
+		public VarDeclarationListProvider(final List<VarDeclaration> list,
+				final boolean isInputData) {
+
+			super(list, new VarDeclarationColumnAccessor(isInputData));
 			this.isInputData = isInputData;
+		}
+
+		@Override
+		public int getRowCount() {
+			if (this.list != null) {
+				return super.getRowCount();
+			}
+			return 0;
 		}
 
 		public void setInput(final Object inputElement) {
 			if (inputElement instanceof FBNetworkElement) {
 				if (isInputData) {
-					varList = ((FBNetworkElement) inputElement).getInterface().getInputVars();
+					this.list = ((FBNetworkElement) inputElement).getInterface().getInputVars();
 				} else {
-					varList = ((FBNetworkElement) inputElement).getInterface().getOutputVars();
+					this.list = ((FBNetworkElement) inputElement).getInterface().getOutputVars();
 				}
 			}
 		}
@@ -214,23 +258,26 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 				}
 			};
 		}
+	}
+
+	private class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclaration> {
+		private final boolean isInputData;
+
+		public VarDeclarationColumnAccessor(final boolean isInputData) {
+			this.isInputData = isInputData;
+		}
 
 		@Override
-		public Object getDataValue(final int columnIndex, final int rowIndex) {
-			final VarDeclaration item = varList.get(rowIndex);
-			if (item == null) {
-				return null;
-			}
-
+		public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
 			switch (columnIndex) {
 			case NAME:
-				return item.getName();
+				return rowObject.getName();
 			case TYPE:
-				return item.getTypeName();
+				return rowObject.getTypeName();
 			case INITIAL_VALUE:
-				return InitialValueHelper.getInitalOrDefaultValue(item);
+				return InitialValueHelper.getInitalOrDefaultValue(rowObject);
 			case COMMENT:
-				return item.getComment();
+				return rowObject.getComment();
 
 			default:
 				return null;
@@ -238,17 +285,21 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 		}
 
 		@Override
-		public void setDataValue(final int columnIndex, final int rowIndex, final Object newValue) {
+		public void setDataValue(final VarDeclaration rowObject, final int columnIndex, final Object newValue) {
 			Command cmd = null;
 			switch (columnIndex) {
 			case INITIAL_VALUE:
 				if (!isInputData) {
 					return;
 				}
-				cmd = new ChangeValueCommand(varList.get(rowIndex), (String) newValue);
+				cmd = new ChangeValueCommand(rowObject, (String) newValue);
 				break;
 			case COMMENT:
-				cmd = new ChangeCommentCommand(varList.get(rowIndex), (String) newValue);
+				if ((String) newValue != null) {
+					cmd = new ChangeCommentCommand(rowObject, (String) newValue);
+				} else {
+					cmd = new ChangeCommentCommand(rowObject, ""); //$NON-NLS-1$
+				}
 				break;
 
 			default:
@@ -262,17 +313,7 @@ public class CommentPropertySection extends AbstractSection { // implements I4di
 		public int getColumnCount() {
 			return 4;
 		}
-
-		@Override
-		public int getRowCount() {
-			if (varList != null) {
-				return varList.size();
-			}
-
-			return 0;
-		}
 	}
-
 
 	private class ColumnDataProvider implements IDataProvider {
 

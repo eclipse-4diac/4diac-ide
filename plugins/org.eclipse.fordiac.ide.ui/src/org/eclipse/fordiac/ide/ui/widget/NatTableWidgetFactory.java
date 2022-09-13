@@ -17,6 +17,7 @@ import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.AbstractUiBindingConfiguration;
+import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.config.DefaultNatTableStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
@@ -36,6 +37,10 @@ import org.eclipse.nebula.widgets.nattable.painter.cell.TextPainter;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBindings;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionStyleConfiguration;
+import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
+import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
+import org.eclipse.nebula.widgets.nattable.style.SelectionStyleLabels;
+import org.eclipse.nebula.widgets.nattable.style.Style;
 import org.eclipse.nebula.widgets.nattable.ui.binding.UiBindingRegistry;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.CellEditorMouseEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.KeyEventMatcher;
@@ -46,10 +51,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public final class NatTableWidgetFactory {
-	public static NatTable createNatTable(final Composite parent, final IDataProvider dataProvider,
+	public static final String DEFAULT_LABEL = "DEFAULT_LABEL"; //$NON-NLS-1$
+	public static final String ERROR_LABEL = "ERROR_LABEL"; //$NON-NLS-1$
+
+	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider, final IEditableRule editableRule) {
 
-		final DataLayer dataLayer = new DataLayer(dataProvider);
 		dataLayer.setColumnPercentageSizing(true);
 
 		final SelectionLayer selectionLayer = new SelectionLayer(dataLayer);
@@ -106,7 +113,7 @@ public final class NatTableWidgetFactory {
 		selectionStyle.fullySelectedHeaderBgColor = GUIHelper.COLOR_WHITE;
 		selectionStyle.selectedHeaderBgColor = GUIHelper.COLOR_WHITE;
 		selectionStyle.selectedHeaderFgColor = GUIHelper.COLOR_BLACK;
-		selectionStyle.selectedHeaderFont = GUIHelper.DEFAULT_FONT;
+		selectionStyle.selectedHeaderFont = headerStyle.font;
 		selectionStyle.anchorBgColor = GUIHelper.COLOR_TITLE_INACTIVE_BACKGROUND;
 		selectionStyle.anchorFgColor = GUIHelper.COLOR_BLACK;
 
@@ -120,6 +127,25 @@ public final class NatTableWidgetFactory {
 		table.addConfiguration(tableStyle);
 		selectionLayer.addConfiguration(selectionStyle);
 		columnHeaderLayer.addConfiguration(headerStyle);
+
+		table.addConfiguration(new AbstractRegistryConfiguration() {
+			@Override
+			public void configureRegistry(final IConfigRegistry configRegistry) {
+				Style cellStyle = new Style();
+				cellStyle.setAttributeValue(CellStyleAttributes.FOREGROUND_COLOR, GUIHelper.COLOR_DARK_GRAY);
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
+						DEFAULT_LABEL);
+
+				cellStyle = new Style();
+				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_RED);
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
+						ERROR_LABEL);
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle,
+						DisplayMode.SELECT, ERROR_LABEL);
+				configRegistry.unregisterConfigAttribute(CellConfigAttributes.CELL_STYLE, DisplayMode.SELECT,
+						SelectionStyleLabels.SELECTION_ANCHOR_STYLE);
+			}
+		});
 
 		table.configure();
 		return table;
