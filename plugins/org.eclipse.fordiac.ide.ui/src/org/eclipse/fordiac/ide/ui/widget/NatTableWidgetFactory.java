@@ -144,8 +144,10 @@ public final class NatTableWidgetFactory {
 		selectionStyle.fullySelectedHeaderBgColor = GUIHelper.COLOR_WHITE;
 		selectionStyle.selectedHeaderBgColor = GUIHelper.COLOR_WHITE;
 		selectionStyle.selectedHeaderFgColor = GUIHelper.COLOR_BLACK;
-		selectionStyle.selectedHeaderFont = headerStyle.font;
+		selectionStyle.selectedHeaderFont = GUIHelper.DEFAULT_FONT;
+		selectionStyle.selectionFont = GUIHelper.DEFAULT_FONT;
 
+		headerStyle.font = GUIHelper.DEFAULT_FONT;
 		headerStyle.bgColor = GUIHelper.COLOR_WHITE;
 		headerStyle.renderGridLines = Boolean.TRUE;
 		headerStyle.cellPainter = new TextPainter();
