@@ -29,6 +29,7 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
+import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
@@ -63,7 +64,10 @@ import org.eclipse.swt.widgets.Composite;
 
 public class GroupEditPart extends AbstractPositionableElementEditPart implements IContainerEditPart {
 	private GroupContentNetwork groupContents;
+	private final RoundedRectangle mainFigure = new BorderedRoundedRectangle();
 	private InstanceCommentFigure commentFigure;
+	private InstanceName instanceName;
+
 
 	private class GroupCommentRenameEditPolicy extends AbstractViewRenameEditPolicy {
 		@Override
@@ -150,7 +154,6 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 
 	@Override
 	protected IFigure createFigureForModel() {
-		final RoundedRectangle mainFigure = new BorderedRoundedRectangle();
 		mainFigure.setOutline(false);
 		mainFigure.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 		mainFigure.setFillXOR(false);
@@ -160,6 +163,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 		mainLayout.verticalSpacing = 0;
 		mainLayout.horizontalSpacing = 0;
 		mainFigure.setLayoutManager(mainLayout);
+		instanceName = new InstanceName(getModel());
 		commentFigure = new InstanceCommentFigure();
 		commentFigure.setCursor(Cursors.SIZEALL);
 		final AdvancedLineBorder commentBorder = new AdvancedLineBorder(PositionConstants.SOUTH);
@@ -174,13 +178,19 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 		final GridData layoutConstraint = new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL
 				| GridData.VERTICAL_ALIGN_FILL | GridData.GRAB_VERTICAL);
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-		getContentPane().add(child, layoutConstraint);
+
+		if (child instanceof InstanceNameFigure) {
+			mainFigure.add(child, new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL), 0);
+		} else {
+			getContentPane().add(child, layoutConstraint);
+		}
 	}
 
 	@Override
 	protected List<Object> getModelChildren() {
-		final List<Object> children = new ArrayList<>(2);
-		children.add(getSubappContents());
+		final List<Object> children = new ArrayList<>(3);
+		children.add(instanceName);
+		children.add(getGroupContents());
 		return children;
 	}
 
@@ -279,7 +289,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 				.orElse(null);
 	}
 
-	private GroupContentNetwork getSubappContents() {
+	private GroupContentNetwork getGroupContents() {
 		if (null == groupContents) {
 			groupContents = new GroupContentNetwork(getModel());
 		}
