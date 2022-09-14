@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
 import java.math.BigInteger
+import java.nio.charset.StandardCharsets
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -25,7 +26,10 @@ import java.util.Set
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
+import org.eclipse.fordiac.ide.model.data.AnyStringType
+import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.WcharType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
@@ -76,9 +80,6 @@ import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExpo
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
-import org.eclipse.fordiac.ide.model.data.AnyStringType
-import org.eclipse.fordiac.ide.model.data.AnyCharsType
-import org.eclipse.fordiac.ide.model.data.WcharType
 
 abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
@@ -308,9 +309,9 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		val type = expr.resultType as DataType
 		'''«type.generateTypeName»''' + switch (type) {
 			AnyStringType: '''("«expr.value.toString.convertToJavaString»")'''
-			AnyCharsType: '''(«IF type instanceof WcharType»u«ENDIF»'«expr.value.toString.convertToJavaString»')'''
+			CharType: '''(«String.format("%02x",  expr.value.toString.getBytes(StandardCharsets.UTF_8).get(0))»)'''
+			WcharType: '''(u'«expr.value.toString.convertToJavaString»')'''
 		}
-
 	}
 
 	def protected dispatch CharSequence generateExpression(STDateLiteral expr) //
