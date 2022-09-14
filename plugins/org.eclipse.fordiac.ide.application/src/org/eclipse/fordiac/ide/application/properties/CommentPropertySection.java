@@ -134,7 +134,7 @@ public class CommentPropertySection extends AbstractSection {
 						.get(rowPosition).getComment();
 
 				if (columnPosition == INITIAL_VALUE && rowItem.getValue().hasError()) {
-					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_LABEL);
+					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 				}
 			} else {
 				rowItem = outputDataProvider.getRowObject(rowPosition);
@@ -144,7 +144,7 @@ public class CommentPropertySection extends AbstractSection {
 
 			if (columnPosition == INITIAL_VALUE && !InitialValueHelper.hasInitalValue(rowItem)
 					|| columnPosition == COMMENT && rowItem.getComment().equals(defaultComment)) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_LABEL);
+				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
 			}
 		});
 	}
@@ -246,15 +246,12 @@ public class CommentPropertySection extends AbstractSection {
 			return new IEditableRule() {
 				@Override
 				public boolean isEditable(final int columnIndex, final int rowIndex) {
-					return false;
+					return (columnIndex == INITIAL_VALUE && isInputData) || columnIndex == COMMENT;
 				}
 
 				@Override
 				public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
-					if ((cell.getColumnIndex() == INITIAL_VALUE && isInputData) || cell.getColumnIndex() == COMMENT) {
-						return true;
-					}
-					return false;
+					return (cell.getColumnIndex() == INITIAL_VALUE && isInputData) || cell.getColumnIndex() == COMMENT;
 				}
 			};
 		}

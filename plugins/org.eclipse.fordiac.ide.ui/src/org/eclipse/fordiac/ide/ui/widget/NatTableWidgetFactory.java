@@ -31,6 +31,7 @@ import org.eclipse.nebula.widgets.nattable.grid.GridRegion;
 import org.eclipse.nebula.widgets.nattable.grid.layer.ColumnHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.layer.CompositeLayer;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultColumnHeaderStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.painter.NatTableBorderOverlayPainter;
 import org.eclipse.nebula.widgets.nattable.painter.cell.TextPainter;
@@ -51,13 +52,19 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
 public final class NatTableWidgetFactory {
-	public static final String DEFAULT_LABEL = "DEFAULT_LABEL"; //$NON-NLS-1$
-	public static final String ERROR_LABEL = "ERROR_LABEL"; //$NON-NLS-1$
+	public static final String DEFAULT_CELL = "DEFAULT_CELL"; //$NON-NLS-1$
+	public static final String ERROR_CELL = "ERROR_CELL"; //$NON-NLS-1$
+	public static final String DISABLED_CELL = "DISABLED_CELL"; //$NON-NLS-1$
+	public static final String DISABLED_HEADER = "DISABLED_HEADER"; //$NON-NLS-1$
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider, final IEditableRule editableRule) {
 
 		dataLayer.setColumnPercentageSizing(true);
+		dataLayer.setColumnWidthPercentageByPosition(0, 20);
+		dataLayer.setColumnWidthPercentageByPosition(1, 20);
+		dataLayer.setColumnWidthPercentageByPosition(2, 20);
+		dataLayer.setColumnWidthPercentageByPosition(3, 40);
 
 		final SelectionLayer selectionLayer = new SelectionLayer(dataLayer);
 		selectionLayer.addConfiguration(new DefaultSelectionBindings() {
@@ -92,7 +99,6 @@ public final class NatTableWidgetFactory {
 						new MouseEditAction());
 			}
 		});
-
 		gridLayer.addConfiguration(new AbstractRegistryConfiguration() {
 			@Override
 			public void configureRegistry(final IConfigRegistry configRegistry) {
@@ -100,9 +106,34 @@ public final class NatTableWidgetFactory {
 			}
 		});
 
+		addEditDisabledLabel(dataLayer, editableRule, false);
+		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
+
 		final NatTable table = new NatTable(parent, gridLayer, false);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
+		setNatTableStyle(table);
 
+		return table;
+	}
+
+	private static void addEditDisabledLabel(final DataLayer dataLayer, final IEditableRule editableRule,
+			final boolean isHeader) {
+		final IConfigLabelAccumulator dataLayerLabelAccumulator = dataLayer.getConfigLabelAccumulator();
+		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
+			if (dataLayerLabelAccumulator != null) {
+				dataLayerLabelAccumulator.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+			}
+			if (!editableRule.isEditable(columnPosition, rowPosition)) {
+				if (isHeader) {
+					configLabels.addLabel(DISABLED_HEADER);
+				} else {
+					configLabels.addLabel(DISABLED_CELL);
+				}
+			}
+		});
+	}
+
+	private static void setNatTableStyle(final NatTable table) {
 		final DefaultNatTableStyleConfiguration tableStyle = new DefaultNatTableStyleConfiguration();
 		final DefaultSelectionStyleConfiguration selectionStyle = new DefaultSelectionStyleConfiguration();
 		final DefaultColumnHeaderStyleConfiguration headerStyle = new DefaultColumnHeaderStyleConfiguration();
@@ -114,8 +145,6 @@ public final class NatTableWidgetFactory {
 		selectionStyle.selectedHeaderBgColor = GUIHelper.COLOR_WHITE;
 		selectionStyle.selectedHeaderFgColor = GUIHelper.COLOR_BLACK;
 		selectionStyle.selectedHeaderFont = headerStyle.font;
-		selectionStyle.anchorBgColor = GUIHelper.COLOR_TITLE_INACTIVE_BACKGROUND;
-		selectionStyle.anchorFgColor = GUIHelper.COLOR_BLACK;
 
 		headerStyle.bgColor = GUIHelper.COLOR_WHITE;
 		headerStyle.renderGridLines = Boolean.TRUE;
@@ -125,29 +154,39 @@ public final class NatTableWidgetFactory {
 		table.addOverlayPainter(new NatTableBorderOverlayPainter());
 
 		table.addConfiguration(tableStyle);
-		selectionLayer.addConfiguration(selectionStyle);
-		columnHeaderLayer.addConfiguration(headerStyle);
-
+		table.addConfiguration(selectionStyle);
+		table.addConfiguration(headerStyle);
 		table.addConfiguration(new AbstractRegistryConfiguration() {
 			@Override
 			public void configureRegistry(final IConfigRegistry configRegistry) {
 				Style cellStyle = new Style();
 				cellStyle.setAttributeValue(CellStyleAttributes.FOREGROUND_COLOR, GUIHelper.COLOR_DARK_GRAY);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
-						DEFAULT_LABEL);
+						DEFAULT_CELL);
 
 				cellStyle = new Style();
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_RED);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
-						ERROR_LABEL);
-				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle,
-						DisplayMode.SELECT, ERROR_LABEL);
+						ERROR_CELL);
+				cellStyle = new Style();
+				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.getColor(255, 100, 100));
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
+						ERROR_CELL);
+
+				cellStyle = new Style();
+				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_WIDGET_LIGHT_SHADOW);
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
+						DISABLED_CELL);
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
+						DISABLED_HEADER);
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
+						DISABLED_HEADER);
+
 				configRegistry.unregisterConfigAttribute(CellConfigAttributes.CELL_STYLE, DisplayMode.SELECT,
 						SelectionStyleLabels.SELECTION_ANCHOR_STYLE);
 			}
 		});
 
 		table.configure();
-		return table;
 	}
 }
