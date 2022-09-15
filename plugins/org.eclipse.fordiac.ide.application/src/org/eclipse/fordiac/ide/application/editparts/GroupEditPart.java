@@ -9,35 +9,29 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Fabio Gandolfi - added name label to group
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.GridData;
-import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.application.figures.GroupFigure;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
 import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
-import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
-import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
-import org.eclipse.fordiac.ide.gef.figures.RoundedRectangleShadowBorder;
 import org.eclipse.fordiac.ide.gef.policies.AbstractViewRenameEditPolicy;
-import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -64,10 +58,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class GroupEditPart extends AbstractPositionableElementEditPart implements IContainerEditPart {
 	private GroupContentNetwork groupContents;
-	private final RoundedRectangle mainFigure = new BorderedRoundedRectangle();
-	private InstanceCommentFigure commentFigure;
 	private InstanceName instanceName;
-
 
 	private class GroupCommentRenameEditPolicy extends AbstractViewRenameEditPolicy {
 		@Override
@@ -84,7 +75,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 		@Override
 		protected void showCurrentEditValue(final DirectEditRequest request) {
 			final String value = (String) request.getCellEditor().getValue();
-			commentFigure.setText(value);
+			getFigure().getCommentFigure().setText(value);
 		}
 
 		@Override
@@ -121,8 +112,8 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 
 	@Override
 	public Rectangle getCommentBounds() {
-		if (commentFigure != null) {
-			return commentFigure.getBounds();
+		if (getFigure().getCommentFigure() != null) {
+			return getFigure().getCommentFigure().getBounds();
 		}
 		return null;
 	}
@@ -154,23 +145,15 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 
 	@Override
 	protected IFigure createFigureForModel() {
-		mainFigure.setOutline(false);
-		mainFigure.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
-		mainFigure.setFillXOR(false);
-		mainFigure.setOpaque(false);
-		mainFigure.setBorder(new RoundedRectangleShadowBorder());
-		final GridLayout mainLayout = new GridLayout(1, true);
-		mainLayout.verticalSpacing = 0;
-		mainLayout.horizontalSpacing = 0;
-		mainFigure.setLayoutManager(mainLayout);
-		instanceName = new InstanceName(getModel());
-		commentFigure = new InstanceCommentFigure();
-		commentFigure.setCursor(Cursors.SIZEALL);
-		final AdvancedLineBorder commentBorder = new AdvancedLineBorder(PositionConstants.SOUTH);
-		commentFigure.setBorder(commentBorder);
-		mainFigure.add(commentFigure, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
-		refreshComment();
-		return mainFigure;
+		final GroupFigure groupFigure = new GroupFigure();
+		groupFigure.getCommentFigure().setText(getModel().getComment());
+
+		return groupFigure;
+	}
+
+	@Override
+	public GroupFigure getFigure() {
+		return (GroupFigure) super.getFigure();
 	}
 
 	@Override
@@ -180,15 +163,19 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 
 		if (child instanceof InstanceNameFigure) {
-			mainFigure.add(child, new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL), 0);
+			getFigure().getNameFigure().add(child,
+					new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.GRAB_HORIZONTAL));
 		} else {
-			getContentPane().add(child, layoutConstraint);
+			getFigure().getMainFigure().add(child, layoutConstraint);
 		}
 	}
 
 	@Override
 	protected List<Object> getModelChildren() {
 		final List<Object> children = new ArrayList<>(3);
+		if (instanceName == null) {
+			instanceName = new InstanceName(getModel());
+		}
 		children.add(instanceName);
 		children.add(getGroupContents());
 		return children;
@@ -213,7 +200,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 
 	@Override
 	protected void performDirectEdit() {
-		new TextDirectEditManager(this, new FigureCellEditorLocator(commentFigure)) {
+		new TextDirectEditManager(this, new FigureCellEditorLocator(getFigure().getCommentFigure())) {
 			@Override
 			protected CellEditor createCellEditorOn(final Composite composite) {
 				return new TextCellEditor(composite, SWT.MULTI | SWT.WRAP);
@@ -251,7 +238,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 
 	@Override
 	protected void refreshComment() {
-		commentFigure.setText(getModel().getComment());
+		getFigure().getCommentFigure().setText(getModel().getComment());
 	}
 
 	@Override
@@ -304,7 +291,7 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 
 	@Override
 	public int getCommentWidth() {
-		return commentFigure.getTextWidth();
+		return getFigure().getCommentFigure().getTextWidth();
 	}
 
 	@Override
