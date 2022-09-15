@@ -13,18 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
-import org.eclipse.nebula.jface.gridviewer.internal.CellSelection;
-import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
@@ -54,39 +46,7 @@ public class TableCopyAction extends Action {
 					return;
 				}
 			}
-			// This IF will be removed once the new copy/paste handling has been approved.
-			final String instanceClassName = "CommentPropertySection"; //$NON-NLS-1$
-			if (instanceClassName.equals(editor.getClass().getSimpleName())) {
-				handleInstancePropertySheet(editor);
-			} else {
-				Clipboard.getDefault().setContents(editor.getViewer().getStructuredSelection());
-			}
+			Clipboard.getDefault().setContents(editor.getViewer().getStructuredSelection());
 		}
-	}
-
-	private static void handleInstancePropertySheet(final I4diacTableUtil editor) {
-		final GridTableViewer viewer = (GridTableViewer) editor.getViewer();
-		final CellSelection selection = (CellSelection) viewer.getSelection();
-
-		final List<String> copyList = new ArrayList<>();
-		final int[] rows = viewer.getGrid().getSelectionIndices();
-		Arrays.sort(rows);
-
-		final List<Object> items = selection.toList();
-
-		for (int i = 0; i < items.size(); i++) {
-			final List<Integer> cellsOfItem = selection.getIndices(items.get(i));
-			for (int j = 0; j < cellsOfItem.size(); j++) {
-				final int col = cellsOfItem.get(j);
-				final int row = rows[i];
-
-				final GridItem item = viewer.getGrid().getItem(row);
-				final String property = (String) viewer.getColumnProperties()[col];
-				if (viewer.getCellModifier().canModify(item, property)) {
-					copyList.add(item.getText(col));
-				}
-			}
-		}
-		FordiacClipboard.INSTANCE.setMultibleTableContents(copyList.toArray(new String[0]));
 	}
 }

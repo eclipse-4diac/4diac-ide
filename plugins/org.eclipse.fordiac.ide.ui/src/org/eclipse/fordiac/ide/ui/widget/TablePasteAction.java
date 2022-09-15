@@ -13,21 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
-import org.eclipse.nebula.jface.gridviewer.internal.CellSelection;
-import org.eclipse.nebula.widgets.grid.GridItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -58,40 +50,7 @@ public class TablePasteAction extends Action {
 					return;
 				}
 			}
-			// This IF will be removed once the new copy/paste handling has been approved.
-			final String instanceClassName = "CommentPropertySection";
-			if (instanceClassName.equals(editor.getClass().getSimpleName())) {
-				handleInstancePropertySheet(editor);
-			} else {
-				pasteItems(editor);
-			}
-		}
-	}
-
-	private static void handleInstancePropertySheet(final I4diacTableUtil editor) {
-		final GridTableViewer viewer = (GridTableViewer) editor.getViewer();
-		final CellSelection selection = (CellSelection) viewer.getSelection();
-		final ICellModifier modifier = viewer.getCellModifier();
-
-		final Object clipBoardContent = FordiacClipboard.INSTANCE.getMultibleTableContents();
-		final String[] content = clipBoardContent instanceof String[] ? (String[]) clipBoardContent : new String[0];
-
-		final int[] rows = viewer.getGrid().getSelectionIndices();
-		Arrays.sort(rows);
-		final List<Object> items = selection.toList();
-
-		int contentIndex = 0;
-		for (int i = 0; i < items.size(); i++) {
-			final List<Integer> cellsOfItem = selection.getIndices(items.get(i));
-			for (final Integer col : cellsOfItem) {
-				final int row = rows[i];
-
-				final GridItem item = viewer.getGrid().getItem(row);
-				final String property = (String) viewer.getColumnProperties()[col];
-				if (modifier.canModify(item, property) && contentIndex < content.length) {
-					modifier.modify(item, property, content[contentIndex++]);
-				}
-			}
+			pasteItems(editor);
 		}
 	}
 
