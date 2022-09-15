@@ -10,7 +10,7 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - multline comments and cleanup
- *   Sebastian Hollersbacher - change to nebula grid
+ *   Sebastian Hollersbacher - change to nebula NatTable
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -88,6 +88,8 @@ public class CommentPropertySection extends AbstractSection {
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
 			commandStack = commandStackBuffer;
+			outputTable.refresh();
+			inputTable.refresh();
 		}
 	}
 
