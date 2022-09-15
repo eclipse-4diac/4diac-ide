@@ -3,12 +3,14 @@
 <FBType Name="RT_E_EC_COUPLER" Comment="Coupling two succeeding event chains" >
   <Identification Description="Copyright (c) 2008 ACIN&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0"/>
   <VersionInfo Author="Alois Zoitl" Date="2008-07-10" Organization="ACIN" Version="1.0"/>
+  <VersionInfo Author="Michael Hansal" Date="2022-09-15" Remarks="add WCET input" Version="2.0"/>
   <InterfaceList>
     <EventInputs>
       <Event Name="INIT" >
         <With Var="QI" />
         <With Var="Tmin" />
         <With Var="Deadline" />
+        <With Var="WCET" />
       </Event>
       <Event Name="EI" Comment="Event input" >
       </Event>
@@ -24,6 +26,7 @@
       <VarDeclaration Name="QI" Type="BOOL" />
       <VarDeclaration Name="Tmin" Type="TIME" />
       <VarDeclaration Name="Deadline" Type="TIME" />
+      <VarDeclaration Name="WCET" Type="TIME" />
     </InputVars>
     <OutputVars>
       <VarDeclaration Name="QO" Type="BOOL" />
