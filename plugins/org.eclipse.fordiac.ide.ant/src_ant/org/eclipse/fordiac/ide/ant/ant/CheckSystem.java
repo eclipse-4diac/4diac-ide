@@ -48,13 +48,13 @@ public class CheckSystem extends Task {
 
 		// load the system to get the error markers is place
 		SystemManager.INSTANCE.getSystem(systemFile);
-		CheckProject.waitMarkerJobsComplete();
+		CheckTypeLibrary.waitMarkerJobsComplete();
 
 		try {
 			final IMarker[] markers = systemFile.findMarkers(IMarker.PROBLEM, true, IResource.DEPTH_ZERO);
 
 			// log Markers, only visible in console output
-			CheckProject.printMarkers(markers, this);
+			CheckTypeLibrary.printMarkers(markers, this);
 			if (markers.length != 0) {
 				throw new BuildException(
 						String.format("The system %s has %d errors or warnings!", systemPathString, markers.length)); //$NON-NLS-1$

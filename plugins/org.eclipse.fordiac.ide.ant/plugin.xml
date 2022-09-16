@@ -4,9 +4,9 @@
    <extension
          point="org.eclipse.ant.core.antTasks">
       <antTask
-            class="org.eclipse.fordiac.ide.ant.ant.CheckProject"
+            class="org.eclipse.fordiac.ide.ant.ant.CheckTypeLibrary"
             library="ant_tasks/ant-ant.jar"
-            name="fordiac.checkProject">
+            name="fordiac.checkTypeLibrary">
       </antTask>
    </extension>
    <extension

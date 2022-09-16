@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.systemmanagement.ValidateProject;
 
-public class CheckProject extends Task {
+public class CheckTypeLibrary extends Task {
 
 	private String projectNameString;
 
@@ -39,7 +39,7 @@ public class CheckProject extends Task {
 	public void execute() throws BuildException {
 
 		log("=======================================================");//$NON-NLS-1$
-		log("                   CHECK PROJECT TASK                  ");//$NON-NLS-1$
+		log("                CHECK TYPE LIBRARY TASK                ");//$NON-NLS-1$
 		log("=======================================================");//$NON-NLS-1$
 
 		if (projectNameString == null) {
