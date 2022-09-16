@@ -33,7 +33,7 @@ public abstract class AbstractExportFBs extends AbstractFBTask {
 		setFordiacProject(workspace.getRoot().getProject(getProjectNameString()));
 		checkFordiacProject();
 
-		CheckTypeLibrary.waitBuilderJobsComplete();
+		Import4diacProject.waitBuilderJobsComplete();
 
 		final List<File> files = new ArrayList<>();
 

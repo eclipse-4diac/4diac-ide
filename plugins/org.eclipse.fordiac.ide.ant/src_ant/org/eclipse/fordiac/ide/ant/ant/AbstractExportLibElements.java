@@ -35,7 +35,7 @@ public abstract class AbstractExportLibElements extends AbstractFBTask {
 
 		checkValidDestination();
 
-		CheckTypeLibrary.waitBuilderJobsComplete();
+		Import4diacProject.waitBuilderJobsComplete();
 
 		final List<File> files = new ArrayList<>();
 
