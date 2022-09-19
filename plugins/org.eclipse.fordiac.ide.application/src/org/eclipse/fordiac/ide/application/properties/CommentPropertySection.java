@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -129,23 +130,28 @@ public class CommentPropertySection extends AbstractSection {
 	private void configureDataLayerLabels(final DataLayer dataLayer, final boolean isInput) {
 		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
 			final VarDeclaration rowItem;
-			final String defaultComment;
+			String defaultComment = null;
 			if (isInput) {
 				rowItem = inputDataProvider.getRowObject(rowPosition);
-				defaultComment = rowItem.getFBNetworkElement().getType().getInterfaceList().getInputVars()
-						.get(rowPosition).getComment();
+				final FBType fbType = rowItem.getFBNetworkElement().getType();
+				if (fbType != null) {
+					defaultComment = fbType.getInterfaceList().getInputVars().get(rowPosition).getComment();
+				}
 
 				if (columnPosition == INITIAL_VALUE && rowItem.getValue().hasError()) {
 					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 				}
 			} else {
 				rowItem = outputDataProvider.getRowObject(rowPosition);
-				defaultComment = rowItem.getFBNetworkElement().getType().getInterfaceList().getOutputVars()
-						.get(rowPosition).getComment();
+				final FBType fbType = rowItem.getFBNetworkElement().getType();
+				if (fbType != null) {
+					defaultComment = fbType.getInterfaceList().getOutputVars().get(rowPosition).getComment();
+				}
 			}
 
 			if (columnPosition == INITIAL_VALUE && !InitialValueHelper.hasInitalValue(rowItem)
-					|| columnPosition == COMMENT && rowItem.getComment().equals(defaultComment)) {
+					|| columnPosition == COMMENT && defaultComment != null
+							&& rowItem.getComment().equals(defaultComment)) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
 			}
 		});
