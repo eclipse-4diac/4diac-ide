@@ -166,7 +166,16 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 				refreshValue();
 				refreshPosition();
 			} else if (LibraryElementPackage.eINSTANCE.getErrorMarkerRef_FileMarkerId().equals(feature)) {
-				Display.getDefault().asyncExec(ValueEditPart.this::refreshValue);
+				Display.getDefault().asyncExec(() -> {
+					refreshValue();
+					if (parentPart != null) {
+						for (final Object ep : parentPart.getTargetConnections()) {
+							if (ep instanceof GraphicalEditPart) {
+								((GraphicalEditPart) ep).refresh();
+							}
+						}
+					}
+				});
 			}
 			super.notifyChanged(notification);
 		}
