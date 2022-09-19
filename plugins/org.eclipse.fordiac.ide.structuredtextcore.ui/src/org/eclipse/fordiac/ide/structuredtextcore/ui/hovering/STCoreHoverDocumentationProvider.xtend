@@ -86,17 +86,16 @@ class STCoreHoverDocumentationProvider extends DefaultHoverDocumentationProvider
 			«FOR in : object.inputParameters»
 				<div style="text-indent:10px;"><b>«in.name» : «(in as STVarDeclaration).type.name» «IF !in.comment.blank»  («in.comment») «ENDIF»</b> «IF !in.documentation.nullOrEmpty» - «in.documentation»«ENDIF»</div>
 			«ENDFOR»
-			
 			</p>
 		«ENDIF»	
 		«IF !object.returnType.name.blank»
 			<p>RETURN:
-			<div style="text-indent:10px;"><b>«"TYPE"» : «object.returnType.name» «IF !object.returnValueComment.blank»  («object.returnValueComment») «ENDIF»  </b></div>
+				<div style="text-indent:10px;"><b>«"TYPE"» : «object.returnType.name» «IF !object.returnValueComment.blank»  («object.returnValueComment») «ENDIF»  </b></div>
 			</p>
 		«ENDIF»
 		«IF !object.comment.isEmpty»
 			<p>DESCRIPTION: 
-			<div style="text-indent:10px;"><b>«object.comment»</b></div>
+				<div style="text-indent:10px;"><b>«object.comment»</b></div>
 			</p>
 		«ENDIF»			
 		
@@ -105,52 +104,54 @@ class STCoreHoverDocumentationProvider extends DefaultHoverDocumentationProvider
 	def dispatch getSTElementAutoDocumentation(FB object) '''
 		
 			
-		<p>INPUTS:
+		    <p>INPUTS:
 		«FOR in : object.inputParameters»
-			<div style="text-indent:10px;"><b>«in.name»</b></div>
+				<div style="text-indent:10px;"><b>«in.name» : «(in as VarDeclaration).type.name»</b></div>
 		«ENDFOR»
-		</p>
-		<p>OUTPUTS:
+		    </p>
+			<p>OUTPUTS:
 		«FOR out : object.outputParameters»
-			<div style="text-indent:10px;"><b>«out.name»</b></div>
+				<div style="text-indent:10px;"><b>«out.name» : «(out as VarDeclaration).type.name»</b></div>
 		«ENDFOR»
-		</p>		
-		<p>DESCRIPTION: 
-		<div style="text-indent:10px;"><b>«object.comment»</b></div>
-		</p>
+		«IF !object.typeEntry.type.comment.isEmpty»		
+			<p>DESCRIPTION: 
+				<div style="text-indent:10px;"><b>«object.typeEntry.type.comment»</b></div>
+			</p>
+		«ENDIF»
 		
 	'''
 
 	def dispatch getSTElementAutoDocumentation(FBType object) '''
 		
-		<p>INPUTS:
+			<p>INPUTS:
 		«FOR in : object.inputParameters»
-			<div style="text-indent:10px;"><b>«in.name»</b></div>
+				<div style="text-indent:10px;"><b>«in.name» : «(in as VarDeclaration).type.name»</b></div>
 		«ENDFOR»
-		</p>
-		<p>OUTPUTS:
+			</p>
+			<p>OUTPUTS:
 		«FOR out : object.outputParameters»
-			<div style="text-indent:10px;"><b>«out.name»</b></div>
+				<div style="text-indent:10px;"><b>«out.name» : «(out as VarDeclaration).type.name»</b></div>
 		«ENDFOR»
-		</p>	
-		<p>INPUT EVENTS:
+			</p>	
+			<p>INPUT EVENTS:
 		«FOR event : object.interfaceList.eventInputs»
-			<div style="text-indent:10px;"><b>«event.name»</b></div>
+				<div style="text-indent:10px;"><b>«event.name»</b></div>
 		«ENDFOR»
-		</p>
-		<p>OUTPUT EVENTS:
+			</p>
+			<p>OUTPUT EVENTS:
 		«FOR event : object.interfaceList.eventOutputs»
-			<div style="text-indent:10px;"><b>«event.name»</b></div>
+				<div style="text-indent:10px;"><b>«event.name»</b></div>
 		«ENDFOR»
-		</p>					
-		<p>DESCRIPTION: 
-			<div style="text-indent:10px;"><b>«object.comment»</b></div>
-		</p>
+		«IF !object.typeEntry.type.comment.isEmpty»		
+			<p>DESCRIPTION: 
+				<div style="text-indent:10px;"><b>«object.typeEntry.type.comment»</b></div>
+			</p>
+		«ENDIF»	
 		
 	'''
 
 	def dispatch getSTElementAutoDocumentation(VarDeclaration object) '''
-		
+	
 		<p>DESCRIPTION: 
 			<div style="text-indent:10px;"><b>«object.comment»</b></div>
 		</p>

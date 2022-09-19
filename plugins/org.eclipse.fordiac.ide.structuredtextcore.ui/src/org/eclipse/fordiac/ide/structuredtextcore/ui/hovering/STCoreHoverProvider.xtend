@@ -37,7 +37,8 @@ import org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider
 class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 
 	override protected getFirstLine(EObject o) {
-		val label = getLabel(o);
+		var label = getLabel(o);
+		if (o instanceof FB) label = o.typeName;
 		return o.getKind() + ( (label !== null) ? "<b>" + label + "</b>" : "");
 	}
 
@@ -77,6 +78,7 @@ class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 		if(object.eContainer instanceof StructuredType) return '''«(object.eContainer as StructuredType).name».'''
 	}
 
+
 	def dispatch getKind(STStandardFunction object) '''FUNCTION '''
 
 	def dispatch getKind(FB object) '''FUNCTION_BLOCK '''
@@ -87,3 +89,4 @@ class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 
 	def dispatch getKind(EObject object) '''«object.eClass().getName()» '''
 }
+

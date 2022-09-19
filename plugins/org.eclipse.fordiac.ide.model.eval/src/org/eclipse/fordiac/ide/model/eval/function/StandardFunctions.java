@@ -401,31 +401,33 @@ public interface StandardFunctions extends Functions {
 				value -> value.substring(position.intValue() - 1, position.intValue() + length.intValue() - 1));
 	}
 
+	@SuppressWarnings("unchecked")
 	@SafeVarargs
 	@Comment("Concatenates two or more Strings.")
-	static StringValue CONCAT(final AnySCharsValue... strings) {
+	static <T extends AnySCharsValue> StringValue CONCAT(final T... strings) {
 		return StringValue.toStringValue(
-				Stream.of(strings).reduce((value1, value2) -> apply(value1, value2, String::concat)).orElseThrow());
+				Stream.of(strings).reduce((value1, value2) -> (T) apply(value1, value2, String::concat)).orElseThrow());
 	}
 
+	@SuppressWarnings("unchecked")
 	@SafeVarargs
 	@Comment("Concatenates two or more WStrings.")
-	static WStringValue CONCAT(final AnyWCharsValue... strings) {
+	static <T extends AnyWCharsValue> WStringValue CONCAT(final T... strings) {
 		return WStringValue.toWStringValue(
-				Stream.of(strings).reduce((value1, value2) -> apply(value1, value2, String::concat)).orElseThrow());
+				Stream.of(strings).reduce((value1, value2) -> (T) apply(value1, value2, String::concat)).orElseThrow());
 	}
 
 	@Comment("Deletes characters from a String, then inserts another String at the position of the deleted characters.")
-	static <U extends AnyIntValue> StringValue INSERT(final StringValue first,
-			@Comment("The String to be inserted.") final AnySCharsValue second,
+	static <U extends AnyIntValue, T extends AnySCharsValue> StringValue INSERT(final StringValue first,
+			@Comment("The String to be inserted.") final T second,
 			@Comment("The replacement position.") final U position) {
 		return apply(first, value -> value.substring(0, position.intValue()).concat(second.stringValue())
 				.concat(value.substring(position.intValue())));
 	}
 
 	@Comment("Deletes characters from a WString, then inserts another WString at the position of the deleted characters.")
-	static <U extends AnyIntValue> WStringValue INSERT(final WStringValue first,
-			@Comment("The WString to be inserted.") final AnyWCharsValue second,
+	static <U extends AnyIntValue, T extends AnyWCharsValue> WStringValue INSERT(final WStringValue first,
+			@Comment("The WString to be inserted.") final T second,
 			@Comment("The replacement position.") final U position) {
 		return apply(first, value -> value.substring(0, position.intValue()).concat(second.stringValue())
 				.concat(value.substring(position.intValue())));
@@ -448,8 +450,8 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Deletes characters from a String, then inserts another String at the position of the deleted characters.")
-	static <U extends AnyIntValue, V extends AnyIntValue> StringValue REPLACE(final StringValue first,
-			@Comment("The String to be inserted.") final AnySCharsValue second,
+	static <U extends AnyIntValue, V extends AnyIntValue, T extends AnySCharsValue> StringValue REPLACE(
+			final StringValue first, @Comment("The String to be inserted.") final T second,
 			@Comment("The number of character to be deleted before the new String is inserted.") final U length,
 			@Comment("The replacement position.") final V position) {
 		return apply(first, value -> value.substring(0, position.intValue() - 1).concat(second.stringValue())
@@ -457,8 +459,8 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Deletes characters from a WString, then inserts another WString at the position of the deleted characters.")
-	static <U extends AnyIntValue, V extends AnyIntValue> WStringValue REPLACE(final WStringValue first,
-			@Comment("The WString to be inserted.") final AnyWCharsValue second,
+	static <U extends AnyIntValue, V extends AnyIntValue, T extends AnyWCharsValue> WStringValue REPLACE(
+			final WStringValue first, @Comment("The WString to be inserted.") final T second,
 			@Comment("The number of character to be deleted before the new WString is inserted.") final U length,
 			@Comment("The replacement position.") final V position) {
 		return apply(first, value -> value.substring(0, position.intValue() - 1).concat(second.stringValue())
@@ -466,14 +468,14 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Returns the location of the first occurrence a String in a String.")
-	static ULIntValue FIND(@Comment("The String to be searched.") final StringValue first,
-			@Comment("The String to be found.") final AnySCharsValue second) {
+	static <T extends AnySCharsValue> ULIntValue FIND(@Comment("The String to be searched.") final StringValue first,
+			@Comment("The String to be found.") final T second) {
 		return ULIntValue.toULIntValue(first.stringValue().indexOf(second.stringValue()) + 1L);
 	}
 
 	@Comment("Returns the location of the first occurrence a WString in a WString.")
-	static ULIntValue FIND(@Comment("The WString to be searched.") final WStringValue first,
-			@Comment("The WString to be found.") final AnyWCharsValue second) {
+	static <T extends AnyWCharsValue> ULIntValue FIND(@Comment("The WString to be searched.") final WStringValue first,
+			@Comment("The WString to be found.") final T second) {
 		return ULIntValue.toULIntValue(first.stringValue().indexOf(second.stringValue()) + 1L);
 	}
 
