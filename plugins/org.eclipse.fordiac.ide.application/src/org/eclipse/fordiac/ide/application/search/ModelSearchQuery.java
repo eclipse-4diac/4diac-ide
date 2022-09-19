@@ -64,7 +64,7 @@ public class ModelSearchQuery implements ISearchQuery {
 		if (modelQuerySpec.isCheckWorkspaceScope()) { // If it's workspace, search all
 			for (final IProject proj : root.getProjects()) {
 				if (proj.isOpen()) {
-					searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj).values());
+					searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj));
 				}
 			}
 		} else {
@@ -73,7 +73,7 @@ public class ModelSearchQuery implements ISearchQuery {
 						.getActiveEditor();
 				final IProject project = openEditor.getAdapter(FBNetwork.class).getAutomationSystem().getTypeLibrary()
 						.getProject();
-				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(project).values());
+				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(project));
 			});
 		}
 

@@ -58,7 +58,7 @@ public class StructSearch {
 
 		for (final IProject proj : root.getProjects()) {
 			if (proj.isOpen()) {
-				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj).values());
+				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj));
 			}
 		}
 

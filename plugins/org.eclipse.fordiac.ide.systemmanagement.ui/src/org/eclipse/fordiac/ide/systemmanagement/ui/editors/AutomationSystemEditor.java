@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListenerManager;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.model.ui.listeners.EditorTabCommandStackListener;
@@ -313,10 +314,17 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	public void dispose() {
+		// get these values here before calling super dispose
+		final boolean dirty = isDirty();
 		if (null != getCommandStack()) {
 			getCommandStack().removeCommandStackEventListener(subEditorCommandStackListener);
 		}
 		super.dispose();
+		if (dirty && system != null) {
+			((SystemEntry) system.getTypeEntry()).setSystem(null);
+			system = null;
+			SystemManager.INSTANCE.notifyListeners();
+		}
 	}
 
 	@Override
