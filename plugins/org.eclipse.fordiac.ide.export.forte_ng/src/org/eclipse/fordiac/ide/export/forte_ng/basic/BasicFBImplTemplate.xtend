@@ -97,7 +97,7 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 			'''(«generateTransitionEvent(transition.conditionEvent)» == pa_nEIID) && («transitionLanguageSupport.get(transition)?.generate(emptyMap)»)'''
 			case conditionEvent !== null: //
 			'''«generateTransitionEvent(transition.conditionEvent)» == pa_nEIID'''
-			case conditionExpression.nullOrEmpty:
+			case !conditionExpression.nullOrEmpty:
 				transitionLanguageSupport.get(transition)?.generate(emptyMap)
 			default:
 				"1"
