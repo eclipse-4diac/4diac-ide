@@ -10,7 +10,7 @@
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.dataimport;
+package org.eclipse.fordiac.ide.model.errormarker;
 
 import java.text.MessageFormat;
 import java.util.Collections;
@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;

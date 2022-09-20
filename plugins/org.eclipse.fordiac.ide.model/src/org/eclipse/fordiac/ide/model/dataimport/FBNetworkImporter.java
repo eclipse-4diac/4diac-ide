@@ -41,7 +41,8 @@ import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionBuild
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionState;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;

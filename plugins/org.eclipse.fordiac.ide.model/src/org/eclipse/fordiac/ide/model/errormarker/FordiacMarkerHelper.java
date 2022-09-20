@@ -14,14 +14,13 @@
  *   Michael Oberlehner
  *               - Refactoring of API
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.helpers;
+package org.eclipse.fordiac.ide.model.errormarker;
 
 import java.util.List;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper;
-import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;

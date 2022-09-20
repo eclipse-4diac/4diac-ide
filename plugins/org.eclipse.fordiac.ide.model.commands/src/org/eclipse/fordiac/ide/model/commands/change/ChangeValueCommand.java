@@ -18,7 +18,7 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.commands.Messages;
-import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;

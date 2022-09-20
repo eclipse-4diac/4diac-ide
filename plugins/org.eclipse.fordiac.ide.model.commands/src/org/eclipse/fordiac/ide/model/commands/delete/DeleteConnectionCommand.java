@@ -18,7 +18,7 @@
 package org.eclipse.fordiac.ide.model.commands.delete;
 
 import org.eclipse.fordiac.ide.model.commands.Messages;
-import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.helpers.ConnectionsHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;

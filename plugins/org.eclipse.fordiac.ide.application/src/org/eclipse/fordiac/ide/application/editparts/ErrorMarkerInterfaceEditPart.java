@@ -65,7 +65,7 @@ public class ErrorMarkerInterfaceEditPart extends InterfaceEditPart {
 
 		// here we handle a datatype mismatch
 		// If the connection is an error marker we want this sequence varname:type
-		if (model.getErrorMessage().contains(model.getName())) {
+		if (model.getErrorMessage() != null && model.getErrorMessage().contains(model.getName())) {
 			return model.getErrorMessage();
 		}
 

@@ -20,7 +20,7 @@ import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;

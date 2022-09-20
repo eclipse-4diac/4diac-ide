@@ -22,7 +22,7 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
-import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
