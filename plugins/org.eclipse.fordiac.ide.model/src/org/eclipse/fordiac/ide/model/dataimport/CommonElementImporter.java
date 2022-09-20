@@ -223,7 +223,7 @@ public abstract class CommonElementImporter {
 	}
 
 	protected void deleteErrorMarkers() {
-		ErrorMarkerBuilder.deleteErrorMarkers(file, ErrorMarkerBuilder.IEC61499_MARKER);
+		ErrorMarkerBuilder.deleteAllErrorMarkersFromFile(file, ErrorMarkerBuilder.IEC61499_MARKER);
 	}
 
 	protected abstract LibraryElement createRootModelElement();

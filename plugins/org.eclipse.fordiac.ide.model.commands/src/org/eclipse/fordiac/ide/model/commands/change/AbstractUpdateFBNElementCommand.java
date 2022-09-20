@@ -407,7 +407,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	private ErrorMarkerInterface createMissingMarker(final IInterfaceElement oldInterface,
 			final FBNetworkElement element) {
-		return (ErrorMarkerInterface) FordiacMarkerHelper.createErrorMarker(element, oldInterface,
+		return FordiacMarkerHelper.createErrorMarkerInterfaceElement(element, oldInterface,
 				MessageFormat.format(Messages.UpdateFBTypeCommand_Pin_not_found, oldInterface.getName()), errorPins);
 	}
 

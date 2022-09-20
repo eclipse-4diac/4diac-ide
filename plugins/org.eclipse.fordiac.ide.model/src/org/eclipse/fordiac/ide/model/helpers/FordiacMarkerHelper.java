@@ -129,26 +129,6 @@ public final class FordiacMarkerHelper {
 		}
 	}
 
-	private FordiacMarkerHelper() {
-		throw new UnsupportedOperationException("FordiacMarkerHelper should not be instantiated"); //$NON-NLS-1$
-	}
-
-	public static ErrorMarkerBuilder createConnectionErrorMarkerBuilder(final String message, final FBNetwork fbNetwork,
-			final String sourceIdentifier, final String destinationIdentifier, final int lineNumber) {
-		final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
-		marker.addLineNumber(lineNumber);
-		marker.addMessage(message);
-
-		// use a dummy connection to get target identifier
-		final String location = FordiacMarkerHelper.getLocation(fbNetwork) + "." + sourceIdentifier + " -> " //$NON-NLS-1$ //$NON-NLS-2$
-				+ destinationIdentifier;
-		marker.addLocation(location);
-
-		marker.addTargetIdentifier(LibraryElementFactory.eINSTANCE.createDataConnection());
-		return marker;
-
-	}
-
 	public static ErrorMarkerFBNElement createErrorMarkerFB(final String name) {
 		final ErrorMarkerFBNElement createErrorMarkerFBNElement = LibraryElementFactory.eINSTANCE
 				.createErrorMarkerFBNElement();
@@ -169,19 +149,17 @@ public final class FordiacMarkerHelper {
 		return errorFb;
 	}
 
-
-
 	public static ErrorMarkerInterface createWrongDataTypeMarker(final IInterfaceElement oldInterface,
 			final IInterfaceElement newInterface, final FBNetworkElement element,
 			final List<ErrorMarkerBuilder> errorPins,final String errorMessage) {
 
-		final ErrorMarkerInterface createErrorMarker = (ErrorMarkerInterface) createErrorMarker(element, oldInterface,
+		final ErrorMarkerInterface createErrorMarker = createErrorMarkerInterfaceElement(element, oldInterface,
 				errorMessage, errorPins);
 		createErrorMarker.setErrorMessage(errorMessage);
 		return createErrorMarker;
 	}
 
-	public static IInterfaceElement createErrorMarker(final FBNetworkElement newElement,
+	public static ErrorMarkerInterface createErrorMarkerInterfaceElement(final FBNetworkElement newElement,
 			final IInterfaceElement oldInterface, final String errorMessage, final List<ErrorMarkerBuilder> errorPins) {
 		final boolean markerExists = newElement.getInterface().getErrorMarker().stream().anyMatch(
 				e -> e.getName().equals(oldInterface.getName()) && (e.isIsInput() == oldInterface.isIsInput()));
@@ -194,8 +172,6 @@ public final class FordiacMarkerHelper {
 			value.setValue(((VarDeclaration) oldInterface).getValue().getValue());
 			interfaceElement.setValue(value);
 		}
-		System.out.println(markerExists);
-		// add to list because file is not exisiting yet for connection
 
 		if (!markerExists) {
 			final ErrorMarkerBuilder createErrorMarker = ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage, newElement,
@@ -209,6 +185,10 @@ public final class FordiacMarkerHelper {
 
 	public static boolean isVariable(final IInterfaceElement oldInterface) {
 		return (oldInterface instanceof VarDeclaration) && !(oldInterface instanceof AdapterDeclaration);
+	}
+
+	private FordiacMarkerHelper() {
+		throw new UnsupportedOperationException("FordiacMarkerHelper should not be instantiated"); //$NON-NLS-1$
 	}
 
 }

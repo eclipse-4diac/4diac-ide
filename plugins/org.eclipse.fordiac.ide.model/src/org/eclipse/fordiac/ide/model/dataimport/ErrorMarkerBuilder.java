@@ -33,9 +33,11 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.swt.widgets.Display;
@@ -197,9 +199,7 @@ public class ErrorMarkerBuilder {
 	}
 
 	public static ErrorMarkerBuilder deleteErrorMarker(final ErrorMarkerRef ie) {
-
 		final IFile file = getFileFromRef(ie);
-
 		return deleteMarkerInJob(file, ie);
 
 	}
@@ -238,11 +238,11 @@ public class ErrorMarkerBuilder {
 		return errorMarkerAttribute;
 	}
 
-	public void deleteErrorMarkers(final IResource file) {
-		deleteErrorMarkers(file, type);
+	public void deleteAllErrorMarkersFromFile(final IResource file) {
+		deleteAllErrorMarkersFromFile(file, type);
 	}
 
-	public static void deleteErrorMarkers(final IResource file, final String type) {
+	public static void deleteAllErrorMarkersFromFile(final IResource file, final String type) {
 		if (file.exists()) {
 			final WorkspaceJob job = new WorkspaceJob("Remove error markers from file: " + file.getName()) { //$NON-NLS-1$
 				@Override
@@ -282,6 +282,22 @@ public class ErrorMarkerBuilder {
 			this.type = type;
 		}
 
+	}
+
+	public static ErrorMarkerBuilder createConnectionErrorMarkerBuilder(final String message, final FBNetwork fbNetwork,
+			final String sourceIdentifier, final String destinationIdentifier, final int lineNumber) {
+		final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
+		marker.addLineNumber(lineNumber);
+		marker.addMessage(message);
+	
+		// use a dummy connection to get target identifier
+		final String location = FordiacMarkerHelper.getLocation(fbNetwork) + "." + sourceIdentifier + " -> " //$NON-NLS-1$ //$NON-NLS-2$
+				+ destinationIdentifier;
+		marker.addLocation(location);
+	
+		marker.addTargetIdentifier(LibraryElementFactory.eINSTANCE.createDataConnection());
+		return marker;
+	
 	}
 
 
