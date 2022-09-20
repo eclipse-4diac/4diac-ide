@@ -18,7 +18,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.fbtypeeditor.fbtester,
  org.eclipse.fordiac.ide.test.fb.interpreter,
- org.eclipse.fordiac.ide.fbtypeeditor
+ org.eclipse.fordiac.ide.fbtypeeditor,
+ org.eclipse.fordiac.ide.systemmanagement
 Export-Package: org.eclipse.fordiac.ide.debug,
  org.eclipse.fordiac.ide.debug.basic,
  org.eclipse.fordiac.ide.debug.breakpoint,
