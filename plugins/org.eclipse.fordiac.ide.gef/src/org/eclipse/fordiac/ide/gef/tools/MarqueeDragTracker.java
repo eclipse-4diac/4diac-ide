@@ -150,7 +150,18 @@ public class MarqueeDragTracker extends AbstractTool implements DragTracker {
 		final Collection<EditPart> marqueeSelectedEditParts = new HashSet<>();
 		marqueeSelectedEditParts.addAll(calculatePrimaryMarqueeSelectedEditParts());
 		marqueeSelectedEditParts.addAll(calculateSecondaryMarqueeSelectedEditParts(marqueeSelectedEditParts));
-		return marqueeSelectedEditParts;
+		return removeDuplicateGroupOrSubappContents(marqueeSelectedEditParts);
+	}
+
+	private Collection<EditPart> removeDuplicateGroupOrSubappContents(
+			final Collection<EditPart> marqueeSelectedEditParts) {
+		final Collection<EditPart> clearedSelection = new HashSet<>();
+		for (final EditPart part : marqueeSelectedEditParts) {
+			if (!marqueeSelectedEditParts.contains(part.getParent())) {
+				clearedSelection.add(part);
+			}
+		}
+		return clearedSelection;
 	}
 
 	/** Responsible of calculating those edit parts that should be regarded as directly affected by the current marquee
