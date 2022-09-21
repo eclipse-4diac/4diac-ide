@@ -2279,25 +2279,25 @@ public interface StandardFunctions extends Functions {
 
 	@OnlySupportedBy("4diac FORTE")
 	@Comment("Converts DURATION value in second and returns it as LINT value.")
-	static LIntValue TIME_IN_S_TO_LINT(final AnyDurationValue value) {
+	static <T extends AnyDurationValue> LIntValue TIME_IN_S_TO_LINT(final T value) {
 		return LIntValue.toLIntValue(value.toDuration().toSeconds());
 	}
 
 	@OnlySupportedBy("4diac FORTE")
 	@Comment("Converts DURATION value in millisecond and returns it as LINT value.")
-	static LIntValue TIME_IN_MS_TO_LINT(final AnyDurationValue value) {
+	static <T extends AnyDurationValue> LIntValue TIME_IN_MS_TO_LINT(final T value) {
 		return LIntValue.toLIntValue(value.toDuration().toMillis());
 	}
 
 	@OnlySupportedBy("4diac FORTE")
 	@Comment("Converts DURATION value in microsecond and returns it as LINT value.")
-	static LIntValue TIME_IN_US_TO_LINT(final AnyDurationValue value) {
+	static <T extends AnyDurationValue> LIntValue TIME_IN_US_TO_LINT(final T value) {
 		return LIntValue.toLIntValue(value.toDuration().toNanos() / 1000);
 	}
 
 	@OnlySupportedBy("4diac FORTE")
 	@Comment("Converts DURATION value in nanosecond and returns it as LINT value.")
-	static LIntValue TIME_IN_NS_TO_LINT(final AnyDurationValue value) {
+	static <T extends AnyDurationValue> LIntValue TIME_IN_NS_TO_LINT(final T value) {
 		return LIntValue.toLIntValue(value.toDuration().toNanos());
 	}
 
@@ -2309,43 +2309,43 @@ public interface StandardFunctions extends Functions {
 
 	@OnlySupportedBy("4diac FORTE")
 	@Comment("Converts DURATION value in millisecond and returns it as ULINT value.")
-	static ULIntValue TIME_IN_MS_TO_ULINT(final AnyDurationValue value) {
+	static <T extends AnyDurationValue> ULIntValue TIME_IN_MS_TO_ULINT(final T value) {
 		return ULIntValue.toULIntValue(value.toDuration().toMillis());
 	}
 
 	@OnlySupportedBy("4diac FORTE")
 	@Comment("Converts DURATION value in microsecond and returns it as ULINT value.")
-	static ULIntValue TIME_IN_US_TO_ULINT(final AnyDurationValue value) {
+	static <T extends AnyDurationValue> ULIntValue TIME_IN_US_TO_ULINT(final T value) {
 		return ULIntValue.toULIntValue(value.toDuration().toNanos() / 1000);
 	}
 
 	@OnlySupportedBy("4diac FORTE")
 	@Comment("Converts DURATION value in nanosecond and returns it as ULINT value.")
-	static ULIntValue TIME_IN_NS_TO_ULINT(final AnyDurationValue value) {
+	static <T extends AnyDurationValue> ULIntValue TIME_IN_NS_TO_ULINT(final T value) {
 		return ULIntValue.toULIntValue(value.toDuration().toNanos());
 	}
 
 	@OnlySupportedBy("4diac FORTE")
 	@Comment("Converts DURATION value in second and returns it as LREAL value.")
-	static LRealValue TIME_IN_S_TO_LREAL(final AnyDurationValue value) {
+	static <T extends AnyDurationValue> LRealValue TIME_IN_S_TO_LREAL(final T value) {
 		return LRealValue.toLRealValue(value.toDuration().toNanos() / 1000000000.0);
 	}
 
 	@OnlySupportedBy("4diac FORTE")
 	@Comment("Converts DURATION value in millisecond and returns it as LREAL value.")
-	static LRealValue TIME_IN_MS_TO_LREAL(final AnyDurationValue value) {
+	static <T extends AnyDurationValue> LRealValue TIME_IN_MS_TO_LREAL(final T value) {
 		return LRealValue.toLRealValue(value.toDuration().toNanos() / 1000000.0);
 	}
 
 	@OnlySupportedBy("4diac FORTE")
 	@Comment("Converts DURATION value in microsecond and returns it as LREAL value.")
-	static LRealValue TIME_IN_US_TO_LREAL(final AnyDurationValue value) {
+	static <T extends AnyDurationValue> LRealValue TIME_IN_US_TO_LREAL(final T value) {
 		return LRealValue.toLRealValue(value.toDuration().toNanos() / 1000.0);
 	}
 
 	@OnlySupportedBy("4diac FORTE")
 	@Comment("Converts DURATION value in nanosecond and returns it as LREAL value.")
-	static LRealValue TIME_IN_NS_TO_LREAL(final AnyDurationValue value) {
+	static <T extends AnyDurationValue> LRealValue TIME_IN_NS_TO_LREAL(final T value) {
 		return LRealValue.toLRealValue(value.toDuration().toNanos());
 	}
 
