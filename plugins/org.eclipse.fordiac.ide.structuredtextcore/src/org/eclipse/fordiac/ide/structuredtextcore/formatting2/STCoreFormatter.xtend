@@ -377,26 +377,27 @@ class STCoreFormatter extends AbstractFormatter2 {
 			}
 		}
 
-		if (binaryExpression.op != STBinaryOperator.RANGE) {
-			val region = binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP)
-			if (region.previousHiddenRegion.text.indexOf("\n") === -1) {
-				region.surround[oneSpace]
+		val opRegion = binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP)
+		if (opRegion !== null) {
+			if (binaryExpression.op != STBinaryOperator.RANGE) {
+				if (opRegion.previousHiddenRegion.text.indexOf("\n") === -1) {
+					opRegion.surround[oneSpace]
+				}
 			}
-		}
 
-		if (binaryExpression.op == STBinaryOperator.AMPERSAND) {
-			document.addReplacer(
-				new AbstractTextReplacer(document, binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP)) {
+			if (binaryExpression.op == STBinaryOperator.AMPERSAND) {
+				document.addReplacer(new AbstractTextReplacer(document, opRegion) {
 					override createReplacements(ITextReplacerContext context) {
-						context.addReplacement(region.replaceWith(STBinaryOperator.AND.toString))
+						context.addReplacement(opRegion.replaceWith(STBinaryOperator.AND.toString))
 						return context
 					}
 
 				})
-		} else if (binaryExpression.op == STBinaryOperator.AND) {
-			document.addReplacer(
-				new KeywordCaseTextReplacer(document, binaryExpression.regionFor.feature(ST_BINARY_EXPRESSION__OP)))
+			} else if (binaryExpression.op == STBinaryOperator.AND) {
+				document.addReplacer(new KeywordCaseTextReplacer(document, opRegion))
+			}
 		}
+
 		binaryExpression.left.format
 		binaryExpression.right.format
 	}
@@ -443,9 +444,8 @@ class STCoreFormatter extends AbstractFormatter2 {
 			for (var i = 0; i < commas.length; i++) {
 				val current = commas.get(i)
 				val line = current.lineRegions.get(0)
-				val nextRelevant = i < commas.length - 1
-						? commas.get(i + 1)
-						: featureExpression.regionFor.keyword(STFeatureExpressionAccess.rightParenthesisKeyword_2_2)
+				val nextRelevant = i < commas.length - 1 ? commas.get(i + 1) : featureExpression.regionFor.keyword(
+						STFeatureExpressionAccess.rightParenthesisKeyword_2_2)
 				val l = (nextRelevant.offset + nextRelevant.length - line.offset)
 				if (line == nextRelevant.lineRegions.get(0)) {
 					val toAdd = current.offset - line.offset
@@ -529,8 +529,9 @@ class STCoreFormatter extends AbstractFormatter2 {
 					} else {
 						var lineCount = 0
 						if (region instanceof IHiddenRegionPart) {
-							lineCount = (region as IHiddenRegionPart).previousHiddenPart instanceof IComment ? region.
-								getLineCount() : region.getLineCount() - 1;
+							lineCount = (region as IHiddenRegionPart).previousHiddenPart instanceof IComment
+								? region.getLineCount()
+								: region.getLineCount() - 1;
 						} else
 							lineCount = region.getLineCount() - 1;
 						if (newLineMin !== null && newLineMin > lineCount)
