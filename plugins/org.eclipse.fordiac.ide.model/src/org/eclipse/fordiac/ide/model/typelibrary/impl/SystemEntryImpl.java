@@ -26,6 +26,16 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 
 	@Override
 	public AutomationSystem getSystem() {
+		return getType();
+	}
+
+	@Override
+	public void setSystem(final LibraryElement system) {
+		setType(system);
+	}
+
+	@Override
+	public AutomationSystem getType() {
 		final LibraryElement type = super.getType();
 		if(type instanceof AutomationSystem){
 			return (AutomationSystem)type;
@@ -34,15 +44,27 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 	}
 
 	@Override
-	public void setSystem(final LibraryElement system) {
-		if(system instanceof AutomationSystem){
-			super.setType(system);
+	public void setType(final LibraryElement newType) {
+		if (newType instanceof AutomationSystem) {
+			super.setType(newType);
 		}else{
 			super.setType(null);
 			if(null != type){
 				FordiacLogHelper.logError("tried to set no AutomationSystem as type entry for SystemEntry");//$NON-NLS-1$
 			}
 		}
+	}
+
+	@Override
+	public AutomationSystem getTypeEditable() {
+		// for performance reasons the systemEntry uses only the type and not the type editable
+		return getSystem();
+	}
+
+	@Override
+	public void setTypeEditable(final LibraryElement newTypeEditable) {
+		// for performance reasons the systemEntry uses only the type and not the type editable
+		setSystem(newTypeEditable);
 	}
 
 	@Override

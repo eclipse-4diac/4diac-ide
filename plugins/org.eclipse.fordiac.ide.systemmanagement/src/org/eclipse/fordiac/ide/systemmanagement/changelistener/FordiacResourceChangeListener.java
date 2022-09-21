@@ -186,13 +186,16 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					.findEditor((final IEditorPart editor) -> editor.getEditorInput() instanceof FileEditorInput
 							&& ((FileEditorInput) editor.getEditorInput()).getFile().equals(entry.getFile()));
 
-			if (findEditor == EditorUtils.getCurrentActiveEditor()) {
-				activeEditor = findEditor;
-			} else if (findEditor != null) {
-				changedOpenedDirtyEditors.add(findEditor);
+			if (findEditor != null) {
+				if (findEditor == EditorUtils.getCurrentActiveEditor()) {
+					activeEditor = findEditor;
+				} else {
+					changedOpenedDirtyEditors.add(findEditor);
+				}
 			} else {
 				// no editor is currently open purge any editable model
 				entry.setTypeEditable(null);
+				SystemManager.INSTANCE.notifyListeners();
 			}
 		}
 
