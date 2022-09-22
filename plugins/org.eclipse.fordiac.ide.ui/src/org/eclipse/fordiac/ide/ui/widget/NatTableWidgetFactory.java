@@ -44,6 +44,7 @@ import org.eclipse.nebula.widgets.nattable.grid.GridRegion;
 import org.eclipse.nebula.widgets.nattable.grid.layer.ColumnHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.layer.CompositeLayer;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.ILayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultColumnHeaderStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.painter.NatTableBorderOverlayPainter;
@@ -161,6 +162,23 @@ public final class NatTableWidgetFactory {
 		setNatTableStyle(table);
 
 		return table;
+	}
+
+	public static DataLayer getDataLayer(final NatTable table) {
+		final SelectionLayer selectionLayer = getSelectionLayer(table);
+		if (selectionLayer != null) {
+			return (DataLayer) selectionLayer.getUnderlyingLayerByPosition(0, 0);
+		}
+		return null;
+	}
+
+	public static SelectionLayer getSelectionLayer(final NatTable table) {
+		final ILayer viewportLayer = table.getLayer().getUnderlyingLayerByPosition(1, 1);
+
+		if (viewportLayer != null) {
+			return (SelectionLayer) viewportLayer.getUnderlyingLayerByPosition(0, 0);
+		}
+		return null;
 	}
 
 	private static void setColumnWidths(final DataLayer dataLayer) {

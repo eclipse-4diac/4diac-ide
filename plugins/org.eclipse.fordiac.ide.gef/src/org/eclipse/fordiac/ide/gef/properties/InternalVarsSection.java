@@ -58,7 +58,6 @@ import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
@@ -68,6 +67,7 @@ import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -124,7 +124,7 @@ public class InternalVarsSection extends AbstractSection implements I4diacTableU
 		internalVarsViewer.setLabelProvider(new DataLabelProvider());
 		internalVarsViewer.setCellModifier(new InternalVarsCellModifier());
 
-		buttons.bindToTableViewer(internalVarsViewer, this,
+		buttons.bindToTableViewer(table, this,
 				ref -> new CreateInternalVariableCommand(getType(), getInsertionIndex(), getName(), getDataType()),
 				ref -> new DeleteInternalVariableCommand(getType(), (VarDeclaration) ref),
 				ref -> new ChangeVariableOrderCommand(getType().getInternalVars(), (VarDeclaration) ref, true),
@@ -150,11 +150,17 @@ public class InternalVarsSection extends AbstractSection implements I4diacTableU
 	}
 
 	private VarDeclaration getLastSelectedVariable() {
-		final IStructuredSelection selection = internalVarsViewer.getStructuredSelection();
-		if (selection.isEmpty()) {
-			return null;
+		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
+		if (selectionLayer != null) {
+			final int[] rows = selectionLayer.getFullySelectedRowPositions();
+			if (rows.length > 0) {
+				final DataLayer dataLayer = (DataLayer) selectionLayer.getUnderlyingLayerByPosition(0, 0);
+				final Object rowObject = ((ListDataProvider<?>) dataLayer.getDataProvider())
+						.getRowObject(rows[rows.length - 1]);
+				return ((VarDeclaration) rowObject);
+			}
 		}
-		return (VarDeclaration) selection.toList().get(selection.toList().size() - 1);
+		return null;
 	}
 
 	private static void configureTableLayout(final Table table) {

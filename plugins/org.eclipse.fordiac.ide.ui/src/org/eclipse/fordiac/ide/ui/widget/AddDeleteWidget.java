@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
@@ -23,7 +24,11 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.KeyListener;
 import org.eclipse.swt.layout.GridData;
@@ -127,6 +132,16 @@ public class AddDeleteWidget {
 		bindToTableViewer(viewer, createListener, deleteListener);
 	}
 
+	public void bindToTableViewer(final NatTable table, final CommandExecutor executor,
+			final CreationCommandProvider addCommand, final CommandProvider deleteCommand) {
+
+		final Listener createListener = getAddListener(table, executor, addCommand);
+
+		final Listener deleteListener = getDeleteListener(table, executor, deleteCommand);
+
+		bindToTableViewer(table, createListener, deleteListener);
+	}
+
 	public void bindToTableViewer(final TableViewer viewer, final Listener createListener,
 			final Listener deleteListener) {
 
@@ -153,6 +168,26 @@ public class AddDeleteWidget {
 		});
 	}
 
+	public void bindToTableViewer(final NatTable table, final Listener createListener, final Listener deleteListener) {
+		addCreateListener(createListener);
+		addDeleteListener(deleteListener);
+		table.addListener(SWT.Selection, event -> {
+			final int[] rows = NatTableWidgetFactory.getSelectionLayer(table).getFullySelectedRowPositions();
+			setButtonEnablement(rows.length > 0);
+		});
+
+		table.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(final KeyEvent e) {
+				if ((e.keyCode == SWT.INSERT) && (e.stateMask == 0)) {
+					createListener.handleEvent(null);
+				} else if ((e.character == SWT.DEL) && (e.stateMask == 0)) {
+					deleteListener.handleEvent(null);
+				}
+			}
+		});
+	}
+
 	public static Listener getSelectionListener(final TableViewer viewer, final CommandExecutor executor,
 			final CommandProvider commandProvider) {
 		return ev -> {
@@ -163,12 +198,41 @@ public class AddDeleteWidget {
 		};
 	}
 
+	public static Listener getSelectionListener(final NatTable table, final CommandExecutor executor,
+			final CommandProvider commandProvider) {
+		return ev -> {
+			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
+			final int[] rows = selectionLayer.getFullySelectedRowPositions();
+			final ListDataProvider<?> dataProvider = (ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(table)
+					.getDataProvider();
+
+			final List<Object> rowObjects = new ArrayList<>();
+			for (final int row : rows) {
+				rowObjects.add(dataProvider.getRowObject(row));
+			}
+			if (!rowObjects.isEmpty()) {
+				executeCompoundCommandForList(table, rowObjects, executor, commandProvider);
+				for (final int row : rows) {
+					selectionLayer.selectRow(0, row - 1, false, true);
+				}
+			}
+		};
+	}
+
 	protected static void executeCompoundCommandForList(final TableViewer viewer, final List<Object> selection,
 			final CommandExecutor executor, final CommandProvider commandProvider) {
 		final CompoundCommand cmd = new CompoundCommand();
 		selection.stream().forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
 		executor.executeCommand(cmd);
 		viewer.refresh();
+	}
+
+	protected static void executeCompoundCommandForList(final NatTable table, final List<Object> selection,
+			final CommandExecutor executor, final CommandProvider commandProvider) {
+		final CompoundCommand cmd = new CompoundCommand();
+		selection.stream().forEach(elem -> cmd.add(commandProvider.getCommand(elem)));
+		executor.executeCommand(cmd);
+		table.refresh();
 	}
 
 	public static Listener getDeleteListener(final TableViewer viewer, final CommandExecutor executor,
@@ -191,6 +255,23 @@ public class AddDeleteWidget {
 		};
 	}
 
+	public static Listener getDeleteListener(final NatTable table, final CommandExecutor executor,
+			final CommandProvider commandProvider) {
+		return ev -> {
+			final int[] rows = NatTableWidgetFactory.getSelectionLayer(table).getFullySelectedRowPositions();
+			final ListDataProvider<?> dataProvider = (ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(table)
+					.getDataProvider();
+			final List<Object> rowObjects = new ArrayList<>();
+			for (final int row : rows) {
+				rowObjects.add(dataProvider.getRowObject(row));
+			}
+			if (!rowObjects.isEmpty()) {
+				executeCompoundCommandForList(table, rowObjects, executor,
+						commandProvider);
+			}
+		};
+	}
+
 	private static Listener getAddListener(final TableViewer viewer, final CommandExecutor executor,
 			final CreationCommandProvider commandProvider) {
 		return ev -> {
@@ -201,6 +282,30 @@ public class AddDeleteWidget {
 			viewer.setSelection(selection);
 			viewer.getTable().forceFocus();
 			viewer.editElement(cmd.getCreatedElement(), EDIT_COLUMN);
+		};
+	}
+
+	private static Listener getAddListener(final NatTable table, final CommandExecutor executor,
+			final CreationCommandProvider commandProvider) {
+		return ev -> {
+			Object refObject = null;
+			int[] rows = null;
+			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
+			if (selectionLayer != null) {
+				rows = selectionLayer.getFullySelectedRowPositions();
+				if (rows.length > 0) {
+					final ListDataProvider<?> dataProvider = (ListDataProvider<?>) NatTableWidgetFactory
+							.getDataLayer(table).getDataProvider();
+					refObject = dataProvider.getRowObject(rows[rows.length - 1]);
+				}
+			}
+
+			final CreationCommand cmd = commandProvider.getCommand(refObject);
+			executor.executeCommand((Command) cmd);
+			table.refresh();
+			if (selectionLayer != null && rows != null && rows.length > 0) {
+				selectionLayer.selectRow(0, rows[rows.length - 1] + 1, false, false);
+			}
 		};
 	}
 

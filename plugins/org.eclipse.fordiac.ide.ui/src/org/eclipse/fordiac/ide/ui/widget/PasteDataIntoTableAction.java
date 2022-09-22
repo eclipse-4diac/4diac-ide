@@ -26,8 +26,7 @@ public class PasteDataIntoTableAction implements IKeyAction {
 		clipboard.dispose();
 		final String[][] content = parseContent(clipboardContents);
 
-		final SelectionLayer selectionLayer = (SelectionLayer) natTable.getLayer().getUnderlyingLayerByPosition(0, 1)
-				.getUnderlyingLayerByPosition(0, 0);
+		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
 		final List<Rectangle> ranges = selectionLayer.getSelectionModel().getSelections().stream().distinct()
 				.collect(Collectors.toList());
 
