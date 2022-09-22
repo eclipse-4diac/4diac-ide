@@ -39,13 +39,15 @@ public class PasteDataIntoTableAction implements IKeyAction {
 
 		final int startingRow = ranges.get(0).y;
 		final int startingColumn = ranges.get(0).x;
-		for (final ILayerCell cell : selectionLayer.getSelectedCells()) {
-			final int arrayRowIndex = cell.getRowIndex() - startingRow;
-			final int arrayColumnIndex = cell.getColumnIndex() - startingColumn;
-
-			if (arrayRowIndex < content.length && arrayColumnIndex < content[0].length) {
-				selectionLayer.doCommand(new UpdateDataCommand(selectionLayer, cell.getColumnIndex(),
-						cell.getRowIndex(), content[arrayRowIndex][arrayColumnIndex]));
+		for(int r = 0; r < content.length; r++) {
+			for(int c = 0; c < content[0].length; c++) {
+				final ILayerCell cell = selectionLayer.getCellByPosition(startingColumn + c, startingRow + r);
+				if (cell != null) {
+					selectionLayer.doCommand(new UpdateDataCommand(selectionLayer, cell.getColumnIndex(),
+							cell.getRowIndex(), content[r][c]));
+					selectionLayer.selectRegion(startingColumn, startingRow, cell.getColumnIndex() - startingColumn + 1,
+							cell.getRowIndex() - startingRow + 1);
+				}
 			}
 		}
 	}
