@@ -32,21 +32,30 @@ import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.config.DefaultNatTableStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.copy.command.CopyDataCommandHandler;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.action.KeyEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.action.MouseEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.command.DeleteSelectionCommandHandler;
 import org.eclipse.nebula.widgets.nattable.edit.config.DefaultEditConfiguration;
-import org.eclipse.nebula.widgets.nattable.edit.editor.ICellEditor;
 import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.grid.GridRegion;
+import org.eclipse.nebula.widgets.nattable.grid.data.DefaultCornerDataProvider;
+import org.eclipse.nebula.widgets.nattable.grid.data.DefaultRowHeaderDataProvider;
 import org.eclipse.nebula.widgets.nattable.grid.layer.ColumnHeaderLayer;
+import org.eclipse.nebula.widgets.nattable.grid.layer.CornerLayer;
+import org.eclipse.nebula.widgets.nattable.grid.layer.GridLayer;
+import org.eclipse.nebula.widgets.nattable.grid.layer.RowHeaderLayer;
+import org.eclipse.nebula.widgets.nattable.grid.layer.config.DefaultGridLayerConfiguration;
+import org.eclipse.nebula.widgets.nattable.grid.layer.config.DefaultRowStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.layer.CompositeLayer;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.ILayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultColumnHeaderStyleConfiguration;
+import org.eclipse.nebula.widgets.nattable.layer.config.DefaultRowHeaderLayerConfiguration;
+import org.eclipse.nebula.widgets.nattable.layer.config.DefaultRowHeaderStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.painter.NatTableBorderOverlayPainter;
 import org.eclipse.nebula.widgets.nattable.painter.cell.TextPainter;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
@@ -84,7 +93,7 @@ public final class NatTableWidgetFactory {
 	public static final String DEFAULT_CELL = "DEFAULT_CELL"; //$NON-NLS-1$
 	public static final String ERROR_CELL = "ERROR_CELL"; //$NON-NLS-1$
 	public static final String DISABLED_CELL = "DISABLED_CELL"; //$NON-NLS-1$ $
-	public static final String TYPE_CELL = "TYPE_CELL"; //$NON-NLS-1$
+	public static final String PROPOSAL_CELL = "PROPOSAL_CELL"; //$NON-NLS-1$
 	public static final String DISABLED_HEADER = "DISABLED_HEADER"; //$NON-NLS-1$
 
 	private static final char[] ACTIVATION_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
@@ -100,28 +109,26 @@ public final class NatTableWidgetFactory {
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider, final IEditableRule editableRule) {
-		return createNatTable(parent, dataLayer, headerDataProvider, editableRule, null, -1);
+		return createNatTable(parent, dataLayer, headerDataProvider, editableRule, null, null);
 	}
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider, final IEditableRule editableRule,
-			final Map<String, List<String>> proposals, final int proposalTextFieldColumn) {
+			final Map<String, List<String>> proposals,
+			final I4diacNatTableUtil section) {
 
 		setColumnWidths(dataLayer);
-		if (proposals != null) {
-			addTypeLabel(dataLayer, proposalTextFieldColumn);
-		}
 
 		final SelectionLayer selectionLayer = new SelectionLayer(dataLayer);
 		selectionLayer.addConfiguration(new DefaultSelectionBindings() {
 			@Override
 			public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
-				super.configureUiBindings(uiBindingRegistry);
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'v'),
-						new PasteDataIntoTableAction());
+						new PasteDataIntoTableAction(section));
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'), new CutDataFromTableAction());
 			}
 		});
+		selectionLayer.registerCommandHandler(new CopyDataCommandHandler(selectionLayer));
 		selectionLayer.registerCommandHandler(new DeleteSelectionCommandHandler(selectionLayer));
 		final ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
 
@@ -129,12 +136,12 @@ public final class NatTableWidgetFactory {
 		final ColumnHeaderLayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, viewportLayer,
 				selectionLayer);
 
-		final CompositeLayer gridLayer = new CompositeLayer(1, 2);
-		gridLayer.setChildLayer(GridRegion.COLUMN_HEADER, columnHeaderLayer, 0, 0);
-		gridLayer.setChildLayer(GridRegion.BODY, viewportLayer, 0, 1);
+		final CompositeLayer compositeLayer = new CompositeLayer(1, 2);
+		compositeLayer.setChildLayer(GridRegion.COLUMN_HEADER, columnHeaderLayer, 0, 0);
+		compositeLayer.setChildLayer(GridRegion.BODY, viewportLayer, 0, 1);
 
-		gridLayer.addConfiguration(new DefaultEditConfiguration());
-		gridLayer.addConfiguration(new AbstractUiBindingConfiguration() {
+		compositeLayer.addConfiguration(new DefaultEditConfiguration());
+		compositeLayer.addConfiguration(new AbstractUiBindingConfiguration() {
 			@Override
 			public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.NONE, SWT.SPACE), new KeyEditAction());
@@ -145,16 +152,101 @@ public final class NatTableWidgetFactory {
 						new MouseEditAction());
 			}
 		});
+		compositeLayer.addConfiguration(new AbstractRegistryConfiguration() {
+			@Override
+			public void configureRegistry(final IConfigRegistry configRegistry) {
+				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE, editableRule);
+				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR,
+						new ButtonTextCellEditor(proposals), DisplayMode.EDIT, PROPOSAL_CELL);
+			}
+		});
+
+		addEditDisabledLabel(dataLayer, editableRule, false);
+		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
+
+		final NatTable table = new NatTable(parent, compositeLayer, false);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
+		setNatTableStyle(table);
+
+		return table;
+	}
+
+
+	public static NatTable createRowNatTable(final Composite parent, final DataLayer bodyDataLayer,
+			final IDataProvider columnHeaderProvider, final IEditableRule editableRule,
+			final Map<String, List<String>> proposals, final I4diacNatTableUtil section) {
+
+		setColumnWidths(bodyDataLayer);
+
+		final SelectionLayer selectionLayer = new SelectionLayer(bodyDataLayer);
+		selectionLayer.addConfiguration(new DefaultSelectionBindings() {
+			@Override
+			public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
+				uiBindingRegistry.unregisterKeyBinding(new KeyEventMatcher(SWT.MOD1, 'c'));
+				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'c'), new CopyDataFromTableAction());
+				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'v'),
+						new PasteDataIntoTableAction(section));
+				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'), new CutDataFromTableAction());
+			}
+		});
+		selectionLayer.registerCommandHandler(new CopyDataCommandHandler(selectionLayer));
+		selectionLayer.registerCommandHandler(new DeleteSelectionCommandHandler(selectionLayer));
+		final ViewportLayer viewportLayer = new ViewportLayer(selectionLayer);
+
+		final DataLayer columnHeaderDataLayer = new DataLayer(columnHeaderProvider);
+		final ColumnHeaderLayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, viewportLayer,
+				selectionLayer);
+
+		final IDataProvider rowHeaderProvider = new DefaultRowHeaderDataProvider(bodyDataLayer.getDataProvider());
+		final DataLayer rowHeaderDataLayer = new DataLayer(rowHeaderProvider, 25, DataLayer.DEFAULT_ROW_HEIGHT);
+		final RowHeaderLayer rowHeaderLayer = new RowHeaderLayer(rowHeaderDataLayer, viewportLayer, selectionLayer,
+				false);
+		rowHeaderLayer.addConfiguration(new DefaultRowHeaderLayerConfiguration() {
+			@Override
+			protected void addRowHeaderUIBindings() {
+				// empty to remove resize cursor
+			}
+		});
+
+		final DataLayer cornerDataLayer = new DataLayer(
+				new DefaultCornerDataProvider(columnHeaderProvider, rowHeaderProvider));
+		final CornerLayer cornerLayer = new CornerLayer(cornerDataLayer, rowHeaderLayer, columnHeaderLayer);
+
+		final GridLayer gridLayer = new GridLayer(viewportLayer, columnHeaderLayer, rowHeaderLayer, cornerLayer, false);
+		gridLayer.addConfiguration(new DefaultGridLayerConfiguration(gridLayer) {
+			@Override
+			protected void addEditingUIConfig() {
+				addConfiguration(new AbstractUiBindingConfiguration() {
+					@Override
+					public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
+						uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.NONE, SWT.SPACE),
+								new KeyEditAction());
+						uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.NONE, SWT.F2),
+								new KeyEditAction());
+						uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(), new KeyEditAction());
+						uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(SWT.MOD2),
+								new KeyEditAction());
+						uiBindingRegistry.registerDoubleClickBinding(new CellEditorMouseEventMatcher(GridRegion.BODY),
+								new MouseEditAction());
+					}
+				});
+			}
+
+			@Override
+			protected void addAlternateRowColoringConfig(final CompositeLayer gridLayer) {
+				addConfiguration(new DefaultRowStyleConfiguration());
+			}
+		});
 		gridLayer.addConfiguration(new AbstractRegistryConfiguration() {
 			@Override
 			public void configureRegistry(final IConfigRegistry configRegistry) {
 				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE, editableRule);
 				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR,
-						createButtonEditor(proposals), DisplayMode.EDIT, TYPE_CELL);
+						new ButtonTextCellEditor(proposals), DisplayMode.EDIT, PROPOSAL_CELL);
 			}
 		});
 
-		addEditDisabledLabel(dataLayer, editableRule, false);
+		addEditDisabledLabel(bodyDataLayer, editableRule, false);
 		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
 
 		final NatTable table = new NatTable(parent, gridLayer, false);
@@ -162,6 +254,7 @@ public final class NatTableWidgetFactory {
 		setNatTableStyle(table);
 
 		return table;
+
 	}
 
 	public static DataLayer getDataLayer(final NatTable table) {
@@ -203,18 +296,6 @@ public final class NatTableWidgetFactory {
 		}
 	}
 
-	private static void addTypeLabel(final DataLayer dataLayer, final int proposalTextFieldColumn) {
-		final IConfigLabelAccumulator dataLayerLabelAccumulator = dataLayer.getConfigLabelAccumulator();
-		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			if (dataLayerLabelAccumulator != null) {
-				dataLayerLabelAccumulator.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-			}
-			if (columnPosition == proposalTextFieldColumn) {
-				configLabels.addLabel(TYPE_CELL);
-			}
-		});
-	}
-
 	private static void addEditDisabledLabel(final DataLayer dataLayer, final IEditableRule editableRule,
 			final boolean isHeader) {
 		final IConfigLabelAccumulator dataLayerLabelAccumulator = dataLayer.getConfigLabelAccumulator();
@@ -235,7 +316,8 @@ public final class NatTableWidgetFactory {
 	private static void setNatTableStyle(final NatTable table) {
 		final DefaultNatTableStyleConfiguration tableStyle = new DefaultNatTableStyleConfiguration();
 		final DefaultSelectionStyleConfiguration selectionStyle = new DefaultSelectionStyleConfiguration();
-		final DefaultColumnHeaderStyleConfiguration headerStyle = new DefaultColumnHeaderStyleConfiguration();
+		final DefaultColumnHeaderStyleConfiguration columnHeaderStyle = new DefaultColumnHeaderStyleConfiguration();
+		final DefaultRowHeaderStyleConfiguration rowHeaderStyle = new DefaultRowHeaderStyleConfiguration();
 
 		tableStyle.bgColor = GUIHelper.COLOR_WHITE;
 		tableStyle.cellPainter = new TextPainter();
@@ -246,17 +328,22 @@ public final class NatTableWidgetFactory {
 		selectionStyle.selectedHeaderFont = GUIHelper.DEFAULT_FONT;
 		selectionStyle.selectionFont = GUIHelper.DEFAULT_FONT;
 
-		headerStyle.font = GUIHelper.DEFAULT_FONT;
-		headerStyle.bgColor = GUIHelper.COLOR_WHITE;
-		headerStyle.renderGridLines = Boolean.TRUE;
-		headerStyle.cellPainter = new TextPainter();
+		columnHeaderStyle.font = GUIHelper.DEFAULT_FONT;
+		columnHeaderStyle.bgColor = GUIHelper.COLOR_WHITE;
+		columnHeaderStyle.renderGridLines = Boolean.TRUE;
+		columnHeaderStyle.cellPainter = new TextPainter();
+
+		rowHeaderStyle.font = GUIHelper.DEFAULT_FONT;
+		rowHeaderStyle.bgColor = GUIHelper.COLOR_WHITE;
+		rowHeaderStyle.cellPainter = new TextPainter();
 
 		table.setBackground(GUIHelper.COLOR_WHITE);
 		table.addOverlayPainter(new NatTableBorderOverlayPainter());
 
 		table.addConfiguration(tableStyle);
 		table.addConfiguration(selectionStyle);
-		table.addConfiguration(headerStyle);
+		table.addConfiguration(columnHeaderStyle);
+		table.addConfiguration(rowHeaderStyle);
 		table.addConfiguration(new AbstractRegistryConfiguration() {
 			@Override
 			public void configureRegistry(final IConfigRegistry configRegistry) {
@@ -289,14 +376,6 @@ public final class NatTableWidgetFactory {
 		});
 
 		table.configure();
-	}
-
-	private static ICellEditor createButtonEditor(final Map<String, List<String>> proposals) {
-		if (proposals == null) {
-			return new TextCellEditor();
-		}
-
-		return new ButtonTextCellEditor(proposals);
 	}
 
 	private static class ButtonTextCellEditor extends TextCellEditor {
