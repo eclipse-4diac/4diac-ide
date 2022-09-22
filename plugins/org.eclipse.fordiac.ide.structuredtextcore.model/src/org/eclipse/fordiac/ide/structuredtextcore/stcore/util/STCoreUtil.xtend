@@ -255,7 +255,7 @@ final class STCoreUtil {
 			STBinaryExpression case op.logical:
 				expectedType.equivalentAnyBitType
 			STBinaryExpression case op.comparison:
-				expression === left ? right.declaredResultType : left.declaredResultType
+				expression === left ? right?.declaredResultType : left.declaredResultType
 			STAssignmentStatement:
 				expression === left ? right.declaredResultType : left.declaredResultType
 			STIfStatement,
