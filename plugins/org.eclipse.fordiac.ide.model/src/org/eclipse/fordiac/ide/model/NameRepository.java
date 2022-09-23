@@ -146,7 +146,7 @@ public final class NameRepository {
 			return false;
 		}
 
-		if (getRefNames(element).contains(nameProposal)) {
+		if (getRefNames(element).parallelStream().anyMatch(name -> name.equalsIgnoreCase(nameProposal))) {
 			ErrorMessenger
 			.popUpErrorMessage(MessageFormat.format(Messages.NameRepository_NameAlreadyExists, nameProposal));
 			return false;
