@@ -57,6 +57,7 @@ public class StructUpdateDialog extends MessageDialog {
 	private boolean selectAll = true;
 
 	private Set<StructManipulator> updatedTypes;
+	private TableViewer viewer;
 
 	public StructUpdateDialog(final Shell parentShell, final String dialogTitle, final Image dialogTitleImage,
 			final String dialogMessage, final int dialogImageType, final String[] dialogButtonLabels,
@@ -84,12 +85,22 @@ public class StructUpdateDialog extends MessageDialog {
 			final Label warningLabel = LabelFactory.newLabel(NONE).create(searchResArea);
 			warningLabel.setText("No additional function blocks or types have been affected by this change!"); //$NON-NLS-1$
 		} else {
-			final TableViewer viewer = createTableViewer(searchResArea);
+			createfilterButtons(parent);
+
+			viewer = createTableViewer(searchResArea);
 			configureTableViewer(viewer);
 
 			viewer.setInput(result.toArray());
 		}
 		return parent;
+	}
+
+	protected void createfilterButtons(final Composite parent) {
+		// Override this method to add filter buttons
+	}
+
+	public void refresh() {
+		viewer.setInput(performStructSearch());
 	}
 
 	protected List<INamedElement> performStructSearch() {
