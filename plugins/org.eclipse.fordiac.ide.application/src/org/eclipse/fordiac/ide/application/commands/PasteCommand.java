@@ -215,6 +215,12 @@ public class PasteCommand extends Command {
 
 		// copy content of Groups
 		if (element instanceof Group) {
+			((Group) element).getFbNetwork().getEventConnections().forEach(con -> {
+				connectionsToCopy.add(new ConnectionReference(con));
+			});
+			((Group) element).getFbNetwork().getDataConnections().forEach(con -> {
+				connectionsToCopy.add(new ConnectionReference(con));
+			});
 			for (final FBNetworkElement groupElement : ((Group) element).getGroupElements()) {
 				((Group) copiedElement).getGroupElements().add(copyAndCreateFB(groupElement, true));
 			}
