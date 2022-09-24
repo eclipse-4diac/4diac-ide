@@ -40,15 +40,18 @@ public class GroupFigure extends Figure {
 		createFigure();
 	}
 
-	protected void createFigure() {
+	private void createFigure() {
 		createMainFigure();
 		createCommentFigure();
 
 		mainFigure.add(commentFigure, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 
 		final GridLayout rootLayout = new GridLayout(1, false);
-		rootLayout.verticalSpacing = 0;
+		rootLayout.verticalSpacing = -1;  // this brings a slight overlap between name and main area to avoid drawing
+										  // artifacts on certain scaling factors
 		rootLayout.horizontalSpacing = 0;
+		rootLayout.marginHeight = 0;
+		rootLayout.marginWidth = 0;
 		setLayoutManager(rootLayout);
 		add(mainFigure, new GridData(GridData.FILL_HORIZONTAL | GridData.FILL_VERTICAL));
 
@@ -81,6 +84,7 @@ public class GroupFigure extends Figure {
 		final GridLayout nameLayout = new GridLayout(1, false);
 		nameLayout.verticalSpacing = 0;
 		nameLayout.horizontalSpacing = 0;
+		nameLayout.marginHeight = 0;
 		nameFigure = new BorderedRoundedRectangle();
 		nameFigure.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 		nameFigure.setOutline(false);
