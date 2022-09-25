@@ -108,8 +108,9 @@
          point="org.eclipse.ui.views">
       <view
             class="org.eclipse.fordiac.ide.debug.ui.view.FBDebugView"
+            icon="fordiacimage://ICON_FB"
             id="org.eclipse.fordiac.ide.debug.ui.view.FBDebugView"
-            name="FBDebugView"
+            name="FB Debug"
             restorable="true">
       </view>
    </extension>

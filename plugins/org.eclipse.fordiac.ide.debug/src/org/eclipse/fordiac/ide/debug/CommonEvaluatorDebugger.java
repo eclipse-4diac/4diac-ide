@@ -273,7 +273,9 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 				if (entry.getKey().getState() != Thread.State.TERMINATED) {
 					return false;
 				}
-				entry.getValue().fireTerminateEvent();
+				if (DebugPlugin.getDefault() != null) {
+					entry.getValue().fireTerminateEvent();
+				}
 				return true;
 			});
 			// notify dead group or reschedule

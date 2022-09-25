@@ -12,24 +12,27 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view;
 
-import java.util.List;
-
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.contexts.DebugContextEvent;
 import org.eclipse.debug.ui.contexts.IDebugContextListener;
 import org.eclipse.draw2d.ColorConstants;
-import org.eclipse.draw2d.ScalableFreeformLayeredPane;
+import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.FreeformViewport;
+import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.RangeModel;
+import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugElement;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
 import org.eclipse.gef.KeyStroke;
 import org.eclipse.gef.MouseWheelHandler;
 import org.eclipse.gef.MouseWheelZoomHandler;
+import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
+import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
@@ -37,11 +40,11 @@ import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.layout.LayoutConstants;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
@@ -54,16 +57,8 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 
 	@Override
 	public void createPartControl(final Composite parent) {
-		GridLayoutFactory.fillDefaults().numColumns(NUM_COLUMNS).margins(LayoutConstants.getMargins())
-		.generateLayout(parent);
-
-		final Composite composite = new Composite(parent, SWT.NONE);
-		GridLayoutFactory.fillDefaults().numColumns(NUM_COLUMNS).margins(LayoutConstants.getMargins())
-		.generateLayout(composite);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(composite);
-
-		createGraphicalViewer(composite);
-		setTitleImage(FordiacImage.ICON_BASIC_FB.getImage());
+		GridLayoutFactory.fillDefaults().numColumns(NUM_COLUMNS).margins(0, 0).generateLayout(parent);
+		createGraphicalViewer(parent);
 	}
 
 	private void createGraphicalViewer(final Composite parent) {
@@ -101,30 +96,20 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 		return new ScalableFreeformRootEditPart() {
 
 			@Override
-			protected ScalableFreeformLayeredPane createScaledLayers() {
-				final ScalableFreeformLayeredPane layers = new ScalableFreeformLayeredPane();
-				// Removed the grid
-				layers.add(getPrintableLayers(), PRINTABLE_LAYERS);
-				// TODO: layers.add(new FeedbackLayer(), SCALED_FEEDBACK_LAYER);
-				return layers;
+			protected IFigure createFigure() {
+				final IFigure rootFigure = super.createFigure();
+				final GridLayer grid = (GridLayer) getLayer(GRID_LAYER);
+				if (grid != null) {
+					// it does not make sense to have a grid in the interface layer so hide it
+					grid.setVisible(false);
+				}
+				return rootFigure;
 			}
 
 			@Override
 			protected void refreshGridLayer() {
 				// No grid
 			}
-
-			// This is to overwrite the comments + add buttons to the viewer
-			@Override
-			protected List getModelChildren() {
-				return super.getModelChildren();
-			}
-
-			@Override
-			protected void refreshChildren() {
-				super.refreshChildren();
-			}
-
 		};
 	}
 
@@ -167,18 +152,20 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 		}
 	}
 
-	/** Updates actions and sets the viewer input when a context is activated.
-	 *
-	 * @param selection New selection to activate. */
-	protected void contextActivated(final ISelection selection) {
+	private void contextActivated(final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			final Object source = ((IStructuredSelection) selection).getFirstElement();
 			final FBType type = getFBTypeFromDebugContext(source);
 
 			if (!isViewerContent(type)) {
-				viewer.setContents(type);
+				setContents(type);
 			}
 		}
+	}
+
+	private void setContents(final FBType type) {
+		viewer.setContents(type);
+		setScrollPosition();
 	}
 
 	private boolean isViewerContent(final FBType type) {
@@ -196,6 +183,33 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 			return getFBTypeFromDebugContext(((EvaluatorDebugElement) source).getDebugTarget());
 		}
 		return null;
+	}
+
+	private void setScrollPosition() {
+		if (viewer.getControl() instanceof FigureCanvas) {
+			Display.getDefault().asyncExec(() -> {
+				final FigureCanvas canvas = (FigureCanvas) viewer.getControl();
+				if (canvas != null && !canvas.isDisposed()) {
+					viewer.flush();
+					if (viewer.getSelectedEditParts().isEmpty()) {
+						final Point scrollPos = getInitialScrollPos(viewer);
+						canvas.scrollTo(scrollPos.x, scrollPos.y);
+					}
+				}
+			});
+		}
+	}
+
+	private static Point getInitialScrollPos(final GraphicalViewer viewer) {
+		final FreeformGraphicalRootEditPart rootEditPart = (FreeformGraphicalRootEditPart) viewer.getRootEditPart();
+		final FreeformViewport rootviewPort = (FreeformViewport) rootEditPart.getFigure();
+		return new Point(calculateCenterScrollPos(rootviewPort.getHorizontalRangeModel()),
+				calculateCenterScrollPos(rootviewPort.getVerticalRangeModel()));
+	}
+
+	private static int calculateCenterScrollPos(final RangeModel rangeModel) {
+		final int center = (rangeModel.getMaximum() + rangeModel.getMinimum()) / 2;
+		return center - rangeModel.getExtent() / 2;
 	}
 
 }
