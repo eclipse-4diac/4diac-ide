@@ -34,27 +34,5 @@
             debugModel="org.eclipse.fordiac.ide.debug.model"
             delegateClass="org.eclipse.fordiac.ide.debug.EvaluatorWatchExpressionDelegate">
       </watchExpressionDelegate>
-   </extension>
-   <extension
-         point="org.eclipse.ui.views">
-      <view
-            class="org.eclipse.fordiac.ide.debug.view.FBDebugView"
-            id="org.eclipse.fordiac.ide.debug.view.FBDebugView"
-            name="FBDebugView"
-            restorable="true">
-      </view>
-   </extension>
-   <extension
-         point="org.eclipse.ui.perspectiveExtensions">
-      <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
-         <view
-               id="org.eclipse.fordiac.ide.debug.view.FBDebugView"
-               minimized="false"
-               ratio="0.75f"
-               relationship="bottom"
-               relative="org.eclipse.ui.navigator.ProjectExplorer">
-         </view>
-      </perspectiveExtension>
-   </extension>
-
+   </extension> 
 </plugin>

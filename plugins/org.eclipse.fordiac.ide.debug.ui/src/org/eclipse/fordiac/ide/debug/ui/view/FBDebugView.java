@@ -10,7 +10,7 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.debug.view;
+package org.eclipse.fordiac.ide.debug.ui.view;
 
 import java.util.ArrayList;
 import java.util.List;
