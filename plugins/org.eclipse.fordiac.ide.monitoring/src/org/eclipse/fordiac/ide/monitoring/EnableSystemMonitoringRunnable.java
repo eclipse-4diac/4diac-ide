@@ -66,6 +66,8 @@ class EnableSystemMonitoringRunnable implements IRunnableWithProgress {
 
 	private void addWatches(final IProgressMonitor monitor) {
 		monitor.subTask("Adding the watches");
+		// update the port string mapping before reenabling the watches
+		systemMonitoringData.updatePortStringMapping();
 		for (final MonitoringBaseElement element : systemMonitoringData.getMonitoredElements()) {
 			if (monitor.isCanceled()) {
 				break;
