@@ -21,7 +21,6 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugElement;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -82,7 +81,7 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 		viewer.getControl().setBackground(ColorConstants.listBackground);
 		final ScalableFreeformRootEditPart root = createRootEditPart();
 		viewer.setRootEditPart(root);
-		viewer.setEditPartFactory(new FBInterfaceEditPartFactory(null, null));
+		viewer.setEditPartFactory(new FBDebugViewEditPartFactory());
 		viewer.setContextMenu(new FordiacContextMenuProvider(viewer, root.getZoomManager(), getActionRegistry()));
 		viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
 		final KeyHandler viewerKeyHandler = new GraphicalViewerKeyHandler(viewer).setParent(getCommonKeyHandler());
