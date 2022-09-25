@@ -22,9 +22,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.gef,
  org.eclipse.fordiac.ide.gef,
- org.eclipse.fordiac.ide.test.fb.interpreter,
  org.eclipse.fordiac.ide.fbtypeeditor,
- org.eclipse.fordiac.ide.systemmanagement
+ org.eclipse.fordiac.ide.systemmanagement,
+ org.eclipse.fordiac.ide.model.ui
 Export-Package: org.eclipse.fordiac.ide.debug.ui,
  org.eclipse.fordiac.ide.debug.ui.basic,
  org.eclipse.fordiac.ide.debug.ui.breakpoint,
