@@ -260,7 +260,6 @@ public final class Messages extends NLS {
 	public static String LinkConstraints_STATUSMessage_NotCompatible;
 	public static String ConnectingIncompatibleInterfaceTypes;
 
-	public static String UpdateFBTypeCommand_wrong_type;
 	public static String UpdateFBTypeCommand_type_mismatch;
 
 
