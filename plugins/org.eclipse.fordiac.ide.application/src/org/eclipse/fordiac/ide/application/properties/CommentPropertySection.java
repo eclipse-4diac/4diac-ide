@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -167,7 +166,7 @@ public class CommentPropertySection extends AbstractSection {
 
 			if (columnPosition == INITIAL_VALUE && !InitialValueHelper.hasInitalValue(rowItem)
 					|| columnPosition == COMMENT && defaultComment != null
-							&& rowItem.getComment().equals(defaultComment)) {
+					&& rowItem.getComment().equals(defaultComment)) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
 			}
 		});
@@ -206,13 +205,7 @@ public class CommentPropertySection extends AbstractSection {
 
 	@Override
 	protected Object getInputType(final Object input) {
-		if (input instanceof EditPart) {
-			return ((EditPart) input).getModel();
-		}
-		if (input instanceof FBNetworkElement) {
-			return input;
-		}
-		return null;
+		return InstanceSectionFilter.getFBNetworkElementFromSelectedElement(input);
 	}
 
 	@Override

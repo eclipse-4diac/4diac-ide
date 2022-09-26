@@ -106,6 +106,12 @@
                tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab">
          </propertySection>
          <propertySection
+            class="org.eclipse.fordiac.ide.application.properties.GroupPropertySection"
+            filter="org.eclipse.fordiac.ide.application.properties.GroupSectionFilter"
+            id="org.eclipse.fordiac.ide.fbnet.properties.GroupPropertySection"
+            tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab">
+      	 </propertySection>
+         <propertySection
                class="org.eclipse.fordiac.ide.gef.properties.ConnectionSection"
                enablesFor="1"
                filter="org.eclipse.fordiac.ide.application.properties.ConnectionFilter"
