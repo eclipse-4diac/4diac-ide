@@ -260,6 +260,7 @@ public enum SystemManager {
 		system.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
 		final SystemExporter systemExporter = new SystemExporter(system);
 		systemExporter.saveSystem(file);
+		system.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp());
 	}
 
 	public synchronized AutomationSystem getSystem(final IFile systemFile) {
