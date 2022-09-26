@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.formatting2
 
 import com.google.inject.Inject
+import java.util.ArrayList
 import java.util.regex.Pattern
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression
@@ -22,6 +23,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpre
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
@@ -63,14 +65,12 @@ import org.eclipse.xtext.formatting2.internal.WhitespaceReplacer
 import org.eclipse.xtext.formatting2.regionaccess.IComment
 import org.eclipse.xtext.formatting2.regionaccess.IHiddenRegion
 import org.eclipse.xtext.formatting2.regionaccess.IHiddenRegionPart
+import org.eclipse.xtext.formatting2.regionaccess.ISemanticRegion
 import org.eclipse.xtext.formatting2.regionaccess.ITextRegionAccess
 import org.eclipse.xtext.formatting2.regionaccess.ITextSegment
 import org.eclipse.xtext.grammaranalysis.impl.GrammarElementTitleSwitch
 
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage.Literals.*
-import org.eclipse.xtext.formatting2.regionaccess.ISemanticRegion
-import java.util.ArrayList
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 
 class STCoreFormatter extends AbstractFormatter2 {
 
@@ -85,6 +85,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	/** Formats the STVarDeclarationBlocks */
 	def dispatch void format(STVarDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
+		varDeclarationBlock.regionFor.keyword(STVarDeclarationBlockAccess.VARKeyword_1).prepend[setNewLines(1, 1, 2)]
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
 				oneSpace
@@ -100,11 +101,11 @@ class STCoreFormatter extends AbstractFormatter2 {
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
-		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
 	/** Formats the STVarTempDeclarationBlocks */
 	def dispatch void format(STVarTempDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
+		varDeclarationBlock.regionFor.keyword(STVarTempDeclarationBlockAccess.VAR_TEMPKeyword_1).prepend[setNewLines(1, 1, 2)]
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarTempDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
 				oneSpace
@@ -120,11 +121,11 @@ class STCoreFormatter extends AbstractFormatter2 {
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
-		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
 	/** Formats the STVarInputDeclarationBlocks */
 	def dispatch void format(STVarInputDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
+		varDeclarationBlock.regionFor.keyword(STVarInputDeclarationBlockAccess.VAR_INPUTKeyword_1).prepend[setNewLines(1, 1, 2)]
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarInputDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
 				oneSpace
@@ -140,11 +141,11 @@ class STCoreFormatter extends AbstractFormatter2 {
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
-		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
 	/** Formats the STVarOutputDeclarationBlocks */
 	def dispatch void format(STVarOutputDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
+		varDeclarationBlock.regionFor.keyword(STVarOutputDeclarationBlockAccess.VAR_OUTPUTKeyword_1).prepend[setNewLines(1, 1, 2)]
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarOutputDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
 				oneSpace
@@ -160,10 +161,10 @@ class STCoreFormatter extends AbstractFormatter2 {
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
-		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
 	def dispatch void format(STVarInOutDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
+		varDeclarationBlock.regionFor.keyword(STVarInOutDeclarationBlockAccess.VAR_IN_OUTKeyword_1).prepend[setNewLines(1, 1, 2)]
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarInOutDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
 				oneSpace
@@ -179,7 +180,6 @@ class STCoreFormatter extends AbstractFormatter2 {
 		for (STVarDeclaration varDeclaration : varDeclarationBlock.varDeclarations) {
 			varDeclaration.format
 		}
-		varDeclarationBlock.append[setNewLines(1, 2, 2)]
 	}
 
 	/** Formats the STVarDeclarations */
