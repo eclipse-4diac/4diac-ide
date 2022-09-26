@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.handlers;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
@@ -28,7 +29,9 @@ import org.eclipse.fordiac.ide.application.wizards.StructUpdateDialog;
 import org.eclipse.fordiac.ide.model.commands.change.TransferInstanceCommentsCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBEndpointFinder;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -125,6 +128,50 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 		return null;
 	}
 
+	public static List<FBNetworkElement> getConnectedFbs(final FBNetworkElement src) {
+		final List<FBNetworkElement> connectedElements = new ArrayList<>();
+
+		final List<IInterfaceElement> pins = new ArrayList<>();
+		pins.addAll(src.getInterface().getEventOutputs());
+		pins.addAll(src.getInterface().getOutputVars());
+
+		for (final IInterfaceElement pin : pins) {
+			connectedElements.addAll(getConnectedFbs(pin));
+		}
+
+		// search for connected elements of connected elements
+		if (!connectedElements.isEmpty() && ((connectedElements.size() == 1 && !connectedElements.get(0).equals(src))
+				|| (connectedElements.size() > 1))) {
+			final List<FBNetworkElement> connectedOfConnectedElements = new ArrayList<>();
+			for (final FBNetworkElement element : connectedElements) {
+				if (!element.equals(src)) {
+					connectedOfConnectedElements.addAll(getConnectedFbs(element));
+				}
+			}
+			connectedOfConnectedElements.forEach(el -> {
+				if (!connectedElements.contains(el)) {
+					connectedElements.add(el);
+				}
+			});
+		}
+
+		return connectedElements.stream().distinct().collect(Collectors.toList());
+	}
+
+	private static List<FBNetworkElement> getConnectedFbs(final IInterfaceElement srcPin) {
+
+		final List<FBNetworkElement> connectedElements = new ArrayList<>();
+		for (final Connection con : srcPin.getOutputConnections()) {
+			if (con.getDestinationElement() instanceof SubApp) {
+				connectedElements.addAll(getConnectedFbs(con.getDestination()));
+			} else {
+				connectedElements.add(con.getDestinationElement());
+			}
+		}
+
+		return connectedElements;
+
+	}
 
 	private static boolean isTypedOrContainedInTypedInstance(final INamedElement element) {
 		return element.eContainer() != null && element.eContainer().eContainer() instanceof SubApp
