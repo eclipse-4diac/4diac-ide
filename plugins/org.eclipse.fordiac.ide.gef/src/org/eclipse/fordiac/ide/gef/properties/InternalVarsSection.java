@@ -88,7 +88,6 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		createInternalVarsControls(parent);
 		this.tabbedPropertySheetPage = tabbedPropertySheetPage;

@@ -71,7 +71,6 @@ public class InternalFbsSection extends AbstractSection implements I4diacTableUt
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		createInternalFbsControls(parent);
 		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);

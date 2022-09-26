@@ -57,7 +57,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class CommentPropertySection extends AbstractSection {
 
@@ -86,10 +85,7 @@ public class CommentPropertySection extends AbstractSection {
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		this.tabbedPropertySheetPage = tabbedPropertySheetPage;
-		setLeftComposite(parent);
-		parent.setLayout(new GridLayout(ONE_COLUMN, true));
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(parent);
+		super.createControls(parent, tabbedPropertySheetPage);
 		createFBInfoGroup(parent);
 		createTableSection(parent);
 	}
@@ -194,11 +190,6 @@ public class CommentPropertySection extends AbstractSection {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.VISIBILITY_CELL);
 			}
 		});
-	}
-
-	@Override
-	public TabbedPropertySheetWidgetFactory getWidgetFactory() {
-		return tabbedPropertySheetPage.getWidgetFactory();
 	}
 
 	protected void createFBInfoGroup(final Composite parent) {

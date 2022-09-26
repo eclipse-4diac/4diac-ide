@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.AbstractPr
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.InputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.OutputPrimitiveEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets.InterfaceSelectorButton;
+import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -46,7 +47,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class AbstractPrimitiveSection extends AbstractServiceSection {
+public abstract class AbstractPrimitiveSection extends AbstractDoubleColumnSection {
 
 
 	private Text parametersText;
@@ -60,8 +61,7 @@ public abstract class AbstractPrimitiveSection extends AbstractServiceSection {
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		Group primitiveSpecification;
-		primitiveSpecification = getWidgetFactory().createGroup(getLeftComposite(),
+		final Group primitiveSpecification = getWidgetFactory().createGroup(getLeftComposite(),
 				Messages.PrimitiveSection_CreateControls_PrimitiveSpecification);
 		primitiveSpecification.setLayout(new GridLayout());
 		primitiveSpecification.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));

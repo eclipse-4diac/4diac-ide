@@ -15,7 +15,7 @@ package org.eclipse.fordiac.ide.application.properties;
 import java.util.ArrayList;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.gef.widgets.ConnectionDisplayWidget;
 import org.eclipse.fordiac.ide.gef.widgets.InternalConnectionsViewer;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
@@ -29,26 +29,19 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class PinEventInfoSection extends AbstractSection {
+public class PinEventInfoSection extends AbstractDoubleColumnSection {
 
 	private PinInfoBasicWidget pinInfo;
 	private ConnectionDisplayWidget inConnections;
 	private InternalConnectionsViewer outConnections;
 
 	private static final int NUM_OF_CONN_DISPLAYS = 2;
-	private static final int PARTS = 2;
 
-	protected TabbedPropertySheetWidgetFactory widgetFactory;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent.setLayout(new GridLayout(PARTS, true));
-		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-
-		widgetFactory = tabbedPropertySheetPage.getWidgetFactory();
 
 		// Enforcing the layout so the connections would be side by side
 		getRightComposite().setLayout(new GridLayout(NUM_OF_CONN_DISPLAYS, true));
@@ -57,13 +50,13 @@ public class PinEventInfoSection extends AbstractSection {
 		final Composite rightComposite = createSmallComposite(getRightComposite());
 
 		pinInfo = pinInfoCreation(getLeftComposite());
-		inConnections = new ConnectionDisplayWidget(widgetFactory, middleComposite, this);
-		outConnections = new InternalConnectionsViewer(widgetFactory, rightComposite, this);
+		inConnections = new ConnectionDisplayWidget(getWidgetFactory(), middleComposite, this);
+		outConnections = new InternalConnectionsViewer(getWidgetFactory(), rightComposite, this);
 
 	}
 
 	protected PinInfoBasicWidget pinInfoCreation(final Composite parent) {
-		return new PinInfoBasicWidget(parent, widgetFactory);
+		return new PinInfoBasicWidget(parent, getWidgetFactory());
 	}
 
 	@Override
@@ -113,7 +106,7 @@ public class PinEventInfoSection extends AbstractSection {
 	}
 
 	private Composite createSmallComposite(final Composite parent) {
-		final Composite composite = widgetFactory.createComposite(parent);
+		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		return composite;

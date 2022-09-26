@@ -36,7 +36,6 @@ public class GroupPropertySection extends AbstractSection {
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		final Composite fbInfoContainer = createFBInfoContainer(parent);
 		createNameEntry(fbInfoContainer);

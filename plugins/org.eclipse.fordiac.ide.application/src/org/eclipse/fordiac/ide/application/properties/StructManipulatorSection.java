@@ -143,10 +143,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent.setLayout(new GridLayout(1, true));
-		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		createStructSelector(parent);
 		final Group memberVarGroup = getWidgetFactory().createGroup(parent,
 				Messages.StructManipulatorSection_Contained_variables);

@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteTrans
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.contentprovider.ServiceSequenceContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets.StateComboHelper;
+import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.ServiceSequenceTypes;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeTransactionOrderCommand;
@@ -59,7 +60,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class ServiceSequenceSection extends AbstractServiceSection {
+public class ServiceSequenceSection extends AbstractSection {
 
 	private TableViewer transactionsViewer;
 	private Text nameText;
@@ -89,18 +90,14 @@ public class ServiceSequenceSection extends AbstractServiceSection {
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
-		final Composite section = getWidgetFactory().createComposite(parent);
-		section.setLayout(new GridLayout(1, false));
-		section.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final Composite typeAndComment = getWidgetFactory().createComposite(section);
+		final Composite typeAndComment = getWidgetFactory().createComposite(parent);
 		typeAndComment.setLayout(new GridLayout(1, false));
 		typeAndComment.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		createTypeAndCommentSection(typeAndComment);
 
-		final Composite transactionSection = getWidgetFactory().createComposite(section);
+		final Composite transactionSection = getWidgetFactory().createComposite(parent);
 		transactionSection.setLayout(new GridLayout(1, false));
 		transactionSection.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		createTransactionSection(transactionSection);

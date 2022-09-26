@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateOutpu
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.DeleteOutputPrimitiveCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.TransactionEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.widgets.InterfaceSelectorButton;
+import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeOutputPrimitiveOrderCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
@@ -63,7 +64,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class TransactionSection extends AbstractServiceSection {
+public class TransactionSection extends AbstractSection {
 
 	private static final int PARAMETER_COL_WIDTH = 400;
 	private static final int EVENT_COL_WIDTH = 200;
@@ -83,19 +84,15 @@ public class TransactionSection extends AbstractServiceSection {
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
-		final Composite section = getWidgetFactory().createComposite(parent);
-		section.setLayout(new GridLayout(1, false));
-		section.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		final Composite inputsComp = getWidgetFactory().createComposite(section);
+		final Composite inputsComp = getWidgetFactory().createComposite(parent);
 		inputsComp.setLayout(new GridLayout(1, false));
 		inputsComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
 		createInputPrimitiveGroup(inputsComp);
 
-		final Composite outputsComp = getWidgetFactory().createComposite(section);
+		final Composite outputsComp = getWidgetFactory().createComposite(parent);
 		outputsComp.setLayout(new GridLayout(1, false));
 		outputsComp.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		createOutputsEdit(outputsComp);

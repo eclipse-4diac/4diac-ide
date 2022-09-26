@@ -57,7 +57,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class AbstractInterfaceSection extends AbstractSection {
+public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSection {
 	protected Text nameText;
 	protected Text commentText;
 	private TableViewer inputViewer;
@@ -84,10 +84,7 @@ public abstract class AbstractInterfaceSection extends AbstractSection {
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent.setLayout(new GridLayout(1, true));
-		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		createFBInfoGroup(parent);
 		createInputInfoGroup(parent);
 	}

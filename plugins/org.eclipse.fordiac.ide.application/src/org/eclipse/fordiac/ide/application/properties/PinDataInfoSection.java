@@ -29,7 +29,7 @@ public class PinDataInfoSection extends PinEventInfoSection {
 
 	@Override
 	protected PinInfoBasicWidget pinInfoCreation(final Composite parent) {
-		return new PinInfoDataWidget(parent, widgetFactory);
+		return new PinInfoDataWidget(parent, getWidgetFactory());
 	}
 
 	@Override
