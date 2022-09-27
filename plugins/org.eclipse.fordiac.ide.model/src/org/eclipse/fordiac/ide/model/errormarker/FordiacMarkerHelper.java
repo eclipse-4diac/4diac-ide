@@ -166,7 +166,8 @@ public final class FordiacMarkerHelper {
 		final ErrorMarkerInterface interfaceElement = ConnectionHelper.createErrorMarkerInterface(
 				oldInterface.getType(), oldInterface.getName(), oldInterface.isIsInput(), newElement.getInterface());
 
-		if (isVariable(oldInterface) && !((VarDeclaration) oldInterface).getValue().getValue().isBlank()) {
+		if (isVariable(oldInterface) && ((VarDeclaration) oldInterface).getValue() != null
+				&& !((VarDeclaration) oldInterface).getValue().getValue().isBlank()) {
 			final Value value = LibraryElementFactory.eINSTANCE.createValue();
 			value.setValue(((VarDeclaration) oldInterface).getValue().getValue());
 			interfaceElement.setValue(value);
