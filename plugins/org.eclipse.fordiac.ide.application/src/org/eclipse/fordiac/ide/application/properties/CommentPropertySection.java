@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
@@ -134,7 +135,15 @@ public class CommentPropertySection extends AbstractSection {
 			if (isInput) {
 				rowItem = inputDataProvider.getRowObject(rowPosition);
 				final FBType fbType = rowItem.getFBNetworkElement().getType();
-				if (fbType != null) {
+				final INamedElement currentFB = getType();
+
+				if (currentFB instanceof StructManipulator) {
+					final List<VarDeclaration> variableList = ((StructManipulator) currentFB).getStructType()
+							.getMemberVariables();
+					if (!variableList.isEmpty()) {
+						defaultComment = variableList.get(rowPosition).getComment();
+					}
+				} else if (fbType != null) {
 					defaultComment = fbType.getInterfaceList().getInputVars().get(rowPosition).getComment();
 				}
 
@@ -144,7 +153,14 @@ public class CommentPropertySection extends AbstractSection {
 			} else {
 				rowItem = outputDataProvider.getRowObject(rowPosition);
 				final FBType fbType = rowItem.getFBNetworkElement().getType();
-				if (fbType != null) {
+				final INamedElement currentFB = getType();
+				if (currentFB instanceof StructManipulator) {
+					final List<VarDeclaration> variableList = ((StructManipulator) currentFB).getStructType()
+							.getMemberVariables();
+					if (!variableList.isEmpty()) {
+						defaultComment = variableList.get(rowPosition).getComment();
+					}
+				} else if (fbType != null) {
 					defaultComment = fbType.getInterfaceList().getOutputVars().get(rowPosition).getComment();
 				}
 			}
