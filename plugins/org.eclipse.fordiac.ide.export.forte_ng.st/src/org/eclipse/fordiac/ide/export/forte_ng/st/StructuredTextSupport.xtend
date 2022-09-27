@@ -309,7 +309,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		val type = expr.resultType as DataType
 		'''«type.generateTypeName»''' + switch (type) {
 			AnyStringType: '''("«expr.value.toString.convertToJavaString»")'''
-			CharType: '''(«String.format("%02x",  expr.value.toString.getBytes(StandardCharsets.UTF_8).get(0))»)'''
+			CharType: '''(«String.format("0x%02x",  expr.value.toString.getBytes(StandardCharsets.UTF_8).get(0))»)'''
 			WcharType: '''(u'«expr.value.toString.convertToJavaString»')'''
 		}
 	}
