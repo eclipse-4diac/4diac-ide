@@ -207,6 +207,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 
 	private static boolean createNewEmptyContainerElement(final StructuredSelection selection) {
 		return (selection.size() == 1)
+				&& (selection.getFirstElement() instanceof EditPart)
 				&& !(((EditPart) selection.getFirstElement()).getModel() instanceof FBNetworkElement);
 	}
 

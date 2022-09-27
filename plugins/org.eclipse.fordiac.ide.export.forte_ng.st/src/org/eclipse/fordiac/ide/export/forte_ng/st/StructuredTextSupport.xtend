@@ -314,17 +314,25 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		}
 	}
 
-	def protected dispatch CharSequence generateExpression(STDateLiteral expr) //
-	'''CIEC_DATE(«expr.value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L»)'''
+	def protected dispatch CharSequence generateExpression(STDateLiteral expr) {
+		val type = expr.resultType as DataType
+		'''«type.generateTypeName»(«expr.value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L»)'''
+	}
 
-	def protected dispatch CharSequence generateExpression(STTimeLiteral expr) //
-	'''CIEC_TIME(«expr.value.toNanos»)'''
+	def protected dispatch CharSequence generateExpression(STTimeLiteral expr) {
+		val type = expr.resultType as DataType
+		'''«type.generateTypeName»(«expr.value.toNanos»)'''
+	}
 
-	def protected dispatch CharSequence generateExpression(STTimeOfDayLiteral expr) //
-	'''CIEC_TIME_OF_DAY(«expr.value.toNanoOfDay»)'''
+	def protected dispatch CharSequence generateExpression(STTimeOfDayLiteral expr) {
+		val type = expr.resultType as DataType
+		'''«type.generateTypeName»(«expr.value.toNanoOfDay»)'''
+	}
 
-	def protected dispatch CharSequence generateExpression(STDateAndTimeLiteral expr) //
-	'''CIEC_DATE_AND_TIME(«LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(expr.value, ChronoUnit.NANOS)»)'''
+	def protected dispatch CharSequence generateExpression(STDateAndTimeLiteral expr) {
+		val type = expr.resultType as DataType
+		'''«type.generateTypeName»(«LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(expr.value, ChronoUnit.NANOS)»)'''
+	}
 
 	def protected dispatch CharSequence generateTemplateExpression(STBinaryExpression expr) {
 		switch (expr.op) {
