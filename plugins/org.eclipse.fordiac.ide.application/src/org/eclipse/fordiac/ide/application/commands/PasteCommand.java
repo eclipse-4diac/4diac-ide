@@ -32,7 +32,9 @@ import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCom
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
+import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -229,7 +231,7 @@ public class PasteCommand extends Command {
 
 				if ((dstFBNetwork.isSubApplicationNetwork() || srcFBNetwork.isSubApplicationNetwork())) {
 					final Command cmd = copyConnectionToSubApp(connRef, copiedSrc, copiedDest);
-					if (cmd.canExecute()) { // checks if the resulting connection is valid
+					if (cmd != null && cmd.canExecute()) { // checks if the resulting connection is valid
 						connCreateCmds.add(cmd);
 					}
 				} else {
@@ -274,8 +276,17 @@ public class PasteCommand extends Command {
 		final IInterfaceElement source = getInterfaceElement(connRef.getSource(), copiedSrc);
 		final IInterfaceElement destination = getInterfaceElement(connRef.getDestination(), copiedDest);
 
-		return CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source, destination);
-
+		if (source != null && destination != null) {
+			final Application sourceApp = source.getFBNetworkElement().getFbNetwork().getApplication();
+			final Application destApp = destination.getFBNetworkElement().getFbNetwork().getApplication();
+			if ((sourceApp != null && destApp != null && sourceApp.equals(destApp))
+					|| (FBNetworkHelper.getRootType(source) != null && FBNetworkHelper.getRootType(destination) != null
+					&& FBNetworkHelper.getRootType(source).equals(FBNetworkHelper.getRootType(destination)))) {
+				return CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(source,
+						destination);
+			}
+		}
+		return null;
 	}
 
 	private IInterfaceElement getInterfaceElement(final IInterfaceElement orig, final FBNetworkElement copiedElement) {

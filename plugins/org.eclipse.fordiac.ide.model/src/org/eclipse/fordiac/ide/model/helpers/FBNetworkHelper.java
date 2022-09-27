@@ -276,7 +276,7 @@ public final class FBNetworkHelper {
 		return new BasicEList<>();
 	}
 
-	private static FBType getRootType(final EObject element) {
+	public static FBType getRootType(final EObject element) {
 		final EObject root = EcoreUtil.getRootContainer(element);
 		if (root instanceof FBType) {
 			return (FBType) root;
@@ -359,12 +359,12 @@ public final class FBNetworkHelper {
 		}
 		return null;
 	}
-	
+
 	/** Get the model from the hierarchical path
-	 * 
+	 *
 	 * @param fullHierarchicalName the complete path of the element separated by '.'
 	 * @param system the {@link AutomationSystem} in which to find the item in
-	 * @return the model as an {@link EObject} (can also return the {@link Application} 
+	 * @return the model as an {@link EObject} (can also return the {@link Application}
 	 * 		   if the path does not include any other elements)
 	 */
 	public static EObject getModelFromHierarchicalName(final String fullHierarchicalName, final AutomationSystem system) {
