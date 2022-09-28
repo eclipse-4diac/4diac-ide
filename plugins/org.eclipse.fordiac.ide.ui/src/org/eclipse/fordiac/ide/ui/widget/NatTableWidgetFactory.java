@@ -58,6 +58,7 @@ import org.eclipse.nebula.widgets.nattable.layer.config.DefaultRowHeaderLayerCon
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultRowHeaderStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.painter.NatTableBorderOverlayPainter;
 import org.eclipse.nebula.widgets.nattable.painter.cell.TextPainter;
+import org.eclipse.nebula.widgets.nattable.painter.layer.NatGridLayerPainter;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer.MoveDirectionEnum;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBindings;
@@ -77,6 +78,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.GridLayout;
@@ -252,6 +254,18 @@ public final class NatTableWidgetFactory {
 		final NatTable table = new NatTable(parent, gridLayer, false);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 		setNatTableStyle(table);
+
+		final NatGridLayerPainter layerPainter = new NatGridLayerPainter(table, DataLayer.DEFAULT_ROW_HEIGHT) {
+
+			@Override
+			protected void paintBackground(final ILayer natLayer, final GC gc, final int xOffset, final int yOffset,
+					final Rectangle rectangle, final IConfigRegistry configRegistry) {
+				super.paintBackground(natLayer, gc, xOffset, yOffset, rectangle, configRegistry);
+				gc.drawLine(0, rectangle.y, 0, rectangle.y + rectangle.height);
+			}
+
+		};
+		table.setLayerPainter(layerPainter);
 
 		return table;
 
