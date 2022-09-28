@@ -26,9 +26,11 @@ public class CopyDataFromTableAction implements IKeyAction {
 	@Override
 	public void run(final NatTable natTable, final KeyEvent event) {
 		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
+		final boolean isHeaderSelected = selectionLayer.getSelectionModel().getSelections().stream()
+				.anyMatch(rec -> rec.width == Integer.MAX_VALUE);
 		final int[] rows = selectionLayer.getFullySelectedRowPositions();
 
-		if (rows.length > 0) {
+		if (isHeaderSelected && rows.length > 0) {
 			final ListDataProvider<?> provider = (ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(natTable)
 					.getDataProvider();
 
