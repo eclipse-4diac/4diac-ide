@@ -25,6 +25,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.figures.GroupFigure;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
 import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
@@ -66,7 +67,8 @@ public class GroupEditPart extends AbstractPositionableElementEditPart implement
 			if (getHost() instanceof GroupEditPart) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ChangeCommentCommand(((GroupEditPart) getHost()).getModel(), str);
+					return new ResizeGroupOrSubappCommand((GraphicalEditPart) getHost(),
+							(Command) new ChangeCommentCommand(((GroupEditPart) getHost()).getModel(), str));
 				}
 			}
 			return null;

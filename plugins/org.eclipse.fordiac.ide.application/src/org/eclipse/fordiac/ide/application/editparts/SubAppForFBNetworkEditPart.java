@@ -36,6 +36,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
 import org.eclipse.fordiac.ide.application.figures.SubAppForFbNetworkFigure;
 import org.eclipse.fordiac.ide.application.policies.ContainerResizePolicy;
@@ -154,7 +155,8 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 			if (getHost().getModel() instanceof INamedElement) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ChangeCommentCommand((INamedElement) getHost().getModel(), str);
+					return new ResizeGroupOrSubappCommand((GraphicalEditPart) getHost(),
+							(Command) new ChangeCommentCommand((INamedElement) getHost().getModel(), str));
 				}
 			}
 			return null;
@@ -310,7 +312,7 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 		if (childEditPart instanceof UnfoldedSubappContentEditPart) {
 			if (getFigure().getExpandedContentArea() != null) {
 				getFigure().getExpandedContentArea()
-						.remove(((UnfoldedSubappContentEditPart) childEditPart).getFigure());
+				.remove(((UnfoldedSubappContentEditPart) childEditPart).getFigure());
 			}
 		} else {
 			super.removeChildVisual(childEditPart);
