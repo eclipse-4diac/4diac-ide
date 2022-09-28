@@ -28,7 +28,7 @@ Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.core.expressions,
  org.eclipse.fordiac.ide.ui.errormessages,
  org.eclipse.search,
- org.eclipse.nebula.widgets.nattable.core
+ org.eclipse.nebula.widgets.nattable.core;bundle-version="2.0.0"
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier
@@ -38,8 +38,3 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.application;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.fordiac.ide.application
-Import-Package: org.eclipse.nebula.jface.gridviewer,
- org.eclipse.nebula.widgets.grid,
- org.eclipse.nebula.widgets.grid.internal,
- org.eclipse.nebula.widgets.nattable;version="2.0.0",
- org.eclipse.nebula.widgets.nattable.data;version="2.0.0"

@@ -106,6 +106,7 @@
       <feature id="org.eclipse.nebula.widgets.richtext.feature"/>
       <feature id="org.eclipse.emf.compare"/>
       <feature id="org.eclipse.emf.compare.ide.ui"/>
+      <feature id="org.eclipse.nebula.widgets.nattable.core.feature"/>
    </features>
 
    <configurations>
