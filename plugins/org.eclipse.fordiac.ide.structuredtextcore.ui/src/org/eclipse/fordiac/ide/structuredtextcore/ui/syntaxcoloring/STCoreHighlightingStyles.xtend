@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies GmbH
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -26,12 +26,12 @@ interface STCoreHighlightingStyles extends HighlightingStyles {
 	String ALGORITHM_BLOCK_ID = "AlgorithmBlock";
 
 //Semantic highlighting Styles
-	String STATIC_VAR_ID = "StaticVar";
+	String STATIC_VAR_ID = "Variables";
 	String CALL_FUNCTION_ID = "CallFunction";
 	String CALL_FUNCTION_BLOCK_ID = "CallFunctionBlock";
 	String CALL_METHOD_ID = "CallMethod";
-	String RETURN_FUNCTION_ID = "ReturnFunction";
-	String RETURN_METHOD_ID = "ReturnMethod";
+	String RETURN_FUNCTION_ID = "OutputFunction";
+	String RETURN_METHOD_ID = "OutputMethod";
 	String FUNCTIONS_NAME_ID = "FunctionsName";
 	String METHODS_NAME_ID = "MethodsName";
 

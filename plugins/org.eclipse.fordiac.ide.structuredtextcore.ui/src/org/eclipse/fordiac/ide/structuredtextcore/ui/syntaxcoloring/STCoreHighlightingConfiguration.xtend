@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies GmbH
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -46,9 +46,9 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 		acceptor.acceptDefaultHighlighting(VAR_KEYWORD_ID, "Variable Keyword", varKeywordTextStyle());
 		acceptor.acceptDefaultHighlighting(DATA_TYPE_ID, "Date Types", dataTypeTextStyle());
 		acceptor.acceptDefaultHighlighting(FUNCTIONS_ID, "Functions", functionsTextStyle());
-		acceptor.acceptDefaultHighlighting(METHOD_BLOCK_ID, "MethodBlock", methodBlockTextStyle());
-		acceptor.acceptDefaultHighlighting(ALGORITHM_BLOCK_ID, "AlgorithmBlock", algorithmTextStyle());
-		acceptor.acceptDefaultHighlighting(FUNCTION_BLOCK_ID, "FunctionBlock", functionBockTextStyle());
+		acceptor.acceptDefaultHighlighting(METHOD_BLOCK_ID, "Method Keyword", methodBlockTextStyle());
+		acceptor.acceptDefaultHighlighting(ALGORITHM_BLOCK_ID, "Algorithm Keyword", algorithmTextStyle());
+		acceptor.acceptDefaultHighlighting(FUNCTION_BLOCK_ID, "Function Block Keyword", functionBockTextStyle());
 		acceptor.acceptDefaultHighlighting(PUNCTUATION_ID, "Punctuation character", punctuationTextStyle());
 		acceptor.acceptDefaultHighlighting(COMMENT_ID, "Comment", commentTextStyle());
 		acceptor.acceptDefaultHighlighting(TASK_ID, "Task Tag", taskTextStyle());
@@ -58,14 +58,15 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 		acceptor.acceptDefaultHighlighting(INVALID_TOKEN_ID, "Invalid Symbol", errorTextStyle());
 
 		// Semantic highlighting Styles	
-		acceptor.acceptDefaultHighlighting(CALL_FUNCTION_ID, "CallFunction", callFunctionTextStyle());
-		acceptor.acceptDefaultHighlighting(CALL_FUNCTION_BLOCK_ID, "CallFunctionBlock", callFunctionBlockTextStyle());
-		acceptor.acceptDefaultHighlighting(CALL_METHOD_ID, "CallMethod", callMethodTextStyle());
-		acceptor.acceptDefaultHighlighting(STATIC_VAR_ID, "StaticVar", staticVarTextStyle());
-		acceptor.acceptDefaultHighlighting(RETURN_FUNCTION_ID, "ReturnFunctionVar", returnFunctionTextStyle());
-		acceptor.acceptDefaultHighlighting(RETURN_METHOD_ID, "ReturnMethodVar", returnMethodTextStyle());
-		acceptor.acceptDefaultHighlighting(FUNCTIONS_NAME_ID, "FunctionsName", functionNameTextStyle());
-		acceptor.acceptDefaultHighlighting(METHODS_NAME_ID, "MethodsName", methodNameTextStyle());
+		acceptor.acceptDefaultHighlighting(CALL_FUNCTION_ID, "Function calls", callFunctionTextStyle());
+		acceptor.acceptDefaultHighlighting(CALL_FUNCTION_BLOCK_ID, "Function Block calls",
+			callFunctionBlockTextStyle());
+		acceptor.acceptDefaultHighlighting(CALL_METHOD_ID, "Method calls", callMethodTextStyle());
+		acceptor.acceptDefaultHighlighting(STATIC_VAR_ID, "Variables", staticVarTextStyle());
+		acceptor.acceptDefaultHighlighting(RETURN_FUNCTION_ID, "Function return values", returnFunctionTextStyle());
+		acceptor.acceptDefaultHighlighting(RETURN_METHOD_ID, "Method return values", returnMethodTextStyle());
+		acceptor.acceptDefaultHighlighting(FUNCTIONS_NAME_ID, "Function Name", functionNameTextStyle());
+		acceptor.acceptDefaultHighlighting(METHODS_NAME_ID, "Method Name", methodNameTextStyle());
 
 	}
 
@@ -187,4 +188,5 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 		textStyle.setStyle(SWT.BOLD);
 		return textStyle;
 	}
+
 }

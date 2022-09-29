@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies GmbH
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.xtext.ide.editor.syntaxcoloring.DefaultSemanticHighlightingCalculator
@@ -89,10 +90,12 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 				STCoreHighlightingStyles.STATIC_VAR_ID
 			FB:
 				STCoreHighlightingStyles.CALL_FUNCTION_BLOCK_ID
-			STMethod case featuresExpression.call:
+			STMethod case (featuresExpression.call):
 				STCoreHighlightingStyles.CALL_METHOD_ID
 			STMethod case !featuresExpression.call:
 				STCoreHighlightingStyles.RETURN_METHOD_ID
+			STStandardFunction:
+				STCoreHighlightingStyles.CALL_FUNCTION_ID
 			STFunction case featuresExpression.call:
 				STCoreHighlightingStyles.CALL_FUNCTION_ID
 			STFunction case !featuresExpression.call:
