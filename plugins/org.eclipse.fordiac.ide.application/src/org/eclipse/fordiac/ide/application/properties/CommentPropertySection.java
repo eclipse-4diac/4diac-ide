@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -47,6 +48,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
@@ -69,6 +72,7 @@ public class CommentPropertySection extends AbstractSection {
 	private VarDeclarationListProvider inputDataProvider;
 	private VarDeclarationListProvider outputDataProvider;
 
+	IAction[] defaultCopyPasteCut = new IAction[3];
 	private TabbedPropertySheetPage tabbedPropertySheetPage;
 
 	@Override
@@ -202,6 +206,32 @@ public class CommentPropertySection extends AbstractSection {
 		});
 	}
 
+	@Override
+	public void aboutToBeShown() {
+		// this can be removed once copy/paste for old tables is no longer used
+		final IActionBars bars = tabbedPropertySheetPage.getSite().getActionBars();
+		defaultCopyPasteCut[0] = bars.getGlobalActionHandler(ActionFactory.COPY.getId());
+		bars.setGlobalActionHandler(ActionFactory.COPY.getId(), null);
+		defaultCopyPasteCut[1] = bars.getGlobalActionHandler(ActionFactory.PASTE.getId());
+		bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), null);
+		defaultCopyPasteCut[2] = bars.getGlobalActionHandler(ActionFactory.CUT.getId());
+		bars.setGlobalActionHandler(ActionFactory.CUT.getId(), null);
+		bars.updateActionBars();
+
+		super.aboutToBeShown();
+	}
+
+	@Override
+	public void aboutToBeHidden() {
+		// this can be removed once copy/paste for old tables is no longer used
+		final IActionBars bars = tabbedPropertySheetPage.getSite().getActionBars();
+		bars.setGlobalActionHandler(ActionFactory.COPY.getId(), defaultCopyPasteCut[0]);
+		bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), defaultCopyPasteCut[1]);
+		bars.setGlobalActionHandler(ActionFactory.CUT.getId(), defaultCopyPasteCut[2]);
+		bars.updateActionBars();
+
+		super.aboutToBeHidden();
+	}
 
 	@Override
 	protected Object getInputType(final Object input) {

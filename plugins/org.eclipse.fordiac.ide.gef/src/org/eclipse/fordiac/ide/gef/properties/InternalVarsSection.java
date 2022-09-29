@@ -50,6 +50,7 @@ import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
@@ -62,6 +63,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InternalVarsSection extends AbstractSection implements I4diacNatTableUtil {
@@ -70,6 +73,9 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 	private static final int COMMENT = 2;
 	private static final int INITIAL_VALUE = 3;
 	private static final int ARRAY_SIZE = 4;
+
+	IAction[] defaultCopyPasteCut = new IAction[3];
+	private TabbedPropertySheetPage tabbedPropertySheetPage;
 
 	private VarDeclarationListProvider provider;
 	private NatTable table;
@@ -85,6 +91,7 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		createInternalVarsControls(parent);
+		this.tabbedPropertySheetPage = tabbedPropertySheetPage;
 	}
 
 	public void createInternalVarsControls(final Composite parent) {
@@ -146,6 +153,33 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public void aboutToBeShown() {
+		// this can be removed once copy/paste for old tables is no longer used
+		final IActionBars bars = tabbedPropertySheetPage.getSite().getActionBars();
+		defaultCopyPasteCut[0] = bars.getGlobalActionHandler(ActionFactory.COPY.getId());
+		bars.setGlobalActionHandler(ActionFactory.COPY.getId(), null);
+		defaultCopyPasteCut[1] = bars.getGlobalActionHandler(ActionFactory.PASTE.getId());
+		bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), null);
+		defaultCopyPasteCut[2] = bars.getGlobalActionHandler(ActionFactory.CUT.getId());
+		bars.setGlobalActionHandler(ActionFactory.CUT.getId(), null);
+		bars.updateActionBars();
+
+		super.aboutToBeShown();
+	}
+
+	@Override
+	public void aboutToBeHidden() {
+		// this can be removed once copy/paste for old tables is no longer used
+		final IActionBars bars = tabbedPropertySheetPage.getSite().getActionBars();
+		bars.setGlobalActionHandler(ActionFactory.COPY.getId(), defaultCopyPasteCut[0]);
+		bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), defaultCopyPasteCut[1]);
+		bars.setGlobalActionHandler(ActionFactory.CUT.getId(), defaultCopyPasteCut[2]);
+		bars.updateActionBars();
+
+		super.aboutToBeHidden();
 	}
 
 	@Override
@@ -248,27 +282,31 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 
 		@Override
 		public void setDataValue(final VarDeclaration rowObject, final int columnIndex, final Object newValue) {
+			final String value = newValue instanceof String ? (String) newValue : null;
 			Command cmd = null;
 			switch (columnIndex) {
 			case NAME:
-				cmd = new ChangeNameCommand(rowObject, newValue.toString());
+				if (value == null) {
+					return;
+				}
+				cmd = new ChangeNameCommand(rowObject, value);
 				break;
 			case TYPE:
-				final DataType dataType = getDataTypeLib().getDataTypesSorted().stream()
-				.filter(type -> ((String) newValue).equals(type.getName())).findAny().orElse(null);
+				DataType dataType = getDataTypeLib().getDataTypesSorted().stream()
+				.filter(type -> type.getName().equals(value)).findAny().orElse(null);
 				if (dataType == null) {
-					return;
+					dataType = getDataTypeLib().getType(null);
 				}
 				cmd = new ChangeDataTypeCommand(rowObject, dataType);
 				break;
 			case COMMENT:
-				cmd = new ChangeCommentCommand(rowObject, newValue.toString());
+				cmd = new ChangeCommentCommand(rowObject, value);
 				break;
 			case INITIAL_VALUE:
-				cmd = new ChangeValueCommand(rowObject, newValue.toString());
+				cmd = new ChangeValueCommand(rowObject, value);
 				break;
 			case ARRAY_SIZE:
-				cmd = new ChangeArraySizeCommand(rowObject, newValue.toString());
+				cmd = new ChangeArraySizeCommand(rowObject, value);
 				break;
 
 			default:
