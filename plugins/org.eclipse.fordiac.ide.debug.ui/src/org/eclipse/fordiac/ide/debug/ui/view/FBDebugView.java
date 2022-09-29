@@ -23,6 +23,7 @@ import org.eclipse.draw2d.RangeModel;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugElement;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
+import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.gef.EditPart;
@@ -174,13 +175,19 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 	}
 
 	private static FBType getFBTypeFromDebugContext(final Object source) {
-		if (source instanceof EvaluatorDebugTarget) {
-			final Object sourceElement = ((EvaluatorDebugTarget) source).getProcess().getEvaluator().getSourceElement();
+		Object evaluatorProcess = source;
+		if (evaluatorProcess instanceof EvaluatorDebugElement) {
+			evaluatorProcess = ((EvaluatorDebugElement) evaluatorProcess).getDebugTarget();
+		}
+		if (evaluatorProcess instanceof EvaluatorDebugTarget) {
+			evaluatorProcess = ((EvaluatorDebugTarget) evaluatorProcess).getProcess();
+		}
+
+		if (evaluatorProcess instanceof EvaluatorProcess) {
+			final Object sourceElement = ((EvaluatorProcess) evaluatorProcess).getEvaluator().getSourceElement();
 			if (sourceElement instanceof FBType) {
 				return (FBType) sourceElement;
 			}
-		} else if (source instanceof EvaluatorDebugElement) {
-			return getFBTypeFromDebugContext(((EvaluatorDebugElement) source).getDebugTarget());
 		}
 		return null;
 	}
