@@ -612,11 +612,12 @@ class STCoreFormatter extends AbstractFormatter2 {
 					"(?m)^[\\s&&[^\r\n]]*\\* ", "").replaceAll("[\\s&&[^\r\n]]+", " ").trim
 			else
 				region.text.replaceFirst("^//", "").replaceFirst("\n$", "").replaceAll("\\s+", " ").trim
+				
 
 		val pattern = Pattern.compile(
 			"[\\s&&[^\r\n]]*(?:(\\S{" + commentLineLength + "})|([[\\s&&[^\r\n]]\\S]{1," + commentLineLength +
 				"}(?!\\S)[\r\n]*))");
-		val matcher = pattern.matcher(commentString)
+		val matcher = pattern.matcher(commentString.replace("$", "\\$"))
 
 		var replacement = (isML ? "(" : "") + matcher.replaceAll [ m |
 			var g = m.group(1) ?: m.group(2)

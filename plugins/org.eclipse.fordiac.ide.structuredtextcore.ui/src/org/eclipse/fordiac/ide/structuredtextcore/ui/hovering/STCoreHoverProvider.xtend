@@ -37,9 +37,10 @@ import org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider
 class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 
 	override protected getFirstLine(EObject o) {
-		var label = getLabel(o);
-		if (o instanceof VarDeclaration) {
-			label = label + " : " + o.type.name
+		val label =  switch (o) {
+			VarDeclaration: o.label + " : " + o.type.name
+			FB: o.typeEntry.type.name
+			default: o.label 
 		}
 		return o.getKind() + ( (label !== null) ? "<b>" + label + "</b>" : "");
 	}
