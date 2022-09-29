@@ -111,13 +111,12 @@ public final class NatTableWidgetFactory {
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider, final IEditableRule editableRule) {
-		return createNatTable(parent, dataLayer, headerDataProvider, editableRule, null, null);
+		return createNatTable(parent, dataLayer, headerDataProvider, editableRule, null);
 	}
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider, final IEditableRule editableRule,
-			final Map<String, List<String>> proposals,
-			final I4diacNatTableUtil section) {
+			final Map<String, List<String>> proposals) {
 
 		setColumnWidths(dataLayer);
 
@@ -126,7 +125,7 @@ public final class NatTableWidgetFactory {
 			@Override
 			public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'v'),
-						new PasteDataIntoTableAction(section));
+						new PasteDataIntoTableAction());
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'), new CutDataFromTableAction());
 			}
 		});
@@ -143,25 +142,8 @@ public final class NatTableWidgetFactory {
 		compositeLayer.setChildLayer(GridRegion.BODY, viewportLayer, 0, 1);
 
 		compositeLayer.addConfiguration(new DefaultEditConfiguration());
-		compositeLayer.addConfiguration(new AbstractUiBindingConfiguration() {
-			@Override
-			public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
-				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.NONE, SWT.SPACE), new KeyEditAction());
-				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.NONE, SWT.F2), new KeyEditAction());
-				uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(), new KeyEditAction());
-				uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(SWT.MOD2), new KeyEditAction());
-				uiBindingRegistry.registerDoubleClickBinding(new CellEditorMouseEventMatcher(GridRegion.BODY),
-						new MouseEditAction());
-			}
-		});
-		compositeLayer.addConfiguration(new AbstractRegistryConfiguration() {
-			@Override
-			public void configureRegistry(final IConfigRegistry configRegistry) {
-				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE, editableRule);
-				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR,
-						new ButtonTextCellEditor(proposals), DisplayMode.EDIT, PROPOSAL_CELL);
-			}
-		});
+		compositeLayer.addConfiguration(new DefaultUiBindingConfiguration());
+		compositeLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposals));
 
 		addEditDisabledLabel(dataLayer, editableRule, false);
 		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
@@ -218,20 +200,7 @@ public final class NatTableWidgetFactory {
 		gridLayer.addConfiguration(new DefaultGridLayerConfiguration(gridLayer) {
 			@Override
 			protected void addEditingUIConfig() {
-				addConfiguration(new AbstractUiBindingConfiguration() {
-					@Override
-					public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
-						uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.NONE, SWT.SPACE),
-								new KeyEditAction());
-						uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.NONE, SWT.F2),
-								new KeyEditAction());
-						uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(), new KeyEditAction());
-						uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(SWT.MOD2),
-								new KeyEditAction());
-						uiBindingRegistry.registerDoubleClickBinding(new CellEditorMouseEventMatcher(GridRegion.BODY),
-								new MouseEditAction());
-					}
-				});
+				addConfiguration(new DefaultUiBindingConfiguration());
 			}
 
 			@Override
@@ -239,14 +208,7 @@ public final class NatTableWidgetFactory {
 				addConfiguration(new DefaultRowStyleConfiguration());
 			}
 		});
-		gridLayer.addConfiguration(new AbstractRegistryConfiguration() {
-			@Override
-			public void configureRegistry(final IConfigRegistry configRegistry) {
-				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE, editableRule);
-				configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR,
-						new ButtonTextCellEditor(proposals), DisplayMode.EDIT, PROPOSAL_CELL);
-			}
-		});
+		gridLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposals));
 
 		addEditDisabledLabel(bodyDataLayer, editableRule, false);
 		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
@@ -255,8 +217,7 @@ public final class NatTableWidgetFactory {
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(table);
 		setNatTableStyle(table);
 
-		final NatGridLayerPainter layerPainter = new NatGridLayerPainter(table, DataLayer.DEFAULT_ROW_HEIGHT) {
-
+		table.setLayerPainter(new NatGridLayerPainter(table, DataLayer.DEFAULT_ROW_HEIGHT) {
 			@Override
 			protected void paintBackground(final ILayer natLayer, final GC gc, final int xOffset, final int yOffset,
 					final Rectangle rectangle, final IConfigRegistry configRegistry) {
@@ -264,8 +225,7 @@ public final class NatTableWidgetFactory {
 				gc.drawLine(0, rectangle.y, 0, rectangle.y + rectangle.height);
 			}
 
-		};
-		table.setLayerPainter(layerPainter);
+		});
 
 		return table;
 
@@ -390,6 +350,37 @@ public final class NatTableWidgetFactory {
 		});
 
 		table.configure();
+	}
+
+	private static class DefaultRegistryConfiguration extends AbstractRegistryConfiguration {
+		IEditableRule editableRule;
+		Map<String, List<String>> proposals;
+
+		public DefaultRegistryConfiguration(final IEditableRule editableRule,
+				final Map<String, List<String>> proposals) {
+			super();
+			this.editableRule = editableRule;
+			this.proposals = proposals;
+		}
+
+		@Override
+		public void configureRegistry(final IConfigRegistry configRegistry) {
+			configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE, editableRule);
+			configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR,
+					new ButtonTextCellEditor(proposals), DisplayMode.EDIT, PROPOSAL_CELL);
+		}
+	}
+
+	private static class DefaultUiBindingConfiguration extends AbstractUiBindingConfiguration {
+		@Override
+		public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
+			uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.NONE, SWT.SPACE), new KeyEditAction());
+			uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.NONE, SWT.F2), new KeyEditAction());
+			uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(), new KeyEditAction());
+			uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(SWT.MOD2), new KeyEditAction());
+			uiBindingRegistry.registerDoubleClickBinding(new CellEditorMouseEventMatcher(GridRegion.BODY),
+					new MouseEditAction());
+		}
 	}
 
 	private static class ButtonTextCellEditor extends TextCellEditor {
