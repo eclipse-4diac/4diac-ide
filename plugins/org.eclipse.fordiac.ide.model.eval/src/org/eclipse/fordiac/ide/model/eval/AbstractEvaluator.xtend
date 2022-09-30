@@ -16,6 +16,7 @@ import java.time.Clock
 import java.time.Instant
 import java.time.ZoneId
 import java.time.ZoneOffset
+import java.util.Collection
 import java.util.Set
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -46,6 +47,10 @@ abstract class AbstractEvaluator implements Evaluator {
 
 	def protected void error(String message, Throwable t) {
 		currentMonitors.forEach[error(message, t)]
+	}
+
+	def protected void update(Collection<? extends Variable<?>> variables) {
+		currentMonitors.forEach[update(variables, this)]
 	}
 
 	def static EvaluatorDebugger currentDebugger() {

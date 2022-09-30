@@ -60,6 +60,7 @@ class BasicFBEvaluator extends BaseFBEvaluator<BasicFBType> {
 		state.trap.ECAction.forEach [
 			algorithmEvaluators.get(algorithm)?.evaluate
 			if(output !== null) queue?.add(output)
+			update(variables.values)
 		]
 	}
 

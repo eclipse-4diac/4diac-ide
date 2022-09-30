@@ -60,5 +60,6 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	
 	override reset(Iterable<Variable<?>> variables) {
 		this.instance.value = new FBVariable(CONTEXT_NAME, type, variables).value
+		update(instance.value.members.values)
 	}
 }
