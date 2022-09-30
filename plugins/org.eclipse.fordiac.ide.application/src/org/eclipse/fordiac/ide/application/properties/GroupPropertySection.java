@@ -12,11 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
+import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -76,7 +79,20 @@ public class GroupPropertySection extends AbstractSection {
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).applyTo(commentText);
 		commentText.addModifyListener(e -> {
 			removeContentAdapter();
-			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
+
+			if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof Group) {
+				final Object groupforFBNetowrkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
+						.getEditPartRegistry().get(getType());
+				if (groupforFBNetowrkEditPart instanceof GroupEditPart
+						&& ((GroupEditPart) groupforFBNetowrkEditPart).getContentEP() != null) {
+					executeCommand(new ResizeGroupOrSubappCommand(
+							((GroupEditPart) groupforFBNetowrkEditPart).getContentEP(),
+							new ChangeCommentCommand(getType(), commentText.getText())));
+				}
+			} else {
+				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
+			}
+
 			addContentAdapter();
 		});
 	}

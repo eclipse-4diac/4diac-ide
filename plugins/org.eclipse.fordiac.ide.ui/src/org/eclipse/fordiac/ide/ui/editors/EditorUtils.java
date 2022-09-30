@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.ui.editors;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -43,6 +44,13 @@ public final class EditorUtils {
 		final IWorkbenchWindow window = PlatformUI.getWorkbench().getActiveWorkbenchWindow();
 		if (window != null && window.getActivePage() != null) {
 			return window.getActivePage().getActiveEditor();
+		}
+		return null;
+	}
+
+	public static GraphicalViewer getGraphicalViewerFromCurrentActiveEditor() {
+		if (EditorUtils.getCurrentActiveEditor() != null) {
+			return getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
 		}
 		return null;
 	}

@@ -17,6 +17,8 @@ package org.eclipse.fordiac.ide.application.properties;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -26,8 +28,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -201,7 +205,18 @@ public class CommentPropertySection extends AbstractSection {
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).hint(SWT.DEFAULT, 3 * commentText.getLineHeight()).applyTo(commentText);
 		commentText.addModifyListener(e -> {
 			removeContentAdapter();
-			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
+			if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof SubApp) {
+				final Object subAppforFBNetowrkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
+						.getEditPartRegistry().get(getType());
+				if (subAppforFBNetowrkEditPart instanceof SubAppForFBNetworkEditPart
+						&& ((SubAppForFBNetworkEditPart) subAppforFBNetowrkEditPart).getContentEP() != null) {
+					executeCommand(new ResizeGroupOrSubappCommand(
+							((SubAppForFBNetworkEditPart) subAppforFBNetowrkEditPart).getContentEP(),
+							new ChangeCommentCommand(getType(), commentText.getText())));
+				}
+			} else {
+				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
+			}
 			addContentAdapter();
 		});
 	}
@@ -232,7 +247,6 @@ public class CommentPropertySection extends AbstractSection {
 
 		super.aboutToBeHidden();
 	}
-
 	@Override
 	protected Object getInputType(final Object input) {
 		return InstanceSectionFilter.getFBNetworkElementFromSelectedElement(input);
