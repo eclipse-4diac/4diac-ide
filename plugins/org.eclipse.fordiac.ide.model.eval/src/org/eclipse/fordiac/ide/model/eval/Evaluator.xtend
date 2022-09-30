@@ -35,4 +35,6 @@ interface Evaluator {
 	def Object getSourceElement()
 
 	def Map<String, Variable<?>> getVariables()
+	
+	def void reset(Iterable<Variable<?>> variables)
 }

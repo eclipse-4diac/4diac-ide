@@ -55,6 +55,17 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	}
 
 	@Test
+	def void testSimpleFBReset() {
+		val evaluator = #[
+			'''DO1 := DI1 + DI2;'''.newSTAlgorithm("REQ")
+		].evaluateSimpleFB("REQ", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
+			"DO1".newVarDeclaration(ElementaryTypes.INT, false))
+		21.toIntValue.assertEquals(evaluator.variables.get("DO1").value)
+		evaluator.reset(emptySet)
+		0.toIntValue.assertEquals(evaluator.variables.get("DO1").value)
+	}
+
+	@Test
 	def void testMethodCall() {
 		21.toIntValue.assertEquals(#[
 			'''THIS.TEST_METHOD(A := DI1, B := DI2, C => DO1);'''.newSTAlgorithm("REQ"),
