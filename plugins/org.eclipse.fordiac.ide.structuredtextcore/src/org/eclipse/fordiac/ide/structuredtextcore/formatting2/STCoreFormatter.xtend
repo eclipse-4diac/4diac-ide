@@ -348,7 +348,7 @@ class STCoreFormatter extends AbstractFormatter2 {
 		if (!(binaryExpression.eContainer instanceof STBinaryExpression ||
 			binaryExpression.eContainer instanceof STCallArgument) ||
 			(binaryExpression.eContainer instanceof STCallArgument &&
-				binaryExpression.regionForEObject.length > maxLineWidth)) {
+				binaryExpression.regionForEObject?.length > maxLineWidth)) {
 			val iter = binaryExpression.allRegionsFor.features(ST_BINARY_EXPRESSION__OP).filter [
 				val line = it.lineRegions.get(0)
 
