@@ -12,7 +12,7 @@
  */
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document
 
-import org.eclipse.fordiac.ide.fbtypextext.ui.FBTypeXtextDocumentUpdater
+import org.eclipse.fordiac.ide.structuredtextcore.ui.document.FBTypeXtextDocumentUpdater
 
 class STAlgorithmDocumentFBTypeUpdater extends FBTypeXtextDocumentUpdater {
 	

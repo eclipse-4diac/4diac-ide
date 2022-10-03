@@ -107,6 +107,7 @@ public final class FordiacMessages extends NLS {
 	public static String TableCopyPaste_TEXT_Copy;  // NOSONAR
 	public static String TableCopyPaste_TEXT_Paste;  // NOSONAR
 	public static String TableCopyPaste_TEXT_Cut;  // NOSONAR
+	public static String NatTable_TEXT_Paste;  // NOSONAR
 
 	static {
 		// initialize resource bundle

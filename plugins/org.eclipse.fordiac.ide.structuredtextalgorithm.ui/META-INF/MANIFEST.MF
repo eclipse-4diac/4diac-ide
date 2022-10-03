@@ -8,6 +8,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.structuredtextalgorithm.ui; singlet
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.structuredtextalgorithm.ide,
+ org.eclipse.xtend.lib, 
  org.eclipse.xtext.ui,
  org.eclipse.xtext.ui.shared,
  org.eclipse.xtext.ui.codetemplates.ui,
@@ -20,8 +21,7 @@ Require-Bundle: org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.structuredtextcore,
  org.eclipse.fordiac.ide.structuredtextcore.ui,
  org.eclipse.xtend.lib;bundle-version="2.14.0",
- org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.fordiac.ide.fbtypextext
+ org.eclipse.fordiac.ide.systemmanagement
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.ui.codemining;resolution:=optional
 Bundle-RequiredExecutionEnvironment: JavaSE-11

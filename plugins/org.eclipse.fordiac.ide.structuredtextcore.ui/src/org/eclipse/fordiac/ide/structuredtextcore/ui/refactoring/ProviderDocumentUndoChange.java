@@ -67,7 +67,7 @@ public class ProviderDocumentUndoChange extends Change {
 	public Change perform(final IProgressMonitor pm) throws CoreException {
 		IDocument document = null;
 		try {
-			document = acquireDocument(pm);
+			document = acquireDocument();
 			final UndoEdit undo = performEdits(document);
 			commit(document, pm);
 			return createUndoChange(undo);
@@ -76,7 +76,7 @@ public class ProviderDocumentUndoChange extends Change {
 		} catch (final MalformedTreeException e) {
 			throw Changes.asCoreException(e);
 		} finally {
-			releaseDocument(document, pm);
+			releaseDocument();
 		}
 	}
 
@@ -94,7 +94,7 @@ public class ProviderDocumentUndoChange extends Change {
 		}
 	}
 
-	protected IDocument acquireDocument(final IProgressMonitor pm) throws CoreException {
+	protected IDocument acquireDocument() throws CoreException {
 		documentProvider.connect(editorInput);
 		final IDocument document = documentProvider.getDocument(editorInput);
 		if (document == null) {
@@ -107,7 +107,7 @@ public class ProviderDocumentUndoChange extends Change {
 		documentProvider.saveDocument(pm, editorInput, document, false);
 	}
 
-	protected void releaseDocument(final IDocument document, final IProgressMonitor pm) {
+	protected void releaseDocument() {
 		documentProvider.disconnect(editorInput);
 	}
 

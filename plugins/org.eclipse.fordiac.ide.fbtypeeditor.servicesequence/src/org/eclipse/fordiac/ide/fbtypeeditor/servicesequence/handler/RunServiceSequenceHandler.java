@@ -15,16 +15,18 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -43,11 +45,11 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 			final ServiceSequence seq = getSequence(selected);
 			if (seq != null) {
 				try {
+					final BasicFBType fbType = EcoreUtil.copy((BasicFBType) seq.getService().getFBType());
 					if ((seq.getStartState() != null) && !seq.getStartState().isBlank()) { // $NON-NLS-1$
-						AbstractInterpreterTest.runTest((BasicFBType) seq.getService().getFBType(), seq,
-								seq.getStartState());
+						FBTestRunner.runFBTest(fbType, seq, seq.getStartState());
 					} else {
-						AbstractInterpreterTest.runFBTest((BasicFBType) seq.getService().getFBType(), seq);
+						FBTestRunner.runFBTest(fbType, seq);
 					}
 					MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
 							Messages.RunServiceSequenceHandler_Success,
@@ -72,11 +74,11 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 		setBaseEnabled(!getSelectedSequences(selection).isEmpty());
 	}
 
+	@SuppressWarnings("unchecked")
 	private static List<ServiceSequence> getSelectedSequences(final ISelection selection) {
 		if (selection instanceof StructuredSelection) {
 			return (List<ServiceSequence>) ((StructuredSelection) selection).toList().stream()
-					.map(RunServiceSequenceHandler::getSequence).filter(ServiceSequence.class::isInstance)
-					.collect(Collectors.toList());
+					.map(RunServiceSequenceHandler::getSequence).filter(Objects::nonNull).collect(Collectors.toList());
 		}
 		return Collections.emptyList();
 	}

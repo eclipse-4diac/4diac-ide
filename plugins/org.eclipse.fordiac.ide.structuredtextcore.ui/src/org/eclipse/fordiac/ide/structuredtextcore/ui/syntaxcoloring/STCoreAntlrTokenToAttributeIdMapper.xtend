@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies GmbH
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,9 +20,9 @@ class STCoreAntlrTokenToAttributeIdMapper extends DefaultAntlrTokenToAttributeId
 	val VAR_DECLARATION_KEYWORDS = #{"'VAR'", "'VAR_TEMP'", "'VAR_INPUT'", "'VAR_OUTPUT'", "'VAR_IN_OUT'", "'END_VAR'",
 		"'VAR_EXTERNAL'", "'VAR_GLOBAL'", "'VAR_ACCESS'", "'RETAIN'", "'CONSTANT'", "'AT'"}
 
-	val DATA_TYPES_KEYWORDS = #{"'CHAR'", "'SINT'", "'INT'", "'DINT'", "'LINT'", "'LINT'", "'USINT'", "'UINT'",
-		"'LDINT'", "'ULINT'", "'REAL'", "'LREAL'", "'TIME'", "'DATE'", "'TIME_OF_DAY'", "'DATE_AND_TIME'", "'STRING'",
-		"'BOOL'", "'BYTE'", "'WORD'", "'DWORD'", "'LWORD'", "'ARRAY'"}
+	val DATA_TYPES_KEYWORDS = #{"'CHAR'", "'WCHAR'", "'SINT'", "'INT'", "'DINT'", "'LINT'", "'LINT'", "'USINT'",
+		"'UINT'", "'LDINT'", "'ULINT'", "'REAL'", "'LREAL'", "'TIME'", "'DATE'", "'TIME_OF_DAY'", "'DATE_AND_TIME'",
+		"'STRING'", "'WSTRING'", "'BOOL'", "'BYTE'", "'WORD'", "'DWORD'", "'LWORD'", "'ARRAY'"}
 
 	val FUNCTIONS_KEYWORDS = #{"'FUNCTION'", "'END_FUNCTION'"}
 
@@ -31,6 +31,8 @@ class STCoreAntlrTokenToAttributeIdMapper extends DefaultAntlrTokenToAttributeId
 	val METHOD_BLOCK_KEYWORDS = #{"'METHOD'", "'END_METHOD'"}
 
 	val ALGORITHM_BLOCK_KEYWORDS = #{"'ALGORITHM'", "'END_ALGORITHM'"}
+
+	val BOOLEAN_KEYWORDS = #{"'TRUE'", "'FALSE'"}
 
 	override protected String calculateId(String tokenName, int tokenType) {
 
@@ -51,6 +53,9 @@ class STCoreAntlrTokenToAttributeIdMapper extends DefaultAntlrTokenToAttributeId
 		}
 		if (FUNCTIONS_KEYWORDS.contains(tokenName)) {
 			return STCoreHighlightingStyles.FUNCTIONS_ID;
+		}
+		if (BOOLEAN_KEYWORDS.contains(tokenName)) {
+			return STCoreHighlightingStyles.NUMBER_ID;
 		}
 		return super.calculateId(tokenName, tokenType);
 

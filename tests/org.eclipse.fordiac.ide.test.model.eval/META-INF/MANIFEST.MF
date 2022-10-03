@@ -15,7 +15,6 @@ Import-Package: org.junit.jupiter.api,
 Require-Bundle: org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
- org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.model.eval.st,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor

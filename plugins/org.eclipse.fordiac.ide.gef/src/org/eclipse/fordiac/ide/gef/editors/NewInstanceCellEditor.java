@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.gef.editors;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.Messages;
+import org.eclipse.fordiac.ide.gef.utilities.CellEditorLayoutFactory;
 import org.eclipse.fordiac.ide.model.edit.providers.ResultListLabelProvider;
 import org.eclipse.fordiac.ide.model.typelibrary.PaletteFilter;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -36,7 +37,6 @@ import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -45,6 +45,8 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class NewInstanceCellEditor extends TextCellEditor {
+
+	private static final int NUM_COLUMNS = 2;
 
 	// if NewInstanceCellEditor is used inside a TableCell = true
 	// if not for example like in main editor for creating new FBs = false(default)
@@ -173,15 +175,8 @@ public class NewInstanceCellEditor extends TextCellEditor {
 		newContainer.setForeground(parent.getForeground());
 
 		// set layout with minimal space to keep the cell editor compact
-		final GridLayout contLayout = new GridLayout(2, false);
-		contLayout.horizontalSpacing = 0;
-		contLayout.marginTop = 0;
-		contLayout.marginBottom = 0;
-		contLayout.marginWidth = 0;
-		contLayout.marginHeight = 0;
-		contLayout.verticalSpacing = 0;
-		contLayout.horizontalSpacing = 0;
-		newContainer.setLayout(contLayout);
+
+		newContainer.setLayout(CellEditorLayoutFactory.getNewGridZeroLayout(NUM_COLUMNS));
 		return newContainer;
 	}
 

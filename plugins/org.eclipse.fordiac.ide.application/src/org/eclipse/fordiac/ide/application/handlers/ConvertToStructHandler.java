@@ -119,7 +119,7 @@ public class ConvertToStructHandler extends AbstractHandler {
 		if (sel instanceof StructuredSelection) {
 			return (List<VarDeclaration>) ((IStructuredSelection) sel).toList().stream()
 					.filter(EditPart.class::isInstance).map(ep -> ((EditPart) ep).getModel())
-					.filter(el -> (el instanceof VarDeclaration))
+					.filter(VarDeclaration.class::isInstance)
 					.collect(Collectors.toList());
 		}
 		return Collections.emptyList();

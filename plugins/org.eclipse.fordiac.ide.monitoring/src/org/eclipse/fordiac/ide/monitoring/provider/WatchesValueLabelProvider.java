@@ -32,11 +32,10 @@ public class WatchesValueLabelProvider extends ColumnLabelProvider {
 		if (element instanceof WatchValueTreeNode) {
 			final WatchValueTreeNode tn = (WatchValueTreeNode) element;
 			final IInterfaceElement ie = tn.getMonitoringBaseElement().getPort().getInterfaceElement();
-			if (ie.getType() instanceof RealType) {
+			if (ie.getType() instanceof RealType && !tn.getValue().contains(".")) {//$NON-NLS-1$
 				// display integers as decimals
-				if (!tn.getValue().contains(".")) { //$NON-NLS-1$
-					return tn.getValue() + ".0"; //$NON-NLS-1$
-				}
+				return tn.getValue() + ".0"; //$NON-NLS-1$
+
 			}
 			if (tn.isStructNode()) { // if element is of type struct, then convert all strings of that struct which are
 				// of type ANY_BIT to 16#xx

@@ -53,8 +53,14 @@ public final class ValidateProject {
 				return Status.OK_STATUS;
 			}
 		};
-		job.setRule(root);
+		job.setRule(null);
 		job.schedule();
+		try {
+			job.join();
+		} catch (final InterruptedException e) {
+			FordiacLogHelper.logError("checkTypeLibraryInProjectsInWorkspaceJob interrupted", e); //$NON-NLS-1$
+			Thread.currentThread().interrupt();
+		}
 
 	}
 

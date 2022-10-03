@@ -24,11 +24,13 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
 /**
@@ -89,6 +91,8 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 			return createFBTransaction();
 		case OperationalSemanticsPackage.CONNECTION_TO_VALUE_MAP:
 			return (EObject) createConnectionToValueMap();
+		case OperationalSemanticsPackage.RUNTIME_MAP:
+			return (EObject) createRuntimeMap();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -168,6 +172,16 @@ public class OperationalSemanticsFactoryImpl extends EFactoryImpl implements Ope
 	public Map.Entry<Connection, Value> createConnectionToValueMap() {
 		ConnectionToValueMapImpl connectionToValueMap = new ConnectionToValueMapImpl();
 		return connectionToValueMap;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	public Map.Entry<FBNetworkElement, FBRuntimeAbstract> createRuntimeMap() {
+		RuntimeMapImpl runtimeMap = new RuntimeMapImpl();
+		return runtimeMap;
 	}
 
 	/**

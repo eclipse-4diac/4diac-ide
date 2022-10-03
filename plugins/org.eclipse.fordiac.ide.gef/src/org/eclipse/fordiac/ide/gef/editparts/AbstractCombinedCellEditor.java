@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.gef.editparts;
 import java.text.MessageFormat;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.gef.utilities.CellEditorLayoutFactory;
 import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
@@ -26,12 +27,12 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 
 public abstract class AbstractCombinedCellEditor<T> extends TextCellEditor {
+	private static final int NUM_COLUMNS = 4;
 	private Composite container;
 	private CCombo comboBox;
 	private T element;
@@ -201,15 +202,7 @@ public abstract class AbstractCombinedCellEditor<T> extends TextCellEditor {
 		newContainer.setBackground(parent.getBackground());
 		newContainer.setForeground(parent.getForeground());
 		// set layout with minimal space to keep the cell editor compact
-		final GridLayout contLayout = new GridLayout(4, false);
-		contLayout.horizontalSpacing = 0;
-		contLayout.marginTop = 0;
-		contLayout.marginBottom = 0;
-		contLayout.marginWidth = 0;
-		contLayout.marginHeight = 0;
-		contLayout.verticalSpacing = 0;
-		contLayout.horizontalSpacing = 0;
-		newContainer.setLayout(contLayout);
+		newContainer.setLayout(CellEditorLayoutFactory.getNewGridZeroLayout(NUM_COLUMNS));
 		return newContainer;
 	}
 

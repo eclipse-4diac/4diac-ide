@@ -6694,6 +6694,34 @@ public interface LibraryElementPackage extends EPackage {
 	int ST_METHOD_FEATURE_COUNT = TEXT_METHOD_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.HiddenElementImpl <em>Hidden Element</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.HiddenElementImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getHiddenElement()
+	 * @generated
+	 */
+	int HIDDEN_ELEMENT = 86;
+
+	/**
+	 * The feature id for the '<em><b>Attributes</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HIDDEN_ELEMENT__ATTRIBUTES = CONFIGURABLE_OBJECT__ATTRIBUTES;
+
+	/**
+	 * The number of structural features of the '<em>Hidden Element</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int HIDDEN_ELEMENT_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6701,7 +6729,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 86;
+	int LANGUAGE = 87;
 
 	/**
 	 * The meta object id for the '<em>IProject</em>' data type.
@@ -6711,7 +6739,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 87;
+	int IPROJECT = 88;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -6721,7 +6749,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 88;
+	int IFILE = 89;
 
 	/**
 	 * The meta object id for the '<em>Command Stack</em>' data type.
@@ -6731,7 +6759,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
 	 * @generated
 	 */
-	int COMMAND_STACK = 89;
+	int COMMAND_STACK = 90;
 
 	/**
 	 * The meta object id for the '<em>Point</em>' data type.
@@ -6741,7 +6769,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPoint()
 	 * @generated
 	 */
-	int POINT = 90;
+	int POINT = 91;
 
 	/**
 	 * The meta object id for the '<em>Type Entry</em>' data type.
@@ -6751,7 +6779,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeEntry()
 	 * @generated
 	 */
-	int TYPE_ENTRY = 91;
+	int TYPE_ENTRY = 92;
 
 	/**
 	 * The meta object id for the '<em>Type Library</em>' data type.
@@ -6761,7 +6789,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeLibrary()
 	 * @generated
 	 */
-	int TYPE_LIBRARY = 92;
+	int TYPE_LIBRARY = 93;
 
 
 	/**
@@ -9528,6 +9556,16 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getSTMethod();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.HiddenElement <em>Hidden Element</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Hidden Element</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.HiddenElement
+	 * @generated
+	 */
+	EClass getHiddenElement();
+
+	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11868,6 +11906,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ST_METHOD = eINSTANCE.getSTMethod();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.HiddenElementImpl <em>Hidden Element</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.HiddenElementImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getHiddenElement()
+		 * @generated
+		 */
+		EClass HIDDEN_ELEMENT = eINSTANCE.getHiddenElement();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.

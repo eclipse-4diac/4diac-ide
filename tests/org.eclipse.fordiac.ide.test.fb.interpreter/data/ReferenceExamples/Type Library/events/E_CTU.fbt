@@ -1,52 +1,65 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!DOCTYPE FBType SYSTEM "http://www.holobloc.com/xml/LibraryElement.dtd">
-<FBType Comment="Event driven up counter" Name="E_CTU">
-  <Identification Description="Copyright (c) 2017 fortiss GmbH&#13;&#10; &#13;&#10;This program and the accompanying materials are made&#13;&#10;available under the terms of the Eclipse Public License 2.0&#13;&#10;which is available at https://www.eclipse.org/legal/epl-2.0/&#13;&#10;&#13;&#10;SPDX-License-Identifier: EPL-2.0" Standard="61499-1 Annex 2"/>
-  <VersionInfo Author="Alois Zoitl" Date="2017-09-21" Organization="fortiss GmbH" Remarks="initial API and implementation and/or initial documentation" Version="1.0"/>
-  <InterfaceList>
-    <EventInputs>
-      <Event Comment="Count up" Name="CU" Type="Event">
-        <With Var="PV"/>
-      </Event>
-      <Event Comment="Reset" Name="R" Type="Event"/>
-    </EventInputs>
-    <EventOutputs>
-      <Event Comment="Count up output" Name="CUO" Type="Event">
-        <With Var="Q"/>
-        <With Var="CV"/>
-      </Event>
-      <Event Comment="Reset output" Name="RO" Type="Event">
-        <With Var="Q"/>
-        <With Var="CV"/>
-      </Event>
-    </EventOutputs>
-    <InputVars>
-      <VarDeclaration Comment="Process Value" Name="PV" Type="UINT"/>
-    </InputVars>
-    <OutputVars>
-      <VarDeclaration Comment="True if CV &gt;= PV" Name="Q" Type="BOOL"/>
-      <VarDeclaration Comment="Counter Value" Name="CV" Type="UINT"/>
-    </OutputVars>
-  </InterfaceList>
-  <BasicFB>
-    <ECC>
-      <ECState Comment="Initial State" Name="START" x="550.0" y="425.0"/>
-      <ECState Comment="" Name="CU" x="1570.0" y="165.0">
-        <ECAction Algorithm="CU" Output="CUO"/>
-      </ECState>
-      <ECState Comment="" Name="R" x="900.0" y="1000.0">
-        <ECAction Algorithm="R" Output="RO"/>
-      </ECState>
-      <ECTransition Comment="" Condition="CU[CV &lt; 65535]" Destination="CU" Source="START" x="970.0" y="210.0"/>
-      <ECTransition Comment="" Condition="1" Destination="START" Source="CU" x="1285.0" y="510.0"/>
-      <ECTransition Comment="" Condition="R" Destination="R" Source="START" x="845.0" y="770.0"/>
-      <ECTransition Comment="" Condition="1" Destination="START" Source="R" x="545.0" y="1050.0"/>
-    </ECC>
-    <Algorithm Comment="reset counter" Name="R">
-      <ST Text="CV := 0;&#13;&#10;Q := FALSE;"/>
-    </Algorithm>
-    <Algorithm Comment="count up" Name="CU">
-      <ST Text="CV := CV + 1;&#13;&#10;Q  := (CV &gt;= PV);"/>
-    </Algorithm>
-  </BasicFB>
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_CTU" Comment="Event driven up counter">
+	<Identification Standard="61499-1 Annex 2" Description="&lt;p&gt;Copyright (c) 2017 fortiss GmbH This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0&lt;/p&gt;&#10;" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-21" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="CU" Type="Event" Comment="Count up">
+				<With Var="PV"/>
+			</Event>
+			<Event Name="R" Type="Event" Comment="Reset">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CUO" Type="Event" Comment="Count up output">
+				<With Var="Q"/>
+				<With Var="CV"/>
+			</Event>
+			<Event Name="RO" Type="Event" Comment="Reset output">
+				<With Var="Q"/>
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="PV" Type="UINT" Comment="Process Value"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="True if CV &amp;gt;= PV"/>
+			<VarDeclaration Name="CV" Type="UINT" Comment="Counter Value"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="546.6666666666667" y="420.0">
+			</ECState>
+			<ECState Name="CU" Comment="" x="1566.6666666666667" y="160.0">
+				<ECAction Algorithm="CU" Output="CUO"/>
+			</ECState>
+			<ECState Name="R" Comment="" x="900.0" y="1000.0">
+				<ECAction Algorithm="R" Output="RO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="CU" Condition="CU[CV &lt; 65535]" Comment="" x="966.6666666666667" y="206.66666666666669"/>
+			<ECTransition Source="CU" Destination="START" Condition="1" Comment="" x="1280.0" y="506.6666666666667"/>
+			<ECTransition Source="START" Destination="R" Condition="R" Comment="" x="840.0" y="766.6666666666667"/>
+			<ECTransition Source="R" Destination="START" Condition="1" Comment="" x="540.0" y="1046.6666666666667"/>
+		</ECC>
+		<Algorithm Name="R" Comment="">
+			<ST><![CDATA[ALGORITHM R
+CV := 0;
+Q := FALSE;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="CU" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM CU
+CV := CV + 1;
+Q  := (CV >= PV);
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
 </FBType>

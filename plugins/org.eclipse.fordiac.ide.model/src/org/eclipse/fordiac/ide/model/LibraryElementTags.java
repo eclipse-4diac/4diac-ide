@@ -48,7 +48,7 @@ public final class LibraryElementTags {
 	public static final String HEIGHT_ATTRIBUTE = "height"; //$NON-NLS-1$
 
 	public static final String CONNECTION_ELEMENT = "Connection"; //$NON-NLS-1$
-	public static final String CONNECTION_VISIBLE = "Visible"; //$NON-NLS-1$
+	public static final String ELEMENT_VISIBLE = "Visible"; //$NON-NLS-1$
 	public static final String DESTINATION_ATTRIBUTE = "Destination"; //$NON-NLS-1$
 	public static final String SOURCE_ATTRIBUTE = "Source"; //$NON-NLS-1$
 	public static final String ADAPTERCONNECTIONS_ELEMENT = "AdapterConnections"; //$NON-NLS-1$
@@ -158,6 +158,7 @@ public final class LibraryElementTags {
 	public static final String ATTRIBUTE_ELEMENT = "Attribute"; //$NON-NLS-1$
 	public static final String COLOR = "Color"; //$NON-NLS-1$
 	public static final String SYSTEM = "System"; //$NON-NLS-1$
+	public static final String DOCUMENTATION = "Documentation"; //$NON-NLS-1$
 
 	public static final String STRUCTURED_TYPE_ELEMENT = "StructuredType"; //$NON-NLS-1$
 	public static final String DEMUX_VISIBLE_CHILDREN = "VisibleChildren"; //$NON-NLS-1$

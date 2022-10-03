@@ -89,6 +89,12 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
+import org.eclipse.fordiac.ide.model.data.ByteType
+import org.eclipse.fordiac.ide.model.data.DwordType
+import org.eclipse.fordiac.ide.model.data.LwordType
+import org.eclipse.fordiac.ide.model.data.WordType
+import org.eclipse.fordiac.ide.model.data.BoolType
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 
 abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
@@ -99,6 +105,33 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	override getInfos() { emptyList }
 
 	override getWarnings() { emptyList }
+
+	def protected CharSequence generateFBVariablePrefix(InterfaceList vars) '''
+		«FOR in : vars.inputVars»
+			local fb_var_«in.name» = fb[DI_«in.name»]
+		«ENDFOR»
+		«FOR out : vars.outputVars»
+			local fb_var_«out.name» = fb[DO_«out.name»]
+		«ENDFOR»
+	'''
+
+	def protected CharSequence generateFBVariableSuffix(InterfaceList vars) '''
+		«FOR out : vars.outputVars»
+			fb[DO_«out.name»] = fb_var_«out.name»
+		«ENDFOR»
+	'''
+
+	def protected CharSequence generateInternalVariablePrefix(Iterable<? extends VarDeclaration> vars) '''
+		«FOR in : vars»
+			local fb_var_«in.name» = fb[IN_«in.name»]
+		«ENDFOR»
+	'''
+
+	def protected CharSequence generateInternalVariableSuffix(Iterable<? extends VarDeclaration> vars) '''
+		«FOR in : vars»
+			fb[IN_«in.name»] = fb_var_«in.name»
+		«ENDFOR»
+	'''
 
 	def protected CharSequence generateLocalVariables(Iterable<? extends STVarDeclarationBlock> blocks,
 		boolean temp) '''
@@ -282,8 +315,68 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateExpression(STArrayAccessExpression expr) //
 	'''«expr.receiver.generateExpression»«FOR index : expr.index»[«index.generateExpression»]«ENDFOR»'''
 
-	def protected dispatch CharSequence generateExpression(STFeatureExpression expr) // TODO: function call
-	'''«expr.feature.generateFeatureName»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
+	def protected dispatch CharSequence generateExpression(STFeatureExpression expr) { // TODO: function call
+		if (expr.call) {
+			if (expr.feature instanceof STStandardFunction) {
+				var name = expr.feature.name.toLowerCase
+				var call = ""
+				var addPars = ""
+				var type = (expr.feature as STStandardFunction).returnType
+				switch name {
+					// math functions
+					case "abs",
+					case "sqrt",
+					case "ln": {
+						call = '''math.«name»'''
+					}
+					case "log": {
+						call = "math.ln"
+						addPars = ", 10"
+					}
+					case "exp",
+					case "sin",
+					case "cos",
+					case "tan",
+					case "asin",
+					case "acos",
+					case "atan": {
+						call = '''math.«name»'''
+					}
+					case "atan2": { // TODO: check if functionally the same
+						call = "math.atan"
+					}
+					// bit operations
+					case "shl",
+					case "shr",
+					case "rol",
+					case "ror": {
+						call = '''STFunc.«name»'''
+						if (type instanceof BoolType) {
+							addPars = ", 1"
+						} else if (type instanceof ByteType) {
+							addPars = ", 8"
+						} else if (type instanceof WordType) {
+							addPars = ", 16"
+						} else if (type instanceof DwordType) {
+							addPars = ", 32"
+						} else if (type instanceof LwordType) {
+							addPars = ", 64"
+						}
+					}
+					default:
+						call = '''«expr.feature.generateFeatureName»'''
+				}
+				return '''«call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»«addPars»)'''
+			} else {
+				if (expr.mappedInOutArguments.size == 0 && expr.mappedOutputArguments == 0) { // inlining possible
+					return '''«expr.feature.generateFeatureName»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)'''
+				} else {
+				}
+			}
+		}
+		'''«expr.feature.generateFeatureName»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
+
+	}
 
 	def protected Iterable<CharSequence> generateCallArguments(STFeatureExpression expr) {
 		try {
@@ -305,14 +398,14 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STExpression argument) {
 		if (argument === null)
-			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
+			'''nil'''
 		else
 			argument.generateExpression
 	}
 
 	def protected CharSequence generateOutputCallArgument(INamedElement parameter, STExpression argument) {
 		if (argument === null)
-			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
+			'''nil'''
 		else
 			argument.generateExpression
 	}
@@ -385,14 +478,13 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		""
 	}
 
-	def protected dispatch CharSequence generateFeatureName(VarDeclaration feature) //
-	'''«IF feature.rootContainer instanceof BaseFBType»st_«ENDIF»«feature.name»()'''
+	def protected dispatch CharSequence generateFeatureName(VarDeclaration feature) '''fb_var_«feature.name»'''
 
 	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) '''st_lv_«feature.name»'''
 
 	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''func_«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(STStandardFunction feature) '''func_«feature.name»''' // TODO: map standard functions
+	def protected dispatch CharSequence generateFeatureName(STStandardFunction feature) '''STfunc.«feature.name»''' // TODO: map standard functions
 
 	def protected dispatch CharSequence generateFeatureName(STMethod feature) '''method_«feature.name»'''
 

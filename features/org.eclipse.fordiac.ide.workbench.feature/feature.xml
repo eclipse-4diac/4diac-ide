@@ -230,6 +230,7 @@ United States, other countries, or both.\n
       <import plugin="org.eclipse.jdt.core" match="compatible"/>
       <import plugin="org.eclipse.jdt.launching"/>
       <import plugin="org.eclipse.ocl.ecore"/>
+      <import feature="org.eclipse.nebula.widgets.nattable.core.feature" version="2.0.3" match="greaterOrEqual"/>
    </requires>
 
    <plugin

@@ -116,4 +116,20 @@ public interface FBType extends CompilableType, ICallable {
 	 */
 	DataType getReturnType();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model
+	 * @generated
+	 */
+	void setDocumentation(String value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getDocumentation();
+
 } // FBType

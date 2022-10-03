@@ -139,7 +139,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//INamedElement #//ConfigurableObject #//ErrorMarkerRef">
+  <eClassifiers xsi:type="ecore:EClass" name="Connection" abstract="true" eSuperTypes="#//INamedElement #//ConfigurableObject #//ErrorMarkerRef #//HiddenElement">
     <eOperations name="getSourceElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getSourceElement(this);"/>
@@ -172,17 +172,6 @@
       <eParameters name="dx1" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
       <eParameters name="dy" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
       <eParameters name="dx2" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
-    </eOperations>
-    <eOperations name="setVisible">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.setVisible(this,visible);"/>
-      </eAnnotations>
-      <eParameters name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
-    </eOperations>
-    <eOperations name="isVisible" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.isVisible(this);"/>
-      </eAnnotations>
     </eOperations>
     <eOperations name="isInterfaceConnection" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -427,7 +416,7 @@
     </eOperations>
     <eOperations name="isResourceTypeFB" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceTypeFB(this);"/>
+        <details key="body" value="return false;"/>
       </eAnnotations>
     </eOperations>
     <eOperations name="getType" lowerBound="1" eType="#//FBType">
@@ -567,6 +556,17 @@
     <eOperations name="getReturnType" eType="ecore:EClass data.ecore#//DataType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="setDocumentation">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.setDocumentation(this, value);"/>
+      </eAnnotations>
+      <eParameters name="value" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    </eOperations>
+    <eOperations name="getDocumentation" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.getDocumentation(this);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="interfaceList" lowerBound="1"
@@ -1175,7 +1175,7 @@
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="IInterfaceElement" abstract="true" interface="true"
-      eSuperTypes="#//INamedElement #//ConfigurableObject">
+      eSuperTypes="#//INamedElement #//ConfigurableObject #//HiddenElement">
     <eOperations name="getFBNetworkElement" lowerBound="1" eType="#//FBNetworkElement">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
@@ -1569,4 +1569,17 @@
   <eClassifiers xsi:type="ecore:EClass" name="STMethod" eSuperTypes="#//TextMethod"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TypeEntry" instanceClassName="org.eclipse.fordiac.ide.model.typelibrary.TypeEntry"/>
   <eClassifiers xsi:type="ecore:EDataType" name="TypeLibrary" instanceClassName="org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary"/>
+  <eClassifiers xsi:type="ecore:EClass" name="HiddenElement" eSuperTypes="#//ConfigurableObject">
+    <eOperations name="setVisible">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);"/>
+      </eAnnotations>
+      <eParameters name="visible" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean"/>
+    </eOperations>
+    <eOperations name="isVisible" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.isVisible(this);"/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
 </ecore:EPackage>

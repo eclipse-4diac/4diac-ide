@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -17,7 +17,7 @@ import org.eclipse.gef.requests.CreationFactory;
 
 /**
  * The typeTemplate is used to create a new instance of the typeTemplate.
- * 
+ *
  */
 public class FBTypeTemplateCreationFactory implements CreationFactory {
 
@@ -26,7 +26,7 @@ public class FBTypeTemplateCreationFactory implements CreationFactory {
 
 	/**
 	 * The Constructor with the specified template.
-	 * 
+	 *
 	 * @param typeTemplate the type template of an fb type
 	 */
 	public FBTypeTemplateCreationFactory(final Object typeTemplate) {
@@ -35,18 +35,18 @@ public class FBTypeTemplateCreationFactory implements CreationFactory {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.requests.CreationFactory#getNewObject()
 	 */
 	@Override
 	public Object getNewObject() {
-		// TODO implement
+
 		return null;
 	}
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.requests.CreationFactory#getObjectType()
 	 */
 	@Override

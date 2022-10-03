@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -283,7 +284,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public EList<Attribute> getAttributes() {
 		if (attributes == null) {
-			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES);
+			attributes = new EObjectContainmentEList.Resolving<>(Attribute.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES);
 		}
 		return attributes;
 	}
@@ -380,7 +381,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public EList<Connection> getInputConnections() {
 		if (inputConnections == null) {
-			inputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
+			inputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__INPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__DESTINATION);
 		}
 		return inputConnections;
 	}
@@ -392,7 +393,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public EList<Connection> getOutputConnections() {
 		if (outputConnections == null) {
-			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
+			outputConnections = new EObjectWithInverseResolvingEList<>(Connection.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
 		}
 		return outputConnections;
 	}
@@ -483,7 +484,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public EList<With> getWiths() {
 		if (withs == null) {
-			withs = new EObjectWithInverseResolvingEList<With>(With.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS, LibraryElementPackage.WITH__VARIABLES);
+			withs = new EObjectWithInverseResolvingEList<>(With.class, this, MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__WITHS, LibraryElementPackage.WITH__VARIABLES);
 		}
 		return withs;
 	}
@@ -504,6 +505,26 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public FBNetworkElement getFBNetworkElement() {
 		return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setVisible(final boolean visible) {
+		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isVisible() {
+		return org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.isVisible(this);
 	}
 
 	/**
@@ -773,6 +794,11 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 				default: return -1;
 			}
 		}
+		if (baseClass == HiddenElement.class) {
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
+		}
 		if (baseClass == IInterfaceElement.class) {
 			switch (derivedFeatureID) {
 				case MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__IS_INPUT: return LibraryElementPackage.IINTERFACE_ELEMENT__IS_INPUT;
@@ -810,6 +836,11 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 		if (baseClass == ConfigurableObject.class) {
 			switch (baseFeatureID) {
 				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return MonitoringPackage.ADAPTER_MONITORING_VAR_DECLARATION__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		if (baseClass == HiddenElement.class) {
+			switch (baseFeatureID) {
 				default: return -1;
 			}
 		}

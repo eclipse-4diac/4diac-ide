@@ -11,7 +11,9 @@
  *  Bianca Wiesmayr
  *     - initial API and implementation and/or initial documentation
  *  Paul Pavlicek
- *     - cleanup and extracting code to factory methods
+ *     - cleanup and extracting code, added random generation
+ *  Felix Roithmayr
+ *     - added extra support for context menu entry
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 
@@ -26,17 +28,11 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.resource.Resource;
-import org.eclipse.emf.ecore.resource.ResourceSet;
-import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
-import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
-import org.eclipse.fordiac.ide.fb.interpreter.api.EventOccFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
@@ -51,7 +47,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.SelectionEvent;
@@ -66,6 +64,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class RecordServiceSequenceHandler extends AbstractHandler {
@@ -104,24 +103,19 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	private static void runInterpreter(final ServiceSequence seq, final List<String> eventNames, final boolean isAppend,
 			final boolean isRandom, final FBType fbType, final int count) {
 		List<Event> events;
-		final FBType typeCopy = fbType;// ToDo EcoreUtil.copy(fbType);
-		events = eventNames.stream().map(name -> findEvent(typeCopy, name)).filter(Objects::nonNull)
-				.collect(Collectors.toList());
-		if (isRandom) {
-			if (count > 0) {
-				events.addAll(InputGenerator.getRandomEventsSequence(typeCopy, count));
-			}
-			if (!events.isEmpty()) {
-				InputGenerator.setRandomDataSequence(events.get(0));
-			}
+		final FBType typeCopy = EcoreUtil.copy(fbType);
+		events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
+				.filter(Objects::nonNull).collect(Collectors.toList());
+		if (isRandom && (count > 0)) {
+			events.addAll(InputGenerator.getRandomEventsSequence(typeCopy, count));
 		}
-		final EventManager eventManager = createEventManager(typeCopy, events);
+		final EventManager eventManager = EventManagerFactory.createEventManager(typeCopy, events, isRandom);
 		EventManagerUtils.process(eventManager);
 		if (!isAppend) {
 			seq.getServiceTransaction().clear();
 		}
 		for (final Transaction transaction : eventManager.getTransactions()) {
-			ServiceSequenceUtils.convertTransactionToServiceModel(seq, (FBTransaction) transaction);
+			ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
 		}
 	}
 
@@ -135,24 +129,16 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		}
 	}
 
-	private static EventManager createEventManager(final FBType fbType, final List<Event> events) {
-		if (fbType.getService() == null) {
-			fbType.setService(ServiceSequenceUtils.createEmptyServiceModel());
-		}
-		final ResourceSet reset = new ResourceSetImpl();
-		final Resource resource = reset
-				.createResource(URI.createURI("platform:/resource/" + fbType.getName() + ".xmi")); //$NON-NLS-1$ //$NON-NLS-2$
-		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
-		resource.getContents().add(eventManager);
 
-		final List<EventOccurrence> createEos = EventOccFactory.createFrom(events, RuntimeFactory.createFrom(fbType));
 
-		for (final EventOccurrence eventOccurrence : createEos) {
-			final Transaction transaction = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
-			transaction.setInputEventOccurrence(eventOccurrence);
-			eventManager.getTransactions().add(transaction);
+	@Override
+	public void setEnabled(final Object evaluationContext) {
+		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
+				ISources.ACTIVE_CURRENT_SELECTION_NAME);
+		if (selection instanceof StructuredSelection) {
+			final StructuredSelection structuredSelection = (StructuredSelection) selection;
+			setBaseEnabled(structuredSelection.size() <= 1);
 		}
-		return eventManager;
 	}
 
 	private static Event findEvent(final FBType fbType, final String eventName) {

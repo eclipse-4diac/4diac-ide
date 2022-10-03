@@ -25,6 +25,8 @@ import org.eclipse.debug.core.model.IThread;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 
 public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThread {
+	private static final int REQUEST_WAIT_TIME = 1000;
+
 	private final Thread thread;
 
 	private final AtomicReference<DebugEvent> request = new AtomicReference<>(null);
@@ -56,7 +58,7 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 		DebugEvent resultingRequest = null;
 		synchronized (this.request) {
 			while ((resultingRequest = this.request.getAndSet(null)) == null || resultingRequest.getKind() != DebugEvent.RESUME) {
-				this.request.wait(1000); // wake up every second in case we missed a notification
+				this.request.wait(REQUEST_WAIT_TIME); // wake up every second in case we missed a notification
 			}
 		}
 		return resultingRequest;
@@ -120,8 +122,8 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 
 	@Override
 	public boolean isStepping() {
-		final DebugEvent request = this.request.get();
-		return request != null && request.isStepStart();
+		final DebugEvent req = this.request.get();
+		return req != null && req.isStepStart();
 	}
 
 	@Override
@@ -190,7 +192,7 @@ public class EvaluatorDebugThread extends EvaluatorDebugElement implements IThre
 
 	@Override
 	public IBreakpoint[] getBreakpoints() {
-		return null;
+		return new IBreakpoint[0];
 	}
 
 	@Override

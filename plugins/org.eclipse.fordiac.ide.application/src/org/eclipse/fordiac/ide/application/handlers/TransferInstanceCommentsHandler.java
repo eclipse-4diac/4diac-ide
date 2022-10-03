@@ -38,18 +38,17 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class TransferInstanceCommentsHandler extends AbstractHandler {
-	private StructUpdateDialog structUpdateDialog;
-	private StructManipulatorEditPart struct;
 
 	private static final int DEFAULT_BUTTON_INDEX = 0; // Save
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection sel = HandlerUtil.getCurrentStructuredSelection(event);
-		struct = (StructManipulatorEditPart) sel.getFirstElement();
+		final StructManipulatorEditPart struct = (StructManipulatorEditPart) sel.getFirstElement();
 		final String[] labels = { Messages.TransferInstanceComments_TransferLabel, Messages.Cancel };
 
-		structUpdateDialog = new StructUpdateDialog(null, Messages.TransferInstanceComments_WizardTitle, null, "",
+		final StructUpdateDialog structUpdateDialog = new StructUpdateDialog(null,
+				Messages.TransferInstanceComments_WizardTitle, null, "",
 				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX,
 				(DataTypeEntry) struct.getModel().getStructType().getTypeEntry()) {
 			@Override

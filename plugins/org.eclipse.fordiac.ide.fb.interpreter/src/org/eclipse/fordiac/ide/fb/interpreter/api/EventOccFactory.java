@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.fb.interpreter.api;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
@@ -21,14 +22,16 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 
-public class EventOccFactory {
+public final class EventOccFactory {
 
 	public static EventOccurrence createFrom(final Event event, final FBRuntimeAbstract runtime) {
 		final EventOccurrence createdEo = OperationalSemanticsFactory.eINSTANCE.createEventOccurrence();
 		createdEo.setEvent(event);
 		createdEo.setActive(true);
 		createdEo.setIgnored(false);
-		createdEo.setParentFB(event.getFBNetworkElement());
+		if (null != event) {
+			createdEo.setParentFB(event.getFBNetworkElement());
+		}
 		createdEo.setFbRuntime(runtime);
 		return createdEo;
 	}
@@ -39,6 +42,9 @@ public class EventOccFactory {
 	/** @param events
 	 * @return */
 	public static List<EventOccurrence> createFrom(final List<Event> events, final FBRuntimeAbstract initialRuntime) {
+		if (null == events || events.isEmpty()) {
+			return Collections.emptyList();
+		}
 		final List<EventOccurrence> createdEOs = new ArrayList<>();
 		for (final Event e : events) {
 			createdEOs.add(createFrom(e, null));

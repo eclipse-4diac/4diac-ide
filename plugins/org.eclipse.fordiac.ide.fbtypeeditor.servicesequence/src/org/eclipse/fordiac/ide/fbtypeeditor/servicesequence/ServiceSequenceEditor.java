@@ -12,6 +12,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr, Melanie Winter
  *     - change canvas, fix problem with size calculation when dragging elements
+ *   Felix Roithmayr
+ *     - added support for new commands and context menu items
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence;
 
@@ -217,4 +219,14 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 		return getGraphicalViewer().getRootEditPart();
 	}
 
+	@Override
+	public Object getAdapter(final Class adapter) {
+		if (adapter == CommandStack.class) {
+			return commandStack;
+		}
+		if (adapter == Service.class) {
+			return adapter.cast(fbType.getService());
+		}
+		return super.getAdapter(adapter);
+	}
 }

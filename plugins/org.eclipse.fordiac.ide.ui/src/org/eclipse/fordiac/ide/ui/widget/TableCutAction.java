@@ -8,8 +8,8 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Daniel Lindhuber
- *     - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber - initial API and implementation and/or initial documentation
+ *   Sebastian Hollersbacher - added support for multiple cells
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
@@ -18,11 +18,8 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.ViewerCell;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.nebula.jface.gridviewer.GridTableViewer;
+import org.eclipse.nebula.widgets.grid.Grid;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
@@ -31,7 +28,7 @@ public class TableCutAction extends Action {
 
 	private final Object part;
 
-	public TableCutAction(Object part) {
+	public TableCutAction(final Object part) {
 		this.part = part;
 		setId(ActionFactory.CUT.getId());
 		setText(FordiacMessages.TableCopyPaste_TEXT_Cut);
@@ -43,7 +40,7 @@ public class TableCutAction extends Action {
 	@Override
 	public void run() {
 		final I4diacTableUtil editor = TableWidgetFactory.getTableEditor(part);
-		
+
 		if (editor != null) {
 			for (final CellEditor cell : editor.getViewer().getCellEditors()) {
 				// cell can be null if column is not editable
@@ -52,33 +49,12 @@ public class TableCutAction extends Action {
 					return;
 				}
 			}
-			// This IF will be removed once the new copy/paste handling has been approved.
-			String instanceClassName = "CommentPropertySection"; //$NON-NLS-1$
-			if (instanceClassName.equals(editor.getClass().getSimpleName())) {
-				handleInstancePropertySheet(editor);
-			} else {
-				cutItems(editor);			
-			}
-		}
-	}
-	
-	private static void handleInstancePropertySheet(I4diacTableUtil editor) {
-		TableViewer viewer = editor.getViewer();
-		ViewerCell focusCell = viewer.getColumnViewerEditor().getFocusCell();
-		ICellModifier modifier = viewer.getCellModifier();
-		
-		if (focusCell != null) {
-			TableItem item = viewer.getTable().getItem(viewer.getTable().getSelectionIndex());
-			String property = (String) viewer.getColumnProperties()[focusCell.getColumnIndex()];
-			if (modifier.canModify(item, property)) {
-				Clipboard.getDefault().setContents(focusCell.getText());
-				modifier.modify(item, property, ""); //$NON-NLS-1$
-			}
+			cutItems(editor);
 		}
 	}
 
-	private static void cutItems(I4diacTableUtil editor) {
-		final Table table = editor.getViewer().getTable();
+	private static void cutItems(final I4diacTableUtil editor) {
+		final Grid table = ((GridTableViewer) editor.getViewer()).getGrid();
 		final int[] indices = table.getSelectionIndices();
 		if (indices.length != 0) {
 			final Object[] entries = new Object[indices.length];
@@ -90,5 +66,4 @@ public class TableCutAction extends Action {
 			Clipboard.getDefault().setContents(entries);
 		}
 	}
-
 }

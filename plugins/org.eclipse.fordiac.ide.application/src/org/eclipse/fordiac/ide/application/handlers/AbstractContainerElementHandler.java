@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
@@ -73,6 +74,10 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 				cmd = cmd.chain(new AddElementsToGroup(group, List.of(newElement), new Point())); // point with 0,0 to
 				// keep
 				// the position
+			}
+			if (!isEditorRootNetwork(event, network)) {
+				// if we are in a container expand it accordingly
+				cmd = new ResizeGroupOrSubappCommand(getContainerEP(viewer, network), cmd);
 			}
 			cmdstack.execute(cmd);
 			selectElement(newElement, viewer);
@@ -171,25 +176,33 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		selectionExtend = new Rectangle(point.x, point.y, 200, 100);
 		final IFigure targetFigure = getTargetFigure(event, viewer, network);
 		targetFigure.translateToRelative(selectionExtend);
-		final Rectangle bounds = targetFigure.getBounds();
-		selectionExtend.translate(-bounds.x, -bounds.y);
+		if (!isEditorRootNetwork(event, network)) {
+			// if the target is not the root figure we need to remove its bounds to get to the correct position
+			final Rectangle bounds = targetFigure.getBounds();
+			selectionExtend.translate(-bounds.x, -bounds.y);
+		}
 		return selectionExtend;
 	}
 
 	protected IFigure getTargetFigure(final ExecutionEvent event, final EditPartViewer viewer,
 			final FBNetwork network) {
 		GraphicalEditPart ep = null;
+		final var editPartRegistry = viewer.getEditPartRegistry();
 		if (group != null) {
-			ep = ((GroupEditPart) viewer.getEditPartRegistry().get(group)).getContentEP();
-		} else if (HandlerUtil.getActiveEditor(event).getAdapter(FBNetwork.class) == network) {
+			ep = ((GroupEditPart) editPartRegistry.get(group)).getContentEP();
+		} else if (isEditorRootNetwork(event, network)) {
 			// we are creating in the root network of the editor
-			ep = (GraphicalEditPart) viewer.getEditPartRegistry().get(network);
+			ep = (GraphicalEditPart) editPartRegistry.get(network);
 		} else {
 			// we are inside of expanded subapp
-			ep = ((IContainerEditPart) viewer.getEditPartRegistry().get(network.eContainer())).getContentEP();
+			ep = ((IContainerEditPart) editPartRegistry.get(network.eContainer())).getContentEP();
 		}
 
 		return ep.getFigure();
+	}
+
+	private boolean isEditorRootNetwork(final ExecutionEvent event, final FBNetwork network) {
+		return group == null && HandlerUtil.getActiveEditor(event).getAdapter(FBNetwork.class) == network;
 	}
 
 	private static boolean createNewEmptyContainerElement(final StructuredSelection selection) {
@@ -203,6 +216,14 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 			return ((EditPart) ep).getModel();
 		}
 		return ep;
+	}
+
+	private GraphicalEditPart getContainerEP(final EditPartViewer viewer, final FBNetwork network) {
+		final var editPartRegistry = viewer.getEditPartRegistry();
+		if (group != null) {
+			return ((GroupEditPart) editPartRegistry.get(group)).getContentEP();
+		}
+		return ((IContainerEditPart) editPartRegistry.get(network.eContainer())).getContentEP();
 	}
 
 }

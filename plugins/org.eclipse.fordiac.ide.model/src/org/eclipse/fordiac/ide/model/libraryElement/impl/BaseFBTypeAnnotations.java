@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Method;
 final class BaseFBTypeAnnotations {
 
 	private BaseFBTypeAnnotations() {
+		throw new UnsupportedOperationException("Helper class must not be instantiated"); //$NON-NLS-1$
 	}
 
 	static EList<Algorithm> getAlgorithm(final BaseFBType fbType) {

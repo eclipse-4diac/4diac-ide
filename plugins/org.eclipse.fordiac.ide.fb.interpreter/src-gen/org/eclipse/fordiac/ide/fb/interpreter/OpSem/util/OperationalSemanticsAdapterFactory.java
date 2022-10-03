@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
 /**
@@ -129,6 +130,11 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseConnectionToValueMap(Map.Entry<Connection, Value> object) {
 			return createConnectionToValueMapAdapter();
+		}
+
+		@Override
+		public Adapter caseRuntimeMap(Map.Entry<FBNetworkElement, FBRuntimeAbstract> object) {
+			return createRuntimeMapAdapter();
 		}
 
 		@Override
@@ -285,6 +291,20 @@ public class OperationalSemanticsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createConnectionToValueMapAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link java.util.Map.Entry
+	 * <em>Runtime Map</em>}'. <!-- begin-user-doc --> This default implementation
+	 * returns null so that we can easily ignore cases; it's useful to ignore a case
+	 * when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
+	 * @return the new adapter.
+	 * @see java.util.Map.Entry
+	 * @generated
+	 */
+	public Adapter createRuntimeMapAdapter() {
 		return null;
 	}
 

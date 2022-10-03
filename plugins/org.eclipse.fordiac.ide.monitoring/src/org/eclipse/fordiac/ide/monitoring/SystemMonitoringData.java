@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -289,6 +290,21 @@ public class SystemMonitoringData {
 			}
 		}
 		return null;
+	}
+
+	/** Check if all port strings are still the same as when they where added to the map.
+	 *
+	 * Differences can occur when blocks or subapps are renamed and the application is redeployed. */
+	public void updatePortStringMapping() {
+		final List<Entry<String, MonitoringBaseElement>> updateEntries = monitoredElementsPerPortStrings.entrySet().stream()
+				.filter(entry -> !entry.getKey().equals(entry.getValue().getPort().getPortString()))
+				.collect(Collectors.toList());
+
+		updateEntries.forEach(entry -> {
+			final MonitoringBaseElement value = entry.getValue();
+			monitoredElementsPerPortStrings.remove(entry.getKey());
+			monitoredElementsPerPortStrings.put(value.getPort().getPortString(), value);
+		});
 	}
 
 }

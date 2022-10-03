@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.scoping
 
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.fordiac.ide.fbtypextext.FBTypeXtextResource
+import org.eclipse.fordiac.ide.structuredtextcore.FBTypeXtextResource
 import org.eclipse.xtext.scoping.impl.ImportedNamespaceAwareLocalScopeProvider
 
 class STAlgorithmImportedNamespaceAwareLocalScopeProvider extends ImportedNamespaceAwareLocalScopeProvider {

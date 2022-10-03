@@ -53,9 +53,11 @@ public class MonitoringChildren implements IMonitoringListener, IChildrenProvide
 		if (element != null && element.getPort().getFb().getFbNetwork() != null) {
 			if (element.getPort().getFb().getGroup() != null) {
 				return checkGroup(element, fbNetwork);
-			} if (fbNetwork instanceof UnfoldedSubappContentNetwork) {
+			}
+			if (fbNetwork instanceof UnfoldedSubappContentNetwork) {
 				return checkExpandedSubApp(element, fbNetwork);
-			} else if (element.getPort().getFb().getFbNetwork().equals(fbNetwork)) {
+			}
+			if (element.getPort().getFb().getFbNetwork().equals(fbNetwork)) {
 				return true;
 			}
 		}

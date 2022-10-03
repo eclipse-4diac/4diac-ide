@@ -13,13 +13,16 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBTest;
+
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
 
 public class EventSplitTest extends AbstractInterpreterTest {
 
@@ -30,8 +33,8 @@ public class EventSplitTest extends AbstractInterpreterTest {
 
 		final String[] arr = { "EO1", "EO2" }; //$NON-NLS-1$ //$NON-NLS-2$
 		final List<String> outputEvents = Arrays.asList(arr);
-		addTransaction(seq, new FBTransaction("EI", outputEvents)); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("EI", outputEvents)); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("EI", outputEvents)); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("EI", outputEvents)); //$NON-NLS-1$
 		runFBTest(fb, seq);
 	}
 

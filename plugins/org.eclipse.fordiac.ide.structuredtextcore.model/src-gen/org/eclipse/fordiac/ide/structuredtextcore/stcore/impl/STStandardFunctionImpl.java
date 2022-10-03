@@ -12,6 +12,9 @@
  * Contributors:
  *    Martin Jobst, Martin Melik Merkumians
  *      - initial API and implementation and/or initial documentation
+ *    Hesam Rezaee
+ *      - add Hovering features
+ *      
  * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore.impl;
@@ -20,36 +23,29 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import org.eclipse.fordiac.ide.model.data.DataType;
-
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>ST Standard Function</b></em>'.
- * <!-- end-user-doc -->
+ * <!-- begin-user-doc --> An implementation of the model object '<em><b>ST
+ * Standard Function</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getComment <em>Comment</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getReturnValueComment <em>Return Value Comment</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getSignature <em>Signature</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStandardFunctionImpl#getInputParameters <em>Input Parameters</em>}</li>
@@ -61,10 +57,13 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
  * @generated
  */
 public class STStandardFunctionImpl extends MinimalEObjectImpl.Container implements STStandardFunction {
+	
+
+
 	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The default value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -72,9 +71,9 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	protected static final String NAME_EDEFAULT = ""; //$NON-NLS-1$
 
 	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @see #getName()
 	 * @generated
 	 * @ordered
@@ -83,8 +82,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 
 	/**
 	 * The default value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -93,8 +91,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 
 	/**
 	 * The cached value of the '{@link #getComment() <em>Comment</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getComment()
 	 * @generated
 	 * @ordered
@@ -102,9 +99,28 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	protected String comment = COMMENT_EDEFAULT;
 
 	/**
-	 * The default value of the '{@link #getSignature() <em>Signature</em>}' attribute.
+	 * The default value of the '{@link #getReturnValueComment() <em>Return Value Comment</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @see #getReturnValueComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final String RETURN_VALUE_COMMENT_EDEFAULT = null;
+
+	/**
+	 * The cached value of the '{@link #getReturnValueComment() <em>Return Value Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getReturnValueComment()
+	 * @generated
+	 * @ordered
+	 */
+	protected String returnValueComment = RETURN_VALUE_COMMENT_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #getSignature() <em>Signature</em>}' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getSignature()
 	 * @generated
 	 * @ordered
@@ -113,8 +129,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 
 	/**
 	 * The cached value of the '{@link #getSignature() <em>Signature</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getSignature()
 	 * @generated
 	 * @ordered
@@ -123,8 +138,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 
 	/**
 	 * The cached value of the '{@link #getReturnType() <em>Return Type</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getReturnType()
 	 * @generated
 	 * @ordered
@@ -133,8 +147,8 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 
 	/**
 	 * The cached value of the '{@link #getInputParameters() <em>Input Parameters</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @see #getInputParameters()
 	 * @generated
 	 * @ordered
@@ -143,8 +157,8 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 
 	/**
 	 * The cached value of the '{@link #getOutputParameters() <em>Output Parameters</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @see #getOutputParameters()
 	 * @generated
 	 * @ordered
@@ -153,8 +167,8 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 
 	/**
 	 * The cached value of the '{@link #getInOutParameters() <em>In Out Parameters</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 * @see #getInOutParameters()
 	 * @generated
 	 * @ordered
@@ -163,8 +177,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 
 	/**
 	 * The cached value of the '{@link #getOnlySupportedBy() <em>Only Supported By</em>}' attribute list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getOnlySupportedBy()
 	 * @generated
 	 * @ordered
@@ -172,8 +185,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	protected EList<String> onlySupportedBy;
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	protected STStandardFunctionImpl() {
@@ -181,8 +193,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -191,8 +202,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -201,8 +211,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -214,8 +223,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -224,8 +232,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -242,13 +249,34 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	 * @generated
 	 */
 	@Override
-	public String getSignature() {
-		return signature;
+	public String getReturnValueComment() {
+		return returnValueComment;
 	}
 
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setReturnValueComment(String newReturnValueComment) {
+		String oldReturnValueComment = returnValueComment;
+		returnValueComment = newReturnValueComment;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_STANDARD_FUNCTION__RETURN_VALUE_COMMENT, oldReturnValueComment, returnValueComment));
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getSignature() {
+		return signature;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -260,8 +288,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -278,8 +305,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	public DataType basicGetReturnType() {
@@ -287,8 +313,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -300,8 +325,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -313,8 +337,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -326,8 +349,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -339,8 +361,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -352,8 +373,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -365,14 +385,12 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return ((InternalEList<?>)getOutputParameters()).basicRemove(otherEnd, msgs);
 			case STCorePackage.ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS:
 				return ((InternalEList<?>)getInOutParameters()).basicRemove(otherEnd, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -382,6 +400,8 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return getName();
 			case STCorePackage.ST_STANDARD_FUNCTION__COMMENT:
 				return getComment();
+			case STCorePackage.ST_STANDARD_FUNCTION__RETURN_VALUE_COMMENT:
+				return getReturnValueComment();
 			case STCorePackage.ST_STANDARD_FUNCTION__SIGNATURE:
 				return getSignature();
 			case STCorePackage.ST_STANDARD_FUNCTION__RETURN_TYPE:
@@ -395,14 +415,12 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return getInOutParameters();
 			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
 				return getOnlySupportedBy();
-			default:
-				return super.eGet(featureID, resolve, coreType);
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@SuppressWarnings("unchecked")
@@ -414,6 +432,9 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return;
 			case STCorePackage.ST_STANDARD_FUNCTION__COMMENT:
 				setComment((String)newValue);
+				return;
+			case STCorePackage.ST_STANDARD_FUNCTION__RETURN_VALUE_COMMENT:
+				setReturnValueComment((String)newValue);
 				return;
 			case STCorePackage.ST_STANDARD_FUNCTION__SIGNATURE:
 				setSignature((String)newValue);
@@ -437,15 +458,12 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				getOnlySupportedBy().clear();
 				getOnlySupportedBy().addAll((Collection<? extends String>)newValue);
 				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -456,6 +474,9 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return;
 			case STCorePackage.ST_STANDARD_FUNCTION__COMMENT:
 				setComment(COMMENT_EDEFAULT);
+				return;
+			case STCorePackage.ST_STANDARD_FUNCTION__RETURN_VALUE_COMMENT:
+				setReturnValueComment(RETURN_VALUE_COMMENT_EDEFAULT);
 				return;
 			case STCorePackage.ST_STANDARD_FUNCTION__SIGNATURE:
 				setSignature(SIGNATURE_EDEFAULT);
@@ -475,15 +496,12 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
 				getOnlySupportedBy().clear();
 				return;
-			default:
-				super.eUnset(featureID);
-				return;
 		}
+		super.eUnset(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -493,6 +511,8 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
 			case STCorePackage.ST_STANDARD_FUNCTION__COMMENT:
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
+			case STCorePackage.ST_STANDARD_FUNCTION__RETURN_VALUE_COMMENT:
+				return RETURN_VALUE_COMMENT_EDEFAULT == null ? returnValueComment != null : !RETURN_VALUE_COMMENT_EDEFAULT.equals(returnValueComment);
 			case STCorePackage.ST_STANDARD_FUNCTION__SIGNATURE:
 				return SIGNATURE_EDEFAULT == null ? signature != null : !SIGNATURE_EDEFAULT.equals(signature);
 			case STCorePackage.ST_STANDARD_FUNCTION__RETURN_TYPE:
@@ -505,14 +525,12 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return inOutParameters != null && !inOutParameters.isEmpty();
 			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
 				return onlySupportedBy != null && !onlySupportedBy.isEmpty();
-			default:
-				return super.eIsSet(featureID);
 		}
+		return super.eIsSet(featureID);
 	}
 
 	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
@@ -524,6 +542,8 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 		result.append(name);
 		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
+		result.append(", ReturnValueComment: "); //$NON-NLS-1$
+		result.append(returnValueComment);
 		result.append(", signature: "); //$NON-NLS-1$
 		result.append(signature);
 		result.append(", onlySupportedBy: "); //$NON-NLS-1$
@@ -532,4 +552,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 		return result.toString();
 	}
 
-} //STStandardFunctionImpl
+
+
+
+} // STStandardFunctionImpl

@@ -25,7 +25,7 @@
 	<SimpleFB>
 		<Algorithm Name="REQ" Comment="">
 			<ST><![CDATA[ALGORITHM REQ
-	DI1 := DO1;
+	DO1 := DI1;
 END_ALGORITHM
 
 ]]></ST>

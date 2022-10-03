@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -679,7 +680,7 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	 */
 	@Override
 	public void setVisible(final boolean visible) {
-		org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.setVisible(this,visible);
+		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);
 	}
 
 	/**
@@ -689,7 +690,7 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	 */
 	@Override
 	public boolean isVisible() {
-		return org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.isVisible(this);
+		return org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.isVisible(this);
 	}
 
 	/**
@@ -973,6 +974,11 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 				default: return -1;
 			}
 		}
+		if (baseClass == HiddenElement.class) {
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -993,6 +999,11 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 			switch (baseFeatureID) {
 				case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID: return LibraryElementPackage.CONNECTION__FILE_MARKER_ID;
 				case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE: return LibraryElementPackage.CONNECTION__ERROR_MESSAGE;
+				default: return -1;
+			}
+		}
+		if (baseClass == HiddenElement.class) {
+			switch (baseFeatureID) {
 				default: return -1;
 			}
 		}

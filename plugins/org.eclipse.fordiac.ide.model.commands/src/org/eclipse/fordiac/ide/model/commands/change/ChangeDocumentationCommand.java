@@ -1,0 +1,50 @@
+/*******************************************************************************
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ *
+ * SPDX-License-Identifier: EPL-2.0
+ *
+ * Contributors:
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *******************************************************************************/
+package org.eclipse.fordiac.ide.model.commands.change;
+
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.gef.commands.Command;
+
+public class ChangeDocumentationCommand extends Command {
+
+	private final FBType type;
+	private final String newDocumentation;
+	private String oldDocumentation;
+
+	public ChangeDocumentationCommand(final FBType type, final String newDocumenation) {
+		this.type = type;
+		this.newDocumentation = (null == newDocumenation) ? "" : newDocumenation; //$NON-NLS-1$
+	}
+
+	@Override
+	public void execute() {
+		oldDocumentation = type.getDocumentation();
+		setDocumentation(newDocumentation);
+	}
+
+	@Override
+	public void undo() {
+		setDocumentation(oldDocumentation);
+	}
+
+	@Override
+	public void redo() {
+		setDocumentation(newDocumentation);
+	}
+
+	private void setDocumentation(final String newValue) {
+		type.setDocumentation(newValue);
+	}
+
+
+}

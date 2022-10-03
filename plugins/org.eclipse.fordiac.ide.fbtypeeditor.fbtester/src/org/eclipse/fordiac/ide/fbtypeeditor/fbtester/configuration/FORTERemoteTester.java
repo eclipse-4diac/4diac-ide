@@ -143,14 +143,18 @@ public class FORTERemoteTester implements IFBTestConfiguratonCreator,IDeployment
 						FordiacLogHelper.logError(Messages.FORTERemoteTester_ThreadInterrupted, ex);
 					}
 				} else {
-					setRunning(false);
-					final String response = testDeploymentExecutor.cleanNetwork();
-					if (response != null) {
-						final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
-						msb.setMessage(MessageFormat.format(
-								Messages.FORTERemoteTester_FBCanNotBeCleanedBecauseOfTheFollowingError, response));
-						msb.open();
-					}
+					stopForte();
+				}
+			}
+
+			private void stopForte() {
+				setRunning(false);
+				final String response = testDeploymentExecutor.cleanNetwork();
+				if (response != null) {
+					final MessageBox msb = new MessageBox(Display.getCurrent().getActiveShell(), SWT.ERROR);
+					msb.setMessage(MessageFormat.format(
+							Messages.FORTERemoteTester_FBCanNotBeCleanedBecauseOfTheFollowingError, response));
+					msb.open();
 				}
 			}
 

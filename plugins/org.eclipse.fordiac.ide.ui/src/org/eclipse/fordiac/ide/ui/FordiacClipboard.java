@@ -8,13 +8,11 @@
  *
  * Contributors:
  *   Daniel Lindhuber - initial API and implementation and/or initial documentation
+ *   Sebastian Hollersbacher - added support for multiple content
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui;
 
 import java.util.Stack;
-
-import org.eclipse.swt.dnd.TextTransfer;
-import org.eclipse.swt.dnd.Transfer;
 
 public class FordiacClipboard {
 
@@ -30,25 +28,11 @@ public class FordiacClipboard {
 		graphicalStack.add(obj);
 	}
 
-	public void setTableContents(final Object obj) {
-		final org.eclipse.swt.dnd.Clipboard cb = new org.eclipse.swt.dnd.Clipboard(null);
-		cb.setContents(new Object[] { obj }, new Transfer[] { TextTransfer.getInstance() });
-		cb.dispose();
-	}
-
 	public Object getGraphicalContents() {
 		return graphicalStack.isEmpty() ? null : graphicalStack.peek();
-	}
-
-	public Object getTableContents() {
-		final org.eclipse.swt.dnd.Clipboard cb = new org.eclipse.swt.dnd.Clipboard(null);
-		final Object contents = cb.getContents(TextTransfer.getInstance());
-		cb.dispose();
-		return contents;
 	}
 
 	private FordiacClipboard() {
 		// nothing to do here
 	}
-
 }

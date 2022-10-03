@@ -55,10 +55,11 @@ class ForteLuaBasicFBTest extends ExporterTestBasicFBTypeAdvanced {
 			local ADI_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_INPUT_NAME» = 201326592
 			
 			local function alg_ALG1(fb)
-			  local VAR_«DATA_OUTPUT_NAME» = fb[DO_«DATA_OUTPUT_NAME»]
-			  VAR_«DATA_OUTPUT_NAME» = 42
-			  fb[DO_«DATA_OUTPUT_NAME»] = VAR_«DATA_OUTPUT_NAME»
-			  	
+			  local fb_var_«DATA_INPUT_NAME» = fb[DI_«DATA_INPUT_NAME»]
+			  local fb_var_«DATA_OUTPUT_NAME» = fb[DO_«DATA_OUTPUT_NAME»]
+			  
+			  fb_var_«DATA_OUTPUT_NAME» = 42
+			  fb[DO_«DATA_OUTPUT_NAME»] = fb_var_«DATA_OUTPUT_NAME»
 			end
 			
 			

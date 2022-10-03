@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 
 /**
@@ -153,6 +154,14 @@ public class OperationalSemanticsSwitch<T> extends Switch<T> {
 			@SuppressWarnings("unchecked")
 			Map.Entry<Connection, Value> connectionToValueMap = (Map.Entry<Connection, Value>) theEObject;
 			T result = caseConnectionToValueMap(connectionToValueMap);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case OperationalSemanticsPackage.RUNTIME_MAP: {
+			@SuppressWarnings("unchecked")
+			Map.Entry<FBNetworkElement, FBRuntimeAbstract> runtimeMap = (Map.Entry<FBNetworkElement, FBRuntimeAbstract>) theEObject;
+			T result = caseRuntimeMap(runtimeMap);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;
@@ -299,6 +308,21 @@ public class OperationalSemanticsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseConnectionToValueMap(Map.Entry<Connection, Value> object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Runtime
+	 * Map</em>'. <!-- begin-user-doc --> This implementation returns null;
+	 * returning a non-null result will terminate the switch. <!-- end-user-doc -->
+	 *
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Runtime
+	 *         Map</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseRuntimeMap(Map.Entry<FBNetworkElement, FBRuntimeAbstract> object) {
 		return null;
 	}
 

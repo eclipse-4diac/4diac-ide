@@ -222,6 +222,8 @@ public final class Messages extends NLS {
 	public static String FBNetworkImporter_ConnectionSourceMissing;
 	public static String FBNetworkImporter_ConnectionSourceNotFound;
 
+	public static String FBNetworkImporter_ConnectionTypeMismatch;
+
 	public static String VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE;
 	public static String VALIDATOR_INVALID_BOOL_LITERAL;
 	public static String VALIDATOR_TypeNotSupported;
@@ -249,6 +251,17 @@ public final class Messages extends NLS {
 	public static String ConnectionHelper_ErrorMarker_Source_Missing;
 	public static String ConnectionHelper_ErrorMarker_Dest_Missing;
 	public static String ConnectionHelper_pin_not_found;
+
+	public static String LinkConstraints_ClassLinconstraintsShouldNotBeCreated;
+	public static String LinkConstraints_ERROR_NotConnectedToAnEventByAWithConstruct;
+	public static String LinkConstraints_STATUSMessage_hasAlreadyInputConnection;
+	public static String LinkConstraints_STATUSMessage_hasAlreadyOutputConnection;
+	public static String LinkConstraints_STATUSMessage_IN_IN_OUT_OUT_notAllowed;
+	public static String LinkConstraints_STATUSMessage_NotCompatible;
+	public static String ConnectingIncompatibleInterfaceTypes;
+
+	public static String UpdateFBTypeCommand_type_mismatch;
+
 
 	static {
 		// initialize resource bundle

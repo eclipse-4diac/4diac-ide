@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
@@ -176,14 +177,24 @@ public class PasteCommand extends Command {
 
 	private void copyFBs() {
 		for (final FBNetworkElement element : elementsToCopy) {
-			final FBNetworkElement copiedElement = createElementCopyFB(element);
-			copiedElements.put(element, copiedElement);
-			dstFBNetwork.getNetworkElements().add(copiedElement);
-			copiedElement.setName(NameRepository.createUniqueName(copiedElement, element.getName()));
+			copyAndCreateFB(element);
 		}
 	}
 
-	private FBNetworkElement createElementCopyFB(final FBNetworkElement element) {
+	private FBNetworkElement copyAndCreateFB(final FBNetworkElement element) {
+		return copyAndCreateFB(element, false);
+	}
+
+	private FBNetworkElement copyAndCreateFB(final FBNetworkElement element, final boolean isNested) {
+		final FBNetworkElement copiedElement = createElementCopyFB(element, isNested);
+		copiedElements.put(element, copiedElement);
+		dstFBNetwork.getNetworkElements().add(copiedElement);
+		copiedElement.setName(NameRepository.createUniqueName(copiedElement, element.getName()));
+		return copiedElement;
+	}
+
+
+	private FBNetworkElement createElementCopyFB(final FBNetworkElement element, final boolean isNested) {
 		final FBNetworkElement copiedElement = EcoreUtil.copy(element);
 		// clear the connection references
 		for (final IInterfaceElement ie : copiedElement.getInterface().getAllInterfaceElements()) {
@@ -193,12 +204,28 @@ public class PasteCommand extends Command {
 				ie.getOutputConnections().clear();
 			}
 		}
-		copiedElement.setPosition(calculatePastePos(element));
+
+		if (isNested == false) {
+			copiedElement.setPosition(calculatePastePos(element));
+		}
 		copiedElement.setMapping(null);
 
 		if (copiedElement instanceof StructManipulator) {
 			// structmanipulators may destroy the param values during copy
 			checkDataValues(element, copiedElement);
+		}
+
+		// copy content of Groups
+		if (element instanceof Group) {
+			((Group) element).getFbNetwork().getEventConnections().forEach(con -> {
+				connectionsToCopy.add(new ConnectionReference(con));
+			});
+			((Group) element).getFbNetwork().getDataConnections().forEach(con -> {
+				connectionsToCopy.add(new ConnectionReference(con));
+			});
+			for (final FBNetworkElement groupElement : ((Group) element).getGroupElements()) {
+				((Group) copiedElement).getGroupElements().add(copyAndCreateFB(groupElement, true));
+			}
 		}
 
 		return copiedElement;

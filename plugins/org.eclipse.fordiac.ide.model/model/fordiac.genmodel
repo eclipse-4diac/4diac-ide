@@ -78,15 +78,8 @@
         <genParameters ecoreParameter="lib.ecore#//Connection/updateRoutingData/dy"/>
         <genParameters ecoreParameter="lib.ecore#//Connection/updateRoutingData/dx2"/>
       </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//Connection/setVisible" body="org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.setVisible(this,visible);">
-        <genParameters ecoreParameter="lib.ecore#//Connection/setVisible/visible"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//Connection/isVisible" body="return org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.isVisible(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/isInterfaceConnection"
           body="return org.eclipse.fordiac.ide.model.Annotations.isInterfaceConnection(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//Connection/setVisible" body="org.eclipse.fordiac.ide.model.annotations.ConnectionAnnotations.setVisible(this,visible);">
-        <genParameters ecoreParameter="lib.ecore#//Connection/setVisible/visible"/>
-      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ConnectionRoutingData">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ConnectionRoutingData/dx1"/>
@@ -156,7 +149,7 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FB">
       <genOperations ecoreOperation="lib.ecore#//FB/isResourceFB" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceFB(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//FB/isResourceTypeFB" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceTypeFB(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FB/isResourceTypeFB" body="return false;"/>
       <genOperations ecoreOperation="lib.ecore#//FB/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xA;if(type instanceof FBType){&#xA;   return (FBType) type; &#xA;}&#xA;return null;"/>
       <genOperations ecoreOperation="lib.ecore#//FB/getInputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FB/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
@@ -203,6 +196,10 @@
       <genOperations ecoreOperation="lib.ecore#//FBType/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBType/getInOutParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBType/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBType/setDocumentation" body="org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.setDocumentation(this, value);">
+        <genParameters ecoreParameter="lib.ecore#//FBType/setDocumentation/value"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBType/getDocumentation" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.getDocumentation(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Identification">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Identification/applicationDomain"/>
@@ -588,6 +585,12 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//OtherMethod/language"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//STMethod"/>
+    <genClasses ecoreClass="lib.ecore#//HiddenElement">
+      <genOperations ecoreOperation="lib.ecore#//HiddenElement/setVisible" body="org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);">
+        <genParameters ecoreParameter="lib.ecore#//HiddenElement/setVisible/visible"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//HiddenElement/isVisible" body="return org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.isVisible(this);"/>
+    </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">

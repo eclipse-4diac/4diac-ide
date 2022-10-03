@@ -1,13 +1,13 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *    Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst
  *      - initial API and implementation and/or initial documentation
@@ -22,10 +22,8 @@ import java.util.List;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -52,7 +50,7 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public GroupItemProvider(AdapterFactory adapterFactory) {
+	public GroupItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -63,7 +61,7 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 	 * @generated
 	 */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -80,20 +78,20 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addGroupElementsPropertyDescriptor(Object object) {
+	protected void addGroupElementsPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
+		(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Group_groupElements_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Group_groupElements_feature", "_UI_Group_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.GROUP__GROUP_ELEMENTS,
-				 true,
-				 false,
-				 true,
-				 null,
-				 null,
-				 null));
+						getResourceLocator(),
+						getString("_UI_Group_groupElements_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Group_groupElements_feature", "_UI_Group_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						LibraryElementPackage.Literals.GROUP__GROUP_ELEMENTS,
+						true,
+						false,
+						true,
+						null,
+						null,
+						null));
 	}
 
 	/**
@@ -102,20 +100,20 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addWidthPropertyDescriptor(Object object) {
+	protected void addWidthPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
+		(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Group_width_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Group_width_feature", "_UI_Group_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.GROUP__WIDTH,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
+						getResourceLocator(),
+						getString("_UI_Group_width_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Group_width_feature", "_UI_Group_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						LibraryElementPackage.Literals.GROUP__WIDTH,
+						true,
+						false,
+						false,
+						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+						null,
+						null));
 	}
 
 	/**
@@ -124,20 +122,20 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addHeightPropertyDescriptor(Object object) {
+	protected void addHeightPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
+		(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Group_height_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Group_height_feature", "_UI_Group_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.GROUP__HEIGHT,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
-				 null,
-				 null));
+						getResourceLocator(),
+						getString("_UI_Group_height_feature"), //$NON-NLS-1$
+						getString("_UI_PropertyDescriptor_description", "_UI_Group_height_feature", "_UI_Group_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+						LibraryElementPackage.Literals.GROUP__HEIGHT,
+						true,
+						false,
+						false,
+						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE,
+						null,
+						null));
 	}
 
 	/**
@@ -159,18 +157,11 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 	 */
 	@Override
 	public String getText(final Object object) {
-		String comment = ((Group) object).getComment();
-		if (comment != null && !comment.isBlank()) {
-			final int linebreak = comment.indexOf('\n');
-			if (linebreak != -1) {
-				comment = comment.substring(0, linebreak);
-			}
-			if (comment.length() > getMaxWidth()) {
-				comment = comment.substring(0, getMaxWidth()) + TRUNCATION_STRING;
-			}
-			return comment;
+		final String name = ((Group) object).getName();
+		if (name != null && !name.isBlank()) {
+			return name;
 		}
-		return "[empty comment]";
+		return "[unnamed group]";//$NON-NLS-1$
 	}
 
 	private static int getMaxWidth() {
@@ -190,18 +181,18 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 	 * @generated
 	 */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Group.class)) {
-			case LibraryElementPackage.GROUP__WIDTH:
-			case LibraryElementPackage.GROUP__HEIGHT:
-				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
-				return;
-			default:
-				super.notifyChanged(notification);
-				return;
-			}
+		case LibraryElementPackage.GROUP__WIDTH:
+		case LibraryElementPackage.GROUP__HEIGHT:
+			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+			return;
+		default:
+			super.notifyChanged(notification);
+			return;
+		}
 	}
 
 	/**
@@ -212,7 +203,7 @@ public class GroupItemProvider extends FBNetworkElementItemProvider {
 	 * @generated
 	 */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

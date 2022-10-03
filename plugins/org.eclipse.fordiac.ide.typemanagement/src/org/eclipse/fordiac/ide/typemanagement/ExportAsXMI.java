@@ -33,12 +33,11 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmRe
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreCommentAssociater;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.xtext.linking.lazy.LazyLinkingResource;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
 
 public class ExportAsXMI {
-	static final String XMI_EXTENSION = "xmi"; // $NON-NLS-1$
+	static final String XMI_EXTENSION = "xmi"; //$NON-NLS-1$
 
 	public Object export(final IFile file) {
 		final URI uri = URI.createPlatformResourceURI(file.getParent().getFullPath().toString(), true);
@@ -50,9 +49,10 @@ public class ExportAsXMI {
 				.appendFileExtension(XMI_EXTENSION);
 		final XtextResourceSet resourceSet = new XtextResourceSet();
 		new STAlgorithmResourceSetInitializer().initialize(resourceSet, file.getProject());
-		resourceSet.addLoadOption(LazyLinkingResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
-		final Resource resource = resourceSet.getResource(URI.createPlatformResourceURI(file.getFullPath().toString()),
-				true);
+		resourceSet.addLoadOption(XtextResource.OPTION_RESOLVE_ALL, Boolean.TRUE);
+		final Resource resource = resourceSet
+				.getResource(URI.createPlatformResourceURI(file.getFullPath().toString(), true),
+						true);
 
 		if (resource instanceof XtextResource) {
 			final STSource source = (STSource) resource.getContents().get(0);
@@ -72,12 +72,12 @@ public class ExportAsXMI {
 		xmiRessource.getContents().addAll(EcoreUtil.copyAll(resource.getContents()));
 
 		try {
-			final HashMap options = new HashMap<>();
+			final HashMap<String, String> options = new HashMap<>();
 			options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
 			xmiRessource.save(options);
 		} catch (final Exception e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
-			System.out.println(e.getMessage() + " " + e); // log it in console for ANT Tasks
+			System.out.println(e.getMessage() + " " + e); // log it in console for ANT Tasks //$NON-NLS-1$
 		}
 
 		return null;

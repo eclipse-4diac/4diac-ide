@@ -13,10 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBTest;
+
+import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
 
 public class EventRendTest extends AbstractInterpreterTest {
 
@@ -25,13 +28,13 @@ public class EventRendTest extends AbstractInterpreterTest {
 		final BasicFBType fb = (BasicFBType) loadFBType("E_REND"); //$NON-NLS-1$
 		final ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
-		addTransaction(seq, new FBTransaction("EI1")); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("R")); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("EI2")); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("R")); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("EI1")); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("EI1")); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("EI2", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq, new FBTransactionBuilder("EI1")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("R")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("EI2")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("R")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("EI1")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("EI1")); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("EI2", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
 
 		runFBTest(fb, seq);
 	}

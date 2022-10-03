@@ -90,31 +90,38 @@ public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceEditPart) {
 			final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
-			if (interfaceEditPart.isInput()) {
-				if (interfaceEditPart.isEvent()) {
-					getFigure().getEventInputs().add(child);
-				} else {
-					if (interfaceEditPart.isAdapter()) {
-						getFigure().getSockets().add(child);
-					} else if (interfaceEditPart.isVariable()) {
-						getFigure().getDataInputs().add(child);
-					}
-				}
-			} else {
-				if (interfaceEditPart.isEvent()) {
-					getFigure().getEventOutputs().add(child);
-				} else {
-					if (interfaceEditPart.isAdapter()) {
-						getFigure().getPlugs().add(child);
-					} else if (interfaceEditPart.isVariable()) {
-						getFigure().getDataOutputs().add(child);
-					}
-				}
-
-			}
+			final IFigure ieContainer = (interfaceEditPart.isInput()) ? getInputIFigure(interfaceEditPart)
+					: getOutPutFigure(interfaceEditPart);
+			ieContainer.add(child);
 		} else {
 			super.addChildVisual(childEditPart, index);
 		}
+	}
+
+	private IFigure getInputIFigure(final InterfaceEditPart interfaceEditPart) {
+		if (interfaceEditPart.isEvent()) {
+			return getFigure().getEventInputs();
+		}
+		if (interfaceEditPart.isAdapter()) {
+			return getFigure().getSockets();
+		}
+		if (interfaceEditPart.isVariable()) {
+			return getFigure().getDataInputs();
+		}
+		return getFigure();
+	}
+
+	private IFigure getOutPutFigure(final InterfaceEditPart interfaceEditPart) {
+		if (interfaceEditPart.isEvent()) {
+			return getFigure().getEventOutputs();
+		}
+		if (interfaceEditPart.isAdapter()) {
+			return getFigure().getPlugs();
+		}
+		if (interfaceEditPart.isVariable()) {
+			return getFigure().getDataOutputs();
+		}
+		return getFigure();
 	}
 
 	@Override
@@ -122,28 +129,9 @@ public class MonitoringAdapterEditPart extends AbstractMonitoringBaseEditPart {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof InterfaceEditPart) {
 			final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
-			if (interfaceEditPart.isInput()) {
-				if (interfaceEditPart.isEvent()) {
-					getFigure().getEventInputs().remove(child);
-				} else {
-					if (interfaceEditPart.isAdapter()) {
-						getFigure().getSockets().remove(child);
-					} else if (interfaceEditPart.isVariable()) {
-						getFigure().getDataInputs().remove(child);
-					}
-				}
-			} else {
-				if (interfaceEditPart.isEvent()) {
-					getFigure().getEventOutputs().remove(child);
-				} else {
-					if (interfaceEditPart.isAdapter()) {
-						getFigure().getPlugs().remove(child);
-					} else if (interfaceEditPart.isVariable()) {
-						getFigure().getDataOutputs().remove(child);
-					}
-				}
-
-			}
+			final IFigure ieContainer = (interfaceEditPart.isInput()) ? getInputIFigure(interfaceEditPart)
+					: getOutPutFigure(interfaceEditPart);
+			ieContainer.remove(child);
 		} else {
 			super.removeChildVisual(childEditPart);
 		}

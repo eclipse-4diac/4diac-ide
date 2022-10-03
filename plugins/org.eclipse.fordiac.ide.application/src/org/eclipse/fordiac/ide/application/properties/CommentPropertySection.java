@@ -10,70 +10,66 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - multline comments and cleanup
+ *   Sebastian Hollersbacher - change to nebula NatTable
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
+
+import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
-import org.eclipse.fordiac.ide.model.edit.providers.CommentLabelProvider;
-import org.eclipse.fordiac.ide.model.edit.providers.InitialValueColumLabelProvider;
-import org.eclipse.fordiac.ide.model.edit.providers.NameLabelProvider;
-import org.eclipse.fordiac.ide.model.edit.providers.TypeLabelProvider;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
-import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.gef.EditPart;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
-import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnPixelData;
-import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
-import org.eclipse.jface.viewers.TextCellEditor;
+import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
+import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Item;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class CommentPropertySection extends AbstractSection implements I4diacTableUtil {
+public class CommentPropertySection extends AbstractSection {
 
 	private static final int ONE_COLUMN = 1;
 	private static final int TWO_COLUMNS = 2;
-	private static final int WIDTH_OF_COLUMNS = 150;
-	private static final String INITIAL_VALUE = "Initial Value"; //$NON-NLS-1$
-	private static final String COMMENT = "Comment"; //$NON-NLS-1$
+
+	private static final int NAME = 0;
+	private static final int TYPE = 1;
+	private static final int INITIAL_VALUE = 2;
+	private static final int COMMENT = 3;
 
 	private Text nameText;
 	private Text commentText;
 
-	private TableViewer inputCommentsViewer;
-	private TableViewer outputCommentsViewer;
-	private TabbedPropertySheetPage tabbedPropertySheetPage;
+	private NatTable inputTable;
+	private NatTable outputTable;
 
-	private CommentLabelProvider commentLabelProvider;
-	private InitialValueColumLabelProvider initialValueLabelProvider;
-	
-	private boolean isInputsViewer;
+	private VarDeclarationListProvider inputDataProvider;
+	private VarDeclarationListProvider outputDataProvider;
+
+	private TabbedPropertySheetPage tabbedPropertySheetPage;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -83,10 +79,6 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(parent);
 		createFBInfoGroup(parent);
 		createTableSection(parent);
-		configureTableViewer(inputCommentsViewer, new InputViewerContentProvider());
-		configureTableViewer(outputCommentsViewer, new OutputViewerContentProvider());
-		setFocusListeners();
-		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
 	}
 
 	@Override
@@ -96,88 +88,10 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 			commandStack = null;
 			nameText.setText(getType().getName() != null ? getType().getName() : ""); //$NON-NLS-1$
 			commentText.setText(getType().getComment() != null ? getType().getComment() : ""); //$NON-NLS-1$
-			inputCommentsViewer.setInput(getType());
-			outputCommentsViewer.setInput(getType());
 			commandStack = commandStackBuffer;
+			outputTable.refresh();
+			inputTable.refresh();
 		}
-	}
-	
-	private void setFocusListeners() {
-		outputCommentsViewer.getTable().addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusGained(final FocusEvent e) {
-				isInputsViewer = false;
-			}
-
-			@Override
-			public void focusLost(final FocusEvent e) {
-				// Nothing to do
-			}
-
-		});
-		inputCommentsViewer.getTable().addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusGained(final FocusEvent e) {
-				isInputsViewer = true;
-			}
-
-			@Override
-			public void focusLost(final FocusEvent e) {
-				// Nothing to do
-			}
-
-		});
-	}
-
-	private void configureTableViewer(final TableViewer tableViewer,
-			final IStructuredContentProvider contentProvider) {
-		final Table table = tableViewer.getTable();
-
-		final CellModifierForCommentSection modifier = new CellModifierForCommentSection();
-		tableViewer.setCellModifier(modifier);
-
-		final String[] cols = new String[] { FordiacMessages.Name, FordiacMessages.Type, FordiacMessages.InitialValue,
-				FordiacMessages.Comment };
-		tableViewer.setColumnProperties(cols);
-
-		tableViewer
-		.setCellEditors(new CellEditor[] { null, null, new TextCellEditor(table), new TextCellEditor(table) });
-
-		tableViewer.setContentProvider(contentProvider);
-
-		table.setHeaderVisible(true);
-		table.setLinesVisible(true);
-		table.setLayout(createTableLayout());
-
-		final TableViewerColumn col1 = new TableViewerColumn(tableViewer, SWT.NONE);
-		col1.setLabelProvider(new NameLabelProvider());
-		col1.getColumn().setText(FordiacMessages.Name);
-
-		final TableViewerColumn col2 = new TableViewerColumn(tableViewer, SWT.NONE);
-		col2.setLabelProvider(new TypeLabelProvider());
-		col2.getColumn().setText(FordiacMessages.Type);
-
-		final TableViewerColumn col3 = new TableViewerColumn(tableViewer, SWT.NONE);
-		initialValueLabelProvider = new InitialValueColumLabelProvider();
-		col3.setLabelProvider(initialValueLabelProvider);
-		col3.getColumn().setText(FordiacMessages.InitialValue);
-
-		final TableViewerColumn col4 = new TableViewerColumn(tableViewer, SWT.NONE);
-		commentLabelProvider = new CommentLabelProvider();
-		col4.setLabelProvider(commentLabelProvider);
-		col4.getColumn().setText(FordiacMessages.Comment);
-
-	}
-
-	private static TableLayout createTableLayout() {
-		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(WIDTH_OF_COLUMNS));
-		layout.addColumnData(new ColumnPixelData(WIDTH_OF_COLUMNS));
-		layout.addColumnData(new ColumnPixelData(WIDTH_OF_COLUMNS));
-		layout.addColumnData(new ColumnPixelData(WIDTH_OF_COLUMNS));
-		return layout;
 	}
 
 	private void createTableSection(final Composite parent) {
@@ -194,13 +108,68 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 		inputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
 		outputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
 
-		inputCommentsViewer = TableWidgetFactory.createPropertyTableViewer(inputComposite, 0);
-		outputCommentsViewer = TableWidgetFactory.createPropertyTableViewer(outputComposite, 0);
+		inputDataProvider = new VarDeclarationListProvider(null, true);
+		outputDataProvider = new VarDeclarationListProvider(null, false);
+
+		final DataLayer inputDataLayer = new DataLayer(inputDataProvider);
+		configureDataLayerLabels(inputDataLayer, true);
+		final DataLayer outputDataLayer = new DataLayer(outputDataProvider);
+		configureDataLayerLabels(outputDataLayer, false);
+
+		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, new ColumnDataProvider(),
+				inputDataProvider.getEditableRule());
+		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer,
+				new ColumnDataProvider(), outputDataProvider.getEditableRule());
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(outputComposite);
 
 		tableSectionComposite.layout();
+	}
+
+	private void configureDataLayerLabels(final DataLayer dataLayer, final boolean isInput) {
+		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
+			final VarDeclaration rowItem;
+			String defaultComment = null;
+			if (isInput) {
+				rowItem = inputDataProvider.getRowObject(rowPosition);
+				final FBType fbType = rowItem.getFBNetworkElement().getType();
+				final INamedElement currentFB = getType();
+
+				if (currentFB instanceof StructManipulator) {
+					final List<VarDeclaration> variableList = ((StructManipulator) currentFB).getStructType()
+							.getMemberVariables();
+					if (!variableList.isEmpty()) {
+						defaultComment = variableList.get(rowPosition).getComment();
+					}
+				} else if (fbType != null) {
+					defaultComment = fbType.getInterfaceList().getInputVars().get(rowPosition).getComment();
+				}
+
+				if (columnPosition == INITIAL_VALUE && rowItem.getValue().hasError()) {
+					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+				}
+			} else {
+				rowItem = outputDataProvider.getRowObject(rowPosition);
+				final FBType fbType = rowItem.getFBNetworkElement().getType();
+				final INamedElement currentFB = getType();
+				if (currentFB instanceof StructManipulator) {
+					final List<VarDeclaration> variableList = ((StructManipulator) currentFB).getStructType()
+							.getMemberVariables();
+					if (!variableList.isEmpty()) {
+						defaultComment = variableList.get(rowPosition).getComment();
+					}
+				} else if (fbType != null) {
+					defaultComment = fbType.getInterfaceList().getOutputVars().get(rowPosition).getComment();
+				}
+			}
+
+			if (columnPosition == INITIAL_VALUE && !InitialValueHelper.hasInitalValue(rowItem)
+					|| columnPosition == COMMENT && defaultComment != null
+					&& rowItem.getComment().equals(defaultComment)) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
+			}
+		});
 	}
 
 	@Override
@@ -236,13 +205,7 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 
 	@Override
 	protected Object getInputType(final Object input) {
-		if (input instanceof EditPart) {
-			return ((EditPart) input).getModel();
-		}
-		if (input instanceof FBNetworkElement) {
-			return input;
-		}
-		return null;
+		return InstanceSectionFilter.getFBNetworkElementFromSelectedElement(input);
 	}
 
 	@Override
@@ -260,109 +223,144 @@ public class CommentPropertySection extends AbstractSection implements I4diacTab
 
 	@Override
 	protected void setInputInit() {
-		// Nothing for now
+		inputDataProvider.setInput(getType());
+		outputDataProvider.setInput(getType());
 
+		inputTable.refresh();
+		outputTable.refresh();
 	}
 
-	private class CellModifierForCommentSection implements ICellModifier {
 
-		// Can modify if it's an initial value or a comment
-		@Override
-		public boolean canModify(final Object element, final String property) {
-			return FordiacMessages.InitialValue.equals(property) || FordiacMessages.Comment.equals(property);
+	private class VarDeclarationListProvider extends ListDataProvider<VarDeclaration> {
+		private final boolean isInputData;
+
+		public VarDeclarationListProvider(final List<VarDeclaration> list,
+				final boolean isInputData) {
+
+			super(list, new VarDeclarationColumnAccessor(isInputData));
+			this.isInputData = isInputData;
 		}
 
 		@Override
-		public Object getValue(final Object element, final String property) {
-			if (element instanceof VarDeclaration) {
-				switch (property) {
-				case INITIAL_VALUE:
-					return initialValueLabelProvider.getText(element);
-				case COMMENT:
-					return commentLabelProvider.getText(element);
-				default:
-					break;
+		public int getRowCount() {
+			if (this.list != null) {
+				return super.getRowCount();
+			}
+			return 0;
+		}
+
+		public void setInput(final Object inputElement) {
+			if (inputElement instanceof FBNetworkElement) {
+				if (isInputData) {
+					this.list = ((FBNetworkElement) inputElement).getInterface().getInputVars();
+				} else {
+					this.list = ((FBNetworkElement) inputElement).getInterface().getOutputVars();
 				}
 			}
-			return null;
+		}
+
+		public IEditableRule getEditableRule() {
+			return new IEditableRule() {
+				@Override
+				public boolean isEditable(final int columnIndex, final int rowIndex) {
+					return (columnIndex == INITIAL_VALUE && isInputData) || columnIndex == COMMENT;
+				}
+
+				@Override
+				public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
+					return (cell.getColumnIndex() == INITIAL_VALUE && isInputData) || cell.getColumnIndex() == COMMENT;
+				}
+			};
+		}
+	}
+
+	private class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclaration> {
+		private final boolean isInputData;
+
+		public VarDeclarationColumnAccessor(final boolean isInputData) {
+			this.isInputData = isInputData;
 		}
 
 		@Override
-		public void modify(Object element, final String property, final Object value) {
+		public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
+			switch (columnIndex) {
+			case NAME:
+				return rowObject.getName();
+			case TYPE:
+				return rowObject.getTypeName();
+			case INITIAL_VALUE:
+				return InitialValueHelper.getInitalOrDefaultValue(rowObject);
+			case COMMENT:
+				return rowObject.getComment();
+
+			default:
+				return null;
+			}
+		}
+
+		@Override
+		public void setDataValue(final VarDeclaration rowObject, final int columnIndex, final Object newValue) {
 			Command cmd = null;
-			if (element instanceof Item) {
-				element = ((Item) element).getData();
-				if (element instanceof VarDeclaration) {
-					final VarDeclaration varDec = (VarDeclaration) element;
-					switch (property) {
-					case INITIAL_VALUE:
-						cmd = new ChangeValueCommand(varDec, (String) value);
-						break;
-					case COMMENT:
-						cmd = new ChangeCommentCommand(varDec, (String) value);
-						break;
-					default:
-						break;
-					}
-					executeCommand(cmd);
-					refresh();
+			switch (columnIndex) {
+			case INITIAL_VALUE:
+				if (!isInputData) {
+					return;
 				}
+				cmd = new ChangeValueCommand(rowObject, (String) newValue);
+				break;
+			case COMMENT:
+				if ((String) newValue != null) {
+					cmd = new ChangeCommentCommand(rowObject, (String) newValue);
+				} else {
+					cmd = new ChangeCommentCommand(rowObject, ""); //$NON-NLS-1$
+				}
+				break;
+
+			default:
+				return;
 			}
+			executeCommand(cmd);
+			refresh();
 		}
-	}
-
-	private static class InputViewerContentProvider implements IStructuredContentProvider {
-
-		private static final Object[] EMPTY_ARR = new Object[0];
 
 		@Override
-		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof FBNetworkElement) {
-				final FBNetworkElement fbNetworkElem = (FBNetworkElement) inputElement;
-				return fbNetworkElem.getInterface().getInputVars().toArray();
-			}
-			return EMPTY_ARR;
+		public int getColumnCount() {
+			return 4;
 		}
-
 	}
 
-	private static class OutputViewerContentProvider implements IStructuredContentProvider {
-
-		private static final Object[] EMPTY_ARR = new Object[0];
+	private class ColumnDataProvider implements IDataProvider {
 
 		@Override
-		public Object[] getElements(final Object inputElement) {
-			if (inputElement instanceof FBNetworkElement) {
-				final FBNetworkElement fbNetworkElem = (FBNetworkElement) inputElement;
-				return fbNetworkElem.getInterface().getOutputVars().toArray();
+		public Object getDataValue(final int columnIndex, final int rowIndex) {
+			switch (columnIndex) {
+			case NAME:
+				return FordiacMessages.Name;
+			case TYPE:
+				return FordiacMessages.Type;
+			case INITIAL_VALUE:
+				return FordiacMessages.InitialValue;
+			case COMMENT:
+				return FordiacMessages.Comment;
+
+			default:
+				return FordiacMessages.EmptyField;
 			}
-			return EMPTY_ARR;
 		}
 
-	}
+		@Override
+		public int getColumnCount() {
+			return 4;
+		}
 
-	@Override
-	public TableViewer getViewer() {
-		return isInputsViewer ? inputCommentsViewer : outputCommentsViewer;
-	}
-	
-	// NOTE These methods are supposed to work for table rows, but here we use them for single cells.
-	//		An inconsistency that will be redressed once the new copy/paste handling has been approved.
+		@Override
+		public int getRowCount() {
+			return 1;
+		}
 
-	@Override
-	public void addEntry(Object entry, int index, CompoundCommand cmd) {
-		// nothing to do here
+		@Override
+		public void setDataValue(final int columnIndex, final int rowIndex, final Object newValue) {
+			// Setting data values to the header is not supported
+		}
 	}
-
-	@Override
-	public Object removeEntry(int index, CompoundCommand cmd) {
-		// nothing to do here
-		return null;
-	}
-
-	@Override
-	public void executeCompoundCommand(CompoundCommand cmd) {
-		commandStack.execute(cmd);
-	}
-
 }

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
+ *               2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,10 +10,12 @@
  * 
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians - updated exporter to correctly handle CHAR/WCHAR
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
 import java.math.BigInteger
+import java.nio.charset.StandardCharsets
 import java.time.Instant
 import java.time.LocalDateTime
 import java.time.LocalTime
@@ -23,7 +26,10 @@ import java.util.Set
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
+import org.eclipse.fordiac.ide.model.data.AnyStringType
+import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.WcharType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
@@ -299,8 +305,14 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateExpression(STNumericLiteral expr) //
 	'''«(expr.resultType as DataType).generateTypeName»(«expr.value»)'''
 
-	def protected dispatch CharSequence generateExpression(STStringLiteral expr) //
-	'''«(expr.resultType as DataType).generateTypeName»("«expr.value.toString.convertToJavaString»")'''
+	def protected dispatch CharSequence generateExpression(STStringLiteral expr) {
+		val type = expr.resultType as DataType
+		'''«type.generateTypeName»''' + switch (type) {
+			AnyStringType: '''("«expr.value.toString.convertToJavaString»")'''
+			CharType: '''(«String.format("0x%02x",  expr.value.toString.getBytes(StandardCharsets.UTF_8).get(0))»)'''
+			WcharType: '''(u'«expr.value.toString.convertToJavaString»')'''
+		}
+	}
 
 	def protected dispatch CharSequence generateExpression(STDateLiteral expr) {
 		val type = expr.resultType as DataType

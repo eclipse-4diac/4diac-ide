@@ -13,7 +13,6 @@
  */
 package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
 /**
@@ -65,6 +64,6 @@ public interface SimpleFBTypeRuntime extends FBRuntimeAbstract {
 	 * @generated
 	 */
 	@Override
-	LibraryElement getModel();
+	SimpleFBType getModel();
 
 } // SimpleFBTypeRuntime

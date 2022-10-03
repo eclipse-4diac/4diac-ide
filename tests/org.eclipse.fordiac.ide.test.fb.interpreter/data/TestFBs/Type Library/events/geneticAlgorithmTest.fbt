@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="geneticAlgorithmTest" Comment="Event driven up counter">
+	<Identification Standard="61499-1 Annex 2" Description="&lt;p&gt;Copyright (c) 2017 fortiss GmbH This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0&lt;/p&gt;&#10;" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-21" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="CU" Type="Event" Comment="Count up">
+				<With Var="PV"/>
+				<With Var="DI1"/>
+				<With Var="DI2"/>
+				<With Var="DI3"/>
+			</Event>
+			<Event Name="R" Type="Event" Comment="Reset">
+				<With Var="PV"/>
+				<With Var="DI1"/>
+				<With Var="DI2"/>
+				<With Var="DI3"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CUO" Type="Event" Comment="Count up output">
+				<With Var="Q"/>
+				<With Var="CV"/>
+			</Event>
+			<Event Name="RO" Type="Event" Comment="Reset output">
+				<With Var="Q"/>
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="PV" Type="UINT" Comment="Process Value" InitialValue="0"/>
+			<VarDeclaration Name="DI1" Type="UINT" Comment="" InitialValue="0"/>
+			<VarDeclaration Name="DI2" Type="UINT" Comment="" InitialValue="0"/>
+			<VarDeclaration Name="DI3" Type="UINT" Comment="" InitialValue="0"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="True if CV &amp;gt;= PV" InitialValue="FALSE"/>
+			<VarDeclaration Name="CV" Type="UINT" Comment="Counter Value" InitialValue="0"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="550.0" y="425.0">
+			</ECState>
+			<ECState Name="CU" Comment="" x="1570.0" y="165.0">
+				<ECAction Algorithm="CU" Output="CUO"/>
+			</ECState>
+			<ECState Name="R" Comment="" x="900.0" y="1000.0">
+				<ECAction Algorithm="R" Output="RO"/>
+			</ECState>
+			<ECState Name="testzustand" Comment="" x="1595.0" y="680.0">
+				<ECAction Algorithm="CU" Output="CUO"/>
+			</ECState>
+			<ECState Name="State" Comment="" x="1735.0" y="1100.0">
+				<ECAction Algorithm="CU" Output="CUO"/>
+				<ECAction Algorithm="CU" Output="CUO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="CU" Condition="CU[CV &lt; 65535]" Comment="" x="970.0" y="210.0"/>
+			<ECTransition Source="START" Destination="R" Condition="R" Comment="" x="845.0" y="770.0"/>
+			<ECTransition Source="R" Destination="START" Condition="1" Comment="" x="545.0" y="1050.0"/>
+			<ECTransition Source="CU" Destination="testzustand" Condition="CU" Comment="" x="1690.0" y="425.0"/>
+			<ECTransition Source="testzustand" Destination="State" Condition="CU" Comment="" x="1885.0" y="925.0"/>
+			<ECTransition Source="State" Destination="START" Condition="1" Comment="" x="1345.0" y="855.0"/>
+		</ECC>
+		<Algorithm Name="R" Comment="">
+			<ST><![CDATA[ALGORITHM R
+CV := 0;
+Q := FALSE;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="CU" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM CU
+CV := CV + 1;
+Q  := (CV >= PV);
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Service RightInterface="right interface" LeftInterface="left interface" Comment="Event driven up counter">
+		<ServiceSequence Name="Service Sequence" Comment="">
+		</ServiceSequence>
+		<ServiceSequence Name="Service Sequence" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="R" Parameters="PV:=0; DI1:=0; DI2:=0; DI3:=0; "/>
+				<OutputPrimitive Interface="left interface" Event="RO"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters="PV:=0; DI1:=0; DI2:=0; DI3:=0; "/>
+				<OutputPrimitive Interface="left interface" Event="CUO"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="R" Parameters="PV:=0; DI1:=0; DI2:=0; DI3:=0; "/>
+				<OutputPrimitive Interface="left interface" Event="RO"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="R" Parameters="PV:=0; DI1:=0; DI2:=0; DI3:=0; "/>
+				<OutputPrimitive Interface="left interface" Event="RO"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters="PV:=0; DI1:=0; DI2:=0; DI3:=0; "/>
+				<OutputPrimitive Interface="left interface" Event="CUO"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="R" Parameters="PV:=0; DI1:=0; DI2:=0; DI3:=0; "/>
+				<OutputPrimitive Interface="left interface" Event="RO"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="R" Parameters="PV:=0; DI1:=0; DI2:=0; DI3:=0; "/>
+				<OutputPrimitive Interface="left interface" Event="RO"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters="PV:=0; DI1:=0; DI2:=0; DI3:=0; "/>
+				<OutputPrimitive Interface="left interface" Event="CUO"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters="PV:=0; DI1:=0; DI2:=0; DI3:=0; "/>
+				<OutputPrimitive Interface="left interface" Event="CUO"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters="PV:=0; DI1:=0; DI2:=0; DI3:=0; "/>
+				<OutputPrimitive Interface="left interface" Event="CUO"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+	</Service>
+</FBType>

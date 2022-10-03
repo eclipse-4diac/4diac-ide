@@ -13,10 +13,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource
 
-import org.eclipse.fordiac.ide.fbtypextext.FBTypeXtextResource
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
+import org.eclipse.fordiac.ide.structuredtextcore.FBTypeXtextResource
 import org.eclipse.ui.IEditorInput
 import org.eclipse.ui.IFileEditorInput
 import org.eclipse.xtext.resource.XtextResource
