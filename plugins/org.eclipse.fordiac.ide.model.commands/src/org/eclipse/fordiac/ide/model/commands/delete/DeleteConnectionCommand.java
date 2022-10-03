@@ -147,11 +147,11 @@ public class DeleteConnectionCommand extends Command {
 	private static boolean isErrorMarkerToDelete(final IInterfaceElement ie) {
 		// we only have to remove the error marker interface if it is one, if it is still in the model (i.e., has not
 		// already been deleted by someone else) and it has no further connections
-		return ie instanceof ErrorMarkerInterface && ie.eContainer() != null && hasNoConnections(ie);
+		return ie instanceof ErrorMarkerInterface && ie.eContainer() != null && hasNoOtherConnections(ie);
 	}
 
-	private static boolean hasNoConnections(final IInterfaceElement ie) {
-		return ie.isIsInput() ? ie.getInputConnections().isEmpty() : ie.getOutputConnections().isEmpty();
+	private static boolean hasNoOtherConnections(final IInterfaceElement ie) {
+		return ie.isIsInput() ? ie.getInputConnections().size() <= 1 : ie.getOutputConnections().size() <= 1;
 	}
 
 	public IInterfaceElement getSource() {
