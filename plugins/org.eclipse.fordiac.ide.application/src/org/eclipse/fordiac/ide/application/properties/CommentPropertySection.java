@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -32,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
@@ -41,7 +43,7 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
+import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
@@ -66,6 +68,9 @@ public class CommentPropertySection extends AbstractSection {
 	private static final int TYPE = 1;
 	private static final int INITIAL_VALUE = 2;
 	private static final int COMMENT = 3;
+	public static final int VISIBLE = 4;
+
+	private static final int COL_COUNT = 5;
 
 	private Text nameText;
 	private Text commentText;
@@ -129,8 +134,15 @@ public class CommentPropertySection extends AbstractSection {
 		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer,
 				new ColumnDataProvider(), outputDataProvider.getEditableRule());
 
+		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
+		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
+
+		inputTable.configure();
+		outputTable.configure();
+
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(outputComposite);
+
 
 		tableSectionComposite.layout();
 	}
@@ -176,6 +188,10 @@ public class CommentPropertySection extends AbstractSection {
 					|| columnPosition == COMMENT && defaultComment != null
 					&& rowItem.getComment().equals(defaultComment)) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
+			}
+			// We add a label for the checkbox column
+			if (columnPosition == VISIBLE) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.VISIBILITY_CELL);
 			}
 		});
 	}
@@ -272,6 +288,18 @@ public class CommentPropertySection extends AbstractSection {
 
 		inputTable.refresh();
 		outputTable.refresh();
+
+		inputTable.addListener(SWT.Selection, event -> {
+			if (event.index == VISIBLE) {
+				final Object o = event.data;
+			}
+		});
+
+		outputTable.addListener(SWT.Selection, event -> {
+			if (event.index == VISIBLE) {
+				final Object o = event.data;
+			}
+		});
 	}
 
 
@@ -307,18 +335,20 @@ public class CommentPropertySection extends AbstractSection {
 			return new IEditableRule() {
 				@Override
 				public boolean isEditable(final int columnIndex, final int rowIndex) {
-					return (columnIndex == INITIAL_VALUE && isInputData) || columnIndex == COMMENT;
+					return (columnIndex == INITIAL_VALUE && isInputData) || columnIndex == COMMENT
+							|| columnIndex == VISIBLE;
 				}
 
-				@Override
+				@Override // Added the visible column stuff
 				public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
-					return (cell.getColumnIndex() == INITIAL_VALUE && isInputData) || cell.getColumnIndex() == COMMENT;
+					return (cell.getColumnIndex() == INITIAL_VALUE && isInputData) || cell.getColumnIndex() == COMMENT
+							|| cell.getColumnIndex() == VISIBLE;
 				}
 			};
 		}
 	}
 
-	private class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclaration> {
+	private class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<VarDeclaration> { // IColumnPropertyAccessor
 		private final boolean isInputData;
 
 		public VarDeclarationColumnAccessor(final boolean isInputData) {
@@ -336,7 +366,8 @@ public class CommentPropertySection extends AbstractSection {
 				return InitialValueHelper.getInitalOrDefaultValue(rowObject);
 			case COMMENT:
 				return rowObject.getComment();
-
+			case VISIBLE: // I added
+				return rowObject.isVisible();
 			default:
 				return null;
 			}
@@ -359,7 +390,11 @@ public class CommentPropertySection extends AbstractSection {
 					cmd = new ChangeCommentCommand(rowObject, ""); //$NON-NLS-1$
 				}
 				break;
-
+			case VISIBLE:
+				// It's a true/false checkbox; if it's visible -> hide; if it's hidden -> show
+				// newValue atm is a string...
+				cmd = new HidePinCommand(rowObject, (Boolean) newValue);
+				break;
 			default:
 				return;
 			}
@@ -369,7 +404,43 @@ public class CommentPropertySection extends AbstractSection {
 
 		@Override
 		public int getColumnCount() {
-			return 4;
+			return COL_COUNT;
+		}
+
+		@Override
+		public String getColumnProperty(final int columnIndex) {
+			switch (columnIndex) {
+			case NAME:
+				return FordiacMessages.Name;
+			case TYPE:
+				return FordiacMessages.Type;
+			case INITIAL_VALUE:
+				return FordiacMessages.InitialValue;
+			case COMMENT:
+				return FordiacMessages.Comment;
+			case VISIBLE:
+				return FordiacMessages.Visible;
+			default:
+				return null;
+			}
+		}
+
+		@Override
+		public int getColumnIndex(final String propertyName) {
+			switch (propertyName) {
+			case "Name":
+				return NAME;
+			case "Type":
+				return TYPE;
+			case "Initial Value":
+				return INITIAL_VALUE;
+			case "Comment":
+				return COMMENT;
+			case "Visible":
+				return VISIBLE;
+			default:
+				return -1;
+			}
 		}
 	}
 
@@ -386,7 +457,8 @@ public class CommentPropertySection extends AbstractSection {
 				return FordiacMessages.InitialValue;
 			case COMMENT:
 				return FordiacMessages.Comment;
-
+			case VISIBLE:
+				return FordiacMessages.Visible;
 			default:
 				return FordiacMessages.EmptyField;
 			}
@@ -394,7 +466,7 @@ public class CommentPropertySection extends AbstractSection {
 
 		@Override
 		public int getColumnCount() {
-			return 4;
+			return COL_COUNT;
 		}
 
 		@Override

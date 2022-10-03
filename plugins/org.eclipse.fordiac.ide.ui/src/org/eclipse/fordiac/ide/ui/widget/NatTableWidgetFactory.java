@@ -61,16 +61,19 @@ import org.eclipse.nebula.widgets.nattable.painter.cell.TextPainter;
 import org.eclipse.nebula.widgets.nattable.painter.layer.NatGridLayerPainter;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer.MoveDirectionEnum;
+import org.eclipse.nebula.widgets.nattable.selection.action.SelectCellAction;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBindings;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
 import org.eclipse.nebula.widgets.nattable.style.SelectionStyleLabels;
 import org.eclipse.nebula.widgets.nattable.style.Style;
+import org.eclipse.nebula.widgets.nattable.ui.action.IMouseAction;
 import org.eclipse.nebula.widgets.nattable.ui.binding.UiBindingRegistry;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.CellEditorMouseEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.KeyEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.LetterOrDigitKeyEventMatcher;
+import org.eclipse.nebula.widgets.nattable.ui.matcher.MouseEventMatcher;
 import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
 import org.eclipse.nebula.widgets.nattable.widget.EditModeEnum;
@@ -97,6 +100,7 @@ public final class NatTableWidgetFactory {
 	public static final String DISABLED_CELL = "DISABLED_CELL"; //$NON-NLS-1$ $
 	public static final String PROPOSAL_CELL = "PROPOSAL_CELL"; //$NON-NLS-1$
 	public static final String DISABLED_HEADER = "DISABLED_HEADER"; //$NON-NLS-1$
+	public static final String VISIBILITY_CELL = "VISIBILITY_CELL"; //$NON-NLS-1$
 
 	private static final char[] ACTIVATION_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
@@ -106,13 +110,15 @@ public final class NatTableWidgetFactory {
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider) {
-		return createNatTable(parent, dataLayer, headerDataProvider, IEditableRule.NEVER_EDITABLE);
+		return createNatTable(parent, dataLayer, headerDataProvider, IEditableRule.ALWAYS_EDITABLE); // this was never,
+																									 // change back
 	}
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider, final IEditableRule editableRule) {
 		return createNatTable(parent, dataLayer, headerDataProvider, editableRule, null);
 	}
+
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider, final IEditableRule editableRule,
@@ -128,6 +134,14 @@ public final class NatTableWidgetFactory {
 						new PasteDataIntoTableAction());
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'), new CutDataFromTableAction());
 			}
+
+			// Could be interesting
+			@Override
+			protected void configureBodyMouseClickBindings(final UiBindingRegistry uiBindingRegistry) {
+				final IMouseAction action = new SelectCellAction();
+				uiBindingRegistry.registerMouseDownBinding(MouseEventMatcher.bodyLeftClick(SWT.NONE), action);
+			}
+
 		});
 		selectionLayer.registerCommandHandler(new CopyDataCommandHandler(selectionLayer));
 		selectionLayer.registerCommandHandler(new DeleteSelectionCommandHandler(selectionLayer));
@@ -261,8 +275,8 @@ public final class NatTableWidgetFactory {
 			dataLayer.setColumnWidthPercentageByPosition(0, 20);
 			dataLayer.setColumnWidthPercentageByPosition(1, 20);
 			dataLayer.setColumnWidthPercentageByPosition(2, 15);
-			dataLayer.setColumnWidthPercentageByPosition(3, 15);
-			dataLayer.setColumnWidthPercentageByPosition(4, 30);
+			dataLayer.setColumnWidthPercentageByPosition(3, 35);
+			dataLayer.setColumnWidthPercentageByPosition(4, 10);
 			break;
 
 		default:
@@ -346,6 +360,7 @@ public final class NatTableWidgetFactory {
 
 				configRegistry.unregisterConfigAttribute(CellConfigAttributes.CELL_STYLE, DisplayMode.SELECT,
 						SelectionStyleLabels.SELECTION_ANCHOR_STYLE);
+
 			}
 		});
 
