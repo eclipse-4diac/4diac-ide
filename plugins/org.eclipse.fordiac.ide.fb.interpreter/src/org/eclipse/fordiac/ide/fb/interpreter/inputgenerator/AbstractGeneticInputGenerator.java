@@ -94,16 +94,20 @@ public abstract class AbstractGeneticInputGenerator {
 			changeOrder(mutant);
 			break;
 		default:
-			replaceEvent(mutant);
+			if (type.getInterfaceList().getEventInputs().size() > 1) {
+				replaceEvent(mutant);
+			}
 			break;
 		}
 		append.add(mutant);
 	}
 
+	// addEvent is only of use when no crossover is not used (crossover changes the size by more then one)
 	private void addEvent(final List<EventOccurrence> mutant) {
 		mutant.addAll(EventOccFactory.createFrom(InputGenerator.getRandomEventsSequence(type, 1), null));
 	}
 
+	// addEvent is only of use when no crossover is not used (crossover changes the size by more then one)
 	private static void removeEvent(final List<EventOccurrence> mutant) {
 		if (!mutant.isEmpty()) {
 			mutant.remove(mutant.size() - 1);
@@ -121,7 +125,15 @@ public abstract class AbstractGeneticInputGenerator {
 
 	private void replaceEvent(final List<EventOccurrence> mutant) {
 		final int pos = random.nextInt(mutant.size());
+		final String name = mutant.get(pos).getEvent().getName();
 		mutant.remove(pos);
+		List<EventOccurrence> eventocc = EventOccFactory.createFrom(InputGenerator.getRandomEventsSequence(type, 1),
+				null);
+		while (name.equals(eventocc.get(0).getEvent().getName())) {
+			eventocc.clear();
+			eventocc = EventOccFactory.createFrom(InputGenerator.getRandomEventsSequence(type, 1), null);
+
+		}
 		mutant.addAll(pos, EventOccFactory.createFrom(InputGenerator.getRandomEventsSequence(type, 1), null));
 	}
 
