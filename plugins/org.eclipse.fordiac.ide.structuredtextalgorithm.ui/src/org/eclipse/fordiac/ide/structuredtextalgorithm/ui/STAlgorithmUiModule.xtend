@@ -44,6 +44,8 @@ import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument
 import org.eclipse.xtext.ui.shared.Access
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreSemanticHighlightingCalculator
+import org.eclipse.xtext.ui.editor.quickfix.ISimilarityMatcher
+import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher
 
 /**
  * Use this class to register components to be used within the Eclipse IDE.
@@ -106,5 +108,9 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	def Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
 		return STCoreSemanticHighlightingCalculator;
+	}
+	
+	def Class<? extends ISimilarityMatcher> bindISimilarityMatcher() {
+		return CaseInsensitiveSimilarityMatcher;
 	}
 }

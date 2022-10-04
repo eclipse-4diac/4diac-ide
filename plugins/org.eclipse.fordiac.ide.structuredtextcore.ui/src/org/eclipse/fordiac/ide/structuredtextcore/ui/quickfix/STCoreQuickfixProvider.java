@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2021, 2022 Primetals Technologies GmbH
+ * Copyright (c) 2021, 2022 Primetals Technologies Austria GmbH
  *               2022 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -32,13 +32,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarOutputDeclarationB
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.validation.STCoreValidator;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.xtext.EcoreUtil2;
 import org.eclipse.xtext.diagnostics.Diagnostic;
 import org.eclipse.xtext.resource.EObjectAtOffsetHelper;
 import org.eclipse.xtext.resource.XtextResource;
-import org.eclipse.xtext.ui.editor.IURIEditorOpener;
-import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.model.IXtextDocument;
 import org.eclipse.xtext.ui.editor.model.edit.IModification;
 import org.eclipse.xtext.ui.editor.model.edit.IModificationContext;
@@ -55,10 +52,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 	private STStandardFunctionProvider standardFunctionProvider;
 
 	@Inject
-	private IURIEditorOpener editorOpener;
-
-	@Inject
-	private EObjectAtOffsetHelper offsetHelper;
+	protected EObjectAtOffsetHelper offsetHelper;
 
 	@Fix(STCoreValidator.TRAILING_UNDERSCORE_IN_IDENTIFIER_ERROR)
 	public static void fixTrailingUnderscore(final Issue issue, final IssueResolutionAcceptor acceptor) {
@@ -110,16 +104,12 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 
 	@Fix(Diagnostic.LINKING_DIAGNOSTIC)
 	public void createMissingVariable(final Issue issue, final IssueResolutionAcceptor acceptor) {
-		IXtextDocument xtextDocument = null;
-		final IEditorPart editor = editorOpener.open(issue.getUriToProblem(), false);
-		XtextEditor xtextEditor = null;
-		if (editor instanceof XtextEditor) {
-			xtextEditor = (XtextEditor) editor;
-			xtextDocument = xtextEditor.getDocument();
-		}
+		final IModificationContext modificationContext = getModificationContextFactory()
+				.createModificationContext(issue);
+		final IXtextDocument xtextDocument = modificationContext.getXtextDocument();
 		if (xtextDocument != null) {
-			final var resolvedElement = xtextDocument.readOnly(
-					(final XtextResource resource) -> (offsetHelper.resolveContainedElementAt(resource, issue.getOffset())));
+			final var resolvedElement = xtextDocument.readOnly((final XtextResource resource) -> (offsetHelper
+					.resolveContainedElementAt(resource, issue.getOffset())));
 			if (EcoreUtil2.getContainerOfType(resolvedElement, STFunction.class) != null
 					|| EcoreUtil2.getContainerOfType(resolvedElement, STMethod.class) != null) {
 				acceptor.accept(issue, "Create missing INPUT variable", "Create missing INPUT variable", null,
@@ -127,13 +117,15 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 							final IXtextDocument document = context.getXtextDocument();
 							if (element.eContainer() instanceof STAssignmentStatement) {
 
-								final STAssignmentStatement assignment = (STAssignmentStatement) element.eContainer();
+								final STAssignmentStatement assignment = (STAssignmentStatement) element
+										.eContainer();
 								final var factory = STCoreFactory.eINSTANCE;
 								final var type = assignment.getRight().getResultType();
 								final var varDeclaration = factory.createSTVarDeclaration();
 								varDeclaration.setType(type);
 								varDeclaration.setName(document.get(issue.getOffset(), issue.getLength()));
-								final EObject container = EcoreUtil2.getContainerOfType(element, STFunction.class) != null
+								final EObject container = EcoreUtil2.getContainerOfType(element,
+										STFunction.class) != null
 										? EcoreUtil2.getContainerOfType(element, STFunction.class)
 												: EcoreUtil2.getContainerOfType(element, STMethod.class);
 								final var inputBlocks = EcoreUtil2.getAllContentsOfType(container,
@@ -147,7 +139,8 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 										((STMethod) container).getBody().getVarDeclarations().add(block);
 									}
 								} else {
-									inputBlocks.get(inputBlocks.size() - 1).getVarDeclarations().add(varDeclaration);
+									inputBlocks.get(inputBlocks.size() - 1).getVarDeclarations()
+									.add(varDeclaration);
 								}
 
 							}
@@ -158,13 +151,15 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 							final IXtextDocument document = context.getXtextDocument();
 							if (element.eContainer() instanceof STAssignmentStatement) {
 
-								final STAssignmentStatement assignment = (STAssignmentStatement) element.eContainer();
+								final STAssignmentStatement assignment = (STAssignmentStatement) element
+										.eContainer();
 								final var factory = STCoreFactory.eINSTANCE;
 								final var type = assignment.getRight().getResultType();
 								final var varDeclaration = factory.createSTVarDeclaration();
 								varDeclaration.setType(type);
 								varDeclaration.setName(document.get(issue.getOffset(), issue.getLength()));
-								final EObject container = EcoreUtil2.getContainerOfType(element, STFunction.class) != null
+								final EObject container = EcoreUtil2.getContainerOfType(element,
+										STFunction.class) != null
 										? EcoreUtil2.getContainerOfType(element, STFunction.class)
 												: EcoreUtil2.getContainerOfType(element, STMethod.class);
 								final var outputBlocks = EcoreUtil2.getAllContentsOfType(container,
@@ -178,7 +173,8 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 										((STMethod) container).getBody().getVarDeclarations().add(block);
 									}
 								} else {
-									outputBlocks.get(outputBlocks.size() - 1).getVarDeclarations().add(varDeclaration);
+									outputBlocks.get(outputBlocks.size() - 1).getVarDeclarations()
+									.add(varDeclaration);
 								}
 
 							}
@@ -189,13 +185,15 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 							final IXtextDocument document = context.getXtextDocument();
 							if (element.eContainer() instanceof STAssignmentStatement) {
 
-								final STAssignmentStatement assignment = (STAssignmentStatement) element.eContainer();
+								final STAssignmentStatement assignment = (STAssignmentStatement) element
+										.eContainer();
 								final var factory = STCoreFactory.eINSTANCE;
 								final var type = assignment.getRight().getResultType();
 								final var varDeclaration = factory.createSTVarDeclaration();
 								varDeclaration.setType(type);
 								varDeclaration.setName(document.get(issue.getOffset(), issue.getLength()));
-								final EObject container = EcoreUtil2.getContainerOfType(element, STFunction.class) != null
+								final EObject container = EcoreUtil2.getContainerOfType(element,
+										STFunction.class) != null
 										? EcoreUtil2.getContainerOfType(element, STFunction.class)
 												: EcoreUtil2.getContainerOfType(element, STMethod.class);
 								final var inOutBlocks = EcoreUtil2.getAllContentsOfType(container,
@@ -209,7 +207,8 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 										((STMethod) container).getBody().getVarDeclarations().add(block);
 									}
 								} else {
-									inOutBlocks.get(inOutBlocks.size() - 1).getVarDeclarations().add(varDeclaration);
+									inOutBlocks.get(inOutBlocks.size() - 1).getVarDeclarations()
+									.add(varDeclaration);
 								}
 							}
 						});

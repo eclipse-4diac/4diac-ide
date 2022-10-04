@@ -11,19 +11,20 @@
  *   Martin Melik Merkumians
  *       - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.structuredtextfunctioneditor;
+package org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix;
 
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.converter.STFunctionValueConverters;
-import org.eclipse.xtext.conversion.IValueConverterService;
+import org.eclipse.xtext.ui.editor.quickfix.ISimilarityMatcher;
+import org.eclipse.xtext.util.Strings;
 
-/**
- * Use this class to register components to be used at runtime / without the
- * Equinox extension registry.
- */
-public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
+public class CaseInsensitiveSimilarityMatcher implements ISimilarityMatcher {
 
 	@Override
-	public Class<? extends IValueConverterService> bindIValueConverterService() {
-		return STFunctionValueConverters.class;
+	public boolean isSimilar(final String s0, final String s1) {
+		if (Strings.isEmpty(s0) || Strings.isEmpty(s1)) {
+			return false;
+		}
+		final double levenshteinDistance = Strings.getLevenshteinDistance(s0.toLowerCase(), s1.toLowerCase());
+		return levenshteinDistance <= 1;
 	}
+
 }
