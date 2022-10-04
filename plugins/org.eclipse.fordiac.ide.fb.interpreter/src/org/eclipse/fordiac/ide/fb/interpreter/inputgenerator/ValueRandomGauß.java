@@ -120,7 +120,7 @@ public class ValueRandomGauß extends AbstractValueRandom {
 	@Override
 	public String nextDint() {
 		final int value = (int) Math.round((random.nextGaussian() * stddev + mean));
-		return "INT#" + value; //$NON-NLS-1$
+		return "DINT#" + value; //$NON-NLS-1$
 	}
 	@Override
 	public String nextLint() {
