@@ -39,9 +39,18 @@ public class DeleteConnectionCommand extends Command {
 	private FBNetworkElement errorFb;
 	ErrorMarkerBuilder deleteConnectionErrorMarker = null;
 
+	private boolean keepMarker; // we want to keep the marker
+
 	public DeleteConnectionCommand(final Connection connection) {
 		this(connection, null);
 		this.errorFb = null;
+		keepMarker = false;
+	}
+
+	public DeleteConnectionCommand(final Connection connection, final boolean keepMarker) {
+		this(connection, null);
+		this.errorFb = null;
+		this.keepMarker = keepMarker;
 	}
 
 	public DeleteConnectionCommand(final Connection connection, final FBNetworkElement errorFb) {
@@ -130,14 +139,14 @@ public class DeleteConnectionCommand extends Command {
 	}
 
 	private void checkErrorMarker() {
-		if (isErrorMarkerToDelete(source)) {
+		if (isErrorMarkerToDelete(source) && !keepMarker) {
 			deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
 		}
-		if (isErrorMarkerToDelete(destination)) {
+		if (isErrorMarkerToDelete(destination) && !keepMarker) {
 			deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
 		}
 
-		if (connection.hasError()) {
+		if (connection.hasError() && !keepMarker) {
 			deleteConnectionErrorMarker = ErrorMarkerBuilder.deleteErrorMarker(connection);
 			deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
 			deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
