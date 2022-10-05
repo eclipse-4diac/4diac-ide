@@ -158,14 +158,16 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 	@Override
 	public void aboutToBeShown() {
 		// this can be removed once copy/paste for old tables is no longer used
-		final IActionBars bars = tabbedPropertySheetPage.getSite().getActionBars();
-		defaultCopyPasteCut[0] = bars.getGlobalActionHandler(ActionFactory.COPY.getId());
-		bars.setGlobalActionHandler(ActionFactory.COPY.getId(), null);
-		defaultCopyPasteCut[1] = bars.getGlobalActionHandler(ActionFactory.PASTE.getId());
-		bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), null);
-		defaultCopyPasteCut[2] = bars.getGlobalActionHandler(ActionFactory.CUT.getId());
-		bars.setGlobalActionHandler(ActionFactory.CUT.getId(), null);
-		bars.updateActionBars();
+		final IActionBars bars = getActionBars();
+		if (bars != null) {
+			defaultCopyPasteCut[0] = bars.getGlobalActionHandler(ActionFactory.COPY.getId());
+			bars.setGlobalActionHandler(ActionFactory.COPY.getId(), null);
+			defaultCopyPasteCut[1] = bars.getGlobalActionHandler(ActionFactory.PASTE.getId());
+			bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), null);
+			defaultCopyPasteCut[2] = bars.getGlobalActionHandler(ActionFactory.CUT.getId());
+			bars.setGlobalActionHandler(ActionFactory.CUT.getId(), null);
+			bars.updateActionBars();
+		}
 
 		super.aboutToBeShown();
 	}
@@ -173,13 +175,22 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 	@Override
 	public void aboutToBeHidden() {
 		// this can be removed once copy/paste for old tables is no longer used
-		final IActionBars bars = tabbedPropertySheetPage.getSite().getActionBars();
-		bars.setGlobalActionHandler(ActionFactory.COPY.getId(), defaultCopyPasteCut[0]);
-		bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), defaultCopyPasteCut[1]);
-		bars.setGlobalActionHandler(ActionFactory.CUT.getId(), defaultCopyPasteCut[2]);
-		bars.updateActionBars();
+		final IActionBars bars = getActionBars();
+		if (bars != null) {
+			bars.setGlobalActionHandler(ActionFactory.COPY.getId(), defaultCopyPasteCut[0]);
+			bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), defaultCopyPasteCut[1]);
+			bars.setGlobalActionHandler(ActionFactory.CUT.getId(), defaultCopyPasteCut[2]);
+			bars.updateActionBars();
+		}
 
 		super.aboutToBeHidden();
+	}
+
+	private IActionBars getActionBars() {
+		if (tabbedPropertySheetPage != null && tabbedPropertySheetPage.getSite() != null) {
+			return tabbedPropertySheetPage.getSite().getActionBars();
+		}
+		return null;
 	}
 
 	@Override
