@@ -698,4 +698,20 @@
             </description>
       </decorator>
    </extension>
+   <extension
+         point="org.eclipse.emf.compare.edit.adapterFactory">
+      <factory
+       		uri="org.eclipse.fordiac.ide.model.libraryElement"
+            class="org.eclipse.fordiac.ide.systemmanagement.ui.emf.compare.AutomationSystemItemProviderEmfCompare"
+            supportedTypes=
+              "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
+               org.eclipse.emf.edit.provider.IStructuredItemContentProvider
+               org.eclipse.emf.edit.provider.ITreeItemContentProvider
+               org.eclipse.emf.edit.provider.IItemLabelProvider
+               org.eclipse.emf.edit.provider.IItemPropertySource"
+            ranking="100"
+           >
+      </factory>
+</extension>
+   
 </plugin>

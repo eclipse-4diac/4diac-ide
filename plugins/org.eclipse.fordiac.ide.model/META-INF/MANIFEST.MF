@@ -7,7 +7,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.e4.core.services,
  org.eclipse.e4.core.contexts,
- org.eclipse.fordiac.ide.ui.errormessages
+ org.eclipse.fordiac.ide.ui.errormessages,
+ org.eclipse.emf.compare,
+ org.eclipse.emf.compare.rcp.ui,
+ com.google.guava
 Export-Package: org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.model.annotations,
  org.eclipse.fordiac.ide.model.data,
