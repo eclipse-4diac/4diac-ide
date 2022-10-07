@@ -27,25 +27,36 @@ abstract class AbstractInterfaceElementEditPart extends AbstractDirectEditableEd
 
 	protected abstract void update();
 
-	private final Adapter adapter = new AdapterImpl() {
-		@Override
-		public void notifyChanged(Notification notification) {
-			super.notifyChanged(notification);
-			refresh();
-			update();
+	private Adapter adapter;
+
+	private Adapter getAdapter() {
+		if (adapter == null) {
+			adapter = createAdapter();
 		}
-	};
+		return adapter;
+	}
+
+	protected Adapter createAdapter() {
+		return new AdapterImpl() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				refresh();
+				update();
+			}
+		};
+	}
 
 	@Override
 	public void activate() {
 		super.activate();
-		getCastedModel().eAdapters().add(adapter);
+		getCastedModel().eAdapters().add(getAdapter());
 	}
 
 	@Override
 	public void deactivate() {
 		super.deactivate();
-		getCastedModel().eAdapters().remove(adapter);
+		getCastedModel().eAdapters().remove(getAdapter());
 	}
 
 	public boolean isInput() {

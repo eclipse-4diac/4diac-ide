@@ -29,6 +29,9 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.DeleteInterfaceEditPolicy;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
@@ -38,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.gef.ConnectionEditPart;
@@ -116,6 +120,21 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	}
 
 	@Override
+	protected Adapter createAdapter() {
+		return new AdapterImpl() {
+			@Override
+			public void notifyChanged(final Notification notification) {
+				super.notifyChanged(notification);
+				refresh();
+				update();
+				if (LibraryElementPackage.eINSTANCE.getEvent_With().equals(notification.getFeature())) {
+					refreshTypeRoot();
+				}
+			}
+		};
+	}
+
+	@Override
 	protected void update() {
 		if (getCastedModel() instanceof Event && null != sourceConnections) {
 			for (final Object con : sourceConnections) {
@@ -136,10 +155,16 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	@Override
 	public void activate() {
 		super.activate();
+		// tell the root edipart that we are here and that it should add the type comment children
+		refreshTypeRoot();
+	}
+
+	private void refreshTypeRoot() {
 		final FBTypeRootEditPart typeRootEP = getFBTypeRootEP();
 		if (typeRootEP != null) {
-			// tell the root edipart that we are here and that it should add the type comment children
 			typeRootEP.refresh();
+			typeRootEP.getChildren().stream().filter(CommentTypeEditPart.class::isInstance)
+					.forEach(ep -> ((CommentTypeEditPart) ep).refreshVisuals());
 		}
 	}
 
@@ -260,4 +285,5 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 	public INamedElement getINamedElement() {
 		return getCastedModel();
 	}
+
 }
