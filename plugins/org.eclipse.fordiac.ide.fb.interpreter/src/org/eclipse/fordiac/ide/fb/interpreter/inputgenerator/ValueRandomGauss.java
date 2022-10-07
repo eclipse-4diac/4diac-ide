@@ -17,11 +17,11 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.LrealType;
 import org.eclipse.fordiac.ide.model.data.RealType;
 
-public class ValueRandomGauß extends AbstractValueRandom {
+public class ValueRandomGauss extends AbstractValueRandom {
 	private double mean;
 	private double stddev;
 
-	public ValueRandomGauß(final double mean, final double stddev) {
+	public ValueRandomGauss(final double mean, final double stddev) {
 		this.mean = mean;
 		if (stddev < 0) {
 			this.stddev = 0;

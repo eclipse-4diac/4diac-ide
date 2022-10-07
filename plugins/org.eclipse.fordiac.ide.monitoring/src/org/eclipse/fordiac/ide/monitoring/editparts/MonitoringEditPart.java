@@ -312,10 +312,6 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 		showPinValues(false);
 	}
 
-	private boolean isForced() {
-		return getModel().isForce() && (getModel().getForceValue() != null);
-	}
-
 	private EditPart getParentPart() {
 		return this.parentPart;
 	}

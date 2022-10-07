@@ -205,7 +205,7 @@ public class PasteCommand extends Command {
 			}
 		}
 
-		if (isNested == false) {
+		if (!isNested) {
 			copiedElement.setPosition(calculatePastePos(element));
 		}
 		copiedElement.setMapping(null);
@@ -217,13 +217,15 @@ public class PasteCommand extends Command {
 
 		// copy content of Groups
 		if (element instanceof Group) {
-			((Group) element).getFbNetwork().getEventConnections().forEach(con -> {
-				connectionsToCopy.add(new ConnectionReference(con));
-			});
-			((Group) element).getFbNetwork().getDataConnections().forEach(con -> {
-				connectionsToCopy.add(new ConnectionReference(con));
-			});
-			for (final FBNetworkElement groupElement : ((Group) element).getGroupElements()) {
+			final Group group = (Group) element;
+			group.getFbNetwork().getEventConnections()
+					.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
+			group.getFbNetwork().getDataConnections()
+					.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
+			group.getFbNetwork().getAdapterConnections()
+					.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
+
+			for (final FBNetworkElement groupElement : group.getGroupElements()) {
 				((Group) copiedElement).getGroupElements().add(copyAndCreateFB(groupElement, true));
 			}
 		}

@@ -111,7 +111,7 @@ public final class NatTableWidgetFactory {
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider) {
 		return createNatTable(parent, dataLayer, headerDataProvider, IEditableRule.ALWAYS_EDITABLE); // this was never,
-																									 // change back
+		// change back
 	}
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
@@ -400,24 +400,21 @@ public final class NatTableWidgetFactory {
 
 	private static class ButtonTextCellEditor extends TextCellEditor {
 		Map<String, List<String>> elements;
-		final SimpleContentProposalProvider proposalProvider;
 		private Button button;
 
 		public ButtonTextCellEditor(final Map<String, List<String>> elements) {
 			super();
 			this.elements = elements;
 
-			proposalProvider = new SimpleContentProposalProvider();
+			final SimpleContentProposalProvider proposalProvider = new SimpleContentProposalProvider();
 			proposalProvider.setFiltering(true);
 			enableContentProposal(new TextContentAdapter(), proposalProvider, null, ACTIVATION_CHARS);
 		}
 
 		private void refreshProposal() {
 			final List<String> proposals = new ArrayList<>();
-			elements.forEach((k, v) -> {
-				proposals.addAll(v);
-			});
-			proposalProvider.setProposals(proposals.toArray(new String[0]));
+			elements.forEach((k, v) -> proposals.addAll(v));
+			((SimpleContentProposalProvider) proposalProvider).setProposals(proposals.toArray(new String[0]));
 		}
 
 		@Override
@@ -550,7 +547,7 @@ public final class NatTableWidgetFactory {
 		}
 
 
-		private static class Node {
+		private static final class Node {
 			private final String value;
 			private final List<Node> children;
 			private Node parent;
@@ -592,5 +589,9 @@ public final class NatTableWidgetFactory {
 				this.parent = parent;
 			}
 		}
+	}
+
+	private NatTableWidgetFactory() {
+		throw new UnsupportedOperationException("Helper class should not be insantiated!");  //$NON-NLS-1$
 	}
 }

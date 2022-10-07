@@ -202,16 +202,13 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 		provider.setInput(getType());
 
 		final List<String> elementaryTypes = new ArrayList<>();
-		getDataTypeLib().getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType)).forEach(type -> {
-			elementaryTypes.add(type.getName());
-		});
+		getDataTypeLib().getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType))
+		.forEach(type -> elementaryTypes.add(type.getName()));
 		proposals.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
 
 		final List<String> structuredTypes = new ArrayList<>();
-		getDataTypeLib().getDataTypesSorted().stream().filter(type -> (type instanceof StructuredType))
-		.forEach(type -> {
-			structuredTypes.add(type.getName());
-		});
+		getDataTypeLib().getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
+		.forEach(type -> structuredTypes.add(type.getName()));
 		proposals.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
 

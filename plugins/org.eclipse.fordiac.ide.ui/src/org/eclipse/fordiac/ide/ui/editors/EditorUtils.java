@@ -49,8 +49,9 @@ public final class EditorUtils {
 	}
 
 	public static GraphicalViewer getGraphicalViewerFromCurrentActiveEditor() {
-		if (EditorUtils.getCurrentActiveEditor() != null) {
-			return getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
+		final IEditorPart currentActiveEditor = getCurrentActiveEditor();
+		if (currentActiveEditor != null) {
+			return currentActiveEditor.getAdapter(GraphicalViewer.class);
 		}
 		return null;
 	}
