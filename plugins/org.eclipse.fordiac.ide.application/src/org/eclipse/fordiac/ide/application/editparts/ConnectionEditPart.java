@@ -266,6 +266,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			}
 			getConnectionFigure().setHidden(!getModel().isVisible());
 			getConnectionFigure().updateConLabels();
+			getConnectionFigure().revalidate();
 		}
 	}
 
