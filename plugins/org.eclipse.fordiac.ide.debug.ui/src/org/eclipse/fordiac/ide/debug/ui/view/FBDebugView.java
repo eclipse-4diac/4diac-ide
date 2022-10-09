@@ -25,6 +25,8 @@ import org.eclipse.fordiac.ide.debug.EvaluatorDebugElement;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
+import org.eclipse.fordiac.ide.model.eval.Evaluator;
+import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -156,25 +158,25 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 	private void contextActivated(final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			final Object source = ((IStructuredSelection) selection).getFirstElement();
-			final FBType type = getFBTypeFromDebugContext(source);
+			final FBEvaluator<? extends FBType> evaluator = getFBEvaluatorDebugContext(source);
 
-			if (!isViewerContent(type)) {
-				setContents(type);
+			if (!isViewerContent(evaluator)) {
+				setContents(evaluator);
 			}
 		}
 	}
 
-	private void setContents(final FBType type) {
-		viewer.setContents(type);
+	private void setContents(final FBEvaluator<? extends FBType> evaluator) {
+		viewer.setContents(evaluator);
 		setScrollPosition();
 	}
 
-	private boolean isViewerContent(final FBType type) {
+	private boolean isViewerContent(final FBEvaluator<? extends FBType> evaluator) {
 		final EditPart content = viewer.getContents();
-		return (content != null && content.getModel() == type) || type == null;
+		return (content != null && content.getModel() == evaluator) || evaluator == null;
 	}
 
-	private static FBType getFBTypeFromDebugContext(final Object source) {
+	private static FBEvaluator<? extends FBType> getFBEvaluatorDebugContext(final Object source) {
 		Object evaluatorProcess = source;
 		if (evaluatorProcess instanceof EvaluatorDebugElement) {
 			evaluatorProcess = ((EvaluatorDebugElement) evaluatorProcess).getDebugTarget();
@@ -184,9 +186,9 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 		}
 
 		if (evaluatorProcess instanceof EvaluatorProcess) {
-			final Object sourceElement = ((EvaluatorProcess) evaluatorProcess).getEvaluator().getSourceElement();
-			if (sourceElement instanceof FBType) {
-				return (FBType) sourceElement;
+			final Evaluator evaluator = ((EvaluatorProcess) evaluatorProcess).getEvaluator();
+			if (evaluator instanceof FBEvaluator<?>) {
+				return (FBEvaluator<?>) evaluator;
 			}
 		}
 		return null;

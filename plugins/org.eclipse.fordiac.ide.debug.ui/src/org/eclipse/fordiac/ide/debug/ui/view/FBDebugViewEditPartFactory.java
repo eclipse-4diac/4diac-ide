@@ -12,11 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import org.eclipse.fordiac.ide.debug.ui.view.editparts.FBDebugViewRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
-import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeRootEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
+import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.gef.EditPart;
 
@@ -28,15 +27,13 @@ public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-		if (modelElement instanceof FBType && context == null) {
-			return new FBTypeRootEditPart() {
-				@Override
-				protected List<?> getModelChildren() {
-					final ArrayList<Object> children = new ArrayList<>(1);
-					children.add(getModel());
-					return children;
-				}
-			};
+		if (modelElement instanceof FBEvaluator<?>) {
+			return new FBDebugViewRootEditPart();
+		}
+		if (modelElement instanceof FBType) {
+			// we can not use the version of parent as this expects a FBTypeRootEditPart as context which we don't have
+			// here
+			return new FBTypeEditPart();
 		}
 		return super.getPartForElement(context, modelElement);
 	}
