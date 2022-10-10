@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -620,6 +621,26 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 * @generated
 	 */
 	@Override
+	public void setVisible(final boolean visible) {
+		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isVisible() {
+		return org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.isVisible(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
 		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
 	}
@@ -887,6 +908,11 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 				default: return -1;
 			}
 		}
+		if (baseClass == HiddenElement.class) {
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
+		}
 		if (baseClass == ErrorMarkerRef.class) {
 			switch (derivedFeatureID) {
 				case LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID: return LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID;
@@ -907,6 +933,11 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 		if (baseClass == ConfigurableObject.class) {
 			switch (baseFeatureID) {
 				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return LibraryElementPackage.ERROR_MARKER_INTERFACE__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		if (baseClass == HiddenElement.class) {
+			switch (baseFeatureID) {
 				default: return -1;
 			}
 		}

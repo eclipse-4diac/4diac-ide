@@ -66,7 +66,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		} else if (modelElement instanceof Connection) {
 			part = new ConnectionEditPart();
 		} else if (modelElement instanceof IInterfaceElement) {
-			part = createInterfaceEditPart(modelElement, context);
+			part = createInterfaceEditPart(modelElement);
 		} else if (modelElement instanceof Value) {
 			part = new FBNValueEditPart();
 		} else {
@@ -107,7 +107,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		return new FBNetworkEditPart();
 	}
 
-	private static EditPart createInterfaceEditPart(final Object modelElement, final EditPart context) {
+	private static EditPart createInterfaceEditPart(final Object modelElement) {
 
 		if (modelElement instanceof ErrorMarkerInterface) {
 			return new ErrorMarkerInterfaceEditPart();

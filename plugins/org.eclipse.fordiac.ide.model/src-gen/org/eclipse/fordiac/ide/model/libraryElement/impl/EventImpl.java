@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -456,6 +457,26 @@ public class EventImpl extends EObjectImpl implements Event {
 	 * @generated
 	 */
 	@Override
+	public void setVisible(final boolean visible) {
+		org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isVisible() {
+		return org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.isVisible(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
 		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
 	}
@@ -692,6 +713,11 @@ public class EventImpl extends EObjectImpl implements Event {
 				default: return -1;
 			}
 		}
+		if (baseClass == HiddenElement.class) {
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
+		}
 		if (baseClass == ICallable.class) {
 			switch (derivedFeatureID) {
 				default: return -1;
@@ -710,6 +736,11 @@ public class EventImpl extends EObjectImpl implements Event {
 		if (baseClass == ConfigurableObject.class) {
 			switch (baseFeatureID) {
 				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return LibraryElementPackage.EVENT__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		if (baseClass == HiddenElement.class) {
+			switch (baseFeatureID) {
 				default: return -1;
 			}
 		}

@@ -110,16 +110,20 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 	@Override
 	public void propertyChange(final PropertyChangeEvent event) {
-		if (event.getSource().getClass().equals(IntegerFieldEditor.class)) {
-			if (IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
-					.equalsIgnoreCase(MAX_PIN_LABEL_SIZE)
-					|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
-					.equalsIgnoreCase(MAX_TYPE_LABEL_SIZE)
-					|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
-					.equalsIgnoreCase(MAX_VALUE_LABEL_SIZE)) {
-				changesOnLabelSize = true;
-			}
+		if (event.getSource().getClass().equals(IntegerFieldEditor.class) && matchPreferenceName(event)) {
+
+			changesOnLabelSize = true;
+
 		}
+	}
+
+	private static boolean matchPreferenceName(final PropertyChangeEvent event) {
+		return IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
+				.equalsIgnoreCase(MAX_PIN_LABEL_SIZE)
+				|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
+				.equalsIgnoreCase(MAX_TYPE_LABEL_SIZE)
+				|| IntegerFieldEditor.class.cast(event.getSource()).getPreferenceName()
+				.equalsIgnoreCase(MAX_VALUE_LABEL_SIZE);
 	}
 
 	@Override
@@ -195,8 +199,8 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 	private void createGroupInterfacePins() {
 		addField(new RadioGroupFieldEditor(PIN_LABEL_STYLE, Messages.DiagramPreferences_PinLabelText, 1,
 				new String[][] { { Messages.DiagramPreferences_ShowPinName, PIN_LABEL_STYLE_PIN_NAME },
-						{ Messages.DiagramPreferences_ShowPinComment, PIN_LABEL_STYLE_PIN_COMMENT },
-						{ Messages.DiagramPreferences_ShowConnectedOutputPinName, PIN_LABEL_STYLE_SRC_PIN_NAME } },
+			{ Messages.DiagramPreferences_ShowPinComment, PIN_LABEL_STYLE_PIN_COMMENT },
+			{ Messages.DiagramPreferences_ShowConnectedOutputPinName, PIN_LABEL_STYLE_SRC_PIN_NAME } },
 				getFieldEditorParent(), true));
 	}
 

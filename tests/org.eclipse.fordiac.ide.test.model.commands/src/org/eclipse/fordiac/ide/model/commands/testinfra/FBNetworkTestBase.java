@@ -18,6 +18,7 @@ import java.io.Reader;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -244,7 +245,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 
 			@Override
 			public Map<QualifiedName, Object> getSessionProperties() throws CoreException {
-				return null;
+				return Collections.emptyMap();
 			}
 
 			@Override
@@ -279,7 +280,7 @@ public abstract class FBNetworkTestBase extends CommandTestBase<FBNetworkTestBas
 
 			@Override
 			public Map<QualifiedName, String> getPersistentProperties() throws CoreException {
-				return null;
+				return Collections.emptyMap();
 			}
 
 			@Override

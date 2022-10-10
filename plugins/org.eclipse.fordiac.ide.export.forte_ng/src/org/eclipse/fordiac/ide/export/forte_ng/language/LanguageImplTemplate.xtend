@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.export.forte_ng.language
 import java.nio.file.Path
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportTemplate
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
-import org.eclipse.fordiac.ide.model.data.DataType
 
 class LanguageImplTemplate extends ForteNgExportTemplate {
 	final ILanguageSupport languageSupport

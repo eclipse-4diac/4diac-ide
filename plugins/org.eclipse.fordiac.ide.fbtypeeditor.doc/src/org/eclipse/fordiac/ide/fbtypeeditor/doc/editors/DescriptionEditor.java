@@ -20,10 +20,11 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDescriptionCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeDocumentationCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -125,22 +126,21 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 				"PageBreak", "Iframe"); //$NON-NLS-1$ //$NON-NLS-2$
 		editor = new RichTextEditor(parent, editorConfig);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
-		editor.setText(getFbType().getIdentification().getDescription());
+		editor.setText(getFbType().getDocumentation());
 		editor.addModifyListener(e -> {
 			if (editor != null && editor.getText() != null
-					&& !editor.getText().equals(getFbType().getIdentification().getDescription())) {
-				executeCommand(new ChangeDescriptionCommand(getFbType(), editor.getText()));
+					&& !editor.getText().equals(getFbType().getDocumentation())) {
+				executeCommand(new ChangeDocumentationCommand(getFbType(), editor.getText()));
 			}
 		});
 	}
 
-	private void executeCommand(final ChangeDescriptionCommand cmd) {
+	private void executeCommand(final Command cmd) {
 		if (commandStack != null && cmd != null) {
 			blockListeners = true;
 			commandStack.execute(cmd);
 			blockListeners = false;
 		}
-
 	}
 
 	@Override
@@ -176,7 +176,8 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 
 	@Override
 	public void reloadType(final FBType type) {
-
+		getEditorInput().setFbType(type);
+		editor.setText(getFbType().getDocumentation());
 	}
 
 	@Override

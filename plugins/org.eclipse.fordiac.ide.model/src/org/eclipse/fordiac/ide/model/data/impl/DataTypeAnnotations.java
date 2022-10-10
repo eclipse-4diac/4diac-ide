@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.data.DateType;
 import org.eclipse.fordiac.ide.model.data.DintType;
 import org.eclipse.fordiac.ide.model.data.DwordType;
 import org.eclipse.fordiac.ide.model.data.EnumeratedType;
+import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.IntType;
 import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
@@ -63,6 +64,10 @@ import org.eclipse.fordiac.ide.model.data.WstringType;
 final class DataTypeAnnotations {
 
 	private DataTypeAnnotations() {
+	}
+
+	static boolean isAssignableFrom(final EventType type, final DataType other) {
+		return other instanceof EventType && type != null && type.getName().equals(other.getName());
 	}
 
 	static boolean isAssignableFrom(final DataType type, final DataType other) {

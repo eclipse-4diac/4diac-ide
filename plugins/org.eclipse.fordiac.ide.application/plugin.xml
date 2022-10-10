@@ -139,6 +139,12 @@
             id="org.eclipse.fordiac.ide.application.properties.InterfaceSection"
             tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
       </propertySection>
+      <propertySection
+            class="org.eclipse.fordiac.ide.application.properties.GroupPropertySection"
+            filter="org.eclipse.fordiac.ide.application.properties.GroupSectionFilter"
+            id="org.eclipse.fordiac.ide.application.properties.GroupPropertySection"
+            tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
+      </propertySection>
       <propertySection class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
                        id="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
                        tab="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab"

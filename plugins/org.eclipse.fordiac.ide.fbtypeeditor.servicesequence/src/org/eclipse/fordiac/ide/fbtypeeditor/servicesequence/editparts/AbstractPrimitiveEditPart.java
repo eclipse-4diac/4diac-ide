@@ -83,10 +83,9 @@ implements NodeEditPart, IChangeStringEditPart {
 
 	@Override
 	public void deactivate() {
-		if (isActive()) {
-			if (getModel().eContainer() != null) {
-				getModel().eContainer().eAdapters().remove(adapter);
-			}
+		if (isActive() && (getModel().eContainer() != null)) {
+
+			getModel().eContainer().eAdapters().remove(adapter);
 		}
 		super.deactivate();
 	}

@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.ant.ant;
 
 import java.io.File;
 import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Optional;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -27,6 +29,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
 public class Import4diacProject extends Task {
@@ -53,6 +56,8 @@ public class Import4diacProject extends Task {
 				loadProject(description, project, projectPath);
 			}
 			check4diacProject(project);
+
+			waitBuilderJobsComplete();
 		} catch (final CoreException e) {
 			throw new BuildException(e);
 		}
@@ -120,6 +125,26 @@ public class Import4diacProject extends Task {
 			monitor = (IProgressMonitor) references.get(AntCorePlugin.ECLIPSE_PROGRESS_MONITOR);
 		}
 		return monitor;
+	}
+
+	public static void waitBuilderJobsComplete() {
+		Job[] jobs = Job.getJobManager().find(null); // get all current scheduled jobs
+
+		while (buildJobExists(jobs)) {
+			try {
+				Thread.sleep(50);
+			} catch (final InterruptedException e) {
+				Thread.currentThread().interrupt();
+			}
+			jobs = Job.getJobManager().find(null); // update the job list
+		}
+	}
+
+	private static boolean buildJobExists(final Job[] jobs) {
+		final Optional<Job> findAny = Arrays.stream(jobs)
+				.filter(j -> (j.getState() != Job.NONE && j.getName().startsWith("Building"))) //$NON-NLS-1$
+				.findAny();
+		return findAny.isPresent();
 	}
 
 }

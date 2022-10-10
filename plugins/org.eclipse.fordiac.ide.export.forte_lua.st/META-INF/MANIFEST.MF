@@ -19,5 +19,6 @@ Require-Bundle: com.google.guava,
  org.eclipse.fordiac.ide.export.forte_lua,
  org.eclipse.fordiac.ide.export.forte_ng,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
- org.eclipse.fordiac.ide.structuredtextfunctioneditor
+ org.eclipse.fordiac.ide.structuredtextfunctioneditor,
+ org.eclipse.fordiac.ide.model.structuredtext
 Export-Package: org.eclipse.fordiac.ide.export.forte_lua.st

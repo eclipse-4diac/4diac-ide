@@ -24,6 +24,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.formatting2.STCoreFormatter
 import org.eclipse.xtext.Keyword
 import org.eclipse.xtext.RuleCall
 import org.eclipse.xtext.formatting2.IFormattableDocument
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
+import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody
 
 class STAlgorithmFormatter extends STCoreFormatter {
 
@@ -65,10 +67,11 @@ class STAlgorithmFormatter extends STCoreFormatter {
 		sTAlgorithm.regionFor.keyword("ALGORITHM").prepend[noIndentation].append[oneSpace]
 		sTAlgorithm.regionFor.assignment(STAlgorithmAccess.nameAssignment_1).append[setNewLines(1, 1, 2)]
 		sTAlgorithm.regionFor.keyword("END_ALGORITHM").prepend[noIndentation].append[setNewLines(2, 2, 2)]
-
+		
+		sTAlgorithm.body.statements.get(0)?.prepend[setNewLines(1, 1, 2)]
 		sTAlgorithm.body.format
 	}
-
+	
 	def dispatch void format(STMethod sTMethod, extension IFormattableDocument document) {
 		sTMethod.regionFor.keyword("METHOD").prepend[noIndentation].append[oneSpace]
 		if (sTMethod.returnType !== null) {
@@ -80,7 +83,7 @@ class STAlgorithmFormatter extends STCoreFormatter {
 			sTMethod.regionFor.assignment(STMethodAccess.nameAssignment_1).append[setNewLines(1, 1, 2)]
 		}
 		sTMethod.regionFor.keyword("END_METHOD").prepend[noIndentation].append[setNewLines(2, 2, 2)]
-
+		sTMethod.body.statements.get(0)?.prepend[setNewLines(1, 1, 2)]
 		sTMethod.body.format
 	}
 

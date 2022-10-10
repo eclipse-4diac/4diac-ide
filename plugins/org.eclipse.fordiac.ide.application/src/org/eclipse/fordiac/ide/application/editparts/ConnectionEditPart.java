@@ -73,7 +73,8 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			refreshVisuals();
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
+					|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getErrorMarkerRef_FileMarkerId().equals(feature)) {
 				refreshComment();
 			}
 			if (LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {
@@ -265,6 +266,7 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 			}
 			getConnectionFigure().setHidden(!getModel().isVisible());
 			getConnectionFigure().updateConLabels();
+			getConnectionFigure().revalidate();
 		}
 	}
 

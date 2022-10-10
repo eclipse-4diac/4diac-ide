@@ -8,23 +8,19 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Daniel Lindhuber
- *     - initial API and implementation and/or initial documentation
+ *   Daniel Lindhuber - initial API and implementation and/or initial documentation
+ *   Sebastian Hollersbacher - added support for multiple cells
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
-import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.ui.actions.Clipboard;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.ViewerCell;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
@@ -54,37 +50,12 @@ public class TablePasteAction extends Action {
 					return;
 				}
 			}
-			// This IF will be removed once the new copy/paste handling has been approved.
-			final String instanceClassName = "CommentPropertySection";
-			if (instanceClassName.equals(editor.getClass().getSimpleName())) {
-				handleInstancePropertySheet(editor);
-			} else {
-				pasteItems(editor);
-			}
-		}
-	}
-
-	private static void handleInstancePropertySheet(final I4diacTableUtil editor) {
-		// cell selection does not support multi-selection so we do not have to
-		// care about more cells being selected
-
-		final TableViewer viewer = editor.getViewer();
-		final ViewerCell focusCell = viewer.getColumnViewerEditor().getFocusCell();
-		final ICellModifier modifier = viewer.getCellModifier();
-		final Object content = FordiacClipboard.INSTANCE.getTableContents();
-		final int index = viewer.getTable().getSelectionIndex();
-
-		if (focusCell != null && index >= 0 && content instanceof String) {
-			final TableItem item = viewer.getTable().getItem(index);
-			final String property = (String) viewer.getColumnProperties()[focusCell.getColumnIndex()];
-			if (modifier.canModify(item, property)) {
-				modifier.modify(item, property, content);
-			}
+			pasteItems(editor);
 		}
 	}
 
 	private static void pasteItems(final I4diacTableUtil editor) {
-		final TableViewer viewer = editor.getViewer();
+		final TableViewer viewer = (TableViewer) editor.getViewer();
 		final Table table = viewer.getTable();
 		final int[] pasteIndices = table.getSelectionIndices();
 		final Object content = Clipboard.getDefault().getContents();

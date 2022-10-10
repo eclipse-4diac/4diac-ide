@@ -1,10 +1,28 @@
+/**
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * 
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0.
+ * 
+ * SPDX-License-Identifier: EPL-2.0
+ * 
+ * Contributors:
+ *   Martin Melik Merkumians
+ *       - initial API and implementation and/or initial documentation
+ *    Hesam Rezaee
+ *      - add Hovering features
+ */
+
 package org.eclipse.fordiac.ide.structuredtextcore.ui.hovering
 
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.xtext.ui.editor.hover.html.DefaultHoverDocumentationProvider
@@ -62,17 +80,91 @@ class STCoreHoverDocumentationProvider extends DefaultHoverDocumentationProvider
 		«ENDIF»
 	'''
 
-	def dispatch getSTElementAutoDocumentation(VarDeclaration object) {
-		object.comment
-	}
+	def dispatch getSTElementAutoDocumentation(STStandardFunction object) '''
+		«IF !object.inputParameters.isEmpty»
+			<p>INPUTS: 
+			«FOR in : object.inputParameters»
+				<div style="text-indent:10px;"><b>«in.name» : «(in as STVarDeclaration).type.name» «IF !in.comment.blank»  («in.comment») «ENDIF»</b> «IF !in.documentation.nullOrEmpty» - «in.documentation»«ENDIF»</div>
+			«ENDFOR»
+			</p>
+		«ENDIF»	
+		«IF !object.returnType.name.blank»
+			<p>RETURN:
+				<div style="text-indent:10px;"><b>«"TYPE"» : «object.returnType.name» «IF !object.returnValueComment.blank»  («object.returnValueComment») «ENDIF»  </b></div>
+			</p>
+		«ENDIF»
+		«IF !object.comment.isEmpty»
+			<p>DESCRIPTION: 
+				<div style="text-indent:10px;"><b>«object.comment»</b></div>
+			</p>
+		«ENDIF»			
+		
+	'''
 
-	def dispatch getSTElementAutoDocumentation(FB object) {
-		object.comment
-	}
+	def dispatch getSTElementAutoDocumentation(FB object) '''
+		
+			
+		    <p>INPUTS:
+		«FOR in : object.inputParameters»
+				<div style="text-indent:10px;"><b>«in.name» : «(in as VarDeclaration).type.name»</b></div>
+		«ENDFOR»
+		    </p>
+			<p>OUTPUTS:
+		«FOR out : object.outputParameters»
+				<div style="text-indent:10px;"><b>«out.name» : «(out as VarDeclaration).type.name»</b></div>
+		«ENDFOR»
+		«IF !object.typeEntry.type.comment.isEmpty»		
+			<p>DESCRIPTION: 
+				<div style="text-indent:10px;"><b>«object.typeEntry.type.comment»</b></div>
+			</p>
+		«ENDIF»
+		
+	'''
 
-	def dispatch getSTElementAutoDocumentation(StructuredType object) {
-		object.comment
-	}
+	def dispatch getSTElementAutoDocumentation(FBType object) '''
+		
+			<p>INPUTS:
+		«FOR in : object.inputParameters»
+				<div style="text-indent:10px;"><b>«in.name» : «(in as VarDeclaration).type.name»</b></div>
+		«ENDFOR»
+			</p>
+			<p>OUTPUTS:
+		«FOR out : object.outputParameters»
+				<div style="text-indent:10px;"><b>«out.name» : «(out as VarDeclaration).type.name»</b></div>
+		«ENDFOR»
+			</p>	
+			<p>INPUT EVENTS:
+		«FOR event : object.interfaceList.eventInputs»
+				<div style="text-indent:10px;"><b>«event.name»</b></div>
+		«ENDFOR»
+			</p>
+			<p>OUTPUT EVENTS:
+		«FOR event : object.interfaceList.eventOutputs»
+				<div style="text-indent:10px;"><b>«event.name»</b></div>
+		«ENDFOR»
+		«IF !object.typeEntry.type.comment.isEmpty»		
+			<p>DESCRIPTION: 
+				<div style="text-indent:10px;"><b>«object.typeEntry.type.comment»</b></div>
+			</p>
+		«ENDIF»	
+		
+	'''
+
+	def dispatch getSTElementAutoDocumentation(VarDeclaration object) '''
+	
+		<p>DESCRIPTION: 
+			<div style="text-indent:10px;"><b>«object.comment»</b></div>
+		</p>
+		
+	'''
+
+	def dispatch getSTElementAutoDocumentation(StructuredType object) '''
+		
+		<p>DESCRIPTION: 
+			<div style="text-indent:10px;"><b>«object.comment»</b></div>
+		</p>	
+		
+	'''
 
 	def dispatch getSTElementAutoDocumentation(EObject object) '''''' // No ST element or no auto-documentation needed ST element
 }

@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 final class CallableAnnotations {
 
 	private CallableAnnotations() {
+		throw new UnsupportedOperationException("Helper class must not be instantiated"); //$NON-NLS-1$
 	}
 
 	@SuppressWarnings("unused")

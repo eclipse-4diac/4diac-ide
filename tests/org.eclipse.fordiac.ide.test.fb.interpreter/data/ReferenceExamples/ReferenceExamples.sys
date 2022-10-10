@@ -4,7 +4,7 @@
 	</VersionInfo>
 	<Application Name="EventConnections" Comment="">
 		<SubAppNetwork>
-			<SubApp Name="Ex1a" Comment="simple event connection  &amp;#10;- trigger E_SPLIT.EI  &amp;#10;- expect E_REND.EO" x="-2493.3333333333335" y="93.33333333333334">
+			<SubApp Name="Ex1a" Comment="simple event connection  &amp;#10;- trigger E_SPLIT.EI  &amp;#10;- expect E_REND.EO" x="-2513.3333333333335" y="-26.666666666666668">
 				<SubAppInterfaceList>
 				</SubAppInterfaceList>
 				<SubAppNetwork>
@@ -19,9 +19,9 @@
 				</SubAppNetwork>
 				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
 				<Attribute Name="width" Type="LREAL" Value="1820.0"/>
-				<Attribute Name="height" Type="LREAL" Value="1233.3333333333335"/>
+				<Attribute Name="height" Type="LREAL" Value="1446.6666666666667"/>
 			</SubApp>
-			<SubApp Name="Ex1b" Comment="simple event connection across several FBs  &amp;#10;- trigger E_SPLIT.EI   &amp;#10;- expect E_REND.EO" x="-533.3333333333334" y="93.33333333333334">
+			<SubApp Name="Ex1b" Comment="simple event connection across several FBs   &amp;#10;- trigger E_SPLIT.EI    &amp;#10;- expect E_REND.EO and &amp;#10;   E_SPLIT2.EO1 and E_SPLIT2.EO2" x="-326.6666666666667" y="0.0">
 				<SubAppInterfaceList>
 				</SubAppInterfaceList>
 				<SubAppNetwork>
@@ -38,10 +38,10 @@
 					</EventConnections>
 				</SubAppNetwork>
 				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
-				<Attribute Name="width" Type="LREAL" Value="2793.3333333333335"/>
-				<Attribute Name="height" Type="LREAL" Value="1226.6666666666667"/>
+				<Attribute Name="width" Type="LREAL" Value="2973.3333333333335"/>
+				<Attribute Name="height" Type="LREAL" Value="1473.3333333333335"/>
 			</SubApp>
-			<SubApp Name="Ex4a" Comment="example involving simple FB and basic FB type&amp;#10;trigger E_PERMIT.EI&amp;#10;expect SimpleIO.CNF, DOI1 := TRUE" x="-2700.0" y="5160.0">
+			<SubApp Name="Ex5a" Comment="example involving simple FB and basic FB type &amp;#10;- trigger E_PERMIT.EI &amp;#10;- expect SimpleIO.CNF, DOI1 := TRUE" x="-2553.3333333333335" y="6066.666666666667">
 				<SubAppInterfaceList>
 				</SubAppInterfaceList>
 				<SubAppNetwork>
@@ -57,57 +57,33 @@
 				</SubAppNetwork>
 				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
 				<Attribute Name="width" Type="LREAL" Value="2686.666666666667"/>
-				<Attribute Name="height" Type="LREAL" Value="1120.0"/>
+				<Attribute Name="height" Type="LREAL" Value="1460.0"/>
 			</SubApp>
-			<SubApp Name="Ex2b" Comment="fan-out of event connections &amp;#10;- trigger E_SPLIT.EI &amp;#10;- expect E_MERGE.EO" x="-573.3333333333334" y="1366.6666666666667">
+			<SubApp Name="Ex2a" Comment="fan-out of event connections  &amp;#10;- trigger E_SPLIT.EI  &amp;#10;- expect 2xE_MERGE.EO" x="-2480.0" y="1486.6666666666667">
 				<SubAppInterfaceList>
 				</SubAppInterfaceList>
 				<SubAppNetwork>
 					<FB Name="E_SPLIT" Type="E_SPLIT" Comment="" x="73.33333333333334" y="13.333333333333334">
 					</FB>
-					<FB Name="E_MERGE_u" Type="E_REND" Comment="" x="1106.6666666666667" y="13.333333333333334">
-					</FB>
-					<FB Name="E_MERGE_l" Type="E_REND" Comment="" x="1100.0" y="593.3333333333334">
-					</FB>
-					<FB Name="E_MERGE" Type="E_MERGE" Comment="" x="2206.666666666667" y="353.33333333333337">
-					</FB>
-					<EventConnections>
-						<Connection Source="E_SPLIT.EO1" Destination="E_MERGE_u.EI1" Comment=""/>
-						<Connection Source="E_SPLIT.EO1" Destination="E_MERGE_u.EI2" Comment="" dx1="240.0" dx2="240.0" dy="0.0"/>
-						<Connection Source="E_SPLIT.EO1" Destination="E_MERGE_l.EI1" Comment="" dx1="153.33333333333334" dx2="153.33333333333334" dy="0.0"/>
-						<Connection Source="E_SPLIT.EO1" Destination="E_MERGE_l.EI2" Comment="" dx1="80.0" dx2="80.0" dy="0.0"/>
-						<Connection Source="E_MERGE_l.EO" Destination="E_MERGE.EI2" Comment="" dx1="246.66666666666669" dx2="246.66666666666669" dy="0.0"/>
-						<Connection Source="E_MERGE_u.EO" Destination="E_MERGE.EI1" Comment="" dx1="246.66666666666669" dx2="246.66666666666669" dy="0.0"/>
-					</EventConnections>
-				</SubAppNetwork>
-				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
-				<Attribute Name="width" Type="LREAL" Value="2946.666666666667"/>
-				<Attribute Name="height" Type="LREAL" Value="1720.0"/>
-			</SubApp>
-			<SubApp Name="Ex2a" Comment="fan-out of event connections &amp;#10;- trigger E_SPLIT.EI &amp;#10;- expect E_MERGE.EO" x="-2493.3333333333335" y="1360.0">
-				<SubAppInterfaceList>
-				</SubAppInterfaceList>
-				<SubAppNetwork>
-					<FB Name="E_SPLIT" Type="E_SPLIT" Comment="" x="73.33333333333334" y="13.333333333333334">
-					</FB>
-					<FB Name="E_MERGE" Type="E_REND" Comment="" x="1106.6666666666667" y="13.333333333333334">
+					<FB Name="E_MERGE" Type="E_MERGE" Comment="" x="1106.6666666666667" y="13.333333333333334">
 					</FB>
 					<EventConnections>
 						<Connection Source="E_SPLIT.EO1" Destination="E_MERGE.EI1" Comment=""/>
-						<Connection Source="E_SPLIT.EO1" Destination="E_MERGE.EI2" Comment="" dx1="213.33333333333334" dx2="213.33333333333334" dy="0.0"/>
+						<Connection Source="E_SPLIT.EO1" Destination="E_MERGE.EI2" Comment="" dx1="160.0"/>
 					</EventConnections>
 				</SubAppNetwork>
 				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
-				<Attribute Name="width" Type="LREAL" Value="1780.0"/>
-				<Attribute Name="height" Type="LREAL" Value="1113.3333333333335"/>
+				<Attribute Name="width" Type="LREAL" Value="1886.6666666666667"/>
+				<Attribute Name="height" Type="LREAL" Value="1173.3333333333335"/>
 			</SubApp>
-			<SubApp Name="Ex3a" Comment="fan-in of event connections&amp;#10;trigger E_SPLIT.EI&amp;#10;expect 2x CUO, CV := 2" x="-2546.666666666667" y="3153.3333333333335">
+			<SubApp Name="Ex3a" Comment="fan-in of event connections &amp;#10;- trigger E_SPLIT.EI &amp;#10;- expect 2x E_CTU.CUO, CV := 2" x="-2460.0" y="2766.666666666667">
 				<SubAppInterfaceList>
 				</SubAppInterfaceList>
 				<SubAppNetwork>
-					<FB Name="E_SPLIT" Type="E_SPLIT" Comment="" x="280.0" y="626.6666666666667">
+					<FB Name="E_SPLIT" Type="E_SPLIT" Comment="" x="286.6666666666667" y="33.333333333333336">
 					</FB>
-					<FB Name="E_CTU" Type="E_CTU" Comment="" x="1486.6666666666667" y="493.33333333333337">
+					<FB Name="E_CTU" Type="E_CTU" Comment="" x="1466.6666666666667" y="40.0">
+						<Parameter Name="PV" Value="2"/>
 					</FB>
 					<EventConnections>
 						<Connection Source="E_SPLIT.EO1" Destination="E_CTU.CU" Comment="" dx1="273.33333333333337"/>
@@ -115,50 +91,36 @@
 					</EventConnections>
 				</SubAppNetwork>
 				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
-				<Attribute Name="width" Type="LREAL" Value="2860.0"/>
-				<Attribute Name="height" Type="LREAL" Value="1846.6666666666667"/>
+				<Attribute Name="width" Type="LREAL" Value="2200.0"/>
+				<Attribute Name="height" Type="LREAL" Value="1453.3333333333335"/>
 			</SubApp>
-			<SubApp Name="SubApp" Comment="TODO: expected order of events in E_SPLIT?" x="3246.666666666667" y="1826.6666666666667">
+			<SubApp Name="Ex6a" Comment="for loop &amp;#10;- trigger 1x E_PERMIT.EI &amp;#10;- expect 3x CUO and CV := 3" x="-2533.3333333333335" y="7560.0">
 				<SubAppInterfaceList>
 				</SubAppInterfaceList>
 				<SubAppNetwork>
-				</SubAppNetwork>
-				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
-				<Attribute Name="width" Type="LREAL" Value="1333.3333333333335"/>
-				<Attribute Name="height" Type="LREAL" Value="666.6666666666667"/>
-			</SubApp>
-			<SubApp Name="Ex5a" Comment="loop&amp;#10;trigger 1x E_PERMIT.EI&amp;#10;expect 3x CUO and CV := 3" x="-2493.3333333333335" y="6360.0">
-				<SubAppInterfaceList>
-				</SubAppInterfaceList>
-				<SubAppNetwork>
-					<FB Name="E_CTU" Type="E_CTU" Comment="" x="1333.3333333333335" y="280.0">
-						<Parameter Name="PV" Value="2"/>
-					</FB>
-					<FB Name="E_PERMIT" Type="E_PERMIT" Comment="" x="306.6666666666667" y="246.66666666666669">
+					<FB Name="E_PERMIT" Type="E_PERMIT" Comment="" x="320.0" y="126.66666666666667">
 						<Parameter Name="PERMIT" Value="TRUE"/>
 					</FB>
+					<FB Name="E_CTU" Type="E_CTU" Comment="" x="1373.3333333333335" y="33.333333333333336">
+						<Parameter Name="PV" Value="2"/>
+					</FB>
+					<FB Name="SimpleNOT" Type="SimpleNOT" Comment="" x="2406.666666666667" y="166.66666666666669">
+					</FB>
 					<EventConnections>
-						<Connection Source="E_PERMIT.EO" Destination="E_CTU.CU" Comment="" dx1="193.33333333333334"/>
-						<Connection Source="E_CTU.CUO" Destination="E_PERMIT.EI" Comment="" dx1="80.0" dx2="80.0" dy="-273.33333333333337"/>
+						<Connection Source="E_PERMIT.EO" Destination="E_CTU.CU" Comment="" dx1="166.66666666666669" dx2="166.66666666666669" dy="0.0"/>
+						<Connection Source="E_CTU.CUO" Destination="SimpleNOT.REQ" Comment="" dx1="226.66666666666669" dx2="226.66666666666669" dy="0.0"/>
+						<Connection Source="SimpleNOT.CNF" Destination="E_PERMIT.EI" Comment="" dx1="80.0" dx2="80.0" dy="-386.6666666666667"/>
 					</EventConnections>
 					<DataConnections>
-						<Connection Source="E_CTU.Q" Destination="E_PERMIT.PERMIT" Comment="" dx1="80.0" dx2="80.0" dy="273.33333333333337"/>
+						<Connection Source="E_CTU.Q" Destination="SimpleNOT.DI1" Comment="" dx1="226.66666666666669"/>
+						<Connection Source="SimpleNOT.DO1" Destination="E_PERMIT.PERMIT" Comment="" dx1="80.0" dx2="80.0" dy="260.0"/>
 					</DataConnections>
 				</SubAppNetwork>
 				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
-				<Attribute Name="width" Type="LREAL" Value="2240.0"/>
-				<Attribute Name="height" Type="LREAL" Value="1633.3333333333335"/>
+				<Attribute Name="width" Type="LREAL" Value="3400.0"/>
+				<Attribute Name="height" Type="LREAL" Value="1626.6666666666667"/>
 			</SubApp>
-			<SubApp Name="Ex5a_1" Comment="larger loop involving several blocks (ECC-dependent)" x="-2360.0" y="8293.333333333334">
-				<SubAppInterfaceList>
-				</SubAppInterfaceList>
-				<SubAppNetwork>
-				</SubAppNetwork>
-				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
-				<Attribute Name="width" Type="LREAL" Value="1333.3333333333335"/>
-				<Attribute Name="height" Type="LREAL" Value="666.6666666666667"/>
-			</SubApp>
-			<SubApp Name="Ex0x" Comment="Parameters&amp;#10;Trigger EI&amp;#10;Expect EO" x="753.3333333333334" y="3460.0">
+			<SubApp Name="Ex4a" Comment="Parameters / initial values &amp;#10;- Trigger E_PERMIT.EI &amp;#10;- Expect E_PERMIT.EO" x="-2473.3333333333335" y="4533.333333333334">
 				<SubAppInterfaceList>
 				</SubAppInterfaceList>
 				<SubAppNetwork>
@@ -168,9 +130,9 @@
 				</SubAppNetwork>
 				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
 				<Attribute Name="width" Type="LREAL" Value="1740.0"/>
-				<Attribute Name="height" Type="LREAL" Value="1280.0"/>
+				<Attribute Name="height" Type="LREAL" Value="1440.0"/>
 			</SubApp>
-			<SubApp Name="Ex0x_1" Comment="Parameters&amp;#10;Trigger EI&amp;#10;Expect nothing" x="2673.3333333333335" y="3546.666666666667">
+			<SubApp Name="Ex4b" Comment="Parameters / initial values &amp;#10;- Trigger EI &amp;#10;- Expect nothing" x="-453.33333333333337" y="4673.333333333334">
 				<SubAppInterfaceList>
 				</SubAppInterfaceList>
 				<SubAppNetwork>
@@ -180,7 +142,7 @@
 				</SubAppNetwork>
 				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
 				<Attribute Name="width" Type="LREAL" Value="1740.0"/>
-				<Attribute Name="height" Type="LREAL" Value="1280.0"/>
+				<Attribute Name="height" Type="LREAL" Value="1440.0"/>
 			</SubApp>
 		</SubAppNetwork>
 	</Application>
@@ -204,7 +166,7 @@
 				<Attribute Name="width" Type="LREAL" Value="2546.666666666667"/>
 				<Attribute Name="height" Type="LREAL" Value="833.3333333333334"/>
 			</SubApp>
-			<SubApp Name="SubApp_1" Comment="WITH" x="2766.666666666667" y="3640.0">
+			<SubApp Name="SubApp_1" Comment="type casts (implicit) " x="2766.666666666667" y="3640.0">
 				<SubAppInterfaceList>
 				</SubAppInterfaceList>
 				<SubAppNetwork>
@@ -213,7 +175,7 @@
 				<Attribute Name="width" Type="LREAL" Value="2546.666666666667"/>
 				<Attribute Name="height" Type="LREAL" Value="833.3333333333334"/>
 			</SubApp>
-			<SubApp Name="Ex4a" Comment="example involving simple FB and basic FB type&amp;#10;trigger E_SR.S&amp;#10;expect SimpleIO.CNF, DOI1 := TRUE" x="2853.3333333333335" y="4700.0">
+			<SubApp Name="Ex4a" Comment="example involving simple FB and basic FB type &amp;#10;trigger E_SR.S &amp;#10;expect SimpleIO.CNF, DOI1 := TRUE" x="2853.3333333333335" y="4700.0">
 				<SubAppInterfaceList>
 				</SubAppInterfaceList>
 				<SubAppNetwork>
@@ -231,6 +193,15 @@
 				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
 				<Attribute Name="width" Type="LREAL" Value="2686.666666666667"/>
 				<Attribute Name="height" Type="LREAL" Value="1166.6666666666667"/>
+			</SubApp>
+			<SubApp Name="SubApp_2" Comment="type casts (explicit)" x="5806.666666666667" y="3660.0">
+				<SubAppInterfaceList>
+				</SubAppInterfaceList>
+				<SubAppNetwork>
+				</SubAppNetwork>
+				<Attribute Name="Unfolded" Type="STRING" Value="true"/>
+				<Attribute Name="width" Type="LREAL" Value="2546.666666666667"/>
+				<Attribute Name="height" Type="LREAL" Value="833.3333333333334"/>
 			</SubApp>
 		</SubAppNetwork>
 	</Application>

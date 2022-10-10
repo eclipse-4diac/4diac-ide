@@ -21,8 +21,8 @@ import org.eclipse.core.runtime.Path
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmPartitioner
+import org.eclipse.fordiac.ide.structuredtextcore.FBTypeXtextResource
 import org.eclipse.xtext.util.LazyStringInputStream
-import org.eclipse.fordiac.ide.fbtypextext.FBTypeXtextResource
 
 class STAlgorithmResource extends FBTypeXtextResource {
 	public static final String OPTION_PLAIN_ST = STAlgorithmResource.name + ".PLAIN_ST";

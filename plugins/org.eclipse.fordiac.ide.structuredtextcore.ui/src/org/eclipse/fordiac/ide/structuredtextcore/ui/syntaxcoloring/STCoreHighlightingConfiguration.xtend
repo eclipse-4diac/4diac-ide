@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies GmbH
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -37,7 +37,6 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 	public static final String RETURN_FUNCTION_ID = STCoreHighlightingStyles.RETURN_FUNCTION_ID;
 	public static final String RETURN_METHOD_ID = STCoreHighlightingStyles.RETURN_METHOD_ID;
 	public static final String FUNCTIONS_NAME_ID = STCoreHighlightingStyles.FUNCTIONS_NAME_ID;
-	public static final String FUNCTIONS_BLOCK_NAME_ID = STCoreHighlightingStyles.FUNCTIONS_BLOCK_NAME_ID;
 	public static final String METHODS_NAME_ID = STCoreHighlightingStyles.METHODS_NAME_ID;
 
 	override configure(IHighlightingConfigurationAcceptor acceptor) {
@@ -47,9 +46,9 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 		acceptor.acceptDefaultHighlighting(VAR_KEYWORD_ID, "Variable Keyword", varKeywordTextStyle());
 		acceptor.acceptDefaultHighlighting(DATA_TYPE_ID, "Date Types", dataTypeTextStyle());
 		acceptor.acceptDefaultHighlighting(FUNCTIONS_ID, "Functions", functionsTextStyle());
-		acceptor.acceptDefaultHighlighting(METHOD_BLOCK_ID, "MethodBlock", methodBlockTextStyle());
-		acceptor.acceptDefaultHighlighting(ALGORITHM_BLOCK_ID, "AlgorithmBlock", algorithmTextStyle());
-		acceptor.acceptDefaultHighlighting(FUNCTION_BLOCK_ID, "FunctionBlock", functionBockTextStyle());
+		acceptor.acceptDefaultHighlighting(METHOD_BLOCK_ID, "Method Keyword", methodBlockTextStyle());
+		acceptor.acceptDefaultHighlighting(ALGORITHM_BLOCK_ID, "Algorithm Keyword", algorithmTextStyle());
+		acceptor.acceptDefaultHighlighting(FUNCTION_BLOCK_ID, "Function Block Keyword", functionBockTextStyle());
 		acceptor.acceptDefaultHighlighting(PUNCTUATION_ID, "Punctuation character", punctuationTextStyle());
 		acceptor.acceptDefaultHighlighting(COMMENT_ID, "Comment", commentTextStyle());
 		acceptor.acceptDefaultHighlighting(TASK_ID, "Task Tag", taskTextStyle());
@@ -59,19 +58,18 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 		acceptor.acceptDefaultHighlighting(INVALID_TOKEN_ID, "Invalid Symbol", errorTextStyle());
 
 		// Semantic highlighting Styles	
-		acceptor.acceptDefaultHighlighting(CALL_FUNCTION_ID, "CallFunction", callFunctionTextStyle());
-		acceptor.acceptDefaultHighlighting(CALL_FUNCTION_BLOCK_ID, "CallFunctionBlock", callFunctionBlockTextStyle());
-		acceptor.acceptDefaultHighlighting(CALL_METHOD_ID, "CallMethod", callMethodTextStyle());
-		acceptor.acceptDefaultHighlighting(STATIC_VAR_ID, "StaticVar", staticVarTextStyle());
-		acceptor.acceptDefaultHighlighting(RETURN_FUNCTION_ID, "ReturnFunctionVar", returnFunctionTextStyle());
-		acceptor.acceptDefaultHighlighting(RETURN_METHOD_ID, "ReturnMethodVar", returnMethodTextStyle());
-		acceptor.acceptDefaultHighlighting(FUNCTIONS_NAME_ID, "FunctionsName", functionNameTextStyle());
-		acceptor.acceptDefaultHighlighting(FUNCTIONS_BLOCK_NAME_ID, "FunctionsBlockName", functionBlockNameTextStyle());
-		acceptor.acceptDefaultHighlighting(METHODS_NAME_ID, "MethodsName", methodNameTextStyle());
-		
+		acceptor.acceptDefaultHighlighting(CALL_FUNCTION_ID, "Function calls", callFunctionTextStyle());
+		acceptor.acceptDefaultHighlighting(CALL_FUNCTION_BLOCK_ID, "Function Block calls",
+			callFunctionBlockTextStyle());
+		acceptor.acceptDefaultHighlighting(CALL_METHOD_ID, "Method calls", callMethodTextStyle());
+		acceptor.acceptDefaultHighlighting(STATIC_VAR_ID, "Variables", staticVarTextStyle());
+		acceptor.acceptDefaultHighlighting(RETURN_FUNCTION_ID, "Function return values", returnFunctionTextStyle());
+		acceptor.acceptDefaultHighlighting(RETURN_METHOD_ID, "Method return values", returnMethodTextStyle());
+		acceptor.acceptDefaultHighlighting(FUNCTIONS_NAME_ID, "Function Name", functionNameTextStyle());
+		acceptor.acceptDefaultHighlighting(METHODS_NAME_ID, "Method Name", methodNameTextStyle());
 
 	}
-	
+
 	def algorithmTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(128, 0, 128));
@@ -84,117 +82,111 @@ class STCoreHighlightingConfiguration extends DefaultHighlightingConfiguration {
 		textStyle.setColor(new RGB(0, 128, 255));
 		return textStyle;
 	}
-	
+
 	def callFunctionBlockTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 128, 255));
 		return textStyle;
 	}
-	
+
 	def callMethodTextStyle() {
 		var textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(0, 0, 255));
+		textStyle.setColor(new RGB(0, 128, 255));
 		return textStyle;
 	}
-	
+
 	def dataTypeTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(128, 128, 255));
 		return textStyle;
 	}
-	
+
 	override defaultTextStyle() {
 		var textStyle = super.defaultTextStyle().copy();
 		textStyle.setColor(new RGB(64, 0, 0));
 		return textStyle;
 	}
-	
-	def functionBockTextStyle(){
+
+	def functionBockTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(128, 0, 128));
 		textStyle.setStyle(SWT.BOLD);
 		return textStyle;
 	}
 
-	def functionsTextStyle(){
+	def functionsTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(128, 0, 128));
 		textStyle.setStyle(SWT.BOLD);
 		return textStyle;
 	}
-	
+
 	def functionNameTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
-	
-	def functionBlockNameTextStyle() {
-		var textStyle = defaultTextStyle().copy();
-		textStyle.setColor(new RGB(0, 0, 0));
-		return textStyle;
-	}
-	
+
 	def methodNameTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
-	
-	override keywordTextStyle(){
+
+	override keywordTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(255, 128, 0));
 		return textStyle;
 	}
-	
-	def methodBlockTextStyle(){
+
+	def methodBlockTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(128, 0, 128));
 		textStyle.setStyle(SWT.BOLD);
 		return textStyle;
 	}
-	
+
 	override numberTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 164, 164));
 		return textStyle;
 	}
-	
+
 	def outputFunctionTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
-	
+
 	def returnFunctionTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
-	
+
 	def returnMethodTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
-	
+
 	def staticVarTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 0));
 		return textStyle;
 	}
-	
+
 	override stringTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(0, 0, 255));
 		return textStyle;
 	}
-	
-	
-	def varKeywordTextStyle(){
+
+	def varKeywordTextStyle() {
 		var textStyle = defaultTextStyle().copy();
 		textStyle.setColor(new RGB(128, 128, 255));
 		textStyle.setStyle(SWT.BOLD);
 		return textStyle;
 	}
+
 }

@@ -14,7 +14,9 @@
 package org.eclipse.fordiac.ide.application.search;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IProject;
@@ -62,7 +64,7 @@ public class ModelSearchQuery implements ISearchQuery {
 		if (modelQuerySpec.isCheckWorkspaceScope()) { // If it's workspace, search all
 			for (final IProject proj : root.getProjects()) {
 				if (proj.isOpen()) {
-					searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj).values());
+					searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj));
 				}
 			}
 		} else {
@@ -71,7 +73,7 @@ public class ModelSearchQuery implements ISearchQuery {
 						.getActiveEditor();
 				final IProject project = openEditor.getAdapter(FBNetwork.class).getAutomationSystem().getTypeLibrary()
 						.getProject();
-				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(project).values());
+				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(project));
 			});
 		}
 
@@ -138,36 +140,18 @@ public class ModelSearchQuery implements ISearchQuery {
 
 	private void searchTypeLibrary(final AutomationSystem sys) {
 		final TypeLibrary lib = sys.getTypeLibrary();
-		for (final TypeEntry entry : lib.getFbTypes().values()) {
-			if (matchEObject(entry.getType())) {
-				searchResult.addResult(entry.getType());
-			}
-		}
-		for (final TypeEntry entry : lib.getAdapterTypes().values()) {
-			if (matchEObject(entry.getType())) {
-				searchResult.addResult(entry.getType());
-			}
-		}
-		for (final TypeEntry entry : lib.getDeviceTypes().values()) {
-			if (matchEObject(entry.getType())) {
-				searchResult.addResult(entry.getType());
-			}
-		}
-		for (final TypeEntry entry : lib.getResourceTypes().values()) {
-			if (matchEObject(entry.getType())) {
-				searchResult.addResult(entry.getType());
-			}
-		}
-		for (final TypeEntry entry : lib.getSegmentTypes().values()) {
-			if (matchEObject(entry.getType())) {
-				searchResult.addResult(entry.getType());
-			}
-		}
-		for (final TypeEntry entry : lib.getSubAppTypes().values()) {
-			if (matchEObject(entry.getType())) {
-				searchResult.addResult(entry.getType());
-			}
-		}
+		searchTypeEntryList( lib.getFbTypes().values());
+		searchTypeEntryList( lib.getAdapterTypes().values());
+		searchTypeEntryList( lib.getDeviceTypes().values());
+		searchTypeEntryList( lib.getResourceTypes().values());
+		searchTypeEntryList( lib.getSegmentTypes().values());
+		searchTypeEntryList( lib.getSubAppTypes().values());
+	}
+
+	private void searchTypeEntryList( final Collection<? extends TypeEntry> entries) {
+		final List<EObject> foundEntries = entries.stream().map(TypeEntry::getType).filter(Objects::nonNull)
+				.filter(this::matchEObject).collect(Collectors.toList());
+		searchResult.addResults(foundEntries);
 	}
 
 	private boolean matchEObject(final EObject modelElement) {

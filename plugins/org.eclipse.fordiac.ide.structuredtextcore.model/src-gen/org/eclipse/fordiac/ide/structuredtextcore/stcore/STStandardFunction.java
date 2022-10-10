@@ -12,6 +12,8 @@
  * Contributors:
  *    Martin Jobst, Martin Melik Merkumians
  *      - initial API and implementation and/or initial documentation
+ *    Hesam Rezaee
+ *      - add Hovering features
  * *******************************************************************************
  */
 package org.eclipse.fordiac.ide.structuredtextcore.stcore;
@@ -32,6 +34,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * The following features are supported:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getReturnValueComment <em>Return Value Comment</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getSignature <em>Signature</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getReturnType <em>Return Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getInputParameters <em>Input Parameters</em>}</li>
@@ -45,6 +48,28 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * @generated
  */
 public interface STStandardFunction extends ICallable {
+	/**
+	 * Returns the value of the '<em><b>Return Value Comment</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Return Value Comment</em>' attribute.
+	 * @see #setReturnValueComment(String)
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTStandardFunction_ReturnValueComment()
+	 * @model
+	 * @generated
+	 */
+	String getReturnValueComment();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction#getReturnValueComment <em>Return Value Comment</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Return Value Comment</em>' attribute.
+	 * @see #getReturnValueComment()
+	 * @generated
+	 */
+	void setReturnValueComment(String value);
+
 	/**
 	 * Returns the value of the '<em><b>Signature</b></em>' attribute.
 	 * <!-- begin-user-doc -->
@@ -136,5 +161,7 @@ public interface STStandardFunction extends ICallable {
 	 * @generated
 	 */
 	EList<String> getOnlySupportedBy();
+
+	
 
 } // STStandardFunction

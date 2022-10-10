@@ -318,22 +318,22 @@ public interface OperationalSemanticsPackage extends EPackage {
 	int FB_NETWORK_RUNTIME__FBNETWORK = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Fb Runtimes</b></em>' containment reference
-	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered
-	 */
-	int FB_NETWORK_RUNTIME__FB_RUNTIMES = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Transfer Data</b></em>' map. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered
 	 */
-	int FB_NETWORK_RUNTIME__TRANSFER_DATA = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 2;
+	int FB_NETWORK_RUNTIME__TRANSFER_DATA = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 1;
+
+	/**
+	 * The feature id for the '<em><b>Type Runtimes</b></em>' map. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int FB_NETWORK_RUNTIME__TYPE_RUNTIMES = FB_RUNTIME_ABSTRACT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>FB Network Runtime</em>' class.
@@ -430,6 +430,44 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @ordered
 	 */
 	int CONNECTION_TO_VALUE_MAP_FEATURE_COUNT = 2;
+
+	/**
+	 * The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.RuntimeMapImpl
+	 * <em>Runtime Map</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.RuntimeMapImpl
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getRuntimeMap()
+	 * @generated
+	 */
+	int RUNTIME_MAP = 9;
+
+	/**
+	 * The feature id for the '<em><b>Key</b></em>' reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int RUNTIME_MAP__KEY = 0;
+
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' containment reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int RUNTIME_MAP__VALUE = 1;
+
+	/**
+	 * The number of structural features of the '<em>Runtime Map</em>' class. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered
+	 */
+	int RUNTIME_MAP_FEATURE_COUNT = 2;
 
 	/**
 	 * Returns the meta object for class
@@ -673,19 +711,6 @@ public interface OperationalSemanticsPackage extends EPackage {
 	EReference getFBNetworkRuntime_Fbnetwork();
 
 	/**
-	 * Returns the meta object for the containment reference list
-	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getFbRuntimes
-	 * <em>Fb Runtimes</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @return the meta object for the containment reference list '<em>Fb
-	 *         Runtimes</em>'.
-	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getFbRuntimes()
-	 * @see #getFBNetworkRuntime()
-	 * @generated
-	 */
-	EReference getFBNetworkRuntime_FbRuntimes();
-
-	/**
 	 * Returns the meta object for the map
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getTransferData
 	 * <em>Transfer Data</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -696,6 +721,18 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getFBNetworkRuntime_TransferData();
+
+	/**
+	 * Returns the meta object for the map
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getTypeRuntimes
+	 * <em>Type Runtimes</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the map '<em>Type Runtimes</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getTypeRuntimes()
+	 * @see #getFBNetworkRuntime()
+	 * @generated
+	 */
+	EReference getFBNetworkRuntime_TypeRuntimes();
 
 	/**
 	 * Returns the meta object for class
@@ -769,6 +806,42 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getConnectionToValueMap_Value();
+
+	/**
+	 * Returns the meta object for class '{@link java.util.Map.Entry <em>Runtime
+	 * Map</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for class '<em>Runtime Map</em>'.
+	 * @see java.util.Map.Entry
+	 * @model keyType="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement"
+	 *        valueType="org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract"
+	 *        valueContainment="true" valueResolveProxies="true"
+	 * @generated
+	 */
+	EClass getRuntimeMap();
+
+	/**
+	 * Returns the meta object for the reference '{@link java.util.Map.Entry
+	 * <em>Key</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the reference '<em>Key</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getRuntimeMap()
+	 * @generated
+	 */
+	EReference getRuntimeMap_Key();
+
+	/**
+	 * Returns the meta object for the containment reference
+	 * '{@link java.util.Map.Entry <em>Value</em>}'. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference '<em>Value</em>'.
+	 * @see java.util.Map.Entry
+	 * @see #getRuntimeMap()
+	 * @generated
+	 */
+	EReference getRuntimeMap_Value();
 
 	/**
 	 * Returns the factory that creates the instances of the model. <!--
@@ -979,20 +1052,20 @@ public interface OperationalSemanticsPackage extends EPackage {
 		EReference FB_NETWORK_RUNTIME__FBNETWORK = eINSTANCE.getFBNetworkRuntime_Fbnetwork();
 
 		/**
-		 * The meta object literal for the '<em><b>Fb Runtimes</b></em>' containment
-		 * reference list feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 *
-		 * @generated
-		 */
-		EReference FB_NETWORK_RUNTIME__FB_RUNTIMES = eINSTANCE.getFBNetworkRuntime_FbRuntimes();
-
-		/**
 		 * The meta object literal for the '<em><b>Transfer Data</b></em>' map feature.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
 		 * @generated
 		 */
 		EReference FB_NETWORK_RUNTIME__TRANSFER_DATA = eINSTANCE.getFBNetworkRuntime_TransferData();
+
+		/**
+		 * The meta object literal for the '<em><b>Type Runtimes</b></em>' map feature.
+		 * <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EReference FB_NETWORK_RUNTIME__TYPE_RUNTIMES = eINSTANCE.getFBNetworkRuntime_TypeRuntimes();
 
 		/**
 		 * The meta object literal for the
@@ -1050,6 +1123,33 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 * @generated
 		 */
 		EReference CONNECTION_TO_VALUE_MAP__VALUE = eINSTANCE.getConnectionToValueMap_Value();
+
+		/**
+		 * The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.RuntimeMapImpl
+		 * <em>Runtime Map</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.RuntimeMapImpl
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getRuntimeMap()
+		 * @generated
+		 */
+		EClass RUNTIME_MAP = eINSTANCE.getRuntimeMap();
+
+		/**
+		 * The meta object literal for the '<em><b>Key</b></em>' reference feature. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EReference RUNTIME_MAP__KEY = eINSTANCE.getRuntimeMap_Key();
+
+		/**
+		 * The meta object literal for the '<em><b>Value</b></em>' containment reference
+		 * feature. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated
+		 */
+		EReference RUNTIME_MAP__VALUE = eINSTANCE.getRuntimeMap_Value();
 
 	}
 

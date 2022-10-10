@@ -85,7 +85,8 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	public void activate() {
 		super.activate();
 		getModel().eAdapters().add(contentAdapter);
-
+		// also add the adapter to parent to refresh the init value after type change
+		getModel().getParentIE().eAdapters().add(contentAdapter);
 		final Object part = getViewer().getEditPartRegistry().get(getModel().getParentIE());
 		if (part instanceof InterfaceEditPart) {
 			parentPart = (InterfaceEditPart) part;
@@ -155,6 +156,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	public void deactivate() {
 		super.deactivate();
 		getModel().eAdapters().remove(contentAdapter);
+		getModel().getParentIE().eAdapters().remove(contentAdapter);
 	}
 
 	private final Adapter contentAdapter = new AdapterImpl() {
@@ -162,11 +164,21 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		@Override
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
-			if (LibraryElementPackage.eINSTANCE.getValue_Value().equals(feature)) {
+			if (LibraryElementPackage.eINSTANCE.getValue_Value().equals(feature)
+					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
 				refreshValue();
 				refreshPosition();
 			} else if (LibraryElementPackage.eINSTANCE.getErrorMarkerRef_FileMarkerId().equals(feature)) {
-				Display.getDefault().asyncExec(ValueEditPart.this::refreshValue);
+				Display.getDefault().asyncExec(() -> {
+					refreshValue();
+					if (parentPart != null) {
+						for (final Object ep : parentPart.getTargetConnections()) {
+							if (ep instanceof GraphicalEditPart) {
+								((GraphicalEditPart) ep).refresh();
+							}
+						}
+					}
+				});
 			}
 			super.notifyChanged(notification);
 		}
@@ -207,7 +219,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		if (getModel().getValue() != null) {
 			setVisible(true);
 			setBackground(getModel().hasError());
-			if (getOuterConnections().isEmpty()) {
+			if (getOuterConnections().isEmpty() || getModel().hasError()) {
 				if (!getModel().getValue().isBlank()) {
 					((ValueFigure) getFigure()).updateValue(getModel().getValue());
 					getFigure().setFont(null);

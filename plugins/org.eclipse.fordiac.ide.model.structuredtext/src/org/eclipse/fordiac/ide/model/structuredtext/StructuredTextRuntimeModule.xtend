@@ -24,7 +24,7 @@ import org.eclipse.xtext.scoping.IgnoreCaseLinking
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
 import org.eclipse.xtext.scoping.impl.DefaultGlobalScopeProvider
 import org.eclipse.xtext.scoping.impl.SimpleLocalScopeProvider
-import org.eclipse.xtext.validation.CompositeEValidator
+import org.eclipse.xtext.serializer.impl.Serializer
 
 /** 
  * Use this class to register components to be used at runtime / without the
@@ -36,7 +36,7 @@ class StructuredTextRuntimeModule extends AbstractStructuredTextRuntimeModule {
 	}
 
 	override bindISerializer() {
-		return org.eclipse.xtext.serializer.impl.Serializer
+		return Serializer
 	}
 
 	override bindIContainer$Manager() {

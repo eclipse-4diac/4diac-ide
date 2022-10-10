@@ -104,5 +104,26 @@
             id="org.eclipse.fordiac.ide.debug.model">
       </debugModelPresentation>
    </extension>
-
+	<extension
+         point="org.eclipse.ui.views">
+      <view
+            class="org.eclipse.fordiac.ide.debug.ui.view.FBDebugView"
+            icon="fordiacimage://ICON_FB"
+            id="org.eclipse.fordiac.ide.debug.ui.view.FBDebugView"
+            name="FB Debug"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
+         <view
+               id="org.eclipse.fordiac.ide.debug.ui.view.FBDebugView"
+               minimized="false"
+               ratio="0.75f"
+               relationship="bottom"
+               relative="org.eclipse.ui.navigator.ProjectExplorer">
+         </view>
+      </perspectiveExtension>
+   </extension>
 </plugin>

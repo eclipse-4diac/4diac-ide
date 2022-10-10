@@ -29,9 +29,8 @@
     </eAnnotations>
     <eOperations name="run" upperBound="-1" eType="#//EventOccurrence">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="&#x9;&#x9;if (this.eContainer instanceof EventOccurrence) {&#xA;&#x9;&#x9;&#x9;return DefaultRunFBType.runFBType(this, (EventOccurrence) this.eContainer, eventManager);&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;throw new IllegalArgumentException(&quot;The eContainer of the FBRuntimeAbstract object must be an EventOccurrence&quot;);&#xA;"/>
+        <details key="body" value="&#x9;&#x9;if (this.eContainer instanceof EventOccurrence) {&#xA;&#x9;&#x9;&#x9;return DefaultRunFBType.runFBType(this, (EventOccurrence) this.eContainer);&#xA;&#x9;&#x9;}&#xA;&#x9;&#x9;throw new IllegalArgumentException(&quot;The eContainer of the FBRuntimeAbstract object must be an EventOccurrence&quot;);&#xA;"/>
       </eAnnotations>
-      <eParameters name="eventManager" lowerBound="1" eType="#//EventManager"/>
     </eOperations>
     <eOperations name="getModel" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
@@ -41,7 +40,7 @@
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="BasicFBTypeRuntime" eSuperTypes="#//FBRuntimeAbstract">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"/>
-    <eOperations name="getModel" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+    <eOperations name="getModel" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//BasicFBType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return this.getBasicfbtype();"/>
       </eAnnotations>
@@ -52,9 +51,9 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="activeState" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//ECState"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SimpleFBTypeRuntime" eSuperTypes="#//FBRuntimeAbstract">
-    <eOperations name="getModel" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//LibraryElement">
+    <eOperations name="getModel" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//SimpleFBType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return null;"/>
+        <details key="body" value="return simpleFBType;"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="simpleFBType" lowerBound="1"
@@ -67,17 +66,17 @@
         eType="#//EventOccurrence" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FBNetworkRuntime" eSuperTypes="#//FBRuntimeAbstract">
-    <eOperations name="getModel" lowerBound="1" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject">
+    <eOperations name="getModel" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FBNetwork">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return this.getFbnetwork();"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="fbnetwork" lowerBound="1"
         eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FBNetwork"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="fbRuntimes" upperBound="-1"
-        eType="#//FBRuntimeAbstract" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="transferData" upperBound="-1"
         eType="#//ConnectionToValueMap" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="typeRuntimes" upperBound="-1"
+        eType="#//RuntimeMap" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FBTransaction" eSuperTypes="#//Transaction">
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputEventOccurrences"
@@ -88,6 +87,11 @@
   <eClassifiers xsi:type="ecore:EClass" name="ConnectionToValueMap" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Connection"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Value"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RuntimeMap" instanceClassName="java.util.Map$Entry">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FBNetworkElement"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//FBRuntimeAbstract"
         containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

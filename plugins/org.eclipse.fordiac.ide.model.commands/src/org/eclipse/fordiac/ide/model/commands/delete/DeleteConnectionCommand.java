@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2021 Profactor GmbH, fortiss GmbH, AIT,
  *                          Johannes Keppler University Linz
- *
+ *               2022 Primetals Technologies Austria GmbH
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -13,10 +13,12 @@
  *   	- initial API and implementation and/or initial documentation
  *   Alois Zoitl - removed editor check from canUndo
  *   Michael Oberlehner - added support for error marker handling
+ *                      - added check for error marker connection
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
 import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.helpers.ConnectionsHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -33,12 +35,22 @@ public class DeleteConnectionCommand extends Command {
 	private final FBNetwork connectionParent;
 	private boolean performMappingCheck;
 	private DeleteConnectionCommand deleteMapped = null;
-	private final CompoundCommand deleteErrorMarkers = new CompoundCommand();
+	private final CompoundCommand deleteInterfaceErrorMarkers = new CompoundCommand();
 	private FBNetworkElement errorFb;
+	ErrorMarkerBuilder deleteConnectionErrorMarker = null;
+
+	private boolean keepMarker; // we want to keep the marker
 
 	public DeleteConnectionCommand(final Connection connection) {
 		this(connection, null);
 		this.errorFb = null;
+		keepMarker = false;
+	}
+
+	public DeleteConnectionCommand(final Connection connection, final boolean keepMarker) {
+		this(connection, null);
+		this.errorFb = null;
+		this.keepMarker = keepMarker;
 	}
 
 	public DeleteConnectionCommand(final Connection connection, final FBNetworkElement errorFb) {
@@ -68,19 +80,18 @@ public class DeleteConnectionCommand extends Command {
 				deleteMapped.execute();
 			}
 		}
-		deleteConnection();
-		handleErrorMarker();
-	}
-
-	private void handleErrorMarker() {
 		checkErrorMarker();
-		deleteErrorMarkers.execute();
+		deleteConnection();
+		deleteInterfaceErrorMarkers.execute();
 	}
 
 	@Override
 	public void redo() {
+		if (deleteConnectionErrorMarker != null) {
+			deleteConnectionErrorMarker.deleteErrorMarker();
+		}
+		deleteInterfaceErrorMarkers.redo();
 		deleteConnection();
-		deleteErrorMarkers.redo();
 	}
 
 	private void deleteConnection() {
@@ -96,7 +107,7 @@ public class DeleteConnectionCommand extends Command {
 
 	@Override
 	public void undo() {
-		deleteErrorMarkers.undo();
+		deleteInterfaceErrorMarkers.undo();
 		connection.setSource(source);
 		connection.setDestination(destination);
 		if (connectionParent != null) {
@@ -104,6 +115,10 @@ public class DeleteConnectionCommand extends Command {
 		}
 		if (null != deleteMapped) {
 			deleteMapped.undo();
+		}
+
+		if (deleteConnectionErrorMarker != null) {
+			deleteConnectionErrorMarker.createMarkerInFile();
 		}
 
 	}
@@ -124,22 +139,28 @@ public class DeleteConnectionCommand extends Command {
 	}
 
 	private void checkErrorMarker() {
-		if (isErrorMarkerToDelete(source)) {
-			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
+		if (isErrorMarkerToDelete(source) && !keepMarker) {
+			deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
 		}
-		if (isErrorMarkerToDelete(destination)) {
-			deleteErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
+		if (isErrorMarkerToDelete(destination) && !keepMarker) {
+			deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
+		}
+
+		if (connection.hasError() && !keepMarker) {
+			deleteConnectionErrorMarker = ErrorMarkerBuilder.deleteErrorMarker(connection);
+			deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
+			deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
 		}
 	}
 
 	private static boolean isErrorMarkerToDelete(final IInterfaceElement ie) {
 		// we only have to remove the error marker interface if it is one, if it is still in the model (i.e., has not
 		// already been deleted by someone else) and it has no further connections
-		return ie instanceof ErrorMarkerInterface && ie.eContainer() != null && hasNoConnections(ie);
+		return ie instanceof ErrorMarkerInterface && ie.eContainer() != null && hasNoOtherConnections(ie);
 	}
 
-	private static boolean hasNoConnections(final IInterfaceElement ie) {
-		return ie.isIsInput() ? ie.getInputConnections().isEmpty() : ie.getOutputConnections().isEmpty();
+	private static boolean hasNoOtherConnections(final IInterfaceElement ie) {
+		return ie.isIsInput() ? ie.getInputConnections().size() <= 1 : ie.getOutputConnections().size() <= 1;
 	}
 
 	public IInterfaceElement getSource() {

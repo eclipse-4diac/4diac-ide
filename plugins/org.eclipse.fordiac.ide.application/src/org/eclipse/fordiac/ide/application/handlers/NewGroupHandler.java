@@ -47,7 +47,6 @@ public class NewGroupHandler extends AbstractContainerElementHandler {
 			}
 			setBaseEnabled(notInGroup);
 		}
-
 	}
 
 }

@@ -92,7 +92,7 @@ public final class TableWidgetFactory {
 				SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | style);
 
 		final TableViewerFocusCellManager focusCellManager = new TableViewerFocusCellManager(tableViewer,
-				new FocusCellOwnerDrawHighlighter(tableViewer));
+				new FocusCellOwnerDrawHighlighter(tableViewer, false));
 		final ColumnViewerEditorActivationStrategy actSupport = new ColumnViewerEditorActivationStrategy(tableViewer) {
 			@Override
 			protected boolean isEditorActivationEvent(final ColumnViewerEditorActivationEvent event) {

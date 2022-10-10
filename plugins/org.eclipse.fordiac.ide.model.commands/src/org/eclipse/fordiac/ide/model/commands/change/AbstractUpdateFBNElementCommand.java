@@ -25,16 +25,13 @@ import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCom
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.LinkConstraints;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteErrorMarkerCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper;
-import org.eclipse.fordiac.ide.model.dataimport.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -52,6 +49,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -70,7 +68,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	protected final CompoundCommand reconnCmds = new CompoundCommand();
 	protected final CompoundCommand resourceConnCreateCmds = new CompoundCommand();
-
 	protected Command mapCmd = null;
 	protected UnmapCommand unmapCmd = null;
 
@@ -245,7 +242,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 			final IInterfaceElement interfaceElement = updateSelectedInterface(oldInterface, newElement);
 
 			if (!interfaceElement.getType().isAssignableFrom(oldInterface.getType())) {
-				return createWrongTypeMarker(oldInterface, interfaceElement, newElement);
+				final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
+						oldInterface.getTypeName(), interfaceElement.getTypeName());
+
+				return FordiacMarkerHelper.createWrongDataTypeMarker(oldInterface, interfaceElement, newElement,
+						errorPins, errorMessage);
 			}
 
 			return interfaceElement;
@@ -315,7 +316,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		if (onlyNewElementIsErrorMarker()) {
 			final String errorMessage = MessageFormat.format("Type File: {0} could not be loaded for FB", //$NON-NLS-1$
 					entry.getFile() != null ? entry.getFile().getFullPath() : "null type"); //$NON-NLS-1$
-			errorMarkerBuilder = FordiacMarkerHelper.createErrorMarker(errorMessage, newElement, 0);
+			errorMarkerBuilder = ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage, newElement, 0);
 			errorMarkerBuilder.setErrorMarkerRef((ErrorMarkerRef) newElement);
 			((ErrorMarkerRef) newElement).setErrorMessage(errorMessage);
 			errorMarkerBuilder.createMarkerInFile();
@@ -355,7 +356,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		for (final ErrorMarkerInterface erroMarker : oldElement.getInterface().getErrorMarker()) {
 			if (hasValue(erroMarker.getValue())) {
 				final IInterfaceElement updatedSelected = newElement.getInterfaceElement(erroMarker.getName());
-				if (isVariable(updatedSelected)) {
+				if (FordiacMarkerHelper.isVariable(updatedSelected)) {
 					final Value value = LibraryElementFactory.eINSTANCE.createValue();
 					value.setValue(erroMarker.getValue().getValue());
 					((VarDeclaration) updatedSelected).setValue(value);
@@ -403,48 +404,10 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	}
 
-	private IInterfaceElement createErrorMarker(final FBNetworkElement newElement, final IInterfaceElement oldInterface,
-			final String errorMessage) {
-		final boolean markerExists = newElement.getInterface().getErrorMarker().stream().anyMatch(
-				e -> e.getName().equals(oldInterface.getName()) && (e.isIsInput() == oldInterface.isIsInput()));
-
-		final ErrorMarkerInterface interfaceElement = ConnectionHelper.createErrorMarkerInterface(
-				oldInterface.getType(), oldInterface.getName(), oldInterface.isIsInput(), newElement.getInterface());
-
-		if (isVariable(oldInterface) && !((VarDeclaration) oldInterface).getValue().getValue().isBlank()) {
-			final Value value = LibraryElementFactory.eINSTANCE.createValue();
-			value.setValue(((VarDeclaration) oldInterface).getValue().getValue());
-			interfaceElement.setValue(value);
-		}
-
-		if (!markerExists) {
-			final ErrorMarkerBuilder createErrorMarker = FordiacMarkerHelper.createErrorMarker(errorMessage, newElement,
-					0);
-			createErrorMarker.setErrorMarkerRef(interfaceElement);
-			createErrorMarker.createMarkerInFile();
-			errorPins.add(createErrorMarker);
-		}
-		return interfaceElement;
-	}
-
-	private boolean isVariable(final IInterfaceElement oldInterface) {
-		return (oldInterface instanceof VarDeclaration) && !(oldInterface instanceof AdapterDeclaration);
-	}
-
-	private ErrorMarkerInterface createWrongTypeMarker(final IInterfaceElement oldInterface,
-			final IInterfaceElement newInterface, final FBNetworkElement element) {
-		final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
-				oldInterface.getTypeName(), newInterface.getTypeName());
-		final ErrorMarkerInterface createErrorMarker = (ErrorMarkerInterface) createErrorMarker(element, oldInterface,
-				errorMessage);
-		createErrorMarker.setErrorMessage(Messages.UpdateFBTypeCommand_wrong_type);
-		return createErrorMarker;
-	}
-
 	private ErrorMarkerInterface createMissingMarker(final IInterfaceElement oldInterface,
 			final FBNetworkElement element) {
-		return (ErrorMarkerInterface) createErrorMarker(element, oldInterface,
-				MessageFormat.format(Messages.UpdateFBTypeCommand_Pin_not_found, oldInterface.getName()));
+		return FordiacMarkerHelper.createErrorMarkerInterfaceElement(element, oldInterface,
+				MessageFormat.format(Messages.UpdateFBTypeCommand_Pin_not_found, oldInterface.getName()), errorPins);
 	}
 
 	private IInterfaceElement updateSelectedInterface(final IInterfaceElement oldInterface,
@@ -471,15 +434,18 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		if (connection.getDestinationElement() == oldElement) {
 			destination = updateSelectedInterface(destination, newElement);
 		}
-
 		// check type compatibility
 		if (!LinkConstraints.typeCheck(source, destination)) {
 			// create wrong type error marker
 			// if connected with itself, prefer marker in destination
+			final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
+					source.getTypeName(), destination.getTypeName());
 			if (connection.getDestinationElement() == oldElement) {
-				destination = createWrongTypeMarker(connection.getDestination(), destination, newElement);
+				destination = FordiacMarkerHelper.createWrongDataTypeMarker(connection.getDestination(), destination,
+						newElement, errorPins, errorMessage);
 			} else {
-				source = createWrongTypeMarker(connection.getSource(), source, newElement);
+				source = FordiacMarkerHelper.createWrongDataTypeMarker(connection.getSource(), source, newElement,
+						errorPins, errorMessage);
 			}
 		}
 
@@ -497,8 +463,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	protected void replaceConnection(final Connection oldConn, final IInterfaceElement source,
 			final IInterfaceElement dest) {
-		if (!isConnectionToBeDeleted(oldConn)) {
-			reconnCmds.add(new DeleteConnectionCommand(oldConn));
+		if (!isConnectionInList(oldConn)) {
+			reconnCmds.add(new DeleteConnectionCommand(oldConn, true));
 		}
 		if (!isConnectionToBeCreated(source, dest)) {
 			final FBNetwork fbn = oldConn.getFBNetwork();
@@ -511,7 +477,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		}
 	}
 
-	protected boolean isConnectionToBeDeleted(final Connection conn) {
+
+
+	protected boolean isConnectionInList(final Connection conn) {
 		for (final Object cmd : reconnCmds.getCommands()) {
 			if ((cmd instanceof DeleteConnectionCommand)
 					&& ((DeleteConnectionCommand) cmd).getConnection().equals(conn)) {

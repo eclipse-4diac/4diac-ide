@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021-2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,16 +9,21 @@
  *
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *                      - added data type check for connection
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -28,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 
 public final class ConnectionHelper {
 
@@ -52,6 +58,10 @@ public final class ConnectionHelper {
 		public void validate() {
 
 			if (sourceEndpoint != null && destinationEndpoint != null) {
+				if (!LinkConstraints.typeCheck(sourceEndpoint, destinationEndpoint)) {
+					connectionState.add(ConnectionState.DATATYPE_MISSMATCH);
+					connectionState.remove(ConnectionState.VALID);
+				}
 				return;
 			}
 
@@ -82,6 +92,8 @@ public final class ConnectionHelper {
 				connectionState.add(ConnectionState.DEST_MISSING);
 				connectionState.remove(ConnectionState.VALID);
 			}
+
+
 		}
 
 		protected static InterfaceList getInterfaceFromQualString(final String source, final FBNetwork fbNetwork) {
@@ -163,6 +175,10 @@ public final class ConnectionHelper {
 
 		public boolean isValidConnection() {
 			return connectionState.contains(ConnectionState.VALID);
+		}
+
+		public boolean isDataTypeMissmatch() {
+			return connectionState.contains(ConnectionState.DATATYPE_MISSMATCH);
 		}
 
 		public boolean isMissingConnectionDestinationEndpoint() {
@@ -258,11 +274,25 @@ public final class ConnectionHelper {
 			this.sourceEndpoint = sourceEndpoint;
 		}
 
+		public void createErrorMarkerConnection(final Connection connection) {
+
+			final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
+					sourceEndpoint.getTypeName(), destinationEndpoint.getTypeName());
+
+			final ErrorMarkerInterface srcErrorMarker = FordiacMarkerHelper.createWrongDataTypeMarker(sourceEndpoint,
+					sourceEndpoint, destinationEndpoint.getFBNetworkElement(), new ArrayList<>(), errorMessage);
+			final ErrorMarkerInterface dstErrorMarker = FordiacMarkerHelper.createWrongDataTypeMarker(
+					destinationEndpoint, destinationEndpoint, destinationEndpoint.getFBNetworkElement(),
+					new ArrayList<>(), errorMessage);
+			connection.setSource(srcErrorMarker);
+			connection.setDestination(dstErrorMarker);
+		}
+
 	}
 
 	public enum ConnectionState {
 		VALID, SOURCE_MISSING, SOURCE_ENDPOINT_MISSING, DEST_MISSING, DEST_ENDPOINT_MISSING, SOURCE_EXITS,
-		SOURCE_ENDPOINT_EXISTS, DEST_EXISTS, DEST_ENPOINT_EXITS, MISSING_TYPE
+		SOURCE_ENDPOINT_EXISTS, DEST_EXISTS, DEST_ENPOINT_EXITS, MISSING_TYPE, DATATYPE_MISSMATCH
 	}
 
 	public static IInterfaceElement createRepairInterfaceElement(final IInterfaceElement connection,
@@ -300,6 +330,7 @@ public final class ConnectionHelper {
 		ieList.getErrorMarker().add(errorMarkerInterface);
 		return errorMarkerInterface;
 	}
+
 
 	private ConnectionHelper() {
 		throw new UnsupportedOperationException();

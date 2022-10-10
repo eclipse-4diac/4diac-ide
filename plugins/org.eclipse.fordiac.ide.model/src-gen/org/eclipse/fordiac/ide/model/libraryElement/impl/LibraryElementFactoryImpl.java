@@ -68,6 +68,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Identification;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
@@ -232,6 +233,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.GROUP: return createGroup();
 			case LibraryElementPackage.OTHER_METHOD: return createOtherMethod();
 			case LibraryElementPackage.ST_METHOD: return createSTMethod();
+			case LibraryElementPackage.HIDDEN_ELEMENT: return createHiddenElement();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -1114,6 +1116,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public STMethod createSTMethod() {
 		STMethodImpl stMethod = new STMethodImpl();
 		return stMethod;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public HiddenElement createHiddenElement() {
+		HiddenElementImpl hiddenElement = new HiddenElementImpl();
+		return hiddenElement;
 	}
 
 	/**

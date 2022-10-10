@@ -42,7 +42,7 @@ public class FocusOnPredecessor extends AbstractHandler {
 	private static final int NON_TRANSPARENT = 255;
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final Set<ConfigurableObject> elementToHighlight = new HashSet<>();
 		getPredecessorFBNetworkElements(getSelectedFBElement(event), elementToHighlight);
 
@@ -61,28 +61,27 @@ public class FocusOnPredecessor extends AbstractHandler {
 		return null;
 	}
 
-	private static void getPredecessorFBNetworkElements(FBNetworkElement element,
-			Set<ConfigurableObject> elementToHighlight) {
-		if (null != element) {
-			elementToHighlight.add(element);
-			for (final VarDeclaration inVar : element.getInterface().getInputVars()) {
-				for (final Connection con : inVar.getInputConnections()) {
-					final IInterfaceElement source = con.getSource();
-					if (source != null) {
-						final FBNetworkElement sourceElement = source.getFBNetworkElement();
-						if (null != sourceElement) {
-							elementToHighlight.add(con);
-							if (!elementToHighlight.contains(sourceElement)) {
-								getPredecessorFBNetworkElements(sourceElement, elementToHighlight);
-							}
-						}
+	private static void getPredecessorFBNetworkElements(final FBNetworkElement element,
+			final Set<ConfigurableObject> elementToHighlight) {
+		if (null == element) {
+			return;
+		}
+		elementToHighlight.add(element);
+		for (final VarDeclaration inVar : element.getInterface().getInputVars()) {
+			for (final Connection con : inVar.getInputConnections()) {
+				final IInterfaceElement source = con.getSource();
+				if (source != null && source.getFBNetworkElement() != null) {
+					final FBNetworkElement sourceElement = source.getFBNetworkElement();
+					elementToHighlight.add(con);
+					if (!elementToHighlight.contains(sourceElement)) {
+						getPredecessorFBNetworkElements(sourceElement, elementToHighlight);
 					}
 				}
 			}
 		}
 	}
 
-	private static FBNetworkElement getSelectedFBElement(ExecutionEvent event) {
+	private static FBNetworkElement getSelectedFBElement(final ExecutionEvent event) {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 		if (selection instanceof StructuredSelection) {
 			Object selObj = ((StructuredSelection) selection).getFirstElement();

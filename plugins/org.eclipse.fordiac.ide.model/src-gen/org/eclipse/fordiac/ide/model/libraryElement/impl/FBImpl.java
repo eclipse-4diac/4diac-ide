@@ -71,7 +71,7 @@ public class FBImpl extends FBNetworkElementImpl implements FB {
 	 */
 	@Override
 	public boolean isResourceTypeFB() {
-		return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceTypeFB(this);
+		return false;
 	}
 
 	/**

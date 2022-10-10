@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
@@ -43,7 +42,7 @@ public class InstanceCommentDecorator implements ILightweightLabelDecorator {
 
 	@Override
 	public void decorate(final Object element, final IDecoration decoration) {
-		if (element instanceof FBNetworkElement && !(element instanceof Group)) {
+		if (element instanceof FBNetworkElement) {
 			final String comment = ((FBNetworkElement) element).getComment();
 			if (null != comment && !comment.isBlank()) {
 				decoration.addSuffix(" [" + checkComment(comment) + "]"); //$NON-NLS-1$ //$NON-NLS-2$

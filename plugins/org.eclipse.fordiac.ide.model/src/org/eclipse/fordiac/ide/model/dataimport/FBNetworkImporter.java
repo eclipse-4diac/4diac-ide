@@ -1,6 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2016, 2020 fortiss GmbH, Johannes Kepler University, Linz,
- *               2020, 2021 Primetals Technologies Austria GmbH
+ *               2020, 2021, 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,15 +18,18 @@
  *                 connection error
  *   Martin Melik Merkumians - moved functionality to base class for usage
  *                 in FBTImporter
+ *   Michael Oberlehner - refactored and extented error markers for pins, connections and datatypes
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
 
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
@@ -38,7 +41,8 @@ import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionBuild
 import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper.ConnectionState;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -177,7 +181,7 @@ class FBNetworkImporter extends CommonElementImporter {
 			// we don't have a type create error marker.
 			// This can only be done after fb has been added to FB network,
 			// so that the error marker can determine the location!
-			final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarker(
+			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createErrorMarkerBuilder(
 					MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", typeFbElement, fb.getName()), //$NON-NLS-1$
 					fb, getLineNumber());
 			e.setErrorMarkerRef((ErrorMarkerRef) fb);
@@ -242,8 +246,14 @@ class FBNetworkImporter extends CommonElementImporter {
 		builder.validate();
 
 		if (builder.isValidConnection()) {
-			connection.setSource(builder.getSourceEndpoint());
-			connection.setDestination(builder.getDestinationEndpoint());
+			final IInterfaceElement src = builder.getSourceEndpoint();
+			final IInterfaceElement dst = builder.getDestinationEndpoint();
+			connection.setSource(src);
+			connection.setDestination(dst);
+		}
+
+		if (builder.isDataTypeMissmatch()) {
+			handleDataTypeMissmatch(builder, connection);
 		}
 
 		if (builder.isMissingConnectionDestination()) {
@@ -279,6 +289,31 @@ class FBNetworkImporter extends CommonElementImporter {
 		return connection;
 	}
 
+	public <T extends Connection> void handleDataTypeMissmatch(final ConnectionBuilder builder,
+			final T connection) {
+		final IInterfaceElement src = builder.getSourceEndpoint();
+		final IInterfaceElement dst = builder.getDestinationEndpoint();
+		final String errorMessage = MessageFormat.format(Messages.FBNetworkImporter_ConnectionTypeMismatch,
+				src.getName() + ":" + src.getTypeName(), dst.getName() + ":" + dst.getTypeName()); //$NON-NLS-1$ //$NON-NLS-2$
+		final ErrorMarkerInterface srcErrorMarker = FordiacMarkerHelper.createWrongDataTypeMarker(src, src,
+				src.getFBNetworkElement(), new ArrayList<>(), src.getName() + ":" + src.getTypeName()); //$NON-NLS-1$
+		srcErrorMarker.setRepairedEndpoint(src);
+		final ErrorMarkerInterface dstErrorMarker = FordiacMarkerHelper.createWrongDataTypeMarker(dst, dst,
+				dst.getFBNetworkElement(), new ArrayList<>(), dst.getName() + ":" + dst.getTypeName()); //$NON-NLS-1$
+		dstErrorMarker.setRepairedEndpoint(dst);
+		final ErrorMarkerBuilder errorMarkerBuilder = ErrorMarkerBuilder.createConnectionErrorMarkerBuilder(
+				errorMessage,
+				getFbNetwork(), builder.getSourcePinName(),
+				builder.getDestinationPinName(), getLineNumber());
+		connection.setErrorMessage(errorMessage);
+		errorMarkerBuilder.setErrorMarkerRef(connection);
+		errorMarkerAttributes.add(errorMarkerBuilder);
+		connection.setSource(srcErrorMarker);
+		connection.setDestination(dstErrorMarker);
+	}
+
+
+
 	public <T extends Connection> void parseAttributes(final T connection)
 			throws XMLStreamException, TypeImportException {
 		processChildren(LibraryElementTags.CONNECTION_ELEMENT, tag -> {
@@ -293,7 +328,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 
 	protected void handleMissingConnectionSource(final Connection connection, final ConnectionBuilder builder) {
-		final ErrorMarkerBuilder e = FordiacMarkerHelper.createConnectionErrorMarkerBuilder(
+		final ErrorMarkerBuilder e = ErrorMarkerBuilder.createConnectionErrorMarkerBuilder(
 				Messages.FBNetworkImporter_ConnectionSourceMissing, getFbNetwork(), builder.getSource(),
 				builder.getDestination(), getLineNumber());
 		errorMarkerAttributes.add(e);
@@ -306,7 +341,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	}
 
 	protected void handleMissingConnectionSourceEndpoint(final Connection connection, final ConnectionBuilder builder) {
-		final ErrorMarkerBuilder e = FordiacMarkerHelper.createConnectionErrorMarkerBuilder(
+		final ErrorMarkerBuilder e = ErrorMarkerBuilder.createConnectionErrorMarkerBuilder(
 				MessageFormat.format(Messages.FBNetworkImporter_ConnectionSourceNotFound, builder.getSource()),
 				getFbNetwork(), builder.getSource(), builder.getDestination(), getLineNumber());
 		errorMarkerAttributes.add(e);
@@ -316,7 +351,7 @@ class FBNetworkImporter extends CommonElementImporter {
 	protected void handleMissingConnectionDestination(final Connection connection,
 			final ConnectionBuilder connectionBuilder) {
 
-		final ErrorMarkerBuilder e = FordiacMarkerHelper.createConnectionErrorMarkerBuilder(
+		final ErrorMarkerBuilder e = ErrorMarkerBuilder.createConnectionErrorMarkerBuilder(
 				Messages.FBNetworkImporter_ConnectionDestinationMissing, getFbNetwork(),
 				connectionBuilder.getSource(), null, getLineNumber());
 		errorMarkerAttributes.add(e);
@@ -364,7 +399,7 @@ class FBNetworkImporter extends CommonElementImporter {
 			final String errorMsg) {
 		if (errorMarkerAttributes.stream().noneMatch(e -> e.getErrorMarkerRef().equals(endpoint))) {
 			// we don't have yet an error marker
-			final ErrorMarkerBuilder e = FordiacMarkerHelper.createConnectionErrorMarkerBuilder(
+			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createConnectionErrorMarkerBuilder(
 					MessageFormat.format(errorMsg, builder.getSource()), getFbNetwork(),
 					builder.getSource(), builder.getDestination(), getLineNumber());
 			e.setErrorMarkerRef(endpoint);
@@ -375,14 +410,12 @@ class FBNetworkImporter extends CommonElementImporter {
 	private static void createErrorMarkerInterface(final Connection connection,
 			final ConnectionBuilder connectionBuilder, final boolean isInput, final ErrorMarkerBuilder e) {
 
-		final String pinName = isInput ? connectionBuilder.getDestinationPinName()
-				: connectionBuilder.getSourcePinName();
+
 
 		final IInterfaceElement oppositeEndpoint = isInput ? connectionBuilder.getSourceEndpoint()
 				: connectionBuilder.getDestinationEndpoint();
 
-		final InterfaceList ieList = isInput ? connectionBuilder.getDestInterfaceList()
-				: connectionBuilder.getSrcInterfaceList();
+
 
 		// we need a special treatment for FB's that lost their type
 		if ((oppositeEndpoint == null)) {
@@ -395,6 +428,10 @@ class FBNetworkImporter extends CommonElementImporter {
 			type = IecTypes.GenericTypes.ANY;
 		}
 
+		final InterfaceList ieList = isInput ? connectionBuilder.getDestInterfaceList()
+				: connectionBuilder.getSrcInterfaceList();
+		final String pinName = isInput ? connectionBuilder.getDestinationPinName()
+				: connectionBuilder.getSourcePinName();
 		final ErrorMarkerInterface errorMarkerInterface = ConnectionHelper
 				.createErrorMarkerInterface(type,
 						pinName, isInput, ieList);
@@ -417,7 +454,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	protected <T extends Connection> void handleMissingConnectionDestinationEnpoint(final T connection,
 			final ConnectionBuilder builder) {
-		final ErrorMarkerBuilder e = FordiacMarkerHelper.createConnectionErrorMarkerBuilder(
+		final ErrorMarkerBuilder e = ErrorMarkerBuilder.createConnectionErrorMarkerBuilder(
 				MessageFormat.format(Messages.FBNetworkImporter_ConnectionDestinationNotFound,
 						builder.getDestination()),
 				getFbNetwork(), builder.getSource(), builder.getDestination(), getLineNumber());
@@ -518,7 +555,7 @@ class FBNetworkImporter extends CommonElementImporter {
 				return il.getPlugs();
 			}
 		}
-		return null;
+		return ECollections.emptyEList();
 	}
 
 	protected FBNetworkElement findFBNetworkElement(final String fbName) {

@@ -1553,6 +1553,29 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 		return stMethodItemProvider;
 	}
 
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.HiddenElement} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected HiddenElementItemProvider hiddenElementItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.HiddenElement}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createHiddenElementAdapter() {
+		if (hiddenElementItemProvider == null) {
+			hiddenElementItemProvider = new HiddenElementItemProvider(this);
+		}
+
+		return hiddenElementItemProvider;
+	}
+
 	/** This returns the root adapter factory that contains this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */

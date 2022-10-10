@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies GmbH
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,9 +16,12 @@ package org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring
 
 import com.google.inject.Inject
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.services.STCoreGrammarAccess
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.xtext.ide.editor.syntaxcoloring.DefaultSemanticHighlightingCalculator
@@ -40,7 +43,7 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 
 	}
 
-	// semantic highlighting for Name of Method by defining the Method 
+	// semantic highlighting for Name of Method  
 	def protected dispatch boolean highlightElement(STMethod stMethod, IHighlightedPositionAcceptor acceptor,
 		CancelIndicator cancelIndicator) {
 		for (ILeafNode n : NodeModelUtils.findActualNodeFor(stMethod).getLeafNodes()) {
@@ -52,7 +55,7 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 		return super.highlightElement(stMethod, acceptor, cancelIndicator);
 	}
 
-	// semantic highlighting for Name of Function by defining the Function 
+	// semantic highlighting for Name of Function  
 	def protected dispatch boolean highlightElement(STFunction stFunction, IHighlightedPositionAcceptor acceptor,
 		CancelIndicator cancelIndicator) {
 		for (ILeafNode n : NodeModelUtils.findActualNodeFor(stFunction).getLeafNodes()) {
@@ -83,10 +86,16 @@ class STCoreSemanticHighlightingCalculator extends DefaultSemanticHighlightingCa
 		IHighlightedPositionAcceptor acceptor, CancelIndicator cancelIndicator) {
 
 		val style = switch (featuresExpression.feature) {
-			STMethod case featuresExpression.call:
+			VarDeclaration:
+				STCoreHighlightingStyles.STATIC_VAR_ID
+			FB:
+				STCoreHighlightingStyles.CALL_FUNCTION_BLOCK_ID
+			STMethod case (featuresExpression.call):
 				STCoreHighlightingStyles.CALL_METHOD_ID
 			STMethod case !featuresExpression.call:
 				STCoreHighlightingStyles.RETURN_METHOD_ID
+			STStandardFunction:
+				STCoreHighlightingStyles.CALL_FUNCTION_ID
 			STFunction case featuresExpression.call:
 				STCoreHighlightingStyles.CALL_FUNCTION_ID
 			STFunction case !featuresExpression.call:

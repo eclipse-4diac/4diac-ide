@@ -418,20 +418,21 @@ public class MarqueeDragTracker extends AbstractTool implements DragTracker {
 		boolean included = false;
 		final Rectangle marqueeSelectionRectangle = getCurrentMarqueeSelectionRectangle();
 		if (editPart instanceof ConnectionEditPart) {
-			if (marqueeBehavior == MarqueeSelectionTool.BEHAVIOR_CONNECTIONS_TOUCHED
-					|| marqueeBehavior == MarqueeSelectionTool.BEHAVIOR_CONNECTIONS_CONTAINED) {
-				if (marqueeSelectionRectangle.intersects(r)) {
-					// children will contain ConnectionEditParts only in case
-					// behavior is BEHAVIOR_CONNECTIONS_TOUCHED or
-					// BEHAVIOR_CONNECTIONS_CONTAINED
-					final Rectangle relMarqueeRect = Rectangle.SINGLETON;
-					figure.translateToRelative(relMarqueeRect.setBounds(marqueeSelectionRectangle));
-					if (marqueeBehavior == MarqueeSelectionTool.BEHAVIOR_CONNECTIONS_TOUCHED) {
-						included = ((Connection) figure).getPoints().intersects(relMarqueeRect);
-					} else {
-						included = relMarqueeRect.contains(((Connection) figure).getPoints().getBounds());
-					}
+			if ((marqueeBehavior == MarqueeSelectionTool.BEHAVIOR_CONNECTIONS_TOUCHED
+					|| marqueeBehavior == MarqueeSelectionTool.BEHAVIOR_CONNECTIONS_CONTAINED)
+					&& marqueeSelectionRectangle.intersects(r)) {
+
+				// children will contain ConnectionEditParts only in case
+				// behavior is BEHAVIOR_CONNECTIONS_TOUCHED or
+				// BEHAVIOR_CONNECTIONS_CONTAINED
+				final Rectangle relMarqueeRect = Rectangle.SINGLETON;
+				figure.translateToRelative(relMarqueeRect.setBounds(marqueeSelectionRectangle));
+				if (marqueeBehavior == MarqueeSelectionTool.BEHAVIOR_CONNECTIONS_TOUCHED) {
+					included = ((Connection) figure).getPoints().intersects(relMarqueeRect);
+				} else {
+					included = relMarqueeRect.contains(((Connection) figure).getPoints().getBounds());
 				}
+
 			}
 		} else {
 			// otherwise children will only be 'node' edit parts

@@ -13,13 +13,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
+import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBTest;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils.setVariable;
+
 import java.util.Arrays;
 
+import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;
-import org.eclipse.fordiac.ide.test.fb.interpreter.infra.FBTransaction;
 
 public class StationCtrlTest extends AbstractInterpreterTest {
 
@@ -29,7 +33,7 @@ public class StationCtrlTest extends AbstractInterpreterTest {
 		fb.getService().getServiceSequence().clear();
 		ServiceSequence seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 
-		addTransaction(seq, new FBTransaction("INIT", "INITO")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq, new FBTransactionBuilder("INIT", "INITO")); //$NON-NLS-1$ //$NON-NLS-2$
 		runFBTest(fb, seq);
 
 		// ErrorCode is default 0
@@ -37,16 +41,16 @@ public class StationCtrlTest extends AbstractInterpreterTest {
 		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 
 		final String[] outputs = { "StopConv", "PickPart" }; //$NON-NLS-1$//$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("NextPart", Arrays.asList(outputs))); //$NON-NLS-1$
-		addTransaction(seq, new FBTransaction("PartPicked", "StartConv")); //$NON-NLS-1$ //$NON-NLS-2$
+		addTransaction(seq, new FBTransactionBuilder("NextPart", Arrays.asList(outputs))); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("PartPicked", "StartConv")); //$NON-NLS-1$ //$NON-NLS-2$
 		runFBTest(fb, seq);
 
 
 		fb.getService().getServiceSequence().clear();
 		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "ErrorCode", "2"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransaction("Error", "StopConv")); //$NON-NLS-1$ //$NON-NLS-2$
-		runTest(fb, seq, "processingPart"); //$NON-NLS-1$
+		addTransaction(seq, new FBTransactionBuilder("Error", "StopConv")); //$NON-NLS-1$ //$NON-NLS-2$
+		runFBTest(fb, seq, "processingPart"); //$NON-NLS-1$
 	}
 
 

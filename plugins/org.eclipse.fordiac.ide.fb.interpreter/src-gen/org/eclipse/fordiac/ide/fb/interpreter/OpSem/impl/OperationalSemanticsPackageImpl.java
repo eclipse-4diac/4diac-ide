@@ -105,6 +105,13 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	private EClass connectionToValueMapEClass = null;
 
 	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	private EClass runtimeMapEClass = null;
+
+	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
 	 * {@link org.eclipse.emf.ecore.EPackage.Registry EPackage.Registry} by the
 	 * package package URI value.
@@ -383,7 +390,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 * @generated
 	 */
 	@Override
-	public EReference getFBNetworkRuntime_FbRuntimes() {
+	public EReference getFBNetworkRuntime_TransferData() {
 		return (EReference) fbNetworkRuntimeEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -393,7 +400,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 * @generated
 	 */
 	@Override
-	public EReference getFBNetworkRuntime_TransferData() {
+	public EReference getFBNetworkRuntime_TypeRuntimes() {
 		return (EReference) fbNetworkRuntimeEClass.getEStructuralFeatures().get(2);
 	}
 
@@ -463,6 +470,36 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 	 * @generated
 	 */
 	@Override
+	public EClass getRuntimeMap() {
+		return runtimeMapEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public EReference getRuntimeMap_Key() {
+		return (EReference) runtimeMapEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
+	public EReference getRuntimeMap_Value() {
+		return (EReference) runtimeMapEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 */
+	@Override
 	public OperationalSemanticsFactory getOperationalSemanticsFactory() {
 		return (OperationalSemanticsFactory) getEFactoryInstance();
 	}
@@ -513,8 +550,8 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 
 		fbNetworkRuntimeEClass = createEClass(FB_NETWORK_RUNTIME);
 		createEReference(fbNetworkRuntimeEClass, FB_NETWORK_RUNTIME__FBNETWORK);
-		createEReference(fbNetworkRuntimeEClass, FB_NETWORK_RUNTIME__FB_RUNTIMES);
 		createEReference(fbNetworkRuntimeEClass, FB_NETWORK_RUNTIME__TRANSFER_DATA);
+		createEReference(fbNetworkRuntimeEClass, FB_NETWORK_RUNTIME__TYPE_RUNTIMES);
 
 		fbTransactionEClass = createEClass(FB_TRANSACTION);
 		createEReference(fbTransactionEClass, FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES);
@@ -523,6 +560,10 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		connectionToValueMapEClass = createEClass(CONNECTION_TO_VALUE_MAP);
 		createEReference(connectionToValueMapEClass, CONNECTION_TO_VALUE_MAP__KEY);
 		createEReference(connectionToValueMapEClass, CONNECTION_TO_VALUE_MAP__VALUE);
+
+		runtimeMapEClass = createEClass(RUNTIME_MAP);
+		createEReference(runtimeMapEClass, RUNTIME_MAP__KEY);
+		createEReference(runtimeMapEClass, RUNTIME_MAP__VALUE);
 	}
 
 	/**
@@ -600,8 +641,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEClass(fbRuntimeAbstractEClass, FBRuntimeAbstract.class, "FBRuntimeAbstract", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
 
-		op = addEOperation(fbRuntimeAbstractEClass, this.getEventOccurrence(), "run", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-		addEParameter(op, this.getEventManager(), "eventManager", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(fbRuntimeAbstractEClass, this.getEventOccurrence(), "run", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(fbRuntimeAbstractEClass, ecorePackage.getEObject(), "getModel", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
@@ -614,7 +654,8 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 				null, 0, 1, BasicFBTypeRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		addEOperation(basicFBTypeRuntimeEClass, ecorePackage.getEObject(), "getModel", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(basicFBTypeRuntimeEClass, theLibraryElementPackage.getBasicFBType(), "getModel", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
 
 		initEClass(simpleFBTypeRuntimeEClass, SimpleFBTypeRuntime.class, "SimpleFBTypeRuntime", !IS_ABSTRACT, //$NON-NLS-1$
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -622,7 +663,7 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 				"simpleFBType", null, 1, 1, SimpleFBTypeRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
 				IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		addEOperation(simpleFBTypeRuntimeEClass, theLibraryElementPackage.getLibraryElement(), "getModel", 1, 1, //$NON-NLS-1$
+		addEOperation(simpleFBTypeRuntimeEClass, theLibraryElementPackage.getSimpleFBType(), "getModel", 1, 1, //$NON-NLS-1$
 				IS_UNIQUE, IS_ORDERED);
 
 		initEClass(transactionEClass, Transaction.class, "Transaction", IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
@@ -636,14 +677,15 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEReference(getFBNetworkRuntime_Fbnetwork(), theLibraryElementPackage.getFBNetwork(), null, "fbnetwork", //$NON-NLS-1$
 				null, 1, 1, FBNetworkRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getFBNetworkRuntime_FbRuntimes(), this.getFBRuntimeAbstract(), null, "fbRuntimes", null, 0, -1, //$NON-NLS-1$
-				FBNetworkRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
-				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getFBNetworkRuntime_TransferData(), this.getConnectionToValueMap(), null, "transferData", null, //$NON-NLS-1$
 				0, -1, FBNetworkRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE,
 				IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getFBNetworkRuntime_TypeRuntimes(), this.getRuntimeMap(), null, "typeRuntimes", null, 0, -1, //$NON-NLS-1$
+				FBNetworkRuntime.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		addEOperation(fbNetworkRuntimeEClass, ecorePackage.getEObject(), "getModel", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+		addEOperation(fbNetworkRuntimeEClass, theLibraryElementPackage.getFBNetwork(), "getModel", 1, 1, IS_UNIQUE, //$NON-NLS-1$
+				IS_ORDERED);
 
 		initEClass(fbTransactionEClass, FBTransaction.class, "FBTransaction", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
@@ -662,6 +704,15 @@ public class OperationalSemanticsPackageImpl extends EPackageImpl implements Ope
 		initEReference(getConnectionToValueMap_Value(), theLibraryElementPackage.getValue(), null, "value", null, 0, 1, //$NON-NLS-1$
 				Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(runtimeMapEClass, Map.Entry.class, "RuntimeMap", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
+				!IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getRuntimeMap_Key(), theLibraryElementPackage.getFBNetworkElement(), null, "key", null, 0, 1, //$NON-NLS-1$
+				Map.Entry.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEReference(getRuntimeMap_Value(), this.getFBRuntimeAbstract(), null, "value", null, 0, 1, Map.Entry.class, //$NON-NLS-1$
+				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE,
+				!IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

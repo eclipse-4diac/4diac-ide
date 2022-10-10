@@ -31,31 +31,34 @@ import org.junit.jupiter.api.Test;
 @SuppressWarnings("static-method")
 class TypedValueConverterTest {
 
+	private static final String TEST_INT = "INT#17"; //$NON-NLS-1$
+	private static final String NAME = "4diac IDE"; //$NON-NLS-1$
+
 	@Test
 	void toValueTest() {
 		assertEquals(Boolean.TRUE, new TypedValueConverter(ElementaryTypes.BOOL).toValue("TRUE")); //$NON-NLS-1$
 		assertEquals(Boolean.FALSE, new TypedValueConverter(ElementaryTypes.BOOL).toValue("FALSE")); //$NON-NLS-1$
 		assertEquals(BigInteger.valueOf(17), new TypedValueConverter(ElementaryTypes.INT).toValue("17")); //$NON-NLS-1$
 		assertEquals(BigDecimal.valueOf(3.1415), new TypedValueConverter(ElementaryTypes.LREAL).toValue("3.1415")); //$NON-NLS-1$
-		assertEquals("4diac IDE", new TypedValueConverter(ElementaryTypes.STRING).toValue("'4diac IDE'")); //$NON-NLS-1$ //$NON-NLS-2$
-		assertEquals("4diac IDE", new TypedValueConverter(ElementaryTypes.WSTRING).toValue("\"4diac IDE\"")); //$NON-NLS-1$ //$NON-NLS-2$
+		assertEquals(NAME, new TypedValueConverter(ElementaryTypes.STRING).toValue("'4diac IDE'")); //$NON-NLS-1$
+		assertEquals(NAME, new TypedValueConverter(ElementaryTypes.WSTRING).toValue("\"4diac IDE\"")); //$NON-NLS-1$
 	}
 
 	@Test
 	void toValueOptionalPrefix() {
 		assertEquals(Boolean.TRUE, new TypedValueConverter(ElementaryTypes.BOOL).toValue("BOOL#TRUE")); //$NON-NLS-1$
 		assertEquals(Boolean.FALSE, new TypedValueConverter(ElementaryTypes.BOOL).toValue("BOOL#FALSE")); //$NON-NLS-1$
-		assertEquals(BigInteger.valueOf(17), new TypedValueConverter(ElementaryTypes.INT).toValue("INT#17")); //$NON-NLS-1$
+		assertEquals(BigInteger.valueOf(17), new TypedValueConverter(ElementaryTypes.INT).toValue(TEST_INT));
 		assertEquals(BigDecimal.valueOf(3.1415),
 				new TypedValueConverter(ElementaryTypes.LREAL).toValue("LREAL#3.1415")); //$NON-NLS-1$
-		assertEquals("4diac IDE", new TypedValueConverter(ElementaryTypes.STRING).toValue("STRING#'4diac IDE'")); //$NON-NLS-1$ //$NON-NLS-2$
-		assertEquals("4diac IDE", new TypedValueConverter(ElementaryTypes.WSTRING).toValue("WSTRING#\"4diac IDE\"")); //$NON-NLS-1$ //$NON-NLS-2$
+		assertEquals(NAME, new TypedValueConverter(ElementaryTypes.STRING).toValue("STRING#'4diac IDE'")); //$NON-NLS-1$
+		assertEquals(NAME, new TypedValueConverter(ElementaryTypes.WSTRING).toValue("WSTRING#\"4diac IDE\"")); //$NON-NLS-1$
 	}
 
 	@Test
 	void toValueOptionalInvalidPrefix() {
 		assertThrowsExactly(IllegalArgumentException.class,
-				() -> new TypedValueConverter(ElementaryTypes.BOOL).toValue("INT#17"), //$NON-NLS-1$
+				() -> new TypedValueConverter(ElementaryTypes.BOOL).toValue(TEST_INT),
 				Messages.VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE);
 	}
 
@@ -110,7 +113,7 @@ class TypedValueConverterTest {
 
 	@Test
 	void toValueRequiredAnyPrefix() {
-		assertEquals(BigInteger.valueOf(17), new TypedValueConverter(GenericTypes.ANY_INT).toValue("INT#17")); //$NON-NLS-1$
+		assertEquals(BigInteger.valueOf(17), new TypedValueConverter(GenericTypes.ANY_INT).toValue(TEST_INT));
 		assertEquals(Duration.ofSeconds(17), new TypedValueConverter(GenericTypes.ANY_DURATION).toValue("TIME#17s")); //$NON-NLS-1$
 		assertEquals("abc", new TypedValueConverter(GenericTypes.ANY_STRING).toValue("STRING#'abc'")); //$NON-NLS-1$ //$NON-NLS-2$
 	}

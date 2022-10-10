@@ -12,6 +12,7 @@
  *       - initial implementation and/or documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBTest;
 
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
@@ -24,13 +25,13 @@ public class StationCtrlTestAutomated extends AbstractInterpreterTest {
 		final BasicFBType fb = (BasicFBType) loadFBType("StationCtrl2", false); //$NON-NLS-1$
 
 		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
-		runTest(fb, seq, "START"); //$NON-NLS-1$
+		runFBTest(fb, seq, "START"); //$NON-NLS-1$
 
 		seq = fb.getService().getServiceSequence().get(1);
-		runTest(fb, seq, "START"); //$NON-NLS-1$
+		runFBTest(fb, seq, "START"); //$NON-NLS-1$
 
 		seq = fb.getService().getServiceSequence().get(2);
-		runTest(fb, seq, "processingPart"); //$NON-NLS-1$
+		runFBTest(fb, seq, "processingPart"); //$NON-NLS-1$
 	}
 
 

@@ -43,8 +43,8 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
-import org.eclipse.fordiac.ide.model.helpers.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
@@ -224,7 +224,7 @@ public abstract class CommonElementImporter {
 	}
 
 	protected void deleteErrorMarkers() {
-		ErrorMarkerBuilder.deleteErrorMarkers(file, ErrorMarkerBuilder.IEC61499_MARKER);
+		ErrorMarkerBuilder.deleteAllErrorMarkersFromFile(file, ErrorMarkerBuilder.IEC61499_MARKER);
 	}
 
 	protected abstract LibraryElement createRootModelElement();
@@ -610,7 +610,7 @@ public abstract class CommonElementImporter {
 	}
 
 	protected void createParameterErrorMarker(final FBNetworkElement block, final VarDeclaration parameter) {
-		final ErrorMarkerBuilder e = FordiacMarkerHelper.createErrorMarker(
+		final ErrorMarkerBuilder e = ErrorMarkerBuilder.createErrorMarkerBuilder(
 				MessageFormat.format(Messages.CommonElementImporter_ERROR_MissingPinForParameter, parameter.getName(),
 						block.getName()),
 				block, getLineNumber());
@@ -623,7 +623,7 @@ public abstract class CommonElementImporter {
 	protected void validateValue(final VarDeclaration vInput) {
 		final String validation = ValueValidator.validateValue(vInput);
 		if ((validation != null) && (!validation.trim().isEmpty())) {
-			final ErrorMarkerBuilder e = FordiacMarkerHelper.createValueErrorMarkerBuilder(validation,
+			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createValueErrorMarkerBuilder(validation,
 					vInput.getValue(), getLineNumber());
 			errorMarkerAttributes.add(e);
 		}

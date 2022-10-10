@@ -106,6 +106,26 @@
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.RecordServiceSequenceHandler"
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence">
       </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.SetServiceSequenceTypeHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setPossible">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.SetServiceSequenceTypeHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setAlways">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.SetServiceSequenceTypeHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setForbidden">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.SetServiceSequenceTypeHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setConditional">
+      </handler>
+      <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.NewServiceSequenceHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.newServiceSequence">
+      </handler>
    </extension>
    <extension
          point="org.eclipse.ui.commands">
@@ -184,6 +204,28 @@
             </visibleWhen>
        </command>
    	</menuContribution> 
+   	<menuContribution
+            locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
+    <command
+    		categoryId="org.eclipse.fordiacpopup:org.eclipse.ui.popup.any"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.expandSequence"
+            label="Expand/Collapse"
+            style="push">
+            <visibleWhen checkEnabled="false">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+        		
+            		</with>
+            </visibleWhen>
+       </command>
+   	</menuContribution> 
    <menuContribution
             locationURI="menu:org.eclipse.4diac.ide.source.menu">
        <command
@@ -221,5 +263,106 @@
             </visibleWhen>
        </command>
 	</menuContribution> 
+	<menuContribution
+       allPopups="false"
+       locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
+       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.runSequence"
+            label="Run Service Sequence"
+            style="push">
+            <visibleWhen checkEnabled="true">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+            		</with>
+            </visibleWhen>
+       </command>
+	       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence"
+            label="Record Service Sequence"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+                       		<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            				<instanceof
+                       				value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+       </command>
+	</menuContribution>
+	<menuContribution
+       allPopups="false"
+       locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
+       <menu id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.settype" label="Set Type">
+       	<command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setPossible"
+            label="Possible"
+            style="push">
+       </command>
+	       <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setAlways"
+            label="Always"
+            style="push">
+       </command>
+	  <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setForbidden"
+            label="Forbidden"
+            style="push">
+       </command>
+	   <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setConditional"
+            label="Conditional"
+            style="push">
+       </command>
+       <visibleWhen checkEnabled="true">
+					<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+            		</with>
+            </visibleWhen>
+       </menu>
+	</menuContribution>
+ <menuContribution
+       allPopups="false"
+       locationURI="popup:org.eclipse.ui.popup.any?endof=org.eclipse.gef.group.copy">
+    <command
+          commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.newServiceSequence"
+          label="New Service Sequence"
+          style="push">
+    </command>
+    <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
+                       		<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            				<instanceof
+                       				value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+ </menuContribution> 
    </extension>
 </plugin>
