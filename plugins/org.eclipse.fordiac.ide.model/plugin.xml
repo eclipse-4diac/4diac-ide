@@ -131,18 +131,4 @@
 			value="true">
 		</persistent>
 	</extension> 
-	<extension point="org.eclipse.core.contenttype.contentTypes">
-  		<file-association
-      		content-type="org.eclipse.emf.compare.content.type"
-      		file-extensions="sys,fbt,sub,adp,dtp"/>
-	</extension> 
- <extension
-       point="org.eclipse.emf.compare.rcp.ui.filters">
-    <filter
-          activeByDefault="true"
-          class="org.eclipse.fordiac.ide.model.emf.compare.IgnorePositionFilterEmfCompare"
-          label="Ignore Function Block positions">
-    </filter>
- </extension>
->
 </plugin>

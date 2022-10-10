@@ -10,7 +10,7 @@
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemmanagement.ui.emf.compare;
+package org.eclipse.fordiac.ide.emf.compare.provider;
 
 
 import org.eclipse.emf.common.notify.Adapter;
