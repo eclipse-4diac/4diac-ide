@@ -66,8 +66,8 @@ final class DataTypeAnnotations {
 	private DataTypeAnnotations() {
 	}
 
-	static boolean isAssignableFrom(final EventType type, final EventType other) {
-		return type != null && other != null && type.getName().equals(other.getName());
+	static boolean isAssignableFrom(final EventType type, final DataType other) {
+		return other instanceof EventType && type != null && type.getName().equals(other.getName());
 	}
 
 	static boolean isAssignableFrom(final DataType type, final DataType other) {

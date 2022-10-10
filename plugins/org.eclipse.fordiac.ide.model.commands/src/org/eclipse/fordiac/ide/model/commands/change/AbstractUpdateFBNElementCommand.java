@@ -68,7 +68,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	protected final CompoundCommand reconnCmds = new CompoundCommand();
 	protected final CompoundCommand resourceConnCreateCmds = new CompoundCommand();
-
 	protected Command mapCmd = null;
 	protected UnmapCommand unmapCmd = null;
 
@@ -435,7 +434,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		if (connection.getDestinationElement() == oldElement) {
 			destination = updateSelectedInterface(destination, newElement);
 		}
-
 		// check type compatibility
 		if (!LinkConstraints.typeCheck(source, destination)) {
 			// create wrong type error marker
@@ -465,8 +463,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 
 	protected void replaceConnection(final Connection oldConn, final IInterfaceElement source,
 			final IInterfaceElement dest) {
-		if (!isConnectionToBeDeleted(oldConn)) {
-			reconnCmds.add(new DeleteConnectionCommand(oldConn));
+		if (!isConnectionInList(oldConn)) {
+			reconnCmds.add(new DeleteConnectionCommand(oldConn, true));
 		}
 		if (!isConnectionToBeCreated(source, dest)) {
 			final FBNetwork fbn = oldConn.getFBNetwork();
@@ -479,7 +477,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command {
 		}
 	}
 
-	protected boolean isConnectionToBeDeleted(final Connection conn) {
+
+
+	protected boolean isConnectionInList(final Connection conn) {
 		for (final Object cmd : reconnCmds.getCommands()) {
 			if ((cmd instanceof DeleteConnectionCommand)
 					&& ((DeleteConnectionCommand) cmd).getConnection().equals(conn)) {
