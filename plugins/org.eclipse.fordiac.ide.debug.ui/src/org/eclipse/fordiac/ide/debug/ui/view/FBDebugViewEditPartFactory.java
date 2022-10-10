@@ -8,11 +8,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Alois ZOitl - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view;
 
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.FBDebugViewRootEditPart;
+import org.eclipse.fordiac.ide.debug.ui.view.editparts.InterfaceValueEditPart;
+import org.eclipse.fordiac.ide.debug.ui.view.editparts.InterfaceValueEntity;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
@@ -34,6 +36,9 @@ public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 			// we can not use the version of parent as this expects a FBTypeRootEditPart as context which we don't have
 			// here
 			return new FBTypeEditPart();
+		}
+		if (modelElement instanceof InterfaceValueEntity) {
+			return new InterfaceValueEditPart();
 		}
 		return super.getPartForElement(context, modelElement);
 	}

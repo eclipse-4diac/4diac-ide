@@ -13,18 +13,25 @@
 package org.eclipse.fordiac.ide.debug.ui.view.editparts;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ShortestPathConnectionRouter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
+import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 
 public class FBDebugViewRootEditPart extends AbstractDiagramEditPart {
+
+	private final Map<Variable<?>, InterfaceValueEntity> interfaceValues = new HashMap<>();
 
 	@Override
 	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
@@ -51,7 +58,24 @@ public class FBDebugViewRootEditPart extends AbstractDiagramEditPart {
 	protected List<?> getModelChildren() {
 		final ArrayList<Object> children = new ArrayList<>();
 		children.add(getFBType());
-		// TODO add values as children
+		children.addAll(getInterfaceValues());
 		return children;
+	}
+
+	private Collection<InterfaceValueEntity> getInterfaceValues() {
+		if (interfaceValues.isEmpty()) {
+			fillInterfaceValues();
+		}
+		return interfaceValues.values();
+	}
+
+	private void fillInterfaceValues() {
+		getModel().getInstance().getMembers().entrySet().forEach(entry -> {
+			final IInterfaceElement interfaceElement = getFBType().getInterfaceList()
+					.getInterfaceElement(entry.getKey());
+			if (interfaceElement != null) {
+				interfaceValues.put(entry.getValue(), new InterfaceValueEntity(interfaceElement, entry.getValue()));
+			}
+		});
 	}
 }
