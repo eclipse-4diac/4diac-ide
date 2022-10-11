@@ -20,10 +20,10 @@ import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
-import org.eclipse.draw2d.MarginBorder;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceEditPart;
+import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.gef.GraphicalEditPart;
@@ -84,18 +84,14 @@ public class InterfaceValueEditPart extends AbstractGraphicalEditPart {
 		l.setOpaque(true);
 		l.setBackgroundColor(org.eclipse.draw2d.ColorConstants.yellow);
 		l.setPreferredSize(150, 20);
-		l.setBorder(new MarginBorder(3, 5, 3, 5));
-
-		if (isInput()) {
-			final LineBorder lb = new LineBorder() {
-				@Override
-				public Insets getInsets(final IFigure figure) {
-					return new Insets(3, 5, 3, 5);
-				}
-			};
-			l.setBorder(lb);
-		}
-		l.setText("--"); //$NON-NLS-1$
+		final LineBorder lb = new LineBorder() {
+			@Override
+			public Insets getInsets(final IFigure figure) {
+				return new Insets(1, 2, 1, 2);
+			}
+		};
+		l.setBorder(lb);
+		l.setText(getModel().getVariable().getValue().toString());
 		return l;
 	}
 
@@ -115,7 +111,13 @@ public class InterfaceValueEditPart extends AbstractGraphicalEditPart {
 		// currently we don't have any edit policy
 	}
 
-	protected void refreshPosition() {
+	public void setValue(final Value value) {
+		if (isActive() && getFigure() != null) {
+			getFigure().setText(value.toString());
+		}
+	}
+
+	private void refreshPosition() {
 		if (null != referencedInterface) {
 			final Rectangle bounds = referencedInterface.getFigure().getBounds();
 

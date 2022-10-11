@@ -12,12 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view;
 
+import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.FBDebugViewRootEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.InterfaceValueEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.InterfaceValueEntity;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
-import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.gef.EditPart;
 
@@ -29,7 +29,7 @@ public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-		if (modelElement instanceof FBEvaluator<?>) {
+		if (modelElement instanceof EvaluatorProcess) {
 			return new FBDebugViewRootEditPart();
 		}
 		if (modelElement instanceof FBType) {
