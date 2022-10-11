@@ -42,7 +42,11 @@ import org.eclipse.swt.widgets.Display;
 public class FBDebugViewRootEditPart extends AbstractDiagramEditPart
 implements EvaluatorMonitor, IDebugEventSetListener {
 
+	private static final long MIN_UPDATE_INTERVAL = 100;  // the minimal update interval between two full refresh of
+	// the shown values
+
 	private final Map<String, InterfaceValueEntity> interfaceValues = new HashMap<>();
+	private long lastUpdate;
 
 	@Override
 	protected ConnectionRouter createConnectionRouter(final IFigure figure) {
@@ -65,6 +69,7 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 		super.activate();
 		getModel().getThreadGroup().addMonitor(this);
 		DebugPlugin.getDefault().addDebugEventListener(this);
+		lastUpdate = System.currentTimeMillis();
 	}
 
 	@Override
@@ -137,11 +142,20 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 
 	private void updateValues(final Collection<? extends Variable<?>> variables) {
 		final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
-		Display.getDefault().asyncExec(() -> {
-			variables.forEach(variable -> {
-				updateVariable(editPartRegistry, variable.getName(), variable.getValue());
-			});
-		});
+		if (shouldUpdate()) {
+			Display.getDefault().asyncExec(() -> variables
+					.forEach(variable -> updateVariable(editPartRegistry, variable.getName(), variable.getValue())));
+		}
+	}
+
+	private boolean shouldUpdate() {
+		final long currentTime = System.currentTimeMillis();
+		final long delta = currentTime - lastUpdate;
+		if (delta > MIN_UPDATE_INTERVAL) {
+			lastUpdate = currentTime;
+			return true;
+		}
+		return false;
 	}
 
 	private void updateVariable(final Map<Object, Object> editPartRegistry, final String variableName,
