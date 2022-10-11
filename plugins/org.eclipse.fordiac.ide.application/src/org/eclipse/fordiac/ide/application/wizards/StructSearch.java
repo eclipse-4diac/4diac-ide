@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -33,7 +34,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 
@@ -132,16 +132,14 @@ public class StructSearch {
 
 	private void searchTypeLibrary(final AutomationSystem sys) {
 		final TypeLibrary lib = sys.getTypeLibrary();
-		for (final TypeEntry entry : lib.getFbTypes().values()) {
-			matchStruct(entry.getType());
+		for (final CompositeFBType entry : lib.getCompositeFBTypes()) {
+			if (entry.getFBNetwork() != null) {
+				searchFBNetwork(entry.getFBNetwork());
+			}
 		}
 		for (final SubAppTypeEntry entry : lib.getSubAppTypes().values()) {
-			matchStruct(entry.getType());
-			for (final FBNetworkElement fbNetworkElement : entry.getType().getFBNetwork().getNetworkElements()) {
-				if (fbNetworkElement.getFbNetwork() != null) {
-					searchFBNetwork(fbNetworkElement.getFbNetwork());
-				}
-				matchStruct(fbNetworkElement);
+			if (entry.getTypeEditable().getFBNetwork() != null) {
+				searchFBNetwork(entry.getTypeEditable().getFBNetwork());
 			}
 		}
 	}
