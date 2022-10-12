@@ -114,6 +114,7 @@ public class InterfaceValueEditPart extends AbstractGraphicalEditPart {
 	public void setValue(final Value value) {
 		if (isActive() && getFigure() != null) {
 			getFigure().setText(value.toString());
+			refreshVisuals();
 		}
 	}
 
@@ -134,7 +135,7 @@ public class InterfaceValueEditPart extends AbstractGraphicalEditPart {
 		int width = 50;
 		if (font != null) {
 			width = FigureUtilities.getTextWidth(label, getFigure().getFont());
-			width = Math.max(width, getFigure().getBounds().width);
+			width = Math.max(width, 50);
 		}
 		return width;
 	}

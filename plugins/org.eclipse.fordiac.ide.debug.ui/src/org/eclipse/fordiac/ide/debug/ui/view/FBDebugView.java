@@ -17,14 +17,19 @@ import org.eclipse.debug.ui.contexts.DebugContextEvent;
 import org.eclipse.debug.ui.contexts.IDebugContextListener;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.FigureCanvas;
+import org.eclipse.draw2d.FreeformLayeredPane;
 import org.eclipse.draw2d.FreeformViewport;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.RangeModel;
 import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.geometry.Translatable;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugElement;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
+import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
 import org.eclipse.gef.EditPart;
@@ -51,6 +56,43 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 
 public class FBDebugView extends ViewPart implements IDebugContextListener {
+
+	public static final class ZeroOffestFreeformCanvas extends AbstractFreeformFigure {
+		private Point contentOffset;
+
+		@Override
+		protected Rectangle calculateFreeformExtent() {
+			final Rectangle newExtents = getContents().getFreeformExtent().getCopy();
+			contentOffset = newExtents.getTopLeft();
+			newExtents.x = 0;
+			newExtents.y = 0;
+			return newExtents;
+		}
+
+		@Override
+		protected void setChildBounds(final Rectangle childBounds) {
+			childBounds.x = contentOffset.x;
+			childBounds.y = contentOffset.y;
+			super.setChildBounds(childBounds);
+		}
+
+		@Override
+		protected void paintChildren(final Graphics graphics) {
+			graphics.translate(-contentOffset.x, -contentOffset.y);
+			super.paintChildren(graphics);
+		}
+
+		@Override
+		public void translateFromParent(final Translatable t) {
+			t.performTranslate(contentOffset.x, contentOffset.y);
+		}
+
+		@Override
+		public void translateToParent(final Translatable t) {
+			t.performTranslate(-contentOffset.x, -contentOffset.y);
+		}
+	}
+
 
 	private GraphicalViewer viewer;
 	private ActionRegistry actionRegistry;
@@ -99,13 +141,19 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 
 			@Override
 			protected IFigure createFigure() {
-				final IFigure rootFigure = super.createFigure();
+				final FreeformViewport viewPort = (FreeformViewport) super.createFigure();
 				final GridLayer grid = (GridLayer) getLayer(GRID_LAYER);
 				if (grid != null) {
 					// it does not make sense to have a grid in the interface layer so hide it
 					grid.setVisible(false);
 				}
-				return rootFigure;
+
+				final FreeformLayeredPane drawingArea = (FreeformLayeredPane) viewPort.getContents();
+
+				final AbstractFreeformFigure editorBackground = new ZeroOffestFreeformCanvas();
+				viewPort.setContents(editorBackground);
+				editorBackground.setContents(drawingArea);
+				return viewPort;
 			}
 
 			@Override
