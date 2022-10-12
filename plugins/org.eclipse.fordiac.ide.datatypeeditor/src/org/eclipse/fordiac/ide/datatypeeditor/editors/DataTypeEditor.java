@@ -34,6 +34,8 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.wizards.StructUpdateDialog;
 import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
@@ -41,10 +43,13 @@ import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
@@ -175,7 +180,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 			addListenerToDataTypeObj();
 			commandStack.markSaveLocation();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
-			updateStructs();
+			updateMultiplexer();
 			break;
 		case SAVE_AS_BUTTON_INDEX:
 			doSaveAs();
@@ -197,12 +202,27 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		}
 	}
 
-	private void updateStructs() {
-		if (structSaveDialog.getUpdatedTypes() != null) {
-			for (final StructManipulator mux : structSaveDialog.getUpdatedTypes()) {
+	private void updateMultiplexer() {
+		if (!structSaveDialog.getCollectedMultiplexer().isEmpty()) {
+			for (final StructManipulator mux : structSaveDialog.getCollectedMultiplexer()) {
 				final StructuredType structuredType = (StructuredType) dataTypeEntry.getTypeEditable();
-				final ChangeStructCommand cmd = new ChangeStructCommand(mux, structuredType);
-				cmd.execute();
+				final EObject rootContainer = EcoreUtil.getRootContainer(EcoreUtil.getRootContainer(mux));
+
+				if (rootContainer instanceof AutomationSystem) {
+					((AutomationSystem) rootContainer).getCommandStack()
+					.execute(new ChangeStructCommand(mux, structuredType));
+
+				} else if (rootContainer instanceof SubAppType) {
+					final IFile file = ((SubAppType) rootContainer).getTypeEntry().getFile();
+					final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+							.findEditor(new FileEditorInput(file));
+					if (editor != null) {
+						HandlerHelper.getCommandStack(editor).execute(new ChangeStructCommand(mux, structuredType));
+					} else {
+						final ChangeStructCommand cmd = new ChangeStructCommand(mux, structuredType);
+						cmd.execute();
+					}
+				}
 			}
 		}
 	}

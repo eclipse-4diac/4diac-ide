@@ -122,7 +122,7 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 		final CommandStack commandStack = editor.getAdapter(CommandStack.class);
 		if (structUpdateDialog.open() == DEFAULT_BUTTON_INDEX) {
 			final TransferInstanceCommentsCommand cmd = new TransferInstanceCommentsCommand(
-					struct.getModel(), structUpdateDialog.getUpdatedTypes());
+					struct.getModel(), structUpdateDialog.getCollectedMultiplexer());
 			commandStack.execute(cmd);
 		}
 		return null;

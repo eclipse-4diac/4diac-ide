@@ -56,7 +56,7 @@ public class StructUpdateDialog extends MessageDialog {
 	private static final int CHECK_BOX_COL_WIDTH = 30;
 	private boolean selectAll = true;
 
-	private Set<StructManipulator> updatedTypes;
+	private final Set<StructManipulator> collectedMulitplexer;
 	private TableViewer viewer;
 
 	public StructUpdateDialog(final Shell parentShell, final String dialogTitle, final Image dialogTitleImage,
@@ -65,10 +65,11 @@ public class StructUpdateDialog extends MessageDialog {
 		super(parentShell, dialogTitle, dialogTitleImage, dialogMessage, dialogImageType, dialogButtonLabels,
 				defaultIndex);
 		this.dataTypeEntry = dataTypeEntry;
+		collectedMulitplexer = new HashSet<>();
 	}
 
-	public Set<StructManipulator> getUpdatedTypes() {
-		return updatedTypes;
+	public Set<StructManipulator> getCollectedMultiplexer() {
+		return collectedMulitplexer;
 	}
 
 	@Override
@@ -114,7 +115,7 @@ public class StructUpdateDialog extends MessageDialog {
 	}
 
 	private void configureTableViewer(final TableViewer viewer) {
-		updatedTypes = new HashSet<>();
+		collectedMulitplexer.clear();
 		viewer.setContentProvider(new ArrayContentProvider());
 		final Table table = viewer.getTable();
 
@@ -127,9 +128,9 @@ public class StructUpdateDialog extends MessageDialog {
 				final TableItem tableItem = (TableItem) event.item;
 				if (tableItem.getData() instanceof StructManipulator) {
 					if (tableItem.getChecked()) {
-						updatedTypes.add((StructManipulator) tableItem.getData());
+						collectedMulitplexer.add((StructManipulator) tableItem.getData());
 					} else {
-						updatedTypes.remove(tableItem.getData());
+						collectedMulitplexer.remove(tableItem.getData());
 					}
 				}
 
@@ -213,8 +214,15 @@ public class StructUpdateDialog extends MessageDialog {
 	}
 
 	void changeSelectionState(final Table table, final boolean state) {
-		for (int i = 0; i < table.getItemCount(); i++) {
-			table.getItems()[i].setChecked(state);
+		for (final TableItem tableItem : table.getItems()) {
+			tableItem.setChecked(state);
+			if (tableItem.getData() instanceof StructManipulator) {
+				if (state) {
+					collectedMulitplexer.add((StructManipulator) tableItem.getData());
+				} else {
+					collectedMulitplexer.remove(tableItem.getData());
+				}
+			}
 		}
 	}
 
