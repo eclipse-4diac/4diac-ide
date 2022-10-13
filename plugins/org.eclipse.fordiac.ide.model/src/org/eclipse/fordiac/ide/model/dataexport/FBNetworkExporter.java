@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceTypeFB;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.SubAppTypeEntryImpl;
 
 class FBNetworkExporter extends CommonElementExporter {
@@ -95,6 +96,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 		// Saving only hidden pins
 		addPinVisibilityAttribute(fbnElement);
+		addPinVarConfigurationAttribute(fbnElement);
 	}
 
 	private void addGroupAttributes(final Group group) throws XMLStreamException {
@@ -117,6 +119,7 @@ class FBNetworkExporter extends CommonElementExporter {
 			addErrorMarkerParamsConfig(fbnElement.getInterface().getErrorMarker());
 			addPinComments(fbnElement.getInterface().getAllInterfaceElements());
 		}
+		
 
 		if (fbnElement instanceof SubApp) {
 			addSubappHeightAndWidthAttributes((SubApp) fbnElement);
@@ -127,6 +130,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 	}
 
+	
 	private void addSubappHeightAndWidthAttributes(final SubApp subApp) throws XMLStreamException {
 		if (subApp.getWidth() != 0) {
 			addAttributeElement(LibraryElementTags.WIDTH_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL.getName(),
@@ -275,6 +279,19 @@ class FBNetworkExporter extends CommonElementExporter {
 					addAttributeElement(visibilityAttribute.getName(), visibilityAttribute.getType().getName(),
 							ie.getName() + ":" + visibilityAttribute.getValue(), //$NON-NLS-1$
 							visibilityAttribute.getComment());
+				}
+			}
+		}
+	}
+	
+	private void addPinVarConfigurationAttribute(final FBNetworkElement fbnElement) throws XMLStreamException {
+		for (final VarDeclaration inVar :  fbnElement.getInterface().getInputVars()) {
+			if (inVar.isVarConfig()) {
+				Attribute varconfigurationAttribute = inVar.getAttribute(LibraryElementTags.VAR_CONFIG);
+				if (varconfigurationAttribute != null) {
+					addAttributeElement(varconfigurationAttribute.getName(), varconfigurationAttribute.getType().getName(),
+							inVar.getName() + ":" + varconfigurationAttribute.getValue(), //$NON-NLS-1$
+							varconfigurationAttribute.getComment());
 				}
 			}
 		}

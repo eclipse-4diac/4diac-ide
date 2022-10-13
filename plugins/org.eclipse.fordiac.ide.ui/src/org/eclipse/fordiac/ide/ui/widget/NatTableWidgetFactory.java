@@ -106,6 +106,9 @@ public final class NatTableWidgetFactory {
 	public static final String VISIBILITY_CELL = "VISIBILITY_CELL"; //$NON-NLS-1$
 	public static final String LEFT_ALIGNMENT = "LEFT_ALIGNMENT"; //$NON-NLS-1$
 
+	public static final String CHECKBOX_CELL = "CHECKBOX_CELL"; //$NON-NLS-1$
+	public static final String VAR_GONFIGURATION_CELL = "VAR_GONFIGURATION_CELL"; //$NON-NLS-1$
+
 	private static final char[] ACTIVATION_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
 			'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2',
@@ -272,6 +275,14 @@ public final class NatTableWidgetFactory {
 			dataLayer.setColumnWidthPercentageByPosition(2, 15);
 			dataLayer.setColumnWidthPercentageByPosition(3, 35);
 			dataLayer.setColumnWidthPercentageByPosition(4, 10);
+			break;
+		case 6:
+			dataLayer.setColumnWidthPercentageByPosition(0, 20);
+			dataLayer.setColumnWidthPercentageByPosition(1, 20);
+			dataLayer.setColumnWidthPercentageByPosition(2, 15);
+			dataLayer.setColumnWidthPercentageByPosition(3, 15);
+			dataLayer.setColumnWidthPercentageByPosition(4, 15);
+			dataLayer.setColumnWidthPercentageByPosition(5, 15);
 			break;
 
 		default:

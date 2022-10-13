@@ -186,7 +186,6 @@ class FbtExporter extends AbstractBlockTypeExporter {
 		addNameAttribute(state.getName());
 		addCommentAttribute(state);
 		addXYAttributes(state);
-
 		addECActions(state.getECAction());
 
 		addEndElement();

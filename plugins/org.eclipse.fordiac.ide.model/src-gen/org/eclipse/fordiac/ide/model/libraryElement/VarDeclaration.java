@@ -102,6 +102,22 @@ public interface VarDeclaration extends IInterfaceElement {
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
 	 * @generated
 	 */
+	boolean isVarConfig();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated
+	 */
 	boolean isArray();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model configDataType="org.eclipse.emf.ecore.xml.type.Boolean"
+	 * @generated
+	 */
+	void setVarConfig(boolean config);
 
 } // VarDeclaration

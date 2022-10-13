@@ -13,8 +13,8 @@
  *     - initial API and implementation and/or initial documentation
  *   Monika Wenger - extracted the model helper methods into this annotations class
  *   Monika Wenger - introduced IEC 61499 attribute support into the model
- *   Alois Zoitl - reworked model helper functions for better mapping and sub-app
- *                 support
+ *   Alois Zoitl - reworked model helper functions for better mapping and sub-app support
+ *   Hesam Rezaee - add variable configuration for global constants
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
@@ -63,6 +63,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.impl.VarDeclarationImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
@@ -446,6 +447,19 @@ public final class Annotations {
 	public static boolean isArray(final VarDeclaration vd) {
 		return vd.getArraySize() > 0;
 	}
+	
+	public static void setVarConfig(VarDeclarationImpl varDeclarationImpl, boolean config) {
+		setVarConfig(varDeclarationImpl, Boolean.toString(config));	
+	}
+	
+	private static void setVarConfig(VarDeclarationImpl varDeclarationImpl, final String config) {
+		varDeclarationImpl.setAttribute(LibraryElementTags.VAR_CONFIG, FordiacKeywords.STRING, config, "");  //$NON-NLS-1$
+	}
+	
+	public static boolean isVarConfig(final VarDeclaration vd) {	
+		final String configurationAttribute = vd.getAttributeValue(LibraryElementTags.VAR_CONFIG);
+  		return "true".equals(configurationAttribute);
+	}
 
 	// *** ConfigurableObject ***//
 	public static void setAttribute(final ConfigurableObject object, final String attributeName, final String type,
@@ -605,5 +619,7 @@ public final class Annotations {
 	private Annotations() {
 		throw new UnsupportedOperationException("The utility class Annotations should not be instatiated"); //$NON-NLS-1$
 	}
+
+
 
 }

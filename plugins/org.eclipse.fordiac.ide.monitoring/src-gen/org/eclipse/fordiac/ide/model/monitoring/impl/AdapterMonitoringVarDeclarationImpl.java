@@ -893,4 +893,15 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 		return new MonitoringAdapterInterfaceEditPart();
 	}
 
+	@Override
+	public boolean isVarConfig() {
+		return org.eclipse.fordiac.ide.model.Annotations.isVarConfig(this);
+	}
+
+	@Override
+	public void setVarConfig(boolean config) {
+		// TODO Auto-generated method stub
+		
+	}
+
 } // AdapterMonitoringVarDeclarationImpl

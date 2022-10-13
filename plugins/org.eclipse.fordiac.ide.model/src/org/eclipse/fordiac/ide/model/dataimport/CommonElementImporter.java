@@ -16,6 +16,7 @@
  *              - Changed XML parsing to Staxx cursor interface for improved
  *  			  parsing performance
  *              - extension for connection error markers
+*  Hesam Rezaee - add import option for Variable configuration and visibility
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -77,11 +78,13 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.gef.commands.Command;
 
 /** The Class CommonElementImporter. */
 public abstract class CommonElementImporter {
 
-	private static final boolean IS_VISIBLE = false;
+	private static final boolean IS_VISIBLE = false;	
+	private static final boolean IS_VAR_CONFIGED = true;
 
 	private static class ImporterStreams implements AutoCloseable {
 		private final InputStream inputStream;
@@ -112,8 +115,10 @@ public abstract class CommonElementImporter {
 		if (hasType) {
 			// we have a typed FB
 			retVal = interfaceList.getVariable(varName);
-			if ((null != retVal) && (retVal.isIsInput() != input)) {
-				retVal = null;
+
+				if ((null != retVal) && (retVal.isIsInput() != input)) {
+					retVal = null;
+
 			}
 		} else {
 			// if we couldn't load the type create the interface entry
@@ -496,6 +501,30 @@ public abstract class CommonElementImporter {
 		final IInterfaceElement ie = block.getInterfaceElement(temp[0]);
 		ie.setVisible(IS_VISIBLE); // I know it's false since we save only hidden pins
 	}
+	
+	private boolean isPinVarConfigAttribute() {
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		final String pinNameAndVarConfig = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		return name.equals(LibraryElementTags.VAR_CONFIG) && pinNameAndVarConfig != null
+				&& pinNameAndVarConfig.contains(":"); //$NON-NLS-1$
+	}
+	
+	protected void parsePinVarConfigAttribute(final FBNetworkElement block) {
+		final String pinNameAndVarConfig = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		final String[] temp = pinNameAndVarConfig.split(":"); //$NON-NLS-1$
+		
+		for(final VarDeclaration inVar : block.getInterface().getInputVars()) {
+			if(inVar.getName().equals(temp[0])){
+				inVar.setVarConfig(IS_VAR_CONFIGED);
+			}
+			else {
+				inVar.setVarConfig(!IS_VAR_CONFIGED);
+			}
+
+		}
+
+//		inVar.setVarConfig(IS_VISIBLE); // I know it's false since we save only hidden pin
+	}
 
 	protected String getAttributeValue(final String attributeName) {
 		return getReader().getAttributeValue("", attributeName); //$NON-NLS-1$
@@ -594,6 +623,9 @@ public abstract class CommonElementImporter {
 		}
 		if (isPinVisibilityAttribute()) {
 			parsePinVisibilityAttribute(block);
+		}
+		if (isPinVarConfigAttribute()) {
+			parsePinVarConfigAttribute(block);
 		}
 		proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
 	}
