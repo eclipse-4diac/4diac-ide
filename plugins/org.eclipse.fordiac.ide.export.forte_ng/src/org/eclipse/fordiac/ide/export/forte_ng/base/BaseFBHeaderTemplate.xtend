@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
+ *               2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  * 
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians - Adjustments for changed FORTE implementation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.base
 
@@ -51,6 +53,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		  «generateFBInterfaceSpecDeclaration»
 		  «IF !type.internalFbs.empty»
 		  	static const size_t csmAmountOfInternalFBs = «type.internalFbs.size»;
+		  	TFunctionBlockPtr *mInternalFBs = createInternalFBs(csmAmountOfInternalFBs, scmInternalFBDefinitions, getResourcePtr());
 		  	«generateInternalFbDefinition»
 		  	
 		  «ENDIF»
@@ -72,24 +75,18 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		  «type.generateBasicFBDataArray»
 		
 		public:
-		  «IF type.internalFbs.empty»
-		  	«FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-		  	    «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData) {
-		  «ELSE»
-		  	«FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-		  	    «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData, scmInternalFBs, csmAmountOfInternalFBs) {
-		  «ENDIF»
+		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
+		    «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData) {
 		  };
 		
 		  «IF !type.internalFbs.empty»
-		  	virtual ~«FBClassName»() {
-		  	  for(size_t i = 0; i < csmAmountOfInternalFBs; ++i){
-		  	    delete mInternalFBs[i];
-		  	  }
-		  	  delete[] mInternalFBs;
+		  	EMGMResponse changeFBExecutionState(EMGMCommandType paCommand) override;
+		  	
+		  	~«FBClassName»() override {
+		  	  deleteInternalFBs(csmAmountOfInternalFBs, mInternalFBs);
 		  	};
 		  «ELSE»
-		  	virtual ~«FBClassName»() = default;
+		  	~«FBClassName»() override = default;
 		  «ENDIF»
 		
 		  «type.interfaceList.inputVars.generateAccessors("getDI")»

@@ -269,10 +269,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 						
 						public:
 						  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-						      CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr, m_anFBConnData, m_anFBVarsData) {
+						    CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr, m_anFBConnData, m_anFBVarsData) {
 						  };
 						
-						  virtual ~«EXPORTED_FUNCTIONBLOCK_NAME»() = default;
+						  ~«EXPORTED_FUNCTIONBLOCK_NAME»() override = default;
 						
 						
 						};
