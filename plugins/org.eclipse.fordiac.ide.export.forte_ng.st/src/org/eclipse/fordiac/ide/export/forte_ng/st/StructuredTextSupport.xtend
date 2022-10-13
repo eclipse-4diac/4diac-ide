@@ -11,6 +11,7 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Martin Melik Merkumians - updated exporter to correctly handle CHAR/WCHAR
+ *     - update to preserve values of non specified FB call parameters
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
@@ -238,7 +239,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected Iterable<CharSequence> generateCallArguments(STFeatureExpression expr) {
 		try {
-			expr.mappedInputArguments.entrySet.map[key.generateInputCallArgument(value)] +
+			expr.mappedInputArguments.entrySet.map[key.generateInputCallArgument(value, expr)] +
 				expr.mappedInOutArguments.entrySet.map[key.generateInOutCallArgument(value)] +
 				expr.mappedOutputArguments.entrySet.map[key.generateOutputCallArgument(value)]
 		} catch (IndexOutOfBoundsException e) {
@@ -269,9 +270,20 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			emptyList
 		}
 	}
+	
+	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument,
+		STFeatureExpression expr) {
+		switch (expr.feature) {
+			FB case argument === null: '''«expr.feature.generateFeatureName».«parameter.generateFeatureName»'''
+			Event case argument ===
+				null: '''«(expr.eContainer as STMemberAccessExpression).receiver.generateExpression».«parameter.generateFeatureName»'''
+			default:
+				parameter.generateInputCallArgument(argument)
+		}
+	}
 
 	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument) {
-		if(argument === null) parameter.generateVariableDefaultValue else argument.generateExpression
+			if(argument === null) parameter.generateVariableDefaultValue else argument.generateExpression
 	}
 
 	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STExpression argument) {
