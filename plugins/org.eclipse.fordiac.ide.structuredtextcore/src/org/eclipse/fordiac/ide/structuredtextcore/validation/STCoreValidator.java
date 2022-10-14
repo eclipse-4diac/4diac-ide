@@ -422,8 +422,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		final DataType accessType = (DataType) memberAccessExpr.getResultType();
 		final DataType receiverType = (DataType) receiverExpression.getResultType();
 		// Valid target receiver is a variable or a function name usable as variable
-		if (memberAccessExpr.getReceiver() instanceof STFeatureExpression
-				&& !((STFeatureExpression) memberAccessExpr.getReceiver()).isCall()) {
+		if (memberAccessExpr.getReceiver() instanceof STMemberAccessExpression
+				|| (memberAccessExpr.getReceiver() instanceof STFeatureExpression
+						&& !((STFeatureExpression) memberAccessExpr.getReceiver()).isCall())) {
 			checkMultibitPartialExpression(expression, accessType, receiverType);
 
 		} else {
