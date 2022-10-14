@@ -46,7 +46,8 @@ class StructVariable extends AbstractVariable<StructValue> implements Iterable<V
 
 	override setValue(Value value) {
 		if (value instanceof StructValue) {
-			if (value.type != type) {
+			// type object references are not unique, whereas typeEntries seem to be
+			if (value.type.typeEntry != (type as StructuredType).typeEntry) {
 				throw new IllegalArgumentException('''Cannot assign structured value with different type «value.type.name» to structured value of type «type.name»''')
 			}
 			value.members.forEach[name, variable|members.get(name).value = variable.value]
