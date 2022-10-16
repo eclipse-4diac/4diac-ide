@@ -13,6 +13,8 @@
 package org.eclipse.fordiac.ide.debug.ui.view;
 
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
+import org.eclipse.fordiac.ide.debug.ui.view.editparts.EventValueEditPart;
+import org.eclipse.fordiac.ide.debug.ui.view.editparts.EventValueEntity;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.FBDebugViewRootEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.InterfaceValueEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.InterfaceValueEntity;
@@ -39,6 +41,9 @@ public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 		}
 		if (modelElement instanceof InterfaceValueEntity) {
 			return new InterfaceValueEditPart();
+		}
+		if(modelElement instanceof EventValueEntity) {
+			return new EventValueEditPart();
 		}
 		return super.getPartForElement(context, modelElement);
 	}

@@ -27,12 +27,14 @@ import org.eclipse.draw2d.ShortestPathConnectionRouter;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugThread;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
+import org.eclipse.fordiac.ide.debug.fb.LaunchEventQueue;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPolicy;
@@ -46,6 +48,7 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 	// the shown values
 
 	private final Map<String, InterfaceValueEntity> interfaceValues = new HashMap<>();
+	private final Map<Event, EventValueEntity> eventValues = new HashMap<>();
 	private long lastUpdate;
 
 	@Override
@@ -91,8 +94,28 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 	protected List<?> getModelChildren() {
 		final ArrayList<Object> children = new ArrayList<>();
 		children.add(getFBType());
+		children.addAll(getEventValues());
 		children.addAll(getInterfaceValues());
 		return children;
+	}
+
+	private Collection<EventValueEntity> getEventValues() {
+		if (eventValues.isEmpty()) {
+			fillEventValues();
+		}
+		return eventValues.values();
+	}
+
+	private void fillEventValues() {
+		if (getFBEvaluator().getQueue() instanceof LaunchEventQueue) {
+			final LaunchEventQueue queue = (LaunchEventQueue) getFBEvaluator().getQueue();
+			getFBType().getInterfaceList().getEventInputs().forEach(ev -> addEventEntry(queue, ev));
+			getFBType().getInterfaceList().getEventOutputs().forEach(ev -> addEventEntry(queue, ev));
+		}
+	}
+
+	private EventValueEntity addEventEntry(final LaunchEventQueue queue, final Event ev) {
+		return eventValues.put(ev, new EventValueEntity(ev, queue.getCount(ev)));
 	}
 
 	private Collection<InterfaceValueEntity> getInterfaceValues() {
@@ -143,8 +166,11 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 	private void updateValues(final Collection<? extends Variable<?>> variables) {
 		final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
 		if (shouldUpdate()) {
-			Display.getDefault().asyncExec(() -> variables
-					.forEach(variable -> updateVariable(editPartRegistry, variable.getName(), variable.getValue())));
+			Display.getDefault().asyncExec(() -> {
+				variables
+				.forEach(variable -> updateVariable(editPartRegistry, variable.getName(), variable.getValue()));
+				updateAllEvents(editPartRegistry);
+			});
 		}
 	}
 
@@ -196,8 +222,20 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 
 	private void updateAllValues() {
 		final Map<Object, Object> editPartRegistry = getViewer().getEditPartRegistry();
-		Display.getDefault().asyncExec(() -> interfaceValues.entrySet().forEach(
-				entry -> updateVariable(editPartRegistry, entry.getKey(), entry.getValue().getVariable().getValue())));
+		Display.getDefault().asyncExec(() -> {
+			interfaceValues.entrySet().forEach(entry -> updateVariable(editPartRegistry, entry.getKey(),
+					entry.getValue().getVariable().getValue()));
+			updateAllEvents(editPartRegistry);
+		});
+	}
+
+	private void updateAllEvents(final Map<Object, Object> editPartRegistry) {
+		eventValues.entrySet().forEach(entry -> {
+			final Object ep = editPartRegistry.get(entry.getValue());
+			if (ep instanceof EventValueEditPart) {
+				((EventValueEditPart) ep).update();
+			}
+		});
 	}
 
 	private boolean isCorrectSource(final Object source) {
