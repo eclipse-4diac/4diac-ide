@@ -256,6 +256,10 @@ class FBNetworkImporter extends CommonElementImporter {
 			handleDataTypeMissmatch(builder, connection);
 		}
 
+		if (builder.isDuplicate()) {
+			handleDuplicateConnection(builder, connection);
+		}
+
 		if (builder.isMissingConnectionDestination()) {
 			handleMissingConnectionDestination(connection, builder);
 		}
@@ -287,6 +291,17 @@ class FBNetworkImporter extends CommonElementImporter {
 		parseConnectionRouting(connection);
 		parseAttributes(connection);
 		return connection;
+	}
+
+	private <T extends Connection> void handleDuplicateConnection(final ConnectionBuilder builder, final T connection) {
+		final String errorMessage = "duplicate connection " + builder.getSourcePinName() + " "
+				+ builder.getDestinationPinName();
+		final ErrorMarkerBuilder errorMarkerBuilder = ErrorMarkerBuilder.createConnectionErrorMarkerBuilder(
+				errorMessage, getFbNetwork(), builder.getSourcePinName(), builder.getDestinationPinName(),
+				getLineNumber());
+		connection.setErrorMessage(errorMessage);
+		errorMarkerBuilder.setErrorMarkerRef(connection);
+		errorMarkerAttributes.add(errorMarkerBuilder);
 	}
 
 	public <T extends Connection> void handleDataTypeMissmatch(final ConnectionBuilder builder,
