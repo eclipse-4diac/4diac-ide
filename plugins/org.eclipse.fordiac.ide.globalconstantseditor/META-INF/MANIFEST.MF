@@ -1,0 +1,37 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.eclipse.fordiac.ide.globalconstantseditor
+Bundle-ManifestVersion: 2
+Bundle-Name: org.eclipse.fordiac.ide.globalconstantseditor
+Bundle-Vendor: Eclipse 4diac
+Bundle-Version: 2.0.1.qualifier
+Bundle-SymbolicName: org.eclipse.fordiac.ide.globalconstantseditor; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.eclipse.xtext.util,
+ org.eclipse.emf.common,
+ org.antlr.runtime;bundle-version="[3.2.0,3.2.1)",
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.structuredtextcore.model,
+ org.eclipse.fordiac.ide.structuredtextcore,
+ org.eclipse.fordiac.ide.model.eval,
+ org.eclipse.fordiac.ide.structuredtextcore.ui,
+ org.eclipse.fordiac.ide.structuredtextcore.ide
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Export-Package: org.eclipse.fordiac.ide.globalconstantseditor,
+ org.eclipse.fordiac.ide.globalconstantseditor.scoping,
+ org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.util,
+ org.eclipse.fordiac.ide.globalconstantseditor.globalConstants,
+ org.eclipse.fordiac.ide.globalconstantseditor.parser.antlr.internal,
+ org.eclipse.fordiac.ide.globalconstantseditor.parser.antlr,
+ org.eclipse.fordiac.ide.globalconstantseditor.serializer,
+ org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl,
+ org.eclipse.fordiac.ide.globalconstantseditor.validation,
+ org.eclipse.fordiac.ide.globalconstantseditor.services,
+ org.eclipse.fordiac.ide.globalconstantseditor.generator,
+ org.eclipse.fordiac.ide.globalconstantseditor.formatting2,
+ org.eclipse.fordiac.ide.globalconstantseditor.parser.antlr.lexer
+Import-Package: org.apache.log4j

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension point="org.eclipse.emf.ecore.generated_package">
+		<package
+			uri = "http://www.eclipse.org/fordiac/ide/globalconstantseditor/GlobalConstants"
+			class = "org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage"
+			genModel = "model/generated/GlobalConstants.genmodel" />
+	</extension>
+</plugin>
