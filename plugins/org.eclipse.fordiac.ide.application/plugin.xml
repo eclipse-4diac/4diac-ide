@@ -1052,7 +1052,10 @@
         	<with variable="selection">
             	<count value="1" />
           		<iterate ifEmpty="false">
-        			<adapt type="org.eclipse.fordiac.ide.model.libraryElement.SubApp"/>
+          			<and>
+        				<adapt type="org.eclipse.fordiac.ide.model.libraryElement.SubApp"/>
+        				<test property="org.eclipse.fordiac.ide.application.utilities.isSubAppNestedInGroup" />
+        			</and>
     			</iterate>
      	   </with>
 		</visibleWhen>
@@ -1425,6 +1428,12 @@
                     id="org.eclipse.fordiac.ide.application.utilities.isMapableFBNetwork"
                     namespace="org.eclipse.fordiac.ide.application.utilities"
                     properties="isMapableFBNetwork"
+                    type="java.lang.Object">
+    </propertyTester>
+    <propertyTester class="org.eclipse.fordiac.ide.application.utilities.IsSubAppNestedInGroupTester"
+                    id="org.eclipse.fordiac.ide.application.utilities.isSubAppNestedInGroupTester"
+                    namespace="org.eclipse.fordiac.ide.application.utilities"
+                    properties="isSubAppNestedInGroup"
                     type="java.lang.Object">
     </propertyTester>
   </extension>
