@@ -372,6 +372,7 @@ final class STCoreUtil {
 
 	def static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
 		DataFactory.eINSTANCE.createArrayType => [
+			name = '''ARRAY [«arraySubranges.map['''«lowerLimit»..«upperLimit»'''].join(", ")»] OF «arrayBaseType.name»'''
 			baseType = arrayBaseType
 			subranges.addAll(arraySubranges)
 		]
