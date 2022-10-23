@@ -859,7 +859,7 @@ public class FBTImporter extends TypeImporter {
 			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createErrorMarkerBuilder(
 					MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", typeFbElement, fb.getName()), //$NON-NLS-1$
 					fb, getLineNumber());
-			errorMarkerAttributes.add(e);
+			errorMarkerBuilders.add(e);
 		}
 	}
 
