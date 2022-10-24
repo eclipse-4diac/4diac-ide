@@ -595,6 +595,7 @@ class FBNetworkImporter extends CommonElementImporter {
 		} else {
 			interfaceList.getOutputVars().add(variable);
 		}
+
 		return variable;
 	}
 

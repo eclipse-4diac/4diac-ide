@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -92,6 +93,8 @@ class FBNetworkExporter extends CommonElementExporter {
 		if (fbnElement instanceof Group) {
 			addGroupAttributes((Group) fbnElement);
 		}
+		// Saving only hidden pins
+		addPinVisibilityAttribute(fbnElement);
 	}
 
 	private void addGroupAttributes(final Group group) throws XMLStreamException {
@@ -260,6 +263,20 @@ class FBNetworkExporter extends CommonElementExporter {
 						ie.getName() + ":" + ie.getComment(), null); //$NON-NLS-1$
 			}
 
+		}
+	}
+
+	private void addPinVisibilityAttribute(final FBNetworkElement fbnElement) throws XMLStreamException {
+		for (final IInterfaceElement ie : fbnElement.getInterface().getAllInterfaceElements()) {
+			// If the pin is hidden, add the attribute to the .sys file
+			if (!ie.isVisible()) {
+				Attribute visibilityAttribute = ie.getAttribute(LibraryElementTags.ELEMENT_VISIBLE);
+				if (visibilityAttribute != null) {
+					addAttributeElement(visibilityAttribute.getName(), visibilityAttribute.getType().getName(),
+							ie.getName() + ":" + visibilityAttribute.getValue(), //$NON-NLS-1$
+							visibilityAttribute.getComment());
+				}
+			}
 		}
 	}
 
