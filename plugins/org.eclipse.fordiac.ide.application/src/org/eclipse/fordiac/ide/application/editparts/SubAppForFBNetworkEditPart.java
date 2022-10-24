@@ -229,7 +229,11 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 				openSubAppEditor();
 			}
 		} else if (request.getType() == RequestConstants.REQ_DIRECT_EDIT) {
-			performDirectEdit();
+			if (getModel().isUnfolded()) {
+				performDirectEdit();
+			} else {
+				super.performRequest(request);
+			}
 		} else {
 			super.performRequest(request);
 		}
