@@ -12,7 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 
 public class HidePinCommand extends Command {
@@ -27,10 +29,7 @@ public class HidePinCommand extends Command {
 
 	@Override
 	public void execute() {
-		if (canExecute()) {
-			hiddenElement.setVisible(visible);
-			System.out.println("Pin hiding command has been executed");
-		}
+		hiddenElement.setVisible(visible);
 	}
 
 	@Override
@@ -45,7 +44,7 @@ public class HidePinCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return hiddenElement != null;
+		return hiddenElement != null && (hiddenElement instanceof VarDeclaration || hiddenElement instanceof AdapterDeclaration);
 	}
 
 }

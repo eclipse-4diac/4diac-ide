@@ -394,9 +394,10 @@ public class CommentPropertySection extends AbstractSection {
 				}
 				break;
 			case VISIBLE:
-				// It's a true/false checkbox; if it's visible -> hide; if it's hidden -> show
-				// newValue atm is a string...
-				cmd = new HidePinCommand(rowObject, (Boolean) newValue);
+				if ((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
+						|| !rowObject.isIsInput() && rowObject.getOutputConnections().isEmpty()) {
+					cmd = new HidePinCommand(rowObject, (Boolean) newValue);
+				}
 				break;
 			default:
 				return;
