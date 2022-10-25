@@ -17,12 +17,11 @@ import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class EvaluatorDebugVariable extends EvaluatorDebugElement
-implements IVariable, Comparable<EvaluatorDebugVariable> {
+		implements IVariable, Comparable<EvaluatorDebugVariable> {
 	private final Variable<?> variable;
 	private EvaluatorDebugValue cachedValue;
 
@@ -103,9 +102,6 @@ implements IVariable, Comparable<EvaluatorDebugVariable> {
 
 	@Override
 	public int compareTo(final EvaluatorDebugVariable o) {
-		if (Evaluator.CONTEXT_NAME.equals(this.variable.getName())) { // sort THIS always at top
-			return Evaluator.CONTEXT_NAME.equals(o.variable.getName()) ? 0 : -1;
-		}
 		return this.variable.getName().compareTo(o.variable.getName());
 	}
 

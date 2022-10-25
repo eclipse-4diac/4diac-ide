@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
+ * 				 2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  * 
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
+ *   Martin Melik Merkumians - Adjustments for changed FORTE implementation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.base
 
@@ -52,23 +54,38 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate 
 		«generateFBInterfaceSpecDefinition»
 		
 		«IF !type.internalVars.isEmpty»
-			«generateInternalVarDefinition(type)»
+			«type.generateInternalVarDefinition»
 			
 		«ENDIF»
 		«IF !type.internalFbs.isEmpty»
-			«generateInteralFbDeclarations(type)»
+			«type.generateInteralFbDeclarations»
 			
 		«ENDIF»	
 		«IF !(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).empty»
 			«generateInitialValueAssignmentDefinition((type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars))»
 			
 		«ENDIF»
+		«IF !type.internalFbs.isEmpty»
+			«generateChangeFBExecutionState»
+			
+		«ENDIF»	
 		«generateAlgorithms»
 		
 		«generateMethods»
 		
 		«generateExecuteEvent»
 		
+	'''
+	
+	def generateChangeFBExecutionState() //
+	'''
+		EMGMResponse «FBClassName»::changeFBExecutionState(EMGMCommandType paCommand) {
+		  EMGMResponse nRetVal = CFunctionBlock::changeFBExecutionState(paCommand);
+		  if (e_RDY == nRetVal) {
+		    nRetVal = changeInternalFBExecutionState(paCommand, csmAmountOfInternalFBs, mInternalFBs);
+		  }
+		  return nRetVal;
+		}
 	'''
 
 	def protected dispatch generateSendEvent(Event event) '''

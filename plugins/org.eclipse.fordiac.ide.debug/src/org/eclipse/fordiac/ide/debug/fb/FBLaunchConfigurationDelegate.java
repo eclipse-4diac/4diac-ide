@@ -12,10 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.fb;
 
-import java.util.AbstractQueue;
-import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.Queue;
 
 import org.eclipse.core.resources.IFile;
@@ -69,62 +66,4 @@ public abstract class FBLaunchConfigurationDelegate extends CommonLaunchConfigur
 		return null;
 	}
 
-	protected static class LaunchEventQueue extends AbstractQueue<Event> {
-		private final Event event;
-		private final boolean repeat;
-		private boolean full;
-
-		public LaunchEventQueue(final Event event, final boolean repeat) {
-			this.event = event;
-			this.repeat = repeat;
-			this.full = true;
-		}
-
-		@Override
-		public boolean offer(final Event e) {
-			return true; // infinite sink
-		}
-
-		@Override
-		public Event poll() {
-			if (full) {
-				full = repeat;
-				return event;
-			}
-			return null;
-		}
-
-		@Override
-		public Event peek() {
-			return full ? event : null;
-		}
-
-		@Override
-		public Iterator<Event> iterator() {
-			return new LaunchEventIterator();
-		}
-
-		@Override
-		public int size() {
-			return full ? 1 : 0;
-		}
-
-		private class LaunchEventIterator implements Iterator<Event> {
-			private boolean start;
-
-			@Override
-			public boolean hasNext() {
-				return start || repeat;
-			}
-
-			@Override
-			public Event next() {
-				if (!hasNext()) {
-					throw new NoSuchElementException();
-				}
-				start = false;
-				return event;
-			}
-		}
-	}
 }

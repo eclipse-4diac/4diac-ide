@@ -116,10 +116,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		parent.setLayout(new GridLayout(2, false));
-		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		createInputEdit(parent);
 		createOutputEdit(parent);
 

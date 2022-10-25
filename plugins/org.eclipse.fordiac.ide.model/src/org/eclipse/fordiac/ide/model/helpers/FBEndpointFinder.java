@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021 - 2022  Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Philipp Bauer - initial implementation, including developing the algorithm; and initial documentation
+ *   Fabio Gandolfi - added find all elements connected to fb
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.helpers;
 
@@ -189,6 +190,63 @@ public class FBEndpointFinder {
 		}
 
 		return result;
+	}
+
+	/**
+	 * find recursively all possible connected FBs, from one given FB. No Block gets
+	 * ignored
+	 *
+	 * @param connectedElements empty list if new call, otherwise recursively called
+	 *                          with already visited elements
+	 * @param src               FBElement of the source element
+	 * @return a List of connected elements
+	 */
+	public static List<FBNetworkElement> getConnectedFbs(List<FBNetworkElement> connectedElements,
+			final FBNetworkElement src) {
+		final List<FBNetworkElement> foundElements = new ArrayList<>();
+
+		final List<IInterfaceElement> pins = new ArrayList<>();
+		pins.addAll(src.getInterface().getEventOutputs());
+		pins.addAll(src.getInterface().getOutputVars());
+
+		for (final IInterfaceElement pin : pins) {
+			foundElements.addAll(getConnectedFbs(pin));
+		}
+
+		// search for connected elements of connected elements
+		if (!foundElements.isEmpty()
+				&& ((foundElements.size() == 1 && !foundElements.get(0).equals(src)) || (foundElements.size() > 1))) {
+			for (final FBNetworkElement element : foundElements) {
+				if (!element.equals(src) && !connectedElements.contains(element)) {
+					connectedElements.add(element);
+					connectedElements = getConnectedFbs(connectedElements, element);
+				}
+			}
+		}
+		return connectedElements.stream().distinct().collect(Collectors.toList());
+	}
+
+	/**
+	 * find all connected Fbs to a given Pin
+	 *
+	 * @param connectedElements empty list if new call, otherwise recursively called
+	 *                          with already visited elements
+	 * @param src               source pin
+	 * @return a List of connected elements
+	 */
+	private static List<FBNetworkElement> getConnectedFbs(final IInterfaceElement srcPin) {
+
+		final List<FBNetworkElement> connectedElements = new ArrayList<>();
+		for (final Connection con : srcPin.getOutputConnections()) {
+			if (con.getDestinationElement() instanceof SubApp) {
+				connectedElements.addAll(getConnectedFbs(con.getDestination()));
+			} else {
+				connectedElements.add(con.getDestinationElement());
+			}
+		}
+
+		return connectedElements.stream().distinct().collect(Collectors.toList());
+
 	}
 
 	/**

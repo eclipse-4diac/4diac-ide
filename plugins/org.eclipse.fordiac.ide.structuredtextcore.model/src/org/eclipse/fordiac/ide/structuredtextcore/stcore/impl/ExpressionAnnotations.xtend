@@ -124,10 +124,7 @@ final package class ExpressionAnnotations {
 		switch (receiverType) {
 			ArrayType:
 				if (expr.index.size < receiverType.subranges.size) { // not consumed all dimensions
-					DataFactory.eINSTANCE.createArrayType => [
-						baseType = receiverType.baseType
-						subranges.addAll(receiverType.subranges.drop(expr.index.size).map[copy])
-					]
+					receiverType.baseType.newArrayType(receiverType.subranges.drop(expr.index.size).map[copy])
 				} else // consumed all dimensions
 					receiverType.baseType
 			StringType:

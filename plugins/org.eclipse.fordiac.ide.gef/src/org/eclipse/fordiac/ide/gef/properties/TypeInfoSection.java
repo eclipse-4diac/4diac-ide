@@ -32,7 +32,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
  * Properties tab which shows the FB type information of the selected FB
  *
  */
-public abstract class TypeInfoSection extends AbstractSection {
+public abstract class TypeInfoSection extends AbstractDoubleColumnSection {
 
 	private TypeInfoWidget typeInfo;
 

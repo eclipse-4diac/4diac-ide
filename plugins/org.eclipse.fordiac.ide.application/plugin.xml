@@ -386,6 +386,11 @@
              id="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"
              name="Transfer all instance comments">
     </command>
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
+             description="Transfer all instance comments"
+             id="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins"
+             name="Transfer all comments of connected pins on output">
+    </command>
     <command
             categoryId="org.eclipse.fordiac.ide.commands.category"
             description="Map Element to Resource"
@@ -627,12 +632,29 @@
           </iterate>
         </with>
       </activeWhen>
-    </handler>    
+    </handler>
+    <handler class="org.eclipse.fordiac.ide.application.handlers.TransferCommentsOfConnectedPinsHandler"
+             commandId="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins">
+      <activeWhen>
+        <with variable="selection">
+          <count value="1" />
+          <iterate operator="and"
+                   ifEmpty="false">
+            <or>
+              <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement">
+              </instanceof>
+              <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart">
+              </instanceof>
+            </or>
+          </iterate>
+        </with>
+      </activeWhen>
+    </handler>  
     <handler class="org.eclipse.fordiac.ide.application.handlers.ConvertToStructHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct">
       <activeWhen>
         <reference definitionId="org.eclipse.fordiac.ide.application.InterfaceElementSelection" />
-      </activeWhen>
+      </activeWhen>u
     </handler>
     <handler class="org.eclipse.fordiac.ide.application.handlers.GoToHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.showInstance">
@@ -750,7 +772,8 @@
       <command commandId="org.eclipse.fordiac.ide.application.commands.connectThrough" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateFBType" />
       <command commandId="org.eclipse.fordiac.ide.application.commands.updateAllFBTypes"/>
-      <command commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments">
+      <command commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"/>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins">
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct"
                label="Extract Struct">
@@ -1029,7 +1052,10 @@
         	<with variable="selection">
             	<count value="1" />
           		<iterate ifEmpty="false">
-        			<adapt type="org.eclipse.fordiac.ide.model.libraryElement.SubApp"/>
+          			<and>
+        				<adapt type="org.eclipse.fordiac.ide.model.libraryElement.SubApp"/>
+        				<test property="org.eclipse.fordiac.ide.application.utilities.isSubAppNestedInGroup" />
+        			</and>
     			</iterate>
      	   </with>
 		</visibleWhen>
@@ -1072,6 +1098,11 @@
       <command
             commandId="org.eclipse.fordiac.ide.application.commands.transferInstanceComments"
             label="Transfer all instance comments"
+            style="push">
+      </command>
+            <command
+            commandId="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins"
+            label="Transfer all comments of connected pins on output"
             style="push">
       </command>
     </menuContribution>
@@ -1397,6 +1428,12 @@
                     id="org.eclipse.fordiac.ide.application.utilities.isMapableFBNetwork"
                     namespace="org.eclipse.fordiac.ide.application.utilities"
                     properties="isMapableFBNetwork"
+                    type="java.lang.Object">
+    </propertyTester>
+    <propertyTester class="org.eclipse.fordiac.ide.application.utilities.IsSubAppNestedInGroupTester"
+                    id="org.eclipse.fordiac.ide.application.utilities.isSubAppNestedInGroupTester"
+                    namespace="org.eclipse.fordiac.ide.application.utilities"
+                    properties="isSubAppNestedInGroup"
                     type="java.lang.Object">
     </propertyTester>
   </extension>

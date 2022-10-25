@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies GmbH
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,7 +16,10 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.converter.STFunctionValueConverters;
 import org.eclipse.xtext.conversion.IValueConverterService;
 
-/** Use this class to register components to be used at runtime / without the Equinox extension registry. */
+/**
+ * Use this class to register components to be used at runtime / without the
+ * Equinox extension registry.
+ */
 public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
 
 	@Override

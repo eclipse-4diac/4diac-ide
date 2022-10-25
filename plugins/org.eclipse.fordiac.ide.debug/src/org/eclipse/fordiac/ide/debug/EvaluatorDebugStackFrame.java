@@ -12,9 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug;
 
-import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
@@ -60,7 +60,8 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 	public boolean isAncestorOf(final EvaluatorDebugStackFrame frame) {
 		if (frame == this) {
 			return true;
-		} else if (frame == null) {
+		}
+		if (frame == null) {
 			return false;
 		}
 		return isAncestorOf(frame.getParent());
@@ -153,8 +154,14 @@ public class EvaluatorDebugStackFrame extends EvaluatorDebugElement implements I
 	@Override
 	public IVariable[] getVariables() throws DebugException {
 		final CommonEvaluatorDebugger debugger = this.getDebugTarget().getDebugger();
-		final List<EvaluatorDebugVariable> variables = this.evaluator.getVariables().values().stream()
-				.map(debugger::getVariable).sorted().collect(Collectors.toList());
+		final var debugVars = this.evaluator.getVariables().values().stream().map(debugger::getVariable)
+				.collect(Collectors.toList());
+		// split all vars into this vars and other vars
+		final var thisVars = debugVars.stream().filter(variable -> Evaluator.CONTEXT_NAME.equals(variable.getName()));
+		final var otherVars = debugVars.stream().filter(variable -> !Evaluator.CONTEXT_NAME.equals(variable.getName()))
+				.sorted();
+		// Concat in a way that this is first, then others
+		final var variables = Stream.concat(thisVars, otherVars).collect(Collectors.toList());
 		return variables.toArray(new IVariable[variables.size()]);
 	}
 

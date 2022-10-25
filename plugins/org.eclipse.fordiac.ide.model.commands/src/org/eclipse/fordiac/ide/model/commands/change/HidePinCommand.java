@@ -29,6 +29,7 @@ public class HidePinCommand extends Command {
 	public void execute() {
 		if (canExecute()) {
 			hiddenElement.setVisible(visible);
+			System.out.println("Pin hiding command has been executed");
 		}
 	}
 

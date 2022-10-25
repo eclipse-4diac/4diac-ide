@@ -49,7 +49,6 @@ public class AlgorithmsSection extends AbstractSection implements I4diacTableUti
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		createAlgorithmControls(parent);
 		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
@@ -59,19 +58,18 @@ public class AlgorithmsSection extends AbstractSection implements I4diacTableUti
 		final SashForm view = new SashForm(parent, SWT.HORIZONTAL | SWT.SMOOTH);
 		view.setLayout(new FillLayout());
 		algorithmList = new AlgorithmList(view, getWidgetFactory());
-		setLeftComposite(algorithmList.getComposite());
 
 		getAlgorithmList().getViewer().addSelectionChangedListener(event -> {
 			final Object selection = ((IStructuredSelection) getAlgorithmList().getViewer().getSelection()).getFirstElement();
 			algorithmGroup.setAlgorithm((selection instanceof Algorithm) ? (Algorithm) selection : null);
 		});
 
-		setRightComposite(getWidgetFactory().createComposite(view));
-		getRightComposite().setLayout(new GridLayout());
+		final Composite algComposite = getWidgetFactory().createComposite(view);
+		algComposite.setLayout(new GridLayout());
 		view.setWeights(1, 1);
 		view.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		algorithmGroup.createControls(getRightComposite(), getWidgetFactory());
+		algorithmGroup.createControls(algComposite, getWidgetFactory());
 	}
 
 	@Override

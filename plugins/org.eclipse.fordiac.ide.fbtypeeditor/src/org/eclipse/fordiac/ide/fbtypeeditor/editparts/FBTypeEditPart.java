@@ -101,7 +101,7 @@ public class FBTypeEditPart extends AbstractConnectableEditPart {
 		return (FBType) super.getModel();
 	}
 
-	FBTypeEditPart() {
+	public FBTypeEditPart() {
 		super();
 	}
 

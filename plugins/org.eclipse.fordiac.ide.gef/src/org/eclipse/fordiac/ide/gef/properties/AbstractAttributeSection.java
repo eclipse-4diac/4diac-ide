@@ -68,10 +68,8 @@ public abstract class AbstractAttributeSection extends AbstractSection {
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		parent.setLayout(new GridLayout(2, false));
-		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		final AddDeleteWidget buttons = createNewDeleteButton(parent);
 		createInputInfoGroup(parent);
 		configureButtonList(buttons, attributeViewer);

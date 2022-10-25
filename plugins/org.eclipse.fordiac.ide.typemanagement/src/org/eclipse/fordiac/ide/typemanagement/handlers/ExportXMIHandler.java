@@ -9,8 +9,10 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Martin Melik Merkumians - initial API and implementation and/or initial documentation
- * 			     - update XMI exporter for FUNCTION and new STAlgorithm grammar
+ *   Martin Melik Merkumians
+ *     - initial API and implementation and/or initial documentation
+ * 	   - update XMI exporter for FUNCTION and new STAlgorithm grammar
+ *     - fixed condition for stfunc files
  *   Martin Jobst
  *     - refactor export
  *     - add comments export
@@ -38,19 +40,20 @@ public class ExportXMIHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final IStructuredSelection selection = (IStructuredSelection)HandlerUtil.getCurrentSelection(event);
+		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final ExportAsXMI exporter = new ExportAsXMI();
 		return exporter.export((IFile) selection.getFirstElement());
 	}
 
 	@Override
 	public void setEnabled(final Object evaluationContext) {
-		final ISelection selection = (ISelection)HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
+		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
+				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		if (selection != null && !selection.isEmpty() && selection instanceof IStructuredSelection) {
-			final IStructuredSelection structuredSelection = (IStructuredSelection)selection;
-			if (structuredSelection.size() == 1 && (structuredSelection.getFirstElement() instanceof IFile)) {
-				final IFile fbFile = (IFile)structuredSelection.getFirstElement();
-				if (fbFile.getFullPath().getFileExtension().equals(TypeLibraryTags.FC_TYPE_FILE_ENDING)) {
+			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
+			if (structuredSelection.size() == 1 && structuredSelection.getFirstElement() instanceof IFile) {
+				final IFile fbFile = (IFile) structuredSelection.getFirstElement();
+				if (fbFile.getFullPath().getFileExtension().equalsIgnoreCase(TypeLibraryTags.FC_TYPE_FILE_ENDING)) {
 					setBaseEnabled(true);
 					return;
 				}

@@ -1,17 +1,18 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug;
 
+import java.util.Collection;
 import java.util.Queue;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -20,22 +21,24 @@ import java.util.stream.Collectors;
 
 import org.eclipse.debug.core.IStreamListener;
 import org.eclipse.debug.core.model.IFlushableStreamMonitor;
+import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
+import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
 public class EvaluatorStreamMonitor implements IFlushableStreamMonitor, EvaluatorMonitor {
 
-	private Set<IStreamListener> listeners = ConcurrentHashMap.newKeySet();
-	private Queue<String> messageBuffer = new ConcurrentLinkedQueue<>();
+	private final Set<IStreamListener> listeners = ConcurrentHashMap.newKeySet();
+	private final Queue<String> messageBuffer = new ConcurrentLinkedQueue<>();
 	private boolean buffered = true;
-	private boolean error;
+	private final boolean error;
 
-	public EvaluatorStreamMonitor(boolean error) {
+	public EvaluatorStreamMonitor(final boolean error) {
 		this.error = error;
 	}
 
 	@Override
 	public String getContents() {
-		return this.messageBuffer.stream().collect(Collectors.joining("\n"));
+		return this.messageBuffer.stream().collect(Collectors.joining("\n")); //$NON-NLS-1$
 	}
 
 	@Override
@@ -44,7 +47,7 @@ public class EvaluatorStreamMonitor implements IFlushableStreamMonitor, Evaluato
 	}
 
 	@Override
-	public void setBuffered(boolean buffer) {
+	public void setBuffered(final boolean buffer) {
 		this.buffered = buffer;
 	}
 
@@ -54,16 +57,16 @@ public class EvaluatorStreamMonitor implements IFlushableStreamMonitor, Evaluato
 	}
 
 	@Override
-	public void addListener(IStreamListener listener) {
+	public void addListener(final IStreamListener listener) {
 		this.listeners.add(listener);
 	}
 
 	@Override
-	public void removeListener(IStreamListener listener) {
+	public void removeListener(final IStreamListener listener) {
 		this.listeners.remove(listener);
 	}
 
-	protected void message(String message) {
+	protected void message(final String message) {
 		if (this.buffered) {
 			this.messageBuffer.add(message);
 		}
@@ -71,30 +74,35 @@ public class EvaluatorStreamMonitor implements IFlushableStreamMonitor, Evaluato
 	}
 
 	@Override
-	public void info(String message) {
+	public void info(final String message) {
 		if (!this.error) {
-			message(message + "\n");
+			message(message + "\n"); //$NON-NLS-1$
 		}
 	}
 
 	@Override
-	public void warn(String message) {
+	public void warn(final String message) {
 		if (this.error) {
-			message(message + "\n");
+			message(message + "\n"); //$NON-NLS-1$
 		}
 	}
 
 	@Override
-	public void error(String message) {
+	public void error(final String message) {
 		if (this.error) {
-			message(message + "\n");
+			message(message + "\n"); //$NON-NLS-1$
 		}
 	}
 
 	@Override
-	public void error(String message, Throwable t) {
+	public void error(final String message, final Throwable t) {
 		if (this.error) {
-			message(message + ": " + t + "\n");
+			message(message + ": " + t + "\n"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
+	}
+
+	@Override
+	public void update(final Collection<? extends Variable<?>> variables, final Evaluator evaluator) {
+		// do nothing
 	}
 }
