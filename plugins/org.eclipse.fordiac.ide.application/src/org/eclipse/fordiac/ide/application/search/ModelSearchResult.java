@@ -27,14 +27,12 @@ import org.eclipse.search.ui.text.IFileMatchAdapter;
 public class ModelSearchResult extends AbstractTextSearchResult {
 
 	private final ISearchQuery modelSearchQuery;
-	private final ModelSearchResultEvent searchResEvent;
 
 	private final List<EObject> results;
 
 	public ModelSearchResult(final ISearchQuery job) {
 		this.modelSearchQuery = job;
 		this.results = new ArrayList<>();
-		searchResEvent = new ModelSearchResultEvent(this);
 	}
 
 	@Override
@@ -73,6 +71,7 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 	}
 
 	private SearchResultEvent getSearchResultEvent(final EObject el, final int eventKind) {
+		final ModelSearchResultEvent searchResEvent = new ModelSearchResultEvent(this);
 		searchResEvent.setKind(eventKind);
 		searchResEvent.setResult(el);
 		return searchResEvent;
@@ -92,6 +91,12 @@ public class ModelSearchResult extends AbstractTextSearchResult {
 	public IFileMatchAdapter getFileMatchAdapter() {
 		// For clicking onto the results
 		return null;
+	}
+
+	public void clear() {
+		final EObject first = (results.isEmpty()) ? null : results.get(0);
+		results.clear();
+		fireChange(getSearchResultEvent(first, ModelSearchResultEvent.REMOVED));
 	}
 
 }

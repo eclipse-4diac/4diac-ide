@@ -58,7 +58,7 @@ public class ModelSearchQuery implements ISearchQuery {
 
 	@Override
 	public IStatus run(final IProgressMonitor monitor) throws OperationCanceledException {
-		searchResult = getSearchResult();
+		getSearchResult().clear();
 		final List<AutomationSystem> searchRootSystems = new ArrayList<>();
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 
