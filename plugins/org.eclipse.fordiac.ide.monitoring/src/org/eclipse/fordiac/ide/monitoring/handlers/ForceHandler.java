@@ -98,23 +98,28 @@ public class ForceHandler extends AbstractMonitoringHandler {
 			if (element instanceof MonitoringElement) {
 				final MonitoringElement monitoringElement = (MonitoringElement) element;
 				final IInterfaceElement interfaceElement = monitoringElement.getPort().getInterfaceElement();
-				
-				final String input; 
+
+				String input;
 				if (variable.getType() instanceof StructuredType) {
 					input = showStructForceDialog((StructuredType) variable.getType(), monitoringElement);
+
+					if (variable.isArray() && input != null) {
+						input = StructParser.removeArrayIndexes(input);
+					}
 				} else {
 					input = showForceDialog(monitoringElement, interfaceElement);
 				}
-				
+
 				if (input != null) {
 					manager.forceValue(monitoringElement, input);
 				}
 			}
 		}
 	}
-	
+
 	private static String showStructForceDialog(final StructuredType type, final MonitoringElement monitoringElement) {
-		final StructForceDialog dialog = new StructForceDialog(Display.getDefault().getActiveShell(), type, monitoringElement);
+		final StructForceDialog dialog = new StructForceDialog(Display.getDefault().getActiveShell(), type,
+				monitoringElement);
 		final int ret = dialog.open();
 		return ret == org.eclipse.jface.window.Window.OK ? dialog.getValue() : null;
 	}

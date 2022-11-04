@@ -35,12 +35,12 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TreeColumn;
 
 public class StructForceDialog extends Dialog {
-	
+
 	private static final int WIDTH = 500;
 	private static final int HEIGHT = 300;
-	
+
 	private static final int COLUMN_WIDTH = 100;
-	
+
 	private static final String NAME = "NAME"; //$NON-NLS-1$
 	private static final String TYPE = "DATATYPE"; //$NON-NLS-1$
 	private static final String VALUE = "VALUE"; //$NON-NLS-1$
@@ -49,18 +49,18 @@ public class StructForceDialog extends Dialog {
 	private TreeViewer viewer;
 	private final MonitoringBaseElement monitoringElement;
 	private WatchValueTreeNode structNode;
-	
+
 	public StructForceDialog(final Shell parentShell, final StructuredType type, final MonitoringBaseElement monitoringElement) {
-        super(parentShell);
-        this.struct = type;
-        this.monitoringElement = monitoringElement;
-    }
-	
+		super(parentShell);
+		this.struct = type;
+		this.monitoringElement = monitoringElement;
+	}
+
 	public String getValue() {
 		return WatchValueTreeNodeUtils.buildTreeString(structNode);
 	}
 
-    @Override
+	@Override
 	protected Control createContents(final Composite parent) {
 		final Control control = super.createContents(parent);
 		getButton(IDialogConstants.OK_ID).setText(Messages.StructForceDialog_Force_Button_Text);
@@ -68,16 +68,16 @@ public class StructForceDialog extends Dialog {
 	}
 
 	@Override
-    protected Control createDialogArea(final Composite parent) {
-        final Composite container = (Composite) super.createDialogArea(parent);
-        createTree(container);
-        return container;
-    }
-    
-    private void createTree(final Composite parent) {
+	protected Control createDialogArea(final Composite parent) {
+		final Composite container = (Composite) super.createDialogArea(parent);
+		createTree(container);
+		return container;
+	}
+
+	private void createTree(final Composite parent) {
 		viewer = createViewer(parent);
 		createColumns();
-		
+
 		viewer.setContentProvider(new StructForceTreeContentProvider());
 		final WatchValueTreeNode root = new WatchValueTreeNode(monitoringElement);
 		structNode = WatchValueTreeNode.createStructNode(monitoringElement, struct, root);
@@ -85,9 +85,9 @@ public class StructForceDialog extends Dialog {
 	}
 
 	public static TreeViewer createViewer(final Composite parent) {
-		final TreeViewer treeViewer = new TreeViewer(parent, 
+		final TreeViewer treeViewer = new TreeViewer(parent,
 				SWT.FULL_SELECTION | SWT.BORDER | SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI);
-		
+
 		treeViewer.getTree().setLinesVisible(true);
 		treeViewer.getTree().setHeaderVisible(true);
 
@@ -99,42 +99,43 @@ public class StructForceDialog extends Dialog {
 
 		return treeViewer;
 	}
-    
-    private void createColumns() {
-    	final TreeViewerColumn nameCol = createTreeViewerColumn(NAME, COLUMN_WIDTH);
-    	nameCol.setLabelProvider(new WatchesNameLabelProvider());
-    	
-    	final TreeViewerColumn typeCol = createTreeViewerColumn(TYPE, COLUMN_WIDTH);
-    	typeCol.setLabelProvider(new WatchesTypeLabelProvider());
-    	
-    	final TreeViewerColumn valueCol = createTreeViewerColumn(VALUE, COLUMN_WIDTH);
-    	valueCol.setLabelProvider(new WatchesValueLabelProvider());
-    	valueCol.setEditingSupport(new StructForceEditingSupport(viewer, viewer.getTree()));
-    }
-    
-    private TreeViewerColumn createTreeViewerColumn(final String title, final int bound) {
-        final TreeViewerColumn viewerColumn = new TreeViewerColumn(viewer, SWT.NONE);
-        final TreeColumn column = viewerColumn.getColumn();
-        column.setText(title);
-        column.setWidth(bound);
-        column.setResizable(true);
-        column.setMoveable(true);
-        return viewerColumn;
-    }
 
-    @Override
-    protected void configureShell(final Shell newShell) {
-        super.configureShell(newShell);
-        newShell.setText(Messages.StructForceDialog_Title);
-    }
+	private void createColumns() {
 
-    @Override
+		final TreeViewerColumn nameCol = createTreeViewerColumn(NAME, COLUMN_WIDTH);
+		nameCol.setLabelProvider(new WatchesNameLabelProvider());
+
+		final TreeViewerColumn typeCol = createTreeViewerColumn(TYPE, COLUMN_WIDTH);
+		typeCol.setLabelProvider(new WatchesTypeLabelProvider());
+
+		final TreeViewerColumn valueCol = createTreeViewerColumn(VALUE, COLUMN_WIDTH);
+		valueCol.setLabelProvider(new WatchesValueLabelProvider());
+		valueCol.setEditingSupport(new StructForceEditingSupport(viewer, viewer.getTree()));
+	}
+
+	private TreeViewerColumn createTreeViewerColumn(final String title, final int bound) {
+		final TreeViewerColumn viewerColumn = new TreeViewerColumn(viewer, SWT.NONE);
+		final TreeColumn column = viewerColumn.getColumn();
+		column.setText(title);
+		column.setWidth(bound);
+		column.setResizable(true);
+		column.setMoveable(true);
+		return viewerColumn;
+	}
+
+	@Override
+	protected void configureShell(final Shell newShell) {
+		super.configureShell(newShell);
+		newShell.setText(Messages.StructForceDialog_Title);
+	}
+
+	@Override
 	protected boolean isResizable() {
 		return true;
 	}
 
 	@Override
-    protected Point getInitialSize() {
-        return new Point(WIDTH, HEIGHT);
-    }
+	protected Point getInitialSize() {
+		return new Point(WIDTH, HEIGHT);
+	}
 }
