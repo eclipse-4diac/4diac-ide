@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.data.WstringType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.value.StringValueConverter;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class WatchValueTreeNodeUtils {
 
@@ -51,10 +52,18 @@ public final class WatchValueTreeNodeUtils {
 		if (isHexDecorationNecessary(value, type)) {
 			return decorateHexNumber(value);
 		} else if (isStruct(type)) {
-			final WatchValueTreeNode dbgStruct = StructParser.createStructFromString(value, (StructuredType) type,
-					model, new WatchValueTreeNode(model));
-			adaptAnyBitValues(dbgStruct.getChildren());
-			return buildTreeString(dbgStruct);
+			try {
+				final WatchValueTreeNode dbgStruct = StructParser.createStructFromString(value, (StructuredType) type,
+						model, new WatchValueTreeNode(model));
+				adaptAnyBitValues(dbgStruct.getChildren());
+				return buildTreeString(dbgStruct);
+			} catch (final Exception ex) {
+				// we have an issue in parsing or creating the struct value, log it and inform the user with a updated
+				// value
+				final String wrongStructValue = "Wrong Struct Value: " + value;
+				FordiacLogHelper.logWarning(wrongStructValue, ex);
+				return wrongStructValue;
+			}
 		}
 
 		return value;
@@ -144,7 +153,7 @@ public final class WatchValueTreeNodeUtils {
 	}
 
 	private static String convertIntegerToHexString(final long number) {
-		return HEX_PREFIX + Long.toHexString(number).toUpperCase(); //$NON-NLS-1$
+		return HEX_PREFIX + Long.toHexString(number).toUpperCase();
 	}
 
 	private static boolean isNumeric(final String input) {
