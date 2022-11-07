@@ -170,25 +170,51 @@
    <!-- If these activties should be needed in the future remove the respective line below -->
    <extension point="org.eclipse.ui.activities">
     <activity id="org.eclipse.fordiac.ide.disabledxtensions" name="Hidden activities"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.jdt.*" /> 
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.pde.*" />
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.externaltools.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.emf.mwe2.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ant.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtext.ui.shared.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.cleanAction"/> 
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.buildProject"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.buildAutomatically"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.buildAll"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.rebuildAll"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.project.buildLast"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtext.ui.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtext.xtext.ui.*"/>   
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtend.ide.*"/>   
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtend.ui.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.xtend.*"/>
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.edit.text.gotoLastEditPosition"/> 
-    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org.eclipse.ui.edit.text.gotoNextEditPosition"/>  
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.jdt\.ui/.*" /> 
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.jdt\.debug\.ui/.*" />
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.pde/.*" />
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.ui\.externaltools/.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.emf\.mwe2.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.ant.*"/>
+    <activityPatternBinding
+          activityId="org.eclipse.fordiac.ide.disabledxtensions"
+          isEqualityPattern="true"
+          pattern="org.eclipse.ui.project.cleanAction"/> 
+    <activityPatternBinding
+          activityId="org.eclipse.fordiac.ide.disabledxtensions"
+          isEqualityPattern="true"
+          pattern="org.eclipse.ui.project.buildProject"/>
+    <activityPatternBinding
+          activityId="org.eclipse.fordiac.ide.disabledxtensions"
+          isEqualityPattern="true"
+          pattern="org.eclipse.ui.project.buildAutomatically"/>
+    <activityPatternBinding
+          activityId="org.eclipse.fordiac.ide.disabledxtensions"
+          isEqualityPattern="true"
+          pattern="org.eclipse.ui.project.buildAll"/>
+    <activityPatternBinding
+          activityId="org.eclipse.fordiac.ide.disabledxtensions"
+          isEqualityPattern="true"
+          pattern="org.eclipse.ui.project.rebuildAll"/>
+    <activityPatternBinding
+          activityId="org.eclipse.fordiac.ide.disabledxtensions"
+          isEqualityPattern="true"
+          pattern="org.eclipse.ui.project.buildLast"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtext\.ui/.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtext\.xtext\.ui/.*"/>   
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtend\.ide/.*"/>   
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtend\.ui/.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtend/.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.xtend\.examples/.*"/>
+    <activityPatternBinding activityId="org.eclipse.fordiac.ide.disabledxtensions" pattern="org\.eclipse\.jdt\.junit/.*"/>
+    <activityPatternBinding
+          activityId="org.eclipse.fordiac.ide.disabledxtensions"
+          isEqualityPattern="true"
+          pattern="org.eclipse.ui.edit.text.gotoLastEditPosition"/> 
+    <activityPatternBinding
+          activityId="org.eclipse.fordiac.ide.disabledxtensions"
+          isEqualityPattern="true"
+          pattern="org.eclipse.ui.edit.text.gotoNextEditPosition"/>
    </extension>
 
 </plugin>

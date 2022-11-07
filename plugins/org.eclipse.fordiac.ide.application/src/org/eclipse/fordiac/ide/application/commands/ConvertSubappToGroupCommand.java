@@ -19,6 +19,7 @@ import java.util.List;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -45,6 +46,11 @@ public class ConvertSubappToGroupCommand extends Command {
 		final Group destination = createGroupCmd.getElement();
 		destination.setWidth(sourceSubapp.getWidth());
 		destination.setHeight(sourceSubapp.getHeight());
+
+		// copy subapp name to group
+		final ChangeNameCommand copyNameCmd = new ChangeNameCommand(destination, sourceSubapp.getName());
+		copyNameCmd.execute();
+		convertToGroupCmd.add(copyNameCmd);
 
 		// copy instance comment of subapp
 		final ChangeCommentCommand copyCommentCmd = new ChangeCommentCommand(destination, sourceSubapp.getComment());

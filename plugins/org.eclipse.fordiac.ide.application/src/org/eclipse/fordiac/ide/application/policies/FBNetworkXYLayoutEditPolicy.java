@@ -29,9 +29,9 @@ import org.eclipse.fordiac.ide.application.commands.MoveElementsFromSubAppComman
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
+import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
-import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
 import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
@@ -235,7 +235,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	public static boolean isDragAndDropRequestToRoot(final Request generic, final EditPart targetEditPart) {
 		return (generic instanceof ChangeBoundsRequest)
 				&& ((targetEditPart instanceof FBNetworkEditPart)
-						|| (targetEditPart instanceof UISubAppNetworkEditPart))
+						|| (targetEditPart instanceof EditorWithInterfaceEditPart))
 				&& !(targetEditPart instanceof UnfoldedSubappContentEditPart)
 				&& !(targetEditPart instanceof GroupContentEditPart);
 	}

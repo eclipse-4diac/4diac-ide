@@ -110,7 +110,7 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 	}
 
 	@Override
-	protected void refreshVisuals() {
+	public void refreshVisuals() {
 		super.refreshVisuals();
 		refreshPosition();
 	}
@@ -136,13 +136,13 @@ class CommentTypeEditPart extends AbstractGraphicalEditPart {
 			} else {
 				final int countOutputEvWITH = getNrEvWITH(interfaceList.getEventOutputs());
 				dx = DISTANCE_TO_FB_BORDER + bounds.width + countOutputEvWITH * WITH_SIZE;
-			} 
+			}
 			return new Point(bounds.x + dx, bounds.y);
 		}
 		return new Point(0, 0);
 	}
 
-	private static int getNrEvWITH(EList<Event> eList) {
+	private static int getNrEvWITH(final EList<Event> eList) {
 		return (int)eList.stream().filter(ev -> !ev.getWith().isEmpty()).count();
 	}
 

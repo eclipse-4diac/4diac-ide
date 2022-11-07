@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.application.commands;
 import org.eclipse.fordiac.ide.application.figures.InstanceNameFigure;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteGroupCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -26,6 +27,7 @@ public class ConvertGroupToSubappCommand extends Command {
 	private final Group sourceGroup;
 
 	private NewSubAppCommand createSubappCmd;
+	private ChangeNameCommand copyNameCmd;
 	private ChangeCommentCommand copyCommentCmd;
 	private ToggleSubAppRepresentationCommand expandCommand;
 	private DeleteGroupCommand deleteGroupCmd;
@@ -43,7 +45,11 @@ public class ConvertGroupToSubappCommand extends Command {
 		final SubApp destinationSubapp = createSubappCmd.getElement();
 		destinationSubapp.setWidth(sourceGroup.getWidth());
 		destinationSubapp.setHeight((int) (sourceGroup.getHeight() + CoordinateConverter.INSTANCE.getLineHeight()
-				+ InstanceNameFigure.INSTANCE_LABEL_MARGIN));
+		+ InstanceNameFigure.INSTANCE_LABEL_MARGIN));
+
+		// transfer group name
+		copyNameCmd = new ChangeNameCommand(destinationSubapp, sourceGroup.getName());
+		copyNameCmd.execute();
 
 		// copy instance comment of group
 		copyCommentCmd = new ChangeCommentCommand(destinationSubapp, sourceGroup.getComment());
@@ -66,6 +72,7 @@ public class ConvertGroupToSubappCommand extends Command {
 	@Override
 	public void undo() {
 		deleteGroupCmd.undo();
+		copyNameCmd.undo();
 		copyCommentCmd.undo();
 		expandCommand.undo();
 		createSubappCmd.undo();
@@ -74,6 +81,7 @@ public class ConvertGroupToSubappCommand extends Command {
 	@Override
 	public void redo() {
 		createSubappCmd.redo();
+		copyNameCmd.redo();
 		copyCommentCmd.redo();
 		expandCommand.redo();
 		deleteGroupCmd.redo();
