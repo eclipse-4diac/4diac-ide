@@ -73,7 +73,7 @@ public class ActionSection extends AbstractSection {
 	}
 
 	@Override
-	protected Object getInputType(Object input) {
+	protected Object getInputType(final Object input) {
 		if (input instanceof ECActionAlgorithmEditPart) {
 			return ((ECActionAlgorithmEditPart) input).getAction();
 		}
@@ -94,21 +94,19 @@ public class ActionSection extends AbstractSection {
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 		parent.setLayout(new GridLayout(3, true));
-		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 		createActionCombos(parent);
 		algorithmGroup.createControls(parent, getWidgetFactory());
 		createAlgorithmView(parent);
 	}
 
-	private void createActionCombos(Composite parent) {
+	private void createActionCombos(final Composite parent) {
 		actionComposite = getWidgetFactory().createComposite(parent);
-		GridData actionCompositeLayoutData = new GridData(GridData.FILL, 0, true, false);
+		final GridData actionCompositeLayoutData = new GridData(GridData.FILL, 0, true, false);
 		actionCompositeLayoutData.horizontalSpan = 3;
 		actionComposite.setLayoutData(actionCompositeLayoutData);
-		RowLayout layout = new RowLayout();
+		final RowLayout layout = new RowLayout();
 		layout.fill = true;
 		actionComposite.setLayout(layout);
 
@@ -127,8 +125,8 @@ public class ActionSection extends AbstractSection {
 		outputEventCombo = ComboBoxWidgetFactory.createCombo(getWidgetFactory(), actionComposite);
 		outputEventCombo.addListener(SWT.Selection, event -> {
 			removeContentAdapter();
-			List<Event> outputEvents = ECCContentAndLabelProvider.getOutputEvents(getFBType());
-			int selItem = outputEventCombo.getSelectionIndex();
+			final List<Event> outputEvents = ECCContentAndLabelProvider.getOutputEvents(getFBType());
+			final int selItem = outputEventCombo.getSelectionIndex();
 			executeCommand(new ChangeOutputCommand(getType(),
 					(selItem < outputEvents.size()) ? outputEvents.get(selItem) : null));
 			addContentAdapter();
@@ -136,8 +134,8 @@ public class ActionSection extends AbstractSection {
 
 	}
 
-	private void createAlgorithmView(Composite parent) {
-		Group algorithmComposite = getWidgetFactory().createGroup(parent, Messages.ActionSection_AllAlgorithms);
+	private void createAlgorithmView(final Composite parent) {
+		final Group algorithmComposite = getWidgetFactory().createGroup(parent, Messages.ActionSection_AllAlgorithms);
 		algorithmComposite.setLayout(new GridLayout(1, false));
 		algorithmComposite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		algorithmList = new AlgorithmList(algorithmComposite, getWidgetFactory());
@@ -146,7 +144,7 @@ public class ActionSection extends AbstractSection {
 	@Override
 	public void setInput(final IWorkbenchPart part, final ISelection selection) {
 		Assert.isTrue(selection instanceof IStructuredSelection);
-		Object input = ((IStructuredSelection) selection).getFirstElement();
+		final Object input = ((IStructuredSelection) selection).getFirstElement();
 		commandStack = getCommandStack(part, input);
 		if (null == commandStack) { // disable all fields
 			outputEventCombo.removeAll();
@@ -165,7 +163,7 @@ public class ActionSection extends AbstractSection {
 
 	@Override
 	public void refresh() {
-		CommandStack commandStackBuffer = commandStack;
+		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
 		if ((null != type) && (null != getFBType())) {
 			// during delete phases it can be that the input (i.e., Action) is not attached
@@ -181,7 +179,7 @@ public class ActionSection extends AbstractSection {
 		commandStack = commandStackBuffer;
 	}
 
-	private static void setDropdown(CCombo comboBox, INamedElement el, List<String> names) {
+	private static void setDropdown(final CCombo comboBox, final INamedElement el, final List<String> names) {
 		comboBox.removeAll();
 		names.forEach(comboBox::add);
 		// pre-selects the elements that are now in the action:

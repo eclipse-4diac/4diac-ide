@@ -12,6 +12,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval
 
+import java.util.Collection
+import org.eclipse.fordiac.ide.model.eval.variable.Variable
+
 interface EvaluatorMonitor {
 	
 	def void info(String message)
@@ -21,4 +24,6 @@ interface EvaluatorMonitor {
 	def void error(String message)
 	
 	def void error(String message, Throwable t)
+	
+	def void update(Collection<? extends Variable<?>> variables, Evaluator evaluator)
 }

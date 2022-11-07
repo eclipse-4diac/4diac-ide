@@ -19,13 +19,15 @@
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
 		<maven.compiler.release/>
-		<tycho.version>2.7.3</tycho.version>
-		<tycho-repo.url>https://download.eclipse.org/releases/2022-06</tycho-repo.url>
+		<tycho.version>3.1.0-SNAPSHOT</tycho.version>
+		<tycho-repo.url>https://download.eclipse.org/releases/2022-09</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 		<sonar.java.source>11</sonar.java.source>
 		<org.eclipse.justj.jre.repository> https://download.eclipse.org/justj/jres/17/updates/release/17.0.4</org.eclipse.justj.jre.repository>
-		<xtend-version>2.27.0</xtend-version>
+		<xtend-version>2.28.0</xtend-version>
+		<eclipse.platform.version>4.25</eclipse.platform.version>
+		<equinox.executable.version>3.8.1800</equinox.executable.version>
 	</properties>
 
 	<repositories>
@@ -42,6 +44,10 @@
 	</repositories>
 
 	<pluginRepositories>
+		<pluginRepository>
+			<id>tycho-snapshots</id>
+			<url>https://repo.eclipse.org/content/repositories/tycho-snapshots/</url>
+		</pluginRepository>
 		<pluginRepository>
 			<id>cbi</id>
 			<url>https://repo.eclipse.org/content/repositories/cbi-releases/</url>
@@ -129,12 +135,12 @@
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.equinox.executable</id>
-								<versionRange>3.8.1700</versionRange>
+								<versionRange>${equinox.executable.version}</versionRange>
 							</requirement>
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.platform</id>
-								<versionRange>4.24.0</versionRange>
+								<versionRange>${eclipse.platform.version}</versionRange>
 							</requirement>
 						</extraRequirements>
 						<profileProperties>
@@ -177,7 +183,7 @@
 							<requirement>
 								<type>eclipse-feature</type>
 								<id>org.eclipse.equinox.executable</id>
-								<versionRange>3.8.1700</versionRange>
+								<versionRange>${equinox.executable.version}</versionRange>
 							</requirement>
 							<requirement>
 								<type>eclipse-feature</type>
@@ -261,8 +267,8 @@
 		</dependency>
 		<dependency>
 			<groupId>org.junit.jupiter</groupId>
-			<artifactId>junit-jupiter-engine</artifactId>
-			<version>5.7.0</version>
+			<artifactId>junit-jupiter</artifactId>
+			<version>5.9.1</version>
 		</dependency>
 		<dependency>
 			<groupId>org.eclipse.xtend</groupId>

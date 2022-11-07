@@ -33,8 +33,8 @@ class ValueConverterTest {
 
 	private static final String NAME_BACKSLASH_FRT = "4diac\f\r\tIDE"; //$NON-NLS-1$
 	private static final String NAME_BACKSLASHN = "4diac\nIDE"; //$NON-NLS-1$
-	private static final String NAME_$ = "4diac$IDE"; //$NON-NLS-1$
-	private static final String NAME_TWO_$ = "'4diac$$IDE'"; //$NON-NLS-1$
+	private static final String NAME_DOLLAR = "4diac$IDE"; //$NON-NLS-1$
+	private static final String NAME_TWO_DOLLAR = "'4diac$$IDE'"; //$NON-NLS-1$
 	private static final String NAME_BACKSLASH = "4diac\"IDE"; //$NON-NLS-1$
 	private static final String NAME_ACUTE = "4diac'IDE"; //$NON-NLS-1$
 
@@ -81,7 +81,7 @@ class ValueConverterTest {
 		assertEquals("abc", StringValueConverter.INSTANCE.toValue("'abc'")); //$NON-NLS-1$ //$NON-NLS-2$
 		assertEquals(NAME_ACUTE, StringValueConverter.INSTANCE.toValue("'4diac$'IDE'")); //$NON-NLS-1$
 		assertEquals(NAME_BACKSLASH, StringValueConverter.INSTANCE.toValue("'4diac\"IDE'")); //$NON-NLS-1$
-		assertEquals(NAME_$, StringValueConverter.INSTANCE.toValue(NAME_TWO_$));
+		assertEquals(NAME_DOLLAR, StringValueConverter.INSTANCE.toValue(NAME_TWO_DOLLAR));
 		assertEquals(NAME_BACKSLASHN, StringValueConverter.INSTANCE.toValue("'4diac$NIDE'")); //$NON-NLS-1$
 		assertEquals(NAME_BACKSLASH_FRT, StringValueConverter.INSTANCE.toValue("'4diac$P$R$TIDE'")); //$NON-NLS-1$
 		assertEquals("4diac IDE", StringValueConverter.INSTANCE.toValue("'4diac$20IDE'")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -104,7 +104,7 @@ class ValueConverterTest {
 		assertEquals("abc", WStringValueConverter.INSTANCE.toValue("\"abc\"")); //$NON-NLS-1$ //$NON-NLS-2$
 		assertEquals(NAME_ACUTE, StringValueConverter.INSTANCE.toValue("'4diac'IDE'")); //$NON-NLS-1$
 		assertEquals(NAME_BACKSLASH, StringValueConverter.INSTANCE.toValue("'4diac$\"IDE'")); //$NON-NLS-1$
-		assertEquals(NAME_$, StringValueConverter.INSTANCE.toValue(NAME_TWO_$));
+		assertEquals(NAME_DOLLAR, StringValueConverter.INSTANCE.toValue(NAME_TWO_DOLLAR));
 		assertEquals(NAME_BACKSLASHN, WStringValueConverter.INSTANCE.toValue("\"4diac$NIDE\"")); //$NON-NLS-1$
 		assertEquals(NAME_BACKSLASH_FRT, WStringValueConverter.INSTANCE.toValue("\"4diac$P$R$TIDE\"")); //$NON-NLS-1$
 		assertEquals("4diac IDE", WStringValueConverter.INSTANCE.toValue("\"4diac$0020IDE\"")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -119,7 +119,7 @@ class ValueConverterTest {
 		assertEquals("'abc'", StringValueConverter.INSTANCE.toString("abc")); //$NON-NLS-1$ //$NON-NLS-2$
 		assertEquals("'4diac$'IDE'", StringValueConverter.INSTANCE.toString(NAME_ACUTE)); //$NON-NLS-1$
 		assertEquals("'4diac\"IDE'", StringValueConverter.INSTANCE.toString(NAME_BACKSLASH)); //$NON-NLS-1$
-		assertEquals(NAME_TWO_$, StringValueConverter.INSTANCE.toString(NAME_$));
+		assertEquals(NAME_TWO_DOLLAR, StringValueConverter.INSTANCE.toString(NAME_DOLLAR));
 		assertEquals("'4diac$NIDE'", StringValueConverter.INSTANCE.toString(NAME_BACKSLASHN)); //$NON-NLS-1$
 		assertEquals("'4diac$P$R$TIDE'", StringValueConverter.INSTANCE.toString(NAME_BACKSLASH_FRT)); //$NON-NLS-1$
 		assertEquals("'4diac$00IDE'", StringValueConverter.INSTANCE.toString("4diac\u0000IDE")); //$NON-NLS-1$ //$NON-NLS-2$
@@ -131,7 +131,7 @@ class ValueConverterTest {
 		assertEquals("\"abc\"", WStringValueConverter.INSTANCE.toString("abc")); //$NON-NLS-1$ //$NON-NLS-2$
 		assertEquals("\"4diac'IDE\"", WStringValueConverter.INSTANCE.toString(NAME_ACUTE)); //$NON-NLS-1$
 		assertEquals("\"4diac$\"IDE\"", WStringValueConverter.INSTANCE.toString(NAME_BACKSLASH)); //$NON-NLS-1$
-		assertEquals("\"4diac$$IDE\"", WStringValueConverter.INSTANCE.toString(NAME_$)); //$NON-NLS-1$
+		assertEquals("\"4diac$$IDE\"", WStringValueConverter.INSTANCE.toString(NAME_DOLLAR)); //$NON-NLS-1$
 		assertEquals("\"4diac$NIDE\"", WStringValueConverter.INSTANCE.toString(NAME_BACKSLASHN)); //$NON-NLS-1$
 		assertEquals("\"4diac$P$R$TIDE\"", WStringValueConverter.INSTANCE.toString(NAME_BACKSLASH_FRT)); //$NON-NLS-1$
 		assertEquals("\"4diac$0000IDE\"", WStringValueConverter.INSTANCE.toString("4diac\u0000IDE")); //$NON-NLS-1$ //$NON-NLS-2$

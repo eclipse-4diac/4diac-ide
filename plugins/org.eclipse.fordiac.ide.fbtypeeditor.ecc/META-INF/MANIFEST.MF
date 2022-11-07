@@ -16,7 +16,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.xtext.ui,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.typemanagement,
- org.eclipse.fordiac.ide.model.ui
+ org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.nebula.widgets.nattable.core;bundle-version="2.0.0"
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier

@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.widget;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -19,6 +20,9 @@ import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Button;
@@ -75,6 +79,14 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 		addDownListener(getReverseSelectionListener(viewer, executor, moveDownCommand));
 	}
 
+	public void bindToTableViewer(final NatTable table, final CommandExecutor executor,
+			final CreationCommandProvider addCommand, final CommandProvider deleteCommand,
+			final CommandProvider moveUpCommand, final CommandProvider moveDownCommand) {
+		super.bindToTableViewer(table, executor, addCommand, deleteCommand);
+		addUpListener(getSelectionListener(table, executor, moveUpCommand));
+		addDownListener(getReverseSelectionListener(table, executor, moveDownCommand));
+	}
+
 	// this is needed for correct execution of move down with multiselection
 	public static Listener getReverseSelectionListener(final TableViewer viewer, final CommandExecutor executor,
 			final CommandProvider commandProvider) {
@@ -88,4 +100,24 @@ public class AddDeleteReorderListWidget extends AddDeleteWidget {
 		};
 	}
 
+	public static Listener getReverseSelectionListener(final NatTable table, final CommandExecutor executor,
+			final CommandProvider commandProvider) {
+		return ev -> {
+			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
+			final int[] rows = selectionLayer.getFullySelectedRowPositions();
+			final ListDataProvider<?> dataProvider = (ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(table)
+					.getDataProvider();
+			final List<Object> rowObjects = new ArrayList<>();
+			for (final int row : rows) {
+				rowObjects.add(dataProvider.getRowObject(row));
+			}
+			if (!rowObjects.isEmpty()) {
+				Collections.reverse(rowObjects);
+				executeCompoundCommandForList(table, rowObjects, executor, commandProvider);
+				for (final int row : rows) {
+					selectionLayer.selectRow(0, row + 1, false, true);
+				}
+			}
+		};
+	}
 }

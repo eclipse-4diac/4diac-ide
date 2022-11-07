@@ -177,7 +177,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		public RecordSequenceDialog(final Shell parentShell, final List<String> events, final List<String> parameters,
 				final ServiceSequence serviceSequence) {
 			super(parentShell, "Record Sequence ", null, //$NON-NLS-1$
-					"Configuration \nInputEvent(s) seperated by ; \nParameters seperated by ; and overwritten when Random ticked \nCount is integernumber for number of random elements \nAppend appends the sequence to privios record \nRandom generates random sequence or appends them after InputEvent(s) ", //$NON-NLS-1$
+					"Configuration \nSeparate input events by ; \nSeparate parameters by ; (overwritten when random is true) \nCount specifies number of random elements\nAppend appends the sequence to the current record \nRandom adds count random events to the sequence", //$NON-NLS-1$
 					MessageDialog.INFORMATION, 0, "Run"); //$NON-NLS-1$
 			this.events = events;
 			this.parameters = parameters;

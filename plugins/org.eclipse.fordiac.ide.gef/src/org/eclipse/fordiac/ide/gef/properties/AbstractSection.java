@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2015 - 2022 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +11,7 @@
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - cleaned command stack handling for property sections
+ *               - extracted double column section for cleaner code
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -47,10 +47,8 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 
 	protected Object type;
 	protected CommandStack commandStack;
-	private Composite rightComposite;
-	private Composite leftComposite;
-	protected boolean createSuperControls = true;
 	private ComposedAdapterFactory adapterFactory;
+	private Composite parent;
 
 	// block updates triggered by any command
 	protected boolean blockRefresh = false;
@@ -108,8 +106,8 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
 			if ((null != getType()) && getType().eAdapters().contains(contentAdapter) && !blockRefresh) {
-				leftComposite.getDisplay().asyncExec(() -> {
-					if (!leftComposite.isDisposed()) {
+				parent.getDisplay().asyncExec(() -> {
+					if (!parent.isDisposed()) {
 						refresh();
 					}
 				});
@@ -138,19 +136,12 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		if (createSuperControls) {
-			parent.setLayout(new GridLayout(2, true));
-			parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-			leftComposite = createComposite(parent);
-			rightComposite = createComposite(parent);
-		} else {
-			leftComposite = parent; // store the parent to be used in the content adapter
-			parent.setLayout(new GridLayout(1, true));
-			parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
-		}
+		this.parent = parent; // store the parent to be used in the content adapter
+		parent.setLayout(new GridLayout(1, true));
+		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 	}
 
-	private Composite createComposite(final Composite parent) {
+	protected Composite createComposite(final Composite parent) {
 		final Composite composite = getWidgetFactory().createComposite(parent);
 		composite.setLayout(new GridLayout());
 		composite.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
@@ -190,19 +181,4 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		return adapterFactory;
 	}
 
-	protected Composite getLeftComposite() {
-		return leftComposite;
-	}
-
-	protected void setLeftComposite(final Composite leftComposite) {
-		this.leftComposite = leftComposite;
-	}
-
-	protected Composite getRightComposite() {
-		return rightComposite;
-	}
-
-	protected void setRightComposite(final Composite rightComposite) {
-		this.rightComposite = rightComposite;
-	}
 }

@@ -349,7 +349,7 @@ final class STCoreUtil {
 					feature.type.newArrayType(newSubrange(0, feature.arraySize))
 				else
 					feature.type
-			STVarDeclaration:
+			STVarDeclaration case feature.type instanceof DataType:
 				if (feature.array)
 					(feature.type as DataType).newArrayType(
 						if (feature.ranges.empty)
@@ -361,6 +361,8 @@ final class STCoreUtil {
 					feature.type
 			FB:
 				feature.type
+			default:
+				null
 		}
 	}
 
@@ -370,6 +372,7 @@ final class STCoreUtil {
 
 	def static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
 		DataFactory.eINSTANCE.createArrayType => [
+			name = '''ARRAY [«arraySubranges.map['''«lowerLimit»..«upperLimit»'''].join(", ")»] OF «arrayBaseType.name»'''
 			baseType = arrayBaseType
 			subranges.addAll(arraySubranges)
 		]

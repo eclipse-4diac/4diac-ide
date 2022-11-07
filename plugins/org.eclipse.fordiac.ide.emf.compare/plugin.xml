@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+	<extension point="org.eclipse.core.contenttype.contentTypes">
+  		<file-association
+      		content-type=" org.eclipse.emf.compare.content.type"
+      		file-extensions="sys,fbt,sub,adp,dtp"/>
+	</extension>  
+   <extension
+         point="org.eclipse.emf.compare.edit.adapterFactory">
+      <factory
+       		uri="org.eclipse.fordiac.ide.model.libraryElement"
+            class="org.eclipse.fordiac.ide.emf.compare.provider.AutomationSystemItemProviderEmfCompare"
+            supportedTypes=
+              "org.eclipse.emf.edit.provider.IEditingDomainItemProvider
+               org.eclipse.emf.edit.provider.IStructuredItemContentProvider
+               org.eclipse.emf.edit.provider.ITreeItemContentProvider
+               org.eclipse.emf.edit.provider.IItemLabelProvider
+               org.eclipse.emf.edit.provider.IItemPropertySource"
+            ranking="100"
+           >
+      </factory>
+</extension>
+<extension
+       point="org.eclipse.emf.compare.rcp.ui.filters">
+    <filter
+          activeByDefault="true"
+          class="org.eclipse.fordiac.ide.emf.compare.filter.IgnorePositionFilterEmfCompare"
+          label="Ignore Function Block positions">
+    </filter>
+ </extension>
+</plugin>

@@ -172,8 +172,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Check
 	public void checkAssignmentTypeCompatibility(final STAssignmentStatement statement) {
-		final DataType leftType = (DataType) statement.getLeft().getResultType();
-		final DataType rightType = (DataType) statement.getRight().getResultType();
+		final var leftType = statement.getLeft().getResultType();
+		final var rightType = statement.getRight().getResultType();
 		checkTypeCompatibility(leftType, rightType, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__RIGHT);
 	}
 
@@ -422,8 +422,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		final DataType accessType = (DataType) memberAccessExpr.getResultType();
 		final DataType receiverType = (DataType) receiverExpression.getResultType();
 		// Valid target receiver is a variable or a function name usable as variable
-		if (memberAccessExpr.getReceiver() instanceof STFeatureExpression
-				&& !((STFeatureExpression) memberAccessExpr.getReceiver()).isCall()) {
+		if (memberAccessExpr.getReceiver() instanceof STMemberAccessExpression
+				|| (memberAccessExpr.getReceiver() instanceof STFeatureExpression
+						&& !((STFeatureExpression) memberAccessExpr.getReceiver()).isCall())) {
 			checkMultibitPartialExpression(expression, accessType, receiverType);
 
 		} else {
@@ -458,7 +459,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 						STCorePackage.Literals.ST_MULTIBIT_PARTIAL_EXPRESSION__EXPRESSION,
 						BIT_ACCESS_INDEX_OUT_OF_RANGE);
 			} else if (expression.getExpression() != null) {
-				final DataType multiBitAccessExpressionType = (DataType) (expression.getExpression().getResultType());
+				final DataType multiBitAccessExpressionType = (DataType) expression.getExpression().getResultType();
 				if (!(multiBitAccessExpressionType instanceof AnyIntType)) {
 					error(MessageFormat.format(Messages.STCoreValidator_BitAccessExpressionNotOfTypeAnyInt,
 							multiBitAccessExpressionType.getName()),

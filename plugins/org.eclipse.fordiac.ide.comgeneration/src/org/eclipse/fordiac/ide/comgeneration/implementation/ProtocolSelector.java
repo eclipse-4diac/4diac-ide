@@ -42,18 +42,7 @@ public final class ProtocolSelector {
 			while (destinationIterator.hasNext()) {
 				destination = destinationIterator.next();
 				final Iterator<Segment> segmentIterator = commonSegments.iterator();
-				while (segmentIterator.hasNext()) {
-					final Segment segment = segmentIterator.next();
-					boolean containsSegment = false;
-					for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
-						if (mediaInfo.getSegment() == segment) {
-							containsSegment = true;
-						}
-					}
-					if (!containsSegment) {
-						segmentIterator.remove();
-					}
-				}
+				removeSegment(destination, segmentIterator);
 			}
 
 			Segment selectedCommonSegment = null;
@@ -63,34 +52,61 @@ public final class ProtocolSelector {
 			}
 
 			destinationIterator = channel.getDestinations().iterator();
-			while (destinationIterator.hasNext()) {
-				destination = destinationIterator.next();
+			processSegment(destinationIterator, selectedCommonSegment);
+		}
+	}
 
-				Segment selectedSegment = selectedCommonSegment;
+	private static void processSegment(Iterator<CommunicationChannelDestination> destinationIterator,
+			Segment selectedCommonSegment) {
+		CommunicationChannelDestination destination;
+		while (destinationIterator.hasNext()) {
+			destination = destinationIterator.next();
 
-				if (selectedSegment == null) {
-					final ArrayList<Segment> availableSegments = new ArrayList<>();
-					for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
-						availableSegments.add(mediaInfo.getSegment());
-					}
-					sortSegments(availableSegments);
-					if (!availableSegments.isEmpty()) {
-						selectedSegment = availableSegments.get(0);
+			Segment selectedSegment = selectedCommonSegment;
+
+			if (selectedSegment == null) {
+				selectedSegment = createSegment(destination, selectedSegment);
+			}
+
+			if (selectedSegment != null) {
+				for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
+					if (mediaInfo.getSegment() == selectedSegment) {
+						destination.setSelectedMedia(mediaInfo);
+						destination.setSelectedProtocolId(getProtocolIdForMetiaType(mediaInfo.getSegment()));
+						break;
 					}
 				}
+			} else {
+				FordiacLogHelper.logError(Messages.ProtocolSelector_NoConnectionAvailable);
+			}
 
-				if (selectedSegment != null) {
-					for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
-						if (mediaInfo.getSegment() == selectedSegment) {
-							destination.setSelectedMedia(mediaInfo);
-							destination.setSelectedProtocolId(getProtocolIdForMetiaType(mediaInfo.getSegment()));
-							break;
-						}
-					}
-				} else {
-					FordiacLogHelper.logError(Messages.ProtocolSelector_NoConnectionAvailable);
+		}
+	}
+
+	private static Segment createSegment(CommunicationChannelDestination destination, Segment selectedSegment) {
+		final ArrayList<Segment> availableSegments = new ArrayList<>();
+		for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
+			availableSegments.add(mediaInfo.getSegment());
+		}
+		sortSegments(availableSegments);
+		if (!availableSegments.isEmpty()) {
+			selectedSegment = availableSegments.get(0);
+		}
+		return selectedSegment;
+	}
+
+	private static void removeSegment(CommunicationChannelDestination destination,
+			final Iterator<Segment> segmentIterator) {
+		while (segmentIterator.hasNext()) {
+			final Segment segment = segmentIterator.next();
+			boolean containsSegment = false;
+			for (final CommunicationMediaInfo mediaInfo : destination.getAvailableMedia()) {
+				if (mediaInfo.getSegment() == segment) {
+					containsSegment = true;
 				}
-
+			}
+			if (!containsSegment) {
+				segmentIterator.remove();
 			}
 		}
 	}

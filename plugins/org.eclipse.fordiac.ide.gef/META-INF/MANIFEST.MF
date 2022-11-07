@@ -38,7 +38,8 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.jface.text,
  org.eclipse.emf.edit.ui,
  org.eclipse.fordiac.ide.model.eval,
- org.eclipse.fordiac.ide.ui.errormessages
+ org.eclipse.fordiac.ide.ui.errormessages,
+ org.eclipse.nebula.widgets.nattable.core;bundle-version="2.0.0"
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier
@@ -48,4 +49,3 @@ Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.gef;singleton:=true
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.fordiac.ide.gef
-

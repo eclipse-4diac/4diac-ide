@@ -55,7 +55,7 @@ class ServiceInterfaceFBHeaderTemplate extends ForteFBTemplate {
 		       «baseClass»( pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, m_anFBConnData, m_anFBVarsData) {
 		   };
 		
-		  virtual ~«FBClassName»() = default;
+		  ~«FBClassName»() override = default;
 		};
 		
 		«generateIncludeGuardEnd»

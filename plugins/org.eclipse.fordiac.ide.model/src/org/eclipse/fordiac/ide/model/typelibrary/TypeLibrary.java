@@ -39,6 +39,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
@@ -88,6 +89,12 @@ public final class TypeLibrary {
 
 	public Map<String, SubAppTypeEntry> getSubAppTypes() {
 		return subAppTypes;
+	}
+
+	public List<CompositeFBType> getCompositeFBTypes() {
+		return getFbTypes().values().stream().filter(e -> e.getTypeEditable() instanceof CompositeFBType)
+				.map(e -> (CompositeFBType) e.getTypeEditable())
+				.collect(Collectors.toList());
 	}
 
 	public AdapterTypeEntry getAdapterTypeEntry(final String typeName) {

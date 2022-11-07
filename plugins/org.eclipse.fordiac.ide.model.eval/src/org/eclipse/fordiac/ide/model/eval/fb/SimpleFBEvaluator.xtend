@@ -33,5 +33,6 @@ class SimpleFBEvaluator extends BaseFBEvaluator<SimpleFBType> {
 			algorithmEvaluators.get(algorithm)?.evaluate
 		}
 		queue?.addAll(type.interfaceList.eventOutputs)
+		update(variables.values)
 	}
 }

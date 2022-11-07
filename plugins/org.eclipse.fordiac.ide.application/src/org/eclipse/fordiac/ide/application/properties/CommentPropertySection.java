@@ -17,26 +17,33 @@ package org.eclipse.fordiac.ide.application.properties;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
+import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
+import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
@@ -47,8 +54,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public class CommentPropertySection extends AbstractSection {
 
@@ -59,6 +67,9 @@ public class CommentPropertySection extends AbstractSection {
 	private static final int TYPE = 1;
 	private static final int INITIAL_VALUE = 2;
 	private static final int COMMENT = 3;
+	public static final int VISIBLE = 4;
+
+	private static final int COL_COUNT = 5;
 
 	private Text nameText;
 	private Text commentText;
@@ -69,14 +80,12 @@ public class CommentPropertySection extends AbstractSection {
 	private VarDeclarationListProvider inputDataProvider;
 	private VarDeclarationListProvider outputDataProvider;
 
+	IAction[] defaultCopyPasteCut = new IAction[3];
 	private TabbedPropertySheetPage tabbedPropertySheetPage;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		this.tabbedPropertySheetPage = tabbedPropertySheetPage;
-		setLeftComposite(parent);
-		parent.setLayout(new GridLayout(ONE_COLUMN, true));
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(parent);
+		super.createControls(parent, tabbedPropertySheetPage);
 		createFBInfoGroup(parent);
 		createTableSection(parent);
 	}
@@ -121,8 +130,15 @@ public class CommentPropertySection extends AbstractSection {
 		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer,
 				new ColumnDataProvider(), outputDataProvider.getEditableRule());
 
+		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
+		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
+
+		inputTable.configure();
+		outputTable.configure();
+
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(outputComposite);
+
 
 		tableSectionComposite.layout();
 	}
@@ -169,12 +185,11 @@ public class CommentPropertySection extends AbstractSection {
 					&& rowItem.getComment().equals(defaultComment)) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
 			}
+			// We add a label for the checkbox column
+			if (columnPosition == VISIBLE) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.VISIBILITY_CELL);
+			}
 		});
-	}
-
-	@Override
-	public TabbedPropertySheetWidgetFactory getWidgetFactory() {
-		return tabbedPropertySheetPage.getWidgetFactory();
 	}
 
 	protected void createFBInfoGroup(final Composite parent) {
@@ -197,11 +212,59 @@ public class CommentPropertySection extends AbstractSection {
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).hint(SWT.DEFAULT, 3 * commentText.getLineHeight()).applyTo(commentText);
 		commentText.addModifyListener(e -> {
 			removeContentAdapter();
-			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
+			if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof SubApp) {
+				final Object subAppforFBNetowrkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
+						.getEditPartRegistry().get(getType());
+				if (subAppforFBNetowrkEditPart instanceof SubAppForFBNetworkEditPart
+						&& ((SubAppForFBNetworkEditPart) subAppforFBNetowrkEditPart).getContentEP() != null) {
+					executeCommand(new ResizeGroupOrSubappCommand(
+							((SubAppForFBNetworkEditPart) subAppforFBNetowrkEditPart).getContentEP(),
+							new ChangeCommentCommand(getType(), commentText.getText())));
+				}
+			} else {
+				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
+			}
 			addContentAdapter();
 		});
 	}
 
+	@Override
+	public void aboutToBeShown() {
+		// this can be removed once copy/paste for old tables is no longer used
+		final IActionBars bars = getActionBars();
+		if (bars != null) {
+			defaultCopyPasteCut[0] = bars.getGlobalActionHandler(ActionFactory.COPY.getId());
+			bars.setGlobalActionHandler(ActionFactory.COPY.getId(), null);
+			defaultCopyPasteCut[1] = bars.getGlobalActionHandler(ActionFactory.PASTE.getId());
+			bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), null);
+			defaultCopyPasteCut[2] = bars.getGlobalActionHandler(ActionFactory.CUT.getId());
+			bars.setGlobalActionHandler(ActionFactory.CUT.getId(), null);
+			bars.updateActionBars();
+		}
+
+		super.aboutToBeShown();
+	}
+
+	@Override
+	public void aboutToBeHidden() {
+		// this can be removed once copy/paste for old tables is no longer used
+		final IActionBars bars = getActionBars();
+		if (bars != null) {
+			bars.setGlobalActionHandler(ActionFactory.COPY.getId(), defaultCopyPasteCut[0]);
+			bars.setGlobalActionHandler(ActionFactory.PASTE.getId(), defaultCopyPasteCut[1]);
+			bars.setGlobalActionHandler(ActionFactory.CUT.getId(), defaultCopyPasteCut[2]);
+			bars.updateActionBars();
+		}
+
+		super.aboutToBeHidden();
+	}
+
+	private IActionBars getActionBars() {
+		if (tabbedPropertySheetPage != null && tabbedPropertySheetPage.getSite() != null) {
+			return tabbedPropertySheetPage.getSite().getActionBars();
+		}
+		return null;
+	}
 
 	@Override
 	protected Object getInputType(final Object input) {
@@ -228,6 +291,18 @@ public class CommentPropertySection extends AbstractSection {
 
 		inputTable.refresh();
 		outputTable.refresh();
+
+		inputTable.addListener(SWT.Selection, event -> {
+			if (event.index == VISIBLE) {
+				final Object o = event.data;
+			}
+		});
+
+		outputTable.addListener(SWT.Selection, event -> {
+			if (event.index == VISIBLE) {
+				final Object o = event.data;
+			}
+		});
 	}
 
 
@@ -263,18 +338,20 @@ public class CommentPropertySection extends AbstractSection {
 			return new IEditableRule() {
 				@Override
 				public boolean isEditable(final int columnIndex, final int rowIndex) {
-					return (columnIndex == INITIAL_VALUE && isInputData) || columnIndex == COMMENT;
+					return (columnIndex == INITIAL_VALUE && isInputData) || columnIndex == COMMENT
+							|| columnIndex == VISIBLE;
 				}
 
-				@Override
+				@Override // Added the visible column stuff
 				public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
-					return (cell.getColumnIndex() == INITIAL_VALUE && isInputData) || cell.getColumnIndex() == COMMENT;
+					return (cell.getColumnIndex() == INITIAL_VALUE && isInputData) || cell.getColumnIndex() == COMMENT
+							|| cell.getColumnIndex() == VISIBLE;
 				}
 			};
 		}
 	}
 
-	private class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclaration> {
+	private class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<VarDeclaration> { // IColumnPropertyAccessor
 		private final boolean isInputData;
 
 		public VarDeclarationColumnAccessor(final boolean isInputData) {
@@ -292,7 +369,8 @@ public class CommentPropertySection extends AbstractSection {
 				return InitialValueHelper.getInitalOrDefaultValue(rowObject);
 			case COMMENT:
 				return rowObject.getComment();
-
+			case VISIBLE: // I added
+				return rowObject.isVisible();
 			default:
 				return null;
 			}
@@ -315,7 +393,11 @@ public class CommentPropertySection extends AbstractSection {
 					cmd = new ChangeCommentCommand(rowObject, ""); //$NON-NLS-1$
 				}
 				break;
-
+			case VISIBLE:
+				// It's a true/false checkbox; if it's visible -> hide; if it's hidden -> show
+				// newValue atm is a string...
+				cmd = new HidePinCommand(rowObject, (Boolean) newValue);
+				break;
 			default:
 				return;
 			}
@@ -325,7 +407,43 @@ public class CommentPropertySection extends AbstractSection {
 
 		@Override
 		public int getColumnCount() {
-			return 4;
+			return COL_COUNT;
+		}
+
+		@Override
+		public String getColumnProperty(final int columnIndex) {
+			switch (columnIndex) {
+			case NAME:
+				return FordiacMessages.Name;
+			case TYPE:
+				return FordiacMessages.Type;
+			case INITIAL_VALUE:
+				return FordiacMessages.InitialValue;
+			case COMMENT:
+				return FordiacMessages.Comment;
+			case VISIBLE:
+				return FordiacMessages.Visible;
+			default:
+				return null;
+			}
+		}
+
+		@Override
+		public int getColumnIndex(final String propertyName) {
+			switch (propertyName) {
+			case "Name":
+				return NAME;
+			case "Type":
+				return TYPE;
+			case "Initial Value":
+				return INITIAL_VALUE;
+			case "Comment":
+				return COMMENT;
+			case "Visible":
+				return VISIBLE;
+			default:
+				return -1;
+			}
 		}
 	}
 
@@ -342,7 +460,8 @@ public class CommentPropertySection extends AbstractSection {
 				return FordiacMessages.InitialValue;
 			case COMMENT:
 				return FordiacMessages.Comment;
-
+			case VISIBLE:
+				return FordiacMessages.Visible;
 			default:
 				return FordiacMessages.EmptyField;
 			}
@@ -350,7 +469,7 @@ public class CommentPropertySection extends AbstractSection {
 
 		@Override
 		public int getColumnCount() {
-			return 4;
+			return COL_COUNT;
 		}
 
 		@Override

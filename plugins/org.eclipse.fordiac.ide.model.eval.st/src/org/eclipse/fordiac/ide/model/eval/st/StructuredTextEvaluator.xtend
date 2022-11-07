@@ -101,6 +101,10 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		variables.unmodifiableView
 	}
 
+	override reset(Iterable<Variable<?>> variables) {
+		// do nothing (reset anyway on every invocation)
+	}
+
 	def protected dispatch Variable<?> findVariable(VarDeclaration variable) {
 		(context as FBVariable).value.members.get(variable.name)
 	}

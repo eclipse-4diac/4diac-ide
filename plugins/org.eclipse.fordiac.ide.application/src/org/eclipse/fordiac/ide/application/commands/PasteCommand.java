@@ -12,6 +12,7 @@
  *   Gerhard Ebenhofer, Alois Zoitl, Filip Andren, Matthias Plasch
  *   - initial API and implementation and/or initial documentation
  *   Alois Zoitl - reworked paste to also handle cut elements
+ *   Fabio Gandolfi - fixed pasting and positioning of different networks
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
@@ -151,8 +152,9 @@ public class PasteCommand extends Command {
 					srcFBNetwork = element.getFbNetwork();
 				}
 				elementsToCopy.add(element);
-				x = Math.min(x, element.getPosition().getX());
-				y = Math.min(y, element.getPosition().getY());
+				final Position outermostPos = getPositionOfOutermostNetwork(element);
+				x = Math.min(x, outermostPos.getX());
+				y = Math.min(y, outermostPos.getY());
 			} else if (object instanceof ConnectionReference) {
 				connectionsToCopy.add((ConnectionReference) object);
 			} else if (object instanceof FBNetwork) {
@@ -173,6 +175,29 @@ public class PasteCommand extends Command {
 				yDelta = DEFAULT_DELTA;
 			}
 		}
+	}
+
+	private static Position getPositionOfOutermostNetwork(final FBNetworkElement element) {
+		final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
+		pos.setX(element.getPosition().getX());
+		pos.setY(element.getPosition().getY());
+		FBNetworkElement parent;
+		if (element.getGroup() != null) {
+			parent = element.getGroup();
+		} else {
+			parent = element.getOuterFBNetworkElement();
+		}
+
+		while (parent != null) {
+			pos.setX(pos.getX() + parent.getPosition().getX());
+			pos.setY(pos.getY() + parent.getPosition().getY());
+			if (parent.getGroup() != null) {
+				parent = parent.getGroup();
+			} else {
+				parent = parent.getOuterFBNetworkElement();
+			}
+		}
+		return pos;
 	}
 
 	private void copyFBs() {
@@ -205,7 +230,7 @@ public class PasteCommand extends Command {
 			}
 		}
 
-		if (isNested == false) {
+		if (!isNested) {
 			copiedElement.setPosition(calculatePastePos(element));
 		}
 		copiedElement.setMapping(null);
@@ -217,13 +242,15 @@ public class PasteCommand extends Command {
 
 		// copy content of Groups
 		if (element instanceof Group) {
-			((Group) element).getFbNetwork().getEventConnections().forEach(con -> {
-				connectionsToCopy.add(new ConnectionReference(con));
-			});
-			((Group) element).getFbNetwork().getDataConnections().forEach(con -> {
-				connectionsToCopy.add(new ConnectionReference(con));
-			});
-			for (final FBNetworkElement groupElement : ((Group) element).getGroupElements()) {
+			final Group group = (Group) element;
+			group.getFbNetwork().getEventConnections()
+					.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
+			group.getFbNetwork().getDataConnections()
+					.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
+			group.getFbNetwork().getAdapterConnections()
+					.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
+
+			for (final FBNetworkElement groupElement : group.getGroupElements()) {
 				((Group) copiedElement).getGroupElements().add(copyAndCreateFB(groupElement, true));
 			}
 		}
@@ -332,8 +359,9 @@ public class PasteCommand extends Command {
 
 	private Position calculatePastePos(final FBNetworkElement element) {
 		final Position pastePos = LibraryElementFactory.eINSTANCE.createPosition();
-		pastePos.setX(element.getPosition().getX() + xDelta);
-		pastePos.setY(element.getPosition().getY() + yDelta);
+		final Position outermostPos = getPositionOfOutermostNetwork(element);
+		pastePos.setX(outermostPos.getX() + xDelta);
+		pastePos.setY(outermostPos.getY() + yDelta);
 		return pastePos;
 	}
 

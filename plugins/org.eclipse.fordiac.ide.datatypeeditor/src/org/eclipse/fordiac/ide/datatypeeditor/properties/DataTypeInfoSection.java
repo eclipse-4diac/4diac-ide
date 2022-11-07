@@ -35,11 +35,9 @@ public class DataTypeInfoSection extends AbstractSection {
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createSuperControls = false;
 		super.createControls(parent, tabbedPropertySheetPage);
 
 		parent.setLayout(new GridLayout(2, false));
-		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
 
 		createCommentField(parent);
 		createTypeInfoGroup(parent);

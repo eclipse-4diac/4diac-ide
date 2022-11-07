@@ -20,7 +20,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
 import java.util.stream.Collectors;
 
-import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
+import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.gef.widgets.PinInfoBasicWidget;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
@@ -29,7 +29,7 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class AdapterInterfaceElementSection extends AbstractSection {
+public class AdapterInterfaceElementSection extends AbstractDoubleColumnSection {
 
 	protected PinInfoBasicWidget pinInfoBasicWidget;
 
