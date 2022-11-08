@@ -27,6 +27,7 @@ import org.eclipse.draw2d.IFigure;
 import org.eclipse.fordiac.ide.gef.router.MoveableRouter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
@@ -114,7 +115,9 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 	protected Collection<Value> getFBValues() {
 		final ArrayList<Value> valueElements = new ArrayList<>();
 		for (final FBNetworkElement element : getNetworkElements()) {
-			element.getInterface().getInputVars().stream().filter(di -> (di.getValue() != null))
+			element.getInterface().getInputVars().stream()
+			.filter(di -> (di.getValue() != null))
+			.filter(HiddenElement::isVisible)
 			.forEach(di -> valueElements.add(di.getValue()));
 			element.getInterface().getErrorMarker().stream().filter(er -> (er.getValue() != null))
 			.forEach(er -> valueElements.add(er.getValue()));
