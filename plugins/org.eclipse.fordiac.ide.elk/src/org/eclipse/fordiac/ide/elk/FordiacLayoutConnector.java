@@ -22,15 +22,15 @@ import org.eclipse.elk.core.service.IDiagramLayoutConnector;
 import org.eclipse.elk.core.service.LayoutMapping;
 import org.eclipse.elk.graph.properties.IPropertyHolder;
 import org.eclipse.fordiac.ide.elk.commands.LayoutCommand;
-import org.eclipse.fordiac.ide.elk.helpers.FordiacGraphDataHelper;
 import org.eclipse.fordiac.ide.elk.helpers.FordiacGraphBuilder;
+import org.eclipse.fordiac.ide.elk.helpers.FordiacGraphDataHelper;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class FordiacLayoutConnector implements IDiagramLayoutConnector {
 
 	@Override
 	public LayoutMapping buildLayoutGraph(final IWorkbenchPart workbenchPart, final Object diagramPart) {
-		final FordiacLayoutMapping mapping = FordiacLayoutMapping.create(workbenchPart);
+		final FordiacLayoutMapping mapping = FordiacLayoutMapping.create(workbenchPart, true);
 
 		if (mapping.hasNetwork()) {
 			FordiacGraphBuilder.build(mapping);
