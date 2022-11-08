@@ -73,6 +73,7 @@ import org.eclipse.nebula.widgets.nattable.ui.matcher.KeyEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.LetterOrDigitKeyEventMatcher;
 import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
+import org.eclipse.nebula.widgets.nattable.viewport.action.ViewportSelectRowAction;
 import org.eclipse.nebula.widgets.nattable.widget.EditModeEnum;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
@@ -345,7 +346,7 @@ public final class NatTableWidgetFactory {
 						DISABLED_HEADER);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 						DISABLED_HEADER);
-
+				
 				configRegistry.unregisterConfigAttribute(CellConfigAttributes.CELL_STYLE, DisplayMode.SELECT,
 						SelectionStyleLabels.SELECTION_ANCHOR_STYLE);
 
