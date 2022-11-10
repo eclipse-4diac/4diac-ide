@@ -407,9 +407,6 @@
                      pattern="org.eclipse.ui.navigator.resources.filters.*">
                </contentExtension>
                <contentExtension
-                     pattern="org.eclipse.ui.navigator.resources.linkHelper">
-               </contentExtension>
-               <contentExtension
                      pattern="org.eclipse.ui.navigator.resources.workingSets">
                </contentExtension>
                <contentExtension
@@ -420,6 +417,9 @@
                </contentExtension>
                <contentExtension
                      pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemConfigurationLinkHelper" >
+               </contentExtension>
+               <contentExtension
+                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.fbNetworkLinkHelper" >
                </contentExtension>
                <contentExtension
                      pattern="org.eclipse.fordiac.ide.typemanagement.navigator.FBContentSorter" >
@@ -664,6 +664,18 @@
           </selectionEnablement>
           <editorInputEnablement>
              <instanceof value="org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput"/>
+          </editorInputEnablement>
+       </linkHelper>
+    </extension>
+    <extension point="org.eclipse.ui.navigator.linkHelper">    
+       <linkHelper
+             class="org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.FBNetworkLinkHelper"
+             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.fbNetworkLinkHelper">
+          <selectionEnablement>
+             <instanceof value="org.eclipse.core.resources.IFile"/>
+          </selectionEnablement>   
+          <editorInputEnablement>
+             <instanceof value="org.eclipse.ui.IFileEditorInput"/>
           </editorInputEnablement>
        </linkHelper>
     </extension>
