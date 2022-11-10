@@ -13,9 +13,18 @@
 package org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.ui.actions.OpenListener;
+import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
+import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
+import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IEditorInput;
@@ -24,6 +33,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.ResourceUtil;
 import org.eclipse.ui.navigator.ILinkHelper;
+import org.eclipse.ui.part.FileEditorInput;
 
 public class FBNetworkLinkHelper implements ILinkHelper {
 
@@ -55,7 +65,68 @@ public class FBNetworkLinkHelper implements ILinkHelper {
 
 	@Override
 	public void activateEditor(final IWorkbenchPage aPage, final IStructuredSelection aSelection) {
-		// Currently do nothing. This avoids that on drag and drop editors are popping-up from the background
+		if (aSelection == null || aSelection.isEmpty()) {
+			return;
+		}
+		final Object sel = aSelection.getFirstElement();
+		if (sel instanceof EObject) {
+			handleModelElementSelection(aPage, (EObject) sel);
+		}
+
+		if (sel instanceof IFile) {
+			handleFileSelection(aPage, (IFile) aSelection.getFirstElement());
+		}
+
+	}
+
+	private static void handleFileSelection(final IWorkbenchPage aPage, final IFile aFile) {
+		if (SystemManager.isSystemFile(aFile)) {
+			handleModelElementSelection(aPage, SystemManager.INSTANCE.getSystem(aFile));
+		}
+	}
+
+	private static void handleModelElementSelection(final IWorkbenchPage aPage, final EObject sel) {
+		final IEditorPart editor = getRootEditor(aPage, sel);
+		if (editor != null) {
+			final AbstractBreadCrumbEditor breadCrumbEditor = OpenListener.getBreadCrumbEditor(editor);
+			if (breadCrumbEditor != null) {
+				final EObject breadCrumbRef = getBreadCrumbRefElement(sel);
+				breadCrumbEditor.getBreadcrumb().setInput(breadCrumbRef);
+				if (breadCrumbRef != sel || sel instanceof Device) {
+					HandlerHelper.selectElement(sel, editor);
+				}
+			}
+		}
+	}
+
+	private static IEditorPart getRootEditor(final IWorkbenchPage aPage, final EObject sel) {
+		final IFile modelFile = getFileForModel(sel);
+		if (modelFile != null) {
+			final IEditorInput fileInput = new FileEditorInput(modelFile);
+			final IEditorPart editor = aPage.findEditor(fileInput);
+			if (editor != null) {
+				aPage.bringToTop(editor);
+				return editor;
+			}
+		}
+		return null;
+	}
+
+	private static IFile getFileForModel(final EObject sel) {
+		final EObject root = EcoreUtil.getRootContainer(sel);
+		if (root instanceof AutomationSystem) {
+			return ((AutomationSystem) root).getSystemFile();
+		} else if (root instanceof FBType) {
+			return ((FBType) root).getTypeEntry().getFile();
+		}
+		return null;
+	}
+
+	private static EObject getBreadCrumbRefElement(final EObject sel) {
+		if ((sel instanceof FBNetworkElement && ((FBNetworkElement) sel).getType() != null) || (sel instanceof Group)) {
+			return sel.eContainer().eContainer();
+		}
+		return sel;
 	}
 
 }
