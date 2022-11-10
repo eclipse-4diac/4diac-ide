@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListener;
 import org.eclipse.fordiac.ide.model.ui.editors.AbstractBreadCrumbEditor;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
@@ -52,6 +53,10 @@ public class FBNetworkLinkHelper implements ILinkHelper {
 			final FBNetworkElement fbElem = editor.getAdapter(FBNetworkElement.class);
 			if (fbElem != null) {
 				return new StructuredSelection(fbElem);
+			}
+			final SystemConfiguration sysConf = editor.getAdapter(SystemConfiguration.class);
+			if (sysConf != null) {
+				return new StructuredSelection(sysConf);
 			}
 		}
 		// if we didn't find a suitable editor try to at least highlight the file
