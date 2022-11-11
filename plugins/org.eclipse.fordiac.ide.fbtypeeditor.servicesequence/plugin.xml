@@ -365,4 +365,29 @@
             </visibleWhen>
  </menuContribution> 
    </extension>
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view.ServiceSequenceAssignView"
+            icon="fordiacimage://ICON_FB"
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view.ServiceSequenceAssignView"
+            name="SSAV"
+            restorable="true">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.eclipse.fordiac.ide.typemanagement.TypeManagementPerspective">
+      	<perspectiveShortcut
+               id="org.eclipse.fordiac.ide.typemanagement.perspective">
+         </perspectiveShortcut>
+         <view
+               id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view.ServiceSequenceAssignView"
+               minimized="false"
+               ratio="0.75f"
+               relationship="stack"
+               relative="org.eclipse.ui.propertiesView">
+         </view>
+      </perspectiveExtension>
+   </extension>
 </plugin>
