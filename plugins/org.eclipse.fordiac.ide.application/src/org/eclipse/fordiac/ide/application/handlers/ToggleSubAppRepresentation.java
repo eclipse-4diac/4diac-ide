@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.ToggleSubAppRepresentationCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.EditPart;
@@ -69,7 +70,9 @@ public class ToggleSubAppRepresentation extends AbstractHandler implements IElem
 		final SubApp subApp = getSelectedSubApp(selection);
 
 		// for now we only allow untyped subapps to be expanded or collapsed
-		setBaseEnabled(((null != subApp) && (!subApp.isTyped())));
+		final boolean isUntypedSubapp = (null != subApp) && (!subApp.isTyped());
+		final boolean isInResource = (null != subApp) && subApp.eContainer().eContainer() instanceof Resource;
+		setBaseEnabled(isUntypedSubapp && !isInResource);
 	}
 
 	@Override

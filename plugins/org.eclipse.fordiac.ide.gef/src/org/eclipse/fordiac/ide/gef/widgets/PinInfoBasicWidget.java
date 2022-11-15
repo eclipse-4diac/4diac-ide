@@ -17,9 +17,11 @@ import java.util.function.Consumer;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -53,7 +55,7 @@ public class PinInfoBasicWidget implements CommandExecutor {
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Name + ":"); //$NON-NLS-1$
 		nameText = createText(parent);
-		nameText.addModifyListener(e -> executeCommand(new ChangeNameCommand(type, nameText.getText())));
+		nameText.addModifyListener(e -> executeCommand(createChangeNameCommand()));
 
 		widgetFactory.createCLabel(parent, FordiacMessages.Comment + ":"); //$NON-NLS-1$
 		commentText = createText(parent);
@@ -62,6 +64,13 @@ public class PinInfoBasicWidget implements CommandExecutor {
 		widgetFactory.createCLabel(parent, FordiacMessages.Type + ":"); //$NON-NLS-1$
 		typeSelectionWidget = new TypeSelectionWidget(widgetFactory, this::handleTypeSelectionChanged);
 		typeSelectionWidget.createControls(parent);
+	}
+
+	private ChangeNameCommand createChangeNameCommand() {
+		if (isSubappPin()) {
+			return new ChangeSubAppIENameCommand(type, nameText.getText());
+		}
+		return new ChangeNameCommand(type, nameText.getText());
 	}
 
 	protected Text createText(final Composite parent) {
@@ -151,6 +160,11 @@ public class PinInfoBasicWidget implements CommandExecutor {
 	private DataType getSelectedType(final String newTypeName) {
 		return getTypeSelectionWidget().getContentProvider().getTypes().stream()
 				.filter(el -> el.getName().equals(newTypeName)).findFirst().orElse(null);
+	}
+
+	private boolean isSubappPin() {
+		final IInterfaceElement ie = getType();
+		return (ie != null) && (ie.getFBNetworkElement() instanceof SubApp);
 	}
 
 }
