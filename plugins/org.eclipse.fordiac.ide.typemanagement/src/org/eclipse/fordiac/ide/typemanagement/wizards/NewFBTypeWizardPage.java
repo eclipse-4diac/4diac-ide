@@ -129,7 +129,9 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	@Override
 	protected boolean validatePage() {
 		if ((null == templateList) || (0 == templateList.length)) {
-			setErrorMessage(Messages.NewFBTypeWizardPage_NoTypeTemplatesFoundCheckTemplatesDirectory);
+			setErrorMessage(
+					MessageFormat.format(Messages.NewFBTypeWizardPage_NoTypeTemplatesFoundCheckTemplatesDirectory,
+							getTypeTemplatesFolder().toString()));
 			return false;
 		}
 		if (super.getFileName().isEmpty()) {
@@ -264,8 +266,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 	}
 
 	private void loadTypeTemplates() {
-		final String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
-		final File templateFolder = new File(templateFolderPath + File.separatorChar + "template"); //$NON-NLS-1$
+		final File templateFolder = getTypeTemplatesFolder();
 		final FileFilter ff = createTemplatesFileFilter();
 		if (templateFolder.isDirectory()) {
 			final File[] files = templateFolder.listFiles(ff);
@@ -277,6 +278,12 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 				}
 			}
 		}
+	}
+
+	private static File getTypeTemplatesFolder() {
+		final String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
+		final File templateFolder = new File(templateFolderPath + File.separatorChar + "template"); //$NON-NLS-1$
+		return templateFolder;
 	}
 
 	@SuppressWarnings("static-method") // this method is need to allow sub-classes to override it with specific filters
