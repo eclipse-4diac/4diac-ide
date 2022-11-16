@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import java.util.List;
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.emf.ecore.EObject;
@@ -189,5 +190,21 @@ public interface InterfaceList extends EObject {
 	 * @generated
 	 */
 	InterfaceList copy();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.VarDeclList" required="true"
+	 * @generated
+	 */
+	List<VarDeclaration> getVisibleInputVars();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.fordiac.ide.model.libraryElement.VarDeclList" required="true"
+	 * @generated
+	 */
+	List<VarDeclaration> getVisibleOutputVars();
 
 } // InterfaceList

@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
+import java.util.List;
 import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.common.util.EList;
@@ -307,6 +308,26 @@ public class InterfaceListImpl extends EObjectImpl implements InterfaceList {
 	@Override
 	public InterfaceList copy() {
 		return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public List<VarDeclaration> getVisibleInputVars() {
+		return getInputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public List<VarDeclaration> getVisibleOutputVars() {
+		return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());
 	}
 
 	/**

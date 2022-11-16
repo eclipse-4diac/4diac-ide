@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
@@ -261,6 +262,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return createTypeEntryFromString(eDataType, initialValue);
 			case LibraryElementPackage.TYPE_LIBRARY:
 				return createTypeLibraryFromString(eDataType, initialValue);
+			case LibraryElementPackage.VAR_DECL_LIST:
+				return createVarDeclListFromString(eDataType, initialValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -288,6 +291,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 				return convertTypeEntryToString(eDataType, instanceValue);
 			case LibraryElementPackage.TYPE_LIBRARY:
 				return convertTypeLibraryToString(eDataType, instanceValue);
+			case LibraryElementPackage.VAR_DECL_LIST:
+				return convertVarDeclListToString(eDataType, instanceValue);
 			default:
 				throw new IllegalArgumentException("The datatype '" + eDataType.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -1255,6 +1260,25 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 */
 	public String convertTypeLibraryToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@SuppressWarnings("unchecked")
+	public List<VarDeclaration> createVarDeclListFromString(EDataType eDataType, String initialValue) {
+		return (List<VarDeclaration>)super.createFromString(initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertVarDeclListToString(EDataType eDataType, Object instanceValue) {
+		return super.convertToString(instanceValue);
 	}
 
 	/**

@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
+import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 
@@ -795,6 +796,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EDataType typeLibraryEDataType = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EDataType varDeclListEDataType = null;
 
 	/**
 	 * Creates an instance of the model <b>Package</b>, registered with
@@ -3542,6 +3550,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EDataType getVarDeclList() {
+		return varDeclListEDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public LibraryElementFactory getLibraryElementFactory() {
 		return (LibraryElementFactory)getEFactoryInstance();
 	}
@@ -3922,6 +3940,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		pointEDataType = createEDataType(POINT);
 		typeEntryEDataType = createEDataType(TYPE_ENTRY);
 		typeLibraryEDataType = createEDataType(TYPE_LIBRARY);
+		varDeclListEDataType = createEDataType(VAR_DECL_LIST);
 	}
 
 	/**
@@ -4303,6 +4322,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEParameter(op, ecorePackage.getEString(), "name", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(interfaceListEClass, this.getInterfaceList(), "copy", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(interfaceListEClass, this.getVarDeclList(), "getVisibleInputVars", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(interfaceListEClass, this.getVarDeclList(), "getVisibleOutputVars", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(linkEClass, Link.class, "Link", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getLink_Segment(), this.getSegment(), this.getSegment_OutConnections(), "segment", null, 0, 1, Link.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -4700,6 +4723,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEDataType(pointEDataType, Point.class, "Point", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEDataType(typeEntryEDataType, TypeEntry.class, "TypeEntry", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEDataType(typeLibraryEDataType, TypeLibrary.class, "TypeLibrary", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEDataType(varDeclListEDataType, List.class, "VarDeclList", IS_SERIALIZABLE, !IS_GENERATED_INSTANCE_CLASS, "java.util.List<org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration>"); //$NON-NLS-1$ //$NON-NLS-2$
 
 		// Create resource
 		createResource(eNS_URI);

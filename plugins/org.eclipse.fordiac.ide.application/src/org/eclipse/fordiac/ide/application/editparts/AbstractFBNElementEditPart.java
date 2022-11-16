@@ -368,7 +368,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			return interfaceList.getSockets().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart.isVariable()) {
-			return interfaceList.getInputVars().indexOf(interfaceEditPart.getModel());
+			return interfaceList.getVisibleInputVars().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
 			return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
@@ -386,7 +386,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			return interfaceList.getPlugs().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart.isVariable()) {
-			return interfaceList.getOutputVars().indexOf(interfaceEditPart.getModel());
+			return interfaceList.getVisibleOutputVars().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
 			return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
