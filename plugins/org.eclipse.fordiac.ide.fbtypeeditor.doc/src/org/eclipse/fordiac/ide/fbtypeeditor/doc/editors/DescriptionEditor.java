@@ -39,10 +39,12 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.nebula.widgets.richtext.RichTextEditor;
 import org.eclipse.nebula.widgets.richtext.RichTextEditorConfiguration;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.SWTError;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
@@ -130,32 +132,39 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 	public void createPartControl(final Composite parent) {
 		GridLayoutFactory.fillDefaults().margins(0, 0).applyTo(parent);
 
-		final Button button = new Button(parent, SWT.PUSH);
-		button.setText("Add Image"); //$NON-NLS-1$ this button is temporary, therefore the NLS-tag
-		button.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
-		button.addListener(SWT.Selection, event -> {
-			final FileDialog dialog = new FileDialog(parent.getShell());
-			final String filename = dialog.open();
-			if (filename != null) {
-				final String base64 = encodeImageToBase64(new File(filename));
-				editor.insertHTML("<img src= data:image/png;base64," + base64 + ">"); //$NON-NLS-1$ //$NON-NLS-2$
-			}
-		});
+		try {
 
-		final RichTextEditorConfiguration editorConfig = new RichTextEditorConfiguration();
+			final Button button = new Button(parent, SWT.PUSH);
+			button.setText("Add Image"); //$NON-NLS-1$ this button is temporary, therefore the NLS-tag
+			button.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
+			button.addListener(SWT.Selection, event -> {
+				final FileDialog dialog = new FileDialog(parent.getShell());
+				final String filename = dialog.open();
+				if (filename != null) {
+					final String base64 = encodeImageToBase64(new File(filename));
+					editor.insertHTML("<img src= data:image/png;base64," + base64 + ">"); //$NON-NLS-1$ //$NON-NLS-2$
+				}
+			});
 
-		editorConfig.setOption("toolbarGroups", TOOLBAR_GROUP_CONFIGURATION); //$NON-NLS-1$
-		editorConfig.removeDefaultToolbarButton("Flash", "Table", "HorizontalRule", "SpecialChar" + "", "Smiley",  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$//$NON-NLS-5$ //$NON-NLS-6$
-				"PageBreak", "Iframe"); //$NON-NLS-1$ //$NON-NLS-2$
-		editor = new RichTextEditor(parent, editorConfig);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
-		editor.setText(getFbType().getDocumentation());
-		editor.addModifyListener(e -> {
-			if (editor != null && editor.getText() != null
-					&& !editor.getText().equals(getFbType().getDocumentation())) {
-				executeCommand(new ChangeDocumentationCommand(getFbType(), editor.getText()));
-			}
-		});
+			final RichTextEditorConfiguration editorConfig = new RichTextEditorConfiguration();
+
+			editorConfig.setOption("toolbarGroups", TOOLBAR_GROUP_CONFIGURATION); //$NON-NLS-1$
+			editorConfig.removeDefaultToolbarButton("Flash", "Table", "HorizontalRule", "SpecialChar" + "", "Smiley",  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$//$NON-NLS-5$ //$NON-NLS-6$
+					"PageBreak", "Iframe"); //$NON-NLS-1$ //$NON-NLS-2$
+			editor = new RichTextEditor(parent, editorConfig);
+			GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
+			editor.setText(getFbType().getDocumentation());
+			editor.addModifyListener(e -> {
+				if (editor != null && editor.getText() != null
+						&& !editor.getText().equals(getFbType().getDocumentation())) {
+					executeCommand(new ChangeDocumentationCommand(getFbType(), editor.getText()));
+				}
+			});
+		} catch (final SWTError e) {
+			final Label errorLabel = new Label(parent, SWT.NONE);
+			errorLabel.setText(e.getMessage());
+			GridDataFactory.swtDefaults().applyTo(errorLabel);
+		}
 	}
 
 	private void executeCommand(final Command cmd) {
@@ -168,7 +177,9 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 
 	@Override
 	public void setFocus() {
-		editor.setFocus();
+		if (editor != null && !editor.isDisposed()) {
+			editor.setFocus();
+		}
 	}
 
 	@Override
@@ -200,7 +211,9 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 	@Override
 	public void reloadType(final FBType type) {
 		getEditorInput().setFbType(type);
-		editor.setText(getFbType().getDocumentation());
+		if (editor != null && !editor.isDisposed()) {
+			editor.setText(getFbType().getDocumentation());
+		}
 	}
 
 	@Override
