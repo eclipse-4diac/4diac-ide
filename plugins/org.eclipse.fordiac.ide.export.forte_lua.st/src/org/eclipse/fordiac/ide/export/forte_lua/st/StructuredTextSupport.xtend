@@ -258,10 +258,31 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateExpression(STBinaryExpression expr) {
 		switch (expr.op) {
 			// case RANGE: '''«expr.left.generateExpression», «expr.right.generateExpression»'''
-			case OR: '''(«expr.left.generateExpression» | «expr.right.generateExpression»)'''
-			case XOR: '''(«expr.left.generateExpression» ~ «expr.right.generateExpression»)'''
-			case AND: '''(«expr.left.generateExpression» & «expr.right.generateExpression»)'''
-			case AMPERSAND: '''(«expr.left.generateExpression» & «expr.right.generateExpression»)'''
+			case OR:
+				if (expr.left.resultType instanceof BoolType) {
+					'''(«expr.left.generateExpression» or «expr.right.generateExpression»)'''
+				} else if (expr.left.resultType instanceof LwordType) {
+					'''STfunc.OR64(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+				} else {
+					'''STfunc.OR(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+				}
+			case XOR:
+				if (expr.left.resultType instanceof BoolType) {
+					'''(«expr.left.generateExpression» ~= «expr.right.generateExpression»)'''
+				} else if (expr.left.resultType instanceof LwordType) {
+					'''STfunc.XOR64(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+				} else {
+					'''STfunc.XOR(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+				}
+			case AND:
+				if (expr.left.resultType instanceof BoolType) {
+					return '''(«expr.left.generateExpression» and «expr.right.generateExpression»)'''
+				} else if (expr.left.resultType instanceof LwordType) {
+					'''STfunc.AND64(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+				} else {
+					'''STfunc.AND(«expr.left.generateExpression», «expr.right.generateExpression»)'''
+				}
+			case AMPERSAND: '''(«expr.left.generateExpression» and «expr.right.generateExpression»)'''
 			case EQ: '''(«expr.left.generateExpression» == «expr.right.generateExpression»)'''
 			case NE: '''(«expr.left.generateExpression» ~= «expr.right.generateExpression»)'''
 			case LT: '''(«expr.left.generateExpression» < «expr.right.generateExpression»)'''
@@ -301,7 +322,21 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		switch (expr.op) {
 			case MINUS: '''-«expr.expression.generateExpression»'''
 			case PLUS: '''«expr.expression.generateExpression»'''
-			case NOT: '''~«expr.expression.generateExpression»'''
+			case NOT: {
+				var bits = ""
+				if (expr.resultType instanceof BoolType) {
+					return '''(not «expr.expression.generateExpression»)'''
+				} else if (expr.resultType instanceof ByteType) {
+					bits = "8"
+				} else if (expr.resultType instanceof WordType) {
+					bits = "16"
+				} else if (expr.resultType instanceof DwordType) {
+					bits = "32"
+				} else if (expr.resultType instanceof LwordType) {
+					bits = "64"
+				}
+				return '''STfunc.NOT«bits»(«expr.expression.generateExpression»)'''
+			}
 			default: {
 				errors.add('''The operation «expr.op.getName» is not supported''')
 				''''''
@@ -350,18 +385,19 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 					case "shr",
 					case "rol",
 					case "ror": {
-						call = '''STFunc.«name»'''
+						var bits = ""
 						if (type instanceof BoolType) {
-							addPars = ", 1"
+							bits = "1"
 						} else if (type instanceof ByteType) {
-							addPars = ", 8"
+							bits = "8"
 						} else if (type instanceof WordType) {
-							addPars = ", 16"
+							bits = "16"
 						} else if (type instanceof DwordType) {
-							addPars = ", 32"
+							bits = "32"
 						} else if (type instanceof LwordType) {
-							addPars = ", 64"
+							bits = "64"
 						}
+						call = '''STfunc.«name.toUpperCase»«bits»'''
 					}
 					default:
 						call = '''«expr.feature.generateFeatureName»'''
