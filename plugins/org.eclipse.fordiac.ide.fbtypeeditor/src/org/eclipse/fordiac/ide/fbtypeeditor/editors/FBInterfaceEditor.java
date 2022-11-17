@@ -105,6 +105,14 @@ public class FBInterfaceEditor extends DiagramEditorWithFlyoutPalette implements
 		return paletteRoot;
 	}
 
+	@Override
+	public Object getAdapter(final Class type) {
+		if (type == InterfaceList.class) {
+			return getModel().getInterfaceList();
+		}
+		return super.getAdapter(type);
+	}
+
 	protected TypeLibrary getTypeLib() {
 		return typeLib;
 	}

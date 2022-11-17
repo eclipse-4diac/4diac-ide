@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
+import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.ECCItemProvider;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
@@ -259,7 +260,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	}
 
 	@Override
-	public Object getModel() {
+	public ECC getModel() {
 		return fbType.getECC();
 	}
 
@@ -277,6 +278,14 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	@Override
 	public AutomationSystem getSystem() {
 		return null; // this is currently needed as the base class is targeted for system editors
+	}
+
+	@Override
+	public Object getAdapter(final Class adapter) {
+		if (adapter == ECC.class) {
+			return adapter.cast(getModel());
+		}
+		return super.getAdapter(adapter);
 	}
 
 	@Override
