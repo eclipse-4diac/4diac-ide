@@ -22,4 +22,6 @@ public interface I4diacNatTableUtil {
 	Object removeEntry(int index, CompoundCommand cmd);
 
 	void executeCompoundCommand(CompoundCommand cmd);
+
+	boolean isEditable();
 }

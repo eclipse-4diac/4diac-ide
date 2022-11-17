@@ -60,4 +60,16 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 		return (FBType) type;
 	}
 
+	@Override
+	protected void setTableInput() {
+		final FBType fbType = getType();
+		inputProvider.setInput(fbType.getInterfaceList().getInputVars());
+		outputProvider.setInput(fbType.getInterfaceList().getOutputVars());
+	}
+
+	@Override
+	public boolean isEditable() {
+		return true;
+	}
+
 }

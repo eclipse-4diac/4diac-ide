@@ -21,6 +21,7 @@ import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 
 public class VarDeclarationListProvider extends ListDataProvider<VarDeclaration> {
 
+
 	public VarDeclarationListProvider(final AbstractSection section, final List<VarDeclaration> list) {
 		super(list, new VarDeclarationColumnAccessor(section));
 	}
@@ -33,9 +34,15 @@ public class VarDeclarationListProvider extends ListDataProvider<VarDeclaration>
 		return 0;
 	}
 
+	public void setInput(final List<VarDeclaration> list) {
+		this.list = list;
+	}
+
 	public void setInput(final Object inputElement) {
 		if (inputElement instanceof BaseFBType) {
 			this.list = ((BaseFBType) inputElement).getInternalVars();
 		}
 	}
+
+
 }

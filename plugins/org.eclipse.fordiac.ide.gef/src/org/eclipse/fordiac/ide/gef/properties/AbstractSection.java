@@ -15,6 +15,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
@@ -24,6 +29,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.provider.LibraryElementItemProviderAdapterFactory;
@@ -49,7 +55,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 	protected CommandStack commandStack;
 	private ComposedAdapterFactory adapterFactory;
 	private Composite parent;
-
+	protected Map<String, List<String>> typeSelection = new HashMap<>();
 	// block updates triggered by any command
 	protected boolean blockRefresh = false;
 
@@ -181,4 +187,15 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		return adapterFactory;
 	}
 
+	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
+		final List<String> elementaryTypes = new ArrayList<>();
+		dataTypeLib.getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType))
+		.forEach(type -> elementaryTypes.add(type.getName()));
+		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
+
+		final List<String> structuredTypes = new ArrayList<>();
+		dataTypeLib.getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
+		.forEach(type -> structuredTypes.add(type.getName()));
+		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
+	}
 }

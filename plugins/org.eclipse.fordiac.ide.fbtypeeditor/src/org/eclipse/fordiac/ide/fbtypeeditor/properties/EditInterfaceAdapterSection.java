@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.swt.widgets.Group;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
@@ -58,6 +59,24 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	@Override
 	protected FBType getType() {
 		return (FBType) type;
+	}
+
+	@Override
+	public boolean isEditable() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	protected void setupOutputTable(final Group outputsGroup) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	protected void setupInputTable(final Group inputsGroup) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

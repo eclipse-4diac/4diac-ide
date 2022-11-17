@@ -25,11 +25,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
@@ -37,7 +32,6 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableComma
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
@@ -66,7 +60,6 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 
 	private VarDeclarationListProvider provider;
 	private NatTable table;
-	private final Map<String, List<String>> proposals = new HashMap<>();
 
 	@Override
 	protected BaseFBType getType() {
@@ -104,7 +97,7 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 			}
 		});
 		table = NatTableWidgetFactory.createRowNatTable(composite,
-				dataLayer, new VarDeclarationColumnProvider(), IEditableRule.ALWAYS_EDITABLE, proposals, this);
+				dataLayer, new VarDeclarationColumnProvider(), IEditableRule.ALWAYS_EDITABLE, typeSelection, this);
 
 		buttons.bindToTableViewer(table, this,
 				ref -> new CreateInternalVariableCommand(getType(), getInsertionIndex(), getName(), getDataType()),
@@ -201,16 +194,7 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 	@Override
 	protected void setInputInit() {
 		provider.setInput(getType());
-
-		final List<String> elementaryTypes = new ArrayList<>();
-		getDataTypeLib().getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType))
-		.forEach(type -> elementaryTypes.add(type.getName()));
-		proposals.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
-
-		final List<String> structuredTypes = new ArrayList<>();
-		getDataTypeLib().getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
-		.forEach(type -> structuredTypes.add(type.getName()));
-		proposals.put("Structured Types", structuredTypes); //$NON-NLS-1$
+		initTypeSelection(getDataTypeLib());
 	}
 
 	public Object getEntry(final int index) {
@@ -236,5 +220,10 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 	public void executeCompoundCommand(final CompoundCommand cmd) {
 		executeCommand(cmd);
 		table.refresh();
+	}
+
+	@Override
+	public boolean isEditable() {
+		return true;
 	}
 }

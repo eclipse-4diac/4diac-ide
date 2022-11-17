@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.properties.ShowInterfaceEventSection.CellImmutableModifier;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
@@ -30,14 +29,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
-import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
@@ -54,28 +49,27 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		createButtons = false;
 		super.createControls(parent, tabbedPropertySheetPage);
-		final Table inputTable = (Table) getInputsViewer().getControl();
-		inputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		inputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		getInputsViewer().setCellModifier(new CellImmutableModifier());
+		// final Table inputTable = (Table) getInputsViewer().getControl();
+		// inputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+		// inputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+		// getInputsViewer().setCellModifier(new CellImmutableModifier());
 
-		final Table outputTable = (Table) getOutputsViewer().getControl();
-		outputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		outputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		getOutputsViewer().setCellModifier(new CellImmutableModifier());
+		// final Table outputTable = (Table) getOutputsViewer().getControl();
+		// outputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+		// outputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
+		// getOutputsViewer().setCellModifier(new CellImmutableModifier());
 	}
 
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
+	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement,
+			final boolean isInput) {
 		return null;
 	}
 
 	@Override
 	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement,
-			final boolean isInput,
-			final int index) {
+			final boolean isInput, final int index) {
 		return null;
 	}
 
@@ -100,34 +94,28 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected InterfaceCellModifier getCellModifier(final TableViewer viewer) {
-		return new DataInterfaceCellModifier(viewer) {
-			@Override
-			public boolean canModify(final Object element, final String property) {
-				return false;
-			}
-		};
-	}
-
-	@Override
 	protected void setTableInput() {
 		final FBNetworkElement selection = getType();
-		if(selection instanceof Multiplexer) {
-			getInputsViewer().setContentProvider(new ArrayContentProvider());
-			getInputsViewer().setInput(((StructManipulator) selection).getStructType().getMemberVariables());
-			getOutputsViewer().setInput(selection.getType());
+		if (selection instanceof Multiplexer) {
+			inputProvider.setInput(((StructManipulator) selection).getStructType().getMemberVariables()); //
+			outputProvider.setInput(((StructManipulator) selection).getInterface().getOutputVars());
 		} else if (selection instanceof Demultiplexer) {
-			getOutputsViewer().setContentProvider(new ArrayContentProvider());
-			getOutputsViewer().setInput(((StructManipulator) selection).getStructType().getMemberVariables());
-			getInputsViewer().setInput(selection.getType());
+			inputProvider.setInput(((StructManipulator) selection).getInterface().getInputVars());
+			outputProvider.setInput(((StructManipulator) selection).getStructType().getMemberVariables()); //
 
-		} else if (selection.getType() != null) { // untyped subapp in typed subapp
-			getInputsViewer().setInput(selection.getType());
-			getOutputsViewer().setInput(selection.getType());
-		} else {
-			// untyped subapp in typed subapp
+		} else if (selection instanceof SubApp && selection.getType() != null) { // untyped subapp in typed subapp //
+			inputProvider.setInput(selection.getType());
+			outputProvider.setInput(selection.getType());
+		}
+		else {
 			super.setTableInput();
 		}
 
 	}
+
+	@Override
+	public boolean isEditable() {
+		return false;
+	}
+
 }

@@ -44,7 +44,8 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 		case VarDeclarationColumnProvider.INITIAL_VALUE:
 			return InitialValueHelper.getInitalOrDefaultValue(rowObject);
 		case VarDeclarationColumnProvider.ARRAY_SIZE:
-			return Integer.toString(rowObject.getArraySize());
+			final int arraySize = rowObject.getArraySize();
+			return Integer.toString(arraySize < 0 ? 0 : arraySize);
 
 		default:
 			return rowObject.getValue() == null ? "" : rowObject.getValue().getValue(); //$NON-NLS-1$

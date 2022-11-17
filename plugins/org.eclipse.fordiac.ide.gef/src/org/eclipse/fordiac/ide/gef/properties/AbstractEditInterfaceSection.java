@@ -24,53 +24,35 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppIENameCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.edit.providers.InterfaceElementLabelProvider;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
-import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
-import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
-import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
+import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnPixelData;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
-import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IContentProvider;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class AbstractEditInterfaceSection extends AbstractSection implements I4diacTableUtil {
+public abstract class AbstractEditInterfaceSection extends AbstractSection implements I4diacNatTableUtil {
 	private static final int TYPE_AND_COMMENT_COLUMN_WIDTH = 100;
 	private static final int NAME_COLUMN_WIDTH = 200;
 	private static final String NAME_COL = "name"; //$NON-NLS-1$
@@ -80,7 +62,12 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	private TableViewer inputsViewer;
 	private TableViewer outputsViewer;
 	private boolean isInputsViewer;
-	protected boolean createButtons = true;
+
+	protected VarDeclarationListProvider inputProvider;
+	protected NatTable inputTable;
+
+	protected VarDeclarationListProvider outputProvider;
+	protected NatTable outputTable;
 
 	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
@@ -93,6 +80,10 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	protected abstract String[] fillTypeCombo();
 
+	protected abstract void setupOutputTable(Group outputsGroup);
+
+	protected abstract void setupInputTable(Group inputsGroup);
+
 	@Override
 	protected abstract INamedElement getInputType(Object input);
 
@@ -102,13 +93,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		return new ChangeDataTypeCommand(data, newType);
 	}
 
-	public TableViewer getInputsViewer() {
-		return inputsViewer;
-	}
-
-	public TableViewer getOutputsViewer() {
-		return outputsViewer;
-	}
 
 	public boolean isInputsViewer() {
 		return isInputsViewer;
@@ -117,124 +101,38 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
-		parent.setLayout(new GridLayout(2, false));
-		createInputEdit(parent);
-		createOutputEdit(parent);
-
-		inputsViewer.setContentProvider(getInputsContentProvider());
-		outputsViewer.setContentProvider(getOutputsContentProvider());
-
-		setFocusListeners();
-		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
-
-		createContextMenu(getInputsViewer());
-		createContextMenu(getOutputsViewer());
+		parent.setLayout(new GridLayout(3, false));
+		createInputOutputEdit(parent);
 	}
 
-	private void setFocusListeners() {
-		getOutputsViewer().getTable().addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusGained(final FocusEvent e) {
-				isInputsViewer = false;
-			}
-
-			@Override
-			public void focusLost(final FocusEvent e) {
-				// Nothing to do
-			}
-
-		});
-		getInputsViewer().getTable().addFocusListener(new FocusListener() {
-
-			@Override
-			public void focusGained(final FocusEvent e) {
-				isInputsViewer = true;
-			}
-
-			@Override
-			public void focusLost(final FocusEvent e) {
-				// Nothing to do
-			}
-
-		});
-
-	}
-
-	protected abstract IContentProvider getOutputsContentProvider();
-
-	protected abstract IContentProvider getInputsContentProvider();
-
-	protected TableLayout createTableLayout(final Table table) {
-		final TableColumn column1 = new TableColumn(table, SWT.LEFT);
-		column1.setText(FordiacMessages.Name);
-		final TableColumn column2 = new TableColumn(table, SWT.LEFT);
-		column2.setText(FordiacMessages.Type);
-		final TableColumn column3 = new TableColumn(table, SWT.LEFT);
-		column3.setText(FordiacMessages.Comment);
-		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(NAME_COLUMN_WIDTH));
-		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDTH));
-		layout.addColumnData(new ColumnPixelData(TYPE_AND_COMMENT_COLUMN_WIDTH));
-		return layout;
-	}
-
-	private void createInputEdit(final Composite parent) {
+	private void createInputOutputEdit(final Composite parent) {
 		final Group inputsGroup = getWidgetFactory().createGroup(parent, "Inputs"); //$NON-NLS-1$
 		inputsGroup.setLayout(new GridLayout(2, false));
 		inputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		if (createButtons) {
-			final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
-			buttons.createControls(inputsGroup, getWidgetFactory());
-			inputsViewer = createTypeTableView(inputsGroup);
-			configureButtonList(buttons, inputsViewer, true);
-		} else {
-			inputsViewer = createTypeTableView(inputsGroup);
-		}
-	}
-
-	private void createOutputEdit(final Composite parent) {
 		final Group outputsGroup = getWidgetFactory().createGroup(parent, "Outputs"); //$NON-NLS-1$
 		outputsGroup.setLayout(new GridLayout(2, false));
 		outputsGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 
-		if (createButtons) {
-			final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
-			buttons.createControls(outputsGroup, getWidgetFactory());
-			outputsViewer = createTypeTableView(outputsGroup);
-			configureButtonList(buttons, outputsViewer, false);
-		} else {
-			outputsViewer = createTypeTableView(outputsGroup);
+		final AddDeleteReorderListWidget inputButtons = new AddDeleteReorderListWidget();
+		final AddDeleteReorderListWidget outputButtons = new AddDeleteReorderListWidget();
 
+		if (isEditable()) {
+			inputButtons.createControls(inputsGroup, getWidgetFactory());
+			outputButtons.createControls(outputsGroup, getWidgetFactory());
+		}
+		setupInputTable(inputsGroup);
+		setupOutputTable(outputsGroup);
+
+		if (isEditable()) {
+			configureButtonList(inputButtons, inputTable, true);
+			configureButtonList(outputButtons, outputTable, false);
 		}
 	}
 
-	private TableViewer createTypeTableView(final Group parent) {
-		final TableViewer viewer = TableWidgetFactory.createTableViewer(parent);
-		viewer.getTable().setLayout(createTableLayout(viewer.getTable()));
-		viewer.getTable().setHeaderVisible(true);
-		viewer.getTable().setLinesVisible(true);
-		viewer.setColumnProperties(getColumnProperties());
-		viewer.setCellModifier(getCellModifier(viewer));
-		viewer.setLabelProvider(getLabelProvider());
-		return viewer;
-	}
-
-	protected String[] getColumnProperties() {
-		return new String[] { NAME_COL, TYPE_COL, COMMENT_COL };
-	}
-
-	protected LabelProvider getLabelProvider() {
-		return new InterfaceElementLabelProvider();
-	}
-
-	protected InterfaceCellModifier getCellModifier(final TableViewer viewer) {
-		return new InterfaceCellModifier(viewer);
-	}
-
-	private void configureButtonList(final AddDeleteReorderListWidget buttons, final TableViewer viewer, final boolean inputs) {
-		buttons.bindToTableViewer(viewer, this, ref -> newCreateCommand((IInterfaceElement) ref, inputs),
+	private void configureButtonList(final AddDeleteReorderListWidget buttons, final NatTable table,
+			final boolean inputs) {
+		buttons.bindToTableViewer(table, this, ref -> newCreateCommand((IInterfaceElement) ref, inputs),
 				ref -> newDeleteCommand((IInterfaceElement) ref), ref -> newOrderCommand((IInterfaceElement) ref, true),
 				ref -> newOrderCommand((IInterfaceElement) ref, false));
 	}
@@ -259,11 +157,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		return newChangeTypeCommand(data, getDataTypeLib().getType(dataTypeName));
 	}
 
-	protected void setCellEditors(final TableViewer viewer) {
-		viewer.setCellEditors(new CellEditor[] { new CustomTextCellEditor(viewer.getTable()),
-				createTypeCellEditor(viewer), new CustomTextCellEditor(viewer.getTable()) });
-	}
-
 	@Override
 	protected void setInputCode() {
 		// nothing to be done here
@@ -271,10 +164,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	@Override
 	protected void setInputInit() {
-		// only now the types are correctly set so that the type lists for the combo
-		// boxes can be created correctly
-		setCellEditors(inputsViewer);
-		setCellEditors(outputsViewer);
+		setTableInput();
 	}
 
 	@Override
@@ -285,107 +175,20 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 			setTableInput();
 		}
 		commandStack = commandStackBuffer;
+		initTypeSelection(getDataTypeLib());
+		inputTable.refresh();
+		outputTable.refresh();
 	}
 
 	protected void setTableInput() {
-		inputsViewer.setInput(getType());
-		outputsViewer.setInput(getType());
-	}
-
-	protected abstract static class InterfaceContentProvider implements IStructuredContentProvider {
-		private final boolean inputs;
-
-		protected InterfaceContentProvider(final boolean inputs) {
-			this.inputs = inputs;
+		if (getType() instanceof FBNetworkElement) {
+			final FBNetworkElement element = (FBNetworkElement) getType();
+			inputProvider.setInput(element.getInterface().getInputVars());
+			final EList<VarDeclaration> outputVars = element.getInterface().getOutputVars();
+			outputProvider.setInput(outputVars);
 		}
-
-		protected abstract Object[] getInputs(Object inputElement);
-
-		protected abstract Object[] getOutputs(Object inputElement);
-
-		@Override
-		public Object[] getElements(final Object inputElement) {
-			if ((inputElement instanceof FBNetworkElement) || (inputElement instanceof FBType)) {
-				if (inputs) {
-					return getInputs(inputElement);
-				}
-				return getOutputs(inputElement);
-			}
-			return new Object[0];
-		}
-
-		static InterfaceList getInterfaceListFromInput(final Object inputElement) {
-			InterfaceList interfaceList = null;
-			if (inputElement instanceof FBNetworkElement) {
-				interfaceList = ((FBNetworkElement) inputElement).getInterface();
-			} else if (inputElement instanceof FBType) {
-				interfaceList = ((FBType) inputElement).getInterfaceList();
-			}
-			return interfaceList;
-		}
-	}
-
-	protected class InterfaceCellModifier implements ICellModifier {
-		private static final int TYPE_COLUMN_INDEX = 1;
-		protected TableViewer viewer;
-
-		public InterfaceCellModifier(final TableViewer viewer) {
-			this.viewer = viewer;
-		}
-
-		@Override
-		public boolean canModify(final Object element, final String property) {
-			return !(TYPE_COL.equals(property) && (element instanceof IInterfaceElement)
-					&& (!((IInterfaceElement) element).getInputConnections().isEmpty()
-							|| !((IInterfaceElement) element).getOutputConnections().isEmpty()));
-		}
-
-		@Override
-		public Object getValue(final Object element, final String property) {
-			switch (property) {
-			case NAME_COL:
-				return ((INamedElement) element).getName();
-			case TYPE_COL:
-				return getTypeValue(element, viewer, TYPE_COLUMN_INDEX);
-			case COMMENT_COL:
-				return ((INamedElement) element).getComment() != null ? ((INamedElement) element).getComment() : ""; //$NON-NLS-1$
-			default:
-				return null;
-			}
-		}
-
-		@Override
-		public void modify(final Object element, final String property, final Object value) {
-			final TableItem tableItem = (TableItem) element;
-			final Object data = tableItem.getData();
-			Command cmd = null;
-
-			switch (property) {
-			case NAME_COL:
-				cmd = new ChangeSubAppIENameCommand((IInterfaceElement) data, value.toString());
-				break;
-			case COMMENT_COL:
-				cmd = new ChangeCommentCommand((INamedElement) data, value.toString());
-				break;
-			case TYPE_COL:
-				if (data instanceof AdapterDeclaration) {
-					final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[((Integer) value).intValue()];
-					final DataType newType = getTypeLibrary().getAdapterTypeEntry(dataTypeName).getType();
-					cmd = newChangeTypeCommand((VarDeclaration) data, newType);
-				} else {
-					if (data instanceof VarDeclaration) {
-						cmd = createChangeDataTypeCommand((VarDeclaration) data, value, viewer);
-					}
-				}
-				break;
-			default:
-				break;
-			}
-
-			if (null != cmd) {
-				executeCommand(cmd);
-				viewer.refresh(data);
-			}
+		if (isEditable()) {
+			initTypeSelection(getDataTypeLib());
 		}
 	}
 
@@ -400,9 +203,9 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		return (null != interfaceElement) ? interfaceElement.getName() : null;
 	}
 
-	@Override
 	public TableViewer getViewer() {
-		return isInputsViewer() ? getInputsViewer() : getOutputsViewer();
+		// return isInputsViewer() ? getInputsViewer() : getOutputsViewer();
+		return null;
 	}
 
 	@Override
@@ -415,15 +218,21 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	@Override
 	public void executeCompoundCommand(final CompoundCommand cmd) {
 		executeCommand(cmd);
-		getViewer().refresh();
+		inputTable.refresh();
+		outputTable.refresh();
 	}
 
 	private IInterfaceElement getEntry(final int index) {
-		final Object obj = getViewer().getElementAt(index);
-		return (IInterfaceElement) obj;
+
+		// final Object obj = getViewer().getElementAt(index);
+		// return (IInterfaceElement) obj;
+		return null;
 	}
 
-	private static void createContextMenu(final TableViewer viewer) {
+	private void createContextMenu(final TableViewer viewer) {
 		OpenStructMenu.addTo(viewer);
 	}
+
+
+
 }

@@ -26,19 +26,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.viewers.IContentProvider;
 
 public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection {
 
-	@Override
-	protected IContentProvider getOutputsContentProvider() {
-		return new EventInterfaceContentProvider(false);
-	}
-
-	@Override
-	protected IContentProvider getInputsContentProvider() {
-		return new EventInterfaceContentProvider(true);
-	}
 
 	@Override
 	protected String[] fillTypeCombo() {
@@ -81,27 +71,4 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		}
 	}
 
-	protected static class EventInterfaceContentProvider extends InterfaceContentProvider {
-		public EventInterfaceContentProvider(final boolean inputs) {
-			super(inputs);
-		}
-
-		@Override
-		protected Object[] getInputs(final Object inputElement) {
-			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
-			if (null != interfaceList) {
-				return interfaceList.getEventInputs().toArray();
-			}
-			return new Object[0];
-		}
-
-		@Override
-		protected Object[] getOutputs(final Object inputElement) {
-			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
-			if (null != interfaceList) {
-				return interfaceList.getEventOutputs().toArray();
-			}
-			return new Object[0];
-		}
-	}
 }
