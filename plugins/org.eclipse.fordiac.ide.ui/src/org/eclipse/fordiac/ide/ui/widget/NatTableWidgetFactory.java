@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
@@ -65,6 +66,7 @@ import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBind
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
+import org.eclipse.nebula.widgets.nattable.style.HorizontalAlignmentEnum;
 import org.eclipse.nebula.widgets.nattable.style.SelectionStyleLabels;
 import org.eclipse.nebula.widgets.nattable.style.Style;
 import org.eclipse.nebula.widgets.nattable.ui.binding.UiBindingRegistry;
@@ -99,6 +101,7 @@ public final class NatTableWidgetFactory {
 	public static final String PROPOSAL_CELL = "PROPOSAL_CELL"; //$NON-NLS-1$
 	public static final String DISABLED_HEADER = "DISABLED_HEADER"; //$NON-NLS-1$
 	public static final String VISIBILITY_CELL = "VISIBILITY_CELL"; //$NON-NLS-1$
+	public static final String LEFT_ALIGNMENT = "LEFT_ALIGNMENT"; //$NON-NLS-1$
 
 	private static final char[] ACTIVATION_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
@@ -309,11 +312,11 @@ public final class NatTableWidgetFactory {
 		columnHeaderStyle.bgColor = GUIHelper.COLOR_WHITE;
 		columnHeaderStyle.renderGridLines = Boolean.TRUE;
 		columnHeaderStyle.cellPainter = new TextPainter();
-
+		
 		rowHeaderStyle.font = GUIHelper.DEFAULT_FONT;
 		rowHeaderStyle.bgColor = GUIHelper.COLOR_WHITE;
 		rowHeaderStyle.cellPainter = new TextPainter();
-
+		
 		table.setBackground(GUIHelper.COLOR_WHITE);
 		table.addOverlayPainter(new NatTableBorderOverlayPainter());
 
@@ -333,10 +336,16 @@ public final class NatTableWidgetFactory {
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_RED);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
 						ERROR_CELL);
+				
 				cellStyle = new Style();
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.getColor(255, 100, 100));
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 						ERROR_CELL);
+				
+				cellStyle = new Style();
+				cellStyle.setAttributeValue(CellStyleAttributes.HORIZONTAL_ALIGNMENT, HorizontalAlignmentEnum.LEFT);
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL, 
+						LEFT_ALIGNMENT);
 
 				cellStyle = new Style();
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_WIDGET_LIGHT_SHADOW);
