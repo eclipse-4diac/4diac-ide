@@ -220,20 +220,24 @@ public class CommentPropertySection extends AbstractSection {
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).hint(SWT.DEFAULT, 3 * commentText.getLineHeight()).applyTo(commentText);
 		commentText.addModifyListener(e -> {
 			removeContentAdapter();
-			if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof SubApp) {
-				final Object subAppforFBNetowrkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
-						.getEditPartRegistry().get(getType());
-				if (subAppforFBNetowrkEditPart instanceof SubAppForFBNetworkEditPart
-						&& ((SubAppForFBNetworkEditPart) subAppforFBNetowrkEditPart).getContentEP() != null) {
-					executeCommand(new ResizeGroupOrSubappCommand(
-							((SubAppForFBNetworkEditPart) subAppforFBNetowrkEditPart).getContentEP(),
-							new ChangeCommentCommand(getType(), commentText.getText())));
-				}
-			} else {
-				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
-			}
+			final Command cmd = createChangeCommentCommand();
+			executeCommand(cmd);
 			addContentAdapter();
 		});
+	}
+
+	private Command createChangeCommentCommand() {
+		Command cmd = new ChangeCommentCommand(getType(), commentText.getText());
+		if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof SubApp) {
+			final Object subAppforFBNetworkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
+					.getEditPartRegistry().get(getType());
+			if (subAppforFBNetworkEditPart instanceof SubAppForFBNetworkEditPart
+					&& ((SubAppForFBNetworkEditPart) subAppforFBNetworkEditPart).getContentEP() != null) {
+				cmd = new ResizeGroupOrSubappCommand(
+						((SubAppForFBNetworkEditPart) subAppforFBNetworkEditPart).getContentEP(), cmd);
+			}
+		}
+		return cmd;
 	}
 
 	@Override
