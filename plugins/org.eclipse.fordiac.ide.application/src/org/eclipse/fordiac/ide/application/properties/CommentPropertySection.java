@@ -410,7 +410,6 @@ public class CommentPropertySection extends AbstractSection {
 				return;
 			}
 			executeCommand(cmd);
-			refresh();
 		}
 
 		@Override

@@ -322,9 +322,7 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 			default:
 				return;
 			}
-
 			executeCommand(cmd);
-			refresh();
 		}
 
 		@Override
