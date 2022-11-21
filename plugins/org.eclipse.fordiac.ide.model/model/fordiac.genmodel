@@ -280,7 +280,10 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Segment/width"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Segment/varDeclarations"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Segment/outConnections"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Segment/communication"/>
       <genOperations ecoreOperation="lib.ecore#//Segment/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xD;&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xD;&#xA;if(type instanceof SegmentType){&#xD;&#xA;&#x9;return (SegmentType) type; &#xD;&#xA;}&#xD;&#xA;return null;"/>
+      <genOperations ecoreOperation="lib.ecore#//Segment/getAutomationSystem" body="return org.eclipse.fordiac.ide.model.annotations.SegmentAnnotations.getAutomationSystem(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//Segment/getSystemConfiguration" body="return org.eclipse.fordiac.ide.model.annotations.SegmentAnnotations.getSystemConfiguration(this); "/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceSequence">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceSequence/serviceTransaction"/>
@@ -599,6 +602,10 @@
         <genParameters ecoreParameter="lib.ecore#//HiddenElement/setVisible/visible"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//HiddenElement/isVisible" body="return org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.isVisible(this);"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="lib.ecore#//CommunicationConfiguration">
+      <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getSegment"
+          body="return (Segment) eContainer();"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"

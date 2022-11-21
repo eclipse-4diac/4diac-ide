@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -747,6 +748,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass hiddenElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass communicationConfigurationEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2072,6 +2080,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	@Override
 	public EReference getSegment_OutConnections() {
 		return (EReference)segmentEClass.getEStructuralFeatures().get(2);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSegment_Communication() {
+		return (EReference)segmentEClass.getEStructuralFeatures().get(3);
 	}
 
 	/**
@@ -3480,6 +3498,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EClass getCommunicationConfiguration() {
+		return communicationConfigurationEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getLanguage() {
 		return languageEEnum;
 	}
@@ -3734,6 +3762,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEAttribute(segmentEClass, SEGMENT__WIDTH);
 		createEReference(segmentEClass, SEGMENT__VAR_DECLARATIONS);
 		createEReference(segmentEClass, SEGMENT__OUT_CONNECTIONS);
+		createEReference(segmentEClass, SEGMENT__COMMUNICATION);
 
 		serviceSequenceEClass = createEClass(SERVICE_SEQUENCE);
 		createEReference(serviceSequenceEClass, SERVICE_SEQUENCE__SERVICE_TRANSACTION);
@@ -3929,6 +3958,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		stMethodEClass = createEClass(ST_METHOD);
 
 		hiddenElementEClass = createEClass(HIDDEN_ELEMENT);
+
+		communicationConfigurationEClass = createEClass(COMMUNICATION_CONFIGURATION);
 
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
@@ -4369,8 +4400,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEAttribute(getSegment_Width(), theXMLTypePackage.getInt(), "width", "200", 0, 1, Segment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 		initEReference(getSegment_VarDeclarations(), this.getVarDeclaration(), null, "varDeclarations", null, 0, -1, Segment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSegment_OutConnections(), this.getLink(), this.getLink_Segment(), "outConnections", null, 0, -1, Segment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getSegment_Communication(), this.getCommunicationConfiguration(), null, "communication", null, 0, 1, Segment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(segmentEClass, this.getSegmentType(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(segmentEClass, this.getAutomationSystem(), "getAutomationSystem", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(segmentEClass, this.getSystemConfiguration(), "getSystemConfiguration", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(serviceSequenceEClass, ServiceSequence.class, "ServiceSequence", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getServiceSequence_ServiceTransaction(), this.getServiceTransaction(), null, "serviceTransaction", null, 0, -1, ServiceSequence.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
@@ -4713,6 +4749,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEParameter(op, theXMLTypePackage.getBoolean(), "visible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(hiddenElementEClass, theXMLTypePackage.getBoolean(), "isVisible", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(communicationConfigurationEClass, CommunicationConfiguration.class, "CommunicationConfiguration", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		addEOperation(communicationConfigurationEClass, this.getSegment(), "getSegment", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$

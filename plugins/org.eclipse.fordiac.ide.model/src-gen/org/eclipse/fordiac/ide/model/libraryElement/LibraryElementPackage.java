@@ -3212,13 +3212,22 @@ public interface LibraryElementPackage extends EPackage {
 	int SEGMENT__OUT_CONNECTIONS = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 4;
 
 	/**
+	 * The feature id for the '<em><b>Communication</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEGMENT__COMMUNICATION = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 5;
+
+	/**
 	 * The number of structural features of the '<em>Segment</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEGMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 5;
+	int SEGMENT_FEATURE_COUNT = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl <em>Service Sequence</em>}' class.
@@ -6722,6 +6731,25 @@ public interface LibraryElementPackage extends EPackage {
 	int HIDDEN_ELEMENT_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CommunicationConfigurationImpl <em>Communication Configuration</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CommunicationConfigurationImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommunicationConfiguration()
+	 * @generated
+	 */
+	int COMMUNICATION_CONFIGURATION = 87;
+
+	/**
+	 * The number of structural features of the '<em>Communication Configuration</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMUNICATION_CONFIGURATION_FEATURE_COUNT = 0;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -6729,7 +6757,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getLanguage()
 	 * @generated
 	 */
-	int LANGUAGE = 87;
+	int LANGUAGE = 88;
 
 	/**
 	 * The meta object id for the '<em>IProject</em>' data type.
@@ -6739,7 +6767,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIProject()
 	 * @generated
 	 */
-	int IPROJECT = 88;
+	int IPROJECT = 89;
 
 	/**
 	 * The meta object id for the '<em>IFile</em>' data type.
@@ -6749,7 +6777,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getIFile()
 	 * @generated
 	 */
-	int IFILE = 89;
+	int IFILE = 90;
 
 	/**
 	 * The meta object id for the '<em>Command Stack</em>' data type.
@@ -6759,7 +6787,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommandStack()
 	 * @generated
 	 */
-	int COMMAND_STACK = 90;
+	int COMMAND_STACK = 91;
 
 	/**
 	 * The meta object id for the '<em>Point</em>' data type.
@@ -6769,7 +6797,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getPoint()
 	 * @generated
 	 */
-	int POINT = 91;
+	int POINT = 92;
 
 	/**
 	 * The meta object id for the '<em>Type Entry</em>' data type.
@@ -6779,7 +6807,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeEntry()
 	 * @generated
 	 */
-	int TYPE_ENTRY = 92;
+	int TYPE_ENTRY = 93;
 
 	/**
 	 * The meta object id for the '<em>Type Library</em>' data type.
@@ -6789,8 +6817,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getTypeLibrary()
 	 * @generated
 	 */
-	int TYPE_LIBRARY = 93;
-
+	int TYPE_LIBRARY = 94;
 
 	/**
 	 * The meta object id for the '<em>Var Decl List</em>' data type.
@@ -6800,7 +6827,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclList()
 	 * @generated
 	 */
-	int VAR_DECL_LIST = 94;
+	int VAR_DECL_LIST = 95;
 
 
 	/**
@@ -8090,6 +8117,17 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSegment_OutConnections();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getCommunication <em>Communication</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Communication</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.Segment#getCommunication()
+	 * @see #getSegment()
+	 * @generated
+	 */
+	EReference getSegment_Communication();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence <em>Service Sequence</em>}'.
@@ -9577,6 +9615,16 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getHiddenElement();
 
 	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration <em>Communication Configuration</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Communication Configuration</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration
+	 * @generated
+	 */
+	EClass getCommunicationConfiguration();
+
+	/**
 	 * Returns the meta object for enum '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10708,6 +10756,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference SEGMENT__OUT_CONNECTIONS = eINSTANCE.getSegment_OutConnections();
+
+		/**
+		 * The meta object literal for the '<em><b>Communication</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SEGMENT__COMMUNICATION = eINSTANCE.getSegment_Communication();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceSequenceImpl <em>Service Sequence</em>}' class.
@@ -11938,6 +11994,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass HIDDEN_ELEMENT = eINSTANCE.getHiddenElement();
+
+		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CommunicationConfigurationImpl <em>Communication Configuration</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CommunicationConfigurationImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommunicationConfiguration()
+		 * @generated
+		 */
+		EClass COMMUNICATION_CONFIGURATION = eINSTANCE.getCommunicationConfiguration();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.Language <em>Language</em>}' enum.

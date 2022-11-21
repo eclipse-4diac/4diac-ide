@@ -56,6 +56,17 @@
              </input>
          </propertySection>
          <propertySection
+               class="org.eclipse.fordiac.ide.systemconfiguration.properties.SegmentSection"
+               id="org.eclipse.fordiac.ide.systemconfiguration.properties.SegmentInterfaceSection"
+               tab="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab">
+            <input
+                  type="org.eclipse.fordiac.ide.systemconfiguration.editparts.SegmentEditPart">
+            </input>
+            <input
+                     type="org.eclipse.fordiac.ide.model.libraryElement.Segment">
+            </input>
+         </propertySection>
+         <propertySection
                class="org.eclipse.fordiac.ide.systemconfiguration.properties.AttributeSection"
                id="org.eclipse.fordiac.ide.systemconfiguration.properties.AttributeSection"
                tab="org.eclipse.fordiac.ide.device.propertyAttributeTab">

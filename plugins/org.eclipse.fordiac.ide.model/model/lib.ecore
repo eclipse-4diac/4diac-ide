@@ -836,6 +836,16 @@
         <details key="body" value="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xD;&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xD;&#xA;if(type instanceof SegmentType){&#xD;&#xA;&#x9;return (SegmentType) type; &#xD;&#xA;}&#xD;&#xA;return null;"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getAutomationSystem" lowerBound="1" eType="#//AutomationSystem">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.SegmentAnnotations.getAutomationSystem(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getSystemConfiguration" lowerBound="1" eType="#//SystemConfiguration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.annotations.SegmentAnnotations.getSystemConfiguration(this); "/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="width" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"
         defaultValueLiteral="200">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
@@ -847,6 +857,8 @@
         eType="#//VarDeclaration" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outConnections" upperBound="-1"
         eType="#//Link" eOpposite="#//Link/segment"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="communication" eType="#//CommunicationConfiguration"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceSequence" eSuperTypes="#//INamedElement #//ConfigurableObject">
     <eOperations name="getService" lowerBound="1" eType="#//Service">
@@ -1604,4 +1616,11 @@
     </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="VarDeclList" instanceTypeName="java.util.List&lt;org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration>"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CommunicationConfiguration" abstract="true">
+    <eOperations name="getSegment" eType="#//Segment">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return (Segment) eContainer();"/>
+      </eAnnotations>
+    </eOperations>
+  </eClassifiers>
 </ecore:EPackage>
