@@ -111,6 +111,9 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 			if (columnPosition == TYPE) {
 				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
 			}
+			if (columnPosition == NAME || columnPosition == COMMENT) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT); 
+			}
 		});
 		table = NatTableWidgetFactory.createRowNatTable(composite,
 				dataLayer, new ColumnDataProvider(), IEditableRule.ALWAYS_EDITABLE, proposals, this);
