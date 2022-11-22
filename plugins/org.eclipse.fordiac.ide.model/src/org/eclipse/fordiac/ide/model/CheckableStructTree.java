@@ -15,26 +15,31 @@ package org.eclipse.fordiac.ide.model;
 
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.jface.viewers.TreeViewer;
 
 public class CheckableStructTree extends AbstractStructTree<CheckableStructTreeNode> {
 
-	public CheckableStructTree(StructManipulator manipulator, StructuredType struct, TreeViewer viewer) {
+	public CheckableStructTree(final StructManipulator manipulator, final StructuredType struct,
+			final TreeViewer viewer) {
 		super(manipulator, struct, viewer);
 	}
 
-	public CheckableStructTree(StructManipulator manipulator, StructuredType struct) {
+	public CheckableStructTree(final StructManipulator manipulator, final StructuredType struct) {
 		super(manipulator, struct);
 	}
 
 	@Override
-	public void buildTree(StructManipulator struct, StructuredType structType, CheckableStructTreeNode parent) {
+	public void buildTree(final StructManipulator struct, final StructuredType structType,
+			final CheckableStructTreeNode parent) {
 		for (final VarDeclaration memberVariable : structType.getMemberVariables()) {
 			final CheckableStructTreeNode treeNode = parent.addChild(memberVariable);
 
-			if (struct.getInterfaceElement(treeNode.getPinName()) != null) {
+			final IInterfaceElement variablePin = struct.getInterfaceElement(treeNode.getPinName());
+			if ((variablePin != null) && !(variablePin instanceof ErrorMarkerRef)) {
 				treeNode.check(true);
 			}
 

@@ -60,7 +60,7 @@ public final class EditorUtils {
 		IEditorPart editor = null;
 		final IWorkbenchPage activePage = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		try {
-			editor = activePage.openEditor(input, editorId);
+			editor = activePage.openEditor(input, editorId, true, IWorkbenchPage.MATCH_INPUT | IWorkbenchPage.MATCH_ID);
 		} catch (final PartInitException e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
 		}
