@@ -105,6 +105,9 @@ public class FBTypeContentProvider extends AdapterFactoryContentProvider {
 		if (element instanceof IFile) {
 			return ((IResource) element).getParent();
 		}
+		if (element instanceof FBType) {
+			return ((FBType) element).getTypeEntry().getFile();
+		}
 		final Object retval = super.getParent(element);
 		if (retval instanceof FBType) {
 			return ((FBType) retval).getTypeEntry().getFile();

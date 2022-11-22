@@ -22,6 +22,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.FigureCanvas;
@@ -367,7 +368,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			return interfaceList.getSockets().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart.isVariable()) {
-			return interfaceList.getInputVars().indexOf(interfaceEditPart.getModel());
+			return interfaceList.getVisibleInputVars().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
 			return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
@@ -385,7 +386,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			return interfaceList.getPlugs().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart.isVariable()) {
-			return interfaceList.getOutputVars().indexOf(interfaceEditPart.getModel());
+			return interfaceList.getVisibleOutputVars().indexOf(interfaceEditPart.getModel());
 		}
 		if (interfaceEditPart instanceof ErrorMarkerInterfaceEditPart) {
 			return calcErrorMarkerINdex(interfaceEditPart, interfaceList);
@@ -415,7 +416,16 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = new ArrayList<>();
 		elements.add(getInstanceName());
-		elements.addAll(getModel().getInterface().getAllInterfaceElements());
+		elements.addAll(getModel().getInterface()
+				.getAllInterfaceElements());
+		elements.removeAll(getModel().getInterface().getInputVars()
+				.stream()
+				.filter(it -> !it.isVisible())
+				.collect(Collectors.toList()));
+		elements.removeAll(getModel().getInterface().getOutputVars()
+				.stream()
+				.filter(it -> !it.isVisible())
+				.collect(Collectors.toList()));
 		return elements;
 	}
 
@@ -448,7 +458,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			// forward direct edit request to instance name
 			final List<EditPart> children = getChildren();
 			children.stream().filter(InstanceNameEditPart.class::isInstance)
-					.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
+			.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
 			return;
 		}
 		super.performRequest(request);

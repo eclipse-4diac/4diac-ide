@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
@@ -61,21 +62,20 @@ import org.eclipse.nebula.widgets.nattable.painter.cell.TextPainter;
 import org.eclipse.nebula.widgets.nattable.painter.layer.NatGridLayerPainter;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer.MoveDirectionEnum;
-import org.eclipse.nebula.widgets.nattable.selection.action.SelectCellAction;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBindings;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
 import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
+import org.eclipse.nebula.widgets.nattable.style.HorizontalAlignmentEnum;
 import org.eclipse.nebula.widgets.nattable.style.SelectionStyleLabels;
 import org.eclipse.nebula.widgets.nattable.style.Style;
-import org.eclipse.nebula.widgets.nattable.ui.action.IMouseAction;
 import org.eclipse.nebula.widgets.nattable.ui.binding.UiBindingRegistry;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.CellEditorMouseEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.KeyEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.LetterOrDigitKeyEventMatcher;
-import org.eclipse.nebula.widgets.nattable.ui.matcher.MouseEventMatcher;
 import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
+import org.eclipse.nebula.widgets.nattable.viewport.action.ViewportSelectRowAction;
 import org.eclipse.nebula.widgets.nattable.widget.EditModeEnum;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusAdapter;
@@ -101,6 +101,7 @@ public final class NatTableWidgetFactory {
 	public static final String PROPOSAL_CELL = "PROPOSAL_CELL"; //$NON-NLS-1$
 	public static final String DISABLED_HEADER = "DISABLED_HEADER"; //$NON-NLS-1$
 	public static final String VISIBILITY_CELL = "VISIBILITY_CELL"; //$NON-NLS-1$
+	public static final String LEFT_ALIGNMENT = "LEFT_ALIGNMENT"; //$NON-NLS-1$
 
 	private static final char[] ACTIVATION_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
@@ -110,8 +111,7 @@ public final class NatTableWidgetFactory {
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider) {
-		return createNatTable(parent, dataLayer, headerDataProvider, IEditableRule.ALWAYS_EDITABLE); // this was never,
-		// change back
+		return createNatTable(parent, dataLayer, headerDataProvider, IEditableRule.NEVER_EDITABLE);
 	}
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
@@ -134,14 +134,6 @@ public final class NatTableWidgetFactory {
 						new PasteDataIntoTableAction());
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'), new CutDataFromTableAction());
 			}
-
-			// Could be interesting
-			@Override
-			protected void configureBodyMouseClickBindings(final UiBindingRegistry uiBindingRegistry) {
-				final IMouseAction action = new SelectCellAction();
-				uiBindingRegistry.registerMouseDownBinding(MouseEventMatcher.bodyLeftClick(SWT.NONE), action);
-			}
-
 		});
 		selectionLayer.registerCommandHandler(new CopyDataCommandHandler(selectionLayer));
 		selectionLayer.registerCommandHandler(new DeleteSelectionCommandHandler(selectionLayer));
@@ -320,11 +312,11 @@ public final class NatTableWidgetFactory {
 		columnHeaderStyle.bgColor = GUIHelper.COLOR_WHITE;
 		columnHeaderStyle.renderGridLines = Boolean.TRUE;
 		columnHeaderStyle.cellPainter = new TextPainter();
-
+		
 		rowHeaderStyle.font = GUIHelper.DEFAULT_FONT;
 		rowHeaderStyle.bgColor = GUIHelper.COLOR_WHITE;
 		rowHeaderStyle.cellPainter = new TextPainter();
-
+		
 		table.setBackground(GUIHelper.COLOR_WHITE);
 		table.addOverlayPainter(new NatTableBorderOverlayPainter());
 
@@ -344,10 +336,16 @@ public final class NatTableWidgetFactory {
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_RED);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
 						ERROR_CELL);
+				
 				cellStyle = new Style();
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.getColor(255, 100, 100));
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 						ERROR_CELL);
+				
+				cellStyle = new Style();
+				cellStyle.setAttributeValue(CellStyleAttributes.HORIZONTAL_ALIGNMENT, HorizontalAlignmentEnum.LEFT);
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL, 
+						LEFT_ALIGNMENT);
 
 				cellStyle = new Style();
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_WIDGET_LIGHT_SHADOW);
@@ -357,7 +355,7 @@ public final class NatTableWidgetFactory {
 						DISABLED_HEADER);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 						DISABLED_HEADER);
-
+				
 				configRegistry.unregisterConfigAttribute(CellConfigAttributes.CELL_STYLE, DisplayMode.SELECT,
 						SelectionStyleLabels.SELECTION_ANCHOR_STYLE);
 

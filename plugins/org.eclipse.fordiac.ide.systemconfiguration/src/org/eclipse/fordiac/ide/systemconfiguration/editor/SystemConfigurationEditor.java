@@ -96,4 +96,12 @@ public class SystemConfigurationEditor extends DiagramEditorWithFlyoutPalette im
 		// empty
 	}
 
+	@Override
+	public Object getAdapter(final Class type) {
+		if (SystemConfiguration.class == type) {
+			return getModel();
+		}
+		return super.getAdapter(type);
+	}
+
 }

@@ -41,6 +41,7 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
@@ -48,6 +49,10 @@ import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
+import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
+import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
+import org.eclipse.nebula.widgets.nattable.style.HorizontalAlignmentEnum;
+import org.eclipse.nebula.widgets.nattable.style.Style;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridLayout;
@@ -185,7 +190,10 @@ public class CommentPropertySection extends AbstractSection {
 					&& rowItem.getComment().equals(defaultComment)) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
 			}
-			// We add a label for the checkbox column
+			if (columnPosition == NAME || columnPosition == COMMENT) {
+				// We want to align the pin names and comments to the left side
+				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT); 
+			}
 			if (columnPosition == VISIBLE) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.VISIBILITY_CELL);
 			}
@@ -212,20 +220,24 @@ public class CommentPropertySection extends AbstractSection {
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).hint(SWT.DEFAULT, 3 * commentText.getLineHeight()).applyTo(commentText);
 		commentText.addModifyListener(e -> {
 			removeContentAdapter();
-			if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof SubApp) {
-				final Object subAppforFBNetowrkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
-						.getEditPartRegistry().get(getType());
-				if (subAppforFBNetowrkEditPart instanceof SubAppForFBNetworkEditPart
-						&& ((SubAppForFBNetworkEditPart) subAppforFBNetowrkEditPart).getContentEP() != null) {
-					executeCommand(new ResizeGroupOrSubappCommand(
-							((SubAppForFBNetworkEditPart) subAppforFBNetowrkEditPart).getContentEP(),
-							new ChangeCommentCommand(getType(), commentText.getText())));
-				}
-			} else {
-				executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
-			}
+			final Command cmd = createChangeCommentCommand();
+			executeCommand(cmd);
 			addContentAdapter();
 		});
+	}
+
+	private Command createChangeCommentCommand() {
+		Command cmd = new ChangeCommentCommand(getType(), commentText.getText());
+		if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof SubApp) {
+			final Object subAppforFBNetworkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
+					.getEditPartRegistry().get(getType());
+			if (subAppforFBNetworkEditPart instanceof SubAppForFBNetworkEditPart
+					&& ((SubAppForFBNetworkEditPart) subAppforFBNetworkEditPart).getContentEP() != null) {
+				cmd = new ResizeGroupOrSubappCommand(
+						((SubAppForFBNetworkEditPart) subAppforFBNetworkEditPart).getContentEP(), cmd);
+			}
+		}
+		return cmd;
 	}
 
 	@Override
@@ -304,8 +316,7 @@ public class CommentPropertySection extends AbstractSection {
 			}
 		});
 	}
-
-
+	
 	private class VarDeclarationListProvider extends ListDataProvider<VarDeclaration> {
 		private final boolean isInputData;
 
@@ -394,15 +405,15 @@ public class CommentPropertySection extends AbstractSection {
 				}
 				break;
 			case VISIBLE:
-				// It's a true/false checkbox; if it's visible -> hide; if it's hidden -> show
-				// newValue atm is a string...
-				cmd = new HidePinCommand(rowObject, (Boolean) newValue);
+				if ((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
+						|| !rowObject.isIsInput() && rowObject.getOutputConnections().isEmpty()) {
+					cmd = new HidePinCommand(rowObject, (Boolean) newValue);
+				}
 				break;
 			default:
 				return;
 			}
 			executeCommand(cmd);
-			refresh();
 		}
 
 		@Override

@@ -85,7 +85,7 @@ public abstract class OpenListener implements IOpenListener {
 		openInBreadCrumbEditor(root.getTypeEntry().getFile(), FB_TYPE_EDITOR, element);
 	}
 
-	private static AbstractBreadCrumbEditor getBreadCrumbEditor(final IEditorPart openedEditor) {
+	public static AbstractBreadCrumbEditor getBreadCrumbEditor(final IEditorPart openedEditor) {
 		AbstractBreadCrumbEditor breadCrumbEditor = openedEditor.getAdapter(AbstractBreadCrumbEditor.class);
 		if ((breadCrumbEditor == null) && (openedEditor instanceof FormEditor)) {
 			breadCrumbEditor = getBreadCrumbFromMultiPageEditor((FormEditor) openedEditor);

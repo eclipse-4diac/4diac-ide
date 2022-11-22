@@ -1266,7 +1266,6 @@
                           pattern="org.eclipse.fordiac.ide.fbPaletteContent"/>
         <contentExtension pattern="org.eclipse.ui.navigator.resources.filters.startsWithDot"/>
         <contentExtension pattern="org.eclipse.fordiac.ide.fbpaletteviewer.filters.showonlyFBTypesAndSubAppTypes"/>
-        <contentExtension pattern="org.eclipse.ui.navigator.resources.linkHelper" />
       </includes>
     </viewerContentBinding>
     <dragAssistant class="org.eclipse.fordiac.ide.typemanagement.FBTypeDragAssistant"

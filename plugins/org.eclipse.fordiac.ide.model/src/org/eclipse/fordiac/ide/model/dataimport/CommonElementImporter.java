@@ -82,6 +82,8 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 /** The Class CommonElementImporter. */
 public abstract class CommonElementImporter {
 
+	private static final boolean IS_VISIBLE = false;
+
 	private static class ImporterStreams implements AutoCloseable {
 		private final InputStream inputStream;
 		private final XMLStreamReader reader;
@@ -441,7 +443,9 @@ public abstract class CommonElementImporter {
 		if (confObject instanceof StructManipulator) {
 			checkStructAttribute((StructManipulator) confObject, name);
 		}
+
 	}
+
 
 	private void checkStructAttribute(final StructManipulator fb, final String name) {
 		if (LibraryElementTags.STRUCTURED_TYPE_ELEMENT.equals(name)) {
@@ -478,6 +482,20 @@ public abstract class CommonElementImporter {
 		}
 		proceedToEndElementNamed(LibraryElementTags.PARAMETER_ELEMENT);
 		return variable;
+	}
+
+	private boolean isPinVisibilityAttribute() {
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		final String pinNameAndVisibility = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		return name.equals(LibraryElementTags.ELEMENT_VISIBLE) && pinNameAndVisibility != null
+				&& pinNameAndVisibility.contains(":"); //$NON-NLS-1$
+	}
+
+	protected void parsePinVisibilityAttribute(final FBNetworkElement block) {
+		final String pinNameAndVisibility = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		final String[] temp = pinNameAndVisibility.split(":"); //$NON-NLS-1$
+		final IInterfaceElement ie = block.getInterfaceElement(temp[0]);
+		ie.setVisible(IS_VISIBLE); // I know it's false since we save only hidden pins
 	}
 
 	protected String getAttributeValue(final String attributeName) {
@@ -574,6 +592,9 @@ public abstract class CommonElementImporter {
 			parsePinComment(block);
 		} else {
 			parseGenericAttributeNode(block);
+		}
+		if (isPinVisibilityAttribute()) {
+			parsePinVisibilityAttribute(block);
 		}
 		proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
 	}

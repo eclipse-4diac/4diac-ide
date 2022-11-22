@@ -407,19 +407,10 @@
                      pattern="org.eclipse.ui.navigator.resources.filters.*">
                </contentExtension>
                <contentExtension
-                     pattern="org.eclipse.ui.navigator.resources.linkHelper">
-               </contentExtension>
-               <contentExtension
                      pattern="org.eclipse.ui.navigator.resources.workingSets">
                </contentExtension>
                <contentExtension
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.applicationLinkHelper" >
-               </contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.applicationLinkHelper" >
-               </contentExtension>
-               <contentExtension
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemConfigurationLinkHelper" >
+                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.fbNetworkLinkHelper" >
                </contentExtension>
                <contentExtension
                      pattern="org.eclipse.fordiac.ide.typemanagement.navigator.FBContentSorter" >
@@ -616,54 +607,24 @@
             id="org.eclipse.fordiac.ide.systemmanagement.filters.typedSubapp"
             name="Hide Subapplication instances">
       </commonFilter>
-  </extension>
-  <extension
-          point="org.eclipse.ui.navigator.linkHelper">
-       <linkHelper
-             class="org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.ApplicationSubAppEditorLinkHelper"
-             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.applicationLinkHelper">
-          <selectionEnablement>
-             <or>
-                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Application"/>
-                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FB"/>
-                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.SubApp"/>
-             </or>
-          </selectionEnablement>
-          <editorInputEnablement>
-             <or>
-             	<instanceof value="org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput"/>
-             	<instanceof value="org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput"/>
-             </or>
-          </editorInputEnablement>
-       </linkHelper>
-  </extension>
-  <extension point="org.eclipse.ui.navigator.linkHelper">    
-       <linkHelper
-             class="org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.ResourceEditorLinkHelper"
-             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.applicationLinkHelper">
-          <selectionEnablement>
-             <or>
-                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Resource"/>
-             </or>
-          </selectionEnablement>
-          <editorInputEnablement>
-             <instanceof value="org.eclipse.fordiac.ide.resourceediting.editors.ResourceEditorInput"/>
-          </editorInputEnablement>
-       </linkHelper>
-    </extension>
+  </extension>  
     <extension point="org.eclipse.ui.navigator.linkHelper">    
        <linkHelper
-             class="org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.SystemConfigurationEditorLinkHelper"
-             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemConfigurationLinkHelper">
+             class="org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.FBNetworkLinkHelper"
+             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.fbNetworkLinkHelper">
           <selectionEnablement>
              <or>
+	            <instanceof value="org.eclipse.core.resources.IFile"/>
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Resource"/>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration"/>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Device"/>
                 <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Segment"/>
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.Application"/>
+                <instanceof value="org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement"/>
              </or>
-          </selectionEnablement>
+          </selectionEnablement>   
           <editorInputEnablement>
-             <instanceof value="org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInput"/>
+             <instanceof value="org.eclipse.ui.IFileEditorInput"/>
           </editorInputEnablement>
        </linkHelper>
     </extension>

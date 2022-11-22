@@ -366,7 +366,9 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			int i = 0;
 			for (final IFBTEditorPart editorPart : editors) {
 				if (editorPart.outlineSelectionChanged(selectedElement)) {
-					setActivePage(i);
+					if (getActivePage() != i) {
+						setActivePage(i);
+					}
 					break;
 				}
 				i++;

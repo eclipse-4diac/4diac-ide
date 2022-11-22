@@ -97,7 +97,7 @@
                         pattern="org.eclipse.fordiac.ide.typemanagement.fbTypeContent">
                   </contentExtension>
                   <contentExtension
-                  pattern="org.eclipse.ui.navigator.resources.linkHelper" />
+                  pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.fbNetworkLinkHelper" />
                   
          </includes>
       </viewerContentBinding>

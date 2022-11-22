@@ -32,12 +32,6 @@ public class CheckBoxConfigurationNebula extends AbstractRegistryConfiguration {
 
 	@Override
 	public void configureRegistry(final IConfigRegistry configRegistry) {
-
-		configRegistry.registerConfigAttribute(
-				EditConfigAttributes.CELL_EDITABLE_RULE,
-				IEditableRule.ALWAYS_EDITABLE
-				);
-
 		registerCheckBoxEditor(configRegistry);
 	}
 

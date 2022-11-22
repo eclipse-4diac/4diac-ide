@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.monitoring.provider;
 
 import org.eclipse.fordiac.ide.model.data.RealType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.Activator;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
@@ -32,7 +33,8 @@ public class WatchesValueLabelProvider extends ColumnLabelProvider {
 		if (element instanceof WatchValueTreeNode) {
 			final WatchValueTreeNode tn = (WatchValueTreeNode) element;
 			final IInterfaceElement ie = tn.getMonitoringBaseElement().getPort().getInterfaceElement();
-			if (ie.getType() instanceof RealType && !tn.getValue().contains(".")) {//$NON-NLS-1$
+			if (ie.getType() instanceof RealType && !tn.getValue().contains(".") //$NON-NLS-1$
+					&& (ie instanceof VarDeclaration && !((VarDeclaration) ie).isArray())) {
 				// display integers as decimals
 				return tn.getValue() + ".0"; //$NON-NLS-1$
 

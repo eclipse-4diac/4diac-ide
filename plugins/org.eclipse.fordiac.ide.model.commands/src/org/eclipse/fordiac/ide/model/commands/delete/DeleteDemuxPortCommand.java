@@ -24,13 +24,14 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.commands.Command;
 
 public class DeleteDemuxPortCommand extends Command {
 
 	private Demultiplexer type;
-	private final VarDeclaration variable;
+	private final IInterfaceElement variable;
 	private final String oldVisibleChildren;
 	private String newVisibleChildren;
 	private ChangeStructCommand cmd;
@@ -38,7 +39,7 @@ public class DeleteDemuxPortCommand extends Command {
 	private final CheckableStructTreeNode node;
 
 	public DeleteDemuxPortCommand(final Demultiplexer type, final CheckableStructTreeNode node) {
-		this.variable = (VarDeclaration) type.getInterfaceElement(node.getPinName());
+		this.variable = type.getInterfaceElement(node.getPinName());
 		this.oldVisibleChildren = node.getTree().getRoot().visibleToString();
 		this.type = type;
 		this.node = node;
@@ -61,14 +62,14 @@ public class DeleteDemuxPortCommand extends Command {
 		final List<String> visibleChildrenNames = Arrays
 				.asList(newVisibleChildren.trim().split(LibraryElementTags.VARIABLE_SEPARATOR));
 		configuredStruct.getMemberVariables()
-		.addAll(EcoreUtil.copyAll(CheckableStructTreeNode.getVarDeclarations(visibleChildrenNames, node)));
+				.addAll(EcoreUtil.copyAll(CheckableStructTreeNode.getVarDeclarations(visibleChildrenNames, node)));
 		configuredStruct.setTypeEntry(type.getStructType().getTypeEntry());
 		cmd = new ChangeStructCommand(type, configuredStruct);
 	}
 
 	@Override
 	public boolean canExecute() {
-		return variable != null;
+		return (variable != null) && !(variable instanceof ErrorMarkerRef);
 	}
 
 	@Override

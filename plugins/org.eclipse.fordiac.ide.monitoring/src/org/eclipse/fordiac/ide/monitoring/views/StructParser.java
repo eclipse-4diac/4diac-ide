@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021-2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
  *   Lukas Wais, Daniel Lindhuber - implemented parsing for structs
+ *   Fabio Gandolfi - added parsing of array of structs
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.views;
 
@@ -28,9 +29,11 @@ public final class StructParser {
 		final WatchValueTreeNode root = new WatchValueTreeNode(monitoringElement, structType,
 				monitoringElement.getPort().getInterfaceElement().getName(), null, null, parent);
 
-		if (isStructLiteral(struct) && !"N/A".equalsIgnoreCase(struct)) { //$NON-NLS-1$
+		if (isStructLiteral(struct) && !"N/A".equalsIgnoreCase(struct) //$NON-NLS-1$
+				|| isArrayLiteral(struct) && !"N/A".equalsIgnoreCase(struct)) { //$NON-NLS-1$
 			buildTree(root, structType, struct);
 		}
+
 		return root;
 	}
 
@@ -42,6 +45,7 @@ public final class StructParser {
 		boolean process = true;
 		int innerCnt = 0;
 		int frameStart = START;
+		int arrayIndex = 0;
 
 		for (int i = START; i < END; i++) {
 			final char c = struct.charAt(i);
@@ -49,7 +53,12 @@ public final class StructParser {
 			case ',':
 				if (process) {
 					final String frame = struct.substring(frameStart, i);
-					addNode(frame, parent, type);
+					if (frame.charAt(0) == '(') {
+						addArrayNode(frame, parent, type, arrayIndex);
+						arrayIndex++;
+					} else {
+						addNode(frame, parent, type);
+					}
 					frameStart = i + 1; // switch to next frame
 				}
 				break;
@@ -84,7 +93,11 @@ public final class StructParser {
 		// handle last variable (no ',' triggers the node creation)
 		if (frameStart != END) {
 			final String frame = struct.substring(frameStart, END);
-			addNode(frame, parent, type);
+			if (frame.charAt(0) == '(') {
+				addArrayNode(frame, parent, type, arrayIndex);
+			} else {
+				addNode(frame, parent, type);
+			}
 		}
 
 	}
@@ -110,10 +123,30 @@ public final class StructParser {
 				variable,
 				parent
 				);
-		
+
 		if (isStructLiteral(value)) {
 			// recursive call
 			buildTree(node, (StructuredType) variable.getType(), value);
+		} else if (isArrayLiteral(value)) {
+			// possibility to parse array
+		}
+
+		parent.addChild(node);
+	}
+
+	private static void addArrayNode(final String frame, final WatchValueTreeNode parent, final StructuredType type,
+			final int arrayIndex) {
+		final MonitoringBaseElement monitoringElement = parent.getMonitoringBaseElement();
+
+		final VarDeclaration variable = null;
+		final String name = "[" + arrayIndex + "]";
+		final String value = frame;
+
+		final WatchValueTreeNode node = new WatchValueTreeNode(monitoringElement, type, name, value, variable, parent);
+
+		if (isStructLiteral(value)) {
+			// recursive call
+			buildTree(node, type, value);
 		} else if (isArrayLiteral(value)) {
 			// possibility to parse array
 		}
@@ -128,7 +161,7 @@ public final class StructParser {
 	private static boolean isStructLiteral(final String value) {
 		return isDerivedTypeLiteral(value, '(', ')');
 	}
-	
+
 	private static boolean isDerivedTypeLiteral(final String value, final char opening, final char closing) {
 		return !value.isBlank() &&
 				value.length() >= 2 &&
@@ -170,6 +203,11 @@ public final class StructParser {
 		}
 		return ""; //$NON-NLS-1$
 
+	}
+
+	public static String removeArrayIndexes(final String input) {
+		final String parsedInput = input.replaceAll("\\[[0-9]+\\]:=", "");
+		return "[" + parsedInput.substring(1, parsedInput.length() - 1) + "]";
 	}
 
 	private StructParser() {

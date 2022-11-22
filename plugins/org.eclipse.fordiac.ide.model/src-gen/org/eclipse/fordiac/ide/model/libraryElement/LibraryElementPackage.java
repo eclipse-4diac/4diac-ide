@@ -6793,6 +6793,17 @@ public interface LibraryElementPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '<em>Var Decl List</em>' data type.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see java.util.List
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclList()
+	 * @generated
+	 */
+	int VAR_DECL_LIST = 94;
+
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration <em>Adapter Declaration</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9642,6 +9653,17 @@ public interface LibraryElementPackage extends EPackage {
 	EDataType getTypeLibrary();
 
 	/**
+	 * Returns the meta object for data type '{@link java.util.List <em>Var Decl List</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for data type '<em>Var Decl List</em>'.
+	 * @see java.util.List
+	 * @model instanceClass="java.util.List&lt;org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration&gt;"
+	 * @generated
+	 */
+	EDataType getVarDeclList();
+
+	/**
 	 * Returns the factory that creates the instances of the model.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11986,6 +12008,16 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EDataType TYPE_LIBRARY = eINSTANCE.getTypeLibrary();
+
+		/**
+		 * The meta object literal for the '<em>Var Decl List</em>' data type.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see java.util.List
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getVarDeclList()
+		 * @generated
+		 */
+		EDataType VAR_DECL_LIST = eINSTANCE.getVarDeclList();
 
 	}
 

@@ -21,6 +21,7 @@
     <genDataTypes ecoreDataType="lib.ecore#//Point"/>
     <genDataTypes ecoreDataType="lib.ecore#//TypeEntry"/>
     <genDataTypes ecoreDataType="lib.ecore#//TypeLibrary"/>
+    <genDataTypes ecoreDataType="lib.ecore#//VarDeclList"/>
     <genClasses ecoreClass="lib.ecore#//AdapterDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterFB"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AdapterDeclaration/typeEntry"/>
@@ -236,6 +237,10 @@
         <genParameters ecoreParameter="lib.ecore#//InterfaceList/getAdapter/name"/>
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/copy" body="return org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier.copy(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getVisibleInputVars"
+          body="return getInputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
+      <genOperations ecoreOperation="lib.ecore#//InterfaceList/getVisibleOutputVars"
+          body="return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Link">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Link/segment"/>

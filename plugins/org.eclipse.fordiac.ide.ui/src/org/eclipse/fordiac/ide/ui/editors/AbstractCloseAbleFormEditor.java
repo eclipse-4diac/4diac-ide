@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ui.editors;
 
+import org.eclipse.e4.ui.model.application.ui.basic.MPart;
+import org.eclipse.e4.ui.workbench.modeling.EPartService;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.forms.editor.FormEditor;
 
@@ -38,5 +40,16 @@ public abstract class AbstractCloseAbleFormEditor extends FormEditor {
 			}
 		}
 		return false;
+	}
+
+	@Override
+	protected void pageChange(final int newPageIndex) {
+		super.pageChange(newPageIndex);
+		// notify the part service that we have a new page activated. This is needed that for example link with editor
+		// gets notified.
+		final EPartService partService = getSite().getService(EPartService.class);
+		final MPart activePart = partService.getActivePart();
+		partService.activate(null);
+		partService.activate(activePart);
 	}
 }
