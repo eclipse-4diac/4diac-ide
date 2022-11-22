@@ -206,6 +206,14 @@ public class WatchValueTreeNode extends AbstractStructTreeNode {
 		return varName;
 	}
 
+	public WatchValueTreeNode getRoot() {
+		AbstractStructTreeNode node = this;
+		while (node.getParent().getParent() != null) {
+			node = node.getParent();
+		}
+		return (WatchValueTreeNode) node;
+	}
+
 	@Override
 	public String toString() {
 		return getWatchedElementString();
