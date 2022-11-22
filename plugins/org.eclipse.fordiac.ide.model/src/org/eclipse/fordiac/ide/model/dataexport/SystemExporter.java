@@ -1,6 +1,7 @@
 /********************************************************************************
  * Copyright (c)  2008 - 2014, 2016, 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				  2018 - 2020 Johannes Keppler University, Linz
+ *                2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,8 +15,11 @@
  *   Alois Zoitl - Refactored class hierarchy of xml exporters
  *               - fixed coordinate system resolution conversion in in- and export
  *               - changed exporting the Saxx cursor api
+ *   Fabio Gandolfi - system export via outputStream
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
+
+import java.io.OutputStream;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -46,29 +50,38 @@ public class SystemExporter extends CommonElementExporter {
 	public void saveSystem(final IFile targetFile) {
 		final long startTime = System.currentTimeMillis();
 		if (null != getWriter()) {
-			try {
-				createNamedElementEntry(system, LibraryElementTags.SYSTEM);
-				addIdentification(system);
-				addVersionInfo(system);
-				addApplications();
-
-				final SystemConfiguration systemConfiguration = system.getSystemConfiguration();
-				if (null != systemConfiguration) {
-					addDevices(systemConfiguration.getDevices());
-					addMapping();
-					addSegment(systemConfiguration.getSegments());
-					addLink(systemConfiguration.getLinks());
-				}
-
-				addEndElement();
-			} catch (final XMLStreamException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
+			serializeSystem();
 			writeToFile(targetFile, null);
 		}
 		final long endTime = System.currentTimeMillis();
 		FordiacLogHelper
 		.logInfo("Overall saving time for System (" + system.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+	}
+
+	public void saveSystem(final OutputStream outputStream) {
+		serializeSystem();
+		writeToFile(outputStream);
+	}
+
+	private void serializeSystem() {
+		try {
+			createNamedElementEntry(system, LibraryElementTags.SYSTEM);
+			addIdentification(system);
+			addVersionInfo(system);
+			addApplications();
+
+			final SystemConfiguration systemConfiguration = system.getSystemConfiguration();
+			if (null != systemConfiguration) {
+				addDevices(systemConfiguration.getDevices());
+				addMapping();
+				addSegment(systemConfiguration.getSegments());
+				addLink(systemConfiguration.getLinks());
+			}
+
+			addEndElement();
+		} catch (final XMLStreamException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
 	}
 
 	private void addApplications() throws XMLStreamException {

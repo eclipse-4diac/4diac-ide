@@ -1,5 +1,6 @@
 /********************************************************************************
  * Copyright (c) 2021 Johannes Kepler University Austria
+ * 				 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,8 @@
  * Contributors:
  *  Antonio Garmendia,Bianca Wiesmayr
  *    - initial API and implementation and/or initial documentation
+ *  Fabio Gandolfi
+ *    - adapted for emf compare
  ********************************************************************************/
 
 package org.eclipse.fordiac.ide.model.resource;
@@ -28,7 +31,9 @@ import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-
+import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
 public class SystemResource extends ResourceImpl {
 
@@ -40,26 +45,26 @@ public class SystemResource extends ResourceImpl {
 	protected void doLoad(final InputStream inputStream, final Map<?, ?> options) throws IOException {
 		final IFile fbtFile = ResourcesPlugin.getWorkspace().getRoot()
 				.getFile(new Path(this.uri.toPlatformString(true)));
+
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(fbtFile.getProject());
+		final SystemEntry sysEntry = typeLib.createSystemEntry(fbtFile);
+
 		final SystemImporter importer = new SystemImporter(fbtFile);
 		importer.loadElement();
 		final AutomationSystem element = importer.getElement();
+		element.setTypeEntry(sysEntry);
 		getContents().add(element);
 	}
 
 	@Override
 	protected void doSave(final OutputStream outputStream, final Map<?, ?> options) throws IOException {
-		saveSystem((AutomationSystem) getContents().get(0));
+		saveSystem((AutomationSystem) getContents().get(0), outputStream);
 	}
 
-	public void saveSystem(final AutomationSystem system) {
-		saveSystem(system, system.getSystemFile());
-	}
-
-	public void saveSystem(final AutomationSystem system, final IFile file) {
+	public void saveSystem(final AutomationSystem system, final OutputStream outputStream) {
 		Assert.isNotNull(system.getTypeEntry()); // there should be no system without type entry
-		system.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
 		final SystemExporter systemExporter = new SystemExporter(system);
-		systemExporter.saveSystem(file);
+		systemExporter.saveSystem(outputStream);
 	}
 
 	@Override
