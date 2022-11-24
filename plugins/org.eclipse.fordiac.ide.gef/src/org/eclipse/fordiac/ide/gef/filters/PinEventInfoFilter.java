@@ -25,7 +25,7 @@ public class PinEventInfoFilter implements IFilter {
 	public boolean select(final Object toTest) {
 		if (toTest instanceof EditPart) {
 			final RootEditPart rootEP = ((EditPart) toTest).getRoot();
-			if (rootEP.getAdapter(FBNetwork.class) != null) {
+			if ((rootEP != null) && (rootEP.getAdapter(FBNetwork.class) != null)) {
 				final Object type = ((EditPart) toTest).getModel();
 				return FilterProperties.isEventPin(type) && FilterProperties.isUntypedSubappPin(type);
 			}
