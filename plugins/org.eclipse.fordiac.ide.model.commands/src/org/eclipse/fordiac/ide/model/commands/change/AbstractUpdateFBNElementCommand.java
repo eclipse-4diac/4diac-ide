@@ -20,6 +20,7 @@ import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -53,7 +54,7 @@ import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public abstract class AbstractUpdateFBNElementCommand extends Command {
+public abstract class AbstractUpdateFBNElementCommand extends Command implements ConnectionLayoutTagger {
 	// Helper data class for storing connection data of resource connection as the
 	// connections are lost during the unmapping process
 	protected static class ConnData {

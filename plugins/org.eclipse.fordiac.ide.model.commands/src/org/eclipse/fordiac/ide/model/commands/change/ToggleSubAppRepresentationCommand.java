@@ -12,12 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
 
-public class ToggleSubAppRepresentationCommand extends Command {
+public class ToggleSubAppRepresentationCommand extends Command implements ConnectionLayoutTagger {
 
 	private final SubApp subapp;
 	private String oldAttribute;

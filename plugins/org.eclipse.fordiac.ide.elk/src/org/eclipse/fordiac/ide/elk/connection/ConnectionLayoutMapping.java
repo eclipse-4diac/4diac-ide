@@ -137,11 +137,10 @@ public class ConnectionLayoutMapping extends LayoutMapping {
 	}
 
 	private static AbstractFBNetworkEditPart findRootEditPart(final IWorkbenchPart workbenchPart) {
-		final Object ep = workbenchPart.getAdapter(GraphicalViewer.class)
+		return (AbstractFBNetworkEditPart) workbenchPart.getAdapter(GraphicalViewer.class)
 				.getRootEditPart()
 				.getChildren()
 				.get(0);
-		return (AbstractFBNetworkEditPart) ep;
 	}
 
 }

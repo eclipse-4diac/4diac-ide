@@ -24,13 +24,14 @@ import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
 
-public class ResizeGroupOrSubappCommand extends Command {
+public class ResizeGroupOrSubappCommand extends Command implements ConnectionLayoutTagger {
 
 	final GraphicalEditPart graphicalEditPart;
 	List<FBNetworkElement> fbnetworkElements;

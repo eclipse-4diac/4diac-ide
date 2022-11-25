@@ -24,12 +24,14 @@ import org.eclipse.fordiac.ide.elk.connection.StandardConnectionRoutingHelper;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.properties.PropertySheet;
+import org.eclipse.ui.views.properties.PropertyShowInContext;
 
 public class ConnectionLayoutHandler extends AbstractHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
+		final IWorkbenchPart workbenchPart = getWorkbenchPart();
 
 		final ConnectionLayoutMapping normalMapping = ConnectionLayoutRunner.run(workbenchPart);
 		final FordiacLayoutData data = StandardConnectionRoutingHelper.INSTANCE.calculateConnections(normalMapping);
@@ -40,6 +42,17 @@ public class ConnectionLayoutHandler extends AbstractHandler {
 		workbenchPart.getAdapter(CommandStack.class).execute(new ConnectionLayoutCommand(data));
 
 		return null;
+	}
+
+	private IWorkbenchPart getWorkbenchPart() {
+		IWorkbenchPart part = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();;
+		if (part instanceof PropertySheet) {
+			final PropertySheet propertySheet = (PropertySheet) part;
+			// carries the part on which the property sheet activates, e.g. our editor
+			final PropertyShowInContext showInContext = (PropertyShowInContext) propertySheet.getShowInContext();
+			part = showInContext.getPart();
+		}
+		return part;
 	}
 
 }

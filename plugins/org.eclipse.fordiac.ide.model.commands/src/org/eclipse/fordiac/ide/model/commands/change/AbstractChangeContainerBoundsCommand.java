@@ -14,12 +14,13 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public abstract class AbstractChangeContainerBoundsCommand extends Command {
+public abstract class AbstractChangeContainerBoundsCommand extends Command implements ConnectionLayoutTagger {
 
 	private final int dx;
 	private final int dy;
