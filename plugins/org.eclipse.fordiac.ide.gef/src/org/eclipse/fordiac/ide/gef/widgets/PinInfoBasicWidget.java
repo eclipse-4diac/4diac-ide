@@ -38,7 +38,7 @@ public class PinInfoBasicWidget implements CommandExecutor {
 	private Text nameText;
 	private Text commentText;
 	protected TypeSelectionWidget typeSelectionWidget;
-	private IInterfaceElement type; // changed from private
+	private IInterfaceElement type;
 
 	protected final TabbedPropertySheetWidgetFactory widgetFactory;
 

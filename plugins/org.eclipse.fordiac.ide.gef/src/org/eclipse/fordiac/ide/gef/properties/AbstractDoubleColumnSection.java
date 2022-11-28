@@ -19,6 +19,7 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractDoubleColumnSection extends AbstractSection {
 
+	public static final int WIDTH_OF_TEXT_HINT = 150;
 	private Composite rightComposite;
 	private Composite leftComposite;
 
@@ -28,7 +29,9 @@ public abstract class AbstractDoubleColumnSection extends AbstractSection {
 		parent.setLayout(new GridLayout(2, true));
 		leftComposite = createComposite(parent);
 		rightComposite = createComposite(parent);
-		parent.setLayoutData(new GridData(GridData.FILL, GridData.FILL, true, true));
+		GridData gridLayoutData = new GridData(GridData.FILL, GridData.FILL, true, true);
+		gridLayoutData.widthHint = WIDTH_OF_TEXT_HINT;
+		parent.setLayoutData(gridLayoutData);
 	}
 
 	protected Composite getLeftComposite() {
