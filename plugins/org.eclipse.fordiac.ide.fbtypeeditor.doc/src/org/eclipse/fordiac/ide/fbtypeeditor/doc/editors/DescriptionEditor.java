@@ -158,14 +158,8 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 		GridLayoutFactory.fillDefaults().margins(0, 0).applyTo(parent);
 
 		try {
-			final RichTextEditorConfiguration editorConfig = new RichTextEditorConfiguration();
+			editor = new RichTextEditor(parent, createRichTextEditorConfiguration());
 
-			editorConfig.setOption("toolbarGroups", TOOLBAR_GROUP_CONFIGURATION); //$NON-NLS-1$
-			editorConfig.removeDefaultToolbarButton("Flash", "HorizontalRule", "SpecialChar" + "", "Smiley",  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$//$NON-NLS-5$
-					"PageBreak", "Iframe"); //$NON-NLS-1$ //$NON-NLS-2$
-			editor = new RichTextEditor(parent, editorConfig);
-			final InsertConvertedImageButton base64ImageInsert = new InsertConvertedImageButton();
-			editor.addToolbarButton(base64ImageInsert);
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
 			editor.setText(getFbType().getDocumentation());
 			editor.addModifyListener(e -> {
@@ -187,6 +181,21 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 			errorLabel.setText(e.getMessage());
 			GridDataFactory.swtDefaults().applyTo(errorLabel);
 		}
+	}
+
+	private RichTextEditorConfiguration createRichTextEditorConfiguration() {
+		final RichTextEditorConfiguration editorConfig = new RichTextEditorConfiguration();
+
+		editorConfig.setOption("toolbarGroups", TOOLBAR_GROUP_CONFIGURATION); //$NON-NLS-1$
+		editorConfig.removeDefaultToolbarButton("Flash", "HorizontalRule", "SpecialChar" + "", "Smiley",  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$//$NON-NLS-5$
+				"PageBreak", "Iframe"); //$NON-NLS-1$ //$NON-NLS-2$
+
+		editorConfig.setRemoveFormat(false);
+
+		final InsertConvertedImageButton base64ImageInsert = new InsertConvertedImageButton();
+		editorConfig.addToolbarButton(base64ImageInsert);
+
+		return editorConfig;
 	}
 
 	private  void insertImage() {
