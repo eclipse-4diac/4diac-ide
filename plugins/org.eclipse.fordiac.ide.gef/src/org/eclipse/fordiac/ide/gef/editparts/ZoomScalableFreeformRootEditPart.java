@@ -33,28 +33,18 @@ import org.eclipse.draw2d.LayeredPane;
 import org.eclipse.draw2d.ScalableFigure;
 import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 import org.eclipse.draw2d.Viewport;
-import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Insets;
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.BackgroundFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.ModuloFreeformFigure;
-import org.eclipse.fordiac.ide.gef.tools.CanvasHelper;
-import org.eclipse.fordiac.ide.gef.tools.MarqueeDragTracker;
-import org.eclipse.fordiac.ide.model.ui.editors.AdvancedScrollingGraphicalViewer;
+import org.eclipse.fordiac.ide.gef.tools.AdvancedMarqueeDragTracker;
 import org.eclipse.gef.DragTracker;
-import org.eclipse.gef.EditPart;
-import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
-import org.eclipse.gef.RequestConstants;
 import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.GuideLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
-import org.eclipse.gef.requests.SelectionRequest;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
@@ -62,8 +52,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.commands.ActionHandler;
 import org.eclipse.jface.resource.ColorRegistry;
 import org.eclipse.jface.resource.StringConverter;
-import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.ui.IWorkbenchPartSite;
@@ -174,82 +162,6 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 			}
 		}
 
-	}
-
-	private static final Request MARQUEE_REQUEST = new Request(RequestConstants.REQ_SELECTION);
-
-	// Safety border around the canvas to ensure that during dragging marquee selection does not grow the canvas
-	private static final Insets MARQUEE_DRAG_BORDER = new Insets(1, 1, 1, 1);
-
-	/** MarqueeDragTracker which deselects all elements on right click if nothing so that the correct context menu is
-	 * shown. We are only here if there is no element under the cursor.
-	 *
-	 * Furthermore it performs autoscrolling if the user went beyond the viewport boundaries. */
-	public static class AdvancedMarqueeDragTracker extends MarqueeDragTracker {
-
-		@Override
-		protected boolean handleButtonDown(final int button) {
-			if (3 == button && getCurrentViewer() != null) {
-				// on right click deselect everything
-
-				getCurrentViewer().setSelection(getDefaultSelectionForRightMouseDown());
-
-			}
-			return super.handleButtonDown(button);
-		}
-
-		@SuppressWarnings("static-method")  // allow sub-classes to provide own default selections
-		protected StructuredSelection getDefaultSelectionForRightMouseDown() {
-			return StructuredSelection.EMPTY;
-		}
-
-		@Override
-		public void mouseDown(final MouseEvent me, final EditPartViewer viewer) {
-			if (viewer instanceof AdvancedScrollingGraphicalViewer) {
-				CanvasHelper.bindToContentPane(me, (AdvancedScrollingGraphicalViewer) viewer, MARQUEE_DRAG_BORDER);
-			}
-			super.mouseDown(me, viewer);
-		}
-
-		@Override
-		public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
-			if (isActive() && viewer instanceof AdvancedScrollingGraphicalViewer) {
-				final Point oldViewPort = ((AdvancedScrollingGraphicalViewer) viewer).getViewLocation();
-				((AdvancedScrollingGraphicalViewer) viewer).checkScrollPositionDuringDrag(me);
-				final Dimension delta = oldViewPort
-						.getDifference(((AdvancedScrollingGraphicalViewer) viewer).getViewLocation());
-				// Compensate the moved scrolling in the start position for correct dropping of
-				// moved parts
-				setStartLocation(getStartLocation().getTranslated(delta));
-				CanvasHelper.bindToContentPane(me, (AdvancedScrollingGraphicalViewer) viewer, MARQUEE_DRAG_BORDER);
-			}
-			super.mouseDrag(me, viewer);
-		}
-
-		@Override
-		protected boolean handleDoubleClick(final int button) {
-			if (1 == button) {
-				performOpen();
-			}
-			return true;
-		}
-
-		protected void performOpen() {
-			final EditPart editPart = getCurrentViewer().findObjectAt(getLocation());
-			if (null != editPart) {
-				final SelectionRequest request = new SelectionRequest();
-				request.setLocation(getLocation());
-				request.setType(RequestConstants.REQ_OPEN);
-				editPart.performRequest(request);
-			}
-		}
-
-		// In the base class version not shown elements can not be selected, as we have now auto-scrolling this is not a
-		// good behavior therefore this overridden version. For details see base class.
-		@Override
-		protected boolean isMarqueeSelectable(final GraphicalEditPart editPart) {
-			return editPart.getTargetEditPart(MARQUEE_REQUEST) == editPart && editPart.isSelectable();
-		}
 	}
 
 	public static final String TOP_LAYER = "TOPLAYER"; //$NON-NLS-1$
