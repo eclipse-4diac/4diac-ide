@@ -20,6 +20,7 @@
 package org.eclipse.fordiac.ide.application.commands;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,6 +30,7 @@ import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
@@ -41,6 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.commands.Command;
@@ -62,6 +65,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 	private final CompoundCommand createConnectionsCommands = new CompoundCommand();
 	protected final CompoundCommand createSubAppInterfaceElementCommands = new CompoundCommand();
 	private final CompoundCommand setUniqueName = new CompoundCommand();
+	private final CompoundCommand removeFromGroup = new CompoundCommand();
 	private final Set<Connection> connsMovedToParent = new HashSet<>();
 
 	public MoveElementsFromSubAppCommand(final Collection<FBNetworkElement> elements, final Point destination) {
@@ -92,13 +96,31 @@ public class MoveElementsFromSubAppCommand extends Command {
 
 	@Override
 	public void execute() {
+		removeElementsFromGroup();
 		removeElementsFromSubapp();
 		addElementsToDestination();
+	}
+
+	private void removeElementsFromGroup() {
+		elements.forEach(element -> {
+			final RemoveElementsFromGroup cmd = new RemoveElementsFromGroup(Arrays.asList(element));
+			removeFromGroup.add(cmd);
+		});
+		removeFromGroup.execute();
 	}
 
 	protected void removeElementsFromSubapp() {
 		elements.forEach(this::removeElementFromSubapp);
 		// connections/interface elements are executed immediately
+
+		elements.forEach(this::removeContainedGroupElementsFromSubapp);
+	}
+
+	private void removeContainedGroupElementsFromSubapp(final FBNetworkElement el) {
+		if (el instanceof Group) {
+			final Group group = (Group) el;
+			group.getGroupElements().forEach(this::removeElementFromSubapp);
+		}
 	}
 
 	private void removeElementFromSubapp(final FBNetworkElement element) {
@@ -116,7 +138,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 
 	protected void addElementsToDestination() {
 		elements.forEach(this::addElementToDestination);
-		setUniqueName.execute();
+		elements.forEach(this::addGroupElements);
 		createConnectionsCommands.execute();
 		positionElements();
 		connsMovedToParent.forEach(destinationNetwork::addConnection);
@@ -128,12 +150,22 @@ public class MoveElementsFromSubAppCommand extends Command {
 		// ensure unique name in new network
 		if (!NameRepository.isValidName(element, element.getName())) {
 			final String uniqueName = NameRepository.createUniqueName(element, element.getName());
-			setUniqueName.add(new ChangeNameCommand(element, uniqueName));
+			final ChangeNameCommand changeNameCommand = new ChangeNameCommand(element, uniqueName);
+			changeNameCommand.execute();
+			setUniqueName.add(changeNameCommand);
+		}
+	}
+
+	private void addGroupElements(final FBNetworkElement el) {
+		if (el instanceof Group) {
+			final Group group = (Group) el;
+			group.getGroupElements().forEach(this::addElementToDestination);
 		}
 	}
 
 	@Override
 	public void redo() {
+		removeFromGroup.execute();
 		redoRemoveElementsFromSubapp();
 		redoAddElementsToDestination();
 	}
@@ -165,6 +197,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 	public void undo() {
 		undoRemoveElementsFromSubapp();
 		undoAddElementsToDestination();
+		removeFromGroup.undo();
 	}
 
 	protected void undoRemoveElementsFromSubapp() {
@@ -240,7 +273,6 @@ public class MoveElementsFromSubAppCommand extends Command {
 			// versa
 			subAppIE = createInterfaceElement(ie, subAppIEName, !isInput);
 		}
-
 
 		createConnection(isInput ? con.getSource() : subAppIE, isInput ? subAppIE : con.getDestination(),
 				sourceSubApp.getSubAppNetwork());
