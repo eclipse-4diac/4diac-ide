@@ -20,12 +20,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.nat.EventColumnProvider;
+import org.eclipse.fordiac.ide.gef.nat.EventListProvider;
+import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
+import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection {
 
@@ -69,6 +80,56 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		if (entry instanceof Event) {
 			cmd.add(newInsertCommand((Event) entry, isInputsViewer(), index));
 		}
+	}
+
+
+	@Override
+	public void setupOutputTable(final Group outputsGroup) {
+		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
+		if (isEditable()) {
+			rule = IEditableRule.ALWAYS_EDITABLE;
+		}
+		outputProvider = new EventListProvider(this, null);
+		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
+		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
+				new EventColumnProvider(), rule, typeSelection, this);
+	}
+
+	@Override
+	public void setupInputTable(final Group inputsGroup) {
+		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
+		if (isEditable()) {
+			rule = IEditableRule.ALWAYS_EDITABLE;
+		}
+		inputProvider = new EventListProvider(this, null);
+		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
+		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
+				new EventColumnProvider(), rule, typeSelection, this);
+	}
+
+	public static DataLayer setupDataLayer(final ListDataProvider<Event> inputProvider) {
+		final DataLayer dataLayer = new DataLayer(inputProvider);
+		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
+
+		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
+			if (labelAcc != null) {
+				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+			}
+		});
+		return dataLayer;
+
+	}
+
+	@Override
+	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
+		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getEventInputs());
+		((FordiacInterfaceListProvider) outputProvider).setInput(element.getInterface().getEventOutputs());
+	}
+
+	@Override
+	public void setTableInputFBType(final FBType type) {
+		((FordiacInterfaceListProvider) inputProvider).setInput(type.getInterfaceList().getEventInputs());
+		((FordiacInterfaceListProvider) outputProvider).setInput(type.getInterfaceList().getEventOutputs());
 	}
 
 }

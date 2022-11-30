@@ -28,7 +28,6 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
-import org.eclipse.swt.widgets.Group;
 
 public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
@@ -77,20 +76,8 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 
 	@Override
 	public boolean isEditable() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
-	@Override
-	protected void setupOutputTable(final Group outputsGroup) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void setupInputTable(final Group inputsGroup) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

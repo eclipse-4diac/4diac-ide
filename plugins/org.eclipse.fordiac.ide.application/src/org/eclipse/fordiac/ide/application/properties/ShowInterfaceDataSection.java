@@ -18,6 +18,8 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
@@ -97,15 +99,19 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	protected void setTableInput() {
 		final FBNetworkElement selection = getType();
 		if (selection instanceof Multiplexer) {
-			inputProvider.setInput(((StructManipulator) selection).getStructType().getMemberVariables()); //
-			outputProvider.setInput(((StructManipulator) selection).getInterface().getOutputVars());
+			((FordiacInterfaceListProvider) inputProvider)
+			.setInput(((StructManipulator) selection).getStructType().getMemberVariables()); //
+			((FordiacInterfaceListProvider) outputProvider)
+			.setInput(((StructManipulator) selection).getInterface().getOutputVars());
 		} else if (selection instanceof Demultiplexer) {
-			inputProvider.setInput(((StructManipulator) selection).getInterface().getInputVars());
-			outputProvider.setInput(((StructManipulator) selection).getStructType().getMemberVariables()); //
+			((FordiacInterfaceListProvider) inputProvider)
+			.setInput(((StructManipulator) selection).getInterface().getInputVars());
+			((FordiacInterfaceListProvider) outputProvider)
+			.setInput(((StructManipulator) selection).getStructType().getMemberVariables()); //
 
 		} else if (selection instanceof SubApp && selection.getType() != null) { // untyped subapp in typed subapp //
-			inputProvider.setInput(selection.getType());
-			outputProvider.setInput(selection.getType());
+			((VarDeclarationListProvider) inputProvider).setInput(selection.getType());
+			((VarDeclarationListProvider) outputProvider).setInput(selection.getType());
 		}
 		else {
 			super.setTableInput();

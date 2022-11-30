@@ -35,6 +35,7 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.widgets.Group;
@@ -134,8 +135,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				new VarDeclarationColumnProvider(), rule, typeSelection, this);
 	}
 
-	public static DataLayer setupDataLayer(final VarDeclarationListProvider provider) {
-		final DataLayer dataLayer = new DataLayer(provider);
+	public static DataLayer setupDataLayer(final ListDataProvider outputProvider) {
+		final DataLayer dataLayer = new DataLayer(outputProvider);
 		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
 
 		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {

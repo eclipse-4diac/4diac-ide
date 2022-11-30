@@ -91,8 +91,8 @@ public class ShowInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	protected void setTableInput() {
 		final FBNetworkElement selection = getType();
 		if (selection.getType() != null) {
-			inputProvider.setInput(selection.getType());
-			outputProvider.setInput(selection.getType());
+			// ((Object) inputProvider).setInput(selection.getType());
+			// ((Object) outputProvider).setInput(selection.getType());
 		} else {
 			// untyped subapp in typed subapp
 			super.setTableInput();

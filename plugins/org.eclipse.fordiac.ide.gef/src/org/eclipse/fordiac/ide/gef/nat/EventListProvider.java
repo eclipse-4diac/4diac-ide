@@ -15,35 +15,26 @@ package org.eclipse.fordiac.ide.gef.nat;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 
-public class VarDeclarationListProvider extends ListDataProvider<VarDeclaration>
-		implements FordiacInterfaceListProvider {
+public class EventListProvider extends ListDataProvider<Event> implements FordiacInterfaceListProvider {
 
-
-	public VarDeclarationListProvider(final AbstractSection section, final List<VarDeclaration> list) {
-		super(list, new VarDeclarationColumnAccessor(section));
+	public EventListProvider(final AbstractSection section, final List<Event> list) {
+		super(list, new EventColumnAcesssor(section));
 	}
+
+	public EventListProvider(final List<Event> list, final IColumnAccessor<Event> columnAccessor) {
+		super(list, columnAccessor);
+	}
+
 
 	@Override
-	public int getRowCount() {
-		if (this.list != null) {
-			return super.getRowCount();
-		}
-		return 0;
+	public <T extends List<? extends IInterfaceElement>> void setInput(final T varDecl) {
+		this.list = (List<Event>) varDecl;
+
 	}
 
-	public void setInput(final Object inputElement) {
-		if (inputElement instanceof BaseFBType) {
-			this.list = ((BaseFBType) inputElement).getInternalVars();
-		}
-	}
-
-	@Override
-	public <T extends List<? extends IInterfaceElement>> void setInput(final T list) {
-		this.list = (List<VarDeclaration>) list;
-	}
 }

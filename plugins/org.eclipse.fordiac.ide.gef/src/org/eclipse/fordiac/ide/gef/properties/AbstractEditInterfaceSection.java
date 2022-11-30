@@ -24,13 +24,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
+import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -45,6 +46,7 @@ import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -63,10 +65,10 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	private TableViewer outputsViewer;
 	private boolean isInputsViewer;
 
-	protected VarDeclarationListProvider inputProvider;
+	protected ListDataProvider inputProvider;
 	protected NatTable inputTable;
 
-	protected VarDeclarationListProvider outputProvider;
+	protected ListDataProvider outputProvider;
 	protected NatTable outputTable;
 
 	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
@@ -182,14 +184,27 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	protected void setTableInput() {
 		if (getType() instanceof FBNetworkElement) {
-			final FBNetworkElement element = (FBNetworkElement) getType();
-			inputProvider.setInput(element.getInterface().getInputVars());
-			final EList<VarDeclaration> outputVars = element.getInterface().getOutputVars();
-			outputProvider.setInput(outputVars);
+			setTableInputFbNetworkElement((FBNetworkElement) getType());
 		}
+
+		if (getType() instanceof FBType) {
+			setTableInputFBType((FBType) getType());
+		}
+
 		if (isEditable()) {
 			initTypeSelection(getDataTypeLib());
 		}
+	}
+
+	public void setTableInputFBType(final FBType type) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
+		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getInputVars());
+		final EList<VarDeclaration> outputVars = element.getInterface().getOutputVars();
+		((FordiacInterfaceListProvider) outputProvider).setInput(outputVars);
 	}
 
 	protected int getInsertingIndex(final IInterfaceElement interfaceElement,
