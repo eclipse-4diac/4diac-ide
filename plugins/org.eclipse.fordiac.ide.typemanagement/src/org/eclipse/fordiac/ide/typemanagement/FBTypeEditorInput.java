@@ -60,8 +60,7 @@ public class FBTypeEditorInput implements IEditorInput {
 	}
 
 	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		return null;
 	}
 

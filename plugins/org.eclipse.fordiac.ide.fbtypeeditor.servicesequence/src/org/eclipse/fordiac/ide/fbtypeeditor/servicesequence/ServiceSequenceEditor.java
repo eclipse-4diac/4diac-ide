@@ -220,9 +220,9 @@ public class ServiceSequenceEditor extends DiagramEditorWithFlyoutPalette implem
 	}
 
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == CommandStack.class) {
-			return commandStack;
+			return adapter.cast(commandStack);
 		}
 		if (adapter == Service.class) {
 			return adapter.cast(fbType.getService());

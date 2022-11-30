@@ -54,9 +54,9 @@ public class UnfoldedSubappContentEditPart extends AbstractContainerContentEditP
 	}
 
 	@Override
-	public Object getAdapter(final Class key) {
+	public <T> T getAdapter(final Class<T> key) {
 		if (key == SubApp.class) {
-			return getContainerElement();
+			return key.cast(getContainerElement());
 		}
 		return super.getAdapter(key);
 	}

@@ -20,9 +20,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 
 public class TypeLibRootElement implements IAdaptable {
 
-	private AutomationSystem system;
+	private final AutomationSystem system;
 
-	TypeLibRootElement(AutomationSystem system) {
+	TypeLibRootElement(final AutomationSystem system) {
 		this.system = system;
 	}
 
@@ -30,11 +30,10 @@ public class TypeLibRootElement implements IAdaptable {
 		return system;
 	}
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public Object getAdapter(Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if ((adapter == IResource.class) || (adapter == IProject.class)) {
-			return getSystem().getSystemFile().getProject();
+			return adapter.cast(getSystem().getSystemFile().getProject());
 		}
 		return null;
 	}

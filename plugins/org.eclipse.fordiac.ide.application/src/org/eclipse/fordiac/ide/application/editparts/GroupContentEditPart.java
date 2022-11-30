@@ -53,9 +53,9 @@ public class GroupContentEditPart extends AbstractContainerContentEditPart {
 
 
 	@Override
-	public Object getAdapter(final Class key) {
+	public <T> T getAdapter(final Class<T> key) {
 		if (key == Group.class) {
-			return getModel().getGroup();
+			return key.cast(getModel().getGroup());
 		}
 		return super.getAdapter(key);
 	}

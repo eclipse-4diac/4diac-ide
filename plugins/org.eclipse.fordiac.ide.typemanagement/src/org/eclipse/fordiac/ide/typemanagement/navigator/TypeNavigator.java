@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2012 - 2017 TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -32,9 +32,9 @@ public class TypeNavigator extends CommonNavigator implements ITabbedPropertyShe
 	private PatternFilter patternFilter = null;
 
 	@Override
-	public void createPartControl(Composite aParent) {
-		Composite container = new Composite(aParent, SWT.NONE);
-		GridLayout layout = new GridLayout(1, false);
+	public void createPartControl(final Composite aParent) {
+		final Composite container = new Composite(aParent, SWT.NONE);
+		final GridLayout layout = new GridLayout(1, false);
 		layout.marginLeft = 0;
 		layout.marginRight = 0;
 		layout.marginBottom = 0;
@@ -44,7 +44,7 @@ public class TypeNavigator extends CommonNavigator implements ITabbedPropertyShe
 		text.setLayoutData(new GridData(GridData.FILL_HORIZONTAL));
 		text.addSelectionListener(new SelectionAdapter() {
 			@Override
-			public void widgetDefaultSelected(SelectionEvent e) {
+			public void widgetDefaultSelected(final SelectionEvent e) {
 				if (e.detail == SWT.CANCEL) {
 					setSearchFilter(""); //$NON-NLS-1$
 				} else {
@@ -54,7 +54,7 @@ public class TypeNavigator extends CommonNavigator implements ITabbedPropertyShe
 		});
 		text.addModifyListener(e -> setSearchFilter(text.getText()));
 		super.createPartControl(container);
-		GridData fillBoth = new GridData();
+		final GridData fillBoth = new GridData();
 		fillBoth.horizontalAlignment = GridData.FILL;
 		fillBoth.grabExcessHorizontalSpace = true;
 		fillBoth.verticalAlignment = GridData.FILL;
@@ -62,8 +62,8 @@ public class TypeNavigator extends CommonNavigator implements ITabbedPropertyShe
 		getCommonViewer().getControl().setLayoutData(fillBoth);
 	}
 
-	void setSearchFilter(String filterString) {
-		CommonViewer cv = getCommonViewer();
+	void setSearchFilter(final String filterString) {
+		final CommonViewer cv = getCommonViewer();
 		if (patternFilter == null) {
 			patternFilter = new TypeListPatternFilter();
 			cv.addFilter(patternFilter);
@@ -78,10 +78,9 @@ public class TypeNavigator extends CommonNavigator implements ITabbedPropertyShe
 	}
 
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Object getAdapter(Class required) {
+	public <T> T getAdapter(final Class<T> required) {
 		if (required == IPropertySheetPage.class) {
-			return new TabbedPropertySheetPage(this);
+			return required.cast(new TabbedPropertySheetPage(this));
 		}
 		return super.getAdapter(required);
 	}

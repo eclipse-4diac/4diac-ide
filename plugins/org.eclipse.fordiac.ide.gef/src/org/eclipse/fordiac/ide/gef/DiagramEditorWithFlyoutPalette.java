@@ -398,16 +398,16 @@ implements ITabbedPropertySheetPageContributor, I4diacModelEditor {
 	 * java.lang.Class)
 	 */
 	@Override
-	public Object getAdapter(final Class type) {
+	public <T> T getAdapter(final Class<T> type) {
 		if (type == ZoomManager.class) {
-			return getGraphicalViewer().getProperty(ZoomManager.class.toString());
+			return type.cast(getGraphicalViewer().getProperty(ZoomManager.class.toString()));
 		}
 		if (type == IContentOutlinePage.class) {
 			outlinePage = new DiagramOutlinePage(getGraphicalViewer());
-			return outlinePage;
+			return type.cast(outlinePage);
 		}
 		if (type == IPropertySheetPage.class) {
-			return new TabbedPropertySheetPage(this);
+			return type.cast(new TabbedPropertySheetPage(this));
 		}
 
 		return super.getAdapter(type);

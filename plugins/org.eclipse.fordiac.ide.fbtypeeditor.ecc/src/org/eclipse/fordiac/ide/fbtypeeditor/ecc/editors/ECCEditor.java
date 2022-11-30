@@ -282,7 +282,7 @@ public class ECCEditor extends DiagramEditorWithFlyoutPalette implements IFBTEdi
 	}
 
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == ECC.class) {
 			return adapter.cast(getModel());
 		}

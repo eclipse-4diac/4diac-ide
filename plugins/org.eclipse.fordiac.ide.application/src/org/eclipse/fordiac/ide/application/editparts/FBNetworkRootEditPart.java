@@ -142,9 +142,9 @@ public class FBNetworkRootEditPart extends ZoomScalableFreeformRootEditPart {
 	}
 
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == FBNetwork.class) {
-			return fbNetwork;
+			return adapter.cast(fbNetwork);
 		}
 		return super.getAdapter(adapter);
 	}
