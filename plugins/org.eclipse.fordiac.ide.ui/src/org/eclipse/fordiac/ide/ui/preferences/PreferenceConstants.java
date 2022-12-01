@@ -73,6 +73,9 @@ public final class PreferenceConstants {
 
 	public static final String P_SHOW_ERRORS_AT_MOUSE_CURSOR = "ShowErrorsAtMouseCursor"; //$NON-NLS-1$
 	public static final boolean P_SHOW_ERRORS_AT_MOUSE_CURSOR_DEFAULT_VALUE = true;
+	
+	public static final String P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX = "DeactivateCommentsTransferringDemuxToMux"; //$NON-NLS-1$
+	public static final boolean P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE = false;
 
 	private PreferenceConstants() {
 		throw new UnsupportedOperationException();
