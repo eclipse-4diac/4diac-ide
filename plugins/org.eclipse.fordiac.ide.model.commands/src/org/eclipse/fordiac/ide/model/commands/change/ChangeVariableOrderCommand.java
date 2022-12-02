@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020 Johannes Kepler University
+ * Copyright (c) 2020, 2022 Johannes Kepler University
  * 				 2020 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -11,66 +11,34 @@
  * Contributors:
  *   Daniel Lindhuber - initial API and implementation and/or initial documentation
  *   Alexander Lumplecker - changed class and constructor name
+ *   Bianca Wiesmayr - cleanup, remove duplicated code
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.gef.commands.Command;
 
-public class ChangeVariableOrderCommand extends Command {
-	private final VarDeclaration variable;
-	private final EList<VarDeclaration> type;
-	private final int oldIndex;
-	private int newIndex;
+public class ChangeVariableOrderCommand extends AbstractChangeListElementOrderCommand<VarDeclaration> {
 
-	public ChangeVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration variable, int indexChanged) {
-		this.type = type;
-		this.variable = variable;
-
-		oldIndex = type.indexOf(variable);
-
-		// move up : -1
-		// move down : +1
-		if (indexChanged == 1) {
-			newIndex = oldIndex + 1;
-		} else if (indexChanged == -1) {
-			newIndex = oldIndex - 1;
-		}
-
-		if (newIndex < 0) {
-			newIndex = 0;
-		}
-		if (newIndex >= type.size()) {
-			newIndex = type.size() - 1;
-		}
+	public ChangeVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration variable,
+			final int indexChanged) {
+		super(variable, isMoveUp(indexChanged), type);
 	}
 
-	public ChangeVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration variable, boolean moveUp) {
+	public ChangeVariableOrderCommand(final EList<VarDeclaration> type, final VarDeclaration variable,
+			final boolean moveUp) {
 		this(type, variable, moveUp ? -1 : 1);
 	}
 
-	@Override
-	public boolean canExecute() {
-		return (null != variable) && (type.size() > 1) && (type.size() > newIndex);
-	}
-
-	@Override
-	public void execute() {
-		moveTo(newIndex);
-	}
-
-	@Override
-	public void redo() {
-		moveTo(newIndex);
-	}
-
-	@Override
-	public void undo() {
-		moveTo(oldIndex);
-	}
-
-	private void moveTo(int index) {
-		type.move(index, variable);
+	private static boolean isMoveUp(final int indexChanged) {
+		// move down : +1
+		// move up : -1
+		if (indexChanged == 1) {
+			return false;
+		}
+		if (indexChanged == -1) {
+			return true;
+		}
+		throw new UnsupportedOperationException();
 	}
 }

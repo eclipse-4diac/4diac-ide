@@ -15,7 +15,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.fordiac.ide.model;visibility:=reexport,
  org.eclipse.fordiac.ide.ui,
- org.eclipse.gef
+ org.eclipse.gef,
+ org.eclipse.fordiac.ide.model.commands
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Automatic-Module-Name: org.eclipse.fordiac.ide.systemconfiguration.segment
 Bundle-ActivationPolicy: lazy

@@ -12,7 +12,7 @@
  *      - Initial implementation and/or documentation
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.model.commands.internal;
+package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.EList;
@@ -81,5 +81,9 @@ public abstract class AbstractChangeListElementOrderCommand<T> extends Command {
 
 	private void moveTo(final int index) {
 		list.move(index, selection);
+	}
+
+	public T getSelection() {
+		return selection;
 	}
 }
