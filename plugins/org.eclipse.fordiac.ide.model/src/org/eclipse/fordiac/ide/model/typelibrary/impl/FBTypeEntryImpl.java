@@ -15,6 +15,8 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.FbtExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.FBTImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -25,7 +27,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 public class FBTypeEntryImpl extends AbstractTypeEntryImpl implements FBTypeEntry {
 
 	@Override
-	public FBType getType() {
+	public synchronized FBType getType() {
 		final LibraryElement type = super.getType();
 		if (type instanceof FBType) {
 			return (FBType) type;
@@ -34,7 +36,7 @@ public class FBTypeEntryImpl extends AbstractTypeEntryImpl implements FBTypeEntr
 	}
 
 	@Override
-	public FBType getTypeEditable() {
+	public synchronized FBType getTypeEditable() {
 		final LibraryElement type = super.getTypeEditable();
 		if (type instanceof FBType) {
 			return (FBType) type;
@@ -43,7 +45,7 @@ public class FBTypeEntryImpl extends AbstractTypeEntryImpl implements FBTypeEntr
 	}
 
 	@Override
-	public void setType(final LibraryElement type) {
+	public synchronized void setType(final LibraryElement type) {
 		if (type instanceof FBType) {
 			super.setType(type);
 		} else {
@@ -57,6 +59,11 @@ public class FBTypeEntryImpl extends AbstractTypeEntryImpl implements FBTypeEntr
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new FBTImporter(getFile());
+	}
+
+	@Override
+	protected AbstractTypeExporter getExporter() {
+		return new FbtExporter(this);
 	}
 
 }

@@ -92,4 +92,8 @@ public final class FBTypeEntryMock extends BasicNotifierImpl implements FBTypeEn
 		return getType().getName();
 	}
 
+	@Override
+	public void save() {
+		// currently not needed in mock
+	}
 }

@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -64,7 +63,7 @@ public class ExtractStructTypeWizard extends AbstractSaveAsWizard {
 
 			datatypeName = TypeEntry.getTypeNameFromFile(targetFile);
 			type.setName(datatypeName);
-			AbstractTypeExporter.saveType(entry);
+			entry.save();
 
 			if (newFilePage.getOpenType()) {
 				OpenStructMenu.openStructEditor(targetFile);

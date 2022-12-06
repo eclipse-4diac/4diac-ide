@@ -91,12 +91,14 @@ public final class ValidateProject {
 		final IFile file = baseFB.getTypeEntry().getFile();
 
 		final MarkerCreator markerCreator = new MarkerCreator();
-		for (final Issue issue : errors) {
-			try {
-				markerCreator.createMarker(issue, file, IMarker.PROBLEM);
-				baseFB.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp());
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
+		synchronized (baseFB.getTypeEntry()) {
+			for (final Issue issue : errors) {
+				try {
+					markerCreator.createMarker(issue, file, IMarker.PROBLEM);
+					baseFB.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp());
+				} catch (final CoreException e) {
+					FordiacLogHelper.logError(e.getMessage(), e);
+				}
 			}
 		}
 	}

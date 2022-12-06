@@ -15,6 +15,8 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AdapterExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -25,7 +27,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 public class AdapterTypeEntryImpl extends AbstractTypeEntryImpl implements AdapterTypeEntry {
 
 	@Override
-	public AdapterType getType() {
+	public synchronized AdapterType getType() {
 		final LibraryElement type = super.getType();
 		if (type instanceof AdapterType) {
 			return (AdapterType) type;
@@ -34,7 +36,7 @@ public class AdapterTypeEntryImpl extends AbstractTypeEntryImpl implements Adapt
 	}
 
 	@Override
-	public AdapterType getTypeEditable() {
+	public synchronized AdapterType getTypeEditable() {
 		final LibraryElement type = super.getTypeEditable();
 		if (type instanceof AdapterType) {
 			return (AdapterType) type;
@@ -43,7 +45,7 @@ public class AdapterTypeEntryImpl extends AbstractTypeEntryImpl implements Adapt
 	}
 
 	@Override
-	public void setType(final LibraryElement type) {
+	public synchronized void setType(final LibraryElement type) {
 		if (type instanceof AdapterType) {
 			super.setType(type);
 			((AdapterType) type).getAdapterFBType().setTypeEntry(this);
@@ -58,6 +60,11 @@ public class AdapterTypeEntryImpl extends AbstractTypeEntryImpl implements Adapt
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new ADPImporter(getFile());
+	}
+
+	@Override
+	protected AbstractTypeExporter getExporter() {
+		return new AdapterExporter(this);
 	}
 
 }

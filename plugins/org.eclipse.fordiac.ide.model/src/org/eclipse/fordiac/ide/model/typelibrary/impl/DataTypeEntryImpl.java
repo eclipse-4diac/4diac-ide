@@ -16,6 +16,8 @@
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.DataTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -25,7 +27,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 public class DataTypeEntryImpl extends AbstractTypeEntryImpl implements DataTypeEntry {
 
 	@Override
-	public AnyDerivedType getType() {
+	public synchronized AnyDerivedType getType() {
 		final LibraryElement type = super.getType();
 		if (type instanceof AnyDerivedType) {
 			return (AnyDerivedType) type;
@@ -34,7 +36,7 @@ public class DataTypeEntryImpl extends AbstractTypeEntryImpl implements DataType
 	}
 
 	@Override
-	public AnyDerivedType getTypeEditable() {
+	public synchronized AnyDerivedType getTypeEditable() {
 		final LibraryElement type = super.getTypeEditable();
 		if (type instanceof AnyDerivedType) {
 			return (AnyDerivedType) type;
@@ -43,7 +45,7 @@ public class DataTypeEntryImpl extends AbstractTypeEntryImpl implements DataType
 	}
 
 	@Override
-	public void setType(final LibraryElement type) {
+	public synchronized void setType(final LibraryElement type) {
 		if (type instanceof AnyDerivedType) {
 			super.setType(type);
 		} else {
@@ -57,6 +59,11 @@ public class DataTypeEntryImpl extends AbstractTypeEntryImpl implements DataType
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new DataTypeImporter(getFile());
+	}
+
+	@Override
+	protected AbstractTypeExporter getExporter() {
+		return new DataTypeExporter(getTypeEditable());
 	}
 
 }
