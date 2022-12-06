@@ -25,9 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Group;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class ShowInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
@@ -39,20 +36,6 @@ public class ShowInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 			return (FBNetworkElement) input;
 		}
 		return null;
-	}
-
-	@Override
-	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);
-		// final Table inputTable = (Table) getInputsViewer().getControl();
-		// inputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		// inputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		// getInputsViewer().setCellModifier(new CellImmutableModifier());
-
-		// final Table outputTable = (Table) getOutputsViewer().getControl();
-		// outputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		// outputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		// getOutputsViewer().setCellModifier(new CellImmutableModifier());
 	}
 
 	@Override
@@ -88,33 +71,10 @@ public class ShowInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 	}
 
 	@Override
-	protected void setTableInput() {
-		final FBNetworkElement selection = getType();
-		if (selection.getType() != null) {
-			// ((Object) inputProvider).setInput(selection.getType());
-			// ((Object) outputProvider).setInput(selection.getType());
-		} else {
-			// untyped subapp in typed subapp
-			super.setTableInput();
-		}
-
-	}
-
-	@Override
 	public boolean isEditable() {
 		return false;
 	}
 
-	@Override
-	protected void setupOutputTable(final Group outputsGroup) {
-		// TODO Auto-generated method stub
 
-	}
-
-	@Override
-	protected void setupInputTable(final Group inputsGroup) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

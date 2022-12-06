@@ -15,27 +15,25 @@ package org.eclipse.fordiac.ide.gef.nat;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 
-public class EventListProvider extends ListDataProvider<Event> implements FordiacInterfaceListProvider {
+public class AdapterListProvider extends ListDataProvider<AdapterDeclaration> implements FordiacInterfaceListProvider {
 
-
-	public EventListProvider(final AbstractSection section, final List<Event> list) {
-		super(list, new EventColumnAcesssor(section));
+	public AdapterListProvider(final AbstractSection section, final List<AdapterDeclaration> list) {
+		super(list, new AdapterColumnAcessor(section));
 	}
 
-	public EventListProvider(final List<Event> list, final IColumnAccessor<Event> columnAccessor) {
+	public AdapterListProvider(final List<AdapterDeclaration> list,
+			final IColumnAccessor<AdapterDeclaration> columnAccessor) {
 		super(list, columnAccessor);
 	}
 
-
 	@Override
 	public <T extends List<? extends IInterfaceElement>> void setInput(final T varDecl) {
-		this.list = (List<Event>) varDecl;
-
+		this.list = (List<AdapterDeclaration>) varDecl;
 	}
 
 }

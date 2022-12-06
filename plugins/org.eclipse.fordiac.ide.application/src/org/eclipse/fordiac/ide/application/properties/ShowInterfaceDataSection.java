@@ -28,12 +28,16 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
@@ -124,4 +128,21 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 		return false;
 	}
 
+	@Override
+	protected void setTableInputFBType(final FBType type) {
+
+	}
+
+	@Override
+	public DataLayer setupDataLayer(final ListDataProvider outputProvider) {
+		final DataLayer dataLayer = new DataLayer(outputProvider);
+		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
+
+		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
+			if (labelAcc != null) {
+				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+			}
+		});
+		return dataLayer;
+	}
 }

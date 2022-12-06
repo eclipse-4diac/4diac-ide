@@ -21,10 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -106,7 +108,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	@Override
 	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
-			cmd.add(newInsertCommand((IInterfaceElement) entry, isInputsViewer(), index));
+			final IInterfaceElement entry2 = (IInterfaceElement) entry;
+			cmd.add(newInsertCommand(entry2, entry2.isIsInput(), index));
 		}
 	}
 
@@ -135,7 +138,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				new VarDeclarationColumnProvider(), rule, typeSelection, this);
 	}
 
-	public static DataLayer setupDataLayer(final ListDataProvider outputProvider) {
+	public DataLayer setupDataLayer(final ListDataProvider outputProvider) {
 		final DataLayer dataLayer = new DataLayer(outputProvider);
 		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
 
@@ -148,5 +151,11 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 			}
 		});
 		return dataLayer;
+	}
+	@Override
+	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
+		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getInputVars());
+		final EList<VarDeclaration> outputVars = element.getInterface().getOutputVars();
+		((FordiacInterfaceListProvider) outputProvider).setInput(outputVars);
 	}
 }

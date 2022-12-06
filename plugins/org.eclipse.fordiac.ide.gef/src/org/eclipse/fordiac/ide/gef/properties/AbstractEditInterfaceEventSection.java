@@ -78,7 +78,8 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 	@Override
 	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof Event) {
-			cmd.add(newInsertCommand((Event) entry, isInputsViewer(), index));
+			final Event entry2 = (Event) entry;
+			cmd.add(newInsertCommand(entry2, entry2.isIsInput(), index));
 		}
 	}
 
@@ -107,7 +108,8 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 				new EventColumnProvider(), rule, typeSelection, this);
 	}
 
-	public static DataLayer setupDataLayer(final ListDataProvider<Event> inputProvider) {
+	@SuppressWarnings("static-method")
+	public DataLayer setupDataLayer(final ListDataProvider<Event> inputProvider) {
 		final DataLayer dataLayer = new DataLayer(inputProvider);
 		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
 

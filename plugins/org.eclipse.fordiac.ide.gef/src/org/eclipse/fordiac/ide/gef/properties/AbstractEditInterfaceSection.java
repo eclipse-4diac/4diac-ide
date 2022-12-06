@@ -20,21 +20,25 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
@@ -55,21 +59,14 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractEditInterfaceSection extends AbstractSection implements I4diacNatTableUtil {
-	private static final int TYPE_AND_COMMENT_COLUMN_WIDTH = 100;
-	private static final int NAME_COLUMN_WIDTH = 200;
-	private static final String NAME_COL = "name"; //$NON-NLS-1$
-	private static final String TYPE_COL = "type"; //$NON-NLS-1$
-	private static final String COMMENT_COL = "comment"; //$NON-NLS-1$
-
-	private TableViewer inputsViewer;
-	private TableViewer outputsViewer;
-	private boolean isInputsViewer;
 
 	protected ListDataProvider inputProvider;
 	protected NatTable inputTable;
 
 	protected ListDataProvider outputProvider;
 	protected NatTable outputTable;
+
+	protected Map<String, List<String>> typeSelection = new HashMap<>();
 
 	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
@@ -93,11 +90,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	// subapps
 	protected ChangeDataTypeCommand newChangeTypeCommand(final VarDeclaration data, final DataType newType) {
 		return new ChangeDataTypeCommand(data, newType);
-	}
-
-
-	public boolean isInputsViewer() {
-		return isInputsViewer;
 	}
 
 	@Override
@@ -196,17 +188,12 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		}
 	}
 
-	public void setTableInputFBType(final FBType type) {
-		// TODO Auto-generated method stub
+	protected abstract void setTableInputFBType(final FBType type);
 
-	}
+	protected abstract void setTableInputFbNetworkElement(final FBNetworkElement element);
 
-	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
-		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getInputVars());
-		final EList<VarDeclaration> outputVars = element.getInterface().getOutputVars();
-		((FordiacInterfaceListProvider) outputProvider).setInput(outputVars);
-	}
 
+	@SuppressWarnings("static-method")
 	protected int getInsertingIndex(final IInterfaceElement interfaceElement,
 			final EList<? extends IInterfaceElement> interfaceList) {
 		return interfaceList.indexOf(interfaceElement) + 1;
@@ -214,20 +201,9 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	protected abstract int getInsertingIndex(IInterfaceElement interfaceElement, boolean isInput);
 
+	@SuppressWarnings("static-method")
 	protected String getCreationName(final IInterfaceElement interfaceElement) {
 		return (null != interfaceElement) ? interfaceElement.getName() : null;
-	}
-
-	public TableViewer getViewer() {
-		// return isInputsViewer() ? getInputsViewer() : getOutputsViewer();
-		return null;
-	}
-
-	@Override
-	public Object removeEntry(final int index, final CompoundCommand cmd) {
-		final IInterfaceElement entry = getEntry(index);
-		cmd.add(newDeleteCommand(entry));
-		return entry;
 	}
 
 	@Override
@@ -237,17 +213,23 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		outputTable.refresh();
 	}
 
-	private IInterfaceElement getEntry(final int index) {
 
-		// final Object obj = getViewer().getElementAt(index);
-		// return (IInterfaceElement) obj;
-		return null;
+
+
+	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
+		final List<String> elementaryTypes = new ArrayList<>();
+		dataTypeLib.getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType))
+		.forEach(type -> elementaryTypes.add(type.getName()));
+		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
+
+		final List<String> structuredTypes = new ArrayList<>();
+		dataTypeLib.getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
+		.forEach(type -> structuredTypes.add(type.getName()));
+		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
 
+	// TODO reimplement
 	private void createContextMenu(final TableViewer viewer) {
 		OpenStructMenu.addTo(viewer);
 	}
-
-
-
 }

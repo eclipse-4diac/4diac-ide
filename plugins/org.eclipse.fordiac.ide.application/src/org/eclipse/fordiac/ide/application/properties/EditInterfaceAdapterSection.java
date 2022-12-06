@@ -31,7 +31,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.swt.widgets.Group;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
@@ -85,20 +84,8 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 
 	@Override
 	public boolean isEditable() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 
-	@Override
-	protected void setupOutputTable(final Group outputsGroup) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	protected void setupInputTable(final Group inputsGroup) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

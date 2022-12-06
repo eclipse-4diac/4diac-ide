@@ -73,4 +73,10 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 		return true;
 	}
 
+	@Override
+	protected void setTableInputFBType(final FBType type) {
+		// TODO Auto-generated method stub
+
+	}
+
 }
