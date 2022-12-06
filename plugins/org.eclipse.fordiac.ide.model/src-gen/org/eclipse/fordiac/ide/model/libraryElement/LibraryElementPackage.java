@@ -6731,10 +6731,10 @@ public interface LibraryElementPackage extends EPackage {
 	int HIDDEN_ELEMENT_FEATURE_COUNT = CONFIGURABLE_OBJECT_FEATURE_COUNT + 0;
 
 	/**
-	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CommunicationConfigurationImpl <em>Communication Configuration</em>}' class.
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration <em>Communication Configuration</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CommunicationConfigurationImpl
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommunicationConfiguration()
 	 * @generated
 	 */
@@ -11996,10 +11996,10 @@ public interface LibraryElementPackage extends EPackage {
 		EClass HIDDEN_ELEMENT = eINSTANCE.getHiddenElement();
 
 		/**
-		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CommunicationConfigurationImpl <em>Communication Configuration</em>}' class.
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration <em>Communication Configuration</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
-		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.CommunicationConfigurationImpl
+		 * @see org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration
 		 * @see org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementPackageImpl#getCommunicationConfiguration()
 		 * @generated
 		 */

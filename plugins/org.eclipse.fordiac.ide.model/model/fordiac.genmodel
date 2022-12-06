@@ -606,6 +606,7 @@
     <genClasses image="false" ecoreClass="lib.ecore#//CommunicationConfiguration">
       <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getSegment"
           body="return (Segment) eContainer();"/>
+      <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getId"/>
     </genClasses>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"

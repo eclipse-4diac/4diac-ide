@@ -14,35 +14,37 @@
 package org.eclipse.fordiac.ide.systemconfiguration.segment.commands;
 
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
 import org.eclipse.gef.commands.Command;
 
-public class TimeSlotDeleteCommand extends Command {
+/** This command allows changing the cycle time of a TSN configuration. */
+public class ChangeTsnCycleTimeCommand extends Command {
 	private final TsnConfiguration config;
-	private final TsnWindow toDelete;
+	private final int cycleTime;
+	private int oldCycleTime;
 
-	public TimeSlotDeleteCommand(final TsnConfiguration config, final TsnWindow toDelete) {
+	public ChangeTsnCycleTimeCommand(final TsnConfiguration config, final int cycleTime) {
+		this.cycleTime = cycleTime;
 		this.config = config;
-		this.toDelete = toDelete;
 	}
 
 	@Override
 	public boolean canExecute() {
-		return config.getWindows().contains(toDelete);
+		return (null != config) && (cycleTime >= 0);
 	}
 
 	@Override
 	public void execute() {
-		config.getWindows().remove(toDelete);
+		this.oldCycleTime = config.getCycleTime();
+		config.setCycleTime(cycleTime);
 	}
 
 	@Override
 	public void undo() {
-		config.getWindows().add(toDelete);
+		config.setCycleTime(oldCycleTime);
 	}
 
 	@Override
 	public void redo() {
-		config.getWindows().remove(toDelete);
+		config.setCycleTime(cycleTime);
 	}
 }

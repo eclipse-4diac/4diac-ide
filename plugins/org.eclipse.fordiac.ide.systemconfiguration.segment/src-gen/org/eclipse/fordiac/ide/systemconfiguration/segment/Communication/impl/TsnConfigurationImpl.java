@@ -1,11 +1,11 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2021 Johannes Kepler University Linz
- *
+ *  
  * This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
- *
+ * 
  * Contributors:
  *   Bianca Wiesmayr
  *          - initial implementation and/or documentation
@@ -17,13 +17,20 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+
 import org.eclipse.emf.common.util.EList;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
+
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-import org.eclipse.fordiac.ide.model.libraryElement.impl.CommunicationConfigurationImpl;
+
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
@@ -41,10 +48,10 @@ import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWind
  * </ul>
  *
  * @generated */
-public class TsnConfigurationImpl extends CommunicationConfigurationImpl implements TsnConfiguration {
+public class TsnConfigurationImpl extends MinimalEObjectImpl.Container implements TsnConfiguration {
 	/** The default value of the '{@link #getCycleTime() <em>Cycle Time</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getCycleTime()
 	 * @generated
 	 * @ordered */
@@ -52,7 +59,7 @@ public class TsnConfigurationImpl extends CommunicationConfigurationImpl impleme
 
 	/** The cached value of the '{@link #getCycleTime() <em>Cycle Time</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getCycleTime()
 	 * @generated
 	 * @ordered */
@@ -60,21 +67,21 @@ public class TsnConfigurationImpl extends CommunicationConfigurationImpl impleme
 
 	/** The cached value of the '{@link #getWindows() <em>Windows</em>}' containment reference list. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @see #getWindows()
 	 * @generated
 	 * @ordered */
 	protected EList<TsnWindow> windows;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	protected TsnConfigurationImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -82,7 +89,7 @@ public class TsnConfigurationImpl extends CommunicationConfigurationImpl impleme
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public int getCycleTime() {
@@ -90,7 +97,7 @@ public class TsnConfigurationImpl extends CommunicationConfigurationImpl impleme
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public void setCycleTime(int newCycleTime) {
@@ -102,19 +109,35 @@ public class TsnConfigurationImpl extends CommunicationConfigurationImpl impleme
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public EList<TsnWindow> getWindows() {
 		if (windows == null) {
-			windows = new EObjectResolvingEList<>(TsnWindow.class, this,
+			windows = new EObjectContainmentEList.Resolving<TsnWindow>(TsnWindow.class, this,
 					CommunicationPackage.TSN_CONFIGURATION__WINDOWS);
 		}
 		return windows;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
+	 * @generated */
+	@Override
+	public String getId() {
+		return "tsnConfig";
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
+	 * @generated */
+	@Override
+	public Segment getSegment() {
+		return (Segment) eContainer();
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * 
 	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -127,7 +150,7 @@ public class TsnConfigurationImpl extends CommunicationConfigurationImpl impleme
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -136,12 +159,13 @@ public class TsnConfigurationImpl extends CommunicationConfigurationImpl impleme
 			return getCycleTime();
 		case CommunicationPackage.TSN_CONFIGURATION__WINDOWS:
 			return getWindows();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -154,12 +178,14 @@ public class TsnConfigurationImpl extends CommunicationConfigurationImpl impleme
 			getWindows().clear();
 			getWindows().addAll((Collection<? extends TsnWindow>) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -170,12 +196,14 @@ public class TsnConfigurationImpl extends CommunicationConfigurationImpl impleme
 		case CommunicationPackage.TSN_CONFIGURATION__WINDOWS:
 			getWindows().clear();
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
@@ -184,12 +212,13 @@ public class TsnConfigurationImpl extends CommunicationConfigurationImpl impleme
 			return cycleTime != CYCLE_TIME_EDEFAULT;
 		case CommunicationPackage.TSN_CONFIGURATION__WINDOWS:
 			return windows != null && !windows.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated */
 	@Override
 	public String toString() {

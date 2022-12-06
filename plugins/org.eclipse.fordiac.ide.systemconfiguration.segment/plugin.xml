@@ -13,5 +13,14 @@
             class="org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage"
             genModel="model/communication.genmodel"/>
    </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.systemconfiguration.communication">
+      <communicationProtocol
+            class="org.eclipse.fordiac.ide.systemconfiguration.segment.properties.TsnDetails"
+            id="tsnConfig"
+            label="TSN"
+            name="tsnProtocol">
+      </communicationProtocol>
+   </extension>
 
 </plugin>

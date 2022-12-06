@@ -1,12 +1,6 @@
 /********************************************************************************
-<<<<<<< HEAD
  * Copyright (c)  2008, 2022  Profactor GmbH, TU Wien ACIN, fortiss GmbH,
- *                            Johannes Keppler University, Linz
-=======
- * Copyright (c)  2008 - 2014, 2016, 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				  2018 - 2020 Johannes Keppler University, Linz
- *                2022 Primetals Technologies Austria GmbH
->>>>>>> develop
+ *                            Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -92,8 +86,17 @@ public class SystemExporter extends AbstractTypeExporter {
 			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE,
 					CoordinateConverter.INSTANCE.convertTo1499XML(segment.getWidth()));
 			addColorAttributeElement(segment);
+			addCommunicationConfigurationAttribute(segment);
 			addAttributes(segment.getAttributes());
 			addEndElement();
+		}
+	}
+
+	private void addCommunicationConfigurationAttribute(final Segment segment) throws XMLStreamException {
+		if (null != segment.getCommunication()) {
+			final String commValue = segment.getCommunication().getId();
+			addAttributeElement(LibraryElementTags.SEGMENT_COMMUNICATION_CONFIG,
+					IecTypes.ElementaryTypes.STRING.getName(), commValue, null);
 		}
 	}
 
@@ -136,11 +139,9 @@ public class SystemExporter extends AbstractTypeExporter {
 		}
 	}
 
-	/**
-	 * Adds the resource.
+	/** Adds the resource.
 	 *
-	 * @param resourceList the list of resource to add to the MXL file
-	 */
+	 * @param resourceList the list of resource to add to the MXL file */
 	private void addResources(final EList<Resource> resourceList) throws XMLStreamException {
 		for (final Resource resource : resourceList) {
 			if (!resource.isDeviceTypeResource()) {

@@ -63,21 +63,21 @@ public interface CommunicationPackage extends EPackage {
 	int TSN_CONFIGURATION = 0;
 
 	/** The feature id for the '<em><b>Cycle Time</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int TSN_CONFIGURATION__CYCLE_TIME = LibraryElementPackage.COMMUNICATION_CONFIGURATION_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Windows</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int TSN_CONFIGURATION__WINDOWS = LibraryElementPackage.COMMUNICATION_CONFIGURATION_FEATURE_COUNT + 1;
 
 	/** The number of structural features of the '<em>Tsn Configuration</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int TSN_CONFIGURATION_FEATURE_COUNT = LibraryElementPackage.COMMUNICATION_CONFIGURATION_FEATURE_COUNT + 2;
@@ -92,19 +92,19 @@ public interface CommunicationPackage extends EPackage {
 	int TSN_WINDOW = 1;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int TSN_WINDOW__NAME = LibraryElementPackage.INAMED_ELEMENT__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int TSN_WINDOW__COMMENT = LibraryElementPackage.INAMED_ELEMENT__COMMENT;
 
 	/** The feature id for the '<em><b>Duration</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	 * 
 	 * @generated
 	 * @ordered */
 	int TSN_WINDOW__DURATION = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 0;

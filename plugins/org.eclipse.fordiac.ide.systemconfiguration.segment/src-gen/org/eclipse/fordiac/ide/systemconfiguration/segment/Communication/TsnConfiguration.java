@@ -61,4 +61,11 @@ public interface TsnConfiguration extends CommunicationConfiguration {
 	 * @generated */
 	EList<TsnWindow> getWindows();
 
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
+	 * @generated */
+	@Override
+	String getId();
+
 } // TsnConfiguration

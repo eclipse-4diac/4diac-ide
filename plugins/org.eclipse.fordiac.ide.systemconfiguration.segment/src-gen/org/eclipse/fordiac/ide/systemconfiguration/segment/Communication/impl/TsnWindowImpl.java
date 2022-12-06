@@ -54,7 +54,7 @@ public class TsnWindowImpl extends MinimalEObjectImpl.Container implements TsnWi
 
 	/** The default value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered */
@@ -62,7 +62,7 @@ public class TsnWindowImpl extends MinimalEObjectImpl.Container implements TsnWi
 
 	/** The cached value of the '{@link #getComment() <em>Comment</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getComment()
 	 * @generated
 	 * @ordered */
@@ -70,7 +70,7 @@ public class TsnWindowImpl extends MinimalEObjectImpl.Container implements TsnWi
 
 	/** The default value of the '{@link #getDuration() <em>Duration</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getDuration()
 	 * @generated
 	 * @ordered */
@@ -78,7 +78,7 @@ public class TsnWindowImpl extends MinimalEObjectImpl.Container implements TsnWi
 
 	/** The cached value of the '{@link #getDuration() <em>Duration</em>}' attribute. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 *
+	 * 
 	 * @see #getDuration()
 	 * @generated
 	 * @ordered */

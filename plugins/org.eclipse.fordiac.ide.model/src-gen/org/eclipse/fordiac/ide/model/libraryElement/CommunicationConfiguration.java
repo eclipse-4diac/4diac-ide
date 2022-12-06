@@ -25,7 +25,7 @@ import org.eclipse.emf.ecore.EObject;
  *
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCommunicationConfiguration()
- * @model abstract="true"
+ * @model interface="true" abstract="true"
  * @generated
  */
 public interface CommunicationConfiguration extends EObject {
@@ -36,5 +36,13 @@ public interface CommunicationConfiguration extends EObject {
 	 * @generated
 	 */
 	Segment getSegment();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
+	 * @generated
+	 */
+	String getId();
 
 } // CommunicationConfiguration

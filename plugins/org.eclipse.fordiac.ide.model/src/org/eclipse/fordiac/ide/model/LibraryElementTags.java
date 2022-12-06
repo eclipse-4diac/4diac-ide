@@ -13,9 +13,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model;
 
-/**
- * The Interface LibraryElementTags.
- */
+/** The Interface LibraryElementTags. */
 public final class LibraryElementTags {
 	public static final String FB_TYPE = "FBType"; //$NON-NLS-1$
 	public static final String ADAPTER_TYPE = "AdapterType"; //$NON-NLS-1$
@@ -120,6 +118,7 @@ public final class LibraryElementTags {
 	public static final String STANDARD_ATTRIBUTE = "Standard"; //$NON-NLS-1$
 	public static final String CLASSIFICATION_ATTRIBUTE = "Classification"; //$NON-NLS-1$
 	public static final String APPLICATION_DOMAIN_ATTRIBUTE = "ApplicationDomain"; //$NON-NLS-1$
+	public static final String SEGMENT_COMMUNICATION_CONFIG = "CommunicationConfiguration"; //$NON-NLS-1$
 
 	public static final String FUNCTION_ELEMENT = "Function"; //$NON-NLS-1$
 
