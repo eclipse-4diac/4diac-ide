@@ -41,7 +41,7 @@
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/elk/updates/nightly"/>
-			<unit id="org.eclipse.elk.libavoid.feature.feature.group" version="0.9.0.202211240326"/>
+			<unit id="org.eclipse.elk.libavoid.feature.feature.group" version="0.0.0"/>
 		</location>
 	</locations>
 </target>
