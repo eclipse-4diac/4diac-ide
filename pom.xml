@@ -24,7 +24,7 @@
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 		<sonar.java.source>11</sonar.java.source>
-		<org.eclipse.justj.jre.repository> https://download.eclipse.org/justj/jres/17/updates/release/17.0.4</org.eclipse.justj.jre.repository>
+		<org.eclipse.justj.jre.repository> https://download.eclipse.org/justj/jres/17/updates/release/17.0.5</org.eclipse.justj.jre.repository>
 		<xtend-version>2.28.0</xtend-version>
 		<eclipse.platform.version>4.25</eclipse.platform.version>
 		<equinox.executable.version>3.8.1800</equinox.executable.version>
