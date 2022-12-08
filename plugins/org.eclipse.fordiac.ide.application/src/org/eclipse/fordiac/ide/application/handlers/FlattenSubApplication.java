@@ -30,6 +30,8 @@ import org.eclipse.fordiac.ide.application.commands.FlattenSubAppCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.gef.commands.CommandStack;
@@ -74,15 +76,26 @@ public class FlattenSubApplication extends AbstractHandler {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final SubApp subApp = getSelectedSubApp(selection);
 
-		setBaseEnabled(HandlerHelper.isEditableSubApp(subApp));
+		setBaseEnabled(HandlerHelper.isEditableSubApp(subApp) && !resultsInGroupInGroup(subApp));
+	}
+
+	private static boolean resultsInGroupInGroup(final SubApp subApp) {
+		return (getContainedGroup(subApp) != null) && (subApp.getGroup() != null);
+	}
+
+	private static FBNetworkElement getContainedGroup(final SubApp subApp) {
+		return subApp.getSubAppNetwork().getNetworkElements().stream().filter(Group.class::isInstance).findFirst()
+				.orElse(null);
 	}
 
 	private static SubApp getSubApp(final Object currentElement) {
 		if (currentElement instanceof SubApp) {
 			return (SubApp) currentElement;
-		} else if (currentElement instanceof SubAppForFBNetworkEditPart) {
+		}
+		if (currentElement instanceof SubAppForFBNetworkEditPart) {
 			return ((SubAppForFBNetworkEditPart) currentElement).getModel();
-		} else if (currentElement instanceof UISubAppNetworkEditPart) {
+		}
+		if (currentElement instanceof UISubAppNetworkEditPart) {
 			return (SubApp) ((UISubAppNetworkEditPart) currentElement).getModel().eContainer();
 		}
 		return null;

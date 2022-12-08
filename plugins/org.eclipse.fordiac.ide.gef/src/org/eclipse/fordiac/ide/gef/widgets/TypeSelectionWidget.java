@@ -191,7 +191,7 @@ public class TypeSelectionWidget {
 			openEditorButton.dispose();
 		} else if (configurableObject instanceof VarDeclaration) {
 			final DataType dtp = ((VarDeclaration) configurableObject).getType();
-			openEditorButton.setEnabled((dtp instanceof StructuredType) && IecTypes.GenericTypes.isAnyType(dtp)); // $NON-NLS-1$
+			openEditorButton.setEnabled((dtp instanceof StructuredType) && !IecTypes.GenericTypes.isAnyType(dtp)); // $NON-NLS-1$
 		}
 	}
 }

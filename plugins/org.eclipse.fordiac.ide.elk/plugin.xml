@@ -6,11 +6,19 @@
         id="org.eclipse.fordiac.ide.elk.layout"
         name="Layout with ELK">
     </command>
+    <command
+        id="org.eclipse.fordiac.ide.elk.connectionLayout"
+        name="Layout with ELK">
+    </command>
 </extension>
 <extension point="org.eclipse.ui.handlers">
     <handler
         class="org.eclipse.fordiac.ide.elk.handlers.LayoutHandler"
         commandId="org.eclipse.fordiac.ide.elk.layout">
+    </handler>
+    <handler
+        class="org.eclipse.fordiac.ide.elk.handlers.ConnectionLayoutHandler"
+        commandId="org.eclipse.fordiac.ide.elk.connectionLayout">
     </handler>
 </extension>
 <extension point="org.eclipse.ui.menus">
@@ -46,11 +54,43 @@
             	</with>
             </visibleWhen>
                </command>
+	</menuContribution>
+	<menuContribution
+         allPopups="false"
+         locationURI="popup:org.eclipse.ui.popup.any?after=additions">  
+      <separator name="layouting stuff" visible="true"/>
+      <command
+            commandId="org.eclipse.fordiac.ide.elk.connectionLayout"
+            label="Connection Layouting"
+            style="push">
+            <visibleWhen checkEnabled="false">
+            	<with variable="selection">
+            	<and>
+            		<or>
+            			<count value="0" />
+            			<and>
+            				<count value="1" />
+            				<iterate>
+            					<or>
+            						<instanceof
+                       					value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart">
+            						</instanceof>
+            						<instanceof
+                       					value="org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart">
+            						</instanceof>
+            					</or>
+            				</iterate>
+            			</and>
+            		</or>
+            		<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
+            	</and>
+            	</with>
+            </visibleWhen>
+               </command>
 	</menuContribution> 
 	<menuContribution
          allPopups="false"
          locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">  
-      <separator name="layouting stuff" visible="true"/>
       <command
             commandId="org.eclipse.fordiac.ide.elk.layout"
             label="Auto Layouting"
@@ -63,7 +103,26 @@
             	</with>
             </visibleWhen>
                </command>
+	</menuContribution>
+	<separator name="layouting stuff" visible="true"/>
+	<menuContribution
+         allPopups="false"
+         locationURI="menu:org.eclipse.4diac.ide.source.menu?after=convertGroup">  
+      <separator name="layouting stuff" visible="true"/>
+      <command
+            commandId="org.eclipse.fordiac.ide.elk.connectionLayout"
+            label="Connection Layouting"
+            style="push">
+            <visibleWhen checkEnabled="false">
+            	<with variable="selection">
+            		<and>
+            			<test property="org.eclipse.fordiac.ide.application.utilities.isViewer" />
+            		</and>
+            	</with>
+            </visibleWhen>
+               </command>
 	</menuContribution> 
+	<separator name="layouting stuff" visible="true"/>
    </extension>
  	<extension point="org.eclipse.elk.core.service.layoutConnectors">
  		<setup
