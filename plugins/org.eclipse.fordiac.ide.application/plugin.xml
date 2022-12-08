@@ -933,6 +933,7 @@
               <iterate ifEmpty="true">
                 <or>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart" />
+                  <instanceof value="org.eclipse.fordiac.ide.application.editparts.GroupEditPart" />
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart"/>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart"/>
                   <instanceof value="org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart"/>

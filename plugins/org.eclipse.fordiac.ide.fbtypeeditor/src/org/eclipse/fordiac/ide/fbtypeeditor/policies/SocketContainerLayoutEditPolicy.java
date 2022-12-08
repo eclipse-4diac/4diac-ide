@@ -23,8 +23,8 @@ import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
@@ -35,7 +35,7 @@ import org.eclipse.gef.requests.CreateRequest;
 public class SocketContainerLayoutEditPolicy extends AbstractInterfaceContainerLayoutEditPolicy {
 
 	@Override
-	protected EditPolicy createChildEditPolicy(EditPart child) {
+	protected EditPolicy createChildEditPolicy(final EditPart child) {
 
 		return new AbstractInterfaceSelectionEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1)) {
 
@@ -45,25 +45,25 @@ public class SocketContainerLayoutEditPolicy extends AbstractInterfaceContainerL
 			}
 
 			@Override
-			protected Command getIECreateCommand(DataType type, int ref) {
+			protected Command getIECreateCommand(final DataType type, final int ref) {
 				return new CreateInterfaceElementCommand(type, getFBType().getInterfaceList(), true, ref);
 			}
 		};
 	}
 
 	@Override
-	protected boolean canReorder(IInterfaceElement childEP, IInterfaceElement afterEP) {
-		return childEP instanceof Event && childEP.isIsInput()
-				&& (null == afterEP || (afterEP instanceof Event && afterEP.isIsInput()));
+	protected boolean canReorder(final IInterfaceElement childEP, final IInterfaceElement afterEP) {
+		return childEP instanceof AdapterDeclaration && childEP.isIsInput()
+				&& (null == afterEP || (afterEP instanceof AdapterDeclaration && afterEP.isIsInput()));
 	}
 
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
-		Object childClass = request.getNewObjectType();
-		FBType type = getFBType();
+		final Object childClass = request.getNewObjectType();
+		final FBType type = getFBType();
 		if (childClass instanceof AdapterType && null != type) {
 			int index = -1;
-			EditPart ref = getInsertionReference(request);
+			final EditPart ref = getInsertionReference(request);
 			if (null != ref) {
 				index = type.getInterfaceList().getSockets().indexOf(ref.getModel());
 			}

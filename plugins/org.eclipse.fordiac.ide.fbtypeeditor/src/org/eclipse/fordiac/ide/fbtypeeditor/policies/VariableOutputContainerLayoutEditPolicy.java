@@ -24,7 +24,6 @@ import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -36,7 +35,7 @@ import org.eclipse.gef.requests.CreateRequest;
 
 public class VariableOutputContainerLayoutEditPolicy extends AbstractInterfaceContainerLayoutEditPolicy {
 	@Override
-	protected EditPolicy createChildEditPolicy(EditPart child) {
+	protected EditPolicy createChildEditPolicy(final EditPart child) {
 
 		return new AbstractInterfaceSelectionEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1)) {
 
@@ -46,27 +45,26 @@ public class VariableOutputContainerLayoutEditPolicy extends AbstractInterfaceCo
 			}
 
 			@Override
-			protected Command getIECreateCommand(DataType refElement, int ref) {
+			protected Command getIECreateCommand(final DataType refElement, final int ref) {
 				return new CreateInterfaceElementCommand(refElement, getFBType().getInterfaceList(), false, ref);
 			}
 		};
 	}
 
 	@Override
-	protected boolean canReorder(IInterfaceElement childEP, IInterfaceElement afterEP) {
-		return childEP instanceof VarDeclaration && !childEP.isIsInput() && !(childEP instanceof AdapterDeclaration)
-				&& (null == afterEP || (afterEP instanceof VarDeclaration && !afterEP.isIsInput()
-						&& !(childEP instanceof AdapterDeclaration)));
+	protected boolean canReorder(final IInterfaceElement childEP, final IInterfaceElement afterEP) {
+		return childEP instanceof VarDeclaration && !childEP.isIsInput()
+				&& (null == afterEP || (afterEP instanceof VarDeclaration && !afterEP.isIsInput()));
 	}
 
 	@Override
 	protected Command getCreateCommand(final CreateRequest request) {
-		Object childClass = request.getNewObjectType();
-		FBType type = getFBType();
+		final Object childClass = request.getNewObjectType();
+		final FBType type = getFBType();
 		if (childClass instanceof DataType && null != type && !(childClass instanceof EventType)
 				&& !(childClass instanceof AdapterType)) {
 			int index = -1;
-			EditPart ref = getInsertionReference(request);
+			final EditPart ref = getInsertionReference(request);
 			if (null != ref) {
 				index = type.getInterfaceList().getOutputVars().indexOf(ref.getModel());
 			}

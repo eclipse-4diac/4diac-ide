@@ -23,7 +23,8 @@ public class PinAdapterInfoFilter implements IFilter {
 	public boolean select(final Object toTest) {
 		if (toTest instanceof EditPart) {
 			final RootEditPart rootEP = ((EditPart) toTest).getRoot();
-			if (rootEP.getAdapter(FBNetwork.class) != null) {
+			// Bug: rootEP can be null during refresh / complex command execution
+			if ((rootEP != null) && (rootEP.getAdapter(FBNetwork.class) != null)) {
 				final Object type = ((EditPart) toTest).getModel();
 				return FilterProperties.isAdapter(type) && FilterProperties.isUntypedSubappPin(type);
 			}

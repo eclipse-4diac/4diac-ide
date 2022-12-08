@@ -19,6 +19,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.application.commands.ConvertSubappToGroupCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
@@ -54,7 +56,14 @@ public class ConvertToGroupHandler extends AbstractHandler implements CommandSta
 	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final SubApp subApp = getSelectedSubApp(selection);
-		setBaseEnabled((null != subApp) && !(subApp.isTyped() || subApp.isContainedInTypedInstance()));
+		setBaseEnabled((null != subApp) && !isGroupContainedInSubapp(subApp)
+				&& !(subApp.isTyped() || subApp.isContainedInTypedInstance()));
+	}
+
+	private static boolean isGroupContainedInSubapp(final SubApp subApp) {
+		final FBNetworkElement group = subApp.getSubAppNetwork().getNetworkElements().stream()
+				.filter(Group.class::isInstance).findFirst().orElse(null);
+		return group != null;
 	}
 
 	private static SubApp getSelectedSubApp(final Object selection) {
