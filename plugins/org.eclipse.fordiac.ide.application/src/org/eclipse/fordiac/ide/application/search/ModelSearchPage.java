@@ -12,12 +12,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.search;
 
+import java.text.MessageFormat;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.search.ModelQuerySpec.SearchScope;
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.layout.LayoutConstants;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.widgets.LabelFactory;
 import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.search.ui.ISearchPage;
@@ -31,6 +43,13 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.navigator.CommonNavigator;
+import org.eclipse.ui.part.FileEditorInput;
 
 public class ModelSearchPage extends DialogPage implements ISearchPage {
 
@@ -47,8 +66,8 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 	private Text query;
 	private Button caseSensitive;
 	private Button exactNameMatching;
-	private Button workspaceScope;
 	private Button projectScope;
+	private IProject curProject;
 
 	public Button getInstanceName() {
 		return instanceName;
@@ -114,19 +133,26 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 				.create(composite);
 
 		final Group radioButtonScope = new Group(composite, SWT.NONE);
-		radioButtonScope.setLayout(new RowLayout(SWT.HORIZONTAL));
+		radioButtonScope.setLayout(new RowLayout(SWT.VERTICAL));
 		radioButtonScope.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false));
 		radioButtonScope.setLayout(new GridLayout(NUMBER_OF_SCOPES, false));
 		radioButtonScope.setText(Messages.Scope);
 
-		projectScope = new Button(radioButtonScope, SWT.RADIO);
-		projectScope.setText(Messages.ProjectScope);
+		configureProjectScope(radioButtonScope);
 
-		workspaceScope = new Button(radioButtonScope, SWT.RADIO);
+		final Button workspaceScope = new Button(radioButtonScope, SWT.RADIO);
 		workspaceScope.setText(Messages.WorkspaceScope);
 		workspaceScope.setSelection(true); // This is the default
 
 		setControl(composite);
+	}
+
+	private void configureProjectScope(final Group radioButtonScope) {
+		projectScope = new Button(radioButtonScope, SWT.RADIO);
+		curProject = getCurrentProject();
+		projectScope.setEnabled(curProject != null); // only if we have a project allow to select it.
+		projectScope.setText(
+				MessageFormat.format(Messages.ProjectScope, (curProject != null) ? curProject.getName() : "[none]"));
 	}
 
 	@Override
@@ -138,9 +164,6 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		final boolean isCheckedComment = comment.getSelection();
 		final boolean isCaseSensitive = caseSensitive.getSelection();
 		final boolean isExactNameMatching = exactNameMatching.getSelection();
-		// Where to look for it
-		final boolean isWorkspaceScope = workspaceScope.getSelection();
-		final boolean isProjectScope = projectScope.getSelection();
 
 		// Search string aka the name of it
 		final String searchString = query.getText();
@@ -150,7 +173,8 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		if (!"".equals(searchString) && optionSelected) { //$NON-NLS-1$
 
 			final ModelQuerySpec modelQuerySpec = new ModelQuerySpec(searchString, isCheckedInstanceName,
-					isCheckedPinName, isCheckedType, isCheckedComment, isCaseSensitive, isExactNameMatching, isWorkspaceScope, isProjectScope);
+					isCheckedPinName, isCheckedType, isCheckedComment, isCaseSensitive, isExactNameMatching, getScope(),
+					curProject);
 
 			final ModelSearchQuery searchJob = new ModelSearchQuery(modelQuerySpec);
 			NewSearchUI.runQueryInBackground(searchJob, NewSearchUI.getSearchResultView());
@@ -165,6 +189,13 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 
 	}
 
+	private ModelQuerySpec.SearchScope getScope() {
+		if (projectScope.getSelection() && curProject != null) {
+			return SearchScope.PROJECT;
+		}
+		return SearchScope.WORKSPACE;
+	}
+
 	private void errorDialogDisplay() {
 		MessageDialog.openWarning(getShell(), Messages.Warning, Messages.ErrorMessageSearch);
 	}
@@ -172,6 +203,55 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 	@Override
 	public void setContainer(final ISearchPageContainer container) {
 		this.container = container;
+	}
+
+	private static IProject getCurrentProject() {
+		final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		IProject project = getProjectFromActiveEditor(page);
+		if (project == null) {
+			project = getProjectFromProjectExplorerSelction(page);
+		}
+		return project;
+	}
+
+	private static IProject getProjectFromActiveEditor(final IWorkbenchPage page) {
+		final IEditorPart openEditor = page.getActiveEditor();
+		if (openEditor != null) {
+			final IEditorInput editorInput = openEditor.getEditorInput();
+			if (editorInput instanceof FileEditorInput) {
+				return ((FileEditorInput) editorInput).getFile().getProject();
+			}
+		}
+		return null;
+	}
+
+	private static IProject getProjectFromProjectExplorerSelction(final IWorkbenchPage page) {
+		final IViewPart view = page.findView("org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"); //$NON-NLS-1$
+
+		if (view instanceof CommonNavigator) {
+			final ISelection selection = ((CommonNavigator) view).getCommonViewer().getSelection();
+			if (selection instanceof StructuredSelection && !((StructuredSelection) selection).isEmpty()) {
+				Object selElement = ((StructuredSelection) selection).getFirstElement();
+				if (selElement instanceof EObject) {
+					selElement = getFileForModel((EObject) selElement);
+				}
+				if (selElement instanceof IResource) {
+					return ((IResource) selElement).getProject();
+				}
+			}
+		}
+
+		return null;
+	}
+
+	private static IFile getFileForModel(final EObject sel) {
+		final EObject root = EcoreUtil.getRootContainer(sel);
+		if (root instanceof AutomationSystem) {
+			return ((AutomationSystem) root).getSystemFile();
+		} else if (root instanceof FBType) {
+			return ((FBType) root).getTypeEntry().getFile();
+		}
+		return null;
 	}
 
 }

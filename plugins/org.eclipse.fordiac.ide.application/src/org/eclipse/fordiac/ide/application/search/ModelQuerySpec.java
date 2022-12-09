@@ -12,8 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.search;
 
+import org.eclipse.core.resources.IProject;
+
 // The inputs from the search page grouped in one place
 public class ModelQuerySpec {
+
+	enum SearchScope {
+		WORKSPACE, PROJECT
+	}
 
 	private String searchString;
 	private boolean checkInstanceName;
@@ -22,16 +28,16 @@ public class ModelQuerySpec {
 	private boolean checkComments;
 	private boolean checkCaseSensitive;
 	private boolean checkExactMatching;
-	private boolean checkWorkspaceScope;
-	private boolean checkProjectScope;
+	private SearchScope scope;
+	private IProject project;
 
 	public ModelQuerySpec() {
 	}
 
 	public ModelQuerySpec(final String searchString, final boolean isCheckedInstanceName,
 			final boolean isCheckedPinName, final boolean isCheckedType, final boolean isCheckedComment,
-			final boolean isCaseSensitive, final boolean isExactNameMatching, final boolean isWorkspaceScope,
-			final boolean isProjectScope) {
+			final boolean isCaseSensitive, final boolean isExactNameMatching, final SearchScope scope,
+			final IProject project) {
 		this.searchString = searchString;
 		this.checkInstanceName = isCheckedInstanceName;
 		this.checkPinName = isCheckedPinName;
@@ -39,8 +45,7 @@ public class ModelQuerySpec {
 		this.checkComments = isCheckedComment;
 		this.checkCaseSensitive = isCaseSensitive;
 		this.checkExactMatching = isExactNameMatching;
-		this.checkWorkspaceScope = isWorkspaceScope;
-		this.checkProjectScope = isProjectScope;
+		this.project = project;
 	}
 
 	public String getSearchString() {
@@ -71,12 +76,12 @@ public class ModelQuerySpec {
 		return checkExactMatching;
 	}
 
-	public boolean isCheckWorkspaceScope() {
-		return checkWorkspaceScope;
+	public SearchScope getScope() {
+		return scope;
 	}
 
-	public boolean isCheckProjectScope() {
-		return checkProjectScope;
+	public IProject getProject() {
+		return project;
 	}
 
 	public void setCheckCaseSensitive(final boolean checkCaseSensitive) {
