@@ -124,7 +124,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 
 		workspaceScope = new Button(radioButtonScope, SWT.RADIO);
 		workspaceScope.setText(Messages.WorkspaceScope);
-		workspaceScope.setEnabled(true); // This is the default
+		workspaceScope.setSelection(true); // This is the default
 
 		setControl(composite);
 	}
