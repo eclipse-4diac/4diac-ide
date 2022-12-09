@@ -53,9 +53,6 @@ public class EventColumnAcesssor implements IColumnAccessor<Event> {
 			}
 			cmd = new ChangeNameCommand(rowObject, value);
 			break;
-		case VarDeclarationColumnProvider.TYPE:
-                        //nothing to do here
-			break;
 		case VarDeclarationColumnProvider.COMMENT:
 			cmd = new ChangeCommentCommand(rowObject, value);
 			break;
@@ -69,7 +66,6 @@ public class EventColumnAcesssor implements IColumnAccessor<Event> {
 
 	@Override
 	public int getColumnCount() {
-		// TODO Auto-generated method stub
 		return 3;
 	}
 

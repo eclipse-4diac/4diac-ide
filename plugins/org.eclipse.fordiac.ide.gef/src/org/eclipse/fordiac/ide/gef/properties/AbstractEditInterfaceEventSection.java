@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.nat.EventColumnAcesssor;
 import org.eclipse.fordiac.ide.gef.nat.EventColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.EventListProvider;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
@@ -117,6 +118,9 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 			if (labelAcc != null) {
 				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
 			}
+			if (columnPosition == EventColumnProvider.NAME || columnPosition == EventColumnProvider.COMMENT) {
+	             configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT); 
+	}
 		});
 		return dataLayer;
 

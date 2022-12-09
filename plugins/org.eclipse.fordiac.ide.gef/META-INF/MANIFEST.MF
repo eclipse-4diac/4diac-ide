@@ -40,7 +40,7 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.emf.edit.ui,
  org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.ui.errormessages,
- org.eclipse.nebula.widgets.nattable.core;bundle-version="2.0.0",
+ org.eclipse.nebula.widgets.nattable.core,
  org.eclipse.fordiac.ide.gef
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
