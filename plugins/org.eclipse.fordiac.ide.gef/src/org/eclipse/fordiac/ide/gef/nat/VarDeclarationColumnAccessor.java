@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
+import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
@@ -44,9 +45,7 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 		case VarDeclarationColumnProvider.INITIAL_VALUE:
 			return InitialValueHelper.getInitalOrDefaultValue(rowObject);
 		case VarDeclarationColumnProvider.ARRAY_SIZE:
-			final int arraySize = rowObject.getArraySize();
-			return Integer.toString(arraySize < 0 ? 0 : arraySize);
-
+			return DataLabelProvider.getArraySizeText(rowObject);
 		default:
 			return rowObject.getValue() == null ? "" : rowObject.getValue().getValue(); //$NON-NLS-1$
 		}
