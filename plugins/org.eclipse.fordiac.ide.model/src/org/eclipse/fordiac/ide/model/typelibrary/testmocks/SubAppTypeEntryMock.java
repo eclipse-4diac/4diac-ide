@@ -92,4 +92,9 @@ public final class SubAppTypeEntryMock extends BasicNotifierImpl implements SubA
 		return getType().getName();
 	}
 
+	@Override
+	public void save() {
+		// currently not needed in mock
+	}
+
 }

@@ -45,6 +45,9 @@ public interface TypeEntry extends Notifier {
 
 	void setTypeLibrary(TypeLibrary typeLib);
 
+	/** Save the editable type to the file associated with this type entry */
+	void save();
+
 	default String getTypeName() {
 		return (getFile() != null) ? TypeEntry.getTypeNameFromFile(getFile()) : ""; //$NON-NLS-1$
 	}

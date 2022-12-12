@@ -15,9 +15,19 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import java.io.InputStream;
+
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
@@ -26,6 +36,7 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.resource.FordiacTypeResource;
@@ -69,6 +80,8 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 
 	private BasicEList<Adapter> eAdapters;
 
+	private boolean updateTypeOnSave = true;
+
 	@Override
 	public IFile getFile() {
 		return file;
@@ -85,17 +98,17 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	}
 
 	@Override
-	public long getLastModificationTimestamp() {
+	public final synchronized long getLastModificationTimestamp() {
 		return lastModificationTimestamp;
 	}
 
 	@Override
-	public void setLastModificationTimestamp(final long newLastModificationTimestamp) {
+	public final synchronized void setLastModificationTimestamp(final long newLastModificationTimestamp) {
 		lastModificationTimestamp = newLastModificationTimestamp;
 	}
 
 	@Override
-	public LibraryElement getType() {
+	public synchronized LibraryElement getType() {
 		if (getFile() != null) {
 			if (type == null) {
 				reloadType();
@@ -119,7 +132,7 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	}
 
 	@Override
-	public void setType(final LibraryElement newType) {
+	public synchronized void setType(final LibraryElement newType) {
 		final LibraryElement oldType = type;
 		type = newType;
 		if (newType != null) {
@@ -143,7 +156,7 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	}
 
 	@Override
-	public LibraryElement getTypeEditable() {
+	public synchronized LibraryElement getTypeEditable() {
 		if ((getFile() != null) && (typeEditable == null || isFileContentChanged())) {
 			// if the editable type is null load it from the file and set a copy
 			setTypeEditable(EcoreUtil.copy(getType()));
@@ -152,7 +165,7 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	}
 
 	@Override
-	public void setTypeEditable(final LibraryElement newTypeEditable) {
+	public synchronized void setTypeEditable(final LibraryElement newTypeEditable) {
 		final LibraryElement oldTypeEditable = typeEditable;
 		typeEditable = newTypeEditable;
 		if (newTypeEditable != null) {
@@ -191,6 +204,36 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	}
 
 	@Override
+	public void save() {
+		final AbstractTypeExporter exporter = getExporter();
+
+		if (null != exporter) {
+			final InputStream fileContent = exporter.getFileContent();
+			if (fileContent != null) {
+				final WorkspaceJob job = new WorkspaceJob("Save type file: " + getFile().getName()) {
+					@Override
+					public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+						try {
+							try (fileContent) {
+								writeToFile(fileContent, monitor);
+							} catch (final CoreException e) {
+								FordiacLogHelper.logError(e.getMessage(), e);
+							}
+						} catch (final Exception e) {
+							FordiacLogHelper.logError(e.getMessage(), e);
+						}
+						return Status.OK_STATUS;
+					}
+				};
+				job.setRule(getRuleScope());
+				job.schedule();
+			}
+		}
+	}
+
+	protected abstract AbstractTypeExporter getExporter();
+
+	@Override
 	public String toString() {
 		final StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (label: "); //$NON-NLS-1$
@@ -214,6 +257,57 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 	@Override
 	protected BasicEList<Adapter> eBasicAdapters() {
 		return eAdapters;
+	}
+
+	protected final void setUpdateTypeOnSave(final boolean updateTypeOnSave) {
+		this.updateTypeOnSave = updateTypeOnSave;
+	}
+
+	/** Search for the first directory parent which is existing. If none can be found we will return the workspace root.
+	 * This directory is then used as scheduling rule for locking the workspace. The direct parent of the entry's file
+	 * can not be used as it may need to be created.
+	 *
+	 * @return the current folder or workspace root */
+	private IContainer getRuleScope() {
+		IContainer parent = getFile().getParent();
+		while (parent != null && !parent.exists()) {
+			parent = parent.getParent();
+		}
+		return (parent != null) ? parent : ResourcesPlugin.getWorkspace().getRoot();
+	}
+
+	private synchronized void writeToFile(final InputStream fileContent, final IProgressMonitor monitor)
+			throws CoreException {
+		// writing to the file and setting the time stamp need to be atomic
+		if (getFile().exists()) {
+			getFile().setContents(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
+		} else {
+			checkAndCreateFolderHierarchy(getFile(), monitor);
+			getFile().create(fileContent, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
+		}
+		// "reset" the modification timestamp in the TypeEntry to avoid reload - as for this
+		// timestamp
+		// it is not necessary as the data is in memory
+		setLastModificationTimestamp(getFile().getModificationStamp());
+		if (updateTypeOnSave) {
+			// make the edit result available for the reading entities
+			setType(EcoreUtil.copy(getTypeEditable()));
+		}
+	}
+
+	/** Check if the folders in the file's path exist and if not create them accordingly
+	 *
+	 * @param file    for which the path should be checked
+	 * @param monitor
+	 * @throws CoreException */
+	private static void checkAndCreateFolderHierarchy(final IFile file, final IProgressMonitor monitor)
+			throws CoreException {
+		final IContainer container = file.getParent();
+		if (!container.exists() && container instanceof IFolder) {
+			final IFolder folder = ((IFolder) container);
+			folder.create(true, true, monitor);
+			folder.refreshLocal(IResource.DEPTH_ZERO, monitor);
+		}
 	}
 
 }

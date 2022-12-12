@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 
@@ -51,15 +50,10 @@ public class SystemResource extends ResourceImpl {
 		saveSystem((AutomationSystem) getContents().get(0));
 	}
 
-	public void saveSystem(final AutomationSystem system) {
-		saveSystem(system, system.getSystemFile());
-	}
-
-	public void saveSystem(final AutomationSystem system, final IFile file) {
+	private static void saveSystem(final AutomationSystem system) {
 		Assert.isNotNull(system.getTypeEntry()); // there should be no system without type entry
-		system.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
-		final SystemExporter systemExporter = new SystemExporter(system);
-		systemExporter.saveSystem(file);
+		system.getTypeEntry().setLastModificationTimestamp(system.getSystemFile().getModificationStamp() + 1);
+		system.getTypeEntry().save();
 	}
 
 	@Override

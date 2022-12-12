@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.application.search.ModelQuerySpec.SearchScope;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -44,8 +45,6 @@ import org.eclipse.search.ui.ISearchQuery;
 import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.search2.internal.ui.SearchView;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
-import org.eclipse.ui.PlatformUI;
 
 public class ModelSearchQuery implements ISearchQuery {
 
@@ -59,35 +58,38 @@ public class ModelSearchQuery implements ISearchQuery {
 	@Override
 	public IStatus run(final IProgressMonitor monitor) throws OperationCanceledException {
 		getSearchResult().clear();
-		final List<AutomationSystem> searchRootSystems = new ArrayList<>();
-		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		final List<AutomationSystem> searchRootSystems = getRootSystems();
+		performSearch(searchRootSystems);
 
-		if (modelQuerySpec.isCheckWorkspaceScope()) { // If it's workspace, search all
+		Display.getDefault()
+				.asyncExec(() -> ((SearchView) NewSearchUI.getSearchResultView()).showSearchResult(getSearchResult()));
+
+		return Status.OK_STATUS;
+	}
+
+	private List<AutomationSystem> getRootSystems() {
+		final List<AutomationSystem> searchRootSystems = new ArrayList<>();
+
+		if (modelQuerySpec.getScope() == SearchScope.PROJECT && modelQuerySpec.getProject() != null) {
+			searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(modelQuerySpec.getProject()));
+		} else {
+			// workspace scope
+			final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 			for (final IProject proj : root.getProjects()) {
 				if (proj.isOpen()) {
 					searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(proj));
 				}
 			}
-		} else {
-			Display.getDefault().syncExec(() -> {
-				final IEditorPart openEditor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
-						.getActiveEditor();
-				final IProject project = openEditor.getAdapter(FBNetwork.class).getAutomationSystem().getTypeLibrary()
-						.getProject();
-				searchRootSystems.addAll(SystemManager.INSTANCE.getProjectSystems(project));
-			});
 		}
+		return searchRootSystems;
+	}
 
+	private void performSearch(final List<AutomationSystem> searchRootSystems) {
 		for (final AutomationSystem sys : searchRootSystems) {
 			searchApplications(sys);
 			searchResources(sys);
 			searchTypeLibrary(sys);
 		}
-
-		Display.getDefault()
-		.asyncExec(() -> ((SearchView) NewSearchUI.getSearchResultView()).showSearchResult(getSearchResult()));
-
-		return Status.OK_STATUS;
 	}
 
 	public void searchApplications(final AutomationSystem sys) {

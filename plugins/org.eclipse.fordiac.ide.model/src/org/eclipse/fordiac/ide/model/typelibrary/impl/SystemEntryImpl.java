@@ -15,6 +15,8 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -23,6 +25,11 @@ import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntry {
+
+	public SystemEntryImpl() {
+		// for system entries we don't want to perform any updates on save
+		setUpdateTypeOnSave(false);
+	}
 
 	@Override
 	public AutomationSystem getSystem() {
@@ -35,7 +42,7 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 	}
 
 	@Override
-	public AutomationSystem getType() {
+	public synchronized AutomationSystem getType() {
 		final LibraryElement type = super.getType();
 		if(type instanceof AutomationSystem){
 			return (AutomationSystem)type;
@@ -44,7 +51,7 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 	}
 
 	@Override
-	public void setType(final LibraryElement newType) {
+	public synchronized void setType(final LibraryElement newType) {
 		if (newType instanceof AutomationSystem) {
 			super.setType(newType);
 		}else{
@@ -56,13 +63,13 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 	}
 
 	@Override
-	public AutomationSystem getTypeEditable() {
+	public synchronized AutomationSystem getTypeEditable() {
 		// for performance reasons the systemEntry uses only the type and not the type editable
 		return getSystem();
 	}
 
 	@Override
-	public void setTypeEditable(final LibraryElement newTypeEditable) {
+	public synchronized void setTypeEditable(final LibraryElement newTypeEditable) {
 		// for performance reasons the systemEntry uses only the type and not the type editable
 		setSystem(newTypeEditable);
 	}
@@ -70,6 +77,11 @@ public class SystemEntryImpl extends AbstractTypeEntryImpl implements SystemEntr
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new SystemImporter(getFile());
+	}
+
+	@Override
+	protected AbstractTypeExporter getExporter() {
+		return new SystemExporter(getSystem());
 	}
 
 }

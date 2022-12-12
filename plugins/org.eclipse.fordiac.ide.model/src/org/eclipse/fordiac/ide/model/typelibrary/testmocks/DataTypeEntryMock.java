@@ -92,4 +92,9 @@ public final class DataTypeEntryMock extends BasicNotifierImpl implements DataTy
 		return getType().getName();
 	}
 
+	@Override
+	public void save() {
+		// currently not needed in mock
+	}
+
 }

@@ -1,6 +1,6 @@
 /********************************************************************************
- * Copyright (c)  2008 - 2014, 2016, 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				  2018 - 2020 Johannes Keppler University, Linz
+ * Copyright (c)  2008, 2022  Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                            Johannes Keppler University, Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.model.dataexport;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -33,46 +32,33 @@ import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-public class SystemExporter extends CommonElementExporter {
-	private final AutomationSystem system;
+public class SystemExporter extends AbstractTypeExporter {
 
 	public SystemExporter(final AutomationSystem system) {
-		super();
-		this.system = system;
+		super(system);
 	}
 
-	public void saveSystem(final IFile targetFile) {
-		final long startTime = System.currentTimeMillis();
-		if (null != getWriter()) {
-			try {
-				createNamedElementEntry(system, LibraryElementTags.SYSTEM);
-				addIdentification(system);
-				addVersionInfo(system);
-				addApplications();
+	@Override
+	protected AutomationSystem getType() {
+		return (AutomationSystem) super.getType();
+	}
 
-				final SystemConfiguration systemConfiguration = system.getSystemConfiguration();
-				if (null != systemConfiguration) {
-					addDevices(systemConfiguration.getDevices());
-					addMapping();
-					addSegment(systemConfiguration.getSegments());
-					addLink(systemConfiguration.getLinks());
-				}
+	@Override
+	protected void createTypeSpecificXMLEntries() throws XMLStreamException {
+		addApplications();
 
-				addEndElement();
-			} catch (final XMLStreamException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
-			writeToFile(targetFile, null);
+		final SystemConfiguration systemConfiguration = getType().getSystemConfiguration();
+		if (null != systemConfiguration) {
+			addDevices(systemConfiguration.getDevices());
+			addMapping();
+			addSegment(systemConfiguration.getSegments());
+			addLink(systemConfiguration.getLinks());
 		}
-		final long endTime = System.currentTimeMillis();
-		FordiacLogHelper
-		.logInfo("Overall saving time for System (" + system.getName() + "): " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	private void addApplications() throws XMLStreamException {
-		for (final Application app : system.getApplication()) {
+		for (final Application app : getType().getApplication()) {
 			addStartElement(LibraryElementTags.APPLICATION_ELEMENT);
 			addNameAndCommentAttribute(app);
 			addAttributes(app.getAttributes());
@@ -105,7 +91,7 @@ public class SystemExporter extends CommonElementExporter {
 	}
 
 	private void addMapping() throws XMLStreamException {
-		for (final Mapping mappingEntry : system.getMapping()) {
+		for (final Mapping mappingEntry : getType().getMapping()) {
 			final String fromString = FBNetworkHelper.getFullHierarchicalName(mappingEntry.getFrom());
 			final String toString = FBNetworkHelper.getFullHierarchicalName(mappingEntry.getTo());
 
@@ -159,6 +145,11 @@ public class SystemExporter extends CommonElementExporter {
 				addEndElement();
 			}
 		}
+	}
+
+	@Override
+	protected String getRootTag() {
+		return LibraryElementTags.SYSTEM;
 	}
 
 }

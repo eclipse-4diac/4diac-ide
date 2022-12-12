@@ -21,9 +21,9 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 
-class SubApplicationTypeExporter extends AbstractBlockTypeExporter {
+public class SubApplicationTypeExporter extends AbstractBlockTypeExporter {
 
-	SubApplicationTypeExporter(final SubAppTypeEntry entry) {
+	public SubApplicationTypeExporter(final SubAppTypeEntry entry) {
 		super(entry.getTypeEditable());
 	}
 

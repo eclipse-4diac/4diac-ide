@@ -43,7 +43,6 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.Messages;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -119,7 +118,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 			// allow each editor to save back changes before saving to file
 			editors.forEach(editorPart -> editorPart.doSave(monitor));
 			getCommandStack().markSaveLocation();
-			AbstractTypeExporter.saveType(typeEntry);
+			typeEntry.save();
 			firePropertyChange(IEditorPart.PROP_DIRTY);
 		}
 	}

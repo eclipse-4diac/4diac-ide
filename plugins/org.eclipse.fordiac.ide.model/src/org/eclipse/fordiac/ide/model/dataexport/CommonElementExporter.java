@@ -34,12 +34,6 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.IEclipsePreferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.emf.common.util.EList;
@@ -60,9 +54,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
-class CommonElementExporter {
+public class CommonElementExporter {
 
-	private static class ByteBufferInputStream extends InputStream {
+	protected static class ByteBufferInputStream extends InputStream {
 
 		private final Iterator<ByteBuffer> bufferIterator;
 		private ByteBuffer currentDataBuffer;
@@ -123,7 +117,7 @@ class CommonElementExporter {
 
 	}
 
-	private static class ByteBufferOutputStream extends OutputStream {
+	protected static class ByteBufferOutputStream extends OutputStream {
 		private static final int SI_PREFIX_KI = 1024;
 		private static final int SI_PREFIX_MI = SI_PREFIX_KI * SI_PREFIX_KI;
 		private static final int SINGLE_DATA_BUFFER_CAPACITY = getSingleDataBufCap();
@@ -198,6 +192,10 @@ class CommonElementExporter {
 
 	protected XMLStreamWriter getWriter() {
 		return writer;
+	}
+
+	protected ByteBufferOutputStream getOutputStream() {
+		return outputStream;
 	}
 
 	protected void addStartElement(final String name) throws XMLStreamException {
@@ -279,62 +277,6 @@ class CommonElementExporter {
 		addNameAndCommentAttribute(namedElement);
 	}
 
-	protected void writeToFile(final IFile iFile, final IProgressMonitor monitor) {
-		final long startTime = System.currentTimeMillis();
-		try {
-			writer.writeCharacters(LINE_END);
-			writer.writeEndDocument();
-			writer.close();
-			try (ByteBufferInputStream inputStream = new ByteBufferInputStream(outputStream.transferDataBuffers())) {
-				if (iFile.exists()) {
-					iFile.setContents(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
-				} else {
-					checkAndCreateFolderHierarchy(iFile, monitor);
-					iFile.create(inputStream, IResource.KEEP_HISTORY | IResource.FORCE, monitor);
-				}
-			} finally {
-				outputStream.close();
-			}
-		} catch (CoreException | XMLStreamException | IOException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		}
-		final long endTime = System.currentTimeMillis();
-		FordiacLogHelper.logInfo("Saving time for System: " + (endTime - startTime) + " ms"); //$NON-NLS-1$ //$NON-NLS-2$
-
-	}
-
-	//Write to File from OutputStream
-	protected void writeToFile(final OutputStream targetStream) {
-		try {
-			writer.writeCharacters(LINE_END);
-			writer.writeEndDocument();
-			writer.close();
-			try (ByteBufferInputStream inputStream = new ByteBufferInputStream(outputStream.transferDataBuffers())) {
-				inputStream.transferTo(targetStream);
-			} finally {
-				outputStream.close();
-			}
-		} catch (XMLStreamException | IOException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-		}
-	}
-
-	/**
-	 * Check if the folders in the file's path exist and if not create them
-	 * accordingly
-	 *
-	 * @param file    for which the path should be checked
-	 * @param monitor
-	 * @throws CoreException */
-	private static void checkAndCreateFolderHierarchy(final IFile file, final IProgressMonitor monitor)
-			throws CoreException {
-		final IContainer container = file.getParent();
-		if (!container.exists() && container instanceof IFolder) {
-			final IFolder folder = ((IFolder) container);
-			folder.create(true, true, monitor);
-			folder.refreshLocal(IResource.DEPTH_ZERO, monitor);
-		}
-	}
 
 	/**
 	 * Adds the identification.

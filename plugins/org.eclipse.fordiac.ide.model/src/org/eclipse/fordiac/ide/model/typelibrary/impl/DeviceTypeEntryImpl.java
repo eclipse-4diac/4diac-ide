@@ -15,6 +15,7 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
@@ -25,7 +26,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 public class DeviceTypeEntryImpl extends AbstractTypeEntryImpl implements DeviceTypeEntry {
 
 	@Override
-	public DeviceType getType() {
+	public synchronized DeviceType getType() {
 		final LibraryElement type = super.getType();
 		if (type instanceof DeviceType) {
 			return (DeviceType) type;
@@ -34,7 +35,7 @@ public class DeviceTypeEntryImpl extends AbstractTypeEntryImpl implements Device
 	}
 
 	@Override
-	public DeviceType getTypeEditable() {
+	public synchronized DeviceType getTypeEditable() {
 		final LibraryElement type = super.getTypeEditable();
 		if(type instanceof DeviceType){
 			return (DeviceType) type;
@@ -43,7 +44,7 @@ public class DeviceTypeEntryImpl extends AbstractTypeEntryImpl implements Device
 	}
 
 	@Override
-	public void setType(final LibraryElement type) {
+	public synchronized void setType(final LibraryElement type) {
 		if(type instanceof DeviceType){
 			super.setType(type);
 		}else{
@@ -57,6 +58,12 @@ public class DeviceTypeEntryImpl extends AbstractTypeEntryImpl implements Device
 	@Override
 	protected CommonElementImporter getImporter() {
 		return new DEVImporter(getFile());
+	}
+
+	@Override
+	protected AbstractTypeExporter getExporter() {
+		// currently we can not save devices, but we also have no editor for it
+		return null;
 	}
 
 }

@@ -15,6 +15,7 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.RESImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -25,7 +26,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 public class ResourceTypeEntryImpl extends AbstractTypeEntryImpl implements ResourceTypeEntry {
 
 	@Override
-	public ResourceType getType() {
+	public synchronized ResourceType getType() {
 		final LibraryElement type = super.getType();
 		if (type instanceof ResourceType) {
 			return (ResourceType) type;
@@ -34,7 +35,7 @@ public class ResourceTypeEntryImpl extends AbstractTypeEntryImpl implements Reso
 	}
 
 	@Override
-	public ResourceType getTypeEditable() {
+	public synchronized ResourceType getTypeEditable() {
 		final LibraryElement type = super.getTypeEditable();
 		if(type instanceof ResourceType){
 			return (ResourceType) type;
@@ -43,7 +44,7 @@ public class ResourceTypeEntryImpl extends AbstractTypeEntryImpl implements Reso
 	}
 
 	@Override
-	public void setType(final LibraryElement type) {
+	public synchronized void setType(final LibraryElement type) {
 		if(type instanceof ResourceType){
 			super.setType(type);
 		}else{
@@ -59,4 +60,9 @@ public class ResourceTypeEntryImpl extends AbstractTypeEntryImpl implements Reso
 		return new RESImporter(getFile());
 	}
 
+	@Override
+	protected AbstractTypeExporter getExporter() {
+		// currently we can not save resources, but we also have no editor for it
+		return null;
+	}
 }

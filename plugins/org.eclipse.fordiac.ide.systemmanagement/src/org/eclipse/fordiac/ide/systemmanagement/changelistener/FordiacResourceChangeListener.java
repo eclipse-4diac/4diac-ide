@@ -42,7 +42,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.NameRepository;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -558,7 +557,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 							// TODO report on error
 							(!newTypeName.equals(type.getName()))) {
 						type.setName(newTypeName);
-						AbstractTypeExporter.saveType(entry);
+						entry.save();
 					}
 					return Status.OK_STATUS;
 				}
@@ -572,7 +571,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		final IProject project = delta.getResource().getProject();
 		closeAllProjectRelatedEditors(project);
 		systemManager.removeProject(project);
-		TypeLibraryManager.INSTANCE.removeProject(project);
 	}
 
 	private static void closeAllProjectRelatedEditors(final IProject project) {
