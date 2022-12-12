@@ -18,33 +18,43 @@ package org.eclipse.fordiac.ide.gef.properties;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.nat.AdapterColumnProvider;
+import org.eclipse.fordiac.ide.gef.nat.AdapterListProvider;
+import org.eclipse.fordiac.ide.gef.nat.EventColumnProvider;
+import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
+import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditInterfaceSection {
 
-	@Override
-	protected IContentProvider getOutputsContentProvider() {
-		return new AdapterInterfaceContentProvider(false);
-	}
 
 	@Override
-	protected IContentProvider getInputsContentProvider() {
-		return new AdapterInterfaceContentProvider(true);
+	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
+		final List<String> adapterTypes = new ArrayList<>();
+		if ((null != getType()) && (null != getTypeLibrary())) {
+			getTypeLibrary().getAdapterTypesSorted().forEach(adpType -> adapterTypes.add(adpType.getTypeName()));
+		}
+		typeSelection.put("Adapter Types", adapterTypes); //$NON-NLS-1$
 	}
 
 	@Override
 	protected String[] fillTypeCombo() {
-		final List<String> list = new ArrayList<>();
-		if ((null != getType()) && (null != getTypeLibrary())) {
-			getTypeLibrary().getAdapterTypesSorted().forEach(adpType -> list.add(adpType.getTypeName()));
-		}
-		return list.toArray(new String[list.size()]);
+		return new String[0];
 	}
 
 	protected AdapterType getLastUsedAdapterType(final InterfaceList interfaceList, final IInterfaceElement interfaceElement,
@@ -75,31 +85,64 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	@Override
 	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof AdapterDeclaration) {
-			cmd.add(newInsertCommand((AdapterDeclaration) entry, isInputsViewer(), index));
+			final AdapterDeclaration adapterDeclaration = (AdapterDeclaration) entry;
+			cmd.add(newInsertCommand(adapterDeclaration, adapterDeclaration.isIsInput(), index));
 		}
 	}
 
-	protected static class AdapterInterfaceContentProvider extends InterfaceContentProvider {
-		public AdapterInterfaceContentProvider(final boolean inputs) {
-			super(inputs);
-		}
 
-		@Override
-		protected Object[] getInputs(final Object inputElement) {
-			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
-			if (null != interfaceList) {
-				return interfaceList.getSockets().toArray();
-			}
-			return new Object[0];
+	@Override
+	public void setupOutputTable(final Group outputsGroup) {
+		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
+		if (isEditable()) {
+			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-
-		@Override
-		protected Object[] getOutputs(final Object inputElement) {
-			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
-			if (null != interfaceList) {
-				return interfaceList.getPlugs().toArray();
-			}
-			return new Object[0];
-		}
+		outputProvider = new AdapterListProvider(this, null);
+		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
+		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer, new EventColumnProvider(),
+				rule, typeSelection, this);
 	}
+
+	@Override
+	public void setupInputTable(final Group inputsGroup) {
+		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
+		if (isEditable()) {
+			rule = IEditableRule.ALWAYS_EDITABLE;
+		}
+		inputProvider = new AdapterListProvider(this, null);
+		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
+		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, new AdapterColumnProvider(),
+				rule, typeSelection, this);
+	}
+
+	public static DataLayer setupDataLayer(final ListDataProvider<Adapter> inputProvider) {
+		final DataLayer dataLayer = new DataLayer(inputProvider);
+		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
+
+		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
+			if (labelAcc != null) {
+				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+			}
+
+			if (columnPosition == VarDeclarationColumnProvider.TYPE) {
+				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+			}
+
+		});
+		return dataLayer;
+
+	}
+
+	@Override
+	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
+		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getSockets());
+		((FordiacInterfaceListProvider) outputProvider).setInput(element.getInterface().getPlugs());
+	}
+
+	@Override
+	public void setTableInputFBType(final FBType type) {
+		((FordiacInterfaceListProvider) inputProvider).setInput(type.getInterfaceList().getSockets());
+		((FordiacInterfaceListProvider) outputProvider).setInput(type.getInterfaceList().getPlugs());
+	}
+
 }

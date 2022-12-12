@@ -9,3 +9,5 @@
 **/.antlr-*.jar
 !.gitignore
 !.gitkeep
+**/.polyglot*
+**/.META-INF_MANIFEST.MF

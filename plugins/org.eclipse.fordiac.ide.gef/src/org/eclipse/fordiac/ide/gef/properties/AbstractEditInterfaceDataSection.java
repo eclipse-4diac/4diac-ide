@@ -21,30 +21,26 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
-import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.widget.CustomTextCellEditor;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.ColumnPixelData;
-import org.eclipse.jface.viewers.IContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
+import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection {
 
@@ -73,16 +69,6 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 			return (dataType == null) ? null : newChangeTypeCommand(data, dataType);
 		}
 		return null;
-	}
-
-	@Override
-	protected IContentProvider getOutputsContentProvider() {
-		return new DataInterfaceContentProvider(false);
-	}
-
-	@Override
-	protected IContentProvider getInputsContentProvider() {
-		return new DataInterfaceContentProvider(true);
 	}
 
 	@Override
@@ -122,124 +108,54 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	@Override
 	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
-			cmd.add(newInsertCommand((IInterfaceElement) entry, isInputsViewer(), index));
+			final IInterfaceElement entry2 = (IInterfaceElement) entry;
+			cmd.add(newInsertCommand(entry2, entry2.isIsInput(), index));
 		}
 	}
 
 	@Override
-	protected TableLayout createTableLayout(final Table table) {
-		final TableLayout layout = super.createTableLayout(table);
-		final TableColumn column4 = new TableColumn(table, SWT.LEFT);
-		column4.setText(FordiacMessages.InitialValue);
-		final TableColumn column5 = new TableColumn(table, SWT.LEFT);
-		column5.setText(FordiacMessages.ArraySize);
-
-		layout.addColumnData(new ColumnPixelData(INITIALVALUE_WIDTH));
-		layout.addColumnData(new ColumnPixelData(ARRAYSIZE_WIDTH));
-
-		return layout;
+	public void setupOutputTable(final Group outputsGroup) {
+		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
+		if (isEditable()) {
+			rule = IEditableRule.ALWAYS_EDITABLE;
+		}
+		outputProvider = new VarDeclarationListProvider(this, null);
+		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
+		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
+				new VarDeclarationColumnProvider(), rule, typeSelection, this);
 	}
+
 
 	@Override
-	protected LabelProvider getLabelProvider() {
-		return new DataLabelProvider();
+	public void setupInputTable(final Group inputsGroup) {
+		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
+		if (isEditable()) {
+			rule = IEditableRule.ALWAYS_EDITABLE;
+		}
+		inputProvider = new VarDeclarationListProvider(this, null);
+		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
+		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
+				new VarDeclarationColumnProvider(), rule, typeSelection, this);
 	}
 
+	public DataLayer setupDataLayer(final ListDataProvider outputProvider) {
+		final DataLayer dataLayer = new DataLayer(outputProvider);
+		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
+
+		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
+			if (labelAcc != null) {
+				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+			}
+			if (columnPosition == VarDeclarationColumnProvider.TYPE) {
+				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+			}
+		});
+		return dataLayer;
+	}
 	@Override
-	protected InterfaceCellModifier getCellModifier(final TableViewer viewer) {
-		return new DataInterfaceCellModifier(viewer);
-	}
-
-	@Override
-	protected void setCellEditors(final TableViewer viewer) {
-		super.setCellEditors(viewer);
-		final CellEditor[] nameTypeCommentEditors = viewer.getCellEditors();
-		viewer.setCellEditors(
-				new CellEditor[] { nameTypeCommentEditors[0], nameTypeCommentEditors[1], nameTypeCommentEditors[2],
-						new CustomTextCellEditor(viewer.getTable()), new CustomTextCellEditor(viewer.getTable()) });
-	}
-
-	@Override
-	protected String[] getColumnProperties() {
-		final String[] nameTypeComment = super.getColumnProperties();
-		return new String[] { nameTypeComment[0], nameTypeComment[1], nameTypeComment[2], INITIAL_VALUE, ARRAY_SIZE };
-	}
-
-	protected class DataInterfaceCellModifier extends InterfaceCellModifier {
-
-		public DataInterfaceCellModifier(final TableViewer viewer) {
-			super(viewer);
-		}
-
-		@Override
-		public boolean canModify(final Object element, final String property) {
-			if (INITIAL_VALUE.equals(property)) {
-				return true;
-			}
-			if (ARRAY_SIZE.equals(property)) {
-				return true;
-			}
-			return super.canModify(element, property);
-		}
-
-		@Override
-		public Object getValue(final Object element, final String property) {
-			switch (property) {
-			case ARRAY_SIZE:
-				final int arraySize = ((VarDeclaration) element).getArraySize();
-				return (arraySize <= 0) ? "" : String.valueOf(arraySize); //$NON-NLS-1$
-			case INITIAL_VALUE:
-				return InitialValueHelper.getInitalOrDefaultValue(element);
-			default:
-				return super.getValue(element, property);
-			}
-		}
-
-		@Override
-		public void modify(final Object element, final String property, final Object value) {
-			final TableItem tableItem = (TableItem) element;
-			final Object data = tableItem.getData();
-			Command cmd = null;
-
-			switch (property) {
-			case ARRAY_SIZE:
-				cmd = new ChangeArraySizeCommand((VarDeclaration) data, (String) value);
-				break;
-			case INITIAL_VALUE:
-				cmd = new ChangeValueCommand((VarDeclaration) data, (String) value);
-				break;
-			default:
-				super.modify(element, property, value);
-			}
-
-			if (null != cmd) {
-				executeCommand(cmd);
-				viewer.refresh(data);
-			}
-		}
-	}
-
-	protected static class DataInterfaceContentProvider extends InterfaceContentProvider {
-		public DataInterfaceContentProvider(final boolean inputs) {
-			super(inputs);
-		}
-
-		@Override
-		protected Object[] getInputs(final Object inputElement) {
-			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
-			if (null != interfaceList) {
-				return interfaceList.getInputVars().toArray();
-			}
-			return new Object[0];
-		}
-
-		@Override
-		protected Object[] getOutputs(final Object inputElement) {
-			final InterfaceList interfaceList = getInterfaceListFromInput(inputElement);
-			if (null != interfaceList) {
-				return interfaceList.getOutputVars().toArray();
-			}
-			return new Object[0];
-		}
+	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
+		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getInputVars());
+		final EList<VarDeclaration> outputVars = element.getInterface().getOutputVars();
+		((FordiacInterfaceListProvider) outputProvider).setInput(outputVars);
 	}
 }

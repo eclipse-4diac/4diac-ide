@@ -317,8 +317,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			local «var_a»
 			
 			«var_a» = true
-			«var_a» = («var_a» & false)
-			«var_a» = («var_a» & false)
+			«var_a» = («var_a» and false)
+			«var_a» = («var_a» and false)
 		'''.toString(), result.toString())
 	}
 
@@ -341,7 +341,7 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			local «var_a»
 			
 			«var_a» = true
-			«var_a» = («var_a» | false)
+			«var_a» = («var_a» or false)
 		'''.toString(), result.toString())
 	}
 
@@ -364,7 +364,7 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			local «var_a»
 			
 			«var_a» = true
-			«var_a» = («var_a» ~ false)
+			«var_a» = («var_a» ~= false)
 		'''.toString(), result.toString())
 	}
 
@@ -391,7 +391,7 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			
 			«var_a» = true
 			«var_b» = false
-			«var_a» = («var_a» | («var_a» & «var_b»))
+			«var_a» = («var_a» or («var_a» and «var_b»))
 		'''.toString(), result.toString())
 	}
 
@@ -418,7 +418,7 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			
 			«var_a» = true
 			«var_b» = false
-			«var_a» = ((«var_a» | «var_a») & «var_b»)
+			«var_a» = ((«var_a» or «var_a») and «var_b»)
 		'''.toString(), result.toString())
 	}
 

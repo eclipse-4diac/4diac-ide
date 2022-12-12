@@ -280,7 +280,7 @@ public class FBEndpointFinder {
 			return;
 		}
 		//fb is a SubApp traverse down over the interface connections of the subapp
-		if (fb instanceof SubApp) {
+		if (fb instanceof SubApp && !((SubApp) fb).isTyped()) {
 			traceSubApp(state);
 		}
 		//fb is mux/demux
@@ -294,7 +294,7 @@ public class FBEndpointFinder {
 				traceFan(state);
 			}
 		}
-		//no SubApp or plexer -> add to found FBs
+		//FBs, CFBs, typed SubApps
 		else {
 			state.connections.add(state.ifElem);
 		}
@@ -308,7 +308,7 @@ public class FBEndpointFinder {
 	private static void traceEvent(final RecursionState state) {
 		final FBNetworkElement fb = state.ifElem.getFBNetworkElement();
 
-		if (fb instanceof SubApp) {
+		if (fb instanceof SubApp && !((SubApp) fb).isTyped()) {
 			final EList<Connection> subCons = state.inputSide ? state.ifElem.getInputConnections() : state.ifElem.getOutputConnections();
 			subCons.forEach(subInt -> traceEvent(new RecursionState(null, state.inputSide, state.inputSide ? subInt.getSource() : subInt.getDestination(), state.connections)));
 			return;

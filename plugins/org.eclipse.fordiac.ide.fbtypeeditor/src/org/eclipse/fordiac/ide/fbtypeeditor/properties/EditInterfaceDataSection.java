@@ -17,6 +17,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
+import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
@@ -58,6 +59,24 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
 	protected FBType getType() {
 		return (FBType) type;
+	}
+
+	@Override
+	protected void setTableInput() {
+		final FBType fbType = getType();
+		((FordiacInterfaceListProvider) inputProvider).setInput(fbType.getInterfaceList().getInputVars());
+		((FordiacInterfaceListProvider) outputProvider).setInput(fbType.getInterfaceList().getOutputVars());
+	}
+
+	@Override
+	public boolean isEditable() {
+		return true;
+	}
+
+	@Override
+	protected void setTableInputFBType(final FBType type) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

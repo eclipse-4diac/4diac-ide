@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCoreFactory
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource
 import org.eclipse.xtext.nodemodel.ICompositeNode
 import org.eclipse.xtext.nodemodel.ILeafNode
+import org.eclipse.xtext.nodemodel.impl.RootNode
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater
 
 import static extension org.eclipse.xtext.nodemodel.util.NodeModelUtils.*
@@ -52,7 +53,7 @@ class STCoreCommentAssociater {
 		val semanticNode = semanticObject.findActualNodeFor
 		if (commentNode.offset < semanticNode.offset)
 			STCommentPosition.BEFORE
-		else if (commentNode.offset > semanticNode.endOffset)
+		else if (commentNode.offset > semanticNode.endOffset || semanticNode.parent instanceof RootNode)
 			STCommentPosition.AFTER
 		else
 			STCommentPosition.INNER

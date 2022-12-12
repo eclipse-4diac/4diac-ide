@@ -53,17 +53,9 @@
                style="push">
             <visibleWhen
                   checkEnabled="true">
-               <with
-                     variable="activeEditorId">
-                  <equals
-                        value="org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditor">
-                  </equals>
-                  <and>
-                     <reference
-                           definitionId="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition">
-                     </reference>
-                  </and>
-               </with>
+                 <reference
+                       definitionId="org.eclipse.fordiac.ide.deployment.ui.DeviceDefinition">
+                 </reference>
             </visibleWhen>
          </command>
       </menuContribution>

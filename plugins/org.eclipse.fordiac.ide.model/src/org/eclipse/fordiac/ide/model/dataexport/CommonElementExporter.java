@@ -14,6 +14,7 @@
  *   Alois Zoitl - Refactored class hierarchy of xml exporters
  *   			 - fixed coordinate system resolution conversion in in- and export
  *               - changed exporting the Saxx cursor api
+ *  Hesam Rezaee - add export option for Variable configuration and visibility
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
@@ -123,7 +124,7 @@ public class CommonElementExporter {
 		private static final int SINGLE_DATA_BUFFER_CAPACITY = getSingleDataBufCap();
 		private static final String PLUGIN_ID = "org.eclipse.fordiac.ide.model"; //$NON-NLS-1$
 
-		private static int getSingleDataBufCap(){
+		private static int getSingleDataBufCap() {
 			final IEclipsePreferences preferences = InstanceScope.INSTANCE.getNode(PLUGIN_ID);
 			return preferences.getInt(PreferenceConstants.P_ALLOCATION_SIZE,
 					PreferenceConstants.P_ALLOCATION_SIZE_DEFAULT_VALUE) * SI_PREFIX_MI;
@@ -277,7 +278,6 @@ public class CommonElementExporter {
 		addNameAndCommentAttribute(namedElement);
 	}
 
-
 	/**
 	 * Adds the identification.
 	 *
@@ -376,7 +376,8 @@ public class CommonElementExporter {
 	 * @param attributeValue the value of the attribute
 	 * @throws XMLStreamException
 	 */
-	protected void writeAttributeRaw(final String attributeName, final String attributeValue) throws XMLStreamException {
+	protected void writeAttributeRaw(final String attributeName, final String attributeValue)
+			throws XMLStreamException {
 		try (Writer osWriter = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8)) {
 			osWriter.write(" "); //$NON-NLS-1$
 			osWriter.write(attributeName);
@@ -423,7 +424,6 @@ public class CommonElementExporter {
 			addParam(inVar.getName(), inVar.getValue());
 		}
 	}
-
 	protected void addErrorMarkerParamsConfig(final EList<ErrorMarkerInterface> errorPins) throws XMLStreamException {
 		for (final ErrorMarkerInterface ep : errorPins) {
 			addParam(ep.getName(), ep.getValue());

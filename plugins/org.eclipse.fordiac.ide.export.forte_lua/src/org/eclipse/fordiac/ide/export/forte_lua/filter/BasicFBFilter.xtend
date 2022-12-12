@@ -42,6 +42,8 @@ class BasicFBFilter {
 	STAlgorithmFilter stAlgorithmFilter = new STAlgorithmFilter
 
 	def String lua(BasicFBType type) '''
+		local STfunc = require "STfunc"
+		
 		«type.luaConstants»
 		
 		«type.luaAlgorithms»

@@ -288,16 +288,25 @@ public class ErrorMarkerBuilder {
 		final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
 		marker.addLineNumber(lineNumber);
 		marker.addMessage(message);
-	
+
 		// use a dummy connection to get target identifier
 		final String location = FordiacMarkerHelper.getLocation(fbNetwork) + "." + sourceIdentifier + " -> " //$NON-NLS-1$ //$NON-NLS-2$
 				+ destinationIdentifier;
 		marker.addLocation(location);
-	
+
 		marker.addTargetIdentifier(LibraryElementFactory.eINSTANCE.createDataConnection());
 		return marker;
-	
+
 	}
 
+	@Override
+	public boolean equals(final Object obj) {
+		return getErrorMarkerRef() != null ? getErrorMarkerRef().equals(obj) : super.equals(obj);
+	}
+
+	@Override
+	public int hashCode() {
+		return getErrorMarkerRef() != null ? getErrorMarkerRef().hashCode() : super.hashCode();
+	}
 
 }

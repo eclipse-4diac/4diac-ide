@@ -74,4 +74,10 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 		return (SubApp) type;
 	}
 
+	@Override
+	public boolean isEditable() {
+		return true;
+	}
+
+
 }

@@ -19,7 +19,7 @@ public interface I4diacNatTableUtil {
 
 	void addEntry(Object entry, int index, CompoundCommand cmd);
 
-	Object removeEntry(int index, CompoundCommand cmd);
-
 	void executeCompoundCommand(CompoundCommand cmd);
+
+	boolean isEditable();
 }

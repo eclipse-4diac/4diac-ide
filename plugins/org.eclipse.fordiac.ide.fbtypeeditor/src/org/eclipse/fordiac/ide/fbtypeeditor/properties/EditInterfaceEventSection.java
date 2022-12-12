@@ -61,4 +61,9 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 		return (FBType) type;
 	}
 
+	@Override
+	public boolean isEditable() {
+		return true;
+	}
+
 }

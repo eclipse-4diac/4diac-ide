@@ -13,19 +13,10 @@
 
 package org.eclipse.fordiac.ide.ui.widget;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
-import org.eclipse.jface.fieldassist.TextContentAdapter;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
 import org.eclipse.nebula.widgets.nattable.config.AbstractUiBindingConfiguration;
@@ -40,7 +31,6 @@ import org.eclipse.nebula.widgets.nattable.edit.action.KeyEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.action.MouseEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.command.DeleteSelectionCommandHandler;
 import org.eclipse.nebula.widgets.nattable.edit.config.DefaultEditConfiguration;
-import org.eclipse.nebula.widgets.nattable.edit.editor.TextCellEditor;
 import org.eclipse.nebula.widgets.nattable.grid.GridRegion;
 import org.eclipse.nebula.widgets.nattable.grid.data.DefaultCornerDataProvider;
 import org.eclipse.nebula.widgets.nattable.grid.data.DefaultRowHeaderDataProvider;
@@ -58,10 +48,10 @@ import org.eclipse.nebula.widgets.nattable.layer.config.DefaultColumnHeaderStyle
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultRowHeaderLayerConfiguration;
 import org.eclipse.nebula.widgets.nattable.layer.config.DefaultRowHeaderStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.painter.NatTableBorderOverlayPainter;
+import org.eclipse.nebula.widgets.nattable.painter.cell.CheckBoxPainter;
 import org.eclipse.nebula.widgets.nattable.painter.cell.TextPainter;
 import org.eclipse.nebula.widgets.nattable.painter.layer.NatGridLayerPainter;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
-import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer.MoveDirectionEnum;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionBindings;
 import org.eclipse.nebula.widgets.nattable.selection.config.DefaultSelectionStyleConfiguration;
 import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
@@ -71,28 +61,16 @@ import org.eclipse.nebula.widgets.nattable.style.SelectionStyleLabels;
 import org.eclipse.nebula.widgets.nattable.style.Style;
 import org.eclipse.nebula.widgets.nattable.ui.binding.UiBindingRegistry;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.CellEditorMouseEventMatcher;
+import org.eclipse.nebula.widgets.nattable.ui.matcher.CellPainterMouseEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.KeyEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.LetterOrDigitKeyEventMatcher;
+import org.eclipse.nebula.widgets.nattable.ui.matcher.MouseEventMatcher;
 import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
-import org.eclipse.nebula.widgets.nattable.viewport.action.ViewportSelectRowAction;
-import org.eclipse.nebula.widgets.nattable.widget.EditModeEnum;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusAdapter;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
 public final class NatTableWidgetFactory {
 	public static final String DEFAULT_CELL = "DEFAULT_CELL"; //$NON-NLS-1$
@@ -103,7 +81,10 @@ public final class NatTableWidgetFactory {
 	public static final String VISIBILITY_CELL = "VISIBILITY_CELL"; //$NON-NLS-1$
 	public static final String LEFT_ALIGNMENT = "LEFT_ALIGNMENT"; //$NON-NLS-1$
 
-	private static final char[] ACTIVATION_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+	public static final String CHECKBOX_CELL = "CHECKBOX_CELL"; //$NON-NLS-1$
+	public static final String VAR_GONFIGURATION_CELL = "VAR_GONFIGURATION_CELL"; //$NON-NLS-1$
+
+	static final char[] ACTIVATION_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
 			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
 			'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2',
 			'3', '4', '5', '6', '7', '8', '9', '_', '.', SWT.BS };
@@ -270,6 +251,14 @@ public final class NatTableWidgetFactory {
 			dataLayer.setColumnWidthPercentageByPosition(3, 35);
 			dataLayer.setColumnWidthPercentageByPosition(4, 10);
 			break;
+		case 6:
+			dataLayer.setColumnWidthPercentageByPosition(0, 20);
+			dataLayer.setColumnWidthPercentageByPosition(1, 20);
+			dataLayer.setColumnWidthPercentageByPosition(2, 15);
+			dataLayer.setColumnWidthPercentageByPosition(3, 15);
+			dataLayer.setColumnWidthPercentageByPosition(4, 15);
+			dataLayer.setColumnWidthPercentageByPosition(5, 15);
+			break;
 
 		default:
 			return;	// all columns have same width
@@ -312,11 +301,11 @@ public final class NatTableWidgetFactory {
 		columnHeaderStyle.bgColor = GUIHelper.COLOR_WHITE;
 		columnHeaderStyle.renderGridLines = Boolean.TRUE;
 		columnHeaderStyle.cellPainter = new TextPainter();
-		
+
 		rowHeaderStyle.font = GUIHelper.DEFAULT_FONT;
 		rowHeaderStyle.bgColor = GUIHelper.COLOR_WHITE;
 		rowHeaderStyle.cellPainter = new TextPainter();
-		
+
 		table.setBackground(GUIHelper.COLOR_WHITE);
 		table.addOverlayPainter(new NatTableBorderOverlayPainter());
 
@@ -336,15 +325,15 @@ public final class NatTableWidgetFactory {
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_RED);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
 						ERROR_CELL);
-				
+
 				cellStyle = new Style();
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.getColor(255, 100, 100));
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 						ERROR_CELL);
-				
+
 				cellStyle = new Style();
 				cellStyle.setAttributeValue(CellStyleAttributes.HORIZONTAL_ALIGNMENT, HorizontalAlignmentEnum.LEFT);
-				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL, 
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
 						LEFT_ALIGNMENT);
 
 				cellStyle = new Style();
@@ -355,7 +344,7 @@ public final class NatTableWidgetFactory {
 						DISABLED_HEADER);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 						DISABLED_HEADER);
-				
+
 				configRegistry.unregisterConfigAttribute(CellConfigAttributes.CELL_STYLE, DisplayMode.SELECT,
 						SelectionStyleLabels.SELECTION_ANCHOR_STYLE);
 
@@ -380,7 +369,7 @@ public final class NatTableWidgetFactory {
 		public void configureRegistry(final IConfigRegistry configRegistry) {
 			configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE, editableRule);
 			configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR,
-					new ButtonTextCellEditor(proposals), DisplayMode.EDIT, PROPOSAL_CELL);
+					new DataTypeSelectionButton(proposals), DisplayMode.EDIT, PROPOSAL_CELL);
 		}
 	}
 
@@ -391,201 +380,11 @@ public final class NatTableWidgetFactory {
 			uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.NONE, SWT.F2), new KeyEditAction());
 			uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(), new KeyEditAction());
 			uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(SWT.MOD2), new KeyEditAction());
+			uiBindingRegistry.registerFirstSingleClickBinding(
+					new CellPainterMouseEventMatcher(GridRegion.BODY, MouseEventMatcher.LEFT_BUTTON, CheckBoxPainter.class), 
+					new MouseEditAction());
 			uiBindingRegistry.registerDoubleClickBinding(new CellEditorMouseEventMatcher(GridRegion.BODY),
 					new MouseEditAction());
-		}
-	}
-
-	private static class ButtonTextCellEditor extends TextCellEditor {
-		Map<String, List<String>> elements;
-		private Button button;
-
-		public ButtonTextCellEditor(final Map<String, List<String>> elements) {
-			super();
-			this.elements = elements;
-
-			final SimpleContentProposalProvider proposalProvider = new SimpleContentProposalProvider();
-			proposalProvider.setFiltering(true);
-			enableContentProposal(new TextContentAdapter(), proposalProvider, null, ACTIVATION_CHARS);
-		}
-
-		private void refreshProposal() {
-			final List<String> proposals = new ArrayList<>();
-			elements.forEach((k, v) -> proposals.addAll(v));
-			((SimpleContentProposalProvider) proposalProvider).setProposals(proposals.toArray(new String[0]));
-		}
-
-		@Override
-		protected Text createEditorControl(final Composite parent, final int style) {
-			focusListener = new FocusAdapter() {
-				// remove focus Listener for button popup
-			};
-			return super.createEditorControl(parent, style);
-		}
-
-		@Override
-		protected Control activateCell(final Composite parent, final Object originalCanonicalValue) {
-			refreshProposal();
-			button = new Button(parent, SWT.FLAT);
-			button.setText("..."); //$NON-NLS-1$
-			button.addSelectionListener(new SelectionAdapter() {
-				@Override
-				public void widgetSelected(final SelectionEvent e) {
-					final ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(
-							Display.getCurrent().getActiveShell(), new LabelProvider() {
-								@Override
-								public String getText(final Object element) {
-									if (element instanceof Node) {
-										return ((Node) element).getValue();
-									}
-									return element.toString();
-								}
-
-								@Override
-								public Image getImage(final Object element) {
-									if (element instanceof Node) {
-										final Node node = (Node) element;
-										if (node.isDirectory()) {
-											return PlatformUI.getWorkbench().getSharedImages()
-													.getImage(ISharedImages.IMG_OBJ_ELEMENT);
-										}
-										return FordiacImage.ICON_DATA_TYPE.getImage();
-									}
-									return super.getImage(element);
-								}
-							}, new ITreeContentProvider() {
-
-								@Override
-								public boolean hasChildren(final Object element) {
-									if (element instanceof Node) {
-										return !((Node) element).getChildren().isEmpty();
-									}
-									return false;
-								}
-
-								@Override
-								public Object getParent(final Object element) {
-									if (element instanceof Node) {
-										return ((Node) element).getParent();
-									}
-									return null;
-								}
-
-								@Override
-								public Object[] getElements(final Object inputElement) {
-									final List<Node> list = new ArrayList<>();
-									if (inputElement instanceof HashMap<?, ?>) {
-										final HashMap<String, List<String>> map = (HashMap<String, List<String>>) inputElement;
-
-										map.forEach((k, v) -> {
-											final Node root = new Node(k, true);
-											v.forEach(value -> {
-												final Node node = new Node(value);
-												node.setParent(root);
-												root.addChild(node);
-											});
-											list.add(root);
-										});
-									}
-									return list.toArray();
-								}
-
-								@Override
-								public Object[] getChildren(final Object parentElement) {
-									if (parentElement instanceof Node) {
-										return ((Node) parentElement).getChildren().toArray();
-									}
-									return new Object[0];
-								}
-							});
-					dialog.setHelpAvailable(false);
-					dialog.setInput(elements);
-
-					if (dialog.open() != Window.OK) {
-						if (editMode != EditModeEnum.DIALOG) {
-							close();
-						}
-						return;
-					}
-
-					final Node selected = (Node) dialog.getFirstResult();
-					if (selected != null) {
-						setEditorValue(selected.getValue());
-
-						if (editMode == EditModeEnum.INLINE) {
-							commit(MoveDirectionEnum.NONE, true);
-						}
-					}
-				}
-			});
-
-			final Text text = (Text) super.activateCell(parent, originalCanonicalValue);
-			if (editMode == EditModeEnum.DIALOG) {
-				final Composite composite = new Composite(parent, 0);
-				composite.setLayout(new GridLayout(2, false));
-				GridDataFactory.fillDefaults().grab(true, false).applyTo(composite);
-				text.setParent(composite);
-				button.setParent(composite);
-				return parent;
-			}
-			return parent;
-		}
-
-		@Override
-		public Rectangle calculateControlBounds(final Rectangle cellBounds) {
-			button.setBounds(cellBounds.x + cellBounds.width - 25, cellBounds.y, 25, cellBounds.height);
-			cellBounds.width = cellBounds.width - 25;
-			return super.calculateControlBounds(cellBounds);
-		}
-
-		@Override
-		public void close() {
-			super.close();
-			button.dispose();
-		}
-
-
-		private static final class Node {
-			private final String value;
-			private final List<Node> children;
-			private Node parent;
-			private final boolean isDirectory;
-
-			private Node(final String value) {
-				this.value = value;
-				this.isDirectory = false;
-				children = new ArrayList<>();
-			}
-
-			private Node(final String value, final boolean isDirectory) {
-				this.value = value;
-				this.isDirectory = isDirectory;
-				children = new ArrayList<>();
-			}
-
-			public boolean isDirectory() {
-				return isDirectory;
-			}
-
-			private String getValue() {
-				return value;
-			}
-
-			private List<Node> getChildren() {
-				return children;
-			}
-
-			private void addChild(final Node child) {
-				this.children.add(child);
-			}
-
-			private Node getParent() {
-				return parent;
-			}
-
-			private void setParent(final Node parent) {
-				this.parent = parent;
-			}
 		}
 	}
 

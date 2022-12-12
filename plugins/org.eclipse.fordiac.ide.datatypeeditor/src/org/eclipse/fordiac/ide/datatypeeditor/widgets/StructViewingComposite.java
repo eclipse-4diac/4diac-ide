@@ -226,7 +226,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			case INIT:
 				return InitialValueHelper.getInitalOrDefaultValue(element);
 			case ARRAY:
-				return (memVar.getArraySize() > 0) ? Integer.toString(memVar.getArraySize()) : ""; //$NON-NLS-1$
+				return DataLabelProvider.getArraySizeText(memVar);
 			default:
 				return "Could not load"; //$NON-NLS-1$
 			}

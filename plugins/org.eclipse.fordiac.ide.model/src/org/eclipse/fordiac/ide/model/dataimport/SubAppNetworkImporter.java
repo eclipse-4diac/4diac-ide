@@ -81,7 +81,7 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 					MessageFormat.format("Type ({0}) could not be loaded for Subapplication: {1}", type, //$NON-NLS-1$
 							subApp.getName()),
 					subApp, getLineNumber());
-			errorMarkerAttributes.add(e);
+			errorMarkerBuilders.add(e);
 			e.setErrorMarkerRef((ErrorMarkerRef) subApp);
 		}
 

@@ -44,26 +44,26 @@ public class WatchesValueEditingSupport extends EditingSupport {
 	@Override
 	protected void setValue(final Object element, final Object value) {
 		if (element instanceof WatchValueTreeNode) {
-			final MonitoringBaseElement monitoringBaseElement = ((WatchValueTreeNode) element)
-					.getMonitoringBaseElement();
-			if (isValid((String) value, monitoringBaseElement)) {
-				if (((WatchValueTreeNode) element).isStructNode()
-						&& ((WatchValueTreeNode) element).getVariable() != null) {
-					MonitoringManager.getInstance().writeValue((MonitoringElement) monitoringBaseElement,
-							StructParser.changeStructNodeValue((MonitoringElement) monitoringBaseElement,
-									((WatchValueTreeNode) element).getVariable(), (String) value));
-					if (needsOfflineSave(monitoringBaseElement.getPort().getInterfaceElement())) {
-						writeOnlineValueToOffline((MonitoringElement) monitoringBaseElement,
-								StructParser.changeStructNodeValue((MonitoringElement) monitoringBaseElement,
-										((WatchValueTreeNode) element).getVariable(), (String) value));
+			final WatchValueTreeNode node = (WatchValueTreeNode) element;
+			final MonitoringElement monitoringElement = (MonitoringElement) node.getMonitoringBaseElement();
+
+			if (isValid((String) value, monitoringElement)) {
+
+				if (node.isStructNode() && node.getVariable() != null) {
+					node.setValue((String) value);
+					final String newStructLiteral = StructParser.toString(node);
+					MonitoringManager.getInstance().writeValue(monitoringElement, newStructLiteral);
+
+					if (needsOfflineSave(monitoringElement.getPort().getInterfaceElement())) {
+						writeOnlineValueToOffline(monitoringElement, newStructLiteral);
 					}
 				} else {
-					MonitoringManager.getInstance().writeValue((MonitoringElement) monitoringBaseElement,
-							(String) value);
-					if (needsOfflineSave(monitoringBaseElement.getPort().getInterfaceElement())) {
-						writeOnlineValueToOffline((MonitoringElement) monitoringBaseElement, (String) value);
+					MonitoringManager.getInstance().writeValue(monitoringElement, (String) value);
+					if (needsOfflineSave(monitoringElement.getPort().getInterfaceElement())) {
+						writeOnlineValueToOffline(monitoringElement, (String) value);
 					}
 				}
+
 			}
 		}
 	}

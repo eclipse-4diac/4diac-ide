@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.data.provider.DataItemProviderAdapterFactor
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
@@ -81,7 +82,12 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 		if (object instanceof AutomationSystem) {
 			return ((AutomationSystem) object).getSystemFile();
 		}
-		return super.getParent(object);
+		final Object parent = super.getParent(object);
+		if (parent instanceof FBType) {
+			// the FBType is not in the tree we have to immediately return the file it is contained in
+			return ((FBType) parent).getTypeEntry().getFile();
+		}
+		return parent;
 	}
 
 	@Override
@@ -117,52 +123,52 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 				// trigger a resorting
 				distributedSystemWorkspaceChanged();
 			}
-			}
 		}
-
-		@Override
-		public void distributedSystemWorkspaceChanged() {
-			if (null != viewer && null != viewer.getControl() && null != viewer.getControl().getDisplay()) {
-				viewer.getControl().getDisplay().asyncExec(() -> {
-					if (null != viewer && null != viewer.getControl() && !viewer.getControl().isDisposed()) {
-						viewer.refresh();
-					}
-				});
-			}
-		}
-
-		private Object[] getResourceChildren(final IResource resource) {
-			if (resource instanceof IWorkspaceRoot) {
-				// show only 4diac or closed projects
-				final IWorkspaceRoot root = (IWorkspaceRoot) resource;
-				return Arrays.stream(root.getProjects()).filter(SystemContentProvider::projectToShow)
-						.collect(Collectors.toList())
-						.toArray(new IProject[0]);
-			}
-			if (((resource instanceof IProject) && ((IProject) resource).isOpen()) || (resource instanceof IFolder)) {
-				try {
-					return ((IContainer) resource).members();
-				} catch (final CoreException e) {
-					FordiacLogHelper.logError("Could not read project children", e); //$NON-NLS-1$
-				}
-			}
-
-			if (SystemManager.isSystemFile(resource)) {
-				// retrieve the children for the Automation system
-				return super.getChildren(SystemManager.INSTANCE.getSystem((IFile) resource));
-			}
-
-			return new Object[0];
-		}
-
-		private static boolean projectToShow(final IProject proj) {
-			// if the project is closed or a 4diac project return true
-			try {
-				return !proj.isOpen() || proj.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID) || proj.hasNature(SystemManager.ROBOT_PROJECT_NATURE_ID);
-			} catch (final CoreException e) {
-				FordiacLogHelper.logError("Could not read project nature", e); //$NON-NLS-1$
-			}
-			return false;
-		}
-
 	}
+
+	@Override
+	public void distributedSystemWorkspaceChanged() {
+		if (null != viewer && null != viewer.getControl() && null != viewer.getControl().getDisplay()) {
+			viewer.getControl().getDisplay().asyncExec(() -> {
+				if (null != viewer && null != viewer.getControl() && !viewer.getControl().isDisposed()) {
+					viewer.refresh();
+				}
+			});
+		}
+	}
+
+	private Object[] getResourceChildren(final IResource resource) {
+		if (resource instanceof IWorkspaceRoot) {
+			// show only 4diac or closed projects
+			final IWorkspaceRoot root = (IWorkspaceRoot) resource;
+			return Arrays.stream(root.getProjects()).filter(SystemContentProvider::projectToShow)
+					.collect(Collectors.toList())
+					.toArray(new IProject[0]);
+		}
+		if (((resource instanceof IProject) && ((IProject) resource).isOpen()) || (resource instanceof IFolder)) {
+			try {
+				return ((IContainer) resource).members();
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError("Could not read project children", e); //$NON-NLS-1$
+			}
+		}
+
+		if (SystemManager.isSystemFile(resource)) {
+			// retrieve the children for the Automation system
+			return super.getChildren(SystemManager.INSTANCE.getSystem((IFile) resource));
+		}
+
+		return new Object[0];
+	}
+
+	private static boolean projectToShow(final IProject proj) {
+		// if the project is closed or a 4diac project return true
+		try {
+			return !proj.isOpen() || proj.hasNature(SystemManager.FORDIAC_PROJECT_NATURE_ID) || proj.hasNature(SystemManager.ROBOT_PROJECT_NATURE_ID);
+		} catch (final CoreException e) {
+			FordiacLogHelper.logError("Could not read project nature", e); //$NON-NLS-1$
+		}
+		return false;
+	}
+
+}

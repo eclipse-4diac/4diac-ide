@@ -632,6 +632,11 @@
           </iterate>
         </with>
       </activeWhen>
+      <enabledWhen> 
+      	<with variable="selection"> 
+         	<test property="org.eclipse.fordiac.ide.application.utilities.isTansferableStruct" /> 
+      	</with> 
+   	  </enabledWhen>
     </handler>
     <handler class="org.eclipse.fordiac.ide.application.handlers.TransferCommentsOfConnectedPinsHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.transferCommentsOfConnectedPins">
@@ -649,6 +654,11 @@
           </iterate>
         </with>
       </activeWhen>
+      <enabledWhen> 
+      	<with variable="selection"> 
+         	<test property="org.eclipse.fordiac.ide.application.utilities.isTansferableStruct" /> 
+      	</with> 
+   	  </enabledWhen>
     </handler>  
     <handler class="org.eclipse.fordiac.ide.application.handlers.ConvertToStructHandler"
              commandId="org.eclipse.fordiac.ide.application.commands.convertToStruct">
@@ -1434,6 +1444,12 @@
                     id="org.eclipse.fordiac.ide.application.utilities.isSubAppNestedInGroupTester"
                     namespace="org.eclipse.fordiac.ide.application.utilities"
                     properties="isSubAppNestedInGroup"
+                    type="java.lang.Object">
+    </propertyTester>
+    <propertyTester class="org.eclipse.fordiac.ide.application.utilities.IsTransferableStructCommentTester"
+                    id="org.eclipse.fordiac.ide.application.utilities.isTransferableStructCommentTester"
+                    namespace="org.eclipse.fordiac.ide.application.utilities"
+                    properties="isTansferableStruct"
                     type="java.lang.Object">
     </propertyTester>
   </extension>

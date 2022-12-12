@@ -16,13 +16,13 @@
  *              - Changed XML parsing to Staxx cursor interface for improved
  *  			  parsing performance
  *              - extension for connection error markers
+ *  Hesam Rezaee - add import option for Variable configuration and visibility
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -83,6 +83,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 public abstract class CommonElementImporter {
 
 	private static final boolean IS_VISIBLE = false;
+	private static final boolean IS_VAR_CONFIGED = true;
 
 	private static class ImporterStreams implements AutoCloseable {
 		private final InputStream inputStream;
@@ -113,8 +114,10 @@ public abstract class CommonElementImporter {
 		if (hasType) {
 			// we have a typed FB
 			retVal = interfaceList.getVariable(varName);
+
 			if ((null != retVal) && (retVal.isIsInput() != input)) {
 				retVal = null;
+
 			}
 		} else {
 			// if we couldn't load the type create the interface entry
@@ -140,7 +143,7 @@ public abstract class CommonElementImporter {
 	private final IFile file;
 	private final TypeLibrary typeLibrary;
 	private LibraryElement element;
-	protected final List<ErrorMarkerBuilder> errorMarkerAttributes;
+	protected final HashSet<ErrorMarkerBuilder> errorMarkerBuilders;
 
 	protected IFile getFile() {
 		return file;
@@ -173,7 +176,7 @@ public abstract class CommonElementImporter {
 		Assert.isNotNull(file);
 		this.file = file;
 		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
-		errorMarkerAttributes = new ArrayList<>();
+		errorMarkerBuilders = new HashSet<>();
 	}
 
 	protected CommonElementImporter(final CommonElementImporter importer) {
@@ -181,7 +184,7 @@ public abstract class CommonElementImporter {
 		reader = importer.reader;
 		file = importer.file;
 		typeLibrary = importer.typeLibrary;
-		errorMarkerAttributes = importer.errorMarkerAttributes;
+		errorMarkerBuilders = importer.errorMarkerBuilders;
 	}
 
 	public void loadElement() {
@@ -207,16 +210,16 @@ public abstract class CommonElementImporter {
 		final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
 		marker.addLineNumber(getLineNumber());
 		marker.addMessage(message);
-		errorMarkerAttributes.add(marker);
+		errorMarkerBuilders.add(marker);
 		return marker;
 	}
 
 	private void buildErrorMarker(final IFile file) {
-		if (!errorMarkerAttributes.isEmpty()) {
+		if (!errorMarkerBuilders.isEmpty()) {
 			final WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) { //$NON-NLS-1$
 				@Override
 				public IStatus runInWorkspace(final IProgressMonitor monitor) {
-					errorMarkerAttributes.stream().forEach(a -> a.createMarkerInFile(file));
+					errorMarkerBuilders.stream().forEach(a -> a.createMarkerInFile(file));
 					return Status.OK_STATUS;
 				}
 			};
@@ -498,6 +501,27 @@ public abstract class CommonElementImporter {
 		ie.setVisible(IS_VISIBLE); // I know it's false since we save only hidden pins
 	}
 
+	private boolean isPinVarConfigAttribute() {
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		final String pinNameAndVarConfig = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		return name.equals(LibraryElementTags.VAR_CONFIG) && pinNameAndVarConfig != null
+				&& pinNameAndVarConfig.contains(":"); //$NON-NLS-1$
+	}
+
+	protected void parsePinVarConfigAttribute(final FBNetworkElement block) {
+		final String pinNameAndVarConfig = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		final String[] temp = pinNameAndVarConfig.split(":"); //$NON-NLS-1$
+
+		for(final VarDeclaration inVar : block.getInterface().getInputVars()) {
+			if(inVar.getName().equals(temp[0])){
+				inVar.setVarConfig(IS_VAR_CONFIGED);
+			}
+			else {
+				inVar.setVarConfig(!IS_VAR_CONFIGED);
+			}
+		}
+	}
+
 	protected String getAttributeValue(final String attributeName) {
 		return getReader().getAttributeValue("", attributeName); //$NON-NLS-1$
 	}
@@ -590,11 +614,12 @@ public abstract class CommonElementImporter {
 	public void handleFBAttributeChild(final FBNetworkElement block) throws XMLStreamException {
 		if (isPinCommentAttribute()) {
 			parsePinComment(block);
+		} else if (isPinVisibilityAttribute()) {
+			parsePinVisibilityAttribute(block);
+		} else if (isPinVarConfigAttribute()) {
+			parsePinVarConfigAttribute(block);
 		} else {
 			parseGenericAttributeNode(block);
-		}
-		if (isPinVisibilityAttribute()) {
-			parsePinVisibilityAttribute(block);
 		}
 		proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
 	}
@@ -635,7 +660,7 @@ public abstract class CommonElementImporter {
 				MessageFormat.format(Messages.CommonElementImporter_ERROR_MissingPinForParameter, parameter.getName(),
 						block.getName()),
 				block, getLineNumber());
-		errorMarkerAttributes.add(e);
+		errorMarkerBuilders.add(e);
 		final ErrorMarkerInterface errorMarkerInterface = ConnectionHelper.createErrorMarkerInterface(IecTypes.GenericTypes.ANY,parameter.getName(), true, block.getInterface());
 		e.setErrorMarkerRef(errorMarkerInterface);
 		errorMarkerInterface.setValue(parameter.getValue());
@@ -646,7 +671,7 @@ public abstract class CommonElementImporter {
 		if ((validation != null) && (!validation.trim().isEmpty())) {
 			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createValueErrorMarkerBuilder(validation,
 					vInput.getValue(), getLineNumber());
-			errorMarkerAttributes.add(e);
+			errorMarkerBuilders.add(e);
 		}
 	}
 

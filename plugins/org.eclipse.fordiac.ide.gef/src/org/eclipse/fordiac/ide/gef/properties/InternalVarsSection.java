@@ -30,31 +30,24 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
-import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
@@ -68,18 +61,13 @@ import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InternalVarsSection extends AbstractSection implements I4diacNatTableUtil {
-	private static final int NAME = 0;
-	private static final int TYPE = 1;
-	private static final int COMMENT = 2;
-	private static final int INITIAL_VALUE = 3;
-	private static final int ARRAY_SIZE = 4;
 
 	IAction[] defaultCopyPasteCut = new IAction[3];
 	private TabbedPropertySheetPage tabbedPropertySheetPage;
 
 	private VarDeclarationListProvider provider;
 	private NatTable table;
-	private final Map<String, List<String>> proposals = new HashMap<>();
+	protected Map<String, List<String>> typeSelection = new HashMap<>();
 
 	@Override
 	protected BaseFBType getType() {
@@ -101,22 +89,23 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
-		provider = new VarDeclarationListProvider(null);
+		provider = new VarDeclarationListProvider(this, null);
 		final DataLayer dataLayer = new DataLayer(provider);
 		final IConfigLabelAccumulator dataLayerLabelAccumulator = dataLayer.getConfigLabelAccumulator();
 		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
 			if (dataLayerLabelAccumulator != null) {
 				dataLayerLabelAccumulator.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
 			}
-			if (columnPosition == TYPE) {
+			if (columnPosition == VarDeclarationColumnProvider.TYPE) {
 				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
 			}
-			if (columnPosition == NAME || columnPosition == COMMENT) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT); 
+			if (columnPosition == VarDeclarationColumnProvider.NAME
+					|| columnPosition == VarDeclarationColumnProvider.COMMENT) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			}
 		});
 		table = NatTableWidgetFactory.createRowNatTable(composite,
-				dataLayer, new ColumnDataProvider(), IEditableRule.ALWAYS_EDITABLE, proposals, this);
+				dataLayer, new VarDeclarationColumnProvider(), IEditableRule.ALWAYS_EDITABLE, typeSelection, this);
 
 		buttons.bindToTableViewer(table, this,
 				ref -> new CreateInternalVariableCommand(getType(), getInsertionIndex(), getName(), getDataType()),
@@ -213,16 +202,7 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 	@Override
 	protected void setInputInit() {
 		provider.setInput(getType());
-
-		final List<String> elementaryTypes = new ArrayList<>();
-		getDataTypeLib().getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType))
-		.forEach(type -> elementaryTypes.add(type.getName()));
-		proposals.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
-
-		final List<String> structuredTypes = new ArrayList<>();
-		getDataTypeLib().getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
-		.forEach(type -> structuredTypes.add(type.getName()));
-		proposals.put("Structured Types", structuredTypes); //$NON-NLS-1$
+		initTypeSelection(getDataTypeLib());
 	}
 
 	public Object getEntry(final int index) {
@@ -237,7 +217,7 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 		}
 	}
 
-	@Override
+
 	public Object removeEntry(final int index, final CompoundCommand cmd) {
 		final VarDeclaration entry = (VarDeclaration) getEntry(index);
 		cmd.add(new DeleteInternalVariableCommand(getType(), entry));
@@ -250,121 +230,20 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 		table.refresh();
 	}
 
-	private class VarDeclarationListProvider extends ListDataProvider<VarDeclaration> {
-		public VarDeclarationListProvider(final List<VarDeclaration> list) {
-			super(list, new VarDeclarationColumnAccessor());
-		}
-
-		@Override
-		public int getRowCount() {
-			if (this.list != null) {
-				return super.getRowCount();
-			}
-			return 0;
-		}
-
-		public void setInput(final Object inputElement) {
-			if (inputElement instanceof BaseFBType) {
-				this.list = ((BaseFBType) inputElement).getInternalVars();
-			}
-		}
+	@Override
+	public boolean isEditable() {
+		return true;
 	}
 
-	private class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclaration> {
-		@Override
-		public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
-			switch (columnIndex) {
-			case NAME:
-				return rowObject.getName();
-			case TYPE:
-				return rowObject.getTypeName();
-			case COMMENT:
-				return rowObject.getComment();
-			case INITIAL_VALUE:
-				return InitialValueHelper.getInitalOrDefaultValue(rowObject);
-			case ARRAY_SIZE:
-				return Integer.toString(rowObject.getArraySize());
+	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
+		final List<String> elementaryTypes = new ArrayList<>();
+		dataTypeLib.getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType))
+		.forEach(type -> elementaryTypes.add(type.getName()));
+		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
 
-			default:
-				return rowObject.getValue() == null ? "" : rowObject.getValue().getValue(); //$NON-NLS-1$
-			}
-		}
-
-		@Override
-		public void setDataValue(final VarDeclaration rowObject, final int columnIndex, final Object newValue) {
-			final String value = newValue instanceof String ? (String) newValue : null;
-			Command cmd = null;
-			switch (columnIndex) {
-			case NAME:
-				if (value == null) {
-					return;
-				}
-				cmd = new ChangeNameCommand(rowObject, value);
-				break;
-			case TYPE:
-				DataType dataType = getDataTypeLib().getDataTypesSorted().stream()
-				.filter(type -> type.getName().equals(value)).findAny().orElse(null);
-				if (dataType == null) {
-					dataType = getDataTypeLib().getType(null);
-				}
-				cmd = new ChangeDataTypeCommand(rowObject, dataType);
-				break;
-			case COMMENT:
-				cmd = new ChangeCommentCommand(rowObject, value);
-				break;
-			case INITIAL_VALUE:
-				cmd = new ChangeValueCommand(rowObject, value);
-				break;
-			case ARRAY_SIZE:
-				cmd = new ChangeArraySizeCommand(rowObject, value);
-				break;
-
-			default:
-				return;
-			}
-			executeCommand(cmd);
-		}
-
-		@Override
-		public int getColumnCount() {
-			return 5;
-		}
-	}
-
-	private class ColumnDataProvider implements IDataProvider {
-
-		@Override
-		public Object getDataValue(final int columnIndex, final int rowIndex) {
-			switch (columnIndex) {
-			case NAME:
-				return FordiacMessages.Name;
-			case TYPE:
-				return FordiacMessages.Type;
-			case COMMENT:
-				return FordiacMessages.Comment;
-			case INITIAL_VALUE:
-				return FordiacMessages.InitialValue;
-			case ARRAY_SIZE:
-				return FordiacMessages.ArraySize;
-
-			default:
-				return FordiacMessages.EmptyField;
-			}
-		}
-
-		@Override
-		public int getColumnCount() {
-			return 5;
-		}
-
-		@Override
-		public int getRowCount() {
-			return 1;
-		}
-
-		@Override
-		public void setDataValue(final int columnIndex, final int rowIndex, final Object newValue) {
-			// Setting data values to the header is not supported
-		}
+		final List<String> structuredTypes = new ArrayList<>();
+		dataTypeLib.getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
+		.forEach(type -> structuredTypes.add(type.getName()));
+		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
 }

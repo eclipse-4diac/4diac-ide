@@ -46,6 +46,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
 
 		store.setDefault(PreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR,
 				PreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR_DEFAULT_VALUE);
+		
+		store.setDefault(PreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX,
+				PreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX_DEFAULT_VALUE);
 
 	}
 }

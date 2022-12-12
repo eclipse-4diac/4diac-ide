@@ -29,6 +29,8 @@ import org.eclipse.fordiac.ide.application.editors.FBNElemEditorCloser;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.gef.DiagramEditor;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -53,13 +55,19 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 		public void notifyChanged(final Notification msg) {
 			super.notifyChanged(msg);
 			final Object feature = msg.getFeature();
-			if ((LibraryElementPackage.eINSTANCE.getTypedConfigureableObject_TypeEntry().equals(feature))
-					&& (fbNetworkElement.getType() == null)) {
-				// the subapp/cfb was detached from the type
+			if (((LibraryElementPackage.eINSTANCE.getTypedConfigureableObject_TypeEntry().equals(feature))
+					&& (fbNetworkElement.getType() == null)) || isSubAppToggledToCollapsed(msg)) {
+				// the subapp/cfb was detached from the type or subapp is being collapsed
 				closeEditor();
 			}
 		}
 	};
+
+	private boolean isSubAppToggledToCollapsed(final Notification msg) {
+		return msg.getNewValue() == null && msg.getOldValue() instanceof Attribute
+				&& ((Attribute) msg.getOldValue()).getName().equals(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE)
+				&& ((Attribute) msg.getOldValue()).getValue().equals("true");
+	}
 
 	private Adapter fbNetworkAdapter;
 
