@@ -46,14 +46,14 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 /**
  * The Class FbtExporter.
  */
-class FbtExporter extends AbstractBlockTypeExporter {
+public class FbtExporter extends AbstractBlockTypeExporter {
 
 	/**
 	 * Instantiates a new fbt exporter.
 	 *
 	 * @param entry
 	 */
-	FbtExporter(final FBTypeEntry entry) {
+	public FbtExporter(final FBTypeEntry entry) {
 		super(entry.getTypeEditable());
 	}
 

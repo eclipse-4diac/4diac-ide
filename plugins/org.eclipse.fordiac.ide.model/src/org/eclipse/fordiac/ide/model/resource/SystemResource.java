@@ -28,10 +28,11 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
-import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
@@ -61,10 +62,11 @@ public class SystemResource extends ResourceImpl {
 		saveSystem((AutomationSystem) getContents().get(0), outputStream);
 	}
 
-	public void saveSystem(final AutomationSystem system, final OutputStream outputStream) {
-		Assert.isNotNull(system.getTypeEntry()); // there should be no system without type entry
-		final SystemExporter systemExporter = new SystemExporter(system);
-		systemExporter.saveSystem(outputStream);
+	private static void saveSystem(final AutomationSystem system, final OutputStream outputStream) {
+		final TypeEntry typeEntry = system.getTypeEntry();
+		Assert.isNotNull(typeEntry); // there should be no system without type entry
+		typeEntry.setLastModificationTimestamp(typeEntry.getFile().getModificationStamp());
+		AbstractTypeExporter.saveType(typeEntry, outputStream);
 	}
 
 	@Override

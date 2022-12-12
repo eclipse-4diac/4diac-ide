@@ -44,7 +44,7 @@ class STAlgorithmDocumentProvider extends FBTypeXtextDocumentProvider {
 			monitor.subTask("Reconciling")
 			Display.^default.syncExec [
 				element.callables.reconcile(partition)
-				AbstractTypeExporter.saveType(element.typeEntry);
+				element.typeEntry.save
 			]
 		} catch (Exception e) {
 			Platform.getLog(class).error("Error saving algorithms to FB type", e)

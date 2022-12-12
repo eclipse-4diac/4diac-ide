@@ -18,7 +18,6 @@ import java.io.InputStream;
 import java.nio.file.Files;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.ADPImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DEVImporter;
 import org.eclipse.fordiac.ide.model.dataimport.DataTypeImporter;
@@ -63,7 +62,7 @@ public class TypeFromTemplateCreator {
 			performTypeSpecificSetup(type);
 			entry.setLastModificationTimestamp(targetTypeFile.getModificationStamp());
 			entry.setType(type);
-			AbstractTypeExporter.saveType(entry);
+			entry.save();
 			return entry;
 		}
 		return null;

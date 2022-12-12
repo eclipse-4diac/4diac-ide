@@ -42,7 +42,6 @@ import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -176,7 +175,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		// Depending on the button clicked:
 		switch (structSaveDialog.open()) {
 		case DEFAULT_BUTTON_INDEX:
-			AbstractTypeExporter.saveType(dataTypeEntry);
+			dataTypeEntry.save();
 			addListenerToDataTypeObj();
 			commandStack.markSaveLocation();
 			firePropertyChange(IEditorPart.PROP_DIRTY);

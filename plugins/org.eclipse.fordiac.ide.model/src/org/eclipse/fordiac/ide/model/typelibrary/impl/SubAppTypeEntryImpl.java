@@ -15,6 +15,8 @@
  ******************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary.impl;
 
+import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataexport.SubApplicationTypeExporter;
 import org.eclipse.fordiac.ide.model.dataimport.CommonElementImporter;
 import org.eclipse.fordiac.ide.model.dataimport.SubAppTImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -25,7 +27,7 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 public class SubAppTypeEntryImpl extends AbstractTypeEntryImpl implements SubAppTypeEntry {
 
 	@Override
-	public SubAppType getTypeEditable() {
+	public synchronized SubAppType getTypeEditable() {
 		final LibraryElement type = super.getTypeEditable();
 		if (type instanceof SubAppType) {
 			return (SubAppType) type;
@@ -34,7 +36,7 @@ public class SubAppTypeEntryImpl extends AbstractTypeEntryImpl implements SubApp
 	}
 
 	@Override
-	public SubAppType getType() {
+	public synchronized SubAppType getType() {
 		final LibraryElement type = super.getType();
 		if (type instanceof SubAppType) {
 			return (SubAppType) type;
@@ -43,7 +45,7 @@ public class SubAppTypeEntryImpl extends AbstractTypeEntryImpl implements SubApp
 	}
 
 	@Override
-	public void setType(final LibraryElement type) {
+	public synchronized void setType(final LibraryElement type) {
 		if (type instanceof SubAppType) {
 			super.setType(type);
 		} else {
@@ -59,5 +61,9 @@ public class SubAppTypeEntryImpl extends AbstractTypeEntryImpl implements SubApp
 		return new SubAppTImporter(getFile());
 	}
 
+	@Override
+	protected AbstractTypeExporter getExporter() {
+		return new SubApplicationTypeExporter(this);
+	}
 
 }

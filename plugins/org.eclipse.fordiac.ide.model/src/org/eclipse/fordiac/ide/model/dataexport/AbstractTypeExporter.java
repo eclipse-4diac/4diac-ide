@@ -20,18 +20,12 @@
 
 package org.eclipse.fordiac.ide.model.dataexport;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.xml.stream.XMLStreamException;
 
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.resources.WorkspaceJob;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
@@ -41,6 +35,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -61,6 +56,26 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		return type;
 	}
 
+	public InputStream getFileContent() {
+		try {
+			createXMLEntries();
+			getWriter().writeCharacters(LINE_END);
+			getWriter().writeEndDocument();
+			getWriter().close();
+			return new ByteBufferInputStream(getOutputStream().transferDataBuffers());
+		} catch (final XMLStreamException e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		} finally {
+			try {
+				getOutputStream().close();
+			} catch (final IOException e) {
+				FordiacLogHelper.logError(e.getMessage(), e);
+			}
+		}
+		return null;
+	}
+
+
 	protected void createXMLEntries() throws XMLStreamException {
 		createNamedElementEntry(getType(), getRootTag());
 		addIdentification(getType());
@@ -69,60 +84,18 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 		addEndElement();
 	}
 
-	public static void saveType(final TypeEntry entry) {
-		final AbstractTypeExporter exporter = getTypeExporter(entry);
-
-		if (null != exporter) {
-			try {
-				exporter.createXMLEntries();
-			} catch (final XMLStreamException e) {
-				FordiacLogHelper.logError(e.getMessage(), e);
-			}
-
-			final WorkspaceJob job = new WorkspaceJob("Save type file: " + entry.getFile().getName()) {
-				@Override
-				public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-					exporter.writeToFile(entry.getFile(), monitor);
-					// "reset" the modification timestamp in the TypeEntry to avoid reload - as for this timestamp it
-					// is not necessary as the data is in memory
-					entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
-					// make the edit result available for the reading entities
-					entry.setType(EcoreUtil.copy(entry.getTypeEditable()));
-					return Status.OK_STATUS;
-				}
-			};
-			job.setRule(getRuleScope(entry));
-			job.schedule();
-		}
-	}
-
 	//Save the model using the Outputstream
 	public static void saveType(final TypeEntry entry, final OutputStream outputStream) {
 		final AbstractTypeExporter exporter = getTypeExporter(entry);
 		if (exporter != null) {
-			try {
-				exporter.createXMLEntries();
-			} catch (final XMLStreamException e) {
+
+			try (InputStream inputStream = exporter.getFileContent()) {
+				inputStream.transferTo(outputStream);
+			} catch (final IOException e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
-			exporter.writeToFile(outputStream);
 			entry.setLastModificationTimestamp(entry.getFile().getModificationStamp());
 		}
-	}
-
-	/** Search for the first directory parent which is existing. If none can be found we will return the workspace root.
-	 * This directory is then used as scheduling rule for locking the workspace. The direct parent of the entry's file
-	 * can not be used as it may need to be created.
-	 *
-	 *
-	 * @param entry the type entry for which we need the scope
-	 * @return the current folder or workspace root */
-	private static IContainer getRuleScope(final TypeEntry entry) {
-		IContainer parent = entry.getFile().getParent();
-		while(parent != null && !parent.exists()) {
-			parent = parent.getParent();
-		}
-		return (parent != null) ? parent : ResourcesPlugin.getWorkspace().getRoot();
 	}
 
 	private static AbstractTypeExporter getTypeExporter(final TypeEntry entry) {
@@ -134,6 +107,8 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 			return new SubApplicationTypeExporter((SubAppTypeEntry) entry);
 		} else if (entry instanceof DataTypeEntry) {
 			return new DataTypeExporter((AnyDerivedType) entry.getTypeEditable());
+		} else if (entry instanceof SystemEntry) {
+			return new SystemExporter(((SystemEntry) entry).getSystem());
 		}
 		return null;
 	}

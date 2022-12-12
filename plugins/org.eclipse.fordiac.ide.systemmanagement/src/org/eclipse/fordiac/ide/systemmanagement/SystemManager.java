@@ -48,7 +48,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
-import org.eclipse.fordiac.ide.model.dataexport.SystemExporter;
 import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
@@ -154,6 +153,7 @@ public enum SystemManager {
 
 	public synchronized void removeProject(final IProject project) {
 		allSystemsInWS.remove(project);
+		TypeLibraryManager.INSTANCE.removeProject(project);
 		notifyListeners();
 	}
 
@@ -257,10 +257,7 @@ public enum SystemManager {
 
 	public static void saveSystem(final AutomationSystem system, final IFile file) {
 		Assert.isNotNull(system.getTypeEntry()); // there should be no system without type entry
-		system.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp() + 1);
-		final SystemExporter systemExporter = new SystemExporter(system);
-		systemExporter.saveSystem(file);
-		system.getTypeEntry().setLastModificationTimestamp(file.getModificationStamp());
+		system.getTypeEntry().save();
 	}
 
 	public synchronized AutomationSystem getSystem(final IFile systemFile) {

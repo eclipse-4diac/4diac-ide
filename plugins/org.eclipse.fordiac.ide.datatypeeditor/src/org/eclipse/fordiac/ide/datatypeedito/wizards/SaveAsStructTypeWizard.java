@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.application.wizards.SaveAsWizardPage;
 import org.eclipse.fordiac.ide.datatypeeditor.editors.DataTypeEditor;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
 import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -126,7 +125,7 @@ public class SaveAsStructTypeWizard extends AbstractSaveAsWizard {
 		InterfaceListCopier.copyVarList(type.getMemberVariables(), structuredType.getMemberVariables(), true);
 		TypeManagementPreferencesHelper.setupVersionInfo(type);
 		type.setName(newName);
-		AbstractTypeExporter.saveType(entry);
+		entry.save();
 		return targetFile;
 	}
 
