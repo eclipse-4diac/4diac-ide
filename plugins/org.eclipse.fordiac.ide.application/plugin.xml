@@ -124,6 +124,12 @@
                    indented="false"
                    label="Attributes">
       </propertyTab>
+      <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyAttributeTab"
+       			   category="Application"
+                   id="org.eclipse.fordiac.ide.application.propertyVarConfigTab"
+                   indented="false"
+                   label="Var Config">
+      </propertyTab>
       <propertyTab category="Interface"
                    id="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab"
                    indented="false"
@@ -218,6 +224,12 @@
       <propertySection class="org.eclipse.fordiac.ide.application.properties.ApplicationAttributeSection"
                        id="org.eclipse.fordiac.ide.application.properties.AttributeSection"
                        tab="org.eclipse.fordiac.ide.application.propertyAttributeTab">
+        <input type="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart">
+        </input>
+      </propertySection>
+      <propertySection class="org.eclipse.fordiac.ide.application.properties.VarConfigurationSection"
+                       id="org.eclipse.fordiac.ide.application.properties.VarConfigSection"
+                       tab="org.eclipse.fordiac.ide.application.propertyVarConfigTab">
         <input type="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart">
         </input>
       </propertySection>

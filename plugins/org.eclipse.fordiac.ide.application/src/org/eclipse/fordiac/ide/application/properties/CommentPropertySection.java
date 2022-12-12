@@ -364,8 +364,8 @@ public class CommentPropertySection extends AbstractSection {
 		}
 	}
 
-	private class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<VarDeclaration> { // IColumnPropertyAccessor
-		private final boolean isInputData;
+	public class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<VarDeclaration> { // IColumnPropertyAccessor
+		protected final boolean isInputData;
 
 		public VarDeclarationColumnAccessor(final boolean isInputData) {
 			this.isInputData = isInputData;
@@ -473,7 +473,7 @@ public class CommentPropertySection extends AbstractSection {
 		}
 	}
 
-	private class ColumnDataProvider implements IDataProvider {
+	public static class ColumnDataProvider implements IDataProvider {
 
 		@Override
 		public Object getDataValue(final int columnIndex, final int rowIndex) {
