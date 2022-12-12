@@ -70,7 +70,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 class FBNetworkImporter extends CommonElementImporter {
 
 	private final FBNetwork fbNetwork;
-	// this is the interface list needed for checking connection to the containg
+	// this is the interface list needed for checking connection to the containing
 	// types interface
 	private final InterfaceList interfaceList;
 
@@ -245,7 +245,7 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		builder.validate();
 
-		if (builder.isValidConnection()) {
+		if (builder.isValidConnection() || builder.isDuplicate()) {
 			final IInterfaceElement src = builder.getSourceEndpoint();
 			final IInterfaceElement dst = builder.getDestinationEndpoint();
 			connection.setSource(src);
@@ -254,10 +254,6 @@ class FBNetworkImporter extends CommonElementImporter {
 
 		if (builder.isDataTypeMissmatch()) {
 			handleDataTypeMissmatch(builder, connection);
-		}
-
-		if (builder.isDuplicate()) {
-			handleDuplicateConnection(builder, connection);
 		}
 
 		if (builder.isMissingConnectionDestination()) {
@@ -290,18 +286,38 @@ class FBNetworkImporter extends CommonElementImporter {
 		}
 		parseConnectionRouting(connection);
 		parseAttributes(connection);
+
+		if (builder.isDuplicate()) {
+			handleDuplicateConnection(builder, connection);
+		}
+
 		return connection;
 	}
 
 	private <T extends Connection> void handleDuplicateConnection(final ConnectionBuilder builder, final T connection) {
-		final String errorMessage = "duplicate connection " + builder.getSourcePinName() + " "
+		final String errorMessage = "duplicate connection " + builder.getSourcePinName() + " -> "
 				+ builder.getDestinationPinName();
+
+		for (final Connection con : builder.getDestinationEndpoint().getInputConnections()) {
+			if (con != connection && con.getSource() == builder.getSourceEndpoint()) {
+				final ErrorMarkerBuilder errorMarkerBuilder = ErrorMarkerBuilder.createConnectionErrorMarkerBuilder(
+						errorMessage, getFbNetwork(), con.getSourceElement().getName(),
+						con.getDestinationElement().getName(),
+						getLineNumber());
+				con.setErrorMessage(errorMessage);
+				errorMarkerBuilder.setErrorMarkerRef(con);
+				errorMarkerBuilders.add(errorMarkerBuilder);
+			}
+		}
+
 		final ErrorMarkerBuilder errorMarkerBuilder = ErrorMarkerBuilder.createConnectionErrorMarkerBuilder(
-				errorMessage, getFbNetwork(), builder.getSourcePinName(), builder.getDestinationPinName(),
+				errorMessage, getFbNetwork(), connection.getSourceElement().getName(),
+				connection.getDestinationElement().getName(),
 				getLineNumber());
+
 		connection.setErrorMessage(errorMessage);
 		errorMarkerBuilder.setErrorMarkerRef(connection);
-		errorMarkerAttributes.add(errorMarkerBuilder);
+		errorMarkerBuilders.add(errorMarkerBuilder);
 	}
 
 	public <T extends Connection> void handleDataTypeMissmatch(final ConnectionBuilder builder,

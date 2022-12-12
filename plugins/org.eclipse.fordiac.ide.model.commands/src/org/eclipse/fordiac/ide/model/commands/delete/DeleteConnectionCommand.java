@@ -148,8 +148,18 @@ public class DeleteConnectionCommand extends Command {
 
 		if (connection.hasError() && !keepMarker) {
 			deleteConnectionErrorMarker = ErrorMarkerBuilder.deleteErrorMarker(connection);
-			deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
-			deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
+			if (errorFb != null) {
+				deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
+				deleteInterfaceErrorMarkers
+				.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
+			} else {
+				// error on connection not on pins
+				for (final Connection con : source.getOutputConnections()) {
+					if ((con.getSource() == source) && (con.getDestination() == destination) && con != connection) {
+						ErrorMarkerBuilder.deleteErrorMarker(con);
+					}
+				}
+			}
 		}
 	}
 
