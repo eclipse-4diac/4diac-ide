@@ -13,22 +13,19 @@
 package org.eclipse.fordiac.ide.gef.nat;
 
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 
 public class EventColumnProvider implements IDataProvider {
 
-	public static final int NAME = 0;
-	public static final int TYPE = 1;
-	public static final int COMMENT = 2;
-
 	@Override
 	public Object getDataValue(final int columnIndex, final int rowIndex) {
 		switch (columnIndex) {
-		case NAME:
+		case  I4diacNatTableUtil.NAME:
 			return FordiacMessages.Name;
-		case TYPE:
+		case  I4diacNatTableUtil.TYPE:
 			return FordiacMessages.Type;
-		case COMMENT:
+		case  I4diacNatTableUtil.COMMENT:
 			return FordiacMessages.Comment;
 		default:
 			return "";

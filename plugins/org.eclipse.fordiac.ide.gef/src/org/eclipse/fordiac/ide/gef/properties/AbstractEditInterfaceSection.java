@@ -27,8 +27,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.nat.EventColumnProvider;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
@@ -227,10 +225,10 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 			if (labelAcc != null) {
 				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
 			}
-			if (isEditable() && columnPosition == VarDeclarationColumnProvider.TYPE) {
+			if (isEditable() && columnPosition == I4diacNatTableUtil.TYPE) {
 				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
-			} else if (columnPosition == EventColumnProvider.NAME || columnPosition == EventColumnProvider.COMMENT) {
-	             configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT); 
+			} else if (columnPosition == I4diacNatTableUtil.NAME || columnPosition == I4diacNatTableUtil.COMMENT) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			}
 		});
 		return dataLayer;

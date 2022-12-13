@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
 
@@ -36,15 +37,15 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 	@Override
 	public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
 		switch (columnIndex) {
-		case VarDeclarationColumnProvider.NAME:
+		case I4diacNatTableUtil.NAME:
 			return rowObject.getName();
-		case VarDeclarationColumnProvider.TYPE:
+		case I4diacNatTableUtil.TYPE:
 			return rowObject.getTypeName();
-		case VarDeclarationColumnProvider.COMMENT:
+		case I4diacNatTableUtil.COMMENT:
 			return rowObject.getComment();
-		case VarDeclarationColumnProvider.INITIAL_VALUE:
+		case I4diacNatTableUtil.INITIAL_VALUE:
 			return InitialValueHelper.getInitalOrDefaultValue(rowObject);
-		case VarDeclarationColumnProvider.ARRAY_SIZE:
+		case I4diacNatTableUtil.ARRAY_SIZE:
 			return DataLabelProvider.getArraySizeText(rowObject);
 		default:
 			return rowObject.getValue() == null ? "" : rowObject.getValue().getValue(); //$NON-NLS-1$
@@ -56,13 +57,13 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 		final String value = newValue instanceof String ? (String) newValue : null;
 		Command cmd = null;
 		switch (columnIndex) {
-		case VarDeclarationColumnProvider.NAME:
+		case I4diacNatTableUtil.NAME:
 			if (value == null) {
 				return;
 			}
 			cmd = new ChangeNameCommand(rowObject, value);
 			break;
-		case VarDeclarationColumnProvider.TYPE:
+		case I4diacNatTableUtil.TYPE:
 			DataType dataType = section.getDataTypeLib().getDataTypesSorted().stream()
 			.filter(type -> type.getName().equals(value)).findAny().orElse(null);
 			if (dataType == null) {
@@ -70,13 +71,13 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 			}
 			cmd = new ChangeDataTypeCommand(rowObject, dataType);
 			break;
-		case VarDeclarationColumnProvider.COMMENT:
+		case I4diacNatTableUtil.COMMENT:
 			cmd = new ChangeCommentCommand(rowObject, value);
 			break;
-		case VarDeclarationColumnProvider.INITIAL_VALUE:
+		case I4diacNatTableUtil.INITIAL_VALUE:
 			cmd = new ChangeValueCommand(rowObject, value);
 			break;
-		case VarDeclarationColumnProvider.ARRAY_SIZE:
+		case I4diacNatTableUtil.ARRAY_SIZE:
 			cmd = new ChangeArraySizeCommand(rowObject, value);
 			break;
 
