@@ -138,20 +138,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 				new VarDeclarationColumnProvider(), rule, typeSelection, this);
 	}
 
-	public DataLayer setupDataLayer(final ListDataProvider outputProvider) {
-		final DataLayer dataLayer = new DataLayer(outputProvider);
-		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
 
-		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			if (labelAcc != null) {
-				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-			}
-			if (columnPosition == VarDeclarationColumnProvider.TYPE) {
-				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
-			}
-		});
-		return dataLayer;
-	}
 	@Override
 	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
 		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getInputVars());
