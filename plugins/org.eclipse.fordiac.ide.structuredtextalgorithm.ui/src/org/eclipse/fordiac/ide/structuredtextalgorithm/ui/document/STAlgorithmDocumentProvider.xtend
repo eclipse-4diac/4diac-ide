@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document
 import com.google.inject.Inject
 import org.eclipse.core.runtime.IProgressMonitor
 import org.eclipse.core.runtime.Platform
-import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmReconciler
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.FBTypeXtextDocumentProvider

@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.model.data.AnyDateType
 import org.eclipse.fordiac.ide.model.data.AnyDurationType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.ArrayType
-import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.LtimeType
 import org.eclipse.fordiac.ide.model.data.StringType

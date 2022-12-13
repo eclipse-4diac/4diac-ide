@@ -17,17 +17,17 @@ import org.eclipse.gef.commands.Command;
 
 public class VarConfigurationCommand extends Command {
 
-	private final VarDeclaration VarDeclration;
+	private final VarDeclaration varDeclaration;
 	private final boolean config;
 
-	public VarConfigurationCommand(final VarDeclaration VarDeclration, final boolean config) {
-		this.VarDeclration = VarDeclration;
+	public VarConfigurationCommand(final VarDeclaration varDeclaration, final boolean config) {
+		this.varDeclaration = varDeclaration;
 		this.config = config;
 	}
 
 	@Override
 	public void execute() {
-		VarDeclration.setVarConfig(config);
+		varDeclaration.setVarConfig(config);
 	}
 
 	@Override
@@ -37,7 +37,7 @@ public class VarConfigurationCommand extends Command {
 
 	@Override
 	public void undo() {
-		VarDeclration.setVarConfig(!config);
+		varDeclaration.setVarConfig(!config);
 	}
 
 }

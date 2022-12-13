@@ -32,20 +32,25 @@ import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.AnyRealType
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.ArrayType
+import org.eclipse.fordiac.ide.model.data.BoolType
+import org.eclipse.fordiac.ide.model.data.ByteType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType
 import org.eclipse.fordiac.ide.model.data.DateType
+import org.eclipse.fordiac.ide.model.data.DwordType
 import org.eclipse.fordiac.ide.model.data.LdateType
 import org.eclipse.fordiac.ide.model.data.LdtType
 import org.eclipse.fordiac.ide.model.data.LtimeType
 import org.eclipse.fordiac.ide.model.data.LtodType
+import org.eclipse.fordiac.ide.model.data.LwordType
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.data.WordType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.value.ValueConverterFactory
@@ -74,6 +79,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNop
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral
@@ -88,13 +94,6 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
-import org.eclipse.fordiac.ide.model.data.ByteType
-import org.eclipse.fordiac.ide.model.data.DwordType
-import org.eclipse.fordiac.ide.model.data.LwordType
-import org.eclipse.fordiac.ide.model.data.WordType
-import org.eclipse.fordiac.ide.model.data.BoolType
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 
 abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList

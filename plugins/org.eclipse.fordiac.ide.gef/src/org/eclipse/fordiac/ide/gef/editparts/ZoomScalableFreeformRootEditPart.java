@@ -34,6 +34,7 @@ import org.eclipse.draw2d.ScalableFigure;
 import org.eclipse.draw2d.ScalableFreeformLayeredPane;
 import org.eclipse.draw2d.Viewport;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.draw2d.zoom.AbstractZoomManager;
 import org.eclipse.fordiac.ide.gef.draw2d.SingleLineBorder;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.gef.figures.BackgroundFreeformFigure;
@@ -244,7 +245,7 @@ public class ZoomScalableFreeformRootEditPart extends ScalableFreeformRootEditPa
 		zoomLevels.add(ZoomManager.FIT_HEIGHT);
 		getZoomManager().setZoomLevelContributions(zoomLevels);
 		getZoomManager().setZoomLevels(new double[] { .25, .5, .75, .80, .85, .90, 1.0, 1.5, 2.0, 2.5, 3, 4 });
-		getZoomManager().setZoomAnimationStyle(ZoomManager.ANIMATE_ZOOM_IN_OUT);
+		getZoomManager().setZoomAnimationStyle(AbstractZoomManager.ANIMATE_ZOOM_IN_OUT);
 	}
 
 	private void setupZoomActions(final IWorkbenchPartSite site, final ActionRegistry actionRegistry) {

@@ -43,7 +43,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
-import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
@@ -51,10 +50,6 @@ import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
-import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
-import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
-import org.eclipse.nebula.widgets.nattable.style.HorizontalAlignmentEnum;
-import org.eclipse.nebula.widgets.nattable.style.Style;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridLayout;
@@ -77,7 +72,7 @@ public class CommentPropertySection extends AbstractSection {
 	public static final int VISIBLE = 4;
 	public static final int ISVARCONFIG = 5;
 
-	private static int COL_COUNT = 6;
+	private static final int COL_COUNT = 6;
 
 	private Text nameText;
 	private Text commentText;
@@ -137,11 +132,11 @@ public class CommentPropertySection extends AbstractSection {
 				inputDataProvider.getEditableRule());
 		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer,
 				new ColumnDataProvider(), outputDataProvider.getEditableRule());
-		
+
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
-		
+
 		inputTable.configure();
 		outputTable.configure();
 
@@ -196,7 +191,7 @@ public class CommentPropertySection extends AbstractSection {
 			}
 			if (columnPosition == NAME || columnPosition == COMMENT) {
 				// We want to align the pin names and comments to the left side
-				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT); 
+				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			}
 			if (columnPosition == VISIBLE) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
@@ -323,7 +318,7 @@ public class CommentPropertySection extends AbstractSection {
 			}
 		});
 	}
-	
+
 	private class VarDeclarationListProvider extends ListDataProvider<VarDeclaration> {
 		private final boolean isInputData;
 
@@ -389,7 +384,7 @@ public class CommentPropertySection extends AbstractSection {
 				return rowObject.getComment();
 			case VISIBLE: // I added
 				return rowObject.isVisible();
-			case ISVARCONFIG: 
+			case ISVARCONFIG:
 				return rowObject.isVarConfig();
 			default:
 				return null;
@@ -416,11 +411,11 @@ public class CommentPropertySection extends AbstractSection {
 			case VISIBLE:
 				if ((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
 						|| !rowObject.isIsInput() && rowObject.getOutputConnections().isEmpty()) {
-					cmd = new HidePinCommand(rowObject, (Boolean) newValue);
+					cmd = new HidePinCommand(rowObject, ((Boolean) newValue).booleanValue());
 				}
 				break;
 			case ISVARCONFIG:
-				cmd = new VarConfigurationCommand(rowObject, (Boolean) newValue);
+				cmd = new VarConfigurationCommand(rowObject, ((Boolean) newValue).booleanValue());
 				break;
 			default:
 				return;
@@ -430,9 +425,11 @@ public class CommentPropertySection extends AbstractSection {
 
 		@Override
 		public int getColumnCount() {
-			int COL_NUM = COL_COUNT; // it can be used to show VarConfig only in inputs table
-			if(!isInputData) COL_NUM--;
-				return COL_NUM;
+			// it can be used to show VarConfig only in inputs table
+			if(!isInputData) {
+				return COL_COUNT - 1;
+			}
+			return COL_COUNT;
 		}
 
 		@Override

@@ -272,9 +272,8 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 					final byte[] bytes = new byte[(int) image.length()];
 					fileInputStreamReader.read(bytes);
 					wrapper.base64 = Base64.getEncoder().encodeToString(bytes);
-					Display.getDefault().asyncExec(() -> {
-						editor.insertHTML("<img src= data:image/png;base64," + wrapper.base64 + ">"); //$NON-NLS-1$ //$NON-NLS-2$
-					});
+					Display.getDefault().asyncExec(
+							() -> editor.insertHTML("<img src= data:image/png;base64," + wrapper.base64 + ">")); //$NON-NLS-1$ //$NON-NLS-2$
 					return Status.OK_STATUS;
 				} catch (final FileNotFoundException e) {
 					FordiacLogHelper.logError(e.getMessage());
