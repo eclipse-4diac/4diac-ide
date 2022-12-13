@@ -15,7 +15,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.handlers;
 
-import org.eclipse.gef.editparts.ZoomListener;
+import org.eclipse.draw2d.zoom.ZoomListener;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.jface.dialogs.IPageChangedListener;
