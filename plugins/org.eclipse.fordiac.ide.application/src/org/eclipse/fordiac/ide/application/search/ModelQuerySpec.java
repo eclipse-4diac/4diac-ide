@@ -17,7 +17,7 @@ import org.eclipse.core.resources.IProject;
 // The inputs from the search page grouped in one place
 public class ModelQuerySpec {
 
-	enum SearchScope {
+	public enum SearchScope {
 		WORKSPACE, PROJECT
 	}
 
