@@ -17,6 +17,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
+import java.util.ArrayList;
+
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.helpers.ConnectionsHelper;
@@ -37,7 +39,7 @@ public class DeleteConnectionCommand extends Command {
 	private DeleteConnectionCommand deleteMapped = null;
 	private final CompoundCommand deleteInterfaceErrorMarkers = new CompoundCommand();
 	private FBNetworkElement errorFb;
-	ErrorMarkerBuilder deleteConnectionErrorMarker = null;
+	private final ArrayList<ErrorMarkerBuilder> deleteConnectionErrorMarkers = new ArrayList<>();
 
 	private boolean keepMarker; // we want to keep the marker
 
@@ -87,8 +89,8 @@ public class DeleteConnectionCommand extends Command {
 
 	@Override
 	public void redo() {
-		if (deleteConnectionErrorMarker != null) {
-			deleteConnectionErrorMarker.deleteErrorMarker();
+		if (!deleteConnectionErrorMarkers.isEmpty()) {
+			deleteConnectionErrorMarkers.forEach(ErrorMarkerBuilder::deleteErrorMarker);
 		}
 		deleteInterfaceErrorMarkers.redo();
 		deleteConnection();
@@ -117,8 +119,8 @@ public class DeleteConnectionCommand extends Command {
 			deleteMapped.undo();
 		}
 
-		if (deleteConnectionErrorMarker != null) {
-			deleteConnectionErrorMarker.createMarkerInFile();
+		if (!deleteConnectionErrorMarkers.isEmpty()) {
+			deleteConnectionErrorMarkers.forEach(ErrorMarkerBuilder::createMarkerInFile);
 		}
 
 	}
@@ -147,17 +149,24 @@ public class DeleteConnectionCommand extends Command {
 		}
 
 		if (connection.hasError() && !keepMarker) {
-			deleteConnectionErrorMarker = ErrorMarkerBuilder.deleteErrorMarker(connection);
+			deleteConnectionErrorMarkers.add(ErrorMarkerBuilder.deleteErrorMarker(connection));
 			if (errorFb != null) {
 				deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
 				deleteInterfaceErrorMarkers
 				.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
 			} else {
+
 				// error on connection not on pins
-				for (final Connection con : source.getOutputConnections()) {
-					if ((con.getSource() == source) && (con.getDestination() == destination) && con != connection) {
-						ErrorMarkerBuilder.deleteErrorMarker(con);
-					}
+				removeDuplicationErrorMarker(connection);
+			}
+		}
+	}
+
+	private void removeDuplicationErrorMarker(final Connection connection) {
+		if (source.getOutputConnections().size() == 2) {
+			for (final Connection con : source.getOutputConnections()) {
+				if ((con.getSource() == source) && (con.getDestination() == destination) && con != connection) {
+					deleteConnectionErrorMarkers.add(ErrorMarkerBuilder.deleteErrorMarker(con));
 				}
 			}
 		}

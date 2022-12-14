@@ -221,6 +221,7 @@ public final class Messages extends NLS {
 	public static String FBNetworkImporter_ConnectionDestinationNotFound;
 	public static String FBNetworkImporter_ConnectionSourceMissing;
 	public static String FBNetworkImporter_ConnectionSourceNotFound;
+	public static String FBNetworkImporter_MultipleInputs;
 
 	public static String FBNetworkImporter_ConnectionTypeMismatch;
 

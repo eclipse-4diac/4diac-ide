@@ -25,6 +25,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.stream.XMLStreamException;
@@ -224,6 +225,7 @@ class FBNetworkImporter extends CommonElementImporter {
 			return true;
 		});
 
+		checkAndHandleMultipleInputConnections(connectionlist);
 	}
 
 	private <T extends Connection> T parseConnection(final EClass conType)
@@ -276,8 +278,8 @@ class FBNetworkImporter extends CommonElementImporter {
 			handleMissingSrcAndDestEnpoint(connection, builder);
 		}
 
-		if (builder.getConnectionState().contains(ConnectionState.MISSING_TYPE)) {
-			return null;
+		if (builder.isDuplicate()) {
+			handleDuplicateConnection(builder, connection);
 		}
 
 		final String commentElement = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
@@ -287,11 +289,45 @@ class FBNetworkImporter extends CommonElementImporter {
 		parseConnectionRouting(connection);
 		parseAttributes(connection);
 
-		if (builder.isDuplicate()) {
-			handleDuplicateConnection(builder, connection);
+		return connection;
+	}
+
+	private <T extends Connection> void checkAndHandleMultipleInputConnections(final EList<T> connectionlist) {
+		for (final Connection con : connectionlist) {
+			if (con instanceof DataConnection && !(((DataConnection) con).getSource() instanceof ErrorMarkerInterface)
+					&& ((DataConnection) con).getDataSource().isIsInput()
+					&& ((DataConnection) con).getDataSource().getInputConnections().size() > 1) {
+				handleMultipleConnectionsOnInput(((DataConnection) con).getDataSource());
+			} else if (con instanceof DataConnection
+					&& !(((DataConnection) con).getDestination() instanceof ErrorMarkerInterface)
+					&& ((DataConnection) con).getDataDestination().isIsInput()
+					&& ((DataConnection) con).getDataDestination().getInputConnections().size() > 1) {
+				handleMultipleConnectionsOnInput(((DataConnection) con).getDataDestination());
+			}
+		}
+	}
+
+	private void handleMultipleConnectionsOnInput(final VarDeclaration inputPin) {
+		final ErrorMarkerInterface errorMarkerInterface;
+		if (inputPin.isIsInput()) {
+
+			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createErrorMarkerBuilder(MessageFormat
+					.format(Messages.FBNetworkImporter_MultipleInputs, inputPin.getName(), inputPin.getType()),
+					inputPin, getLineNumber());
+			errorMarkerBuilders.add(e);
+
+			errorMarkerInterface = ConnectionHelper.createErrorMarkerInterface(inputPin.getType(), inputPin.getName(),
+					true, inputPin.getFBNetworkElement().getInterface());
+			e.setErrorMarkerRef(errorMarkerInterface);
+
+			final List<Connection> inputConnections = new ArrayList<>(
+					inputPin.getInputConnections());
+			for (final Connection con : inputConnections) {
+				errorMarkerInterface.setRepairedEndpoint(con.getDestination());
+				con.setDestination(errorMarkerInterface);
+			}
 		}
 
-		return connection;
 	}
 
 	private <T extends Connection> void handleDuplicateConnection(final ConnectionBuilder builder, final T connection) {
@@ -299,7 +335,8 @@ class FBNetworkImporter extends CommonElementImporter {
 				+ builder.getDestinationPinName();
 
 		for (final Connection con : builder.getDestinationEndpoint().getInputConnections()) {
-			if (con != connection && con.getSource() == builder.getSourceEndpoint()) {
+			if (con != connection && con.getSource() == builder.getSourceEndpoint()
+					&& !(con.getErrorMessage() != null && con.getErrorMessage().contains("duplicate connection"))) {
 				final ErrorMarkerBuilder errorMarkerBuilder = ErrorMarkerBuilder.createConnectionErrorMarkerBuilder(
 						errorMessage, getFbNetwork(), con.getSourceElement().getName(),
 						con.getDestinationElement().getName(),

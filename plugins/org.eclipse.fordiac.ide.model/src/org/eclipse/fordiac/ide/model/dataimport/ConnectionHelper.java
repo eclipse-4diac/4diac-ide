@@ -67,6 +67,7 @@ public final class ConnectionHelper {
 					connectionState.add(ConnectionState.DUPLICATE);
 					connectionState.remove(ConnectionState.VALID);
 				}
+
 				return;
 			}
 
@@ -209,6 +210,13 @@ public final class ConnectionHelper {
 		public boolean isMissingSourceAndDestEndpoint() {
 			return connectionState.containsAll(EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING,
 					ConnectionState.DEST_ENDPOINT_MISSING, ConnectionState.SOURCE_EXITS, ConnectionState.DEST_EXISTS));
+		}
+
+		public boolean dataInputHasMultipleConnections() {
+			return (!(sourceEndpoint.getType().getName().equalsIgnoreCase("Event")) && sourceEndpoint.isIsInput()
+					&& sourceEndpoint.getInputConnections().size() > 1)
+					|| (!(destinationEndpoint.getType().getName().equalsIgnoreCase("Event"))
+							&& destinationEndpoint.isIsInput() && destinationEndpoint.getInputConnections().size() > 1);
 		}
 
 		public String getSourcePinName() {
