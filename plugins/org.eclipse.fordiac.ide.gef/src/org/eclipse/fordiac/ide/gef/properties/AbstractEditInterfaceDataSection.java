@@ -22,6 +22,7 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -117,7 +118,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		outputProvider = new VarDeclarationListProvider(this, null);
+		outputProvider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new VarDeclarationColumnProvider(), rule, typeSelection, this);
@@ -130,7 +131,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		inputProvider = new VarDeclarationListProvider(this, null);
+		inputProvider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new VarDeclarationColumnProvider(), rule, typeSelection, this);

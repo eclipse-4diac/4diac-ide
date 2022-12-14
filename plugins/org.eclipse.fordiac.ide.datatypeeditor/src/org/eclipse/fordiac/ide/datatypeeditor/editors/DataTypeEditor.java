@@ -90,7 +90,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListener {
 
 	private final CommandStack commandStack = new CommandStack();
-	private StructViewingComposite editComposite;
+	private StructViewingComposite structComposite;
 	private Composite errorComposite;
 	private boolean importFailed;
 	private boolean outsideWorkspace;
@@ -128,7 +128,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	public void stackChanged(final CommandStackEvent event) {
 		updateActions(stackActions);
 		firePropertyChange(IEditorPart.PROP_DIRTY);
-		editComposite.getViewer().refresh();
+		structComposite.refresh();
 	}
 
 	@Override
@@ -310,8 +310,8 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	@Override
 	public void createPartControl(final Composite parent) {
 		if (dataTypeEntry.getTypeEditable() != null && (!importFailed)) {
-			editComposite = new StructViewingComposite(parent, 1, commandStack, dataTypeEntry, this);
-			editComposite.createPartControl(parent);
+			structComposite = new StructViewingComposite(parent, 1, commandStack, dataTypeEntry, this);
+			structComposite.createPartControl(parent);
 			TableWidgetFactory.enableCopyPasteCut(this);
 		} else if (importFailed) {
 			createErrorComposite(parent, Messages.ErrorCompositeMessage);
@@ -334,10 +334,10 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 
 	@Override
 	public void setFocus() {
-		if (null == editComposite) {
+		if (null == structComposite) {
 			errorComposite.setFocus();
 		} else {
-			editComposite.setFocus();
+			structComposite.setFocus();
 		}
 	}
 
@@ -414,7 +414,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 			removeListenerFromDataTypeObj();
 			dataTypeEntry.setTypeEditable(null);
 			importType(getEditorInput());
-			editComposite.reload();
+			structComposite.reload();
 			addListenerToDataTypeObj();
 		} catch (final PartInitException e) {
 			FordiacLogHelper

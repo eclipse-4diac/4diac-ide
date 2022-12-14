@@ -30,6 +30,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
@@ -48,10 +49,8 @@ import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
-import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -89,7 +88,7 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
-		provider = new VarDeclarationListProvider(this, null);
+		provider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
 		final DataLayer dataLayer = new DataLayer(provider);
 		final IConfigLabelAccumulator dataLayerLabelAccumulator = dataLayer.getConfigLabelAccumulator();
 		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
@@ -119,6 +118,10 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 		return (null != varInternal) ? varInternal.getType() : null;
 	}
 
+	private VarDeclaration getLastSelectedVariable() {
+		return (VarDeclaration) provider.getLastSelectedVariable(table);
+	}
+
 	private String getName() {
 		final VarDeclaration varInternal = getLastSelectedVariable();
 		return (null != varInternal) ? varInternal.getName() : null;
@@ -132,19 +135,6 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 		return getType().getInternalVars().indexOf(varInternal) + 1;
 	}
 
-	private VarDeclaration getLastSelectedVariable() {
-		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);
-		if (selectionLayer != null) {
-			final int[] rows = selectionLayer.getFullySelectedRowPositions();
-			if (rows.length > 0) {
-				final DataLayer dataLayer = (DataLayer) selectionLayer.getUnderlyingLayerByPosition(0, 0);
-				final Object rowObject = ((ListDataProvider<?>) dataLayer.getDataProvider())
-						.getRowObject(rows[rows.length - 1]);
-				return ((VarDeclaration) rowObject);
-			}
-		}
-		return null;
-	}
 
 	@Override
 	public void aboutToBeShown() {
@@ -202,6 +192,7 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 	@Override
 	protected void setInputInit() {
 		provider.setInput(getType());
+		provider.setTypeLib(getType().getTypeLibrary());
 		initTypeSelection(getDataTypeLib());
 	}
 

@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
-import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
@@ -22,16 +21,24 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
 
 public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclaration> {
 
-	private final AbstractSection section;
+	private final CommandExecutor section;
+	private TypeLibrary library;
 
-	public VarDeclarationColumnAccessor(final AbstractSection section) {
+	public VarDeclarationColumnAccessor(final CommandExecutor section) {
 		this.section = section;
+	}
+
+	public VarDeclarationColumnAccessor(final CommandExecutor section, final TypeLibrary library) {
+		this.section = section;
+		setTypeLib(library);
 	}
 
 	@Override
@@ -64,10 +71,10 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 			cmd = new ChangeNameCommand(rowObject, value);
 			break;
 		case I4diacNatTableUtil.TYPE:
-			DataType dataType = section.getDataTypeLib().getDataTypesSorted().stream()
+			DataType dataType = library.getDataTypeLibrary().getDataTypesSorted().stream()
 			.filter(type -> type.getName().equals(value)).findAny().orElse(null);
 			if (dataType == null) {
-				dataType = section.getDataTypeLib().getType(null);
+				dataType = library.getDataTypeLibrary().getType(null);
 			}
 			cmd = new ChangeDataTypeCommand(rowObject, dataType);
 			break;
@@ -91,5 +98,12 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 	@Override
 	public int getColumnCount() {
 		return 5;
+	}
+
+	public void setTypeLib(final TypeLibrary dataTypeLib) {
+		if(library==null) {
+			this.library = dataTypeLib;
+		}
+
 	}
 }

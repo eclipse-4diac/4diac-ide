@@ -14,18 +14,21 @@ package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 
 public class VarDeclarationListProvider extends ListDataProvider<VarDeclaration>
-		implements FordiacInterfaceListProvider {
+implements FordiacInterfaceListProvider {
 
+	private final VarDeclarationColumnAccessor columnAccessor;
 
-	public VarDeclarationListProvider(final AbstractSection section, final List<VarDeclaration> list) {
-		super(list, new VarDeclarationColumnAccessor(section));
+	public VarDeclarationListProvider(final List<VarDeclaration> list,
+			final VarDeclarationColumnAccessor columnAccessor) {
+		super(list, columnAccessor);
+		this.columnAccessor = columnAccessor;
 	}
 
 	@Override
@@ -46,4 +49,10 @@ public class VarDeclarationListProvider extends ListDataProvider<VarDeclaration>
 	public <T extends List<? extends IInterfaceElement>> void setInput(final T list) {
 		this.list = (List<VarDeclaration>) list;
 	}
+
+	public void setTypeLib(final TypeLibrary dataTypeLib) {
+		columnAccessor.setTypeLib(dataTypeLib);
+	}
+
+
 }
