@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.elk.connection;
 
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
+import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 
@@ -23,6 +24,13 @@ public class StandardConnectionRoutingHelper extends AbstractConnectionRoutingHe
 
 	@Override
 	void saveConnections(final ConnectionLayoutMapping mapping, final InterfaceEditPart ie) {
+		if (mapping.getParentElement() instanceof UnfoldedSubappContentEditPart
+				&& ((UnfoldedSubappContentEditPart) mapping.getParentElement()).getParent() == ie.getParent()
+				&& ie.getModel().isIsInput()) {
+			// we have an unfolded subapp input pin. for this we don't want the connection targets as these are outside
+			return;
+		}
+
 		for (final Object obj : ie.getTargetConnections()) {
 			final ConnectionEditPart conn = (ConnectionEditPart) obj;
 			final Group sourceGroup = getGroupFromModel(conn.getSource().getParent().getModel());
