@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
  * 							Johannes Kepler University,
  *                          Primetals Technologies Germany GmbH
  *                          Primetals Technologies Austria GmbH
@@ -21,6 +21,8 @@
  *               - added checking code to deactivate connection creation when alt
  *                 key is not pressed anymore
  *               - show however feedback for collocated connections
+ *               - extracted inline connection creation to be used for connection
+ *                 duplication as well
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.tools;
 
@@ -28,11 +30,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.tools.AdvancedPanningSelectionTool;
-import org.eclipse.fordiac.ide.gef.tools.FordiacConnectionDragCreationTool;
+import org.eclipse.fordiac.ide.gef.tools.InlineConnectionCreationTool;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
@@ -44,58 +45,13 @@ import org.eclipse.swt.events.MouseEvent;
 
 public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool {
 
-	/**
-	 * Key to indicate that connection creation mode should be activated.
+	/** Key to indicate that connection creation mode should be activated.
 	 *
-	 * The current default is on most system the Alt key.
-	 */
+	 * The current default is on most system the Ctrl key. */
 	private static final int CONNECTION_CREATION_MOD_KEY = SWT.MOD1;
 
-	static class InlineConnectionCreationTool extends FordiacConnectionDragCreationTool {
-
-		private final EditPart sourcePart;
-		private EditPart lastConnTarget;
-		private boolean startup = true;
-
-		public InlineConnectionCreationTool(final EditPart sourcePart) {
-			super();
-			this.sourcePart = sourcePart;
-		}
-
-		public void startup(final Point point) {
-			startup = true;
-			activate();
-			super.handleButtonDown(LEFT_MOUSE);
-			startup = false;
-			handleDragStarted();
-			getCurrentInput().setMouseLocation(point.x, point.y);
-			handleMove();
-		}
-
-		@Override
-		public void mouseUp(final MouseEvent me, final EditPartViewer viewer) {
-			super.mouseUp(me, viewer);
-			lastConnTarget = getTargetEditPart();
-			startup(new Point(me.x, me.y));
-		}
-
-		@Override
-		protected EditPart getTargetEditPart() {
-			if (startup) {
-				return sourcePart;
-			}
-			EditPart part = super.getTargetEditPart();
-			if ((null != part) && (part.equals(lastConnTarget))) {
-				// don't use the last part
-				part = null;
-			}
-			return part;
-		}
-
-	}
-
-	static final int LEFT_MOUSE = 1;
-	static final double TYPE_DISTANCE = 10.0; // the max distance the mouse may move between left click and
+	private static final int LEFT_MOUSE = 1;
+	private static final double TYPE_DISTANCE = 10.0; // the max distance the mouse may move between left click and
 	// typing
 	private org.eclipse.draw2d.geometry.Point lastLeftClick = new org.eclipse.draw2d.geometry.Point(0, 0);
 	private InlineConnectionCreationTool connectionCreationTool;
@@ -190,10 +146,8 @@ public class FBNetworkPanningSelectionTool extends AdvancedPanningSelectionTool 
 	private void activateConnectionCreation(final EditPartViewer viewer) {
 		final List<Object> editParts = viewer.getSelectedEditParts();
 		if ((editParts.size() == 1) && (editParts.get(0) instanceof InterfaceEditPart)) {
-			connectionCreationTool = new InlineConnectionCreationTool((EditPart) editParts.get(0));
-			connectionCreationTool.setViewer(viewer);
-			connectionCreationTool.setEditDomain(getDomain());
-			connectionCreationTool.startup(getCurrentInput().getMouseLocation());
+			connectionCreationTool = InlineConnectionCreationTool.createInlineConnCreationTool(
+					(EditPart) editParts.get(0), getDomain(), viewer, getLocation());
 		}
 	}
 

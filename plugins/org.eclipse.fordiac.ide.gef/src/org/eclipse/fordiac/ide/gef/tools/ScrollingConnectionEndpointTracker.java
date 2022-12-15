@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2019, 2021 Johannes Kepler University Linz,
+ * Copyright (c) 2019, 2022 Johannes Kepler University Linz,
  *                          Primetals Technologies Austria
  *
  * This program and the accompanying materials are made available under the
@@ -13,6 +13,7 @@
  *               - added the option to duplicate the connection when pressing
  *                 the ctrl key during dragging
  *               - keep connection draging within canvas bounds
+ *               - used new InlineConnectionCreationTool for duplicating connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.tools;
 
@@ -30,7 +31,6 @@ import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.RequestConstants;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.requests.ReconnectRequest;
 import org.eclipse.gef.tools.ConnectionEndpointTracker;
 import org.eclipse.swt.SWT;
@@ -48,41 +48,11 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 			ConnectionPreferenceValues.HANDLE_SIZE);
 
 
-	private static final class InlineConnectionDragCreationTool extends FordiacConnectionDragCreationTool {
-		private final EditPart originalSource;
-
-		private InlineConnectionDragCreationTool(final EditPart originalSource, final EditDomain editDomain,
-				final EditPartViewer editPartViewer) {
-			this.originalSource = originalSource;
-			super.setEditDomain(editDomain);
-			super.setViewer(editPartViewer);
-			startDraggingFrom();
-		}
-
-		@Override
-		protected Command getCommand() {
-			if (getTargetEditPart() instanceof ConnectionEditPart) {
-				// this is the initial command request update the source position
-				setTargetEditPart(originalSource);
-				setConnectionSource(originalSource);
-			}
-			return super.getCommand();
-		}
-
-		private void startDraggingFrom() {
-			super.activate();
-			super.setTargetEditPart(null);
-			super.handleButtonDown(1); // emulate left mouse button click
-			super.handleDragStarted();
-		}
-	}
-
-	private InlineConnectionDragCreationTool conCreationTool = null;
+	private InlineConnectionCreationTool conCreationTool = null;
 
 	public ScrollingConnectionEndpointTracker(final ConnectionEditPart cep) {
 		super(cep);
 	}
-
 
 	@Override
 	public void mouseDrag(final MouseEvent me, final EditPartViewer viewer) {
@@ -129,7 +99,8 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 		final EditPart target = (getCommandName().equals(RequestConstants.REQ_RECONNECT_SOURCE))
 				? getConnectionEditPart().getTarget()
 						: getConnectionEditPart().getSource();
-		conCreationTool = new InlineConnectionDragCreationTool(target, getDomain(), getCurrentViewer());
+		conCreationTool = InlineConnectionCreationTool.createInlineConnCreationTool(target, getDomain(),
+				getCurrentViewer(), getLocation());
 		updateTarget(getStartLocation());
 	}
 
@@ -148,8 +119,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	public void keyUp(final KeyEvent keyEvent, final EditPartViewer viewer) {
 		if ((null != conCreationTool) && (keyEvent.keyCode == SWT.MOD1)) {
 			// Ctrl or Command key was released
-			conCreationTool.deactivate();
-			conCreationTool = null;
+			deactivateConCreationTool();
 			updateTarget(getLocation());
 		}
 		super.keyUp(keyEvent, viewer);
@@ -168,7 +138,7 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 	public void mouseUp(final MouseEvent me, final EditPartViewer viewer) {
 		if (null != conCreationTool) {
 			conCreationTool.mouseUp(me, viewer);
-			conCreationTool = null;
+			deactivateConCreationTool();
 			handleFinished();
 		} else {
 			super.mouseUp(me, viewer);
@@ -221,6 +191,19 @@ public class ScrollingConnectionEndpointTracker extends ConnectionEndpointTracke
 			conCreationTool.commitDrag();
 		}
 		super.commitDrag();
+	}
+
+	@Override
+	public void deactivate() {
+		if (conCreationTool != null) {
+			deactivateConCreationTool();
+		}
+		super.deactivate();
+	}
+
+	private void deactivateConCreationTool() {
+		conCreationTool.deactivate();
+		conCreationTool = null;
 	}
 
 }
