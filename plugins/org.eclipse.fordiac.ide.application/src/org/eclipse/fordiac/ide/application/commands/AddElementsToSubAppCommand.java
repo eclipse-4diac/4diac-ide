@@ -201,7 +201,7 @@ public class AddElementsToSubAppCommand extends Command {
 
 	private void checkConnection(final Connection con, final IInterfaceElement opposite,
 			final IInterfaceElement ownIE) {
-		if ((opposite.getFBNetworkElement() != null) && elementsToAdd.contains(opposite.getFBNetworkElement())) {
+		if ((opposite.getFBNetworkElement() != null) && isPartOfMove(opposite.getFBNetworkElement())) {
 			moveConIntoSubApp(con);
 		} else if ((opposite.getFBNetworkElement() != null) && targetSubApp.equals(opposite.getFBNetworkElement())) {
 			// the connection's opposite target is within the subapp
@@ -209,6 +209,14 @@ public class AddElementsToSubAppCommand extends Command {
 		} else {
 			handleModifyConnection(con, ownIE);
 		}
+	}
+
+	private boolean isPartOfMove(final FBNetworkElement elementToCheck) {
+		if (elementsToAdd.contains(elementToCheck)) {
+			return true;
+		}
+		// if the element is in a group check if the group is moved into the subapp
+		return (elementToCheck.isInGroup() && elementsToAdd.contains(elementToCheck.getGroup()));
 	}
 
 	private void moveConIntoSubApp(final Connection con) {
