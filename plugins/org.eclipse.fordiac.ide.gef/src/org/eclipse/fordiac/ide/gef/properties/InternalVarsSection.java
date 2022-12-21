@@ -96,11 +96,11 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 			if (dataLayerLabelAccumulator != null) {
 				dataLayerLabelAccumulator.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
 			}
-			if (columnPosition == VarDeclarationColumnProvider.TYPE) {
+			if (columnPosition == I4diacNatTableUtil.TYPE) {
 				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
 			}
-			if (columnPosition == VarDeclarationColumnProvider.NAME
-					|| columnPosition == VarDeclarationColumnProvider.COMMENT) {
+			if (columnPosition == I4diacNatTableUtil.NAME
+					|| columnPosition == I4diacNatTableUtil.COMMENT) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			}
 		});

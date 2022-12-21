@@ -109,23 +109,6 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 				new EventColumnProvider(), rule, typeSelection, this);
 	}
 
-	@SuppressWarnings("static-method")
-	public DataLayer setupDataLayer(final ListDataProvider<Event> inputProvider) {
-		final DataLayer dataLayer = new DataLayer(inputProvider);
-		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
-
-		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			if (labelAcc != null) {
-				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-			}
-			if (columnPosition == EventColumnProvider.NAME || columnPosition == EventColumnProvider.COMMENT) {
-	             configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT); 
-	}
-		});
-		return dataLayer;
-
-	}
-
 	@Override
 	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
 		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getEventInputs());

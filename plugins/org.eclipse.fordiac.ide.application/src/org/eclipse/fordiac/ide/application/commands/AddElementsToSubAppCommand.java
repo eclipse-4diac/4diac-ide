@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2018-2020 Johannes Kepler University,
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2018, 2022 Johannes Kepler University,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -71,7 +71,6 @@ public class AddElementsToSubAppCommand extends Command {
 	public AddElementsToSubAppCommand(final SubApp targetSubApp, final List<?> selection, final Point moveDelta) {
 		this.targetSubApp = targetSubApp;
 		this.moveDelta = moveDelta;
-
 		fillElementList(selection);
 	}
 
@@ -86,7 +85,6 @@ public class AddElementsToSubAppCommand extends Command {
 		unmappingCmds.execute();
 		removeFromOtherGroups.execute();
 		processElementsToAdd();
-		setUniqueName.execute();
 		modifiedConns.execute();
 		ElementSelector.selectViewObjects(elementsToAdd);
 	}
@@ -95,7 +93,7 @@ public class AddElementsToSubAppCommand extends Command {
 	public void redo() {
 		unmappingCmds.redo();
 		removeFromOtherGroups.redo();
-		elementsToAdd.forEach(element -> targetSubApp.getSubAppNetwork().getNetworkElements().add(element));
+		elementsToAdd.forEach(element -> addToNetwork(targetSubApp.getSubAppNetwork().getNetworkElements(), element));
 		movedConns.forEach(con -> targetSubApp.getSubAppNetwork().addConnection(con));
 		changedSubAppIEs.redo();
 		setPositionCommands.redo();
@@ -109,7 +107,7 @@ public class AddElementsToSubAppCommand extends Command {
 		changedSubAppIEs.undo();
 		setPositionCommands.undo();
 		movedConns.forEach(con -> targetSubApp.getFbNetwork().addConnection(con));
-		elementsToAdd.forEach(element -> targetSubApp.getFbNetwork().getNetworkElements().add(element));
+		elementsToAdd.forEach(element -> addToNetwork(targetSubApp.getFbNetwork().getNetworkElements(), element));
 		setUniqueName.undo();
 		removeFromOtherGroups.undo();
 		unmappingCmds.undo();
@@ -125,9 +123,16 @@ public class AddElementsToSubAppCommand extends Command {
 			// elements are added which can result in container size changes
 			command.execute();
 			setPositionCommands.add(command);
-			fbNetwork.add(fbNetworkElement);
+			addToNetwork(fbNetwork, fbNetworkElement);
 			checkElementConnections(fbNetworkElement);
 			ensureUniqueName(fbNetworkElement);
+		}
+	}
+
+	private static void addToNetwork(final EList<FBNetworkElement> fbNetwork, final FBNetworkElement element) {
+		fbNetwork.add(element);
+		if (element instanceof Group) {
+			((Group) element).getGroupElements().forEach(fbNetwork::add);
 		}
 	}
 
@@ -143,7 +148,12 @@ public class AddElementsToSubAppCommand extends Command {
 		// ensure unique name in new network
 		if (!NameRepository.isValidName(element, element.getName())) {
 			final String uniqueName = NameRepository.createUniqueName(element, element.getName());
-			setUniqueName.add(new ChangeNameCommand(element, uniqueName));
+			final ChangeNameCommand cmd = new ChangeNameCommand(element, uniqueName);
+			cmd.execute();
+			setUniqueName.add(cmd);
+		}
+		if (element instanceof Group) {
+			((Group) element).getGroupElements().forEach(this::ensureUniqueName);
 		}
 	}
 
@@ -160,13 +170,20 @@ public class AddElementsToSubAppCommand extends Command {
 
 	protected void addElement(final FBNetworkElement element) {
 		elementsToAdd.add(element);
+		checkMapping(element);
+	}
+
+	private void checkMapping(final FBNetworkElement element) {
 		if (element.isMapped()) {
 			unmappingCmds.add(new UnmapCommand(element));
 		}
+		if (element instanceof Group) {
+			((Group) element).getGroupElements().forEach(this::checkMapping);
+		}
 	}
 
-	private void checkElementConnections(final FBNetworkElement fbNetworkElement) {
-		for (final IInterfaceElement ie : fbNetworkElement.getInterface().getAllInterfaceElements()) {
+	private void checkElementConnections(final FBNetworkElement element) {
+		for (final IInterfaceElement ie : element.getInterface().getAllInterfaceElements()) {
 			if (ie.isIsInput()) {
 				for (final Connection con : ie.getInputConnections()) {
 					checkConnection(con, con.getSource(), ie);
@@ -177,12 +194,14 @@ public class AddElementsToSubAppCommand extends Command {
 				}
 			}
 		}
-
+		if (element instanceof Group) {
+			((Group) element).getGroupElements().forEach(this::checkElementConnections);
+		}
 	}
 
 	private void checkConnection(final Connection con, final IInterfaceElement opposite,
 			final IInterfaceElement ownIE) {
-		if ((opposite.getFBNetworkElement() != null) && elementsToAdd.contains(opposite.getFBNetworkElement())) {
+		if ((opposite.getFBNetworkElement() != null) && isPartOfMove(opposite.getFBNetworkElement())) {
 			moveConIntoSubApp(con);
 		} else if ((opposite.getFBNetworkElement() != null) && targetSubApp.equals(opposite.getFBNetworkElement())) {
 			// the connection's opposite target is within the subapp
@@ -190,6 +209,14 @@ public class AddElementsToSubAppCommand extends Command {
 		} else {
 			handleModifyConnection(con, ownIE);
 		}
+	}
+
+	private boolean isPartOfMove(final FBNetworkElement elementToCheck) {
+		if (elementsToAdd.contains(elementToCheck)) {
+			return true;
+		}
+		// if the element is in a group check if the group is moved into the subapp
+		return (elementToCheck.isInGroup() && elementsToAdd.contains(elementToCheck.getGroup()));
 	}
 
 	private void moveConIntoSubApp(final Connection con) {

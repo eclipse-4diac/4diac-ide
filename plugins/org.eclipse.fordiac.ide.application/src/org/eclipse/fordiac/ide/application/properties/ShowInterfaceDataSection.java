@@ -132,17 +132,4 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	protected void setTableInputFBType(final FBType type) {
 
 	}
-
-	@Override
-	public DataLayer setupDataLayer(final ListDataProvider outputProvider) {
-		final DataLayer dataLayer = new DataLayer(outputProvider);
-		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
-
-		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			if (labelAcc != null) {
-				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-			}
-		});
-		return dataLayer;
-	}
 }

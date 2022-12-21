@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -51,6 +52,8 @@ import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -214,6 +217,22 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	}
 
 
+	public DataLayer setupDataLayer(final ListDataProvider outputProvider) {
+		final DataLayer dataLayer = new DataLayer(outputProvider);
+		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
+
+		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
+			if (labelAcc != null) {
+				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+			}
+			if (isEditable() && columnPosition == I4diacNatTableUtil.TYPE) {
+				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+			} else if (columnPosition == I4diacNatTableUtil.NAME || columnPosition == I4diacNatTableUtil.COMMENT) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			}
+		});
+		return dataLayer;
+	}
 
 
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {

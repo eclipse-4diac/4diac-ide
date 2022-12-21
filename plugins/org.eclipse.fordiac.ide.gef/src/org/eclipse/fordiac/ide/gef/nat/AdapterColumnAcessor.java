@@ -19,6 +19,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
+import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
 
@@ -33,11 +34,11 @@ public class AdapterColumnAcessor implements IColumnAccessor<AdapterDeclaration>
 	@Override
 	public Object getDataValue(final AdapterDeclaration rowObject, final int columnIndex) {
 		switch (columnIndex) {
-		case EventColumnProvider.NAME:
+		case I4diacNatTableUtil.NAME:
 			return rowObject.getName();
-		case EventColumnProvider.TYPE:
+		case I4diacNatTableUtil.TYPE:
 			return rowObject.getAdapterType().getName();
-		case EventColumnProvider.COMMENT:
+		case I4diacNatTableUtil.COMMENT:
 			return rowObject.getComment();
 		default:
 			return ""; //$NON-NLS-1$
@@ -49,19 +50,19 @@ public class AdapterColumnAcessor implements IColumnAccessor<AdapterDeclaration>
 		final String value = newValue instanceof String ? (String) newValue : null;
 		Command cmd = null;
 		switch (columnIndex) {
-		case VarDeclarationColumnProvider.NAME:
+		case I4diacNatTableUtil.NAME:
 			if (value == null) {
 				return;
 			}
 			cmd = new ChangeNameCommand(rowObject, value);
 			break;
-		case VarDeclarationColumnProvider.TYPE:
+		case I4diacNatTableUtil.TYPE:
 			final AdapterTypeEntry adapterTypeEntry = section.getTypeLibrary().getAdapterTypeEntry(value);
 			if (adapterTypeEntry != null) {
 				cmd = new ChangeAdapterTypeCommand(rowObject, adapterTypeEntry.getType());
 			}
 			break;
-		case VarDeclarationColumnProvider.COMMENT:
+		case I4diacNatTableUtil.COMMENT:
 			cmd = new ChangeCommentCommand(rowObject, value);
 			break;
 		default:

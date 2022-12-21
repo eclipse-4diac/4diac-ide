@@ -115,23 +115,6 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 				rule, typeSelection, this);
 	}
 
-	public static DataLayer setupDataLayer(final ListDataProvider<Adapter> inputProvider) {
-		final DataLayer dataLayer = new DataLayer(inputProvider);
-		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
-
-		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			if (labelAcc != null) {
-				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-			}
-
-			if (columnPosition == VarDeclarationColumnProvider.TYPE) {
-				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
-			}
-
-		});
-		return dataLayer;
-
-	}
 
 	@Override
 	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
