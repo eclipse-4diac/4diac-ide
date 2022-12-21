@@ -10,7 +10,7 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.search;
+package org.eclipse.fordiac.ide.model.search;
 
 public interface IModelSearchContentProvider {
 	void clear();

@@ -11,10 +11,9 @@
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - add table design, context menu
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.search;
+package org.eclipse.fordiac.ide.model.search;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;

@@ -24,8 +24,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.StructManipulatorEditPart;
-import org.eclipse.fordiac.ide.application.wizards.StructSearch;
-import org.eclipse.fordiac.ide.application.wizards.StructUpdateDialog;
 import org.eclipse.fordiac.ide.model.commands.change.TransferInstanceCommentsCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBEndpointFinder;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -36,6 +34,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.search.dialog.StructUpdateDialog;
+import org.eclipse.fordiac.ide.model.search.types.StructSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -59,7 +59,7 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 		final IStructuredSelection sel = HandlerUtil.getCurrentStructuredSelection(event);
 		final StructManipulatorEditPart struct = (StructManipulatorEditPart) sel.getFirstElement();
 		selectedItem = struct.getModel();
-		final String[] labels = { Messages.TransferInstanceComments_TransferLabel, Messages.Cancel };
+		final String[] labels = { Messages.TransferInstanceComments_TransferLabel, SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
 		final StructUpdateDialog structUpdateDialog = new StructUpdateDialog(null,
 				Messages.TransferInstanceComments_WizardTitle, null, "",

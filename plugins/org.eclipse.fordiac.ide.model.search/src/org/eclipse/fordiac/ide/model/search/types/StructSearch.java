@@ -12,7 +12,7 @@
  *   			   - Search partially taken from ModelSearchQuery
  *   Fabio Gandolfi - added search for transfer instance comments
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.wizards;
+package org.eclipse.fordiac.ide.model.search.types;
 
 import java.util.ArrayList;
 import java.util.List;

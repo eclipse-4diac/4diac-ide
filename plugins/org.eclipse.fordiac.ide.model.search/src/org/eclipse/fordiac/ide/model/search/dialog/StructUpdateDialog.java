@@ -10,19 +10,21 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.wizards;
+package org.eclipse.fordiac.ide.model.search.dialog;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.search.ModelSearchResultPage;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.search.Messages;
+import org.eclipse.fordiac.ide.model.search.ModelSearchResultPage;
+import org.eclipse.fordiac.ide.model.search.types.StructSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -189,7 +191,7 @@ public class StructUpdateDialog extends MessageDialog {
 
 		// Type name column
 		final TableViewerColumn colType = new TableViewerColumn(viewer, SWT.LEAD);
-		colType.getColumn().setText(Messages.Type);
+		colType.getColumn().setText(FordiacMessages.Type);
 		colType.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {

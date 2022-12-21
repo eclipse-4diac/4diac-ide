@@ -11,7 +11,7 @@
  *   Dunja Zivotin, Bianca Wiesmayr
  *    - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.search;
+package org.eclipse.fordiac.ide.model.search;
 
 import java.util.ArrayList;
 import java.util.List;

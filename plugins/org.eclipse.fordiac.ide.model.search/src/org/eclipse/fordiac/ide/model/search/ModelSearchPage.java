@@ -10,7 +10,7 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.application.search;
+package org.eclipse.fordiac.ide.model.search;
 
 import java.text.MessageFormat;
 
@@ -19,10 +19,10 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.search.ModelQuerySpec.SearchScope;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
+import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.dialogs.DialogPage;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -108,7 +108,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 
 		instanceName = WidgetFactory.button(SWT.CHECK).text(Messages.InstanceName).create(fbInfoGroup);
 		pinName = WidgetFactory.button(SWT.CHECK).text(Messages.PinName).create(fbInfoGroup);
-		type = WidgetFactory.button(SWT.CHECK).text(Messages.Type).create(fbInfoGroup);
+		type = WidgetFactory.button(SWT.CHECK).text(FordiacMessages.Type).create(fbInfoGroup);
 		comment = WidgetFactory.button(SWT.CHECK).text(Messages.Comment).create(fbInfoGroup);
 
 		instanceName.setSelection(true);
