@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -106,6 +107,8 @@ public abstract class AbstractTypeExporter extends CommonElementExporter {
 			return new SubApplicationTypeExporter((SubAppTypeEntry) entry);
 		} else if (entry instanceof DataTypeEntry) {
 			return new DataTypeExporter((AnyDerivedType) entry.getTypeEditable());
+		} else if (entry instanceof SystemEntry) {
+			return new SystemExporter(((SystemEntry) entry).getSystem());
 		}
 		return null;
 	}

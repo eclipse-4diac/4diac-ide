@@ -22,12 +22,4 @@
            >
       </factory>
 </extension>
-<extension
-       point="org.eclipse.emf.compare.rcp.ui.filters">
-    <filter
-          activeByDefault="true"
-          class="org.eclipse.fordiac.ide.emf.compare.filter.IgnorePositionFilterEmfCompare"
-          label="Ignore Function Block positions">
-    </filter>
- </extension>
 </plugin>

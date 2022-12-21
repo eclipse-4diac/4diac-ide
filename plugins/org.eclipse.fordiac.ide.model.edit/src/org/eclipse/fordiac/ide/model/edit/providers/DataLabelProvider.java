@@ -35,12 +35,16 @@ public class DataLabelProvider extends InitialValueLabelProvider {
 		if (element instanceof VarDeclaration) {
 			final VarDeclaration varDecl = ((VarDeclaration) element);
 			if (columnIndex == ARRAYSIZE_COL_INDEX) {
-				final int arraySize = varDecl.getArraySize();
-				return (arraySize <= 0) ? "" : String.valueOf(arraySize); //$NON-NLS-1$
+				return getArraySizeText(varDecl);
 			}
 			return super.getColumnText(element, columnIndex);
 		}
 		return element.toString();
+	}
+
+	public static String getArraySizeText(final VarDeclaration varDecl) {
+		final int arraySize = varDecl.getArraySize();
+		return (arraySize <= 0) ? "" : String.valueOf(arraySize); //$NON-NLS-1$
 	}
 
 }

@@ -46,11 +46,13 @@ public class FordiacLayoutFactory {
 		throw new IllegalStateException("Factory class"); //$NON-NLS-1$
 	}
 
-	public static ElkNode createFordiacLayoutGraph() {
+	public static ElkNode createFordiacLayoutGraph(final boolean hasProperties) {
 		final ElkNode graph = ElkGraphUtil.createGraph();
 		final ElkNode parent = ElkGraphUtil.createGraph();
 		graph.setParent(parent);
-		configureGraph(graph);
+		if (hasProperties) {
+			configureGraph(graph);
+		}
 		return graph;
 	}
 
@@ -78,9 +80,9 @@ public class FordiacLayoutFactory {
 	public static ElkPort createFordiacLayoutPort(final InterfaceEditPart editPart, final ElkNode parent, final Point point) {
 		final ElkPort port = ElkGraphUtil.createPort(parent);
 		port.setDimensions(1, editPart.getFigure().getBounds().height);
+		port.setProperty(CoreOptions.PORT_SIDE, editPart.isInput() ? PortSide.EAST : PortSide.WEST);
 		if (editPart.getParent() instanceof EditorWithInterfaceEditPart) {
 			/* "FIXED_ORDER" port constraint, needs an index and the side */
-			port.setProperty(CoreOptions.PORT_SIDE, editPart.isInput() ? PortSide.EAST : PortSide.WEST);
 			port.setProperty(CoreOptions.PORT_INDEX, Integer.valueOf(getLayoutInterfaceIndex(editPart)));
 		} else {
 			/* "FIXED_POS" port constraint, needs the absolute position */

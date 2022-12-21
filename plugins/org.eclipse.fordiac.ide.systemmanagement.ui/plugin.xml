@@ -410,7 +410,7 @@
                      pattern="org.eclipse.ui.navigator.resources.workingSets">
                </contentExtension>
                <contentExtension
-                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.fbNetworkLinkHelper" >
+                     pattern="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemExplorerLinkHelper" >
                </contentExtension>
                <contentExtension
                      pattern="org.eclipse.fordiac.ide.typemanagement.navigator.FBContentSorter" >
@@ -610,8 +610,8 @@
   </extension>  
     <extension point="org.eclipse.ui.navigator.linkHelper">    
        <linkHelper
-             class="org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.FBNetworkLinkHelper"
-             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.fbNetworkLinkHelper">
+             class="org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers.SystemExplorerLinkHelper"
+             id="org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer.systemExplorerLinkHelper">
           <selectionEnablement>
              <or>
 	            <instanceof value="org.eclipse.core.resources.IFile"/>

@@ -37,6 +37,8 @@ class ForteLuaBasicFBTest extends ExporterTestBasicFBTypeAdvanced {
 		val luaString = generateLuaString(functionBlock);
 
 		assertEquals('''
+			local STfunc = require "STfunc"
+			
 			local FB_STATE = 0
 			local ECC_INIT = 0
 			local ECC_START = 1

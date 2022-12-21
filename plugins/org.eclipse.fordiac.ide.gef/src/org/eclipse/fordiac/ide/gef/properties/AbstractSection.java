@@ -68,7 +68,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		addContentAdapter();
 	}
 
-	protected final TypeLibrary getTypeLibrary() {
+	public final TypeLibrary getTypeLibrary() {
 		final EObject root = EcoreUtil.getRootContainer(getType());
 
 		if (root instanceof LibraryElement) {
@@ -78,7 +78,7 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 				"Could not determine root element for finding the typ lib for given element: " + getType()); //$NON-NLS-1$
 	}
 
-	protected final DataTypeLibrary getDataTypeLib() {
+	public final DataTypeLibrary getDataTypeLib() {
 		return getTypeLibrary().getDataTypeLibrary();
 	}
 
@@ -180,5 +180,4 @@ public abstract class AbstractSection extends AbstractPropertySection implements
 		}
 		return adapterFactory;
 	}
-
 }

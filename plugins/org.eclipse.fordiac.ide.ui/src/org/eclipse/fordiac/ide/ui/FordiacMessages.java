@@ -86,6 +86,7 @@ public final class FordiacMessages extends NLS {
 	public static String Version;  // NOSONAR
 	public static String VersionInfo;  // NOSONAR
 	public static String Visible;  // NOSONAR
+	public static String VarConfig;  // NOSONAR
 	public static String With;  // NOSONAR
 
 	public static String DirectoryChooserControl_LABEL_Browse;  // NOSONAR
@@ -102,6 +103,7 @@ public final class FordiacMessages extends NLS {
 	public static String FordiacPreferencePage_LABEL_DataConnectorColor;  // NOSONAR
 	public static String FordiacPreferencePage_LABEL_ShowErrorsAtMouseCursor;
 
+	public static String FordiacPreferencePage_LABEL_DeactivateTransferingComments_DEMUX_to_MUX; // NOSONAR
 	public static String FordiacPreferencePage_LABEL_DefaultAdapterConnectorColor;  // NOSONAR
 	public static String FordiacPreferencePage_LABEL_PreferencePageDescription;  // NOSONAR
 

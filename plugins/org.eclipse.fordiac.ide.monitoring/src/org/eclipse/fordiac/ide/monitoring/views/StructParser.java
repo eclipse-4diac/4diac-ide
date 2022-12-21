@@ -15,6 +15,7 @@
 package org.eclipse.fordiac.ide.monitoring.views;
 
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
+import org.eclipse.fordiac.ide.model.AbstractStructTreeNode;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -201,8 +202,54 @@ public final class StructParser {
 			return monitoringElement.getCurrentValue().substring(0, startIndex) + interfaceElement.getName() + ":=" //$NON-NLS-1$
 					+ newNodeValue + monitoringElement.getCurrentValue().substring(endIndex);
 		}
+
 		return ""; //$NON-NLS-1$
 
+	}
+
+	public static String toString(final WatchValueTreeNode startNode) {
+		final WatchValueTreeNode root = startNode.getRoot();
+		final StringBuilder builder = new StringBuilder();
+		final boolean isArray = isArray(root);
+		toString(root, builder, isArray);
+		return isArray ? removeArrayIndexes(builder.toString()) : builder.toString();
+
+	}
+
+	private static boolean isArray(final WatchValueTreeNode root) {
+		final MonitoringElement element = (MonitoringElement) root.getMonitoringBaseElement();
+		return element.getCurrentValue().startsWith("["); //$NON-NLS-1$
+	}
+
+	private static void toString(final WatchValueTreeNode startNode, final StringBuilder builder, final boolean isArray) {
+		if (startNode.isStructLeaf()) {
+			builder.append(startNode.getValue()); // also handles arrays inside of structs
+			return;
+		}
+
+		if (isArray) {
+			builder.append("["); //$NON-NLS-1$
+		} else {
+			builder.append("("); //$NON-NLS-1$
+		}
+
+		for (final AbstractStructTreeNode tmp : startNode.getChildren()) {
+			final WatchValueTreeNode node = (WatchValueTreeNode) tmp;
+			builder.append(node.getVarName());
+			builder.append(":="); //$NON-NLS-1$
+			toString(node, builder, false);
+			builder.append(","); //$NON-NLS-1$
+		}
+		// remove last semicolon if necessary
+		if (builder.charAt(builder.length() - 1) == ',') { //$NON-NLS-1$
+			builder.setLength(builder.length() - 1);
+		}
+
+		if (isArray) {
+			builder.append("]"); //$NON-NLS-1$
+		} else {
+			builder.append(")"); //$NON-NLS-1$
+		}
 	}
 
 	public static String removeArrayIndexes(final String input) {

@@ -38,16 +38,16 @@ public class CheckBoxConfigurationNebula extends AbstractRegistryConfiguration {
 	private static void registerCheckBoxEditor(final IConfigRegistry configRegistry) {
 
 		configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR, new CheckBoxCellEditor(),
-				DisplayMode.EDIT, NatTableWidgetFactory.VISIBILITY_CELL);
+				DisplayMode.EDIT, NatTableWidgetFactory.CHECKBOX_CELL);
 
 		// Visualized as a check box button
 		configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER,
 				new CheckBoxPainter(),
-				DisplayMode.NORMAL, NatTableWidgetFactory.VISIBILITY_CELL);
+				DisplayMode.NORMAL, NatTableWidgetFactory.CHECKBOX_CELL);
 
 		// Needs a Boolean conversion to work correctly
 		configRegistry.registerConfigAttribute(CellConfigAttributes.DISPLAY_CONVERTER,
-				new DefaultBooleanDisplayConverter(), DisplayMode.NORMAL, NatTableWidgetFactory.VISIBILITY_CELL);
+				new DefaultBooleanDisplayConverter(), DisplayMode.NORMAL, NatTableWidgetFactory.CHECKBOX_CELL);
 	}
 
 }

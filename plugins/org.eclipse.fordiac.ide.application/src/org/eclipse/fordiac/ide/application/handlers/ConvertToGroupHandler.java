@@ -56,8 +56,9 @@ public class ConvertToGroupHandler extends AbstractHandler implements CommandSta
 	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final SubApp subApp = getSelectedSubApp(selection);
-		setBaseEnabled((null != subApp) && !isGroupContainedInSubapp(subApp)
-				&& !(subApp.isTyped() || subApp.isContainedInTypedInstance()));
+		setBaseEnabled((null != subApp) // the type check has to be done before group containment
+				&& !(subApp.isTyped() || subApp.isContainedInTypedInstance()) 
+				&& !isGroupContainedInSubapp(subApp));
 	}
 
 	private static boolean isGroupContainedInSubapp(final SubApp subApp) {

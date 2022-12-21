@@ -60,4 +60,10 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 		return (FBType) type;
 	}
 
+	@Override
+	public boolean isEditable() {
+		return true;
+	}
+
+
 }

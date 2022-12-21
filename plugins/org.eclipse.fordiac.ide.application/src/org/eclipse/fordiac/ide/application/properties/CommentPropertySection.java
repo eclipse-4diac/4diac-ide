@@ -11,6 +11,7 @@
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - multline comments and cleanup
  *   Sebastian Hollersbacher - change to nebula NatTable
+ *   Hesam Rezaee - Variable configuration for Global Constants
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -24,6 +25,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
+import org.eclipse.fordiac.ide.model.commands.change.VarConfigurationCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -73,8 +75,9 @@ public class CommentPropertySection extends AbstractSection {
 	private static final int INITIAL_VALUE = 2;
 	private static final int COMMENT = 3;
 	public static final int VISIBLE = 4;
+	public static final int ISVARCONFIG = 5;
 
-	private static final int COL_COUNT = 5;
+	private static int COL_COUNT = 6;
 
 	private Text nameText;
 	private Text commentText;
@@ -134,10 +137,11 @@ public class CommentPropertySection extends AbstractSection {
 				inputDataProvider.getEditableRule());
 		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer,
 				new ColumnDataProvider(), outputDataProvider.getEditableRule());
+		
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
-
+		
 		inputTable.configure();
 		outputTable.configure();
 
@@ -195,7 +199,10 @@ public class CommentPropertySection extends AbstractSection {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT); 
 			}
 			if (columnPosition == VISIBLE) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.VISIBILITY_CELL);
+				configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
+			}
+			if (columnPosition == ISVARCONFIG) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
 			}
 		});
 	}
@@ -350,13 +357,13 @@ public class CommentPropertySection extends AbstractSection {
 				@Override
 				public boolean isEditable(final int columnIndex, final int rowIndex) {
 					return (columnIndex == INITIAL_VALUE && isInputData) || columnIndex == COMMENT
-							|| columnIndex == VISIBLE;
+							|| columnIndex == VISIBLE || columnIndex == ISVARCONFIG;
 				}
 
 				@Override // Added the visible column stuff
 				public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
 					return (cell.getColumnIndex() == INITIAL_VALUE && isInputData) || cell.getColumnIndex() == COMMENT
-							|| cell.getColumnIndex() == VISIBLE;
+							|| cell.getColumnIndex() == VISIBLE || cell.getColumnIndex() == ISVARCONFIG;
 				}
 			};
 		}
@@ -382,6 +389,8 @@ public class CommentPropertySection extends AbstractSection {
 				return rowObject.getComment();
 			case VISIBLE: // I added
 				return rowObject.isVisible();
+			case ISVARCONFIG: 
+				return rowObject.isVarConfig();
 			default:
 				return null;
 			}
@@ -410,6 +419,9 @@ public class CommentPropertySection extends AbstractSection {
 					cmd = new HidePinCommand(rowObject, (Boolean) newValue);
 				}
 				break;
+			case ISVARCONFIG:
+				cmd = new VarConfigurationCommand(rowObject, (Boolean) newValue);
+				break;
 			default:
 				return;
 			}
@@ -418,7 +430,9 @@ public class CommentPropertySection extends AbstractSection {
 
 		@Override
 		public int getColumnCount() {
-			return COL_COUNT;
+			int COL_NUM = COL_COUNT; // it can be used to show VarConfig only in inputs table
+			if(!isInputData) COL_NUM--;
+				return COL_NUM;
 		}
 
 		@Override
@@ -434,6 +448,8 @@ public class CommentPropertySection extends AbstractSection {
 				return FordiacMessages.Comment;
 			case VISIBLE:
 				return FordiacMessages.Visible;
+			case ISVARCONFIG:
+				return FordiacMessages.VarConfig;
 			default:
 				return null;
 			}
@@ -452,6 +468,8 @@ public class CommentPropertySection extends AbstractSection {
 				return COMMENT;
 			case "Visible":
 				return VISIBLE;
+			case "VarConfig":
+				return ISVARCONFIG;
 			default:
 				return -1;
 			}
@@ -473,6 +491,8 @@ public class CommentPropertySection extends AbstractSection {
 				return FordiacMessages.Comment;
 			case VISIBLE:
 				return FordiacMessages.Visible;
+			case ISVARCONFIG:
+				return FordiacMessages.VarConfig;
 			default:
 				return FordiacMessages.EmptyField;
 			}

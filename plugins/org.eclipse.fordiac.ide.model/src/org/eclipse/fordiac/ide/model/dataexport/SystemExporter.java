@@ -1,6 +1,12 @@
 /********************************************************************************
+<<<<<<< HEAD
  * Copyright (c)  2008, 2022  Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  *                            Johannes Keppler University, Linz
+=======
+ * Copyright (c)  2008 - 2014, 2016, 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				  2018 - 2020 Johannes Keppler University, Linz
+ *                2022 Primetals Technologies Austria GmbH
+>>>>>>> develop
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +20,7 @@
  *   Alois Zoitl - Refactored class hierarchy of xml exporters
  *               - fixed coordinate system resolution conversion in in- and export
  *               - changed exporting the Saxx cursor api
+ *   Fabio Gandolfi - system export via outputStream
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 

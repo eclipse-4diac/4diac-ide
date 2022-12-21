@@ -17,6 +17,7 @@ import java.util.function.Consumer;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
+import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.commands.Command;
@@ -42,13 +43,9 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 		if (getType() != null) {
 			final Consumer<Command> commandExecutorBuffer = commandExecutor;
 			commandExecutor = null;
-			arraySizeText.setText((getType().getArraySize() > 0) ?
-					String.valueOf(getType().getArraySize()) : ""); //$NON-NLS-1$
-
+			arraySizeText.setText(DataLabelProvider.getArraySizeText(getType()));
 			initValueText.setText(InitialValueHelper.getInitalOrDefaultValue(getType()));
 			initValueText.setForeground(InitialValueHelper.getForegroundColor(getType()));
-
-
 			commandExecutor = commandExecutorBuffer;
 		}
 	}

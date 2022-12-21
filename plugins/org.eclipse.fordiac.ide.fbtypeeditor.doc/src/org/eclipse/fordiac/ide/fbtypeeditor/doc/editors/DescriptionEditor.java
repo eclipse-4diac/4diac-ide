@@ -10,7 +10,7 @@
  * Contributors:
  *   Alois Zoitl, Lukas Wais
  *                - initial API and implementation and/or initial documentation
- *   Lukas Wais   - enable image inserting
+ *   Lukas Wais   - implemented base64 image inserting
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.doc.editors;
 
@@ -18,10 +18,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.net.URL;
 import java.util.Base64;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
@@ -38,18 +45,20 @@ import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.nebula.widgets.richtext.RichTextEditor;
 import org.eclipse.nebula.widgets.richtext.RichTextEditorConfiguration;
+import org.eclipse.nebula.widgets.richtext.toolbar.ToolbarButton;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
-import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.EditorPart;
+import org.osgi.framework.Bundle;
 
 public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 	// @formatter:off
@@ -58,11 +67,13 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 			+ "{ name: 'clipboard', groups: [ 'undo', 'clipboard'] },"					//$NON-NLS-1$
 			+ "{ name: 'colors' },"  													//$NON-NLS-1$
 			+ "{ name: 'basicstyles', groups: [ 'basicstyles', 'cleanup' ] }," 			//$NON-NLS-1$
-			+ "{ name: 'styles' }," 													//$NON-NLS-1$
+			+ "{ name: 'styles' }, " 													//$NON-NLS-1$
 			+ "{ name: 'paragraph', groups: [ 'align', 'list', 'indent' ] }," 			//$NON-NLS-1$
 			+ "{ name: 'find'}," 														//$NON-NLS-1$
-			+ "{ name: 'insert' }," //$NON-NLS-1$
+			+ "{ name: 'insert' }," 													//$NON-NLS-1$
+			+ "{ name: 'links' }," 														//$NON-NLS-1$
 			+ "]"; 																		//$NON-NLS-1$
+
 	// @formatter:on
 
 	private CommandStack commandStack;
@@ -128,30 +139,35 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 		return false;
 	}
 
+	final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.fbtypeeditor.doc"); //$NON-NLS-1$
+	final URL url = bundle.getEntry("icon/insert_image.png"); //$NON-NLS-1$
+	private class InsertConvertedImageButton extends ToolbarButton {
+		public InsertConvertedImageButton() {
+			super("insert_image", "insert_base64_image", "insert converted image", "insert", url);
+		}
+
+		@Override
+		public Object execute() {
+			insertImage();
+			return null;
+		}
+	}
+
 	@Override
 	public void createPartControl(final Composite parent) {
 		GridLayoutFactory.fillDefaults().margins(0, 0).applyTo(parent);
 
 		try {
+			editor = new RichTextEditor(parent, createRichTextEditorConfiguration());
 
-			final Button button = new Button(parent, SWT.PUSH);
-			button.setText("Add Image"); //$NON-NLS-1$ this button is temporary, therefore the NLS-tag
-			button.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false));
-			button.addListener(SWT.Selection, event -> {
-				final FileDialog dialog = new FileDialog(parent.getShell());
-				final String filename = dialog.open();
-				if (filename != null) {
-					final String base64 = encodeImageToBase64(new File(filename));
-					editor.insertHTML("<img src= data:image/png;base64," + base64 + ">"); //$NON-NLS-1$ //$NON-NLS-2$
+			GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
+			editor.setText(getFbType().getDocumentation());
+			editor.addModifyListener(e -> {
+				if (editor != null && editor.getText() != null
+						&& !editor.getText().equals(getFbType().getDocumentation())) {
+					executeCommand(new ChangeDocumentationCommand(getFbType(), editor.getText()));
 				}
 			});
-
-			final RichTextEditorConfiguration editorConfig = new RichTextEditorConfiguration();
-
-			editorConfig.setOption("toolbarGroups", TOOLBAR_GROUP_CONFIGURATION); //$NON-NLS-1$
-			editorConfig.removeDefaultToolbarButton("Flash", "Table", "HorizontalRule", "SpecialChar" + "", "Smiley",  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$//$NON-NLS-5$ //$NON-NLS-6$
-					"PageBreak", "Iframe"); //$NON-NLS-1$ //$NON-NLS-2$
-			editor = new RichTextEditor(parent, editorConfig);
 			GridDataFactory.fillDefaults().grab(true, true).applyTo(editor);
 			editor.setText(getFbType().getDocumentation());
 			editor.addModifyListener(e -> {
@@ -164,6 +180,29 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 			final Label errorLabel = new Label(parent, SWT.NONE);
 			errorLabel.setText(e.getMessage());
 			GridDataFactory.swtDefaults().applyTo(errorLabel);
+		}
+	}
+
+	private RichTextEditorConfiguration createRichTextEditorConfiguration() {
+		final RichTextEditorConfiguration editorConfig = new RichTextEditorConfiguration();
+
+		editorConfig.setOption("toolbarGroups", TOOLBAR_GROUP_CONFIGURATION); //$NON-NLS-1$
+		editorConfig.removeDefaultToolbarButton("Flash", "HorizontalRule", "SpecialChar" + "", "Smiley",  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$//$NON-NLS-5$
+				"PageBreak", "Iframe"); //$NON-NLS-1$ //$NON-NLS-2$
+
+		editorConfig.setRemoveFormat(false);
+
+		final InsertConvertedImageButton base64ImageInsert = new InsertConvertedImageButton();
+		editorConfig.addToolbarButton(base64ImageInsert);
+
+		return editorConfig;
+	}
+
+	private  void insertImage() {
+		final FileDialog dialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
+		final String filename = dialog.open();
+		if (filename != null) {
+			insertEncodedBase64Image(new File(filename));
 		}
 	}
 
@@ -221,19 +260,33 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 		return null;
 	}
 
-	private static String encodeImageToBase64(final File image) {
-		try (FileInputStream fileInputStreamReader = new FileInputStream(image)) {
-			final byte[] bytes = new byte[(int) image.length()];
-			fileInputStreamReader.read(bytes);
+	private void insertEncodedBase64Image(final File image) {
+		final var wrapper = new Object() {
+			String base64 = ""; //$NON-NLS-1$
+		};
 
-			return Base64.getEncoder().encodeToString(bytes);
-		} catch (final FileNotFoundException e) {
-			FordiacLogHelper.logError(e.getMessage());
-		} catch (final IOException e) {
-			FordiacLogHelper.logError(e.getMessage());
-		}
+		final WorkspaceJob job = new WorkspaceJob("convert image to base64") { //$NON-NLS-1$
+			@Override
+			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+				try (FileInputStream fileInputStreamReader = new FileInputStream(image)) {
+					final byte[] bytes = new byte[(int) image.length()];
+					fileInputStreamReader.read(bytes);
+					wrapper.base64 = Base64.getEncoder().encodeToString(bytes);
+					Display.getDefault().asyncExec(() -> {
+						editor.insertHTML("<img src= data:image/png;base64," + wrapper.base64 + ">"); //$NON-NLS-1$ //$NON-NLS-2$
+					});
+					return Status.OK_STATUS;
+				} catch (final FileNotFoundException e) {
+					FordiacLogHelper.logError(e.getMessage());
+				} catch (final IOException e) {
+					FordiacLogHelper.logError(e.getMessage());
+				}
+				return Status.CANCEL_STATUS;
+			}
+		};
 
-		return ""; //$NON-NLS-1$
+		job.setRule(ResourcesPlugin.getWorkspace().getRoot());
+		job.schedule();
 	}
 
 }

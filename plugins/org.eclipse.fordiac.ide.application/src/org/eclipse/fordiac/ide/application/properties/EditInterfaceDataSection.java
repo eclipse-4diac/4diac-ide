@@ -30,11 +30,11 @@ import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementComma
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
@@ -55,7 +55,7 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 		return new CreateSubAppInterfaceElementCommand(interfaceElement, isInput, getType().getInterface(), index);
 	}
 
-	@Override
+
 	protected LabelProvider getLabelProvider() {
 		return new DataLabelProvider() {
 
@@ -78,26 +78,6 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 		};
 	}
 
-	@Override
-	protected InterfaceCellModifier getCellModifier(final TableViewer viewer) {
-		return new DataInterfaceCellModifier(viewer) {
-			@Override
-			public boolean canModify(final Object element, final String property) {
-				if (INITIAL_VALUE.equals(property)) {
-					return ((VarDeclaration) element).isIsInput();
-				}
-				return super.canModify(element, property);
-			}
-
-			@Override
-			public Object getValue(final Object element, final String property) {
-				if (property.equals(INITIAL_VALUE) && !((VarDeclaration) element).isIsInput()) {
-					return "-"; //$NON-NLS-1$
-				}
-				return super.getValue(element, property);
-			}
-		};
-	}
 
 	@Override
 	protected SubApp getInputType(final Object input) {
@@ -131,6 +111,17 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
 	protected SubApp getType() {
 		return (SubApp) type;
+	}
+
+	@Override
+	public boolean isEditable() {
+		return true;
+	}
+
+	@Override
+	protected void setTableInputFBType(final FBType type) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

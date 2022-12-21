@@ -344,7 +344,11 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VarDeclaration/arraySize"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//VarDeclaration/withs"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//VarDeclaration/value"/>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/isVarConfig" body="return org.eclipse.fordiac.ide.model.Annotations.isVarConfig(this);"/>
       <genOperations ecoreOperation="lib.ecore#//VarDeclaration/isArray" body="return org.eclipse.fordiac.ide.model.Annotations.isArray(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//VarDeclaration/setVarConfig" body="org.eclipse.fordiac.ide.model.Annotations.setVarConfig(this,config);">
+        <genParameters ecoreParameter="lib.ecore#//VarDeclaration/setVarConfig/config"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//VersionInfo">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VersionInfo/author"/>

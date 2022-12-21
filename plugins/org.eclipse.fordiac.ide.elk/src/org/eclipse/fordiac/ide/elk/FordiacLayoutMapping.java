@@ -38,9 +38,9 @@ import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.ui.IWorkbenchPart;
 
 public class FordiacLayoutMapping extends LayoutMapping {
-	
+
 	private static final long serialVersionUID = 363049909751709783L;
-	
+
 	public static final IProperty<AbstractFBNetworkEditPart> NETWORK_EDIT_PART = new Property<>("gef.networkEditPart"); //$NON-NLS-1$
 	public static final IProperty<CommandStack> COMMAND_STACK = new Property<>("gef.commandStack"); //$NON-NLS-1$
 	public static final IProperty<List<ConnectionEditPart>> CONNECTIONS = new Property<>("gef.connections"); //$NON-NLS-1$
@@ -50,14 +50,14 @@ public class FordiacLayoutMapping extends LayoutMapping {
 	public static final IProperty<Map<GraphicalEditPart, ElkGraphElement>> REVERSE_MAPPING = new Property<>("gef.reverseMapping"); //$NON-NLS-1$
 	public static final IProperty<Map<ElkPort, ElkPort>> DUMMY_PORTS = new Property<>("gef.dummyPorts"); //$NON-NLS-1$
 	public static final IProperty<FordiacLayoutData> LAYOUT_DATA = new Property<>("gef.layoutData"); //$NON-NLS-1$
-	
+
 	private boolean hasNetwork = true;
-	
+
 	public boolean hasNetwork() {
 		return hasNetwork;
 	}
-	
-	public static FordiacLayoutMapping create(final IWorkbenchPart workbenchPart) {
+
+	public static FordiacLayoutMapping create(final IWorkbenchPart workbenchPart, final boolean hasProperties) {
 		final FordiacLayoutMapping mapping = new FordiacLayoutMapping(workbenchPart);
 		mapping.setProperty(FordiacLayoutMapping.COMMAND_STACK, workbenchPart.getAdapter(CommandStack.class));
 		mapping.setProperty(FordiacLayoutMapping.CONNECTIONS, new ArrayList<>());
@@ -67,21 +67,21 @@ public class FordiacLayoutMapping extends LayoutMapping {
 		mapping.setProperty(FordiacLayoutMapping.REVERSE_MAPPING, new HashMap<>());
 		mapping.setProperty(FordiacLayoutMapping.DUMMY_PORTS, new HashMap<>());
 		mapping.setProperty(FordiacLayoutMapping.LAYOUT_DATA, new FordiacLayoutData());
-		
+
 		findRootEditPart(mapping, workbenchPart);
-		
+
 		if (mapping.getProperty(FordiacLayoutMapping.NETWORK_EDIT_PART) != null) {
-			createGraphRoot(mapping);
+			createGraphRoot(mapping, hasProperties);
 		} else {
 			mapping.hasNetwork = false;
 		}
-		
+
 		return mapping;
 	}
-	
-	private static void createGraphRoot(final LayoutMapping mapping) {
+
+	private static void createGraphRoot(final LayoutMapping mapping, final boolean hasProperties) {
 		final AbstractFBNetworkEditPart networkEditPart = mapping.getProperty(FordiacLayoutMapping.NETWORK_EDIT_PART);
-		final ElkNode graph = FordiacLayoutFactory.createFordiacLayoutGraph();
+		final ElkNode graph = FordiacLayoutFactory.createFordiacLayoutGraph(hasProperties);
 		setGraphBounds(graph, networkEditPart);
 		mapping.setLayoutGraph(graph);
 		mapping.setParentElement(networkEditPart);
@@ -110,7 +110,7 @@ public class FordiacLayoutMapping extends LayoutMapping {
 			graph.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
 		}
 	}
-	
+
 	private static void findRootEditPart(final LayoutMapping mapping, final IWorkbenchPart workbenchPart) {
 		final Object ep = workbenchPart.getAdapter(GraphicalViewer.class)
 							.getRootEditPart()
@@ -118,9 +118,9 @@ public class FordiacLayoutMapping extends LayoutMapping {
 							.get(0);
 		mapping.setProperty(FordiacLayoutMapping.NETWORK_EDIT_PART, (AbstractFBNetworkEditPart) ep);
 	}
-	
+
 	private FordiacLayoutMapping(final IWorkbenchPart workbenchPart) {
 		super(workbenchPart);
 	}
-	
+
 }

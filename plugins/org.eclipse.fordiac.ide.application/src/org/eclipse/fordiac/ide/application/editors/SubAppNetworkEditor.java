@@ -17,7 +17,9 @@ import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppEditPartFactory;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -34,9 +36,9 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 			final int type = notification.getEventType();
 			final int featureId = notification.getFeatureID(Application.class);
 
-			if ((LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY == featureId)
-					&& (getSubApp().isTyped())) {
-				// undo of detached from the subapp type
+			if (((LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT__TYPE_ENTRY == featureId) && (getSubApp().isTyped()))
+					|| isSubAppToggledToExpanded(notification)) {
+				// undo of detached from the subapp type or because of subapp beeing expanded
 				closeEditor();
 			} else {
 				if ((Notification.SET == type) && (LibraryElementPackage.SUB_APP__NAME == featureId)) {
@@ -46,6 +48,12 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 			}
 		}
 	};
+
+	private boolean isSubAppToggledToExpanded(final Notification msg) {
+		return msg.getOldValue() == null && msg.getNewValue() instanceof Attribute
+				&& ((Attribute) msg.getNewValue()).getName().equals(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE)
+				&& ((Attribute) msg.getNewValue()).getValue().equals("true");
+	}
 
 	private Adapter fbNetworkAdapter;
 

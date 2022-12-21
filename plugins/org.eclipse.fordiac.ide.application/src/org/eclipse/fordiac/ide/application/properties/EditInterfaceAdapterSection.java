@@ -82,4 +82,10 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 		return (SubApp) type;
 	}
 
+	@Override
+	public boolean isEditable() {
+		return true;
+	}
+
+
 }

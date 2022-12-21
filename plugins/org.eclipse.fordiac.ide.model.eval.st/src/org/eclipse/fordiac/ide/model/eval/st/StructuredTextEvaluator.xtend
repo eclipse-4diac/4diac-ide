@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.st
 
 import java.util.List
 import java.util.Map
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.data.WstringType
@@ -86,6 +87,7 @@ import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.S
 abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	@Accessors final String name
 	protected final Map<String, Variable<?>> variables
+	protected final Map<String, Variable<?>> cachedGlobalConstants = newHashMap
 
 	new(String name, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		super(context, parent)
@@ -114,7 +116,12 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch Variable<?> findVariable(STVarDeclaration variable) {
-		variables.get(variable.name)
+		if (variable.eContainer instanceof STVarGlobalDeclarationBlock)
+			cachedGlobalConstants.computeIfAbsent(variable.name) [
+				newVariable(variable).evaluateInitializerExpression(variable.defaultValue)
+			]
+		else
+			variables.get(variable.name)
 	}
 
 	def protected dispatch Variable<?> findVariable(ICallable variable) {

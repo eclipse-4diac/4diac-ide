@@ -46,9 +46,10 @@ public class FordiacPreferencePage extends FieldEditorPreferencePage implements 
 				FordiacMessages.FordiacPreferencePage_LABEL_DefaultComplianceProfile, getSupportedProfiles(),
 				getFieldEditorParent()));
 
-		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR,
-				FordiacMessages.FordiacPreferencePage_LABEL_ShowErrorsAtMouseCursor, getFieldEditorParent()));
+		createCheckBoxFields();
+		
 	}
+	
 
 	private void createDataColorFields() {
 		addField(new ColorFieldEditor(PreferenceConstants.P_BOOL_CONNECTOR_COLOR,
@@ -70,6 +71,14 @@ public class FordiacPreferencePage extends FieldEditorPreferencePage implements 
 		return new String[][] { { "HOLOBLOC", "HOLOBLOC" }, { "FBDK2", "FBDK2" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 			{ "DynamicTypeLoad", "DynamicTypeLoad" } }; //$NON-NLS-1$ //$NON-NLS-2$
 
+	}
+	
+	private void createCheckBoxFields() {
+		addField(new BooleanFieldEditor(PreferenceConstants.P_SHOW_ERRORS_AT_MOUSE_CURSOR,
+				FordiacMessages.FordiacPreferencePage_LABEL_ShowErrorsAtMouseCursor, getFieldEditorParent()));
+		
+		addField(new BooleanFieldEditor(PreferenceConstants.P_DEACTIVATE_COMMENT_TRANSFERRING_DEMUX_TO_MUX,
+				FordiacMessages.FordiacPreferencePage_LABEL_DeactivateTransferingComments_DEMUX_to_MUX, getFieldEditorParent()));
 	}
 
 	@Override

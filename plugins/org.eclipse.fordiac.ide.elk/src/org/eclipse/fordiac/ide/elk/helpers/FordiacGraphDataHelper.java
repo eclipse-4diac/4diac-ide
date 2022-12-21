@@ -44,9 +44,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.gef.GraphicalEditPart;
 
 public class FordiacGraphDataHelper {
-	
+
 	private static final int INSTANCE_COMMENT_OFFSET = 8;
-	
+
 	public static FordiacLayoutData calculate(final LayoutMapping mapping) {
 		calculateNodePositionsRecursively(mapping, mapping.getLayoutGraph(), 0, INSTANCE_COMMENT_OFFSET);
 		createPinOffsetData(mapping);
@@ -59,15 +59,15 @@ public class FordiacGraphDataHelper {
 		final int calculatedY = (int) (node.getY() + parentY);
 
 		setPosition(mapping, node, ep, calculatedX, calculatedY);
-		
+
 		processConnections(mapping, node, calculatedX, calculatedY);
-		
+
 		// position inside of group -> relative
 		// outside -> absolute
 		if (ep instanceof GroupEditPart) {
 			final int groupCommentHeight = (int) node.getLabels().get(0).getHeight();
 			node.getChildren().forEach(child -> calculateNodePositionsRecursively(mapping, child, 0, -groupCommentHeight));
-		} else {			
+		} else {
 			node.getChildren().forEach(child -> calculateNodePositionsRecursively(mapping, child, calculatedX, calculatedY));
 		}
 	}
@@ -82,20 +82,20 @@ public class FordiacGraphDataHelper {
 			pos.setX(calculatedX);
 			pos.setY(calculatedY);
 			mapping.getProperty(LAYOUT_DATA).addPosition((FBNetworkElement) ep.getModel(), pos);
-			
+
 			if (ep instanceof GroupEditPart) {
 				mapping.getProperty(LAYOUT_DATA).addGroup((Group) ep.getModel(), (int) node.getHeight(), (int) node.getWidth());
 			}
 		}
 	}
-	
+
 	private static void processConnections(final LayoutMapping mapping, final ElkNode node, final int calculatedX, final int calculatedY) {
 		for (final ElkEdge edge : node.getContainedEdges()) {
 			final ConnectionEditPart connEp = (ConnectionEditPart) mapping.getGraphMap().get(edge);
 			if (connEp == null) {
 				processHierarchyCrossingConnection(mapping, node, edge);
 			} else {
-				processNormalConnection(mapping, node, calculatedX, calculatedY, edge, connEp);				
+				processNormalConnection(mapping, node, calculatedX, calculatedY, edge, connEp);
 			}
 		}
 	}
@@ -105,15 +105,15 @@ public class FordiacGraphDataHelper {
 		final ElkPort startPort = (ElkPort) edge.getSources().get(0);
 		final ElkPort endPort = (ElkPort) edge.getTargets().get(0);
 		final List<ElkBendPoint> bendPoints = edge.getSections().get(0).getBendPoints();
-		
+
 		mapping.getProperty(LAYOUT_DATA).addConnectionPoints(connEp.getModel(), createPointList(node, startPort, endPort, bendPoints, calculatedX, calculatedY));
 	}
 
 	private static void processHierarchyCrossingConnection(final LayoutMapping mapping, final ElkNode node, final ElkEdge edge) {
-		
+
 		final ConnectionEditPart connEp = mapping.getProperty(HIERARCHY_CROSSING_CONNECTIONS_REVERSE_MAPPING).get(edge);
 		final List<ElkEdge> edgeList = mapping.getProperty(HIERARCHY_CROSSING_CONNECTIONS_MAPPING).get(connEp);
-		
+
 		// crossing edge has already been processed
 		// This is necessary because there are 2(or 3) graph connections for every hierarchy crossing diagram connection.
 		// We process the whole thing on first encounter (always the part in the highest level e.g. the network that contains the groups).
@@ -121,11 +121,11 @@ public class FordiacGraphDataHelper {
 		if (edgeList == null) {
 			return;
 		}
-		
+
 		final ElkPort startPort = (ElkPort) edgeList.get(0).getSources().get(0);
 		final ElkPort endPort = (ElkPort) edgeList.get(edgeList.size() - 1).getTargets().get(0);
 		final List<ElkBendPoint> bendPoints = new LinkedList<>();
-		
+
 		for (final ElkEdge e : edgeList) {
 			// is in group
 			if (e.getContainingNode() != node) {
@@ -137,9 +137,9 @@ public class FordiacGraphDataHelper {
 			}
 			bendPoints.addAll(e.getSections().get(0).getBendPoints());
 		}
-		
+
 		trimConnection(bendPoints);
-		
+
 		mapping.getProperty(LAYOUT_DATA).addConnectionPoints(connEp.getModel(), createCrossingPointList(node, startPort, endPort, bendPoints));
 		mapping.getProperty(HIERARCHY_CROSSING_CONNECTIONS_MAPPING).remove(connEp); // remove so other iterations don't process it again
 	}
@@ -157,7 +157,7 @@ public class FordiacGraphDataHelper {
 			bendPoints.retainAll(list);
 		}
 	}
-	
+
 	private static PointList createPointList(final ElkNode node, final ElkPort startPort, final ElkPort endPort,
 			final List<ElkBendPoint> bendPoints, final int calculatedX, final int calculatedY) {
 		final PointList list = new PointList();
@@ -180,7 +180,7 @@ public class FordiacGraphDataHelper {
 		}
 		return list;
 	}
-	
+
 	private static PointList createCrossingPointList(final ElkNode node, final ElkPort startPort, final ElkPort endPort,
 			final List<ElkBendPoint> bendPoints) {
 		final PointList list = new PointList();
@@ -192,7 +192,7 @@ public class FordiacGraphDataHelper {
 		list.addPoint(toAbsolute(endPort.getX(), endPort.getY(), endPort.getParent()));
 		return list;
 	}
-	
+
 	private static PrecisionPoint toAbsolute(final double startX, final double startY, final ElkNode parent) {
 		double x = startX;
 		double y = startY;
@@ -204,7 +204,7 @@ public class FordiacGraphDataHelper {
 		}
 		return new PrecisionPoint(x, y);
 	}
-	
+
 	private static void createPinOffsetData(final LayoutMapping mapping) {
 		if (!mapping.getLayoutGraph().getPorts().isEmpty()) {
 			final InterfaceList interfaceList = (InterfaceList) ((IInterfaceElement) mapping.getGraphMap()
@@ -231,7 +231,7 @@ public class FordiacGraphDataHelper {
 			});
 		}
 	}
-	
+
 	private static boolean isFirstInputVar(final InterfaceList interfaceList, final IInterfaceElement pin) {
 		return !interfaceList.getInputVars().isEmpty() && pin.equals(interfaceList.getInputVars().get(0));
 	}
