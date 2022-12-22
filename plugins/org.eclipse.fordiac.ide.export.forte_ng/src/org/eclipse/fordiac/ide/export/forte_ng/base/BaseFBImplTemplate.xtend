@@ -80,7 +80,7 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate 
 	def generateChangeFBExecutionState() //
 	'''
 		EMGMResponse «FBClassName»::changeFBExecutionState(EMGMCommandType paCommand) {
-		  return changeFBExecutionState(paCommand, csmAmountOfInternalFBs, mInternalFBs);
+		  return changeFBExecutionStateHelper(paCommand, csmAmountOfInternalFBs, mInternalFBs);
 		}
 	'''
 
