@@ -18,13 +18,11 @@ package org.eclipse.fordiac.ide.gef.properties;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.AdapterColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.AdapterListProvider;
 import org.eclipse.fordiac.ide.gef.nat.EventColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -35,9 +33,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditInterfaceSection {

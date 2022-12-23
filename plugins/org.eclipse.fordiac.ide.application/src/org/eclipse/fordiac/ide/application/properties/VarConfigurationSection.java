@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
- *               
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -31,13 +31,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
@@ -50,15 +48,12 @@ public class VarConfigurationSection extends AbstractSection {
 
 	private static final int ONE_COLUMN = 1;
 	private static final int NAME = 0;
-	private static final int TYPE = 1;
 	private static final int INITIAL_VALUE = 3;
 	private static final int COMMENT = 2;
 	public static final int VISIBLE = 4;
 
-	public static IColumnAccessor<VarDeclaration> columnAccessor;
 	private NatTable inputTable;
 	private VarConfigDeclarationListProvider inputDataProvider;
-	IAction[] defaultCopyPasteCut = new IAction[3];
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -95,7 +90,7 @@ public class VarConfigurationSection extends AbstractSection {
 	private void configureDataLayerLabels(final DataLayer dataLayer, final boolean isInput) {
 		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
 			VarDeclaration rowItem = null;
-			String defaultComment = null;
+			final String defaultComment = null;
 			if (isInput) {
 				rowItem = inputDataProvider.getRowObject(rowPosition);
 				if (columnPosition == INITIAL_VALUE && rowItem.getValue().hasError()) {
@@ -104,7 +99,7 @@ public class VarConfigurationSection extends AbstractSection {
 			}
 			if (columnPosition == INITIAL_VALUE && !InitialValueHelper.hasInitalValue(rowItem)
 					|| columnPosition == COMMENT && defaultComment != null
-							&& rowItem.getComment().equals(defaultComment)) {
+					&& rowItem.getComment().equals(defaultComment)) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
 			}
 			if (columnPosition == NAME || columnPosition == COMMENT) {
@@ -118,7 +113,7 @@ public class VarConfigurationSection extends AbstractSection {
 	}
 
 	@Override
-	protected Application getInputType(Object input) {
+	protected Application getInputType(final Object input) {
 		if (input instanceof FBNetworkEditPart) {
 			return ((FBNetworkEditPart) input).getModel().getApplication();
 		}
@@ -144,7 +139,7 @@ public class VarConfigurationSection extends AbstractSection {
 
 	}
 
-	private class VarConfigDeclarationListProvider extends ListDataProvider<VarDeclaration> {
+	private static class VarConfigDeclarationListProvider extends ListDataProvider<VarDeclaration> {
 
 		public VarConfigDeclarationListProvider(final AbstractSection section, final List<VarDeclaration> list) {
 			super(list, new VarConfigDeclarationColumnAccessor(section));
@@ -159,17 +154,17 @@ public class VarConfigurationSection extends AbstractSection {
 		}
 
 		public void setInput(final Object inputElement) {
-			List<VarDeclaration> finallist = new ArrayList<VarDeclaration>();
+			final List<VarDeclaration> finallist = new ArrayList<>();
 			if (inputElement instanceof Application) {
-				for (FBNetworkElement networkElemnt : ((Application) inputElement).getFBNetwork()
+				for (final FBNetworkElement networkElemnt : ((Application) inputElement).getFBNetwork()
 						.getNetworkElements()) {
 					if (networkElemnt instanceof FB) {
-						VarConfigExtractFunction(finallist, networkElemnt);
+						varConfigExtractFunction(finallist, networkElemnt);
 					} else if (networkElemnt instanceof SubApp) {
-						VarConfigExtractFunction(finallist, networkElemnt);
-						for (FBNetworkElement subappNetworkElemnet : ((SubApp) networkElemnt).getSubAppNetwork()
+						varConfigExtractFunction(finallist, networkElemnt);
+						for (final FBNetworkElement subappNetworkElemnet : ((SubApp) networkElemnt).getSubAppNetwork()
 								.getNetworkElements()) {
-							VarConfigExtractFunction(finallist, subappNetworkElemnet);
+							varConfigExtractFunction(finallist, subappNetworkElemnet);
 						}
 					}
 					this.list = finallist;
@@ -178,15 +173,16 @@ public class VarConfigurationSection extends AbstractSection {
 			}
 		}
 
-		public void VarConfigExtractFunction(final List<VarDeclaration> list, final FBNetworkElement networkElemnt) {
-			for (VarDeclaration inputVar : ((FBNetworkElement) networkElemnt).getInterface().getInputVars()) {
+		private static void varConfigExtractFunction(final List<VarDeclaration> list,
+				final FBNetworkElement networkElemnt) {
+			for (final VarDeclaration inputVar : networkElemnt.getInterface().getInputVars()) {
 				if (inputVar.isVarConfig()) {
 					list.add(inputVar);
 				}
 			}
 		}
 
-		public IEditableRule getEditableRule() {
+		private static IEditableRule getEditableRule() {
 			return new IEditableRule() {
 				@Override
 				public boolean isEditable(final int columnIndex, final int rowIndex) {
@@ -201,22 +197,23 @@ public class VarConfigurationSection extends AbstractSection {
 		}
 	}
 
-	private class VarConfigDeclarationColumnAccessor extends VarDeclarationColumnAccessor {
+	private static class VarConfigDeclarationColumnAccessor extends VarDeclarationColumnAccessor {
 
-		public VarConfigDeclarationColumnAccessor(AbstractSection section) {
+		public VarConfigDeclarationColumnAccessor(final AbstractSection section) {
 			super(section);
 		}
 
+		@Override
 		public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
 			if (columnIndex == VISIBLE) {
-				return rowObject.isVisible();
+				return Boolean.valueOf(rowObject.isVisible());
 			} else if (columnIndex == NAME) {
 				if (rowObject.eContainer().eContainer() instanceof FB) {
 					final FB fb = (FB) rowObject.eContainer().eContainer();
-					return fb.getName() + "." + rowObject.getName();
+					return fb.getName() + "." + rowObject.getName(); //$NON-NLS-1$
 				} else if (rowObject.eContainer().eContainer() instanceof SubApp) {
 					final SubApp subapp = (SubApp) rowObject.eContainer().eContainer();
-					return subapp.getName() + "." + rowObject.getName();
+					return subapp.getName() + "." + rowObject.getName(); //$NON-NLS-1$
 				} else {
 					return null;
 				}
@@ -225,19 +222,16 @@ public class VarConfigurationSection extends AbstractSection {
 			}
 		}
 
-		public void setDataValue(final VarDeclaration rowObject, final int columnIndex, final Object newValue) {
-			super.setDataValue(rowObject, columnIndex, newValue);
-		}
 	}
 
-	public class VarConfigColumnDataProvider extends VarDeclarationColumnProvider {
+	private static class VarConfigColumnDataProvider extends VarDeclarationColumnProvider {
 
+		@Override
 		public Object getDataValue(final int columnIndex, final int rowIndex) {
 			if (columnIndex == NAME) {
 				return FordiacMessages.Constants;
-			} else {
-				return super.getDataValue(columnIndex, rowIndex);
 			}
+			return super.getDataValue(columnIndex, rowIndex);
 		}
 
 	}

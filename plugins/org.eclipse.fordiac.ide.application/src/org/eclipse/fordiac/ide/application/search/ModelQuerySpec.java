@@ -46,6 +46,7 @@ public class ModelQuerySpec {
 		this.checkCaseSensitive = isCaseSensitive;
 		this.checkExactMatching = isExactNameMatching;
 		this.project = project;
+		this.scope = scope;
 	}
 
 	public String getSearchString() {

@@ -63,10 +63,10 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractEditInterfaceSection extends AbstractSection implements I4diacNatTableUtil {
 
-	protected ListDataProvider inputProvider;
+	protected ListDataProvider<? extends IInterfaceElement> inputProvider;
 	protected NatTable inputTable;
 
-	protected ListDataProvider outputProvider;
+	protected ListDataProvider<? extends IInterfaceElement> outputProvider;
 	protected NatTable outputTable;
 
 	protected Map<String, List<String>> typeSelection = new HashMap<>();

@@ -22,8 +22,6 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.EditPart;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
@@ -60,23 +58,9 @@ public class ShowInterfaceEventSection extends AbstractEditInterfaceEventSection
 	}
 
 	@Override
-	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
-		super.createControls(parent, tabbedPropertySheetPage);
-		// getInputsViewer().setCellModifier(new CellImmutableModifier());
-		// final Table inputTable = (Table) getInputsViewer().getControl();
-		// inputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		// inputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		// getOutputsViewer().setCellModifier(new CellImmutableModifier());
-		// final Table outputTable = (Table) getOutputsViewer().getControl();
-		// outputTable.setBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-		// outputTable.setHeaderBackground(Display.getCurrent().getSystemColor(SWT.COLOR_WIDGET_LIGHT_SHADOW));
-	}
-
-	@Override
 	protected FBNetworkElement getType() {
 		return (FBNetworkElement) type;
 	}
-
 
 	@Override
 	public boolean isEditable() {

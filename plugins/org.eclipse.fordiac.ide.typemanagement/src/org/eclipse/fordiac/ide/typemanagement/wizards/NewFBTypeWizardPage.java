@@ -282,8 +282,7 @@ public class NewFBTypeWizardPage extends WizardNewFileCreationPage {
 
 	private static File getTypeTemplatesFolder() {
 		final String templateFolderPath = Platform.getInstallLocation().getURL().getFile();
-		final File templateFolder = new File(templateFolderPath + File.separatorChar + "template"); //$NON-NLS-1$
-		return templateFolder;
+		return new File(templateFolderPath + File.separatorChar + "template"); //$NON-NLS-1$
 	}
 
 	@SuppressWarnings("static-method") // this method is need to allow sub-classes to override it with specific filters
