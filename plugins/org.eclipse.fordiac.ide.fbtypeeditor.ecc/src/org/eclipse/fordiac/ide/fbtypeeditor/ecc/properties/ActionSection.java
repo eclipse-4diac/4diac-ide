@@ -157,7 +157,7 @@ public class ActionSection extends AbstractSection {
 			// during delete phases it can be that the input (i.e., Action) is not attached
 			// to its type anymore
 			algorithmGroup.initialize(getFBType(), commandStack);
-			algorithmList.initialize(getFBType(), commandStack);
+			algorithmList.initialize(getFBType());
 		}
 	}
 
