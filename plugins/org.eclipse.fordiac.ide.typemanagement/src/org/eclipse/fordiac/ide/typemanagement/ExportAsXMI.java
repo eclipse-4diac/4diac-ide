@@ -20,6 +20,7 @@
 
 package org.eclipse.fordiac.ide.typemanagement;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import org.eclipse.core.resources.IFile;
@@ -39,12 +40,17 @@ import org.eclipse.xtext.resource.XtextResourceSet;
 public class ExportAsXMI {
 	static final String XMI_EXTENSION = "xmi"; //$NON-NLS-1$
 
-	public Object export(final IFile file) {
+	public void export(final IFile file) {
 		final URI uri = URI.createPlatformResourceURI(file.getParent().getFullPath().toString(), true);
-		return export(file, uri);
+
+		try {
+			export(file, uri);
+		} catch (final Exception e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
 	}
 
-	public Object export(final IFile file, final URI saveLocation) {
+	public void export(final IFile file, final URI saveLocation) throws IOException {
 		final URI xmiUri = saveLocation.appendSegment(file.getName()).trimFileExtension()
 				.appendFileExtension(XMI_EXTENSION);
 		final XtextResourceSet resourceSet = new XtextResourceSet();
@@ -71,16 +77,9 @@ public class ExportAsXMI {
 		final Resource xmiRessource = xmiResourceSet.createResource(xmiUri);
 		xmiRessource.getContents().addAll(EcoreUtil.copyAll(resource.getContents()));
 
-		try {
-			final HashMap<String, String> options = new HashMap<>();
-			options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
-			xmiRessource.save(options);
-		} catch (final Exception e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
-			System.out.println(e.getMessage() + " " + e); // log it in console for ANT Tasks //$NON-NLS-1$
-		}
-
-		return null;
+		final HashMap<String, String> options = new HashMap<>();
+		options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
+		xmiRessource.save(options);
 	}
 
 }

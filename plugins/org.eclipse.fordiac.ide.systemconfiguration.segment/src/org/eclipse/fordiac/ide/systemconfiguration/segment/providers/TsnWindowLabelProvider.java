@@ -1,5 +1,7 @@
 package org.eclipse.fordiac.ide.systemconfiguration.segment.providers;
 
+import java.text.MessageFormat;
+
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -23,7 +25,7 @@ public class TsnWindowLabelProvider extends LabelProvider implements ITableLabel
 				}
 				return "TsnWindow" + ((TsnConfiguration) window.eContainer()).getWindows().indexOf(window);
 			case 1:
-				return "TIME#" + String.valueOf(window.getDuration()) + "ms";
+				return MessageFormat.format("TIME#{0}ms", String.valueOf(window.getDuration()));
 			case 2:
 				return "TIME"; ////$NON-NLS-1$
 			case 3:

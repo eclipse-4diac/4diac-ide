@@ -61,13 +61,15 @@ public abstract class AbstractFbNetworkInstanceViewer extends DiagramEditor {
 				closeEditor();
 			}
 		}
-	};
 
-	private boolean isSubAppToggledToCollapsed(final Notification msg) {
-		return msg.getNewValue() == null && msg.getOldValue() instanceof Attribute
-				&& ((Attribute) msg.getOldValue()).getName().equals(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE)
-				&& ((Attribute) msg.getOldValue()).getValue().equals("true");
-	}
+		private boolean isSubAppToggledToCollapsed(final Notification msg) {
+			return msg.getNewValue() == null && msg.getOldValue() instanceof Attribute
+					&& ((Attribute) msg.getOldValue()).getName()
+							.equals(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE)
+					&& "true".equals(((Attribute) msg.getOldValue()).getValue()); //$NON-NLS-1$
+		}
+
+	};
 
 	private Adapter fbNetworkAdapter;
 

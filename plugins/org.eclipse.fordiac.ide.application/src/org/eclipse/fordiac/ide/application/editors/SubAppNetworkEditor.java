@@ -47,13 +47,15 @@ public class SubAppNetworkEditor extends FBNetworkEditor {
 				firePropertyChange(PROP_DIRTY);
 			}
 		}
+
+		private boolean isSubAppToggledToExpanded(final Notification msg) {
+			return msg.getOldValue() == null && msg.getNewValue() instanceof Attribute
+					&& ((Attribute) msg.getNewValue()).getName()
+							.equals(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE)
+					&& "true".equals(((Attribute) msg.getNewValue()).getValue()); //$NON-NLS-1$
+		}
 	};
 
-	private boolean isSubAppToggledToExpanded(final Notification msg) {
-		return msg.getOldValue() == null && msg.getNewValue() instanceof Attribute
-				&& ((Attribute) msg.getNewValue()).getName().equals(LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE)
-				&& ((Attribute) msg.getNewValue()).getValue().equals("true");
-	}
 
 	private Adapter fbNetworkAdapter;
 

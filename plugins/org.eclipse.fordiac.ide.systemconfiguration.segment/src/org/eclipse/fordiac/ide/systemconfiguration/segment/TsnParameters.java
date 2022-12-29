@@ -17,4 +17,8 @@ public final class TsnParameters {
 
 	public static final int TSN_MAX_WINDOWS = 8;
 	public static final String TSN_WINDOW_NAME = "WindowP"; //$NON-NLS-1$
+
+	private TsnParameters() {
+		throw new UnsupportedOperationException("Helper class sould not be instantiated!"); //$NON-NLS-1$
+	}
 }

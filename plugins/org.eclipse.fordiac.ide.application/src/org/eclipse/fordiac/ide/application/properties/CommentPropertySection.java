@@ -65,12 +65,12 @@ public class CommentPropertySection extends AbstractSection {
 	private static final int ONE_COLUMN = 1;
 	private static final int TWO_COLUMNS = 2;
 
-	private static final int NAME = 0;
-	private static final int TYPE = 1;
-	private static final int INITIAL_VALUE = 2;
-	private static final int COMMENT = 3;
-	public static final int VISIBLE = 4;
-	public static final int ISVARCONFIG = 5;
+	private static final int NAME_COL_ID = 0;
+	private static final int TYPE_COL_ID = 1;
+	private static final int INITIAL_VALUE_COL_ID = 2;
+	private static final int COMMENT_COL_ID = 3;
+	public static final int VISIBLE_COL_ID = 4;
+	public static final int ISVARCONFIG_COL_ID = 5;
 
 	private static final int COL_COUNT = 6;
 
@@ -166,7 +166,7 @@ public class CommentPropertySection extends AbstractSection {
 					defaultComment = fbType.getInterfaceList().getInputVars().get(rowPosition).getComment();
 				}
 
-				if (columnPosition == INITIAL_VALUE && rowItem.getValue().hasError()) {
+				if (columnPosition == INITIAL_VALUE_COL_ID && rowItem.getValue().hasError()) {
 					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 				}
 			} else {
@@ -184,19 +184,19 @@ public class CommentPropertySection extends AbstractSection {
 				}
 			}
 
-			if (columnPosition == INITIAL_VALUE && !InitialValueHelper.hasInitalValue(rowItem)
-					|| columnPosition == COMMENT && defaultComment != null
+			if (columnPosition == INITIAL_VALUE_COL_ID && !InitialValueHelper.hasInitalValue(rowItem)
+					|| columnPosition == COMMENT_COL_ID && defaultComment != null
 					&& rowItem.getComment().equals(defaultComment)) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
 			}
-			if (columnPosition == NAME || columnPosition == COMMENT) {
+			if (columnPosition == NAME_COL_ID || columnPosition == COMMENT_COL_ID) {
 				// We want to align the pin names and comments to the left side
 				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			}
-			if (columnPosition == VISIBLE) {
+			if (columnPosition == VISIBLE_COL_ID) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
 			}
-			if (columnPosition == ISVARCONFIG) {
+			if (columnPosition == ISVARCONFIG_COL_ID) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
 			}
 		});
@@ -305,18 +305,6 @@ public class CommentPropertySection extends AbstractSection {
 
 		inputTable.refresh();
 		outputTable.refresh();
-
-		inputTable.addListener(SWT.Selection, event -> {
-			if (event.index == VISIBLE) {
-				final Object o = event.data;
-			}
-		});
-
-		outputTable.addListener(SWT.Selection, event -> {
-			if (event.index == VISIBLE) {
-				final Object o = event.data;
-			}
-		});
 	}
 
 	private class VarDeclarationListProvider extends ListDataProvider<VarDeclaration> {
@@ -351,14 +339,15 @@ public class CommentPropertySection extends AbstractSection {
 			return new IEditableRule() {
 				@Override
 				public boolean isEditable(final int columnIndex, final int rowIndex) {
-					return (columnIndex == INITIAL_VALUE && isInputData) || columnIndex == COMMENT
-							|| columnIndex == VISIBLE || columnIndex == ISVARCONFIG;
+					return (columnIndex == INITIAL_VALUE_COL_ID && isInputData) || columnIndex == COMMENT_COL_ID
+							|| columnIndex == VISIBLE_COL_ID || columnIndex == ISVARCONFIG_COL_ID;
 				}
 
 				@Override // Added the visible column stuff
 				public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
-					return (cell.getColumnIndex() == INITIAL_VALUE && isInputData) || cell.getColumnIndex() == COMMENT
-							|| cell.getColumnIndex() == VISIBLE || cell.getColumnIndex() == ISVARCONFIG;
+					return (cell.getColumnIndex() == INITIAL_VALUE_COL_ID && isInputData)
+							|| cell.getColumnIndex() == COMMENT_COL_ID || cell.getColumnIndex() == VISIBLE_COL_ID
+							|| cell.getColumnIndex() == ISVARCONFIG_COL_ID;
 				}
 			};
 		}
@@ -374,17 +363,17 @@ public class CommentPropertySection extends AbstractSection {
 		@Override
 		public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
 			switch (columnIndex) {
-			case NAME:
+			case NAME_COL_ID:
 				return rowObject.getName();
-			case TYPE:
+			case TYPE_COL_ID:
 				return rowObject.getTypeName();
-			case INITIAL_VALUE:
+			case INITIAL_VALUE_COL_ID:
 				return InitialValueHelper.getInitalOrDefaultValue(rowObject);
-			case COMMENT:
+			case COMMENT_COL_ID:
 				return rowObject.getComment();
-			case VISIBLE: // I added
+			case VISIBLE_COL_ID: // I added
 				return rowObject.isVisible();
-			case ISVARCONFIG:
+			case ISVARCONFIG_COL_ID:
 				return rowObject.isVarConfig();
 			default:
 				return null;
@@ -395,26 +384,26 @@ public class CommentPropertySection extends AbstractSection {
 		public void setDataValue(final VarDeclaration rowObject, final int columnIndex, final Object newValue) {
 			Command cmd = null;
 			switch (columnIndex) {
-			case INITIAL_VALUE:
+			case INITIAL_VALUE_COL_ID:
 				if (!isInputData) {
 					return;
 				}
 				cmd = new ChangeValueCommand(rowObject, (String) newValue);
 				break;
-			case COMMENT:
+			case COMMENT_COL_ID:
 				if ((String) newValue != null) {
 					cmd = new ChangeCommentCommand(rowObject, (String) newValue);
 				} else {
 					cmd = new ChangeCommentCommand(rowObject, ""); //$NON-NLS-1$
 				}
 				break;
-			case VISIBLE:
+			case VISIBLE_COL_ID:
 				if ((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
 						|| !rowObject.isIsInput() && rowObject.getOutputConnections().isEmpty()) {
 					cmd = new HidePinCommand(rowObject, ((Boolean) newValue).booleanValue());
 				}
 				break;
-			case ISVARCONFIG:
+			case ISVARCONFIG_COL_ID:
 				cmd = new VarConfigurationCommand(rowObject, ((Boolean) newValue).booleanValue());
 				break;
 			default:
@@ -435,17 +424,17 @@ public class CommentPropertySection extends AbstractSection {
 		@Override
 		public String getColumnProperty(final int columnIndex) {
 			switch (columnIndex) {
-			case NAME:
+			case NAME_COL_ID:
 				return FordiacMessages.Name;
-			case TYPE:
+			case TYPE_COL_ID:
 				return FordiacMessages.Type;
-			case INITIAL_VALUE:
+			case INITIAL_VALUE_COL_ID:
 				return FordiacMessages.InitialValue;
-			case COMMENT:
+			case COMMENT_COL_ID:
 				return FordiacMessages.Comment;
-			case VISIBLE:
+			case VISIBLE_COL_ID:
 				return FordiacMessages.Visible;
-			case ISVARCONFIG:
+			case ISVARCONFIG_COL_ID:
 				return FordiacMessages.VarConfig;
 			default:
 				return null;
@@ -456,17 +445,17 @@ public class CommentPropertySection extends AbstractSection {
 		public int getColumnIndex(final String propertyName) {
 			switch (propertyName) {
 			case "Name":
-				return NAME;
+				return NAME_COL_ID;
 			case "Type":
-				return TYPE;
+				return TYPE_COL_ID;
 			case "Initial Value":
-				return INITIAL_VALUE;
+				return INITIAL_VALUE_COL_ID;
 			case "Comment":
-				return COMMENT;
+				return COMMENT_COL_ID;
 			case "Visible":
-				return VISIBLE;
+				return VISIBLE_COL_ID;
 			case "VarConfig":
-				return ISVARCONFIG;
+				return ISVARCONFIG_COL_ID;
 			default:
 				return -1;
 			}
@@ -478,17 +467,17 @@ public class CommentPropertySection extends AbstractSection {
 		@Override
 		public Object getDataValue(final int columnIndex, final int rowIndex) {
 			switch (columnIndex) {
-			case NAME:
+			case NAME_COL_ID:
 				return FordiacMessages.Name;
-			case TYPE:
+			case TYPE_COL_ID:
 				return FordiacMessages.Type;
-			case INITIAL_VALUE:
+			case INITIAL_VALUE_COL_ID:
 				return FordiacMessages.InitialValue;
-			case COMMENT:
+			case COMMENT_COL_ID:
 				return FordiacMessages.Comment;
-			case VISIBLE:
+			case VISIBLE_COL_ID:
 				return FordiacMessages.Visible;
-			case ISVARCONFIG:
+			case ISVARCONFIG_COL_ID:
 				return FordiacMessages.VarConfig;
 			default:
 				return FordiacMessages.EmptyField;

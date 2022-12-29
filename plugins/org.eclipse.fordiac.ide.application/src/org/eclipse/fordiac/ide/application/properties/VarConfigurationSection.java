@@ -78,7 +78,7 @@ public class VarConfigurationSection extends AbstractSection {
 		configureDataLayerLabels(inputDataLayer, true);
 
 		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer,
-				new VarConfigColumnDataProvider(), inputDataProvider.getEditableRule());
+				new VarConfigColumnDataProvider(), VarConfigDeclarationListProvider.getEditableRule());
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		inputTable.configure();
@@ -221,7 +221,6 @@ public class VarConfigurationSection extends AbstractSection {
 				return super.getDataValue(rowObject, columnIndex);
 			}
 		}
-
 	}
 
 	private static class VarConfigColumnDataProvider extends VarDeclarationColumnProvider {

@@ -74,10 +74,8 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 		final Label msLbl = widgetFactory.createLabel(detailsComp, "ms");
 		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).applyTo(msLbl);
 
-		cycleTimeValue.addModifyListener(event -> {
-			executor.executeCommand(
-					new ChangeTsnCycleTimeCommand(tsnConfig, Integer.valueOf(cycleTimeValue.getText())));
-		});
+		cycleTimeValue.addModifyListener(event -> executor
+				.executeCommand(new ChangeTsnCycleTimeCommand(tsnConfig, Integer.parseInt(cycleTimeValue.getText()))));
 	}
 
 	private static void createTsnWindowArea(final TabbedPropertySheetWidgetFactory widgetFactory,

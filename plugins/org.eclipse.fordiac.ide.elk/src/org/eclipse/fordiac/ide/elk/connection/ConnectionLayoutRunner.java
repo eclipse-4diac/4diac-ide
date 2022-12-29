@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.ui.IWorkbenchPart;
 
-public class ConnectionLayoutRunner {
+public final class ConnectionLayoutRunner {
 
 	public static void runSubapps(final ConnectionLayoutMapping mapping, final FordiacLayoutData data) {
 		for (final UnfoldedSubappContentEditPart subapp : mapping.getExpandedSubapps()) {
@@ -63,7 +63,7 @@ public class ConnectionLayoutRunner {
 	public static ConnectionLayoutMapping run(final Object parent) {
 		final ConnectionLayoutMapping mapping = getLayoutMapping(parent);
 
-		if (mapping.hasNetwork()) {
+		if (mapping != null && mapping.hasNetwork()) {
 			StandardConnectionRoutingHelper.INSTANCE.buildGraph(mapping);
 		}
 
@@ -75,7 +75,7 @@ public class ConnectionLayoutRunner {
 	private static ConnectionLayoutMapping run(final Object parent, final Group group1, final Group group2) {
 		final ConnectionLayoutMapping mapping = getLayoutMapping(parent);
 
-		if (mapping.hasNetwork()) {
+		if (mapping != null && mapping.hasNetwork()) {
 			GroupToGroupConnectionRoutingHelper.INSTANCE.setGroup1(group1);
 			GroupToGroupConnectionRoutingHelper.INSTANCE.setGroup2(group2);
 			GroupToGroupConnectionRoutingHelper.INSTANCE.buildGraph(mapping);
@@ -89,7 +89,7 @@ public class ConnectionLayoutRunner {
 	private static ConnectionLayoutMapping run(final Object parent, final GroupEditPart group, final ConnectionLayoutMapping normalMapping) {
 		final ConnectionLayoutMapping mapping = getLayoutMapping(parent);
 
-		if (mapping.hasNetwork()) {
+		if (mapping != null && mapping.hasNetwork()) {
 			GroupConnectionRoutingHelper.INSTANCE.setCurrentGroup(group);
 			GroupConnectionRoutingHelper.INSTANCE.setGroupTupleMap(normalMapping.getGroupTuples());
 			GroupConnectionRoutingHelper.INSTANCE.buildGraph(mapping);
@@ -113,6 +113,10 @@ public class ConnectionLayoutRunner {
 	private static void layout(final ConnectionLayoutMapping mapping) {
 		final RecursiveGraphLayoutEngine engine = new RecursiveGraphLayoutEngine();
 		engine.layout(mapping.getLayoutGraph(), new BasicProgressMonitor());
+	}
+
+	private ConnectionLayoutRunner() {
+		throw new UnsupportedOperationException("Helper class sould not be instantiated!"); //$NON-NLS-1$
 	}
 
 }
