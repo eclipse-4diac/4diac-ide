@@ -30,6 +30,5 @@ Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.ecc,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties,
- org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets,
- org.eclipse.fordiac.ide.fbtypeeditor.ecc.xtext
+ org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets
 Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor.ecc

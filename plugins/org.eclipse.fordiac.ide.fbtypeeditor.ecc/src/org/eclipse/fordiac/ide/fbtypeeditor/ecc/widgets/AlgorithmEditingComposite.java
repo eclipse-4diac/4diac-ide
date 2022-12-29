@@ -19,26 +19,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTextCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditor;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.IAlgorithmEditorCreator;
+import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.TextEditor;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.TextAlgorithm;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
-import org.eclipse.jface.text.DocumentEvent;
-import org.eclipse.jface.text.IDocumentListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.layout.GridData;
@@ -50,27 +35,10 @@ public abstract class AlgorithmEditingComposite {
 
 	private Composite codeEditors;
 	private final StackLayout stack;
-	private final Map<String, IAlgorithmEditor> editors = new HashMap<>();
-	private IAlgorithmEditor currentAlgEditor;
-	private CommandStack commandStack;
+	private IAlgorithmEditor editor;
 	private Algorithm currentAlgorithm;
 
-	private boolean blockUpdates = false;
-
-	private final IDocumentListener listener = new IDocumentListener() {
-		@Override
-		public void documentChanged(final DocumentEvent event) {
-			if ((getAlgorithm() != null) && (null != currentAlgEditor) && currentAlgEditor.isDocumentValid()) {
-				executeCommand(new ChangeAlgorithmTextCommand((TextAlgorithm) getAlgorithm(),
-						currentAlgEditor.getAlgorithmText()));
-			}
-		}
-
-		@Override
-		public void documentAboutToBeChanged(final DocumentEvent event) {
-			// no action required
-		}
-	};
+	private final boolean blockUpdates = false;
 
 	protected AlgorithmEditingComposite() {
 		stack = new StackLayout();
@@ -87,6 +55,7 @@ public abstract class AlgorithmEditingComposite {
 
 		codeEditors.setLayout(stack);
 		codeEditors.setLayoutData(codeEditorsGridData);
+		editor = new TextEditor(codeEditors, null, null);
 
 		disableAllFields();
 	}
@@ -99,48 +68,9 @@ public abstract class AlgorithmEditingComposite {
 		return currentAlgorithm;
 	}
 
-	protected void executeCommand(final Command cmd) {
-		if (null != currentAlgorithm && getCommandStack() != null) {
-			blockUpdates = true;
-			getCommandStack().execute(cmd);
-			blockUpdates = false;
-		}
-	}
-
-	public void initialize(final BaseFBType fbType, final CommandStack commandStack) {
-		this.setCommandStack(commandStack);
-		loadEditors(fbType);
-	}
-
-	private void loadEditors(final BaseFBType basicFBType) {
-		editors.clear();
-		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		final IExtensionPoint point = registry.getExtensionPoint("org.eclipse.fordiac.ide.fbtypeeditor.ecc.algorithmEditor"); //$NON-NLS-1$
-		final IExtension[] extensions = point.getExtensions();
-		for (final IExtension extension : extensions) {
-			final IConfigurationElement[] elements = extension.getConfigurationElements();
-			for (final IConfigurationElement element : elements) {
-				Object obj = null;
-				try {
-					obj = element.createExecutableExtension("class"); //$NON-NLS-1$
-				} catch (final Exception e) {
-					FordiacLogHelper.logError(e.getMessage(), e);
-				}
-				if (obj instanceof IAlgorithmEditorCreator) {
-					final IAlgorithmEditor editor = ((IAlgorithmEditorCreator) obj).createAlgorithmEditor(codeEditors,
-							basicFBType);
-					final String lang = element.getAttribute("language"); //$NON-NLS-1$
-					editors.put(lang, editor);
-				}
-			}
-		}
-	}
-
 	public void setAlgorithm(final Algorithm algorithm) {
 		if (!blockUpdates) {
 			// set commandStack to null so that an update will not lead to a changed type
-			final CommandStack commandStackBuffer = getCommandStack();
-			setCommandStack(null);
 			if (this.currentAlgorithm != algorithm) {
 				currentAlgorithm = algorithm;
 				if (null != currentAlgorithm) {
@@ -153,7 +83,6 @@ public abstract class AlgorithmEditingComposite {
 				}
 			}
 			updateAlgFields();
-			setCommandStack(commandStackBuffer);
 		}
 	}
 
@@ -168,42 +97,13 @@ public abstract class AlgorithmEditingComposite {
 	protected void updateAlgFields() {
 		final Algorithm alg = getAlgorithm();
 		if (alg instanceof TextAlgorithm) {
-			currentAlgEditor.setAlgorithmText(((TextAlgorithm) alg).getText());
+			editor.setAlgorithmText(((TextAlgorithm) alg).getText());
 		}
 	}
 
 	private void initializeEditor() {
-		if (null != currentAlgEditor) {
-			currentAlgEditor.removeDocumentListener(listener);
-		}
-		final String algType = getAlgorithmTypeString(getAlgorithm());
-		currentAlgEditor = editors.get(algType);
-		if (null != currentAlgEditor) {
-			stack.topControl = currentAlgEditor.getControl();
-			currentAlgEditor.addDocumentListener(listener);
-		}
+		stack.topControl = editor.getControl();
 		codeEditors.layout();
 	}
 
-	protected static String getAlgorithmTypeString(final Algorithm algorithm) {
-		if (algorithm instanceof STAlgorithm) {
-			return "ST"; //$NON-NLS-1$
-		}
-		if (algorithm instanceof TextAlgorithm) {
-			return "AnyText"; //$NON-NLS-1$
-		}
-		return "AnyText"; // per default return any text and show it as generic text //$NON-NLS-1$
-	}
-
-	private CommandStack getCommandStack() {
-		return commandStack;
-	}
-
-	private void setCommandStack(final CommandStack commandStack) {
-		this.commandStack = commandStack;
-	}
-
-	public Composite getCodeEditors() {
-		return codeEditors;
-	}
 }

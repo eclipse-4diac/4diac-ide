@@ -73,7 +73,6 @@ public class AlgorithmsSection extends AbstractSection {
 
 	@Override
 	protected void setInputInit() {
-		algorithmGroup.initialize(getType(), commandStack);
 		getAlgorithmList().initialize(getType());
 	}
 
