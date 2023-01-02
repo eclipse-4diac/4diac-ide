@@ -122,6 +122,11 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			if (columnPosition == I4diacNatTableUtil.TYPE) {
 				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
 			}
+
+			if (columnPosition == I4diacNatTableUtil.NAME || columnPosition == I4diacNatTableUtil.COMMENT) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			}
+
 		});
 		return dataLayer;
 	}
@@ -230,7 +235,6 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 	public void refresh() {
 		reload();
-		natTable.refresh();
 	}
 
 	@Override
