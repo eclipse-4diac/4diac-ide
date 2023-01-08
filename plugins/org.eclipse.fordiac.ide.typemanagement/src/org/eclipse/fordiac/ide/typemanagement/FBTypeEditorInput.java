@@ -13,10 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IStorage;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 /**
@@ -24,7 +27,7 @@ import org.eclipse.ui.IPersistableElement;
  * method is adapted that EditorInput is equal to another EditorInput if the
  * content is equal.
  */
-public class FBTypeEditorInput implements IEditorInput {
+public class FBTypeEditorInput implements IFileEditorInput {
 	private FBType fbType;
 	private final TypeEntry entry;
 
@@ -88,5 +91,15 @@ public class FBTypeEditorInput implements IEditorInput {
 
 	public void setFbType(final FBType fbType) {
 		this.fbType = fbType;
+	}
+
+	@Override
+	public IStorage getStorage() throws CoreException {
+		return getFile();
+	}
+
+	@Override
+	public IFile getFile() {
+		return entry.getFile();
 	}
 }

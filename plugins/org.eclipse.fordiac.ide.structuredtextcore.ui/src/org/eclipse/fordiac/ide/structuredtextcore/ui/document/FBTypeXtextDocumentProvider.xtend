@@ -52,7 +52,7 @@ abstract class FBTypeXtextDocumentProvider extends XtextDocumentProvider {
 				val libraryElement = typeEntry.typeEditable
 				if (libraryElement instanceof BaseFBType) {
 					if (document instanceof XtextDocument) {
-						doSaveDocument(monitor, libraryElement, document)
+						doSaveDocument(monitor, element, libraryElement, document)
 					}
 				}
 			}
@@ -94,7 +94,7 @@ abstract class FBTypeXtextDocumentProvider extends XtextDocumentProvider {
 		}
 	}
 
-	def abstract void doSaveDocument(IProgressMonitor monitor, BaseFBType element, XtextDocument document)
+	def abstract void doSaveDocument(IProgressMonitor monitor, IFileEditorInput fileEditorInput, BaseFBType element, XtextDocument document)
 	
 	def abstract void setDocumentContent(IDocument monitor, BaseFBType element)
 }
