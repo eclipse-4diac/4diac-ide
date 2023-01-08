@@ -74,16 +74,32 @@ Within the <i>General</i> tab enter the path to your file and select the proper 
 In case you use an AutomationML file or XML, choose XML.
 Then press OK.
 Your database will be loaded.
-You can now test any XQuery within the GUI of BaseX.
+Then a user and a password is needed to access the created database.
+To create it, select <i>command</i> within the drop down under the menubar and type the following commands into the field next to it.</p>
+
+<div class="code">> create user admin
+> grant write to admin
+</div>
+
+<p>You can now test any XQuery within the GUI of BaseX.
 For further explanation or in case of any problems please have a look at the <a href="http://docs.basex.org/wiki/Main_Page">manual of BaseX</a>.</p>
 
-<p>Now change to the <i>bin</i> directory of your BaseX installation.
+<p>To start the entire BaseX server change to the <i>bin</i> directory of your BaseX installation.
 Start the BaseX server there.
 The output should be the BaseX version and the port where you can reach to your database.</p>
 
 <div class="code">> ./basexserver
 
-BaseX 9.0.2 [Server]
+BaseX 10.4 [Server]
+Server was started (port: 1984).
+</div>
+
+<p>In case you used the Java implementation of BaseX the following command will start the BaseX server.
+Replace the version number of the following line by the version number of the JAR file you downloaded.</p>
+
+<div class="code">> java -cp BaseX104.jar org.basex.BaseXServer
+
+BaseX 10.4 [Server]
 Server was started (port: 1984).
 </div>
 
@@ -104,48 +120,48 @@ The interface value is then added as parameter of the <i>append</i> method, supp
 The rest of your XQuery is appended afterwards.
 This could look like the following algorithm code for <i>getVMax</i>.</p>
 
-<div class="code">xVMax() = "xquery "
-"let $name := '";
-xVMax().append(name().getValue());
-xVMax().append("' "
-"let $component := //InstanceHierarchy/*/InternalElement[@Name=$name] "
-"let $compType := tokenize($component/RoleRequirements/@RefBaseRoleClassPath/data(),'/')[last()] "
-"let $rollerTable :=  $component/InternalElement/RoleRequirements[contains(@RefBaseRoleClassPath,'RollConveyor')]/.. "
-"let $rollDiameter := $rollerTable/Attribute[@Name='RollDiameter']/Value/data() "
-"let $link := tokenize($component/InternalLink/@RefPartnerSideA/data(),':')[1] "
-"let $motor := //InternalElement[@ID=$link]/RoleRequirements[contains(@RefBaseRoleClassPath,'ElectricMotor')]/.. "
-"let $gearFactor := $motor/Attribute[@Name='Gearfactor']/Value/data() "
-"let $rotSpeed := $motor/Attribute[@Name='Rotational Speed']/Value/data() "
-"let $linSpeed :=  $rotSpeed div (60.0 * $gearFactor) * (2.0 * 3.1416 * 0.5 * $rollDiameter) "
-"return round-half-to-even($linSpeed, 3)");
+<div class="code">st_xVMax() = CIEC_STRING("xquery ");
+st_xVMax().append("let $name := '");
+st_xVMax().append(st_name().getValue());
+st_xVMax().append("' "
+  "let $component := //InstanceHierarchy/*/InternalElement[@Name=$name] "
+  "let $compType := tokenize($component/RoleRequirements/@RefBaseRoleClassPath/data(),'/')[last()] "
+  "let $rollerTable :=  $component/InternalElement/RoleRequirements[contains(@RefBaseRoleClassPath,'RollConveyor')]/.. "
+  "let $rollDiameter := $rollerTable/Attribute[@Name='RollDiameter']/Value/data() "
+  "let $link := tokenize($component/InternalLink/@RefPartnerSideA/data(),':')[1] "
+  "let $motor := //InternalElement[@ID=$link]/RoleRequirements[contains(@RefBaseRoleClassPath,'ElectricMotor')]/.. "
+  "let $gearFactor := $motor/Attribute[@Name='Gearfactor']/Value/data() "
+  "let $rotSpeed := $motor/Attribute[@Name='Rotational Speed']/Value/data() "
+  "let $linSpeed :=  $rotSpeed div (60.0 * $gearFactor) * (2.0 * 3.1416 * 0.5 * $rollDiameter) "
+  "return round-half-to-even($linSpeed, 3)");
 </div>
 
 <p>The XQuery algorithm code for <i>getPredecessor</i> could be as follows:</p>
 
-<div class="code">xPredecessor() = "xquery " 
-"let $name := '";
-xPredecessor().append(name().getValue());
-xPredecessor().append("' "
-"let $links := //InstanceHierarchy/InternalElement/InternalLink "
-"let $cp := //InstanceHierarchy/*/InternalElement[@Name=$name] "
-"let $id := $cp/@ID/data() "
-"let $succId := tokenize($links[contains(@RefPartnerSideB, $id)]/@RefPartnerSideA, ':')[1] "
-"let $successor := //InstanceHierarchy/*/InternalElement[@ID=$succId] "
-"return $successor/@Name/data() ");
+<div class="code">st_xPredecessor() = CIEC_STRING("xquery "); 
+st_xPredecessor().append("let $name := '");
+st_xPredecessor().append(st_name().getValue());
+st_xPredecessor().append("' "
+  "let $links := //InstanceHierarchy/InternalElement/InternalLink "
+  "let $cp := //InstanceHierarchy/*/InternalElement[@Name=$name] "
+  "let $id := $cp/@ID/data() "
+  "let $succId := tokenize($links[contains(@RefPartnerSideB, $id)]/@RefPartnerSideA, ':')[1] "
+  "let $successor := //InstanceHierarchy/*/InternalElement[@ID=$succId] "
+  "return $successor/@Name/data() ");
 </div>
 
 <p>The XQuery algorithm code for <i>getSuccessor</i> could be as follows:</p>
 
-<div class="code">xSuccessor() = "xquery " 
-"let $name := '";
-xSuccessor().append(name().getValue());
-xSuccessor().append("' "
-"let $links := //InstanceHierarchy/InternalElement/InternalLink "
-"let $cp := //InstanceHierarchy/*/InternalElement[@Name=$name] "
-"let $id := $cp/@ID/data() "
-"let $succId := tokenize($links[contains(@RefPartnerSideA, $id)]/@RefPartnerSideB, ':')[1] "
-"let $successor := //InstanceHierarchy/*/InternalElement[@ID=$succId] "
-"return $successor/@Name/data() ");
+<div class="code">st_xSuccessor() = CIEC_STRING("xquery "); 
+st_xSuccessor().append("let $name := '");
+st_xSuccessor().append(st_name().getValue());
+st_xSuccessor().append("' "
+  "let $links := //InstanceHierarchy/InternalElement/InternalLink "
+  "let $cp := //InstanceHierarchy/*/InternalElement[@Name=$name] "
+  "let $id := $cp/@ID/data() "
+  "let $succId := tokenize($links[contains(@RefPartnerSideA, $id)]/@RefPartnerSideB, ':')[1] "
+  "let $successor := //InstanceHierarchy/*/InternalElement[@ID=$succId] "
+  "return $successor/@Name/data() ");
 </div>
 
 <p>Please consider that your XQuery is dependent on the data structure of your database.
