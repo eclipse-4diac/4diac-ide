@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
+import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
@@ -91,6 +92,14 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 		public void translateToParent(final Translatable t) {
 			t.performTranslate(-contentOffset.x, -contentOffset.y);
 		}
+
+		@Override
+		public Rectangle getClientArea(final Rectangle rect) {
+			final Rectangle clientArea = super.getClientArea(rect);
+			clientArea.translate(contentOffset);
+			return clientArea;
+		}
+
 	}
 
 
@@ -109,6 +118,10 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 		viewer = new ScrollingGraphicalViewer();
 		viewer.createControl(parent);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(viewer.getControl());
+		// needed to get selection working
+		final EditDomain editDomain = new EditDomain();
+		editDomain.addViewer(viewer);
+
 		configureGraphicalViewer();
 		initializeGraphicalViewer();
 		hookGraphicalViewer();

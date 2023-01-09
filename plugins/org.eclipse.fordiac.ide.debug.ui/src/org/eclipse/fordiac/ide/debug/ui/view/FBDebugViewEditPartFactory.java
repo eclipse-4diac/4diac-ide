@@ -18,8 +18,15 @@ import org.eclipse.fordiac.ide.debug.ui.view.editparts.EventValueEntity;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.FBDebugViewRootEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.InterfaceValueEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.InterfaceValueEntity;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.EventInputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.EventOutputContainer;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceContainerEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.PlugContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.SocketContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.VariableInputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.VariableOutputContainer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.gef.EditPart;
 
@@ -44,6 +51,16 @@ public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 		}
 		if(modelElement instanceof EventValueEntity) {
 			return new EventValueEditPart();
+		}
+		if (modelElement instanceof EventInputContainer || modelElement instanceof EventOutputContainer
+				|| modelElement instanceof VariableInputContainer || modelElement instanceof VariableOutputContainer
+				|| modelElement instanceof SocketContainer || modelElement instanceof PlugContainer) {
+			return new InterfaceContainerEditPart() {
+				@Override
+				protected void createEditPolicies() {
+					// we don't want dedicated editpolicies
+				}
+			};
 		}
 		return super.getPartForElement(context, modelElement);
 	}
