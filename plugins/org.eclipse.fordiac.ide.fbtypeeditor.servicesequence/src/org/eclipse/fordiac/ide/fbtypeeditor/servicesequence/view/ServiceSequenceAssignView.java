@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -72,6 +72,10 @@ public class ServiceSequenceAssignView extends ViewPart {
 	private ActionRegistry actionRegistry;
 	private FBType fbType;
 	private Label lblHead;
+	private Text textEvent;
+	private Text textParam;
+	private Text textName;
+
 	private final int MARGIN = 10;
 	private boolean sequenceVisible = false;
 	private boolean settingsVisible = false;
@@ -101,7 +105,6 @@ public class ServiceSequenceAssignView extends ViewPart {
 		lblHead = new Label(subheaderComposite, SWT.LEFT);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(lblHead);
 		final Button reloadBtn = ButtonFactory.newButton(SWT.RIGHT).text("Reload").onSelect(x -> { //$NON-NLS-1$
-			System.out.println("Clicked reload"); //$NON-NLS-1$
 			initializeGraphicalViewer();
 		}).create(subheaderComposite);
 		GridDataFactory.fillDefaults().grab(false, false).applyTo(reloadBtn);
@@ -120,27 +123,25 @@ public class ServiceSequenceAssignView extends ViewPart {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(settingsComposite);
 
 		final Button expandToggle = ButtonFactory.newButton(SWT.TOGGLE).text("...").onSelect(x -> { //$NON-NLS-1$
-			System.out.println("Toggled Expand"); //$NON-NLS-1$
 			final Button source = (Button) x.getSource();
 			settingsVisible = source.getSelection();
-			System.out.println(settingsVisible);
 			settingsComposite.setVisible(settingsVisible);
 		}).create(expandButtonComposite);
 		GridDataFactory.fillDefaults().grab(false, false).applyTo(expandToggle);
 
 		final Label lblName = LabelFactory.newLabel(SWT.NONE).text("Name:").create(settingsComposite);
 		GridDataFactory.fillDefaults().applyTo(lblName);
-		final Text textName = TextFactory.newText(SWT.NONE).text(DEFAULT_SEQUENCE_NAME).create(settingsComposite);
+		textName = TextFactory.newText(SWT.NONE).text(DEFAULT_SEQUENCE_NAME).create(settingsComposite);
 		GridDataFactory.fillDefaults().applyTo(textName);
 
 		final Label lblEvent = LabelFactory.newLabel(SWT.NONE).text("Initial Events:").create(settingsComposite);
 		GridDataFactory.fillDefaults().applyTo(lblEvent);
-		final Text textEvent = TextFactory.newText(SWT.NONE).create(settingsComposite);
+		textEvent = TextFactory.newText(SWT.NONE).create(settingsComposite);
 		GridDataFactory.fillDefaults().applyTo(textEvent);
 
 		final Label lblParam = LabelFactory.newLabel(SWT.NONE).text("Initial Parameters:").create(settingsComposite);
 		GridDataFactory.fillDefaults().applyTo(lblParam);
-		final Text textParam = TextFactory.newText(SWT.NONE).create(settingsComposite);
+		textParam = TextFactory.newText(SWT.NONE).create(settingsComposite);
 		GridDataFactory.fillDefaults().applyTo(textParam);
 
 		final Label lblRandom = LabelFactory.newLabel(SWT.NONE).text("Event Count:").create(settingsComposite); //$NON-NLS-1$
@@ -170,7 +171,6 @@ public class ServiceSequenceAssignView extends ViewPart {
 			} catch (final NumberFormatException e) {
 				count = DEFAULT_SEQUENCE_NUM;
 			}
-			System.out.println("Clicked generate"); //$NON-NLS-1$
 			serviceSequence = getNext();
 			sequenceVisible = true;
 			refreshGraphicalViewer();
@@ -188,7 +188,6 @@ public class ServiceSequenceAssignView extends ViewPart {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(subselectorComposite);
 		subselectorComposite.setLayout(new GridLayout());
 		final Button possibleBtn = ButtonFactory.newButton(SWT.PUSH).text("POSSIBLE").onSelect(x -> { //$NON-NLS-1$
-			System.out.println("Clicked possible"); //$NON-NLS-1$
 			serviceSequence.setServiceSequenceType(ServiceSequenceTypes.DEFAULT);
 			saveSequence();
 			isRepeat = contBtn.getSelection();
@@ -202,8 +201,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 			}
 		}).create(subselectorComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(possibleBtn);
-		final Button conditionalBtn = ButtonFactory.newButton(SWT.PUSH).text("CONDITIONAL").onSelect(x -> { //$NON-NLS-1$
-			System.out.println("Clicked conditional"); //$NON-NLS-1$
+		final Button conditionalBtn = ButtonFactory.newButton(SWT.PUSH).text("\u2753 CONDITIONAL").onSelect(x -> { //$NON-NLS-1$
 			serviceSequence.setServiceSequenceType(ServiceSequenceTypes.CONDITIONAL);
 			saveSequence();
 			isRepeat = contBtn.getSelection();
@@ -218,8 +216,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 
 		}).create(subselectorComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(conditionalBtn);
-		final Button alwaysBtn = ButtonFactory.newButton(SWT.PUSH).text("ALWAYS").onSelect(x -> { //$NON-NLS-1$
-			System.out.println("Clicked always"); //$NON-NLS-1$
+		final Button alwaysBtn = ButtonFactory.newButton(SWT.PUSH).text("\u2705 ALWAYS").onSelect(x -> { //$NON-NLS-1$
 			serviceSequence.setServiceSequenceType(ServiceSequenceTypes.ALWAYS);
 			saveSequence();
 			isRepeat = contBtn.getSelection();
@@ -234,8 +231,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 
 		}).create(subselectorComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(alwaysBtn);
-		final Button forbiddenBtn = ButtonFactory.newButton(SWT.PUSH).text("FORBIDDEN").onSelect(x -> { //$NON-NLS-1$
-			System.out.println("Clicked forbidden"); //$NON-NLS-1$
+		final Button forbiddenBtn = ButtonFactory.newButton(SWT.PUSH).text("\u26D4 FORBIDDEN").onSelect(x -> { //$NON-NLS-1$
 			serviceSequence.setServiceSequenceType(ServiceSequenceTypes.FORBIDDEN);
 			saveSequence();
 			isRepeat = contBtn.getSelection();
@@ -252,7 +248,6 @@ public class ServiceSequenceAssignView extends ViewPart {
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(forbiddenBtn);
 
 		final Button skipBtn = ButtonFactory.newButton(SWT.PUSH).text("Skip").onSelect(x -> { //$NON-NLS-1$
-			System.out.println("Clicked skip"); //$NON-NLS-1$
 			isRepeat = contBtn.getSelection();
 			if (isRepeat) {
 				gen.accept(null);
@@ -284,8 +279,6 @@ public class ServiceSequenceAssignView extends ViewPart {
 		viewer.setRootEditPart(root);
 		viewer.setEditPartFactory(getEditpartFactory());
 		viewer.setContextMenu(new FordiacContextMenuProvider(viewer, root.getZoomManager(), getActionRegistry()));
-		// viewer.setProperty(MouseWheelHandler.KeyGenerator.getKey(SWT.MOD1), MouseWheelZoomHandler.SINGLETON);
-
 	}
 
 	private void initializeGraphicalViewer() {
@@ -307,9 +300,6 @@ public class ServiceSequenceAssignView extends ViewPart {
 			typeCopy.setService(ServiceFactory.createDefaultServiceModel());
 			typeCopy.getService().getServiceSequence().set(0, serviceSequence);
 			viewer.setContents(typeCopy);
-			// ((GraphicalEditPart) viewer.getRootEditPart()).getFigure().getLayoutManager().invalidate();
-			// ((GraphicalEditPart) viewer.getRootEditPart()).refresh();
-			// ((GraphicalEditPart) viewer.getRootEditPart()).getFigure().invalidateTree();
 		}
 	}
 
@@ -350,18 +340,18 @@ public class ServiceSequenceAssignView extends ViewPart {
 	private ServiceSequence getNext() {
 		if (fbType != null) {
 			final ServiceSequence seq = LibraryElementFactory.eINSTANCE.createServiceSequence();
-			seq.setName(DEFAULT_SEQUENCE_NAME);
-			final List<String> events = new ArrayList<>();
-			final List<String> parameters = new ArrayList<>();
+			String name = textName.getText();
+			if (name == null || name.isBlank()) {
+				name = DEFAULT_SEQUENCE_NAME;
+			}
+			seq.setName(name);
+			final List<String> events = ServiceSequenceUtils.splitList(textEvent.getText());
+			final List<String> parameters = ServiceSequenceUtils.splitList(textParam.getText());
 			try {
 				setParameters(fbType, parameters);
-				// TODO simplify to InputGenerator.getRandomEventsSequence(fbType, count);
 				runInterpreter(seq, events, true, true, fbType, count);
 			} catch (final Exception e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
-				// MessageDialog.openError(HandlerUtil.getActiveShell(event),
-				// Messages.RecordServiceSequenceHandler_PROBLEM,
-				// Messages.RecordServiceSequenceHandler_CHECK_VARIABLE_NAMES);
 			}
 			return seq;
 		}
