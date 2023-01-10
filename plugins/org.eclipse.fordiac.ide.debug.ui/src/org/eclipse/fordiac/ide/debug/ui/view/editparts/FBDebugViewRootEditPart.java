@@ -21,10 +21,12 @@ import java.util.Map;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
+import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ShortestPathConnectionRouter;
 import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugThread;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
@@ -141,11 +143,13 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 	}
 
 	private void fillInterfaceValues() {
+		final EvaluatorDebugTarget debugTarget = (EvaluatorDebugTarget) getModel().getAdapter(IDebugTarget.class);
 		getFBEvaluator().getInstance().getMembers().entrySet().forEach(entry -> {
 			final IInterfaceElement interfaceElement = getFBType().getInterfaceList()
 					.getInterfaceElement(entry.getKey());
 			if (interfaceElement != null) {
-				interfaceValues.put(entry.getKey(), new InterfaceValueEntity(interfaceElement, entry.getValue()));
+				interfaceValues.put(entry.getKey(),
+						new InterfaceValueEntity(interfaceElement, entry.getValue(), debugTarget));
 			}
 		});
 	}

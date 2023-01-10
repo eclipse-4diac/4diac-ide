@@ -17,8 +17,13 @@ package org.eclipse.fordiac.ide.debug.ui.view.editparts;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.fordiac.ide.debug.ui.view.policies.InterfaceValueDirectEditPolicy;
+import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.gef.EditPolicy;
+import org.eclipse.gef.Request;
+import org.eclipse.gef.RequestConstants;
 
 public class InterfaceValueEditPart extends AbstractDebugInterfaceValueEditPart {
 
@@ -35,8 +40,29 @@ public class InterfaceValueEditPart extends AbstractDebugInterfaceValueEditPart 
 	}
 
 	@Override
+	protected void createEditPolicies() {
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new InterfaceValueDirectEditPolicy());
+	}
+
+	@Override
 	protected IInterfaceElement getInterfaceElement() {
 		return getModel().getInterfaceElement();
+	}
+
+	@Override
+	public void performRequest(final Request request) {
+		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
+		// REQ_OPEN -> doubleclick
+		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+			performDirectEdit();
+		} else {
+			super.performRequest(request);
+		}
+	}
+
+	private void performDirectEdit() {
+		final var labelDirectEditManager = new LabelDirectEditManager(this, getFigure());
+		labelDirectEditManager.show();
 	}
 
 	public void setValue(final Value value) {
