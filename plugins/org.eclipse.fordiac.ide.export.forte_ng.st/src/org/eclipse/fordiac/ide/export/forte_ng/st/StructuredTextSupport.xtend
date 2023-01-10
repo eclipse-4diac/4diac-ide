@@ -12,6 +12,7 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Martin Melik Merkumians - updated exporter to correctly handle CHAR/WCHAR
  *     - update to preserve values of non specified FB call parameters
+ * 	   - adds export for global constants
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
@@ -27,6 +28,7 @@ import java.util.Set
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataType
@@ -80,6 +82,7 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
+import static extension org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.util.GlobalConstantsUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
 abstract class StructuredTextSupport implements ILanguageSupport {
@@ -385,7 +388,12 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateFeatureName(VarDeclaration feature) //
 	'''«IF feature.rootContainer instanceof BaseFBType»st_«ENDIF»«feature.name»()'''
 
-	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) '''st_lv_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) {
+		switch (feature.eContainer) {
+			STVarGlobalDeclarationBlock: '''st_global_«feature.name»'''
+			default: '''st_lv_«feature.name»'''
+		}
+	}
 
 	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''func_«feature.name»'''
 
@@ -459,6 +467,10 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				#[object.type]
 			STFeatureExpression: // feature expressions may refer to definitions contained in other sources
 				switch (feature : object.feature) {
+					STVarDeclaration case feature.eContainer instanceof STVarGlobalDeclarationBlock:
+						#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
+							name = feature.sourceName
+						]]
 					STFunction:
 						#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
 							name = feature.sourceName

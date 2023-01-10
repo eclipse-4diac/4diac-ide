@@ -11,7 +11,7 @@
  *   Hesam Rezaee
  *       - initial API and implementation and/or initial documentation
  *******************************************************************************/
-module org.eclipse.fordiac.ide.globalconstantseditor.GenerateGlobalConstants
+module org.eclipse.fordiac.ide.structuredtext.mwe.GenerateGlobalConstants
 
 import org.eclipse.xtext.xtext.generator.*
 import org.eclipse.xtext.xtext.generator.model.project.*
@@ -49,7 +49,7 @@ Workflow {
 			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.model/model/fordiac.genmodel"
 			referencedResource = "platform:/resource/org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel"
 			referencedResource =
-			"platform:/resource/org.eclipse.fordiac.ide.globalconstantseditor/model/generated/GlobalConstants.genmodel"
+			"platform:/resource/org.eclipse.fordiac.ide.globalconstantseditor.model/model/GlobalConstants.genmodel"
 
 			serializer = {
 				generateStub = false
