@@ -279,7 +279,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 				return true;
 			});
 			// notify dead group or reschedule
-			if (threadGroup.isDestroyed()) {
+			if (debugTarget.getProcess().isTerminated()) {
 				DebugPlugin.getDefault().getBreakpointManager()
 				.removeBreakpointListener(CommonEvaluatorDebugger.this.debugTarget);
 				CommonEvaluatorDebugger.this.debugTarget.fireTerminateEvent();

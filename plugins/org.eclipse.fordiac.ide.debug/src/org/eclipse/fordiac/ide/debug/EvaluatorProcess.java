@@ -62,6 +62,7 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 		this.fireCreationEvent();
 	}
 
+	@SuppressWarnings("boxing")
 	@Override
 	public IStatus call() throws Exception {
 		try {
@@ -79,16 +80,16 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 			}
 			final long finish = System.nanoTime();
 			final Duration elapsed = Duration.ofNanos(finish - start);
-			this.streamsProxy.getOutputStreamMonitor().info(String.format("Elapsed: %d:%02d:%02d:%03d",
+			this.streamsProxy.getOutputStreamMonitor().info(String.format("Elapsed: %d:%02d:%02d:%03d", //$NON-NLS-1$
 					elapsed.toHours(), elapsed.toMinutesPart(), elapsed.toSecondsPart(), elapsed.toMillisPart()));
 			return Status.OK_STATUS;
 		} catch (final InterruptedException e) {
-			this.streamsProxy.getErrorStreamMonitor().error("Terminated");
+			this.streamsProxy.getErrorStreamMonitor().error("Terminated"); //$NON-NLS-1$
 			Thread.currentThread().interrupt();
-			return Status.error("Terminated");
+			return Status.error("Terminated"); //$NON-NLS-1$
 		} catch (final Exception t) {
-			this.streamsProxy.getErrorStreamMonitor().error("Exception occurred", t);
-			return Status.error("Exception occurred", t);
+			this.streamsProxy.getErrorStreamMonitor().error("Exception occurred", t); //$NON-NLS-1$
+			return Status.error("Exception occurred", t); //$NON-NLS-1$
 		} finally {
 			fireTerminateEvent();
 		}
@@ -117,7 +118,7 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 
 	@Override
 	public boolean isTerminated() {
-		return this.threadGroup.isDestroyed();
+		return this.thread.getState() == Thread.State.TERMINATED;
 	}
 
 	@Override
@@ -131,9 +132,9 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 			return this.task.get(-1, TimeUnit.NANOSECONDS).getCode();
 		} catch (final InterruptedException e) {
 			Thread.currentThread().interrupt();
-			throw new DebugException(Status.error("Couldn't get exit code", e));
+			throw new DebugException(Status.error("Couldn't get exit code", e)); //$NON-NLS-1$
 		} catch (ExecutionException | TimeoutException e) {
-			throw new DebugException(Status.error("Couldn't get exit code", e));
+			throw new DebugException(Status.error("Couldn't get exit code", e)); //$NON-NLS-1$
 		} catch (final CancellationException e) {
 			return -1;
 		}
@@ -166,6 +167,7 @@ public class EvaluatorProcess extends PlatformObject implements IProcess, Callab
 		fireEvent(new DebugEvent(this, DebugEvent.CHANGE));
 	}
 
+	@SuppressWarnings("static-method")
 	protected void fireEvent(final DebugEvent event) {
 		final DebugPlugin manager = DebugPlugin.getDefault();
 		if (manager != null) {
