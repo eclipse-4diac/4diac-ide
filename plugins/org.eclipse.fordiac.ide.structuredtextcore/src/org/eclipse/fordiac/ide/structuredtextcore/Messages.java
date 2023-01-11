@@ -16,7 +16,7 @@ package org.eclipse.fordiac.ide.structuredtextcore;
 
 import org.eclipse.osgi.util.NLS;
 
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextcore.messages"; //$NON-NLS-1$
 	public static String STCoreValidator_Consecutive_Underscores_In_Identifier;
@@ -43,6 +43,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_BitAccessInvalidForReciever;
 	public static String STCoreValidator_BitAccessExpressionNotOfTypeAnyInt;
 	public static String STCoreValidator_Duplicate_Variable_Name;
+	public static String STCoreValidator_IndexRangeTypeInvalid;
 
 	static {
 		// initialize resource bundle

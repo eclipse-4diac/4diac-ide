@@ -53,6 +53,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgume
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement;
@@ -103,18 +104,39 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String STANDARD_FUNCTION_WITH_FORMAL_ARGUMENTS = ISSUE_CODE_PREFIX
 			+ "standardFunctionWithFormalArguments"; //$NON-NLS-1$
 	public static final String LITERAL_IMPLICIT_CONVERSION = ISSUE_CODE_PREFIX + "literalImplicitConversion"; //$NON-NLS-1$
-
 	public static final String ICALLABLE_NOT_VISIBLE = ISSUE_CODE_PREFIX + "iCallableNotVisible"; //$NON-NLS-1$
 	public static final String ICALLABLE_HAS_NO_RETURN_TYPE = ISSUE_CODE_PREFIX + "iCallableHasNoReturnType"; //$NON-NLS-1$
 	public static final String BIT_ACCESS_INDEX_OUT_OF_RANGE = ISSUE_CODE_PREFIX + "bitAccessIndexOutOfRange"; //$NON-NLS-1$
 	public static final String BIT_ACCESS_INDEX_INVALID_EXPRESSION = ISSUE_CODE_PREFIX + "bitAccessInvalidExpression"; //$NON-NLS-1$
 	public static final String BIT_ACCESS_INVALID_FOR_TYPE = ISSUE_CODE_PREFIX + "bitAccessInvalidForType"; //$NON-NLS-1$
 	public static final String BIT_ACCESS_INVALID_RECEIVER = ISSUE_CODE_PREFIX + "bitAccessInvalidForReceiver"; //$NON-NLS-1$
-
 	public static final String BIT_ACCESS_EXPRESSION_NOT_OF_TYPE_ANY_INT = ISSUE_CODE_PREFIX
 			+ "bitAccessExpressionNotOfTypeAnyInt"; //$NON-NLS-1$
-
 	public static final String DUPLICATE_VARIABLE_NAME = ISSUE_CODE_PREFIX + "duplicateVariableName"; //$NON-NLS-1$
+	public static final String INDEX_RANGE_TYPE_INVALID = ISSUE_CODE_PREFIX + "indexRangeTypeInvalid"; //$NON-NLS-1$
+
+	@Check
+	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
+		if (varDeclaration.isArray()) {
+			for (final STExpression range : varDeclaration.getRanges()) {
+				if (range instanceof STBinaryExpression) {
+					final STBinaryExpression binaryExpression = (STBinaryExpression) range;
+					final DataType leftType = (DataType) binaryExpression.getLeft().getResultType();
+					if (!(leftType instanceof AnyIntType)) {
+						error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, leftType.getName()),
+								range, STCorePackage.Literals.ST_BINARY_EXPRESSION__LEFT, INDEX_RANGE_TYPE_INVALID,
+								leftType.getName());
+					}
+					final DataType rightType = (DataType) binaryExpression.getRight().getResultType();
+					if (!(rightType instanceof AnyIntType)) {
+						error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, rightType.getName()),
+								range, STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_TYPE_INVALID,
+								rightType.getName());
+					}
+				}
+			}
+		}
+	}
 
 	@Check
 	public void checkConsecutiveUnderscoresInIdentifier(final INamedElement iNamedElement) {

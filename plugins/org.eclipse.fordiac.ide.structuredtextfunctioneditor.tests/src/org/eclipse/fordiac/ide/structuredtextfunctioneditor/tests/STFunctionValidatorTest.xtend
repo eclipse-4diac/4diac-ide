@@ -941,4 +941,38 @@ class STFunctionValidatorTest {
 		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.DUPLICATE_VARIABLE_NAME,
 			"Variable with duplicate name bol1")
 	}
+	
+	@Test
+	def void testAnyIntRangesAreValid(){
+		'''
+		FUNCTION ArrayTestDeclarationTest
+		VAR
+			arrayTest : ARRAY [-1 .. 65535] OF REAL;
+		END_VAR
+		END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+	
+	def static Stream<Arguments> invalidArrayRangeArgument() {
+		return Stream.of(Arguments.of("REAL#1.0", "REAL"), Arguments.of("LREAL#1.0", "LREAL"),
+			Arguments.of("\"3\"", "WCHAR"), Arguments.of("'5'", "CHAR"),
+			Arguments.of("WSTRING#\"4\"", "WSTRING"), Arguments.of("STRING#'6'", "STRING"),
+			Arguments.of("T#4h", "TIME"), Arguments.of("TOD#12:00:00", "TOD"),
+			Arguments.of("DATE#20-03-2017", "DATE"), Arguments.of("DT#20-03-2017-16:48:00", "DT"),
+			Arguments.of("LT#4h", "LTIME"), Arguments.of("LTOD#12:00:00", "LTOD"),
+			Arguments.of("LDATE#20-03-2017", "LDATE"), Arguments.of("LDT#20-03-2017-16:48:00", "LDT"))
+	}
+	
+	@ParameterizedTest(name="{index}: argument {0}")
+	@MethodSource("invalidArrayRangeArgument")
+	def void testNonAnyIntRangesAreInvalid(String argument, String argumentTypeName) {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				arrayTest : ARRAY [«argument» .. 65535] OF REAL;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STBinaryExpression, STCoreValidator.INDEX_RANGE_TYPE_INVALID,
+			'''Type «argumentTypeName» is not valid for defining ranges. Ranges must be of type ANY_INT''')
+	}
 }
