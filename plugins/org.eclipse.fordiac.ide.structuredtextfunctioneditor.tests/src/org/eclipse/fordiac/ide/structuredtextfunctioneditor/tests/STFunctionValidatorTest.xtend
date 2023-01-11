@@ -954,7 +954,7 @@ class STFunctionValidatorTest {
 		'''.parse.assertNoErrors
 	}
 	
-	def static Stream<Arguments> invalidArrayRangeArgument() {
+	def static Stream<Arguments> invalidArrayRangeOrMaxLengthArgument() {
 		return Stream.of(Arguments.of("REAL#1.0", "REAL"), Arguments.of("LREAL#1.0", "LREAL"),
 			Arguments.of("\"3\"", "WCHAR"), Arguments.of("'5'", "CHAR"),
 			Arguments.of("WSTRING#\"4\"", "WSTRING"), Arguments.of("STRING#'6'", "STRING"),
@@ -965,7 +965,7 @@ class STFunctionValidatorTest {
 	}
 	
 	@ParameterizedTest(name="{index}: argument {0}")
-	@MethodSource("invalidArrayRangeArgument")
+	@MethodSource("invalidArrayRangeOrMaxLengthArgument")
 	def void testNonAnyIntRangesAreInvalid(String argument, String argumentTypeName) {
 		'''
 			FUNCTION ArrayTestDeclarationTest
@@ -1008,5 +1008,19 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.MAX_LENGTH_NOT_ALLOWED,
 			"For types not of ANY_STRING no maximum length may be defined")
+	}
+	
+	@ParameterizedTest(name="{index}: argument {0}")
+	@MethodSource("invalidArrayRangeOrMaxLengthArgument")
+	def void testInvalidMaxLengthTypes(String argument, String argumentTypeName) {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				testVar : STRING[«argument»];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration,
+			STCoreValidator.
+				MAX_LENGTH_TYPE_INVALID, '''Type «argumentTypeName» is not valid to specify an ANY_STRING max length. Max length must be of type ANY_INT''')
 	}
 }

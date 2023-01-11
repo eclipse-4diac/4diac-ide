@@ -116,6 +116,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String DUPLICATE_VARIABLE_NAME = ISSUE_CODE_PREFIX + "duplicateVariableName"; //$NON-NLS-1$
 	public static final String INDEX_RANGE_TYPE_INVALID = ISSUE_CODE_PREFIX + "indexRangeTypeInvalid"; //$NON-NLS-1$
 	public static final String MAX_LENGTH_NOT_ALLOWED = ISSUE_CODE_PREFIX + "maxLengthNotAllowed"; //$NON-NLS-1$
+	public static final String MAX_LENGTH_TYPE_INVALID = ISSUE_CODE_PREFIX + "maxLengthTypeInvalid"; //$NON-NLS-1$
 
 	@Check
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
@@ -145,6 +146,17 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		if (varDeclaration.getMaxLength() != null && !(varDeclaration.getType() instanceof AnyStringType)) {
 			error(Messages.STCoreValidator_NonAnyStringNotMaxLengthSettingNotAllowed, varDeclaration,
 					STCorePackage.Literals.ST_VAR_DECLARATION__MAX_LENGTH, MAX_LENGTH_NOT_ALLOWED);
+		}
+	}
+
+	@Check
+	public void checkTypeofStringSizeValue(final STVarDeclaration varDeclaration) {
+		if (varDeclaration.getType() instanceof AnyStringType && varDeclaration.getMaxLength() != null
+				&& !(varDeclaration.getMaxLength().getResultType() instanceof AnyIntType)) {
+			error(MessageFormat.format(Messages.STCoreValidator_MaxLengthTypeInvalid,
+					varDeclaration.getMaxLength().getResultType().getName()), varDeclaration,
+					STCorePackage.Literals.ST_VAR_DECLARATION__MAX_LENGTH, MAX_LENGTH_TYPE_INVALID,
+					varDeclaration.getMaxLength().getResultType().getName());
 		}
 	}
 
