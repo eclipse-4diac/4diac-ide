@@ -270,7 +270,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			emptyList
 		}
 	}
-	
+
 	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument,
 		STFeatureExpression expr) {
 		switch (expr.feature) {
@@ -283,7 +283,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument) {
-			if(argument === null) parameter.generateVariableDefaultValue else argument.generateExpression
+		if(argument === null) parameter.generateVariableDefaultValue else argument.generateExpression
 	}
 
 	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STExpression argument) {
@@ -427,10 +427,20 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		}
 	}
 
+	/**
+	 * Get contained dependencies of an object defined in the current source
+	 * @param object An object defined/contained <b>in the current source</b>
+	 * @return The list of objects <b>from other sources/headers</b> on which <t>object</t> (recursively) depends
+	 */
 	def protected Set<INamedElement> getContainedDependencies(EObject object) {
 		object.<EObject>getAllProperContents(true).toIterable.flatMap[dependencies].toSet
 	}
 
+	/**
+	 * Get dependencies of an object defined in the current source
+	 * @param object An object defined/contained <b>in the current source</b>
+	 * @return The list of objects <b>from other sources/headers</b> on which <t>object</t> depends
+	 */
 	def protected Iterable<INamedElement> getDependencies(EObject object) {
 		switch (object) {
 			STVarDeclaration:
@@ -447,12 +457,17 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				#[object.type]
 			STDateAndTimeLiteral:
 				#[object.type]
-			STFeatureExpression:
-				object.feature.dependencies
+			STFeatureExpression: // feature expressions may refer to definitions contained in other sources
+				switch (feature : object.feature) {
+					STFunction:
+						#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
+							name = feature.sourceName
+						]]
+					default:
+						emptySet
+				}
 			STFunction:
-				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
-					name = object.sourceName
-				]]
+				object.returnType !== null ? #[object.returnType] : emptySet
 			default:
 				emptySet
 		}
