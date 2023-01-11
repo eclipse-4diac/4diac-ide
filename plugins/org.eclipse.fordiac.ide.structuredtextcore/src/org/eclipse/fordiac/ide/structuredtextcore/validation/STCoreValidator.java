@@ -34,6 +34,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
+import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
@@ -114,6 +115,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			+ "bitAccessExpressionNotOfTypeAnyInt"; //$NON-NLS-1$
 	public static final String DUPLICATE_VARIABLE_NAME = ISSUE_CODE_PREFIX + "duplicateVariableName"; //$NON-NLS-1$
 	public static final String INDEX_RANGE_TYPE_INVALID = ISSUE_CODE_PREFIX + "indexRangeTypeInvalid"; //$NON-NLS-1$
+	public static final String MAX_LENGTH_NOT_ALLOWED = ISSUE_CODE_PREFIX + "maxLengthNotAllowed"; //$NON-NLS-1$
 
 	@Check
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
@@ -135,6 +137,14 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					}
 				}
 			}
+		}
+	}
+
+	@Check
+	public void checkIfMaxSizeOnVarDeclarationAllowed(final STVarDeclaration varDeclaration) {
+		if (varDeclaration.getMaxLength() != null && !(varDeclaration.getType() instanceof AnyStringType)) {
+			error(Messages.STCoreValidator_NonAnyStringNotMaxLengthSettingNotAllowed, varDeclaration,
+					STCorePackage.Literals.ST_VAR_DECLARATION__MAX_LENGTH, MAX_LENGTH_NOT_ALLOWED);
 		}
 	}
 

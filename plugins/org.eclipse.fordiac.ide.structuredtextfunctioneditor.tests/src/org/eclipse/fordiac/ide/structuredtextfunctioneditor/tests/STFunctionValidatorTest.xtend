@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 
 import com.google.inject.Inject
 import java.util.stream.Stream
+import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
@@ -974,5 +975,38 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STBinaryExpression, STCoreValidator.INDEX_RANGE_TYPE_INVALID,
 			'''Type «argumentTypeName» is not valid for defining ranges. Ranges must be of type ANY_INT''')
+	}
+	
+	def static Stream<Arguments> validTypesForMaxLengthSpecifier() {
+		DataTypeLibrary.nonUserDefinedDataTypes.stream.filter[(it instanceof AnyStringType)].map[arguments(it.name)]
+	}
+	
+	@ParameterizedTest(name="{index}: argument {0}")
+	@MethodSource("validTypesForMaxLengthSpecifier")
+	def void testTypesValidForMaxLength(String typeName) {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				testVar : «typeName» [5];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+	
+	def static Stream<Arguments> invalidTypesForMaxLengthSpecifier() {
+		DataTypeLibrary.nonUserDefinedDataTypes.stream.filter[!(it instanceof AnyStringType)].map[arguments(it.name)]
+	}
+	
+	@ParameterizedTest(name="{index}: argument {0}")
+	@MethodSource("invalidTypesForMaxLengthSpecifier")
+	def void testTypesInvalidForMaxLength(String typeName) {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				testVar : «typeName» [5];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.MAX_LENGTH_NOT_ALLOWED,
+			"For types not of ANY_STRING no maximum length may be defined")
 	}
 }
