@@ -17,14 +17,13 @@ package org.eclipse.fordiac.ide.application.policies;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectAdapterConnectionCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.requests.CreateConnectionRequest;
 import org.eclipse.swt.SWT;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.PlatformUI;
@@ -33,8 +32,7 @@ import org.eclipse.ui.part.FileEditorInput;
 public class AdapterNodeEditPolicy extends InterfaceElementEditPolicy {
 
 	@Override
-	protected Command getConnectionCreateCommand(final CreateConnectionRequest request) {
-
+	protected AbstractConnectionCreateCommand createConnectionCreateCommand() {
 		final InterfaceEditPart host = (InterfaceEditPart) getHost();
 
 		if ((host.isAdapter()) && (0 != (host.getMouseState() & SWT.CONTROL))) {
@@ -44,8 +42,7 @@ public class AdapterNodeEditPolicy extends InterfaceElementEditPolicy {
 
 		final AdapterConnectionCreateCommand cmd = new AdapterConnectionCreateCommand(getParentNetwork());
 		cmd.setSource(((InterfaceEditPart) getHost()).getModel());
-		request.setStartCommand(cmd);
-		return new AdapterConnectionCreateCommand(getParentNetwork());
+		return cmd;
 
 	}
 

@@ -35,6 +35,15 @@ import org.eclipse.gef.requests.ReconnectRequest;
 public abstract class InterfaceElementEditPolicy extends GraphicalNodeEditPolicy {
 
 	@Override
+	protected final Command getConnectionCreateCommand(final CreateConnectionRequest request) {
+		final AbstractConnectionCreateCommand command = createConnectionCreateCommand();
+		request.setStartCommand(command);
+		return command;
+	}
+
+	protected abstract AbstractConnectionCreateCommand createConnectionCreateCommand();
+
+	@Override
 	protected Command getConnectionCompleteCommand(final CreateConnectionRequest request) {
 		final AbstractConnectionCreateCommand command = (AbstractConnectionCreateCommand) request.getStartCommand();
 		command.setDestination(((InterfaceEditPart) getHost()).getModel());
