@@ -22,6 +22,8 @@ public class AdvancedGraphicalViewerKeyHandler extends GraphicalViewerKeyHandler
 	private static final int SCROLL_SPEED_X = ModuloFreeformFigure.BASE_HEIGHT * 3;
 	private static final int SCROLL_SPEED_Y = (int) (ModuloFreeformFigure.BASE_HEIGHT * 1.5);
 
+	private int currentKeyCode;  // if currently a key is pressed this will hold the key code otherwise 0
+
 	public AdvancedGraphicalViewerKeyHandler(final AdvancedScrollingGraphicalViewer viewer) {
 		super(viewer);
 	}
@@ -29,6 +31,7 @@ public class AdvancedGraphicalViewerKeyHandler extends GraphicalViewerKeyHandler
 	@Override
 	public boolean keyPressed(final KeyEvent event) {
 		final boolean modifierPressed = (event.stateMask & SWT.MODIFIER_MASK) != 0;
+		currentKeyCode = event.keyCode;
 		switch (event.keyCode) {
 		case SWT.ARROW_DOWN:
 			if (!modifierPressed) {
@@ -75,7 +78,17 @@ public class AdvancedGraphicalViewerKeyHandler extends GraphicalViewerKeyHandler
 	}
 
 	@Override
+	public boolean keyReleased(final KeyEvent event) {
+		currentKeyCode = 0;
+		return super.keyReleased(event);
+	}
+
+	@Override
 	public AdvancedScrollingGraphicalViewer getViewer() {
 		return (AdvancedScrollingGraphicalViewer) super.getViewer();
+	}
+
+	public int getCurrentKeyCode() {
+		return currentKeyCode;
 	}
 }
