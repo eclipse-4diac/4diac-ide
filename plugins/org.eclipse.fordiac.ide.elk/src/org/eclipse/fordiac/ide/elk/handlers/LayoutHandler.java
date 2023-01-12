@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,24 +13,24 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.elk.handlers;
 
-import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.elk.core.service.DiagramLayoutEngine;
 import org.eclipse.fordiac.ide.elk.helpers.FordiacLayoutFactory;
 import org.eclipse.ui.IWorkbenchPart;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.HandlerUtil;
 
-public class LayoutHandler extends AbstractHandler {
+public class LayoutHandler extends AbstractLayoutHandler {
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
-		final IWorkbenchPart workbenchPart = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart();
-		// TODO check for AbstractBreadcrumbEditor
-		if (workbenchPart instanceof Object) {
-			DiagramLayoutEngine.invokeLayout(workbenchPart, null, FordiacLayoutFactory.createLayoutParams());
+		final IWorkbenchPart part = HandlerUtil.getActiveEditor(event);
+
+		if (null != part) {
+			DiagramLayoutEngine.invokeLayout(part, null, FordiacLayoutFactory.createLayoutParams());
 		}
-		return null;
+		return Status.OK_STATUS;
 	}
 
 }
