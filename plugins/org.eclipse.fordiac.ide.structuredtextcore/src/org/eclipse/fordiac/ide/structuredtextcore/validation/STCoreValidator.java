@@ -27,6 +27,7 @@ import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isNumericValueValid;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isStringValueValid;
 
+import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.util.stream.StreamSupport;
 
@@ -46,8 +47,10 @@ import org.eclipse.fordiac.ide.model.value.NumericValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STStringValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument;
@@ -117,6 +120,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String INDEX_RANGE_TYPE_INVALID = ISSUE_CODE_PREFIX + "indexRangeTypeInvalid"; //$NON-NLS-1$
 	public static final String MAX_LENGTH_NOT_ALLOWED = ISSUE_CODE_PREFIX + "maxLengthNotAllowed"; //$NON-NLS-1$
 	public static final String MAX_LENGTH_TYPE_INVALID = ISSUE_CODE_PREFIX + "maxLengthTypeInvalid"; //$NON-NLS-1$
+	public static final String TOO_MANY_INDICES_GIVEN = ISSUE_CODE_PREFIX + "tooManyIndicesGiven"; //$NON-NLS-1$
+	public static final String ARRAY_ACCESS_INVALID = ISSUE_CODE_PREFIX + "arrayAccessInvalid"; //$NON-NLS-1$
+	public static final String ARRAY_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "arrayIndexOutOfBounds"; //$NON-NLS-1$
 
 	@Check
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
@@ -157,6 +163,93 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					varDeclaration.getMaxLength().getResultType().getName()), varDeclaration,
 					STCorePackage.Literals.ST_VAR_DECLARATION__MAX_LENGTH, MAX_LENGTH_TYPE_INVALID,
 					varDeclaration.getMaxLength().getResultType().getName());
+		}
+	}
+
+	@Check
+	public void checkArrayAccessDimensions(final STArrayAccessExpression accessExpression) {
+		final var featureExpression = accessExpression.getReceiver() instanceof STFeatureExpression
+				? ((STFeatureExpression) accessExpression.getReceiver()).getFeature()
+				: null;
+		if (featureExpression instanceof STVarDeclaration) {
+			final STVarDeclaration varDeclaration = (STVarDeclaration) featureExpression;
+			if (varDeclaration.isArray()) {
+				final var indexExpressions = accessExpression.getIndex();
+				final var indexCounts = varDeclaration.getCount().size(); // unknown array dimensions [*]
+				final var indexRanges = varDeclaration.getRanges().size();
+				final var declaredArrayDimensions = Math.max(indexCounts, indexRanges);
+				if (indexExpressions.size() > declaredArrayDimensions) {
+					for (int i = 0; i < indexExpressions.size() - declaredArrayDimensions; i++) {
+						error(MessageFormat.format(Messages.STCoreValidator_TooManyIndicesGiven,
+								accessExpression.getIndex().size(), declaredArrayDimensions), accessExpression,
+								STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, declaredArrayDimensions + i,
+								TOO_MANY_INDICES_GIVEN);
+					}
+				}
+			} else if (!(varDeclaration.getType() instanceof AnyStringType)) {
+				// not an array in the first place, but exclude ANY_STRING as they are allowed
+				// this type of access for chars
+				final var indexExpressions = accessExpression.getIndex();
+				for (int i = 0; i < indexExpressions.size(); i++) {
+					error(Messages.STCoreValidator_ArrayAccessInvalidOnNonArrayVariable,
+							STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, i, ARRAY_ACCESS_INVALID);
+				}
+
+			}
+		}
+	}
+
+	@Check
+	public void checkArrayAccessIndices(final STArrayAccessExpression accessExpression) {
+		final var featureExpression = accessExpression.getReceiver() instanceof STFeatureExpression
+				? ((STFeatureExpression) accessExpression.getReceiver()).getFeature()
+				: null;
+
+		final STVarDeclaration varDeclaration = (STVarDeclaration) featureExpression;
+		final var indexExpressions = accessExpression.getIndex();
+
+		if (varDeclaration != null && varDeclaration.isArray()) {
+			for (int i = 0; i < indexExpressions.size(); i++) {
+				final STExpression expression = indexExpressions.get(i);
+				checkArrayIndexInArrayDimensionBounds(accessExpression, varDeclaration, i, expression);
+				checkArrayAccessIndexType(accessExpression, i, expression);
+			}
+		}
+	}
+
+	private void checkArrayIndexInArrayDimensionBounds(final STArrayAccessExpression accessExpression,
+			final STVarDeclaration varDeclaration, final int i, final STExpression expression) {
+		if (expression instanceof STNumericLiteral
+				&& ((STNumericLiteral) expression).getResultType() instanceof AnyIntType
+				&& varDeclaration.getRanges() != null && varDeclaration.getRanges().size() > i
+				&& varDeclaration.getRanges().get(i) instanceof STBinaryExpression
+				&& ((STBinaryExpression) varDeclaration.getRanges().get(i)).getOp() == STBinaryOperator.RANGE) {
+			final var indexValue = (BigInteger) ((STNumericLiteral) expression).getValue();
+			final var lowerBoundExpression = ((STBinaryExpression) varDeclaration.getRanges().get(i)).getLeft();
+			final var upperBoundExpression = ((STBinaryExpression) varDeclaration.getRanges().get(i)).getRight();
+
+			if (lowerBoundExpression instanceof STNumericLiteral
+					&& lowerBoundExpression.getResultType() instanceof AnyIntType
+					&& upperBoundExpression instanceof STNumericLiteral
+					&& upperBoundExpression.getResultType() instanceof AnyIntType) {
+				final var lowerBound = (BigInteger) ((STNumericLiteral) lowerBoundExpression).getValue();
+				final var upperBound = (BigInteger) ((STNumericLiteral) upperBoundExpression).getValue();
+
+				if (indexValue.compareTo(lowerBound) < 0 || indexValue.compareTo(upperBound) > 0) {
+					error(MessageFormat.format(Messages.STCoreValidator_ArrayIndexOutOfBounds, indexValue, lowerBound,
+							upperBound), accessExpression, STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, i,
+							ARRAY_INDEX_OUT_OF_BOUNDS);
+				}
+			}
+		}
+	}
+
+	private void checkArrayAccessIndexType(final STArrayAccessExpression accessExpression, final int i,
+			final STExpression expression) {
+		if (!(expression.getResultType() instanceof AnyIntType)) {
+			error(MessageFormat.format(Messages.STCoreValidator_IndexAccessTypeInvalid,
+					expression.getResultType().getName()), accessExpression,
+					STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, i, INDEX_RANGE_TYPE_INVALID);
 		}
 	}
 

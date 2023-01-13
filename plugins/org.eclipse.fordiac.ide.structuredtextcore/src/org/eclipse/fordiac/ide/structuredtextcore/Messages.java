@@ -46,6 +46,10 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_IndexRangeTypeInvalid;
 	public static String STCoreValidator_NonAnyStringNotMaxLengthSettingNotAllowed;
 	public static String STCoreValidator_MaxLengthTypeInvalid;
+	public static String STCoreValidator_TooManyIndicesGiven;
+	public static String STCoreValidator_IndexAccessTypeInvalid;
+	public static String STCoreValidator_ArrayAccessInvalidOnNonArrayVariable;
+	public static String STCoreValidator_ArrayIndexOutOfBounds;
 
 	static {
 		// initialize resource bundle

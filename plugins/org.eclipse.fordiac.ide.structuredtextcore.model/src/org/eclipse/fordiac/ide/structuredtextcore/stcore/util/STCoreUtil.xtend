@@ -83,6 +83,11 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral
 
 final class STCoreUtil {
 

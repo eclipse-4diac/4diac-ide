@@ -1023,4 +1023,42 @@ class STFunctionValidatorTest {
 			STCoreValidator.
 				MAX_LENGTH_TYPE_INVALID, '''Type «argumentTypeName» is not valid to specify an ANY_STRING max length. Max length must be of type ANY_INT''')
 	}
+	
+	@Test
+	def void testValidArrayAccessOperator() {
+		'''
+		FUNCTION ArrayTestDeclarationTest
+			VAR
+				arrayTest : ARRAY [0 .. 10] OF REAL;
+			END_VAR
+		arrayTest[0] := arrayTest[1];
+		END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+	
+	@Test
+	def void testOutOfBoundsArrayAccessOperator() {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+				VAR
+					arrayTest : ARRAY [0 .. 10] OF REAL;
+				END_VAR
+			arrayTest[0] := arrayTest[11];
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
+			STCoreValidator.ARRAY_INDEX_OUT_OF_BOUNDS, "Index 11 out of array dimension bounds [0..10]")
+	}
+	
+	@Test
+	def void testTooManyIndicesArrayAccessOperator() {
+		'''
+		FUNCTION ArrayTestDeclarationTest
+			VAR
+				arrayTest : ARRAY [0 .. 10] OF REAL;
+			END_VAR
+		arrayTest[0] := arrayTest[1,1];
+		END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
+			STCoreValidator.TOO_MANY_INDICES_GIVEN, "Too many indices given, 2 indices given, but only 1 specified for the variable")
+	}
 }

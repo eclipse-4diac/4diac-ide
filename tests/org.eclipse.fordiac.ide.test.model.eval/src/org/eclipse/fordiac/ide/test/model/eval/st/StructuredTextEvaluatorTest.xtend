@@ -699,9 +699,10 @@ class StructuredTextEvaluatorTest {
 			'''
 				VAR_TEMP
 					test: ARRAY [ 0 .. 1 ] OF INT := [ 17, 4 ];
+					invalidIndex : INT := 3;
 				END_VAR
 				
-				test[3] := test[0] + test[1];
+				test[invalidIndex] := test[0] + test[1];
 			'''.evaluateAlgorithm
 		]
 	}
