@@ -29,13 +29,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.emf.common.notify.Adapter;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDocumentationCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
@@ -80,20 +76,7 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 	private RichTextEditor editor;
 	private boolean blockListeners = false;
 
-	private final Adapter sysConfListener = new AdapterImpl() {
-		@Override
-		public void notifyChanged(final Notification notification) {
-			if (!blockListeners && LibraryElementPackage.eINSTANCE.getIdentification_Description()
-					.equals(notification.getFeature())) {
-				final CommandStack comStackbuf = commandStack;
-				commandStack = null;
-				if (editor != null && !editor.isDisposed()) {
-					editor.setText(getFbType().getIdentification().getDescription());
-				}
-				commandStack = comStackbuf;
-			}
-		}
-	};
+
 
 	private FBType getFbType() {
 		return getEditorInput().getContent();
@@ -119,13 +102,11 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 		setInput(input);
 		setSite(site);
 		setPartName("Description"); //$NON-NLS-1$
-		getFbType().getIdentification().eAdapters().add(sysConfListener);
 	}
 
 	@Override
 	public void dispose() {
 		commandStack = null;
-		getFbType().getIdentification().eAdapters().remove(sysConfListener);
 		super.dispose();
 	}
 
