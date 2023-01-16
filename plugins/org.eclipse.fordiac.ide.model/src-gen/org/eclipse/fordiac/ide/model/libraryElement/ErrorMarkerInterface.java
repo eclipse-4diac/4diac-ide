@@ -42,7 +42,7 @@ public interface ErrorMarkerInterface extends IInterfaceElement, ErrorMarkerRef 
 	 * @return the value of the '<em>Repaired Endpoint</em>' reference.
 	 * @see #setRepairedEndpoint(IInterfaceElement)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getErrorMarkerInterface_RepairedEndpoint()
-	 * @model
+	 * @model transient="true"
 	 * @generated
 	 */
 	IInterfaceElement getRepairedEndpoint();
