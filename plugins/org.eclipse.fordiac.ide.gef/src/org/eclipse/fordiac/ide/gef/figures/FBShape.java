@@ -171,7 +171,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		return top;
 	}
 
-	protected Shape getMiddle() {
+	public Shape getMiddle() {
 		return middle;
 	}
 
