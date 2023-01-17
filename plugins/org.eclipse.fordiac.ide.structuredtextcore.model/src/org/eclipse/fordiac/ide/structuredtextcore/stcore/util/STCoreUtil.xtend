@@ -83,11 +83,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeLiteral
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STTimeOfDayLiteral
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral
 
 final class STCoreUtil {
 
@@ -356,12 +351,16 @@ final class STCoreUtil {
 					feature.type
 			STVarDeclaration case feature.type instanceof DataType:
 				if (feature.array)
-					(feature.type as DataType).newArrayType(
-						if (feature.ranges.empty)
-							feature.count.map[DataFactory.eINSTANCE.createSubrange]
-						else
-							feature.ranges.map[toSubrange]
-					)
+					try {
+						(feature.type as DataType).newArrayType(
+							if (feature.ranges.empty)
+								feature.count.map[DataFactory.eINSTANCE.createSubrange]
+							else
+								feature.ranges.map[toSubrange]
+						)
+					} catch (ArithmeticException e) {
+						null // invalid declaration
+					}
 				else
 					feature.type
 			FB:
@@ -395,7 +394,7 @@ final class STCoreUtil {
 	def static int asConstantInt(STExpression expr) {
 		switch (expr) {
 			STNumericLiteral: (expr.value as BigInteger).intValueExact
-			default: 0
+			default: throw new ArithmeticException("Not a constant integer")
 		}
 	}
 

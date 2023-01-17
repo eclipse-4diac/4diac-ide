@@ -387,16 +387,20 @@ final package class ExpressionAnnotations {
 	}
 
 	def package static INamedElement addDimension(INamedElement type, STArrayInitializerExpression expr) {
-		val size = expr.values.map [
-			if (initExpressions.empty)
-				1
-			else
-				(indexOrInitExpression as STElementaryInitializerExpression).value.asConstantInt
-		].fold(0)[a, b|a + b]
-		if (type instanceof ArrayType)
-			type.baseType.newArrayType(#[newSubrange(0, size - 1)] + type.subranges.map[copy])
-		else if (type instanceof DataType)
-			type.newArrayType(newSubrange(0, size - 1))
+		try {
+			val size = expr.values.map [
+				if (initExpressions.empty)
+					1
+				else
+					(indexOrInitExpression as STElementaryInitializerExpression).value.asConstantInt
+			].fold(0)[a, b|a + b]
+			if (type instanceof ArrayType)
+				type.baseType.newArrayType(#[newSubrange(0, size - 1)] + type.subranges.map[copy])
+			else if (type instanceof DataType)
+				type.newArrayType(newSubrange(0, size - 1))
+		} catch (ArithmeticException e) {
+			null // invalid initializer expression
+		}
 	}
 
 	def package static INamedElement commonSupertype(INamedElement first, INamedElement second) {
