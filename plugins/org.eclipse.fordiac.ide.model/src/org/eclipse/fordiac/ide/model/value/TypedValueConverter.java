@@ -111,7 +111,7 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 					MessageFormat.format(Messages.VALIDATOR_DatatypeRequiresTypeSpecifier, type.getName()));
 		}
 		final ValueConverter<?> delegate = getValueConverter(valueType);
-		return checkValue(valueType, delegate.toValue(value));
+		return checkValue(valueType, string, delegate.toValue(value));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -132,7 +132,7 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 			result = ElementaryTypes.getTypeByName(prefix);
 		}
 		if (result == null) {
-			throw new IllegalArgumentException(Messages.VALIDATOR_UNKNOWN_LITERAL_TYPE);
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_UNKNOWN_LITERAL_TYPE, prefix));
 		}
 		return result;
 	}
@@ -161,7 +161,8 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 	private static ValueConverter<?> getValueConverter(final DataType type) throws IllegalArgumentException {
 		final ValueConverter<?> valueConverter = ValueConverterFactory.createValueConverter(type);
 		if (valueConverter == null) {
-			throw new IllegalArgumentException(Messages.VALIDATOR_TypeNotSupported);
+			throw new IllegalArgumentException(
+					MessageFormat.format(Messages.VALIDATOR_TypeNotSupported, type.getName()));
 		}
 		return valueConverter;
 	}
@@ -170,9 +171,9 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 		return IecTypes.GenericTypes.isAnyType(type) || type instanceof AnyDurationType || type instanceof AnyDateType;
 	}
 
-	private static Object checkValue(final DataType type, final Object value) {
+	private static Object checkValue(final DataType type, final String string, final Object value) {
 		if ((type instanceof AnyNumType || type instanceof AnyBitType) && !isNumericValueValid(type, value)) {
-			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_NUMBER_LITERAL);
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_INVALID_NUMBER_LITERAL, string));
 		}
 		return value;
 	}

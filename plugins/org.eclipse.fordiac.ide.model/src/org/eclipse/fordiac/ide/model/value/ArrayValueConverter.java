@@ -12,6 +12,7 @@
  */
 package org.eclipse.fordiac.ide.model.value;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -37,7 +38,7 @@ public class ArrayValueConverter<T> implements ValueConverter<List<T>> {
 	public List<T> toValue(final String string) throws IllegalArgumentException {
 		final var trimmed = string.trim();
 		if (!trimmed.startsWith("[") || !trimmed.endsWith("]")) { //$NON-NLS-1$ //$NON-NLS-2$
-			throw new IllegalArgumentException(Messages.VALIDATOR_ARRAY_MISSES_BRACKETS);
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_ARRAY_MISSES_BRACKETS, string));
 		}
 		final var inner = trimmed.substring(1, trimmed.length() - 1);
 		return Stream.of(ARRAY_PATTERN.split(inner)).map(String::trim).map(elementValueConverter::toValue)

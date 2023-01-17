@@ -245,6 +245,8 @@ public final class Messages extends NLS {
 	public static String VALIDATOR_IllegalEscapeInStringLiteral;
 	public static String VALIDATOR_InvalidTimeOfDayLiteral;
 
+	public static String VALIDATOR_InvalidTimeUnit;
+
 	public static String Error_SelfInsertion;
 	public static String Error_RecursiveType;
 
