@@ -23,8 +23,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationAttributes;
+import org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.debug.ui.MainLaunchConfigurationTab;
-import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -154,10 +154,10 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	}
 
 	@Override
-	protected List<Variable<?>> getDefaultArguments() {
+	protected List<Variable<?>> getDefaultArguments() throws CoreException {
 		final FBType fbType = getFBType();
 		if (fbType != null) {
-			return List.copyOf(new FBVariable("dummy", fbType).getMembers().values()); //$NON-NLS-1$
+			return FBLaunchConfigurationDelegate.getDefaultArguments(fbType);
 		}
 		return Collections.emptyList();
 	}

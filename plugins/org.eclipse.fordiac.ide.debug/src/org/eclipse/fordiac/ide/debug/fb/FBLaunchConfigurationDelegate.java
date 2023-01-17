@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.fb;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.Queue;
 
@@ -19,10 +20,12 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.ILaunch;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.fordiac.ide.debug.CommonLaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
+import org.eclipse.fordiac.ide.debug.Messages;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
@@ -52,9 +55,13 @@ public abstract class FBLaunchConfigurationDelegate extends CommonLaunchConfigur
 	public abstract FBEvaluator<? extends FBType> createEvaluator(FBType type, Queue<Event> queue,
 			List<Variable<?>> variables) throws CoreException;
 
-	@SuppressWarnings("static-method")
-	protected List<Variable<?>> getDefaultArguments(final FBType type) {
-		return List.copyOf(new FBVariable("dummy", type).getMembers().values()); //$NON-NLS-1$
+	public static List<Variable<?>> getDefaultArguments(final FBType type) throws CoreException {
+		try {
+			return List.copyOf(new FBVariable("dummy", type).getMembers().values()); //$NON-NLS-1$
+		} catch (final Exception e) {
+			throw new CoreException(Status.error(MessageFormat
+					.format(Messages.FBLaunchConfigurationDelegate_InvalidDefaultArguments, type.getName()), e));
+		}
 	}
 
 	@SuppressWarnings("static-method")

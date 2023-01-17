@@ -14,8 +14,6 @@ package org.eclipse.fordiac.ide.debug.ui.st;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -24,10 +22,9 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.fordiac.ide.debug.st.STLaunchConfigurationAttributes;
+import org.eclipse.fordiac.ide.debug.st.STLaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.debug.ui.MainLaunchConfigurationTab;
-import org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.util.STFunctionParseUtil;
@@ -144,12 +141,10 @@ public class STLaunchConfigurationTab extends MainLaunchConfigurationTab {
 	}
 
 	@Override
-	protected List<Variable<?>> getDefaultArguments() {
+	protected List<Variable<?>> getDefaultArguments() throws CoreException {
 		final STFunction function = getFunction();
 		if (function != null) {
-			return Stream.concat(function.getInputParameters().stream(), function.getInOutParameters().stream())
-					.map(STVarDeclaration.class::cast).map(STVariableOperations::newVariable)
-					.collect(Collectors.toList());
+			return STLaunchConfigurationDelegate.getDefaultArguments(function);
 		}
 		return Collections.emptyList();
 	}

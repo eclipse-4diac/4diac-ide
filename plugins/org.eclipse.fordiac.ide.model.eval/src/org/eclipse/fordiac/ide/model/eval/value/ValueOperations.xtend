@@ -1077,25 +1077,55 @@ final class ValueOperations {
 				case null:
 					null
 				LrealType:
-					LRealValue.toLRealValue(value as Number)
+					switch (value) {
+						Number: LRealValue.toLRealValue(value)
+						default: LRealValue.toLRealValue(value.toString)
+					}
 				RealType:
-					RealValue.toRealValue(value as Number)
+					switch (value) {
+						Number: RealValue.toRealValue(value)
+						default: RealValue.toRealValue(value.toString)
+					}
 				LintType:
-					LIntValue.toLIntValue(value as Number)
+					switch (value) {
+						Number: LIntValue.toLIntValue(value)
+						default: LIntValue.toLIntValue(value.toString)
+					}
 				DintType:
-					DIntValue.toDIntValue(value as Number)
+					switch (value) {
+						Number: DIntValue.toDIntValue(value)
+						default: DIntValue.toDIntValue(value.toString)
+					}
 				IntType:
-					IntValue.toIntValue(value as Number)
+					switch (value) {
+						Number: IntValue.toIntValue(value)
+						default: IntValue.toIntValue(value.toString)
+					}
 				SintType:
-					SIntValue.toSIntValue(value as Number)
+					switch (value) {
+						Number: SIntValue.toSIntValue(value)
+						default: SIntValue.toSIntValue(value.toString)
+					}
 				UlintType:
-					ULIntValue.toULIntValue(value as Number)
+					switch (value) {
+						Number: ULIntValue.toULIntValue(value)
+						default: ULIntValue.toULIntValue(value.toString)
+					}
 				UdintType:
-					UDIntValue.toUDIntValue(value as Number)
+					switch (value) {
+						Number: UDIntValue.toUDIntValue(value)
+						default: UDIntValue.toUDIntValue(value.toString)
+					}
 				UintType:
-					UIntValue.toUIntValue(value as Number)
+					switch (value) {
+						Number: UIntValue.toUIntValue(value)
+						default: UIntValue.toUIntValue(value.toString)
+					}
 				UsintType:
-					USIntValue.toUSIntValue(value as Number)
+					switch (value) {
+						Number: USIntValue.toUSIntValue(value)
+						default: USIntValue.toUSIntValue(value.toString)
+					}
 				LtimeType:
 					switch (value) {
 						Number: LTimeValue.toLTimeValue(value)
@@ -1109,13 +1139,25 @@ final class ValueOperations {
 						default: TimeValue.toTimeValue(value.toString)
 					}
 				LwordType:
-					LWordValue.toLWordValue(value as Number)
+					switch (value) {
+						Number: LWordValue.toLWordValue(value)
+						default: LWordValue.toLWordValue(value.toString)
+					}
 				DwordType:
-					DWordValue.toDWordValue(value as Number)
+					switch (value) {
+						Number: DWordValue.toDWordValue(value)
+						default: DWordValue.toDWordValue(value.toString)
+					}
 				WordType:
-					WordValue.toWordValue(value as Number)
+					switch (value) {
+						Number: WordValue.toWordValue(value)
+						default: WordValue.toWordValue(value.toString)
+					}
 				ByteType:
-					ByteValue.toByteValue(value as Number)
+					switch (value) {
+						Number: ByteValue.toByteValue(value)
+						default: ByteValue.toByteValue(value.toString)
+					}
 				BoolType:
 					BoolValue.toBoolValue(switch (value) {
 						Boolean: value.booleanValue
