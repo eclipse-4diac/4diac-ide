@@ -12,23 +12,42 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.value;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyDateType;
 import org.eclipse.fordiac.ide.model.data.AnyDurationType;
+import org.eclipse.fordiac.ide.model.data.AnyNumType;
+import org.eclipse.fordiac.ide.model.data.BoolType;
+import org.eclipse.fordiac.ide.model.data.ByteType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType;
 import org.eclipse.fordiac.ide.model.data.DateType;
+import org.eclipse.fordiac.ide.model.data.DintType;
+import org.eclipse.fordiac.ide.model.data.DwordType;
+import org.eclipse.fordiac.ide.model.data.IntType;
 import org.eclipse.fordiac.ide.model.data.LdateType;
 import org.eclipse.fordiac.ide.model.data.LdtType;
+import org.eclipse.fordiac.ide.model.data.LintType;
+import org.eclipse.fordiac.ide.model.data.LrealType;
 import org.eclipse.fordiac.ide.model.data.LtimeType;
 import org.eclipse.fordiac.ide.model.data.LtodType;
+import org.eclipse.fordiac.ide.model.data.LwordType;
+import org.eclipse.fordiac.ide.model.data.RealType;
+import org.eclipse.fordiac.ide.model.data.SintType;
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType;
 import org.eclipse.fordiac.ide.model.data.TimeType;
+import org.eclipse.fordiac.ide.model.data.UdintType;
+import org.eclipse.fordiac.ide.model.data.UintType;
+import org.eclipse.fordiac.ide.model.data.UlintType;
+import org.eclipse.fordiac.ide.model.data.UsintType;
+import org.eclipse.fordiac.ide.model.data.WordType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 
@@ -92,7 +111,7 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 					MessageFormat.format(Messages.VALIDATOR_DatatypeRequiresTypeSpecifier, type.getName()));
 		}
 		final ValueConverter<?> delegate = getValueConverter(valueType);
-		return delegate.toValue(value);
+		return checkValue(valueType, delegate.toValue(value));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -149,5 +168,65 @@ public final class TypedValueConverter implements ValueConverter<Object> {
 
 	private static boolean isTypePrefixRequired(final DataType type) {
 		return IecTypes.GenericTypes.isAnyType(type) || type instanceof AnyDurationType || type instanceof AnyDateType;
+	}
+
+	private static Object checkValue(final DataType type, final Object value) {
+		if ((type instanceof AnyNumType || type instanceof AnyBitType) && !isNumericValueValid(type, value)) {
+			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_NUMBER_LITERAL);
+		}
+		return value;
+	}
+
+	private static boolean isNumericValueValid(final DataType type, final Object value) {
+		if (value instanceof Boolean) {
+			return type instanceof BoolType;
+		} else if (value instanceof BigDecimal) {
+			if (type instanceof RealType) {
+				return Float.isFinite(((BigDecimal) value).floatValue());
+			} else if (type instanceof LrealType) {
+				return Double.isFinite(((BigDecimal) value).doubleValue());
+			}
+		} else if (value instanceof BigInteger) {
+			if (type instanceof RealType) {
+				return Float.isFinite(((BigInteger) value).floatValue());
+			} else if (type instanceof LrealType) {
+				return Double.isFinite(((BigInteger) value).doubleValue());
+			} else if (type instanceof SintType) {
+				return checkRange((BigInteger) value, Byte.MIN_VALUE, Byte.MAX_VALUE);
+			} else if (type instanceof IntType) {
+				return checkRange((BigInteger) value, Short.MIN_VALUE, Short.MAX_VALUE);
+			} else if (type instanceof DintType) {
+				return checkRange((BigInteger) value, Integer.MIN_VALUE, Integer.MAX_VALUE);
+			} else if (type instanceof LintType) {
+				return checkRange((BigInteger) value, Long.MIN_VALUE, Long.MAX_VALUE);
+			} else if (type instanceof UsintType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffL));
+			} else if (type instanceof UintType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffffL));
+			} else if (type instanceof UdintType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffffffffL));
+			} else if (type instanceof UlintType) {
+				return checkRangeUnsigned((BigInteger) value, new BigInteger("ffffffffffffffff", 16)); //$NON-NLS-1$
+			} else if (type instanceof BoolType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.ONE);
+			} else if (type instanceof ByteType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffL));
+			} else if (type instanceof WordType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffffL));
+			} else if (type instanceof DwordType) {
+				return checkRangeUnsigned((BigInteger) value, BigInteger.valueOf(0xffffffffL));
+			} else if (type instanceof LwordType) {
+				return checkRangeUnsigned((BigInteger) value, new BigInteger("ffffffffffffffff", 16)); //$NON-NLS-1$
+			}
+		}
+		return false;
+	}
+
+	private static boolean checkRange(final BigInteger value, final long lower, final long upper) {
+		return value.compareTo(BigInteger.valueOf(lower)) >= 0 && value.compareTo(BigInteger.valueOf(upper)) <= 0;
+	}
+
+	private static boolean checkRangeUnsigned(final BigInteger value, final BigInteger upper) {
+		return value.signum() >= 0 && value.compareTo(upper) <= 0;
 	}
 }
