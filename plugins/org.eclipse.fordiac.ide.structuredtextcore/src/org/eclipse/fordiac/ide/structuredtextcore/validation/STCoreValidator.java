@@ -36,6 +36,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
+import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
@@ -50,7 +51,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProv
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument;
@@ -118,6 +118,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			+ "bitAccessExpressionNotOfTypeAnyInt"; //$NON-NLS-1$
 	public static final String DUPLICATE_VARIABLE_NAME = ISSUE_CODE_PREFIX + "duplicateVariableName"; //$NON-NLS-1$
 	public static final String INDEX_RANGE_TYPE_INVALID = ISSUE_CODE_PREFIX + "indexRangeTypeInvalid"; //$NON-NLS-1$
+	public static final String INDEX_RANGE_NOT_A_LITERAL = ISSUE_CODE_PREFIX + "indexRangeNotALiteral"; //$NON-NLS-1$
 	public static final String MAX_LENGTH_NOT_ALLOWED = ISSUE_CODE_PREFIX + "maxLengthNotAllowed"; //$NON-NLS-1$
 	public static final String MAX_LENGTH_TYPE_INVALID = ISSUE_CODE_PREFIX + "maxLengthTypeInvalid"; //$NON-NLS-1$
 	public static final String TOO_MANY_INDICES_GIVEN = ISSUE_CODE_PREFIX + "tooManyIndicesGiven"; //$NON-NLS-1$
@@ -135,12 +136,24 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 						error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, leftType.getName()),
 								range, STCorePackage.Literals.ST_BINARY_EXPRESSION__LEFT, INDEX_RANGE_TYPE_INVALID,
 								leftType.getName());
+						// Currently we can only process literals
+					}
+					if (leftType instanceof AnyIntType && !(binaryExpression.getLeft() instanceof STNumericLiteral)) {
+						error(Messages.STCoreValidator_IndexRangeNotALiteral, range,
+								STCorePackage.Literals.ST_BINARY_EXPRESSION__LEFT, INDEX_RANGE_NOT_A_LITERAL,
+								leftType.getName());
 					}
 					final DataType rightType = (DataType) binaryExpression.getRight().getResultType();
 					if (!(rightType instanceof AnyIntType)) {
 						error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, rightType.getName()),
 								range, STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_TYPE_INVALID,
 								rightType.getName());
+						// Currently we can only process literals
+					}
+					if (rightType instanceof AnyIntType && !(binaryExpression.getRight() instanceof STNumericLiteral)) {
+						error(Messages.STCoreValidator_IndexRangeNotALiteral, range,
+								STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_NOT_A_LITERAL,
+								leftType.getName());
 					}
 				}
 			}
@@ -201,39 +214,30 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Check
 	public void checkArrayAccessIndices(final STArrayAccessExpression accessExpression) {
-		final var featureExpression = accessExpression.getReceiver() instanceof STFeatureExpression
-				? ((STFeatureExpression) accessExpression.getReceiver()).getFeature()
-				: null;
+		final var type = accessExpression.getReceiver().getResultType();
+		final var arrayType = type instanceof ArrayType ? (ArrayType) type : null;
 
-		final STVarDeclaration varDeclaration = (STVarDeclaration) featureExpression;
-		final var indexExpressions = accessExpression.getIndex();
-
-		if (varDeclaration != null && varDeclaration.isArray()) {
+		if (arrayType != null) {
+			final var indexExpressions = accessExpression.getIndex();
 			for (int i = 0; i < indexExpressions.size(); i++) {
 				final STExpression expression = indexExpressions.get(i);
-				checkArrayIndexInArrayDimensionBounds(accessExpression, varDeclaration, i, expression);
+				checkArrayIndexInArrayDimensionBounds(accessExpression, arrayType, i, expression);
 				checkArrayAccessIndexType(accessExpression, i, expression);
 			}
 		}
 	}
 
 	private void checkArrayIndexInArrayDimensionBounds(final STArrayAccessExpression accessExpression,
-			final STVarDeclaration varDeclaration, final int i, final STExpression expression) {
+			final ArrayType arrayType, final int i, final STExpression expression) {
 		if (expression instanceof STNumericLiteral
 				&& ((STNumericLiteral) expression).getResultType() instanceof AnyIntType
-				&& varDeclaration.getRanges() != null && varDeclaration.getRanges().size() > i
-				&& varDeclaration.getRanges().get(i) instanceof STBinaryExpression
-				&& ((STBinaryExpression) varDeclaration.getRanges().get(i)).getOp() == STBinaryOperator.RANGE) {
+				&& arrayType.getSubranges() != null && arrayType.getSubranges().size() > i) {
 			final var indexValue = (BigInteger) ((STNumericLiteral) expression).getValue();
-			final var lowerBoundExpression = ((STBinaryExpression) varDeclaration.getRanges().get(i)).getLeft();
-			final var upperBoundExpression = ((STBinaryExpression) varDeclaration.getRanges().get(i)).getRight();
 
-			if (lowerBoundExpression instanceof STNumericLiteral
-					&& lowerBoundExpression.getResultType() instanceof AnyIntType
-					&& upperBoundExpression instanceof STNumericLiteral
-					&& upperBoundExpression.getResultType() instanceof AnyIntType) {
-				final var lowerBound = (BigInteger) ((STNumericLiteral) lowerBoundExpression).getValue();
-				final var upperBound = (BigInteger) ((STNumericLiteral) upperBoundExpression).getValue();
+			final var subrange = arrayType.getSubranges().get(i);
+			if (subrange.isSetLowerLimit() && subrange.isSetUpperLimit()) {
+				final BigInteger lowerBound = BigInteger.valueOf(subrange.getLowerLimit());
+				final BigInteger upperBound = BigInteger.valueOf(subrange.getUpperLimit());
 
 				if (indexValue.compareTo(lowerBound) < 0 || indexValue.compareTo(upperBound) > 0) {
 					error(MessageFormat.format(Messages.STCoreValidator_ArrayIndexOutOfBounds, indexValue, lowerBound,
