@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Status;
@@ -39,5 +41,24 @@ public abstract class CommonLaunchConfigurationDelegate extends LaunchConfigurat
 		} else {
 			throw new CoreException(Status.error("Illegal launch mode: " + mode)); //$NON-NLS-1$
 		}
+	}
+
+	@Override
+	protected IProject[] getBuildOrder(final ILaunchConfiguration configuration, final String mode)
+			throws CoreException {
+		final IResource resource = LaunchConfigurationAttributes.getResource(configuration);
+		if (resource != null) {
+			final IProject project = resource.getProject();
+			if (project != null) {
+				return computeReferencedBuildOrder(new IProject[] { project });
+			}
+		}
+		return super.getBuildOrder(configuration, mode);
+	}
+
+	@Override
+	protected IProject[] getProjectsForProblemSearch(final ILaunchConfiguration configuration, final String mode)
+			throws CoreException {
+		return getBuildOrder(configuration, mode);
 	}
 }
