@@ -45,6 +45,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 
 	private ComboViewer eventCombo;
 	private Button repeatEventCheckbox;
+	private Button keepDebuggerRunningCheckbox;
 
 	@Override
 	public void createControl(final Composite parent) {
@@ -66,6 +67,11 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		repeatEventCheckbox.setText("Repeat event"); //$NON-NLS-1$
 		repeatEventCheckbox.addSelectionListener(widgetSelectedAdapter(e -> updateLaunchConfigurationDialog()));
 		GridDataFactory.fillDefaults().applyTo(repeatEventCheckbox);
+
+		keepDebuggerRunningCheckbox = new Button(comp, SWT.CHECK);
+		keepDebuggerRunningCheckbox.setText("Keep debugger running when idle"); //$NON-NLS-1$
+		keepDebuggerRunningCheckbox.addSelectionListener(widgetSelectedAdapter(e -> updateLaunchConfigurationDialog()));
+		GridDataFactory.fillDefaults().applyTo(keepDebuggerRunningCheckbox);
 		return group;
 	}
 
@@ -92,6 +98,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		super.setDefaults(configuration);
 		configuration.removeAttribute(FBLaunchConfigurationAttributes.EVENT);
 		configuration.removeAttribute(FBLaunchConfigurationAttributes.REPEAT_EVENT);
+		configuration.removeAttribute(FBLaunchConfigurationAttributes.KEEP_RUNNING_WHEN_IDLE);
 	}
 
 	@Override
@@ -106,6 +113,8 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 				eventCombo.setSelection(new StructuredSelection(event), true);
 			}
 			repeatEventCheckbox.setSelection(FBLaunchConfigurationAttributes.isRepeatEvent(configuration));
+			keepDebuggerRunningCheckbox
+					.setSelection(FBLaunchConfigurationAttributes.isKeepRunningWhenIdle(configuration));
 		} catch (final CoreException e) {
 			// ignore
 		}
@@ -122,6 +131,8 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 			configuration.removeAttribute(FBLaunchConfigurationAttributes.EVENT);
 		}
 		configuration.setAttribute(FBLaunchConfigurationAttributes.REPEAT_EVENT, repeatEventCheckbox.getSelection());
+		configuration.setAttribute(FBLaunchConfigurationAttributes.KEEP_RUNNING_WHEN_IDLE,
+				keepDebuggerRunningCheckbox.getSelection());
 	}
 
 	@Override

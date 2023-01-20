@@ -42,10 +42,11 @@ public abstract class FBLaunchConfigurationDelegate extends CommonLaunchConfigur
 			final FBType type = (FBType) TypeLibraryManager.INSTANCE.getTypeEntryForFile((IFile) resource).getType();
 			final var event = FBLaunchConfigurationAttributes.getEvent(configuration, type, getDefaultEvent(type));
 			final var repeatEvent = FBLaunchConfigurationAttributes.isRepeatEvent(configuration);
+			final var keepRunningWhenIdle = FBLaunchConfigurationAttributes.isKeepRunningWhenIdle(configuration);
 			final var defaultArguments = getDefaultArguments(type);
 			final var variables = LaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
 			final var evaluator = createEvaluator(type, variables);
-			evaluator.setEventQueue(new FBLaunchEventQueue(event, repeatEvent));
+			evaluator.setEventQueue(new FBLaunchEventQueue(event, repeatEvent, keepRunningWhenIdle));
 			launch(evaluator, configuration, mode, launch, monitor);
 		}
 	}

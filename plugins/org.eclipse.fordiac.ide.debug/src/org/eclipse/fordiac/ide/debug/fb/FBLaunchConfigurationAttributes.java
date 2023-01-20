@@ -21,8 +21,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttributes {
 	String EVENT = "org.eclipse.fordiac.ide.debug.event"; //$NON-NLS-1$
 	String REPEAT_EVENT = "org.eclipse.fordiac.ide.debug.repeatEvent"; //$NON-NLS-1$
+	String KEEP_RUNNING_WHEN_IDLE = "org.eclipse.fordiac.ide.debug.keepRunningWhenIdle"; //$NON-NLS-1$
 
-	static Event getEvent(final ILaunchConfiguration configuration, final FBType type, final Event defaultEvent) throws CoreException {
+	static Event getEvent(final ILaunchConfiguration configuration, final FBType type, final Event defaultEvent)
+			throws CoreException {
 		final String eventAttribute = configuration.getAttribute(EVENT, ""); //$NON-NLS-1$
 		if (eventAttribute != null && !eventAttribute.isEmpty()) {
 			final var event = type.getInterfaceList().getEvent(eventAttribute);
@@ -35,5 +37,10 @@ public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttr
 
 	static boolean isRepeatEvent(final ILaunchConfiguration configuration) throws CoreException {
 		return configuration.getAttribute(REPEAT_EVENT, false);
+	}
+
+	static boolean isKeepRunningWhenIdle(final ILaunchConfiguration configuration)
+			throws CoreException {
+		return configuration.getAttribute(KEEP_RUNNING_WHEN_IDLE, true);
 	}
 }
