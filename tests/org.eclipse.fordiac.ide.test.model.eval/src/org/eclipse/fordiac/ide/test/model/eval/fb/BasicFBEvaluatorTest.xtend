@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.model.eval.fb
 
+import java.util.Collection
 import java.util.List
 import java.util.Queue
 import java.util.Set
@@ -137,25 +138,24 @@ class BasicFBEvaluatorTest extends FBEvaluatorTest {
 				"DO1".newVarDeclaration(ElementaryTypes.INT, false)))
 	}
 
-	def static evaluateBasicFB(ECC ecc, Iterable<Event> inputEvents, Iterable<Variable<?>> variables,
+	def static evaluateBasicFB(ECC ecc, Collection<Event> inputEvents, Iterable<Variable<?>> variables,
 		VarDeclaration output) {
 		evaluateBasicFB(newBasicFB(ecc, variables.filter[type instanceof DataType].map [
 			newVarDeclaration(name, type as DataType, true)
 		] + #[output]), inputEvents, variables)
 	}
 
-	def static evaluateBasicFB(BasicFBType fbType, Iterable<Event> inputEvents, Iterable<Variable<?>> variables) {
-		val queue = new ArrayBlockingQueue(1000)
-		val eval = new TracingBasicFBEvaluator(fbType, null, variables, queue, null)
-		queue.addAll(inputEvents)
-		inputEvents.forEach[eval.evaluate]
+	def static evaluateBasicFB(BasicFBType fbType, Collection<Event> inputEvents, Iterable<Variable<?>> variables) {
+		val eval = new TracingBasicFBEvaluator(fbType, null, variables, null)
+		eval.eventQueue = new TracingFBEvaluatorEventQueue(inputEvents)
+		eval.evaluate
 		return eval
 	}
 
 	def static void assertTrace(Object expectedResult, Iterable<? extends Event> expectedEvents,
 		Iterable<? extends ECState> expectedTrace, TracingBasicFBEvaluator actual) {
 		expectedResult.assertEquals(actual.variables.get("DO1").value)
-		expectedEvents.assertIterableEquals(actual.queue)
+		expectedEvents.assertIterableEquals((actual.eventQueue as TracingFBEvaluatorEventQueue).outputEvents)
 		expectedTrace.assertIterableEquals(actual.trace)
 	}
 
@@ -230,9 +230,9 @@ class BasicFBEvaluatorTest extends FBEvaluatorTest {
 	static class TracingBasicFBEvaluator extends BasicFBEvaluator {
 		@Accessors final Queue<ECState> trace = new ArrayBlockingQueue(1000)
 
-		new(BasicFBType type, Variable<?> context, Iterable<Variable<?>> variables, Queue<Event> queue,
+		new(BasicFBType type, Variable<?> context, Iterable<Variable<?>> variables,
 			Evaluator parent) {
-			super(type, context, variables, queue, parent)
+			super(type, context, variables, parent)
 		}
 
 		override protected <T> T trap(T context) {

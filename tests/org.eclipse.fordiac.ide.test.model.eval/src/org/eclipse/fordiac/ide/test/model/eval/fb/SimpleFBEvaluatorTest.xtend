@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -615,11 +615,11 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 		] + #[output])
 		fbType.callables.addAll(callables)
 		fbType.internalFbs.addAll(internalFBs)
-		val queue = new ArrayBlockingQueue(1000)
-		val eval = new SimpleFBEvaluator(fbType, null, variables, queue, null)
-		queue.add(inputEvent)
+		val queue = new TracingFBEvaluatorEventQueue(#[inputEvent])
+		val eval = new SimpleFBEvaluator(fbType, null, variables, null)
+		eval.eventQueue = queue
 		eval.evaluate
-		#[outputEvent].assertIterableEquals(queue)
+		#[outputEvent].assertIterableEquals(queue.outputEvents)
 		return eval
 	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022-2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.debug.fb;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.Queue;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -26,7 +25,6 @@ import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.fordiac.ide.debug.CommonLaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.debug.Messages;
-import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
@@ -46,14 +44,14 @@ public abstract class FBLaunchConfigurationDelegate extends CommonLaunchConfigur
 			final var repeatEvent = FBLaunchConfigurationAttributes.isRepeatEvent(configuration);
 			final var defaultArguments = getDefaultArguments(type);
 			final var variables = LaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
-			final Queue<Event> queue = new LaunchEventQueue(event, repeatEvent);
-			final Evaluator evaluator = createEvaluator(type, queue, variables);
+			final var evaluator = createEvaluator(type, variables);
+			evaluator.setEventQueue(new FBLaunchEventQueue(event, repeatEvent));
 			launch(evaluator, configuration, mode, launch, monitor);
 		}
 	}
 
-	public abstract FBEvaluator<? extends FBType> createEvaluator(FBType type, Queue<Event> queue,
-			List<Variable<?>> variables) throws CoreException;
+	public abstract FBEvaluator<? extends FBType> createEvaluator(FBType type, List<Variable<?>> variables)
+			throws CoreException;
 
 	public static List<Variable<?>> getDefaultArguments(final FBType type) throws CoreException {
 		try {

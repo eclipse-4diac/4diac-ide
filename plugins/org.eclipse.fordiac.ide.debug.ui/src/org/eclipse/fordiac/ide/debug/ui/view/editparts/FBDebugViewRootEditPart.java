@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Martin Jobst - refactor evaluator API
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view.editparts;
 
@@ -30,7 +32,6 @@ import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugThread;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
-import org.eclipse.fordiac.ide.debug.fb.LaunchEventQueue;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
@@ -38,6 +39,7 @@ import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
+import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorCountingEventQueue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -124,14 +126,15 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 	}
 
 	private void fillEventValues() {
-		if (getFBEvaluator().getQueue() instanceof LaunchEventQueue) {
-			final LaunchEventQueue queue = (LaunchEventQueue) getFBEvaluator().getQueue();
-			getFBType().getInterfaceList().getEventInputs().forEach(ev -> addEventEntry(queue, ev));
-			getFBType().getInterfaceList().getEventOutputs().forEach(ev -> addEventEntry(queue, ev));
+		final var eventQueue = getFBEvaluator().getEventQueue();
+		if (eventQueue instanceof FBEvaluatorCountingEventQueue) {
+			final FBEvaluatorCountingEventQueue countingEventQueue = (FBEvaluatorCountingEventQueue) eventQueue;
+			getFBType().getInterfaceList().getEventInputs().forEach(ev -> addEventEntry(countingEventQueue, ev));
+			getFBType().getInterfaceList().getEventOutputs().forEach(ev -> addEventEntry(countingEventQueue, ev));
 		}
 	}
 
-	private EventValueEntity addEventEntry(final LaunchEventQueue queue, final Event ev) {
+	private EventValueEntity addEventEntry(final FBEvaluatorCountingEventQueue queue, final Event ev) {
 		return eventValues.put(ev, new EventValueEntity(ev, queue.getCount(ev)));
 	}
 
@@ -144,7 +147,7 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 
 	private void fillInterfaceValues() {
 		final EvaluatorDebugTarget debugTarget = (EvaluatorDebugTarget) getModel().getAdapter(IDebugTarget.class);
-		getFBEvaluator().getInstance().getMembers().entrySet().forEach(entry -> {
+		getFBEvaluator().getContext().getMembers().entrySet().forEach(entry -> {
 			final IInterfaceElement interfaceElement = getFBType().getInterfaceList()
 					.getInterfaceElement(entry.getKey());
 			if (interfaceElement != null) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -20,28 +20,42 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	@Accessors final T type
-	@Accessors final Queue<Event> queue
-	@Accessors final FBVariable instance
+	@Accessors FBEvaluatorEventQueue eventQueue
 
-	new(T type, Variable<?> context, Iterable<Variable<?>> variables, Queue<Event> queue, Evaluator parent) {
-		super(context, parent)
+	new(T type, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
+		super(new FBVariable(CONTEXT_NAME, type, variables), parent)
 		this.type = type
-		this.queue = queue
-		this.instance = new FBVariable(CONTEXT_NAME, type, variables)
+	}
+
+	@Deprecated(forRemoval=true)
+	new(T type, Variable<?> context, Iterable<Variable<?>> variables, Queue<Event> queue, Evaluator parent) {
+		this(type, context, variables, parent)
+		this.eventQueue = new FBEvaluatorEventQueueAdapter(queue, type)
 	}
 
 	override evaluate() {
-		while (queue?.peek.applicable) {
-			queue.poll.evaluate
+		var Event event
+		while((event = eventQueue?.receiveInputEvent) !== null) {
+			if(!event.applicable) {
+				throw new UnsupportedOperationException('''The event «event.name» is not applicable for this evaluator''')
+			}
+			event.evaluate
 		}
 		null
 	}
 
+	/**
+	 * Evaluate a single event
+	 */
 	def abstract void evaluate(Event event)
 
+	/**
+	 * Determine if the event is applicable to the current evaluator
+	 */
 	def boolean isApplicable(Event event) {
 		event?.eContainer?.eContainer == type && event.isInput
 	}
@@ -50,16 +64,57 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 		type.name
 	}
 
+	override FBVariable getContext() {
+		super.context as FBVariable
+	}
+
+	/**
+	 * Get the FB instance of this evaluator
+	 * 
+	 * @deprecated Use {@link #getContext() getContext()} instead
+	 */
+	@Deprecated(forRemoval=true)
+	def getInstance() { context }
+
+	/**
+	 * Get the FB instance of this evaluator
+	 * 
+	 * @deprecated Use {@link #getContext() getContext()} instead
+	 */
+	@Deprecated(forRemoval=true)
+	def getQueue() {
+		switch(queue : eventQueue) { FBEvaluatorEventQueueAdapter: queue.delegate }
+	}
+
 	override getSourceElement() {
 		this.type
 	}
 
 	override getVariables() {
-		instance.value.members
+		context.value.members
 	}
-	
+
 	override reset(Iterable<Variable<?>> variables) {
-		this.instance.value = new FBVariable(CONTEXT_NAME, type, variables).value
-		update(instance.value.members.values)
+		context.value = new FBVariable(CONTEXT_NAME, type, variables).value
+		update(context.value.members.values)
+	}
+
+	@Deprecated(forRemoval=true)
+	@FinalFieldsConstructor
+	protected static class FBEvaluatorEventQueueAdapter implements FBEvaluatorEventQueue {
+		@Accessors final Queue<Event> delegate
+		@Accessors final FBType type
+
+		override receiveInputEvent() throws InterruptedException {
+			if(delegate.peek.applicable) delegate.poll else null
+		}
+
+		override sendOutputEvent(Event event) {
+			delegate.offer(event)
+		}
+
+		def protected boolean isApplicable(Event event) {
+			event?.eContainer?.eContainer == type && event.isInput
+		}
 	}
 }
