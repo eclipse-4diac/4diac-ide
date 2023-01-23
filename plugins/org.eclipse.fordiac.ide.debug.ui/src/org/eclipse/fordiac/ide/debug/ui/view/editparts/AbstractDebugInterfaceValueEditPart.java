@@ -16,7 +16,6 @@
 package org.eclipse.fordiac.ide.debug.ui.view.editparts;
 
 import org.eclipse.draw2d.AncestorListener;
-import org.eclipse.draw2d.FigureUtilities;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
@@ -73,7 +72,7 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 	@Override
 	protected IFigure createFigure() {
 		final Label l = new Label();
-		l.setSize(100, 100);
+		l.setSize(100, -1);
 		l.setOpaque(true);
 		l.setBackgroundColor(org.eclipse.draw2d.ColorConstants.yellow);
 		l.setPreferredSize(150, 20);
@@ -109,17 +108,16 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 
 			final int width = getFigureWidth();
 			final int x = calcXPos(bounds, width);
-			final Rectangle newBounds = new Rectangle(x, bounds.y, -1, -1);
+			final Rectangle newBounds = new Rectangle(x, bounds.y, width, -1);
 			((GraphicalEditPart) getParent()).setLayoutConstraint(this, getFigure(), newBounds);
 		}
 	}
 
 	private int getFigureWidth() {
-		final String label = getFigure().getText();
 		final Font font = getFigure().getFont();
 		int width = 50;
 		if (font != null) {
-			width = FigureUtilities.getTextWidth(label, getFigure().getFont());
+			width = getFigure().getPreferredSize().width;
 			width = Math.max(width, 50);
 		}
 		return width;
@@ -131,7 +129,6 @@ public abstract class AbstractDebugInterfaceValueEditPart extends AbstractGraphi
 			x = bounds.x - 10 - width - 15 * getNumEventInputs();
 		} else {
 			x = bounds.x + bounds.width + 10 + 15 * getNumEventOutputs();
-
 		}
 		return x;
 	}
