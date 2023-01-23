@@ -16,13 +16,17 @@ import java.util.Collection
 import java.util.Map
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
 import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditor
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorFactory
+
+import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 
 final class STAlgorithmEmbeddedEditorUtil {
 	static final URI SYNTHETIC_URI = URI.createURI("__synthetic.stalg")
@@ -34,6 +38,10 @@ final class STAlgorithmEmbeddedEditorUtil {
 
 	def static EmbeddedEditorFactory getEmbeddedEditorFactory() {
 		return SERVICE_PROVIDER.get(EmbeddedEditorFactory)
+	}
+
+	def static void updateEditor(EmbeddedEditor editor, VarDeclaration varDeclaration) {
+		editor.updateEditor(varDeclaration?.eResource?.URI ?: SYNTHETIC_URI, null, null, varDeclaration.featureType)
 	}
 
 	def static void updateEditor(EmbeddedEditor editor, URI uri, FBType type,
