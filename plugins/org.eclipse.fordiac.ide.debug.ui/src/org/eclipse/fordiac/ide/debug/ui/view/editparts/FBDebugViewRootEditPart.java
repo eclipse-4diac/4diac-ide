@@ -101,7 +101,7 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 		DebugPlugin.getDefault().removeDebugEventListener(this);
 	}
 
-	private FBEvaluator<?> getFBEvaluator() {
+	public FBEvaluator<?> getFBEvaluator() {
 		return (FBEvaluator<?>) getModel().getEvaluator();
 	}
 
@@ -213,6 +213,7 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 			final Object ep = editPartRegistry.get(interfaceValueEntity);
 			if (ep instanceof InterfaceValueEditPart) {
 				((InterfaceValueEditPart) ep).setValue(value);
+				refreshVisuals();
 			}
 		}
 	}
