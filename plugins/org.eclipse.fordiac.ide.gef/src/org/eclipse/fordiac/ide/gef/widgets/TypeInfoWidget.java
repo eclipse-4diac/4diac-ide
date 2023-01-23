@@ -86,6 +86,8 @@ public class TypeInfoWidget implements CommandExecutor {
 	private Text typeText;
 	private Text descriptionText;
 
+	private boolean blockListeners;
+
 	private TableViewer versionViewer;
 	private AddDeleteWidget addDeleteVersionInfoButtons;
 	private static final String VERSION_PROPERTY = "version"; //$NON-NLS-1$
@@ -118,24 +120,43 @@ public class TypeInfoWidget implements CommandExecutor {
 		identificationGroup.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Standard + ":"); //$NON-NLS-1$
 		standardText = createGroupText(identificationGroup, true);
-		standardText.addModifyListener(e -> executeCommand(new ChangeStandardCommand(type, standardText.getText())));
+		standardText.addModifyListener(e -> {
+			if (!blockListeners) {
+				executeCommand(new ChangeStandardCommand(type, standardText.getText()));
+			}
+		});
 
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Classification + ":"); //$NON-NLS-1$
 		classificationText = createGroupText(identificationGroup, true);
-		classificationText.addModifyListener(
-				e -> executeCommand(new ChangeClassificationCommand(type, classificationText.getText())));
+		classificationText.addModifyListener(e -> {
+			if (!blockListeners) {
+				executeCommand(new ChangeClassificationCommand(type, classificationText.getText()));
+			}
+		});
+
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.ApplicationDomain + ":"); //$NON-NLS-1$
 		domainText = createGroupText(identificationGroup, true);
-		domainText
-				.addModifyListener(e -> executeCommand(new ChangeApplicationDomainCommand(type, domainText.getText())));
+		domainText.addModifyListener(e -> {
+			if (!blockListeners) {
+				executeCommand(new ChangeApplicationDomainCommand(type, domainText.getText()));
+			}
+		});
 
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Function + ":"); //$NON-NLS-1$
 		functionText = createGroupText(identificationGroup, true);
-		functionText.addModifyListener(e -> executeCommand(new ChangeFunctionCommand(type, functionText.getText())));
+		functionText.addModifyListener(e -> {
+			if (!blockListeners) {
+				executeCommand(new ChangeFunctionCommand(type, functionText.getText()));
+			}
+		});
 
 		getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Type + ":"); //$NON-NLS-1$
 		typeText = createGroupText(identificationGroup, true);
-		typeText.addModifyListener(e -> executeCommand(new ChangeIdentifcationTypeCommand(type, typeText.getText())));
+		typeText.addModifyListener(e -> {
+			if (!blockListeners) {
+				executeCommand(new ChangeIdentifcationTypeCommand(type, typeText.getText()));
+			}
+		});
 
 		final Label label = getWidgetFactory().createLabel(identificationGroup, FordiacMessages.Description + ":"); //$NON-NLS-1$
 		label.setLayoutData(new GridData(SWT.NONE, SWT.TOP, false, false));
@@ -143,8 +164,11 @@ public class TypeInfoWidget implements CommandExecutor {
 				SWT.WRAP | SWT.MULTI | SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
 		final GridData descriptionTextData = new GridData(GridData.FILL, GridData.FILL, true, true);
 		descriptionText.setLayoutData(descriptionTextData);
-		descriptionText
-				.addModifyListener(e -> executeCommand(new ChangeDescriptionCommand(type, descriptionText.getText())));
+		descriptionText.addModifyListener(e -> {
+			if (!blockListeners) {
+				executeCommand(new ChangeDescriptionCommand(type, descriptionText.getText()));
+			}
+		});
 	}
 
 	private void createVersionInfoGroup(final Composite parent) {
@@ -287,7 +311,9 @@ public class TypeInfoWidget implements CommandExecutor {
 	@Override
 	public void executeCommand(final Command cmd) {
 		if (commandExecutor != null) {
+			blockListeners = true;
 			commandExecutor.accept(cmd);
+			blockListeners = false;
 		}
 	}
 

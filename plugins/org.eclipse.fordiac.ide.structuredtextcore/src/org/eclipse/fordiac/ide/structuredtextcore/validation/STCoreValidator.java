@@ -388,12 +388,13 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Check
 	public void checkStringLiteral(final STStringLiteral expression) {
 		final var type = (DataType) expression.getResultType();
-		final var expectedType = (DataType) STCoreUtil.getExpectedType(expression);
+		final var expectedType = STCoreUtil.getExpectedType(expression);
 		if (!isStringValueValid(type, expression.getValue())) {
 			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(),
 					stringValueConverter.toString(expression.getValue())),
 					STCorePackage.Literals.ST_STRING_LITERAL__VALUE, INVALID_STRING_LITERAL);
-		} else if (expectedType != null && !type.equals(expectedType) && expectedType.isAssignableFrom(type)) {
+		} else if (expectedType instanceof DataType && !type.equals(expectedType)
+				&& ((DataType) expectedType).isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
 					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
 		}
