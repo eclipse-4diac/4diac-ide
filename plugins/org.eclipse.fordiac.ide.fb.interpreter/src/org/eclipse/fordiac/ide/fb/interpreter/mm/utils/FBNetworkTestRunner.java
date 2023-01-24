@@ -13,6 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
 
+import java.util.Optional;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
@@ -70,7 +72,10 @@ public final class FBNetworkTestRunner {
 
 	private static void checkData(final String expectedResult, final EventOccurrence result, final boolean isInput) {
 		final FBType resultType = (FBType) result.getFbRuntime().getModel();
-		new SequenceMatcher(resultType).matchParameters(expectedResult, isInput);
+		final Optional<String> errorMsg = new SequenceMatcher(resultType).matchParameters(expectedResult, isInput);
+		if (errorMsg.isPresent()) {
+			throw new IllegalArgumentException(errorMsg.get());
+		}
 	}
 
 	private static void checkEvent(final EventOccurrence result, final String expectedEventName)

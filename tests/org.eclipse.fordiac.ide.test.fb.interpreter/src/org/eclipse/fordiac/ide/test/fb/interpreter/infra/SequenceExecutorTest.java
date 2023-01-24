@@ -19,7 +19,6 @@ public class SequenceExecutorTest {
 		assert (trans.size() == 3);
 		assert (trans.stream().noneMatch(t -> t.getInputEventOccurrence().isActive()));
 		assert (trans.stream().noneMatch(t -> t.getInputEventOccurrence().isIgnored()));
-
 	}
 
 }

@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
 import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
-import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBTest;
 import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils.setVariable;
 
 import java.util.Arrays;
@@ -45,14 +44,11 @@ public class StationCtrlTest extends AbstractInterpreterTest {
 		addTransaction(seq, new FBTransactionBuilder("PartPicked", "StartConv")); //$NON-NLS-1$ //$NON-NLS-2$
 		runFBTest(fb, seq);
 
-
 		fb.getService().getServiceSequence().clear();
 		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "ErrorCode", "2"); //$NON-NLS-1$ //$NON-NLS-2$
 		addTransaction(seq, new FBTransactionBuilder("Error", "StopConv")); //$NON-NLS-1$ //$NON-NLS-2$
 		runFBTest(fb, seq, "processingPart"); //$NON-NLS-1$
 	}
-
-
 
 }
