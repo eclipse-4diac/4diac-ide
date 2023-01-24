@@ -37,6 +37,9 @@ class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Var
 
 	new(String name, ArrayType type) {
 		super(name, type)
+		if(!type.subranges.forall[setLowerLimit && setUpperLimit]) {
+			throw new IllegalArgumentException("Cannot instantiate array variable with unknown bounds")
+		}
 		elementType = if (type.subranges.size > 1)
 			newArrayType(type.baseType, type.subranges.tail.map[copy])
 		else
@@ -101,11 +104,8 @@ class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Var
 	}
 
 	def static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
-		if (arraySubranges.empty) {
-			throw new UnsupportedOperationException("Cannot create array with variable size")
-		}
 		DataFactory.eINSTANCE.createArrayType => [
-			name = '''ARRAY [«arraySubranges.map['''«lowerLimit»..«upperLimit»'''].join(", ")»] OF «arrayBaseType.name»'''
+			name = '''ARRAY [«arraySubranges.map['''«IF setLowerLimit && setUpperLimit»«lowerLimit»..«upperLimit»«ELSE»*«ENDIF»'''].join(", ")»] OF «arrayBaseType.name»'''
 			baseType = arrayBaseType
 			subranges.addAll(arraySubranges)
 		]

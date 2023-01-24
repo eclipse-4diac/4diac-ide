@@ -62,6 +62,15 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	protected int lowerLimit = LOWER_LIMIT_EDEFAULT;
 
 	/**
+	 * This is true if the Lower Limit attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean lowerLimitESet;
+
+	/**
 	 * The default value of the '{@link #getUpperLimit() <em>Upper Limit</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -80,6 +89,15 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	 * @ordered
 	 */
 	protected int upperLimit = UPPER_LIMIT_EDEFAULT;
+
+	/**
+	 * This is true if the Upper Limit attribute has been set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean upperLimitESet;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -119,8 +137,35 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	public void setLowerLimit(int newLowerLimit) {
 		int oldLowerLimit = lowerLimit;
 		lowerLimit = newLowerLimit;
+		boolean oldLowerLimitESet = lowerLimitESet;
+		lowerLimitESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.SUBRANGE__LOWER_LIMIT, oldLowerLimit, lowerLimit));
+			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.SUBRANGE__LOWER_LIMIT, oldLowerLimit, lowerLimit, !oldLowerLimitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetLowerLimit() {
+		int oldLowerLimit = lowerLimit;
+		boolean oldLowerLimitESet = lowerLimitESet;
+		lowerLimit = LOWER_LIMIT_EDEFAULT;
+		lowerLimitESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, DataPackage.SUBRANGE__LOWER_LIMIT, oldLowerLimit, LOWER_LIMIT_EDEFAULT, oldLowerLimitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetLowerLimit() {
+		return lowerLimitESet;
 	}
 
 	/**
@@ -142,8 +187,35 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	public void setUpperLimit(int newUpperLimit) {
 		int oldUpperLimit = upperLimit;
 		upperLimit = newUpperLimit;
+		boolean oldUpperLimitESet = upperLimitESet;
+		upperLimitESet = true;
 		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.SUBRANGE__UPPER_LIMIT, oldUpperLimit, upperLimit));
+			eNotify(new ENotificationImpl(this, Notification.SET, DataPackage.SUBRANGE__UPPER_LIMIT, oldUpperLimit, upperLimit, !oldUpperLimitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void unsetUpperLimit() {
+		int oldUpperLimit = upperLimit;
+		boolean oldUpperLimitESet = upperLimitESet;
+		upperLimit = UPPER_LIMIT_EDEFAULT;
+		upperLimitESet = false;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.UNSET, DataPackage.SUBRANGE__UPPER_LIMIT, oldUpperLimit, UPPER_LIMIT_EDEFAULT, oldUpperLimitESet));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean isSetUpperLimit() {
+		return upperLimitESet;
 	}
 
 	/**
@@ -192,10 +264,10 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	public void eUnset(int featureID) {
 		switch (featureID) {
 			case DataPackage.SUBRANGE__LOWER_LIMIT:
-				setLowerLimit(LOWER_LIMIT_EDEFAULT);
+				unsetLowerLimit();
 				return;
 			case DataPackage.SUBRANGE__UPPER_LIMIT:
-				setUpperLimit(UPPER_LIMIT_EDEFAULT);
+				unsetUpperLimit();
 				return;
 			default:
 				super.eUnset(featureID);
@@ -212,9 +284,9 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 			case DataPackage.SUBRANGE__LOWER_LIMIT:
-				return lowerLimit != LOWER_LIMIT_EDEFAULT;
+				return isSetLowerLimit();
 			case DataPackage.SUBRANGE__UPPER_LIMIT:
-				return upperLimit != UPPER_LIMIT_EDEFAULT;
+				return isSetUpperLimit();
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -231,9 +303,9 @@ public class SubrangeImpl extends EObjectImpl implements Subrange {
 
 		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (lowerLimit: "); //$NON-NLS-1$
-		result.append(lowerLimit);
+		if (lowerLimitESet) result.append(lowerLimit); else result.append("<unset>"); //$NON-NLS-1$
 		result.append(", upperLimit: "); //$NON-NLS-1$
-		result.append(upperLimit);
+		if (upperLimitESet) result.append(upperLimit); else result.append("<unset>"); //$NON-NLS-1$
 		result.append(')');
 		return result.toString();
 	}
