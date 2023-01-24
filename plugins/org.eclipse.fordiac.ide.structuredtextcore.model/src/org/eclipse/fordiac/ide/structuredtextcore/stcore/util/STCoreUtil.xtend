@@ -69,10 +69,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
@@ -86,6 +88,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 
 final class STCoreUtil {
+	public static final String OPTION_EXPECTED_TYPE = STCoreUtil.name + ".EXPECTED_TYPE"
 
 	private new() {
 	}
@@ -288,6 +291,8 @@ final class STCoreUtil {
 					VarDeclaration: parameter.type
 					STVarDeclaration: parameter.type
 				}
+			STExpressionSource:
+				eResource?.resourceSet?.loadOptions?.get(OPTION_EXPECTED_TYPE) as INamedElement
 		}
 	}
 
@@ -298,6 +303,8 @@ final class STCoreUtil {
 			STStructInitElement: variable.featureType
 			STArrayInitializerExpression: expectedType
 			STStructInitializerExpression: expectedType
+			STInitializerExpressionSource: eResource?.resourceSet?.loadOptions?.get(
+				OPTION_EXPECTED_TYPE) as INamedElement
 		}
 	}
 

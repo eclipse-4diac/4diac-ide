@@ -22,6 +22,7 @@
  *       - validation for unary and binary operators
  *       - fix type validation for literals
  *       - validation for truncated string literals
+ *       - validation for (initializer) expression source
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.validation;
 
@@ -60,9 +61,11 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
@@ -327,6 +330,25 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			final var type = getFeatureType(declaration);
 			final var initializerType = declaration.getDefaultValue().getResultType();
 			checkTypeCompatibility(type, initializerType, STCorePackage.Literals.ST_VAR_DECLARATION__DEFAULT_VALUE);
+		}
+	}
+
+	@Check
+	public void checkExpressionSourceTypeCompatibility(final STExpressionSource source) {
+		if (source.getExpression() != null) {
+			final var type = STCoreUtil.getExpectedType(source.getExpression());
+			final var initializerType = source.getExpression().getResultType();
+			checkTypeCompatibility(type, initializerType, STCorePackage.Literals.ST_EXPRESSION_SOURCE__EXPRESSION);
+		}
+	}
+
+	@Check
+	public void checkInitializerExpressionSourceTypeCompatibility(final STInitializerExpressionSource source) {
+		if (source.getInitializerExpression() != null) {
+			final var type = STCoreUtil.getExpectedType(source.getInitializerExpression());
+			final var initializerType = source.getInitializerExpression().getResultType();
+			checkTypeCompatibility(type, initializerType,
+					STCorePackage.Literals.ST_INITIALIZER_EXPRESSION_SOURCE__INITIALIZER_EXPRESSION);
 		}
 	}
 
