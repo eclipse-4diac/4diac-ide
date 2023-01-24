@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.hyperlinking.ST
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.reconciler.STAlgorithmDocumentReconcileStrategy
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceForIEditorInputFactory
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreCommentDocumentationProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider
@@ -47,6 +48,7 @@ import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper
 import org.eclipse.xtext.ui.editor.model.XtextDocument
 import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider
+import org.eclipse.xtext.ui.editor.occurrences.IOccurrenceComputer
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer
 import org.eclipse.xtext.ui.editor.quickfix.ISimilarityMatcher
 import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy
@@ -134,5 +136,9 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 		if (PlatformUI.isWorkbenchRunning()) {
 			binder.bind(IURIEditorOpener).annotatedWith(LanguageSpecific).to(STAlgorithmURIEditorOpener)
 		}
+	}
+		
+	def Class<? extends IOccurrenceComputer> bindIOccurrenceComputer() {
+		return STCoreOccurrenceComputer;
 	}
 }
