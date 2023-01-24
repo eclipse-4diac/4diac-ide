@@ -422,6 +422,20 @@ public class STCoreSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case STCorePackage.ST_EXPRESSION_SOURCE: {
+				STExpressionSource stExpressionSource = (STExpressionSource)theEObject;
+				T result = caseSTExpressionSource(stExpressionSource);
+				if (result == null) result = caseSTSource(stExpressionSource);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case STCorePackage.ST_INITIALIZER_EXPRESSION_SOURCE: {
+				STInitializerExpressionSource stInitializerExpressionSource = (STInitializerExpressionSource)theEObject;
+				T result = caseSTInitializerExpressionSource(stInitializerExpressionSource);
+				if (result == null) result = caseSTSource(stInitializerExpressionSource);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -1173,6 +1187,36 @@ public class STCoreSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSTStructInitElement(STStructInitElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Expression Source</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Expression Source</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTExpressionSource(STExpressionSource object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Initializer Expression Source</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Initializer Expression Source</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTInitializerExpressionSource(STInitializerExpressionSource object) {
 		return null;
 	}
 

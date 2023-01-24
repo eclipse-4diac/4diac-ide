@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2021 - 2022 Primetals Technologies GmbH, 
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +17,7 @@
  *       - literal data types
  *       - enhanced partial access
  *       - input/output variable blocks
+ *       - (initializer) expression source
  *******************************************************************************/
 grammar org.eclipse.fordiac.ide.structuredtextcore.STCore hidden(WS, ML_COMMENT, SL_COMMENT)
 
@@ -27,6 +28,18 @@ import "org.eclipse.fordiac.ide.model.libraryElement" as libraryElement
 
 STCoreSource returns STSource:
 	{STCoreSource} statements+=STStatement*;
+
+STExpressionSource returns STSource:
+	{STExpressionSource} expression=STExpression?;
+
+STExpressionSource0 returns STSource:
+	STExpressionSource; // necessary to keep Xtext from skipping this rule
+
+STInitializerExpressionSource returns STSource:
+	{STInitializerExpressionSource} initializerExpression=STInitializerExpression?;
+
+STInitializerExpressionSource0 returns STSource:
+	STInitializerExpressionSource; // necessary to keep Xtext from skipping this rule
 
 STVarDeclarationBlock returns STVarPlainDeclarationBlock:
 	{STVarPlainDeclarationBlock} 'VAR' (constant?='CONSTANT')?
