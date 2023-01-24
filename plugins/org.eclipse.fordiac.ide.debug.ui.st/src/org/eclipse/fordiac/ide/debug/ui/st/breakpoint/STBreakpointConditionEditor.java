@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022-2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,13 +13,13 @@
 package org.eclipse.fordiac.ide.debug.ui.st.breakpoint;
 
 import java.util.Collections;
-import java.util.stream.Stream;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.fordiac.ide.debug.st.breakpoint.STLineBreakpoint;
 import org.eclipse.fordiac.ide.debug.ui.st.Messages;
 import org.eclipse.fordiac.ide.debug.ui.st.util.STDebugUIUtil;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmConditionEditedResourceProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorUtil;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -33,7 +33,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IPropertyListener;
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditor;
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorModelAccess;
@@ -49,7 +48,6 @@ public class STBreakpointConditionEditor {
 	private STLineBreakpoint input;
 
 	private Button conditional;
-	private Composite conditionEditorComposite;
 	private EmbeddedEditor conditionEditor;
 	private EmbeddedEditorModelAccess conditionEditorModelAccess;
 
@@ -72,30 +70,19 @@ public class STBreakpointConditionEditor {
 		}));
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(conditional);
 
-		conditionEditorComposite = new Composite(comp, SWT.NONE);
-		GridLayoutFactory.fillDefaults().applyTo(conditionEditorComposite);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(conditionEditorComposite);
-
-		createConditionPlaceholder(conditionEditorComposite);
+		createConditionEditor(comp);
+		GridDataFactory.fillDefaults().grab(true, true).applyTo(conditionEditor.getViewer().getControl());
 
 		return comp;
 	}
 
-	@SuppressWarnings("static-method")
-	protected Control createConditionPlaceholder(final Composite parent) {
-		final Text conditionText = new Text(parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-		conditionText.setEditable(false);
-		GridDataFactory.fillDefaults().grab(true, true).applyTo(conditionText);
-		return conditionText;
-	}
-
-	protected Control createConditionEditor(final Composite parent) {
-		final IEditedResourceProvider editedResourceProvider = createEditedResourceProvider();
+	protected void createConditionEditor(final Composite parent) {
+		final IEditedResourceProvider editedResourceProvider = new STAlgorithmConditionEditedResourceProvider(null,
+				Collections.emptyList(), ElementaryTypes.BOOL);
 		conditionEditor = STAlgorithmEmbeddedEditorUtil.getEmbeddedEditorFactory().newEditor(editedResourceProvider)
 				.withParent(parent);
-		conditionEditorModelAccess = conditionEditor.createPartialEditor("", input.getCondition(), //$NON-NLS-1$
-				"", false);  //$NON-NLS-1$
-		conditionEditor.getViewer().setEditable(input.isConditionEnabled());
+		conditionEditorModelAccess = conditionEditor.createPartialEditor();
+		conditionEditor.getViewer().setEditable(false);
 		conditionEditor.getDocument().addDocumentListener(new IDocumentListener() {
 			@Override
 			public void documentChanged(final DocumentEvent event) {
@@ -109,43 +96,32 @@ public class STBreakpointConditionEditor {
 			}
 		});
 		SourceViewerColorProvider.initializeSourceViewerColors(conditionEditor.getViewer());
-		return conditionEditor.getViewer().getControl();
-	}
-
-	protected IEditedResourceProvider createEditedResourceProvider() {
-		try {
-			return new STAlgorithmConditionEditedResourceProvider(input.getFBType(),
-					STDebugUIUtil.getAdditionalScope(input.getMarker().getResource(), input.getLineNumber()));
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError("Couldn't get breakpoint attributes", e); //$NON-NLS-1$
-		}
-		return new STAlgorithmConditionEditedResourceProvider(null, Collections.emptyList());
 	}
 
 	protected void updateConditionEditor() {
-		conditionEditor = null;
-		conditionEditorModelAccess = null;
-		Stream.of(conditionEditorComposite.getChildren()).forEach(Control::dispose);
 		if (input != null) {
-			createConditionEditor(conditionEditorComposite);
+			try {
+				STAlgorithmEmbeddedEditorUtil.updateEditor(conditionEditor, input.getFBType().eResource().getURI(),
+						input.getFBType(),
+						STDebugUIUtil.getAdditionalScope(input.getMarker().getResource(), input.getLineNumber()),
+						ElementaryTypes.BOOL);
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError("Couldn't get breakpoint attributes", e); //$NON-NLS-1$
+				STAlgorithmEmbeddedEditorUtil.updateEditor(conditionEditor, null, null, null, ElementaryTypes.BOOL);
+			}
+			conditionEditorModelAccess.updateModel(input.getCondition());
 		} else {
-			createConditionPlaceholder(conditionEditorComposite);
+			STAlgorithmEmbeddedEditorUtil.updateEditor(conditionEditor, null, null, null, ElementaryTypes.BOOL);
+			conditionEditorModelAccess.updateModel(""); //$NON-NLS-1$
 		}
-		conditionEditorComposite.layout();
 	}
 
 	public void setInput(final STLineBreakpoint input) {
-		if (this.input == input) {
-			if (conditionEditorModelAccess != null && input != null
-					&& !input.getCondition().equals(conditionEditorModelAccess.getEditablePart())) {
-				conditionEditorModelAccess.updateModel(input.getCondition());
-			}
-		} else {
-			this.input = input;
-			updateConditionEditor();
-		}
+		this.input = input;
 		conditional.setEnabled(input != null);
 		conditional.setSelection(input != null && input.isConditionEnabled());
+		conditionEditor.getViewer().setEditable(input != null && input.isConditionEnabled());
+		updateConditionEditor();
 		setDirty(false);
 	}
 
