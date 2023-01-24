@@ -15,6 +15,7 @@
  *   Michael Jaeger   - replaced HashSet with ArrayList
  *   Lukas Wais		  - implemented tree menu for structured types
  *   Alois Zoitl	  - fixed fokus checking for linux.
+ *   Dunja Životin    - extracted DataTypeTreeSelectionDialog and TypeNode into separate classes
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.ui.editors;
@@ -63,6 +64,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
+import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
 
 public class DataTypeDropdown extends TextCellEditor {
 
@@ -271,59 +273,7 @@ public class DataTypeDropdown extends TextCellEditor {
 		deactivate();
 	}
 
-	private class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
-
-		public DataTypeTreeSelectionDialog(final Shell parent, final IBaseLabelProvider labelProvider,
-				final ITreeContentProvider contentProvider) {
-			super(parent, labelProvider, contentProvider);
-		}
-
-		@Override
-		protected Control createDialogArea(final Composite parent) {
-			final Control control = super.createDialogArea(parent);
-			createContextMenu(getTreeViewer().getTree());
-			return control;
-		}
-
-		private void createContextMenu(final Control control) {
-			final Menu openEditorMenu = new Menu(control);
-			final MenuItem openItem = new MenuItem(openEditorMenu, SWT.NONE);
-			openItem.addListener(SWT.Selection, e -> {
-				final StructuredType sel = getSelectedStructuredType();
-				if (sel != null) {
-					handleShellCloseEvent();
-					setResult(null); // discard selection, do not update type
-					OpenStructMenu.openStructEditor(sel.getTypeEntry().getFile());
-				}
-			});
-			openItem.setText(FordiacMessages.OPEN_TYPE_EDITOR_MESSAGE);
-
-			openEditorMenu.addMenuListener(new MenuListener() {
-				@Override
-				public void menuShown(final MenuEvent e) {
-					final StructuredType type = getSelectedStructuredType();
-					openItem.setEnabled((type != null) && (type != IecTypes.GenericTypes.ANY_STRUCT));
-				}
-
-				@Override
-				public void menuHidden(final MenuEvent e) {
-					// nothing to be done here
-				}
-			});
-			control.setMenu(openEditorMenu);
-		}
-
-		private StructuredType getSelectedStructuredType() {
-			final Object selected = ((TreeSelection) getTreeViewer().getSelection()).getFirstElement();
-			if (selected instanceof TypeNode) {
-				final DataType dtp = ((TypeNode) selected).getType();
-				if (dtp instanceof StructuredType) {
-					return (StructuredType) dtp;
-				}
-			}
-			return null;
-		}
-	}
+	
 
 	private static LabelProvider createTreeLabelProvider() {
 		return new LabelProvider() {
@@ -497,91 +447,5 @@ public class DataTypeDropdown extends TextCellEditor {
 		/* if true, a separate focus listener is created and the whole cell editor looses focus when the proposal popup
 		 * is opened */
 		return false;
-	}
-
-	private static class TypeNode implements Comparable<TypeNode> {
-		private final String name;
-		private final List<TypeNode> children;
-		private TypeNode parent;
-		private DataType type;
-
-		private TypeNode(final String name) {
-			this.name = name;
-			children = new ArrayList<>();
-		}
-
-		public boolean isDirectory() {
-			return null == type;
-		}
-
-		private TypeNode(final String name, final DataType type) {
-			this.name = name;
-			this.type = type;
-			children = new ArrayList<>();
-		}
-
-		private String getName() {
-			return name;
-		}
-
-		private List<TypeNode> getChildren() {
-			return children;
-		}
-
-		// inserting in place
-		private void addChild(final TypeNode child) {
-			final int index = Collections.binarySearch(children, child);
-			if (index < 0) {
-				children.add(-index - 1, child);
-			}
-		}
-
-		private TypeNode getParent() {
-			return parent;
-		}
-
-		private void setParent(final TypeNode parent) {
-			this.parent = parent;
-		}
-
-		public DataType getType() {
-			return type;
-		}
-
-		@Override
-		public int hashCode() {
-			final int prime = 31;
-			int result = 1;
-			result = (prime * result) + ((name == null) ? 0 : name.hashCode());
-			return result;
-		}
-
-		@Override
-		public boolean equals(final Object obj) {
-			if (this == obj) {
-				return true;
-			}
-			if (null == obj) {
-				return false;
-			}
-			if (getClass() != obj.getClass()) {
-				return false;
-			}
-			final TypeNode other = (TypeNode) obj;
-			if (null == name) {
-				if (null != other.name) {
-					return false;
-				}
-			} else if (!name.equals(other.name)) {
-				return false;
-			}
-			return true;
-		}
-
-		@Override
-		public int compareTo(final TypeNode other) {
-			// otherwise lower case would be after upper case names
-			return this.name.toLowerCase().compareTo(other.getName().toLowerCase());
-		}
 	}
 }
