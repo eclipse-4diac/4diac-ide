@@ -9,10 +9,12 @@
  *
  * Contributors:
  *   Daniel Lindhuber - initial implementation and/or documentation
+ *   Prankur Agarwal - sorting the items alphabetically
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.widgets;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
@@ -21,6 +23,7 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -46,13 +49,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.ToolItem;
 
 public class BreadcrumbItem {
-
 	private static final int SHELL_WIDTH = 250;
 	private static final int SHELL_HEIGHT = 250;
 
 	private final AdapterFactoryLabelProvider labelProvider;
 	private final ITreeContentProvider contentProvider;
-
 	private final Object current;
 	private final ToolItem text;
 	private ToolItem arrow;
@@ -170,12 +171,12 @@ public class BreadcrumbItem {
 		@Override
 		public Object[] getChildren(final Object parentElement) {
 			return Arrays.stream(nestedContentProvider.getChildren(parentElement))
-					.filter(obj -> obj instanceof IFile || obj instanceof SystemConfiguration
-							|| obj instanceof Application || obj instanceof SubApp
-							|| (obj instanceof CFBInstance)
-							|| obj instanceof Device || obj instanceof Resource)
-					.collect(Collectors.toList()).toArray();
+					.filter(obj -> (obj instanceof IFile) || (obj instanceof SystemConfiguration)
+							|| (obj instanceof Application) || (obj instanceof SubApp) || (obj instanceof CFBInstance)
+							|| (obj instanceof Device) || (obj instanceof Resource))
+					.sorted(new ChildrenSortComparator()).collect(Collectors.toList()).toArray();
 		}
+
 
 		@Override
 		public Object getParent(final Object element) {
@@ -221,4 +222,30 @@ public class BreadcrumbItem {
 
 	}
 
+}
+
+class ChildrenSortComparator implements Comparator<Object> {
+	@Override
+	public int compare(final Object obj1, final Object obj2) {
+		if (obj1 instanceof SystemConfiguration) {
+			if (obj2 instanceof SystemConfiguration) {
+				return -1;
+			}
+			return 1;
+		}
+
+		return getName(obj1).compareTo(getName(obj2));
+	}
+
+	@SuppressWarnings("static-method")
+	private String getName(final Object obj) {
+		if (obj instanceof IFile) {
+			return ((IFile) obj).getName();
+		} else if (obj instanceof INamedElement) {
+			return ((INamedElement) obj).getName();
+		}
+
+		// would not come here as already a filter in Arrays.stream
+		return ""; //$NON-NLS-1$
+	}
 }
