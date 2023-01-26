@@ -39,6 +39,10 @@ public class InterfaceValueEntity {
 		return ie;
 	}
 
+	public EvaluatorDebugTarget getDebugTarget() {
+		return debugTarget;
+	}
+
 	public void updateValue(final String newValue) {
 		final EvaluatorDebugVariable debugVar = debugTarget.getDebugger().getVariable(getVariable());
 		debugVar.setValue(newValue);

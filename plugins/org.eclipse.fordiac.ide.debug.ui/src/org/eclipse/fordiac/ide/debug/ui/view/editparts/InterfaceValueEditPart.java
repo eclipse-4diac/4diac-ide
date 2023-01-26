@@ -41,7 +41,10 @@ public class InterfaceValueEditPart extends AbstractDebugInterfaceValueEditPart 
 
 	@Override
 	protected void createEditPolicies() {
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new InterfaceValueDirectEditPolicy());
+		if (getModel().getDebugTarget() != null) {
+			// only in debug mode we should be editable
+			installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new InterfaceValueDirectEditPolicy());
+		}
 	}
 
 	@Override
@@ -51,9 +54,9 @@ public class InterfaceValueEditPart extends AbstractDebugInterfaceValueEditPart 
 
 	@Override
 	public void performRequest(final Request request) {
-		// REQ_DIRECT_EDIT -> first select 0.4 sec pause -> click -> edit
-		// REQ_OPEN -> doubleclick
-		if (request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN) {
+		if ((request.getType() == RequestConstants.REQ_DIRECT_EDIT || request.getType() == RequestConstants.REQ_OPEN)
+				&& (getModel().getDebugTarget() != null)) {
+			// only allow direct edit when we are in debug mode
 			performDirectEdit();
 		} else {
 			super.performRequest(request);
