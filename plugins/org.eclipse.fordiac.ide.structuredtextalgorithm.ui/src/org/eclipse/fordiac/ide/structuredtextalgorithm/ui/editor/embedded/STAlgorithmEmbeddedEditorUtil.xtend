@@ -16,10 +16,8 @@ import java.util.Collection
 import java.util.Map
 import org.eclipse.emf.common.util.URI
 import org.eclipse.emf.ecore.EObject
-import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
 import org.eclipse.xtext.resource.IResourceServiceProvider
@@ -40,8 +38,8 @@ final class STAlgorithmEmbeddedEditorUtil {
 		return SERVICE_PROVIDER.get(EmbeddedEditorFactory)
 	}
 
-	def static void updateEditor(EmbeddedEditor editor, VarDeclaration varDeclaration) {
-		editor.updateEditor(varDeclaration?.eResource?.URI ?: SYNTHETIC_URI, null, null, varDeclaration.featureType)
+	def static void updateEditor(EmbeddedEditor editor, INamedElement element) {
+		editor.updateEditor(element?.eResource?.URI ?: SYNTHETIC_URI, null, null, element.featureType)
 	}
 
 	def static void updateEditor(EmbeddedEditor editor, URI uri, FBType type,

@@ -41,7 +41,7 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 	@Override
 	public void initialize(final IInterfaceElement type, final Consumer<Command> commandExecutor) {
 		super.initialize(type, commandExecutor);
-		initialValueEditor.setVarDeclaration((VarDeclaration) type);
+		initialValueEditor.setInterfaceElement(type);
 		initialValueEditor.setCommandExecutor(commandExecutor);
 	}
 

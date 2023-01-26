@@ -16,6 +16,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorUtil;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmInitialValueEditedResourceProvider;
@@ -42,7 +43,7 @@ public class InitialValueEditor {
 	protected EmbeddedEditorModelAccess modelAccess;
 	private boolean proposalPopupOpen;
 
-	private VarDeclaration varDeclaration;
+	private IInterfaceElement interfaceElement;
 	private Consumer<Command> commandExecutor;
 
 	public InitialValueEditor(final Composite parent, final int style) {
@@ -75,10 +76,10 @@ public class InitialValueEditor {
 		});
 		embeddedEditor.getViewer().addTextPresentationListener(textPresentation -> {
 			if (!embeddedEditor.getViewer().getUndoManager().undoable()
-					&& !InitialValueHelper.hasInitalValue(varDeclaration)) {
+					&& !InitialValueHelper.hasInitalValue(interfaceElement)) {
 				textPresentation.replaceStyleRange(new StyleRange(textPresentation.getExtent().getOffset(),
-						textPresentation.getExtent().getLength(), InitialValueHelper.getForegroundColor(varDeclaration),
-						control.getBackground()));
+						textPresentation.getExtent().getLength(),
+						InitialValueHelper.getForegroundColor(interfaceElement), control.getBackground()));
 			}
 		});
 		control = (StyledText) embeddedEditor.getViewer().getControl();
@@ -115,15 +116,17 @@ public class InitialValueEditor {
 	}
 
 	public void commit() {
-		executeCommand(new ChangeValueCommand(varDeclaration, modelAccess.getEditablePart()));
+		if (interfaceElement instanceof VarDeclaration) {
+			executeCommand(new ChangeValueCommand((VarDeclaration) interfaceElement, modelAccess.getEditablePart()));
+		}
 		refresh();
 	}
 
 	public void refresh() {
 		final var commandExecutorCache = this.commandExecutor;
 		this.commandExecutor = null;
-		STAlgorithmEmbeddedEditorUtil.updateEditor(embeddedEditor, varDeclaration);
-		modelAccess.updateModel(InitialValueHelper.getInitalOrDefaultValue(varDeclaration));
+		STAlgorithmEmbeddedEditorUtil.updateEditor(embeddedEditor, interfaceElement);
+		modelAccess.updateModel(InitialValueHelper.getInitalOrDefaultValue(interfaceElement));
 		control.setSelection(0);
 		this.commandExecutor = commandExecutorCache;
 	}
@@ -138,12 +141,12 @@ public class InitialValueEditor {
 		}
 	}
 
-	public VarDeclaration getVarDeclaration() {
-		return varDeclaration;
+	public IInterfaceElement getInterfaceElement() {
+		return interfaceElement;
 	}
 
-	public void setVarDeclaration(final VarDeclaration varDeclaration) {
-		this.varDeclaration = varDeclaration;
+	public void setInterfaceElement(final IInterfaceElement interfaceElement) {
+		this.interfaceElement = interfaceElement;
 	}
 
 	public Consumer<Command> getCommandExecutor() {
