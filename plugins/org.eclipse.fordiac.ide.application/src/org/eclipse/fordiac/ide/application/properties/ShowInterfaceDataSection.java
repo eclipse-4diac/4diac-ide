@@ -95,8 +95,10 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 			.setInput(((StructManipulator) selection).getStructType().getMemberVariables()); //
 
 		} else if (selection instanceof SubApp && selection.getType() != null) { // untyped subapp in typed subapp //
-			((VarDeclarationListProvider) inputProvider).setInput(selection.getType());
-			((VarDeclarationListProvider) outputProvider).setInput(selection.getType());
+			((VarDeclarationListProvider) inputProvider)
+					.setInput(selection.getType().getInterfaceList().getInputVars());
+			((VarDeclarationListProvider) outputProvider)
+					.setInput(selection.getType().getInterfaceList().getOutputVars());
 		}
 		else {
 			super.setTableInput();

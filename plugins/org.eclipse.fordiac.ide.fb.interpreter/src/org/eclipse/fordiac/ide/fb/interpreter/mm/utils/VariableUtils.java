@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Johannes Kepler University Linz
+ * Copyright (c) 2021, 2023 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -58,6 +58,7 @@ public final class VariableUtils {
 	public static void fBVariableInitialization(final BaseFBType baseFbType) {
 		final var lib = new DataTypeLibrary();
 		initInternalVars(baseFbType, lib);
+		initInternalConstVars(baseFbType, lib);
 		initInputVars(baseFbType, lib);
 		initOutputVars(baseFbType, lib);
 	}
@@ -78,6 +79,10 @@ public final class VariableUtils {
 
 	public static void initInternalVars(final BaseFBType basicFbType, final DataTypeLibrary lib) {
 		basicFbType.getInternalVars().forEach(interVar -> VariableUtils.initVariable(interVar, lib));
+	}
+
+	public static void initInternalConstVars(final BaseFBType basicFbType, final DataTypeLibrary lib) {
+		basicFbType.getInternalConstVars().forEach(interVar -> VariableUtils.initVariable(interVar, lib));
 	}
 
 	private VariableUtils() {

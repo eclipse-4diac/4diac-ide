@@ -9,12 +9,12 @@
  *
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *   Prankur Agarawal	- add handling for internal constant variables
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -39,12 +39,6 @@ implements FordiacInterfaceListProvider {
 		return 0;
 	}
 
-	public void setInput(final Object inputElement) {
-		if (inputElement instanceof BaseFBType) {
-			this.list = ((BaseFBType) inputElement).getInternalVars();
-		}
-	}
-
 	@Override
 	public <T extends List<? extends IInterfaceElement>> void setInput(final T list) {
 		this.list = (List<VarDeclaration>) list;
@@ -53,6 +47,5 @@ implements FordiacInterfaceListProvider {
 	public void setTypeLib(final TypeLibrary dataTypeLib) {
 		columnAccessor.setTypeLib(dataTypeLib);
 	}
-
 
 }

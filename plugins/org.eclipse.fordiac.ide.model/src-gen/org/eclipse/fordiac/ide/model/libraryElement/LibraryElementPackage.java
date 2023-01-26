@@ -859,13 +859,22 @@ public interface LibraryElementPackage extends EPackage {
 	int BASE_FB_TYPE__INTERNAL_VARS = FB_TYPE_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Internal Const Vars</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASE_FB_TYPE__INTERNAL_CONST_VARS = FB_TYPE_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Internal Fbs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FB_TYPE__INTERNAL_FBS = FB_TYPE_FEATURE_COUNT + 1;
+	int BASE_FB_TYPE__INTERNAL_FBS = FB_TYPE_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Algorithm</b></em>' reference list.
@@ -874,7 +883,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FB_TYPE__ALGORITHM = FB_TYPE_FEATURE_COUNT + 2;
+	int BASE_FB_TYPE__ALGORITHM = FB_TYPE_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Methods</b></em>' reference list.
@@ -883,7 +892,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FB_TYPE__METHODS = FB_TYPE_FEATURE_COUNT + 3;
+	int BASE_FB_TYPE__METHODS = FB_TYPE_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Callables</b></em>' containment reference list.
@@ -892,7 +901,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FB_TYPE__CALLABLES = FB_TYPE_FEATURE_COUNT + 4;
+	int BASE_FB_TYPE__CALLABLES = FB_TYPE_FEATURE_COUNT + 5;
 
 	/**
 	 * The number of structural features of the '<em>Base FB Type</em>' class.
@@ -901,7 +910,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int BASE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 5;
+	int BASE_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 6;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BasicFBTypeImpl <em>Basic FB Type</em>}' class.
@@ -1002,6 +1011,15 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int BASIC_FB_TYPE__INTERNAL_VARS = BASE_FB_TYPE__INTERNAL_VARS;
+
+	/**
+	 * The feature id for the '<em><b>Internal Const Vars</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int BASIC_FB_TYPE__INTERNAL_CONST_VARS = BASE_FB_TYPE__INTERNAL_CONST_VARS;
 
 	/**
 	 * The feature id for the '<em><b>Internal Fbs</b></em>' containment reference list.
@@ -5467,6 +5485,15 @@ public interface LibraryElementPackage extends EPackage {
 	int SIMPLE_FB_TYPE__INTERNAL_VARS = BASE_FB_TYPE__INTERNAL_VARS;
 
 	/**
+	 * The feature id for the '<em><b>Internal Const Vars</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SIMPLE_FB_TYPE__INTERNAL_CONST_VARS = BASE_FB_TYPE__INTERNAL_CONST_VARS;
+
+	/**
 	 * The feature id for the '<em><b>Internal Fbs</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9223,6 +9250,17 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getBaseFBType_InternalVars();
 
 	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getInternalConstVars <em>Internal Const Vars</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Internal Const Vars</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getInternalConstVars()
+	 * @see #getBaseFBType()
+	 * @generated
+	 */
+	EReference getBaseFBType_InternalConstVars();
+
+	/**
 	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getInternalFbs <em>Internal Fbs</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11668,6 +11706,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference BASE_FB_TYPE__INTERNAL_VARS = eINSTANCE.getBaseFBType_InternalVars();
+
+		/**
+		 * The meta object literal for the '<em><b>Internal Const Vars</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference BASE_FB_TYPE__INTERNAL_CONST_VARS = eINSTANCE.getBaseFBType_InternalConstVars();
 
 		/**
 		 * The meta object literal for the '<em><b>Internal Fbs</b></em>' containment reference list feature.

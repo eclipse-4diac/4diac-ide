@@ -1,8 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University Linz
- * 				 2020 Primetals Technologies Germany GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2023 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,31 +8,17 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Monika Wenger, Alois Zoitl
- *     - initial API and implementation and/or initial documentation
- *   Alois Zoitl - added mulitline selection and code cleanup.
- *   Bianca Wiesmayr - extract Table creation, improve insertion
- *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
- *   Daniel Lindhuber - added copy and paste
- *   Bianca Wiesmayr - extracted super class for simple and basic FB, added context menu
- *   Daniel Lindhuber - changed type selection to search field
- *   Alexander Lumplecker
- *     - changed AddDeleteWidget to AddDeleteReorderListWidget
- *     - added ChangeVariableOrderCommand
- *   Sebastian Hollersbacher - change to nebula NatTable
- *   Martin Jobst - add initial value cell editor support
- *   Prankur Agarwal - create a super class and change it's implementation
+ *   Prankur Agarwal  - initial implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
-
 
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVariableOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.create.CreateInternalVariableCommand;
-import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableCommand;
+import org.eclipse.fordiac.ide.model.commands.create.CreateInternalConstVariableCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalConstVariableCommand;
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -51,7 +34,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-public class InternalVarsSection extends AbstractInternalVarsSection {
+public class InternalConstVarsSection extends AbstractInternalVarsSection {
 
 	@Override
 	public void createVarControl(final Composite parent) {
@@ -86,50 +69,48 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 		table.configure();
 
 		buttons.bindToTableViewer(table, this,
-				ref -> new CreateInternalVariableCommand(getType(), getInsertionIndex(), getName(), getDataType()),
-				ref -> new DeleteInternalVariableCommand(getType(), (VarDeclaration) ref),
-				ref -> new ChangeVariableOrderCommand(getType().getInternalVars(), (VarDeclaration) ref, true),
-				ref -> new ChangeVariableOrderCommand(getType().getInternalVars(), (VarDeclaration) ref, false));
+				ref -> new CreateInternalConstVariableCommand(getType(), getInsertionIndex(), getName(), getDataType()),
+				ref -> new DeleteInternalConstVariableCommand(getType(), (VarDeclaration) ref),
+				ref -> new ChangeVariableOrderCommand(getType().getInternalConstVars(), (VarDeclaration) ref, true),
+				ref -> new ChangeVariableOrderCommand(getType().getInternalConstVars(), (VarDeclaration) ref, false));
 	}
 
 	@Override
 	protected void setInputInit() {
 		final BaseFBType currentType = getType();
 		if (currentType != null) {
-			provider.setInput(currentType.getInternalVars());
+			provider.setInput(currentType.getInternalConstVars());
 			provider.setTypeLib(currentType.getTypeLibrary());
 			initTypeSelection(getDataTypeLib());
 		}
 	}
 
 	private int getInsertionIndex() {
-		final VarDeclaration varInternal = getLastSelectedVariable();
-		if (null == varInternal) {
-			return getType().getInternalVars().size();
+		final VarDeclaration varConst = getLastSelectedVariable();
+		if (null == varConst) {
+			return getType().getInternalConstVars().size();
 		}
-		return getType().getInternalVars().indexOf(varInternal) + 1;
+		return getType().getInternalConstVars().indexOf(varConst) + 1;
 	}
 
 
 	@Override
 	public Object getEntry(final int index) {
-		return getType().getInternalVars().get(index);
+		return getType().getInternalConstVars().get(index);
 	}
 
 	@Override
 	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			final VarDeclaration varEntry = (VarDeclaration) entry;
-			cmd.add(new InsertVariableCommand(getType().getInternalVars(), varEntry, index));
+			cmd.add(new InsertVariableCommand(getType().getInternalConstVars(), varEntry, index));
 		}
 	}
 
 
 	public Object removeEntry(final int index, final CompoundCommand cmd) {
 		final VarDeclaration entry = (VarDeclaration) getEntry(index);
-		cmd.add(new DeleteInternalVariableCommand(getType(), entry));
+		cmd.add(new DeleteInternalConstVariableCommand(getType(), entry));
 		return entry;
 	}
-
-
 }

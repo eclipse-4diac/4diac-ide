@@ -480,6 +480,9 @@ public final class FordiacKeywords {
 	public static final String VARIABLE_INTERNAL = "InternalVar1"; //$NON-NLS-1$
 
 	@ModelString
+	public static final String VARIABLE_INTERNAL_CONST = "InternalConstVar1"; //$NON-NLS-1$
+
+	@ModelString
 	public static final String EVENT_INPUT = "EI1"; //$NON-NLS-1$
 	@ModelString
 	public static final String EVENT_OUTPUT = "EO1"; //$NON-NLS-1$

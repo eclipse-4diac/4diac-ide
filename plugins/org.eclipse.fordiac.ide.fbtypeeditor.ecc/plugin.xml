@@ -59,6 +59,12 @@
          <propertyTab
                afterTab="property.tab.ivars"
                category="ecc"
+               id="property.tab.icvars"
+               label="Internal Const Vars">
+         </propertyTab>
+         <propertyTab
+               afterTab="property.tab.icvars"
+               category="ecc"
                id="property.tab.ifbs"
                label="Internal FBs">
          </propertyTab>
