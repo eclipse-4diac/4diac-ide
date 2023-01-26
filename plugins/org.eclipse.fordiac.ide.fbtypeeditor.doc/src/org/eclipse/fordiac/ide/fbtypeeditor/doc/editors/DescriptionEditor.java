@@ -203,8 +203,12 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 
 		editorConfig.setRemoveFormat(false);
 
-		final InsertConvertedImageButton base64ImageInsert = new InsertConvertedImageButton();
-		editorConfig.addToolbarButton(base64ImageInsert);
+		// FIXME disable custom button on Gtk/WebKit, which causes the UI to hang for 10s
+		// until https://bugs.eclipse.org/bugs/show_bug.cgi?id=581144 is fixed
+		if (!SWT.getPlatform().equals("gtk")) { //$NON-NLS-1$
+			final InsertConvertedImageButton base64ImageInsert = new InsertConvertedImageButton();
+			editorConfig.addToolbarButton(base64ImageInsert);
+		}
 
 		return editorConfig;
 	}
