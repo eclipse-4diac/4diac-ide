@@ -36,7 +36,7 @@ import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.swt.widgets.Group;
 
-public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection {
+public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection<Event> {
 
 
 	@Override

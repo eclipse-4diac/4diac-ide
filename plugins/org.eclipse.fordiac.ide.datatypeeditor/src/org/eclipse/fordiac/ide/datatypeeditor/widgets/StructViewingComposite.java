@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University, Linz
  * 				 2020 Primetals Technologies Germany GmbH
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +14,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Alexander Lumplecker
  *     - changed ChangeMemberVariableOrderCommand to ChangeVariableOrderCommand
+ *   Martin Jobst - add initial value cell editor support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.datatypeeditor.widgets;
 
@@ -22,6 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
@@ -109,6 +112,8 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		initTypeSelection(getType().getTypeLibrary().getDataTypeLibrary());
 		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, new VarDeclarationColumnProvider(),
 				IEditableRule.ALWAYS_EDITABLE, typeSelection, this);
+		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
+		natTable.configure();
 	}
 
 	public DataLayer setupDataLayer(final ListDataProvider outputProvider) {
@@ -127,6 +132,9 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			}
 
+			if (columnPosition == I4diacNatTableUtil.INITIAL_VALUE) {
+				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
+			}
 		});
 		return dataLayer;
 	}

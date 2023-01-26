@@ -2,6 +2,7 @@
  * Copyright (c) 2015 - 2017 fortiss GmbH
  * 				 2019 - 2020 Johannes Kepler University Linz
  * 				 2020 Primetals Technologies Germany GmbH
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,6 +23,7 @@
  *     - changed AddDeleteWidget to AddDeleteReorderListWidget
  *     - added ChangeVariableOrderCommand
  *   Sebastian Hollersbacher - change to nebula NatTable
+ *   Martin Jobst - add initial value cell editor support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -30,6 +32,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
@@ -102,9 +105,14 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 					|| columnPosition == I4diacNatTableUtil.COMMENT) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			}
+			if (columnPosition == I4diacNatTableUtil.INITIAL_VALUE) {
+				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
+			}
 		});
 		table = NatTableWidgetFactory.createRowNatTable(composite,
 				dataLayer, new VarDeclarationColumnProvider(), IEditableRule.ALWAYS_EDITABLE, typeSelection, this);
+		table.addConfiguration(new InitialValueEditorConfiguration(provider));
+		table.configure();
 
 		buttons.bindToTableViewer(table, this,
 				ref -> new CreateInternalVariableCommand(getType(), getInsertionIndex(), getName(), getDataType()),

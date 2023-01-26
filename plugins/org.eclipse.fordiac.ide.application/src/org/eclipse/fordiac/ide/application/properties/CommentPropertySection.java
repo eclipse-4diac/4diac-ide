@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  *   Bianca Wiesmayr - multline comments and cleanup
  *   Sebastian Hollersbacher - change to nebula NatTable
  *   Hesam Rezaee - Variable configuration for Global Constants
+ *   Martin Jobst - add initial value cell editor support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -20,6 +22,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -137,6 +140,9 @@ public class CommentPropertySection extends AbstractSection {
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
 
+		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputDataProvider));
+		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputDataProvider));
+
 		inputTable.configure();
 		outputTable.configure();
 
@@ -192,6 +198,9 @@ public class CommentPropertySection extends AbstractSection {
 			if (columnPosition == NAME_COL_ID || columnPosition == COMMENT_COL_ID) {
 				// We want to align the pin names and comments to the left side
 				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			}
+			if (columnPosition == INITIAL_VALUE_COL_ID) {
+				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
 			}
 			if (columnPosition == VISIBLE_COL_ID) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
