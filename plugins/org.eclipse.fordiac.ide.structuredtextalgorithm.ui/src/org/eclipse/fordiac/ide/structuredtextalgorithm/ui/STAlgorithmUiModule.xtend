@@ -56,6 +56,8 @@ import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeId
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument
 import org.eclipse.xtext.ui.shared.Access
+import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities
 
 /**
  * Use this class to register components to be used within the Eclipse IDE.
@@ -140,5 +142,9 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 		
 	def Class<? extends IOccurrenceComputer> bindIOccurrenceComputer() {
 		return STCoreOccurrenceComputer;
+	}
+	
+	def Class<? extends IContentProposalPriorities> bindIContentProposalPriorities() {
+		return STCoreContentProposalPriorities;
 	}
 }

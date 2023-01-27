@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui;
 
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
@@ -30,6 +31,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
 import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider;
 import org.eclipse.xtext.ui.editor.model.XtextDocument;
@@ -82,7 +84,7 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 	@SuppressWarnings("static-method")
 	public void configureCodeMinings(final Binder binder) {
 		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("codeMiningInitializer")) //$NON-NLS-1$
-		.to(STCoreCodeMiningPreferences.Initializer.class);
+				.to(STCoreCodeMiningPreferences.Initializer.class);
 	}
 
 	@SuppressWarnings("static-method")
@@ -113,5 +115,10 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 	@SuppressWarnings("static-method")
 	public Class<? extends IOccurrenceComputer> bindIOccurrenceComputer() {
 		return STCoreOccurrenceComputer.class;
+	}
+
+	@SuppressWarnings("static-method")
+	public Class<? extends IContentProposalPriorities> bindIContentProposalPriorities() {
+		return STCoreContentProposalPriorities.class;
 	}
 }
