@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
+ *   Alois Zoitl   - added event repetation toolbar
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view;
 
@@ -30,6 +31,7 @@ import org.eclipse.draw2d.geometry.Translatable;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugElement;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
+import org.eclipse.fordiac.ide.debug.ui.view.actions.RepeatEventAction;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
@@ -51,6 +53,7 @@ import org.eclipse.gef.ui.actions.UpdateAction;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
@@ -58,6 +61,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
@@ -113,12 +117,25 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 	private ActionRegistry actionRegistry;
 	private static final int NUM_COLUMNS = 1;
 	private KeyHandler sharedKeyHandler;
+	private RepeatEventAction repeatEventAction;
 
 	@Override
 	public void createPartControl(final Composite parent) {
 		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		GridLayoutFactory.fillDefaults().numColumns(NUM_COLUMNS).margins(0, 0).generateLayout(parent);
 		createGraphicalViewer(parent);
+		createToolBarEntries();
+	}
+
+	private void createToolBarEntries() {
+		final IActionBars actionBars = getViewSite().getActionBars();
+		final IToolBarManager toolBar = actionBars.getToolBarManager();
+		toolBar.add(createRepeatEventAction());
+	}
+
+	private IAction createRepeatEventAction() {
+		repeatEventAction = new RepeatEventAction();
+		return repeatEventAction;
 	}
 
 	@Override
@@ -246,6 +263,7 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 
 	private void setContents(final EvaluatorProcess evaluator) {
 		viewer.setContents(evaluator);
+		repeatEventAction.updateEvaluator(evaluator);
 		setScrollPosition();
 	}
 
