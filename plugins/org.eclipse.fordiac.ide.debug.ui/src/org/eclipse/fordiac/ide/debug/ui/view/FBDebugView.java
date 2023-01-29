@@ -125,6 +125,11 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 		GridLayoutFactory.fillDefaults().numColumns(NUM_COLUMNS).margins(0, 0).generateLayout(parent);
 		createGraphicalViewer(parent);
 		createToolBarEntries();
+		hookDebugListeners();
+	}
+
+	private void hookDebugListeners() {
+		DebugUITools.addPartDebugContextListener(getSite(), this);
 	}
 
 	private void createToolBarEntries() {
@@ -157,7 +162,6 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 		configureGraphicalViewer();
 		initializeGraphicalViewer();
 		hookGraphicalViewer();
-		DebugUITools.addPartDebugContextListener(getSite(), this);
 	}
 
 
@@ -253,10 +257,14 @@ public class FBDebugView extends ViewPart implements IDebugContextListener, ISel
 	private void contextActivated(final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			final Object source = ((IStructuredSelection) selection).getFirstElement();
-			final EvaluatorProcess evaluator = getFBEvaluatorDebugContext(source);
+			if (source == null) {
+				setContents(null);
+			} else {
+				final EvaluatorProcess evaluator = getFBEvaluatorDebugContext(source);
 
-			if (!isViewerContent(evaluator)) {
-				setContents(evaluator);
+				if (!isViewerContent(evaluator)) {
+					setContents(evaluator);
+				}
 			}
 		}
 	}

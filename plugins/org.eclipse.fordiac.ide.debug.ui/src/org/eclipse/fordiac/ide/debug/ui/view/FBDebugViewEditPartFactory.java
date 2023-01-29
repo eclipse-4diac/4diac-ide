@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.debug.ui.view;
 
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.DebugInputEventEditPart;
+import org.eclipse.fordiac.ide.debug.ui.view.editparts.EmptyDebugViewRootEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.EventValueEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.EventValueEntity;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.FBDebugViewRootEditPart;
@@ -40,6 +41,10 @@ public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
+		if (modelElement == null && context == null) {
+			// no debug is active show an empty view
+			return new EmptyDebugViewRootEditPart();
+		}
 		if (modelElement instanceof EvaluatorProcess) {
 			return new FBDebugViewRootEditPart();
 		}
