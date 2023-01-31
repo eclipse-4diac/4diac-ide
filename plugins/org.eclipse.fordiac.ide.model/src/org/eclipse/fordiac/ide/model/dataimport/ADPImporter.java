@@ -81,6 +81,10 @@ public class ADPImporter extends TypeImporter {
 					case LibraryElementTags.SERVICE_ELEMENT:
 						parseService(adapterFBType);
 						break;
+					case LibraryElementTags.ATTRIBUTE_ELEMENT:
+						parseGenericAttributeNode(getElement());
+						proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+						break;
 					default:
 						return false;
 					}
