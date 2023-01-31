@@ -58,6 +58,8 @@ import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument
 import org.eclipse.xtext.ui.shared.Access
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities
+import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.quickfix.STAlgorithmQuickAssistProcessor
 
 /**
  * Use this class to register components to be used within the Eclipse IDE.
@@ -139,12 +141,16 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 			binder.bind(IURIEditorOpener).annotatedWith(LanguageSpecific).to(STAlgorithmURIEditorOpener)
 		}
 	}
-		
+
 	def Class<? extends IOccurrenceComputer> bindIOccurrenceComputer() {
 		return STCoreOccurrenceComputer;
 	}
-	
+
 	def Class<? extends IContentProposalPriorities> bindIContentProposalPriorities() {
 		return STCoreContentProposalPriorities;
+	}
+
+	def Class<? extends XtextQuickAssistProcessor> bindXtextQuickAssistProcessor() {
+		return STAlgorithmQuickAssistProcessor
 	}
 }
