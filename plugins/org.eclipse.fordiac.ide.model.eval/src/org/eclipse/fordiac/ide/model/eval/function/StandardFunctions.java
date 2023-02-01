@@ -811,8 +811,8 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Returns the day of week of DATE value.")
-	static SIntValue DAY_OF_WEEK(final DateValue value) {
-		return SIntValue.toSIntValue((byte) value.toLocalDate().getDayOfWeek().getValue());
+	static USIntValue DAY_OF_WEEK(final DateValue value) {
+		return USIntValue.toUSIntValue((byte) value.toLocalDate().getDayOfWeek().getValue());
 	}
 
 	@Comment("Converts a value into the big-endian format.")
