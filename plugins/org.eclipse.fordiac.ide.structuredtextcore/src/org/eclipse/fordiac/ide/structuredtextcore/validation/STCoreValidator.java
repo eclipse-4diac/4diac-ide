@@ -21,6 +21,7 @@
  *       - validation for calls
  *       - validation for unary and binary operators
  *       - fix type validation for literals
+ *       - validation for truncated string literals
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.validation;
 
@@ -125,6 +126,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String TOO_MANY_INDICES_GIVEN = ISSUE_CODE_PREFIX + "tooManyIndicesGiven"; //$NON-NLS-1$
 	public static final String ARRAY_ACCESS_INVALID = ISSUE_CODE_PREFIX + "arrayAccessInvalid"; //$NON-NLS-1$
 	public static final String ARRAY_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "arrayIndexOutOfBounds"; //$NON-NLS-1$
+	public static final String TRUNCATED_LITERAL = ISSUE_CODE_PREFIX + "truncatedLiteral"; //$NON-NLS-1$
 
 	@Check
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
@@ -536,6 +538,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(),
 					stringValueConverter.toString(expression.getValue())),
 					STCorePackage.Literals.ST_STRING_LITERAL__VALUE, INVALID_STRING_LITERAL);
+		} else if (expectedType instanceof AnyStringType && ((AnyStringType) expectedType).isSetMaxLength()
+				&& expression.getValue().length() > ((AnyStringType) expectedType).getMaxLength()) {
+			warning(MessageFormat.format(Messages.STCoreValidator_String_Literal_Truncated,
+					Integer.toString(((AnyStringType) expectedType).getMaxLength())), null, TRUNCATED_LITERAL);
 		} else if (expectedType instanceof DataType && !type.eClass().equals(expectedType.eClass())
 				&& ((DataType) expectedType).isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),

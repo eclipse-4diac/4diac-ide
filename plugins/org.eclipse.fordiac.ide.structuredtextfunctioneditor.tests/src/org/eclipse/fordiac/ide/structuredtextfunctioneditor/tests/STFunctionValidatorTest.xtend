@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
- *               2022 Martin Erich Jobst
+ *               2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,7 @@
  *   Martin Jobst
  *       - validation for reserved identifiers
  *       - validation for calls
+ *       - validation for truncated string literals
  *   Martin Melik Merkumians
  * 		- validation for duplicate names on FUNCTIONs
  *******************************************************************************/
@@ -565,6 +566,39 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse
 		func3.assertNoIssue(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.LITERAL_IMPLICIT_CONVERSION)
+	}
+
+	@Test
+	def void testStringLiteralTruncated() {
+		val func1 = '''
+			FUNCTION hubert
+			VAR
+				str : STRING[5] := '4diac IDE';
+			END_VAR
+			END_FUNCTION
+		'''.parse
+		func1.assertNoErrors
+		func1.assertWarning(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.TRUNCATED_LITERAL)
+		val func2 = '''
+			FUNCTION hubert
+			VAR
+				str : WSTRING[5] := "4diac IDE";
+			END_VAR
+			END_FUNCTION
+		'''.parse
+		func2.assertNoErrors
+		func2.assertWarning(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.TRUNCATED_LITERAL)
+		val func3 = '''
+			FUNCTION hubert
+			VAR
+				str1 : STRING := "4diac IDE";
+				str2 : STRING[5] := "4diac";
+				str3 : WSTRING := "4diac IDE";
+				str4 : WSTRING[5] := "4diac";
+			END_VAR
+			END_FUNCTION
+		'''.parse
+		func3.assertNoIssue(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.TRUNCATED_LITERAL)
 	}
 
 	@Test

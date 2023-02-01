@@ -51,6 +51,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_IndexAccessTypeInvalid;
 	public static String STCoreValidator_ArrayAccessInvalidOnNonArrayVariable;
 	public static String STCoreValidator_ArrayIndexOutOfBounds;
+	public static String STCoreValidator_String_Literal_Truncated;
 
 	static {
 		// initialize resource bundle
