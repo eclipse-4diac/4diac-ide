@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,55 +12,24 @@
  */
 package org.eclipse.fordiac.ide.model.eval.st.variable
 
-import java.math.BigInteger
-import org.eclipse.fordiac.ide.model.data.DataType
-import org.eclipse.fordiac.ide.model.data.Subrange
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 
-import static org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable.*
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.st.ConstantExpressionEvaluator.evaluate
+import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.getFeatureType
 
 final class STVariableOperations {
 	private new() {
 	}
 
 	def static Variable<?> newVariable(STVarDeclaration decl) {
-		newVariable(decl.name, decl.actualType).evaluate(decl.defaultValue)
+		newVariable(decl.name, decl.featureType).evaluate(decl.defaultValue)
 	}
 
 	def static Variable<?> newVariable(STVarDeclaration decl, Value value) {
 		newVariable(decl.name, value)
-	}
-
-	def private static Subrange newSubrange(STExpression expr) {
-		switch (expr) {
-			STBinaryExpression case expr.op === STBinaryOperator.RANGE:
-				newSubrange(expr.left.asConstantInt, expr.right.asConstantInt)
-			default:
-				newSubrange(0, expr.asConstantInt)
-		}
-	}
-
-	def private static int asConstantInt(STExpression expr) {
-		switch (expr) {
-			STNumericLiteral: (expr.value as BigInteger).intValueExact
-			default: 0
-		}
-	}
-
-	def static INamedElement getActualType(STVarDeclaration decl) {
-		if (decl.array)
-			newArrayType(decl.type as DataType, decl.ranges.map[newSubrange])
-		else
-			decl.type
 	}
 }
