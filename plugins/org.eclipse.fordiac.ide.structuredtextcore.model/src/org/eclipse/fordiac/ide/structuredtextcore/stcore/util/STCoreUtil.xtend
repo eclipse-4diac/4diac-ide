@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.AnyRealType
+import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.BoolType
@@ -292,7 +293,7 @@ final class STCoreUtil {
 
 	def static INamedElement getExpectedType(STInitializerExpression expression) {
 		switch (it : expression.eContainer) {
-			STVarDeclaration: type
+			STVarDeclaration: featureType
 			STArrayInitElement: expectedType
 			STStructInitElement: variable.featureType
 			STArrayInitializerExpression: expectedType
@@ -350,19 +351,25 @@ final class STCoreUtil {
 				else
 					feature.type
 			STVarDeclaration case feature.type instanceof DataType:
-				if (feature.array)
-					try {
-						(feature.type as DataType).newArrayType(
+				try {
+					val type = switch (type: feature.type) {
+						AnyStringType case feature.maxLength !== null:
+							type.newStringType(feature.maxLength.asConstantInt)
+						DataType:
+							type
+					}
+					if (feature.array)
+						type.newArrayType(
 							if (feature.ranges.empty)
 								feature.count.map[DataFactory.eINSTANCE.createSubrange]
 							else
 								feature.ranges.map[toSubrange]
 						)
-					} catch (ArithmeticException e) {
-						null // invalid declaration
-					}
-				else
-					feature.type
+					else
+						type
+				} catch (ArithmeticException e) {
+					null // invalid declaration
+				}
 			FB:
 				feature.type
 			default:
@@ -389,6 +396,13 @@ final class STCoreUtil {
 			default:
 				newSubrange(0, expr.asConstantInt)
 		}
+	}
+
+	def static AnyStringType newStringType(AnyStringType template, int maxLengthValue) {
+		DataFactory.eINSTANCE.create(template.eClass) as AnyStringType => [
+			name = '''«template.name»[«maxLengthValue»]'''
+			maxLength = maxLengthValue
+		]
 	}
 
 	def static int asConstantInt(STExpression expr) {
