@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 - 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021 - 2023 Primetals Technologies Austria GmbH
  *               2022 - 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -14,6 +14,8 @@
  *       - adds check for trailing underscore on identifiers
  *       - validation for unqualified FB calls (exactly one input event)
  *       - validation for partial bit access
+ *       - validaton for array access
+ *       - validaton for string access
  *   Ulzii Jargalsaikhan
  *       - custom validation for identifiers
  *   Martin Jobst
@@ -130,6 +132,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String ARRAY_ACCESS_INVALID = ISSUE_CODE_PREFIX + "arrayAccessInvalid"; //$NON-NLS-1$
 	public static final String ARRAY_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "arrayIndexOutOfBounds"; //$NON-NLS-1$
 	public static final String TRUNCATED_LITERAL = ISSUE_CODE_PREFIX + "truncatedLiteral"; //$NON-NLS-1$
+	public static final String STRING_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "stringIndexOutOfBounds"; //$NON-NLS-1$
+	public static final String STRING_INDEX_ZERO_OR_LESS_INVALID = ISSUE_CODE_PREFIX + "stringIndexZeroOrLessInvalid"; //$NON-NLS-1$
 
 	@Check
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
@@ -182,6 +186,36 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					varDeclaration.getMaxLength().getResultType().getName()), varDeclaration,
 					STCorePackage.Literals.ST_VAR_DECLARATION__MAX_LENGTH, MAX_LENGTH_TYPE_INVALID,
 					varDeclaration.getMaxLength().getResultType().getName());
+		}
+	}
+
+	@Check
+	public void checkStringIndexInBounds(final STArrayAccessExpression accessExpression) {
+		final var type = accessExpression.getReceiver().getResultType();
+		final var anyStringType = type instanceof AnyStringType ? (AnyStringType) type : null;
+		if (anyStringType != null) {
+			final var indexExpressions = accessExpression.getIndex();
+			if (indexExpressions.size() > 1) {
+				// too many indices for a string
+				error(MessageFormat.format(Messages.STCoreValidator_TooManyIndicesGivenForStringAccess,
+						indexExpressions.size()), accessExpression,
+						STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, TOO_MANY_INDICES_GIVEN);
+			} else if (indexExpressions.size() == 1 && indexExpressions.get(0) instanceof STNumericLiteral) {
+				final var maxLength = anyStringType.getMaxLength();
+				final var index = (BigInteger) ((STNumericLiteral) indexExpressions.get(0)).getValue();
+				if (anyStringType.isSetMaxLength() && index.compareTo(BigInteger.valueOf(maxLength)) > 0) {
+					warning(MessageFormat.format(Messages.STCoreValidator_StringIndexOutOfBounds, index, maxLength),
+							accessExpression, STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX,
+							STRING_INDEX_OUT_OF_BOUNDS);
+				}
+				if (index.compareTo(BigInteger.ONE) < 0) {
+					// Index is invalid, as less than 1
+					warning(MessageFormat.format(Messages.STCoreValidator_StringIndexZeroOrLess, index),
+							accessExpression, STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX,
+							STRING_INDEX_ZERO_OR_LESS_INVALID);
+				}
+			}
+			// No index at all, so no check needed
 		}
 	}
 
