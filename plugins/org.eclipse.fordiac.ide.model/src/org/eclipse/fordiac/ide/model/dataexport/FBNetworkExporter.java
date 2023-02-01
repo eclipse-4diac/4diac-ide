@@ -77,14 +77,14 @@ class FBNetworkExporter extends CommonElementExporter {
 			final String nodeName = getFBNElementNodeName(fbnElement);
 			if (nodeName != null) {
 				addStartElement(nodeName);
-				addFBNetworkElementAttributes(fbnElement);
+				addFBNetworkElementXMLAttributes(fbnElement);
 				addFBNetworkElementChildren(fbnElement);
 				addEndElement();
 			}
 		}
 	}
 
-	private void addFBNetworkElementAttributes(final FBNetworkElement fbnElement) throws XMLStreamException {
+	private void addFBNetworkElementXMLAttributes(final FBNetworkElement fbnElement) throws XMLStreamException {
 		addNameAttribute(fbnElement.getName());
 		if (fbnElement.getType() != null) {
 			addTypeAttribute(fbnElement.getType());
@@ -94,9 +94,6 @@ class FBNetworkExporter extends CommonElementExporter {
 		if (fbnElement instanceof Group) {
 			addGroupAttributes((Group) fbnElement);
 		}
-		// Saving only hidden pins
-		addPinVisibilityAttribute(fbnElement);
-		addPinVarConfigurationAttribute(fbnElement);
 	}
 
 	private void addGroupAttributes(final Group group) throws XMLStreamException {
@@ -118,8 +115,10 @@ class FBNetworkExporter extends CommonElementExporter {
 			addParamsConfig(fbnElement.getInterface().getInputVars());
 			addErrorMarkerParamsConfig(fbnElement.getInterface().getErrorMarker());
 			addPinComments(fbnElement.getInterface().getAllInterfaceElements());
+			// Saving only hidden pins
+			addPinVisibilityAttribute(fbnElement);
+			addPinVarConfigurationAttribute(fbnElement);
 		}
-		
 
 		if (fbnElement instanceof SubApp) {
 			addSubappHeightAndWidthAttributes((SubApp) fbnElement);
@@ -130,7 +129,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 	}
 
-	
+
 	private void addSubappHeightAndWidthAttributes(final SubApp subApp) throws XMLStreamException {
 		if (subApp.getWidth() != 0) {
 			addAttributeElement(LibraryElementTags.WIDTH_ATTRIBUTE, IecTypes.ElementaryTypes.LREAL.getName(),
@@ -274,7 +273,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		for (final IInterfaceElement ie : fbnElement.getInterface().getAllInterfaceElements()) {
 			// If the pin is hidden, add the attribute to the .sys file
 			if (!ie.isVisible()) {
-				Attribute visibilityAttribute = ie.getAttribute(LibraryElementTags.ELEMENT_VISIBLE);
+				final Attribute visibilityAttribute = ie.getAttribute(LibraryElementTags.ELEMENT_VISIBLE);
 				if (visibilityAttribute != null) {
 					addAttributeElement(visibilityAttribute.getName(), visibilityAttribute.getType().getName(),
 							ie.getName() + ":" + visibilityAttribute.getValue(), //$NON-NLS-1$
@@ -283,11 +282,11 @@ class FBNetworkExporter extends CommonElementExporter {
 			}
 		}
 	}
-	
+
 	private void addPinVarConfigurationAttribute(final FBNetworkElement fbnElement) throws XMLStreamException {
 		for (final VarDeclaration inVar :  fbnElement.getInterface().getInputVars()) {
 			if (inVar.isVarConfig()) {
-				Attribute varconfigurationAttribute = inVar.getAttribute(LibraryElementTags.VAR_CONFIG);
+				final Attribute varconfigurationAttribute = inVar.getAttribute(LibraryElementTags.VAR_CONFIG);
 				if (varconfigurationAttribute != null) {
 					addAttributeElement(varconfigurationAttribute.getName(), varconfigurationAttribute.getType().getName(),
 							inVar.getName() + ":" + varconfigurationAttribute.getValue(), //$NON-NLS-1$
