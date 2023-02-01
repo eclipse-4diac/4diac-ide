@@ -72,7 +72,7 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 			break;
 		case I4diacNatTableUtil.TYPE:
 			DataType dataType = library.getDataTypeLibrary().getDataTypesSorted().stream()
-			.filter(type -> type.getName().equals(value)).findAny().orElse(null);
+					.filter(type -> type.getName().equals(value)).findAny().orElse(null);
 			if (dataType == null) {
 				dataType = library.getDataTypeLibrary().getType(null);
 			}
@@ -101,7 +101,7 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 	}
 
 	public void setTypeLib(final TypeLibrary dataTypeLib) {
-		if(library==null) {
+		if (library == null) {
 			this.library = dataTypeLib;
 		}
 

@@ -346,7 +346,7 @@ final class STCoreUtil {
 		switch (feature) {
 			VarDeclaration:
 				if (feature.array)
-					feature.type.newArrayType(newSubrange(0, feature.arraySize))
+					feature.type.newArrayType(newSubrange(0, feature.arraySize - 1))
 				else
 					feature.type
 			STVarDeclaration case feature.type instanceof DataType:
