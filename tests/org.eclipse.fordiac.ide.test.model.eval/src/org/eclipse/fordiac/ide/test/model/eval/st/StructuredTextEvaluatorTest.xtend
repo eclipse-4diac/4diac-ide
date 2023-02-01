@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -568,28 +568,43 @@ class StructuredTextEvaluatorTest {
 		'''.evaluateAlgorithm)
 	}
 
-	@Test
-	def void testStringSubscript() {
-		'a'.toCharValue.assertTrace(#[STArrayAccessExpression], '''
+	@ParameterizedTest(name="{index}: {1} := '4diac IDE'{0}")
+	@MethodSource("stringSubscriptArgumentsProvider")
+	def void testStringSubscript(int index, String result) {
+		result.toCharValue.assertTrace(#[STArrayAccessExpression], '''
 			VAR_TEMP
 				test: CHAR;
 				str: STRING := '4diac IDE';
 			END_VAR
 			
-			test := str[4];
+			test := str[«index»];
 		'''.evaluateAlgorithm)
 	}
 
-	@Test
-	def void testWStringSubscript() {
-		'a'.toWCharValue.assertTrace(#[STArrayAccessExpression], '''
+	@ParameterizedTest(name="{index}: {1} := '4diac IDE'{0}")
+	@MethodSource("stringSubscriptArgumentsProvider")
+	def void testWStringSubscript(int index, String result) {
+		result.toWCharValue.assertTrace(#[STArrayAccessExpression], '''
 			VAR_TEMP
 				test: WCHAR;
 				str: WSTRING := "4diac IDE";
 			END_VAR
 			
-			test := str[4];
+			test := str[«index»];
 		'''.evaluateAlgorithm)
+	}
+
+	def static Stream<Arguments> stringSubscriptArgumentsProvider() {
+		Stream.of(
+			arguments(0, '\u0000'),
+			arguments(1, '4'),
+			arguments(4, 'a'),
+			arguments(9, 'E'),
+			arguments(10, '\u0000'),
+			arguments(42, '\u0000'),
+			arguments(-1, '\u0000'),
+			arguments(-42, '\u0000')
+		)
 	}
 
 	@Test
@@ -615,6 +630,75 @@ class StructuredTextEvaluatorTest {
 			test[7] := "I";
 			test[8] := "D";
 			test[9] := "E";
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testStringSubscriptModifyOutOfBounds() {
+		"4diac\u0000IDE".toStringValue.assertTrace(STStringLiteral.repeat(6), '''
+			VAR_TEMP
+				test: STRING := '4diac';
+			END_VAR
+			
+			test[7] := 'I';
+			test[8] := 'D';
+			test[9] := 'E';
+			
+			test[0] := 'I';
+			test[-1] := 'D';
+			test[-4] := 'E';
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testWStringSubscriptModifyOutOfBounds() {
+		"4diac\u0000IDE".toWStringValue.assertTrace(STStringLiteral.repeat(6), '''
+			VAR_TEMP
+				test: WSTRING := "4diac";
+			END_VAR
+			
+			test[7] := "I";
+			test[8] := "D";
+			test[9] := "E";
+			
+			test[0] := "I";
+			test[-1] := "D";
+			test[-4] := "E";
+		'''.evaluateAlgorithm)
+	}
+
+
+	@Test
+	def void testStringMaxLength() {
+		"4diac".toStringValue.assertTrace(STStringLiteral.repeat(6), '''
+			VAR_TEMP
+				test: STRING[5] := '4diac IDE';
+			END_VAR
+			
+			test[7] := 'I';
+			test[8] := 'D';
+			test[9] := 'E';
+			
+			test[0] := 'I';
+			test[-1] := 'D';
+			test[-4] := 'E';
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testWStringMaxLength() {
+		"4diac".toWStringValue.assertTrace(STStringLiteral.repeat(6), '''
+			VAR_TEMP
+				test: WSTRING[5] := "4diac IDE";
+			END_VAR
+			
+			test[7] := "I";
+			test[8] := "D";
+			test[9] := "E";
+			
+			test[0] := "I";
+			test[-1] := "D";
+			test[-4] := "E";
 		'''.evaluateAlgorithm)
 	}
 

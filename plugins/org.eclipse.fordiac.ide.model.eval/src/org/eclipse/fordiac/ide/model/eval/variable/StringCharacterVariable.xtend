@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable
 
+import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.value.CharValue
 import org.eclipse.fordiac.ide.model.eval.value.StringValue
@@ -34,11 +35,12 @@ class StringCharacterVariable extends AbstractVariable<CharValue> {
 	}
 
 	override setValue(Value value) {
-		if (value instanceof CharValue)
-			delegate.value = StringValue.toStringValue(
-				delegate.value.stringValue.substring(0, index - 1) + value.charValue +
-					delegate.value.stringValue.substring(index))
-		else
+		if (value instanceof CharValue) {
+			val type = delegate.type as StringType
+			if (!type.setMaxLength || index <= type.maxLength) {
+				delegate.value = delegate.value.withCharAt(index, value)
+			}
+		} else
 			throw new ClassCastException('''Cannot assign value with incompatible type «value.type.name» as «type.name»''')
 	}
 

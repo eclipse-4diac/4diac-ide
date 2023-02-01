@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -1035,9 +1035,15 @@ final class ValueOperations {
 			case value.type:
 				value
 			WstringType:
-				WStringValue.toWStringValue(value)
+				if (type.setMaxLength)
+					WStringValue.toWStringValue(value, type.maxLength)
+				else
+					WStringValue.toWStringValue(value)
 			StringType:
-				StringValue.toStringValue(value)
+				if (type.setMaxLength)
+					StringValue.toStringValue(value, type.maxLength)
+				else
+					StringValue.toStringValue(value)
 			WcharType:
 				WCharValue.toWCharValue(value)
 			CharType:
@@ -1165,9 +1171,15 @@ final class ValueOperations {
 						default: value !== null
 					})
 				WstringType:
-					WStringValue.toWStringValue(value.toString)
+					if (type.setMaxLength)
+						WStringValue.toWStringValue(value.toString, type.maxLength)
+					else
+						WStringValue.toWStringValue(value.toString)
 				StringType:
-					StringValue.toStringValue(value.toString)
+					if (type.setMaxLength)
+						StringValue.toStringValue(value.toString, type.maxLength)
+					else
+						StringValue.toStringValue(value.toString)
 				WcharType:
 					switch (value) {
 						Character: WCharValue.toWCharValue(value)
