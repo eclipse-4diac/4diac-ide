@@ -1,7 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH,
- *                          Primetals Technologies Austria GmbH,
- *                          Johannes Kepler University Linz
+ * Copyright (c) 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,61 +10,61 @@
  * Contributors:
  *   Dunja Životin - extracted out of the DataTypeDropdown class
  *******************************************************************************/
-package org.eclipse.fordiac.ide.model.ui.editors;
+package org.eclipse.fordiac.ide.model.ui.nat;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.emf.ecore.EObject;
 
 public class TypeNode implements Comparable<TypeNode> {
 	private final String name;
 	final List<TypeNode> children;
 	private TypeNode parent;
-	private DataType type;
+	private EObject dataType;
 
-	TypeNode(final String name) {
+	public TypeNode(final String name) {
 		this.name = name;
 		children = new ArrayList<>();
 	}
 
 	public boolean isDirectory() {
-		return null == type;
+		return null == dataType;
 	}
 
-	TypeNode(final String name, final DataType type) {
+	public TypeNode(final String name, final EObject type) {
 		this.name = name;
-		this.type = type;
+		this.dataType = type;
 		children = new ArrayList<>();
 	}
 
-	String getName() {
+	public String getName() {
 		return name;
 	}
 
-	List<TypeNode> getChildren() {
+	public List<TypeNode> getChildren() {
 		return children;
 	}
 
 	// inserting in place
-	void addChild(final TypeNode child) {
+	public void addChild(final TypeNode child) {
 		final int index = Collections.binarySearch(children, child);
 		if (index < 0) {
 			children.add(-index - 1, child);
 		}
 	}
 
-	TypeNode getParent() {
+	public TypeNode getParent() {
 		return parent;
 	}
 
-	void setParent(final TypeNode parent) {
+	public void setParent(final TypeNode parent) {
 		this.parent = parent;
 	}
 
-	public DataType getType() {
-		return type;
+	public EObject getType() {
+		return dataType;
 	}
 
 	@Override
