@@ -19,7 +19,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import org.eclipse.core.runtime.Assert;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.VarContentProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.VarDeclarationLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.create.WithCreateCommand;
@@ -34,8 +33,6 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -46,7 +43,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class EventInterfaceElementSection extends AdapterInterfaceElementSection {
@@ -102,12 +98,12 @@ public class EventInterfaceElementSection extends AdapterInterfaceElementSection
 	}
 
 	@Override
-	public void setInput(final IWorkbenchPart part, final ISelection selection) {
-		super.setInput(part, selection);
-		Assert.isTrue(selection instanceof IStructuredSelection);
-		// hide with part for sub app type events
-		eventComposite.setVisible(!(getType().eContainer().eContainer() instanceof SubAppType));
-		if (null == commandStack) { // disable all field
+	protected void setInputInit() {
+		super.setInputInit();
+		if (getType() != null) {
+			eventComposite.setVisible(!(getType().eContainer().eContainer() instanceof SubAppType));
+		}
+		if (null == commandStack) { // disable all fields
 			withEventsViewer.setInput(null);
 			Arrays.stream(withEventsViewer.getTable().getItems()).forEach(item -> item.setGrayed(true));
 		}

@@ -165,7 +165,7 @@ implements I4diacNatTableUtil {
 
 	@Override
 	protected void setInputInit() {
-		setTableInput();
+		// nothing to be done here
 	}
 
 	@Override
@@ -176,7 +176,6 @@ implements I4diacNatTableUtil {
 			setTableInput();
 		}
 		commandStack = commandStackBuffer;
-		initTypeSelection(getDataTypeLib());
 		inputTable.refresh();
 		outputTable.refresh();
 	}

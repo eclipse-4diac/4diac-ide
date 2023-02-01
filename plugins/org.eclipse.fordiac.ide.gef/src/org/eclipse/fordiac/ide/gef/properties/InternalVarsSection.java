@@ -199,9 +199,12 @@ public class InternalVarsSection extends AbstractSection implements I4diacNatTab
 
 	@Override
 	protected void setInputInit() {
-		provider.setInput(getType());
-		provider.setTypeLib(getType().getTypeLibrary());
-		initTypeSelection(getDataTypeLib());
+		final BaseFBType currentType = getType();
+		if (currentType != null) {
+			provider.setInput(currentType);
+			provider.setTypeLib(currentType.getTypeLibrary());
+			initTypeSelection(getDataTypeLib());
+		}
 	}
 
 	public Object getEntry(final int index) {
