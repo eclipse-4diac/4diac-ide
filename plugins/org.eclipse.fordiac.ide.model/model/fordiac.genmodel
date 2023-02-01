@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
-    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="*******************************************************************************&#xA;Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH&#xA;              2022 Martin Erich Jobst&#xA;&#xA;This program and the accompanying materials are made available under the&#xA;terms of the Eclipse Public License 2.0 which is available at&#xA;http://www.eclipse.org/legal/epl-2.0.&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;Contributors:&#xA;   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst&#xA;     - initial API and implementation and/or initial documentation&#xA;*******************************************************************************"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" copyrightText="*******************************************************************************&#xA;Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH&#xA;              2022-2023 Martin Erich Jobst&#xA;&#xA;This program and the accompanying materials are made available under the&#xA;terms of the Eclipse Public License 2.0 which is available at&#xA;http://www.eclipse.org/legal/epl-2.0.&#xA;&#xA;SPDX-License-Identifier: EPL-2.0&#xA;&#xA;Contributors:&#xA;   Gerhard Ebenhofer, Alois Zoitl, Ingo Hegny, Monika Wenger, Martin Jobst&#xA;     - initial API and implementation and/or initial documentation&#xA;*******************************************************************************"
     modelDirectory="/org.eclipse.fordiac.ide.model/src-gen" creationSubmenus="true"
     editDirectory="/org.eclipse.fordiac.ide.model.edit/src-gen" modelPluginID="org.eclipse.fordiac.ide.model"
     templateDirectory="" modelName="fordiac" editPluginClass="org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin"
@@ -863,6 +863,7 @@
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="data.ecore#//AnyStringType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute data.ecore#//AnyStringType/maxLength"/>
       <genOperations ecoreOperation="data.ecore#//AnyStringType/isAssignableFrom"
           body="return org.eclipse.fordiac.ide.model.data.impl.DataTypeAnnotations.isAssignableFrom(this, other);">
         <genParameters ecoreParameter="data.ecore#//AnyStringType/isAssignableFrom/other"/>

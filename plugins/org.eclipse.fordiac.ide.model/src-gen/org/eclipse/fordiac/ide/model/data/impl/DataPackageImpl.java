@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -499,7 +499,6 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	private DataPackageImpl() {
 		super(eNS_URI, DataFactory.eINSTANCE);
 	}
-
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -1097,6 +1096,16 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 	 * @generated
 	 */
 	@Override
+	public EAttribute getAnyStringType_MaxLength() {
+		return (EAttribute)anyStringTypeEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getStringType() {
 		return stringTypeEClass;
 	}
@@ -1345,6 +1354,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		anyCharsTypeEClass = createEClass(ANY_CHARS_TYPE);
 
 		anyStringTypeEClass = createEClass(ANY_STRING_TYPE);
+		createEAttribute(anyStringTypeEClass, ANY_STRING_TYPE__MAX_LENGTH);
 
 		stringTypeEClass = createEClass(STRING_TYPE);
 
@@ -1684,6 +1694,7 @@ public class DataPackageImpl extends EPackageImpl implements DataPackage {
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(anyStringTypeEClass, AnyStringType.class, "AnyStringType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEAttribute(getAnyStringType_MaxLength(), ecorePackage.getEInt(), "maxLength", null, 0, 1, AnyStringType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		op = addEOperation(anyStringTypeEClass, theXMLTypePackage.getBoolean(), "isAssignableFrom", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 		addEParameter(op, this.getDataType(), "other", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$

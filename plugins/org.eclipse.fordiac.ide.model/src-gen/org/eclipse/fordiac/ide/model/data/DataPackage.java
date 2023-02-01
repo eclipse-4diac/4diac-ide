@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -2806,13 +2806,22 @@ public interface DataPackage extends EPackage {
 	int ANY_STRING_TYPE__TYPE_ENTRY = ANY_CHARS_TYPE__TYPE_ENTRY;
 
 	/**
+	 * The feature id for the '<em><b>Max Length</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ANY_STRING_TYPE__MAX_LENGTH = ANY_CHARS_TYPE_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Any String Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ANY_STRING_TYPE_FEATURE_COUNT = ANY_CHARS_TYPE_FEATURE_COUNT + 0;
+	int ANY_STRING_TYPE_FEATURE_COUNT = ANY_CHARS_TYPE_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.data.impl.StringTypeImpl <em>String Type</em>}' class.
@@ -2868,6 +2877,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int STRING_TYPE__TYPE_ENTRY = ANY_STRING_TYPE__TYPE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Max Length</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STRING_TYPE__MAX_LENGTH = ANY_STRING_TYPE__MAX_LENGTH;
 
 	/**
 	 * The number of structural features of the '<em>String Type</em>' class.
@@ -2932,6 +2950,15 @@ public interface DataPackage extends EPackage {
 	 * @ordered
 	 */
 	int WSTRING_TYPE__TYPE_ENTRY = ANY_STRING_TYPE__TYPE_ENTRY;
+
+	/**
+	 * The feature id for the '<em><b>Max Length</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int WSTRING_TYPE__MAX_LENGTH = ANY_STRING_TYPE__MAX_LENGTH;
 
 	/**
 	 * The number of structural features of the '<em>Wstring Type</em>' class.
@@ -4146,6 +4173,17 @@ public interface DataPackage extends EPackage {
 	EClass getAnyStringType();
 
 	/**
+	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.data.AnyStringType#getMaxLength <em>Max Length</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Max Length</em>'.
+	 * @see org.eclipse.fordiac.ide.model.data.AnyStringType#getMaxLength()
+	 * @see #getAnyStringType()
+	 * @generated
+	 */
+	EAttribute getAnyStringType_MaxLength();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.data.StringType <em>String Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4812,6 +4850,14 @@ public interface DataPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ANY_STRING_TYPE = eINSTANCE.getAnyStringType();
+
+		/**
+		 * The meta object literal for the '<em><b>Max Length</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute ANY_STRING_TYPE__MAX_LENGTH = eINSTANCE.getAnyStringType_MaxLength();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.data.impl.StringTypeImpl <em>String Type</em>}' class.
