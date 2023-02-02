@@ -1228,4 +1228,176 @@ class Formatter2Test {
 			'''
 		]
 	}
+
+	@Test
+	def void testCommentIndentationInIF() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert : INT
+				// top level comment
+				bol1 := TRUE;
+				// BETWEEN* top level comment *BETWEEN
+				bol1 := TRUE;
+				// top level comment
+				IF bol1 THEN
+					// nesting 1 comment
+					bol1 := TRUE;
+					// BETWEEEN* nesting 1 comment *BETWEEN
+					bol1 := TRUE;
+					// nesting 1 comment
+					IF bol1 THEN
+						// nesting 2 comment
+						bol1 := TRUE;
+						// BETWEEEN* nesting 2 comment *BETWEEN
+						bol1 := TRUE;
+						// nesting 2 comment
+						IF bol1 THEN
+							// nesting 3 comment
+							bol1 := TRUE;
+							// BETWEEEN* nesting 3 comment *BETWEEN
+							bol1 := TRUE;
+							// nesting 3 comment
+						END_IF;
+						bol1 := TRUE;
+						//comment BETWEEN END_IF 2
+						bol1 := true;
+					END_IF;
+					bol1 := TRUE;
+					//comment BETWEEN END_IF 1
+					bol1 := true;
+				END_IF;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert : INT
+				// top level comment
+				bol1 := TRUE;
+				// BETWEEN* top level comment *BETWEEN
+				bol1 := TRUE;
+				// top level comment
+				IF bol1 THEN
+					// nesting 1 comment
+					bol1 := TRUE;
+					// BETWEEEN* nesting 1 comment *BETWEEN
+					bol1 := TRUE;
+					// nesting 1 comment
+					IF bol1 THEN
+						// nesting 2 comment
+						bol1 := TRUE;
+						// BETWEEEN* nesting 2 comment *BETWEEN
+						bol1 := TRUE;
+						// nesting 2 comment
+						IF bol1 THEN
+							// nesting 3 comment
+							bol1 := TRUE;
+							// BETWEEEN* nesting 3 comment *BETWEEN
+							bol1 := TRUE;
+							// nesting 3 comment
+						END_IF;
+						bol1 := TRUE;
+						// comment BETWEEN END_IF 2
+						bol1 := TRUE;
+					END_IF;
+					bol1 := TRUE;
+					// comment BETWEEN END_IF 1
+					bol1 := TRUE;
+				END_IF;
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void testCommentIndentationInFORMininal() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert : INT
+				FOR int1 := 1 TO 4 DO
+				    // nesting 1 comment
+					bol1 := TRUE;
+					// BETWEEEN* nesting 1 comment *BETWEEN
+					bol1 := TRUE;
+					// nesting 1 comment
+				END_FOR;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert : INT
+				FOR int1 := 1 TO 4 DO
+					// nesting 1 comment
+					bol1 := TRUE;
+					// BETWEEEN* nesting 1 comment *BETWEEN
+					bol1 := TRUE;
+					// nesting 1 comment
+				END_FOR;
+				END_FUNCTION
+			'''
+		]
+	}
+
+	@Test
+	def void testCommentIndentationInFOR() {
+		assertFormatted[
+			toBeFormatted = '''
+				FUNCTION hubert : INT
+				// top level comment
+				bol1 := TRUE;
+				// BETWEEN* top level comment *BETWEEN
+				bol1 := TRUE;
+				// top level comment
+				FOR int1 := 1 TO 4 DO
+					// nesting 1 comment
+					bol1 := TRUE;
+					// BETWEEEN* nesting 1 comment *BETWEEN
+					bol1 := TRUE;
+					// nesting 1 comment
+					FOR int1 := 1 TO 4 DO
+						// nesting 2 comment
+						bol1 := TRUE;
+						// BETWEEEN* nesting 2 comment *BETWEEN
+						bol1 := TRUE;
+						// nesting 2 comment
+						FOR int1 := 1 TO 4 DO
+							// nesting 3 comment
+							bol1 := TRUE;
+							// BETWEEEN* nesting 3 comment *BETWEEN
+							bol1 := TRUE;
+							// nesting 3 comment
+						END_FOR;
+					END_FOR;
+				END_FOR;
+				END_FUNCTION
+			'''
+			expectation = '''
+				FUNCTION hubert : INT
+				// top level comment
+				bol1 := TRUE;
+				// BETWEEN* top level comment *BETWEEN
+				bol1 := TRUE;
+				// top level comment
+				FOR int1 := 1 TO 4 DO
+					// nesting 1 comment
+					bol1 := TRUE;
+					// BETWEEEN* nesting 1 comment *BETWEEN
+					bol1 := TRUE;
+					// nesting 1 comment
+					FOR int1 := 1 TO 4 DO
+						// nesting 2 comment
+						bol1 := TRUE;
+						// BETWEEEN* nesting 2 comment *BETWEEN
+						bol1 := TRUE;
+						// nesting 2 comment
+						FOR int1 := 1 TO 4 DO
+							// nesting 3 comment
+							bol1 := TRUE;
+							// BETWEEEN* nesting 3 comment *BETWEEN
+							bol1 := TRUE;
+							// nesting 3 comment
+						END_FOR;
+					END_FOR;
+				END_FOR;
+				END_FUNCTION
+			'''
+		]
+	}
 }
