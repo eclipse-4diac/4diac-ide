@@ -19,8 +19,20 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.util.Objects
 import org.eclipse.fordiac.ide.model.data.AnyBitType
+import org.eclipse.fordiac.ide.model.data.AnyCharType
+import org.eclipse.fordiac.ide.model.data.AnyCharsType
+import org.eclipse.fordiac.ide.model.data.AnyDateType
+import org.eclipse.fordiac.ide.model.data.AnyDerivedType
 import org.eclipse.fordiac.ide.model.data.AnyDurationType
+import org.eclipse.fordiac.ide.model.data.AnyElementaryType
+import org.eclipse.fordiac.ide.model.data.AnyIntType
+import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
+import org.eclipse.fordiac.ide.model.data.AnyRealType
+import org.eclipse.fordiac.ide.model.data.AnySignedType
+import org.eclipse.fordiac.ide.model.data.AnyStringType
+import org.eclipse.fordiac.ide.model.data.AnyType
+import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.data.ByteType
 import org.eclipse.fordiac.ide.model.data.CharType
@@ -1271,6 +1283,21 @@ final class ValueOperations {
 			TimeOfDayType: TimeOfDayValue
 			LdateType: LDateValue
 			DateType: DateValue
+			AnySignedType: AnySignedValue
+			AnyUnsignedType: AnyUnsignedValue
+			AnyIntType: AnyIntValue
+			AnyRealType: AnyRealValue
+			AnyNumType: AnyNumValue
+			AnyDurationType: AnyDurationValue
+			AnyMagnitudeType: AnyMagnitudeValue
+			AnyBitType: AnyBitValue
+			AnyCharType: AnyCharValue
+			AnyStringType: AnyStringValue
+			AnyCharsType: AnyCharsValue
+			AnyDateType: AnyDateValue
+			AnyElementaryType: AnyElementaryValue
+			AnyDerivedType: AnyDerivedValue
+			AnyType: AnyValue
 			default: null
 		}
 	}
@@ -1317,6 +1344,7 @@ final class ValueOperations {
 			case AnyCharsValue: GenericTypes.ANY_CHARS
 			case AnyDateValue: GenericTypes.ANY_DATE
 			case AnyElementaryValue: GenericTypes.ANY_ELEMENTARY
+			case AnyDerivedValue: GenericTypes.ANY_DERIVED
 			case AnyValue: GenericTypes.ANY
 			default: null
 		}

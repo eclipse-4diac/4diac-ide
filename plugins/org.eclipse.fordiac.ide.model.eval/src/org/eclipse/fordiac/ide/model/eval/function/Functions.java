@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -303,7 +303,7 @@ public interface Functions {
 	 * @throws IllegalStateException if multiple candidate methods match */
 	static DataType inferReturnTypeFromDataTypes(final Class<? extends Functions> clazz, final String name,
 			final List<DataType> atypes) throws NoSuchMethodException, SecurityException {
-		return ValueOperations.dataType(inferReturnType(clazz, name, getValueTypes(atypes)));
+		return inferReturnTypeFromDataTypes(findMethodFromDataTypes(clazz, name, atypes), atypes);
 	}
 
 	/** Infer the concrete return type (i.e., resolve generic type) for a function
@@ -312,7 +312,26 @@ public interface Functions {
 	 * @param atypes The argument types used to infer the return type
 	 * @return The concrete return type of the function based on the argument types */
 	static DataType inferReturnTypeFromDataTypes(final Method method, final List<DataType> atypes) {
-		return ValueOperations.dataType(inferReturnType(method, getValueTypes(atypes)));
+		try {
+			final Type returnType = method.getGenericReturnType();
+			if (returnType instanceof TypeVariable<?>) {
+				DataType result = null;
+				for (int i = 0; i < atypes.size(); ++i) {
+					final Type ptype = getGenericParameterValueType(method, i);
+					if (ptype.equals(returnType)) {
+						result = commonSupertype(result, atypes.get(i));
+					}
+				}
+				if (result != null) {
+					return result;
+				}
+			}
+		} catch (final Exception e) {
+			// ignore
+		}
+		return method.getReturnType() != void.class
+				? ValueOperations.dataType(method.getReturnType().asSubclass(Value.class))
+						: null;
 	}
 
 	/** Infer the concrete return type (i.e., resolve generic type) for a function
@@ -338,8 +357,7 @@ public interface Functions {
 	 * @throws IllegalStateException if multiple candidate methods match */
 	static List<DataType> inferParameterTypesFromDataTypes(final Class<? extends Functions> clazz, final String name,
 			final List<DataType> atypes) throws NoSuchMethodException, SecurityException {
-		return inferParameterTypes(clazz, name, getValueTypes(atypes)).stream().map(ValueOperations::dataType)
-				.collect(Collectors.toList());
+		return inferParameterTypesFromDataTypes(findMethodFromDataTypes(clazz, name, atypes), atypes);
 	}
 
 	/** Infer the concrete parameter types (i.e., resolve generic types) for a function
@@ -348,8 +366,40 @@ public interface Functions {
 	 * @param atypes The argument types used to infer the return type
 	 * @return The concrete parameter types of the function based on the argument types */
 	static List<DataType> inferParameterTypesFromDataTypes(final Method method, final List<DataType> atypes) {
-		return inferParameterTypes(method, getValueTypes(atypes)).stream().map(ValueOperations::dataType)
-				.collect(Collectors.toList());
+		final List<DataType> result = new ArrayList<>(atypes.size());
+		for (int i = 0; i < atypes.size(); ++i) {
+			result.add(inferParameterTypeFromDataType(method, atypes, i));
+		}
+		return result;
+	}
+
+	/** Infer a single concrete parameter type (i.e., resolve generic type) for a function
+	 *
+	 * @param method The method reference corresponding to the function
+	 * @param atypes The argument types used to infer the return type
+	 * @param index  The parameter index
+	 * @return The concrete parameter type of the function based on the argument types */
+	static DataType inferParameterTypeFromDataType(final Method method, final List<DataType> atypes, final int index) {
+		try {
+			final Type parameterType = getGenericParameterValueType(method, index);
+			if (parameterType instanceof TypeVariable<?>) {
+				DataType result = null;
+				for (int i = 0; i < atypes.size(); ++i) {
+					final Type ptype = getGenericParameterValueType(method, i);
+					if (ptype.equals(parameterType)) {
+						result = commonSupertype(result, atypes.get(i));
+					}
+				}
+				if (result != null) {
+					return result;
+				}
+			} else if (parameterType instanceof Class<?>) {
+				return ValueOperations.dataType(((Class<?>) parameterType).asSubclass(Value.class));
+			}
+		} catch (final Exception e) {
+			// ignore
+		}
+		return ValueOperations.dataType(getParameterType(method, index).asSubclass(Value.class));
 	}
 
 	/** Get the generic parameter value type
@@ -485,15 +535,20 @@ public interface Functions {
 		} else if (Value.class.isAssignableFrom(clazz1) && Value.class.isAssignableFrom(clazz2)) {
 			final DataType type1 = ValueOperations.dataType(clazz1.asSubclass(Value.class));
 			final DataType type2 = ValueOperations.dataType(clazz2.asSubclass(Value.class));
-			if (type1 == null) {
-				return ValueOperations.valueType(type2);
-			} else if (type2 == null) {
-				return ValueOperations.valueType(type1);
-			} else if (type1.isAssignableFrom(type2)) {
-				return ValueOperations.valueType(type1);
-			} else if (type2.isAssignableFrom(type1)) {
-				return ValueOperations.valueType(type2);
-			}
+			return ValueOperations.valueType(commonSupertype(type1, type2));
+		}
+		return null;
+	}
+
+	private static DataType commonSupertype(final DataType type1, final DataType type2) {
+		if (type1 == null) {
+			return type2;
+		} else if (type2 == null) {
+			return type1;
+		} else if (type1.isAssignableFrom(type2)) {
+			return type1;
+		} else if (type2.isAssignableFrom(type1)) {
+			return type2;
 		}
 		return null;
 	}
