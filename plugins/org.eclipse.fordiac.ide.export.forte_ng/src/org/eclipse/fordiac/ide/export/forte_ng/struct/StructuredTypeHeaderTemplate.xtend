@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University Linz
+ *               2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  * 
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Martin Jobst - add constructor with member list
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.struct
 
@@ -34,12 +36,13 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 		  DECLARE_FIRMWARE_DATATYPE(«type.name»)
 
 		  public:
-		      «structClassName»();
+		    «structClassName»();
 
-		      virtual ~«structClassName»() {
-		      }
+		    «structClassName»(«generateConstructorParameters»);
 
-          «type.memberVariables.generateAccessors("getMember")»
+		    virtual ~«structClassName»() = default;
+
+            «type.memberVariables.generateAccessors("getMember")»
 
 		  private:
 		    static const CStringDictionary::TStringId scmElementTypes[];
@@ -57,9 +60,5 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 		«type.memberVariables.map[type].generateTypeIncludes»
 		
 		«type.compilerInfo?.header»
-	'''
-
-	def protected generateAlgorithms() '''
-		void alg_REQ(void);
 	'''
 }

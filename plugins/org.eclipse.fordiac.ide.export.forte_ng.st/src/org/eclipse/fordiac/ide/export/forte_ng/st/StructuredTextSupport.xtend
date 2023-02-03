@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  *               2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 import org.eclipse.fordiac.ide.model.data.AnyStringType
+import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.WcharType
@@ -80,9 +81,9 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+import static extension org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.util.GlobalConstantsUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
-import static extension org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.util.GlobalConstantsUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
 abstract class StructuredTextSupport implements ILanguageSupport {
@@ -115,7 +116,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateInitializerExpression(STArrayInitializerExpression expr) //
-	'''{«FOR elem : expr.values SEPARATOR ", "»«elem.generateArrayInitElement»«ENDFOR»}'''
+	'''«(expr.expectedType as DataType).generateTypeName»{«FOR elem : expr.values SEPARATOR ", "»«elem.generateArrayInitElement»«ENDFOR»}'''
 
 	def protected CharSequence generateArrayInitElement(STArrayInitElement elem) //
 	'''«IF elem.initExpressions.empty»«elem.indexOrInitExpression.generateInitializerExpression»«ELSE»«elem.generateMultiArrayInitElement»«ENDIF»'''
@@ -124,7 +125,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''«FOR i : 0..<(elem.indexOrInitExpression as STElementaryInitializerExpression).value.integerFromConstantExpression SEPARATOR ", "»«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateInitializerExpression»«ENDFOR»«ENDFOR»'''
 
 	def protected dispatch CharSequence generateInitializerExpression(STStructInitializerExpression expr) //
-	'''{«FOR elem : expr.generateStructInitElements SEPARATOR ", "»«elem»«ENDFOR»}'''
+	'''«(expr.expectedType as DataType).generateTypeName»(«FOR elem : expr.generateStructInitElements SEPARATOR ", "»«elem»«ENDFOR»)'''
 
 	def protected Iterable<CharSequence> generateStructInitElements(STStructInitializerExpression expr) {
 		expr.mappedStructInitElements.entrySet.map[key.generateStructInitElement(value)]
@@ -424,6 +425,18 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		) [ type, count |
 			'''«IF output»CIEC_ARRAY_COMMON«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«type»>'''
 		]
+	}
+
+	def protected CharSequence generateTypeName(DataType type) {
+		switch (type) {
+			ArrayType:
+				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
+					val fixed = subrange.setLowerLimit && subrange.setUpperLimit
+					'''«IF fixed»CIEC_ARRAY_FIXED«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«result»«IF fixed», «subrange.lowerLimit», «subrange.upperLimit»«ENDIF»>'''
+				].toString
+			default:
+				ForteNgExportUtil.generateTypeName(type)
+		}
 	}
 
 	def protected int getIntegerFromConstantExpression(STExpression expr) {

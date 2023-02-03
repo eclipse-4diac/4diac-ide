@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University Linz
+ *               2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  * 
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Martin Jobst - add constructor with member list
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.struct
 
@@ -31,6 +33,13 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		
 		«structClassName»::«structClassName»() :
 		    CIEC_STRUCT(«type.name.FORTEStringId», «type.memberVariables.size», scmElementTypes, scmElementNames, e_APPLICATION + e_CONSTRUCTED + 1) {
+		}
+		
+		«structClassName»::«structClassName»(«generateConstructorParameters») :
+		    CIEC_STRUCT(«type.name.FORTEStringId», «type.memberVariables.size», scmElementTypes, scmElementNames, e_APPLICATION + e_CONSTRUCTED + 1) {
+		  «FOR member : type.memberVariables»
+		  «exportPrefix»«member.name»() = «member.generateName»;
+		  «ENDFOR»
 		}
 		
 		const CStringDictionary::TStringId «structClassName»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
