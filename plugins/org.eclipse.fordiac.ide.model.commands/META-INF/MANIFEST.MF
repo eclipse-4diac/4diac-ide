@@ -6,6 +6,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.model.commands;singleton:=true
 Bundle-Version: 2.0.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.eval,
  org.eclipse.gef,
  org.eclipse.ui.workbench,
  org.eclipse.fordiac.ide.ui,

@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.model.data.AnyIntType;
 import org.eclipse.fordiac.ide.model.data.AnyStringType;
 import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -134,6 +135,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String TRUNCATED_LITERAL = ISSUE_CODE_PREFIX + "truncatedLiteral"; //$NON-NLS-1$
 	public static final String STRING_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "stringIndexOutOfBounds"; //$NON-NLS-1$
 	public static final String STRING_INDEX_ZERO_OR_LESS_INVALID = ISSUE_CODE_PREFIX + "stringIndexZeroOrLessInvalid"; //$NON-NLS-1$
+	public static final String LITERAL_REQUIRES_TYPE_SPECIFIER = ISSUE_CODE_PREFIX + "literalRequiresTypeSpecifier"; //$NON-NLS-1$
 
 	@Check
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
@@ -579,6 +581,11 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(),
 					NumericValueConverter.INSTANCE.toString(expression.getValue())),
 					STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE, INVALID_NUMERIC_LITERAL);
+		} else if (expectedType instanceof DataType && IecTypes.GenericTypes.isAnyType((DataType) expectedType)
+				&& expression.getType() == null) {
+			error(MessageFormat.format(Messages.STCoreValidator_Literal_Requires_Type_Specifier,
+					expectedType.getName()), STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE,
+					LITERAL_REQUIRES_TYPE_SPECIFIER);
 		} else if (expectedType instanceof DataType && !type.eClass().equals(expectedType.eClass())
 				&& ((DataType) expectedType).isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
@@ -594,6 +601,11 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(),
 					stringValueConverter.toString(expression.getValue())),
 					STCorePackage.Literals.ST_STRING_LITERAL__VALUE, INVALID_STRING_LITERAL);
+		} else if (expectedType instanceof DataType && IecTypes.GenericTypes.isAnyType((DataType) expectedType)
+				&& expression.getType() == null) {
+			error(MessageFormat.format(Messages.STCoreValidator_Literal_Requires_Type_Specifier,
+					expectedType.getName()), STCorePackage.Literals.ST_STRING_LITERAL__VALUE,
+					LITERAL_REQUIRES_TYPE_SPECIFIER);
 		} else if (expectedType instanceof AnyStringType && ((AnyStringType) expectedType).isSetMaxLength()
 				&& expression.getValue().length() > ((AnyStringType) expectedType).getMaxLength()) {
 			warning(MessageFormat.format(Messages.STCoreValidator_String_Literal_Truncated,

@@ -16,6 +16,7 @@ import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.eval.function.Functions
+import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.value.AnyIntValue
 import org.eclipse.fordiac.ide.model.eval.value.AnyMagnitudeValue
 import org.eclipse.fordiac.ide.model.eval.value.AnyValue
@@ -24,6 +25,9 @@ import org.eclipse.fordiac.ide.model.eval.value.IntValue
 import org.eclipse.fordiac.ide.model.eval.value.StructValue
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
+import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
 import static org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable.*
@@ -37,6 +41,13 @@ import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations
 import static extension org.junit.jupiter.api.Assertions.*
 
 class FunctionsTest {
+	@BeforeAll
+	def static void setupXtext() {
+		new DataTypeLibrary
+		STAlgorithmStandaloneSetup.doSetup
+		StructuredTextEvaluatorFactory.register
+	}
+
 	@Test
 	def void testNotFound() {
 		NoSuchMethodException.assertThrows[SampleFunctions.findMethodFromDataTypes("ILLEGAL_NAME", ElementaryTypes.INT)]

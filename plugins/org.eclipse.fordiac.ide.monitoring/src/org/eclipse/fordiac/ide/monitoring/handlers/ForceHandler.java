@@ -21,10 +21,10 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
-import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.monitoring.Messages;
 import org.eclipse.fordiac.ide.monitoring.MonitoringManager;
 import org.eclipse.fordiac.ide.monitoring.dialogs.StructForceDialog;
@@ -141,7 +141,7 @@ public class ForceHandler extends AbstractMonitoringHandler {
 
 	private static String validateForceInput(final VarDeclaration varDeclaration, final String newValue) {
 		if (!newValue.isBlank()) {
-			final String validationMsg = ValueValidator.validateValue(varDeclaration, newValue);
+			final String validationMsg = VariableOperations.validateValue(varDeclaration, newValue);
 			if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
 				return validationMsg;
 			}

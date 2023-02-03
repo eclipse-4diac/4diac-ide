@@ -14,10 +14,10 @@ package org.eclipse.fordiac.ide.gef.widgets;
 
 import org.eclipse.draw2d.Label;
 import org.eclipse.fordiac.ide.gef.editparts.LabelDirectEditManager;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.swt.events.KeyAdapter;
@@ -43,7 +43,7 @@ public class PinValueDirectEditManager extends LabelDirectEditManager {
 			final IInterfaceElement ie = ((Value) getEditPart().getModel()).getParentIE();
 
 			if (!value.isBlank() && (ie instanceof VarDeclaration)) {
-				final String validationMsg = ValueValidator.validateValue((VarDeclaration) ie, value);
+				final String validationMsg = VariableOperations.validateValue((VarDeclaration) ie, value);
 				isValid = !((validationMsg != null) && !validationMsg.trim().isEmpty());
 				if (!isValid) {
 					ErrorMessenger.popUpErrorMessage(validationMsg);

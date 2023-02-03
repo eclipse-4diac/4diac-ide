@@ -20,6 +20,9 @@
          <source
                type="java.lang.String">
          </source>
+         <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">
+         </source>
       </factory>
    </extension>
 

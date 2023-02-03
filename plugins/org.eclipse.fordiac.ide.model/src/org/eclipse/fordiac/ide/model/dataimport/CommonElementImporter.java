@@ -77,7 +77,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
-import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 /** The Class CommonElementImporter. */
@@ -628,7 +627,6 @@ public abstract class CommonElementImporter {
 		final VarDeclaration vInput = getVarNamed(block.getInterface(), parameter.getName(), true);
 		if (null != vInput) {
 			vInput.setValue(parameter.getValue());
-			validateValue(vInput);
 		} else {
 			createParameterErrorMarker(block, parameter);
 		}
@@ -642,15 +640,6 @@ public abstract class CommonElementImporter {
 		errorMarkerInterface.setValue(parameter.getValue());
 		errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage)
 				.setTarget(errorMarkerInterface).setLineNumber(getLineNumber()));
-	}
-
-	protected void validateValue(final VarDeclaration vInput) {
-		final String validation = ValueValidator.validateValue(vInput);
-		if ((validation != null) && (!validation.trim().isEmpty())) {
-			vInput.getValue().setErrorMessage(validation);
-			errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(validation).setTarget(vInput.getValue())
-					.setLineNumber(getLineNumber()));
-		}
 	}
 
 	protected boolean isProfileAttribute() {

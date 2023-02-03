@@ -19,12 +19,15 @@ import org.eclipse.emf.ecore.EObject
 import org.eclipse.emf.ecore.resource.ResourceSet
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod
 import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.STAlgorithmParser
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
 import org.eclipse.xtext.ParserRule
 import org.eclipse.xtext.parser.IParseResult
 import org.eclipse.xtext.parser.IParser
@@ -34,11 +37,10 @@ import org.eclipse.xtext.validation.Issue
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 
-class StructuredTextParseUtil extends ParseUtil{
+class StructuredTextParseUtil extends ParseUtil {
 	static final URI SYNTHETIC_URI = URI.createURI("__synthetic.stalg")
 	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.
 		getResourceServiceProvider(SYNTHETIC_URI)
-	static final String EXPRESSION_DEFAULT_NAME = "anonymous"
 
 	private new() {
 	}
@@ -101,33 +103,50 @@ class StructuredTextParseUtil extends ParseUtil{
 	def static STExpression parse(String expression, FBType fbType, Collection<? extends EObject> additionalContent,
 		List<String> errors, List<String> warnings, List<String> infos) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
-		expression.parse(parser.grammarAccess.STExpressionRule, EXPRESSION_DEFAULT_NAME, fbType, additionalContent,
+		expression.parse(parser.grammarAccess.STExpressionRule, fbType?.eResource?.URI, null, fbType, additionalContent,
 			errors, warnings, infos)?.rootASTElement as STExpression
+	}
+
+	def static STInitializerExpressionSource parse(String expression, URI uri, INamedElement expectedType,
+		FBType fbType, Collection<? extends EObject> additionalContent, List<String> errors, List<String> warnings,
+		List<String> infos) {
+		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
+		expression.parse(parser.grammarAccess.STInitializerExpressionSourceRule, uri, expectedType, fbType,
+			additionalContent, errors, warnings, infos)?.rootASTElement as STInitializerExpressionSource
 	}
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, String name, FBType fbType,
 		List<String> errors, List<String> warnings, List<String> infos) {
-		text.parse(entryPoint, name, fbType, null, errors, warnings, infos)
+		text.parse(entryPoint, fbType?.eResource?.URI, null, name, fbType, null, errors, warnings, infos)
 	}
 
-	def private static IParseResult parse(String text, ParserRule entryPoint, String name, FBType fbType,
-		Collection<? extends EObject> additionalContent, List<String> errors, List<String> warnings,
+	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, INamedElement expectedType,
+		FBType fbType, Collection<? extends EObject> additionalContent, List<String> errors, List<String> warnings,
 		List<String> infos) {
 		val issues = newArrayList
-		val parseResult = text.parse(entryPoint, fbType, additionalContent, issues)
-		name.postProcess(errors,warnings,infos,issues,parseResult)
+		text.parse(entryPoint, uri, expectedType, fbType, additionalContent, issues).postProcess(errors, warnings,
+			infos, issues)
+	}
+
+	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, INamedElement expectedType,
+		String name, FBType fbType, Collection<? extends EObject> additionalContent, List<String> errors,
+		List<String> warnings, List<String> infos) {
+		val issues = newArrayList
+		val parseResult = text.parse(entryPoint, uri, expectedType, fbType, additionalContent, issues)
+		name.postProcess(errors, warnings, infos, issues, parseResult)
 	}
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, FBType fbType, List<Issue> issues) {
-		text.parse(entryPoint, fbType, null, issues)
+		text.parse(entryPoint, fbType?.eResource?.URI ?: SYNTHETIC_URI, null, fbType, null, issues)
 	}
 
-	def private static IParseResult parse(String text, ParserRule entryPoint, FBType fbType,
-		Collection<? extends EObject> additionalContent, List<Issue> issues) {
+	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, INamedElement expectedType,
+		FBType fbType, Collection<? extends EObject> additionalContent, List<Issue> issues) {
 		val resourceSet = SERVICE_PROVIDER.get(ResourceSet) as XtextResourceSet
 		resourceSet.loadOptions.putAll(#{
-			STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE
+			STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE,
+			STCoreUtil.OPTION_EXPECTED_TYPE -> expectedType
 		})
-		SERVICE_PROVIDER.postProcess(resourceSet,text,entryPoint,fbType,null,issues,SYNTHETIC_URI)
+		SERVICE_PROVIDER.postProcess(resourceSet, text, entryPoint, fbType, additionalContent, issues, uri ?: SYNTHETIC_URI)
 	}
 }

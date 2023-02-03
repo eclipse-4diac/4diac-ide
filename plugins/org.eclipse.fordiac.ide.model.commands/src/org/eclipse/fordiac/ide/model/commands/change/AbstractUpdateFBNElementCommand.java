@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -55,7 +56,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
-import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -340,7 +340,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 		for (final VarDeclaration input : newElement.getInterface().getInputVars()) {
 			if (hasValue(input.getValue())) {
-				final String errorMessage = ValueValidator.validateValue(input);
+				final String errorMessage = VariableOperations.validateValue(input);
 				input.getValue().setErrorMessage(errorMessage);
 				if (!errorMessage.isBlank()) {
 					createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(

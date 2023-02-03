@@ -14,10 +14,10 @@
 package org.eclipse.fordiac.ide.gef.figures;
 
 import org.eclipse.draw2d.Label;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 
 /**
  * The Class ToolTipFigure.
@@ -46,7 +46,7 @@ public class ValueToolTipFigure extends ToolTipFigure {
 	public void setValue(final INamedElement element, final Value value) {
 		valueLabel.setText(value.getValue());
 		if (element instanceof VarDeclaration) {
-			final String validationMsg = ValueValidator.validateValue((VarDeclaration) element, value.getValue());
+			final String validationMsg = VariableOperations.validateValue((VarDeclaration) element, value.getValue());
 			if ((null != validationMsg) && !validationMsg.isBlank()) {
 				errorMsg.setText(validationMsg);
 			}

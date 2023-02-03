@@ -12,8 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.provider;
 
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.monitoring.views.WatchValueTreeNode;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.jface.viewers.CellEditor;
@@ -23,7 +23,7 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.widgets.Tree;
 
 public class StructForceEditingSupport extends EditingSupport {
-	
+
 	private final TextCellEditor cellEditor;
 
 	public StructForceEditingSupport(final ColumnViewer viewer, final Tree tree) {
@@ -58,14 +58,14 @@ public class StructForceEditingSupport extends EditingSupport {
 			final WatchValueTreeNode node = (WatchValueTreeNode) element;
 			if (isValid((String) value, node.getVariable())) {
 				node.setValue((String) value);
-				getViewer().refresh();				
+				getViewer().refresh();
 			}
 		}
 	}
-	
+
 	public static boolean isValid(final String value, final VarDeclaration varDec) {
 		if (!value.isBlank()) {
-			final String validationMsg = ValueValidator.validateValue(varDec, value);
+			final String validationMsg = VariableOperations.validateValue(varDec, value);
 			if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
 				ErrorMessenger.popUpErrorMessage(validationMsg);
 				return false;

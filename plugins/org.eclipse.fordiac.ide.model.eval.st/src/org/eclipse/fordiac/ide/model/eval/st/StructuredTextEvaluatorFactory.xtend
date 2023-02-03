@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,11 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.st
 
+import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
-import org.eclipse.fordiac.ide.model.eval.Evaluator
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
+import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 
@@ -32,6 +33,8 @@ class StructuredTextEvaluatorFactory implements EvaluatorFactory {
 			new STFunctionEvaluator(source, context, variables, parent)
 		} else if (source instanceof String) {
 			new ScopedExpressionEvaluator(source, context, variables, parent)
+		} else if (source instanceof VarDeclaration) {
+			new VarDeclarationEvaluator(source, context, variables, parent)
 		}
 	}
 
@@ -42,5 +45,6 @@ class StructuredTextEvaluatorFactory implements EvaluatorFactory {
 		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(STMethod, factory)
 		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(STFunction, factory)
 		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(String, factory)
+		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(VarDeclaration, factory)
 	}
 }
