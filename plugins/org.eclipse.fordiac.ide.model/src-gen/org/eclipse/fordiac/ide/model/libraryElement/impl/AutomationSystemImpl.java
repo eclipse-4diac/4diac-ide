@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -34,7 +34,9 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
@@ -50,6 +52,7 @@ import org.eclipse.gef.commands.CommandStack;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getAttributes <em>Attributes</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getApplication <em>Application</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getMapping <em>Mapping</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getSystemConfiguration <em>System Configuration</em>}</li>
@@ -60,6 +63,16 @@ import org.eclipse.gef.commands.CommandStack;
  * @generated
  */
 public class AutomationSystemImpl extends LibraryElementImpl implements AutomationSystem {
+	/**
+	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAttributes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Attribute> attributes;
+
 	/**
 	 * The cached value of the '{@link #getApplication() <em>Application</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -147,6 +160,19 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.AUTOMATION_SYSTEM;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<Attribute> getAttributes() {
+		if (attributes == null) {
+			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES);
+		}
+		return attributes;
 	}
 
 	/**
@@ -315,8 +341,50 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @generated
 	 */
 	@Override
+	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
+		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Attribute getAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getAttributeValue(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean deleteAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
+				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				return ((InternalEList<?>)getApplication()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
@@ -336,6 +404,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
+				return getAttributes();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				return getApplication();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
@@ -361,6 +431,10 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
+				getAttributes().clear();
+				getAttributes().addAll((Collection<? extends Attribute>)newValue);
+				return;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				getApplication().clear();
 				getApplication().addAll((Collection<? extends Application>)newValue);
@@ -392,6 +466,9 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
+				getAttributes().clear();
+				return;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				getApplication().clear();
 				return;
@@ -421,6 +498,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
+				return attributes != null && !attributes.isEmpty();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				return application != null && !application.isEmpty();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
@@ -434,6 +513,38 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			default:
 				return super.eIsSet(featureID);
 		}
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == ConfigurableObject.class) {
+			switch (derivedFeatureID) {
+				case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES: return LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == ConfigurableObject.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
 	}
 
 	/**

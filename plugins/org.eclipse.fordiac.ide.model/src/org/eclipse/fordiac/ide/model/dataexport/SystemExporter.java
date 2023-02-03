@@ -47,7 +47,9 @@ public class SystemExporter extends AbstractTypeExporter {
 
 	@Override
 	protected void createTypeSpecificXMLEntries() throws XMLStreamException {
+		addAttributes(getType().getAttributes());
 		addApplications();
+
 
 		final SystemConfiguration systemConfiguration = getType().getSystemConfiguration();
 		if (null != systemConfiguration) {

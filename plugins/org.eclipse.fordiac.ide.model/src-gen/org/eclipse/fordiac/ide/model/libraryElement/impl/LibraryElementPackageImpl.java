@@ -4135,6 +4135,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		stAlgorithmEClass.getESuperTypes().add(this.getTextAlgorithm());
 		subAppTypeEClass.getESuperTypes().add(this.getCompositeFBType());
 		automationSystemEClass.getESuperTypes().add(this.getLibraryElement());
+		automationSystemEClass.getESuperTypes().add(this.getConfigurableObject());
 		varDeclarationEClass.getESuperTypes().add(this.getIInterfaceElement());
 		libraryElementEClass.getESuperTypes().add(this.getINamedElement());
 		compilableTypeEClass.getESuperTypes().add(this.getLibraryElement());

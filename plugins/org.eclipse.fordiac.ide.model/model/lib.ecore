@@ -992,7 +992,7 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SubAppType" eSuperTypes="#//CompositeFBType"/>
-  <eClassifiers xsi:type="ecore:EClass" name="AutomationSystem" eSuperTypes="#//LibraryElement">
+  <eClassifiers xsi:type="ecore:EClass" name="AutomationSystem" eSuperTypes="#//LibraryElement #//ConfigurableObject">
     <eOperations name="getDeviceNamed" lowerBound="1" eType="#//Device">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);"/>

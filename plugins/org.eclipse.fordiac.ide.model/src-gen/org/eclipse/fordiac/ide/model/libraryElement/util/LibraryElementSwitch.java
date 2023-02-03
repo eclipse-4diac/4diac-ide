@@ -507,6 +507,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				AutomationSystem automationSystem = (AutomationSystem)theEObject;
 				T result = caseAutomationSystem(automationSystem);
 				if (result == null) result = caseLibraryElement(automationSystem);
+				if (result == null) result = caseConfigurableObject(automationSystem);
 				if (result == null) result = caseINamedElement(automationSystem);
 				if (result == null) result = defaultCase(theEObject);
 				return result;

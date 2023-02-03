@@ -115,6 +115,10 @@ public class SystemImporter extends CommonElementImporter {
 			case LibraryElementTags.LINK_ELEMENT:
 				parseLink(sysConf);
 				break;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(getElement());
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				break;
 			default:
 				return false;
 			}
