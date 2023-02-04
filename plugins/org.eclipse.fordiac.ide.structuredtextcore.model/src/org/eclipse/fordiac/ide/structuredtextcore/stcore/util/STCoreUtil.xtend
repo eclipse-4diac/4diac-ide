@@ -87,6 +87,8 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
+
 final class STCoreUtil {
 	public static final String OPTION_EXPECTED_TYPE = STCoreUtil.name + ".EXPECTED_TYPE"
 
@@ -298,19 +300,31 @@ final class STCoreUtil {
 
 	def static INamedElement getExpectedType(STInitializerExpression expression) {
 		switch (it : expression.eContainer) {
-			STVarDeclaration: featureType
-			STArrayInitElement: expectedType
-			STStructInitElement: variable.featureType
-			STArrayInitializerExpression: expectedType
-			STStructInitializerExpression: expectedType
-			STInitializerExpressionSource: eResource?.resourceSet?.loadOptions?.get(
-				OPTION_EXPECTED_TYPE) as INamedElement
+			STVarDeclaration:
+				featureType
+			STArrayInitElement:
+				expectedType
+			STStructInitElement:
+				variable.featureType
+			STArrayInitializerExpression:
+				expectedType
+			STStructInitializerExpression:
+				expectedType
+			STInitializerExpressionSource:
+				eResource?.resourceSet?.loadOptions?.get(OPTION_EXPECTED_TYPE) as INamedElement
 		}
 	}
 
 	def static INamedElement getExpectedType(STArrayInitElement initElement) {
 		switch (it : initElement.eContainer) {
-			STArrayInitializerExpression: expectedType
+			STArrayInitializerExpression:
+				switch (type : expectedType) {
+					ArrayType:
+						if (type.subranges.size > 1) // not consumed all dimensions
+							type.baseType.newArrayType(type.subranges.tail.map[copy])
+						else // consumed all dimensions
+							type.baseType
+				}
 		}
 	}
 
