@@ -912,9 +912,9 @@ class StandardFunctionsTest {
 	}
 
 	@Test
-	def void testConcatDateLTod() {
+	def void testConcatLDateLTod() {
 		LocalDateTime.of(2017, 4, 21, 21, 42).toLDateAndTimeValue.assertEquals(
-			StandardFunctions.invoke("CONCAT_DATE_LTOD", LocalDate.of(2017, 4, 21).toDateValue,
+			StandardFunctions.invoke("CONCAT_LDATE_LTOD", LocalDate.of(2017, 4, 21).toLDateValue,
 				LocalTime.of(21, 42).toLTimeOfDayValue))
 	}
 
