@@ -1031,7 +1031,7 @@ class StandardFunctionsTest {
 
 	@Test
 	def void testDayOfWeek() {
-		5.toSIntValue.assertEquals(StandardFunctions.invoke("DAY_OF_WEEK", LocalDate.of(2022, 5, 13).toDateValue))
+		5.toUSIntValue.assertEquals(StandardFunctions.invoke("DAY_OF_WEEK", LocalDate.of(2022, 5, 13).toDateValue))
 	}
 
 	@Test
