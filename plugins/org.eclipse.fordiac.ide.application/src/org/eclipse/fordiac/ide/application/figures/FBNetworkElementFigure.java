@@ -24,7 +24,6 @@ import org.eclipse.draw2d.MouseListener;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
-import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
 import org.eclipse.fordiac.ide.gef.figures.FBShape;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -38,7 +37,7 @@ import org.eclipse.ui.part.FileEditorInput;
  * The visualization of an FB. It Provides several containers for its interface.
  *
  */
-public class FBNetworkElementFigure extends FBShape implements ITransparencyFigure {
+public class FBNetworkElementFigure extends FBShape {
 
 	private static final class OpenTypeListener implements MouseListener {
 		private final AbstractFBNElementEditPart editPart;
@@ -153,16 +152,6 @@ public class FBNetworkElementFigure extends FBShape implements ITransparencyFigu
 	 */
 	public final void refreshToolTips() {
 		setToolTip(new FBNetworkElementTooltipFigure(model));
-	}
-
-	@Override
-	public void setTransparency(final int value) {
-		setAlpha(value);
-	}
-
-	@Override
-	public int getTransparency() {
-		return getAlpha().intValue();
 	}
 
 	public Rectangle getFBBounds() {

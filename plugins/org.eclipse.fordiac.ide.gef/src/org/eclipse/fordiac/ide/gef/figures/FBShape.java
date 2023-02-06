@@ -24,10 +24,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
-import org.eclipse.draw2d.AbstractBackground;
 import org.eclipse.draw2d.BorderLayout;
 import org.eclipse.draw2d.Figure;
-import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.MarginBorder;
@@ -41,6 +39,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.gef.Activator;
 import org.eclipse.fordiac.ide.gef.Messages;
+import org.eclipse.fordiac.ide.gef.draw2d.ITransparencyFigure;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
 import org.eclipse.fordiac.ide.gef.listeners.IFontUpdateListener;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
@@ -51,7 +50,7 @@ import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.swt.SWT;
 
-public class FBShape extends Shape implements IFontUpdateListener {
+public class FBShape extends Figure implements IFontUpdateListener, ITransparencyFigure {
 
 	private static final String TYPE_TRUNCATION_STRING = "\u2026"; //$NON-NLS-1$
 
@@ -204,9 +203,7 @@ public class FBShape extends Shape implements IFontUpdateListener {
 	}
 
 	@Override
-	public void setAlpha(final int value) {
-		super.setAlpha(value);
-
+	public void setTransparency(final int value) {
 		bottom.setAlpha(value);
 		top.setAlpha(value);
 		getMiddle().setAlpha(value);
@@ -214,6 +211,11 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		if (getTypeLabel() != null) {
 			getTypeLabel().setAlpha(value);
 		}
+	}
+
+	@Override
+	public int getTransparency() {
+		return bottom.getAlpha().intValue();
 	}
 
 	@Override
@@ -227,27 +229,8 @@ public class FBShape extends Shape implements IFontUpdateListener {
 		typeLabel.setFont(JFaceResources.getFontRegistry().getItalic(PreferenceConstants.DIAGRAM_FONT));
 	}
 
-	@Override
-	protected void fillShape(final Graphics graphics) {
-		// not used
-	}
-
-	@Override
-	protected void outlineShape(final Graphics graphics) {
-		// not used
-	}
-
-	@Override
-	public void paintFigure(final Graphics graphics) {
-		// paint figure of shape does not check for background borders, needed for drop shadow
-		if (getBorder() instanceof AbstractBackground) {
-			((AbstractBackground) getBorder()).paintBackground(this, graphics, NO_INSETS);
-		}
-		super.paintFigure(graphics);
-	}
 
 	private void configureMainFigure() {
-		setFillXOR(false);
 		setOpaque(false);
 
 		final GridLayout mainLayout = new GridLayout(1, true);
