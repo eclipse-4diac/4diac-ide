@@ -35,6 +35,7 @@ import javax.xml.stream.XMLStreamReader;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
@@ -43,6 +44,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
@@ -52,6 +54,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -193,6 +196,7 @@ public abstract class CommonElementImporter {
 			proceedToStartElementNamed(getStartElementName());
 			readNameCommentAttributes(element);
 			processChildren(getStartElementName(), getBaseChildrenHandler());
+			restorePersistedErrorMessages();
 		} catch (final Exception e) {
 			FordiacLogHelper.logWarning("Type Loading issue", e);//$NON-NLS-1$
 			createErrorMarker(e.getMessage());
@@ -207,6 +211,18 @@ public abstract class CommonElementImporter {
 
 	protected void createErrorMarker(final String message) {
 		errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(message).setLineNumber(getLineNumber()));
+	}
+
+	protected void restorePersistedErrorMessages() {
+		EcoreUtil.getAllProperContents(element, false).forEachRemaining(this::restorePersistedErrorMessage);
+	}
+
+	protected void restorePersistedErrorMessage(final Object object) {
+		if (object instanceof Value) {
+			final String errorMessage = FordiacMarkerHelper.findPersistedErrorMessage(file, (EObject) object,
+					FordiacErrorMarker.INITIAL_VALUE_MARKER);
+			((ErrorMarkerRef) object).setErrorMessage(errorMessage);
+		}
 	}
 
 	protected abstract LibraryElement createRootModelElement();

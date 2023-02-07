@@ -335,7 +335,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 		for (final VarDeclaration input : oldElement.getInterface().getInputVars()) {
 			deleteMarkersCmds.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(
-					FordiacMarkerHelper.findMarkers(input.getValue(), FordiacErrorMarker.IEC61499_MARKER)));
+					FordiacMarkerHelper.findMarkers(input.getValue(), FordiacErrorMarker.INITIAL_VALUE_MARKER)));
 		}
 
 		for (final VarDeclaration input : newElement.getInterface().getInputVars()) {
@@ -344,7 +344,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 				input.getValue().setErrorMessage(errorMessage);
 				if (!errorMessage.isBlank()) {
 					createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(
-							ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(input.getValue())));
+							ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage)
+									.setType(FordiacErrorMarker.INITIAL_VALUE_MARKER).setTarget(input.getValue())));
 				}
 			}
 		}

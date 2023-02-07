@@ -95,6 +95,15 @@ class StructuredTextParseUtil extends ParseUtil {
 		return issues
 	}
 
+	def static List<Issue> validate(String expression, URI uri, INamedElement expectedType, FBType fbType,
+		Collection<? extends EObject> additionalContent) {
+		val issues = newArrayList
+		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
+		expression.parse(parser.grammarAccess.STInitializerExpressionSourceRule, uri, expectedType, fbType,
+			additionalContent, issues)
+		return issues
+	}
+
 	def static STExpression parse(String expression, FBType fbType, List<String> errors, List<String> warnings,
 		List<String> infos) {
 		expression.parse(fbType, null, errors, warnings, infos)
@@ -147,6 +156,7 @@ class StructuredTextParseUtil extends ParseUtil {
 			STAlgorithmResource.OPTION_PLAIN_ST -> Boolean.TRUE,
 			STCoreUtil.OPTION_EXPECTED_TYPE -> expectedType
 		})
-		SERVICE_PROVIDER.postProcess(resourceSet, text, entryPoint, fbType, additionalContent, issues, uri ?: SYNTHETIC_URI)
+		SERVICE_PROVIDER.postProcess(resourceSet, text, entryPoint, fbType, additionalContent, issues,
+			uri ?: SYNTHETIC_URI)
 	}
 }

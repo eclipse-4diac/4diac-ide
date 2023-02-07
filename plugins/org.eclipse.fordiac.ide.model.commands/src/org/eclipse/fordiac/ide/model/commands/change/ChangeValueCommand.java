@@ -22,6 +22,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -84,13 +85,14 @@ public class ChangeValueCommand extends Command {
 
 	private void handleErrorMarker() {
 		if (!oldErrorMessage.isBlank()) {
-			errorMarkerUpdateCmds.add(FordiacMarkerCommandHelper
-					.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(variable.getValue())));
+			errorMarkerUpdateCmds.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(
+					FordiacMarkerHelper.findMarkers(variable.getValue(), FordiacErrorMarker.INITIAL_VALUE_MARKER)));
 		}
 		if (!newErrorMessage.isBlank()) {
 			ErrorMessenger.popUpErrorMessage(newErrorMessage);
-			errorMarkerUpdateCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(
-					ErrorMarkerBuilder.createErrorMarkerBuilder(newErrorMessage).setTarget(variable.getValue())));
+			errorMarkerUpdateCmds.add(FordiacMarkerCommandHelper
+					.newCreateMarkersCommand(ErrorMarkerBuilder.createErrorMarkerBuilder(newErrorMessage)
+							.setType(FordiacErrorMarker.INITIAL_VALUE_MARKER).setTarget(variable.getValue())));
 		}
 	}
 

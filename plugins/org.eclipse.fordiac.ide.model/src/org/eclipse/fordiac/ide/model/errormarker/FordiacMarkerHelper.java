@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.model.errormarker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -96,6 +97,13 @@ public final class FordiacMarkerHelper {
 			}
 		}
 		return result;
+	}
+
+	public static String findPersistedErrorMessage(final IResource resource, final EObject value,
+			final String markerType) {
+		return FordiacMarkerHelper.findMarkers(resource, value, markerType).stream()
+				.filter(marker -> marker.getAttribute(IMarker.SEVERITY, 0) == IMarker.SEVERITY_ERROR)
+				.map(marker -> marker.getAttribute(IMarker.MESSAGE, "unknown")).collect(Collectors.joining(", ")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	public static void createMarkers(final IResource resource, final List<ErrorMarkerBuilder> builders) {
