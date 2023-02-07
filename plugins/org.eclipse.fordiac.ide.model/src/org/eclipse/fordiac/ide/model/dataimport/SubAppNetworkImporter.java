@@ -76,12 +76,10 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		fbNetworkElementMap.put(subApp.getName(), subApp);
 
 		if ((null == subApp.getTypeEntry() && type != null) || (subApp instanceof ErrorMarkerRef)) {
-			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createErrorMarkerBuilder(
-					MessageFormat.format("Type ({0}) could not be loaded for Subapplication: {1}", type, //$NON-NLS-1$
-							subApp.getName()),
-					subApp, getLineNumber());
-			errorMarkerBuilders.add(e);
-			e.setErrorMarkerRef((ErrorMarkerRef) subApp);
+			final String errorMessage = MessageFormat.format("Type ({0}) could not be loaded for Subapplication: {1}", //$NON-NLS-1$
+					type, subApp.getName());
+			errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(subApp)
+					.setLineNumber(getLineNumber()));
 		}
 
 	}

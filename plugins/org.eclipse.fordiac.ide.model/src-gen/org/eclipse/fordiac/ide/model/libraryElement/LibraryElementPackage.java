@@ -1214,22 +1214,13 @@ public interface LibraryElementPackage extends EPackage {
 	int CONNECTION__ATTRIBUTES = INAMED_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>File Marker Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int CONNECTION__FILE_MARKER_ID = INAMED_ELEMENT_FEATURE_COUNT + 1;
-
-	/**
 	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION__ERROR_MESSAGE = INAMED_ELEMENT_FEATURE_COUNT + 2;
+	int CONNECTION__ERROR_MESSAGE = INAMED_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Res Type Connection</b></em>' attribute.
@@ -1238,7 +1229,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION__RES_TYPE_CONNECTION = INAMED_ELEMENT_FEATURE_COUNT + 3;
+	int CONNECTION__RES_TYPE_CONNECTION = INAMED_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The feature id for the '<em><b>Broken Connection</b></em>' attribute.
@@ -1247,7 +1238,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION__BROKEN_CONNECTION = INAMED_ELEMENT_FEATURE_COUNT + 4;
+	int CONNECTION__BROKEN_CONNECTION = INAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Source</b></em>' reference.
@@ -1256,7 +1247,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION__SOURCE = INAMED_ELEMENT_FEATURE_COUNT + 5;
+	int CONNECTION__SOURCE = INAMED_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
 	 * The feature id for the '<em><b>Destination</b></em>' reference.
@@ -1265,7 +1256,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION__DESTINATION = INAMED_ELEMENT_FEATURE_COUNT + 6;
+	int CONNECTION__DESTINATION = INAMED_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The feature id for the '<em><b>Routing Data</b></em>' containment reference.
@@ -1274,7 +1265,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION__ROUTING_DATA = INAMED_ELEMENT_FEATURE_COUNT + 7;
+	int CONNECTION__ROUTING_DATA = INAMED_ELEMENT_FEATURE_COUNT + 6;
 
 	/**
 	 * The number of structural features of the '<em>Connection</em>' class.
@@ -1283,7 +1274,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int CONNECTION_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 8;
+	int CONNECTION_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 7;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionRoutingDataImpl <em>Connection Routing Data</em>}' class.
@@ -4170,15 +4161,6 @@ public interface LibraryElementPackage extends EPackage {
 	int DATA_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>File Marker Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int DATA_CONNECTION__FILE_MARKER_ID = CONNECTION__FILE_MARKER_ID;
-
-	/**
 	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4279,15 +4261,6 @@ public interface LibraryElementPackage extends EPackage {
 	int EVENT_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
 
 	/**
-	 * The feature id for the '<em><b>File Marker Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT_CONNECTION__FILE_MARKER_ID = CONNECTION__FILE_MARKER_ID;
-
-	/**
 	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4386,15 +4359,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ADAPTER_CONNECTION__ATTRIBUTES = CONNECTION__ATTRIBUTES;
-
-	/**
-	 * The feature id for the '<em><b>File Marker Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_CONNECTION__FILE_MARKER_ID = CONNECTION__FILE_MARKER_ID;
 
 	/**
 	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
@@ -4507,22 +4471,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_REF = 79;
 
 	/**
-	 * The feature id for the '<em><b>File Marker Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ERROR_MARKER_REF__FILE_MARKER_ID = 0;
-
-	/**
 	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_REF__ERROR_MESSAGE = 1;
+	int ERROR_MARKER_REF__ERROR_MESSAGE = 0;
 
 	/**
 	 * The number of structural features of the '<em>Error Marker Ref</em>' class.
@@ -4531,7 +4486,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_REF_FEATURE_COUNT = 2;
+	int ERROR_MARKER_REF_FEATURE_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ValueImpl <em>Value</em>}' class.
@@ -4542,15 +4497,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 */
 	int VALUE = 52;
-
-	/**
-	 * The feature id for the '<em><b>File Marker Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VALUE__FILE_MARKER_ID = ERROR_MARKER_REF__FILE_MARKER_ID;
 
 	/**
 	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
@@ -6066,22 +6012,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_FBN_ELEMENT__GROUP = FB_NETWORK_ELEMENT__GROUP;
 
 	/**
-	 * The feature id for the '<em><b>File Marker Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ERROR_MARKER_FBN_ELEMENT__FILE_MARKER_ID = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
+	int ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE = FB_NETWORK_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Repaired Element</b></em>' reference.
@@ -6090,7 +6027,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 2;
+	int ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The number of structural features of the '<em>Error Marker FBN Element</em>' class.
@@ -6099,7 +6036,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_FBN_ELEMENT_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 3;
+	int ERROR_MARKER_FBN_ELEMENT_FEATURE_COUNT = FB_NETWORK_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl <em>Error Marker Interface</em>}' class.
@@ -6184,22 +6121,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_INTERFACE__TYPE_NAME = IINTERFACE_ELEMENT__TYPE_NAME;
 
 	/**
-	 * The feature id for the '<em><b>File Marker Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ERROR_MARKER_INTERFACE__FILE_MARKER_ID = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
-
-	/**
 	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_INTERFACE__ERROR_MESSAGE = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
+	int ERROR_MARKER_INTERFACE__ERROR_MESSAGE = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The feature id for the '<em><b>Repaired Endpoint</b></em>' reference.
@@ -6208,7 +6136,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
+	int ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The feature id for the '<em><b>Value</b></em>' containment reference.
@@ -6217,7 +6145,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_INTERFACE__VALUE = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
+	int ERROR_MARKER_INTERFACE__VALUE = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Error Marker Interface</em>' class.
@@ -6226,7 +6154,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 4;
+	int ERROR_MARKER_INTERFACE_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CFBInstanceImpl <em>CFB Instance</em>}' class.
@@ -9645,17 +9573,6 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getErrorMarkerRef();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getFileMarkerId <em>File Marker Id</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>File Marker Id</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getFileMarkerId()
-	 * @see #getErrorMarkerRef()
-	 * @generated
-	 */
-	EAttribute getErrorMarkerRef_FileMarkerId();
-
-	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getErrorMessage <em>Error Message</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12106,14 +12023,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ERROR_MARKER_REF = eINSTANCE.getErrorMarkerRef();
-
-		/**
-		 * The meta object literal for the '<em><b>File Marker Id</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ERROR_MARKER_REF__FILE_MARKER_ID = eINSTANCE.getErrorMarkerRef_FileMarkerId();
 
 		/**
 		 * The meta object literal for the '<em><b>Error Message</b></em>' attribute feature.

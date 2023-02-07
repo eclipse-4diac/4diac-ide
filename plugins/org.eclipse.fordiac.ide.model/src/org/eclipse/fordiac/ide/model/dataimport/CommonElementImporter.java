@@ -2,6 +2,7 @@
  * Copyright (c) 2008, 2020 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  *                          Johannes Kepler University, Linz
  *               2020, 2021  Primetals Technologies Austria GmbH
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,12 +18,14 @@
  *  			  parsing performance
  *              - extension for connection error markers
  *  Hesam Rezaee - add import option for Variable configuration and visibility
+ *  Martin Jobst - refactor marker handling
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
 import java.io.InputStream;
 import java.text.MessageFormat;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -30,11 +33,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.WorkspaceJob;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.CoordinateConverter;
@@ -45,6 +44,7 @@ import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
@@ -144,7 +144,7 @@ public abstract class CommonElementImporter {
 	private final IFile file;
 	private final TypeLibrary typeLibrary;
 	private LibraryElement element;
-	protected final HashSet<ErrorMarkerBuilder> errorMarkerBuilders;
+	protected final List<ErrorMarkerBuilder> errorMarkerBuilders;
 
 	protected IFile getFile() {
 		return file;
@@ -177,7 +177,7 @@ public abstract class CommonElementImporter {
 		Assert.isNotNull(file);
 		this.file = file;
 		typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
-		errorMarkerBuilders = new HashSet<>();
+		errorMarkerBuilders = new ArrayList<>();
 	}
 
 	protected CommonElementImporter(final CommonElementImporter importer) {
@@ -191,7 +191,6 @@ public abstract class CommonElementImporter {
 	public void loadElement() {
 		element = createRootModelElement();
 		try (ImporterStreams streams = createInputStreams(getInputStream())) {
-			deleteErrorMarkers();
 			proceedToStartElementNamed(getStartElementName());
 			readNameCommentAttributes(element);
 			processChildren(getStartElementName(), getBaseChildrenHandler());
@@ -199,7 +198,7 @@ public abstract class CommonElementImporter {
 			FordiacLogHelper.logWarning("Type Loading issue", e);//$NON-NLS-1$
 			createErrorMarker(e.getMessage());
 		} finally {
-			buildErrorMarker(file);
+			FordiacMarkerHelper.updateMarkers(file, errorMarkerBuilders);
 		}
 	}
 
@@ -207,30 +206,8 @@ public abstract class CommonElementImporter {
 		return file.getContents();
 	}
 
-	protected ErrorMarkerBuilder createErrorMarker(final String message) {
-		final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
-		marker.addLineNumber(getLineNumber());
-		marker.addMessage(message);
-		errorMarkerBuilders.add(marker);
-		return marker;
-	}
-
-	private void buildErrorMarker(final IFile file) {
-		if (!errorMarkerBuilders.isEmpty()) {
-			final WorkspaceJob job = new WorkspaceJob("Add error marker to file: " + file.getName()) { //$NON-NLS-1$
-				@Override
-				public IStatus runInWorkspace(final IProgressMonitor monitor) {
-					errorMarkerBuilders.stream().forEach(a -> a.createMarkerInFile(file));
-					return Status.OK_STATUS;
-				}
-			};
-			job.setRule(file.getProject());
-			job.schedule();
-		}
-	}
-
-	protected void deleteErrorMarkers() {
-		ErrorMarkerBuilder.deleteAllErrorMarkersFromFile(file, ErrorMarkerBuilder.IEC61499_MARKER);
+	protected void createErrorMarker(final String message) {
+		errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(message).setLineNumber(getLineNumber()));
 	}
 
 	protected abstract LibraryElement createRootModelElement();
@@ -658,23 +635,21 @@ public abstract class CommonElementImporter {
 	}
 
 	protected void createParameterErrorMarker(final FBNetworkElement block, final VarDeclaration parameter) {
-		final ErrorMarkerBuilder e = ErrorMarkerBuilder.createErrorMarkerBuilder(
-				MessageFormat.format(Messages.CommonElementImporter_ERROR_MissingPinForParameter, parameter.getName(),
-						block.getName()),
-				block, getLineNumber());
-		errorMarkerBuilders.add(e);
-		final ErrorMarkerInterface errorMarkerInterface = FordiacErrorMarkerInterfaceHelper
-				.createErrorMarkerInterface(IecTypes.GenericTypes.ANY, parameter.getName(), true, block.getInterface());
-		e.setErrorMarkerRef(errorMarkerInterface);
+		final String errorMessage = MessageFormat.format(Messages.CommonElementImporter_ERROR_MissingPinForParameter,
+				parameter.getName(), block.getName());
+		final ErrorMarkerInterface errorMarkerInterface = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterface(
+				IecTypes.GenericTypes.ANY, parameter.getName(), true, block.getInterface(), errorMessage);
 		errorMarkerInterface.setValue(parameter.getValue());
+		errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage)
+				.setTarget(errorMarkerInterface).setLineNumber(getLineNumber()));
 	}
 
 	protected void validateValue(final VarDeclaration vInput) {
 		final String validation = ValueValidator.validateValue(vInput);
 		if ((validation != null) && (!validation.trim().isEmpty())) {
-			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createValueErrorMarkerBuilder(validation, vInput.getValue(),
-					getLineNumber());
-			errorMarkerBuilders.add(e);
+			vInput.getValue().setErrorMessage(validation);
+			errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(validation).setTarget(vInput.getValue())
+					.setLineNumber(getLineNumber()));
 		}
 	}
 

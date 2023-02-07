@@ -3352,18 +3352,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EAttribute getErrorMarkerRef_FileMarkerId() {
-		return (EAttribute)errorMarkerRefEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EAttribute getErrorMarkerRef_ErrorMessage() {
-		return (EAttribute)errorMarkerRefEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)errorMarkerRefEClass.getEStructuralFeatures().get(0);
 	}
 
 	/**
@@ -4008,7 +3998,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(cfbInstanceEClass, CFB_INSTANCE__CFB_NETWORK);
 
 		errorMarkerRefEClass = createEClass(ERROR_MARKER_REF);
-		createEAttribute(errorMarkerRefEClass, ERROR_MARKER_REF__FILE_MARKER_ID);
 		createEAttribute(errorMarkerRefEClass, ERROR_MARKER_REF__ERROR_MESSAGE);
 
 		groupEClass = createEClass(GROUP);
@@ -4799,7 +4788,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		addEOperation(cfbInstanceEClass, this.getCompositeFBType(), "getType", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(errorMarkerRefEClass, ErrorMarkerRef.class, "ErrorMarkerRef", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEAttribute(getErrorMarkerRef_FileMarkerId(), ecorePackage.getELong(), "fileMarkerId", null, 0, 1, ErrorMarkerRef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getErrorMarkerRef_ErrorMessage(), theXMLTypePackage.getString(), "errorMessage", null, 0, 1, ErrorMarkerRef.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(errorMarkerRefEClass, theXMLTypePackage.getBoolean(), "hasError", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$

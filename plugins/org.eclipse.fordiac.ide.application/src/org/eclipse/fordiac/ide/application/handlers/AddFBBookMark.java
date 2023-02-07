@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020 Johannes Kepler University
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Martin Jobst - refactor marker handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
@@ -46,14 +48,10 @@ public class AddFBBookMark extends AbstractHandler {
 		if (null != element) {
 			final String description = getDescription(element, event);
 			if (null != description) {
-				final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
-				marker.addTargetIdentifier(element);
-				marker.addLocation(element);
-				marker.addMessage(description);
-
-				final CreateMarkersOperation op = new CreateMarkersOperation(IMarker.BOOKMARK, marker.getAttributes(),
-						getFile(element),
-						Messages.AddFBBookMark_AddBookmark);
+				final CreateMarkersOperation op = new CreateMarkersOperation(IMarker.BOOKMARK,
+						ErrorMarkerBuilder.createErrorMarkerBuilder(description).setSeverity(IMarker.SEVERITY_INFO)
+						.setPriority(IMarker.PRIORITY_NORMAL).setTarget(element).getAttributes(),
+						getFile(element), Messages.AddFBBookMark_AddBookmark);
 				try {
 					PlatformUI.getWorkbench().getOperationSupport().getOperationHistory().execute(op, null,
 							WorkspaceUndoUtil.getUIInfoAdapter(HandlerUtil.getActiveShell(event)));

@@ -279,7 +279,6 @@ public final class ConnectionHelper {
 		public void setSourceEndpoint(final IInterfaceElement sourceEndpoint) {
 			this.sourceEndpoint = sourceEndpoint;
 		}
-
 	}
 
 	public enum ConnectionState {

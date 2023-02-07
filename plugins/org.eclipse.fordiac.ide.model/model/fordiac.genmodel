@@ -572,9 +572,8 @@
       <genOperations ecoreOperation="lib.ecore#//CFBInstance/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xA;if(type instanceof CompositeFBType){&#xA;   return (CompositeFBType) type; &#xA;}&#xA;return null;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerRef">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ErrorMarkerRef/fileMarkerId"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ErrorMarkerRef/errorMessage"/>
-      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerRef/hasError" body="return getFileMarkerId() != 0;"/>
+      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerRef/hasError" body="return getErrorMessage() != null &amp;&amp; !getErrorMessage().isBlank();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Group">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Group/groupElements"/>

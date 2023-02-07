@@ -27,7 +27,6 @@ import org.eclipse.emf.ecore.EObject;
  * The following features are supported:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getFileMarkerId <em>File Marker Id</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getErrorMessage <em>Error Message</em>}</li>
  * </ul>
  *
@@ -36,28 +35,6 @@ import org.eclipse.emf.ecore.EObject;
  * @generated
  */
 public interface ErrorMarkerRef extends EObject {
-	/**
-	 * Returns the value of the '<em><b>File Marker Id</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>File Marker Id</em>' attribute.
-	 * @see #setFileMarkerId(long)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getErrorMarkerRef_FileMarkerId()
-	 * @model
-	 * @generated
-	 */
-	long getFileMarkerId();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef#getFileMarkerId <em>File Marker Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>File Marker Id</em>' attribute.
-	 * @see #getFileMarkerId()
-	 * @generated
-	 */
-	void setFileMarkerId(long value);
-
 	/**
 	 * Returns the value of the '<em><b>Error Message</b></em>' attribute.
 	 * <!-- begin-user-doc -->

@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2021 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2008 - 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
  *                           Johannes Keppler University Linz,
  *                           Primetals Technologies Austria GmbH
+ *                           Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,11 +15,14 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - removed editor check from canUndo
  *               - added value validation and error marker handling
+ *   Martin Jobst - refactor marker handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.commands.Messages;
+import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -26,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.validation.ValueValidator;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 
 public class ChangeValueCommand extends Command {
 
@@ -34,8 +39,9 @@ public class ChangeValueCommand extends Command {
 	private VarDeclaration mirroredVar; // the variable of the mapped entity
 	private String newValue;
 	private String oldValue;
-	private ErrorMarkerBuilder errorMarker;
-	private String validationMsg = "";
+	private String newErrorMessage;
+	private String oldErrorMessage;
+	private final CompoundCommand errorMarkerUpdateCmds = new CompoundCommand();
 
 	public ChangeValueCommand(final VarDeclaration variable, final String value) {
 		this.variable = variable;
@@ -44,23 +50,7 @@ public class ChangeValueCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		if ((variable == null) || (variable.getType() == null)) {
-			return false;
-		}
-		isValid(newValue);
-		return true;
-	}
-
-	private boolean isValid(final String value) {
-		if (!value.isBlank()) {
-			// if we have a non empty value check if it is a valid literal
-			validationMsg = ValueValidator.validateValue(variable, value);
-			if ((validationMsg != null) && (!validationMsg.trim().isEmpty())) {
-				ErrorMessenger.popUpErrorMessage(validationMsg);
-				return false;
-			}
-		}
-		return true;
+		return variable != null && variable.getType() != null;
 	}
 
 	public ChangeValueCommand() {
@@ -76,34 +66,48 @@ public class ChangeValueCommand extends Command {
 				mirroredVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			}
 			oldValue = ""; //$NON-NLS-1$
+			oldErrorMessage = ""; //$NON-NLS-1$
 		} else {
 			oldValue = variable.getValue().getValue();
+			oldErrorMessage = variable.getValue().getErrorMessage();
+			if (oldErrorMessage == null) {
+				oldErrorMessage = ""; //$NON-NLS-1$
+			}
 		}
 		variable.getValue().setValue(newValue);
+		newErrorMessage = ValueValidator.validateValue(variable);
+		variable.getValue().setErrorMessage(newErrorMessage);
 		setMirroredVar(newValue);
-		handleErrorMarker(newValue);
+		handleErrorMarker();
+		errorMarkerUpdateCmds.execute();
 	}
 
-	private void handleErrorMarker(final String value) {
-		if (isValid(value)) {
-			deleteErrorMarker();
-		} else {
-			createErrorMarker();
+	private void handleErrorMarker() {
+		if (!oldErrorMessage.isBlank()) {
+			errorMarkerUpdateCmds.add(FordiacMarkerCommandHelper
+					.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(variable.getValue())));
+		}
+		if (!newErrorMessage.isBlank()) {
+			ErrorMessenger.popUpErrorMessage(newErrorMessage);
+			errorMarkerUpdateCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(
+					ErrorMarkerBuilder.createErrorMarkerBuilder(newErrorMessage).setTarget(variable.getValue())));
 		}
 	}
 
 	@Override
 	public void undo() {
 		variable.getValue().setValue(oldValue);
+		variable.getValue().setErrorMessage(oldErrorMessage);
 		setMirroredVar(oldValue);
-		handleErrorMarker(oldValue);
+		errorMarkerUpdateCmds.undo();
 	}
 
 	@Override
 	public void redo() {
 		variable.getValue().setValue(newValue);
+		variable.getValue().setErrorMessage(newErrorMessage);
 		setMirroredVar(newValue);
-		handleErrorMarker(newValue);
+		errorMarkerUpdateCmds.redo();
 	}
 
 	private VarDeclaration getMirroredVariable() {
@@ -122,21 +126,6 @@ public class ChangeValueCommand extends Command {
 	private void setMirroredVar(final String val) {
 		if (null != mirroredVar) {
 			mirroredVar.getValue().setValue(val);
-		}
-	}
-
-	private void deleteErrorMarker() {
-		if (variable.getValue().hasError()) {
-			errorMarker = ErrorMarkerBuilder.deleteErrorMarker(variable.getValue());
-		}
-	}
-
-	private void createErrorMarker() {
-		if (!variable.getValue().hasError()) {
-			if (errorMarker == null) {
-				errorMarker = ErrorMarkerBuilder.createValueErrorMarkerBuilder(validationMsg, variable.getValue(), 0);
-			}
-			errorMarker.createMarkerInFile();
 		}
 	}
 }

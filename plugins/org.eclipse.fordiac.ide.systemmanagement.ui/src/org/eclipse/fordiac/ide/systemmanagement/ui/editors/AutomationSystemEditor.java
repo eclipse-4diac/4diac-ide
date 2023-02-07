@@ -27,7 +27,6 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditor;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppInstanceViewerInput;
@@ -40,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -287,25 +285,6 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	@Override
 	public String getContributorId() {
 		return DiagramEditorWithFlyoutPalette.PROPERTY_CONTRIBUTOR_ID;
-	}
-
-	@Override
-	protected void gotoFBNetworkElement(final Object object) {
-		final String name = (String) object;
-		final String[] split = name.split("\\."); //$NON-NLS-1$
-		if (split.length >= 2) {
-			final String fullNameOfParent = name.substring(0, name.lastIndexOf('.'));
-			final EObject targetmodel = FBNetworkHelper.getModelFromHierarchicalName(fullNameOfParent, system);
-			if (null != targetmodel) {
-				getBreadcrumb().setInput(targetmodel);
-				final FBNetworkEditor fbEditor = getAdapter(FBNetworkEditor.class);
-				if (null != fbEditor) {
-					final FBNetworkElement elementToSelect = fbEditor.getModel()
-							.getElementNamed(split[split.length - 1]);
-					fbEditor.selectElement(elementToSelect);
-				}
-			}
-		}
 	}
 
 	@Override

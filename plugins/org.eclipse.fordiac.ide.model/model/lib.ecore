@@ -1566,10 +1566,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerRef">
     <eOperations name="hasError" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getFileMarkerId() != 0;"/>
+        <details key="body" value="return getErrorMessage() != null &amp;&amp; !getErrorMessage().isBlank();"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileMarkerId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorMessage" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//FBNetworkElement">

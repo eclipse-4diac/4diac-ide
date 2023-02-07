@@ -170,7 +170,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
 				refreshValue();
 				refreshPosition();
-			} else if (LibraryElementPackage.eINSTANCE.getErrorMarkerRef_FileMarkerId().equals(feature)) {
+			} else if (LibraryElementPackage.eINSTANCE.getErrorMarkerRef_ErrorMessage().equals(feature)) {
 				Display.getDefault().asyncExec(() -> {
 					refreshValue();
 					if (parentPart != null) {

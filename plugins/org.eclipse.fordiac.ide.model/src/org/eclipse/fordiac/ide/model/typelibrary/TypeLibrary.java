@@ -41,6 +41,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -195,10 +196,8 @@ public final class TypeLibrary {
 			if (!FordiacKeywords.isReservedKeyword(entry.getTypeName())) {
 				addTypeEntry(entry);
 			} else {
-				final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
-				marker.addMessage(
-						MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, entry.getTypeName()));
-				marker.createMarkerInFile(file);
+				FordiacMarkerHelper.createMarkers(file, List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(
+						MessageFormat.format(Messages.NameRepository_NameReservedKeyWord, entry.getTypeName()))));
 			}
 		}
 		return entry;

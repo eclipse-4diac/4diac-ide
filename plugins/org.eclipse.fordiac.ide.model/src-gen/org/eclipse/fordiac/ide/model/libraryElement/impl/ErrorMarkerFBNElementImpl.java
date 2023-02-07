@@ -36,7 +36,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerFBNElementImpl#getFileMarkerId <em>File Marker Id</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerFBNElementImpl#getErrorMessage <em>Error Message</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerFBNElementImpl#getRepairedElement <em>Repaired Element</em>}</li>
  * </ul>
@@ -44,26 +43,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * @generated
  */
 public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements ErrorMarkerFBNElement {
-	/**
-	 * The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFileMarkerId()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final long FILE_MARKER_ID_EDEFAULT = 0L;
-
-	/**
-	 * The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFileMarkerId()
-	 * @generated
-	 * @ordered
-	 */
-	protected long fileMarkerId = FILE_MARKER_ID_EDEFAULT;
-
 	/**
 	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -111,29 +90,6 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.ERROR_MARKER_FBN_ELEMENT;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public long getFileMarkerId() {
-		return fileMarkerId;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setFileMarkerId(long newFileMarkerId) {
-		long oldFileMarkerId = fileMarkerId;
-		fileMarkerId = newFileMarkerId;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__FILE_MARKER_ID, oldFileMarkerId, fileMarkerId));
 	}
 
 	/**
@@ -206,7 +162,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	 */
 	@Override
 	public boolean hasError() {
-		return getFileMarkerId() != 0;
+		return getErrorMessage() != null && !getErrorMessage().isBlank();
 	}
 
 	/**
@@ -217,8 +173,6 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__FILE_MARKER_ID:
-				return getFileMarkerId();
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE:
 				return getErrorMessage();
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT:
@@ -237,9 +191,6 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__FILE_MARKER_ID:
-				setFileMarkerId((Long)newValue);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE:
 				setErrorMessage((String)newValue);
 				return;
@@ -260,9 +211,6 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__FILE_MARKER_ID:
-				setFileMarkerId(FILE_MARKER_ID_EDEFAULT);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE:
 				setErrorMessage(ERROR_MESSAGE_EDEFAULT);
 				return;
@@ -283,8 +231,6 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__FILE_MARKER_ID:
-				return fileMarkerId != FILE_MARKER_ID_EDEFAULT;
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE:
 				return ERROR_MESSAGE_EDEFAULT == null ? errorMessage != null : !ERROR_MESSAGE_EDEFAULT.equals(errorMessage);
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT:
@@ -303,7 +249,6 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
 		if (baseClass == ErrorMarkerRef.class) {
 			switch (derivedFeatureID) {
-				case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__FILE_MARKER_ID: return LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID;
 				case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE: return LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE;
 				default: return -1;
 			}
@@ -320,7 +265,6 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
 		if (baseClass == ErrorMarkerRef.class) {
 			switch (baseFeatureID) {
-				case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID: return LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__FILE_MARKER_ID;
 				case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE: return LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT__ERROR_MESSAGE;
 				default: return -1;
 			}
@@ -338,9 +282,7 @@ public class ErrorMarkerFBNElementImpl extends FBNetworkElementImpl implements E
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (fileMarkerId: "); //$NON-NLS-1$
-		result.append(fileMarkerId);
-		result.append(", errorMessage: "); //$NON-NLS-1$
+		result.append(" (errorMessage: "); //$NON-NLS-1$
 		result.append(errorMessage);
 		result.append(')');
 		return result.toString();

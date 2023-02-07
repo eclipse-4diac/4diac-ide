@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH, Johannes Kepler University Linz
  * 				 2022 Primetals Technologies Austria GmbH
+ * 				 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +18,7 @@
  *   Michael Oberlehner, Alois Zoitl
  *               - implemented save and restore state
  *   Daniel Lindhuber - connection auto layout
+ *   Martin Jobst - refactor marker handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.editors;
 
@@ -25,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
@@ -32,8 +35,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
@@ -253,40 +255,48 @@ INavigationLocationProvider, IPersistableEditor {
 
 	@Override
 	public void gotoMarker(final IMarker marker) {
-		if (FordiacMarkerHelper.markerTargetsFBNetworkElement(marker)) {
-			gotoFBNetworkElement(marker.getAttribute(IMarker.LOCATION, null));
-		} else if (FordiacMarkerHelper.markerTargetsConnection(marker)) {
-			gotoConnection(marker);
-		} else if (FordiacMarkerHelper.markerTargetsValue(marker)) {
-			gotoValue(marker);
+		try {
+			final EObject target = FordiacErrorMarker.getTargetEditable(marker);
+			gotoElement(target);
+		} catch (IllegalArgumentException | CoreException e) {
+			FordiacLogHelper.logWarning("Couldn't goto marker " + marker.toString(), e); //$NON-NLS-1$
 		}
 	}
 
-	protected void gotoConnection(final IMarker marker) {
-		final ErrorMarkerRef errorRef = ErrorMarkerBuilder.getMarkerRef(marker);
-		if (errorRef instanceof ErrorMarkerInterface) {
-			final FBNetworkElement parent = ((ErrorMarkerInterface) errorRef).getFBNetworkElement();
-			selectErrorRef(errorRef, parent);
-		} else if (errorRef instanceof Connection) {
-			final EObject toView = errorRef.eContainer().eContainer();
-			final IEditorPart editor = HandlerHelper.openEditor(toView);
-			final Connection conn = (Connection) errorRef;
-			if (conn.getSourceElement() != null) {
-				HandlerHelper.selectElement(((Connection) errorRef).getSourceElement(), editor);
-			} else if (conn.getDestinationElement() != null) {
-				HandlerHelper.selectElement(((Connection) errorRef).getDestinationElement(), editor);
-			}
-			HandlerHelper.selectElement(errorRef, editor);
+	protected void gotoElement(final EObject element) {
+		if (element instanceof FBNetworkElement) {
+			gotoElement((FBNetworkElement) element);
+		} else if (element instanceof ErrorMarkerInterface) {
+			gotoElement((ErrorMarkerInterface) element);
+		} else if (element instanceof Connection) {
+			gotoElement((Connection) element);
+		} else if (element instanceof Value) {
+			gotoElement((Value) element);
 		}
-
 	}
 
-	protected void gotoValue(final IMarker marker) {
-		final ErrorMarkerRef errorRef = ErrorMarkerBuilder.getMarkerRef(marker);
-		final FBNetworkElement parent = errorRef instanceof Value
-				? ((Value) errorRef).getParentIE().getFBNetworkElement()
-						: null;
+	protected void gotoElement(final FBNetworkElement element) {
+		final EObject toView = element.eContainer().eContainer();
+		getBreadcrumb().setInput(toView);
+		HandlerHelper.selectElement(element, this);
+	}
+
+	protected void gotoElement(final ErrorMarkerInterface errorRef) {
+		final FBNetworkElement parent = errorRef.getFBNetworkElement();
 		selectErrorRef(errorRef, parent);
+	}
+
+	protected void gotoElement(final Connection conn) {
+		if (conn.getSourceElement() != null) {
+			HandlerHelper.selectElement(conn.getSourceElement(), this);
+		} else if (conn.getDestinationElement() != null) {
+			HandlerHelper.selectElement(conn.getDestinationElement(), this);
+		}
+		HandlerHelper.selectElement(conn, this);
+	}
+
+	protected void gotoElement(final Value value) {
+		selectErrorRef(value, value.getParentIE().getFBNetworkElement());
 	}
 
 	private void selectErrorRef(final ErrorMarkerRef errorRef, final FBNetworkElement parent) {
@@ -394,8 +404,6 @@ INavigationLocationProvider, IPersistableEditor {
 	}
 
 	public abstract CommandStack getCommandStack();
-
-	protected abstract void gotoFBNetworkElement(final Object object);
 
 	protected abstract EditorPart createEditorPart(final Object model);
 

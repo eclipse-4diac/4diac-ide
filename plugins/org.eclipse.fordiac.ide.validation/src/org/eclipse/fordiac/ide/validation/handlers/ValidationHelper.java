@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.validation.handlers;
 import java.text.MessageFormat;
 import java.util.List;
 
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -30,12 +29,12 @@ import org.eclipse.emf.ecore.EClassifier;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EParameter;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -128,34 +127,9 @@ public final class ValidationHelper {
 			if (iresource == null) {
 				return;
 			}
-
-			final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
-			marker.addMessage(message);
-			switch (severity) {
-			case IMarker.SEVERITY_WARNING:
-				marker.setSeverityWarning();
-				break;
-			case IMarker.SEVERITY_INFO:
-				marker.setSeverityInfo();
-				break;
-			default:
-				break;
-			}
-			marker.addLocation(location);
-			marker.addLineNumber(lineNumber);
-
-			marker.setMarkerType(IValidationMarker.TYPE);
-
-			marker.addTargetIdentifier(context);
-
-			if (context instanceof Connection) {
-				marker.setErrorMarkerRef((ErrorMarkerRef) context);
-			} else if (context instanceof VarDeclaration) {
-				marker.addTargetIdentifier(((VarDeclaration) context).getValue());
-				marker.setErrorMarkerRef(((VarDeclaration) context).getValue());
-			}
-
-			marker.createMarkerInResource(iresource);
+			FordiacMarkerHelper.createMarkers(iresource,
+					List.of(ErrorMarkerBuilder.createErrorMarkerBuilder(message).setType(IValidationMarker.TYPE)
+							.setSeverity(severity).setLocation(location).setLineNumber(lineNumber).setTarget(context)));
 		}
 
 		private static IResource getFile(final INamedElement element) {

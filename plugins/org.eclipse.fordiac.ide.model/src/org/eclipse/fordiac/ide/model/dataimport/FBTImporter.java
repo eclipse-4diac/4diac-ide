@@ -3,6 +3,7 @@
  * 				 2018 TU Wien/ACIN
  * 				 2020, 2023 Johannes Kepler University, Linz
  *               2021 Primetals Technologies Austria GmbH
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +18,7 @@
  *  Alois Zoitl - Changed XML parsing to Staxx cursor interface for improved
  *  			  parsing performance
  *  Martin Melik Merkumians - added import of internal FBs
+ *  Martin Jobst - refactor marker handling
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -872,13 +874,10 @@ public class FBTImporter extends TypeImporter {
 		type.getInternalFbs().add(fb);
 
 		if (fb.getTypeEntry() == null) {
-			// we don't have a type create error marker.
-			// This can only be done after fb has been added to FB network,
-			// so that the error marker can determine the location!
-			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createErrorMarkerBuilder(
-					MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", typeFbElement, fb.getName()), //$NON-NLS-1$
-					fb, getLineNumber());
-			errorMarkerBuilders.add(e);
+			final String errorMessage = MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", //$NON-NLS-1$
+					typeFbElement, fb.getName());
+			errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(fb)
+					.setLineNumber(getLineNumber()));
 		}
 	}
 
