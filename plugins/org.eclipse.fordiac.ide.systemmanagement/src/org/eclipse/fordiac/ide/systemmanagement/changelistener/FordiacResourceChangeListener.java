@@ -41,6 +41,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -398,6 +399,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				return Status.OK_STATUS;
 			}
 		};
+		job.setUser(false);
+		job.setSystem(true);
+		job.setPriority(Job.SHORT);
 		job.setRule(entry.getFile().getProject());
 		job.schedule();
 	}
@@ -431,6 +435,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				return Status.OK_STATUS;
 			}
 		};
+		job.setUser(false);
+		job.setSystem(true);
+		job.setPriority(Job.SHORT);
 		job.setRule(file.getProject());
 		job.schedule();
 	}
@@ -532,6 +539,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				return Status.OK_STATUS;
 			}
 		};
+		job.setUser(false);
+		job.setSystem(true);
+		job.setPriority(Job.SHORT);
 		job.setRule(file.getProject());
 		job.schedule();
 	}
@@ -558,6 +568,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					return Status.OK_STATUS;
 				}
 			};
+			job.setUser(false);
+			job.setSystem(true);
+			job.setPriority(Job.SHORT);
 			job.setRule(newFile.getProject());
 			job.schedule();
 		}

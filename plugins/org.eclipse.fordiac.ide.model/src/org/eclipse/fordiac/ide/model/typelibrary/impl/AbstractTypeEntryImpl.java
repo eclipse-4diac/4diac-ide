@@ -28,6 +28,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.BasicNotifierImpl;
@@ -225,6 +226,9 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 						return Status.OK_STATUS;
 					}
 				};
+				job.setUser(false);
+				job.setSystem(true);
+				job.setPriority(Job.SHORT);
 				job.setRule(getRuleScope());
 				job.schedule();
 			}
