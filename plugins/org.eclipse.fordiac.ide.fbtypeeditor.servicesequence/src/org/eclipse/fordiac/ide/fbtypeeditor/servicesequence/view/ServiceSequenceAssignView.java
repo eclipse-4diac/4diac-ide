@@ -90,7 +90,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 
 		final Composite headerComposite = new Composite(parentComposite, SWT.BORDER);
 		GridLayoutFactory.fillDefaults().extendedMargins(MARGIN, MARGIN, MARGIN, MARGIN)
-		.generateLayout(headerComposite);
+				.generateLayout(headerComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(headerComposite);
 		final Composite subheaderComposite = new Composite(headerComposite, SWT.NONE);
 		GridLayoutFactory.fillDefaults().numColumns(2).generateLayout(subheaderComposite);
@@ -148,7 +148,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 		final Text numRandom = TextFactory.newText(SWT.NONE).text("10").create(settingsComposite); //$NON-NLS-1$
 		numRandom.addVerifyListener(e -> {
 			for (final char c : e.text.toCharArray()) {
-				if (c < '0' || c > '9') {
+				if ((c < '0') || (c > '9')) {
 					e.doit = false;
 					return;
 				}
@@ -294,7 +294,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 	}
 
 	private void refreshGraphicalViewer() {
-		if (fbType != null && serviceSequence != null) {
+		if ((fbType != null) && (serviceSequence != null)) {
 			final FBType typeCopy = EcoreUtil.copy(fbType);
 			typeCopy.setService(ServiceFactory.createDefaultServiceModel());
 			typeCopy.getService().getServiceSequence().set(0, serviceSequence);
@@ -340,7 +340,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 		if (fbType != null) {
 			final ServiceSequence seq = LibraryElementFactory.eINSTANCE.createServiceSequence();
 			String name = textName.getText();
-			if (name == null || name.isBlank()) {
+			if ((name == null) || name.isBlank()) {
 				name = DEFAULT_SEQUENCE_NAME;
 			}
 			seq.setName(name);
@@ -360,14 +360,14 @@ public class ServiceSequenceAssignView extends ViewPart {
 
 	private static void runInterpreter(final ServiceSequence seq, final List<String> eventNames, final boolean isAppend,
 			final boolean isRandom, final FBType fbType, final int count) {
-		List<Event> events;
+		final List<Event> events;
 		final FBType typeCopy = EcoreUtil.copy(fbType);
 		events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
 				.filter(Objects::nonNull).collect(Collectors.toList());
 		if (isRandom && (count > 0)) {
 			events.addAll(InputGenerator.getRandomEventsSequence(typeCopy, count));
 		}
-		final EventManager eventManager = EventManagerFactory.createEventManager(typeCopy, events, isRandom);
+		final EventManager eventManager = EventManagerFactory.createEventManager(typeCopy, events, isRandom, "START"); //$NON-NLS-1$
 		EventManagerUtils.process(eventManager);
 		if (!isAppend) {
 			seq.getServiceTransaction().clear();

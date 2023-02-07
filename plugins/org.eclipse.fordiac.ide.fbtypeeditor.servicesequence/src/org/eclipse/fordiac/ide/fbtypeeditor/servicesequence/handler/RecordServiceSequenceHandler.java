@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021, 2022 Johannes Kepler University Linz and others
+ * Copyright (c) 2021, 2023 Johannes Kepler University Linz and others
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -73,6 +73,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class RecordServiceSequenceHandler extends AbstractHandler {
 
 	private static final int CANCEL = -1;
+	private String startState;
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
@@ -99,7 +100,8 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 					try {
 						final FBType fbType = seq.getService().getFBType();
 						setParameters(fbType, parameters);
-						runInterpreter(seq, events, dialog.isAppend(), dialog.isRandom(), fbType, count);
+						runInterpreter(seq, events, dialog.isAppend(), dialog.isRandom(), fbType, count, startState);
+						seq.setStartState(startState);
 					} catch (final Exception e) {
 						FordiacLogHelper.logError(e.getMessage(), e);
 						MessageDialog.openError(HandlerUtil.getActiveShell(event),
@@ -113,7 +115,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	}
 
 	private static void runInterpreter(final ServiceSequence seq, final List<String> eventNames, final boolean isAppend,
-			final boolean isRandom, final FBType fbType, final int count) {
+			final boolean isRandom, final FBType fbType, final int count, final String startState) {
 		List<Event> events;
 		final FBType typeCopy = EcoreUtil.copy(fbType);
 		events = eventNames.stream().filter(s -> !s.isBlank()).map(name -> findEvent(typeCopy, name))
@@ -121,7 +123,8 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		if (isRandom && (count > 0)) {
 			events.addAll(InputGenerator.getRandomEventsSequence(typeCopy, count));
 		}
-		final EventManager eventManager = EventManagerFactory.createEventManager(typeCopy, events, isRandom);
+		final EventManager eventManager = EventManagerFactory.createEventManager(typeCopy, events, isRandom,
+				startState);
 		EventManagerUtils.process(eventManager);
 		if (!isAppend) {
 			seq.getServiceTransaction().clear();
@@ -140,8 +143,6 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			}
 		}
 	}
-
-
 
 	@Override
 	public void setEnabled(final Object evaluationContext) {
@@ -171,13 +172,14 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		return null;
 	}
 
-	private static class RecordSequenceDialog extends MessageDialog {
+	private class RecordSequenceDialog extends MessageDialog {
 		private static final int DEFAULT_RANDOMCOUNT = 10;
 		private Text inputEventText;
 		private Text inputParameterText;
 		private Text inputCount;
 		private Button appendCheckbox;
 		private Button randomCheckbox;
+		private CCombo inputStartStateCombo;
 		private final List<String> events;
 		private final List<String> parameters;
 		private boolean append;
@@ -230,7 +232,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			label = new Label(group, SWT.None);
 			label.setText("Start State");//$NON-NLS-1$
 
-			final CCombo inputStartStateCombo = ComboBoxWidgetFactory.createCombo(group);
+			inputStartStateCombo = ComboBoxWidgetFactory.createCombo(group);
 			inputStartStateCombo.setLayoutData(new GridData(SWT.BEGINNING, SWT.CENTER, true, false));
 			final FBType fbtype = serviceSequence.getService().getFBType();
 			if (fbtype instanceof BasicFBType) {
@@ -239,8 +241,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 								Stream.of("")) //$NON-NLS-1$
 						.toArray(String[]::new);
 				inputStartStateCombo.setItems(startnames);
-				inputStartStateCombo.select(Arrays.asList(startnames).indexOf("")); //$NON-NLS-1$
-				inputStartStateCombo.select(CANCEL);
+				inputStartStateCombo.select(0);
 			} else {
 				inputStartStateCombo.setEnabled(false);
 			}
@@ -280,6 +281,11 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 				count = DEFAULT_RANDOMCOUNT;
 
 			}
+			final int selectedStartState = inputStartStateCombo.getSelectionIndex();
+			if (selectedStartState == -1) { // nothing selected
+				startState = "START"; //$NON-NLS-1$
+			}
+			startState = inputStartStateCombo.getItem(selectedStartState);
 			super.buttonPressed(buttonId);
 		}
 
@@ -287,7 +293,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			return splitAndCleanList(inputEventText.getText());
 		}
 
-		private static List<String> splitAndCleanList(final String text) {
+		private List<String> splitAndCleanList(final String text) {
 			return Arrays.asList(text.split(";", 0)).stream().filter(s -> !s.isBlank()) //$NON-NLS-1$
 					.map(String::strip).collect(Collectors.toList());
 		}
