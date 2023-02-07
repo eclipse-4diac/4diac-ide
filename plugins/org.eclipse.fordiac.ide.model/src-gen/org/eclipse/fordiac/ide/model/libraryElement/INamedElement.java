@@ -82,4 +82,12 @@ public interface INamedElement extends EObject {
 	 */
 	void setComment(String value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	String getQualifiedName();
+
 } // INamedElement

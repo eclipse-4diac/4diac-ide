@@ -452,6 +452,7 @@
     <genClasses image="false" ecoreClass="lib.ecore#//INamedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//INamedElement/name"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//INamedElement/comment"/>
+      <genOperations ecoreOperation="lib.ecore#//INamedElement/getQualifiedName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ResourceTypeFB">
       <genOperations ecoreOperation="lib.ecore#//ResourceTypeFB/isResourceTypeFB"

@@ -83,6 +83,15 @@ public interface STFunctionPackage extends EPackage {
 	int ST_FUNCTION_SOURCE = 0;
 
 	/**
+	 * The feature id for the '<em><b>Comments</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_FUNCTION_SOURCE__COMMENTS = STCorePackage.ST_SOURCE__COMMENTS;
+
+	/**
 	 * The feature id for the '<em><b>Functions</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
