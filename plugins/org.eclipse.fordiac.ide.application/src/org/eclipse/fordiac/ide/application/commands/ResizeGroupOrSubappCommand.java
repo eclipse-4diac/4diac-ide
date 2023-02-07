@@ -86,9 +86,9 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 
 	@Override
 	public void undo() {
-		for (final AbstractChangeContainerBoundsCommand changeBoundscmd : changeContainerBoundsCommandList) {
-			if (changeBoundscmd != null && changeBoundscmd.canUndo()) {
-				changeBoundscmd.undo();
+		for (int i = changeContainerBoundsCommandList.size() - 1; i >= 0; i--) {
+			if (changeContainerBoundsCommandList.get(i) != null && changeContainerBoundsCommandList.get(i).canUndo()) {
+				changeContainerBoundsCommandList.get(i).undo();
 			}
 		}
 		if (cmdToExecuteBefore != null) {
@@ -107,11 +107,12 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 		if (cmdToExecuteBefore != null) {
 			cmdToExecuteBefore.redo();
 		}
-		for (int i = changeContainerBoundsCommandList.size() - 1; i >= 0; i--) {
-			if (changeContainerBoundsCommandList.get(i) != null && changeContainerBoundsCommandList.get(i).canRedo()) {
-				changeContainerBoundsCommandList.get(i).redo();
+		for (final AbstractChangeContainerBoundsCommand changeBoundscmd : changeContainerBoundsCommandList) {
+			if (changeBoundscmd != null && changeBoundscmd.canRedo()) {
+				changeBoundscmd.redo();
 			}
 		}
+
 	}
 
 	@Override
