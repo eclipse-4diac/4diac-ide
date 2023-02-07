@@ -71,13 +71,11 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 			cmdToExecuteBefore = null;
 		}
 
-		addChangeContainerBoundCommand(checkAndCreateResizeCommand(getTargetContainerEP(), fbnetworkElements));
-
-		GraphicalEditPart parent = findNestedGraphicalEditPart(getTargetContainerEP());
+		GraphicalEditPart parent = getTargetContainerEP();
 		while (parent != null) {
-			this.fbnetworkElements = null;
-			addChangeContainerBoundCommand(checkAndCreateResizeCommand(parent, null));
+			addChangeContainerBoundCommand(checkAndCreateResizeCommand(parent, fbnetworkElements));
 			parent = findNestedGraphicalEditPart(parent);
+			this.fbnetworkElements = null;
 		}
 	}
 
@@ -149,15 +147,20 @@ public class ResizeGroupOrSubappCommand extends Command implements ConnectionLay
 		final Rectangle containerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(containerEP);
 		if (fbBounds != null && !containerBounds.contains(fbBounds)) {
 			fbBounds.union(containerBounds);
-			if (containerEP instanceof UnfoldedSubappContentEditPart) {
-				return ContainerContentLayoutPolicy.createChangeBoundsCommand(
-						((UnfoldedSubappContentEditPart) containerEP).getModel().getSubapp(), containerBounds,
-						fbBounds);
+			final FBNetworkElement container = getContainer(containerEP);
+			if (container != null) {
+				return ContainerContentLayoutPolicy.createChangeBoundsCommand(container, containerBounds, fbBounds);
 			}
-			if (containerEP instanceof GroupContentEditPart) {
-				return ContainerContentLayoutPolicy.createChangeBoundsCommand(
-						((GroupContentEditPart) containerEP).getModel().getGroup(), containerBounds, fbBounds);
-			}
+		}
+		return null;
+	}
+
+	private static FBNetworkElement getContainer(final GraphicalEditPart containerEP) {
+		if (containerEP instanceof UnfoldedSubappContentEditPart) {
+			return ((UnfoldedSubappContentEditPart) containerEP).getModel().getSubapp();
+		}
+		if (containerEP instanceof GroupContentEditPart) {
+			return ((GroupContentEditPart) containerEP).getModel().getGroup();
 		}
 		return null;
 	}

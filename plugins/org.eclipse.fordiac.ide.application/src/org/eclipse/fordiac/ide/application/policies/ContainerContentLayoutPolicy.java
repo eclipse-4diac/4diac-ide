@@ -22,25 +22,21 @@ import java.util.Map;
 import java.util.Objects;
 
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.AbstractContainerContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedMoveHandle;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppBoundsCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Group;
-import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.requests.ChangeBoundsRequest;
 
 public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
@@ -71,27 +67,11 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 	}
 
 	@Override
-	protected Command getChangeConstraintCommand(final ChangeBoundsRequest request) {
-		final Command cmd = super.getChangeConstraintCommand(request);
-
-		if (RequestUtil.isMoveRequest(request)) {
-			final Point moveDelta = getScaledMoveDelta(request);
-			final Rectangle newContentBounds = getNewContentBounds(request.getEditParts());
-			newContentBounds.translate(moveDelta);
-			final Rectangle contentBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(getHost());
-			if (!contentBounds.contains(newContentBounds)) {
-				newContentBounds.union(contentBounds);
-				final AbstractChangeContainerBoundsCommand changeSizeCmd = ContainerContentLayoutPolicy
-						.createChangeBoundsCommand(getParentModel(), contentBounds, newContentBounds);
-				if (cmd instanceof CompoundCommand) {
-					((CompoundCommand) cmd).add(changeSizeCmd);
-				} else {
-					final CompoundCommand compCmd = new CompoundCommand();
-					compCmd.add(cmd);
-					compCmd.add(changeSizeCmd);
-					return compCmd;
-				}
-			}
+	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
+			final Object constraint) {
+		final Command cmd = super.createChangeConstraintCommand(request, child, constraint);
+		if (cmd != null) {
+			return new ResizeGroupOrSubappCommand(getHost(), cmd);
 		}
 		return cmd;
 	}
@@ -99,7 +79,7 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 	protected FBNetworkElement getParentModel() {
 		return (getHost() instanceof AbstractContainerContentEditPart)
 				? ((AbstractContainerContentEditPart) getHost()).getContainerElement()
-				: null;
+						: null;
 	}
 
 	protected Rectangle getNewContentBounds(final List<EditPart> editParts) {
@@ -142,18 +122,11 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 
 	public static AbstractChangeContainerBoundsCommand createChangeBoundsCommand(final FBNetworkElement container,
 			final Rectangle contentContainerBounds, final Rectangle contentBounds) {
-		final int dx = contentBounds.x - contentContainerBounds.x;
-		final int dy = contentBounds.y - contentContainerBounds.y;
-		final int dw = contentBounds.width - contentContainerBounds.width;
-		final int dh = contentBounds.height - contentContainerBounds.height;
-
-		if (container instanceof Group) {
-			return new ChangeGroupBoundsCommand((Group) container, dx, dy, dw, dh);
-		}
-		if (container instanceof SubApp) {
-			return new ChangeSubAppBoundsCommand((SubApp) container, dx, dy, dw, dh);
-		}
-		return null;
+		final Point moveDelta = new Point(contentBounds.x - contentContainerBounds.x,
+				contentBounds.y - contentContainerBounds.y);
+		final Dimension sizeDelta = new Dimension(contentBounds.width - contentContainerBounds.width,
+				contentBounds.height - contentContainerBounds.height);
+		return FBNetworkXYLayoutEditPolicy.createChangeBoundsCommand(container, sizeDelta, moveDelta);
 	}
 
 	protected static void translateToRelative(final GraphicalEditPart graphicalEditPart, final Point topLeft) {
