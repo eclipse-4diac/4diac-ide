@@ -26,6 +26,9 @@ import java.util.Map;
 import java.util.Set;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
@@ -37,13 +40,19 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.monitoring.MonitoringElement;
 import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
+import org.eclipse.fordiac.ide.monitoring.handlers.RemoveAllWatchesHandler;
 import org.eclipse.fordiac.ide.monitoring.model.SubAppPortHelper;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.gef.EditPart;
+import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.PlatformUI;
 
 /**
  * Singleton instance that Coordinates and manages all the Ports to be
@@ -95,6 +104,29 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		return null;
 	}
 
+	private final Adapter contentAdapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			if (notification.getEventType() == Notification.REMOVE && notification.getOldValue() instanceof Mapping) {
+				final FBNetworkElement fb = ((Mapping) notification.getOldValue()).getFrom();
+				if (fb instanceof SubApp) {
+					removeMonitoringElementsFromSubApp((SubApp) fb);
+				} else {
+					removeMonitoringElementsFromFB(fb);
+				}
+				notifyWatchesChanged();
+
+				final GraphicalViewer viewer = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
+						.getActiveEditor().getAdapter(GraphicalViewer.class);
+
+				viewer.getRootEditPart().refresh();
+				final List<?> children = viewer.getRootEditPart().getChildren();
+				children.forEach(child -> ((EditPart) child).refresh());
+			}
+		}
+	};
+
 	/**
 	 * Adds monitoring elements.
 	 *
@@ -116,6 +148,36 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		final SystemMonitoringData data = getSystemMonitoringData(element.getPort().getSystem());
 		data.removeMonitoringElement(element);
 		notifyRemovePort(element.getPort());
+	}
+
+	/**
+	 * Removes the monitoring elements from a given FBNetworkElement.
+	 *
+	 * @param element the FBNetworkElement
+	 */
+	public void removeMonitoringElementsFromFB(final FBNetworkElement element) {
+		for (final IInterfaceElement ieElement : RemoveAllWatchesHandler
+				.getWatchedIfElementsForFB(MonitoringManager.this, element)) {
+			removeMonitoringElement(getMonitoringElement(ieElement));
+		}
+	}
+
+	/**
+	 * Removes the monitoring elements from a given FBNetworkElement.
+	 *
+	 * @param element the Subapp
+	 */
+	public void removeMonitoringElementsFromSubApp(final SubApp element) {
+
+		removeMonitoringElementsFromFB(element);
+
+		for (final FBNetworkElement nestedFB : element.getSubAppNetwork().getNetworkElements()) {
+			if (nestedFB instanceof SubApp) {
+				removeMonitoringElementsFromSubApp((SubApp) nestedFB);
+			} else {
+				removeMonitoringElementsFromFB(nestedFB);
+			}
+		}
 	}
 
 	/**
@@ -160,12 +222,18 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	@Override
 	public void enableSystem(final AutomationSystem system) {
 		getSystemMonitoringData(system).enableSystem();
+		if (!system.eAdapters().contains(contentAdapter)) {
+			system.eAdapters().add(contentAdapter);
+		}
 	}
 
 	@Override
 	public void enableSystemSynch(final AutomationSystem system, final IProgressMonitor monitor)
 			throws InvocationTargetException, InterruptedException {
 		getSystemMonitoringData(system).enableSystemSynch(monitor);
+		if (!system.eAdapters().contains(contentAdapter)) {
+			system.eAdapters().add(contentAdapter);
+		}
 	}
 
 	/**
@@ -177,12 +245,18 @@ public class MonitoringManager extends AbstractMonitoringManager {
 	public void disableSystem(final AutomationSystem system) {
 		getSystemMonitoringData(system).disableSystem();
 		notifyWatchesChanged();
+		if (system.eAdapters().contains(contentAdapter)) {
+			system.eAdapters().remove(contentAdapter);
+		}
 	}
 
 	@Override
 	public void disableSystemSynch(final AutomationSystem system, final IProgressMonitor monitor)
 			throws InvocationTargetException, InterruptedException {
 		getSystemMonitoringData(system).disableSystemSynch(monitor);
+		if (system.eAdapters().contains(contentAdapter)) {
+			system.eAdapters().remove(contentAdapter);
+		}
 	}
 
 	@Override
