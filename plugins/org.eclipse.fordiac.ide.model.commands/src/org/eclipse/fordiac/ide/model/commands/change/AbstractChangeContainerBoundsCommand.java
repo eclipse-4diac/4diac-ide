@@ -76,8 +76,11 @@ public abstract class AbstractChangeContainerBoundsCommand extends Command imple
 		if (dx != 0 || dy != 0) {
 			final CompoundCommand cmd = new CompoundCommand();
 			cmd.add(new SetPositionCommand(target, dx, dy));
-			// ensure that the children stay at their position when the group grows or shrinks on the left/top side
-			getChildren().forEach(el -> cmd.add(new SetPositionCommand(el, -dx, -dy)));
+			// Ensure that the children stay at their position when the group grows or shrinks on the left/top side
+			// If the child is in a group we must only consider it if the group the child is contained in itself is
+			// changed.
+			getChildren().stream().filter(el -> !el.isInGroup() || target.equals(el.getGroup()))
+			.forEach(el -> cmd.add(new SetPositionCommand(el, -dx, -dy)));
 			return cmd;
 		}
 		return null;
