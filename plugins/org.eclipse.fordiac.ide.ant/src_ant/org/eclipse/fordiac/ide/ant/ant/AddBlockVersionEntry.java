@@ -63,8 +63,7 @@ public class AddBlockVersionEntry extends AbstractBlockModelTask {
 		vi.add(limit(position, vi.size()), info);
 
 		log(MessageFormat.format("Adding version {2} to {0}/{1}", // //$NON-NLS-1$
-				projectname, blockname, version, //
-				author, date, remarks, organization, Integer.valueOf(position)));
+				projectname, blockname, version));
 	}
 
 	protected static int limit(final int p, final int maximum) {

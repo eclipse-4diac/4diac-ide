@@ -30,7 +30,7 @@ public class SetBlockDocumentation extends AbstractBlockModelTask {
 	protected void modifyBlock(final FBType fb) {
 		fb.setDocumentation(documentation);
 
-		log(MessageFormat.format("Adding documentation to {0}/{1}", // //$NON-NLS-1$
+		log(MessageFormat.format("Adding documentation to {0}/{1}", //$NON-NLS-1$
 				projectname, blockname));
 	}
 

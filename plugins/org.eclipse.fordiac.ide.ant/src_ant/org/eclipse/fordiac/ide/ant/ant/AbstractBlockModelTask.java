@@ -21,7 +21,7 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
-abstract public class AbstractBlockModelTask extends Task {
+public abstract class AbstractBlockModelTask extends Task {
 
 	public void setProjectname(final String projectname) {
 		this.projectname = nullCheckString(projectname);
@@ -36,7 +36,7 @@ abstract public class AbstractBlockModelTask extends Task {
 
 		final IProject fordiacProject = ResourcesPlugin.getWorkspace().getRoot().getProject(projectname);
 		if (fordiacProject == null) {
-			throw new BuildException(MessageFormat.format("Project named '{0}' not in workspace", projectname));//$NON-NLS-1$
+			throw new BuildException(MessageFormat.format("Project named {0} not in workspace", projectname));//$NON-NLS-1$
 		}
 
 		final var tl = TypeLibraryManager.INSTANCE.getTypeLibrary(fordiacProject);
@@ -57,12 +57,12 @@ abstract public class AbstractBlockModelTask extends Task {
 		modifyBlock(fb);
 	}
 
-	abstract protected void modifyBlock(final FBType fb);
+	protected abstract void modifyBlock(final FBType fb);
 
 	protected String projectname = EMPTY_STRING;
 	protected String blockname = EMPTY_STRING;
 
-	protected final static String EMPTY_STRING = ""; //$NON-NLS-1$
+	protected static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
 	protected static String nullCheckString(final String s) {
 		return s == null ? EMPTY_STRING : s;
