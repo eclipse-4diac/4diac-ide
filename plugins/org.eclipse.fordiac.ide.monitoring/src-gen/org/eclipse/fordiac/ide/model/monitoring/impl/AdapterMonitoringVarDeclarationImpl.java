@@ -568,6 +568,16 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getQualifiedName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -901,7 +911,7 @@ public class AdapterMonitoringVarDeclarationImpl extends EObjectImpl implements 
 	@Override
 	public void setVarConfig(boolean config) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 } // AdapterMonitoringVarDeclarationImpl

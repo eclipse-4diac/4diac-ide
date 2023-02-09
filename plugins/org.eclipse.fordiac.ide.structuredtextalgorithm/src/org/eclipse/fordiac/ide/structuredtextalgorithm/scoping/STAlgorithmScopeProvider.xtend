@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -67,7 +67,8 @@ class STAlgorithmScopeProvider extends AbstractSTAlgorithmScopeProvider {
 			!(LibraryElementPackage.eINSTANCE.getVarDeclaration().isSuperTypeOf(clazz) &&
 				description.EObjectOrProxy.eContainer?.eContainer instanceof FB) && // ensure the VarDeclaration is not in an internal FB
 			!LibraryElementPackage.eINSTANCE.algorithm.isSuperTypeOf(clazz) && // reject Algorithm from library element
-			!LibraryElementPackage.eINSTANCE.method.isSuperTypeOf(clazz); // reject Method from library element
+			!LibraryElementPackage.eINSTANCE.method.isSuperTypeOf(clazz) && // reject Method from library element
+			!STAlgorithmPackage.eINSTANCE.STAlgorithm.isSuperTypeOf(clazz); // reject STAlgorithm
 	}
 
 	def protected STMethod getMethod(EObject context) {

@@ -31,7 +31,6 @@ import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.draw2d.AdvancedLineBorder;
 import org.eclipse.fordiac.ide.gef.figures.BorderedRoundedRectangle;
@@ -135,23 +134,11 @@ public class SubAppForFbNetworkFigure extends FBNetworkElementFigure {
 	}
 
 	private void createExpandedMainFigure() {
-		expandedMainFigure = new BorderedRoundedRectangle() {
-			@Override
-			public Insets getInsets() {
-				// the insets are needed to correctly get the bottom margin for the selection
-				// area
-				// left and right need to be 0 so that the pins are directly at the border
-				final Insets insets = super.getInsets();
-				insets.left = 0;
-				insets.right = 0;
-				return insets;
-			}
-		};
-
+		expandedMainFigure = new BorderedRoundedRectangle();
 		expandedMainFigure.setOutline(false);
 		expandedMainFigure.setOpaque(false);
 		expandedMainFigure
-		.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
+				.setCornerDimensions(new Dimension(DiagramPreferences.CORNER_DIM, DiagramPreferences.CORNER_DIM));
 		expandedMainFigure.setBorder(new RoundedRectangleShadowBorder());
 		final GridLayout expandedMainLayout = createTopBottomLayout();
 		expandedMainFigure.setLayoutManager(expandedMainLayout);

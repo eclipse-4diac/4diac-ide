@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.nat.EventColumnAcesssor;
 import org.eclipse.fordiac.ide.gef.nat.EventColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.EventListProvider;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
@@ -34,12 +33,10 @@ import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.widgets.Group;
 
-public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection {
+public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection<Event> {
 
 
 	@Override

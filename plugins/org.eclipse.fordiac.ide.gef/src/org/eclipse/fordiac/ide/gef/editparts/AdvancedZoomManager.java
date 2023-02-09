@@ -23,14 +23,8 @@ import org.eclipse.gef.editparts.ZoomManager;
 
 public class AdvancedZoomManager extends ZoomManager {
 
-	private Point lastMousePos;
-
 	AdvancedZoomManager(final ScalableFigure pane, final Viewport viewport) {
 		super(pane, viewport);
-	}
-
-	public void setLastMousePos(final int x, final int y) {
-		this.lastMousePos = new Point(x, y);
 	}
 
 	@Override
@@ -52,12 +46,6 @@ public class AdvancedZoomManager extends ZoomManager {
 		return center - rangeModel.getExtent() / 2;
 	}
 
-	@Override
-	protected void primSetZoom(final double zoom) {
-		final Point newViewLocation = (null == lastMousePos) ? takeMiddPosition(zoom) : calcNewViewLocation(zoom);
-		super.primSetZoom(zoom);
-		setViewLocation(newViewLocation);
-	}
 
 	@Override
 	protected double getFitHeightZoomLevel() {
@@ -107,30 +95,6 @@ public class AdvancedZoomManager extends ZoomManager {
 			return scaleY;
 		}
 		return Math.min(scaleX, scaleY);
-	}
-
-
-	/*
-	 * In order to keep the target under the mouse stable we have to calculate the
-	 * new view location such that the following equation holds:
-	 *
-	 * (mousepos + oldViewLocation) / oldZoom = (mousepos + newViewLocation)/newZoom
-	 *
-	 */
-	private Point calcNewViewLocation(final double newZoom) {
-		final Point oldViewLocation = getViewport().getViewLocation();
-		final Point newviewLocation = lastMousePos.getCopy();
-		newviewLocation.performTranslate(oldViewLocation.x, oldViewLocation.y);
-		newviewLocation.scale(1.0 / getZoom());
-		newviewLocation.scale(newZoom);
-		newviewLocation.performTranslate(-lastMousePos.x, -lastMousePos.y);
-		return newviewLocation;
-	}
-
-	private Point takeMiddPosition(final double newZoom) {
-		final Point oldViewLocation = getViewport().getClientArea().getCenter();
-		final Dimension dif = oldViewLocation.getScaled(newZoom / getZoom()).getDifference(oldViewLocation);
-		return getViewport().getViewLocation().getTranslated(dif.width, dif.height);
 	}
 
 }

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  *
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
+ *   Martin Jobst - refactor evaluator API
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view.editparts;
 
@@ -21,22 +23,29 @@ import java.util.Map;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugPlugin;
 import org.eclipse.debug.core.IDebugEventSetListener;
+import org.eclipse.debug.core.model.IDebugTarget;
 import org.eclipse.draw2d.ConnectionRouter;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.ShortestPathConnectionRouter;
+import org.eclipse.draw2d.geometry.Insets;
+import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugThread;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
-import org.eclipse.fordiac.ide.debug.fb.LaunchEventQueue;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDiagramEditPart;
+import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
+import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorMonitor;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
+import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorCountingEventQueue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.editpolicies.RootComponentEditPolicy;
 import org.eclipse.swt.widgets.Display;
@@ -60,6 +69,16 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 	@Override
 	protected void createEditPolicies() {
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new RootComponentEditPolicy());
+		installEditPolicy(EditPolicy.LAYOUT_ROLE, new EmptyXYLayoutEditPolicy() {
+			@Override
+			protected EditPolicy createChildEditPolicy(final EditPart child) {
+				if (child instanceof AbstractDebugInterfaceValueEditPart) {
+					// we only want to provide selection feedback for debug values
+					return new ModifiedNonResizeableEditPolicy(DiagramPreferences.CORNER_DIM_HALF, new Insets(1));
+				}
+				return null;
+			}
+		});
 	}
 
 	@Override
@@ -82,7 +101,7 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 		DebugPlugin.getDefault().removeDebugEventListener(this);
 	}
 
-	private FBEvaluator<?> getFBEvaluator() {
+	public FBEvaluator<?> getFBEvaluator() {
 		return (FBEvaluator<?>) getModel().getEvaluator();
 	}
 
@@ -107,14 +126,15 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 	}
 
 	private void fillEventValues() {
-		if (getFBEvaluator().getQueue() instanceof LaunchEventQueue) {
-			final LaunchEventQueue queue = (LaunchEventQueue) getFBEvaluator().getQueue();
-			getFBType().getInterfaceList().getEventInputs().forEach(ev -> addEventEntry(queue, ev));
-			getFBType().getInterfaceList().getEventOutputs().forEach(ev -> addEventEntry(queue, ev));
+		final var eventQueue = getFBEvaluator().getEventQueue();
+		if (eventQueue instanceof FBEvaluatorCountingEventQueue) {
+			final FBEvaluatorCountingEventQueue countingEventQueue = (FBEvaluatorCountingEventQueue) eventQueue;
+			getFBType().getInterfaceList().getEventInputs().forEach(ev -> addEventEntry(countingEventQueue, ev));
+			getFBType().getInterfaceList().getEventOutputs().forEach(ev -> addEventEntry(countingEventQueue, ev));
 		}
 	}
 
-	private EventValueEntity addEventEntry(final LaunchEventQueue queue, final Event ev) {
+	private EventValueEntity addEventEntry(final FBEvaluatorCountingEventQueue queue, final Event ev) {
 		return eventValues.put(ev, new EventValueEntity(ev, queue.getCount(ev)));
 	}
 
@@ -126,11 +146,13 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 	}
 
 	private void fillInterfaceValues() {
-		getFBEvaluator().getInstance().getMembers().entrySet().forEach(entry -> {
+		final EvaluatorDebugTarget debugTarget = (EvaluatorDebugTarget) getModel().getAdapter(IDebugTarget.class);
+		getFBEvaluator().getContext().getMembers().entrySet().forEach(entry -> {
 			final IInterfaceElement interfaceElement = getFBType().getInterfaceList()
 					.getInterfaceElement(entry.getKey());
 			if (interfaceElement != null) {
-				interfaceValues.put(entry.getKey(), new InterfaceValueEntity(interfaceElement, entry.getValue()));
+				interfaceValues.put(entry.getKey(),
+						new InterfaceValueEntity(interfaceElement, entry.getValue(), debugTarget));
 			}
 		});
 	}
@@ -191,6 +213,7 @@ implements EvaluatorMonitor, IDebugEventSetListener {
 			final Object ep = editPartRegistry.get(interfaceValueEntity);
 			if (ep instanceof InterfaceValueEditPart) {
 				((InterfaceValueEditPart) ep).setValue(value);
+				refreshVisuals();
 			}
 		}
 	}

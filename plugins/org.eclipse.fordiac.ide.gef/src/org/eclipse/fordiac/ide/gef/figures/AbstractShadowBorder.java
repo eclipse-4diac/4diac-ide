@@ -22,7 +22,7 @@ public abstract class AbstractShadowBorder extends AbstractBackground {
 	protected static final int SHADOW_ALPHA = 30;
 	protected static final int SHADOW_SIZE = 4;
 	protected static final int SHADOW_CORNER_RADIUS = DiagramPreferences.CORNER_DIM + 2;
-	public static final Insets SHADOW_INSETS = new Insets(2, 2, SHADOW_SIZE, SHADOW_SIZE * 2 / 3);
+	public static final Insets SHADOW_INSETS = new Insets(2, 2, SHADOW_SIZE + 1, SHADOW_SIZE * 2 / 3 + 1);
 
 	@Override
 	public Insets getInsets(final IFigure figure) {

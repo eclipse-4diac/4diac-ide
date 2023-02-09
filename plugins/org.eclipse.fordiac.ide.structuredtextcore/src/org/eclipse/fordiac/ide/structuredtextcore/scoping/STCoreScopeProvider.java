@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2021, 2022 Primetals Technologies GmbH,
- *               2022 Martin Erich Jobst
+ *               2022-2003 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +16,7 @@
  *       - add scope for adapter variables
  *       - add scope for internal FBs
  *       - fix scope ignoreCase, cleanup
+ *       - exclude events from global scope
  *   Martin Melik Merkumians
  *       - added scope for struct in struct
  *******************************************************************************/
@@ -186,7 +187,8 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 				|| LibraryElementPackage.eINSTANCE.getVarDeclaration().isSuperTypeOf(clazz)
 				|| LibraryElementPackage.eINSTANCE.getFB().isSuperTypeOf(clazz)
 				|| (LibraryElementPackage.eINSTANCE.getICallable().isSuperTypeOf(clazz)
-						&& !LibraryElementPackage.eINSTANCE.getFBType().isSuperTypeOf(clazz));
+						&& !LibraryElementPackage.eINSTANCE.getFBType().isSuperTypeOf(clazz)
+						&& !LibraryElementPackage.eINSTANCE.getEvent().isSuperTypeOf(clazz));
 	}
 
 	protected static STExpression getReceiver(final EObject context) {

@@ -12,7 +12,7 @@
     codeFormatting="true" commentFormatting="true" importerID="org.eclipse.emf.importer.ecore"
     containmentProxies="true" complianceLevel="11.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.fb.interpreter.mm.OpSem.edit"
     editorPluginID="org.eclipse.fordiac.ide.fb.interpreter.mm.OpSem.editor" usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data"
-    importOrganizing="true" cleanup="true" eclipsePlatformVersion="2021-06">
+    importOrganizing="true" cleanup="true" eclipsePlatformVersion="2022-09">
   <foreignModel>OperationalSemantics.ecore</foreignModel>
   <testsDirectory xsi:nil="true"/>
   <genPackages prefix="OperationalSemantics" basePackage="org.eclipse.fordiac.ide.fb.interpreter"

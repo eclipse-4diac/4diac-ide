@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -33,45 +34,49 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
 
 public final class FBTestRunner {
 
-	public static FBType runFBTest(final FBType fb, final ServiceSequence seq) {
+	public static Optional<String> runFBTest(final FBType fb, final ServiceSequence seq) {
 		return runFBTest(fb, seq, null);
 	}
 
-	public static FBType runFBTest(final FBType fb, final ServiceSequence seq, final String startStateName)
-			throws IllegalArgumentException {
+	public static Optional<String> runFBTest(final FBType fb, final ServiceSequence seq, final String startStateName) {
 		if (seq.getServiceTransaction().isEmpty()) {
-			return fb;
+			return Optional.empty();
 		}
 		final FBRuntimeAbstract rt = RuntimeFactory.createFrom(fb);
 		RuntimeFactory.setStartState(rt, startStateName);
 		final List<FBTransaction> transaction = TransactionFactory.createFrom(fb, seq, rt);
 		final EventManager eventManager = EventManagerFactory.createFrom(transaction);
 		EventManagerUtils.process(eventManager);
-		checkResults(seq, eventManager);
-		return EventManagerUtils.getLastTypeFromSequence(fb, eventManager);
+		return checkResults(seq, eventManager);
 	}
 
-	private static void checkResults(final ServiceSequence seq, final EventManager eventManager)
-			throws IllegalArgumentException {
+	private static Optional<String> checkResults(final ServiceSequence seq, final EventManager eventManager) {
 		final EList<ServiceTransaction> expectedResults = seq.getServiceTransaction();
 		final EList<Transaction> results = eventManager.getTransactions();
 
 		if (expectedResults.size() != results.size()) { // correct test data
-			throw new IllegalArgumentException("test data is incorrect"); //$NON-NLS-1$
+			return Optional.of("test data is incorrect: expected number of elements: " + expectedResults.size() //$NON-NLS-1$
+					+ ", received number of elements: " + results.size());  //$NON-NLS-1$
 		}
 
 		for (int i = 0; i < expectedResults.size(); i++) {
 			final FBTransaction result = (FBTransaction) results.get(i);
 			final ServiceTransaction expectedResult = expectedResults.get(i);
-			checkTransaction(result, expectedResult);
+			final Optional<String> errorMsg = checkTransaction(result, expectedResult);
+			if (errorMsg.isPresent()) {
+				return errorMsg;
+			}
 		}
+		return Optional.empty();
 	}
 
-	private static void checkTransaction(final FBTransaction result, final ServiceTransaction expectedResult) {
+	private static Optional<String> checkTransaction(final FBTransaction result,
+			final ServiceTransaction expectedResult) {
 		// input event was correctly generated
 		if (!result.getInputEventOccurrence().getEvent().getName()
 				.equals(expectedResult.getInputPrimitive().getEvent())) {
-			throw new IllegalArgumentException("Input event was not generated correctly"); //$NON-NLS-1$
+			return Optional.of(
+					"Input event " + expectedResult.getInputPrimitive().getEvent() + " was not generated correctly"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
 
 		// no unwanted output event occurrences
@@ -79,32 +84,42 @@ public final class FBTestRunner {
 				p -> !p.getInterface().getName().toLowerCase().contains(ServiceSequenceUtils.INTERNAL_INTERFACE))
 				.count();
 		if (outputEvents != result.getOutputEventOccurrences().size()) {
-			throw new IllegalArgumentException("Unwanted output event occurrence"); //$NON-NLS-1$
+			return Optional.of("Unwanted output event occurrence"); //$NON-NLS-1$
 		}
 
 		// check all output primitives
 		for (int j = 0; j < outputEvents; j++) {
 			final OutputPrimitive p = expectedResult.getOutputPrimitive().get(j);
-			checkOutputPrimitive(result, j, p);
+			final Optional<String> errorMsg = checkOutputPrimitive(result, j, p);
+			if (errorMsg.isPresent()) {
+				return errorMsg;
+			}
 		}
+
+		return Optional.empty();
 	}
 
-	private static void checkOutputPrimitive(final FBTransaction result, final int j, final OutputPrimitive p) {
+	private static Optional<String> checkOutputPrimitive(final FBTransaction result, final int j,
+			final OutputPrimitive p) {
 		if (!p.getInterface().getName().toLowerCase().contains(ServiceSequenceUtils.INTERNAL_INTERFACE)) {
 			// generated output event is correct
-			if (!p.getEvent().equals(result.getOutputEventOccurrences().get(j).getEvent().getName())) {
-				throw new IllegalArgumentException("Generated output event is incorrect"); //$NON-NLS-1$
+			final String nameGeneratedEvent = result.getOutputEventOccurrences().get(j).getEvent().getName();
+			if (!p.getEvent().equals(nameGeneratedEvent)) {
+				return Optional.of("Generated output event " + nameGeneratedEvent + " is incorrect"); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 			// the associated data is correct
-			if (!processParameters(p.getParameters(), result)) {
-				throw new IllegalArgumentException("Parameter values do not match the data"); //$NON-NLS-1$
+			final Optional<String> errorMsg = processParameters(p.getParameters(), result);
+			if (!errorMsg.isEmpty()) {
+				return Optional
+						.of("Parameter values of " + p.getParameters() + " do not match the data: " + errorMsg.get()); //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
+		return Optional.empty();
 	}
 
-	private static boolean processParameters(final String parameters, final FBTransaction result) {
+	private static Optional<String> processParameters(final String parameters, final FBTransaction result) {
 		if ((parameters == null) || parameters.isBlank()) {
-			return true;
+			return Optional.empty();
 		}
 		final int length = result.getOutputEventOccurrences().size();
 		final FBRuntimeAbstract captured = result.getOutputEventOccurrences().get(length - 1).getFbRuntime();
@@ -112,11 +127,12 @@ public final class FBTestRunner {
 		final SequenceMatcher sm = new SequenceMatcher(getFBType(captured));
 
 		for (final String assumption : parameterList) {
-			if (!sm.matchVariable(assumption, false)) {
-				return false;
+			final Optional<String> errorMsg = sm.matchVariable(assumption, false);
+			if (errorMsg.isPresent()) {
+				return errorMsg;
 			}
 		}
-		return true;
+		return Optional.empty();
 	}
 
 	private static FBType getFBType(final FBRuntimeAbstract captured) {

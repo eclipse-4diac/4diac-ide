@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
+   <extension-point id="org.eclipse.fordiac.ide.systemconfiguration.communication" name="Available communication configurations for segments" schema="schema/org.eclipse.fordiac.ide.systemconfiguration.communication.exsd"/>
    <extension
          point="org.eclipse.ui.editors">
       <editor
@@ -54,6 +55,17 @@
             <input
                   type="org.eclipse.fordiac.ide.model.libraryElement.Device">
              </input>
+         </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.systemconfiguration.properties.SegmentSection"
+               id="org.eclipse.fordiac.ide.systemconfiguration.properties.SegmentInterfaceSection"
+               tab="org.eclipse.fordiac.ide.application.propertyDeviceInterfaceTab">
+            <input
+                  type="org.eclipse.fordiac.ide.systemconfiguration.editparts.SegmentEditPart">
+            </input>
+            <input
+                     type="org.eclipse.fordiac.ide.model.libraryElement.Segment">
+            </input>
          </propertySection>
          <propertySection
                class="org.eclipse.fordiac.ide.systemconfiguration.properties.AttributeSection"

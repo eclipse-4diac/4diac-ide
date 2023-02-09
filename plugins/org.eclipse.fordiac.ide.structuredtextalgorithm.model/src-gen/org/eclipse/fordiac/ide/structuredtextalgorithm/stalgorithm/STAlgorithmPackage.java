@@ -201,6 +201,15 @@ public interface STAlgorithmPackage extends EPackage {
 	int ST_ALGORITHM_SOURCE = 2;
 
 	/**
+	 * The feature id for the '<em><b>Comments</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_ALGORITHM_SOURCE__COMMENTS = STCorePackage.ST_SOURCE__COMMENTS;
+
+	/**
 	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

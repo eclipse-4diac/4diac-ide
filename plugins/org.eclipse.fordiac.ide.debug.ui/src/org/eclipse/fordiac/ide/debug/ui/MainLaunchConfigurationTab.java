@@ -14,6 +14,8 @@ package org.eclipse.fordiac.ide.debug.ui;
 
 import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 
+import java.text.MessageFormat;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -33,6 +35,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -205,10 +208,12 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 	protected void initializeArgumentsFrom(final ILaunchConfiguration configuration) {
 		try {
 			arguments = LaunchConfigurationAttributes.getArguments(configuration, getDefaultArguments());
-			argumentsTable.setInput(arguments);
 		} catch (final CoreException e) {
-			FordiacLogHelper.logWarning(e.getMessage(), e);
+			ErrorDialog.openError(getShell(), Messages.MainLaunchConfigurationTab_ConfigurationError,
+					Messages.MainLaunchConfigurationTab_ErrorInitializingArguments, e.getStatus());
+			arguments = Collections.emptyList();
 		}
+		argumentsTable.setInput(arguments);
 	}
 
 	@Override
@@ -230,23 +235,29 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 	}
 
 	protected void updateArguments() {
-		final var oldArguments = arguments;
-		arguments = getDefaultArguments();
-		if (oldArguments != null && arguments != null) {
-			arguments.forEach(variable -> oldArguments.stream()
-					.filter(arg -> Objects.equals(arg.getName(), variable.getName())).findFirst().ifPresent(arg -> {
-						try {
-							variable.setValue(arg.getValue().toString());
-						} catch (final Exception e) {
-							FordiacLogHelper.logWarning(e.getMessage(), e);
-						}
-					}));
+		try {
+			final var oldArguments = arguments;
+			arguments = getDefaultArguments();
+			if (oldArguments != null && arguments != null) {
+				arguments.forEach(variable -> oldArguments.stream()
+						.filter(arg -> Objects.equals(arg.getName(), variable.getName())).findFirst().ifPresent(arg -> {
+							try {
+								variable.setValue(arg.getValue().toString());
+							} catch (final Exception e) {
+								FordiacLogHelper.logWarning(e.getMessage(), e);
+							}
+						}));
+			}
+		} catch (final CoreException e) {
+			ErrorDialog.openError(getShell(), Messages.MainLaunchConfigurationTab_ConfigurationError,
+					Messages.MainLaunchConfigurationTab_ErrorUpdatingArguments, e.getStatus());
+			arguments = Collections.emptyList();
 		}
 		argumentsTable.setInput(arguments);
 		updateLaunchConfigurationDialog();
 	}
 
-	protected abstract List<Variable<?>> getDefaultArguments();
+	protected abstract List<Variable<?>> getDefaultArguments() throws CoreException;
 
 	protected boolean filterTargetResource(final IResource resource) throws CoreException {
 		if (resource instanceof IFile) {
@@ -363,9 +374,10 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 					variable.setValue(value.toString());
 				} catch (final Exception e) {
 					FordiacLogHelper.logWarning(e.getMessage(), e);
-					MessageDialog.openError(getViewer().getControl().getShell(), "Invalid Value", //$NON-NLS-1$
-							String.format("'%s' is not a valid value for variable %s with type %s", value.toString(), //$NON-NLS-1$
-									variable.getName(), variable.getType().getName()));
+					MessageDialog.openError(getViewer().getControl().getShell(),
+							Messages.MainLaunchConfigurationTab_InvalidValueTitle,
+							MessageFormat.format(Messages.MainLaunchConfigurationTab_InvalidValueMessage,
+									value.toString(), variable.getName(), variable.getType().getName()));
 				}
 				// update element itself
 				getViewer().update(element, null);

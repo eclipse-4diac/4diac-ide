@@ -206,16 +206,6 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 
 		private final RoundedRectangle rect = new BorderedRoundedRectangle() {
 			@Override
-			protected void outlineShape(final Graphics graphics) {
-				// nothing to do here right now
-			}
-
-			@Override
-			protected void fillShape(final Graphics graphics) {
-				graphics.fillRoundRectangle(getBounds(), getCornerDimensions().width, getCornerDimensions().height);
-			}
-
-			@Override
 			public void setBounds(final Rectangle rect) {
 				super.setBounds(rect);
 				setCornerDimensions(new Dimension((rect.height * 2) / 3, rect.height));
@@ -255,6 +245,7 @@ public class SegmentEditPart extends AbstractViewEditPart implements NodeEditPar
 			main.setConstraint(rect, rectLayoutData);
 			rect.setBorder(new RoundedRectangleShadowBorder());
 			rect.add(instanceNameLabel);
+			rect.setOutline(false);
 			instanceNameLabel.setBorder(new MarginBorder(4, 0, 4, 0));
 
 			final GridLayout rectLayout = new GridLayout(3, false);

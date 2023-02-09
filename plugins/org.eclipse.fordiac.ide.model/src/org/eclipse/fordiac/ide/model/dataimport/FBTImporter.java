@@ -1,7 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2018 TU Wien/ACIN
- * 				 2020 Johannes Kepler University, Linz
+ * 				 2020, 2023 Johannes Kepler University, Linz
  *               2021 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
@@ -450,6 +450,9 @@ public class FBTImporter extends TypeImporter {
 		case LibraryElementTags.INTERNAL_VARS_ELEMENT:
 			parseInternalVars(type);
 			break;
+		case LibraryElementTags.INTERNAL_CONST_VARS_ELEMENT:
+			parseInternalConstVars(type);
+			break;
 		case LibraryElementTags.ALGORITHM_ELEMENT:
 			final Algorithm alg = parseAlgorithm();
 			if (null != alg) {
@@ -833,6 +836,22 @@ public class FBTImporter extends TypeImporter {
 			}
 			if (LibraryElementTags.FB_ELEMENT.equals(name)) {
 				parseInternalFB(type);
+				return true;
+			}
+			return false;
+		});
+	}
+
+	/** This method parses Internal Constant Variables of a BaseFBType.
+	 *
+	 * @param type - the BaseFBType of which the Internal Constant Variables will be parsed
+	 *
+	 * @throws TypeImportException the FBT import exception
+	 * @throws XMLStreamException */
+	private void parseInternalConstVars(final BaseFBType type) throws TypeImportException, XMLStreamException {
+		processChildren(LibraryElementTags.INTERNAL_CONST_VARS_ELEMENT, name -> {
+			if (LibraryElementTags.VAR_DECLARATION_ELEMENT.equals(name)) {
+				type.getInternalConstVars().add(parseVarDeclaration());
 				return true;
 			}
 			return false;

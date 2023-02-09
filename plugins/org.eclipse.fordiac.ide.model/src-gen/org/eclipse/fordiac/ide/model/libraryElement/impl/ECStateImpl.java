@@ -215,6 +215,16 @@ public class ECStateImpl extends EObjectImpl implements ECState {
 	 * @generated
 	 */
 	@Override
+	public String getQualifiedName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Position getPosition() {
 		if (position != null && position.eIsProxy()) {
 			InternalEObject oldPosition = (InternalEObject)position;

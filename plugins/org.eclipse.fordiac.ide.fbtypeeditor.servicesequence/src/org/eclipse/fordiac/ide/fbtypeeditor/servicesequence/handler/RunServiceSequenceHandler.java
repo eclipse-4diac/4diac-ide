@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -27,7 +28,6 @@ import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
@@ -44,24 +44,23 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 		for (final Object selected : selection.toList()) {
 			final ServiceSequence seq = getSequence(selected);
 			if (seq != null) {
-				try {
-					final BasicFBType fbType = EcoreUtil.copy((BasicFBType) seq.getService().getFBType());
-					if ((seq.getStartState() != null) && !seq.getStartState().isBlank()) { // $NON-NLS-1$
-						FBTestRunner.runFBTest(fbType, seq, seq.getStartState());
-					} else {
-						FBTestRunner.runFBTest(fbType, seq);
-					}
+				final BasicFBType fbType = EcoreUtil.copy((BasicFBType) seq.getService().getFBType());
+				Optional<String> result;
+				if ((seq.getStartState() != null) && !seq.getStartState().isBlank()) { // $NON-NLS-1$
+					result = FBTestRunner.runFBTest(fbType, seq, seq.getStartState());
+				} else {
+					result = FBTestRunner.runFBTest(fbType, seq);
+				}
+
+				if (result.isEmpty()) {
 					MessageDialog.openInformation(HandlerUtil.getActiveShell(event),
 							Messages.RunServiceSequenceHandler_Success,
 							Messages.RunServiceSequenceHandler_SequenceMatchesECC);
-
-				} catch (final Exception e) {
-					FordiacLogHelper.logError("Service Sequence was inconsistent", e); //$NON-NLS-1$
+				} else {
 					MessageDialog.openError(HandlerUtil.getActiveShell(event),
 							Messages.RunServiceSequenceHandler_InconsistencyDetected,
-							Messages.RunServiceSequenceHandler_SequenceDoesNotMatchECC);
+							Messages.RunServiceSequenceHandler_SequenceDoesNotMatchECC + ":\n" + result.get()); //$NON-NLS-1$
 				}
-
 			}
 		}
 		return Status.OK_STATUS;

@@ -90,8 +90,7 @@ public abstract class UntypedEditorInput implements IEditorInput {
 	 * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
 	 */
 	@Override
-	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		return null;
 	}
 

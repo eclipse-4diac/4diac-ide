@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.value;
 
+import java.text.MessageFormat;
+
 import org.eclipse.fordiac.ide.model.Messages;
 
 public final class StringValueConverter extends AbstractStringValueConverter {
@@ -23,7 +25,7 @@ public final class StringValueConverter extends AbstractStringValueConverter {
 	@Override
 	public String toValue(final String string) throws IllegalArgumentException {
 		if (string.length() < 1 || string.charAt(0) != '\'') {
-			throw new IllegalArgumentException(Messages.VALIDATOR_IllegalStringLiteral);
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, string));
 		}
 		return super.toValue(string);
 	}

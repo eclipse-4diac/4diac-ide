@@ -79,6 +79,10 @@ public class SubAppTImporter extends FBTImporter {
 				getElement().setFBNetwork(subAppImporter.getFbNetwork());
 				subAppImporter.parseFBNetwork(LibraryElementTags.SUBAPPNETWORK_ELEMENT);
 				break;
+			case LibraryElementTags.ATTRIBUTE_ELEMENT:
+				parseGenericAttributeNode(getElement());
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				break;
 			default:
 				return false;
 			}

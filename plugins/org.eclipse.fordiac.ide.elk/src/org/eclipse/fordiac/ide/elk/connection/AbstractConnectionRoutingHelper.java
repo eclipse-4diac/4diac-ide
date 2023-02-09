@@ -87,9 +87,9 @@ abstract class AbstractConnectionRoutingHelper {
 	private void addEditorPins(final ConnectionLayoutMapping mapping) {
 		final EditorWithInterfaceEditPart editor = (EditorWithInterfaceEditPart) mapping.getParentElement();
 		final List<SubAppInternalInterfaceEditPart> pins = (List<SubAppInternalInterfaceEditPart>) editor.getChildren()
-			.stream()
-			.filter(InterfaceEditPart.class::isInstance)
-			.collect(Collectors.toList());
+				.stream()
+				.filter(InterfaceEditPart.class::isInstance)
+				.collect(Collectors.toList());
 
 		for (final InterfaceEditPart pin : pins) {
 			final ElkPort port = getPort(null, pin, mapping, true);
@@ -256,7 +256,7 @@ abstract class AbstractConnectionRoutingHelper {
 		node.setDimensions(bounds.preciseWidth() + GROUP_PADDING, bounds.preciseHeight() + GROUP_PADDING);
 
 		mapping.getGroups().add(group);
-	};
+	}
 
 	abstract void saveConnections(final ConnectionLayoutMapping mapping, final InterfaceEditPart ie);
 

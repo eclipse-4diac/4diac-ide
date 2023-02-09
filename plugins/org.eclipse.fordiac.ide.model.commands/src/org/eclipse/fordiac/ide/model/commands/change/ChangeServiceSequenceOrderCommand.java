@@ -14,7 +14,6 @@
 
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.fordiac.ide.model.commands.internal.AbstractChangeListElementOrderCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 
 public class ChangeServiceSequenceOrderCommand extends AbstractChangeListElementOrderCommand<ServiceSequence> {

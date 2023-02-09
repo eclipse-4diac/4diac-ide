@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.export.forte_lua.st
 
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
-import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STReturn
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock
@@ -25,7 +24,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlo
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-
 
 @FinalFieldsConstructor
 class STFunctionSupport extends StructuredTextSupport {

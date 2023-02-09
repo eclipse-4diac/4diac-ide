@@ -36,7 +36,6 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.application.wizards.StructUpdateDialog;
 import org.eclipse.fordiac.ide.datatypeedito.wizards.SaveAsStructTypeWizard;
 import org.eclipse.fordiac.ide.datatypeeditor.Messages;
 import org.eclipse.fordiac.ide.datatypeeditor.widgets.StructViewingComposite;
@@ -46,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
+import org.eclipse.fordiac.ide.model.search.dialog.StructUpdateDialog;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
@@ -90,7 +90,7 @@ public class DataTypeEditor extends EditorPart implements CommandStackEventListe
 ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListener {
 
 	private final CommandStack commandStack = new CommandStack();
-	private StructViewingComposite editComposite;
+	private StructViewingComposite structComposite;
 	private Composite errorComposite;
 	private boolean importFailed;
 	private boolean outsideWorkspace;
@@ -128,7 +128,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	public void stackChanged(final CommandStackEvent event) {
 		updateActions(stackActions);
 		firePropertyChange(IEditorPart.PROP_DIRTY);
-		editComposite.getViewer().refresh();
+		structComposite.refresh();
 	}
 
 	@Override
@@ -167,7 +167,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 
 	private void createSaveDialog() {
 		final String[] labels = { Messages.StructAlteringButton_SaveAndUpdate, Messages.StructAlteringButton_SaveAs,
-				Messages.StructAlteringButton_Cancel };
+				SWT.getMessage("SWT_Cancel") }; //$NON-NLS-1$
 
 		structSaveDialog = new StructUpdateDialog(null, Messages.StructViewingComposite_Headline, null, "",
 				MessageDialog.NONE, labels, DEFAULT_BUTTON_INDEX, dataTypeEntry);
@@ -310,8 +310,8 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 	@Override
 	public void createPartControl(final Composite parent) {
 		if (dataTypeEntry.getTypeEditable() != null && (!importFailed)) {
-			editComposite = new StructViewingComposite(parent, 1, commandStack, dataTypeEntry, this);
-			editComposite.createPartControl(parent);
+			structComposite = new StructViewingComposite(parent, 1, commandStack, dataTypeEntry, this);
+			structComposite.createPartControl(parent);
 			TableWidgetFactory.enableCopyPasteCut(this);
 		} else if (importFailed) {
 			createErrorComposite(parent, Messages.ErrorCompositeMessage);
@@ -334,10 +334,10 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 
 	@Override
 	public void setFocus() {
-		if (null == editComposite) {
+		if (null == structComposite) {
 			errorComposite.setFocus();
 		} else {
-			editComposite.setFocus();
+			structComposite.setFocus();
 		}
 	}
 
@@ -414,7 +414,7 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 			removeListenerFromDataTypeObj();
 			dataTypeEntry.setTypeEditable(null);
 			importType(getEditorInput());
-			editComposite.reload();
+			structComposite.reload();
 			addListenerToDataTypeObj();
 		} catch (final PartInitException e) {
 			FordiacLogHelper

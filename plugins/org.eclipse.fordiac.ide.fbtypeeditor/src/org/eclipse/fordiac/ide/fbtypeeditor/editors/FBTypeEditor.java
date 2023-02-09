@@ -68,6 +68,7 @@ import org.eclipse.gef.commands.CommandStackEventListener;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorActionBarContributor;
 import org.eclipse.ui.IEditorInput;
@@ -351,12 +352,22 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		if (adapter == IGotoMarker.class) {
 			return adapter.cast(this);
 		}
-		T result = super.getAdapter(adapter);
-		if (result == null) {
-			result = editors.stream().map(innerEditor -> Adapters.adapt(innerEditor, adapter)).filter(Objects::nonNull)
-					.findFirst().orElse(null);
+
+		if (isEditorActive()) {
+			// we should only call super if the editor is active otherwise we may get disposed errors
+			T result = super.getAdapter(adapter);
+			if (result == null) {
+				result = editors.stream().map(innerEditor -> Adapters.adapt(innerEditor, adapter))
+						.filter(Objects::nonNull).findFirst().orElse(null);
+			}
+			return result;
 		}
-		return result;
+		return null;
+	}
+
+	private boolean isEditorActive() {
+		final int index = getActivePage();
+		return index != -1 && !((CTabFolder) getContainer()).getItem(index).isDisposed();
 	}
 
 	public void handleContentOutlineSelection(final ISelection selection) {

@@ -11,13 +11,6 @@
       </editor>
    </extension>
    <extension
-         point="org.eclipse.fordiac.ide.fbtypeeditor.ecc.algorithmEditor">
-      <algorithmEditor
-            class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.editors.TextEditorCreator"
-            language="AnyText">
-      </algorithmEditor>
-   </extension>
-   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
@@ -65,6 +58,12 @@
          </propertyTab>
          <propertyTab
                afterTab="property.tab.ivars"
+               category="ecc"
+               id="property.tab.icvars"
+               label="Internal Const Vars">
+         </propertyTab>
+         <propertyTab
+               afterTab="property.tab.icvars"
                category="ecc"
                id="property.tab.ifbs"
                label="Internal FBs">

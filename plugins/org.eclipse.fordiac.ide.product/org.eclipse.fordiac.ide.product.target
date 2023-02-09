@@ -26,22 +26,22 @@
 			<unit id="org.eclipse.emf.compare.source.feature.group" version="3.3.19.202209051432"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/eclipse/updates/4.25"/>
-			<unit id="org.eclipse.jdt.feature.group" version="3.18.1300.v20220831-1800"/>
-			<unit id="org.eclipse.pde.feature.group" version="3.14.1300.v20220831-1800"/>
-			<unit id="org.eclipse.platform.sdk" version="4.25.0.I20220831-1800"/>
-		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/releases/2022-09"/>
-			<unit id="org.eclipse.egit.feature.group" version="6.3.0.202209071007-r"/>
-			<unit id="org.eclipse.emf.sdk.feature.group" version="2.31.0.v20220817-1401"/>
-			<unit id="org.eclipse.gef.sdk.feature.group" version="3.14.0.202206170857"/>
-			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.17.1.v20220309-0840"/>
-			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.28.0.v20220829-0555"/>
-		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/elk/updates/nightly"/>
 			<unit id="org.eclipse.elk.libavoid.feature.feature.group" version="0.0.0"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://download.eclipse.org/eclipse/updates/4.26"/>
+			<unit id="org.eclipse.jdt.feature.group" version="3.18.1400.v20221123-1800"/>
+			<unit id="org.eclipse.pde.feature.group" version="3.14.1400.v20221123-1800"/>
+			<unit id="org.eclipse.platform.sdk" version="4.26.0.I20221123-1800"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://download.eclipse.org/releases/2022-12"/>
+			<unit id="org.eclipse.egit.feature.group" version="6.4.0.202211300538-r"/>
+			<unit id="org.eclipse.emf.sdk.feature.group" version="2.32.0.v20221121-1400"/>
+			<unit id="org.eclipse.gef.sdk.feature.group" version="3.15.0.202211301913"/>
+			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.18.0.v20221121-1436"/>
+			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.29.0.v20221121-1054"/>
 		</location>
 	</locations>
 </target>

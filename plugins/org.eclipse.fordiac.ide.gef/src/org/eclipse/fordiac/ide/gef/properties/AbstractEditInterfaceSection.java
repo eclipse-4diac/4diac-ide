@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017, 2018 fortiss GmbH
  * 				 2018, 2019, 2020 Johannes Kepler University Linz
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +18,7 @@
  *               - cleaned command stack handling for property sections
  *   Daniel Lindhuber - added copy/paste and the context menu
  *   				  - made typedropdown methods overrideable
+ *   Martin Jobst - add initial value cell editor support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
@@ -61,12 +64,13 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class AbstractEditInterfaceSection extends AbstractSection implements I4diacNatTableUtil {
+public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> extends AbstractSection
+implements I4diacNatTableUtil {
 
-	protected ListDataProvider inputProvider;
+	protected ListDataProvider<T> inputProvider;
 	protected NatTable inputTable;
 
-	protected ListDataProvider outputProvider;
+	protected ListDataProvider<T> outputProvider;
 	protected NatTable outputTable;
 
 	protected Map<String, List<String>> typeSelection = new HashMap<>();
@@ -161,7 +165,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	@Override
 	protected void setInputInit() {
-		setTableInput();
+		// nothing to be done here
 	}
 
 	@Override
@@ -172,7 +176,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 			setTableInput();
 		}
 		commandStack = commandStackBuffer;
-		initTypeSelection(getDataTypeLib());
 		inputTable.refresh();
 		outputTable.refresh();
 	}
@@ -216,8 +219,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		outputTable.refresh();
 	}
 
-
-	public DataLayer setupDataLayer(final ListDataProvider outputProvider) {
+	public DataLayer setupDataLayer(final ListDataProvider<T> outputProvider) {
 		final DataLayer dataLayer = new DataLayer(outputProvider);
 		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
 
@@ -227,6 +229,8 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 			}
 			if (isEditable() && columnPosition == I4diacNatTableUtil.TYPE) {
 				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+			} else if (isEditable() && columnPosition == I4diacNatTableUtil.INITIAL_VALUE) {
+				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
 			} else if (columnPosition == I4diacNatTableUtil.NAME || columnPosition == I4diacNatTableUtil.COMMENT) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			}

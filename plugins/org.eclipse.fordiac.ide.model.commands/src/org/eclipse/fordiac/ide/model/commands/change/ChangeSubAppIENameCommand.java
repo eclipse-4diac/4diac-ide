@@ -13,21 +13,22 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
-public class ChangeSubAppIENameCommand extends AbstractChangeElementNameWithOppositeCommand {
+public class ChangeSubAppIENameCommand extends AbstractChangeElementNameWithOppositeCommand implements ConnectionLayoutTagger {
 
-	public ChangeSubAppIENameCommand(IInterfaceElement element, String name) {
+	public ChangeSubAppIENameCommand(final IInterfaceElement element, final String name) {
 		super(element, name);
 	}
 
 	@Override
-	protected INamedElement getOppositeElement(INamedElement element) {
+	protected INamedElement getOppositeElement(final INamedElement element) {
 		if ((null != ((IInterfaceElement) element).getFBNetworkElement())
 				&& ((IInterfaceElement) element).getFBNetworkElement().isMapped()) {
-			FBNetworkElement oppositeElement = ((IInterfaceElement) element).getFBNetworkElement().getOpposite();
+			final FBNetworkElement oppositeElement = ((IInterfaceElement) element).getFBNetworkElement().getOpposite();
 			return oppositeElement.getInterfaceElement(element.getName());
 		}
 		return null;

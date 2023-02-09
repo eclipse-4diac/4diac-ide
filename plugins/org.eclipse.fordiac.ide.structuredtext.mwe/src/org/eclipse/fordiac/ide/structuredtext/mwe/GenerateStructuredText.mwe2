@@ -16,4 +16,5 @@ Workflow {
 	component = @GenerateSTCore {}
 	component = @GenerateSTFunction {}
 	component = @GenerateSTAlgorithm {}
+	component = @GenerateGlobalConstants {}
 }

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,12 +11,15 @@
  * Contributors:
  *   Fabio Gandolfi
  *     - initial API and implementation and/or initial documentation
+ *   Martin Jobst
+ *     - add clauses for handling error markers
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.model.edit.helper;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.swt.SWT;
@@ -35,8 +39,14 @@ public final class InitialValueHelper {
 				return varDec.getValue().getValue();
 			}
 			return getDefaultValue(element);
+		} else if (element instanceof ErrorMarkerInterface) {
+			final ErrorMarkerInterface marker = (ErrorMarkerInterface) element;
+			if (hasInitalValue(element)) {
+				return marker.getValue().getValue();
+			}
+			// no default value for error markers
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	public static String getDefaultValue(final Object element) {
@@ -51,7 +61,7 @@ public final class InitialValueHelper {
 				FordiacLogHelper.logWarning("could not aquire VarDec default value", exc); //$NON-NLS-1$
 			}
 		}
-		return "";
+		return ""; //$NON-NLS-1$
 	}
 
 	public static Color getForegroundColor(final Object element) {
@@ -63,8 +73,16 @@ public final class InitialValueHelper {
 	}
 
 	public static boolean hasInitalValue(final Object element) {
-		return (((VarDeclaration) element).getValue() != null
-				&& !((VarDeclaration) element).getValue().getValue().isEmpty());
+		if (element instanceof VarDeclaration) {
+			final VarDeclaration varDec = (VarDeclaration) element;
+			return varDec.getValue() != null && varDec.getValue().getValue() != null
+					&& !varDec.getValue().getValue().isEmpty();
+		} else if (element instanceof ErrorMarkerInterface) {
+			final ErrorMarkerInterface marker = (ErrorMarkerInterface) element;
+			return marker.getValue() != null && marker.getValue().getValue() != null
+					&& !marker.getValue().getValue().isEmpty();
+		}
+		return false;
 	}
 
 }

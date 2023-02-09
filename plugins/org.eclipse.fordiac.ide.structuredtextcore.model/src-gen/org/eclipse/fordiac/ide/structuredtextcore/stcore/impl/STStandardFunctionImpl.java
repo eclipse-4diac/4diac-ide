@@ -373,6 +373,16 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 	}
 
 	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getQualifiedName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
+	}
+
+	/**
 	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
 	 */
@@ -385,8 +395,9 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return ((InternalEList<?>)getOutputParameters()).basicRemove(otherEnd, msgs);
 			case STCorePackage.ST_STANDARD_FUNCTION__IN_OUT_PARAMETERS:
 				return ((InternalEList<?>)getInOutParameters()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -415,8 +426,9 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return getInOutParameters();
 			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
 				return getOnlySupportedBy();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -458,8 +470,10 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				getOnlySupportedBy().clear();
 				getOnlySupportedBy().addAll((Collection<? extends String>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -496,8 +510,10 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
 				getOnlySupportedBy().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -525,8 +541,9 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 				return inOutParameters != null && !inOutParameters.isEmpty();
 			case STCorePackage.ST_STANDARD_FUNCTION__ONLY_SUPPORTED_BY:
 				return onlySupportedBy != null && !onlySupportedBy.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**
@@ -542,7 +559,7 @@ public class STStandardFunctionImpl extends MinimalEObjectImpl.Container impleme
 		result.append(name);
 		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
-		result.append(", ReturnValueComment: "); //$NON-NLS-1$
+		result.append(", returnValueComment: "); //$NON-NLS-1$
 		result.append(returnValueComment);
 		result.append(", signature: "); //$NON-NLS-1$
 		result.append(signature);

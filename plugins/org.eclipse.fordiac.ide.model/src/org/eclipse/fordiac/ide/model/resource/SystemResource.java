@@ -28,9 +28,10 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
-import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
@@ -50,11 +51,7 @@ public class SystemResource extends ResourceImpl {
 		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(fbtFile.getProject());
 		final SystemEntry sysEntry = typeLib.createSystemEntry(fbtFile);
 
-		final SystemImporter importer = new SystemImporter(fbtFile);
-		importer.loadElement();
-		final AutomationSystem element = importer.getElement();
-		element.setTypeEntry(sysEntry);
-		getContents().add(element);
+		getContents().add(sysEntry.getTypeEditable());
 	}
 
 	@Override
@@ -65,6 +62,8 @@ public class SystemResource extends ResourceImpl {
 	private static void saveSystem(final AutomationSystem system, final OutputStream outputStream) {
 		final TypeEntry typeEntry = system.getTypeEntry();
 		Assert.isNotNull(typeEntry); // there should be no system without type entry
+
+		typeEntry.setTypeEditable(EcoreUtil.copy((LibraryElement) system));
 		typeEntry.setLastModificationTimestamp(typeEntry.getFile().getModificationStamp());
 		AbstractTypeExporter.saveType(typeEntry, outputStream);
 	}

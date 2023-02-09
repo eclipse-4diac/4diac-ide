@@ -31,7 +31,7 @@ public class RoundedRectangleShadowBorder extends AbstractShadowBorder {
 			cornerRadius = ((RoundedRectangle) figure).getCornerDimensions().getExpanded(2, 2);
 		}
 
-		final Rectangle shadowRect = figure.getBounds().getExpanded(2, 2);
+		final Rectangle shadowRect = figure.getClientArea().getExpanded(2, 2);
 		final Rectangle clipRect = shadowRect.getCopy();
 		clipRect.width += SHADOW_SIZE;
 		clipRect.height += SHADOW_SIZE;

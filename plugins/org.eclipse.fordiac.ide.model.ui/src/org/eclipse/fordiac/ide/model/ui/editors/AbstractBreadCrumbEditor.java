@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2020, 2021 Primetals Technologies Germany GmbH, Johannes Kepler University Linz
+ * 				 2022 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,6 +16,7 @@
  *     - initial implementation of breadcrumb navigation location
  *   Michael Oberlehner, Alois Zoitl
  *               - implemented save and restore state
+ *   Daniel Lindhuber - connection auto layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.ui.editors;
 
@@ -23,11 +25,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.resources.IMarker;
+import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -43,6 +47,7 @@ import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
+import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -58,7 +63,10 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.INavigationLocationProvider;
 import org.eclipse.ui.IPersistableEditor;
+import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.EditorPart;
 import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
@@ -71,6 +79,29 @@ INavigationLocationProvider, IPersistableEditor {
 	private static final String TAG_GRAPHICAL_VIEWER_ZOOM = "FORDIAC_GRAPHICAL_VIEWER_ZOOM"; //$NON-NLS-1$
 	private static final String TAG_GRAPHICAL_VIEWER_HOR_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_HOR_SCROLL"; //$NON-NLS-1$
 	private static final String TAG_GRAPHICAL_VIEWER_VER_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_VER_SCROLL"; //$NON-NLS-1$
+
+	@SuppressWarnings("unchecked")
+	private final CommandStackEventListener listener = event -> {
+		if (event.isPostChangeEvent() && isConnectionLayoutPreferenceTicked()) {
+			/*
+			 * FBNetworkElementSetPositionCommand
+			 * ResizeGroupOrSubappCommand
+			 * AbstractConnectionCreateCommand
+			 * ToggleSubAppRepresentationCommand
+			 * AbstractChangeContainerBoundsCommand
+			 * AbstractCreateFBNetworkElementCommand
+			 * ChangeFBNetworkElementName
+			 * ChangeSubAppIENameCommand
+			 * AbstractUpdateFBNElementCommand
+			 */
+			if (event.getCommand() instanceof ConnectionLayoutTagger
+					|| (event.getCommand() instanceof CompoundCommand
+							&& ((CompoundCommand) event.getCommand()).getCommands().stream().anyMatch(ConnectionLayoutTagger.class::isInstance))) {
+				getActiveEditor().getAdapter(GraphicalViewer.class).flush();
+				triggerConnectionLayout();
+			}
+		}
+	};
 
 	private Map<Object, Integer> modelToEditorNum = new HashMap<>();
 
@@ -103,6 +134,7 @@ INavigationLocationProvider, IPersistableEditor {
 		// only add the selection change listener when our editor is full up
 		breadcrumb.addSelectionChangedListener(
 				event -> handleBreadCrumbSelection(((StructuredSelection) event.getSelection()).getFirstElement()));
+		getCommandStack().addCommandStackEventListener(listener);
 	}
 
 	private void initializeBreadcrumb() {
@@ -212,6 +244,7 @@ INavigationLocationProvider, IPersistableEditor {
 	@Override
 	public void dispose() {
 		if (null != getCommandStack()) {
+			getCommandStack().removeCommandStackEventListener(listener);
 			getCommandStack().removeCommandStackEventListener(this);
 		}
 		super.dispose();
@@ -332,6 +365,25 @@ INavigationLocationProvider, IPersistableEditor {
 			}
 		}
 
+	}
+
+	private boolean isConnectionLayoutPreferenceTicked() {
+		return InstanceScope.INSTANCE.getNode("org.eclipse.fordiac.ide.gef").getBoolean("ConnectionAutoLayout", false);
+	}
+
+	private static void triggerConnectionLayout() {
+		final IHandlerService handlerService = getHandlerService();
+		try {
+			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.connectionLayout", null); //$NON-NLS-1$
+		} catch (final Exception ex) {
+			throw new RuntimeException("Could not execute layout command"); //$NON-NLS-1$
+		}
+	}
+
+	private static IHandlerService getHandlerService() {
+		final IWorkbenchPartSite site = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActivePart().getSite();
+		final IHandlerService handlerService = site.getService(IHandlerService.class);
+		return handlerService;
 	}
 
 	protected void showReloadErrorMessage(final String path, final String whatEditor) {

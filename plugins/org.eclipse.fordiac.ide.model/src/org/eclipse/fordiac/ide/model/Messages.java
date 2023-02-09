@@ -221,6 +221,7 @@ public final class Messages extends NLS {
 	public static String FBNetworkImporter_ConnectionDestinationNotFound;
 	public static String FBNetworkImporter_ConnectionSourceMissing;
 	public static String FBNetworkImporter_ConnectionSourceNotFound;
+	public static String FBNetworkImporter_MultipleInputs;
 
 	public static String FBNetworkImporter_ConnectionTypeMismatch;
 
@@ -244,6 +245,8 @@ public final class Messages extends NLS {
 	public static String VALIDATOR_UnevenlyQuotedStringLiteral;
 	public static String VALIDATOR_IllegalEscapeInStringLiteral;
 	public static String VALIDATOR_InvalidTimeOfDayLiteral;
+
+	public static String VALIDATOR_InvalidTimeUnit;
 
 	public static String Error_SelfInsertion;
 	public static String Error_RecursiveType;

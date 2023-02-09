@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  *               2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
@@ -12,6 +12,7 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Martin Melik Merkumians - updated exporter to correctly handle CHAR/WCHAR
  *     - update to preserve values of non specified FB call parameters
+ * 	   - adds export for global constants
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.st
 
@@ -27,7 +28,9 @@ import java.util.Set
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 import org.eclipse.fordiac.ide.model.data.AnyStringType
+import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.WcharType
@@ -78,6 +81,7 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+import static extension org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.util.GlobalConstantsUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
 import static extension org.eclipse.xtext.util.Strings.convertToJavaString
@@ -112,7 +116,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateInitializerExpression(STArrayInitializerExpression expr) //
-	'''{«FOR elem : expr.values SEPARATOR ", "»«elem.generateArrayInitElement»«ENDFOR»}'''
+	'''«(expr.expectedType as DataType).generateTypeName»{«FOR elem : expr.values SEPARATOR ", "»«elem.generateArrayInitElement»«ENDFOR»}'''
 
 	def protected CharSequence generateArrayInitElement(STArrayInitElement elem) //
 	'''«IF elem.initExpressions.empty»«elem.indexOrInitExpression.generateInitializerExpression»«ELSE»«elem.generateMultiArrayInitElement»«ENDIF»'''
@@ -121,7 +125,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''«FOR i : 0..<(elem.indexOrInitExpression as STElementaryInitializerExpression).value.integerFromConstantExpression SEPARATOR ", "»«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateInitializerExpression»«ENDFOR»«ENDFOR»'''
 
 	def protected dispatch CharSequence generateInitializerExpression(STStructInitializerExpression expr) //
-	'''{«FOR elem : expr.generateStructInitElements SEPARATOR ", "»«elem»«ENDFOR»}'''
+	'''«(expr.expectedType as DataType).generateTypeName»(«FOR elem : expr.generateStructInitElements SEPARATOR ", "»«elem»«ENDFOR»)'''
 
 	def protected Iterable<CharSequence> generateStructInitElements(STStructInitializerExpression expr) {
 		expr.mappedStructInitElements.entrySet.map[key.generateStructInitElement(value)]
@@ -270,7 +274,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			emptyList
 		}
 	}
-	
+
 	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument,
 		STFeatureExpression expr) {
 		switch (expr.feature) {
@@ -283,7 +287,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument) {
-			if(argument === null) parameter.generateVariableDefaultValue else argument.generateExpression
+		if(argument === null) parameter.generateVariableDefaultValue else argument.generateExpression
 	}
 
 	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STExpression argument) {
@@ -385,7 +389,12 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateFeatureName(VarDeclaration feature) //
 	'''«IF feature.rootContainer instanceof BaseFBType»st_«ENDIF»«feature.name»()'''
 
-	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) '''st_lv_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) {
+		switch (feature.eContainer) {
+			STVarGlobalDeclarationBlock: '''st_global_«feature.name»'''
+			default: '''st_lv_«feature.name»'''
+		}
+	}
 
 	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''func_«feature.name»'''
 
@@ -418,6 +427,18 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		]
 	}
 
+	def protected CharSequence generateTypeName(DataType type) {
+		switch (type) {
+			ArrayType:
+				type.subranges.reverseView.fold(type.baseType.generateTypeName) [ result, subrange |
+					val fixed = subrange.setLowerLimit && subrange.setUpperLimit
+					'''«IF fixed»CIEC_ARRAY_FIXED«ELSE»CIEC_ARRAY_VARIABLE«ENDIF»<«result»«IF fixed», «subrange.lowerLimit», «subrange.upperLimit»«ENDIF»>'''
+				].toString
+			default:
+				ForteNgExportUtil.generateTypeName(type)
+		}
+	}
+
 	def protected int getIntegerFromConstantExpression(STExpression expr) {
 		try {
 			((expr as STNumericLiteral).value as BigInteger).intValueExact
@@ -427,10 +448,20 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		}
 	}
 
+	/**
+	 * Get contained dependencies of an object defined in the current source
+	 * @param object An object defined/contained <b>in the current source</b>
+	 * @return The list of objects <b>from other sources/headers</b> on which <t>object</t> (recursively) depends
+	 */
 	def protected Set<INamedElement> getContainedDependencies(EObject object) {
 		object.<EObject>getAllProperContents(true).toIterable.flatMap[dependencies].toSet
 	}
 
+	/**
+	 * Get dependencies of an object defined in the current source
+	 * @param object An object defined/contained <b>in the current source</b>
+	 * @return The list of objects <b>from other sources/headers</b> on which <t>object</t> depends
+	 */
 	def protected Iterable<INamedElement> getDependencies(EObject object) {
 		switch (object) {
 			STVarDeclaration:
@@ -447,12 +478,21 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				#[object.type]
 			STDateAndTimeLiteral:
 				#[object.type]
-			STFeatureExpression:
-				object.feature.dependencies
+			STFeatureExpression: // feature expressions may refer to definitions contained in other sources
+				switch (feature : object.feature) {
+					STVarDeclaration case feature.eContainer instanceof STVarGlobalDeclarationBlock:
+						#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
+							name = feature.sourceName
+						]]
+					STFunction:
+						#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
+							name = feature.sourceName
+						]]
+					default:
+						emptySet
+				}
 			STFunction:
-				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
-					name = object.sourceName
-				]]
+				object.returnType !== null ? #[object.returnType] : emptySet
 			default:
 				emptySet
 		}

@@ -355,9 +355,9 @@ public class SubAppForFBNetworkEditPart extends AbstractFBNElementEditPart imple
 	}
 
 	@Override
-	public Object getAdapter(final Class key) {
+	public <T> T getAdapter(final Class<T> key) {
 		if (key == SubApp.class) {
-			return getModel();
+			return key.cast(getModel());
 		}
 		return super.getAdapter(key);
 	}

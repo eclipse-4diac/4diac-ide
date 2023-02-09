@@ -24,7 +24,6 @@ class EvaluatorThreadGroup extends ThreadGroup {
 
 	new(String name) {
 		super(name)
-		daemon = true
 	}
 
 	def synchronized void attachDebugger(EvaluatorDebugger debugger) {

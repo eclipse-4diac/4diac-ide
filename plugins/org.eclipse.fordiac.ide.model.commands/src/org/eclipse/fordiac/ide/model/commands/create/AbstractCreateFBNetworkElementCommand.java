@@ -16,6 +16,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -26,7 +27,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.SubAppTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.Command;
 
-public abstract class AbstractCreateFBNetworkElementCommand extends Command {
+public abstract class AbstractCreateFBNetworkElementCommand extends Command implements ConnectionLayoutTagger {
 
 	private final FBNetworkElement element;
 	private final FBNetwork fbNetwork;

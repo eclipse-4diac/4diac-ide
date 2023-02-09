@@ -13,26 +13,22 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.commands.Command;
 
 public class TransferCommentsOfConnectedPinsCommand extends Command {
-	private final Map<IInterfaceElement, ArrayList<IInterfaceElement>> commentsToCopy;
+	private final Map<IInterfaceElement, List<IInterfaceElement>> commentsToCopy;
 
 	public TransferCommentsOfConnectedPinsCommand(
-			final Map<IInterfaceElement, ArrayList<IInterfaceElement>> commentsToCopy) {
+			final Map<IInterfaceElement, List<IInterfaceElement>> commentsToCopy) {
 		this.commentsToCopy = commentsToCopy;
 	}
 
 	@Override
 	public void execute() {
-
-		commentsToCopy.forEach((key, elements) -> elements.forEach(e -> {
-			e.setComment(key.getComment());
-		})
-				);
+		commentsToCopy.forEach((key, elements) -> elements.forEach(e -> e.setComment(key.getComment())));
 	}
 }

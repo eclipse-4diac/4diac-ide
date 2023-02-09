@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
- *               2022 Martin Erich Jobst
+ *               2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,7 @@
  *   Martin Jobst
  *       - validation for reserved identifiers
  *       - validation for calls
+ *       - validation for truncated string literals
  *   Martin Melik Merkumians
  * 		- validation for duplicate names on FUNCTIONs
  *******************************************************************************/
@@ -21,6 +22,7 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 
 import com.google.inject.Inject
 import java.util.stream.Stream
+import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
@@ -567,6 +569,39 @@ class STFunctionValidatorTest {
 	}
 
 	@Test
+	def void testStringLiteralTruncated() {
+		val func1 = '''
+			FUNCTION hubert
+			VAR
+				str : STRING[5] := '4diac IDE';
+			END_VAR
+			END_FUNCTION
+		'''.parse
+		func1.assertNoErrors
+		func1.assertWarning(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.TRUNCATED_LITERAL)
+		val func2 = '''
+			FUNCTION hubert
+			VAR
+				str : WSTRING[5] := "4diac IDE";
+			END_VAR
+			END_FUNCTION
+		'''.parse
+		func2.assertNoErrors
+		func2.assertWarning(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.TRUNCATED_LITERAL)
+		val func3 = '''
+			FUNCTION hubert
+			VAR
+				str1 : STRING := "4diac IDE";
+				str2 : STRING[5] := "4diac";
+				str3 : WSTRING := "4diac IDE";
+				str4 : WSTRING[5] := "4diac";
+			END_VAR
+			END_FUNCTION
+		'''.parse
+		func3.assertNoIssue(STCorePackage.eINSTANCE.STStringLiteral, STCoreValidator.TRUNCATED_LITERAL)
+	}
+
+	@Test
 	def void testReservedIdentifierErrorValidator() {
 		'''
 		FUNCTION hubert
@@ -940,5 +975,124 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.DUPLICATE_VARIABLE_NAME,
 			"Variable with duplicate name bol1")
+	}
+	
+	@Test
+	def void testAnyIntRangesAreValid(){
+		'''
+		FUNCTION ArrayTestDeclarationTest
+		VAR
+			arrayTest : ARRAY [-1 .. 65535] OF REAL;
+		END_VAR
+		END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+	
+	def static Stream<Arguments> invalidArrayRangeOrMaxLengthArgument() {
+		return Stream.of(Arguments.of("REAL#1.0", "REAL"), Arguments.of("LREAL#1.0", "LREAL"),
+			Arguments.of("\"3\"", "WCHAR"), Arguments.of("'5'", "CHAR"),
+			Arguments.of("WSTRING#\"4\"", "WSTRING"), Arguments.of("STRING#'6'", "STRING"),
+			Arguments.of("T#4h", "TIME"), Arguments.of("TOD#12:00:00", "TOD"),
+			Arguments.of("DATE#20-03-2017", "DATE"), Arguments.of("DT#20-03-2017-16:48:00", "DT"),
+			Arguments.of("LT#4h", "LTIME"), Arguments.of("LTOD#12:00:00", "LTOD"),
+			Arguments.of("LDATE#20-03-2017", "LDATE"), Arguments.of("LDT#20-03-2017-16:48:00", "LDT"))
+	}
+	
+	@ParameterizedTest(name="{index}: argument {0}")
+	@MethodSource("invalidArrayRangeOrMaxLengthArgument")
+	def void testNonAnyIntRangesAreInvalid(String argument, String argumentTypeName) {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				arrayTest : ARRAY [«argument» .. 65535] OF REAL;
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STBinaryExpression, STCoreValidator.INDEX_RANGE_TYPE_INVALID,
+			'''Type «argumentTypeName» is not valid for defining ranges. Ranges must be of type ANY_INT''')
+	}
+	
+	def static Stream<Arguments> validTypesForMaxLengthSpecifier() {
+		DataTypeLibrary.nonUserDefinedDataTypes.stream.filter[(it instanceof AnyStringType)].map[arguments(it.name)]
+	}
+	
+	@ParameterizedTest(name="{index}: argument {0}")
+	@MethodSource("validTypesForMaxLengthSpecifier")
+	def void testTypesValidForMaxLength(String typeName) {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				testVar : «typeName» [5];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+	
+	def static Stream<Arguments> invalidTypesForMaxLengthSpecifier() {
+		DataTypeLibrary.nonUserDefinedDataTypes.stream.filter[!(it instanceof AnyStringType)].map[arguments(it.name)]
+	}
+	
+	@ParameterizedTest(name="{index}: argument {0}")
+	@MethodSource("invalidTypesForMaxLengthSpecifier")
+	def void testTypesInvalidForMaxLength(String typeName) {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				testVar : «typeName» [5];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.MAX_LENGTH_NOT_ALLOWED,
+			"For types not of ANY_STRING no maximum length may be defined")
+	}
+	
+	@ParameterizedTest(name="{index}: argument {0}")
+	@MethodSource("invalidArrayRangeOrMaxLengthArgument")
+	def void testInvalidMaxLengthTypes(String argument, String argumentTypeName) {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				testVar : STRING[«argument»];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration,
+			STCoreValidator.
+				MAX_LENGTH_TYPE_INVALID, '''Type «argumentTypeName» is not valid to specify an ANY_STRING max length. Max length must be of type ANY_INT''')
+	}
+	
+	@Test
+	def void testValidArrayAccessOperator() {
+		'''
+		FUNCTION ArrayTestDeclarationTest
+			VAR
+				arrayTest : ARRAY [0 .. 10] OF REAL;
+			END_VAR
+		arrayTest[0] := arrayTest[1];
+		END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+	
+	@Test
+	def void testOutOfBoundsArrayAccessOperator() {
+		'''
+			FUNCTION ArrayTestDeclarationTest
+				VAR
+					arrayTest : ARRAY [0 .. 10] OF REAL;
+				END_VAR
+			arrayTest[0] := arrayTest[11];
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
+			STCoreValidator.ARRAY_INDEX_OUT_OF_BOUNDS, "Index 11 out of array dimension bounds [0..10]")
+	}
+	
+	@Test
+	def void testTooManyIndicesArrayAccessOperator() {
+		'''
+		FUNCTION ArrayTestDeclarationTest
+			VAR
+				arrayTest : ARRAY [0 .. 10] OF REAL;
+			END_VAR
+		arrayTest[0] := arrayTest[1,1];
+		END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
+			STCoreValidator.TOO_MANY_INDICES_GIVEN, "Too many indices given, 2 indices given, but only 1 specified for the variable")
 	}
 }

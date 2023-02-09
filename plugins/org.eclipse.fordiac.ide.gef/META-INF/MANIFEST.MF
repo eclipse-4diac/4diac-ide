@@ -41,7 +41,9 @@ Require-Bundle: org.eclipse.gef,
  org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.ui.errormessages,
  org.eclipse.nebula.widgets.nattable.core,
- org.eclipse.fordiac.ide.gef
+ org.eclipse.fordiac.ide.gef,
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ui,
+ org.eclipse.xtext.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier

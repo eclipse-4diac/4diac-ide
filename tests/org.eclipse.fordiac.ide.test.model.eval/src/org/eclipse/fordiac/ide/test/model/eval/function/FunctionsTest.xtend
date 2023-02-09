@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,15 +12,21 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.model.eval.function
 
+import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.eval.function.Functions
 import org.eclipse.fordiac.ide.model.eval.value.AnyIntValue
 import org.eclipse.fordiac.ide.model.eval.value.AnyMagnitudeValue
+import org.eclipse.fordiac.ide.model.eval.value.AnyValue
+import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.IntValue
+import org.eclipse.fordiac.ide.model.eval.value.StructValue
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.junit.jupiter.api.Test
 
+import static org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable.*
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
@@ -231,6 +237,58 @@ class FunctionsTest {
 		21.toIntValue.assertEquals(arg.value)
 	}
 
+	@Test
+	def void testGenericType() {
+		// lookup
+		SampleFunctions.findMethodFromDataTypes("GENERIC_TYPE", GenericTypes.ANY).assertNotNull
+		// return type
+		GenericTypes.ANY.assertEquals(SampleFunctions.inferReturnTypeFromDataTypes("GENERIC_TYPE", GenericTypes.ANY))
+		// parameter types
+		#[GenericTypes.ANY].assertIterableEquals(
+			SampleFunctions.inferParameterTypesFromDataTypes("GENERIC_TYPE", GenericTypes.ANY))
+		// invoke
+		val arg = newVariable("A", ElementaryTypes.INT, "21")
+		SampleFunctions.invoke("GENERIC_OUTPUT", arg)
+		21.toIntValue.assertEquals(arg.value)
+	}
+
+	@Test
+	def void testGenericTypeArray() {
+		val arrayType = newArrayType(ElementaryTypes.INT, newSubrange(0, 1))
+		// lookup
+		SampleFunctions.findMethodFromDataTypes("GENERIC_TYPE", arrayType).assertNotNull
+		// return type
+		arrayType.assertEquals(SampleFunctions.inferReturnTypeFromDataTypes("GENERIC_TYPE", arrayType))
+		// parameter types
+		#[arrayType].assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("GENERIC_TYPE", arrayType))
+		// invoke
+		val arg = newVariable("A", arrayType, "[17, 4]")
+		val result = SampleFunctions.invoke("GENERIC_TYPE", arg.value) as ArrayValue
+		17.toIntValue.assertEquals(result.get(0).value)
+		4.toIntValue.assertEquals(result.get(1).value)
+	}
+
+	@Test
+	def void testGenericTypeStruct() {
+		val structType = DataFactory.eINSTANCE.createStructuredType => [
+			memberVariables.addAll(#[
+				LibraryElementFactory.eINSTANCE.createVarDeclaration => [name = "a" type = ElementaryTypes.INT],
+				LibraryElementFactory.eINSTANCE.createVarDeclaration => [name = "b" type = ElementaryTypes.INT]
+			])
+		]
+		// lookup
+		SampleFunctions.findMethodFromDataTypes("GENERIC_TYPE", structType).assertNotNull
+		// return type
+		structType.assertEquals(SampleFunctions.inferReturnTypeFromDataTypes("GENERIC_TYPE", structType))
+		// parameter types
+		#[structType].assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("GENERIC_TYPE", structType))
+		// invoke
+		val arg = newVariable("A", structType, "{a = 17, b = 4}")
+		val result = SampleFunctions.invoke("GENERIC_TYPE", arg.value) as StructValue
+		17.toIntValue.assertEquals(result.get("a").value)
+		4.toIntValue.assertEquals(result.get("b").value)
+	}
+
 	static interface SampleFunctions extends Functions {
 		def static IntValue SIMPLE(IntValue a) { a }
 
@@ -249,5 +307,7 @@ class FunctionsTest {
 		def static void SIMPLE_OUTPUT(Variable<IntValue> a) { a.value = 21.wrapValue(a.type) }
 
 		def static <T extends AnyIntValue> void GENERIC_OUTPUT(Variable<T> a) { a.value = 21.wrapValue(a.type) }
+
+		def static <T extends AnyValue> T GENERIC_TYPE(T a) { a }
 	}
 }

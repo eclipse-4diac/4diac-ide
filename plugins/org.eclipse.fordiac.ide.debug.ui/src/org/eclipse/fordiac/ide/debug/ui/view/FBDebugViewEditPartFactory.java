@@ -13,13 +13,23 @@
 package org.eclipse.fordiac.ide.debug.ui.view;
 
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
+import org.eclipse.fordiac.ide.debug.ui.view.editparts.DebugInputEventEditPart;
+import org.eclipse.fordiac.ide.debug.ui.view.editparts.EmptyDebugViewRootEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.EventValueEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.EventValueEntity;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.FBDebugViewRootEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.InterfaceValueEditPart;
 import org.eclipse.fordiac.ide.debug.ui.view.editparts.InterfaceValueEntity;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.EventInputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.EventOutputContainer;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBInterfaceEditPartFactory;
 import org.eclipse.fordiac.ide.fbtypeeditor.editparts.FBTypeEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.InterfaceContainerEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.PlugContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.SocketContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.VariableInputContainer;
+import org.eclipse.fordiac.ide.fbtypeeditor.editparts.VariableOutputContainer;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.gef.EditPart;
 
@@ -31,6 +41,10 @@ public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
+		if (modelElement == null && context == null) {
+			// no debug is active show an empty view
+			return new EmptyDebugViewRootEditPart();
+		}
 		if (modelElement instanceof EvaluatorProcess) {
 			return new FBDebugViewRootEditPart();
 		}
@@ -44,6 +58,20 @@ public class FBDebugViewEditPartFactory extends FBInterfaceEditPartFactory {
 		}
 		if(modelElement instanceof EventValueEntity) {
 			return new EventValueEditPart();
+		}
+		if (modelElement instanceof Event && ((Event) modelElement).isIsInput()) {
+			// for input events we would like to use a button
+			return new DebugInputEventEditPart();
+		}
+		if (modelElement instanceof EventInputContainer || modelElement instanceof EventOutputContainer
+				|| modelElement instanceof VariableInputContainer || modelElement instanceof VariableOutputContainer
+				|| modelElement instanceof SocketContainer || modelElement instanceof PlugContainer) {
+			return new InterfaceContainerEditPart() {
+				@Override
+				protected void createEditPolicies() {
+					// we don't want dedicated editpolicies
+				}
+			};
 		}
 		return super.getPartForElement(context, modelElement);
 	}

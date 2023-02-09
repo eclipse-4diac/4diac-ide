@@ -125,14 +125,14 @@
       <details key="archetype" value="Description"/>
     </eAnnotations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="lowerLimit" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int" unsettable="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="LowerLimit"/>
       </eAnnotations>
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="upperLimit" lowerBound="1"
-        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
+        eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int" unsettable="true">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="attribute"/>
         <details key="name" value="UpperLimit"/>
@@ -450,6 +450,8 @@
       </eAnnotations>
       <eParameters name="other" eType="#//DataType"/>
     </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="maxLength" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+        unsettable="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="StringType" eSuperTypes="#//AnyStringType">
     <eOperations name="isAssignableFrom" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">

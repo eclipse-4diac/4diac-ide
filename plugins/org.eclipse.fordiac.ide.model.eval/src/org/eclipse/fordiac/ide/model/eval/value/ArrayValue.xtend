@@ -26,6 +26,9 @@ class ArrayValue implements AnyDerivedValue, Iterable<Value> {
 	int end
 
 	new(ArrayType type, List<Variable<?>> elements) {
+		if(!type.subranges.forall[setLowerLimit && setUpperLimit]) {
+			throw new IllegalArgumentException("Cannot instantiate array value with unknown bounds")
+		}
 		this.type = type
 		this.elements = elements
 		start = type.subranges.head.lowerLimit

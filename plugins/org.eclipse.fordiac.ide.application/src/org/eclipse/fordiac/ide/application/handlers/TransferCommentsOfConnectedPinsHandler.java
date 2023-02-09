@@ -13,8 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.handlers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -38,7 +38,7 @@ public class TransferCommentsOfConnectedPinsHandler extends AbstractHandler {
 		final IStructuredSelection sel = HandlerUtil.getCurrentStructuredSelection(event);
 		final FBNetworkElement element = (FBNetworkElement) ((EditPart) sel.getFirstElement()).getModel();
 
-		final Map<IInterfaceElement, ArrayList<IInterfaceElement>> commentsToCopy = findConnectedPins(element);
+		final Map<IInterfaceElement, List<IInterfaceElement>> commentsToCopy = findConnectedPins(element);
 
 		final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 		final CommandStack commandStack = editor.getAdapter(CommandStack.class);
@@ -47,24 +47,20 @@ public class TransferCommentsOfConnectedPinsHandler extends AbstractHandler {
 		return null;
 	}
 
-	private Map<IInterfaceElement, ArrayList<IInterfaceElement>> findConnectedPins(final FBNetworkElement src){
+	private static Map<IInterfaceElement, List<IInterfaceElement>> findConnectedPins(final FBNetworkElement src) {
+		final Map<IInterfaceElement, List<IInterfaceElement>> commentsToCopy = new HashMap<>();
 
-		final Map<IInterfaceElement, ArrayList<IInterfaceElement>> commentsToCopy = new HashMap<>();
-
-		for(final IInterfaceElement var : src.getInterface().getOutputVars()) {
-			if (!var.getOutputConnections().isEmpty()) {
-				var.getOutputConnections().stream().map(Connection::getDestination).collect(Collectors.toList());
-				commentsToCopy.put(var, (ArrayList<IInterfaceElement>) var.getOutputConnections().stream()
-						.map(Connection::getDestination)
-						.collect(Collectors.toList()));
+		for(final IInterfaceElement outVar : src.getInterface().getOutputVars()) {
+			if (!outVar.getOutputConnections().isEmpty()) {
+				commentsToCopy.put(outVar, outVar.getOutputConnections().stream()
+						.map(Connection::getDestination).collect(Collectors.toList()));
 			}
 		}
 
 		for (final IInterfaceElement evnt : src.getInterface().getEventOutputs()) {
 			if (!evnt.getOutputConnections().isEmpty()) {
-				evnt.getOutputConnections().stream().map(Connection::getDestination).collect(Collectors.toList());
-				commentsToCopy.put(evnt, (ArrayList<IInterfaceElement>) evnt.getOutputConnections().stream()
-						.map(Connection::getDestination).collect(Collectors.toList()));
+				commentsToCopy.put(evnt, evnt.getOutputConnections().stream().map(Connection::getDestination)
+						.collect(Collectors.toList()));
 			}
 		}
 

@@ -157,7 +157,7 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 	 * .Class)
 	 */
 	@Override
-	public Object getAdapter(final Class key) {
+	public <T> T getAdapter(final Class<T> key) {
 		if (key == SnapToHelper.class) {
 			final List<SnapToGrid> snapStrategies = new ArrayList<>();
 			if (Activator.getDefault().getPreferenceStore().getBoolean(DiagramPreferences.SNAP_TO_GRID)) {
@@ -168,12 +168,12 @@ public abstract class AbstractDiagramEditPart extends AbstractGraphicalEditPart 
 				return null;
 			}
 			if (snapStrategies.size() == 1) {
-				return snapStrategies.get(0);
+				return key.cast(snapStrategies.get(0));
 			}
 
 			final SnapToHelper[] ss = new SnapToHelper[snapStrategies.size()];
 			snapStrategies.toArray(ss);
-			return new CompoundSnapToHelper(ss);
+			return key.cast(new CompoundSnapToHelper(ss));
 		}
 		return super.getAdapter(key);
 	}

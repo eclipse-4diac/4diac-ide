@@ -17,9 +17,8 @@
 package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
 
 import java.util.List;
+import java.util.Optional;
 
-import org.eclipse.fordiac.ide.model.data.BoolType;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -27,6 +26,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.value.TypedValueConverter;
 
 public class SequenceMatcher {
 
@@ -36,70 +36,60 @@ public class SequenceMatcher {
 		this.fbType = fbType;
 	}
 
-	public boolean matchPrimitive(final Primitive p) {
-		return matchEvent(p.getEvent(), p instanceof InputPrimitive)
-				&& matchParameters(p.getParameters(), p instanceof InputPrimitive);
-	}
-
-	private boolean matchEvent(final String eventName, final boolean isInput) {
-		final IInterfaceElement el = fbType.getInterfaceList().getInterfaceElement(eventName);
-		if (el instanceof Event) {
-			return el.isIsInput() == isInput;
+	public Optional<String> matchPrimitive(final Primitive p) {
+		final Optional<String> errorMsg = matchEvent(p.getEvent(), p instanceof InputPrimitive);
+		if (errorMsg.isPresent()) {
+			return errorMsg;
 		}
-		return false;
+		return matchParameters(p.getParameters(), p instanceof InputPrimitive);
 	}
 
-	public boolean matchParameters(final String parameters, final boolean isInput) {
+	private Optional<String> matchEvent(final String eventName, final boolean isInput) {
+		final IInterfaceElement el = fbType.getInterfaceList().getInterfaceElement(eventName);
+		if (!(el instanceof Event)) {
+			return Optional.of("Event " + eventName + " not present in FB interface");  //$NON-NLS-1$//$NON-NLS-2$
+		}
+		if (el.isIsInput() != isInput) {
+			return Optional.of("Event pin " + eventName + " is not at the correct interface (input or output"); //$NON-NLS-1$ //$NON-NLS-2$
+		}
+		return Optional.empty();
+	}
+
+	public Optional<String> matchParameters(final String parameters, final boolean isInput) {
 		// split parameters at ";"
 		final List<String> params = ServiceSequenceUtils.splitList(parameters);
-
 		// parse each parameter assumption a:=b
-		return params.stream().allMatch(param -> matchVariable(param, isInput));
+		for (final String param : params) {
+			final Optional<String> errorMsg = matchVariable(param, isInput);
+			if (errorMsg.isPresent()) {
+				return errorMsg;
+			}
+		}
+		return Optional.empty();
 	}
 
-	public boolean matchVariable(final String assumption, final boolean isInput) {
+	public Optional<String> matchVariable(final String assumption, final boolean isInput) {
 		// parse the assumption of the form XY:=UINT#0
 		final List<String> str = ServiceSequenceUtils.splitParameter(assumption);
 		if (str.size() == 2) {
 			final IInterfaceElement el = fbType.getInterfaceList().getInterfaceElement(str.get(0));
-			if (el instanceof VarDeclaration && el.isIsInput() == isInput) {
-				final Value val = ((VarDeclaration) el).getValue();
-				if (val != null) {
-					String value = val.getValue();
-					value = ServiceSequenceUtils.removeKeyword(value);
-					if (value != null) {
-						return matchValue(value, str.get(1), el.getType());
+			if (!(el instanceof VarDeclaration) || (el.isIsInput() != isInput)) {
+				return Optional.of("No matching data pin with name " + str.get(0)); //$NON-NLS-1$
+			}
+			final Value val = ((VarDeclaration) el).getValue();
+			if (val != null) {
+				try {
+					final TypedValueConverter converter = new TypedValueConverter(el.getType());
+					final Object value = converter.toValue(val.getValue());
+					final Object expectedValue = converter.toValue(str.get(1));
+					if (!value.equals(expectedValue)) {
+						return Optional.of("Values do not match, expected: " + expectedValue + ", received: " + value); //$NON-NLS-1$ //$NON-NLS-2$
 					}
+				} catch (final Exception e) {
+					return Optional.of(e.getMessage());
 				}
 			}
 		}
-
-		return false;
-	}
-
-	private static boolean matchValue(final String typeValue, final String expectedValue, final DataType dtp) {
-		if (dtp instanceof BoolType) {
-			return matchBoolean(typeValue,
-					Boolean.parseBoolean(expectedValue.strip()) || "1".equals(expectedValue.strip())); //$NON-NLS-1$
-		}
-		return typeValue.strip().equals(expectedValue.strip());
-	}
-
-	private static boolean matchBoolean(final String typeValue, final boolean expectedValue) {
-		final String BOOL_FALSE = "FALSE"; //$NON-NLS-1$
-		final String BOOL_TRUE = "TRUE"; //$NON-NLS-1$
-		final String BOOL_ZERO = "0"; //$NON-NLS-1$
-		final String BOOL_ONE = "1"; //$NON-NLS-1$
-		if (BOOL_ONE.equalsIgnoreCase(typeValue)) {
-			return (expectedValue);
-		} else if (BOOL_ZERO.equalsIgnoreCase(typeValue)) {
-			return (!expectedValue);
-		} else if (BOOL_TRUE.equalsIgnoreCase(typeValue)) {
-			return (expectedValue);
-		} else if (BOOL_FALSE.equalsIgnoreCase(typeValue)) {
-			return (!expectedValue);
-		}
-
-		return false;
+		return Optional.empty();
 	}
 }

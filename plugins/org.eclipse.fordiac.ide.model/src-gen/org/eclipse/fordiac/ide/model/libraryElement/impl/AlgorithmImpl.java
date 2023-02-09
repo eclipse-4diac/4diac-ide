@@ -157,6 +157,16 @@ public abstract class AlgorithmImpl extends EObjectImpl implements Algorithm {
 	 * @generated
 	 */
 	@Override
+	public String getQualifiedName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<INamedElement> getInputParameters() {
 		return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);
 	}

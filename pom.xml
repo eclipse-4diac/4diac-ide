@@ -20,14 +20,14 @@
 		<maven.compiler.target>11</maven.compiler.target>
 		<maven.compiler.release/>
 		<tycho.version>4.0.0-SNAPSHOT</tycho.version>
-		<tycho-repo.url>https://download.eclipse.org/releases/2022-09</tycho-repo.url>
+		<tycho-repo.url>https://download.eclipse.org/releases/2022-12</tycho-repo.url>
 		<sonar.exclusions>**/src-gen/**/*,**/xtend-gen/**/*</sonar.exclusions>
 		<sonar.projectName>Eclipse 4diac</sonar.projectName>
 		<sonar.java.source>11</sonar.java.source>
-		<org.eclipse.justj.jre.repository> https://download.eclipse.org/justj/jres/17/updates/release/17.0.4</org.eclipse.justj.jre.repository>
-		<xtend-version>2.28.0</xtend-version>
-		<eclipse.platform.version>4.25</eclipse.platform.version>
-		<equinox.executable.version>3.8.1800</equinox.executable.version>
+		<org.eclipse.justj.jre.repository>https://download.eclipse.org/justj/jres/17/updates/release/17.0.5</org.eclipse.justj.jre.repository>
+        <xtend-version>2.29.0</xtend-version>
+        <eclipse.platform.version>4.26</eclipse.platform.version>
+        <equinox.executable.version>3.8.1900</equinox.executable.version>
 	</properties>
 
 	<repositories>
@@ -163,6 +163,11 @@
 							<os>macosx</os>
 							<ws>cocoa</ws>
 							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>aarch64</arch>
 						</environment>
 					</environments>
 				</configuration>

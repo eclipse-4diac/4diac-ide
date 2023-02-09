@@ -12,6 +12,7 @@
  */
 package org.eclipse.fordiac.ide.model.value;
 
+import java.text.MessageFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -38,12 +39,14 @@ public final class DateAndTimeValueConverter implements ValueConverter<LocalDate
 	@Override
 	public LocalDateTime toValue(final String string) {
 		if (string.indexOf("__") != -1) { //$NON-NLS-1$
-			throw new IllegalArgumentException(Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
+			throw new IllegalArgumentException(
+					MessageFormat.format(Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE, string));
 		}
 		try {
 			return LocalDateTime.parse(string.replace("_", ""), DATE_AND_TIME); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (final Exception e) {
-			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_DATE_AND_TIME_FORMAT, e);
+			throw new IllegalArgumentException(
+					MessageFormat.format(Messages.VALIDATOR_INVALID_DATE_AND_TIME_FORMAT, string), e);
 		}
 	}
 }

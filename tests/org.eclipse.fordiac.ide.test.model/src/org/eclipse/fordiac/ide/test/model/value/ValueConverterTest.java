@@ -21,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.assertThrowsExactly;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter;
@@ -48,7 +49,7 @@ class ValueConverterTest {
 		assertEquals(BigInteger.valueOf(16), NumericValueConverter.INSTANCE.toValue("16#10")); //$NON-NLS-1$
 		assertEquals(BigDecimal.valueOf(3.1415), NumericValueConverter.INSTANCE.toValue("3.1415")); //$NON-NLS-1$
 		assertThrowsExactly(IllegalArgumentException.class, () -> NumericValueConverter.INSTANCE.toValue("NoNumber"), //$NON-NLS-1$
-				Messages.VALIDATOR_INVALID_NUMBER_LITERAL);
+				MessageFormat.format(Messages.VALIDATOR_INVALID_NUMBER_LITERAL, "NoNumber")); //$NON-NLS-1$
 		assertThrowsExactly(IllegalArgumentException.class, () -> NumericValueConverter.INSTANCE.toValue("1__00"), //$NON-NLS-1$
 				Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
 	}

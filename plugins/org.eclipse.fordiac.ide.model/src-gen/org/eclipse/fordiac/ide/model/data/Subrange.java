@@ -41,9 +41,11 @@ public interface Subrange extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Lower Limit</em>' attribute.
+	 * @see #isSetLowerLimit()
+	 * @see #unsetLowerLimit()
 	 * @see #setLowerLimit(int)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getSubrange_LowerLimit()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.Int" required="true"
+	 * @model unsettable="true" dataType="org.eclipse.emf.ecore.xml.type.Int" required="true"
 	 *        extendedMetaData="kind='attribute' name='LowerLimit'"
 	 * @generated
 	 */
@@ -54,19 +56,46 @@ public interface Subrange extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Lower Limit</em>' attribute.
+	 * @see #isSetLowerLimit()
+	 * @see #unsetLowerLimit()
 	 * @see #getLowerLimit()
 	 * @generated
 	 */
 	void setLowerLimit(int value);
 
 	/**
+	 * Unsets the value of the '{@link org.eclipse.fordiac.ide.model.data.Subrange#getLowerLimit <em>Lower Limit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetLowerLimit()
+	 * @see #getLowerLimit()
+	 * @see #setLowerLimit(int)
+	 * @generated
+	 */
+	void unsetLowerLimit();
+
+	/**
+	 * Returns whether the value of the '{@link org.eclipse.fordiac.ide.model.data.Subrange#getLowerLimit <em>Lower Limit</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Lower Limit</em>' attribute is set.
+	 * @see #unsetLowerLimit()
+	 * @see #getLowerLimit()
+	 * @see #setLowerLimit(int)
+	 * @generated
+	 */
+	boolean isSetLowerLimit();
+
+	/**
 	 * Returns the value of the '<em><b>Upper Limit</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Upper Limit</em>' attribute.
+	 * @see #isSetUpperLimit()
+	 * @see #unsetUpperLimit()
 	 * @see #setUpperLimit(int)
 	 * @see org.eclipse.fordiac.ide.model.data.DataPackage#getSubrange_UpperLimit()
-	 * @model dataType="org.eclipse.emf.ecore.xml.type.Int" required="true"
+	 * @model unsettable="true" dataType="org.eclipse.emf.ecore.xml.type.Int" required="true"
 	 *        extendedMetaData="kind='attribute' name='UpperLimit'"
 	 * @generated
 	 */
@@ -77,9 +106,34 @@ public interface Subrange extends EObject {
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @param value the new value of the '<em>Upper Limit</em>' attribute.
+	 * @see #isSetUpperLimit()
+	 * @see #unsetUpperLimit()
 	 * @see #getUpperLimit()
 	 * @generated
 	 */
 	void setUpperLimit(int value);
+
+	/**
+	 * Unsets the value of the '{@link org.eclipse.fordiac.ide.model.data.Subrange#getUpperLimit <em>Upper Limit</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isSetUpperLimit()
+	 * @see #getUpperLimit()
+	 * @see #setUpperLimit(int)
+	 * @generated
+	 */
+	void unsetUpperLimit();
+
+	/**
+	 * Returns whether the value of the '{@link org.eclipse.fordiac.ide.model.data.Subrange#getUpperLimit <em>Upper Limit</em>}' attribute is set.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return whether the value of the '<em>Upper Limit</em>' attribute is set.
+	 * @see #unsetUpperLimit()
+	 * @see #getUpperLimit()
+	 * @see #setUpperLimit(int)
+	 * @generated
+	 */
+	boolean isSetUpperLimit();
 
 } // Subrange

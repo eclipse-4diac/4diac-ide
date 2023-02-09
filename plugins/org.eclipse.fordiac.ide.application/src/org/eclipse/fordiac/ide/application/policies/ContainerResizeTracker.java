@@ -14,8 +14,6 @@ package org.eclipse.fordiac.ide.application.policies;
 
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Point;
-import org.eclipse.draw2d.geometry.PrecisionRectangle;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.gef.GraphicalEditPart;
@@ -47,47 +45,6 @@ class ContainerResizeTracker extends ResizeTracker {
 	protected boolean handleDragStarted() {
 		updateMinBounds();
 		return super.handleDragStarted();
-	}
-
-	@Override
-	protected void enforceConstraintsForResize(final ChangeBoundsRequest changeBoundsRequest) {
-		super.enforceConstraintsForResize(changeBoundsRequest);
-		if (getOwner() != null && isTopOrLeft()) {
-			// ensure that on minimum size the bottom right corner is not moving, this is has potential to be upstreamed
-			// to GEF
-			final PrecisionRectangle originalConstraint = new PrecisionRectangle(getOwner().getFigure().getBounds());
-			getOwner().getFigure().translateToAbsolute(originalConstraint);
-			final PrecisionRectangle manipulatedConstraint = new PrecisionRectangle(
-					changeBoundsRequest.getTransformedRectangle(originalConstraint));
-			final Point origBR = originalConstraint.getBottomRight();
-			final Point newBR = manipulatedConstraint.getBottomRight();
-
-			if (isLeftResize() && (origBR.x < newBR.x)) {
-				final Point moveDelta = changeBoundsRequest.getMoveDelta();
-				moveDelta.x -= (newBR.x - origBR.x);
-				changeBoundsRequest.setMoveDelta(moveDelta);
-			}
-
-			if (isTopResize() && (origBR.y < newBR.y)) {
-				final Point moveDelta = changeBoundsRequest.getMoveDelta();
-				moveDelta.y -= (newBR.y - origBR.y);
-				changeBoundsRequest.setMoveDelta(moveDelta);
-			}
-		}
-	}
-
-	private boolean isTopOrLeft() {
-		return isLeftResize() || isTopResize();
-	}
-
-	private boolean isLeftResize() {
-		return getResizeDirection() == PositionConstants.WEST || getResizeDirection() == PositionConstants.NORTH_WEST
-				|| getResizeDirection() == PositionConstants.SOUTH_WEST;
-	}
-
-	private boolean isTopResize() {
-		return getResizeDirection() == PositionConstants.NORTH || getResizeDirection() == PositionConstants.NORTH_WEST
-				|| getResizeDirection() == PositionConstants.NORTH_EAST;
 	}
 
 	private void updateMinBounds() {

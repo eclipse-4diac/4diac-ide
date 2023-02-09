@@ -16,29 +16,21 @@ package org.eclipse.fordiac.ide.application.policies;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractReconnectConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ReconnectEventConnectionCommand;
+import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.requests.CreateConnectionRequest;
 
 /**
  * An EditPolicy which allows drawing Connections between EventInterfaces.
  */
 public class EventNodeEditPolicy extends InterfaceElementEditPolicy {
 
-	/*
-	 * (non-Javadoc)
-	 *
-	 * @see org.eclipse.gef.editpolicies.GraphicalNodeEditPolicy#
-	 * getConnectionCreateCommand(org.eclipse.gef.requests.CreateConnectionRequest)
-	 */
 	@Override
-	protected Command getConnectionCreateCommand(final CreateConnectionRequest request) {
+	protected AbstractConnectionCreateCommand createConnectionCreateCommand() {
 		final EventConnectionCreateCommand cmd = new EventConnectionCreateCommand(getParentNetwork());
 		cmd.setSource(((InterfaceEditPart) getHost()).getModel());
-		request.setStartCommand(cmd);
-		return new EventConnectionCreateCommand(getParentNetwork());
+		return cmd;
 	}
 
 	@Override

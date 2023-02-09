@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,8 +9,11 @@
  *
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
+ *   Alois Zoitl   - added event repetation toolbar
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view;
+
+import java.util.Iterator;
 
 import org.eclipse.debug.ui.DebugUITools;
 import org.eclipse.debug.ui.contexts.DebugContextEvent;
@@ -28,10 +31,12 @@ import org.eclipse.draw2d.geometry.Translatable;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugElement;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorProcess;
+import org.eclipse.fordiac.ide.debug.ui.view.actions.RepeatEventAction;
 import org.eclipse.fordiac.ide.gef.FordiacContextMenuProvider;
 import org.eclipse.fordiac.ide.gef.figures.AbstractFreeformFigure;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator;
+import org.eclipse.gef.EditDomain;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.KeyHandler;
@@ -42,9 +47,13 @@ import org.eclipse.gef.editparts.FreeformGraphicalRootEditPart;
 import org.eclipse.gef.editparts.GridLayer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.gef.ui.actions.DirectEditAction;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
+import org.eclipse.gef.ui.actions.UpdateAction;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.ScrollingGraphicalViewer;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.jface.viewers.ISelection;
@@ -52,10 +61,12 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.part.ViewPart;
 
-public class FBDebugView extends ViewPart implements IDebugContextListener {
+public class FBDebugView extends ViewPart implements IDebugContextListener, ISelectionListener {
 
 	public static final class ZeroOffestFreeformCanvas extends AbstractFreeformFigure {
 		private Point contentOffset;
@@ -91,6 +102,14 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 		public void translateToParent(final Translatable t) {
 			t.performTranslate(-contentOffset.x, -contentOffset.y);
 		}
+
+		@Override
+		public Rectangle getClientArea(final Rectangle rect) {
+			final Rectangle clientArea = super.getClientArea(rect);
+			clientArea.translate(contentOffset);
+			return clientArea;
+		}
+
 	}
 
 
@@ -98,21 +117,51 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 	private ActionRegistry actionRegistry;
 	private static final int NUM_COLUMNS = 1;
 	private KeyHandler sharedKeyHandler;
+	private RepeatEventAction repeatEventAction;
 
 	@Override
 	public void createPartControl(final Composite parent) {
+		getSite().getWorkbenchWindow().getSelectionService().addSelectionListener(this);
 		GridLayoutFactory.fillDefaults().numColumns(NUM_COLUMNS).margins(0, 0).generateLayout(parent);
 		createGraphicalViewer(parent);
+		createToolBarEntries();
+		hookDebugListeners();
+	}
+
+	private void hookDebugListeners() {
+		DebugUITools.addPartDebugContextListener(getSite(), this);
+	}
+
+	private void createToolBarEntries() {
+		final IActionBars actionBars = getViewSite().getActionBars();
+		final IToolBarManager toolBar = actionBars.getToolBarManager();
+		toolBar.add(createRepeatEventAction());
+	}
+
+	private IAction createRepeatEventAction() {
+		repeatEventAction = new RepeatEventAction();
+		return repeatEventAction;
+	}
+
+	@Override
+	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
+		// If not the active editor, ignore selection changed.
+		if (this.equals(getSite().getPage().getActivePart())) {
+			updateActions();
+		}
 	}
 
 	private void createGraphicalViewer(final Composite parent) {
 		viewer = new ScrollingGraphicalViewer();
 		viewer.createControl(parent);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(viewer.getControl());
+		// needed to get selection working
+		final EditDomain editDomain = new EditDomain();
+		editDomain.addViewer(viewer);
+
 		configureGraphicalViewer();
 		initializeGraphicalViewer();
 		hookGraphicalViewer();
-		DebugUITools.addPartDebugContextListener(getSite(), this);
 	}
 
 
@@ -165,7 +214,7 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 
 	private ActionRegistry getActionRegistry() {
 		if (actionRegistry == null) {
-			actionRegistry = new ActionRegistry();
+			actionRegistry = createActionRegistry();
 		}
 		return actionRegistry;
 	}
@@ -173,19 +222,22 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 	@Override
 	public void dispose() {
 		DebugUITools.removePartDebugContextListener(getSite(), this);
+		getSite().getWorkbenchWindow().getSelectionService().removeSelectionListener(this);
+	}
+
+	@Override
+	public <T> T getAdapter(final Class<T> type) {
+		if (type == ActionRegistry.class) {
+			return type.cast(getActionRegistry());
+		}
+		return super.getAdapter(type);
 	}
 
 	private KeyHandler getCommonKeyHandler() {
 		if (sharedKeyHandler == null) {
 			sharedKeyHandler = new KeyHandler();
-			sharedKeyHandler.put(KeyStroke.getPressed(SWT.DEL, 127, 0),
-					getActionRegistry().getAction(ActionFactory.DELETE.getId()));
 			sharedKeyHandler.put(KeyStroke.getPressed(SWT.F2, 0),
 					getActionRegistry().getAction(GEFActionConstants.DIRECT_EDIT));
-			sharedKeyHandler.put(/* CTRL + '=' */
-					KeyStroke.getPressed('+', 0x3d, SWT.CTRL),
-					getActionRegistry().getAction(GEFActionConstants.ZOOM_IN));
-
 		}
 		return sharedKeyHandler;
 	}
@@ -205,16 +257,21 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 	private void contextActivated(final ISelection selection) {
 		if (selection instanceof IStructuredSelection) {
 			final Object source = ((IStructuredSelection) selection).getFirstElement();
-			final EvaluatorProcess evaluator = getFBEvaluatorDebugContext(source);
+			if (source == null) {
+				setContents(null);
+			} else {
+				final EvaluatorProcess evaluator = getFBEvaluatorDebugContext(source);
 
-			if (!isViewerContent(evaluator)) {
-				setContents(evaluator);
+				if (!isViewerContent(evaluator)) {
+					setContents(evaluator);
+				}
 			}
 		}
 	}
 
 	private void setContents(final EvaluatorProcess evaluator) {
 		viewer.setContents(evaluator);
+		repeatEventAction.updateEvaluator(evaluator);
 		setScrollPosition();
 	}
 
@@ -266,6 +323,24 @@ public class FBDebugView extends ViewPart implements IDebugContextListener {
 	private static int calculateCenterScrollPos(final RangeModel rangeModel) {
 		final int center = (rangeModel.getMaximum() + rangeModel.getMinimum()) / 2;
 		return center - rangeModel.getExtent() / 2;
+	}
+
+	private ActionRegistry createActionRegistry() {
+		final ActionRegistry newAR = new ActionRegistry();
+		final var action = new DirectEditAction(this);
+		newAR.registerAction(action);
+		return newAR;
+	}
+
+	private void updateActions() {
+		final ActionRegistry registry = getActionRegistry();
+		final Iterator<Object> actionIter = registry.getActions();
+		while (actionIter.hasNext()) {
+			final IAction action = (IAction) actionIter.next();
+			if (action instanceof UpdateAction) {
+				((UpdateAction) action).update();
+			}
+		}
 	}
 
 }

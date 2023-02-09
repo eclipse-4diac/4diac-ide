@@ -1,7 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
- * 				 2019 - 2020 Johannes Kepler University
- *               2020        Primetals Technologies Germany GmbH
+ * Copyright (c) 2008, 2023  Profactor GmbH, fortiss GmbH, Johannes Kepler University,
+ * 							 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -50,29 +49,30 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 	 * @throws RuntimeException if no match was found (programming error) */
 	@Override
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
-		EditPart part = null;
 		if (modelElement instanceof UnfoldedSubappContentNetwork) {
-			part = new UnfoldedSubappContentEditPart();
+			return new UnfoldedSubappContentEditPart();
 		} else if (modelElement instanceof GroupContentNetwork) {
-			part = new GroupContentEditPart();
+			return new GroupContentEditPart();
 		} else if (modelElement instanceof FBNetwork) {
-			part = getPartForFBNetwork((FBNetwork) modelElement);
+			return getPartForFBNetwork((FBNetwork) modelElement);
 		} else if (modelElement instanceof FBNetworkElement) {
-			part = getPartForFBNetworkElement((FBNetworkElement) modelElement);
+			return getPartForFBNetworkElement((FBNetworkElement) modelElement);
+		} else if (modelElement instanceof StructuredType) {
+			return new StructuredTypeEditPart();
 		} else if (modelElement instanceof InstanceName) {
-			part = new InstanceNameEditPart();
+			return new InstanceNameEditPart();
 		} else if (modelElement instanceof InstanceComment) {
-			part = new InstanceCommentEditPart();
+			return new InstanceCommentEditPart();
 		} else if (modelElement instanceof Connection) {
-			part = new ConnectionEditPart();
+			return new ConnectionEditPart();
 		} else if (modelElement instanceof IInterfaceElement) {
-			part = createInterfaceEditPart(modelElement);
+			return createInterfaceEditPart(modelElement);
 		} else if (modelElement instanceof Value) {
-			part = new FBNValueEditPart();
-		} else {
-			throw createEditpartCreationException(modelElement);
+			return new FBNValueEditPart();
 		}
-		return part;
+
+		throw createEditpartCreationException(modelElement);
+
 	}
 
 	private static EditPart getPartForFBNetworkElement(final FBNetworkElement element) {

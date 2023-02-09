@@ -593,4 +593,12 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//STInitializerExpression"
         containment="true"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STExpressionSource" eSuperTypes="#//STSource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//STExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STInitializerExpressionSource" eSuperTypes="#//STSource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initializerExpression"
+        eType="#//STInitializerExpression" containment="true"/>
+  </eClassifiers>
 </ecore:EPackage>

@@ -59,8 +59,10 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		acceptor.accept(issue, "Remove trailing '_' from identifier",
 				"Remove trailing underscore from name: " + issue.getData()[0], null, (IModification) context -> {
 					final IXtextDocument xtextDocument = context.getXtextDocument();
-					xtextDocument.replace(issue.getOffset(), issue.getLength(),
-							issue.getData()[0].substring(0, issue.getData()[0].length() - 1));
+					if (xtextDocument != null) {
+						xtextDocument.replace(issue.getOffset(), issue.getLength(),
+								issue.getData()[0].substring(0, issue.getData()[0].length() - 1));
+					}
 				});
 	}
 
@@ -69,8 +71,10 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		acceptor.accept(issue, "Replace consecutive undersocres with one underscore from identifier",
 				"Remove consecutive underscore from name: " + issue.getData()[0], null, (IModification) context -> {
 					final IXtextDocument xtextDocument = context.getXtextDocument();
-					xtextDocument.replace(issue.getOffset(), issue.getLength(),
-							issue.getData()[0].replaceAll("_(_)+", "_")); //$NON-NLS-1$ //$NON-NLS-2$
+					if (xtextDocument != null) {
+						xtextDocument.replace(issue.getOffset(), issue.getLength(),
+								issue.getData()[0].replaceAll("_(_)+", "_")); //$NON-NLS-1$ //$NON-NLS-2$
+					}
 				});
 	}
 
@@ -84,11 +88,14 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 					"Add typecast from " + issue.getData()[0] + " to " + issue.getData()[1], null,
 					(IModification) context -> {
 						final IXtextDocument xtextDocument = context.getXtextDocument();
-						final String original = xtextDocument.get(issue.getOffset().intValue(),
-								issue.getLength().intValue());
-						final String replacement = issue.getData()[0] + "_TO_" + issue.getData()[1] + "(" + original //$NON-NLS-1$ //$NON-NLS-2$
-								+ ")"; //$NON-NLS-1$
-						xtextDocument.replace(issue.getOffset().intValue(), issue.getLength().intValue(), replacement);
+						if (xtextDocument != null) {
+							final String original = xtextDocument.get(issue.getOffset().intValue(),
+									issue.getLength().intValue());
+							final String replacement = issue.getData()[0] + "_TO_" + issue.getData()[1] + "(" + original //$NON-NLS-1$ //$NON-NLS-2$
+									+ ")"; //$NON-NLS-1$
+							xtextDocument.replace(issue.getOffset().intValue(), issue.getLength().intValue(),
+									replacement);
+						}
 					});
 		}
 	}
@@ -98,7 +105,9 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 		acceptor.accept(issue, "Change variable name case as declared",
 				"Changes " + issue.getData()[0] + "to " + issue.getData()[1], null, (IModification) context -> {
 					final IXtextDocument xtextDocument = context.getXtextDocument();
-					xtextDocument.replace(issue.getOffset(), issue.getLength(), issue.getData()[1]);
+					if (xtextDocument != null) {
+						xtextDocument.replace(issue.getOffset(), issue.getLength(), issue.getData()[1]);
+					}
 				});
 	}
 
@@ -115,10 +124,9 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 				acceptor.accept(issue, "Create missing INPUT variable", "Create missing INPUT variable", null,
 						(final EObject element, final IModificationContext context) -> {
 							final IXtextDocument document = context.getXtextDocument();
-							if (element.eContainer() instanceof STAssignmentStatement) {
+							if (document != null && element.eContainer() instanceof STAssignmentStatement) {
 
-								final STAssignmentStatement assignment = (STAssignmentStatement) element
-										.eContainer();
+								final STAssignmentStatement assignment = (STAssignmentStatement) element.eContainer();
 								final var factory = STCoreFactory.eINSTANCE;
 								final var type = assignment.getRight().getResultType();
 								final var varDeclaration = factory.createSTVarDeclaration();
@@ -139,8 +147,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 										((STMethod) container).getBody().getVarDeclarations().add(block);
 									}
 								} else {
-									inputBlocks.get(inputBlocks.size() - 1).getVarDeclarations()
-									.add(varDeclaration);
+									inputBlocks.get(inputBlocks.size() - 1).getVarDeclarations().add(varDeclaration);
 								}
 
 							}
@@ -149,10 +156,9 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 						(final EObject element, final IModificationContext context) -> {
 
 							final IXtextDocument document = context.getXtextDocument();
-							if (element.eContainer() instanceof STAssignmentStatement) {
+							if (document != null && element.eContainer() instanceof STAssignmentStatement) {
 
-								final STAssignmentStatement assignment = (STAssignmentStatement) element
-										.eContainer();
+								final STAssignmentStatement assignment = (STAssignmentStatement) element.eContainer();
 								final var factory = STCoreFactory.eINSTANCE;
 								final var type = assignment.getRight().getResultType();
 								final var varDeclaration = factory.createSTVarDeclaration();
@@ -173,8 +179,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 										((STMethod) container).getBody().getVarDeclarations().add(block);
 									}
 								} else {
-									outputBlocks.get(outputBlocks.size() - 1).getVarDeclarations()
-									.add(varDeclaration);
+									outputBlocks.get(outputBlocks.size() - 1).getVarDeclarations().add(varDeclaration);
 								}
 
 							}
@@ -183,10 +188,9 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 						(final EObject element, final IModificationContext context) -> {
 
 							final IXtextDocument document = context.getXtextDocument();
-							if (element.eContainer() instanceof STAssignmentStatement) {
+							if (document != null && element.eContainer() instanceof STAssignmentStatement) {
 
-								final STAssignmentStatement assignment = (STAssignmentStatement) element
-										.eContainer();
+								final STAssignmentStatement assignment = (STAssignmentStatement) element.eContainer();
 								final var factory = STCoreFactory.eINSTANCE;
 								final var type = assignment.getRight().getResultType();
 								final var varDeclaration = factory.createSTVarDeclaration();
@@ -207,8 +211,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 										((STMethod) container).getBody().getVarDeclarations().add(block);
 									}
 								} else {
-									inOutBlocks.get(inOutBlocks.size() - 1).getVarDeclarations()
-									.add(varDeclaration);
+									inOutBlocks.get(inOutBlocks.size() - 1).getVarDeclarations().add(varDeclaration);
 								}
 							}
 						});
@@ -217,7 +220,7 @@ public class STCoreQuickfixProvider extends DefaultQuickfixProvider {
 					(final EObject element, final IModificationContext context) -> {
 
 						final IXtextDocument document = context.getXtextDocument();
-						if (element.eContainer() instanceof STAssignmentStatement) {
+						if (document != null && element.eContainer() instanceof STAssignmentStatement) {
 
 							final STAssignmentStatement assignment = (STAssignmentStatement) element.eContainer();
 							final var factory = STCoreFactory.eINSTANCE;

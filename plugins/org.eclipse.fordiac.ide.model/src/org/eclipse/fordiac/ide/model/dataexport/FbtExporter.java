@@ -82,6 +82,7 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 	private void addBasicFB(final BasicFBType type) throws XMLStreamException {
 		addStartElement(LibraryElementTags.BASIC_F_B_ELEMENT);
 		addInternalVarList(type.getInternalVars(), type.getInternalFbs(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
+		addVarList(type.getInternalConstVars(), LibraryElementTags.INTERNAL_CONST_VARS_ELEMENT);
 		addECC(type.getECC());
 		for (final ICallable callable : type.getCallables()) {
 			addICallable(callable);
@@ -218,6 +219,7 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 	private void addSimpleFB(final SimpleFBType type) throws XMLStreamException {
 		addStartElement(LibraryElementTags.SIMPLE_F_B_ELEMENT);
 		addInternalVarList(type.getInternalVars(), type.getInternalFbs(), LibraryElementTags.INTERNAL_VARS_ELEMENT);
+		addVarList(type.getInternalConstVars(), LibraryElementTags.INTERNAL_CONST_VARS_ELEMENT);
 		for (final ICallable callable : type.getCallables()) {
 			addICallable(callable);
 		}

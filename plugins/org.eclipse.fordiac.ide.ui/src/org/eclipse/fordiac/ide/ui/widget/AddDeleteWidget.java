@@ -106,8 +106,8 @@ public class AddDeleteWidget {
 	public void setButtonEnablement(final boolean enable) {
 		deleteButton.setEnabled(enable);
 		deleteButton
-		.setImage((enable) ? PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE)
-				: PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
+				.setImage((enable) ? PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE)
+						: PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 	}
 
 	public void setCreateButtonEnablement(final boolean enable) {
@@ -266,8 +266,7 @@ public class AddDeleteWidget {
 				rowObjects.add(dataProvider.getRowObject(row));
 			}
 			if (!rowObjects.isEmpty()) {
-				executeCompoundCommandForList(table, rowObjects, executor,
-						commandProvider);
+				executeCompoundCommandForList(table, rowObjects, executor, commandProvider);
 			}
 		};
 	}
@@ -276,12 +275,14 @@ public class AddDeleteWidget {
 			final CreationCommandProvider commandProvider) {
 		return ev -> {
 			final CreationCommand cmd = commandProvider.getCommand(getReferencedElement(viewer));
-			executor.executeCommand((Command) cmd);
-			viewer.refresh();
-			final StructuredSelection selection = new StructuredSelection(cmd.getCreatedElement());
-			viewer.setSelection(selection);
-			viewer.getTable().forceFocus();
-			viewer.editElement(cmd.getCreatedElement(), EDIT_COLUMN);
+			if (((Command) cmd).canExecute()) {
+				executor.executeCommand((Command) cmd);
+				viewer.refresh();
+				final StructuredSelection selection = new StructuredSelection(cmd.getCreatedElement());
+				viewer.setSelection(selection);
+				viewer.getTable().forceFocus();
+				viewer.editElement(cmd.getCreatedElement(), EDIT_COLUMN);
+			}
 		};
 	}
 
@@ -303,7 +304,7 @@ public class AddDeleteWidget {
 			final CreationCommand cmd = commandProvider.getCommand(refObject);
 			executor.executeCommand((Command) cmd);
 			table.refresh();
-			if (selectionLayer != null && rows != null && rows.length > 0) {
+			if ((selectionLayer != null) && (rows != null) && (rows.length > 0)) {
 				selectionLayer.selectRow(0, rows[rows.length - 1] + 1, false, false);
 			}
 		};

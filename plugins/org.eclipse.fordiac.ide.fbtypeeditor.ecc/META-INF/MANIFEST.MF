@@ -17,7 +17,8 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.typemanagement,
  org.eclipse.fordiac.ide.model.ui,
- org.eclipse.nebula.widgets.nattable.core;bundle-version="2.0.0"
+ org.eclipse.nebula.widgets.nattable.core;bundle-version="2.0.0",
+ org.eclipse.fordiac.ide.structuredtextalgorithm.ui
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier
@@ -30,6 +31,5 @@ Export-Package: org.eclipse.fordiac.ide.fbtypeeditor.ecc,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider,
  org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties,
- org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets,
- org.eclipse.fordiac.ide.fbtypeeditor.ecc.xtext
+ org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets
 Automatic-Module-Name: org.eclipse.fordiac.ide.fbtypeeditor.ecc

@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
 import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
-import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBTest;
 import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils.setVariable;
 
 import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
@@ -43,7 +42,5 @@ public class EventPermitTest extends AbstractInterpreterTest {
 		addTransaction(seq2, new FBTransactionBuilder("EI", "EO")); //$NON-NLS-1$ //$NON-NLS-2$
 
 	}
-
-
 
 }

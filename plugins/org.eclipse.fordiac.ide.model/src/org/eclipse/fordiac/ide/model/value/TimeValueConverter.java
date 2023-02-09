@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.value;
 
 import java.math.BigDecimal;
+import java.text.MessageFormat;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 import java.util.regex.Pattern;
@@ -77,7 +78,8 @@ public final class TimeValueConverter implements ValueConverter<Duration> {
 						.longValueExact(), ChronoUnit.NANOS);
 			}).reduce(Duration.ZERO, Duration::plus);
 		} catch (final Exception e) {
-			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_TIME_LITERAL, e);
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_INVALID_TIME_LITERAL, string),
+					e);
 		}
 	}
 
@@ -98,7 +100,7 @@ public final class TimeValueConverter implements ValueConverter<Duration> {
 		case "NS": //$NON-NLS-1$
 			return ChronoUnit.NANOS;
 		default:
-			throw new IllegalArgumentException("Invalid time unit"); //$NON-NLS-1$
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_InvalidTimeUnit, string));
 		}
 	}
 }

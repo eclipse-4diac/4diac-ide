@@ -34,14 +34,17 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
+import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SegmentType;
+import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /**
@@ -57,6 +60,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getWidth <em>Width</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getVarDeclarations <em>Var Declarations</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getOutConnections <em>Out Connections</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getCommunication <em>Communication</em>}</li>
  * </ul>
  *
  * @generated
@@ -121,6 +125,16 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * @ordered
 	 */
 	protected EList<Link> outConnections;
+
+	/**
+	 * The cached value of the '{@link #getCommunication() <em>Communication</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getCommunication()
+	 * @generated
+	 * @ordered
+	 */
+	protected CommunicationConfiguration communication;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -332,6 +346,74 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * @generated
 	 */
 	@Override
+	public CommunicationConfiguration getCommunication() {
+		if (communication != null && communication.eIsProxy()) {
+			InternalEObject oldCommunication = (InternalEObject)communication;
+			communication = (CommunicationConfiguration)eResolveProxy(oldCommunication);
+			if (communication != oldCommunication) {
+				InternalEObject newCommunication = (InternalEObject)communication;
+				NotificationChain msgs = oldCommunication.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COMMUNICATION, null, null);
+				if (newCommunication.eInternalContainer() == null) {
+					msgs = newCommunication.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COMMUNICATION, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.SEGMENT__COMMUNICATION, oldCommunication, communication));
+			}
+		}
+		return communication;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public CommunicationConfiguration basicGetCommunication() {
+		return communication;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetCommunication(CommunicationConfiguration newCommunication, NotificationChain msgs) {
+		CommunicationConfiguration oldCommunication = communication;
+		communication = newCommunication;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SEGMENT__COMMUNICATION, oldCommunication, newCommunication);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setCommunication(CommunicationConfiguration newCommunication) {
+		if (newCommunication != communication) {
+			NotificationChain msgs = null;
+			if (communication != null)
+				msgs = ((InternalEObject)communication).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COMMUNICATION, null, msgs);
+			if (newCommunication != null)
+				msgs = ((InternalEObject)newCommunication).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.SEGMENT__COMMUNICATION, null, msgs);
+			msgs = basicSetCommunication(newCommunication, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.SEGMENT__COMMUNICATION, newCommunication, newCommunication));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public SegmentType getType() {
 		//this cannot be moved to the annotation class because there we don't have the super access!!!
 		org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();
@@ -339,6 +421,26 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 			return (SegmentType) type; 
 		}
 		return null;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AutomationSystem getAutomationSystem() {
+		return org.eclipse.fordiac.ide.model.annotations.SegmentAnnotations.getAutomationSystem(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SystemConfiguration getSystemConfiguration() {
+		return org.eclipse.fordiac.ide.model.annotations.SegmentAnnotations.getSystemConfiguration(this); 
 	}
 
 	/**
@@ -397,6 +499,8 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 				return ((InternalEList<?>)getVarDeclarations()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 				return ((InternalEList<?>)getOutConnections()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.SEGMENT__COMMUNICATION:
+				return basicSetCommunication(null, msgs);
 			default:
 				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -422,6 +526,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 				return getVarDeclarations();
 			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 				return getOutConnections();
+			case LibraryElementPackage.SEGMENT__COMMUNICATION:
+				if (resolve) return getCommunication();
+				return basicGetCommunication();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -453,6 +560,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 				getOutConnections().clear();
 				getOutConnections().addAll((Collection<? extends Link>)newValue);
 				return;
+			case LibraryElementPackage.SEGMENT__COMMUNICATION:
+				setCommunication((CommunicationConfiguration)newValue);
+				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -482,6 +592,9 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 				getOutConnections().clear();
 				return;
+			case LibraryElementPackage.SEGMENT__COMMUNICATION:
+				setCommunication((CommunicationConfiguration)null);
+				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -506,6 +619,8 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 				return varDeclarations != null && !varDeclarations.isEmpty();
 			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 				return outConnections != null && !outConnections.isEmpty();
+			case LibraryElementPackage.SEGMENT__COMMUNICATION:
+				return communication != null;
 			default:
 				return super.eIsSet(featureID);
 		}

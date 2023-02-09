@@ -24,8 +24,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.formatting2.STCoreFormatter
 import org.eclipse.xtext.Keyword
 import org.eclipse.xtext.RuleCall
 import org.eclipse.xtext.formatting2.IFormattableDocument
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmBody
-import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethodBody
 
 class STAlgorithmFormatter extends STCoreFormatter {
 

@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  *   Bianca Wiesmayr - multline comments and cleanup
  *   Sebastian Hollersbacher - change to nebula NatTable
  *   Hesam Rezaee - Variable configuration for Global Constants
+ *   Martin Jobst - add initial value cell editor support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -20,6 +22,7 @@ import java.util.List;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
@@ -43,7 +46,6 @@ import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
-import org.eclipse.nebula.widgets.nattable.config.CellConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.IColumnPropertyAccessor;
@@ -51,10 +53,6 @@ import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
-import org.eclipse.nebula.widgets.nattable.style.CellStyleAttributes;
-import org.eclipse.nebula.widgets.nattable.style.DisplayMode;
-import org.eclipse.nebula.widgets.nattable.style.HorizontalAlignmentEnum;
-import org.eclipse.nebula.widgets.nattable.style.Style;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CLabel;
 import org.eclipse.swt.layout.GridLayout;
@@ -70,14 +68,14 @@ public class CommentPropertySection extends AbstractSection {
 	private static final int ONE_COLUMN = 1;
 	private static final int TWO_COLUMNS = 2;
 
-	private static final int NAME = 0;
-	private static final int TYPE = 1;
-	private static final int INITIAL_VALUE = 2;
-	private static final int COMMENT = 3;
-	public static final int VISIBLE = 4;
-	public static final int ISVARCONFIG = 5;
+	private static final int NAME_COL_ID = 0;
+	private static final int TYPE_COL_ID = 1;
+	private static final int INITIAL_VALUE_COL_ID = 2;
+	private static final int COMMENT_COL_ID = 3;
+	public static final int VISIBLE_COL_ID = 4;
+	public static final int ISVARCONFIG_COL_ID = 5;
 
-	private static int COL_COUNT = 6;
+	private static final int COL_COUNT = 6;
 
 	private Text nameText;
 	private Text commentText;
@@ -137,11 +135,14 @@ public class CommentPropertySection extends AbstractSection {
 				inputDataProvider.getEditableRule());
 		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer,
 				new ColumnDataProvider(), outputDataProvider.getEditableRule());
-		
+
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
-		
+
+		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputDataProvider));
+		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputDataProvider));
+
 		inputTable.configure();
 		outputTable.configure();
 
@@ -171,7 +172,7 @@ public class CommentPropertySection extends AbstractSection {
 					defaultComment = fbType.getInterfaceList().getInputVars().get(rowPosition).getComment();
 				}
 
-				if (columnPosition == INITIAL_VALUE && rowItem.getValue().hasError()) {
+				if (columnPosition == INITIAL_VALUE_COL_ID && rowItem.getValue().hasError()) {
 					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 				}
 			} else {
@@ -189,19 +190,22 @@ public class CommentPropertySection extends AbstractSection {
 				}
 			}
 
-			if (columnPosition == INITIAL_VALUE && !InitialValueHelper.hasInitalValue(rowItem)
-					|| columnPosition == COMMENT && defaultComment != null
+			if (columnPosition == INITIAL_VALUE_COL_ID && !InitialValueHelper.hasInitalValue(rowItem)
+					|| columnPosition == COMMENT_COL_ID && defaultComment != null
 					&& rowItem.getComment().equals(defaultComment)) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
 			}
-			if (columnPosition == NAME || columnPosition == COMMENT) {
+			if (columnPosition == NAME_COL_ID || columnPosition == COMMENT_COL_ID) {
 				// We want to align the pin names and comments to the left side
-				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT); 
+				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			}
-			if (columnPosition == VISIBLE) {
+			if (columnPosition == INITIAL_VALUE_COL_ID) {
+				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
+			}
+			if (columnPosition == VISIBLE_COL_ID) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
 			}
-			if (columnPosition == ISVARCONFIG) {
+			if (columnPosition == ISVARCONFIG_COL_ID) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
 			}
 		});
@@ -310,20 +314,8 @@ public class CommentPropertySection extends AbstractSection {
 
 		inputTable.refresh();
 		outputTable.refresh();
-
-		inputTable.addListener(SWT.Selection, event -> {
-			if (event.index == VISIBLE) {
-				final Object o = event.data;
-			}
-		});
-
-		outputTable.addListener(SWT.Selection, event -> {
-			if (event.index == VISIBLE) {
-				final Object o = event.data;
-			}
-		});
 	}
-	
+
 	private class VarDeclarationListProvider extends ListDataProvider<VarDeclaration> {
 		private final boolean isInputData;
 
@@ -356,21 +348,22 @@ public class CommentPropertySection extends AbstractSection {
 			return new IEditableRule() {
 				@Override
 				public boolean isEditable(final int columnIndex, final int rowIndex) {
-					return (columnIndex == INITIAL_VALUE && isInputData) || columnIndex == COMMENT
-							|| columnIndex == VISIBLE || columnIndex == ISVARCONFIG;
+					return (columnIndex == INITIAL_VALUE_COL_ID && isInputData) || columnIndex == COMMENT_COL_ID
+							|| columnIndex == VISIBLE_COL_ID || columnIndex == ISVARCONFIG_COL_ID;
 				}
 
 				@Override // Added the visible column stuff
 				public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
-					return (cell.getColumnIndex() == INITIAL_VALUE && isInputData) || cell.getColumnIndex() == COMMENT
-							|| cell.getColumnIndex() == VISIBLE || cell.getColumnIndex() == ISVARCONFIG;
+					return (cell.getColumnIndex() == INITIAL_VALUE_COL_ID && isInputData)
+							|| cell.getColumnIndex() == COMMENT_COL_ID || cell.getColumnIndex() == VISIBLE_COL_ID
+							|| cell.getColumnIndex() == ISVARCONFIG_COL_ID;
 				}
 			};
 		}
 	}
 
-	private class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<VarDeclaration> { // IColumnPropertyAccessor
-		private final boolean isInputData;
+	public class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<VarDeclaration> { // IColumnPropertyAccessor
+		protected final boolean isInputData;
 
 		public VarDeclarationColumnAccessor(final boolean isInputData) {
 			this.isInputData = isInputData;
@@ -379,17 +372,17 @@ public class CommentPropertySection extends AbstractSection {
 		@Override
 		public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
 			switch (columnIndex) {
-			case NAME:
+			case NAME_COL_ID:
 				return rowObject.getName();
-			case TYPE:
+			case TYPE_COL_ID:
 				return rowObject.getTypeName();
-			case INITIAL_VALUE:
+			case INITIAL_VALUE_COL_ID:
 				return InitialValueHelper.getInitalOrDefaultValue(rowObject);
-			case COMMENT:
+			case COMMENT_COL_ID:
 				return rowObject.getComment();
-			case VISIBLE: // I added
+			case VISIBLE_COL_ID: // I added
 				return rowObject.isVisible();
-			case ISVARCONFIG: 
+			case ISVARCONFIG_COL_ID:
 				return rowObject.isVarConfig();
 			default:
 				return null;
@@ -400,27 +393,27 @@ public class CommentPropertySection extends AbstractSection {
 		public void setDataValue(final VarDeclaration rowObject, final int columnIndex, final Object newValue) {
 			Command cmd = null;
 			switch (columnIndex) {
-			case INITIAL_VALUE:
+			case INITIAL_VALUE_COL_ID:
 				if (!isInputData) {
 					return;
 				}
 				cmd = new ChangeValueCommand(rowObject, (String) newValue);
 				break;
-			case COMMENT:
+			case COMMENT_COL_ID:
 				if ((String) newValue != null) {
 					cmd = new ChangeCommentCommand(rowObject, (String) newValue);
 				} else {
 					cmd = new ChangeCommentCommand(rowObject, ""); //$NON-NLS-1$
 				}
 				break;
-			case VISIBLE:
+			case VISIBLE_COL_ID:
 				if ((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
 						|| !rowObject.isIsInput() && rowObject.getOutputConnections().isEmpty()) {
-					cmd = new HidePinCommand(rowObject, (Boolean) newValue);
+					cmd = new HidePinCommand(rowObject, ((Boolean) newValue).booleanValue());
 				}
 				break;
-			case ISVARCONFIG:
-				cmd = new VarConfigurationCommand(rowObject, (Boolean) newValue);
+			case ISVARCONFIG_COL_ID:
+				cmd = new VarConfigurationCommand(rowObject, ((Boolean) newValue).booleanValue());
 				break;
 			default:
 				return;
@@ -430,25 +423,27 @@ public class CommentPropertySection extends AbstractSection {
 
 		@Override
 		public int getColumnCount() {
-			int COL_NUM = COL_COUNT; // it can be used to show VarConfig only in inputs table
-			if(!isInputData) COL_NUM--;
-				return COL_NUM;
+			// it can be used to show VarConfig only in inputs table
+			if(!isInputData) {
+				return COL_COUNT - 1;
+			}
+			return COL_COUNT;
 		}
 
 		@Override
 		public String getColumnProperty(final int columnIndex) {
 			switch (columnIndex) {
-			case NAME:
+			case NAME_COL_ID:
 				return FordiacMessages.Name;
-			case TYPE:
+			case TYPE_COL_ID:
 				return FordiacMessages.Type;
-			case INITIAL_VALUE:
+			case INITIAL_VALUE_COL_ID:
 				return FordiacMessages.InitialValue;
-			case COMMENT:
+			case COMMENT_COL_ID:
 				return FordiacMessages.Comment;
-			case VISIBLE:
+			case VISIBLE_COL_ID:
 				return FordiacMessages.Visible;
-			case ISVARCONFIG:
+			case ISVARCONFIG_COL_ID:
 				return FordiacMessages.VarConfig;
 			default:
 				return null;
@@ -459,39 +454,39 @@ public class CommentPropertySection extends AbstractSection {
 		public int getColumnIndex(final String propertyName) {
 			switch (propertyName) {
 			case "Name":
-				return NAME;
+				return NAME_COL_ID;
 			case "Type":
-				return TYPE;
+				return TYPE_COL_ID;
 			case "Initial Value":
-				return INITIAL_VALUE;
+				return INITIAL_VALUE_COL_ID;
 			case "Comment":
-				return COMMENT;
+				return COMMENT_COL_ID;
 			case "Visible":
-				return VISIBLE;
+				return VISIBLE_COL_ID;
 			case "VarConfig":
-				return ISVARCONFIG;
+				return ISVARCONFIG_COL_ID;
 			default:
 				return -1;
 			}
 		}
 	}
 
-	private class ColumnDataProvider implements IDataProvider {
+	public static class ColumnDataProvider implements IDataProvider {
 
 		@Override
 		public Object getDataValue(final int columnIndex, final int rowIndex) {
 			switch (columnIndex) {
-			case NAME:
+			case NAME_COL_ID:
 				return FordiacMessages.Name;
-			case TYPE:
+			case TYPE_COL_ID:
 				return FordiacMessages.Type;
-			case INITIAL_VALUE:
+			case INITIAL_VALUE_COL_ID:
 				return FordiacMessages.InitialValue;
-			case COMMENT:
+			case COMMENT_COL_ID:
 				return FordiacMessages.Comment;
-			case VISIBLE:
+			case VISIBLE_COL_ID:
 				return FordiacMessages.Visible;
-			case ISVARCONFIG:
+			case ISVARCONFIG_COL_ID:
 				return FordiacMessages.VarConfig;
 			default:
 				return FordiacMessages.EmptyField;

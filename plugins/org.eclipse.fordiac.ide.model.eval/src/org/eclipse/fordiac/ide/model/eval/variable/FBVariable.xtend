@@ -17,7 +17,9 @@ import org.eclipse.fordiac.ide.model.eval.value.FBValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
+import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
@@ -38,22 +40,32 @@ class FBVariable extends AbstractVariable<FBValue> {
 	new(String name, FBType type, Iterable<Variable<?>> variables) {
 		super(name, type)
 		val members = variables?.toMap[getName] ?: newHashMap;
-		(type.interfaceList.inputVars + type.interfaceList.outputVars).forEach [ variable |
-			members.computeIfAbsent(variable.name)[newVariable(variable)]
-		]
+		(type.interfaceList.inputVars + type.interfaceList.outputVars).forEach[initializeMember(members)]
 		if (type instanceof BaseFBType) {
-			(type.internalVars).forEach [ variable |
-				members.computeIfAbsent(variable.name)[newVariable(variable)]
-			]
-			(type.internalFbs).forEach [ variable |
-				members.computeIfAbsent(variable.name)[newVariable(variable)]
-			]
+			type.internalVars.forEach[initializeMember(members)]
+			type.internalFbs.forEach[initializeMember(members)]
 		}
 		if (type instanceof BasicFBType) {
 			members.computeIfAbsent(ECStateVariable.NAME)[new ECStateVariable(type)]
 		}
 		this.members = members.immutableCopy
 		value = new FBValue(type, this.members)
+	}
+
+	def protected void initializeMember(VarDeclaration variable, Map<String, Variable<?>> members) {
+		try {
+			members.computeIfAbsent(variable.name)[newVariable(variable)]
+		} catch (Exception e) {
+			throw new Exception('''Error initializing member "«variable.name»": «e.message»''', e)
+		}
+	}
+
+	def protected void initializeMember(FB fb, Map<String, Variable<?>> members) {
+		try {
+			members.computeIfAbsent(fb.name)[newVariable(fb)]
+		} catch (Exception e) {
+			throw new Exception('''Error initializing member "«fb.name»": «e.message»''', e)
+		}
 	}
 
 	override setValue(Value value) {

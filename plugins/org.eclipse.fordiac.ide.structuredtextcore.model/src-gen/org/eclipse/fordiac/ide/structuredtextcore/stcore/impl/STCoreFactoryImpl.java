@@ -126,6 +126,8 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 			case STCorePackage.ST_COMMENT: return createSTComment();
 			case STCorePackage.ST_STRUCT_INITIALIZER_EXPRESSION: return createSTStructInitializerExpression();
 			case STCorePackage.ST_STRUCT_INIT_ELEMENT: return createSTStructInitElement();
+			case STCorePackage.ST_EXPRESSION_SOURCE: return createSTExpressionSource();
+			case STCorePackage.ST_INITIALIZER_EXPRESSION_SOURCE: return createSTInitializerExpressionSource();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -749,6 +751,28 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	public STStructInitElement createSTStructInitElement() {
 		STStructInitElementImpl stStructInitElement = new STStructInitElementImpl();
 		return stStructInitElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STExpressionSource createSTExpressionSource() {
+		STExpressionSourceImpl stExpressionSource = new STExpressionSourceImpl();
+		return stExpressionSource;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public STInitializerExpressionSource createSTInitializerExpressionSource() {
+		STInitializerExpressionSourceImpl stInitializerExpressionSource = new STInitializerExpressionSourceImpl();
+		return stInitializerExpressionSource;
 	}
 
 	/**

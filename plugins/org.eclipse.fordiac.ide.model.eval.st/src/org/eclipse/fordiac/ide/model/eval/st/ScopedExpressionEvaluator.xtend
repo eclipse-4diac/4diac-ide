@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,7 +16,6 @@ import java.util.Collection
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException
-import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluator
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
@@ -34,8 +33,7 @@ class ScopedExpressionEvaluator extends StructuredTextEvaluator {
 	STExpression parseResult
 
 	new(String expression, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
-		super("anonymous", context ?: switch (parent) { FBEvaluator<?>: parent.instance default: parent?.context },
-			variables ?: parent?.variables?.values, parent)
+		super("anonymous", context ?: parent?.context, variables ?: parent?.variables?.values, parent)
 		this.expression = expression
 	}
 

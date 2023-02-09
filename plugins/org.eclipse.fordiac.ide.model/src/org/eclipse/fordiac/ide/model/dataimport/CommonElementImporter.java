@@ -305,13 +305,15 @@ public abstract class CommonElementImporter {
 		}
 	}
 
-	/** Parses the identification.
+	/**
+	 * Parses the identification.
 	 *
 	 * @param elem the elem
 	 * @param node the node
 	 *
 	 * @return the identification
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	protected void parseIdentification(final LibraryElement elem) throws XMLStreamException {
 		final Identification ident = LibraryElementFactory.eINSTANCE.createIdentification();
 		final String standard = getAttributeValue(LibraryElementTags.STANDARD_ATTRIBUTE);
@@ -342,12 +344,14 @@ public abstract class CommonElementImporter {
 		proceedToEndElementNamed(LibraryElementTags.IDENTIFICATION_ELEMENT);
 	}
 
-	/** Parses the version info.
+	/**
+	 * Parses the version info.
 	 *
 	 * @param elem the library element the version info should be added to.
 	 *
 	 * @throws TypeImportException the FBT import exception
-	 * @throws XMLStreamException */
+	 * @throws XMLStreamException
+	 */
 	protected void parseVersionInfo(final LibraryElement elem) throws TypeImportException, XMLStreamException {
 		final VersionInfo versionInfo = LibraryElementFactory.eINSTANCE.createVersionInfo();
 
@@ -384,11 +388,14 @@ public abstract class CommonElementImporter {
 		proceedToEndElementNamed(LibraryElementTags.VERSION_INFO_ELEMENT);
 	}
 
-	/** Gets the xand y.
+	/**
+	 * Gets the xand y.
 	 *
-	 * @param positionableElement the positionable element where the parsed coordinates should be set to
+	 * @param positionableElement the positionable element where the parsed
+	 *                            coordinates should be set to
 	 *
-	 * @throws TypeImportException the FBT import exception */
+	 * @throws TypeImportException the FBT import exception
+	 */
 	public void getXandY(final PositionableElement positionableElement) throws TypeImportException {
 		try {
 			final String x = getAttributeValue(LibraryElementTags.X_ATTRIBUTE);
@@ -448,7 +455,6 @@ public abstract class CommonElementImporter {
 		}
 
 	}
-
 
 	private void checkStructAttribute(final StructManipulator fb, final String name) {
 		if (LibraryElementTags.STRUCTURED_TYPE_ELEMENT.equals(name)) {
@@ -511,14 +517,9 @@ public abstract class CommonElementImporter {
 	protected void parsePinVarConfigAttribute(final FBNetworkElement block) {
 		final String pinNameAndVarConfig = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
 		final String[] temp = pinNameAndVarConfig.split(":"); //$NON-NLS-1$
-
-		for(final VarDeclaration inVar : block.getInterface().getInputVars()) {
-			if(inVar.getName().equals(temp[0])){
-				inVar.setVarConfig(IS_VAR_CONFIGED);
-			}
-			else {
-				inVar.setVarConfig(!IS_VAR_CONFIGED);
-			}
+		final VarDeclaration inVar = block.getInterface().getVariable(temp[0]);
+		if (inVar != null) {
+			inVar.setVarConfig(IS_VAR_CONFIGED);	
 		}
 	}
 
@@ -661,7 +662,8 @@ public abstract class CommonElementImporter {
 						block.getName()),
 				block, getLineNumber());
 		errorMarkerBuilders.add(e);
-		final ErrorMarkerInterface errorMarkerInterface = ConnectionHelper.createErrorMarkerInterface(IecTypes.GenericTypes.ANY,parameter.getName(), true, block.getInterface());
+		final ErrorMarkerInterface errorMarkerInterface = ConnectionHelper
+				.createErrorMarkerInterface(IecTypes.GenericTypes.ANY, parameter.getName(), true, block.getInterface());
 		e.setErrorMarkerRef(errorMarkerInterface);
 		errorMarkerInterface.setValue(parameter.getValue());
 	}
@@ -669,8 +671,8 @@ public abstract class CommonElementImporter {
 	protected void validateValue(final VarDeclaration vInput) {
 		final String validation = ValueValidator.validateValue(vInput);
 		if ((validation != null) && (!validation.trim().isEmpty())) {
-			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createValueErrorMarkerBuilder(validation,
-					vInput.getValue(), getLineNumber());
+			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createValueErrorMarkerBuilder(validation, vInput.getValue(),
+					getLineNumber());
 			errorMarkerBuilders.add(e);
 		}
 	}
@@ -700,7 +702,7 @@ public abstract class CommonElementImporter {
 			switch (name) {
 			case LibraryElementTags.FBNETWORK_ELEMENT:
 				new ResDevFBNetworkImporter(this, fbNetwork, resource.getVarDeclarations())
-				.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
+						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 				break;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
 				parseGenericAttributeNode(resource);
@@ -750,13 +752,13 @@ public abstract class CommonElementImporter {
 	public static void createParamters(final IVarElement element) {
 		if (element instanceof Device) {
 			element.getVarDeclarations()
-			.addAll(EcoreUtil.copyAll(((DeviceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-					.getType().getVarDeclaration()));
+					.addAll(EcoreUtil.copyAll(((DeviceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+							.getType().getVarDeclaration()));
 		}
 		if (element instanceof Resource) {
 			element.getVarDeclarations()
-			.addAll(EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-					.getType().getVarDeclaration()));
+					.addAll(EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+							.getType().getVarDeclaration()));
 		}
 		for (final VarDeclaration varDecl : element.getVarDeclarations()) {
 			final Value value = LibraryElementFactory.eINSTANCE.createValue();
@@ -805,18 +807,20 @@ public abstract class CommonElementImporter {
 			final InterfaceList il = LibraryElementFactory.eINSTANCE.createInterfaceList();
 			il.getInputVars().addAll(resource.getVarDeclarations());
 			resourceFBNetwork = FBNetworkHelper.createResourceFBNetwork(resource.getType().getFBNetwork(), il);
-			resource.getVarDeclarations().addAll(il.getInputVars());  // ensure that the data inputs are back with us.
+			resource.getVarDeclarations().addAll(il.getInputVars()); // ensure that the data inputs are back with us.
 		} else {
 			resourceFBNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		}
 		return resourceFBNetwork;
 	}
 
-	/** Take the given string and unescape all &, <, >, ", ', newlines, and tabs with the according XML unsescaped
-	 * characters.
+	/**
+	 * Take the given string and unescape all &, <, >, ", ', newlines, and tabs with
+	 * the according XML unsescaped characters.
 	 *
 	 * @param value the string to unescape
-	 * @return the unescaped string */
+	 * @return the unescaped string
+	 */
 	protected static String fullyUnEscapeValue(final String value) {
 		String escapedValue = value.replace("&amp;", "&"); //$NON-NLS-1$ //$NON-NLS-2$
 		escapedValue = escapedValue.replace("&lt;", "<"); //$NON-NLS-1$ //$NON-NLS-2$

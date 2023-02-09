@@ -15,15 +15,12 @@ package org.eclipse.fordiac.ide.export.forte_lua.st
 
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
-import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.getAllProperContents
-import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.PrimaryVariable
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 
 @FinalFieldsConstructor
 class STAlgorithmSupport extends StructuredTextSupport {

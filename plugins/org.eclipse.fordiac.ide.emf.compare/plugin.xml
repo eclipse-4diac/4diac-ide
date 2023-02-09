@@ -21,5 +21,12 @@
             ranking="100"
            >
       </factory>
-</extension>
+ </extension>
+   <extension
+         point="org.eclipse.emf.compare.rcp.matchEngine">
+      <engineFactory
+            class="org.eclipse.fordiac.ide.emf.compare.MatchEngine.FordiacMatchEngineFactory"
+            ranking="20">
+      </engineFactory>
+   </extension> 
 </plugin>

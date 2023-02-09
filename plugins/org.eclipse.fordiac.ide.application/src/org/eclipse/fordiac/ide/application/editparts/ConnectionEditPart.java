@@ -70,7 +70,10 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		@Override
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
-			refreshVisuals();
+
+			if(!LibraryElementPackage.eINSTANCE.getErrorMarkerRef_FileMarkerId().equals(feature)) {
+				refreshVisuals();
+			}
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)

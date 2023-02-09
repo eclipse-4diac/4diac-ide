@@ -28,6 +28,7 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getInternalVars <em>Internal Vars</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getInternalConstVars <em>Internal Const Vars</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getInternalFbs <em>Internal Fbs</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getAlgorithm <em>Algorithm</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.BaseFBType#getMethods <em>Methods</em>}</li>
@@ -51,6 +52,19 @@ public interface BaseFBType extends FBType {
 	 * @generated
 	 */
 	EList<VarDeclaration> getInternalVars();
+
+	/**
+	 * Returns the value of the '<em><b>Internal Const Vars</b></em>' containment reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Internal Const Vars</em>' containment reference list.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getBaseFBType_InternalConstVars()
+	 * @model containment="true"
+	 *        extendedMetaData="kind='element' name='VarDeclaration' namespace='##targetNamespace'"
+	 * @generated
+	 */
+	EList<VarDeclaration> getInternalConstVars();
 
 	/**
 	 * Returns the value of the '<em><b>Internal Fbs</b></em>' containment reference list.

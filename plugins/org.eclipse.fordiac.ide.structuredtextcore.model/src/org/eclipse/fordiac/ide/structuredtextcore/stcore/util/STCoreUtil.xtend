@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,6 +22,7 @@ import org.eclipse.fordiac.ide.model.data.AnyIntType
 import org.eclipse.fordiac.ide.model.data.AnyMagnitudeType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.AnyRealType
+import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.BoolType
@@ -68,10 +69,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
@@ -84,7 +87,10 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryOperator
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.copy
+
 final class STCoreUtil {
+	public static final String OPTION_EXPECTED_TYPE = STCoreUtil.name + ".EXPECTED_TYPE"
 
 	private new() {
 	}
@@ -287,22 +293,38 @@ final class STCoreUtil {
 					VarDeclaration: parameter.type
 					STVarDeclaration: parameter.type
 				}
+			STExpressionSource:
+				eResource?.resourceSet?.loadOptions?.get(OPTION_EXPECTED_TYPE) as INamedElement
 		}
 	}
 
 	def static INamedElement getExpectedType(STInitializerExpression expression) {
 		switch (it : expression.eContainer) {
-			STVarDeclaration: type
-			STArrayInitElement: expectedType
-			STStructInitElement: variable.featureType
-			STArrayInitializerExpression: expectedType
-			STStructInitializerExpression: expectedType
+			STVarDeclaration:
+				featureType
+			STArrayInitElement:
+				expectedType
+			STStructInitElement:
+				variable.featureType
+			STArrayInitializerExpression:
+				expectedType
+			STStructInitializerExpression:
+				expectedType
+			STInitializerExpressionSource:
+				eResource?.resourceSet?.loadOptions?.get(OPTION_EXPECTED_TYPE) as INamedElement
 		}
 	}
 
 	def static INamedElement getExpectedType(STArrayInitElement initElement) {
 		switch (it : initElement.eContainer) {
-			STArrayInitializerExpression: expectedType
+			STArrayInitializerExpression:
+				switch (type : expectedType) {
+					ArrayType:
+						if (type.subranges.size > 1) // not consumed all dimensions
+							type.baseType.newArrayType(type.subranges.tail.map[copy])
+						else // consumed all dimensions
+							type.baseType
+				}
 		}
 	}
 
@@ -346,19 +368,29 @@ final class STCoreUtil {
 		switch (feature) {
 			VarDeclaration:
 				if (feature.array)
-					feature.type.newArrayType(newSubrange(0, feature.arraySize))
+					feature.type.newArrayType(newSubrange(0, feature.arraySize - 1))
 				else
 					feature.type
 			STVarDeclaration case feature.type instanceof DataType:
-				if (feature.array)
-					(feature.type as DataType).newArrayType(
-						if (feature.ranges.empty)
-							feature.count.map[DataFactory.eINSTANCE.createSubrange]
-						else
-							feature.ranges.map[toSubrange]
-					)
-				else
-					feature.type
+				try {
+					val type = switch (type: feature.type) {
+						AnyStringType case feature.maxLength !== null:
+							type.newStringType(feature.maxLength.asConstantInt)
+						DataType:
+							type
+					}
+					if (feature.array)
+						type.newArrayType(
+							if (feature.ranges.empty)
+								feature.count.map[DataFactory.eINSTANCE.createSubrange]
+							else
+								feature.ranges.map[toSubrange]
+						)
+					else
+						type
+				} catch (ArithmeticException e) {
+					null // invalid declaration
+				}
 			FB:
 				feature.type
 			default:
@@ -372,7 +404,7 @@ final class STCoreUtil {
 
 	def static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
 		DataFactory.eINSTANCE.createArrayType => [
-			name = '''ARRAY [«arraySubranges.map['''«lowerLimit»..«upperLimit»'''].join(", ")»] OF «arrayBaseType.name»'''
+			name = '''ARRAY [«arraySubranges.map['''«IF setLowerLimit && setUpperLimit»«lowerLimit»..«upperLimit»«ELSE»*«ENDIF»'''].join(", ")»] OF «arrayBaseType.name»'''
 			baseType = arrayBaseType
 			subranges.addAll(arraySubranges)
 		]
@@ -387,10 +419,17 @@ final class STCoreUtil {
 		}
 	}
 
+	def static AnyStringType newStringType(AnyStringType template, int maxLengthValue) {
+		DataFactory.eINSTANCE.create(template.eClass) as AnyStringType => [
+			name = '''«template.name»[«maxLengthValue»]'''
+			maxLength = maxLengthValue
+		]
+	}
+
 	def static int asConstantInt(STExpression expr) {
 		switch (expr) {
 			STNumericLiteral: (expr.value as BigInteger).intValueExact
-			default: 0
+			default: throw new ArithmeticException("Not a constant integer")
 		}
 	}
 

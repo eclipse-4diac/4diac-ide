@@ -350,5 +350,11 @@
       <genOperations ecoreOperation="STCore.ecore#//STStructInitElement/getDeclaredResultType"
           body="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
     </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STExpressionSource">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STExpressionSource/expression"/>
+    </genClasses>
+    <genClasses ecoreClass="STCore.ecore#//STInitializerExpressionSource">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference STCore.ecore#//STInitializerExpressionSource/initializerExpression"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>

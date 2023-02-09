@@ -28,6 +28,8 @@ import org.eclipse.fordiac.ide.application.actions.DeleteFBNetworkAction;
 import org.eclipse.fordiac.ide.application.actions.FBNetworkSelectAllAction;
 import org.eclipse.fordiac.ide.application.actions.PasteEditPartsAction;
 import org.eclipse.fordiac.ide.application.actions.UpdateFBTypeAction;
+import org.eclipse.fordiac.ide.application.dnd.ConnectionDragSourceListener;
+import org.eclipse.fordiac.ide.application.dnd.ConnectionDragTargetListener;
 import org.eclipse.fordiac.ide.application.editparts.ElementEditPartFactory;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkRootEditPart;
 import org.eclipse.fordiac.ide.application.tools.FBNetworkPanningSelectionTool;
@@ -126,7 +128,8 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 		final Open4DIACElementAction openAction = (Open4DIACElementAction) registry
 				.getAction(Open4DIACElementAction.ID);
 		getGraphicalViewer().addSelectionChangedListener(openAction);
-
+		getGraphicalViewer().addDragSourceListener(new ConnectionDragSourceListener(getGraphicalViewer()));
+		getGraphicalViewer().addDropTargetListener(new ConnectionDragTargetListener(getGraphicalViewer()));
 	}
 
 	@Override
@@ -239,9 +242,9 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	}
 
 	@Override
-	public Object getAdapter(final Class adapter) {
+	public <T> T getAdapter(final Class<T> adapter) {
 		if (adapter == FBNetwork.class) {
-			return getModel();
+			return adapter.cast(getModel());
 		}
 		return super.getAdapter(adapter);
 	}
