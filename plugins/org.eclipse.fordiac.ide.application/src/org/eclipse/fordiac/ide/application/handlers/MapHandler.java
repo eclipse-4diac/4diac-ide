@@ -22,12 +22,12 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.model.annotations.MappingAnnotations;
 import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.Command;
@@ -52,13 +52,12 @@ public class MapHandler extends AbstractHandler {
 		final List<FBNetworkElement> fbelements = HandlerHelper.getSelectedFBNElements(selection);
 		final AutomationSystem system = getSystem(editor);
 
-		if (system != null && !fbelements.isEmpty()) {
+		if ((system != null) && !fbelements.isEmpty()) {
 			final CompoundCommand mapCommands = openDialog(editor.getSite().getShell(), system, fbelements);
 			if (!mapCommands.isEmpty()) {
 				HandlerHelper.getCommandStack(editor).execute(mapCommands);
 			}
 		}
-
 		return Status.OK_STATUS;
 	}
 
@@ -70,9 +69,9 @@ public class MapHandler extends AbstractHandler {
 		final ElementTreeSelectionDialog dialog = createDialog(shell, system);
 		if (Window.OK == dialog.open()) {
 			final Object firstResult = dialog.getFirstResult();
-			if (firstResult instanceof Resource) {
+			if (firstResult instanceof MappingTarget) {
 				fbelements.forEach(fb -> {
-					final Command cmd = MapToCommand.createMapToCommand(fb, (Resource) firstResult);
+					final Command cmd = MapToCommand.createMapToCommand(fb, (MappingTarget) firstResult);
 					if (cmd.canExecute()) {
 						mapCommands.add(cmd);
 					}
@@ -107,14 +106,12 @@ public class MapHandler extends AbstractHandler {
 		return dialog;
 	}
 
-
 	private static LabelProvider createTreeLabelProvider() {
 		return new LabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if(element instanceof Resource) {
-					return ((Resource) element).getDevice().getName() + "." //$NON-NLS-1$
-							+((Resource)element).getName();
+				if (element instanceof MappingTarget) {
+					return MappingAnnotations.getHierarchicalName((MappingTarget) element);
 				}
 				return super.getText(element);
 			}
@@ -123,6 +120,7 @@ public class MapHandler extends AbstractHandler {
 			public Image getImage(final Object element) {
 				return FordiacImage.ICON_RESOURCE.getImage();
 			}
+
 		};
 	}
 
@@ -149,16 +147,8 @@ public class MapHandler extends AbstractHandler {
 
 			@Override
 			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof AutomationSystem) {
-					final AutomationSystem system = (AutomationSystem) parentElement;
-					return system.getSystemConfiguration().getDevices().stream()
-							.flatMap(dev -> dev.getResource().stream())
-							.toArray(Resource[]::new);
-				}
-
-				if (parentElement instanceof Device) {
-					final Device device = (Device) parentElement;
-					return device.getResource().toArray();
+				if (parentElement instanceof EObject) {
+					return MappingAnnotations.getContainedMappingTargets((EObject) parentElement).toArray();
 				}
 				return new Object[0];
 			}
@@ -170,7 +160,8 @@ public class MapHandler extends AbstractHandler {
 		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_EDITOR_NAME);
 		final FBNetwork network = editor.getAdapter(FBNetwork.class);
-		setBaseEnabled(isValidSelection(evaluationContext) && isMapable(network) && hasDevices(network));
+		setBaseEnabled(
+				isValidSelection(evaluationContext) && MappingAnnotations.isMapable(network) && hasDevices(network));
 	}
 
 	private static boolean isValidSelection(final Object evaluationContext) {
@@ -181,12 +172,7 @@ public class MapHandler extends AbstractHandler {
 
 	private static boolean hasDevices(final FBNetwork network) {
 		final AutomationSystem system = network.getAutomationSystem();
-		return system != null && !system.getSystemConfiguration().getDevices().isEmpty();
-	}
-
-	public static boolean isMapable(final FBNetwork network) {
-		return ((network != null) && !(network.isSubApplicationNetwork() || network.isCFBTypeNetwork()
-				|| network.eContainer() instanceof Resource));
+		return (system != null) && !system.getSystemConfiguration().getDevices().isEmpty();
 	}
 
 	private static AutomationSystem getSystem(final IEditorPart editor) {

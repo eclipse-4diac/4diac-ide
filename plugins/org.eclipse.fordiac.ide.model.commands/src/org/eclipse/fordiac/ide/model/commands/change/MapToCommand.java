@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -169,8 +170,8 @@ public class MapToCommand extends Command {
 		}
 
 		final CreateSubAppInstanceCommand cmd = new CreateSubAppInstanceCommand(
-				(SubAppTypeEntry) srcElement.getTypeEntry(), getTargetFBNetwork(),
-				srcElement.getPosition().getX(), srcElement.getPosition().getY());
+				(SubAppTypeEntry) srcElement.getTypeEntry(), getTargetFBNetwork(), srcElement.getPosition().getX(),
+				srcElement.getPosition().getY());
 		cmd.execute();
 
 		return cmd.getSubApp();
@@ -230,9 +231,8 @@ public class MapToCommand extends Command {
 				// connections to error markers will not get mapped
 				addConnectionCreateCommand(
 						connection.getSourceElement().getOpposite()
-						.getInterfaceElement(connection.getSource().getName()),
-						targetElement.getInterfaceElement(interfaceElement.getName()),
-						connection.isVisible());
+								.getInterfaceElement(connection.getSource().getName()),
+						targetElement.getInterfaceElement(interfaceElement.getName()), connection.isVisible());
 
 			}
 		}
@@ -261,7 +261,8 @@ public class MapToCommand extends Command {
 		return connection.getSourceElement() == connection.getDestinationElement();
 	}
 
-	private void addConnectionCreateCommand(final IInterfaceElement source, final IInterfaceElement destination, final boolean visible) {
+	private void addConnectionCreateCommand(final IInterfaceElement source, final IInterfaceElement destination,
+			final boolean visible) {
 		final AbstractConnectionCreateCommand cmd = getConnectionCreatCMD(source);
 		if (null != cmd) {
 			cmd.setSource(source);
@@ -281,9 +282,11 @@ public class MapToCommand extends Command {
 	private AbstractConnectionCreateCommand getConnectionCreatCMD(final IInterfaceElement interfaceElement) {
 		if (interfaceElement instanceof Event) {
 			return new EventConnectionCreateCommand(resource.getFBNetwork());
-		} else if (interfaceElement instanceof AdapterDeclaration) {
+		}
+		if (interfaceElement instanceof AdapterDeclaration) {
 			return new AdapterConnectionCreateCommand(resource.getFBNetwork());
-		} else if (interfaceElement instanceof VarDeclaration) {
+		}
+		if (interfaceElement instanceof VarDeclaration) {
 			return new DataConnectionCreateCommand(resource.getFBNetwork());
 		}
 		return null;
@@ -323,13 +326,17 @@ public class MapToCommand extends Command {
 	 * "Remapping required deletion of Connections added within the Resource - please check your network" );
 	 * informUser.open(); // TODO check whether markers could be used! } } */
 
-	public static Command createMapToCommand(final FBNetworkElement srcElement, final Resource resource) {
-		if (srcElement instanceof Group) {
-			final CompoundCommand cmd = new CompoundCommand();
-			((Group) srcElement).getGroupElements().forEach(el -> cmd.add(new MapToCommand(el, resource)));
-			return cmd;
+	public static Command createMapToCommand(final FBNetworkElement srcElement, final MappingTarget resource) {
+		if (resource instanceof Resource) {
+			if (srcElement instanceof Group) {
+				final CompoundCommand cmd = new CompoundCommand();
+				((Group) srcElement).getGroupElements()
+						.forEach(el -> cmd.add(new MapToCommand(el, (Resource) resource)));
+				return cmd;
+			}
+			return new MapToCommand(srcElement, (Resource) resource);
 		}
-		return new MapToCommand(srcElement, resource);
+		return null;
 	}
 
 }

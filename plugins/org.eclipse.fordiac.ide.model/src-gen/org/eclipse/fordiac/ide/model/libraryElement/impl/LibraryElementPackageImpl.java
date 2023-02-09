@@ -4113,6 +4113,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		attributeEClass.getESuperTypes().add(this.getTypedElement());
 		resourceEClass.getESuperTypes().add(this.getTypedConfigureableObject());
 		resourceEClass.getESuperTypes().add(this.getIVarElement());
+		resourceEClass.getESuperTypes().add(this.getMappingTarget());
 		resourceTypeEClass.getESuperTypes().add(this.getCompilableType());
 		segmentEClass.getESuperTypes().add(this.getTypedConfigureableObject());
 		segmentEClass.getESuperTypes().add(this.getPositionableElement());

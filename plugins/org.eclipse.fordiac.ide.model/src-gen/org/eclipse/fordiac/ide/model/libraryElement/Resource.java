@@ -37,7 +37,7 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * @model
  * @generated
  */
-public interface Resource extends TypedConfigureableObject, IVarElement {
+public interface Resource extends TypedConfigureableObject, IVarElement, MappingTarget {
 	/**
 	 * Returns the value of the '<em><b>FB Network</b></em>' containment reference.
 	 * <!-- begin-user-doc -->

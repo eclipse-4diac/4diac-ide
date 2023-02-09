@@ -415,6 +415,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseResource(resource);
 				if (result == null) result = caseTypedConfigureableObject(resource);
 				if (result == null) result = caseIVarElement(resource);
+				if (result == null) result = caseMappingTarget(resource);
 				if (result == null) result = caseINamedElement(resource);
 				if (result == null) result = caseConfigurableObject(resource);
 				if (result == null) result = defaultCase(theEObject);
