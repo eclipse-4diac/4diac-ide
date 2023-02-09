@@ -72,8 +72,9 @@ public class ExportAsXMI {
 		xmiRessource.getContents().addAll(EcoreUtil.copyAll(resource.getContents()));
 
 		try {
-			final HashMap<String, String> options = new HashMap<>();
+			final HashMap<String, Object> options = new HashMap<>();
 			options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
+			options.put(XMLResource.OPTION_SKIP_ESCAPE_URI, Boolean.FALSE);
 			xmiRessource.save(options);
 		} catch (final Exception e) {
 			FordiacLogHelper.logError(e.getMessage(), e);
