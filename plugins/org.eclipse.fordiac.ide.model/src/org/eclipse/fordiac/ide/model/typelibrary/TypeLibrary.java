@@ -1,7 +1,8 @@
 /********************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems
+ * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH, IBH Systems
  * 		            		Johannes Kepler University,
  *                          Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +18,7 @@
  *  Alois Zoitl - Changed to a per project Type and Data TypeLibrary
  *              - Added support for project renameing
  *              - Changed TypeLibrary from palette model to TypeEntry POJO classes
+ *  Martin Jobst - migrate system handling to typelib
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.typelibrary;
 
@@ -45,7 +47,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorFBTypeEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.ErrorSubAppTypeEntryImpl;
-import org.eclipse.fordiac.ide.model.typelibrary.impl.SystemEntryImpl;
 import org.eclipse.fordiac.ide.model.typelibrary.impl.TypeEntryFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
@@ -59,6 +60,7 @@ public final class TypeLibrary {
 	private final Map<String, ResourceTypeEntry> resourceTypes = new HashMap<>();
 	private final Map<String, SegmentTypeEntry> segmentTypes = new HashMap<>();
 	private final Map<String, SubAppTypeEntry> subAppTypes = new HashMap<>();
+	private final Map<String, SystemEntry> systems = new HashMap<>();
 	private final Map<String, TypeEntry> errorTypes = new HashMap<>();
 
 	public Map<String, AdapterTypeEntry> getAdapterTypes() {
@@ -91,6 +93,10 @@ public final class TypeLibrary {
 		return subAppTypes;
 	}
 
+	public Map<String, SystemEntry> getSystems() {
+		return systems;
+	}
+
 	public List<CompositeFBType> getCompositeFBTypes() {
 		return getFbTypes().values().stream().filter(e -> e.getTypeEditable() instanceof CompositeFBType)
 				.map(e -> (CompositeFBType) e.getTypeEditable())
@@ -119,6 +125,10 @@ public final class TypeLibrary {
 
 	public SubAppTypeEntry getSubAppTypeEntry(final String typeName) {
 		return getSubAppTypes().get(typeName);
+	}
+
+	public SystemEntry getSystemEntry(final String name) {
+		return getSystems().get(name);
 	}
 
 	public TypeEntry getTypeEntry(final IFile typeFile) {
@@ -160,6 +170,8 @@ public final class TypeLibrary {
 				return getSegmentTypes();
 			case TypeLibraryTags.SUBAPP_TYPE_FILE_ENDING:
 				return getSubAppTypes();
+			case TypeLibraryTags.SYSTEM_TYPE_FILE_ENDING:
+				return getSystems();
 			default:
 				break;
 			}
@@ -173,24 +185,7 @@ public final class TypeLibrary {
 	TypeLibrary(final IProject project) {
 		this.project = project;
 		if (project != null && project.exists()) {
-			loadPaletteFolderMembers(project);
-		}
-	}
-
-	private void loadPaletteFolderMembers(final IContainer container) {
-		try {
-			final var members = container.members();
-
-			for (final IResource iResource : members) {
-				if (iResource instanceof IFolder) {
-					loadPaletteFolderMembers((IFolder) iResource);
-				}
-				if (iResource instanceof IFile) {
-					createTypeEntry((IFile) iResource);
-				}
-			}
-		} catch (final CoreException e) {
-			FordiacLogHelper.logError(e.getMessage(), e);
+			checkAdditions(project);
 		}
 	}
 
@@ -206,13 +201,6 @@ public final class TypeLibrary {
 				marker.createMarkerInFile(file);
 			}
 		}
-		return entry;
-	}
-
-	public SystemEntry createSystemEntry(final IFile sysFile) {
-		final SystemEntry entry = new SystemEntryImpl();
-		entry.setFile(sysFile);
-		entry.setTypeLibrary(this);
 		return entry;
 	}
 
@@ -279,6 +267,7 @@ public final class TypeLibrary {
 		checkDeletionsForTypeGroup(getResourceTypes().values());
 		checkDeletionsForTypeGroup(getSegmentTypes().values());
 		checkDeletionsForTypeGroup(getSubAppTypes().values());
+		checkDeletionsForTypeGroup(getSystems().values());
 		checkDeletionsForTypeGroup(dataTypeLib.getDerivedDataTypes().values());
 	}
 
@@ -341,6 +330,8 @@ public final class TypeLibrary {
 			getSegmentTypes().put(entry.getTypeName(), (SegmentTypeEntry) entry);
 		} else if (entry instanceof SubAppTypeEntry) {
 			getSubAppTypes().put(entry.getTypeName(), (SubAppTypeEntry) entry);
+		} else if (entry instanceof SystemEntry) {
+			getSystems().put(entry.getTypeName(), (SystemEntry) entry);
 		} else {
 			FordiacLogHelper.logError("Unknown type entry to be added to library: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
@@ -359,6 +350,8 @@ public final class TypeLibrary {
 			getSegmentTypes().remove(entry.getTypeName());
 		} else if (entry instanceof SubAppTypeEntry) {
 			getSubAppTypes().remove(entry.getTypeName());
+		} else if (entry instanceof SystemEntry) {
+			getSystems().remove(entry.getTypeName());
 		} else {
 			FordiacLogHelper.logError("Unknown type entry to be removed from library: " + entry.getClass().getName()); //$NON-NLS-1$
 		}

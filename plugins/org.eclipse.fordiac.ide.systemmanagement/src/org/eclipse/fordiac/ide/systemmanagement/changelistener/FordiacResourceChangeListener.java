@@ -260,10 +260,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private void collectTypeEntries(final IResourceDelta delta) {
 		final IFile file = (IFile) delta.getResource();
 
-		TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-		if (typeEntryForFile == null) {
-			typeEntryForFile = systemManager.getTypeEntry(file);
-		}
+		final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 		if (typeEntryForFile != null
 				&& typeEntryForFile.getLastModificationTimestamp() != file.getModificationStamp()) {
 			changedFiles.add(typeEntryForFile);
@@ -442,7 +439,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		final IProject oldProject = ResourcesPlugin.getWorkspace().getRoot()
 				.getProject(delta.getMovedFromPath().lastSegment());
 		final IProject newProject = delta.getResource().getProject();
-		TypeLibraryManager.INSTANCE.renameProject(oldProject, newProject);
 		systemManager.renameProject(oldProject, newProject);
 	}
 
