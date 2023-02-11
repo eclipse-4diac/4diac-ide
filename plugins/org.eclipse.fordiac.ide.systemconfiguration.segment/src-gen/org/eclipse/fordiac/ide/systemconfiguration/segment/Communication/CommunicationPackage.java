@@ -116,6 +116,28 @@ public interface CommunicationPackage extends EPackage {
 	 * @ordered */
 	int TSN_WINDOW_FEATURE_COUNT = LibraryElementPackage.COMMUNICATION_MAPPING_TARGET_FEATURE_COUNT + 1;
 
+	/** The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.DefaultConfigurationImpl
+	 * <em>Default Configuration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.DefaultConfigurationImpl
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.CommunicationPackageImpl#getDefaultConfiguration()
+	 * @generated */
+	int DEFAULT_CONFIGURATION = 2;
+
+	/** The feature id for the '<em><b>Target</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int DEFAULT_CONFIGURATION__TARGET = LibraryElementPackage.COMMUNICATION_CONFIGURATION_FEATURE_COUNT + 0;
+
+	/** The number of structural features of the '<em>Default Configuration</em>' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int DEFAULT_CONFIGURATION_FEATURE_COUNT = LibraryElementPackage.COMMUNICATION_CONFIGURATION_FEATURE_COUNT + 1;
+
 	/** Returns the meta object for class
 	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration <em>Tsn
 	 * Configuration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -163,6 +185,25 @@ public interface CommunicationPackage extends EPackage {
 	 * @see #getTsnWindow()
 	 * @generated */
 	EAttribute getTsnWindow_Duration();
+
+	/** Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration <em>Default
+	 * Configuration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for class '<em>Default Configuration</em>'.
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration
+	 * @generated */
+	EClass getDefaultConfiguration();
+
+	/** Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration#getTarget
+	 * <em>Target</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the reference '<em>Target</em>'.
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration#getTarget()
+	 * @see #getDefaultConfiguration()
+	 * @generated */
+	EReference getDefaultConfiguration_Target();
 
 	/** Returns the factory that creates the instances of the model. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -216,6 +257,21 @@ public interface CommunicationPackage extends EPackage {
 		 *
 		 * @generated */
 		EAttribute TSN_WINDOW__DURATION = eINSTANCE.getTsnWindow_Duration();
+
+		/** The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.DefaultConfigurationImpl
+		 * <em>Default Configuration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.DefaultConfigurationImpl
+		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.CommunicationPackageImpl#getDefaultConfiguration()
+		 * @generated */
+		EClass DEFAULT_CONFIGURATION = eINSTANCE.getDefaultConfiguration();
+
+		/** The meta object literal for the '<em><b>Target</b></em>' reference feature. <!-- begin-user-doc --> <!--
+		 * end-user-doc -->
+		 *
+		 * @generated */
+		EReference DEFAULT_CONFIGURATION__TARGET = eINSTANCE.getDefaultConfiguration_Target();
 
 	}
 

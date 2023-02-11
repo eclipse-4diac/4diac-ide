@@ -39,6 +39,12 @@ public interface CommunicationFactory extends EFactory {
 	 * @generated */
 	TsnWindow createTsnWindow();
 
+	/** Returns a new object of class '<em>Default Configuration</em>'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return a new object of class '<em>Default Configuration</em>'.
+	 * @generated */
+	DefaultConfiguration createDefaultConfiguration();
+
 	/** Returns the package supported by this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @return the package supported by this factory.

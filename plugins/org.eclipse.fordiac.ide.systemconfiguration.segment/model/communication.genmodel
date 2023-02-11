@@ -28,5 +28,12 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute communication.ecore#//TsnWindow/duration"/>
       <genOperations ecoreOperation="communication.ecore#//TsnWindow/getName" body="return Annotations.getTsnWindowName(this);"/>
     </genClasses>
+    <genClasses ecoreClass="communication.ecore#//DefaultConfiguration">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference communication.ecore#//DefaultConfiguration/target"/>
+      <genOperations ecoreOperation="communication.ecore#//DefaultConfiguration/getId"
+          body="return &quot;defaultConfig&quot;;"/>
+      <genOperations ecoreOperation="communication.ecore#//DefaultConfiguration/getMappingTargets"
+          body="return ECollections.asEList(target);"/>
+    </genClasses>
   </genPackages>
 </genmodel:GenModel>
