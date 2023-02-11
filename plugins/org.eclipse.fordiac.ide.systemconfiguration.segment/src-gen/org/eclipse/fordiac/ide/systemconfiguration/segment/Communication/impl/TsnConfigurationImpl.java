@@ -17,6 +17,7 @@ import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
+import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
@@ -127,18 +128,16 @@ public class TsnConfigurationImpl extends MinimalEObjectImpl.Container implement
 	 *
 	 * @generated */
 	@Override
-	public Segment getSegment() {
-		return (Segment) eContainer();
+	public EList<CommunicationMappingTarget> getMappingTargets() {
+		return ECollections.toEList(windows);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
 	@Override
-	public EList<CommunicationMappingTarget> getMappingTargets() {
-		// TODO: implement this method
-		// Ensure that you remove @generated or mark it @generated NOT
-		throw new UnsupportedOperationException();
+	public Segment getSegment() {
+		return (Segment) eContainer();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

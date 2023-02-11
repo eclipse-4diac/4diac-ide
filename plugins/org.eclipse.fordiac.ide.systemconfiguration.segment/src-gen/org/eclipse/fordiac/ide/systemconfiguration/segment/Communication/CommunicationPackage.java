@@ -103,6 +103,13 @@ public interface CommunicationPackage extends EPackage {
 	 * @ordered */
 	int TSN_WINDOW__COMMENT = LibraryElementPackage.COMMUNICATION_MAPPING_TARGET__COMMENT;
 
+	/** The feature id for the '<em><b>Mapped Elements</b></em>' reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int TSN_WINDOW__MAPPED_ELEMENTS = LibraryElementPackage.COMMUNICATION_MAPPING_TARGET__MAPPED_ELEMENTS;
+
 	/** The feature id for the '<em><b>Duration</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated

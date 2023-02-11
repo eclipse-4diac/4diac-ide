@@ -3562,6 +3562,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EReference getCommunicationMappingTarget_MappedElements() {
+		return (EReference)communicationMappingTargetEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getCommunicationChannel() {
 		return communicationChannelEClass;
 	}
@@ -4029,6 +4039,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		mappingTargetEClass = createEClass(MAPPING_TARGET);
 
 		communicationMappingTargetEClass = createEClass(COMMUNICATION_MAPPING_TARGET);
+		createEReference(communicationMappingTargetEClass, COMMUNICATION_MAPPING_TARGET__MAPPED_ELEMENTS);
 
 		communicationChannelEClass = createEClass(COMMUNICATION_CHANNEL);
 
@@ -4839,6 +4850,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(mappingTargetEClass, MappingTarget.class, "MappingTarget", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(communicationMappingTargetEClass, CommunicationMappingTarget.class, "CommunicationMappingTarget", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+		initEReference(getCommunicationMappingTarget_MappedElements(), this.getCommunicationChannel(), null, "mappedElements", null, 0, -1, CommunicationMappingTarget.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(communicationChannelEClass, CommunicationChannel.class, "CommunicationChannel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 

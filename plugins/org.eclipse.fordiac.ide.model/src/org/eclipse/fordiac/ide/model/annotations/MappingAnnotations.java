@@ -12,12 +12,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.annotations;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -27,10 +32,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 
 public class MappingAnnotations {
 	public static MappingTarget getMappingTarget(final FBNetworkElement el) {
+		if (el instanceof CommunicationChannel) {
+			return (MappingTarget) el.getMapping().getTo().eContainer();
+		}
 		return el.getResource();
 	}
 
-	public static List<? extends MappingTarget> getPossibleMappingTargets(final EObject obj) {
+	public static List<MappingTarget> getPossibleMappingTargets(final EObject obj) {
+		if (obj instanceof CommunicationChannel) {
+			return getContainedCommunicationMappingTargets(
+					((CommunicationChannel) obj).getFbNetwork().getAutomationSystem());
+		}
 		if (obj instanceof FBNetworkElement) {
 			return getContainedMappingTargets(((FBNetworkElement) obj).getFbNetwork().getAutomationSystem());
 		}
@@ -41,32 +53,36 @@ public class MappingAnnotations {
 		return Collections.emptyList();
 	}
 
-	public static List<? extends MappingTarget> getContainedMappingTargets(final EObject obj) {
+	public static List<MappingTarget> getContainedMappingTargets(final EObject obj) {
 		if (obj instanceof AutomationSystem) {
 			final AutomationSystem system = (AutomationSystem) obj;
-			final List<Resource> targets = system.getSystemConfiguration().getDevices().stream()
-					.flatMap(dev -> dev.getResource().stream()).collect(Collectors.toList());
-			// add communication mapping targets TODO
-			return targets;
+			return system.getSystemConfiguration().getDevices().stream().flatMap(dev -> dev.getResource().stream())
+					.collect(Collectors.toList());
 		}
 		if (obj instanceof Device) {
-			return ((Device) obj).getResource();
+			return new ArrayList<>(((Device) obj).getResource());
+		}
+		return Collections.emptyList();
+	}
+
+	public static List<MappingTarget> getContainedCommunicationMappingTargets(final EObject obj) {
+		if (obj instanceof AutomationSystem) {
+			final AutomationSystem system = (AutomationSystem) obj;
+			return system.getSystemConfiguration().getSegments().stream().map(Segment::getCommunication)
+					.filter(Objects::nonNull).flatMap(comm -> comm.getMappingTargets().stream())
+					.collect(Collectors.toList());
 		}
 		if (obj instanceof Segment) {
-			return Collections.emptyList(); // TODO
+			final CommunicationConfiguration communication = ((Segment) obj).getCommunication();
+			if (communication != null) {
+				return new ArrayList<>(communication.getMappingTargets());
+			}
 		}
 		return Collections.emptyList();
 	}
 
 	public static boolean containsMappingTargets(final EObject obj) {
 		return (obj instanceof Device) || (obj instanceof Segment) || (obj instanceof MappingTarget);
-	}
-
-	public static List<? extends MappingTarget> getCommunicationMappingTargets(final Segment seg) {
-		if (seg.getCommunication() != null) {
-			return Collections.EMPTY_LIST; // TODO return communication mapping targets
-		}
-		return Collections.emptyList();
 	}
 
 	public static boolean isMapable(final FBNetwork network) {
@@ -78,6 +94,10 @@ public class MappingAnnotations {
 		if (target instanceof Resource) {
 			return ((Resource) target).getDevice().getName() + "." //$NON-NLS-1$
 					+ ((Resource) target).getName();
+		}
+		if (target instanceof CommunicationMappingTarget) {
+			return ((Segment) target.eContainer().eContainer()).getName() + "." //$NON-NLS-1$
+					+ ((CommunicationMappingTarget) target).getName();
 		}
 		return target.toString();
 	}

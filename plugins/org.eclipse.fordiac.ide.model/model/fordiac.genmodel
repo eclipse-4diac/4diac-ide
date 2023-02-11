@@ -612,7 +612,9 @@
       <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getMappingTargets"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//MappingTarget"/>
-    <genClasses ecoreClass="lib.ecore#//CommunicationMappingTarget"/>
+    <genClasses ecoreClass="lib.ecore#//CommunicationMappingTarget">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//CommunicationMappingTarget/mappedElements"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//CommunicationChannel"/>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"

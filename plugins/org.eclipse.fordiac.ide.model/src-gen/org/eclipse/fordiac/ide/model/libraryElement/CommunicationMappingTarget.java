@@ -16,16 +16,36 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import org.eclipse.emf.common.util.EList;
+
 
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Communication Mapping Target</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <p>
+ * The following features are supported:
+ * </p>
+ * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget#getMappedElements <em>Mapped Elements</em>}</li>
+ * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCommunicationMappingTarget()
  * @model
  * @generated
  */
 public interface CommunicationMappingTarget extends MappingTarget {
+
+	/**
+	 * Returns the value of the '<em><b>Mapped Elements</b></em>' reference list.
+	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Mapped Elements</em>' reference list.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCommunicationMappingTarget_MappedElements()
+	 * @model
+	 * @generated
+	 */
+	EList<CommunicationChannel> getMappedElements();
 } // CommunicationMappingTarget

@@ -6842,13 +6842,22 @@ public interface LibraryElementPackage extends EPackage {
 	int COMMUNICATION_MAPPING_TARGET__COMMENT = MAPPING_TARGET__COMMENT;
 
 	/**
+	 * The feature id for the '<em><b>Mapped Elements</b></em>' reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int COMMUNICATION_MAPPING_TARGET__MAPPED_ELEMENTS = MAPPING_TARGET_FEATURE_COUNT + 0;
+
+	/**
 	 * The number of structural features of the '<em>Communication Mapping Target</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int COMMUNICATION_MAPPING_TARGET_FEATURE_COUNT = MAPPING_TARGET_FEATURE_COUNT + 0;
+	int COMMUNICATION_MAPPING_TARGET_FEATURE_COUNT = MAPPING_TARGET_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CommunicationChannelImpl <em>Communication Channel</em>}' class.
@@ -9848,6 +9857,17 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getCommunicationMappingTarget();
 
 	/**
+	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget#getMappedElements <em>Mapped Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference list '<em>Mapped Elements</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget#getMappedElements()
+	 * @see #getCommunicationMappingTarget()
+	 * @generated
+	 */
+	EReference getCommunicationMappingTarget_MappedElements();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel <em>Communication Channel</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -12265,6 +12285,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass COMMUNICATION_MAPPING_TARGET = eINSTANCE.getCommunicationMappingTarget();
+
+		/**
+		 * The meta object literal for the '<em><b>Mapped Elements</b></em>' reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference COMMUNICATION_MAPPING_TARGET__MAPPED_ELEMENTS = eINSTANCE.getCommunicationMappingTarget_MappedElements();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.CommunicationChannelImpl <em>Communication Channel</em>}' class.
