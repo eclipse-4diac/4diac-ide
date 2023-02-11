@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -718,6 +718,24 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	HiddenElement createHiddenElement();
+
+	/**
+	 * Returns a new object of class '<em>Mapping Target</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Mapping Target</em>'.
+	 * @generated
+	 */
+	MappingTarget createMappingTarget();
+
+	/**
+	 * Returns a new object of class '<em>Communication Mapping Target</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Communication Mapping Target</em>'.
+	 * @generated
+	 */
+	CommunicationMappingTarget createCommunicationMappingTarget();
 
 	/**
 	 * Returns the package supported by this factory.

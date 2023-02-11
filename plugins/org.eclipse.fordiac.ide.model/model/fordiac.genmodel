@@ -609,7 +609,10 @@
       <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getSegment"
           body="return (Segment) eContainer();"/>
       <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getId"/>
+      <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getMappingTargets"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//MappingTarget"/>
+    <genClasses ecoreClass="lib.ecore#//CommunicationMappingTarget"/>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">

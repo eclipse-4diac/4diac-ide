@@ -150,6 +150,30 @@ public class CommunicationAdapterFactory extends AdapterFactoryImpl {
 		return null;
 	}
 
+	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.MappingTarget
+	 * <em>Mapping Target</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
+	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
+	 * -->
+	 *
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.MappingTarget
+	 * @generated */
+	public Adapter createMappingTargetAdapter() {
+		return null;
+	}
+
+	/** Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget <em>Communication Mapping
+	 * Target</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily ignore
+	 * cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget
+	 * @generated */
+	public Adapter createCommunicationMappingTargetAdapter() {
+		return null;
+	}
+
 	/** Creates a new adapter for the default case. <!-- begin-user-doc --> This default implementation returns null.
 	 * <!-- end-user-doc -->
 	 *

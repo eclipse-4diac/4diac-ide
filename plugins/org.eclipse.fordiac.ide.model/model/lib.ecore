@@ -1638,5 +1638,8 @@
       </eAnnotations>
     </eOperations>
     <eOperations name="getId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+    <eOperations name="getMappingTargets" upperBound="-1" eType="#//CommunicationMappingTarget"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MappingTarget" eSuperTypes="#//INamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CommunicationMappingTarget" eSuperTypes="#//MappingTarget"/>
 </ecore:EPackage>

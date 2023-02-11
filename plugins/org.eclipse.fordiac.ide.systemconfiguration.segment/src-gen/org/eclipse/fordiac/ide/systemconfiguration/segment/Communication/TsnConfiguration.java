@@ -15,6 +15,7 @@ package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 
 /** <!-- begin-user-doc --> A representation of the model object '<em><b>Tsn Configuration</b></em>'. <!-- end-user-doc
  * -->
@@ -67,5 +68,12 @@ public interface TsnConfiguration extends CommunicationConfiguration {
 	 * @generated */
 	@Override
 	String getId();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation"
+	 * @generated */
+	@Override
+	EList<CommunicationMappingTarget> getMappingTargets();
 
 } // TsnConfiguration

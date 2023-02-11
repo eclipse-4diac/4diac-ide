@@ -21,10 +21,12 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference communication.ecore#//TsnConfiguration/windows"/>
       <genOperations ecoreOperation="communication.ecore#//TsnConfiguration/getId"
           body="return &quot;tsnConfig&quot;;"/>
+      <genOperations ecoreOperation="communication.ecore#//TsnConfiguration/getMappingTargets"
+          body="return ECollections.toEList(windows);"/>
     </genClasses>
     <genClasses ecoreClass="communication.ecore#//TsnWindow">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute communication.ecore#//TsnWindow/duration"/>
-      <genOperations ecoreOperation="communication.ecore#//TsnWindow/getName"/>
+      <genOperations ecoreOperation="communication.ecore#//TsnWindow/getName" body="return Annotations.getTsnWindowName(this);"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
