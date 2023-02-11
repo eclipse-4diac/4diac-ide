@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
@@ -240,6 +241,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.HIDDEN_ELEMENT: return createHiddenElement();
 			case LibraryElementPackage.MAPPING_TARGET: return createMappingTarget();
 			case LibraryElementPackage.COMMUNICATION_MAPPING_TARGET: return createCommunicationMappingTarget();
+			case LibraryElementPackage.COMMUNICATION_CHANNEL: return createCommunicationChannel();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -1159,6 +1161,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public CommunicationMappingTarget createCommunicationMappingTarget() {
 		CommunicationMappingTargetImpl communicationMappingTarget = new CommunicationMappingTargetImpl();
 		return communicationMappingTarget;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CommunicationChannel createCommunicationChannel() {
+		CommunicationChannelImpl communicationChannel = new CommunicationChannelImpl();
+		return communicationChannel;
 	}
 
 	/**

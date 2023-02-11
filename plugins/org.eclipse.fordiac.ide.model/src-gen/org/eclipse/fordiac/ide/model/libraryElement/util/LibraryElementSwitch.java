@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
@@ -965,6 +966,19 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseCommunicationMappingTarget(communicationMappingTarget);
 				if (result == null) result = caseMappingTarget(communicationMappingTarget);
 				if (result == null) result = caseINamedElement(communicationMappingTarget);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.COMMUNICATION_CHANNEL: {
+				CommunicationChannel communicationChannel = (CommunicationChannel)theEObject;
+				T result = caseCommunicationChannel(communicationChannel);
+				if (result == null) result = caseFB(communicationChannel);
+				if (result == null) result = caseFBNetworkElement(communicationChannel);
+				if (result == null) result = caseICallable(communicationChannel);
+				if (result == null) result = caseTypedConfigureableObject(communicationChannel);
+				if (result == null) result = casePositionableElement(communicationChannel);
+				if (result == null) result = caseINamedElement(communicationChannel);
+				if (result == null) result = caseConfigurableObject(communicationChannel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -2319,6 +2333,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCommunicationMappingTarget(CommunicationMappingTarget object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Communication Channel</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Communication Channel</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCommunicationChannel(CommunicationChannel object) {
 		return null;
 	}
 

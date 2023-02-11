@@ -216,7 +216,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		final List<EditPart> selection = getViewer().getSelectedEditParts();
 		if (selection.size() > 1) {
 			return false;
-		} else if (selection.size() == 1) {
+		}
+		if (selection.size() == 1) {
 			return selection.get(0) == this;
 		}
 		return true;
@@ -416,20 +417,15 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = new ArrayList<>();
 		elements.add(getInstanceName());
-		elements.addAll(getModel().getInterface()
-				.getAllInterfaceElements());
-		elements.removeAll(getModel().getInterface().getInputVars()
-				.stream()
-				.filter(it -> !it.isVisible())
+		elements.addAll(getModel().getInterface().getAllInterfaceElements());
+		elements.removeAll(getModel().getInterface().getInputVars().stream().filter(it -> !it.isVisible())
 				.collect(Collectors.toList()));
-		elements.removeAll(getModel().getInterface().getOutputVars()
-				.stream()
-				.filter(it -> !it.isVisible())
+		elements.removeAll(getModel().getInterface().getOutputVars().stream().filter(it -> !it.isVisible())
 				.collect(Collectors.toList()));
 		return elements;
 	}
 
-	private InstanceName getInstanceName() {
+	protected InstanceName getInstanceName() {
 		if (instanceName == null) {
 			instanceName = new InstanceName(getModel());
 		}
@@ -458,7 +454,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			// forward direct edit request to instance name
 			final List<EditPart> children = getChildren();
 			children.stream().filter(InstanceNameEditPart.class::isInstance)
-			.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
+					.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
 			return;
 		}
 		super.performRequest(request);

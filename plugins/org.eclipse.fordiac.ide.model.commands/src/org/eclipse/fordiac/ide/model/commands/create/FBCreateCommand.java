@@ -38,13 +38,17 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	private static FB createNewFb(final FBTypeEntry typeEntry) {
 		if (typeEntry.getType().getName().equals("STRUCT_MUX")) { //$NON-NLS-1$
 			return LibraryElementFactory.eINSTANCE.createMultiplexer();
-		} else if (typeEntry.getType().getName().equals("STRUCT_DEMUX")) { //$NON-NLS-1$
-			return LibraryElementFactory.eINSTANCE.createDemultiplexer();
-		} else if (typeEntry.getType() instanceof CompositeFBType) {
-			return LibraryElementFactory.eINSTANCE.createCFBInstance();
-		} else {
-			return LibraryElementFactory.eINSTANCE.createFB();
 		}
+		if (typeEntry.getType().getName().equals("STRUCT_DEMUX")) { //$NON-NLS-1$
+			return LibraryElementFactory.eINSTANCE.createDemultiplexer();
+		}
+		if (typeEntry.getType().getName().startsWith("COMM_CHANNEL")) { //$NON-NLS-1$
+			return LibraryElementFactory.eINSTANCE.createCommunicationChannel();
+		}
+		if (typeEntry.getType() instanceof CompositeFBType) {
+			return LibraryElementFactory.eINSTANCE.createCFBInstance();
+		}
+		return LibraryElementFactory.eINSTANCE.createFB();
 	}
 
 	// constructor to reuse this command for adapter creation

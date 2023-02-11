@@ -73,6 +73,8 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		FBNetworkElement copy;
 		if (invalidType()) {
 			copy = LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
+		} else if (entry.getTypeName().startsWith("COMM_CHANNEL")) { //$NON-NLS-1$
+			copy = LibraryElementFactory.eINSTANCE.createCommunicationChannel();
 		} else if (entry instanceof SubAppTypeEntry) {
 			copy = LibraryElementFactory.eINSTANCE.createSubApp();
 		} else if (entry instanceof AdapterTypeEntry) {
@@ -106,7 +108,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 
 	private boolean isMultiplexer() {
 		return (entry instanceof FBTypeEntry) && (entry.getType() instanceof ServiceInterfaceFBType)
-				&& entry.getType().getName().startsWith("STRUCT");
+				&& entry.getType().getName().startsWith("STRUCT"); //$NON-NLS-1$
 	}
 
 	public boolean reloadErrorType() {

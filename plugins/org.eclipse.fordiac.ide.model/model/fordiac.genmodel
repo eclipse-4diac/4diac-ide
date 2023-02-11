@@ -613,6 +613,7 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//MappingTarget"/>
     <genClasses ecoreClass="lib.ecore#//CommunicationMappingTarget"/>
+    <genClasses ecoreClass="lib.ecore#//CommunicationChannel"/>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">

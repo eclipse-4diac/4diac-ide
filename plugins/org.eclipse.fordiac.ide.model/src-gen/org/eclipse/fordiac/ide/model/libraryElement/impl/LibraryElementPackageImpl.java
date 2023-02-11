@@ -56,6 +56,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
@@ -772,6 +773,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass communicationMappingTargetEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass communicationChannelEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -3554,6 +3562,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EClass getCommunicationChannel() {
+		return communicationChannelEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EEnum getLanguage() {
 		return languageEEnum;
 	}
@@ -4012,6 +4030,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		communicationMappingTargetEClass = createEClass(COMMUNICATION_MAPPING_TARGET);
 
+		communicationChannelEClass = createEClass(COMMUNICATION_CHANNEL);
+
 		// Create enums
 		languageEEnum = createEEnum(LANGUAGE);
 
@@ -4146,6 +4166,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		hiddenElementEClass.getESuperTypes().add(this.getConfigurableObject());
 		mappingTargetEClass.getESuperTypes().add(this.getINamedElement());
 		communicationMappingTargetEClass.getESuperTypes().add(this.getMappingTarget());
+		communicationChannelEClass.getESuperTypes().add(this.getFB());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterDeclarationEClass, AdapterDeclaration.class, "AdapterDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -4817,6 +4838,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(mappingTargetEClass, MappingTarget.class, "MappingTarget", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(communicationMappingTargetEClass, CommunicationMappingTarget.class, "CommunicationMappingTarget", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+
+		initEClass(communicationChannelEClass, CommunicationChannel.class, "CommunicationChannel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		// Initialize enums and add enum literals
 		initEEnum(languageEEnum, Language.class, "Language"); //$NON-NLS-1$

@@ -738,6 +738,15 @@ public interface LibraryElementFactory extends EFactory {
 	CommunicationMappingTarget createCommunicationMappingTarget();
 
 	/**
+	 * Returns a new object of class '<em>Communication Channel</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Communication Channel</em>'.
+	 * @generated
+	 */
+	CommunicationChannel createCommunicationChannel();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
