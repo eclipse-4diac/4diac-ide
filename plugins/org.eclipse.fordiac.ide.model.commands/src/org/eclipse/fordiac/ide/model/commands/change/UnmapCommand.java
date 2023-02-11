@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008 - 2017 Profactor GmbH,  fortiss GmbH, AIT
  * 				 2019 Johannes Keppler University Linz
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -11,7 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Filip Pr�stl Andr�n, Monika Wenger
  *       - initial API and implementation and/or initial documentation
- *   Alois Zoitl - removed editor check from canUndo 
+ *   Alois Zoitl - removed editor check from canUndo
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
@@ -36,7 +36,7 @@ public class UnmapCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return mapping != null && null != system;
+		return (mapping != null) && (null != system);
 	}
 
 	@Override

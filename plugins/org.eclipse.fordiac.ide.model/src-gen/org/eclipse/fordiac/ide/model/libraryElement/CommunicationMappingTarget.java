@@ -38,13 +38,13 @@ import org.eclipse.emf.common.util.EList;
 public interface CommunicationMappingTarget extends MappingTarget {
 
 	/**
-	 * Returns the value of the '<em><b>Mapped Elements</b></em>' reference list.
+	 * Returns the value of the '<em><b>Mapped Elements</b></em>' containment reference list.
 	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Mapped Elements</em>' reference list.
+	 * @return the value of the '<em>Mapped Elements</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getCommunicationMappingTarget_MappedElements()
-	 * @model
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	EList<CommunicationChannel> getMappedElements();

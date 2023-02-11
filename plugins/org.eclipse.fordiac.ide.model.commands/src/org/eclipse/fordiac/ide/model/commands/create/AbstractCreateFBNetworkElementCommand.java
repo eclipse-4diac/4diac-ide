@@ -56,7 +56,7 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command impl
 		element.updatePosition(x, y);
 		fbNetwork.getNetworkElements().add(element); // as subclasses may not be able to
 		// run redo on execute we have to duplicate this here
-		element.setName(NameRepository.createUniqueName(element, getInitalInstanceName()));
+		element.setName(NameRepository.createUniqueName(element, getInitialInstanceName()));
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command impl
 		return element;
 	}
 
-	protected String getInitalInstanceName() {
+	protected String getInitialInstanceName() {
 		return element.getTypeName();
 	}
 

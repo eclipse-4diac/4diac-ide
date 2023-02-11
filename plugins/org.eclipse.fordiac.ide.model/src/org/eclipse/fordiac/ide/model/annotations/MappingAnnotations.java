@@ -102,6 +102,13 @@ public class MappingAnnotations {
 		return target.toString();
 	}
 
+	public static String getHierarchicalName(final FBNetworkElement element) {
+		if (element instanceof CommunicationChannel) {
+			return getHierarchicalName((MappingTarget) element.getOpposite().eContainer());
+		}
+		return getHierarchicalName(element.getResource());
+	}
+
 	private MappingAnnotations() {
 		throw new UnsupportedOperationException();
 	}

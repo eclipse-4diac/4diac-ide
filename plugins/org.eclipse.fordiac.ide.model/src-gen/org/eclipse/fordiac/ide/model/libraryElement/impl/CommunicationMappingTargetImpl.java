@@ -17,10 +17,13 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.util.EObjectContainmentEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -40,7 +43,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  */
 public class CommunicationMappingTargetImpl extends MappingTargetImpl implements CommunicationMappingTarget {
 	/**
-	 * The cached value of the '{@link #getMappedElements() <em>Mapped Elements</em>}' reference list.
+	 * The cached value of the '{@link #getMappedElements() <em>Mapped Elements</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getMappedElements()
@@ -76,9 +79,24 @@ public class CommunicationMappingTargetImpl extends MappingTargetImpl implements
 	@Override
 	public EList<CommunicationChannel> getMappedElements() {
 		if (mappedElements == null) {
-			mappedElements = new EObjectResolvingEList<CommunicationChannel>(CommunicationChannel.class, this, LibraryElementPackage.COMMUNICATION_MAPPING_TARGET__MAPPED_ELEMENTS);
+			mappedElements = new EObjectContainmentEList.Resolving<CommunicationChannel>(CommunicationChannel.class, this, LibraryElementPackage.COMMUNICATION_MAPPING_TARGET__MAPPED_ELEMENTS);
 		}
 		return mappedElements;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.COMMUNICATION_MAPPING_TARGET__MAPPED_ELEMENTS:
+				return ((InternalEList<?>)getMappedElements()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
 	}
 
 	/**

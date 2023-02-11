@@ -1643,7 +1643,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="MappingTarget" eSuperTypes="#//INamedElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="CommunicationMappingTarget" eSuperTypes="#//MappingTarget">
     <eStructuralFeatures xsi:type="ecore:EReference" name="mappedElements" upperBound="-1"
-        eType="#//CommunicationChannel"/>
+        eType="#//CommunicationChannel" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="CommunicationChannel" eSuperTypes="#//FB"/>
 </ecore:EPackage>

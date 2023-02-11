@@ -6842,7 +6842,7 @@ public interface LibraryElementPackage extends EPackage {
 	int COMMUNICATION_MAPPING_TARGET__COMMENT = MAPPING_TARGET__COMMENT;
 
 	/**
-	 * The feature id for the '<em><b>Mapped Elements</b></em>' reference list.
+	 * The feature id for the '<em><b>Mapped Elements</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -9857,10 +9857,10 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getCommunicationMappingTarget();
 
 	/**
-	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget#getMappedElements <em>Mapped Elements</em>}'.
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget#getMappedElements <em>Mapped Elements</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference list '<em>Mapped Elements</em>'.
+	 * @return the meta object for the containment reference list '<em>Mapped Elements</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget#getMappedElements()
 	 * @see #getCommunicationMappingTarget()
 	 * @generated
@@ -12287,7 +12287,7 @@ public interface LibraryElementPackage extends EPackage {
 		EClass COMMUNICATION_MAPPING_TARGET = eINSTANCE.getCommunicationMappingTarget();
 
 		/**
-		 * The meta object literal for the '<em><b>Mapped Elements</b></em>' reference list feature.
+		 * The meta object literal for the '<em><b>Mapped Elements</b></em>' containment reference list feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
