@@ -16,7 +16,9 @@
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.commands.delete.DeleteMappedCommunicationFbCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -41,7 +43,7 @@ public class UnmapCommand extends Command {
 
 	@Override
 	public void execute() {
-		deleteMappedFBCmd = new DeleteFBNetworkElementCommand(mapping.getTo());
+		deleteMappedFBCmd = getDeleteMappedFbCommand(mapping.getTo());
 		mapping.getFrom().setMapping(null);
 		mapping.getTo().setMapping(null);
 		system.getMapping().remove(mapping);
@@ -66,5 +68,12 @@ public class UnmapCommand extends Command {
 
 	public FBNetworkElement getMappedFBNetworkElement() {
 		return deleteMappedFBCmd.getFBNetworkElement();
+	}
+
+	private DeleteFBNetworkElementCommand getDeleteMappedFbCommand(final FBNetworkElement fb) {
+		if (fb instanceof CommunicationChannel) {
+			return new DeleteMappedCommunicationFbCommand((CommunicationChannel) fb);
+		}
+		return new DeleteFBNetworkElementCommand(mapping.getTo());
 	}
 }
