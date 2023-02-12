@@ -26,12 +26,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.commands.Command;
 
 /**
  * The Class CreateTransitionCommand.
  */
-public class CreateTransitionCommand extends Command implements CreationCommand {
+public class CreateTransitionCommand extends CreationCommand {
 	static final Point SELF_TRANS_OFFSET = new Point(10, 50);
 
 	/** The source. */

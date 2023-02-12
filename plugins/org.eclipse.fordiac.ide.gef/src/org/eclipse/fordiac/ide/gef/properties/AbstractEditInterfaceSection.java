@@ -32,7 +32,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -43,6 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -75,10 +75,9 @@ implements I4diacNatTableUtil {
 
 	protected Map<String, List<String>> typeSelection = new HashMap<>();
 
-	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
+	protected abstract CreationCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
-	protected abstract CreateInterfaceElementCommand newInsertCommand(IInterfaceElement selection, boolean isInput,
-			int index);
+	protected abstract CreationCommand newInsertCommand(IInterfaceElement selection, boolean isInput, int index);
 
 	protected abstract DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection);
 

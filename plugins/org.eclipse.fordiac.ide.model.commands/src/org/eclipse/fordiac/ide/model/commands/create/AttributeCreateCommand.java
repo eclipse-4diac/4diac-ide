@@ -22,9 +22,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.commands.Command;
 
-public class AttributeCreateCommand extends Command implements CreationCommand {
+public class AttributeCreateCommand extends CreationCommand {
 	private final ConfigurableObject configurableObject;
 	private Attribute attribute;
 	private Attribute refElement;

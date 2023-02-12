@@ -95,7 +95,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		return createChangeBoundsCommand(container, sizeDelta, moveDelta);
 	}
 
-	protected static AbstractChangeContainerBoundsCommand createChangeBoundsCommand(final FBNetworkElement container,
+	public static AbstractChangeContainerBoundsCommand createChangeBoundsCommand(final FBNetworkElement container,
 			final Dimension sizeDelta, final Point moveDelta) {
 		if (container instanceof Group) {
 			return new ChangeGroupBoundsCommand((Group) container, moveDelta.x, moveDelta.y, sizeDelta.width,
