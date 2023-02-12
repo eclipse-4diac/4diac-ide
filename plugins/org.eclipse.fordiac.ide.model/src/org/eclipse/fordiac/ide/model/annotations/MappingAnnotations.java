@@ -104,6 +104,9 @@ public class MappingAnnotations {
 
 	public static String getHierarchicalName(final FBNetworkElement element) {
 		if (element instanceof CommunicationChannel) {
+			if (element.eContainer() instanceof MappingTarget) {
+				return getHierarchicalName((MappingTarget) element.eContainer());
+			}
 			return getHierarchicalName((MappingTarget) element.getOpposite().eContainer());
 		}
 		return getHierarchicalName(element.getResource());
