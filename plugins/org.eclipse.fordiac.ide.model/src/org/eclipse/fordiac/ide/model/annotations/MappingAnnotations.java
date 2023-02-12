@@ -95,7 +95,7 @@ public class MappingAnnotations {
 			return ((Resource) target).getDevice().getName() + "." //$NON-NLS-1$
 					+ ((Resource) target).getName();
 		}
-		if (target instanceof CommunicationMappingTarget) {
+		if ((target instanceof CommunicationMappingTarget) && (target.eContainer() != null)) {
 			return ((Segment) target.eContainer().eContainer()).getName() + "." //$NON-NLS-1$
 					+ ((CommunicationMappingTarget) target).getName();
 		}
