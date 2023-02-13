@@ -77,9 +77,15 @@ public class ExportAsXMI {
 		final Resource xmiRessource = xmiResourceSet.createResource(xmiUri);
 		xmiRessource.getContents().addAll(EcoreUtil.copyAll(resource.getContents()));
 
-		final HashMap<String, String> options = new HashMap<>();
-		options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
-		xmiRessource.save(options);
+		try {
+			final HashMap<String, Object> options = new HashMap<>();
+			options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
+			options.put(XMLResource.OPTION_SKIP_ESCAPE_URI, Boolean.FALSE);
+			xmiRessource.save(options);
+		} catch (final Exception e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+			System.out.println(e.getMessage() + " " + e); // log it in console for ANT Tasks //$NON-NLS-1$
+		}
 	}
 
 }

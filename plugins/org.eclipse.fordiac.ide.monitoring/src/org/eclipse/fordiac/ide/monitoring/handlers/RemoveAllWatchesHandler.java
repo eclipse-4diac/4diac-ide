@@ -121,7 +121,8 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 		return foundElements;
 	}
 
-	private static Set<IInterfaceElement> getWatchedIfElementsForFB(final MonitoringManager manager, final FBNetworkElement model) {
+	public static Set<IInterfaceElement> getWatchedIfElementsForFB(final MonitoringManager manager,
+			final FBNetworkElement model) {
 		final Set<IInterfaceElement> foundElements = new HashSet<>();
 		for (final IInterfaceElement element : model.getInterface().getAllInterfaceElements()) {
 			if (manager.containsPort(element)) {

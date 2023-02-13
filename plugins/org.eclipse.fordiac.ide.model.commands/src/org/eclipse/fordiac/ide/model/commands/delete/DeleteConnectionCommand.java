@@ -150,7 +150,8 @@ public class DeleteConnectionCommand extends Command {
 
 		if (connection.hasError() && !keepMarker) {
 			deleteConnectionErrorMarkers.add(ErrorMarkerBuilder.deleteErrorMarker(connection));
-			if (errorFb != null) {
+			if (errorFb != null && source instanceof ErrorMarkerInterface
+					&& destination instanceof ErrorMarkerInterface) {
 				deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
 				deleteInterfaceErrorMarkers
 				.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) destination, errorFb));
