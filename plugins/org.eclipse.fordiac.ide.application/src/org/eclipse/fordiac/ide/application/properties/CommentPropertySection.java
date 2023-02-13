@@ -14,6 +14,7 @@
  *   Sebastian Hollersbacher - change to nebula NatTable
  *   Hesam Rezaee - Variable configuration for Global Constants
  *   Martin Jobst - add initial value cell editor support
+ *   Dario Romano - fixed renaming bug for instances
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -25,7 +26,7 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
 import org.eclipse.fordiac.ide.model.commands.change.VarConfigurationCommand;
@@ -114,8 +115,10 @@ public class CommentPropertySection extends AbstractSection {
 		GridLayoutFactory.fillDefaults().numColumns(TWO_COLUMNS).applyTo(tableSectionComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(tableSectionComposite);
 
-		final Group inputComposite = getWidgetFactory().createGroup(tableSectionComposite, Messages.CommentPropertySection_DataInputs);
-		final Group outputComposite = getWidgetFactory().createGroup(tableSectionComposite, Messages.CommentPropertySection_DataOutputs);
+		final Group inputComposite = getWidgetFactory().createGroup(tableSectionComposite,
+				Messages.CommentPropertySection_DataInputs);
+		final Group outputComposite = getWidgetFactory().createGroup(tableSectionComposite,
+				Messages.CommentPropertySection_DataOutputs);
 
 		inputComposite.setText(Messages.CommentPropertySection_DataInputs);
 		outputComposite.setText(Messages.CommentPropertySection_DataOutputs);
@@ -133,9 +136,8 @@ public class CommentPropertySection extends AbstractSection {
 
 		inputTable = NatTableWidgetFactory.createNatTable(inputComposite, inputDataLayer, new ColumnDataProvider(),
 				inputDataProvider.getEditableRule());
-		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer,
-				new ColumnDataProvider(), outputDataProvider.getEditableRule());
-
+		outputTable = NatTableWidgetFactory.createNatTable(outputComposite, outputDataLayer, new ColumnDataProvider(),
+				outputDataProvider.getEditableRule());
 
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
@@ -148,7 +150,6 @@ public class CommentPropertySection extends AbstractSection {
 
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(inputComposite);
 		GridDataFactory.fillDefaults().grab(true, true).applyTo(outputComposite);
-
 
 		tableSectionComposite.layout();
 	}
@@ -220,7 +221,9 @@ public class CommentPropertySection extends AbstractSection {
 		nameText = createGroupText(fbInfoGroup, true);
 		nameText.addModifyListener(e -> {
 			removeContentAdapter();
-			executeCommand(new ChangeNameCommand(getType(), nameText.getText()));
+			if (getType() instanceof FBNetworkElement) {
+				executeCommand(new ChangeFBNetworkElementName((FBNetworkElement) getType(), nameText.getText()));
+			}
 			addContentAdapter();
 		});
 
@@ -228,7 +231,8 @@ public class CommentPropertySection extends AbstractSection {
 		GridDataFactory.fillDefaults().align(SWT.LEFT, SWT.TOP).grab(false, false).applyTo(commentLabel);
 
 		commentText = createGroupText(fbInfoGroup, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
-		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false).hint(SWT.DEFAULT, 3 * commentText.getLineHeight()).applyTo(commentText);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false)
+		.hint(SWT.DEFAULT, 3 * commentText.getLineHeight()).applyTo(commentText);
 		commentText.addModifyListener(e -> {
 			removeContentAdapter();
 			final Command cmd = createChangeCommentCommand();
@@ -319,8 +323,7 @@ public class CommentPropertySection extends AbstractSection {
 	private class VarDeclarationListProvider extends ListDataProvider<VarDeclaration> {
 		private final boolean isInputData;
 
-		public VarDeclarationListProvider(final List<VarDeclaration> list,
-				final boolean isInputData) {
+		public VarDeclarationListProvider(final List<VarDeclaration> list, final boolean isInputData) {
 
 			super(list, new VarDeclarationColumnAccessor(isInputData));
 			this.isInputData = isInputData;
@@ -424,7 +427,7 @@ public class CommentPropertySection extends AbstractSection {
 		@Override
 		public int getColumnCount() {
 			// it can be used to show VarConfig only in inputs table
-			if(!isInputData) {
+			if (!isInputData) {
 				return COL_COUNT - 1;
 			}
 			return COL_COUNT;
