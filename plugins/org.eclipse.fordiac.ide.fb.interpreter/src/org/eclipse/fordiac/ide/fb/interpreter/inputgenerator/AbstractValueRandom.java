@@ -139,9 +139,6 @@ public abstract class AbstractValueRandom {
 		if (dataType instanceof SintType) {
 			return nextSint();
 		}
-		if (dataType instanceof IntType) {
-			return nextInteger();
-		}
 		if (dataType instanceof DintType) {
 			return nextDint();
 		}
@@ -150,9 +147,6 @@ public abstract class AbstractValueRandom {
 		}
 		if (dataType instanceof UsintType) {
 			return nextUsint();
-		}
-		if (dataType instanceof UintType) {
-			return nextUint();
 		}
 		if (dataType instanceof UdintType) {
 			return nextUdint();
