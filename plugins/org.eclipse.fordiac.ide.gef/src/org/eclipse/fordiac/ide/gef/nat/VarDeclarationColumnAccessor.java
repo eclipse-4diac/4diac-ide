@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
+import org.eclipse.fordiac.ide.model.commands.change.VarConfigurationCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
@@ -54,6 +55,8 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 			return InitialValueHelper.getInitalOrDefaultValue(rowObject);
 		case I4diacNatTableUtil.ARRAY_SIZE:
 			return DataLabelProvider.getArraySizeText(rowObject);
+		case I4diacNatTableUtil.VAR_CONFIG:
+			return rowObject.isVarConfig();
 		default:
 			return rowObject.getValue() == null ? "" : rowObject.getValue().getValue(); //$NON-NLS-1$
 		}
@@ -87,6 +90,9 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 		case I4diacNatTableUtil.ARRAY_SIZE:
 			cmd = new ChangeArraySizeCommand(rowObject, value);
 			break;
+		case I4diacNatTableUtil.VAR_CONFIG:
+			cmd = new VarConfigurationCommand(rowObject, ((Boolean) newValue).booleanValue());
+			break;
 
 		default:
 			return;
@@ -97,7 +103,7 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 
 	@Override
 	public int getColumnCount() {
-		return 5;
+		return 6;
 	}
 
 	public void setTypeLib(final TypeLibrary dataTypeLib) {

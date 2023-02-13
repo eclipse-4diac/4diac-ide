@@ -18,6 +18,7 @@
  *               - added instance comment editing
  *   Dunja Životin - extracted in/out connections table into a separate widget
  *   Martin Jobst - adopt ST editor for initial values
+ *   Hesam Rezaee - add varConfig for variables
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -29,6 +30,7 @@ import org.eclipse.fordiac.ide.gef.editors.InitialValueEditor;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.gef.widgets.ConnectionDisplayWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.VarConfigurationCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -54,6 +56,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.Section;
@@ -72,6 +76,8 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	private Button openEditorButton;
 	private Section infoSection;
 	private ConnectionDisplayWidget connectionDisplayWidget;
+	private CLabel varConfigCLabel;
+	private Button varConfigCheckBox;
 
 	@Override
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
@@ -145,6 +151,16 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		currentParameterEditor.setCommandExecutor(this::executeCommand);
 		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false)
 		.applyTo(currentParameterEditor.getControl());
+		
+		varConfigCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.VarConfig + ":"); //$NON-NLS-1$
+		varConfigCheckBox = getWidgetFactory().createButton(composite, null, SWT.CHECK);
+		varConfigCheckBox.addListener(SWT.Selection, new Listener() {
+			@Override
+			public void handleEvent(Event event) {
+				executeCommand(
+						new VarConfigurationCommand((VarDeclaration) getType(), varConfigCheckBox.getSelection()));
+			}
+		});
 
 		infoSection.setClient(composite);
 	}
@@ -175,6 +191,11 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 			currentParameterEditor.refresh();
 
 			typeText.setText(getPinTypeName());
+			
+			if (getType() instanceof VarDeclaration) {
+				varConfigCheckBox.setVisible(getType().isIsInput());
+				varConfigCheckBox.setSelection(((VarDeclaration) getType()).isVarConfig());
+			}
 
 			connectionDisplayWidget.refreshConnectionsViewer(getType());
 
