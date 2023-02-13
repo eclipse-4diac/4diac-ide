@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommand;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
@@ -60,6 +61,7 @@ public class PasteDataIntoTableAction implements IKeyAction {
 		final String[][] cellsContent = parseContent(contents);
 
 		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
+
 		final List<Rectangle> ranges = selectionLayer.getSelectionModel().getSelections().stream().distinct()
 				.collect(Collectors.toList());
 
@@ -86,22 +88,30 @@ public class PasteDataIntoTableAction implements IKeyAction {
 
 	private void pasteClipboardElementsContents(final NatTable natTable, final Object contents) {
 		if (contents instanceof Object[] && section != null) {
+
 			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
-			final int[] rows = selectionLayer.getFullySelectedRowPositions();
+
+			final int[] rows = selectionLayer != null ? selectionLayer.getFullySelectedRowPositions() :  new int[natTable.getColumnCount()];
+
 
 			final int[] selectedIndices = new int[((Object[]) contents).length];
 
-			int index = rows[rows.length - 1] + 1;
+			int index = selectionLayer != null ? rows[rows.length - 1] + 1 : 0;
 			final CompoundCommand cmpCommand = new CompoundCommand();
 			int i = 0;
+			final boolean isInput = section
+					.checkIsInput((ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(natTable).getDataProvider());
+
 			for (final Object entry : (Object[]) contents) {
 				selectedIndices[i++] = index;
-				section.addEntry(entry, index++, cmpCommand);
+				section.addEntry(entry, isInput, index++, cmpCommand);
 			}
 
 			section.executeCompoundCommand(cmpCommand);
-			for (final int ind : selectedIndices) {
-				selectionLayer.selectRow(0, ind, false, true);
+			if (selectionLayer != null) {
+				for (final int ind : selectedIndices) {
+					selectionLayer.selectRow(0, ind, false, true);
+				}
 			}
 		}
 	}

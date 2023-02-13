@@ -104,6 +104,11 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 		createInputOutputEdit(parent);
 	}
 
+	@Override
+	public boolean checkIsInput(final ListDataProvider<?> currentList) {
+		return currentList == inputProvider;
+	}
+
 	private void createInputOutputEdit(final Composite parent) {
 		final Group inputsGroup = getWidgetFactory().createGroup(parent, "Inputs"); //$NON-NLS-1$
 		inputsGroup.setLayout(new GridLayout(2, false));

@@ -109,10 +109,10 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	}
 
 	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			final IInterfaceElement entry2 = (IInterfaceElement) entry;
-			cmd.add(newInsertCommand(entry2, entry2.isIsInput(), index));
+			cmd.add(newInsertCommand(entry2, isInput, index));
 		}
 	}
 

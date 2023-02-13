@@ -75,10 +75,10 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 	}
 
 	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof Event) {
 			final Event entry2 = (Event) entry;
-			cmd.add(newInsertCommand(entry2, entry2.isIsInput(), index));
+			cmd.add(newInsertCommand(entry2, isInput, index));
 		}
 	}
 

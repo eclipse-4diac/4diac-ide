@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.ui.widget;
 
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 
 public interface I4diacNatTableUtil {
 
@@ -24,9 +25,11 @@ public interface I4diacNatTableUtil {
 	int ARRAY_SIZE = 4;
 	int VAR_CONFIG = 5;
 
-	void addEntry(Object entry, int index, CompoundCommand cmd);
+	void addEntry(Object entry, boolean isInput, int index, CompoundCommand cmd);
 
 	void executeCompoundCommand(CompoundCommand cmd);
 
 	boolean isEditable();
+
+	boolean checkIsInput(ListDataProvider<?> currentList);
 }

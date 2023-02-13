@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
@@ -134,6 +135,11 @@ public abstract class AbstractInternalVarsSection extends AbstractSection implem
 	@Override
 	public boolean isEditable() {
 		return true;
+	}
+
+	@Override
+	public boolean checkIsInput(final ListDataProvider<?> currentList) {
+		return false;
 	}
 
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {

@@ -188,7 +188,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			final VarDeclaration varEntry = (VarDeclaration) entry;
 			cmd.add(new InsertVariableCommand(getType().getMemberVariables(), varEntry, index));
@@ -259,5 +259,10 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	@Override
 	public void setSelection(final ISelection selection) {
 		// currently nothing to be done here
+	}
+
+	@Override
+	public boolean checkIsInput(final ListDataProvider<?> currentList) {
+		return false;
 	}
 }

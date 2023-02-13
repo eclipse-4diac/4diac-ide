@@ -81,10 +81,10 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	}
 
 	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof AdapterDeclaration) {
 			final AdapterDeclaration adapterDeclaration = (AdapterDeclaration) entry;
-			cmd.add(newInsertCommand(adapterDeclaration, adapterDeclaration.isIsInput(), index));
+			cmd.add(newInsertCommand(adapterDeclaration, isInput, index));
 		}
 	}
 

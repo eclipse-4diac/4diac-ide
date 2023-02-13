@@ -117,6 +117,7 @@ public final class NatTableWidgetFactory {
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'v'),
 						new PasteDataIntoTableAction());
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'), new CutDataFromTableAction());
+				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'c'), new CopyDataFromTableAction());
 			}
 		});
 		selectionLayer.registerCommandHandler(new CopyDataCommandHandler(selectionLayer));
@@ -368,7 +369,6 @@ public final class NatTableWidgetFactory {
 
 		table.configure();
 	}
-
 
 	private static class DefaultUiBindingConfiguration extends AbstractUiBindingConfiguration {
 		@Override
