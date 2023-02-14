@@ -123,10 +123,11 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
 		outputProvider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
+		
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this);
-		outputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
+		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.configure();
 	}
 
@@ -145,7 +146,12 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		inputTable.configure();
 	}
 
-
+	@Override
+	protected void setInputInit() {
+		((VarDeclarationListProvider) outputProvider).setTypeLib(getTypeLibrary());
+		((VarDeclarationListProvider) inputProvider).setTypeLib(getTypeLibrary());
+	}
+	
 	@Override
 	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
 		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getInputVars());
