@@ -88,7 +88,7 @@ public final class NatTableWidgetFactory {
 			'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h',
 			'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2',
 			'3', '4', '5', '6', '7', '8', '9', '_', '.', SWT.BS };
-	
+
 	public static char[] getActivationChars() {
 		return ACTIVATION_CHARS;
 	}
@@ -106,7 +106,7 @@ public final class NatTableWidgetFactory {
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider, final IEditableRule editableRule,
-			/*final Map<String, List<String>> proposals*/ final AbstractSelectionButton proposalButton) {
+			final AbstractSelectionButton proposalButton) {
 
 		setColumnWidths(dataLayer);
 
@@ -133,7 +133,7 @@ public final class NatTableWidgetFactory {
 
 		compositeLayer.addConfiguration(new DefaultEditConfiguration());
 		compositeLayer.addConfiguration(new DefaultUiBindingConfiguration());
-		compositeLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, /*proposals*/ proposalButton));
+		compositeLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposalButton));
 
 		addEditDisabledLabel(dataLayer, editableRule, false);
 		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
@@ -148,7 +148,7 @@ public final class NatTableWidgetFactory {
 
 	public static NatTable createRowNatTable(final Composite parent, final DataLayer bodyDataLayer,
 			final IDataProvider columnHeaderProvider, final IEditableRule editableRule,
-			AbstractSelectionButton proposalButton, final I4diacNatTableUtil section) {
+			final AbstractSelectionButton proposalButton, final I4diacNatTableUtil section) {
 
 		setColumnWidths(bodyDataLayer);
 
@@ -338,16 +338,16 @@ public final class NatTableWidgetFactory {
 				cellStyle.setAttributeValue(CellStyleAttributes.HORIZONTAL_ALIGNMENT, HorizontalAlignmentEnum.LEFT);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
 						LEFT_ALIGNMENT);
-				
-				
+
+
 				cellStyle = new Style();
-				Font font = GUIHelper.getFont(new FontData(GUIHelper.DEFAULT_FONT.toString(), 10, SWT.BOLD));
+				final Font font = GUIHelper.getFont(new FontData(GUIHelper.DEFAULT_FONT.toString(), 10, SWT.BOLD));
 				cellStyle.setAttributeValue(CellStyleAttributes.FONT, font);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL, GridRegion.COLUMN_HEADER);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT, GridRegion.COLUMN_HEADER);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.EDIT, GridRegion.COLUMN_HEADER);
-				
-				
+
+
 				cellStyle = new Style();
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_WIDGET_LIGHT_SHADOW);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
@@ -357,7 +357,7 @@ public final class NatTableWidgetFactory {
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 						DISABLED_HEADER);
 				// Padding for the left aligned cells
-				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER, new BackgroundPainter(new 
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER, new BackgroundPainter(new
 						PaddingDecorator(new TextPainter(false, true, false, true), 2, 2, 2, 2)));
 
 				configRegistry.unregisterConfigAttribute(CellConfigAttributes.CELL_STYLE, DisplayMode.SELECT,
@@ -368,7 +368,7 @@ public final class NatTableWidgetFactory {
 
 		table.configure();
 	}
-	
+
 
 	private static class DefaultUiBindingConfiguration extends AbstractUiBindingConfiguration {
 		@Override
@@ -378,7 +378,7 @@ public final class NatTableWidgetFactory {
 			uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(), new KeyEditAction());
 			uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(SWT.MOD2), new KeyEditAction());
 			uiBindingRegistry.registerFirstSingleClickBinding(
-					new CellPainterMouseEventMatcher(GridRegion.BODY, MouseEventMatcher.LEFT_BUTTON, CheckBoxPainter.class), 
+					new CellPainterMouseEventMatcher(GridRegion.BODY, MouseEventMatcher.LEFT_BUTTON, CheckBoxPainter.class),
 					new MouseEditAction());
 			uiBindingRegistry.registerDoubleClickBinding(new CellEditorMouseEventMatcher(GridRegion.BODY),
 					new MouseEditAction());
