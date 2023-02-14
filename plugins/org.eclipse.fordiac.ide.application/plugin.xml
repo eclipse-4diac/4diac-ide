@@ -196,7 +196,7 @@
                        filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
                        tab="org.eclipse.fordiac.ide.application.property.tab.EditEvents">
       </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.EditInterfaceDataSection"
+      <propertySection class="org.eclipse.fordiac.ide.application.properties.EditUntypedSubappInterfaceSection"
                        id="org.eclipse.fordiac.ide.application.properties.section.EditData"
                        filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
                        tab="org.eclipse.fordiac.ide.application.property.tab.EditData">

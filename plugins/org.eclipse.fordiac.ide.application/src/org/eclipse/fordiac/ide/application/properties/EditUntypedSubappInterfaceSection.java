@@ -40,7 +40,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
-public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
+public class EditUntypedSubappInterfaceSection extends AbstractEditInterfaceDataSection {
+
 	@Override
 	protected CreationCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
 		final DataType last = getLastUsedDataType(getType().getInterface(), isInput, interfaceElement);
@@ -66,7 +67,6 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 		}
 		return cmd;
 	}
-
 
 	protected LabelProvider getLabelProvider() {
 		return new DataLabelProvider() {
@@ -135,6 +135,5 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 		// TODO Auto-generated method stub
 
 	}
-
 
 }

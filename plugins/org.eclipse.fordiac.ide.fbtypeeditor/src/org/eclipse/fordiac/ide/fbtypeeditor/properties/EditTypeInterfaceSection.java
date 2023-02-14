@@ -26,7 +26,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 
-public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
+public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 	@Override
 	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
 		final DataType last = getLastUsedDataType(getType().getInterfaceList(), isInput, interfaceElement);
@@ -62,20 +62,14 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected void setTableInput() {
-		final FBType fbType = getType();
-		((FordiacInterfaceListProvider) inputProvider).setInput(fbType.getInterfaceList().getInputVars());
-		((FordiacInterfaceListProvider) outputProvider).setInput(fbType.getInterfaceList().getOutputVars());
-	}
-
-	@Override
 	public boolean isEditable() {
 		return true;
 	}
 
 	@Override
 	protected void setTableInputFBType(final FBType type) {
-		// TODO Auto-generated method stub
+		((FordiacInterfaceListProvider) inputProvider).setInput(type.getInterfaceList().getInputVars());
+		((FordiacInterfaceListProvider) outputProvider).setInput(type.getInterfaceList().getOutputVars());
 
 	}
 
