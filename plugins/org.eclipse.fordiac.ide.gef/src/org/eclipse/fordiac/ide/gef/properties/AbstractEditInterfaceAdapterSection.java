@@ -39,6 +39,7 @@ import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditInterfaceSection<AdapterDeclaration> {
 
+	private static final boolean ADAPTER_TYPE_SELECTION = true;
 
 	@Override
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
@@ -97,7 +98,7 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		outputProvider = new AdapterListProvider(this, null);
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer, new EventColumnProvider(),
-				rule, new DataTypeSelectionButton(typeSelection), this);
+				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this);
 	}
 
 	@Override
@@ -109,7 +110,7 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		inputProvider = new AdapterListProvider(this, null);
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, new AdapterColumnProvider(),
-				rule, new DataTypeSelectionButton(typeSelection), this);
+				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this);
 	}
 
 

@@ -24,8 +24,10 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.Messages;
@@ -44,46 +46,49 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object[] getElements(Object inputElement) {
+		if (inputElement instanceof HashMap<?,?>) {
+			HashMap<String, List<String>> map = (HashMap<String, List<String>>) inputElement;
+			return createTree(map);
+		}
+		return new Object[0];
+	}
+	
+	protected Object[] createTree(HashMap<String, List<String>> inputElement) {
 		final TypeNode elementaries = new TypeNode(Messages.DataTypeDropdown_Elementary_Types);
 		final TypeNode structures = new TypeNode(Messages.DataTypeDropdown_STRUCT_Types);
-
-		if (inputElement instanceof HashMap<?,?>) {
-			
-			final HashMap<String, List<String>> map = (HashMap<String, List<String>>) inputElement;
-			
-			TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(getCurrentProject());
-			List<DataType> dataTypes = typeLib.getDataTypeLibrary().getDataTypesSorted();
-			List<StructuredType> structuredTypes = typeLib.getDataTypeLibrary().getStructuredTypesSorted();
-			
-			
-			map.forEach((key, val) -> {
-				val.forEach(value -> {
-					if (key.equals(Messages.DataTypeDropdown_Elementary_Types)) {
-						Optional<DataType> type = dataTypes.stream()
-								.filter(dataType -> dataType.getName().equals(value))
-								.findFirst();
-						final TypeNode newNode = new TypeNode(type.get().getName(), type.get());
-						elementaries.addChild(newNode);
-					} else if (key.equals(Messages.DataTypeDropdown_STRUCT_Types)) {
-						Optional<StructuredType> type = structuredTypes.stream()
-								.filter(structType -> structType.getName().equals(value))
-								.findFirst();
-						if (type.isPresent()) {
-							if(null != type.get().getTypeEntry()) {
-								final String parentPath = type.get().getTypeEntry().getFile().getParent()
-										.getProjectRelativePath().toOSString();
-								createSubdirectories(structures, type.get(), parentPath);
-							} else {
-								final TypeNode runtimeNode = new TypeNode(type.get().getName(), type.get());
-								runtimeNode.setParent(structures);
-								structures.addChild(runtimeNode);
-							}
+		
+		TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(getCurrentProject());
+		List<DataType> dataTypes = typeLib.getDataTypeLibrary().getDataTypesSorted();
+		List<StructuredType> structuredTypes = typeLib.getDataTypeLibrary().getStructuredTypesSorted();
+		
+		
+		inputElement.forEach((key, val) -> {
+			val.forEach(value -> {
+				if (key.equals(Messages.DataTypeDropdown_Elementary_Types)) {
+					Optional<DataType> type = dataTypes.stream()
+							.filter(dataType -> dataType.getName().equals(value))
+							.findFirst();
+					final TypeNode newNode = new TypeNode(type.get().getName(), type.get());
+					elementaries.addChild(newNode);
+				} else if (key.equals(Messages.DataTypeDropdown_STRUCT_Types)) {
+					Optional<StructuredType> type = structuredTypes.stream()
+							.filter(structType -> structType.getName().equals(value))
+							.findFirst();
+					if (type.isPresent()) {
+						if(null != type.get().getTypeEntry()) {
+							final String parentPath = type.get().getTypeEntry().getFile().getParent()
+									.getProjectRelativePath().toOSString();
+							createSubdirectories(structures, type.get(), parentPath);
+						} else {
+							final TypeNode runtimeNode = new TypeNode(type.get().getName(), type.get());
+							runtimeNode.setParent(structures);
+							structures.addChild(runtimeNode);
 						}
 					}
-				});
+				}
 			});
-		}
-
+		});
+		
 		if (elementaries.getChildren().isEmpty()) {
 			return structures.getChildren().toArray();
 		} else if (structures.getChildren().isEmpty()) {
@@ -115,6 +120,8 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 		actualType.setParent(node);
 		node.addChild(actualType);
 	}
+	
+	
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
@@ -140,7 +147,7 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 		return false;
 	}
 	
-	private static IProject getCurrentProject() {
+	protected static IProject getCurrentProject() {
 		final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		IProject project = getProjectFromActiveEditor(page);
 		if (project == null) {

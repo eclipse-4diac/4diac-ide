@@ -18,32 +18,32 @@ import java.util.Map;
 
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
-import org.eclipse.fordiac.ide.model.ui.nat.TypeSelectionTreeContentProvider;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.fordiac.ide.ui.widget.AbstractSelectionButton;
 import org.eclipse.jface.layout.GridDataFactory;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.window.Window;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer.MoveDirectionEnum;
 import org.eclipse.nebula.widgets.nattable.widget.EditModeEnum;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 public class DataTypeSelectionButton extends AbstractSelectionButton {
 
+	private boolean isTypeSelectionForAdapters = false;
+	
 	public DataTypeSelectionButton(Map<String, List<String>> elements) {
 		super(elements);
+	}
+	
+	public DataTypeSelectionButton(Map<String, List<String>> elements, boolean isTypeSelectionForAdapters) {
+		super(elements);
+		this.isTypeSelectionForAdapters = isTypeSelectionForAdapters;
 	}
 	
 	@Override
@@ -54,8 +54,13 @@ public class DataTypeSelectionButton extends AbstractSelectionButton {
 		button.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(final SelectionEvent e) {
-				final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(
-						Display.getCurrent().getActiveShell());
+				DataTypeTreeSelectionDialog dialog = null;
+				if (isTypeSelectionForAdapters) {
+					dialog = new DataTypeTreeSelectionDialog(Display.getCurrent().getActiveShell(), isTypeSelectionForAdapters);
+				} else {
+					dialog = new DataTypeTreeSelectionDialog(Display.getCurrent().getActiveShell());
+				}
+				 
 				dialog.setHelpAvailable(false);
 				dialog.setInput(elements);
 

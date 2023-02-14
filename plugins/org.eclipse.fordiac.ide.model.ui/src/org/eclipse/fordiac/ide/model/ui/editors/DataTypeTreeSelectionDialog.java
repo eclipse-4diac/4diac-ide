@@ -15,16 +15,14 @@
 package org.eclipse.fordiac.ide.model.ui.editors;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.ui.nat.AdapterSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeSelectionTreeContentProvider;
 import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
-import org.eclipse.jface.viewers.IBaseLabelProvider;
-import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
@@ -41,9 +39,16 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
 
 public class DataTypeTreeSelectionDialog extends ElementTreeSelectionDialog {
+	
+	private boolean isTypeSelectionForAdapters;
 
 	public DataTypeTreeSelectionDialog(final Shell parent) {
 		super(parent, createTreeLabelProvider(), new TypeSelectionTreeContentProvider());
+	}
+	
+	public DataTypeTreeSelectionDialog(final Shell parent, final boolean isTypeSelectionForAdapters) {
+		super(parent, createTreeLabelProvider(), new AdapterSelectionTreeContentProvider());
+		this.isTypeSelectionForAdapters = isTypeSelectionForAdapters;
 	}
 
 	@Override
