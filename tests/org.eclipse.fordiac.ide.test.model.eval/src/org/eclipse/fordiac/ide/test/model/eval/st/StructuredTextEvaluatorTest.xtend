@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.st.ECTransitionEvaluator
 import org.eclipse.fordiac.ide.model.eval.st.STAlgorithmEvaluator
+import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
@@ -635,7 +636,7 @@ class StructuredTextEvaluatorTest {
 
 	@Test
 	def void testStringSubscriptModifyOutOfBounds() {
-		"4diac\u0000IDE".toStringValue.assertTrace(STStringLiteral.repeat(6), '''
+		"4diac\u0000IDE".toStringValue.assertTrace(STStringLiteral.repeat(3), '''
 			VAR_TEMP
 				test: STRING := '4diac';
 			END_VAR
@@ -643,16 +644,33 @@ class StructuredTextEvaluatorTest {
 			test[7] := 'I';
 			test[8] := 'D';
 			test[9] := 'E';
-			
-			test[0] := 'I';
-			test[-1] := 'D';
-			test[-4] := 'E';
 		'''.evaluateAlgorithm)
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: STRING := '4diac';
+			END_VAR
+			
+			test[0] := '?';
+		'''.evaluateAlgorithm]
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: STRING := '4diac';
+			END_VAR
+			
+			test[-1] := '?';
+		'''.evaluateAlgorithm]
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: STRING := '4diac';
+			END_VAR
+			
+			test[-4] := '?';
+		'''.evaluateAlgorithm]
 	}
 
 	@Test
 	def void testWStringSubscriptModifyOutOfBounds() {
-		"4diac\u0000IDE".toWStringValue.assertTrace(STStringLiteral.repeat(6), '''
+		"4diac\u0000IDE".toWStringValue.assertTrace(STStringLiteral.repeat(3), '''
 			VAR_TEMP
 				test: WSTRING := "4diac";
 			END_VAR
@@ -660,46 +678,73 @@ class StructuredTextEvaluatorTest {
 			test[7] := "I";
 			test[8] := "D";
 			test[9] := "E";
-			
-			test[0] := "I";
-			test[-1] := "D";
-			test[-4] := "E";
 		'''.evaluateAlgorithm)
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: WSTRING := "4diac IDE";
+			END_VAR
+			
+			test[0] := "?";
+		'''.evaluateAlgorithm]
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: WSTRING := "4diac IDE";
+			END_VAR
+			
+			test[-1] := "?";
+		'''.evaluateAlgorithm]
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: WSTRING := "4diac IDE";
+			END_VAR
+			
+			test[-4] := "?";
+		'''.evaluateAlgorithm]
 	}
 
 
 	@Test
 	def void testStringMaxLength() {
-		"4diac".toStringValue.assertTrace(STStringLiteral.repeat(6), '''
+		StringIndexOutOfBoundsException.assertThrows['''
 			VAR_TEMP
 				test: STRING[5] := '4diac IDE';
 			END_VAR
 			
-			test[7] := 'I';
-			test[8] := 'D';
-			test[9] := 'E';
+			test[6] := '?';
+		'''.evaluateAlgorithm]
+	}
+
+	@Test
+	def void testStringMaxLengthDefault() {
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: STRING := '4diac IDE';
+			END_VAR
 			
-			test[0] := 'I';
-			test[-1] := 'D';
-			test[-4] := 'E';
-		'''.evaluateAlgorithm)
+			test[«AnyStringValue.MAX_LENGTH + 1»] := '?';
+		'''.evaluateAlgorithm]
 	}
 
 	@Test
 	def void testWStringMaxLength() {
-		"4diac".toWStringValue.assertTrace(STStringLiteral.repeat(6), '''
+		StringIndexOutOfBoundsException.assertThrows['''
 			VAR_TEMP
 				test: WSTRING[5] := "4diac IDE";
 			END_VAR
 			
-			test[7] := "I";
-			test[8] := "D";
-			test[9] := "E";
+			test[6] := "?";
+		'''.evaluateAlgorithm]
+	}
+
+	@Test
+	def void testWStringMaxLengthDefault() {
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: WSTRING := "4diac IDE";
+			END_VAR
 			
-			test[0] := "I";
-			test[-1] := "D";
-			test[-4] := "E";
-		'''.evaluateAlgorithm)
+			test[«AnyStringValue.MAX_LENGTH + 1»] := "?";
+		'''.evaluateAlgorithm]
 	}
 
 	@Test

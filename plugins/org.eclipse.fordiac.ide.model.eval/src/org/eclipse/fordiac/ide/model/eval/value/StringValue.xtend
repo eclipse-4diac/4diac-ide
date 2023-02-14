@@ -29,18 +29,14 @@ class StringValue implements AnyStringValue, AnySCharsValue {
 		this.value = value;
 	}
 
-	def static toStringValue(String value) { new StringValue(value.getBytes(StandardCharsets.UTF_8)) }
+	def static toStringValue(String value) { value.toStringValue(MAX_LENGTH) }
 
 	def static toStringValue(String value, int maxLength) {
 		new StringValue(value.getBytes(StandardCharsets.UTF_8).truncate(maxLength))
 	}
 
 	def static toStringValue(AnyCharsValue value) {
-		switch (value) {
-			CharValue: new StringValue(#[value.charValue as byte])
-			StringValue: new StringValue(value.value)
-			default: value.stringValue.toStringValue
-		}
+		value.toStringValue(MAX_LENGTH)
 	}
 
 	def static toStringValue(AnyCharsValue value, int maxLength) {
@@ -56,12 +52,12 @@ class StringValue implements AnyStringValue, AnySCharsValue {
 	}
 
 	def withCharAt(int index, CharValue c) {
-		if (index > 0) {
-			val newValue = value.copyOf(Math.max(value.length, index))
-			newValue.set(index - 1, c.charValue as byte)
-			new StringValue(newValue)
-		} else
-			this
+		if (index <= 0) {
+			throw new StringIndexOutOfBoundsException(index)
+		}
+		val newValue = value.copyOf(Math.max(value.length, index))
+		newValue.set(index - 1, c.charValue as byte)
+		new StringValue(newValue)
 	}
 
 	override length() { value.length }

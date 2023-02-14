@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.variable
 
 import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue
 import org.eclipse.fordiac.ide.model.eval.value.CharValue
 import org.eclipse.fordiac.ide.model.eval.value.StringValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
@@ -37,9 +38,10 @@ class StringCharacterVariable extends AbstractVariable<CharValue> {
 	override setValue(Value value) {
 		if (value instanceof CharValue) {
 			val type = delegate.type as StringType
-			if (!type.setMaxLength || index <= type.maxLength) {
-				delegate.value = delegate.value.withCharAt(index, value)
+			if (index > (type.setMaxLength ? type.maxLength : AnyStringValue.MAX_LENGTH)) {
+				throw new StringIndexOutOfBoundsException(index);
 			}
+			delegate.value = delegate.value.withCharAt(index, value)
 		} else
 			throw new ClassCastException('''Cannot assign value with incompatible type «value.type.name» as «type.name»''')
 	}

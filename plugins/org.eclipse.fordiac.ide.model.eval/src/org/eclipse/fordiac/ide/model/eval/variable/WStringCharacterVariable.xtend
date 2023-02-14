@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.eval.variable
 
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.eval.value.WCharValue
 import org.eclipse.fordiac.ide.model.eval.value.WStringValue
@@ -37,9 +38,10 @@ class WStringCharacterVariable extends AbstractVariable<WCharValue> {
 	override setValue(Value value) {
 		if (value instanceof WCharValue) {
 			val type = delegate.type as WstringType
-			if (!type.setMaxLength || index <= type.maxLength) {
-				delegate.value = delegate.value.withCharAt(index, value)
+			if (index > (type.setMaxLength ? type.maxLength : AnyStringValue.MAX_LENGTH)) {
+				throw new StringIndexOutOfBoundsException(index);
 			}
+			delegate.value = delegate.value.withCharAt(index, value)
 		} else
 			throw new ClassCastException('''Cannot assign value with incompatible type «value.type.name» as «type.name»''')
 	}
