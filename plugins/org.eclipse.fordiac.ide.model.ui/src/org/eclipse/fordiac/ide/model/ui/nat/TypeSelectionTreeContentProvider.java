@@ -20,14 +20,13 @@ import java.util.Optional;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.Messages;
@@ -45,39 +44,39 @@ import org.eclipse.ui.part.FileEditorInput;
 public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 
 	@Override
-	public Object[] getElements(Object inputElement) {
+	public Object[] getElements(final Object inputElement) {
 		if (inputElement instanceof HashMap<?,?>) {
-			HashMap<String, List<String>> map = (HashMap<String, List<String>>) inputElement;
+			final HashMap<String, List<String>> map = (HashMap<String, List<String>>) inputElement;
 			return createTree(map);
 		}
 		return new Object[0];
 	}
-	
-	protected Object[] createTree(HashMap<String, List<String>> inputElement) {
+
+	protected Object[] createTree(final HashMap<String, List<String>> inputElement) {
 		final TypeNode elementaries = new TypeNode(Messages.DataTypeDropdown_Elementary_Types);
 		final TypeNode structures = new TypeNode(Messages.DataTypeDropdown_STRUCT_Types);
-		
-		TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(getCurrentProject());
-		List<DataType> dataTypes = typeLib.getDataTypeLibrary().getDataTypesSorted();
-		List<StructuredType> structuredTypes = typeLib.getDataTypeLibrary().getStructuredTypesSorted();
-		
-		
+
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(getCurrentProject());
+		final List<DataType> dataTypes = typeLib.getDataTypeLibrary().getDataTypesSorted();
+		final List<StructuredType> structuredTypes = typeLib.getDataTypeLibrary().getStructuredTypesSorted();
+
+
 		inputElement.forEach((key, val) -> {
 			val.forEach(value -> {
 				if (key.equals(Messages.DataTypeDropdown_Elementary_Types)) {
-					Optional<DataType> type = dataTypes.stream()
+					final Optional<DataType> type = dataTypes.stream()
 							.filter(dataType -> dataType.getName().equals(value))
 							.findFirst();
 					final TypeNode newNode = new TypeNode(type.get().getName(), type.get());
 					elementaries.addChild(newNode);
 				} else if (key.equals(Messages.DataTypeDropdown_STRUCT_Types)) {
-					Optional<StructuredType> type = structuredTypes.stream()
+					final Optional<StructuredType> type = structuredTypes.stream()
 							.filter(structType -> structType.getName().equals(value))
 							.findFirst();
 					if (type.isPresent()) {
 						if(null != type.get().getTypeEntry()) {
-							final String parentPath = type.get().getTypeEntry().getFile().getParent()
-									.getProjectRelativePath().toOSString();
+							final IPath parentPath = type.get().getTypeEntry().getFile().getParent()
+									.getProjectRelativePath();
 							createSubdirectories(structures, type.get(), parentPath);
 						} else {
 							final TypeNode runtimeNode = new TypeNode(type.get().getName(), type.get());
@@ -88,7 +87,7 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 				}
 			});
 		});
-		
+
 		if (elementaries.getChildren().isEmpty()) {
 			return structures.getChildren().toArray();
 		} else if (structures.getChildren().isEmpty()) {
@@ -98,10 +97,10 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 		return new TypeNode[] { elementaries, structures };
 	}
 
-	private void createSubdirectories(TypeNode node, final StructuredType structuredType,
-			final String parentPath) {
+	private static void createSubdirectories(TypeNode node, final StructuredType structuredType,
+			final IPath parentPath) {
 		// split up the path in subdirectories
-		final String[] paths = parentPath.split("\\\\"); //$NON-NLS-1$
+		final String[] paths = parentPath.segments();
 
 		// start after Type Library
 		for (int i = 1; i < paths.length; i++) {
@@ -120,11 +119,11 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 		actualType.setParent(node);
 		node.addChild(actualType);
 	}
-	
-	
+
+
 
 	@Override
-	public Object[] getChildren(Object parentElement) {
+	public Object[] getChildren(final Object parentElement) {
 		if (parentElement instanceof TypeNode) {
 			return ((TypeNode) parentElement).getChildren().toArray();
 		}
@@ -132,7 +131,7 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 	}
 
 	@Override
-	public Object getParent(Object element) {
+	public Object getParent(final Object element) {
 		if (element instanceof TypeNode) {
 			return ((TypeNode) element).getParent();
 		}
@@ -140,13 +139,13 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 	}
 
 	@Override
-	public boolean hasChildren(Object element) {
+	public boolean hasChildren(final Object element) {
 		if (element instanceof TypeNode) {
 			return !((TypeNode) element).getChildren().isEmpty();
 		}
 		return false;
 	}
-	
+
 	protected static IProject getCurrentProject() {
 		final IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
 		IProject project = getProjectFromActiveEditor(page);
@@ -185,7 +184,7 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 
 		return null;
 	}
-	
+
 	private static IFile getFileForModel(final EObject sel) {
 		final EObject root = EcoreUtil.getRootContainer(sel);
 		if (root instanceof AutomationSystem) {
