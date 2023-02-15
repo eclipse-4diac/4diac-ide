@@ -21,8 +21,6 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
-import org.eclipse.ui.ide.undo.CreateMarkersOperation;
-import org.eclipse.ui.ide.undo.DeleteMarkersOperation;
 
 public final class FordiacMarkerCommandHelper {
 
@@ -30,17 +28,15 @@ public final class FordiacMarkerCommandHelper {
 		final IResource resource = FordiacMarkerHelper.getResource(builder.getTarget());
 		if (resource == null) {
 			FordiacLogHelper
-					.logWarning("Cannot determine resource for " + builder + " (target may be null or dangling)"); //$NON-NLS-1$ //$NON-NLS-2$
+			.logWarning("Cannot determine resource for " + builder + " (target may be null or dangling)"); //$NON-NLS-1$ //$NON-NLS-2$
 			return new CompoundCommand();
 		}
-		return new OperationCommand(new CreateMarkersOperation(builder.getType(), builder.getAttributes(), resource,
-				"Create error marker for " + builder.toString()), false); //$NON-NLS-1$
+		return new CreateMarkersCommand("Create error marker for " + builder.toString(), resource, builder.getType(), //$NON-NLS-1$
+				builder.getAttributes());
 	}
 
 	public static Command newDeleteMarkersCommand(final List<IMarker> markers) {
-		return new OperationCommand(
-				new DeleteMarkersOperation(markers.toArray(new IMarker[markers.size()]), "Delete error markers"), //$NON-NLS-1$
-				false);
+		return new DeleteMarkersCommand("Delete error markers", markers); //$NON-NLS-1$
 	}
 
 	private FordiacMarkerCommandHelper() {
