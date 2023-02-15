@@ -21,11 +21,15 @@
 package org.eclipse.fordiac.ide.model.ui.editors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.ui.Messages;
 import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
@@ -56,7 +60,7 @@ public class DataTypeDropdown extends TextCellEditor {
 	private final ITypeSelectionContentProvider contentProvider;
 	private SimpleContentProposalProvider provider;
 	private List<DataType> types;
-	private String[] elementaryTypes;
+	private String[] elementaryTypes = new String[0];
 	private final TableViewer viewer;
 	/* A flag that indicates if the content proposals have been set to elementary types (this is the case if the text
 	 * field is empty) or all types. This means that the ModifyListener of the textControl does not have to set the
@@ -198,7 +202,7 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	private String[] getElementaryTypes() {
 		// only load elementary types once because they do not change
-		if (null == elementaryTypes) {
+		if (null == elementaryTypes || elementaryTypes.length == 0) {
 			elementaryTypes = types.stream().filter(type -> !(type instanceof StructuredType)).map(DataType::getName)
 					.toArray(String[]::new);
 		}
@@ -230,7 +234,10 @@ public class DataTypeDropdown extends TextCellEditor {
 		loadContent(); // refresh content before opening
 
 		final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(getControl().getShell());
-		dialog.setInput(types);
+		HashMap<String, List<String>> allTypes = new HashMap<>();
+		allTypes.put(Messages.DataTypeDropdown_Elementary_Types, Arrays.asList(getElementaryTypes()));
+		allTypes.put(Messages.DataTypeDropdown_STRUCT_Types, types.stream().map(INamedElement::getName).collect(Collectors.toList()));
+		dialog.setInput(allTypes);
 		dialog.setTitle(Messages.DataTypeDropdown_Type_Selection);
 		dialog.setMessage(Messages.DataTypeDropdown_Select_Type);
 		dialog.setDoubleClickSelects(false); // because it is incompatible with multi-level tree

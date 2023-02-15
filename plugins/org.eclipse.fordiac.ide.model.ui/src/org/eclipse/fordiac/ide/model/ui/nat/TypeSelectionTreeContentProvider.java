@@ -62,6 +62,7 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 
 
 		inputElement.forEach((key, val) -> {
+			if (val != null && !val.isEmpty()) {
 			val.forEach(value -> {
 				if (key.equals(Messages.DataTypeDropdown_Elementary_Types)) {
 					final Optional<DataType> type = dataTypes.stream()
@@ -86,8 +87,8 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 					}
 				}
 			});
-		});
-
+		}});
+		
 		if (elementaries.getChildren().isEmpty()) {
 			return structures.getChildren().toArray();
 		} else if (structures.getChildren().isEmpty()) {
