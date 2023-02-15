@@ -12,7 +12,7 @@
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Martin Jobst - fix name validation with proposed changes and child resources
  *******************************************************************************/
-package org.eclipse.fordiac.ide.typemanagement;
+package org.eclipse.fordiac.ide.typemanagement.refactoring;
 
 import java.text.MessageFormat;
 import java.util.Optional;
@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.fordiac.ide.model.IdentifierVerifier;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.typemanagement.Messages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ltk.core.refactoring.Change;
@@ -94,6 +95,7 @@ public class RenameType extends RenameParticipant {
 				&& TypeLibraryManager.INSTANCE.getTypeEntryForFile(newFile) != null;
 	}
 
+
 	@Override
 	public Change createChange(final IProgressMonitor pm) throws CoreException, OperationCanceledException {
 		return null;
@@ -116,11 +118,11 @@ public class RenameType extends RenameParticipant {
 	}
 
 	private boolean shouldSaveFile(final Shell shell) {
-		final int result = MessageDialog.open(MessageDialog.QUESTION, shell, "Rename of Type with unsaved changes!",
+		final int result = MessageDialog.open(MessageDialog.QUESTION, shell, "Rename of Type with unsaved changes!", //$NON-NLS-1$
 				MessageFormat.format(
-						"There are unsaved changes for type \"{0}\". Do you want to save them before renaming?",
+						"There are unsaved changes for type \"{0}\". Do you want to save them before renaming?", //$NON-NLS-1$
 						TypeEntry.getTypeNameFromFileName(getOldName())),
-				SWT.NONE, "Save", "Cancel");
+				SWT.NONE, "Save", "Cancel"); //$NON-NLS-1$ //$NON-NLS-2$
 		return result == 0;
 	}
 

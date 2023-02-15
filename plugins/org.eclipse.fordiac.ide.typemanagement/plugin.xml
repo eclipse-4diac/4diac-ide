@@ -435,7 +435,7 @@
    <extension
          point="org.eclipse.ltk.core.refactoring.renameParticipants">
       <renameParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.RenameType"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameType"
             id="org.eclipse.fordiac.ide.typemanagement.renameType"
             name="Rename Type handler">
          <enablement>
@@ -487,7 +487,7 @@
    <extension
          point="org.eclipse.ltk.core.refactoring.deleteParticipants">
       <deleteParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.DeleteFBTypeParticipant"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.deleteFBType"
             name="Delete FB Type Handler">
          <enablement>
@@ -556,5 +556,48 @@
             properties="fbType"
             type="org.eclipse.core.resources.IResource">
       </propertyTester>
+   </extension>  
+    <extension
+         point="org.eclipse.ltk.core.refactoring.refactoringContributions">
+      <contribution
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameTypeRefactoringContribution"
+            id="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"/>
+   </extension>
+    <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            description="4diac action set"
+            id="org.eclipse.refactoring.actionSet"
+            label="4diac"
+            visible="true">
+         <menu
+               id="org.eclipse.refactoring.menu"
+               label="Refactoring"
+               path="edit">
+            <separator name="renameType"/>
+         </menu>
+         <action
+               class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameTypeAction"
+               definitionId="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
+               enablesFor="1"
+               helpContextId="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
+               id="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
+               label="Rename Type..."
+               menubarPath="org.eclipse.refactoring.menu/renameType"
+               style="push"
+               tooltip="Rename Type"/>
+      </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            description="Rename a type and search for affected references"
+            id="org.eclipse.refactoring.category"
+            name="Refactoring"/>
+      <command
+            categoryId="org.eclipse.refactoring.category"
+            description="Renames a iec 61499 type"
+            id="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
+            name="Rename Type"/>
    </extension>
 </plugin>

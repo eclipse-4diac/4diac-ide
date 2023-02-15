@@ -19,7 +19,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.expressions,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.structuredtextalgorithm.ui,
- org.eclipse.fordiac.ide.structuredtextcore
+ org.eclipse.fordiac.ide.structuredtextcore,
+ org.eclipse.ltk.ui.refactoring,
+ org.eclipse.fordiac.ide.model.search,
+ org.eclipse.fordiac.ide.model.commands
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier

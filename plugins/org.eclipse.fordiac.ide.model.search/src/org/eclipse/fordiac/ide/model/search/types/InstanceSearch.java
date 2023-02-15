@@ -22,6 +22,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
@@ -55,6 +56,14 @@ public class InstanceSearch {
 	public List<INamedElement> performTypeLibrarySearch(final TypeLibrary library) {
 		searchResult = new ArrayList<>();
 		searchTypeLibrary(library);
+		return searchResult;
+	}
+
+	public List<INamedElement> searchStructuredTypes(final TypeLibrary library) {
+		searchResult = new ArrayList<>();
+		for (final StructuredType structuredType : library.getDataTypeLibrary().getStructuredTypes()) {
+			match(structuredType);
+		}
 		return searchResult;
 	}
 
@@ -131,14 +140,22 @@ public class InstanceSearch {
 	}
 
 	private void searchTypeLibrary(final TypeLibrary typeLibrary) {
-		for (final CompositeFBType entry : typeLibrary.getCompositeFBTypes()) {
-			if (entry.getFBNetwork() != null) {
-				searchFBNetwork(entry.getFBNetwork());
-			}
-		}
+		searchCFBs(typeLibrary);
+		searchSubappTypes(typeLibrary);
+	}
+
+	public void searchSubappTypes(final TypeLibrary typeLibrary) {
 		for (final SubAppTypeEntry entry : typeLibrary.getSubAppTypes().values()) {
 			if (entry.getTypeEditable().getFBNetwork() != null) {
 				searchFBNetwork(entry.getTypeEditable().getFBNetwork());
+			}
+		}
+	}
+
+	public void searchCFBs(final TypeLibrary typeLibrary) {
+		for (final CompositeFBType entry : typeLibrary.getCompositeFBTypes()) {
+			if (entry.getFBNetwork() != null) {
+				searchFBNetwork(entry.getFBNetwork());
 			}
 		}
 	}
