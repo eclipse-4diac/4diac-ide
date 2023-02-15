@@ -31,4 +31,5 @@ Export-Package: org.eclipse.fordiac.ide.globalconstantseditor,
  org.eclipse.fordiac.ide.globalconstantseditor.generator,
  org.eclipse.fordiac.ide.globalconstantseditor.formatting2,
  org.eclipse.fordiac.ide.globalconstantseditor.parser.antlr.lexer
-Import-Package: org.apache.log4j
+Import-Package: org.apache.log4j,
+ org.eclipse.fordiac.ide.globalconstantseditor.globalConstants

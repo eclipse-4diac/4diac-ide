@@ -648,6 +648,15 @@ public interface LibraryElementFactory extends EFactory {
 	ErrorMarkerFBNElement createErrorMarkerFBNElement();
 
 	/**
+	 * Returns a new object of class '<em>Error Marker Data Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Marker Data Type</em>'.
+	 * @generated
+	 */
+	ErrorMarkerDataType createErrorMarkerDataType();
+
+	/**
 	 * Returns a new object of class '<em>Error Marker Interface</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

@@ -1537,6 +1537,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerFBNElement" eSuperTypes="#//FBNetworkElement #//ErrorMarkerRef">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repairedElement" eType="#//FBNetworkElement"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerDataType" eSuperTypes="data.ecore#//DataType #//ErrorMarkerRef"/>
   <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerInterface" eSuperTypes="#//IInterfaceElement #//ErrorMarkerRef">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repairedEndpoint" eType="#//IInterfaceElement"
         transient="true"/>

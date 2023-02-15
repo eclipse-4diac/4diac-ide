@@ -61,6 +61,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
@@ -230,6 +231,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.MULTIPLEXER: return createMultiplexer();
 			case LibraryElementPackage.LOCAL_VARIABLE: return createLocalVariable();
 			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT: return createErrorMarkerFBNElement();
+			case LibraryElementPackage.ERROR_MARKER_DATA_TYPE: return createErrorMarkerDataType();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE: return createErrorMarkerInterface();
 			case LibraryElementPackage.CFB_INSTANCE: return createCFBInstance();
 			case LibraryElementPackage.ERROR_MARKER_REF: return createErrorMarkerRef();
@@ -1049,6 +1051,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public ErrorMarkerFBNElement createErrorMarkerFBNElement() {
 		ErrorMarkerFBNElementImpl errorMarkerFBNElement = new ErrorMarkerFBNElementImpl();
 		return errorMarkerFBNElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorMarkerDataType createErrorMarkerDataType() {
+		ErrorMarkerDataTypeImpl errorMarkerDataType = new ErrorMarkerDataTypeImpl();
+		return errorMarkerDataType;
 	}
 
 	/**

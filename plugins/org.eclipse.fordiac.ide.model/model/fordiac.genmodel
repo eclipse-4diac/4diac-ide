@@ -556,6 +556,7 @@
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerFBNElement">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerFBNElement/repairedElement"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ErrorMarkerDataType"/>
     <genClasses ecoreClass="lib.ecore#//ErrorMarkerInterface">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerInterface/repairedEndpoint"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerInterface/value"/>

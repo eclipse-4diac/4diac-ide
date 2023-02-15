@@ -71,6 +71,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.DeviceType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
@@ -674,6 +675,13 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass errorMarkerFBNElementEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass errorMarkerDataTypeEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -3254,6 +3262,16 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EClass getErrorMarkerDataType() {
+		return errorMarkerDataTypeEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getErrorMarkerInterface() {
 		return errorMarkerInterfaceEClass;
 	}
@@ -3948,6 +3966,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		errorMarkerFBNElementEClass = createEClass(ERROR_MARKER_FBN_ELEMENT);
 		createEReference(errorMarkerFBNElementEClass, ERROR_MARKER_FBN_ELEMENT__REPAIRED_ELEMENT);
 
+		errorMarkerDataTypeEClass = createEClass(ERROR_MARKER_DATA_TYPE);
+
 		errorMarkerInterfaceEClass = createEClass(ERROR_MARKER_INTERFACE);
 		createEReference(errorMarkerInterfaceEClass, ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT);
 		createEReference(errorMarkerInterfaceEClass, ERROR_MARKER_INTERFACE__VALUE);
@@ -4113,6 +4133,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		localVariableEClass.getESuperTypes().add(this.getVarDeclaration());
 		errorMarkerFBNElementEClass.getESuperTypes().add(this.getFBNetworkElement());
 		errorMarkerFBNElementEClass.getESuperTypes().add(this.getErrorMarkerRef());
+		errorMarkerDataTypeEClass.getESuperTypes().add(theDataPackage.getDataType());
+		errorMarkerDataTypeEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		errorMarkerInterfaceEClass.getESuperTypes().add(this.getIInterfaceElement());
 		errorMarkerInterfaceEClass.getESuperTypes().add(this.getErrorMarkerRef());
 		cfbInstanceEClass.getESuperTypes().add(this.getFB());
@@ -4726,6 +4748,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(errorMarkerFBNElementEClass, ErrorMarkerFBNElement.class, "ErrorMarkerFBNElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getErrorMarkerFBNElement_RepairedElement(), this.getFBNetworkElement(), null, "repairedElement", null, 0, 1, ErrorMarkerFBNElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(errorMarkerDataTypeEClass, ErrorMarkerDataType.class, "ErrorMarkerDataType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(errorMarkerInterfaceEClass, ErrorMarkerInterface.class, "ErrorMarkerInterface", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getErrorMarkerInterface_RepairedEndpoint(), this.getIInterfaceElement(), null, "repairedEndpoint", null, 0, 1, ErrorMarkerInterface.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
