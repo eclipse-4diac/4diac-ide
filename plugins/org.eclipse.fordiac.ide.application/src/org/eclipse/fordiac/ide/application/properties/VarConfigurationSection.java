@@ -17,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
@@ -25,18 +24,13 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
@@ -48,7 +42,6 @@ import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class VarConfigurationSection extends AbstractSection {
@@ -120,48 +113,23 @@ public class VarConfigurationSection extends AbstractSection {
 	}
 
 	@Override
-	protected INamedElement getInputType(final Object input) {
+	protected Application getInputType(final Object input) {
 		if (input instanceof FBNetworkEditPart) {
 			return ((FBNetworkEditPart) input).getModel().getApplication();
 		}
-		if (input instanceof INamedElement) {
-			return ((INamedElement) input);
-		}
 		return null;
 	}
 
 	@Override
-	protected INamedElement getType() {
-		if ((type instanceof Application) || (type instanceof FB) || (type instanceof SubApp)
-				|| (type instanceof CFBInstance)) {
-			return (INamedElement) type;
+	protected EObject getType() {
+		if (type instanceof Application) {
+			return (EObject) type;
 		}
 		return null;
 	}
 
-	@Override
-	protected CommandStack getCommandStack(final IWorkbenchPart part, final Object input) {
-		super.getCommandStack(part, input);
-		if (input instanceof FBNetworkEditPart) {
-			AutomationSystem automationsys = (AutomationSystem) ((FBNetworkEditPart) input).getModel().eContainer()
-					.eContainer();
-			return automationsys.getCommandStack();
-		}
-		if (input instanceof EObject) {
-			EObject root = EcoreUtil.getRootContainer((EObject) input);
-			if (root instanceof AutomationSystem) {
-				return ((AutomationSystem) root).getCommandStack();
-			}
-			if (root instanceof FBType) {
-				return null;
-			}
-		}
-		return null;
-	}
-	
 	@Override
 	protected void setInputCode() {
-		// Nothing for now
 	}
 
 	@Override
@@ -173,7 +141,7 @@ public class VarConfigurationSection extends AbstractSection {
 
 	private static class VarConfigDeclarationListProvider extends ListDataProvider<VarDeclaration> {
 
-		public VarConfigDeclarationListProvider(final VarConfigurationSection  section, final List<VarDeclaration> list) {
+		public VarConfigDeclarationListProvider(final AbstractSection section, final List<VarDeclaration> list) {
 			super(list, new VarConfigDeclarationColumnAccessor(section));
 		}
 
@@ -187,73 +155,84 @@ public class VarConfigurationSection extends AbstractSection {
 
 		public void setInput(final Object inputElement) {
 			final List<VarDeclaration> finallist = new ArrayList<>();
-			getListVarConfig(finallist, inputElement);
-			this.list = finallist;
-		}
-		private void getListVarConfig(final List<VarDeclaration> list, final Object obj) {
-			EcoreUtil.getAllProperContents((EObject) obj, true).forEachRemaining(item -> {
-				if ((item instanceof VarDeclaration) && (((VarDeclaration) item).isVarConfig())) {
-					list.add((VarDeclaration) item);
+			if (inputElement instanceof Application) {
+				for (final FBNetworkElement networkElemnt : ((Application) inputElement).getFBNetwork()
+						.getNetworkElements()) {
+					if (networkElemnt instanceof FB) {
+						varConfigExtractFunction(finallist, networkElemnt);
+					} else if (networkElemnt instanceof SubApp) {
+						varConfigExtractFunction(finallist, networkElemnt);
+						for (final FBNetworkElement subappNetworkElemnet : ((SubApp) networkElemnt).getSubAppNetwork()
+								.getNetworkElements()) {
+							varConfigExtractFunction(finallist, subappNetworkElemnet);
+						}
+					}
+					this.list = finallist;
+
 				}
-			});
+			}
 		}
-		public static IEditableRule getEditableRule() {
+
+		private static void varConfigExtractFunction(final List<VarDeclaration> list,
+				final FBNetworkElement networkElemnt) {
+			for (final VarDeclaration inputVar : networkElemnt.getInterface().getInputVars()) {
+				if (inputVar.isVarConfig()) {
+					list.add(inputVar);
+				}
+			}
+		}
+
+		private static IEditableRule getEditableRule() {
 			return new IEditableRule() {
 				@Override
 				public boolean isEditable(final int columnIndex, final int rowIndex) {
 					return (columnIndex == INITIAL_VALUE) || columnIndex == COMMENT;
 				}
+
 				@Override
 				public boolean isEditable(final ILayerCell cell, final IConfigRegistry configRegistry) {
 					return (cell.getColumnIndex() == INITIAL_VALUE) || cell.getColumnIndex() == COMMENT;
 				}
 			};
 		}
-
 	}
 
-	public static class VarConfigDeclarationColumnAccessor extends VarDeclarationColumnAccessor {
-		private VarConfigurationSection varSection;
-		public VarConfigDeclarationColumnAccessor(VarConfigurationSection section) {
+	private static class VarConfigDeclarationColumnAccessor extends VarDeclarationColumnAccessor {
+
+		public VarConfigDeclarationColumnAccessor(final AbstractSection section) {
 			super(section);
-			varSection = section;
 		}
-		@Override
-		public int getColumnCount() {
-			return 5;
-		}
+
 		@Override
 		public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
 			if (columnIndex == VISIBLE) {
 				return Boolean.valueOf(rowObject.isVisible());
 			} else if (columnIndex == NAME) {
-				final INamedElement typeSection = (this.varSection).getType();
-				if (typeSection instanceof Application) {
-					return rowObject.getQualifiedName();
+				if (rowObject.eContainer().eContainer() instanceof FB) {
+					final FB fb = (FB) rowObject.eContainer().eContainer();
+					return fb.getName() + "." + rowObject.getName(); //$NON-NLS-1$
+				} else if (rowObject.eContainer().eContainer() instanceof SubApp) {
+					final SubApp subapp = (SubApp) rowObject.eContainer().eContainer();
+					return subapp.getName() + "." + rowObject.getName(); //$NON-NLS-1$
 				} else {
-					
-					  String name = rowObject.getQualifiedName();
-					  String typeName = varSection.getType().getQualifiedName();
-					  if(name.startsWith(typeName + ".")) {
-					    name = name.substring(typeName.length() + 1);
-					  }
-					  return name;
+					return null;
 				}
 			} else {
 				return super.getDataValue(rowObject, columnIndex);
 			}
 		}
 	}
-	public static class VarConfigColumnDataProvider extends VarDeclarationColumnProvider {
+
+	private static class VarConfigColumnDataProvider extends VarDeclarationColumnProvider {
+
 		@Override
 		public Object getDataValue(final int columnIndex, final int rowIndex) {
 			if (columnIndex == NAME) {
 				return FordiacMessages.Constants;
 			}
-			if (columnIndex == VISIBLE) {
-				return FordiacMessages.Visible;
-			}
 			return super.getDataValue(columnIndex, rowIndex);
 		}
+
 	}
+
 }

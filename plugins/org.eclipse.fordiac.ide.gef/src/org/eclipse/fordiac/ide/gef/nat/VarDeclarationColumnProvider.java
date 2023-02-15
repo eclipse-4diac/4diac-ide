@@ -31,8 +31,6 @@ public class VarDeclarationColumnProvider implements IDataProvider {
 			return FordiacMessages.InitialValue;
 		case I4diacNatTableUtil.ARRAY_SIZE:
 			return FordiacMessages.ArraySize;
-		case I4diacNatTableUtil.VAR_CONFIG:
-			return FordiacMessages.VarConfig;
 
 		default:
 			return FordiacMessages.EmptyField;
@@ -41,7 +39,7 @@ public class VarDeclarationColumnProvider implements IDataProvider {
 
 	@Override
 	public int getColumnCount() {
-		return 6;
+		return 5;
 	}
 
 	@Override

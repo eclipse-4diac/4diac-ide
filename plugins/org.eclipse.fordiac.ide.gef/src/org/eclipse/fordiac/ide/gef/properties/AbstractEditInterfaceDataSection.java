@@ -16,7 +16,6 @@
  *   Bianca Wiesmayr - create command now has enhanced guess, added columns
  *   Daniel Lindhuber - added addEntry method & type search field
  *   Martin Jobst - add initial value cell editor support
- *   Hesam Rezaee - add varConfig for variables
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -37,16 +36,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
-import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection<VarDeclaration> {
@@ -124,7 +120,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	public void setupOutputTable(final Group outputsGroup) {
 		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
 		if (isEditable()) {
-			rule = VAR_CONFIG_NOT_EDITABLE;
+			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
 		outputProvider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
 		
@@ -132,17 +128,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
-		configureDataLayerLabels(outputDataLayer);
-		outputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		outputTable.configure();
-	}
-	
-	private void configureDataLayerLabels(DataLayer dataLayer) {
-		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			if (columnPosition == VAR_CONFIG) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
-			}
-		});
 	}
 
 
@@ -157,8 +143,6 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
-		configureDataLayerLabels(inputDataLayer);
-		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		inputTable.configure();
 	}
 
@@ -174,15 +158,4 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		final EList<VarDeclaration> outputVars = element.getInterface().getOutputVars();
 		((FordiacInterfaceListProvider) outputProvider).setInput(outputVars);
 	}
-	
-	public static final IEditableRule VAR_CONFIG_NOT_EDITABLE = new IEditableRule() {
-		@Override
-		public boolean isEditable(ILayerCell cell, IConfigRegistry configRegistry) {
-			return !(cell.getColumnIndex() == VAR_CONFIG);
-		}
-		@Override
-		public boolean isEditable(int columnIndex, int rowIndex) {
-			return !(columnIndex == VAR_CONFIG);
-		}
-	};
 }

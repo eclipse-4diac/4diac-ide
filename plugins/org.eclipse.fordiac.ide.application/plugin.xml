@@ -229,8 +229,9 @@
       </propertySection>
       <propertySection class="org.eclipse.fordiac.ide.application.properties.VarConfigurationSection"
                        id="org.eclipse.fordiac.ide.application.properties.VarConfigSection"
-                       filter="org.eclipse.fordiac.ide.application.properties.VarConfigurationFilter"
                        tab="org.eclipse.fordiac.ide.application.propertyVarConfigTab">
+        <input type="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart">
+        </input>
       </propertySection>
       
       <propertySection class="org.eclipse.fordiac.ide.application.properties.PinEventInfoSection"
