@@ -32,7 +32,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -246,8 +246,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 				final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
 						oldInterface.getTypeName(), interfaceElement.getTypeName());
 
-				return FordiacMarkerHelper.createWrongDataTypeMarker(oldInterface, interfaceElement, newElement,
-						errorPins, errorMessage);
+				return FordiacErrorMarkerInterfaceHelper.createWrongDataTypeMarker(oldInterface, interfaceElement,
+						newElement, errorPins, errorMessage);
 			}
 
 			return interfaceElement;
@@ -357,7 +357,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		for (final ErrorMarkerInterface erroMarker : oldElement.getInterface().getErrorMarker()) {
 			if (hasValue(erroMarker.getValue())) {
 				final IInterfaceElement updatedSelected = newElement.getInterfaceElement(erroMarker.getName());
-				if (FordiacMarkerHelper.isVariable(updatedSelected)) {
+				if (updatedSelected instanceof VarDeclaration) {
 					final Value value = LibraryElementFactory.eINSTANCE.createValue();
 					value.setValue(erroMarker.getValue().getValue());
 					((VarDeclaration) updatedSelected).setValue(value);
@@ -407,7 +407,7 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	private ErrorMarkerInterface createMissingMarker(final IInterfaceElement oldInterface,
 			final FBNetworkElement element) {
-		return FordiacMarkerHelper.createErrorMarkerInterfaceElement(element, oldInterface,
+		return FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterfaceElement(element, oldInterface,
 				MessageFormat.format(Messages.UpdateFBTypeCommand_Pin_not_found, oldInterface.getName()), errorPins);
 	}
 
@@ -442,11 +442,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
 					source.getTypeName(), destination.getTypeName());
 			if (connection.getDestinationElement() == oldElement) {
-				destination = FordiacMarkerHelper.createWrongDataTypeMarker(connection.getDestination(), destination,
-						newElement, errorPins, errorMessage);
+				destination = FordiacErrorMarkerInterfaceHelper.createWrongDataTypeMarker(connection.getDestination(),
+						destination, newElement, errorPins, errorMessage);
 			} else {
-				source = FordiacMarkerHelper.createWrongDataTypeMarker(connection.getSource(), source, newElement,
-						errorPins, errorMessage);
+				source = FordiacErrorMarkerInterfaceHelper.createWrongDataTypeMarker(connection.getSource(), source,
+						newElement, errorPins, errorMessage);
 			}
 		}
 
@@ -477,8 +477,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			reconnCmds.add(cmd);
 		}
 	}
-
-
 
 	protected boolean isConnectionInList(final Connection conn) {
 		for (final Object cmd : reconnCmds.getCommands()) {

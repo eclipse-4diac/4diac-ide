@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
@@ -662,7 +663,7 @@ public abstract class CommonElementImporter {
 						block.getName()),
 				block, getLineNumber());
 		errorMarkerBuilders.add(e);
-		final ErrorMarkerInterface errorMarkerInterface = ConnectionHelper
+		final ErrorMarkerInterface errorMarkerInterface = FordiacErrorMarkerInterfaceHelper
 				.createErrorMarkerInterface(IecTypes.GenericTypes.ANY, parameter.getName(), true, block.getInterface());
 		e.setErrorMarkerRef(errorMarkerInterface);
 		errorMarkerInterface.setValue(parameter.getValue());

@@ -16,29 +16,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.errormarker;
 
-import java.util.List;
-
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.fordiac.ide.model.dataimport.ConnectionHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 public final class FordiacMarkerHelper {
 
@@ -126,65 +114,6 @@ public final class FordiacMarkerHelper {
 				builder.insert(0, ((Device) runner.eContainer()).getName());
 			}
 		}
-	}
-
-	public static ErrorMarkerFBNElement createErrorMarkerFB(final String name) {
-		final ErrorMarkerFBNElement createErrorMarkerFBNElement = LibraryElementFactory.eINSTANCE
-				.createErrorMarkerFBNElement();
-		createErrorMarkerFBNElement.setName(name);
-		createErrorMarkerFBNElement.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		final Position position = LibraryElementFactory.eINSTANCE.createPosition();
-		position.setX(0);
-		position.setY(0);
-		createErrorMarkerFBNElement.setPosition(position);
-		return createErrorMarkerFBNElement;
-	}
-
-	public static FBNetworkElement createTypeErrorMarkerFB(final String typeFbElement, final TypeLibrary typeLibrary,
-			final FBType fbType) {
-		final ErrorMarkerFBNElement errorFb = FordiacMarkerHelper.createErrorMarkerFB(typeFbElement);
-		final TypeEntry entry = typeLibrary.createErrorTypeEntry(typeFbElement, fbType);
-		errorFb.setTypeEntry(entry);
-		return errorFb;
-	}
-
-	public static ErrorMarkerInterface createWrongDataTypeMarker(final IInterfaceElement oldInterface,
-			final IInterfaceElement newInterface, final FBNetworkElement element,
-			final List<ErrorMarkerBuilder> errorPins,final String errorMessage) {
-
-		final ErrorMarkerInterface createErrorMarker = createErrorMarkerInterfaceElement(element, oldInterface,
-				errorMessage, errorPins);
-		createErrorMarker.setErrorMessage(errorMessage);
-		return createErrorMarker;
-	}
-
-	public static ErrorMarkerInterface createErrorMarkerInterfaceElement(final FBNetworkElement newElement,
-			final IInterfaceElement oldInterface, final String errorMessage, final List<ErrorMarkerBuilder> errorPins) {
-		final boolean markerExists = newElement.getInterface().getErrorMarker().stream().anyMatch(
-				e -> e.getName().equals(oldInterface.getName()) && (e.isIsInput() == oldInterface.isIsInput()));
-
-		final ErrorMarkerInterface interfaceElement = ConnectionHelper.createErrorMarkerInterface(
-				oldInterface.getType(), oldInterface.getName(), oldInterface.isIsInput(), newElement.getInterface());
-
-		if (isVariable(oldInterface) && ((VarDeclaration) oldInterface).getValue() != null
-				&& !((VarDeclaration) oldInterface).getValue().getValue().isBlank()) {
-			final Value value = LibraryElementFactory.eINSTANCE.createValue();
-			value.setValue(((VarDeclaration) oldInterface).getValue().getValue());
-			interfaceElement.setValue(value);
-		}
-
-		if (!markerExists) {
-			final ErrorMarkerBuilder createErrorMarker = ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage, newElement,
-					0);
-			createErrorMarker.setErrorMarkerRef(interfaceElement);
-			createErrorMarker.createMarkerInFile();
-			errorPins.add(createErrorMarker);
-		}
-		return interfaceElement;
-	}
-
-	public static boolean isVariable(final IInterfaceElement oldInterface) {
-		return (oldInterface instanceof VarDeclaration) && !(oldInterface instanceof AdapterDeclaration);
 	}
 
 	private FordiacMarkerHelper() {

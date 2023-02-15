@@ -32,11 +32,9 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.swt.widgets.Display;
@@ -280,22 +278,6 @@ public class ErrorMarkerBuilder {
 		if (null != type) {
 			this.type = type;
 		}
-
-	}
-
-	public static ErrorMarkerBuilder createConnectionErrorMarkerBuilder(final String message, final FBNetwork fbNetwork,
-			final String sourceIdentifier, final String destinationIdentifier, final int lineNumber) {
-		final ErrorMarkerBuilder marker = new ErrorMarkerBuilder();
-		marker.addLineNumber(lineNumber);
-		marker.addMessage(message);
-
-		// use a dummy connection to get target identifier
-		final String location = FordiacMarkerHelper.getLocation(fbNetwork) + "." + sourceIdentifier + " -> " //$NON-NLS-1$ //$NON-NLS-2$
-				+ destinationIdentifier;
-		marker.addLocation(location);
-
-		marker.addTargetIdentifier(LibraryElementFactory.eINSTANCE.createDataConnection());
-		return marker;
 
 	}
 

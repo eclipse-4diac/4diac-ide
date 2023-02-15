@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -95,14 +94,12 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 
 		final SubAppTypeEntry subEntry = getTypeLibrary().getSubAppTypeEntry(type);
 		if (subEntry == null) {
-			return FordiacMarkerHelper.createTypeErrorMarkerFB(type, getTypeLibrary(),
-					LibraryElementFactory.eINSTANCE.createSubAppType());
+			return createTypeErrorMarkerFB(type, getTypeLibrary(), LibraryElementFactory.eINSTANCE.createSubAppType());
 		}
 		subApp.setTypeEntry(subEntry);
 		subApp.setInterface(subEntry.getType().getInterfaceList().copy());
 		return subApp;
 	}
-
 
 	private void parseUntypedSubapp(final SubApp subApp) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.SUBAPP_ELEMENT, name -> {
