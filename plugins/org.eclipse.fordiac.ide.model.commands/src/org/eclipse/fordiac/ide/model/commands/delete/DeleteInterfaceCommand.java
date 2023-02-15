@@ -48,7 +48,11 @@ public class DeleteInterfaceCommand extends Command {
 		if ((interfaceElement instanceof AdapterDeclaration) && (parent.eContainer() instanceof CompositeFBType)) {
 			cmds.add(new DeleteFBNetworkElementCommand(((AdapterDeclaration) interfaceElement).getAdapterFB()));
 		}
+		deleteErrorMarker();
 		performDeletion();
+		if (cmds.canExecute()) {
+			cmds.execute();
+		}
 	}
 
 	@Override
@@ -61,7 +65,7 @@ public class DeleteInterfaceCommand extends Command {
 			} else if (interfaceElement instanceof VarDeclaration) {
 				parent.getInputVars().add(oldIndex, (VarDeclaration) interfaceElement);
 			} else if (interfaceElement instanceof ErrorMarkerInterface) {
-				undoErrorMarker((ErrorMarkerInterface) interfaceElement);
+				parent.getErrorMarker().add(oldIndex, (ErrorMarkerInterface) interfaceElement);
 			}
 		} else {
 			if (interfaceElement instanceof Event) {
@@ -71,16 +75,16 @@ public class DeleteInterfaceCommand extends Command {
 			} else if (interfaceElement instanceof VarDeclaration) {
 				parent.getOutputVars().add(oldIndex, (VarDeclaration) interfaceElement);
 			} else if (interfaceElement instanceof ErrorMarkerInterface) {
-				undoErrorMarker((ErrorMarkerInterface) interfaceElement);
+				parent.getErrorMarker().add(oldIndex, (ErrorMarkerInterface) interfaceElement);
 			}
 		}
 		if (cmds.canUndo()) {
 			cmds.undo();
 		}
+		undoErrorMarker();
 	}
 
-	private void undoErrorMarker(final ErrorMarkerInterface errorIE) {
-		parent.getErrorMarker().add(oldIndex, errorIE);
+	private void undoErrorMarker() {
 		if (oldErrorMarker != null) {
 			oldErrorMarker.createMarkerInFile();
 		}
@@ -88,7 +92,11 @@ public class DeleteInterfaceCommand extends Command {
 
 	@Override
 	public void redo() {
+		deleteErrorMarker();
 		performDeletion();
+		if (cmds.canRedo()) {
+			cmds.redo();
+		}
 	}
 
 	private void performDeletion() {
@@ -103,7 +111,8 @@ public class DeleteInterfaceCommand extends Command {
 				oldIndex = parent.getInputVars().indexOf(interfaceElement);
 				parent.getInputVars().remove(interfaceElement);
 			} else if (interfaceElement instanceof ErrorMarkerInterface) {
-				deleteErrorMarker();
+				oldIndex = parent.getErrorMarker().indexOf(interfaceElement);
+				parent.getErrorMarker().remove(interfaceElement);
 			}
 
 		} else {
@@ -117,19 +126,16 @@ public class DeleteInterfaceCommand extends Command {
 				oldIndex = parent.getOutputVars().indexOf(interfaceElement);
 				parent.getOutputVars().remove(interfaceElement);
 			} else if (interfaceElement instanceof ErrorMarkerInterface) {
-				deleteErrorMarker();
+				oldIndex = parent.getErrorMarker().indexOf(interfaceElement);
+				parent.getErrorMarker().remove(interfaceElement);
 			}
-		}
-		if (cmds.canExecute()) {
-			cmds.execute();
 		}
 	}
 
 	private void deleteErrorMarker() {
-		oldErrorMarker = ErrorMarkerBuilder
-				.deleteErrorMarker((ErrorMarkerRef) interfaceElement);
-		oldIndex = parent.getErrorMarker().indexOf(interfaceElement);
-		parent.getErrorMarker().remove(interfaceElement);
+		if (interfaceElement instanceof ErrorMarkerInterface) {
+			oldErrorMarker = ErrorMarkerBuilder.deleteErrorMarker((ErrorMarkerRef) interfaceElement);
+		}
 	}
 
 	private void handleSubAppConnections() {
