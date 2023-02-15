@@ -156,7 +156,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	public void deactivate() {
 		super.deactivate();
 		getModel().eAdapters().remove(contentAdapter);
-		getModel().getParentIE().eAdapters().remove(contentAdapter);
+		if (getModel().getParentIE() != null) {
+			getModel().getParentIE().eAdapters().remove(contentAdapter);
+		}
 	}
 
 	private final Adapter contentAdapter = new AdapterImpl() {
@@ -320,7 +322,11 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 * @return true, if is input
 	 */
 	public boolean isInput() {
-		return getIInterfaceElement().isIsInput();
+		final IInterfaceElement interfaceElement = getIInterfaceElement();
+		if (interfaceElement != null) {
+			return interfaceElement.isIsInput();
+		}
+		return false;
 	}
 
 	private IInterfaceElement getIInterfaceElement() {
