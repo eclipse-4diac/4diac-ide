@@ -294,7 +294,7 @@ class FunctionsTest {
 		// parameter types
 		#[structType].assertIterableEquals(SampleFunctions.inferParameterTypesFromDataTypes("GENERIC_TYPE", structType))
 		// invoke
-		val arg = newVariable("A", structType, "{a = 17, b = 4}")
+		val arg = newVariable("A", structType, "(a := 17, b := 4)")
 		val result = SampleFunctions.invoke("GENERIC_TYPE", arg.value) as StructValue
 		17.toIntValue.assertEquals(result.get("a").value)
 		4.toIntValue.assertEquals(result.get("b").value)

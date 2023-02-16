@@ -23,7 +23,7 @@ import static extension org.eclipse.fordiac.ide.model.eval.variable.VariableOper
 
 class StructVariable extends AbstractVariable<StructValue> implements Iterable<Variable<?>> {
 	static final Pattern MAP_PATTERN = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
-	static final Pattern MAP_KV_PATTERN = Pattern.compile("=(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
+	static final Pattern MAP_KV_PATTERN = Pattern.compile(":=(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
 
 	@Accessors final Map<String, Variable<?>> members
 	@Accessors final StructValue value
@@ -57,7 +57,7 @@ class StructVariable extends AbstractVariable<StructValue> implements Iterable<V
 
 	override setValue(String value) {
 		val trimmed = value.trim
-		if (!trimmed.startsWith("{") || !trimmed.endsWith("}")) {
+		if (!trimmed.startsWith("(") || !trimmed.endsWith(")")) {
 			throw new IllegalArgumentException("Not a valid struct value")
 		}
 		val inner = trimmed.substring(1, trimmed.length - 1)
@@ -72,7 +72,7 @@ class StructVariable extends AbstractVariable<StructValue> implements Iterable<V
 
 	override validateValue(String value) {
 		val trimmed = value.trim
-		if (!trimmed.startsWith("{") || !trimmed.endsWith("}")) {
+		if (!trimmed.startsWith("(") || !trimmed.endsWith(")")) {
 			return false
 		}
 		val inner = trimmed.substring(1, trimmed.length - 1)
