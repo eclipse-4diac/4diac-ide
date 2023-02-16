@@ -30,6 +30,7 @@ import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.options.NodeLabelPlacement;
+import org.eclipse.elk.core.options.PortSide;
 import org.eclipse.elk.core.service.LayoutMapping;
 import org.eclipse.elk.graph.ElkEdge;
 import org.eclipse.elk.graph.ElkGraphElement;
@@ -56,19 +57,19 @@ public final class FordiacGraphBuilder {
 	private static final PrecisionPoint END_POINT = new PrecisionPoint();
 
 	public static void build(final FordiacLayoutMapping mapping) {
-		buildGraphRecursively(mapping, mapping.getLayoutGraph(), (GraphicalEditPart) mapping.getParentElement());
+		buildGraphRecursively(mapping, mapping.getLayoutGraph(), (GraphicalEditPart) mapping.getParentElement(), 0);
 		processConnections(mapping);
 		processHierarchyCrossingConnections(mapping);
 	}
 
 	private static void buildGraphRecursively(final LayoutMapping mapping, final ElkNode parentLayoutNode,
-			final GraphicalEditPart currentEditPart) {
+			final GraphicalEditPart currentEditPart, final int yOffset) {
 		for (final GraphicalEditPart child : currentEditPart.getChildren()) {
 			if (child instanceof GroupEditPart) {
 				processGroup(mapping, parentLayoutNode, child);
 			}
 			if (child instanceof AbstractFBNElementEditPart) {
-				processFB(mapping, parentLayoutNode, child);
+				processFB(mapping, parentLayoutNode, child, yOffset);
 			}
 			if (child instanceof InterfaceEditPart) {
 				processInterface(mapping, child);
@@ -80,10 +81,11 @@ public final class FordiacGraphBuilder {
 	}
 
 	// creates graph elements for normal FBs and subapps
-	private static void processFB(final LayoutMapping mapping, final ElkNode parentLayoutNode, final Object child) {
+	private static void processFB(final LayoutMapping mapping, final ElkNode parentLayoutNode, final Object child,
+			final int yOffset) {
 		final AbstractFBNElementEditPart childEditPart = (AbstractFBNElementEditPart) child;
-		final ElkNode node = createNode(mapping, childEditPart, parentLayoutNode);
-		buildGraphRecursively(mapping, node, childEditPart);
+		final ElkNode node = createNode(mapping, childEditPart, parentLayoutNode, yOffset);
+		buildGraphRecursively(mapping, node, childEditPart, yOffset);
 	}
 
 	// creates a group node and DIRECTLY passes the group content to the recursion
@@ -91,7 +93,10 @@ public final class FordiacGraphBuilder {
 	private static void processGroup(final LayoutMapping mapping, final ElkNode parentLayoutNode, final Object child) {
 		final GroupEditPart group = (GroupEditPart) child;
 		final ElkNode node = createGroupNode(mapping, group, parentLayoutNode);
-		buildGraphRecursively(mapping, node, group.getChildren().get(0));
+		// TODO get rid of magic number
+		// don't yet know how to calculate the exact offset but 7 seems to do the trick
+		final int offset = group.getCommentBounds().height + 7;
+		buildGraphRecursively(mapping, node, group.getContentEP(), offset);
 	}
 
 	private static void processValue(final LayoutMapping mapping, final ValueEditPart valueEditPart) {
@@ -123,8 +128,11 @@ public final class FordiacGraphBuilder {
 		// add all editor interfaces to the elk graph to ensure the right order in the
 		// sidebar
 		if (ep.getParent() instanceof EditorWithInterfaceEditPart) {
-			getPort(new Point(0, 0), ep, mapping); // point is irrelevant since the interface element gets moved along
-													// the graph border (sidebar)
+			final ElkPort port = getPort(new Point(0, 0), ep, mapping); // point is irrelevant since the interface
+																		// element gets moved along the graph border
+																		// (sidebar)
+			// override the port side because isInput() is negated for internal subapp pins
+			port.setProperty(CoreOptions.PORT_SIDE, !ep.isInput() ? PortSide.WEST : PortSide.EAST);
 		}
 	}
 
@@ -178,11 +186,11 @@ public final class FordiacGraphBuilder {
 	}
 
 	private static ElkNode createNode(final LayoutMapping mapping, final AbstractFBNElementEditPart editPart,
-			final ElkNode parent) {
+			final ElkNode parent, final int yOffset) {
 		final ElkNode node = FordiacLayoutFactory.createFordiacLayoutNode(editPart, parent);
 
 		final Rectangle bounds = editPart.getFigure().getFBBounds();
-		node.setLocation(bounds.x, bounds.y);
+		node.setLocation(bounds.x, bounds.y - yOffset);
 		node.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
 
 		final ElkLabel label = ElkGraphUtil.createLabel(editPart.getModel().getName(), node);
