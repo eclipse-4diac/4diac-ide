@@ -66,7 +66,11 @@ class StructVariable extends AbstractVariable<StructValue> implements Iterable<V
 			if (split.length != 2) {
 				throw new IllegalArgumentException("Not a valid struct value")
 			}
-			members.get(split.get(0).trim).value = split.get(1).trim
+			val variable = members.get(split.get(0).trim)
+			if (variable === null) {
+				throw new IllegalArgumentException("Not a valid struct value")
+			}
+			variable.value = split.get(1).trim
 		]
 	}
 
@@ -81,7 +85,11 @@ class StructVariable extends AbstractVariable<StructValue> implements Iterable<V
 			if (split.length != 2) {
 				throw new IllegalArgumentException("Not a valid struct value")
 			}
-			members.get(split.get(0).trim).validateValue(split.get(1).trim)
+			val variable = members.get(split.get(0).trim)
+			if (variable === null) {
+				throw new IllegalArgumentException("Not a valid struct value")
+			}
+			variable.validateValue(split.get(1).trim)
 		]
 	}
 
