@@ -41,6 +41,18 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 		setTypeLib(library);
 	}
 
+	protected CommandExecutor getSection() {
+		return section;
+	}
+
+	protected TypeLibrary getLibrary() {
+		return library;
+	}
+
+	private void setLibrary(final TypeLibrary library) {
+		this.library = library;
+	}
+
 	@Override
 	public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
 		switch (columnIndex) {
@@ -71,10 +83,10 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 			cmd = new ChangeNameCommand(rowObject, value);
 			break;
 		case I4diacNatTableUtil.TYPE:
-			DataType dataType = library.getDataTypeLibrary().getDataTypesSorted().stream()
+			DataType dataType = getLibrary().getDataTypeLibrary().getDataTypesSorted().stream()
 					.filter(type -> type.getName().equals(value)).findAny().orElse(null);
 			if (dataType == null) {
-				dataType = library.getDataTypeLibrary().getType(null);
+				dataType = getLibrary().getDataTypeLibrary().getType(null);
 			}
 			cmd = new ChangeDataTypeCommand(rowObject, dataType);
 			break;
@@ -92,7 +104,7 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 			return;
 		}
 
-		section.executeCommand(cmd);
+		getSection().executeCommand(cmd);
 	}
 
 	@Override
@@ -101,8 +113,8 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 	}
 
 	public void setTypeLib(final TypeLibrary dataTypeLib) {
-		if (library == null) {
-			this.library = dataTypeLib;
+		if (getLibrary() == null) {
+			setLibrary(dataTypeLib);
 		}
 
 	}

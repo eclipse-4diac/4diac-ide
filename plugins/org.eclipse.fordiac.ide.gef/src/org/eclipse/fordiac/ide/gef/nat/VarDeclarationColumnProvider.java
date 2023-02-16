@@ -31,7 +31,6 @@ public class VarDeclarationColumnProvider implements IDataProvider {
 			return FordiacMessages.InitialValue;
 		case I4diacNatTableUtil.ARRAY_SIZE:
 			return FordiacMessages.ArraySize;
-
 		default:
 			return FordiacMessages.EmptyField;
 		}
