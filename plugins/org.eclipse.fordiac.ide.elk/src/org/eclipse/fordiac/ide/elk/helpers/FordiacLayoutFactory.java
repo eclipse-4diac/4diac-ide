@@ -38,7 +38,6 @@ import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 
 public class FordiacLayoutFactory {
 
@@ -80,12 +79,8 @@ public class FordiacLayoutFactory {
 	public static ElkPort createFordiacLayoutPort(final InterfaceEditPart editPart, final ElkNode parent, final Point point) {
 		final ElkPort port = ElkGraphUtil.createPort(parent);
 		port.setDimensions(1, editPart.getFigure().getBounds().height);
-		port.setProperty(CoreOptions.PORT_SIDE, editPart.isInput() ? PortSide.EAST : PortSide.WEST);
-		if (editPart.getParent() instanceof EditorWithInterfaceEditPart) {
-			/* "FIXED_ORDER" port constraint, needs an index and the side */
-			port.setProperty(CoreOptions.PORT_INDEX, Integer.valueOf(getLayoutInterfaceIndex(editPart)));
-		} else {
-			/* "FIXED_POS" port constraint, needs the absolute position */
+		port.setProperty(CoreOptions.PORT_SIDE, editPart.isInput() ? PortSide.WEST : PortSide.EAST);
+		if (!(editPart.getParent() instanceof EditorWithInterfaceEditPart)) {
 			port.setLocation(point.preciseX() - parent.getX(), point.preciseY() - parent.getY());
 		}
 		return port;
@@ -132,44 +127,6 @@ public class FordiacLayoutFactory {
 
 	private static LayoutConfigurator createConfigurator() {
 		return new LayoutConfigurator();
-	}
-
-	/** @param ep InterfaceEditPart of the Editor
-	 * @return index of the InterfaceElement in the editors sidebar, goes clockwise starting at the top right interface
-	 *         element */
-	public static int getLayoutInterfaceIndex(final InterfaceEditPart ep) {
-		final InterfaceList ifList = (InterfaceList) ep.getModel().eContainer();
-		int index = 0;
-		if (ep.getModel().isIsInput()) { // use model isInput! because EditPart.isInput treats inputs as
-			// outputs for visual appearance
-			final int rightSideIndices = ifList.getEventOutputs().size() + ifList.getOutputVars().size()
-					+ ifList.getPlugs().size();
-			if (ep.isEvent()) {
-				index = ifList.getEventInputs().size() - ifList.getEventInputs().indexOf(ep.getModel()) - 1;
-				index += ifList.getInputVars().size();
-				index += ifList.getSockets().size();
-				index += rightSideIndices;
-			} else if (ep.isAdapter()) {
-				index = ifList.getSockets().size() - ifList.getSockets().indexOf(ep.getModel()) - 1;
-				index += rightSideIndices;
-			} else {
-				index = ifList.getInputVars().size() - ifList.getInputVars().indexOf(ep.getModel()) - 1;
-				index += ifList.getSockets().size();
-				index += rightSideIndices;
-			}
-		} else {
-			if (ep.isEvent()) {
-				index = ifList.getEventOutputs().indexOf(ep.getModel());
-			} else if (ep.isAdapter()) {
-				index = ifList.getPlugs().indexOf(ep.getModel());
-				index += ifList.getEventOutputs().size();
-				index += ifList.getOutputVars().size();
-			} else {
-				index = ifList.getOutputVars().indexOf(ep.getModel());
-				index += ifList.getEventOutputs().size();
-			}
-		}
-		return index;
 	}
 
 }
