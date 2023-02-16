@@ -14,13 +14,14 @@ package org.eclipse.fordiac.ide.model.eval.st
 
 import java.util.Collection
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithm
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
@@ -30,7 +31,7 @@ import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.Str
 class ScopedExpressionEvaluator extends StructuredTextEvaluator {
 	final String expression
 
-	STExpression parseResult
+	STExpressionSource parseResult
 
 	new(String expression, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		super("anonymous", context ?: parent?.context, variables ?: parent?.variables?.values, parent)
@@ -43,6 +44,7 @@ class ScopedExpressionEvaluator extends StructuredTextEvaluator {
 			val warnings = newArrayList
 			val infos = newArrayList
 			parseResult = expression.parse(
+				null,
 				switch (type : context?.type) { FBType: type },
 				additionalScope,
 				errors,
@@ -59,7 +61,7 @@ class ScopedExpressionEvaluator extends StructuredTextEvaluator {
 	}
 
 	def protected Collection<? extends EObject> getAdditionalScope() {
-		switch (source:parent.sourceElement) {
+		switch (source:parent?.sourceElement) {
 			STAlgorithm: source.body.varTempDeclarations
 			STMethod: source.body.varDeclarations
 			STFunction: source.varDeclarations
@@ -68,7 +70,7 @@ class ScopedExpressionEvaluator extends StructuredTextEvaluator {
 
 	override evaluate() {
 		prepare
-		parseResult.evaluateExpression
+		parseResult.expression.evaluateExpression
 	}
 
 	override String getSourceElement() {

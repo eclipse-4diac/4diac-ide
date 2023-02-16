@@ -15,10 +15,11 @@ package org.eclipse.fordiac.ide.export.forte_lua.st
 
 import java.util.Map
 import org.eclipse.fordiac.ide.export.ExportException
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
@@ -27,11 +28,12 @@ import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.Str
 class ECTransitionSupport extends StructuredTextSupport {
 	final ECTransition transition
 
-	STExpression parseResult
+	STExpressionSource parseResult
 
 	override prepare(Map<?, ?> options) {
 		if (parseResult === null && errors.empty) {
 			parseResult = transition.conditionExpression.parse(
+				ElementaryTypes.BOOL,
 				switch (root : transition.rootContainer) { FBType: root },
 				errors, warnings, infos
 			)
@@ -41,7 +43,7 @@ class ECTransitionSupport extends StructuredTextSupport {
 
 	override generate(Map<?, ?> options) throws ExportException {
 		prepare(options)
-		parseResult?.generateExpression
+		parseResult?.expression?.generateExpression
 	}
 
 	override getDependencies(Map<?, ?> options) {
