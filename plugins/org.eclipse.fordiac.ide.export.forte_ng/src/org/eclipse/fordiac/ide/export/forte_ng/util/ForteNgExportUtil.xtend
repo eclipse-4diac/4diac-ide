@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,13 +12,6 @@
  */
 package org.eclipse.fordiac.ide.export.forte_ng.util
 
-import java.time.Duration
-import java.time.Instant
-import java.time.LocalDate
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneOffset
-import java.time.temporal.ChronoUnit
 import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.ArrayType
@@ -33,29 +26,9 @@ import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.model.value.TypedValueConverter
-
-import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
 final class ForteNgExportUtil {
 	private new() {
-	}
-
-	def static CharSequence generateVariableDefaultValue(VarDeclaration decl) {
-		if (decl.value?.value.nullOrEmpty) {
-			decl.type.generateTypeDefaultValue
-		} else {
-			val converter = new TypedValueConverter(decl.type)
-			val value = converter.toValue(decl.value.value)
-			'''«decl.type.generateTypeName»(«switch (value) {
-				String: '''"«value.convertToJavaString»"'''
-				Duration: Long.toString(value.toNanos)
-				LocalTime: Long.toString(value.toNanoOfDay)
-				LocalDate: Long.toString(value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L)
-				LocalDateTime: Long.toString(LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(value, ChronoUnit.NANOS))
-				default: value
-			}»)'''
-		}
 	}
 
 	def static CharSequence generateTypeDefaultValue(DataType type) {
@@ -63,7 +36,7 @@ final class ForteNgExportUtil {
 			AnyStringType: '''«type.generateTypeName»("")'''
 			AnyElementaryType: '''«type.generateTypeName»(0)'''
 			ArrayType: '''«type.generateTypeName»()'''
-			StructuredType: '''«type.generateTypeName»{}'''
+			StructuredType: '''«type.generateTypeName»()'''
 			default:
 				"0"
 		}
@@ -74,7 +47,7 @@ final class ForteNgExportUtil {
 
 	def static CharSequence generateTypeName(DataType type) '''CIEC_«type.generateTypeNamePlain»'''
 
-  	def static String generateTypeNamePlain(DataType type) {
+	def static String generateTypeNamePlain(DataType type) {
 		switch (type) {
 			TimeType: "TIME"
 			LtimeType: "LTIME"
@@ -88,5 +61,4 @@ final class ForteNgExportUtil {
 			default: type.name
 		}
 	}
-	
 }

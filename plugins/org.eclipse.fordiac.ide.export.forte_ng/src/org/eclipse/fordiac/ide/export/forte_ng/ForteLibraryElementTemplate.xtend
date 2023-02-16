@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2019 fortiss GmbH
  * 				 2020 Johannes Kepler Unviersity Linz
+ *               2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,11 +12,13 @@
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Alois Zoitl  - extracted base class for all types from fbtemplate
+ *   Martin Jobst - generate variable default values with constant expressions
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
 import java.util.List
+import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -73,6 +76,19 @@ abstract class ForteLibraryElementTemplate extends ForteNgExportTemplate {
 	'''«IF variable.array»CIEC_ARRAY<«ENDIF»«variable.type.generateTypeName»«IF variable.array»>«ENDIF»'''
 
 	def protected CharSequence generateName(VarDeclaration variable) '''var_«variable.name»'''
+
+	def CharSequence generateVariableDefaultValue(VarDeclaration decl) {
+		if (decl.value?.value.nullOrEmpty) {
+			decl.type.generateTypeDefaultValue
+		} else {
+			val support = ILanguageSupportFactory.createLanguageSupport("forte_ng", decl)
+			val result = support.generate(emptyMap)
+			errors.addAll(support.getErrors)
+			warnings.addAll(support.getWarnings)
+			infos.addAll(support.getInfos)
+			result
+		}
+	}
 
 	def protected getFORTEStringId(String s) '''g_nStringId«s»'''
 

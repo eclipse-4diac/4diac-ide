@@ -42,6 +42,7 @@ abstract class ForteNgExportTemplate extends ExportTemplate {
 		«FOR include : types.map[generateTypeInclude.toString].toSet»
 			#include "«include»"
 		«ENDFOR»
+		#include "iec61131_functions.h"
 		#include "forte_array_common.h"
 		#include "forte_array.h"
 		#include "forte_array_fixed.h"

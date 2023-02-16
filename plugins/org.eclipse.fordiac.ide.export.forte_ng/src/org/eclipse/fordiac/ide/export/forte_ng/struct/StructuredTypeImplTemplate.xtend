@@ -33,6 +33,9 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		
 		«structClassName»::«structClassName»() :
 		    CIEC_STRUCT(«type.name.FORTEStringId», «type.memberVariables.size», scmElementTypes, scmElementNames, e_APPLICATION + e_CONSTRUCTED + 1) {
+		  «FOR member : type.memberVariables»
+		  «exportPrefix»«member.name»() = «member.generateVariableDefaultValue»;
+		  «ENDFOR»
 		}
 		
 		«structClassName»::«structClassName»(«generateConstructorParameters») :

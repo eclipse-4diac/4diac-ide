@@ -369,7 +369,16 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateVariableDefaultValue(VarDeclaration variable) {
-		ForteNgExportUtil.generateVariableDefaultValue(variable)
+		if (variable.value?.value.nullOrEmpty) {
+			variable.type.generateTypeDefaultValue
+		} else {
+			val support = new VarDeclarationSupport(variable)
+			val result = support.generate(emptyMap)
+			errors.addAll(support.getErrors)
+			warnings.addAll(support.getWarnings)
+			infos.addAll(support.getInfos)
+			result
+		}
 	}
 
 	def protected dispatch CharSequence generateVariableDefaultValue(STVarDeclaration variable) {
