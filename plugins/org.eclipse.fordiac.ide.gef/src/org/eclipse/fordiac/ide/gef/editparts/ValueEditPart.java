@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.gef.widgets.PinValueDirectEditManager;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -412,7 +411,12 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 * @return the manager
 	 */
 	public DirectEditManager createDirectEditManager() {
-		return new PinValueDirectEditManager(this, getFigure());
+		final IInterfaceElement interfaceElement = getIInterfaceElement();
+		if (interfaceElement instanceof VarDeclaration) {
+			return new InitialValueDirectEditManager(this, new FigureCellEditorLocator(getFigure()),
+					(VarDeclaration) interfaceElement);
+		}
+		return new LabelDirectEditManager(this, getFigure());
 	}
 
 	/** performs the directEdit. */
