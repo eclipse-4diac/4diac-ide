@@ -116,6 +116,5 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 		if (getLibrary() == null) {
 			setLibrary(dataTypeLib);
 		}
-
 	}
 }

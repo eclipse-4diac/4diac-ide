@@ -29,7 +29,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
-import org.eclipse.fordiac.ide.model.commands.change.VarConfigurationCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -412,7 +412,7 @@ public class CommentPropertySection extends AbstractSection {
 				}
 				break;
 			case ISVARCONFIG_COL_ID:
-				cmd = new VarConfigurationCommand(rowObject, ((Boolean) newValue).booleanValue());
+				cmd = new ChangeVarConfigurationCommand(rowObject, ((Boolean) newValue).booleanValue());
 				break;
 			default:
 				return;

@@ -19,7 +19,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.fordiac.ide.gef.editors.InitialValueEditor;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
-import org.eclipse.fordiac.ide.model.commands.change.VarConfigurationCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -89,7 +89,7 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 		varConfigLabel = widgetFactory.createCLabel(parent, FordiacMessages.VarConfig + ":"); //$NON-NLS-1$
 		varConfigCheckBox = widgetFactory.createButton(parent, null, SWT.CHECK);
 		varConfigCheckBox.addListener(SWT.Selection,
-				event -> executeCommand(new VarConfigurationCommand(getType(), varConfigCheckBox.getSelection())));
+				event -> executeCommand(new ChangeVarConfigurationCommand(getType(), varConfigCheckBox.getSelection())));
 	}
 
 	@Override

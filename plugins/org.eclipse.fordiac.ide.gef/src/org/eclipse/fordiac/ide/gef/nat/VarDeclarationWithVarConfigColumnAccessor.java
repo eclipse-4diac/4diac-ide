@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
-import org.eclipse.fordiac.ide.model.commands.change.VarConfigurationCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
@@ -39,7 +39,7 @@ public class VarDeclarationWithVarConfigColumnAccessor extends VarDeclarationCol
 	@Override
 	public void setDataValue(final VarDeclaration rowObject, final int columnIndex, final Object newValue) {
 		if (columnIndex == I4diacNatTableUtil.VAR_CONFIG) {
-			getSection().executeCommand(new VarConfigurationCommand(rowObject, ((Boolean) newValue).booleanValue()));
+			getSection().executeCommand(new ChangeVarConfigurationCommand(rowObject, ((Boolean) newValue).booleanValue()));
 			return;
 		}
 		super.setDataValue(rowObject, columnIndex, newValue);
