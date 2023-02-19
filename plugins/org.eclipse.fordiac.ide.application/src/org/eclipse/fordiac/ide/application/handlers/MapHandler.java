@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.Command;
@@ -52,7 +53,7 @@ public class MapHandler extends AbstractHandler {
 		final List<FBNetworkElement> fbelements = HandlerHelper.getSelectedFBNElements(selection);
 		final AutomationSystem system = getSystem(editor);
 
-		if (system != null && !fbelements.isEmpty()) {
+		if ((system != null) && !fbelements.isEmpty()) {
 			final CompoundCommand mapCommands = openDialog(editor.getSite().getShell(), system, fbelements);
 			if (!mapCommands.isEmpty()) {
 				HandlerHelper.getCommandStack(editor).execute(mapCommands);
@@ -107,14 +108,13 @@ public class MapHandler extends AbstractHandler {
 		return dialog;
 	}
 
-
 	private static LabelProvider createTreeLabelProvider() {
 		return new LabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if(element instanceof Resource) {
+				if (element instanceof Resource) {
 					return ((Resource) element).getDevice().getName() + "." //$NON-NLS-1$
-							+((Resource)element).getName();
+							+ ((Resource) element).getName();
 				}
 				return super.getText(element);
 			}
@@ -152,8 +152,7 @@ public class MapHandler extends AbstractHandler {
 				if (parentElement instanceof AutomationSystem) {
 					final AutomationSystem system = (AutomationSystem) parentElement;
 					return system.getSystemConfiguration().getDevices().stream()
-							.flatMap(dev -> dev.getResource().stream())
-							.toArray(Resource[]::new);
+							.flatMap(dev -> dev.getResource().stream()).toArray(Resource[]::new);
 				}
 
 				if (parentElement instanceof Device) {
@@ -176,17 +175,27 @@ public class MapHandler extends AbstractHandler {
 	private static boolean isValidSelection(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		return !HandlerHelper.getSelectedFBNElements(selection).isEmpty();
+		final List<FBNetworkElement> fbs = HandlerHelper.getSelectedFBNElements(selection);
+		return !fbs.isEmpty() && allFbsAreMapable(fbs);
+	}
+
+	private static boolean allFbsAreMapable(final List<FBNetworkElement> fbs) {
+		for (final FBNetworkElement fb : fbs) {
+			if (fb.getOuterFBNetworkElement() instanceof SubApp) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	private static boolean hasDevices(final FBNetwork network) {
 		final AutomationSystem system = network.getAutomationSystem();
-		return system != null && !system.getSystemConfiguration().getDevices().isEmpty();
+		return (system != null) && !system.getSystemConfiguration().getDevices().isEmpty();
 	}
 
 	public static boolean isMapable(final FBNetwork network) {
 		return ((network != null) && !(network.isSubApplicationNetwork() || network.isCFBTypeNetwork()
-				|| network.eContainer() instanceof Resource));
+				|| (network.eContainer() instanceof Resource)));
 	}
 
 	private static AutomationSystem getSystem(final IEditorPart editor) {
