@@ -39,7 +39,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallNamedInputArgumentImpl#getParameter <em>Parameter</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallNamedInputArgumentImpl#getArgument <em>Argument</em>}</li>
  * </ul>
  *
  * @generated
@@ -54,16 +53,6 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	 * @ordered
 	 */
 	protected INamedElement parameter;
-
-	/**
-	 * The cached value of the '{@link #getArgument() <em>Argument</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getArgument()
-	 * @generated
-	 * @ordered
-	 */
-	protected STExpression argument;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -130,51 +119,6 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	 * @generated
 	 */
 	@Override
-	public STExpression getArgument() {
-		return argument;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain basicSetArgument(STExpression newArgument, NotificationChain msgs) {
-		STExpression oldArgument = argument;
-		argument = newArgument;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT, oldArgument, newArgument);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setArgument(STExpression newArgument) {
-		if (newArgument != argument) {
-			NotificationChain msgs = null;
-			if (argument != null)
-				msgs = ((InternalEObject)argument).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT, null, msgs);
-			if (newArgument != null)
-				msgs = ((InternalEObject)newArgument).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT, null, msgs);
-			msgs = basicSetArgument(newArgument, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT, newArgument, newArgument));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public INamedElement getResultType() {
 		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getResultType(this);
 	}
@@ -195,28 +139,11 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 	 * @generated
 	 */
 	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT:
-				return basicSetArgument(null, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER:
 				if (resolve) return getParameter();
 				return basicGetParameter();
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT:
-				return getArgument();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -232,9 +159,6 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 		switch (featureID) {
 			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER:
 				setParameter((INamedElement)newValue);
-				return;
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT:
-				setArgument((STExpression)newValue);
 				return;
 			default:
 				super.eSet(featureID, newValue);
@@ -253,9 +177,6 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER:
 				setParameter((INamedElement)null);
 				return;
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT:
-				setArgument((STExpression)null);
-				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -272,8 +193,6 @@ public class STCallNamedInputArgumentImpl extends STCallArgumentImpl implements 
 		switch (featureID) {
 			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER:
 				return parameter != null;
-			case STCorePackage.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT:
-				return argument != null;
 			default:
 				return super.eIsSet(featureID);
 		}

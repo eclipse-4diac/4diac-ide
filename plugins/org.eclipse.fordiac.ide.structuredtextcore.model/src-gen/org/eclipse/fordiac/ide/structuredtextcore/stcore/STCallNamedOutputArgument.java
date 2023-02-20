@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#isNot <em>Not</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#getParameter <em>Parameter</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#getArgument <em>Argument</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallNamedOutputArgument()
@@ -80,28 +79,6 @@ public interface STCallNamedOutputArgument extends STCallArgument {
 	 * @generated
 	 */
 	void setParameter(INamedElement value);
-
-	/**
-	 * Returns the value of the '<em><b>Argument</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Argument</em>' containment reference.
-	 * @see #setArgument(STExpression)
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage#getSTCallNamedOutputArgument_Argument()
-	 * @model containment="true"
-	 * @generated
-	 */
-	STExpression getArgument();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#getArgument <em>Argument</em>}' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Argument</em>' containment reference.
-	 * @see #getArgument()
-	 * @generated
-	 */
-	void setArgument(STExpression value);
 
 	/**
 	 * <!-- begin-user-doc -->

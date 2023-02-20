@@ -567,13 +567,22 @@ public interface STCorePackage extends EPackage {
 	int ST_CALL_ARGUMENT = 15;
 
 	/**
+	 * The feature id for the '<em><b>Argument</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_CALL_ARGUMENT__ARGUMENT = 0;
+
+	/**
 	 * The number of structural features of the '<em>ST Call Argument</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_CALL_ARGUMENT_FEATURE_COUNT = 0;
+	int ST_CALL_ARGUMENT_FEATURE_COUNT = 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallUnnamedArgumentImpl <em>ST Call Unnamed Argument</em>}' class.
@@ -592,7 +601,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_CALL_UNNAMED_ARGUMENT__ARGUMENT = ST_CALL_ARGUMENT_FEATURE_COUNT + 0;
+	int ST_CALL_UNNAMED_ARGUMENT__ARGUMENT = ST_CALL_ARGUMENT__ARGUMENT;
 
 	/**
 	 * The number of structural features of the '<em>ST Call Unnamed Argument</em>' class.
@@ -601,7 +610,7 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_CALL_UNNAMED_ARGUMENT_FEATURE_COUNT = ST_CALL_ARGUMENT_FEATURE_COUNT + 1;
+	int ST_CALL_UNNAMED_ARGUMENT_FEATURE_COUNT = ST_CALL_ARGUMENT_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallNamedInputArgumentImpl <em>ST Call Named Input Argument</em>}' class.
@@ -614,6 +623,15 @@ public interface STCorePackage extends EPackage {
 	int ST_CALL_NAMED_INPUT_ARGUMENT = 17;
 
 	/**
+	 * The feature id for the '<em><b>Argument</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT = ST_CALL_ARGUMENT__ARGUMENT;
+
+	/**
 	 * The feature id for the '<em><b>Parameter</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -623,22 +641,13 @@ public interface STCorePackage extends EPackage {
 	int ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER = ST_CALL_ARGUMENT_FEATURE_COUNT + 0;
 
 	/**
-	 * The feature id for the '<em><b>Argument</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT = ST_CALL_ARGUMENT_FEATURE_COUNT + 1;
-
-	/**
 	 * The number of structural features of the '<em>ST Call Named Input Argument</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_CALL_NAMED_INPUT_ARGUMENT_FEATURE_COUNT = ST_CALL_ARGUMENT_FEATURE_COUNT + 2;
+	int ST_CALL_NAMED_INPUT_ARGUMENT_FEATURE_COUNT = ST_CALL_ARGUMENT_FEATURE_COUNT + 1;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallNamedOutputArgumentImpl <em>ST Call Named Output Argument</em>}' class.
@@ -649,6 +658,15 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	int ST_CALL_NAMED_OUTPUT_ARGUMENT = 18;
+
+	/**
+	 * The feature id for the '<em><b>Argument</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_CALL_NAMED_OUTPUT_ARGUMENT__ARGUMENT = ST_CALL_ARGUMENT__ARGUMENT;
 
 	/**
 	 * The feature id for the '<em><b>Not</b></em>' attribute.
@@ -669,22 +687,13 @@ public interface STCorePackage extends EPackage {
 	int ST_CALL_NAMED_OUTPUT_ARGUMENT__PARAMETER = ST_CALL_ARGUMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Argument</b></em>' containment reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ST_CALL_NAMED_OUTPUT_ARGUMENT__ARGUMENT = ST_CALL_ARGUMENT_FEATURE_COUNT + 2;
-
-	/**
 	 * The number of structural features of the '<em>ST Call Named Output Argument</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ST_CALL_NAMED_OUTPUT_ARGUMENT_FEATURE_COUNT = ST_CALL_ARGUMENT_FEATURE_COUNT + 3;
+	int ST_CALL_NAMED_OUTPUT_ARGUMENT_FEATURE_COUNT = ST_CALL_ARGUMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STIfStatementImpl <em>ST If Statement</em>}' class.
@@ -2425,6 +2434,17 @@ public interface STCorePackage extends EPackage {
 	EClass getSTCallArgument();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument#getArgument <em>Argument</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Argument</em>'.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument#getArgument()
+	 * @see #getSTCallArgument()
+	 * @generated
+	 */
+	EReference getSTCallArgument_Argument();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument <em>ST Call Unnamed Argument</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -2433,17 +2453,6 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	EClass getSTCallUnnamedArgument();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument#getArgument <em>Argument</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Argument</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument#getArgument()
-	 * @see #getSTCallUnnamedArgument()
-	 * @generated
-	 */
-	EReference getSTCallUnnamedArgument_Argument();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument <em>ST Call Named Input Argument</em>}'.
@@ -2465,17 +2474,6 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSTCallNamedInputArgument_Parameter();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument#getArgument <em>Argument</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Argument</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument#getArgument()
-	 * @see #getSTCallNamedInputArgument()
-	 * @generated
-	 */
-	EReference getSTCallNamedInputArgument_Argument();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument <em>ST Call Named Output Argument</em>}'.
@@ -2508,17 +2506,6 @@ public interface STCorePackage extends EPackage {
 	 * @generated
 	 */
 	EReference getSTCallNamedOutputArgument_Parameter();
-
-	/**
-	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#getArgument <em>Argument</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference '<em>Argument</em>'.
-	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument#getArgument()
-	 * @see #getSTCallNamedOutputArgument()
-	 * @generated
-	 */
-	EReference getSTCallNamedOutputArgument_Argument();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement <em>ST If Statement</em>}'.
@@ -4050,6 +4037,14 @@ public interface STCorePackage extends EPackage {
 		EClass ST_CALL_ARGUMENT = eINSTANCE.getSTCallArgument();
 
 		/**
+		 * The meta object literal for the '<em><b>Argument</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_CALL_ARGUMENT__ARGUMENT = eINSTANCE.getSTCallArgument_Argument();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallUnnamedArgumentImpl <em>ST Call Unnamed Argument</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -4058,14 +4053,6 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EClass ST_CALL_UNNAMED_ARGUMENT = eINSTANCE.getSTCallUnnamedArgument();
-
-		/**
-		 * The meta object literal for the '<em><b>Argument</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ST_CALL_UNNAMED_ARGUMENT__ARGUMENT = eINSTANCE.getSTCallUnnamedArgument_Argument();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallNamedInputArgumentImpl <em>ST Call Named Input Argument</em>}' class.
@@ -4084,14 +4071,6 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER = eINSTANCE.getSTCallNamedInputArgument_Parameter();
-
-		/**
-		 * The meta object literal for the '<em><b>Argument</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT = eINSTANCE.getSTCallNamedInputArgument_Argument();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STCallNamedOutputArgumentImpl <em>ST Call Named Output Argument</em>}' class.
@@ -4118,14 +4097,6 @@ public interface STCorePackage extends EPackage {
 		 * @generated
 		 */
 		EReference ST_CALL_NAMED_OUTPUT_ARGUMENT__PARAMETER = eINSTANCE.getSTCallNamedOutputArgument_Parameter();
-
-		/**
-		 * The meta object literal for the '<em><b>Argument</b></em>' containment reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ST_CALL_NAMED_OUTPUT_ARGUMENT__ARGUMENT = eINSTANCE.getSTCallNamedOutputArgument_Argument();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STIfStatementImpl <em>ST If Statement</em>}' class.

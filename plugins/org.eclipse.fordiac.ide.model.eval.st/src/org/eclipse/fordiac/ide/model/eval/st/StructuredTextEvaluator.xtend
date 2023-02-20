@@ -50,6 +50,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpre
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
@@ -394,9 +395,9 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 				feature.findVariable.value
 			STStandardFunction case expr.call: {
 				val arguments = (expr.mappedInputArguments.entrySet.map [
-					value?.evaluateExpression.castValue(key.featureType)
+					value?.argument?.evaluateExpression.castValue(key.featureType)
 				] + expr.mappedOutputArguments.entrySet.map [
-					value?.evaluateVariable
+					value?.argument?.evaluateVariable
 				]).toList
 				StandardFunctions.invoke(feature.name, arguments)
 			}
@@ -560,12 +561,12 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		STVariableOperations.newVariable(v, value)
 	}
 
-	def protected Value evaluateCall(Variable<?> receiver, ICallable feature, Map<INamedElement, STExpression> inputs,
-		Map<INamedElement, STExpression> outputs, Map<INamedElement, STExpression> inouts) {
+	def protected Value evaluateCall(Variable<?> receiver, ICallable feature, Map<INamedElement, STCallArgument> inputs,
+		Map<INamedElement, STCallArgument> outputs, Map<INamedElement, STCallArgument> inouts) {
 		val arguments = (inputs.entrySet.filter[value !== null].map [
-			newVariable(key, value.evaluateExpression)
+			newVariable(key, value.argument.evaluateExpression)
 		] + inouts.entrySet.filter[value !== null].map [
-			newVariable(key, value.evaluateVariable.value)
+			newVariable(key, value.argument.evaluateVariable.value)
 		]).toList
 		val eval = EvaluatorFactory.createEvaluator(feature, feature.eClass.instanceClass as Class<? extends ICallable>,
 			receiver, arguments, this)
@@ -575,18 +576,18 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 		val result = eval.evaluate
 		inouts.forEach [ parameter, argument |
-			if(argument !== null) argument.evaluateVariable.value = eval.variables.get(parameter.name).value
+			if(argument !== null) argument.argument.evaluateVariable.value = eval.variables.get(parameter.name).value
 		]
 		outputs.forEach [ parameter, argument |
-			if(argument !== null) argument.evaluateVariable.value = eval.variables.get(parameter.name).value
+			if(argument !== null) argument.argument.evaluateVariable.value = eval.variables.get(parameter.name).value
 		]
 		result
 	}
 
-	def protected Value evaluateFBCall(FBValue fb, Event event, Map<INamedElement, STExpression> inputs,
-		Map<INamedElement, STExpression> outputs) {
+	def protected Value evaluateFBCall(FBValue fb, Event event, Map<INamedElement, STCallArgument> inputs,
+		Map<INamedElement, STCallArgument> outputs) {
 		inputs.forEach [ parameter, argument |
-			fb.get(parameter.name).value = argument?.evaluateExpression ?:
+			fb.get(parameter.name).value = argument?.argument?.evaluateExpression ?:
 				(parameter as VarDeclaration).type.defaultValue
 		]
 		val eval = EvaluatorFactory.createEvaluator(fb.type, fb.type.eClass.instanceClass as Class<? extends ICallable>,
@@ -597,7 +598,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 		eval.evaluate(event)
 		outputs.forEach [ parameter, argument |
-			if(argument !== null) argument.evaluateVariable.value = eval.variables.get(parameter.name).value
+			if(argument !== null) argument.argument.evaluateVariable.value = eval.variables.get(parameter.name).value
 		]
 		null
 	}

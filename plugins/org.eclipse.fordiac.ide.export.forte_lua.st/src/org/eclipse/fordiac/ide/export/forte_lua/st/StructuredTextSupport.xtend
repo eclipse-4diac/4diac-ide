@@ -60,6 +60,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitElement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
@@ -427,22 +428,22 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		}
 	}
 
-	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument) {
-		if(argument === null) parameter.generateVariableDefaultValue else argument.generateExpression
+	def protected CharSequence generateInputCallArgument(INamedElement parameter, STCallArgument argument) {
+		if(argument === null) parameter.generateVariableDefaultValue else argument.argument.generateExpression
 	}
 
-	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STExpression argument) {
+	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STCallArgument argument) {
 		if (argument === null)
 			'''nil'''
 		else
-			argument.generateExpression
+			argument.argument.generateExpression
 	}
 
-	def protected CharSequence generateOutputCallArgument(INamedElement parameter, STExpression argument) {
+	def protected CharSequence generateOutputCallArgument(INamedElement parameter, STCallArgument argument) {
 		if (argument === null)
 			'''nil'''
 		else
-			argument.generateExpression
+			argument.argument.generateExpression
 	}
 
 	def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //

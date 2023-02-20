@@ -438,8 +438,8 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 		if (errorAcceptor != null) {
 			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER) == ValueTransient.YES)
 				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER));
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__ARGUMENT));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_ARGUMENT__ARGUMENT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_ARGUMENT__ARGUMENT));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getSTCallNamedInputArgumentAccess().getParameterINamedElementIDTerminalRuleCall_0_0_1(), semanticObject.eGet(STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER, false));
@@ -496,8 +496,8 @@ public class STCoreSemanticSequencer extends AbstractDelegatingSemanticSequencer
 	 */
 	protected void sequence_STCallUnnamedArgument(ISerializationContext context, STCallUnnamedArgument semanticObject) {
 		if (errorAcceptor != null) {
-			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_UNNAMED_ARGUMENT__ARGUMENT) == ValueTransient.YES)
-				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_UNNAMED_ARGUMENT__ARGUMENT));
+			if (transientValues.isValueTransient(semanticObject, STCorePackage.Literals.ST_CALL_ARGUMENT__ARGUMENT) == ValueTransient.YES)
+				errorAcceptor.accept(diagnosticProvider.createFeatureValueMissing(semanticObject, STCorePackage.Literals.ST_CALL_ARGUMENT__ARGUMENT));
 		}
 		SequenceFeeder feeder = createSequencerFeeder(context, semanticObject);
 		feeder.accept(grammarAccess.getSTCallUnnamedArgumentAccess().getArgumentSTExpressionParserRuleCall_0(), semanticObject.getArgument());

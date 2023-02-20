@@ -118,7 +118,7 @@ public interface STFeatureExpression extends STExpression {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	Map<INamedElement, STExpression> getMappedInputArguments();
+	Map<INamedElement, STCallArgument> getMappedInputArguments();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -126,7 +126,7 @@ public interface STFeatureExpression extends STExpression {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	Map<INamedElement, STExpression> getMappedOutputArguments();
+	Map<INamedElement, STCallArgument> getMappedOutputArguments();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -134,6 +134,6 @@ public interface STFeatureExpression extends STExpression {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	Map<INamedElement, STExpression> getMappedInOutArguments();
+	Map<INamedElement, STCallArgument> getMappedInOutArguments();
 
 } // STFeatureExpression
