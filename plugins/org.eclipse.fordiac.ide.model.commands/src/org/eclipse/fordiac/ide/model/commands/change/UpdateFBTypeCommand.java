@@ -16,12 +16,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
@@ -112,12 +114,15 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 	}
 
 	public boolean reloadErrorType() {
-		final TypeLibrary typeLibrary = entry.getTypeLibrary();
-		final TypeEntry reloadedType = typeLibrary.find(entry.getTypeName());
-		if ((reloadedType != null) && (reloadedType.getFile() != null) && reloadedType.getFile().exists()) {
-			typeLibrary.removeErrorTypeEntry(entry);
-			entry = reloadedType;
-			return true;
+		final EObject rootContainer = EcoreUtil.getRootContainer(network);
+		if (rootContainer instanceof LibraryElement) {
+			final TypeLibrary typeLibrary = ((LibraryElement) rootContainer).getTypeLibrary();
+			final TypeEntry reloadedType = typeLibrary.find(entry.getTypeName());
+			if ((reloadedType != null) && (reloadedType.getFile() != null) && reloadedType.getFile().exists()) {
+				typeLibrary.removeErrorTypeEntry(entry);
+				entry = reloadedType;
+				return true;
+			}
 		}
 		return false;
 	}
