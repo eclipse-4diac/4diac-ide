@@ -48,6 +48,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
@@ -299,10 +300,11 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected CharSequence generateOutputCallArgument(INamedElement parameter, STCallArgument argument) {
-		if (argument === null)
-			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
-		else
-			argument.argument.generateExpression
+		switch(argument) {
+			case null: '''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
+			STCallNamedOutputArgument case argument.not: '''ST_EXTEND_LIFETIME(CIEC_ANY_BIT_NOT(«argument.argument.generateExpression»))'''
+			default: argument.argument.generateExpression
+		}
 	}
 
 	def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //
