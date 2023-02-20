@@ -60,13 +60,6 @@ public class ErrorMarkerInterfaceEditPart extends InterfaceEditPart {
 	}
 
 	@Override
-	protected String getLabelText() {
-		final ErrorMarkerInterface model = getModel();
-		return model.getErrorMessage() != null ? super.getLabelText() + ": " + model.getErrorMessage() //$NON-NLS-1$
-		: super.getLabelText();
-	}
-
-	@Override
 	protected IFigure createFigure() {
 		final IFigure figure = new InterfaceFigure();
 		figure.setBackgroundColor(ColorConstants.red);
