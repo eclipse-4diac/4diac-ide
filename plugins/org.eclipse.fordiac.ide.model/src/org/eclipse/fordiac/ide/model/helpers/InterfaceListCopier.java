@@ -27,11 +27,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.With;
 
 public final class InterfaceListCopier {
 
-	/** Create a new copy of the source interface list
+	/**
+	 * Create a new copy of the source interface list
 	 *
 	 * @param src        source interface list
 	 * @param copyValues flag indicating if initial values should be copied or not
-	 * @return */
+	 * @return
+	 */
 	public static InterfaceList copy(final InterfaceList src, final boolean copyValues, final boolean copyComments) {
 		final InterfaceList copy = LibraryElementFactory.eINSTANCE.createInterfaceList();
 
@@ -54,8 +56,7 @@ public final class InterfaceListCopier {
 	}
 
 	private static void copyErrorMarkerList(final EList<ErrorMarkerInterface> copy,
-			final EList<ErrorMarkerInterface> src,
-			final boolean copyValues, final boolean copyComments) {
+			final EList<ErrorMarkerInterface> src, final boolean copyValues, final boolean copyComments) {
 		src.forEach(c -> copy.add(copyMarker(c, copyValues, copyComments)));
 	}
 
@@ -96,6 +97,7 @@ public final class InterfaceListCopier {
 			final boolean copyComments) {
 		final VarDeclaration copy = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		copy.setArraySize(variable.getArraySize());
+		copy.setVarConfig(variable.isVarConfig());
 
 		copyInterfaceElement(variable, copy, copyComments);
 
@@ -119,12 +121,14 @@ public final class InterfaceListCopier {
 		dst.setTypeName(src.getTypeName());
 	}
 
-	/** copy a list of events with the associated with constructs
+	/**
+	 * copy a list of events with the associated with constructs
 	 *
 	 * @param destEvents the list of the copied events
 	 * @param copyVars   the list of the data points for the new withs
 	 * @param srcEvents  the source event list
-	 * @param srcVars    the source vars used in the withs */
+	 * @param srcVars    the source vars used in the withs
+	 */
 	private static void copyEventList(final EList<Event> destEvents, final EList<VarDeclaration> copyVars,
 			final EList<Event> srcEvents, final EList<VarDeclaration> srcVars, final boolean copyComments) {
 		srcEvents.forEach(srcEvent -> {

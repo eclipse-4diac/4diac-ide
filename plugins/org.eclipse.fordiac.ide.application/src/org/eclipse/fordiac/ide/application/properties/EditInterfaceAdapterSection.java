@@ -19,33 +19,44 @@ import org.eclipse.fordiac.ide.application.commands.ChangeSubAppIETypeCommand;
 import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
+import org.eclipse.fordiac.ide.application.commands.ResizingSubappInterfaceCreationCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceAdapterSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 
 public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
+	protected CreationCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
 		final AdapterType last = getLastUsedAdapterType(getType().getInterface(), interfaceElement, isInput);
 		final int pos = getInsertingIndex(interfaceElement, isInput);
-		return new CreateSubAppInterfaceElementCommand(last, getCreationName(interfaceElement),
-				getType().getInterface(), isInput, pos);
+		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(last,
+				getCreationName(interfaceElement), getType().getInterface(), isInput, pos);
+		if (getType().isUnfolded()) {
+			// if the group is expanded we need to check if the subapp needs to be expanded
+			return ResizingSubappInterfaceCreationCommand.createCommand(cmd, getType());
+		}
+		return cmd;
 	}
 
 	@Override
-	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement,
+	protected CreationCommand newInsertCommand(final IInterfaceElement interfaceElement,
 			final boolean isInput, final int index) {
-		return new CreateSubAppInterfaceElementCommand(interfaceElement, isInput, getType().getInterface(),
-				index);
+		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(interfaceElement,
+				isInput, getType().getInterface(), index);
+		if (getType().isUnfolded()) {
+			// if the group is expanded we need to check if the subapp needs to be expanded
+			return ResizingSubappInterfaceCreationCommand.createCommand(cmd, getType());
+		}
+		return cmd;
 	}
 
 	@Override

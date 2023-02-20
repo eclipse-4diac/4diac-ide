@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022 - 2023 Primetals Technologies Austria GmbH
  *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
@@ -11,6 +11,7 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *   Martin Jobst - adopt ST editor for initial values
+ *   Martin Melik Merkumians - add VarConfig checkbox for data pins
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.widgets;
 
@@ -18,6 +19,7 @@ import java.util.function.Consumer;
 
 import org.eclipse.fordiac.ide.gef.editors.InitialValueEditor;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeArraySizeCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -25,6 +27,8 @@ import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.CLabel;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
@@ -33,6 +37,8 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 
 	private Text arraySizeText;
 	private InitialValueEditor initialValueEditor;
+	private CLabel varConfigLabel;
+	private Button varConfigCheckBox;
 
 	public PinInfoDataWidget(final Composite parent, final TabbedPropertySheetWidgetFactory widgetFactory) {
 		super(parent, widgetFactory);
@@ -43,6 +49,13 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 		super.initialize(type, commandExecutor);
 		initialValueEditor.setInterfaceElement(type);
 		initialValueEditor.setCommandExecutor(commandExecutor);
+		setVarConfigOption(getType().isIsInput());
+	}
+
+	private void setVarConfigOption(final boolean enabled) {
+		varConfigLabel.setVisible(enabled);
+		varConfigCheckBox.setVisible(enabled);
+		varConfigCheckBox.setEnabled(enabled);
 	}
 
 	@Override
@@ -68,11 +81,15 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 		widgetFactory.createCLabel(parent, FordiacMessages.ArraySize + ":"); //$NON-NLS-1$
 		arraySizeText = createText(parent);
 		arraySizeText
-		.addModifyListener(e -> executeCommand(new ChangeArraySizeCommand(getType(), arraySizeText.getText())));
+				.addModifyListener(e -> executeCommand(new ChangeArraySizeCommand(getType(), arraySizeText.getText())));
 
 		widgetFactory.createCLabel(parent, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		initialValueEditor = new InitialValueEditor(parent, SWT.SINGLE | SWT.BORDER);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(initialValueEditor.getControl());
+		varConfigLabel = widgetFactory.createCLabel(parent, FordiacMessages.VarConfig + ":"); //$NON-NLS-1$
+		varConfigCheckBox = widgetFactory.createButton(parent, null, SWT.CHECK);
+		varConfigCheckBox.addListener(SWT.Selection,
+				event -> executeCommand(new ChangeVarConfigurationCommand(getType(), varConfigCheckBox.getSelection())));
 	}
 
 	@Override

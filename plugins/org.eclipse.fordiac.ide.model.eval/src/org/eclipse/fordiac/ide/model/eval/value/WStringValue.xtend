@@ -25,11 +25,11 @@ class WStringValue implements AnyStringValue, AnyWCharsValue {
 		this.value = value;
 	}
 
-	def static toWStringValue(String value) { new WStringValue(value) }
+	def static toWStringValue(String value) { value.toWStringValue(MAX_LENGTH) }
 
 	def static toWStringValue(String value, int maxLength) { new WStringValue(value.truncate(maxLength)) }
 
-	def static toWStringValue(AnyCharsValue value) { new WStringValue(value.stringValue) }
+	def static toWStringValue(AnyCharsValue value) { value.toWStringValue(MAX_LENGTH) }
 
 	def static toWStringValue(AnyCharsValue value, int maxLength) { value.stringValue.toWStringValue(maxLength) }
 
@@ -38,15 +38,15 @@ class WStringValue implements AnyStringValue, AnyWCharsValue {
 	}
 
 	def withCharAt(int index, WCharValue c) {
-		if (index > 0) {
-			val newValue = new StringBuilder(value)
-			if (newValue.length < index) {
-				newValue.length = index
-			}
-			newValue.setCharAt(index - 1, c.charValue)
-			new WStringValue(newValue.toString)
-		} else
-			this
+		if (index <= 0) {
+			throw new StringIndexOutOfBoundsException(index)
+		}
+		val newValue = new StringBuilder(value)
+		if (newValue.length < index) {
+			newValue.length = index
+		}
+		newValue.setCharAt(index - 1, c.charValue)
+		new WStringValue(newValue.toString)
 	}
 
 	override length() { value.length }

@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInternalVariableComma
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
@@ -81,7 +82,7 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 			}
 		});
 		table = NatTableWidgetFactory.createRowNatTable(composite,
-				dataLayer, new VarDeclarationColumnProvider(), IEditableRule.ALWAYS_EDITABLE, typeSelection, this);
+				dataLayer, new VarDeclarationColumnProvider(), IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this);
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 		table.configure();
 

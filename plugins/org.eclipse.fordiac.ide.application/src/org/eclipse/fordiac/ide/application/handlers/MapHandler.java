@@ -29,6 +29,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.gef.commands.Command;
@@ -178,7 +180,7 @@ public class MapHandler extends AbstractHandler {
 			return false;
 		}
 		// cannot mix communication mapping to segments with fb mapping to devices
-		return (!containsCommunicationMapping(selected)
+		return ((!containsCommunicationMapping(selected) && allFbsAreMapable(selected))
 				|| selected.stream().allMatch(CommunicationChannel.class::isInstance));
 	}
 
@@ -186,9 +188,23 @@ public class MapHandler extends AbstractHandler {
 		return selected.stream().anyMatch(CommunicationChannel.class::isInstance);
 	}
 
+	private static boolean allFbsAreMapable(final List<FBNetworkElement> fbs) {
+		for (final FBNetworkElement fb : fbs) {
+			if (fb.getOuterFBNetworkElement() instanceof SubApp) {
+				return false;
+			}
+		}
+		return true;
+	}
+
 	private static boolean hasDevices(final FBNetwork network) {
 		final AutomationSystem system = network.getAutomationSystem();
 		return (system != null) && !system.getSystemConfiguration().getDevices().isEmpty();
+	}
+
+	public static boolean isMapable(final FBNetwork network) {
+		return ((network != null) && !(network.isSubApplicationNetwork() || network.isCFBTypeNetwork()
+				|| (network.eContainer() instanceof Resource)));
 	}
 
 	private static AutomationSystem getSystem(final IEditorPart editor) {

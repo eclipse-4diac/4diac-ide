@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
@@ -91,7 +92,7 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		outputProvider = new EventListProvider(this, null);
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new EventColumnProvider(), rule, typeSelection, this);
+				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this);
 	}
 
 	@Override
@@ -103,7 +104,7 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		inputProvider = new EventListProvider(this, null);
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new EventColumnProvider(), rule, typeSelection, this);
+				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this);
 	}
 
 	@Override

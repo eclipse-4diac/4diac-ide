@@ -13,9 +13,6 @@
 
 package org.eclipse.fordiac.ide.ui.widget;
 
-import java.util.List;
-import java.util.Map;
-
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
@@ -26,7 +23,6 @@ import org.eclipse.nebula.widgets.nattable.config.IConfigRegistry;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.copy.command.CopyDataCommandHandler;
 import org.eclipse.nebula.widgets.nattable.data.IDataProvider;
-import org.eclipse.nebula.widgets.nattable.edit.EditConfigAttributes;
 import org.eclipse.nebula.widgets.nattable.edit.action.KeyEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.action.MouseEditAction;
 import org.eclipse.nebula.widgets.nattable.edit.command.DeleteSelectionCommandHandler;
@@ -51,7 +47,6 @@ import org.eclipse.nebula.widgets.nattable.painter.NatTableBorderOverlayPainter;
 import org.eclipse.nebula.widgets.nattable.painter.cell.BackgroundPainter;
 import org.eclipse.nebula.widgets.nattable.painter.cell.CheckBoxPainter;
 import org.eclipse.nebula.widgets.nattable.painter.cell.TextPainter;
-import org.eclipse.nebula.widgets.nattable.painter.cell.decorator.CellPainterDecorator;
 import org.eclipse.nebula.widgets.nattable.painter.cell.decorator.PaddingDecorator;
 import org.eclipse.nebula.widgets.nattable.painter.layer.NatGridLayerPainter;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
@@ -68,7 +63,6 @@ import org.eclipse.nebula.widgets.nattable.ui.matcher.CellPainterMouseEventMatch
 import org.eclipse.nebula.widgets.nattable.ui.matcher.KeyEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.LetterOrDigitKeyEventMatcher;
 import org.eclipse.nebula.widgets.nattable.ui.matcher.MouseEventMatcher;
-import org.eclipse.nebula.widgets.nattable.ui.util.CellEdgeEnum;
 import org.eclipse.nebula.widgets.nattable.util.GUIHelper;
 import org.eclipse.nebula.widgets.nattable.viewport.ViewportLayer;
 import org.eclipse.swt.SWT;
@@ -95,6 +89,9 @@ public final class NatTableWidgetFactory {
 			'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2',
 			'3', '4', '5', '6', '7', '8', '9', '_', '.', SWT.BS };
 
+	public static char[] getActivationChars() {
+		return ACTIVATION_CHARS;
+	}
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider) {
@@ -109,7 +106,7 @@ public final class NatTableWidgetFactory {
 
 	public static NatTable createNatTable(final Composite parent, final DataLayer dataLayer,
 			final IDataProvider headerDataProvider, final IEditableRule editableRule,
-			final Map<String, List<String>> proposals) {
+			final AbstractSelectionButton proposalButton) {
 
 		setColumnWidths(dataLayer);
 
@@ -136,7 +133,7 @@ public final class NatTableWidgetFactory {
 
 		compositeLayer.addConfiguration(new DefaultEditConfiguration());
 		compositeLayer.addConfiguration(new DefaultUiBindingConfiguration());
-		compositeLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposals));
+		compositeLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposalButton));
 
 		addEditDisabledLabel(dataLayer, editableRule, false);
 		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
@@ -151,7 +148,7 @@ public final class NatTableWidgetFactory {
 
 	public static NatTable createRowNatTable(final Composite parent, final DataLayer bodyDataLayer,
 			final IDataProvider columnHeaderProvider, final IEditableRule editableRule,
-			final Map<String, List<String>> proposals, final I4diacNatTableUtil section) {
+			final AbstractSelectionButton proposalButton, final I4diacNatTableUtil section) {
 
 		setColumnWidths(bodyDataLayer);
 
@@ -201,7 +198,7 @@ public final class NatTableWidgetFactory {
 				addConfiguration(new DefaultRowStyleConfiguration());
 			}
 		});
-		gridLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposals));
+		gridLayer.addConfiguration(new DefaultRegistryConfiguration(editableRule, proposalButton));
 
 		addEditDisabledLabel(bodyDataLayer, editableRule, false);
 		addEditDisabledLabel(columnHeaderDataLayer, editableRule, true);
@@ -341,16 +338,16 @@ public final class NatTableWidgetFactory {
 				cellStyle.setAttributeValue(CellStyleAttributes.HORIZONTAL_ALIGNMENT, HorizontalAlignmentEnum.LEFT);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
 						LEFT_ALIGNMENT);
-				
-				
+
+
 				cellStyle = new Style();
-				Font font = GUIHelper.getFont(new FontData(GUIHelper.DEFAULT_FONT.toString(), 10, SWT.BOLD));
+				final Font font = GUIHelper.getFont(new FontData(GUIHelper.DEFAULT_FONT.toString(), 10, SWT.BOLD));
 				cellStyle.setAttributeValue(CellStyleAttributes.FONT, font);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL, GridRegion.COLUMN_HEADER);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT, GridRegion.COLUMN_HEADER);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.EDIT, GridRegion.COLUMN_HEADER);
-				
-				
+
+
 				cellStyle = new Style();
 				cellStyle.setAttributeValue(CellStyleAttributes.BACKGROUND_COLOR, GUIHelper.COLOR_WIDGET_LIGHT_SHADOW);
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL,
@@ -360,7 +357,7 @@ public final class NatTableWidgetFactory {
 				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.SELECT,
 						DISABLED_HEADER);
 				// Padding for the left aligned cells
-				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER, new BackgroundPainter(new 
+				configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_PAINTER, new BackgroundPainter(new
 						PaddingDecorator(new TextPainter(false, true, false, true), 2, 2, 2, 2)));
 
 				configRegistry.unregisterConfigAttribute(CellConfigAttributes.CELL_STYLE, DisplayMode.SELECT,
@@ -371,32 +368,7 @@ public final class NatTableWidgetFactory {
 
 		table.configure();
 	}
-	
-	private void registerFontForAllDisplayModes(Style cellStyle, IConfigRegistry configRegistry) {
-		cellStyle = new Style();
-		Font font = GUIHelper.getFont(new FontData(GUIHelper.DEFAULT_FONT.toString(), 10, SWT.BOLD));
-		cellStyle.setAttributeValue(CellStyleAttributes.FONT, font);
-		configRegistry.registerConfigAttribute(CellConfigAttributes.CELL_STYLE, cellStyle, DisplayMode.NORMAL, GridRegion.COLUMN_HEADER);
-	}
 
-	private static class DefaultRegistryConfiguration extends AbstractRegistryConfiguration {
-		IEditableRule editableRule;
-		Map<String, List<String>> proposals;
-
-		public DefaultRegistryConfiguration(final IEditableRule editableRule,
-				final Map<String, List<String>> proposals) {
-			super();
-			this.editableRule = editableRule;
-			this.proposals = proposals;
-		}
-
-		@Override
-		public void configureRegistry(final IConfigRegistry configRegistry) {
-			configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITABLE_RULE, editableRule);
-			configRegistry.registerConfigAttribute(EditConfigAttributes.CELL_EDITOR,
-					new DataTypeSelectionButton(proposals), DisplayMode.EDIT, PROPOSAL_CELL);
-		}
-	}
 
 	private static class DefaultUiBindingConfiguration extends AbstractUiBindingConfiguration {
 		@Override
@@ -406,7 +378,7 @@ public final class NatTableWidgetFactory {
 			uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(), new KeyEditAction());
 			uiBindingRegistry.registerKeyBinding(new LetterOrDigitKeyEventMatcher(SWT.MOD2), new KeyEditAction());
 			uiBindingRegistry.registerFirstSingleClickBinding(
-					new CellPainterMouseEventMatcher(GridRegion.BODY, MouseEventMatcher.LEFT_BUTTON, CheckBoxPainter.class), 
+					new CellPainterMouseEventMatcher(GridRegion.BODY, MouseEventMatcher.LEFT_BUTTON, CheckBoxPainter.class),
 					new MouseEditAction());
 			uiBindingRegistry.registerDoubleClickBinding(new CellEditorMouseEventMatcher(GridRegion.BODY),
 					new MouseEditAction());
@@ -416,4 +388,5 @@ public final class NatTableWidgetFactory {
 	private NatTableWidgetFactory() {
 		throw new UnsupportedOperationException("Helper class should not be insantiated!");  //$NON-NLS-1$
 	}
+
 }

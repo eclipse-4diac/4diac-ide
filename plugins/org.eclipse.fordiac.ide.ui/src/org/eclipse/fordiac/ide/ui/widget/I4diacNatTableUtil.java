@@ -22,6 +22,7 @@ public interface I4diacNatTableUtil {
 	int COMMENT = 2;
 	int INITIAL_VALUE = 3;
 	int ARRAY_SIZE = 4;
+	int VAR_CONFIG = 5;
 
 	void addEntry(Object entry, int index, CompoundCommand cmd);
 

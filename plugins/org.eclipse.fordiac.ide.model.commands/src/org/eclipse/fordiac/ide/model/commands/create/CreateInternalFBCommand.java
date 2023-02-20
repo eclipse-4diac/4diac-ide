@@ -22,9 +22,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.commands.Command;
 
-public class CreateInternalFBCommand extends Command implements CreationCommand {
+public class CreateInternalFBCommand extends CreationCommand {
 
 	/** The element where the internal FB is added to */
 	private final BaseFBType baseFbType;

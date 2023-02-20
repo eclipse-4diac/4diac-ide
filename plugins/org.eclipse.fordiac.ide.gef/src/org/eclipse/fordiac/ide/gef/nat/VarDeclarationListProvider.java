@@ -21,14 +21,15 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 
 public class VarDeclarationListProvider extends ListDataProvider<VarDeclaration>
-implements FordiacInterfaceListProvider {
-
-	private final VarDeclarationColumnAccessor columnAccessor;
+		implements FordiacInterfaceListProvider {
 
 	public VarDeclarationListProvider(final List<VarDeclaration> list,
 			final VarDeclarationColumnAccessor columnAccessor) {
 		super(list, columnAccessor);
-		this.columnAccessor = columnAccessor;
+	}
+
+	protected VarDeclarationColumnAccessor getColumnAccessor() {
+		return (VarDeclarationColumnAccessor) columnAccessor;
 	}
 
 	@Override
@@ -39,13 +40,14 @@ implements FordiacInterfaceListProvider {
 		return 0;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends List<? extends IInterfaceElement>> void setInput(final T list) {
 		this.list = (List<VarDeclaration>) list;
 	}
 
 	public void setTypeLib(final TypeLibrary dataTypeLib) {
-		columnAccessor.setTypeLib(dataTypeLib);
+		getColumnAccessor().setTypeLib(dataTypeLib);
 	}
 
 }

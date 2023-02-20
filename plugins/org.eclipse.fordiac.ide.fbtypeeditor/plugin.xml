@@ -138,7 +138,7 @@
                tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditEvents">
          </propertySection>
          <propertySection
-               class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditInterfaceDataSection"
+               class="org.eclipse.fordiac.ide.fbtypeeditor.properties.EditTypeInterfaceSection"
                filter="org.eclipse.fordiac.ide.fbtypeeditor.properties.FBTypePropertiesFilter"
                id="org.eclipse.fordiac.ide.fbtypeeditor.properties.section.EditData"
                tab="org.eclipse.fordiac.ide.fbtypeeditor.property.tab.EditData">

@@ -32,7 +32,6 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -42,7 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -65,7 +64,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> extends AbstractSection
-implements I4diacNatTableUtil {
+		implements I4diacNatTableUtil {
 
 	protected ListDataProvider<T> inputProvider;
 	protected NatTable inputTable;
@@ -75,10 +74,9 @@ implements I4diacNatTableUtil {
 
 	protected Map<String, List<String>> typeSelection = new HashMap<>();
 
-	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
+	protected abstract CreationCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
-	protected abstract CreateInterfaceElementCommand newInsertCommand(IInterfaceElement selection, boolean isInput,
-			int index);
+	protected abstract CreationCommand newInsertCommand(IInterfaceElement selection, boolean isInput, int index);
 
 	protected abstract DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection);
 
@@ -153,8 +151,10 @@ implements I4diacNatTableUtil {
 	}
 
 	// subclasses need to override this method if they use a different type dropdown
-	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value, final TableViewer viewer) {
-		final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[((Integer) value).intValue()];
+	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value,
+			final TableViewer viewer) {
+		final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[((Integer) value)
+				.intValue()];
 		return newChangeTypeCommand(data, getDataTypeLib().getType(dataTypeName));
 	}
 
@@ -198,7 +198,6 @@ implements I4diacNatTableUtil {
 
 	protected abstract void setTableInputFbNetworkElement(final FBNetworkElement element);
 
-
 	@SuppressWarnings("static-method")
 	protected int getInsertingIndex(final IInterfaceElement interfaceElement,
 			final EList<? extends IInterfaceElement> interfaceList) {
@@ -219,8 +218,8 @@ implements I4diacNatTableUtil {
 		outputTable.refresh();
 	}
 
-	public DataLayer setupDataLayer(final ListDataProvider<T> outputProvider) {
-		final DataLayer dataLayer = new DataLayer(outputProvider);
+	protected DataLayer setupDataLayer(final ListDataProvider<T> provider) {
+		final DataLayer dataLayer = new DataLayer(provider);
 		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
 
 		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
@@ -238,21 +237,15 @@ implements I4diacNatTableUtil {
 		return dataLayer;
 	}
 
-
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
 		final List<String> elementaryTypes = new ArrayList<>();
 		dataTypeLib.getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType))
-		.forEach(type -> elementaryTypes.add(type.getName()));
+				.forEach(type -> elementaryTypes.add(type.getName()));
 		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
 
 		final List<String> structuredTypes = new ArrayList<>();
 		dataTypeLib.getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
-		.forEach(type -> structuredTypes.add(type.getName()));
+				.forEach(type -> structuredTypes.add(type.getName()));
 		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
-	}
-
-	// TODO reimplement
-	private void createContextMenu(final TableViewer viewer) {
-		OpenStructMenu.addTo(viewer);
 	}
 }

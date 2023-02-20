@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
+import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -122,10 +123,11 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
 		outputProvider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
+		
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new VarDeclarationColumnProvider(), rule, typeSelection, this);
-		outputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
+				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this);
+		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.configure();
 	}
 
@@ -139,12 +141,17 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		inputProvider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new VarDeclarationColumnProvider(), rule, typeSelection, this);
+				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.configure();
 	}
 
-
+	@Override
+	protected void setInputInit() {
+		((VarDeclarationListProvider) outputProvider).setTypeLib(getTypeLibrary());
+		((VarDeclarationListProvider) inputProvider).setTypeLib(getTypeLibrary());
+	}
+	
 	@Override
 	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
 		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getInputVars());

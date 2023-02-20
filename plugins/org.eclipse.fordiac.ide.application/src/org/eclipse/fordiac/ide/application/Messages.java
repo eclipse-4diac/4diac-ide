@@ -19,7 +19,7 @@ package org.eclipse.fordiac.ide.application;
 import org.eclipse.osgi.util.NLS;
 
 /** The Class Messages. */
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.application.messages"; //$NON-NLS-1$
 
@@ -122,7 +122,9 @@ public final class Messages extends NLS {
 
 	public static String OpenApplicationEditorAction_Name;
 
-	/** The Open sub application editor action_ erro r_ open subapplication editor. */
+	/**
+	 * The Open sub application editor action_ erro r_ open subapplication editor.
+	 */
 	public static String OpenSubApplicationEditorAction_ERROR_OpenSubapplicationEditor;
 
 	public static String OpenSubApplicationEditorAction_Name;
@@ -203,6 +205,8 @@ public final class Messages extends NLS {
 	public static String ToggleSubAppRepresentation_Collapse;
 
 	public static String ToggleSubAppRepresentation_Expand;
+
+	public static String VarConfigurationSection_VarConfigs;
 
 	static {
 		// initialize resource bundle

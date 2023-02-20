@@ -21,34 +21,28 @@
 package org.eclipse.fordiac.ide.model.ui.editors;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.ui.Messages;
+import org.eclipse.fordiac.ide.model.ui.nat.TypeNode;
 import org.eclipse.fordiac.ide.model.ui.widgets.ITypeSelectionContentProvider;
-import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
-import org.eclipse.fordiac.ide.ui.FordiacMessages;
-import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 import org.eclipse.jface.fieldassist.ContentProposalAdapter;
 import org.eclipse.jface.fieldassist.IContentProposalListener2;
 import org.eclipse.jface.fieldassist.SimpleContentProposalProvider;
 import org.eclipse.jface.fieldassist.TextContentAdapter;
-import org.eclipse.jface.viewers.IBaseLabelProvider;
-import org.eclipse.jface.viewers.ITreeContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.MenuEvent;
-import org.eclipse.swt.events.MenuListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -57,14 +51,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.swt.widgets.MenuItem;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.dialogs.ElementTreeSelectionDialog;
-import org.eclipse.fordiac.ide.model.ui.editors.DataTypeTreeSelectionDialog;
 
 public class DataTypeDropdown extends TextCellEditor {
 
@@ -73,7 +60,7 @@ public class DataTypeDropdown extends TextCellEditor {
 	private final ITypeSelectionContentProvider contentProvider;
 	private SimpleContentProposalProvider provider;
 	private List<DataType> types;
-	private String[] elementaryTypes;
+	private String[] elementaryTypes = new String[0];
 	private final TableViewer viewer;
 	/* A flag that indicates if the content proposals have been set to elementary types (this is the case if the text
 	 * field is empty) or all types. This means that the ModifyListener of the textControl does not have to set the
@@ -215,7 +202,7 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	private String[] getElementaryTypes() {
 		// only load elementary types once because they do not change
-		if (null == elementaryTypes) {
+		if (null == elementaryTypes || elementaryTypes.length == 0) {
 			elementaryTypes = types.stream().filter(type -> !(type instanceof StructuredType)).map(DataType::getName)
 					.toArray(String[]::new);
 		}
@@ -245,12 +232,12 @@ public class DataTypeDropdown extends TextCellEditor {
 
 	private void openDialog() {
 		loadContent(); // refresh content before opening
-		final ITreeContentProvider treeProvider = createTreeContentProvider();
-		final LabelProvider labelProvider = createTreeLabelProvider();
 
-		final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(getControl().getShell(),
-				labelProvider, treeProvider);
-		dialog.setInput(types);
+		final DataTypeTreeSelectionDialog dialog = new DataTypeTreeSelectionDialog(getControl().getShell());
+		HashMap<String, List<String>> allTypes = new HashMap<>();
+		allTypes.put(Messages.DataTypeDropdown_Elementary_Types, Arrays.asList(getElementaryTypes()));
+		allTypes.put(Messages.DataTypeDropdown_STRUCT_Types, types.stream().map(INamedElement::getName).collect(Collectors.toList()));
+		dialog.setInput(allTypes);
 		dialog.setTitle(Messages.DataTypeDropdown_Type_Selection);
 		dialog.setMessage(Messages.DataTypeDropdown_Select_Type);
 		dialog.setDoubleClickSelects(false); // because it is incompatible with multi-level tree
@@ -271,122 +258,6 @@ public class DataTypeDropdown extends TextCellEditor {
 			}
 		}
 		deactivate();
-	}
-
-	
-
-	private static LabelProvider createTreeLabelProvider() {
-		return new LabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				if (element instanceof TypeNode) {
-					return ((TypeNode) element).getName();
-				}
-				return element.toString();
-			}
-
-			@Override
-			public Image getImage(final Object element) {
-				if (element instanceof TypeNode) {
-					final TypeNode node = (TypeNode) element;
-					if (node.isDirectory()) {
-						return PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
-					}
-					return FordiacImage.ICON_DATA_TYPE.getImage();
-				}
-				return super.getImage(element);
-			}
-		};
-	}
-
-	private static ITreeContentProvider createTreeContentProvider() {
-		return new ITreeContentProvider() {
-
-			@Override
-			public boolean hasChildren(final Object element) {
-				if (element instanceof TypeNode) {
-					return !((TypeNode) element).getChildren().isEmpty();
-				}
-				return false;
-			}
-
-			/* This method separates elementary types and structs into different type nodes before displaying them in
-			 * the tree */
-			@Override
-			public Object[] getElements(final Object inputElement) {
-				final TypeNode elementaries = new TypeNode(Messages.DataTypeDropdown_Elementary_Types);
-				final TypeNode structures = new TypeNode(Messages.DataTypeDropdown_STRUCT_Types);
-
-				if (inputElement instanceof List<?>) {
-					((List<?>) inputElement).forEach(type -> {
-						if (type instanceof StructuredType) {
-							final StructuredType structuredType = (StructuredType) type;
-							// some files are created at runtime and do not have a path
-							if (null != structuredType.getTypeEntry()) {
-								final String parentPath = structuredType.getTypeEntry().getFile().getParent()
-										.getProjectRelativePath().toOSString();
-								createSubdirectories(structures, structuredType, parentPath);
-							} else {
-								final TypeNode runtimeNode = new TypeNode(structuredType.getName(), structuredType);
-								runtimeNode.setParent(structures);
-								structures.addChild(runtimeNode);
-							}
-						} else if (type instanceof DataType) {
-							final DataType simpleType = (DataType) type;
-							final TypeNode newNode = new TypeNode(simpleType.getName(), simpleType);
-							elementaries.addChild(newNode);
-						}
-					});
-				}
-
-				if (elementaries.children.isEmpty()) {
-					return structures.getChildren().toArray();
-				} else if (structures.children.isEmpty()) {
-					return elementaries.getChildren().toArray();
-				}
-
-				return new TypeNode[] { elementaries, structures };
-			}
-
-			private void createSubdirectories(TypeNode node, final StructuredType structuredType,
-					final String parentPath) {
-				// split up the path in subdirectories
-				final String[] paths = parentPath.split("\\\\"); //$NON-NLS-1$
-
-				// start after Type Library
-				for (int i = 1; i < paths.length; i++) {
-					final TypeNode current = new TypeNode(paths[i]);
-					// check if we already have a parent node
-					final int index = node.getChildren().indexOf(current);
-					if (-1 != index) {
-						node = node.getChildren().get(index);
-					} else {
-						current.setParent(node);
-						node.addChild(current);
-						node = current;
-					}
-				}
-				final TypeNode actualType = new TypeNode(structuredType.getName(), structuredType);
-				actualType.setParent(node);
-				node.addChild(actualType);
-			}
-
-			@Override
-			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof TypeNode) {
-					return ((TypeNode) parentElement).getChildren().toArray();
-				}
-				return new Object[0];
-			}
-
-			@Override
-			public Object getParent(final Object element) {
-				if (element instanceof TypeNode) {
-					return ((TypeNode) element).getParent();
-				}
-				return null;
-			}
-		};
 	}
 
 	static final char[] ACTIVATION_CHARS = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O',

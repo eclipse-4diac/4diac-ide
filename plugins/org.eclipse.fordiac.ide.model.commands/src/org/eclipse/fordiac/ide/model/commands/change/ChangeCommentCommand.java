@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2012, 2015 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -33,18 +33,19 @@ public class ChangeCommentCommand extends Command {
 
 	/**
 	 * Instantiates a new change comment command.
-	 * 
+	 *
 	 * @param interfaceElement the interface element
 	 * @param comment          the comment
 	 */
 	public ChangeCommentCommand(final INamedElement interfaceElement, final String comment) {
 		this.interfaceElement = interfaceElement;
-		this.comment = comment;
+		// comment must not be null, ensure a correct value in all cases
+		this.comment = (comment != null) ? comment : ""; //$NON-NLS-1$
 	}
 
 	/**
 	 * Sets the interface element.
-	 * 
+	 *
 	 * @param interfaceElement the new interface element
 	 */
 	public void setInterfaceElement(final IInterfaceElement interfaceElement) {
@@ -53,7 +54,7 @@ public class ChangeCommentCommand extends Command {
 
 	/**
 	 * Gets the comment.
-	 * 
+	 *
 	 * @return the comment
 	 */
 	public String getComment() {
@@ -62,7 +63,7 @@ public class ChangeCommentCommand extends Command {
 
 	/**
 	 * Sets the comment.
-	 * 
+	 *
 	 * @param comment the new comment
 	 */
 	public void setComment(final String comment) {
@@ -71,7 +72,7 @@ public class ChangeCommentCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#execute()
 	 */
 	@Override
@@ -82,7 +83,7 @@ public class ChangeCommentCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#undo()
 	 */
 	@Override
@@ -93,7 +94,7 @@ public class ChangeCommentCommand extends Command {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see org.eclipse.gef.commands.Command#redo()
 	 */
 	@Override

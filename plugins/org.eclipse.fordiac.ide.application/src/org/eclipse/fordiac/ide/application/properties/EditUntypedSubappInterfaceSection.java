@@ -1,7 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017 fortiss GmbH
  * 				 2019, 2020 Johannes Kepler University Linz
- * 				 2020 Primetals Technologies Germany GmbH
+ * 				 2020 - 2023 Primetals Technologies Germany GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +14,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - create command now has enhanced guess
  *   Daniel Lindhuber - added insert command method & cell editor classes
+ *   Martin Melik Merkumians - added option for setting VAR CONFIG on inputs
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
@@ -21,12 +22,16 @@ import org.eclipse.fordiac.ide.application.commands.ChangeSubAppIETypeCommand;
 import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
+import org.eclipse.fordiac.ide.application.commands.ResizingSubappInterfaceCreationCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationWithVarConfigColumnAccessor;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationWithVarConfigColumnProvider;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
@@ -34,27 +39,85 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
+import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
+import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Group;
 
-public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
+public class EditUntypedSubappInterfaceSection extends AbstractEditInterfaceDataSection {
+
 	@Override
-	protected CreateInterfaceElementCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
+	protected CreationCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
 		final DataType last = getLastUsedDataType(getType().getInterface(), isInput, interfaceElement);
 		final int pos = getInsertingIndex(interfaceElement, isInput);
-		return new CreateSubAppInterfaceElementCommand(last, getCreationName(interfaceElement),
-				getType().getInterface(), isInput, pos);
+		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(last,
+				getCreationName(interfaceElement), getType().getInterface(), isInput, pos);
+		if (getType().isUnfolded()) {
+			// if the group is expanded we need to check if the subapp needs to be expanded
+			return ResizingSubappInterfaceCreationCommand.createCommand(cmd, getType());
+		}
+		return cmd;
 	}
 
 	@Override
-	protected CreateInterfaceElementCommand newInsertCommand(final IInterfaceElement interfaceElement,
-			final boolean isInput,
+	protected CreationCommand newInsertCommand(final IInterfaceElement interfaceElement, final boolean isInput,
 			final int index) {
-		return new CreateSubAppInterfaceElementCommand(interfaceElement, isInput, getType().getInterface(), index);
+		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(interfaceElement,
+				isInput, getType().getInterface(), index);
+		if (getType().isUnfolded()) {
+			// if the group is expanded we need to check if the subapp needs to be expanded
+			return ResizingSubappInterfaceCreationCommand.createCommand(cmd, getType());
+		}
+		return cmd;
 	}
 
+	@Override
+	public void setupInputTable(final Group inputsGroup) {
+		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
+		if (isEditable()) {
+			rule = IEditableRule.ALWAYS_EDITABLE;
+		}
+		inputProvider = new VarDeclarationListProvider(null, new VarDeclarationWithVarConfigColumnAccessor(this, null));
+		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
+		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
+				new VarDeclarationWithVarConfigColumnProvider(), rule, new DataTypeSelectionButton(typeSelection),
+				this);
+		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
+		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
+		inputTable.configure();
+	}
+
+	@Override
+	protected DataLayer setupDataLayer(final ListDataProvider<VarDeclaration> provider) {
+		final DataLayer dataLayer = new DataLayer(provider);
+		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
+
+		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
+			if (labelAcc != null) {
+				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+			}
+			if (isEditable() && columnPosition == I4diacNatTableUtil.TYPE) {
+				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+			} else if (isEditable() && columnPosition == I4diacNatTableUtil.INITIAL_VALUE) {
+				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
+			} else if (columnPosition == I4diacNatTableUtil.NAME || columnPosition == I4diacNatTableUtil.COMMENT) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			} else if (columnPosition == I4diacNatTableUtil.VAR_CONFIG) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
+			}
+		});
+		return dataLayer;
+	}
 
 	protected LabelProvider getLabelProvider() {
 		return new DataLabelProvider() {
@@ -77,7 +140,6 @@ public class EditInterfaceDataSection extends AbstractEditInterfaceDataSection {
 
 		};
 	}
-
 
 	@Override
 	protected SubApp getInputType(final Object input) {

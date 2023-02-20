@@ -18,10 +18,9 @@ import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.Communi
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.commands.Command;
 
 /** This command allows adding windows to a TSN configuration. */
-public class CreateTsnWindowCommand extends Command implements CreationCommand {
+public class CreateTsnWindowCommand extends CreationCommand {
 	private final TsnConfiguration config;
 
 	private TsnWindow newWindow;
@@ -30,7 +29,7 @@ public class CreateTsnWindowCommand extends Command implements CreationCommand {
 	private final int duration;
 
 	public CreateTsnWindowCommand(final TsnConfiguration config, final int duration) {
-		this(config, TsnParameters.TSN_WINDOW_NAME, "", duration); // //$NON-NLS-1$ //$NON-NLS-2$
+		this(config, TsnParameters.TSN_WINDOW_NAME, "", duration); // //$NON-NLS-1$
 	}
 
 	public CreateTsnWindowCommand(final TsnConfiguration config, final String name, final String comment,
