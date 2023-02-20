@@ -29,6 +29,8 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 
+import java.util.ArrayList;
+
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
@@ -63,7 +65,7 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
-		provider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
+		provider = new VarDeclarationListProvider(new ArrayList<>(), new VarDeclarationColumnAccessor(this, null));
 		final DataLayer dataLayer = new DataLayer(provider);
 		final IConfigLabelAccumulator dataLayerLabelAccumulator = dataLayer.getConfigLabelAccumulator();
 		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
@@ -81,8 +83,8 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
 			}
 		});
-		table = NatTableWidgetFactory.createRowNatTable(composite,
-				dataLayer, new VarDeclarationColumnProvider(), IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this);
+		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new VarDeclarationColumnProvider(),
+				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, Boolean.FALSE);
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 		table.configure();
 

@@ -13,6 +13,7 @@
 
 package org.eclipse.fordiac.ide.ui.widget;
 
+import org.eclipse.fordiac.ide.ui.providers.RowHeaderDataProvider;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.AbstractRegistryConfiguration;
@@ -29,7 +30,6 @@ import org.eclipse.nebula.widgets.nattable.edit.command.DeleteSelectionCommandHa
 import org.eclipse.nebula.widgets.nattable.edit.config.DefaultEditConfiguration;
 import org.eclipse.nebula.widgets.nattable.grid.GridRegion;
 import org.eclipse.nebula.widgets.nattable.grid.data.DefaultCornerDataProvider;
-import org.eclipse.nebula.widgets.nattable.grid.data.DefaultRowHeaderDataProvider;
 import org.eclipse.nebula.widgets.nattable.grid.layer.ColumnHeaderLayer;
 import org.eclipse.nebula.widgets.nattable.grid.layer.CornerLayer;
 import org.eclipse.nebula.widgets.nattable.grid.layer.GridLayer;
@@ -149,7 +149,7 @@ public final class NatTableWidgetFactory {
 
 	public static NatTable createRowNatTable(final Composite parent, final DataLayer bodyDataLayer,
 			final IDataProvider columnHeaderProvider, final IEditableRule editableRule,
-			final AbstractSelectionButton proposalButton, final I4diacNatTableUtil section) {
+			final AbstractSelectionButton proposalButton, final I4diacNatTableUtil section, final Boolean isInput) {
 
 		setColumnWidths(bodyDataLayer);
 
@@ -172,7 +172,7 @@ public final class NatTableWidgetFactory {
 		final ColumnHeaderLayer columnHeaderLayer = new ColumnHeaderLayer(columnHeaderDataLayer, viewportLayer,
 				selectionLayer);
 
-		final IDataProvider rowHeaderProvider = new DefaultRowHeaderDataProvider(bodyDataLayer.getDataProvider());
+		final IDataProvider rowHeaderProvider = new RowHeaderDataProvider(bodyDataLayer.getDataProvider(), isInput);
 		final DataLayer rowHeaderDataLayer = new DataLayer(rowHeaderProvider, 25, DataLayer.DEFAULT_ROW_HEIGHT);
 		final RowHeaderLayer rowHeaderLayer = new RowHeaderLayer(rowHeaderDataLayer, viewportLayer, selectionLayer,
 				false);
@@ -223,6 +223,7 @@ public final class NatTableWidgetFactory {
 	}
 
 	public static DataLayer getDataLayer(final NatTable table) {
+		//
 		final SelectionLayer selectionLayer = getSelectionLayer(table);
 		if (selectionLayer != null) {
 			return (DataLayer) selectionLayer.getUnderlyingLayerByPosition(0, 0);

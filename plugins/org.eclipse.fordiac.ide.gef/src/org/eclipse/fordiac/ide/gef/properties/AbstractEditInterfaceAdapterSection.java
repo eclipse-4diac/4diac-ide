@@ -95,10 +95,10 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		outputProvider = new AdapterListProvider(this, null);
+		outputProvider = new AdapterListProvider(this, new ArrayList<>());
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer, new EventColumnProvider(),
-				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this);
+				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this, Boolean.FALSE);
 	}
 
 	@Override
@@ -107,10 +107,10 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		inputProvider = new AdapterListProvider(this, null);
+		inputProvider = new AdapterListProvider(this, new ArrayList<>());
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, new AdapterColumnProvider(),
-				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this);
+				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this, Boolean.TRUE);
 	}
 
 

@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022 Primetals Technologies Austria GmbH,
+ *               2023 Jonannes Kepler University, Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +10,7 @@
  *
  * Contributors:
  *   Sebastian Hollersbacher - initial API and implementation and/or initial documentation
+ *   Prankur Agarwal - fixed the issues with pasting
  *******************************************************************************/
 
 package org.eclipse.fordiac.ide.ui.widget;
@@ -18,11 +20,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.fordiac.ide.ui.providers.RowHeaderDataProvider;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.nebula.widgets.nattable.NatTable;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.edit.command.UpdateDataCommand;
+import org.eclipse.nebula.widgets.nattable.grid.layer.GridLayer;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.layer.cell.ILayerCell;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 import org.eclipse.nebula.widgets.nattable.ui.action.IKeyAction;
@@ -88,27 +92,28 @@ public class PasteDataIntoTableAction implements IKeyAction {
 
 	private void pasteClipboardElementsContents(final NatTable natTable, final Object contents) {
 		if (contents instanceof Object[] && section != null) {
-
-			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
-
-			final int[] rows = selectionLayer != null ? selectionLayer.getFullySelectedRowPositions() :  new int[natTable.getColumnCount()];
-
-
-			final int[] selectedIndices = new int[((Object[]) contents).length];
-
-			int index = selectionLayer != null ? rows[rows.length - 1] + 1 : 0;
 			final CompoundCommand cmpCommand = new CompoundCommand();
-			int i = 0;
-			final boolean isInput = section
-					.checkIsInput((ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(natTable).getDataProvider());
+			final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
+			final RowHeaderDataProvider rowHeaderDataProvider = (RowHeaderDataProvider) (((DataLayer) ((GridLayer) natTable
+					.getUnderlyingLayerByPosition(0, 0)).getRowHeaderLayer().getUnderlyingLayerByPosition(0, 0))
+					.getDataProvider());
 
-			for (final Object entry : (Object[]) contents) {
-				selectedIndices[i++] = index;
-				section.addEntry(entry, isInput, index++, cmpCommand);
-			}
-
-			section.executeCompoundCommand(cmpCommand);
-			if (selectionLayer != null) {
+			if (selectionLayer == null) {
+				int i = 0;
+				for (final Object entry : (Object[]) contents) {
+					section.addEntry(entry, rowHeaderDataProvider.getIsInput(), i++, cmpCommand);
+				}
+				section.executeCompoundCommand(cmpCommand);
+			} else {
+				final int[] rows = selectionLayer.getFullySelectedRowPositions();
+				final int[] selectedIndices = new int[((Object[]) contents).length];
+				int index = rows.length != 0 ? rows[rows.length - 1] + 1 : natTable.getRowCount();
+				int i = 0;
+				for (final Object entry : (Object[]) contents) {
+					selectedIndices[i++] = index;
+					section.addEntry(entry, rowHeaderDataProvider.getIsInput(), index++, cmpCommand);
+				}
+				section.executeCompoundCommand(cmpCommand);
 				for (final int ind : selectedIndices) {
 					selectionLayer.selectRow(0, ind, false, true);
 				}

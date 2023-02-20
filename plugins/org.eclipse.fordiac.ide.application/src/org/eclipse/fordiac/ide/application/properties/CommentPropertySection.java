@@ -18,6 +18,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.application.Messages;
@@ -126,8 +127,8 @@ public class CommentPropertySection extends AbstractSection {
 		inputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
 		outputComposite.setLayout(new GridLayout(ONE_COLUMN, false));
 
-		inputDataProvider = new VarDeclarationListProvider(null, true);
-		outputDataProvider = new VarDeclarationListProvider(null, false);
+		inputDataProvider = new VarDeclarationListProvider(new ArrayList<>(), true);
+		outputDataProvider = new VarDeclarationListProvider(new ArrayList<>(), false);
 
 		final DataLayer inputDataLayer = new DataLayer(inputDataProvider);
 		configureDataLayerLabels(inputDataLayer, true);
