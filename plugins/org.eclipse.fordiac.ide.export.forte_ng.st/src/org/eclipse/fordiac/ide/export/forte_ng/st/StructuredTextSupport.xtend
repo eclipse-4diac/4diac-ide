@@ -47,6 +47,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpre
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
@@ -275,7 +276,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		}
 	}
 
-	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument,
+	def protected CharSequence generateInputCallArgument(INamedElement parameter, STCallArgument argument,
 		STFeatureExpression expr) {
 		switch (expr.feature) {
 			FB case argument === null: '''«expr.feature.generateFeatureName».«parameter.generateFeatureName»'''
@@ -286,22 +287,22 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		}
 	}
 
-	def protected CharSequence generateInputCallArgument(INamedElement parameter, STExpression argument) {
-		if(argument === null) parameter.generateVariableDefaultValue else argument.generateExpression
+	def protected CharSequence generateInputCallArgument(INamedElement parameter, STCallArgument argument) {
+		if(argument === null) parameter.generateVariableDefaultValue else argument.argument.generateExpression
 	}
 
-	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STExpression argument) {
+	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STCallArgument argument) {
 		if (argument === null)
 			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
 		else
-			argument.generateExpression
+			argument.argument.generateExpression
 	}
 
-	def protected CharSequence generateOutputCallArgument(INamedElement parameter, STExpression argument) {
+	def protected CharSequence generateOutputCallArgument(INamedElement parameter, STCallArgument argument) {
 		if (argument === null)
 			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
 		else
-			argument.generateExpression
+			argument.argument.generateExpression
 	}
 
 	def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //

@@ -210,7 +210,7 @@ public class STBuiltinFeatureExpressionImpl extends STExpressionImpl implements 
 	 * @generated
 	 */
 	@Override
-	public Map<INamedElement, STExpression> getMappedInputArguments() {
+	public Map<INamedElement, STCallArgument> getMappedInputArguments() {
 		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedInputArguments(this);
 	}
 
@@ -220,7 +220,7 @@ public class STBuiltinFeatureExpressionImpl extends STExpressionImpl implements 
 	 * @generated
 	 */
 	@Override
-	public Map<INamedElement, STExpression> getMappedOutputArguments() {
+	public Map<INamedElement, STCallArgument> getMappedOutputArguments() {
 		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedOutputArguments(this);
 	}
 
@@ -230,7 +230,7 @@ public class STBuiltinFeatureExpressionImpl extends STExpressionImpl implements 
 	 * @generated
 	 */
 	@Override
-	public Map<INamedElement, STExpression> getMappedInOutArguments() {
+	public Map<INamedElement, STCallArgument> getMappedInOutArguments() {
 		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getMappedInOutArguments(this);
 	}
 
