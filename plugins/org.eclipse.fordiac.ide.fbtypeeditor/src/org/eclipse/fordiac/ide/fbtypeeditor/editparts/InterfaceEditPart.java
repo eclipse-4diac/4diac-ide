@@ -164,7 +164,7 @@ public class InterfaceEditPart extends AbstractInterfaceElementEditPart implemen
 		if (typeRootEP != null) {
 			typeRootEP.refresh();
 			typeRootEP.getChildren().stream().filter(CommentTypeEditPart.class::isInstance)
-					.forEach(ep -> ((CommentTypeEditPart) ep).refreshVisuals());
+			.forEach(ep -> ((CommentTypeEditPart) ep).refreshVisuals());
 		}
 	}
 

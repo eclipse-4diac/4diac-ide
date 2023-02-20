@@ -19,6 +19,7 @@ package org.eclipse.fordiac.ide.model.edit.helper;
 
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -50,7 +51,8 @@ public final class InitialValueHelper {
 	}
 
 	public static String getDefaultValue(final Object element) {
-		if (element instanceof VarDeclaration) {
+		if (element instanceof VarDeclaration
+				&& !(((VarDeclaration) element).getType() instanceof ErrorMarkerDataType)) {
 			final VarDeclaration varDec = (VarDeclaration) element;
 
 			try {

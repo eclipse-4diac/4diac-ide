@@ -36,6 +36,7 @@ import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -240,7 +241,8 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	@SuppressWarnings("static-method") // allow subclasses to overwrite this method
 	protected String getDefaultValue(final IInterfaceElement ie) {
-		if ((ie instanceof VarDeclaration) && !IecTypes.GenericTypes.isAnyType(ie.getType())) {
+		if ((ie instanceof VarDeclaration) && !IecTypes.GenericTypes.isAnyType(ie.getType())
+				&& !(ie.getType() instanceof ErrorMarkerDataType)) {
 			try {
 				return VariableOperations.newVariable((VarDeclaration) ie).getValue().toString();
 			} catch (final Exception ex) {

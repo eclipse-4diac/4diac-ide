@@ -27,12 +27,12 @@ import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.FordiacKeywords;
 import org.eclipse.fordiac.ide.model.NamedElementComparator;
-import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 
 public final class DataTypeLibrary {
@@ -96,11 +96,13 @@ public final class DataTypeLibrary {
 		return dataTypes;
 	}
 
-	/** FIXME only return type if it really exists!
+	/**
+	 * get type
 	 *
 	 * @param name the name
 	 *
-	 * @return the type */
+	 * @return the type or ErrorMarker
+	 */
 	public DataType getType(final String name) {
 		if (null == name) {
 			return typeMap.get("ANY"); //$NON-NLS-1$
@@ -110,9 +112,8 @@ public final class DataTypeLibrary {
 		if (null == type) {
 			type = getDerivedType(name);
 			if (null == type) {
-				// TODO reconsider if in this case a new type should be created
 				FordiacLogHelper.logInfo("Missing Datatype: " + name); //$NON-NLS-1$
-				type = DataFactory.eINSTANCE.createElementaryType();
+				type = LibraryElementFactory.eINSTANCE.createErrorMarkerDataType();
 				type.setName(name);
 				typeMap.put(name, type);
 			}
