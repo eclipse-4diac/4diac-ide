@@ -48,7 +48,8 @@ public final class FordiacErrorMarkerInterfaceHelper {
 		}
 
 		if (!markerExists && errorMarkerBuilders != null) {
-			errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(newElement));
+			errorMarkerBuilders
+					.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(interfaceElement));
 		}
 		return interfaceElement;
 	}

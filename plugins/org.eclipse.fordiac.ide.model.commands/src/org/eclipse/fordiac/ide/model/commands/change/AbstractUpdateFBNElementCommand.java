@@ -333,6 +333,11 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 					FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(oldElement)));
 		}
 
+		for (final IInterfaceElement element : oldElement.getInterface().getAllInterfaceElements()) {
+			deleteMarkersCmds
+			.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(element)));
+		}
+
 		for (final VarDeclaration input : oldElement.getInterface().getInputVars()) {
 			deleteMarkersCmds.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(
 					FordiacMarkerHelper.findMarkers(input.getValue(), FordiacErrorMarker.INITIAL_VALUE_MARKER)));
