@@ -31,8 +31,7 @@ public final class FordiacMarkerCommandHelper {
 			.logWarning("Cannot determine resource for " + builder + " (target may be null or dangling)"); //$NON-NLS-1$ //$NON-NLS-2$
 			return new CompoundCommand();
 		}
-		return new CreateMarkersCommand("Create error marker for " + builder.toString(), resource, builder.getType(), //$NON-NLS-1$
-				builder.getAttributes());
+		return new CreateMarkersCommand("Create error marker for " + builder.toString(), List.of(builder)); //$NON-NLS-1$
 	}
 
 	public static Command newDeleteMarkersCommand(final List<IMarker> markers) {

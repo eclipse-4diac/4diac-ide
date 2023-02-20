@@ -94,6 +94,14 @@ public abstract class AbstractMarkersCommand extends AbstractWorkspaceCommand {
 		return MultiRule.combine(rules.toArray(new ISchedulingRule[rules.size()]));
 	}
 
+	public List<IMarker> getMarkers() {
+		return markers;
+	}
+
+	public List<MarkerDescription> getMarkerDescriptions() {
+		return markerDescriptions;
+	}
+
 	public static class MarkerDescription {
 		private final IResource resource;
 		private final String type;

@@ -14,21 +14,27 @@ package org.eclipse.fordiac.ide.model.commands.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 
 public class CreateMarkersCommand extends AbstractMarkersCommand {
 
-	public CreateMarkersCommand(final String label, final IResource resource, final String type,
-			final Map<String, Object> attributes) {
-		super(label, new ArrayList<>(), new ArrayList<>(List.of(new MarkerDescription(resource, type, attributes))));
+	private final List<ErrorMarkerBuilder> markerBuilders;
+
+	public CreateMarkersCommand(final String label, final List<ErrorMarkerBuilder> markerBuilders) {
+		super(label, new ArrayList<>(), new ArrayList<>());
+		this.markerBuilders = markerBuilders;
 	}
 
 	@Override
 	protected void doExecute(final IProgressMonitor monitor) throws CoreException {
+		markerBuilders.stream().map(CreateMarkersCommand::toMarkerDescription).filter(Objects::nonNull)
+				.forEachOrdered(getMarkerDescriptions()::add);
 		createMarkers();
 	}
 
@@ -40,5 +46,13 @@ public class CreateMarkersCommand extends AbstractMarkersCommand {
 	@Override
 	protected void doUndo(final IProgressMonitor monitor) throws CoreException {
 		deleteMarkers();
+	}
+
+	protected static MarkerDescription toMarkerDescription(final ErrorMarkerBuilder builder) {
+		final IResource resource = FordiacMarkerHelper.getResource(builder.getTarget());
+		if (resource != null) {
+			return new MarkerDescription(resource, builder.getType(), builder.getAttributes());
+		}
+		return null;
 	}
 }
