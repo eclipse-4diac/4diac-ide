@@ -51,6 +51,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STContinue
@@ -579,7 +580,12 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			if(argument !== null) argument.argument.evaluateVariable.value = eval.variables.get(parameter.name).value
 		]
 		outputs.forEach [ parameter, argument |
-			if(argument !== null) argument.argument.evaluateVariable.value = eval.variables.get(parameter.name).value
+			switch (argument) {
+				STCallNamedOutputArgument case argument.not:
+					argument.argument.evaluateVariable.value = eval.variables.get(parameter.name).value.bitwiseNot
+				case argument !== null:
+					argument.argument.evaluateVariable.value = eval.variables.get(parameter.name).value
+			}
 		]
 		result
 	}
@@ -598,7 +604,12 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 		}
 		eval.evaluate(event)
 		outputs.forEach [ parameter, argument |
-			if(argument !== null) argument.argument.evaluateVariable.value = eval.variables.get(parameter.name).value
+			switch (argument) {
+				STCallNamedOutputArgument case argument.not:
+					argument.argument.evaluateVariable.value = eval.variables.get(parameter.name).value.bitwiseNot
+				case argument !== null:
+					argument.argument.evaluateVariable.value = eval.variables.get(parameter.name).value
+			}
 		]
 		null
 	}
