@@ -403,11 +403,7 @@ public class CommentPropertySection extends AbstractSection {
 				cmd = new ChangeValueCommand(rowObject, (String) newValue);
 				break;
 			case COMMENT_COL_ID:
-				if ((String) newValue != null) {
-					cmd = new ChangeCommentCommand(rowObject, (String) newValue);
-				} else {
-					cmd = new ChangeCommentCommand(rowObject, ""); //$NON-NLS-1$
-				}
+				cmd = new ChangeCommentCommand(rowObject, (String) newValue);
 				break;
 			case VISIBLE_COL_ID:
 				if ((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
