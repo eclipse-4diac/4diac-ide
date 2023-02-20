@@ -134,7 +134,7 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		}
 	}
 
-	private static void setParameters(final FBType fbType, final List<String> parameters) {
+	static void setParameters(final FBType fbType, final List<String> parameters) {
 		// parameter: format "VarName:=Value"
 		for (final String param : parameters) {
 			final String[] paramValues = param.split(":="); //$NON-NLS-1$
