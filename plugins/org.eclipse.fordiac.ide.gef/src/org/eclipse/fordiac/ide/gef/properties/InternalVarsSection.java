@@ -29,8 +29,6 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 
-import java.util.ArrayList;
-
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
@@ -65,7 +63,7 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
-		provider = new VarDeclarationListProvider(new ArrayList<>(), new VarDeclarationColumnAccessor(this, null));
+		provider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
 		final DataLayer dataLayer = new DataLayer(provider);
 		final IConfigLabelAccumulator dataLayerLabelAccumulator = dataLayer.getConfigLabelAccumulator();
 		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
@@ -100,7 +98,7 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 		final BaseFBType currentType = getType();
 		if (currentType != null) {
 			provider.setInput(currentType.getInternalVars());
-			provider.setTypeLib(currentType.getTypeLibrary());
+			provider.setTypeLib(getDataTypeLib());
 			initTypeSelection(getDataTypeLib());
 		}
 	}

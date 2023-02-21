@@ -106,9 +106,9 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private void createNatTable(final Composite parent) {
-		structMemberProvider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
+		structMemberProvider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
 		structMemberProvider.setInput(getType().getMemberVariables());
-		structMemberProvider.setTypeLib(getType().getTypeLibrary());
+		structMemberProvider.setTypeLib(getDataTypeLibrary());
 		final DataLayer inputDataLayer = setupDataLayer(structMemberProvider);
 		initTypeSelection(getType().getTypeLibrary().getDataTypeLibrary());
 		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, new VarDeclarationColumnProvider(),

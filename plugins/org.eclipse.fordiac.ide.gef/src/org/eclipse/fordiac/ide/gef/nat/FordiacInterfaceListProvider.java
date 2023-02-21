@@ -21,9 +21,9 @@ import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
 import org.eclipse.nebula.widgets.nattable.selection.SelectionLayer;
 
-public interface FordiacInterfaceListProvider {
+public interface FordiacInterfaceListProvider<T extends IInterfaceElement> {
 
-	<T extends List<? extends IInterfaceElement>> void setInput(T varDecl);
+	void setInput(List<T> varDecl);
 
 	default IInterfaceElement getLastSelectedVariable(final NatTable table) {
 		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(table);

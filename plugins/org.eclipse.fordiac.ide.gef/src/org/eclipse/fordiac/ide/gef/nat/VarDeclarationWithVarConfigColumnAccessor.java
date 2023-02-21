@@ -14,7 +14,6 @@ package org.eclipse.fordiac.ide.gef.nat;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 
@@ -24,14 +23,10 @@ public class VarDeclarationWithVarConfigColumnAccessor extends VarDeclarationCol
 		super(section);
 	}
 
-	public VarDeclarationWithVarConfigColumnAccessor(final CommandExecutor section, final TypeLibrary library) {
-		super(section, library);
-	}
-
 	@Override
 	public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
 		if (columnIndex == I4diacNatTableUtil.VAR_CONFIG) {
-			return rowObject.isVarConfig();
+			return Boolean.valueOf(rowObject.isVarConfig());
 		}
 		return super.getDataValue(rowObject, columnIndex);
 	}

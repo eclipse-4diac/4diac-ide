@@ -89,7 +89,7 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		outputProvider = new EventListProvider(this, new ArrayList<>());
+		outputProvider = new EventListProvider(this);
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, false);
@@ -101,7 +101,7 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		inputProvider = new EventListProvider(this, new ArrayList<>());
+		inputProvider = new EventListProvider(this);
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, true);

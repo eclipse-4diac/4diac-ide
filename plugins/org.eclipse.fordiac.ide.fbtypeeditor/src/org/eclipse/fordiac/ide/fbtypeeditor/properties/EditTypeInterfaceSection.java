@@ -58,7 +58,7 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		inputProvider = new VarDeclarationListProvider(null, new VarDeclarationWithVarConfigColumnAccessor(this, null));
+		inputProvider = new VarDeclarationListProvider(new VarDeclarationWithVarConfigColumnAccessor(this));
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new VarDeclarationWithVarConfigColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this,

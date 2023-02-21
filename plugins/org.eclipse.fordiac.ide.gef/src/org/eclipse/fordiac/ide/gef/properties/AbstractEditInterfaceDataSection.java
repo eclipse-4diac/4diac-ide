@@ -122,7 +122,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		outputProvider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
+		outputProvider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
 				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, false);
@@ -137,7 +137,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		inputProvider = new VarDeclarationListProvider(new ArrayList<>(), new VarDeclarationColumnAccessor(this, null));
+		inputProvider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, true);
@@ -147,14 +147,14 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 
 	@Override
 	protected void setInputInit() {
-		((VarDeclarationListProvider) outputProvider).setTypeLib(getTypeLibrary());
-		((VarDeclarationListProvider) inputProvider).setTypeLib(getTypeLibrary());
+		((VarDeclarationListProvider) outputProvider).setTypeLib(getDataTypeLib());
+		((VarDeclarationListProvider) inputProvider).setTypeLib(getDataTypeLib());
 	}
 
 	@Override
 	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
-		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getInputVars());
-		final EList<VarDeclaration> outputVars = element.getInterface().getOutputVars();
-		((FordiacInterfaceListProvider) outputProvider).setInput(outputVars);
+		((FordiacInterfaceListProvider<VarDeclaration>) inputProvider).setInput(element.getInterface().getInputVars());
+		((FordiacInterfaceListProvider<VarDeclaration>) outputProvider)
+				.setInput(element.getInterface().getOutputVars());
 	}
 }

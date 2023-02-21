@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021, 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,19 +13,23 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
+import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 
 public class VarDeclarationListProvider extends ListDataProvider<VarDeclaration>
-		implements FordiacInterfaceListProvider {
+implements FordiacInterfaceListProvider<VarDeclaration> {
 
 	public VarDeclarationListProvider(final List<VarDeclaration> list,
 			final VarDeclarationColumnAccessor columnAccessor) {
 		super(list, columnAccessor);
+	}
+
+	public VarDeclarationListProvider(final VarDeclarationColumnAccessor columnAccessor) {
+		super(Collections.emptyList(), columnAccessor);
 	}
 
 	protected VarDeclarationColumnAccessor getColumnAccessor() {
@@ -40,13 +44,12 @@ public class VarDeclarationListProvider extends ListDataProvider<VarDeclaration>
 		return 0;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends List<? extends IInterfaceElement>> void setInput(final T list) {
-		this.list = (List<VarDeclaration>) list;
+	public void setInput(final List<VarDeclaration> list) {
+		this.list = list;
 	}
 
-	public void setTypeLib(final TypeLibrary dataTypeLib) {
+	public void setTypeLib(final DataTypeLibrary dataTypeLib) {
 		getColumnAccessor().setTypeLib(dataTypeLib);
 	}
 
