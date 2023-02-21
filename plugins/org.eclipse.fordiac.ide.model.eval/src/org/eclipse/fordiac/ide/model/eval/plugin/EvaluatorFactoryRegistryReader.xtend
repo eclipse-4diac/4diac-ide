@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
 class EvaluatorFactoryRegistryReader {
 	static final String FACTORY_ID = "factory"
 	static final String ATT_CLASS = "class"
+	static final String ATT_VARIANT = "variant"
 	static final String ATT_TYPE = "type"
 	static final String CHILD_SOURCE = "source"
 
@@ -34,6 +35,7 @@ class EvaluatorFactoryRegistryReader {
 					null
 				}
 			if (factory !== null) {
+				val variant = getAttribute(ATT_VARIANT)
 				val sources = getChildren(CHILD_SOURCE)
 				sources.forEach [
 					val type = getAttribute(ATT_TYPE)
@@ -43,9 +45,10 @@ class EvaluatorFactoryRegistryReader {
 							log('''The factory source type attribute does not specify a valid class''', e)
 							null
 						}
-					val previousFactory = EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.put(sourceClass, factory)
+					val previousFactory = EvaluatorFactory.Registry.INSTANCE.registerFactory(variant, sourceClass,
+						factory)
 					if (previousFactory !== null) {
-						log('''A factory «previousFactory.class.name» was already registered for the source type «sourceClass.name»''')
+						log('''A factory «previousFactory.class.name» was already registered for the variant «variant» and source type «sourceClass.name»''')
 					}
 				]
 			}

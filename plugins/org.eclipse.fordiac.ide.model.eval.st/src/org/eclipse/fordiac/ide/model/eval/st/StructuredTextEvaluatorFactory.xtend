@@ -40,11 +40,11 @@ class StructuredTextEvaluatorFactory implements EvaluatorFactory {
 
 	def static void register() {
 		val factory = new StructuredTextEvaluatorFactory
-		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(STAlgorithm, factory)
-		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(ECTransition, factory)
-		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(STMethod, factory)
-		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(STFunction, factory)
-		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(String, factory)
-		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(VarDeclaration, factory)
+		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, STAlgorithm, factory)
+		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, ECTransition, factory)
+		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, STMethod, factory)
+		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, STFunction, factory)
+		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, String, factory)
+		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, VarDeclaration, factory)
 	}
 }
