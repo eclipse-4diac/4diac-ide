@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -47,7 +46,6 @@ public class ConvertToGroupHandler extends AbstractHandler implements CommandSta
 				commandStack.execute(cmd);
 			}
 			commandStack.addCommandStackEventListener(this);
-			SystemManager.INSTANCE.notifyListeners();
 		}
 		return Status.OK_STATUS;
 	}
