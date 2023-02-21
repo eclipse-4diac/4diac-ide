@@ -54,4 +54,12 @@ public interface CommunicationConfiguration extends EObject {
 	 */
 	EList<CommunicationMappingTarget> getMappingTargets();
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<VarDeclaration> getParameters();
+
 } // CommunicationConfiguration

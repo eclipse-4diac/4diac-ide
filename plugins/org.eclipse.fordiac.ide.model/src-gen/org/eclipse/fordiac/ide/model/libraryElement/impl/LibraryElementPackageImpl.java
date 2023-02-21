@@ -4811,6 +4811,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		addEOperation(communicationConfigurationEClass, this.getCommunicationMappingTarget(), "getMappingTargets", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
+		addEOperation(communicationConfigurationEClass, this.getVarDeclaration(), "getParameters", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(mappingTargetEClass, MappingTarget.class, "MappingTarget", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(communicationMappingTargetEClass, CommunicationMappingTarget.class, "CommunicationMappingTarget", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$

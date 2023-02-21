@@ -604,6 +604,8 @@
           body="return (Segment) eContainer();"/>
       <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getId"/>
       <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getMappingTargets"/>
+      <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getParameters"
+          body="return new EList&lt;?>();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//MappingTarget"/>
     <genClasses ecoreClass="lib.ecore#//CommunicationMappingTarget">

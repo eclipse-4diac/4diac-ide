@@ -90,6 +90,7 @@ public class SystemExporter extends AbstractTypeExporter {
 			addColorAttributeElement(segment);
 			addCommunicationConfigurationAttribute(segment);
 			addAttributes(segment.getAttributes());
+			addParamsConfig(segment.getCommunication().getParameters());
 			addEndElement();
 		}
 	}

@@ -22,6 +22,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration;
 
@@ -118,6 +119,14 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	@Override
 	public Segment getSegment() {
 		return (Segment) eContainer();
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EList<VarDeclaration> getParameters() {
+		throw new UnsupportedOperationException();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

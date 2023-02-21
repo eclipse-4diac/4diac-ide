@@ -1633,6 +1633,11 @@
     </eOperations>
     <eOperations name="getId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     <eOperations name="getMappingTargets" upperBound="-1" eType="#//CommunicationMappingTarget"/>
+    <eOperations name="getParameters" upperBound="-1" eType="#//VarDeclaration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return new EList&lt;?>();"/>
+      </eAnnotations>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="MappingTarget" eSuperTypes="#//INamedElement"/>
   <eClassifiers xsi:type="ecore:EClass" name="CommunicationMappingTarget" eSuperTypes="#//MappingTarget">
