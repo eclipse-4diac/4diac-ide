@@ -714,10 +714,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	protected void checkTypeCompatibility(final DataType destination, final DataType source,
 			final EStructuralFeature feature, final int index) {
-		if (!destination.isAssignableFrom(source)) {
+		if (!(destination.isAssignableFrom(source)
+				|| (GenericTypes.isAnyType(source) && source.isAssignableFrom(destination)))) {
 			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
-					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
-					destination.getName());
+					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(), destination.getName());
 		}
 	}
 }
