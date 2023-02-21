@@ -1023,8 +1023,6 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="systemConfiguration" lowerBound="1"
         eType="#//SystemConfiguration" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="systemFile" eType="#//IFile"
-        transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="commandStack" eType="#//CommandStack"
         transient="true"/>
   </eClassifiers>

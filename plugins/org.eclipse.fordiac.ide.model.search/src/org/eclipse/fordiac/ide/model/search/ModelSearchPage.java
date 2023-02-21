@@ -19,8 +19,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.search.ModelQuerySpec.SearchScope;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.jface.dialogs.DialogPage;
@@ -246,10 +245,8 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 
 	private static IFile getFileForModel(final EObject sel) {
 		final EObject root = EcoreUtil.getRootContainer(sel);
-		if (root instanceof AutomationSystem) {
-			return ((AutomationSystem) root).getSystemFile();
-		} else if (root instanceof FBType) {
-			return ((FBType) root).getTypeEntry().getFile();
+		if (root instanceof LibraryElement) {
+			return ((LibraryElement) root).getTypeEntry().getFile();
 		}
 		return null;
 	}

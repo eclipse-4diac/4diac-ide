@@ -1576,6 +1576,75 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 		return hiddenElementItemProvider;
 	}
 
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.MappingTarget} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected MappingTargetItemProvider mappingTargetItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.MappingTarget}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createMappingTargetAdapter() {
+		if (mappingTargetItemProvider == null) {
+			mappingTargetItemProvider = new MappingTargetItemProvider(this);
+		}
+
+		return mappingTargetItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CommunicationMappingTargetItemProvider communicationMappingTargetItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCommunicationMappingTargetAdapter() {
+		if (communicationMappingTargetItemProvider == null) {
+			communicationMappingTargetItemProvider = new CommunicationMappingTargetItemProvider(this);
+		}
+
+		return communicationMappingTargetItemProvider;
+	}
+
+	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CommunicationChannelItemProvider communicationChannelItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCommunicationChannelAdapter() {
+		if (communicationChannelItemProvider == null) {
+			communicationChannelItemProvider = new CommunicationChannelItemProvider(this);
+		}
+
+		return communicationChannelItemProvider;
+	}
+
 	/** This returns the root adapter factory that contains this factory. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */

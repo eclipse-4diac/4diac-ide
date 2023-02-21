@@ -506,11 +506,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private void handleFileRename(final IFile dst, final IFile src) {
-		if (isSystemFile(dst)) {
-			renameSystemFile(dst);
-		} else {
-			handleTypeRename(src, dst);
-		}
+		handleTypeRename(src, dst);
 		systemManager.notifyListeners();
 	}
 
@@ -522,28 +518,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		} else {
 			updateTypeEntry(file, typeLibrary.createTypeEntry(file));
 		}
-	}
-
-	private void renameSystemFile(final IFile file) {
-		final WorkspaceJob job = new WorkspaceJob(Messages.FordiacResourceChangeListener_7 + file.getName()) {
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				final AutomationSystem system = systemManager.getSystem(file);
-				if (null != system) {
-					final String newTypeName = TypeEntry.getTypeNameFromFile(file);
-					if (!newTypeName.equals(system.getName())) {
-						system.setName(TypeEntry.getTypeNameFromFile(file));
-						SystemManager.saveSystem(system);
-					}
-				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.setUser(false);
-		job.setSystem(true);
-		job.setPriority(Job.SHORT);
-		job.setRule(file.getProject());
-		job.schedule();
 	}
 
 	private static void updateTypeEntry(final IFile newFile, final TypeEntry entry) {
@@ -591,7 +565,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			}
 			if (editor instanceof ISystemEditor) {
 				final AutomationSystem system = ((ISystemEditor) editor).getSystem();
-				return project.equals(system.getSystemFile().getProject());
+				return project.equals(system.getTypeLibrary().getProject());
 			}
 			return false;
 		}));

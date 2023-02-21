@@ -40,7 +40,7 @@ public class OpenCompositeInstanceViewerOpenListener extends AbstractOpenSystemE
 	public void run(final IAction action) {
 		final EObject root = EcoreUtil.getRootContainer(compositeFBInstance);
 		if (root instanceof AutomationSystem) {
-			openInSystemEditor(((AutomationSystem) root).getSystemFile(), compositeFBInstance);
+			openInSystemEditor(((AutomationSystem) root).getTypeEntry().getFile(), compositeFBInstance);
 		} else if (root instanceof SubAppType) {
 			openInSubappTypeEditor((SubAppType) root, compositeFBInstance);
 		} else if (root instanceof CompositeFBType) {

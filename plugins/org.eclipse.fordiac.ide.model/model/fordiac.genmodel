@@ -332,7 +332,6 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/application"/>
       <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/mapping"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/systemConfiguration"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AutomationSystem/systemFile"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AutomationSystem/commandStack"/>
       <genOperations ecoreOperation="lib.ecore#//AutomationSystem/getDeviceNamed"
           body="return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);">

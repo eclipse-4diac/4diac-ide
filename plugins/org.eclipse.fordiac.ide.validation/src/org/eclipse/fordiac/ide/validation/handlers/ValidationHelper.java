@@ -138,7 +138,7 @@ public final class ValidationHelper {
 			}
 
 			if (element instanceof Application || element instanceof SubApp) {
-				return ((Application) element).getAutomationSystem().getSystemFile();
+				return ((Application) element).getAutomationSystem().getTypeEntry().getFile();
 			}
 			return null;
 		}

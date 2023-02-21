@@ -23,10 +23,11 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.InputDialog;
@@ -47,11 +48,12 @@ public class AddFBBookMark extends AbstractHandler {
 		final FBNetworkElement element = getSelectedFBElement(event);
 		if (null != element) {
 			final String description = getDescription(element, event);
-			if (null != description) {
+			final IResource file = getFile(element);
+			if (description != null && file != null) {
 				final CreateMarkersOperation op = new CreateMarkersOperation(IMarker.BOOKMARK,
 						ErrorMarkerBuilder.createErrorMarkerBuilder(description).setSeverity(IMarker.SEVERITY_INFO)
-						.setPriority(IMarker.PRIORITY_NORMAL).setTarget(element).getAttributes(),
-						getFile(element), Messages.AddFBBookMark_AddBookmark);
+								.setPriority(IMarker.PRIORITY_NORMAL).setTarget(element).getAttributes(),
+						file, Messages.AddFBBookMark_AddBookmark);
 				try {
 					PlatformUI.getWorkbench().getOperationSupport().getOperationHistory().execute(op, null,
 							WorkspaceUndoUtil.getUIInfoAdapter(HandlerUtil.getActiveShell(event)));
@@ -89,12 +91,11 @@ public class AddFBBookMark extends AbstractHandler {
 	}
 
 	private static IResource getFile(final FBNetworkElement element) {
-		final EObject container = element.eContainer().eContainer();
-		if (container instanceof FBType) {
-			return ((FBType) container).getTypeEntry().getFile();
+		final EObject container = EcoreUtil.getRootContainer(element);
+		if (container instanceof LibraryElement) {
+			return ((LibraryElement) container).getTypeEntry().getFile();
 		}
-		// if we are here we are in a app or subapp
-		return element.getFbNetwork().getAutomationSystem().getSystemFile();
+		return null;
 	}
 
 	private static FBNetworkElement getSelectedFBElement(final ExecutionEvent event) {

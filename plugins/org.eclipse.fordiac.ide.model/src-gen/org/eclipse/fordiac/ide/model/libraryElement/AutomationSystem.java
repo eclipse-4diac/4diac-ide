@@ -16,8 +16,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-import org.eclipse.core.resources.IFile;
-
 import org.eclipse.emf.common.util.EList;
 
 import org.eclipse.gef.commands.CommandStack;
@@ -34,7 +32,6 @@ import org.eclipse.gef.commands.CommandStack;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getApplication <em>Application</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getMapping <em>Mapping</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemConfiguration <em>System Configuration</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemFile <em>System File</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getCommandStack <em>Command Stack</em>}</li>
  * </ul>
  *
@@ -90,28 +87,6 @@ public interface AutomationSystem extends LibraryElement, ConfigurableObject {
 	 * @generated
 	 */
 	void setSystemConfiguration(SystemConfiguration value);
-
-	/**
-	 * Returns the value of the '<em><b>System File</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>System File</em>' attribute.
-	 * @see #setSystemFile(IFile)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAutomationSystem_SystemFile()
-	 * @model dataType="org.eclipse.fordiac.ide.model.libraryElement.IFile" transient="true"
-	 * @generated
-	 */
-	IFile getSystemFile();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem#getSystemFile <em>System File</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>System File</em>' attribute.
-	 * @see #getSystemFile()
-	 * @generated
-	 */
-	void setSystemFile(IFile value);
 
 	/**
 	 * Returns the value of the '<em><b>Command Stack</b></em>' attribute.

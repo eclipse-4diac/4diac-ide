@@ -18,8 +18,6 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
-import org.eclipse.core.resources.IFile;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -56,7 +54,6 @@ import org.eclipse.gef.commands.CommandStack;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getApplication <em>Application</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getMapping <em>Mapping</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getSystemConfiguration <em>System Configuration</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getSystemFile <em>System File</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getCommandStack <em>Command Stack</em>}</li>
  * </ul>
  *
@@ -102,26 +99,6 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @ordered
 	 */
 	protected SystemConfiguration systemConfiguration;
-
-	/**
-	 * The default value of the '{@link #getSystemFile() <em>System File</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSystemFile()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final IFile SYSTEM_FILE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getSystemFile() <em>System File</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSystemFile()
-	 * @generated
-	 * @ordered
-	 */
-	protected IFile systemFile = SYSTEM_FILE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getCommandStack() <em>Command Stack</em>}' attribute.
@@ -275,29 +252,6 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @generated
 	 */
 	@Override
-	public IFile getSystemFile() {
-		return systemFile;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setSystemFile(IFile newSystemFile) {
-		IFile oldSystemFile = systemFile;
-		systemFile = newSystemFile;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE, oldSystemFile, systemFile));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public CommandStack getCommandStack() {
 		return commandStack;
 	}
@@ -413,8 +367,6 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 				if (resolve) return getSystemConfiguration();
 				return basicGetSystemConfiguration();
-			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
-				return getSystemFile();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
 				return getCommandStack();
 			default:
@@ -446,9 +398,6 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 				setSystemConfiguration((SystemConfiguration)newValue);
 				return;
-			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
-				setSystemFile((IFile)newValue);
-				return;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
 				setCommandStack((CommandStack)newValue);
 				return;
@@ -478,9 +427,6 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 				setSystemConfiguration((SystemConfiguration)null);
 				return;
-			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
-				setSystemFile(SYSTEM_FILE_EDEFAULT);
-				return;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
 				setCommandStack(COMMAND_STACK_EDEFAULT);
 				return;
@@ -506,8 +452,6 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 				return mapping != null && !mapping.isEmpty();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 				return systemConfiguration != null;
-			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
-				return SYSTEM_FILE_EDEFAULT == null ? systemFile != null : !SYSTEM_FILE_EDEFAULT.equals(systemFile);
 			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
 				return COMMAND_STACK_EDEFAULT == null ? commandStack != null : !COMMAND_STACK_EDEFAULT.equals(commandStack);
 			default:
@@ -557,9 +501,7 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (systemFile: "); //$NON-NLS-1$
-		result.append(systemFile);
-		result.append(", commandStack: "); //$NON-NLS-1$
+		result.append(" (commandStack: "); //$NON-NLS-1$
 		result.append(commandStack);
 		result.append(')');
 		return result.toString();

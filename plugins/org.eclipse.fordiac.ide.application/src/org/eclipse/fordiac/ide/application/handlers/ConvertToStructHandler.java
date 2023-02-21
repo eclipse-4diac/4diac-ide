@@ -34,9 +34,8 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEdit
 import org.eclipse.fordiac.ide.application.wizards.ExtractStructTypeWizard;
 import org.eclipse.fordiac.ide.model.commands.create.CreateStructFromInterfaceElementsCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.gef.EditPart;
@@ -87,10 +86,8 @@ public class ConvertToStructHandler extends AbstractHandler {
 
 	private static IProject getProject(final FBNetworkElement fb) {
 		final EObject root = EcoreUtil.getRootContainer(fb);
-		if (root instanceof AutomationSystem) {
-			return ((AutomationSystem) root).getSystemFile().getProject();
-		} else if (root instanceof FBType) {
-			return ((FBType) root).getTypeLibrary().getProject();
+		if (root instanceof LibraryElement) {
+			return ((LibraryElement) root).getTypeLibrary().getProject();
 		}
 		return null;
 	}

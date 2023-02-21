@@ -116,7 +116,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 	@Override
 	protected TransferDropTargetListener createTransferDropTargetListener() {
 		return new FbTypeTemplateTransferDropTargetListener(getGraphicalViewer(),
-				getSystem().getSystemFile().getProject());
+				getSystem().getTypeLibrary().getProject());
 	}
 
 	@Override
@@ -205,7 +205,7 @@ public class FBNetworkEditor extends DiagramEditorWithFlyoutPalette implements I
 
 	@Override
 	protected PaletteViewerProvider createPaletteViewerProvider() {
-		return new FBTypePaletteViewerProvider(getSystem().getSystemFile().getProject(), getEditDomain(),
+		return new FBTypePaletteViewerProvider(getSystem().getTypeLibrary().getProject(), getEditDomain(),
 				getPaletteNavigatorID());
 	}
 

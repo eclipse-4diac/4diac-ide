@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -23,25 +23,26 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
+import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType} object.
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
+public class CommunicationMappingTargetItemProvider extends MappingTargetItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SimpleFBTypeItemProvider(AdapterFactory adapterFactory) {
+	public CommunicationMappingTargetItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -56,19 +57,42 @@ public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
+			addMappedElementsPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
 
 	/**
-	 * This returns SimpleFBType.gif.
+	 * This adds a property descriptor for the Mapped Elements feature.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void addMappedElementsPropertyDescriptor(Object object) {
+		itemPropertyDescriptors.add
+			(createItemPropertyDescriptor
+				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+				 getResourceLocator(),
+				 getString("_UI_CommunicationMappingTarget_mappedElements_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_CommunicationMappingTarget_mappedElements_feature", "_UI_CommunicationMappingTarget_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.COMMUNICATION_MAPPING_TARGET__MAPPED_ELEMENTS,
+				 true,
+				 false,
+				 true,
+				 null,
+				 null,
+				 null));
+	}
+
+	/**
+	 * This returns CommunicationMappingTarget.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SimpleFBType")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CommunicationMappingTarget")); //$NON-NLS-1$
 	}
 
 	/**
@@ -79,10 +103,10 @@ public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((SimpleFBType)object).getName();
+		String label = ((CommunicationMappingTarget)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_SimpleFBType_type") : //$NON-NLS-1$
-			getString("_UI_SimpleFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			getString("_UI_CommunicationMappingTarget_type") : //$NON-NLS-1$
+			getString("_UI_CommunicationMappingTarget_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 
@@ -109,33 +133,6 @@ public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__METHODS;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2", //$NON-NLS-1$
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

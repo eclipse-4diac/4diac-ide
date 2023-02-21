@@ -130,6 +130,7 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 
 		switch (notification.getFeatureID(BaseFBType.class)) {
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_CONST_VARS:
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
 			case LibraryElementPackage.BASE_FB_TYPE__ALGORITHM:
 			case LibraryElementPackage.BASE_FB_TYPE__METHODS:
@@ -165,6 +166,16 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 
 		newChildDescriptors.add
 			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS,
+				 LibraryElementFactory.eINSTANCE.createVarDeclaration()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS,
+				 LibraryElementFactory.eINSTANCE.createLocalVariable()));
+
+		newChildDescriptors.add
+			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
 				 LibraryElementFactory.eINSTANCE.createFB()));
 
@@ -192,6 +203,11 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
 				 LibraryElementFactory.eINSTANCE.createCFBInstance()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS,
+				 LibraryElementFactory.eINSTANCE.createCommunicationChannel()));
 
 		newChildDescriptors.add
 			(createChildParameter
@@ -312,6 +328,11 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
 				 LibraryElementFactory.eINSTANCE.createSTMethod()));
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
+				 LibraryElementFactory.eINSTANCE.createCommunicationChannel()));
 	}
 
 	/**
@@ -326,6 +347,8 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 		Object childObject = child;
 
 		boolean qualify =
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS ||
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM ||

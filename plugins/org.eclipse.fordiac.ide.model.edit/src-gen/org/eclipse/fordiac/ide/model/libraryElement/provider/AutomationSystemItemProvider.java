@@ -64,32 +64,9 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addSystemFilePropertyDescriptor(object);
 			addCommandStackPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the System File feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addSystemFilePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AutomationSystem_systemFile_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_AutomationSystem_systemFile_feature", "_UI_AutomationSystem_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.AUTOMATION_SYSTEM__SYSTEM_FILE,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -181,8 +158,8 @@ public class AutomationSystemItemProvider extends LibraryElementItemProvider {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(AutomationSystem.class)) {
+			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
 			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
-			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
 			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;

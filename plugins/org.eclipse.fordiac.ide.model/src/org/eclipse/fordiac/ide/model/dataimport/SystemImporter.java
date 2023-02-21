@@ -73,10 +73,7 @@ public class SystemImporter extends CommonElementImporter {
 	public static AutomationSystem createAutomationSystem(final IFile systemFile) {
 		final AutomationSystem system = LibraryElementFactory.eINSTANCE.createAutomationSystem();
 		system.setName(TypeEntry.getTypeNameFromFile(systemFile));
-		system.setSystemFile(systemFile);
-
 		system.setCommandStack(new CommandStack());
-
 		// create PhysicalConfiguration
 		final SystemConfiguration sysConf = LibraryElementFactory.eINSTANCE.createSystemConfiguration();
 		system.setSystemConfiguration(sysConf);

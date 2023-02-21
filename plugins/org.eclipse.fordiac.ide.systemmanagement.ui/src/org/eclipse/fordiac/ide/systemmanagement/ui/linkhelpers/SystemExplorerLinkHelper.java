@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.systemmanagement.ui.linkhelpers;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -23,6 +22,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.ui.actions.OpenListener;
@@ -146,10 +146,8 @@ public class SystemExplorerLinkHelper implements ILinkHelper {
 
 	private static IFile getFileForModel(final EObject sel) {
 		final EObject root = EcoreUtil.getRootContainer(sel);
-		if (root instanceof AutomationSystem) {
-			return ((AutomationSystem) root).getSystemFile();
-		} else if (root instanceof FBType) {
-			return ((FBType) root).getTypeEntry().getFile();
+		if (root instanceof LibraryElement) {
+			return ((LibraryElement) root).getTypeEntry().getFile();
 		}
 		return null;
 	}

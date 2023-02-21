@@ -33,7 +33,7 @@ public class OpenResourceEditorAction extends AbstractOpenSystemElementListener 
 	@Override
 	public void run(final IAction action) {
 		if (null != res) {
-			openInSystemEditor(res.getAutomationSystem().getSystemFile(), res);
+			openInSystemEditor(res.getAutomationSystem().getTypeEntry().getFile(), res);
 		}
 	}
 

@@ -33,7 +33,7 @@ public class TypeLibRootElement implements IAdaptable {
 	@Override
 	public <T> T getAdapter(final Class<T> adapter) {
 		if ((adapter == IResource.class) || (adapter == IProject.class)) {
-			return adapter.cast(getSystem().getSystemFile().getProject());
+			return adapter.cast(getSystem().getTypeLibrary().getProject());
 		}
 		return null;
 	}

@@ -174,7 +174,7 @@ public enum SystemManager {
 	 *
 	 * @param system to be added */
 	public void removeSystem(final AutomationSystem system) {
-		removeSystem(system.getSystemFile());
+		removeSystem(system.getTypeEntry().getFile());
 	}
 
 	public synchronized void removeSystem(final IFile systemFile) {
@@ -192,9 +192,7 @@ public enum SystemManager {
 		final SystemEntry systemEntry = (SystemEntry) oldTypeLibrary.getTypeEntry(oldSystemFile);
 		if (null != systemEntry) {
 			oldTypeLibrary.removeTypeEntry(systemEntry);
-			final AutomationSystem system = systemEntry.getSystem();
 			systemEntry.setFile(newSystemFile);
-			system.setSystemFile(newSystemFile);
 			final TypeLibrary newTypeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(newSystemFile.getProject());
 			newTypeLibrary.addTypeEntry(systemEntry);
 			notifyListeners();
@@ -214,9 +212,7 @@ public enum SystemManager {
 		final SystemEntry systemEntry = (SystemEntry) typeLibrary.getTypeEntry(oldSystemFile);
 		if (null != systemEntry) {
 			typeLibrary.removeTypeEntry(systemEntry);
-			final AutomationSystem system = systemEntry.getSystem();
 			systemEntry.setFile(newSystemFile);
-			system.setSystemFile(newSystemFile);
 			typeLibrary.addTypeEntry(systemEntry);
 		}
 	}
@@ -236,13 +232,13 @@ public enum SystemManager {
 	}
 
 	public static void saveTagProvider(final AutomationSystem system, final ITagProvider tagProvider) {
-		final IProject project = system.getSystemFile().getProject();
+		final IProject project = system.getTypeLibrary().getProject();
 		final IPath projectPath = project.getLocation();
 		tagProvider.saveTagConfiguration(projectPath);
 	}
 
 	public String getReplacedString(final AutomationSystem system, final String value) {
-		final ArrayList<ITagProvider> tagProvider = getTagProviderList(system.getSystemFile().getProject());
+		final ArrayList<ITagProvider> tagProvider = getTagProviderList(system.getTypeLibrary().getProject());
 		String result = null;
 		for (final ITagProvider iTagProvider : tagProvider) {
 			result = iTagProvider.getReplacedString(value);
@@ -311,7 +307,7 @@ public enum SystemManager {
 	}
 
 	public ITagProvider getTagProvider(final Class<?> class1, final AutomationSystem system) {
-		final ArrayList<ITagProvider> tagProviderList = getTagProviderList(system.getSystemFile().getProject());
+		final ArrayList<ITagProvider> tagProviderList = getTagProviderList(system.getTypeLibrary().getProject());
 		for (final ITagProvider iTagProvider : tagProviderList) {
 			if (iTagProvider.getClass().equals(class1)) {
 				return iTagProvider;

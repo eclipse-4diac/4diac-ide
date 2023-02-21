@@ -239,14 +239,14 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return;
 		}
 		final SaveAsDialog saveAsDialog = new SaveAsDialog(getSite().getShell());
-		saveAsDialog.setOriginalName(system.getSystemFile().getName());
+		saveAsDialog.setOriginalName(getFile().getName());
 		saveAsDialog.open();
 		final IPath path = saveAsDialog.getResult();
 		if (path == null) {
 			return;
 		}
 
-		final IPath fullPath = system.getSystemFile().getFullPath();
+		final IPath fullPath = getFile().getFullPath();
 		if (fullPath.equals(path)) {
 			doSave(null);
 			return;
@@ -289,7 +289,7 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 	@Override
 	public IFile getFile() {
-		return system.getSystemFile();
+		return system.getTypeEntry().getFile();
 	}
 
 	@Override

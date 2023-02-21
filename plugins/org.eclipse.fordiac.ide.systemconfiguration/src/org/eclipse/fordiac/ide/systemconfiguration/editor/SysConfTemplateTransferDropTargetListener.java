@@ -60,7 +60,7 @@ public class SysConfTemplateTransferDropTargetListener extends TemplateTransferD
 	 */
 	public SysConfTemplateTransferDropTargetListener(final EditPartViewer viewer, final AutomationSystem system) {
 		super(viewer);
-		targetProject = (null != system) ? system.getSystemFile().getProject() : null;
+		targetProject = (null != system) ? system.getTypeLibrary().getProject() : null;
 	}
 
 	@Override

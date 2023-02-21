@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,23 +25,22 @@ import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 
 /**
- * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType} object.
+ * This is the item provider adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel} object.
  * <!-- begin-user-doc -->
  * <!-- end-user-doc -->
  * @generated
  */
-public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
+public class CommunicationChannelItemProvider extends FBItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public SimpleFBTypeItemProvider(AdapterFactory adapterFactory) {
+	public CommunicationChannelItemProvider(AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -61,14 +60,14 @@ public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
 	}
 
 	/**
-	 * This returns SimpleFBType.gif.
+	 * This returns CommunicationChannel.gif.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
 	@Override
 	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SimpleFBType")); //$NON-NLS-1$
+		return overlayImage(object, getResourceLocator().getImage("full/obj16/CommunicationChannel")); //$NON-NLS-1$
 	}
 
 	/**
@@ -79,10 +78,10 @@ public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((SimpleFBType)object).getName();
+		String label = ((CommunicationChannel)object).getName();
 		return label == null || label.length() == 0 ?
-			getString("_UI_SimpleFBType_type") : //$NON-NLS-1$
-			getString("_UI_SimpleFBType_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
+			getString("_UI_CommunicationChannel_type") : //$NON-NLS-1$
+			getString("_UI_CommunicationChannel_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 
@@ -109,33 +108,6 @@ public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
-
-		boolean qualify =
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM ||
-			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__METHODS;
-
-		if (qualify) {
-			return getString
-				("_UI_CreateChild_text2", //$NON-NLS-1$
-				 new Object[] { getTypeText(childObject), getFeatureText(childFeature), getTypeText(owner) });
-		}
-		return super.getCreateChildText(owner, feature, child, selection);
 	}
 
 }

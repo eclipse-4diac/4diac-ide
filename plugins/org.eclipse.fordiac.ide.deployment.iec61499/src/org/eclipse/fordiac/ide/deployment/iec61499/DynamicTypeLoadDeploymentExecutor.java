@@ -36,6 +36,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
@@ -397,12 +398,13 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				result = result.replaceFirst("</Response>", ""); //$NON-NLS-1$ //$NON-NLS-2$
 				if (!result.contains("Reason=\"UNSUPPORTED_TYPE\"") && !result.contains("Reason=\"UNSUPPORTED_CMD\"")) { //$NON-NLS-1$ //$NON-NLS-2$
 					final AutomationSystem system = res.getDevice().getAutomationSystem();
-					final Path path = Paths.get(system.getSystemFile().getLocation() + File.separator + "generated" //$NON-NLS-1$
+					final IFile sysFile = system.getTypeEntry().getFile();
+					final Path path = Paths.get(sysFile.getLocation() + File.separator + "generated" //$NON-NLS-1$
 							+ File.separator + typeName + "." + extension); //$NON-NLS-1$
 					final File file = new File(path.toString());
 					file.getParentFile().mkdirs();
 					Files.write(path, result.getBytes(), StandardOpenOption.CREATE);
-					TypeLibraryManager.INSTANCE.refreshTypeLib(system.getSystemFile());
+					TypeLibraryManager.INSTANCE.refreshTypeLib(sysFile);
 				}
 			}
 		} catch (final Exception e) {
