@@ -293,17 +293,26 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected CharSequence generateInOutCallArgument(INamedElement parameter, STCallArgument argument) {
-		if (argument === null)
-			'''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
-		else
-			argument.argument.generateExpression
+		switch (argument) {
+			case null: '''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
+			case (argument.argument instanceof STMemberAccessExpression) &&
+				(argument.argument as STMemberAccessExpression).
+					member instanceof STMultibitPartialExpression: '''ST_EXTEND_LIFETIME(«argument.argument.generateExpression»)'''
+			default:
+				argument.argument.generateExpression
+		}
 	}
 
 	def protected CharSequence generateOutputCallArgument(INamedElement parameter, STCallArgument argument) {
-		switch(argument) {
+		switch (argument) {
 			case null: '''ST_IGNORE_OUT_PARAM(«parameter.generateVariableDefaultValue»)'''
-			STCallNamedOutputArgument case argument.not: '''ST_EXTEND_LIFETIME(CIEC_ANY_BIT_NOT(«argument.argument.generateExpression»))'''
-			default: argument.argument.generateExpression
+			STCallNamedOutputArgument case argument.
+				not: '''ST_EXTEND_LIFETIME(CIEC_ANY_BIT_NOT(«argument.argument.generateExpression»))'''
+			case (argument.argument instanceof STMemberAccessExpression) &&
+				(argument.argument as STMemberAccessExpression).
+					member instanceof STMultibitPartialExpression: '''ST_EXTEND_LIFETIME(«argument.argument.generateExpression»)'''
+			default:
+				argument.argument.generateExpression
 		}
 	}
 
