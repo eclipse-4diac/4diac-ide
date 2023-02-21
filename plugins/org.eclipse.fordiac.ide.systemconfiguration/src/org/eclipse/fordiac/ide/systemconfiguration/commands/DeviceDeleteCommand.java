@@ -19,7 +19,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
@@ -44,20 +43,17 @@ public class DeviceDeleteCommand extends Command {
 		}
 		commands.execute();
 		deviceParent.getDevices().remove(device);
-		SystemManager.INSTANCE.notifyListeners();
 	}
 
 	@Override
 	public void undo() {
 		deviceParent.getDevices().add(device);
 		commands.undo();
-		SystemManager.INSTANCE.notifyListeners();
 	}
 
 	@Override
 	public void redo() {
 		commands.redo();
 		deviceParent.getDevices().remove(device);
-		SystemManager.INSTANCE.notifyListeners();
 	}
 }

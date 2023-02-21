@@ -20,7 +20,6 @@ import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -58,7 +57,6 @@ public class ResourceDeleteCommand extends Command {
 		if (device != null) {
 			device.getResource().remove(resource);
 		}
-		SystemManager.INSTANCE.notifyListeners();
 	}
 
 	private void closeResourceEditor() {
@@ -73,7 +71,6 @@ public class ResourceDeleteCommand extends Command {
 			device.getResource().add(resource);
 		}
 		commands.undo();
-		SystemManager.INSTANCE.notifyListeners();
 	}
 
 	@Override
@@ -82,6 +79,5 @@ public class ResourceDeleteCommand extends Command {
 		if (device != null) {
 			device.getResource().remove(resource);
 		}
-		SystemManager.INSTANCE.notifyListeners();
 	}
 }
