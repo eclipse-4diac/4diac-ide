@@ -112,7 +112,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		final DataLayer inputDataLayer = setupDataLayer(structMemberProvider);
 		initTypeSelection(getType().getTypeLibrary().getDataTypeLibrary());
 		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, new VarDeclarationColumnProvider(),
-				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this);
+				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, Boolean.FALSE);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
 		natTable.configure();
 	}
@@ -188,7 +188,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			final VarDeclaration varEntry = (VarDeclaration) entry;
 			cmd.add(new InsertVariableCommand(getType().getMemberVariables(), varEntry, index));

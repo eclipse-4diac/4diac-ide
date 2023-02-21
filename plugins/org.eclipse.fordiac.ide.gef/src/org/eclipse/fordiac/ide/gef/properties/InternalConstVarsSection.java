@@ -12,6 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import java.util.ArrayList;
+
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
@@ -46,7 +48,7 @@ public class InternalConstVarsSection extends AbstractInternalVarsSection {
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
-		provider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
+		provider = new VarDeclarationListProvider(new ArrayList<>(), new VarDeclarationColumnAccessor(this, null));
 		final DataLayer dataLayer = new DataLayer(provider);
 		final IConfigLabelAccumulator dataLayerLabelAccumulator = dataLayer.getConfigLabelAccumulator();
 		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
@@ -56,16 +58,15 @@ public class InternalConstVarsSection extends AbstractInternalVarsSection {
 			if (columnPosition == I4diacNatTableUtil.TYPE) {
 				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
 			}
-			if (columnPosition == I4diacNatTableUtil.NAME
-					|| columnPosition == I4diacNatTableUtil.COMMENT) {
+			if (columnPosition == I4diacNatTableUtil.NAME || columnPosition == I4diacNatTableUtil.COMMENT) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
 			}
 			if (columnPosition == I4diacNatTableUtil.INITIAL_VALUE) {
 				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
 			}
 		});
-		table = NatTableWidgetFactory.createRowNatTable(composite,
-				dataLayer, new VarDeclarationColumnProvider(), IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this);
+		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new VarDeclarationColumnProvider(),
+				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, Boolean.FALSE);
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 		table.configure();
 
@@ -94,20 +95,18 @@ public class InternalConstVarsSection extends AbstractInternalVarsSection {
 		return getType().getInternalConstVars().indexOf(varConst) + 1;
 	}
 
-
 	@Override
 	public Object getEntry(final int index) {
 		return getType().getInternalConstVars().get(index);
 	}
 
 	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			final VarDeclaration varEntry = (VarDeclaration) entry;
 			cmd.add(new InsertVariableCommand(getType().getInternalConstVars(), varEntry, index));
 		}
 	}
-
 
 	public Object removeEntry(final int index, final CompoundCommand cmd) {
 		final VarDeclaration entry = (VarDeclaration) getEntry(index);

@@ -187,7 +187,11 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 		@SuppressWarnings("unchecked")
 		final EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaceElementList;
 		final int insertionPos = index == -1 ? temp.size() : index;
-		temp.add(insertionPos, newInterfaceElement);
+		if (insertionPos > temp.size()) {
+			temp.add(newInterfaceElement);
+		} else {
+			temp.add(insertionPos, newInterfaceElement);
+		}
 	}
 
 	private void createAdapterCreateCommand() {

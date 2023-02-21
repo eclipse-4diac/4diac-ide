@@ -75,10 +75,10 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 	}
 
 	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof Event) {
 			final Event entry2 = (Event) entry;
-			cmd.add(newInsertCommand(entry2, entry2.isIsInput(), index));
+			cmd.add(newInsertCommand(entry2, isInput, index));
 		}
 	}
 
@@ -89,10 +89,10 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		outputProvider = new EventListProvider(this, null);
+		outputProvider = new EventListProvider(this, new ArrayList<>());
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this);
+				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, Boolean.FALSE);
 	}
 
 	@Override
@@ -101,10 +101,10 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		inputProvider = new EventListProvider(this, null);
+		inputProvider = new EventListProvider(this, new ArrayList<>());
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this);
+				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, Boolean.TRUE);
 	}
 
 	@Override

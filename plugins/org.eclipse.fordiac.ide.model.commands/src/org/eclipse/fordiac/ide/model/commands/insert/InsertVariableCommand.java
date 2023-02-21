@@ -22,12 +22,12 @@ import org.eclipse.gef.commands.Command;
 
 public class InsertVariableCommand extends Command {
 
-	private VarDeclaration type;
+	private final VarDeclaration type;
 	private VarDeclaration varDecl;
-	private EList<VarDeclaration> list;
-	private int index;
+	private final EList<VarDeclaration> list;
+	private final int index;
 
-	public InsertVariableCommand(final EList<VarDeclaration> list, VarDeclaration type, int index) {
+	public InsertVariableCommand(final EList<VarDeclaration> list, final VarDeclaration type, final int index) {
 		this.list = list;
 		this.type = type;
 		this.index = index;
@@ -40,8 +40,8 @@ public class InsertVariableCommand extends Command {
 		varDecl.setTypeName(type.getType().getName());
 		varDecl.setComment(type.getComment());
 		varDecl.setArraySize(type.getArraySize());
-		Value value = LibraryElementFactory.eINSTANCE.createValue();
-		Value typeValue = type.getValue();
+		final Value value = LibraryElementFactory.eINSTANCE.createValue();
+		final Value typeValue = type.getValue();
 		value.setValue((typeValue == null) ? "" : typeValue.getValue()); //$NON-NLS-1$
 		varDecl.setValue(value);
 		redo();
@@ -50,7 +50,11 @@ public class InsertVariableCommand extends Command {
 
 	@Override
 	public void redo() {
-		getVariableList().add(index, varDecl);
+		if (index > list.size()) {
+			list.add(varDecl);
+		} else {
+			list.add(index, varDecl);
+		}
 	}
 
 	@Override
