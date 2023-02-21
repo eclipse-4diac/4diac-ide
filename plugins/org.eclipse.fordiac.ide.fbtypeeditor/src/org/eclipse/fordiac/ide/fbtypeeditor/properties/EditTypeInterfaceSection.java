@@ -62,7 +62,7 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
 				new VarDeclarationWithVarConfigColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this,
-				Boolean.TRUE);
+				true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.addConfiguration(new CheckBoxConfigurationNebula());
 		inputTable.configure();

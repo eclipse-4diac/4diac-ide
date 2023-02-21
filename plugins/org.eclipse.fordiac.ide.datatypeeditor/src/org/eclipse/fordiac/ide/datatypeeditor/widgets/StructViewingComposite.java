@@ -112,7 +112,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		final DataLayer inputDataLayer = setupDataLayer(structMemberProvider);
 		initTypeSelection(getType().getTypeLibrary().getDataTypeLibrary());
 		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, new VarDeclarationColumnProvider(),
-				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, Boolean.FALSE);
+				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
 		natTable.configure();
 	}

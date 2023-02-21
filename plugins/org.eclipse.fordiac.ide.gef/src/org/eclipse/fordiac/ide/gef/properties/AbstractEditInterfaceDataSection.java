@@ -125,8 +125,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		outputProvider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this,
-				Boolean.FALSE);
+				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.configure();
 	}
@@ -141,8 +140,7 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		inputProvider = new VarDeclarationListProvider(new ArrayList<>(), new VarDeclarationColumnAccessor(this, null));
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this,
-				Boolean.TRUE);
+				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.configure();
 	}

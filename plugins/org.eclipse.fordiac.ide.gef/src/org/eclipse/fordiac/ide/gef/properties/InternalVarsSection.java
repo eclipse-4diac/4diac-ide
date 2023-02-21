@@ -84,7 +84,7 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 			}
 		});
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new VarDeclarationColumnProvider(),
-				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, Boolean.FALSE);
+				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, false);
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 		table.configure();
 
