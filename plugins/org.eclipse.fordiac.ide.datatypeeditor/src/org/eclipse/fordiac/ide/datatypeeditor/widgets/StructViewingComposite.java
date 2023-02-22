@@ -52,8 +52,8 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -117,27 +117,39 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 		natTable.configure();
 	}
 
-	public DataLayer setupDataLayer(final ListDataProvider outputProvider) {
-		final DataLayer dataLayer = new DataLayer(outputProvider);
+	private static DataLayer setupDataLayer(final VarDeclarationListProvider provider) {
+		final DataLayer dataLayer = new DataLayer(provider);
 		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
 
 		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
 			if (labelAcc != null) {
 				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
 			}
-			if (columnPosition == I4diacNatTableUtil.TYPE) {
-				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
-			}
-
-			if (columnPosition == I4diacNatTableUtil.NAME || columnPosition == I4diacNatTableUtil.COMMENT) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			}
-
-			if (columnPosition == I4diacNatTableUtil.INITIAL_VALUE) {
-				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
-			}
+			configureLabels(provider, configLabels, columnPosition, rowPosition);
 		});
 		return dataLayer;
+	}
+
+	private static void configureLabels(final VarDeclarationListProvider provider, final LabelStack configLabels,
+			final int columnPosition, final int rowPosition) {
+		switch (columnPosition) {
+		case I4diacNatTableUtil.TYPE:
+			configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+			break;
+		case I4diacNatTableUtil.INITIAL_VALUE:
+			final VarDeclaration rowItem = provider.getRowObject(rowPosition);
+			if (rowItem.getValue().hasError()) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+			}
+			configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
+			break;
+		case I4diacNatTableUtil.NAME:
+		case I4diacNatTableUtil.COMMENT:
+			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			break;
+		default:
+			break;
+		}
 	}
 
 	private DataType getDataType() {

@@ -33,9 +33,9 @@ import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -188,13 +188,13 @@ public class ErrorMarkerBuilder {
 
 	private static IFile getFileFromRef(final ErrorMarkerRef ie) {
 		final EObject rootContainer = EcoreUtil.getRootContainer(ie);
-		IFile systemFile = null;
+		IFile file = null;
 		if (rootContainer instanceof AutomationSystem) {
-			systemFile = ((AutomationSystem) rootContainer).getSystemFile();
-		} else if (rootContainer instanceof FBType) {
-			systemFile = ((FBType) rootContainer).getTypeEntry().getFile();
+			file = ((AutomationSystem) rootContainer).getSystemFile();
+		} else if (rootContainer instanceof LibraryElement) {
+			file = ((LibraryElement) rootContainer).getTypeEntry().getFile();
 		}
-		return systemFile;
+		return file;
 	}
 
 	public static ErrorMarkerBuilder deleteErrorMarker(final ErrorMarkerRef ie) {
