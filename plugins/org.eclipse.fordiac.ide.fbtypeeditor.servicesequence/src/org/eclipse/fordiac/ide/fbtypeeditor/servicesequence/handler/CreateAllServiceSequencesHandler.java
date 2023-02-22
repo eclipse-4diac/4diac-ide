@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
@@ -50,41 +49,35 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 
-		FBType fbtype = ((BasicFBType) ((EditPart) selection.getFirstElement()).getModel());
+		final FBType fbtype = ((BasicFBType) ((EditPart) selection.getFirstElement()).getModel());
 
 		if ((selection.getFirstElement() instanceof SequenceRootEditPart) && (selection.toList().size() == 1)) {
-			final CreateServiceSequenceCommand cmd = new CreateServiceSequenceCommand(
-					((FBType) ((EditPart) selection.getFirstElement()).getModel()).getService());
-			if (cmd.canExecute()) {
-				cmd.execute();
-			}
-			final ServiceSequence seq = (ServiceSequence) cmd.getCreatedElement();
 
 			final Set<Set<Object>> allCombinationsSimple = getAllCombinationsOfEvents(
 					((FBType) ((EditPart) selection.getFirstElement()).getModel()).getInterfaceList().getEventInputs()
 							.stream().toArray());
 
-			// final Set<Set<Object>> allCombinationsQuadratic = getAllCombinationsOfEvents(
-			// allCombinationsSimple.toArray());
-
-			// for (final Set<Object> set2 :
-			// allCombinationsQuadratic) {
-			// System.out.println(set2.toString());
-			// }
-
 			final EList<ECState> states = ((BasicFBType) fbtype).getECC().getECState();
 
 			final List<InputObject> combinations = getAllCombinationsWithStartStates(allCombinationsSimple, states);
 
-			fbtype = seq.getService().getFBType();
-			setParameters(fbtype, new ArrayList<>());
+			RecordServiceSequenceHandler.setParameters(fbtype, new ArrayList<>());
 
 			final List<EventManager> eventManagers = createEventManagers(fbtype, combinations);
 
 			for (final EventManager eventManager : eventManagers) {
 				EventManagerUtils.process(eventManager);
 
+				final CreateServiceSequenceCommand cmd = new CreateServiceSequenceCommand(
+						((FBType) ((EditPart) selection.getFirstElement()).getModel()).getService());
+				if (cmd.canExecute()) {
+					cmd.execute();
+				}
+				final ServiceSequence seq = (ServiceSequence) cmd.getCreatedElement();
+				seq.setStartState(combinations.get(eventManagers.indexOf(eventManager)).getStartState().getName());
+
 				for (final Transaction transaction : eventManager.getTransactions()) {
+
 					ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbtype, (FBTransaction) transaction);
 				}
 			}
@@ -128,16 +121,6 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 		}
 
 		return eventmanagers;
-	}
-
-	static void setParameters(final FBType fbType, final List<String> parameters) {
-		// parameter: format "VarName:=Value"
-		for (final String param : parameters) {
-			final String[] paramValues = param.split(":="); //$NON-NLS-1$
-			if (paramValues.length == 2) {
-				VariableUtils.setVariable(fbType, paramValues[0], paramValues[1]);
-			}
-		}
 	}
 
 	public static class InputObject {
