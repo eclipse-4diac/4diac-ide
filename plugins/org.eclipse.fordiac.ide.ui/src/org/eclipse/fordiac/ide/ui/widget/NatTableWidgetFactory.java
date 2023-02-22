@@ -158,6 +158,7 @@ public final class NatTableWidgetFactory {
 			@Override
 			public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
 				uiBindingRegistry.unregisterKeyBinding(new KeyEventMatcher(SWT.MOD1, 'c'));
+				uiBindingRegistry.unregisterKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'));
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'c'), new CopyDataFromTableAction());
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'v'),
 						new PasteDataIntoTableAction(section));

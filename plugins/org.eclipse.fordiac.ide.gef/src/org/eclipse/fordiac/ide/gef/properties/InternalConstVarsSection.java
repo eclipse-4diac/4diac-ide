@@ -90,9 +90,10 @@ public class InternalConstVarsSection extends AbstractInternalVarsSection {
 		}
 	}
 
-	public Object removeEntry(final int index, final CompoundCommand cmd) {
-		final VarDeclaration entry = (VarDeclaration) getEntry(index);
-		cmd.add(new DeleteInternalConstVariableCommand(getType(), entry));
-		return entry;
+	@Override
+	public void removeEntry(final Object entry, final CompoundCommand cmd) {
+		if (entry instanceof VarDeclaration) {
+			cmd.add(new DeleteInternalConstVariableCommand(getType(), (VarDeclaration) entry));
+		}
 	}
 }

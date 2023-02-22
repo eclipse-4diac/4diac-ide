@@ -175,4 +175,11 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 		typeSelection.put("FB Types", typeLib.getFbTypes().values().stream() //$NON-NLS-1$
 				.map(FBTypeEntry::getTypeName).collect(Collectors.toList()));
 	}
+
+	@Override
+	public void removeEntry(final Object entry, final CompoundCommand cmd) {
+		if (entry instanceof FB) {
+			cmd.add(new DeleteInternalFBCommand(getType(), (FB) entry));
+		}
+	}
 }

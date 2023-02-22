@@ -151,6 +151,13 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	}
 
 	@Override
+	public void removeEntry(final Object entry, final CompoundCommand cmd) {
+		if (entry instanceof VarDeclaration) {
+			cmd.add(newDeleteCommand((IInterfaceElement) entry));
+		}
+	}
+
+	@Override
 	public void setupOutputTable(final Group outputsGroup) {
 		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
 		if (isEditable()) {
