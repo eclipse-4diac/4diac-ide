@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2022 Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2008, 2023 Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +13,7 @@
  *   Alois Zoitl, Gerhard Ebenhofer
  *       - initial API and implementation and/or initial documentation
  *   Alois Zoitl - extracted from ChangeDataTypeCommand
+ *   Martin Jobst - refactored additional commands
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
@@ -25,39 +27,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 
 public class ChangeAdapterTypeCommand extends ChangeDataTypeCommand {
 
-	private UpdateFBTypeCommand updateTypeCmd = null;
-
 	public ChangeAdapterTypeCommand(final AdapterDeclaration adapter, final AdapterType adpType) {
 		super(adapter, adpType);
-	}
-
-	@Override
-	public void execute() {
-		super.execute();
-		handleAdapter();
-	}
-
-	@Override
-	public void undo() {
-		super.undo();
-		if (null != updateTypeCmd) {
-			updateTypeCmd.undo();
-		}
-	}
-
-	@Override
-	public void redo() {
-		super.redo();
-		if (null != updateTypeCmd) {
-			updateTypeCmd.redo();
-		}
-	}
-
-	private void handleAdapter() {
 		if ((getInterfaceElement().eContainer().eContainer() instanceof CompositeFBType)
 				&& (!(getInterfaceElement().eContainer().eContainer() instanceof SubAppType))) {
-			updateTypeCmd = new ChangeAdapterFBCommand((AdapterDeclaration) getInterfaceElement());
-			updateTypeCmd.execute();
+			getAdditionalCommands().add(new ChangeAdapterFBCommand((AdapterDeclaration) getInterfaceElement()));
 		}
 	}
 

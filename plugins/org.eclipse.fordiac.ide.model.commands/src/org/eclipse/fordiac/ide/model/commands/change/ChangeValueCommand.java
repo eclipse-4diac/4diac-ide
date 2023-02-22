@@ -19,47 +19,29 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
-import org.eclipse.fordiac.ide.model.commands.Messages;
-import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CompoundCommand;
 
-public class ChangeValueCommand extends Command {
-
-	private static final String CHANGE = Messages.ChangeValueCommand_LABEL_ChangeValue;
-	private VarDeclaration variable;
+public class ChangeValueCommand extends AbstractChangeInterfaceElementCommand {
 	private VarDeclaration mirroredVar; // the variable of the mapped entity
-	private String newValue;
+	private final String newValue;
 	private String oldValue;
-	private String newErrorMessage;
-	private String oldErrorMessage;
-	private final CompoundCommand errorMarkerUpdateCmds = new CompoundCommand();
 
 	public ChangeValueCommand(final VarDeclaration variable, final String value) {
-		this.variable = variable;
+		super(variable);
 		newValue = (null == value) ? "" : value; //$NON-NLS-1$ //always ensure a valid value
 	}
 
 	@Override
 	public boolean canExecute() {
-		return variable != null && variable.getType() != null;
-	}
-
-	public ChangeValueCommand() {
-		super(CHANGE);
+		return getInterfaceElement() != null && getInterfaceElement().getType() != null;
 	}
 
 	@Override
-	public void execute() {
+	protected void doExecute() {
+		final VarDeclaration variable = getInterfaceElement();
 		mirroredVar = getMirroredVariable();
 		if (null == variable.getValue()) {
 			variable.setValue(LibraryElementFactory.eINSTANCE.createValue());
@@ -67,52 +49,29 @@ public class ChangeValueCommand extends Command {
 				mirroredVar.setValue(LibraryElementFactory.eINSTANCE.createValue());
 			}
 			oldValue = ""; //$NON-NLS-1$
-			oldErrorMessage = ""; //$NON-NLS-1$
 		} else {
 			oldValue = variable.getValue().getValue();
-			oldErrorMessage = variable.getValue().getErrorMessage();
-			if (oldErrorMessage == null) {
-				oldErrorMessage = ""; //$NON-NLS-1$
-			}
 		}
 		variable.getValue().setValue(newValue);
-		newErrorMessage = VariableOperations.validateValue(variable);
-		variable.getValue().setErrorMessage(newErrorMessage);
 		setMirroredVar(newValue);
-		handleErrorMarker();
-		errorMarkerUpdateCmds.execute();
-	}
-
-	private void handleErrorMarker() {
-		if (!oldErrorMessage.isBlank()) {
-			errorMarkerUpdateCmds.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(
-					FordiacMarkerHelper.findMarkers(variable.getValue(), FordiacErrorMarker.INITIAL_VALUE_MARKER)));
-		}
-		if (!newErrorMessage.isBlank()) {
-			ErrorMessenger.popUpErrorMessage(newErrorMessage);
-			errorMarkerUpdateCmds.add(FordiacMarkerCommandHelper
-					.newCreateMarkersCommand(ErrorMarkerBuilder.createErrorMarkerBuilder(newErrorMessage)
-							.setType(FordiacErrorMarker.INITIAL_VALUE_MARKER).setTarget(variable.getValue())));
-		}
 	}
 
 	@Override
-	public void undo() {
+	protected void doUndo() {
+		final VarDeclaration variable = getInterfaceElement();
 		variable.getValue().setValue(oldValue);
-		variable.getValue().setErrorMessage(oldErrorMessage);
 		setMirroredVar(oldValue);
-		errorMarkerUpdateCmds.undo();
 	}
 
 	@Override
-	public void redo() {
+	protected void doRedo() {
+		final VarDeclaration variable = getInterfaceElement();
 		variable.getValue().setValue(newValue);
-		variable.getValue().setErrorMessage(newErrorMessage);
 		setMirroredVar(newValue);
-		errorMarkerUpdateCmds.redo();
 	}
 
 	private VarDeclaration getMirroredVariable() {
+		final VarDeclaration variable = getInterfaceElement();
 		if ((null != variable.getFBNetworkElement()) && variable.getFBNetworkElement().isMapped()) {
 			final FBNetworkElement opposite = variable.getFBNetworkElement().getOpposite();
 			if (null != opposite) {
@@ -129,5 +88,10 @@ public class ChangeValueCommand extends Command {
 		if (null != mirroredVar) {
 			mirroredVar.getValue().setValue(val);
 		}
+	}
+
+	@Override
+	public VarDeclaration getInterfaceElement() {
+		return (VarDeclaration) super.getInterfaceElement();
 	}
 }
