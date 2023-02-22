@@ -166,15 +166,8 @@ public enum SystemManager {
 	}
 
 	public synchronized AutomationSystem replaceSystemFromFile(final AutomationSystem system, final IFile file) {
-		removeSystem(system);
-		return SystemManager.INSTANCE.getSystem(file);
-	}
-
-	/** Remove a system from the set of systems managed by the system manager
-	 *
-	 * @param system to be added */
-	public void removeSystem(final AutomationSystem system) {
 		removeSystem(system.getTypeEntry().getFile());
+		return SystemManager.INSTANCE.getSystem(file);
 	}
 
 	public synchronized void removeSystem(final IFile systemFile) {
@@ -184,36 +177,6 @@ public enum SystemManager {
 			typeLibrary.removeTypeEntry(refSystemEntry);
 			closeAllSystemEditors(refSystemEntry.getSystem());
 			notifyListeners();
-		}
-	}
-
-	public synchronized void moveSystemToNewProject(final IFile oldSystemFile, final IFile newSystemFile) {
-		final TypeLibrary oldTypeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(oldSystemFile.getProject());
-		final SystemEntry systemEntry = (SystemEntry) oldTypeLibrary.getTypeEntry(oldSystemFile);
-		if (null != systemEntry) {
-			oldTypeLibrary.removeTypeEntry(systemEntry);
-			systemEntry.setFile(newSystemFile);
-			final TypeLibrary newTypeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(newSystemFile.getProject());
-			newTypeLibrary.addTypeEntry(systemEntry);
-			notifyListeners();
-		}
-	}
-
-	/** Search for a system with the old System file and change it to the new file entry
-	 *
-	 * @param targetProject the project where to search for the system file, this may be different the old system file's
-	 *                      project in case of project renames
-	 * @param oldSystemFile
-	 * @param newSystemFile */
-	@SuppressWarnings("static-method")
-	public synchronized void updateSystemFile(final IProject targetProject, final IFile oldSystemFile,
-			final IFile newSystemFile) {
-		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(oldSystemFile.getProject());
-		final SystemEntry systemEntry = (SystemEntry) typeLibrary.getTypeEntry(oldSystemFile);
-		if (null != systemEntry) {
-			typeLibrary.removeTypeEntry(systemEntry);
-			systemEntry.setFile(newSystemFile);
-			typeLibrary.addTypeEntry(systemEntry);
 		}
 	}
 

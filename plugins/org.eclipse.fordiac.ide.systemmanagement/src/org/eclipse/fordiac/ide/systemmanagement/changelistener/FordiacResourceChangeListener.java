@@ -473,36 +473,26 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private void handleFileMoveBetweenProjects(final IFile src, final IFile dst) {
-		if (isSystemFile(src)) {
-			systemManager.moveSystemToNewProject(src, dst);
-		} else {
-			final TypeLibrary srcTypeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(src.getProject());
-			final TypeEntry entry = srcTypeLib.getTypeEntry(src);
-			if (null != entry) {
-				srcTypeLib.removeTypeEntry(entry);
-				entry.setFile(dst);
-				final TypeLibrary dstTypeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(dst.getProject());
-				dstTypeLib.addTypeEntry(entry);
-			}
+	private static void handleFileMoveBetweenProjects(final IFile src, final IFile dst) {
+		final TypeLibrary srcTypeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(src.getProject());
+		final TypeEntry entry = srcTypeLib.getTypeEntry(src);
+		if (null != entry) {
+			srcTypeLib.removeTypeEntry(entry);
+			entry.setFile(dst);
+			final TypeLibrary dstTypeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(dst.getProject());
+			dstTypeLib.addTypeEntry(entry);
 		}
 	}
 
-	private void handleFileAfterProjectRename(final IFile src, final IFile dst) {
-		if (isSystemFile(src)) {
-			systemManager.updateSystemFile(dst.getProject(), src, dst);  // if loaded the system should already be in
-			// the list of the new project
+	private static void handleFileAfterProjectRename(final IFile src, final IFile dst) {
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(dst.getProject());
+		final TypeEntry entry = typeLib.getTypeEntry(src);
+		if (entry == null) {
+			// we have to create the entry
+			typeLib.createTypeEntry(dst);
 		} else {
-			final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(dst.getProject());
-			final TypeEntry entry = typeLib.getTypeEntry(src);
-			if (entry == null) {
-				// we have to create the entry
-				typeLib.createTypeEntry(dst);
-			} else {
-				entry.setFile(dst);
-			}
+			entry.setFile(dst);
 		}
-
 	}
 
 	private void handleFileRename(final IFile dst, final IFile src) {
