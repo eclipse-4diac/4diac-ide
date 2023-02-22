@@ -35,8 +35,6 @@ import org.eclipse.xtext.resource.IResourceServiceProvider
 import org.eclipse.xtext.resource.XtextResourceSet
 import org.eclipse.xtext.validation.Issue
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
-
 class StructuredTextParseUtil extends ParseUtil {
 	static final URI SYNTHETIC_URI = URI.createURI("__synthetic.stalg")
 	static final IResourceServiceProvider SERVICE_PROVIDER = IResourceServiceProvider.Registry.INSTANCE.
@@ -49,7 +47,7 @@ class StructuredTextParseUtil extends ParseUtil {
 		List<String> errors, List<String> warnings, List<String> infos) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		extension val partitioner = SERVICE_PROVIDER.get(STAlgorithmPartitioner)
-		switch (root : algorithm.rootContainer) {
+		switch (root : algorithm.eContainer) {
 			BaseFBType:
 				(root.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, root.name, root, errors, warnings,
 					infos)?.rootASTElement as STAlgorithmSource)?.elements?.filter(
@@ -66,7 +64,7 @@ class StructuredTextParseUtil extends ParseUtil {
 		List<String> errors, List<String> warnings, List<String> infos) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
 		extension val partitioner = SERVICE_PROVIDER.get(STAlgorithmPartitioner)
-		switch (root : method.rootContainer) {
+		switch (root : method.eContainer) {
 			BaseFBType:
 				(root.combine.parse(parser.grammarAccess.STAlgorithmSourceRule, root.name, root, errors, warnings,
 					infos)?.rootASTElement as STAlgorithmSource)?.elements?.filter(
