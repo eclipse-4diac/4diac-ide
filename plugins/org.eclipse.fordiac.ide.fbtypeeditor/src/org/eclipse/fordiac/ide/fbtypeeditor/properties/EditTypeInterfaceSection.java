@@ -39,7 +39,7 @@ import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
+import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.swt.widgets.Group;
 
 public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
@@ -69,25 +69,12 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 	}
 
 	@Override
-	protected DataLayer setupDataLayer(final ListDataProvider<VarDeclaration> provider) {
-		final DataLayer dataLayer = new DataLayer(provider);
-		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
-
-		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			if (labelAcc != null) {
-				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-			}
-			if (isEditable() && columnPosition == I4diacNatTableUtil.TYPE) {
-				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
-			} else if (isEditable() && columnPosition == I4diacNatTableUtil.INITIAL_VALUE) {
-				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
-			} else if (columnPosition == I4diacNatTableUtil.NAME || columnPosition == I4diacNatTableUtil.COMMENT) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			} else if (columnPosition == I4diacNatTableUtil.VAR_CONFIG) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
-			}
-		});
-		return dataLayer;
+	protected void configureLabels(final ListDataProvider<VarDeclaration> provider, final LabelStack configLabels,
+			final int columnPosition, final int rowPosition) {
+		super.configureLabels(provider, configLabels, columnPosition, rowPosition);
+		if (columnPosition == I4diacNatTableUtil.VAR_CONFIG) {
+			configLabels.addLabelOnTop(NatTableWidgetFactory.CHECKBOX_CELL);
+		}
 	}
 
 	@Override

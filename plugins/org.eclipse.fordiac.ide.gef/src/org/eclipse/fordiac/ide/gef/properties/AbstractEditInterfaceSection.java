@@ -55,6 +55,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -64,7 +65,7 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> extends AbstractSection
-		implements I4diacNatTableUtil {
+implements I4diacNatTableUtil {
 
 	protected ListDataProvider<T> inputProvider;
 	protected NatTable inputTable;
@@ -154,7 +155,7 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value,
 			final TableViewer viewer) {
 		final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[((Integer) value)
-				.intValue()];
+		                                                                                         .intValue()];
 		return newChangeTypeCommand(data, getDataTypeLib().getType(dataTypeName));
 	}
 
@@ -226,26 +227,46 @@ public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> 
 			if (labelAcc != null) {
 				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
 			}
-			if (isEditable() && columnPosition == I4diacNatTableUtil.TYPE) {
-				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
-			} else if (isEditable() && columnPosition == I4diacNatTableUtil.INITIAL_VALUE) {
-				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
-			} else if (columnPosition == I4diacNatTableUtil.NAME || columnPosition == I4diacNatTableUtil.COMMENT) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			}
+			configureLabels(provider, configLabels, columnPosition, rowPosition);
 		});
 		return dataLayer;
+	}
+
+	protected void configureLabels(final ListDataProvider<T> provider, final LabelStack configLabels,
+			final int columnPosition, final int rowPosition) {
+		switch (columnPosition) {
+		case I4diacNatTableUtil.TYPE:
+			if (isEditable()) {
+				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+			}
+			break;
+		case I4diacNatTableUtil.INITIAL_VALUE:
+			if (isEditable()) {
+				final VarDeclaration rowItem = (VarDeclaration) provider.getRowObject(rowPosition);
+				if (rowItem.getValue() != null && rowItem.getValue().hasError()) {
+					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+				}
+				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
+			}
+			break;
+		case I4diacNatTableUtil.NAME:
+		case I4diacNatTableUtil.COMMENT:
+			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			break;
+		default:
+			break;
+		}
 	}
 
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
 		final List<String> elementaryTypes = new ArrayList<>();
 		dataTypeLib.getDataTypesSorted().stream().filter(type -> !(type instanceof StructuredType))
-				.forEach(type -> elementaryTypes.add(type.getName()));
+		.forEach(type -> elementaryTypes.add(type.getName()));
 		typeSelection.put("Elementary Types", elementaryTypes); //$NON-NLS-1$
 
 		final List<String> structuredTypes = new ArrayList<>();
 		dataTypeLib.getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
-				.forEach(type -> structuredTypes.add(type.getName()));
+		.forEach(type -> structuredTypes.add(type.getName()));
 		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
 }
