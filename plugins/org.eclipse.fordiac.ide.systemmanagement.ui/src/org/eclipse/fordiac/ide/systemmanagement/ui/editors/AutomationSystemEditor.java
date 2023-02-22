@@ -108,12 +108,9 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	private void loadSystem() {
-
 		if (getEditorInput() instanceof FileEditorInput) {
-			system = SystemManager.INSTANCE.getSystem(((FileEditorInput) getEditorInput()).getFile()); // register as
-			// listener and
-			// call this
-			// method
+			system = SystemManager.INSTANCE.getSystem(((FileEditorInput) getEditorInput()).getFile());
+			// register as listener and call this method
 			if (null != system) {
 				getCommandStack().addCommandStackEventListener(this);
 				getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
@@ -313,10 +310,12 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 		final String path = getBreadcrumb().serializePath();
 
-		system = SystemManager.INSTANCE.replaceSystemFromFile(system, getFile());
-
+		final SystemEntry typeEntry = (SystemEntry) system.getTypeEntry();
+		typeEntry.setSystem(null);
+		system = typeEntry.getSystem();
 		system.setCommandStack(commandStack);
 		getCommandStack().flush();
+		setPartName(system.getName());
 
 		if (!getBreadcrumb().openPath(path, system)) {
 			if (!system.getApplication().isEmpty()) {

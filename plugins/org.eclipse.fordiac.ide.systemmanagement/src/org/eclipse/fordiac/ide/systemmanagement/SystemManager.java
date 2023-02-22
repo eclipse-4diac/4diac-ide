@@ -61,9 +61,6 @@ import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceCh
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.xtext.ui.XtextProjectHelper;
 
 /** The Class SystemManager.
@@ -163,21 +160,6 @@ public enum SystemManager {
 	public synchronized void renameProject(final IProject oldProject, final IProject newProject) {
 		TypeLibraryManager.INSTANCE.renameProject(oldProject, newProject);
 		notifyListeners();
-	}
-
-	public synchronized AutomationSystem replaceSystemFromFile(final AutomationSystem system, final IFile file) {
-		removeSystem(system.getTypeEntry().getFile());
-		return SystemManager.INSTANCE.getSystem(file);
-	}
-
-	public synchronized void removeSystem(final IFile systemFile) {
-		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject());
-		final SystemEntry refSystemEntry = (SystemEntry) typeLibrary.getTypeEntry(systemFile);
-		if (null != refSystemEntry) {
-			typeLibrary.removeTypeEntry(refSystemEntry);
-			closeAllSystemEditors(refSystemEntry.getSystem());
-			notifyListeners();
-		}
 	}
 
 	/** Load system.
@@ -304,14 +286,6 @@ public enum SystemManager {
 
 	private static String[] getBuilderIDs() {
 		return new String[] { XtextProjectHelper.BUILDER_ID };
-	}
-
-	private static void closeAllSystemEditors(final AutomationSystem refSystem) {
-		// display related stuff needs to run in a display thread
-		Display.getDefault().asyncExec(
-				() -> EditorUtils.closeEditorsFiltered((final IEditorPart editor) -> (editor instanceof ISystemEditor)
-						&& (refSystem.equals(((ISystemEditor) editor).getSystem()))));
-
 	}
 
 	/** Notify listeners. */

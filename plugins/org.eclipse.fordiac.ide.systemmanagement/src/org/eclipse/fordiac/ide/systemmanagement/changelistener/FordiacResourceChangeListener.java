@@ -325,22 +325,19 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(delta.getResource().getProject());
 		final IFile file = (IFile) delta.getResource();
 
-		if (isSystemFile(file)) {
-			systemManager.removeSystem(file);
-		} else {
-			final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-			if (null != entry) {
-				closeAllEditorsForFile(file);
-				final FileToRenameEntry rnEntry = getFileRenameEntry(entry);
-				if(rnEntry != null) {
-					// the file was moved to a new location update the type entry and do not remove it from the
-					// rename list
-					entry.setFile(rnEntry.getFile());
-					filesToRename.remove(rnEntry);
-				} else {
-					typeLib.removeTypeEntry(entry);
-				}
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		if (null != entry) {
+			closeAllEditorsForFile(file);
+			final FileToRenameEntry rnEntry = getFileRenameEntry(entry);
+			if(rnEntry != null) {
+				// the file was moved to a new location update the type entry and do not remove it from the
+				// rename list
+				entry.setFile(rnEntry.getFile());
+				filesToRename.remove(rnEntry);
+			} else {
+				typeLib.removeTypeEntry(entry);
 			}
+			systemManager.notifyListeners();
 		}
 	}
 
