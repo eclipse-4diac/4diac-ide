@@ -121,12 +121,10 @@ public final class DataTypeLibrary {
 	}
 
 	public DataType getTypeIfExists(final String name) {
-
 		final DataType dataType = typeMap.get(name.toUpperCase());
 		if (dataType != null) {
 			return dataType;
 		}
-
 		return getDerivedType(name);
 	}
 
