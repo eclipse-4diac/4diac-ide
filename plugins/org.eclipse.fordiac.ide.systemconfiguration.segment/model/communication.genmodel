@@ -19,8 +19,6 @@
     <genClasses ecoreClass="communication.ecore#//TsnConfiguration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute communication.ecore#//TsnConfiguration/cycleTime"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference communication.ecore#//TsnConfiguration/windows"/>
-      <genOperations ecoreOperation="communication.ecore#//TsnConfiguration/getId"
-          body="return &quot;tsnConfig&quot;;"/>
       <genOperations ecoreOperation="communication.ecore#//TsnConfiguration/getMappingTargets"
           body="return ECollections.toEList(windows);"/>
       <genOperations ecoreOperation="communication.ecore#//TsnConfiguration/getParameters"

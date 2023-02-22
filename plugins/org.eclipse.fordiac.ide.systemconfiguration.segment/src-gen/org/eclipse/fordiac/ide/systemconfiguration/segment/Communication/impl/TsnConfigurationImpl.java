@@ -123,14 +123,6 @@ public class TsnConfigurationImpl extends MinimalEObjectImpl.Container implement
 	 *
 	 * @generated */
 	@Override
-	public String getId() {
-		return "tsnConfig";
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
 	public EList<CommunicationMappingTarget> getMappingTargets() {
 		return ECollections.toEList(windows);
 	}

@@ -4,8 +4,7 @@ Export-Package: org.eclipse.fordiac.ide.systemconfiguration,
  org.eclipse.fordiac.ide.systemconfiguration.commands,
  org.eclipse.fordiac.ide.systemconfiguration.editor,
  org.eclipse.fordiac.ide.systemconfiguration.editparts,
- org.eclipse.fordiac.ide.systemconfiguration.policies,
- org.eclipse.fordiac.systemconfiguration.api
+ org.eclipse.fordiac.ide.systemconfiguration.policies
 Require-Bundle: org.eclipse.ui.views.properties.tabbed,
  org.eclipse.core.runtime,
  org.eclipse.gef,

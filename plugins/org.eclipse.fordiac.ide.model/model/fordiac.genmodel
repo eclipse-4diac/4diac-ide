@@ -277,7 +277,6 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Segment">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Segment/width"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Segment/varDeclarations"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Segment/outConnections"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Segment/communication"/>
       <genOperations ecoreOperation="lib.ecore#//Segment/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xD;&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xD;&#xA;if(type instanceof SegmentType){&#xD;&#xA;&#x9;return (SegmentType) type; &#xD;&#xA;}&#xD;&#xA;return null;"/>
@@ -602,7 +601,6 @@
     <genClasses image="false" ecoreClass="lib.ecore#//CommunicationConfiguration">
       <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getSegment"
           body="return (Segment) eContainer();"/>
-      <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getId"/>
       <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getMappingTargets"/>
       <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getParameters"
           body="return new EList&lt;?>();"/>

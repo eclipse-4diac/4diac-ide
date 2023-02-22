@@ -443,6 +443,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseTypedConfigureableObject(segment);
 				if (result == null) result = casePositionableElement(segment);
 				if (result == null) result = caseColorizableElement(segment);
+				if (result == null) result = caseIVarElement(segment);
 				if (result == null) result = caseINamedElement(segment);
 				if (result == null) result = caseConfigurableObject(segment);
 				if (result == null) result = defaultCase(theEObject);

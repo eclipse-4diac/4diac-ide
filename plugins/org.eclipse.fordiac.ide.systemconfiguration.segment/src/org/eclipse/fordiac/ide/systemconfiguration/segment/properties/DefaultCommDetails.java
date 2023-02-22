@@ -12,10 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.segment.properties;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationFactory;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
-import org.eclipse.fordiac.systemconfiguration.api.CommunicationConfigurationDetails;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
@@ -32,5 +35,10 @@ public class DefaultCommDetails extends CommunicationConfigurationDetails {
 	@Override
 	public CommunicationConfiguration createModel() {
 		return CommunicationFactory.eINSTANCE.createDefaultConfiguration();
+	}
+
+	@Override
+	public CommunicationConfiguration createModel(final List<VarDeclaration> parameters) {
+		return createModel();
 	}
 }

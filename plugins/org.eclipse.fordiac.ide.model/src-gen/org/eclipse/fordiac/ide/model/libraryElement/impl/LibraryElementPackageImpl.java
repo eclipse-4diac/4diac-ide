@@ -2102,7 +2102,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EReference getSegment_VarDeclarations() {
+	public EReference getSegment_OutConnections() {
 		return (EReference)segmentEClass.getEStructuralFeatures().get(1);
 	}
 
@@ -2112,18 +2112,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EReference getSegment_OutConnections() {
-		return (EReference)segmentEClass.getEStructuralFeatures().get(2);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EReference getSegment_Communication() {
-		return (EReference)segmentEClass.getEStructuralFeatures().get(3);
+		return (EReference)segmentEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -3805,7 +3795,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		segmentEClass = createEClass(SEGMENT);
 		createEAttribute(segmentEClass, SEGMENT__WIDTH);
-		createEReference(segmentEClass, SEGMENT__VAR_DECLARATIONS);
 		createEReference(segmentEClass, SEGMENT__OUT_CONNECTIONS);
 		createEReference(segmentEClass, SEGMENT__COMMUNICATION);
 
@@ -4096,6 +4085,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		segmentEClass.getESuperTypes().add(this.getTypedConfigureableObject());
 		segmentEClass.getESuperTypes().add(this.getPositionableElement());
 		segmentEClass.getESuperTypes().add(this.getColorizableElement());
+		segmentEClass.getESuperTypes().add(this.getIVarElement());
 		serviceSequenceEClass.getESuperTypes().add(this.getINamedElement());
 		serviceSequenceEClass.getESuperTypes().add(this.getConfigurableObject());
 		serviceInterfaceFBTypeEClass.getESuperTypes().add(this.getFBType());
@@ -4452,7 +4442,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(segmentEClass, Segment.class, "Segment", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getSegment_Width(), theXMLTypePackage.getInt(), "width", "200", 0, 1, Segment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
-		initEReference(getSegment_VarDeclarations(), this.getVarDeclaration(), null, "varDeclarations", null, 0, -1, Segment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSegment_OutConnections(), this.getLink(), this.getLink_Segment(), "outConnections", null, 0, -1, Segment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getSegment_Communication(), this.getCommunicationConfiguration(), null, "communication", null, 0, 1, Segment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
@@ -4806,8 +4795,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEClass(communicationConfigurationEClass, CommunicationConfiguration.class, "CommunicationConfiguration", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		addEOperation(communicationConfigurationEClass, this.getSegment(), "getSegment", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
-		addEOperation(communicationConfigurationEClass, theXMLTypePackage.getString(), "getId", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(communicationConfigurationEClass, this.getCommunicationMappingTarget(), "getMappingTargets", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 

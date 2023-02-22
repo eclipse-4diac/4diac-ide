@@ -3203,22 +3203,22 @@ public interface LibraryElementPackage extends EPackage {
 	int SEGMENT__COLOR = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Width</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int SEGMENT__WIDTH = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
-
-	/**
 	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SEGMENT__VAR_DECLARATIONS = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 3;
+	int SEGMENT__VAR_DECLARATIONS = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 2;
+
+	/**
+	 * The feature id for the '<em><b>Width</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SEGMENT__WIDTH = TYPED_CONFIGUREABLE_OBJECT_FEATURE_COUNT + 3;
 
 	/**
 	 * The feature id for the '<em><b>Out Connections</b></em>' reference list.
@@ -8201,17 +8201,6 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getSegment_Width();
 
 	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getVarDeclarations <em>Var Declarations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Var Declarations</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.Segment#getVarDeclarations()
-	 * @see #getSegment()
-	 * @generated
-	 */
-	EReference getSegment_VarDeclarations();
-
-	/**
 	 * Returns the meta object for the reference list '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getOutConnections <em>Out Connections</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -10860,14 +10849,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SEGMENT__WIDTH = eINSTANCE.getSegment_Width();
-
-		/**
-		 * The meta object literal for the '<em><b>Var Declarations</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference SEGMENT__VAR_DECLARATIONS = eINSTANCE.getSegment_VarDeclarations();
 
 		/**
 		 * The meta object literal for the '<em><b>Out Connections</b></em>' reference list feature.

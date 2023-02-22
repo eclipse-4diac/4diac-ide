@@ -832,7 +832,7 @@
         eType="#//FBNetwork" containment="true" resolveProxies="false"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="supportedFBTypes" eType="#//FBType"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Segment" eSuperTypes="#//TypedConfigureableObject #//PositionableElement #//ColorizableElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Segment" eSuperTypes="#//TypedConfigureableObject #//PositionableElement #//ColorizableElement #//IVarElement">
     <eOperations name="getType" lowerBound="1" eType="#//SegmentType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xD;&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xD;&#xA;if(type instanceof SegmentType){&#xD;&#xA;&#x9;return (SegmentType) type; &#xD;&#xA;}&#xD;&#xA;return null;"/>
@@ -855,8 +855,6 @@
         <details key="name" value="dx1"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="varDeclarations" upperBound="-1"
-        eType="#//VarDeclaration" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outConnections" upperBound="-1"
         eType="#//Link" eOpposite="#//Link/segment"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="communication" eType="#//CommunicationConfiguration"
@@ -1631,7 +1629,6 @@
         <details key="body" value="return (Segment) eContainer();"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
     <eOperations name="getMappingTargets" upperBound="-1" eType="#//CommunicationMappingTarget"/>
     <eOperations name="getParameters" upperBound="-1" eType="#//VarDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">

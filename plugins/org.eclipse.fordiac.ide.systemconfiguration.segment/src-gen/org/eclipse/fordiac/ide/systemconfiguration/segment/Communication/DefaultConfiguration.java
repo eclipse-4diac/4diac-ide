@@ -54,7 +54,6 @@ public interface DefaultConfiguration extends CommunicationConfiguration {
 	 *
 	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
 	 * @generated */
-	@Override
 	String getId();
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

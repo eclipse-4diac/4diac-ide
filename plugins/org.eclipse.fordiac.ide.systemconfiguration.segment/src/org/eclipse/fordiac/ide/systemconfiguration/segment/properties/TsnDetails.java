@@ -12,9 +12,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.segment.properties;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Messages;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.TsnParameters;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationFactory;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
@@ -28,7 +33,6 @@ import org.eclipse.fordiac.ide.systemconfiguration.segment.widget.MappedFbMenu;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.fordiac.systemconfiguration.api.CommunicationConfigurationDetails;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -176,6 +180,25 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 			executor.executeCommand(cmd);
 			viewer.refresh();
 		}
+	}
+
+	@Override
+	public CommunicationConfiguration createModel(final List<VarDeclaration> parameters) {
+		final TsnConfiguration configuration = (TsnConfiguration) createModel();
+		for (final VarDeclaration parameter : parameters) {
+			if (parameter.getName().startsWith(TsnParameters.TSN_WINDOW_NAME)) {
+				final TsnWindow window = CommunicationFactory.eINSTANCE.createTsnWindow();
+				configuration.getWindows().add(window);
+			} else if (parameter.getName().equals(TsnParameters.TSN_CYCLE_NAME)) {
+				configuration.setCycleTime(Integer.valueOf(parameter.getValue().getValue()));
+			}
+		}
+		int sum;
+		if ((sum = configuration.getWindows().stream().mapToInt(TsnWindow::getDuration).sum()) > configuration
+				.getCycleTime()) {
+			configuration.setCycleTime(sum);
+		}
+		return configuration;
 	}
 
 }

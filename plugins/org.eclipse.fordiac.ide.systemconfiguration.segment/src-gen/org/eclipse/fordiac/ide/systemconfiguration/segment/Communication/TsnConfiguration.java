@@ -53,22 +53,15 @@ public interface TsnConfiguration extends CommunicationConfiguration {
 	 * @generated */
 	void setCycleTime(int value);
 
-	/** Returns the value of the '<em><b>Windows</b></em>' reference list. The list contents are of type
+	/** Returns the value of the '<em><b>Windows</b></em>' containment reference list. The list contents are of type
 	 * {@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
-	 * @return the value of the '<em>Windows</em>' reference list.
+	 * @return the value of the '<em>Windows</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage#getTsnConfiguration_Windows()
-	 * @model required="true" upper="8"
+	 * @model containment="true" resolveProxies="true" required="true" upper="8"
 	 * @generated */
 	EList<TsnWindow> getWindows();
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
-	 * @generated */
-	@Override
-	String getId();
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *

@@ -88,18 +88,9 @@ public class SystemExporter extends AbstractTypeExporter {
 			getWriter().writeAttribute(LibraryElementTags.DX1_ATTRIBUTE,
 					CoordinateConverter.INSTANCE.convertTo1499XML(segment.getWidth()));
 			addColorAttributeElement(segment);
-			addCommunicationConfigurationAttribute(segment);
 			addAttributes(segment.getAttributes());
 			addParamsConfig(segment.getCommunication().getParameters());
 			addEndElement();
-		}
-	}
-
-	private void addCommunicationConfigurationAttribute(final Segment segment) throws XMLStreamException {
-		if (null != segment.getCommunication()) {
-			final String commValue = segment.getCommunication().getId();
-			addAttributeElement(LibraryElementTags.SEGMENT_COMMUNICATION_CONFIG,
-					IecTypes.ElementaryTypes.STRING.getName(), commValue, null);
 		}
 	}
 

@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -44,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.gef.commands.CommandStack;
@@ -140,6 +142,7 @@ public class SystemImporter extends CommonElementImporter {
 		}
 
 		parseSegmentNodeChildren(segment);
+		parseCommunication(segment);
 		return segment;
 	}
 
@@ -148,22 +151,27 @@ public class SystemImporter extends CommonElementImporter {
 			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
 				if (isColorAttributeNode()) {
 					parseColor(segment);
-				} else if (isCommunicationAttributeNode()) {
-					parseCommunication(segment);
 				} else {
 					parseGenericAttributeNode(segment);
 				}
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			} else if (LibraryElementTags.PARAMETER_ELEMENT.equals(name)) {
+				segment.getVarDeclarations().add(parseParameter());
+				proceedToEndElementNamed(LibraryElementTags.PARAMETER_ELEMENT);
 				return true;
 			}
 			return false;
 		});
 	}
 
-	private void parseCommunication(final Segment segment) {
-		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
-		if (null != value) {
-			segment.setCommunication(null); // TODO load file based on information
+	private static void parseCommunication(final Segment segment) {
+		final String typeName = segment.getTypeName();
+		final CommunicationConfigurationDetails commConfig = CommunicationConfigurationDetails
+				.getCommConfigUiFromExtensionPoint(typeName);
+		if (commConfig != null) {
+			final CommunicationConfiguration config = commConfig.createModel(segment.getVarDeclarations());
+			segment.setCommunication(config);
 		}
 	}
 
@@ -202,7 +210,7 @@ public class SystemImporter extends CommonElementImporter {
 			final DeviceTypeEntry entry = getTypeLibrary().getDeviceTypeEntry(typeName);
 			if (null != entry) {
 				device.setTypeEntry(entry);
-				createParamters(device);
+				createParameters(device);
 			}
 		}
 	}
@@ -318,11 +326,6 @@ public class SystemImporter extends CommonElementImporter {
 			parseGenericAttributeNode(device);
 		}
 		proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-	}
-
-	private boolean isCommunicationAttributeNode() {
-		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
-		return (null != name) && LibraryElementTags.SEGMENT_COMMUNICATION_CONFIG.equals(name);
 	}
 
 	private boolean isColorAttributeNode() {

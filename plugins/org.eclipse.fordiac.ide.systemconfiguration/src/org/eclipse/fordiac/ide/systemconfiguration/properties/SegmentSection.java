@@ -13,23 +13,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.properties;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
+import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ChangeCommunicationConfigurationCommand;
-import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
-import org.eclipse.fordiac.systemconfiguration.api.CommunicationConfigurationDetails;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -48,7 +39,6 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class SegmentSection extends AbstractDoubleColumnSection {
 
-	private static final String COMM_CONFIG_ID = "org.eclipse.fordiac.ide.systemconfiguration.communication";
 	private Text nameText;
 	private Text commentText;
 	private Button checkbox;
@@ -134,7 +124,7 @@ public class SegmentSection extends AbstractDoubleColumnSection {
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).grab(false, false).applyTo(checkbox);
 
 		commSelector = ComboBoxWidgetFactory.createCombo(parent);
-		commSelector.setItems(getCommConfigNamesFromExtensionPoint());
+		commSelector.setItems(CommunicationConfigurationDetails.getCommConfigNamesFromExtensionPoint());
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.BEGINNING).grab(true, false).applyTo(commSelector);
 		commSelector.layout();
 		commSelector.addSelectionListener(new SelectionListener() {
@@ -150,7 +140,8 @@ public class SegmentSection extends AbstractDoubleColumnSection {
 					getRightComposite().setVisible(false);
 				}
 				final String selectedName = commSelector.getItems()[selected];
-				final CommunicationConfigurationDetails commConfig = getCommConfigUiFromExtensionPoint(selectedName);
+				final CommunicationConfigurationDetails commConfig = CommunicationConfigurationDetails
+						.getCommConfigUiFromExtensionPoint(selectedName);
 				if (commConfig != null) {
 					removeContentAdapter();
 					executeCommand(new ChangeCommunicationConfigurationCommand(commConfig.createModel(), getType()));
@@ -201,62 +192,19 @@ public class SegmentSection extends AbstractDoubleColumnSection {
 			commentText.setText(getType().getComment());
 			checkbox.setSelection(getType().getCommunication() != null);
 			commSelector.setVisible(checkbox.getSelection());
-			commSelector.select(getIndexOfCommunication(commSelector.getItems(), getCommunicationType()));
+			commSelector.select(CommunicationConfigurationDetails.getIndexOfCommunication(commSelector.getItems(),
+					getCommunicationType()));
 			getRightComposite().setVisible(checkbox.getSelection() && (commSelector.getSelectionIndex() != 0));
 		}
 	}
 
-	private static int getIndexOfCommunication(final String[] names, final String id) {
-		final IConfigurationElement selected = getCommConfigExtensionPoint("id", id); //$NON-NLS-1$
-		if ((selected == null) || (selected.getAttribute("label") == null)) {
-			return 0;
-		}
-		return Arrays.asList(names).indexOf(selected.getAttribute("label")); //$NON-NLS-1$
-	}
+
 
 	private String getCommunicationType() {
-		if (getType().getCommunication() == null) {
-			return ""; //$NON-NLS-1$
-		}
-		return getType().getCommunication().getId();
+		return getType().getTypeName();
 	}
 
-	private static String[] getCommConfigNamesFromExtensionPoint() {
-		final IConfigurationElement[] config = getCommConfigExtensionPoint();
-		final List<String> names = new ArrayList<>();
-		names.add(""); //$NON-NLS-1$
-		for (final IConfigurationElement e : config) {
-			names.add(e.getAttribute("label")); //$NON-NLS-1$
-		}
-		return names.toArray(new String[0]);
-	}
 
-	private static CommunicationConfigurationDetails getCommConfigUiFromExtensionPoint(final String name) {
-		final IConfigurationElement selected = getCommConfigExtensionPoint("label", name); //$NON-NLS-1$
-		if (selected != null) {
-			try {
-				final Object o = selected.createExecutableExtension("class"); //$NON-NLS-1$
-				if (o instanceof CommunicationConfigurationDetails) {
-					return (CommunicationConfigurationDetails) o;
-				}
-			} catch (final CoreException ex) {
-				FordiacLogHelper.logError(ex.getMessage());
-			}
-		}
-		return null;
-	}
 
-	private static IConfigurationElement[] getCommConfigExtensionPoint() {
-		final IExtensionRegistry registry = Platform.getExtensionRegistry();
-		return registry.getConfigurationElementsFor(COMM_CONFIG_ID);
-	}
 
-	private static IConfigurationElement getCommConfigExtensionPoint(final String attribute, final String value) {
-		for (final IConfigurationElement e : getCommConfigExtensionPoint()) {
-			if (value.equals(e.getAttribute(attribute))) {
-				return e;
-			}
-		}
-		return null;
-	}
 }
