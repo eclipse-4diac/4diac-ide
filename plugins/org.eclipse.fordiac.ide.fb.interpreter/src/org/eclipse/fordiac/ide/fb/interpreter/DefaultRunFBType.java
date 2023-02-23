@@ -20,13 +20,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.EMap;
-import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
@@ -40,13 +40,12 @@ import org.eclipse.fordiac.ide.fb.interpreter.api.IRunFBTypeVisitor;
 import org.eclipse.fordiac.ide.fb.interpreter.api.LambdaVisitor;
 import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.impl.EvaluateExpressionImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils;
-import org.eclipse.fordiac.ide.fb.interpreter.parser.ConditionExpressionXMI;
-import org.eclipse.fordiac.ide.fb.interpreter.parser.DefaultParserXMI;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
+import org.eclipse.fordiac.ide.model.eval.fb.BasicFBEvaluator;
+import org.eclipse.fordiac.ide.model.eval.value.BoolValue;
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
@@ -66,9 +65,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.Expression;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-
 
 public class DefaultRunFBType implements IRunFBTypeVisitor {
 
@@ -82,7 +79,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			final FBNetworkRuntime fbNetworkRuntime = (FBNetworkRuntime) this.eventOccurrence.getFbRuntime();
 			final FBNetwork fbNetwork = fbNetworkRuntime.getFbnetwork();
 			fbNetwork.getNetworkElements()
-			.forEach(networkElement -> nameToFBNetwork.put(networkElement.getName(), networkElement));
+					.forEach(networkElement -> nameToFBNetwork.put(networkElement.getName(), networkElement));
 		}
 	}
 
@@ -106,23 +103,20 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		VariableUtils.fBVariableInitialization(basicFBTypeRuntime.getBasicfbtype());
 		final var outputEvents = new BasicEList<EventOccurrence>();
 		final var eCC = basicFBTypeRuntime.getBasicfbtype().getECC();
-		// Create a resource if the BasicFBType does not have one
-		final var fBTypeResource = new DefaultParserXMI().createFBResource(basicFBTypeRuntime.getBasicfbtype());
 		// Active State
 		final var eCState = basicFBTypeRuntime.getActiveState();
 		if (eCState == null) {
 			basicFBTypeRuntime.setActiveState(eCC.getStart());
 		}
 		// apply event and evaluate transitions
-		var firedTransition = evaluateOutTransitions(basicFBTypeRuntime, fBTypeResource);
+		var firedTransition = evaluateOutTransitions(basicFBTypeRuntime);
 		while (firedTransition != null) {
 			isConsumed();
 			basicFBTypeRuntime.setActiveState(firedTransition.getDestination());// fire transition
 			outputEvents.addAll(performEntryAction(basicFBTypeRuntime));
-			firedTransition = evaluateOutTransitions(basicFBTypeRuntime, fBTypeResource);
+			firedTransition = evaluateOutTransitions(basicFBTypeRuntime);
 		}
 		// apply result
-		basicFBTypeRuntime.setBasicfbtype((BasicFBType) fBTypeResource.getContents().get(0));
 		for (final EventOccurrence eo : outputEvents) {
 			((BasicFBTypeRuntime) eo.getFbRuntime()).setActiveState(basicFBTypeRuntime.getActiveState());
 		}
@@ -138,8 +132,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 				processAlgorithmWithEvaluator(executedFbtype, action.getAlgorithm());
 			}
 			if (action.getOutput() != null) {
-				processOutputEvent(basicFBTypeRuntime, action.getOutput(), outputEvents,
-						/* fBTypeResource, */ executedFbtype);
+				processOutputEvent(basicFBTypeRuntime, action.getOutput(), outputEvents, executedFbtype);
 			}
 		}
 		return outputEvents;
@@ -153,8 +146,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		varDecls.addAll(basefbtype.getInterfaceList().getOutputVars());
 		varDecls.addAll(basefbtype.getInternalVars());
 		varDecls.addAll(basefbtype.getInternalConstVars());
-		final List<Variable<?>> vars = varDecls.stream().map(VariableOperations::newVariable)
-				.collect(Collectors.toList());
+		final List<Variable<?>> vars = varDecls.stream()
+				.map(v -> VariableOperations.newVariable(v, v.getValue().getValue())).collect(Collectors.toList());
 		final FBVariable fbVar = new FBVariable("THIS", basefbtype, Collections.emptyList()); //$NON-NLS-1$
 		Class<? extends FBType> baseFBClass = null;
 		if (basefbtype instanceof BasicFBType) {
@@ -184,6 +177,52 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		}
 	}
 
+	private static boolean processConditionWithEvaluator(final BasicFBType basicFBType,
+			final ECTransition ecTransition) {
+
+		if (ecTransition.getConditionExpression().isEmpty()) {
+			throw new IllegalArgumentException("ConditionExpression object cannot be empty"); //$NON-NLS-1$
+		}
+		final List<VarDeclaration> varDecls = new ArrayList<>(basicFBType.getInterfaceList().getInputVars());
+		varDecls.addAll(basicFBType.getInterfaceList().getOutputVars());
+		varDecls.addAll(basicFBType.getInternalVars());
+		final List<Variable<?>> vars = varDecls.stream()
+				.map(v -> VariableOperations.newVariable(v, v.getValue().getValue())).collect(Collectors.toList());
+		final FBVariable fbVar = new FBVariable("THIS", basicFBType, Collections.emptyList()); //$NON-NLS-1$
+		final Class<? extends FBType> baseFBClass = BasicFBType.class;
+
+		final Evaluator fbEval = EvaluatorFactory.createEvaluator(basicFBType, baseFBClass, fbVar, vars, null);
+		if (fbEval instanceof BasicFBEvaluator) {
+			final BasicFBEvaluator fbEvaluator = (BasicFBEvaluator) fbEval;
+			final Map<ECTransition, Evaluator> ecTransitionToEvaluator = fbEvaluator.getTransitionEvaluators();
+			final Optional<Entry<ECTransition, Evaluator>> findEvaluator = ecTransitionToEvaluator.entrySet().stream()
+					.filter(entryEvaluator -> entryEvaluator.getKey().getConditionExpression()
+							.contentEquals(ecTransition.getConditionExpression()))
+					.findFirst();
+			if (findEvaluator.isEmpty()) {
+				return false;
+			}
+
+			final Evaluator evaluator = findEvaluator.get().getValue();
+			try {
+				final org.eclipse.fordiac.ide.model.eval.value.Value value = evaluator.evaluate();
+				if (value instanceof BoolValue) {
+					return ((BoolValue) value).boolValue();
+				}
+				throw new IllegalStateException("The evaluator does not return a boolean value"); //$NON-NLS-1$
+			} catch (final EvaluatorException e) {
+				FordiacLogHelper.logError("Condition Expression: " + evaluator.getName(), //$NON-NLS-1$
+						e);
+			} catch (final InterruptedException e) {
+				FordiacLogHelper.logError("Condition Expression: " + evaluator.getName(), //$NON-NLS-1$
+						e);
+				Thread.currentThread().interrupt();
+			}
+
+		}
+		return false;
+	}
+
 	private static void processOutputEvent(final FBRuntimeAbstract runtime, final Event output,
 			final BasicEList<EventOccurrence> outputEvents/* , Resource fBTypeResource */,
 			final FBType executedFbtype) {
@@ -206,33 +245,25 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		outputEvents.add(newEventOccurrence);
 	}
 
-	private ECTransition evaluateOutTransitions(final BasicFBTypeRuntime basicFBTypeRuntime,
-			final Resource fBTypeResource) {
+	private ECTransition evaluateOutTransitions(final BasicFBTypeRuntime basicFBTypeRuntime) {
 		final var outTransitions = basicFBTypeRuntime.getActiveState().getOutTransitions();
 		for (final ECTransition outTransition : outTransitions) {
-			if (transitionCanFire(outTransition, fBTypeResource)) {
+			if (transitionCanFire(outTransition, basicFBTypeRuntime)) {
 				return outTransition;
 			}
 		}
 		return null;
 	}
 
-	private boolean transitionCanFire(final ECTransition outTransition, final Resource fBTypeResource) {
+	private boolean transitionCanFire(final ECTransition outTransition, final BasicFBTypeRuntime basicFBTypeRuntime) {
 		final var event = outTransition.getConditionEvent();
 		if (transitionHoldsFor(event)) {
 			final var condExpression = outTransition.getConditionExpression();
 			if (condExpression.isEmpty() || "1".equals(condExpression)) { //$NON-NLS-1$
 				return true;
 			}
-			final var resource = new ConditionExpressionXMI(fBTypeResource.getResourceSet())
-					.createXtextResourceFromConditionExp(condExpression);
-			final var rootEObject = resource.getContents().get(0);
-			if (rootEObject instanceof Expression) {
-				final var evaluation = (Boolean) EvaluateExpressionImpl.of().apply(rootEObject);
-				if (Boolean.TRUE.equals(evaluation)) {
-					return true;
-				}
-			}
+			return processConditionWithEvaluator(basicFBTypeRuntime.getBasicfbtype(), outTransition);
+
 		}
 		return false;
 	}

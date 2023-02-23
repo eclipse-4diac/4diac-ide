@@ -55,7 +55,7 @@ public abstract class AbstractInterpreterTest {
 
 	public static void runFBTest(final FBType fb, final ServiceSequence seq) {
 		final Optional<String> result = FBTestRunner.runFBTest(fb, seq);
-		assertTrue(result.isEmpty());
+		assertTrue(!result.isPresent());
 	}
 
 	public static void runFBTest(final FBType fb, final ServiceSequence seq, final String startStateName) {

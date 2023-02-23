@@ -30,14 +30,14 @@ public class EventCTDTest extends AbstractInterpreterTest {
 		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", "Q:=FALSE;CV:=1")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder("LD", "LDO", "Q:=FALSE;CV:=1")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		addTransaction(seq, new FBTransactionBuilder("CD", "CDO", "Q:=TRUE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
 		runFBTest(fb, seq);
 
 		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PV", "2"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", "Q:=FALSE;CV:=2")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder("LD", "LDO", "Q:=FALSE;CV:=2")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		addTransaction(seq, new FBTransactionBuilder("CD", "CDO", "Q:=FALSE;CV:=1")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		addTransaction(seq, new FBTransactionBuilder("CD", "CDO", "Q:=TRUE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 
@@ -45,7 +45,7 @@ public class EventCTDTest extends AbstractInterpreterTest {
 
 		seq = ServiceSequenceUtils.addServiceSequence(fb.getService());
 		setVariable(fb, "PV", "0"); //$NON-NLS-1$ //$NON-NLS-2$
-		addTransaction(seq, new FBTransactionBuilder("LDI", "LDO", "Q:=TRUE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+		addTransaction(seq, new FBTransactionBuilder("LD", "LDO", "Q:=TRUE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		addTransaction(seq, new FBTransactionBuilder("CD")); //$NON-NLS-1$
 		runFBTest(fb, seq);
 	}
