@@ -62,7 +62,7 @@ class LanguageHeaderTemplate extends ForteNgExportTemplate {
 	'''
 
 	def protected generateHeaderIncludes() '''
-		«IF languageSupport !== null»«languageSupport.getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> true}).filter(DataType).generateTypeIncludes»«ENDIF»
+		«IF languageSupport !== null»«languageSupport.getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> true}).generateDependencyIncludes»«ENDIF»
 	'''
 
 	override getErrors() {

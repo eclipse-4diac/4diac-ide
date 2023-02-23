@@ -58,9 +58,9 @@ class VarGlobalConstantsSupport extends StructuredTextSupport {
 	override getDependencies(Map<?, ?> options) {
 		prepare(options)
 		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
-			source.getContainedDependencies
+			source.varDeclarations.map[type].toSet
 		else
-			emptySet
+			source.containedDependencies
 	}
 
 	override prepare(Map<?, ?> options) {
