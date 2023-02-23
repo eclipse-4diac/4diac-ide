@@ -54,7 +54,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 
-public class EditUntypedSubappInterfaceSection extends AbstractEditInterfaceDataSection {
+public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterfaceDataSection {
 
 	@Override
 	protected CreationCommand newCreateCommand(final IInterfaceElement interfaceElement, final boolean isInput) {
