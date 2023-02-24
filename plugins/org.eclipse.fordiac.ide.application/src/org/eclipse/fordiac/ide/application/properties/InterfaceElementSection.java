@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.gef.editors.InitialValueEditor;
 import org.eclipse.fordiac.ide.gef.properties.AbstractDoubleColumnSection;
 import org.eclipse.fordiac.ide.gef.widgets.ConnectionDisplayWidget;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -69,6 +70,8 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	private InitialValueEditor currentParameterEditor;
 	private CLabel parameterTextCLabel;
 	private CLabel currentParameterTextCLabel;
+	private CLabel currentVarConfigTextCLabel;
+	private Button currentVarConfigCheckBox;
 	private Button openEditorButton;
 	private Section infoSection;
 	private ConnectionDisplayWidget connectionDisplayWidget;
@@ -144,7 +147,13 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		currentParameterEditor = new InitialValueEditor(composite, SWT.SINGLE | SWT.BORDER);
 		currentParameterEditor.setCommandExecutor(this::executeCommand);
 		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false)
-		.applyTo(currentParameterEditor.getControl());
+				.applyTo(currentParameterEditor.getControl());
+
+		currentVarConfigTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.VarConfig + ":"); //$NON-NLS-1$
+		currentVarConfigCheckBox = getWidgetFactory().createButton(composite, null, SWT.CHECK);
+		currentVarConfigCheckBox.addListener(SWT.Selection,
+				event -> executeCommand(new ChangeVarConfigurationCommand((VarDeclaration) getType(),
+						currentVarConfigCheckBox.getSelection())));
 
 		infoSection.setClient(composite);
 	}
@@ -177,6 +186,11 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 			typeText.setText(getPinTypeName());
 
 			connectionDisplayWidget.refreshConnectionsViewer(getType());
+
+			if (getType() instanceof VarDeclaration) {
+				final var verDeclaration = (VarDeclaration) getType();
+				currentVarConfigCheckBox.setSelection(verDeclaration.isVarConfig());
+			}
 
 			if (fb != null) {
 				setEditable(!fb.isContainedInTypedInstance());
@@ -267,6 +281,8 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		parameterText.setVisible(isDataIO);
 		currentParameterTextCLabel.setVisible(isDataIO && getType().isIsInput());
 		currentParameterEditor.getControl().setVisible(isDataIO && getType().isIsInput());
+		currentVarConfigTextCLabel.setVisible(isDataIO && getType().isIsInput() && getType() instanceof VarDeclaration);
+		currentVarConfigCheckBox.setVisible(isDataIO && getType().isIsInput() && getType() instanceof VarDeclaration);
 	}
 
 	private boolean isDataIO() {
@@ -281,6 +297,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		instanceCommentText.setEditable(editable);
 		instanceCommentText.setEnabled(editable);
 		connectionDisplayWidget.setEditable(editable);
+		currentVarConfigCheckBox.setEnabled(editable);
 	}
 
 	// this method will be removed as soon as there is a toString for StructType in
