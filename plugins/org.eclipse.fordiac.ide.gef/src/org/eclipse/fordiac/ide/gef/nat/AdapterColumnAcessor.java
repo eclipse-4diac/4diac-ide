@@ -58,9 +58,10 @@ public class AdapterColumnAcessor implements IColumnAccessor<AdapterDeclaration>
 			break;
 		case I4diacNatTableUtil.TYPE:
 			final AdapterTypeEntry adapterTypeEntry = section.getTypeLibrary().getAdapterTypeEntry(value);
-			if (adapterTypeEntry != null) {
-				cmd = new ChangeAdapterTypeCommand(rowObject, adapterTypeEntry.getType());
+			if (adapterTypeEntry == null) {
+				return;
 			}
+			cmd = new ChangeAdapterTypeCommand(rowObject, adapterTypeEntry.getType());
 			break;
 		case I4diacNatTableUtil.COMMENT:
 			cmd = new ChangeCommentCommand(rowObject, value);

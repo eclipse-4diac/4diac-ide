@@ -51,7 +51,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.IEditorFileChangeListener;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -312,7 +311,6 @@ ITabbedPropertySheetPageContributor, ISelectionListener, IEditorFileChangeListen
 		if (dataTypeEntry.getTypeEditable() != null && (!importFailed)) {
 			structComposite = new StructViewingComposite(parent, 1, commandStack, dataTypeEntry, this);
 			structComposite.createPartControl(parent);
-			TableWidgetFactory.enableCopyPasteCut(this);
 		} else if (importFailed) {
 			createErrorComposite(parent, Messages.ErrorCompositeMessage);
 			if (outsideWorkspace) {

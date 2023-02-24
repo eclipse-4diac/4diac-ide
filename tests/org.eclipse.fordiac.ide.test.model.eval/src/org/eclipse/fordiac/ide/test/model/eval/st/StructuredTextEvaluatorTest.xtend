@@ -1380,6 +1380,39 @@ class StructuredTextEvaluatorTest {
 		'''.evaluateAlgorithm)
 	}
 
+	@Test
+	def void testStandardFunctionCall() {
+		21.toIntValue.assertTrace(#[STFeatureExpression], '''
+			VAR_TEMP
+				test: INT;
+			END_VAR
+			
+			test := DINT_TO_INT(DINT#21);
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testStandardFunctionCallWithInference() {
+		21.toIntValue.assertTrace(#[STFeatureExpression], '''
+			VAR_TEMP
+				test: INT;
+			END_VAR
+			
+			test := ADD(SINT#17, INT#4);
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testStandardFunctionCallWithGenericReturn() {
+		5.toIntValue.assertTrace(#[STFeatureExpression], '''
+			VAR_TEMP
+				test: INT;
+			END_VAR
+			
+			test := LEN('4diac');
+		'''.evaluateAlgorithm)
+	}
+
 	def static evaluateExpression(CharSequence expression) {
 		expression.evaluateExpression(emptyList)
 	}

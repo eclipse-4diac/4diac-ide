@@ -358,7 +358,7 @@ public interface StandardFunctions extends Functions {
 
 	/* ANY_CHARS functions */
 	@Comment("Returns the length of a String.")
-	static <T extends AnyStringValue> ULIntValue LEN(final T string) {
+	static <T extends AnyStringValue> AnyIntValue LEN(final T string) {
 		return ULIntValue.toULIntValue(string.length());
 	}
 
@@ -469,13 +469,13 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Returns the location of the first occurrence a String in a String.")
-	static <T extends AnySCharsValue> ULIntValue FIND(@Comment("The String to be searched.") final StringValue first,
+	static <T extends AnySCharsValue> AnyIntValue FIND(@Comment("The String to be searched.") final StringValue first,
 			@Comment("The String to be found.") final T second) {
 		return ULIntValue.toULIntValue(first.stringValue().indexOf(second.stringValue()) + 1L);
 	}
 
 	@Comment("Returns the location of the first occurrence a WString in a WString.")
-	static <T extends AnyWCharsValue> ULIntValue FIND(@Comment("The WString to be searched.") final WStringValue first,
+	static <T extends AnyWCharsValue> AnyIntValue FIND(@Comment("The WString to be searched.") final WStringValue first,
 			@Comment("The WString to be found.") final T second) {
 		return ULIntValue.toULIntValue(first.stringValue().indexOf(second.stringValue()) + 1L);
 	}
@@ -811,7 +811,7 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Returns the day of week of DATE value.")
-	static USIntValue DAY_OF_WEEK(final DateValue value) {
+	static AnyIntValue DAY_OF_WEEK(final DateValue value) {
 		return USIntValue.toUSIntValue((byte) value.toLocalDate().getDayOfWeek().getValue());
 	}
 

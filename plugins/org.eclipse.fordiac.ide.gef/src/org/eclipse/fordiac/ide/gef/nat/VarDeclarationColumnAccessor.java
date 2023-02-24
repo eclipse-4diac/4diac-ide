@@ -83,10 +83,9 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 			cmd = new ChangeNameCommand(rowObject, value);
 			break;
 		case I4diacNatTableUtil.TYPE:
-			DataType dataType = getLibrary().getDataTypeLibrary().getDataTypesSorted().stream()
-					.filter(type -> type.getName().equals(value)).findAny().orElse(null);
+			final DataType dataType = getLibrary().getDataTypeLibrary().getTypeIfExists(value);
 			if (dataType == null) {
-				dataType = getLibrary().getDataTypeLibrary().getType(null);
+				return;
 			}
 			cmd = new ChangeDataTypeCommand(rowObject, dataType);
 			break;
@@ -99,7 +98,6 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 		case I4diacNatTableUtil.ARRAY_SIZE:
 			cmd = new ChangeArraySizeCommand(rowObject, value);
 			break;
-
 		default:
 			return;
 		}

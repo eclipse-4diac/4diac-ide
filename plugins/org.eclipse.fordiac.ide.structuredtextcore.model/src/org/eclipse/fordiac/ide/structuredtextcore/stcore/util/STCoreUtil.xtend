@@ -54,6 +54,7 @@ import org.eclipse.fordiac.ide.model.data.WcharType
 import org.eclipse.fordiac.ide.model.data.WordType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
@@ -150,6 +151,7 @@ final class STCoreUtil {
 
 	def static boolean isApplicableTo(STUnaryOperator operator, INamedElement type) {
 		switch (operator) {
+			case type.anyType: false
 			case PLUS,
 			case MINUS: type instanceof AnyMagnitudeType && !(type instanceof AnyUnsignedType)
 			case NOT: type instanceof AnyBitType
@@ -158,6 +160,7 @@ final class STCoreUtil {
 
 	def static boolean isApplicableTo(STBinaryOperator operator, INamedElement first, INamedElement second) {
 		switch (operator) {
+			case first.anyType || second.anyType: false
 			case ADD:
 				(first instanceof AnyMagnitudeType && second instanceof AnyMagnitudeType) ||
 					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) ||
@@ -495,6 +498,13 @@ final class STCoreUtil {
 
 	def static boolean isInstanceofAnyLDateType(INamedElement type) {
 		return type instanceof LdateType || type instanceof LtodType || type instanceof LdtType
+	}
+
+	def static boolean isAnyType(INamedElement element) {
+		switch (element) {
+			DataType: GenericTypes.isAnyType(element)
+			default: false
+		}
 	}
 
 	def static boolean isAncestor(EClassifier clazz, EObject object) {
