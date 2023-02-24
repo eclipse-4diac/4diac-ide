@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgo
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.hyperlinking.STAlgorithmHyperlinkHelper
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.quickfix.STAlgorithmQuickAssistProcessor
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.reconciler.STAlgorithmDocumentReconcileStrategy
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.refactoring.ExtractMethodRefactoring
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceForIEditorInputFactory
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities
@@ -33,6 +34,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreCommentDocum
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.quickfix.CaseInsensitiveSimilarityMatcher
+import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallableRefactoring
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreAntlrTokenToAttributeIdMapper
 import org.eclipse.fordiac.ide.structuredtextcore.ui.syntaxcoloring.STCoreHighlightingConfiguration
@@ -164,5 +166,9 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 	def void configureKeyBindingScope(Binder binder) {
 		binder.bindConstant().annotatedWith(Names.named(XtextEditor.KEY_BINDING_SCOPE)).to(
 			"org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"); // $NON-NLS-1$
+	}
+
+	def Class<? extends ExtractCallableRefactoring> bindExtractCallableRefactoring() {
+		return ExtractMethodRefactoring
 	}
 }
