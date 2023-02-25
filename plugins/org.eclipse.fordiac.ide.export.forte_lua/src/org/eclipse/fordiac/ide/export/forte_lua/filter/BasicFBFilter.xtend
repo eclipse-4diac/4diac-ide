@@ -15,11 +15,13 @@
 package org.eclipse.fordiac.ide.export.forte_lua.filter
 
 import java.util.ArrayList
+import java.util.Collections
 import java.util.HashMap
 import java.util.List
 import java.util.Map
+import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECC
@@ -31,9 +33,6 @@ import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants.*
-
-import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
-import java.util.Collections
 
 class BasicFBFilter {
 
@@ -141,7 +140,7 @@ class BasicFBFilter {
 		  «luaFBStateVariable» = «state.luaStateName»
 		  «FOR action : state.ECAction»
 		  	«IF null !== action.algorithm»«action.algorithm.luaAlgorithmName»(fb)«ENDIF»
-		  	«IF action.output instanceof AdapterEvent»
+		  	«IF action.output.FBNetworkElement instanceof AdapterFB»
 		  		«action.output?.luaSendAdapterOutputEvent»
 		  	«ELSE»	
 		  		«action.output?.luaSendOutputEvent»

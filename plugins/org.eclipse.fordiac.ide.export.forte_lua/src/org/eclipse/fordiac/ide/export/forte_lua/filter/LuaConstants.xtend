@@ -20,7 +20,7 @@ import java.util.ArrayList
 import java.util.List
 import org.eclipse.emf.common.util.EList
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECC
@@ -58,10 +58,10 @@ class LuaConstants {
 	def static luaStateName(ECState state) '''ECC_«state.name»'''
 
 	def static luaInputEventName(
-		Event event) '''«IF event instanceof AdapterEvent»AEI_«event.name.replace('.','_')»«ELSE»EI_«event.name»«ENDIF»'''
+		Event event) '''«IF event.FBNetworkElement instanceof AdapterFB»AEI_«event.FBNetworkElement.name»_«event.name»«ELSE»EI_«event.name»«ENDIF»'''
 
 	def static luaOutputEventName(
-		Event event) '''«IF event instanceof AdapterEvent»AEO_«event.name.replace('.','_')»«ELSE»EO_«event.name»«ENDIF»'''
+		Event event) '''«IF event.FBNetworkElement instanceof AdapterFB»AEO_«event.FBNetworkElement.name»_«event.name»«ELSE»EO_«event.name»«ENDIF»'''
 
 	def static luaAdapterInputEventName(Event event, String adapterName) '''AEI_«adapterName»_«event.name»'''
 

@@ -20,6 +20,7 @@ import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
@@ -84,16 +85,15 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate 
 		}
 	'''
 
-	def protected dispatch generateSendEvent(Event event) '''
-		sendOutputEvent(scm_nEvent«event.name»ID);
-	'''
+	def protected generateSendEvent(Event event) { 
+		if(event.FBNetworkElement instanceof AdapterFB){
+			return '''sendAdapterEvent(scm_n«event.FBNetworkElement.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«event.name»ID);'''
+		}
+		'''sendOutputEvent(scm_nEvent«event.name»ID);'''
+	}
 
-	def protected dispatch generateSendEvent(AdapterEvent event) '''
-		sendAdapterEvent(scm_n«event.adapterDeclaration.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«event.adapterEventName»ID);
-	'''
-
-	def protected getAdapterEventName(AdapterEvent event) {
-		event.name.split("\\.").get(1);
+	def private getAdapterDeclaration(Event event){
+		(event.FBNetworkElement as AdapterFB).adapterDecl;
 	}
 
 	def protected generateAlgorithms() '''
