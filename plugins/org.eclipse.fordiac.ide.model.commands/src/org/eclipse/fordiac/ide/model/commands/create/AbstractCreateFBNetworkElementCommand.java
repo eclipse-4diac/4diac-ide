@@ -54,24 +54,22 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command impl
 	public void execute() {
 		element.setInterface(getTypeInterfaceList().copy());
 		element.updatePosition(x, y);
-		fbNetwork.getNetworkElements().add(element); // as subclasses may not be able to
-		// run redo on execute we have to duplicate this here
+		insertFBNetworkElement();
+		checkName();
+	}
+
+	protected void checkName() {
 		element.setName(NameRepository.createUniqueName(element, getInitialInstanceName()));
 	}
 
 	@Override
 	public void redo() {
-		fbNetwork.getNetworkElements().add(element);
+		insertFBNetworkElement();
 	}
 
 	@Override
 	public void undo() {
-		fbNetwork.getNetworkElements().remove(element);
-	}
-
-	public void updateCreatePosition(final int x, final int y) {
-		this.x = x;
-		this.y = y;
+		removeFBNetworkElement();
 	}
 
 	public FBNetworkElement getElement() {
@@ -97,5 +95,22 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command impl
 			return new CreateSubAppInstanceCommand((SubAppTypeEntry) typeEntry, fbNetwork, x, y);
 		}
 		return null;
+	}
+
+	public void updateCreatePosition(final int x, final int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	private void insertFBNetworkElement() {
+		if (fbNetwork != null) {
+			fbNetwork.getNetworkElements().add(element);
+		}
+	}
+
+	private void removeFBNetworkElement() {
+		if (fbNetwork != null) {
+			fbNetwork.getNetworkElements().remove(element);
+		}
 	}
 }

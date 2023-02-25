@@ -23,7 +23,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
@@ -65,7 +65,7 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 		this.value = ""; //$NON-NLS-1$
 	}
 
-	private boolean isValidName(final String name) {
+	private static boolean isValidName(final String name) {
 		return !IdentifierVerifier.verifyIdentifier(name).isPresent();
 	}
 
@@ -195,15 +195,15 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 	}
 
 	private void createAdapterCreateCommand() {
-		if (isInternalAdapterInCompositeFB()) {
+		if (shouldAdapterFBBeCreated()) {
 			final int xyPos = 10;
 			adapterCreateCmd = new AdapterCreateCommand(xyPos, xyPos, (AdapterDeclaration) newInterfaceElement,
-					(CompositeFBType) targetInterfaceList.eContainer());
+					(FBType) targetInterfaceList.eContainer());
 		}
 	}
 
-	private boolean isInternalAdapterInCompositeFB() {
-		return (dataType instanceof AdapterType) && (targetInterfaceList.eContainer() instanceof CompositeFBType)
+	private boolean shouldAdapterFBBeCreated() {
+		return (dataType instanceof AdapterType)
 				&& !(targetInterfaceList.eContainer() instanceof SubAppType);
 	}
 
