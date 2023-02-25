@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -677,18 +676,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseLibraryElement(adapterFBType);
 				if (result == null) result = caseConfigurableObject(adapterFBType);
 				if (result == null) result = caseINamedElement(adapterFBType);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.ADAPTER_EVENT: {
-				AdapterEvent adapterEvent = (AdapterEvent)theEObject;
-				T result = caseAdapterEvent(adapterEvent);
-				if (result == null) result = caseEvent(adapterEvent);
-				if (result == null) result = caseIInterfaceElement(adapterEvent);
-				if (result == null) result = caseICallable(adapterEvent);
-				if (result == null) result = caseINamedElement(adapterEvent);
-				if (result == null) result = caseHiddenElement(adapterEvent);
-				if (result == null) result = caseConfigurableObject(adapterEvent);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1855,21 +1842,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAdapterFBType(AdapterFBType object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Adapter Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Adapter Event</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAdapterEvent(AdapterEvent object) {
 		return null;
 	}
 

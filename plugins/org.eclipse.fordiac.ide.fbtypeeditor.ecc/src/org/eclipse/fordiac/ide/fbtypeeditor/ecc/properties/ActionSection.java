@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2019 fortiss GmbH,
- * 				 2019 - 2020 Johannes Kepler University Linz (JKU)
+ * Copyright (c) 2015, 2023 fortiss GmbH, Johannes Kepler University Linz (JKU)
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +12,7 @@
  *     - initial API and implementation and/or initial documentation
  *	 Bianca Wiesmayr - consistent dropdown menu edit#
  *   Alois Zoitl - fixed issues during deletion of actions
+ *               - updated for new adapter FB handling
  ********************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 

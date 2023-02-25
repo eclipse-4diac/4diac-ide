@@ -513,15 +513,6 @@ public interface LibraryElementFactory extends EFactory {
 	AdapterFBType createAdapterFBType();
 
 	/**
-	 * Returns a new object of class '<em>Adapter Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Adapter Event</em>'.
-	 * @generated
-	 */
-	AdapterEvent createAdapterEvent();
-
-	/**
 	 * Returns a new object of class '<em>Service</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

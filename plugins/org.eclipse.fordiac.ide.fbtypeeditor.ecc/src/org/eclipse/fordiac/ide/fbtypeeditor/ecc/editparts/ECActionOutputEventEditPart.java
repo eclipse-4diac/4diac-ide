@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2020 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2011, 2023 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
  * 								Johannes Kepler University Linz (JKU)
  *
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,8 @@
  * Contributors:
  *   Alois Zoitl, Gerhard Ebenhofer, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Bianca Wiesmayr
- *     -  consistent dropdown menu edit, redesign ECC
+ *   Bianca Wiesmayr -  consistent dropdown menu edit, redesign ECC
+ *   Alois Zoitl     - updated for new adapter FB handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -40,8 +40,6 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -90,7 +88,6 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 			if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)
 					&& (isOutputEvent(notification) || isAdapterOutputEvent(notification))) {
 				refreshEventLabel(getNameLabel());
-
 			}
 		}
 
@@ -99,20 +96,22 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		}
 
 		private boolean isAdapterOutputEvent(final Notification notification) {
-			return (getAction().getOutput() instanceof AdapterEvent) && (((AdapterEvent) getAction().getOutput())
-					.getAdapterDeclaration().getName().equals(notification.getNewValue()));
+			return isAdapterNotification(notification.getNewValue(), getAction().getOutput());
 		}
 
 		private void handleRemove(final Notification notification) {
 			if ((notification.getOldValue() == getAction().getOutput())
-					|| ((getAction().getOutput() instanceof AdapterEvent)
-							&& (notification.getOldValue() instanceof AdapterDeclaration)
-							&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration() == notification
-							.getOldValue()))) {
+					|| isAdapterNotification(notification.getOldValue(), getAction().getOutput())) {
 				executeCommand(new ChangeOutputCommand(getAction(), null));
 			}
 		}
 	};
+
+	public static boolean isAdapterNotification(final Object change, final Event ev) {
+		return (ev.getFBNetworkElement() instanceof AdapterFB)
+				&& ((((AdapterFB) ev.getFBNetworkElement()).getAdapterDecl() == change)
+						|| (ev.getFBNetworkElement().getName().equals(change)));
+	}
 
 	private final IPropertyChangeListener propertyChangeListener = event -> {
 		if (event.getProperty().equals(PreferenceConstants.P_ECC_EVENT_COLOR)) {

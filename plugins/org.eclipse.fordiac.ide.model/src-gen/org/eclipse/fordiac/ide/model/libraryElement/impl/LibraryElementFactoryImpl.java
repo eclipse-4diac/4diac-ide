@@ -34,7 +34,6 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -216,7 +215,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 			case LibraryElementPackage.RESOURCE_TYPE_FB: return createResourceTypeFB();
 			case LibraryElementPackage.SEGMENT_TYPE: return createSegmentType();
 			case LibraryElementPackage.ADAPTER_FB_TYPE: return createAdapterFBType();
-			case LibraryElementPackage.ADAPTER_EVENT: return createAdapterEvent();
 			case LibraryElementPackage.SERVICE: return createService();
 			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT: return createTypedConfigureableObject();
 			case LibraryElementPackage.ADAPTER_FB: return createAdapterFB();
@@ -886,17 +884,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	public AdapterFBType createAdapterFBType() {
 		AdapterFBTypeImpl adapterFBType = new AdapterFBTypeImpl();
 		return adapterFBType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public AdapterEvent createAdapterEvent() {
-		AdapterEventImpl adapterEvent = new AdapterEventImpl();
-		return adapterEvent;
 	}
 
 	/**

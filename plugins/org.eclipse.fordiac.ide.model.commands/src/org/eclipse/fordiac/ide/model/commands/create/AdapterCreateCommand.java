@@ -44,6 +44,7 @@ public class AdapterCreateCommand extends FBCreateCommand {
 	protected void checkName() {
 		// for adapters we already have a correct name and do not want to change that. Also for basics, simples, and
 		// SIFBs we are not in an fbnetwork and name checking wouldn't even work.
+		getAdapterFB().setName(getAdapterFB().getAdapterDecl().getName());
 	}
 
 	private static FBNetwork getFBNetwork(final FBType parent) {

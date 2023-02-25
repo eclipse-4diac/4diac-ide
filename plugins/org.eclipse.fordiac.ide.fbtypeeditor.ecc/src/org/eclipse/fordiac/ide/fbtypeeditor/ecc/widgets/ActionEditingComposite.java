@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH
- * 				 2019 Johannes Kepler University Linz
+ * Copyright (c) 2015, 2023 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +17,7 @@
  *     - change TransitionViewer to table and make it editable
  *   Alois Zoitl - extracted helper for ComboCellEditors that unfold on activation
  *   Bianca Wiesmayr - externalized code from StateSection and cleanup
+ *   Alois Zoitl - updated for new adapter FB handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets;
 

@@ -42,7 +42,6 @@ import org.eclipse.fordiac.ide.model.data.impl.DataPackageImpl;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -549,13 +548,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	private EClass adapterFBTypeEClass = null;
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	private EClass adapterEventEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -2802,26 +2794,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EClass getAdapterEvent() {
-		return adapterEventEClass;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getAdapterEvent_AdapterDeclaration() {
-		return (EReference)adapterEventEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getService() {
 		return serviceEClass;
 	}
@@ -3912,9 +3884,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		adapterFBTypeEClass = createEClass(ADAPTER_FB_TYPE);
 		createEReference(adapterFBTypeEClass, ADAPTER_FB_TYPE__ADAPTER_TYPE);
 
-		adapterEventEClass = createEClass(ADAPTER_EVENT);
-		createEReference(adapterEventEClass, ADAPTER_EVENT__ADAPTER_DECLARATION);
-
 		serviceEClass = createEClass(SERVICE);
 		createEReference(serviceEClass, SERVICE__RIGHT_INTERFACE);
 		createEReference(serviceEClass, SERVICE__LEFT_INTERFACE);
@@ -4131,7 +4100,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		resourceTypeFBEClass.getESuperTypes().add(this.getFB());
 		segmentTypeEClass.getESuperTypes().add(this.getCompilableType());
 		adapterFBTypeEClass.getESuperTypes().add(this.getFBType());
-		adapterEventEClass.getESuperTypes().add(this.getEvent());
 		typedConfigureableObjectEClass.getESuperTypes().add(this.getINamedElement());
 		typedConfigureableObjectEClass.getESuperTypes().add(this.getConfigurableObject());
 		adapterFBEClass.getESuperTypes().add(this.getFB());
@@ -4659,11 +4627,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 
 		initEClass(adapterFBTypeEClass, AdapterFBType.class, "AdapterFBType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getAdapterFBType_AdapterType(), this.getAdapterType(), null, "adapterType", null, 0, 1, AdapterFBType.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-
-		initEClass(adapterEventEClass, AdapterEvent.class, "AdapterEvent", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-		initEReference(getAdapterEvent_AdapterDeclaration(), this.getAdapterDeclaration(), null, "adapterDeclaration", null, 1, 1, AdapterEvent.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-
-		addEOperation(adapterEventEClass, theXMLTypePackage.getString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(serviceEClass, Service.class, "Service", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getService_RightInterface(), this.getServiceInterface(), null, "rightInterface", null, 0, 1, Service.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$

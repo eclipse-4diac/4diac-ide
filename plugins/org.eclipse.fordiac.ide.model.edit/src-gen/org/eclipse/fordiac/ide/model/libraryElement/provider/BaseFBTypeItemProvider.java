@@ -292,11 +292,6 @@ public class BaseFBTypeItemProvider extends FBTypeItemProvider {
 		newChildDescriptors.add
 			(createChildParameter
 				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
-				 LibraryElementFactory.eINSTANCE.createAdapterEvent()));
-
-		newChildDescriptors.add
-			(createChildParameter
-				(LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES,
 				 LibraryElementFactory.eINSTANCE.createAdapterFB()));
 
 		newChildDescriptors.add

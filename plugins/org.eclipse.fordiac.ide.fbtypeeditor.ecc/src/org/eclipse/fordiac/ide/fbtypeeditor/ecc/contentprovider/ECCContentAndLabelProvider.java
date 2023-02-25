@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2013, 2017 fortiss GmbH
- *               2019 Johannes Kepler University Linz
+ * Copyright (c) 2016, 2023 fortiss GmbH, Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -11,10 +10,9 @@
  * Contributors:
  *   Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Bianca Wiesmayr
- *     - expanded for input events
- *   Virendra Ashiwal, Bianca Wiesmayr
- *   	- expanded for Transitions
+ *   Bianca Wiesmayr - expanded for input events
+ *   Virendra Ashiwal, Bianca Wiesmayr - expanded for Transitions
+ *   Alois Zoitl - updated for new adapter FB handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider;
 

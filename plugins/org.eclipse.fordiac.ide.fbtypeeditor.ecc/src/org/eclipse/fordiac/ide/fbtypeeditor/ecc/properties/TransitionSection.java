@@ -1,7 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2017 fortiss GmbH
- *               2019 Johannes Kepler University Linz
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2015, 2023 fortiss GmbH, Johannes Kepler University Linz,
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,12 +11,11 @@
  * Contributors:
  *   Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
- *   Bianca Wiesmayr
- *    - consistent dropdown menu edit
+ *   Bianca Wiesmayr - consistent dropdown menu edit
  *   Virendra Ashiwal, Bianca Wiesmayr
  *   - Used extracted method from ECCContentAndLabelProvider
- *   Martin Jobst
- *   - adopt ST editor for transition conditions
+ *   Martin Jobst - adopt ST editor for transition conditions
+ *   Alois Zoitl  - updated for new adapter FB handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 

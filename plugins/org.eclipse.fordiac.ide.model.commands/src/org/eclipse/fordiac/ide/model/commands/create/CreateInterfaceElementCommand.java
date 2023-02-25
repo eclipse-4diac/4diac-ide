@@ -137,10 +137,10 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 		}
 		createAdapterCreateCommand();
 		insertElement();
+		newInterfaceElement.setName(NameRepository.createUniqueName(newInterfaceElement, name));
 		if (null != adapterCreateCmd) {
 			adapterCreateCmd.execute();
 		}
-		newInterfaceElement.setName(NameRepository.createUniqueName(newInterfaceElement, name));
 	}
 
 	private void finalizeCopyInterfaceElement() {

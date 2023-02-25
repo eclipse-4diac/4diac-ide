@@ -1,9 +1,8 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2018 TU Wien/ACIN
- * 				 2020, 2023 Johannes Kepler University, Linz
- *               2021 Primetals Technologies Austria GmbH
- *               2023 Martin Erich Jobst
+ * Copyright (c) 2008, 2023  Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                           TU Wien/ACIN, Johannes Kepler University, Linz,
+ *                           Primetals Technologies Austria GmbH,
+ *                           Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -19,6 +18,7 @@
  *  			  parsing performance
  *  Martin Melik Merkumians - added import of internal FBs
  *  Martin Jobst - refactor marker handling
+ *  Alois Zoitl - updated for new adapter FB handling
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
