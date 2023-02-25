@@ -9,7 +9,7 @@
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterFB" eType="#//AdapterFB"
-        eOpposite="#//AdapterFB/adapterDecl"/>
+        containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeEntry" eType="#//TypeEntry"
         transient="true"/>
   </eClassifiers>
@@ -1363,7 +1363,7 @@
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterDecl" lowerBound="1"
-        eType="#//AdapterDeclaration" eOpposite="#//AdapterDeclaration/adapterFB"/>
+        eType="#//AdapterDeclaration"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
   <eClassifiers xsi:type="ecore:EClass" name="Primitive">

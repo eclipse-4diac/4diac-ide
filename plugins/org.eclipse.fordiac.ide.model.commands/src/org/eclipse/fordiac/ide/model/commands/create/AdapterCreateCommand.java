@@ -28,6 +28,7 @@ public class AdapterCreateCommand extends FBCreateCommand {
 		super(getFBNetwork(parent), LibraryElementFactory.eINSTANCE.createAdapterFB(), x, y);
 		getAdapterFB().setTypeEntry(adapterDecl.getType().getTypeEntry());
 		getAdapterFB().setAdapterDecl(adapterDecl);
+		adapterDecl.setAdapterFB(getAdapterFB());
 	}
 
 	private AdapterFB getAdapterFB() {

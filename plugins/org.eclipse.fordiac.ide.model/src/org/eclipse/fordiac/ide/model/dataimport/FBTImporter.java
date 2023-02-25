@@ -1032,6 +1032,7 @@ public class FBTImporter extends TypeImporter {
 		final AdapterFB aFB = LibraryElementFactory.eINSTANCE.createAdapterFB();
 		aFB.setTypeEntry(adapter.getAdapterType().getTypeEntry());
 		aFB.setAdapterDecl(adapter);
+		adapter.setAdapterFB(aFB);
 		aFB.setName(adapter.getName());
 
 		if (null != aFB.getType() && null != aFB.getType().getInterfaceList()) {

@@ -191,7 +191,7 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	protected String typeName = TYPE_NAME_EDEFAULT;
 
 	/**
-	 * The cached value of the '{@link #getAdapterFB() <em>Adapter FB</em>}' reference.
+	 * The cached value of the '{@link #getAdapterFB() <em>Adapter FB</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getAdapterFB()
@@ -413,6 +413,12 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			InternalEObject oldAdapterFB = (InternalEObject)adapterFB;
 			adapterFB = (AdapterFB)eResolveProxy(oldAdapterFB);
 			if (adapterFB != oldAdapterFB) {
+				InternalEObject newAdapterFB = (InternalEObject)adapterFB;
+				NotificationChain msgs = oldAdapterFB.eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, null, null);
+				if (newAdapterFB.eInternalContainer() == null) {
+					msgs = newAdapterFB.eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, null, msgs);
+				}
+				if (msgs != null) msgs.dispatch();
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, oldAdapterFB, adapterFB));
 			}
@@ -454,9 +460,9 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 		if (newAdapterFB != adapterFB) {
 			NotificationChain msgs = null;
 			if (adapterFB != null)
-				msgs = ((InternalEObject)adapterFB).eInverseRemove(this, LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL, AdapterFB.class, msgs);
+				msgs = ((InternalEObject)adapterFB).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, null, msgs);
 			if (newAdapterFB != null)
-				msgs = ((InternalEObject)newAdapterFB).eInverseAdd(this, LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL, AdapterFB.class, msgs);
+				msgs = ((InternalEObject)newAdapterFB).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, null, msgs);
 			msgs = basicSetAdapterFB(newAdapterFB, msgs);
 			if (msgs != null) msgs.dispatch();
 		}
@@ -598,10 +604,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputConnections()).basicAdd(otherEnd, msgs);
 			case LibraryElementPackage.ADAPTER_DECLARATION__OUTPUT_CONNECTIONS:
 				return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputConnections()).basicAdd(otherEnd, msgs);
-			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
-				if (adapterFB != null)
-					msgs = ((InternalEObject)adapterFB).eInverseRemove(this, LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL, AdapterFB.class, msgs);
-				return basicSetAdapterFB((AdapterFB)otherEnd, msgs);
 			default:
 				return super.eInverseAdd(otherEnd, featureID, msgs);
 		}

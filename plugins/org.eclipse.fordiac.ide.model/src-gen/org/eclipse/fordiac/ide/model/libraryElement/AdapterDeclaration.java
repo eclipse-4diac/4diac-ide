@@ -37,24 +37,22 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
  */
 public interface AdapterDeclaration extends IInterfaceElement {
 	/**
-	 * Returns the value of the '<em><b>Adapter FB</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl <em>Adapter Decl</em>}'.
+	 * Returns the value of the '<em><b>Adapter FB</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Adapter FB</em>' reference.
+	 * @return the value of the '<em>Adapter FB</em>' containment reference.
 	 * @see #setAdapterFB(AdapterFB)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration_AdapterFB()
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl
-	 * @model opposite="adapterDecl"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	AdapterFB getAdapterFB();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Adapter FB</em>' reference.
+	 * @param value the new value of the '<em>Adapter FB</em>' containment reference.
 	 * @see #getAdapterFB()
 	 * @generated
 	 */
