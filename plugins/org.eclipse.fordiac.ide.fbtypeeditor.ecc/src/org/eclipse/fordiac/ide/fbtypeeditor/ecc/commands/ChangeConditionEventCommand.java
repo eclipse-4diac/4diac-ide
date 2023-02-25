@@ -16,6 +16,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 
+import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider.ONE_CONDITION;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,13 +26,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.gef.commands.Command;
-import static org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.ECCContentAndLabelProvider.*;
 
 public class ChangeConditionEventCommand extends Command {
 
 	private final ECTransition transition;
 	private final List<Event> eventList = new ArrayList<>();
-	private String conditionEvent;
+	private final String conditionEvent;
 	private String oldConditionEvent;
 
 	// if the string is 1 we need to set capture the condition expression
@@ -49,7 +50,7 @@ public class ChangeConditionEventCommand extends Command {
 		this.transition = transition;
 		this.conditionEvent = conditionEvent;
 
-		BasicFBType fb = (null != transition) ? transition.getECC().getBasicFBType() : null;
+		final BasicFBType fb = (null != transition) ? transition.getECC().getBasicFBType() : null;
 		eventList.addAll(ECCContentAndLabelProvider.getInputEvents(fb));
 	}
 
@@ -93,9 +94,9 @@ public class ChangeConditionEventCommand extends Command {
 		}
 	}
 
-	private Event getEvent(String event) {
-		for (Event e : eventList) {
-			if (e.getName().equals(event)) {
+	private Event getEvent(final String eventName) {
+		for (final Event e : eventList) {
+			if (ECCContentAndLabelProvider.getEventName(e).equals(eventName)) {
 				return e;
 			}
 		}

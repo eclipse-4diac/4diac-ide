@@ -32,7 +32,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
@@ -167,9 +166,12 @@ public class ActionSection extends AbstractSection {
 		if ((null != type) && (null != getFBType())) {
 			// during delete phases it can be that the input (i.e., Action) is not attached
 			// to its type anymore. Therefore also the check if getFBType() is not null
-			setDropdown(outputEventCombo, getType().getOutput(),
-					ECCContentAndLabelProvider.getOutputEventNames(getFBType()));
-			setDropdown(algorithmCombo, getAlgorithm(), ECCContentAndLabelProvider.getAlgorithmNames(getFBType()));
+			updateDropdown(outputEventCombo, ECCContentAndLabelProvider.getOutputEventNames(getFBType()));
+			selectOutputEvent(getType().getOutput());
+
+			updateDropdown(algorithmCombo, ECCContentAndLabelProvider.getAlgorithmNames(getFBType()));
+			selectAlgorithm(getAlgorithm());
+
 			actionComposite.layout();
 
 			algorithmGroup.setAlgorithm(getAlgorithm());
@@ -178,11 +180,19 @@ public class ActionSection extends AbstractSection {
 		commandStack = commandStackBuffer;
 	}
 
-	private static void setDropdown(final CCombo comboBox, final INamedElement el, final List<String> names) {
+	private static void updateDropdown(final CCombo comboBox, final List<String> names) {
 		comboBox.removeAll();
 		names.forEach(comboBox::add);
-		// pre-selects the elements that are now in the action:
-		comboBox.select((null == el) ? names.size() - 1 : comboBox.indexOf(el.getName()));
+	}
+
+	private void selectOutputEvent(final Event eo) {
+		outputEventCombo.select((null == eo) ? outputEventCombo.getItemCount() - 1
+				: outputEventCombo.indexOf(ECCContentAndLabelProvider.getEventName(eo)));
+	}
+
+	private void selectAlgorithm(final Algorithm alg) {
+		algorithmCombo
+		.select((null == alg) ? algorithmCombo.getItemCount() - 1 : algorithmCombo.indexOf(alg.getName()));
 	}
 
 	@Override

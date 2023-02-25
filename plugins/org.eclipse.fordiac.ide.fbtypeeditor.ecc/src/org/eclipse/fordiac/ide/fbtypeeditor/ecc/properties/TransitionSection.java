@@ -33,6 +33,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmConditionEditedResourceProvider;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmEmbeddedEditorUtil;
 import org.eclipse.fordiac.ide.ui.providers.SourceViewerColorProvider;
@@ -190,13 +191,17 @@ public class TransitionSection extends AbstractSection {
 					&& getType().getConditionExpression().equals(ECCContentAndLabelProvider.ONE_CONDITION)) {
 				eventCombo.select(eventCombo.indexOf(ECCContentAndLabelProvider.ONE_CONDITION));
 			} else {
-				eventCombo.select(getType().getConditionEvent() != null
-						? eventCombo.indexOf(getType().getConditionEvent().getName())
-								: (eventCombo.getItemCount() - 1));
+				final Event conditionEvent = getType().getConditionEvent();
+				eventCombo.select(
+						conditionEvent != null ? getEventIndex(conditionEvent) : (eventCombo.getItemCount() - 1));
 			}
 			updateConditionEditor();
 		}
 		commandStack = commandStackBuffer;
+	}
+
+	private int getEventIndex(final Event conditionEvent) {
+		return eventCombo.indexOf(ECCContentAndLabelProvider.getEventName(conditionEvent));
 	}
 
 	public void fillEventConditionDropdown() {
