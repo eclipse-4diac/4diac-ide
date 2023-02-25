@@ -24,6 +24,7 @@ import java.util.List;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
@@ -205,9 +207,17 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 				getWriter().writeAttribute(LibraryElementTags.ALGORITHM_ELEMENT, action.getAlgorithm().getName());
 			}
 			if (action.getOutput() != null) {
-				getWriter().writeAttribute(LibraryElementTags.OUTPUT_ATTRIBUTE, action.getOutput().getName());
+				getWriter().writeAttribute(LibraryElementTags.OUTPUT_ATTRIBUTE,
+						getActionOutputEventName(action.getOutput()));
 			}
 		}
+	}
+
+	private static String getActionOutputEventName(final Event event) {
+		if (event.getFBNetworkElement() instanceof AdapterFB) {
+			return event.getFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		}
+		return event.getName();
 	}
 
 	/**

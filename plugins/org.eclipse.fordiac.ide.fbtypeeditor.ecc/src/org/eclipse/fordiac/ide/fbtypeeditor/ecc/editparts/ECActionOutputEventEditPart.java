@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -65,7 +66,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			refreshEventLabel();
+			refreshEventLabel(getNameLabel());
 		}
 	};
 
@@ -88,7 +89,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		private void handleSet(final Notification notification) {
 			if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)
 					&& (isOutputEvent(notification) || isAdapterOutputEvent(notification))) {
-				refreshEventLabel();
+				refreshEventLabel(getNameLabel());
 
 			}
 		}
@@ -235,14 +236,27 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		eventLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_COLOR));
 		eventLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_TEXT_COLOR));
 		eventLabel.setOpaque(true);
-		eventLabel.setText(getAction().getOutput() != null ? getAction().getOutput().getName() : ""); //$NON-NLS-1$
+		refreshEventLabel(eventLabel);
 		eventLabel.setBorder(new MarginBorder(OUTPUT_EVENT_INSETS));
 		eventLabel.setTextAlignment(PositionConstants.LEFT);
 		eventLabel.setLabelAlignment(PositionConstants.LEFT);
 		return eventLabel;
 	}
 
-	private void refreshEventLabel() {
-		getNameLabel().setText(getAction().getOutput() != null ? getAction().getOutput().getName() : ""); //$NON-NLS-1$
+	private void refreshEventLabel(final Label eventLabel) {
+		if (eventLabel != null) {
+			eventLabel.setText(getActionOutputLabelText(getAction().getOutput()));
+		}
+	}
+
+	private static String getActionOutputLabelText(final Event event) {
+		if (event == null) {
+			return ""; //$NON-NLS-1$
+		}
+
+		if (event.getFBNetworkElement() instanceof AdapterFB) {
+			return event.getFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		}
+		return event.getName();
 	}
 }

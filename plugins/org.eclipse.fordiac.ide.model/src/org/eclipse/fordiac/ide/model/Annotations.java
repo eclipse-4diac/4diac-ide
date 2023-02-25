@@ -237,16 +237,23 @@ public final class Annotations {
 		final Event event = ect.getConditionEvent();
 		final String expression = ect.getConditionExpression();
 		if (event != null) {
-			retVal = event.getName();
+			retVal = getTransitionEventName(event);
 		}
 		if (expression != null) {
-			if (expression.equals("1")) { //$NON-NLS-1$
+			if ("1".equals(expression)) { //$NON-NLS-1$
 				retVal = expression;
-			} else if (!expression.equals("")) { //$NON-NLS-1$
+			} else if (!expression.isBlank()) {
 				retVal += "[" + expression + "]"; //$NON-NLS-1$ //$NON-NLS-2$
 			}
 		}
 		return retVal;
+	}
+
+	private static String getTransitionEventName(final Event event) {
+		if (event.getFBNetworkElement() instanceof AdapterFB) {
+			return event.getFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		}
+		return event.getName();
 	}
 
 	// *** SubApp ***//
@@ -266,12 +273,12 @@ public final class Annotations {
 
 	public static Event getEvent(final InterfaceList il, final String name) {
 		for (final Event event : il.getEventInputs()) {
-			if (event.getName().equals(name)) {
+			if (getTransitionEventName(event).equals(name)) {
 				return event;
 			}
 		}
 		for (final Event event : il.getEventOutputs()) {
-			if (event.getName().equals(name)) {
+			if (getTransitionEventName(event).equals(name)) {
 				return event;
 			}
 		}
@@ -447,18 +454,18 @@ public final class Annotations {
 	public static boolean isArray(final VarDeclaration vd) {
 		return vd.getArraySize() > 0;
 	}
-	
-	public static void setVarConfig(VarDeclarationImpl varDeclarationImpl, boolean config) {
-		setVarConfig(varDeclarationImpl, Boolean.toString(config));	
+
+	public static void setVarConfig(final VarDeclarationImpl varDeclarationImpl, final boolean config) {
+		setVarConfig(varDeclarationImpl, Boolean.toString(config));
 	}
-	
-	private static void setVarConfig(VarDeclarationImpl varDeclarationImpl, final String config) {
+
+	private static void setVarConfig(final VarDeclarationImpl varDeclarationImpl, final String config) {
 		varDeclarationImpl.setAttribute(LibraryElementTags.VAR_CONFIG, FordiacKeywords.STRING, config, "");  //$NON-NLS-1$
 	}
-	
-	public static boolean isVarConfig(final VarDeclaration vd) {	
+
+	public static boolean isVarConfig(final VarDeclaration vd) {
 		final String configurationAttribute = vd.getAttributeValue(LibraryElementTags.VAR_CONFIG);
-  		return "true".equals(configurationAttribute);
+		return "true".equals(configurationAttribute);
 	}
 
 	// *** ConfigurableObject ***//
