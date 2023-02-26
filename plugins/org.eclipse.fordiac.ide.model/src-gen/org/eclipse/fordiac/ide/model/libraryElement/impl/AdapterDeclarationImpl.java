@@ -64,6 +64,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getTypeName <em>Type Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getAdapterFB <em>Adapter FB</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getAdapterNetworkFB <em>Adapter Network FB</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getTypeEntry <em>Type Entry</em>}</li>
  * </ul>
  *
@@ -199,6 +200,16 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 * @ordered
 	 */
 	protected AdapterFB adapterFB;
+
+	/**
+	 * The cached value of the '{@link #getAdapterNetworkFB() <em>Adapter Network FB</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAdapterNetworkFB()
+	 * @generated
+	 * @ordered
+	 */
+	protected AdapterFB adapterNetworkFB;
 
 	/**
 	 * The default value of the '{@link #getTypeEntry() <em>Type Entry</em>}' attribute.
@@ -476,6 +487,46 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 * @generated
 	 */
 	@Override
+	public AdapterFB getAdapterNetworkFB() {
+		if (adapterNetworkFB != null && adapterNetworkFB.eIsProxy()) {
+			InternalEObject oldAdapterNetworkFB = (InternalEObject)adapterNetworkFB;
+			adapterNetworkFB = (AdapterFB)eResolveProxy(oldAdapterNetworkFB);
+			if (adapterNetworkFB != oldAdapterNetworkFB) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB, oldAdapterNetworkFB, adapterNetworkFB));
+			}
+		}
+		return adapterNetworkFB;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public AdapterFB basicGetAdapterNetworkFB() {
+		return adapterNetworkFB;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public void setAdapterNetworkFB(AdapterFB newAdapterNetworkFB) {
+		AdapterFB oldAdapterNetworkFB = adapterNetworkFB;
+		adapterNetworkFB = newAdapterNetworkFB;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB, oldAdapterNetworkFB, adapterNetworkFB));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public TypeEntry getTypeEntry() {
 		return typeEntry;
 	}
@@ -658,6 +709,9 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
 				if (resolve) return getAdapterFB();
 				return basicGetAdapterFB();
+			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
+				if (resolve) return getAdapterNetworkFB();
+				return basicGetAdapterNetworkFB();
 			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_ENTRY:
 				return getTypeEntry();
 			default:
@@ -704,6 +758,9 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
 				setAdapterFB((AdapterFB)newValue);
 				return;
+			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
+				setAdapterNetworkFB((AdapterFB)newValue);
+				return;
 			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_ENTRY:
 				setTypeEntry((TypeEntry)newValue);
 				return;
@@ -748,6 +805,9 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
 				setAdapterFB((AdapterFB)null);
 				return;
+			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
+				setAdapterNetworkFB((AdapterFB)null);
+				return;
 			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_ENTRY:
 				setTypeEntry(TYPE_ENTRY_EDEFAULT);
 				return;
@@ -783,6 +843,8 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB:
 				return adapterFB != null;
+			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
+				return adapterNetworkFB != null;
 			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_ENTRY:
 				return TYPE_ENTRY_EDEFAULT == null ? typeEntry != null : !TYPE_ENTRY_EDEFAULT.equals(typeEntry);
 			default:

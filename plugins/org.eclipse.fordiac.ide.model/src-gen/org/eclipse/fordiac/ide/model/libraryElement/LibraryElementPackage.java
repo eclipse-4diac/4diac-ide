@@ -293,13 +293,22 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_DECLARATION__ADAPTER_FB = IINTERFACE_ELEMENT_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Adapter Network FB</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTER_DECLARATION__ADAPTER_NETWORK_FB = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
+
+	/**
 	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION__TYPE_ENTRY = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
+	int ADAPTER_DECLARATION__TYPE_ENTRY = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The number of structural features of the '<em>Adapter Declaration</em>' class.
@@ -308,7 +317,7 @@ public interface LibraryElementPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
+	int ADAPTER_DECLARATION_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl <em>Library Element</em>}' class.
@@ -6872,6 +6881,17 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAdapterDeclaration_AdapterFB();
 
 	/**
+	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterNetworkFB <em>Adapter Network FB</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the reference '<em>Adapter Network FB</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterNetworkFB()
+	 * @see #getAdapterDeclaration()
+	 * @generated
+	 */
+	EReference getAdapterDeclaration_AdapterNetworkFB();
+
+	/**
 	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getTypeEntry <em>Type Entry</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9779,6 +9799,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ADAPTER_DECLARATION__ADAPTER_FB = eINSTANCE.getAdapterDeclaration_AdapterFB();
+
+		/**
+		 * The meta object literal for the '<em><b>Adapter Network FB</b></em>' reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ADAPTER_DECLARATION__ADAPTER_NETWORK_FB = eINSTANCE.getAdapterDeclaration_AdapterNetworkFB();
 
 		/**
 		 * The meta object literal for the '<em><b>Type Entry</b></em>' attribute feature.

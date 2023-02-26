@@ -104,8 +104,8 @@ public abstract class AbstractBlockTypeExporter extends AbstractTypeExporter {
 		}
 
 		addNameTypeCommentAttribute(adapterDecl, adapterDecl.getType());
-		if (null != adapterDecl.getAdapterFB()) {
-			addXYAttributes(adapterDecl.getAdapterFB());
+		if (null != adapterDecl.getAdapterNetworkFB()) {
+			addXYAttributes(adapterDecl.getAdapterNetworkFB());
 		}
 
 		if (hasAttributes) {

@@ -48,7 +48,7 @@ public class DeleteInterfaceCommand extends Command {
 		handleWiths();
 		handleSubAppConnections();
 		if ((interfaceElement instanceof AdapterDeclaration) && (parent.eContainer() instanceof CompositeFBType)) {
-			cmds.add(new DeleteFBNetworkElementCommand(((AdapterDeclaration) interfaceElement).getAdapterFB()));
+			cmds.add(new DeleteFBNetworkElementCommand(((AdapterDeclaration) interfaceElement).getAdapterNetworkFB()));
 		}
 		deleteMarkersCmds.add(
 				FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(interfaceElement)));

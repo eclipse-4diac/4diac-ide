@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterNetworkFB <em>Adapter Network FB</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getTypeEntry <em>Type Entry</em>}</li>
  * </ul>
  *
@@ -57,6 +58,28 @@ public interface AdapterDeclaration extends IInterfaceElement {
 	 * @generated
 	 */
 	void setAdapterFB(AdapterFB value);
+
+	/**
+	 * Returns the value of the '<em><b>Adapter Network FB</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Adapter Network FB</em>' reference.
+	 * @see #setAdapterNetworkFB(AdapterFB)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration_AdapterNetworkFB()
+	 * @model
+	 * @generated
+	 */
+	AdapterFB getAdapterNetworkFB();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterNetworkFB <em>Adapter Network FB</em>}' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Adapter Network FB</em>' reference.
+	 * @see #getAdapterNetworkFB()
+	 * @generated
+	 */
+	void setAdapterNetworkFB(AdapterFB value);
 
 	/**
 	 * Returns the value of the '<em><b>Type Entry</b></em>' attribute.

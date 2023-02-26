@@ -24,6 +24,7 @@
     <genDataTypes ecoreDataType="lib.ecore#//VarDeclList"/>
     <genClasses ecoreClass="lib.ecore#//AdapterDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterFB"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterNetworkFB"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AdapterDeclaration/typeEntry"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterDeclaration/getAdapterType"
           body="return (AdapterType)getType();"/>

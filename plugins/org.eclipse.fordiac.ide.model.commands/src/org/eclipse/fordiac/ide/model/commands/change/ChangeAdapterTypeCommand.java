@@ -38,7 +38,7 @@ public class ChangeAdapterTypeCommand extends ChangeDataTypeCommand {
 	private static final class ChangeAdapterFBCommand extends UpdateFBTypeCommand {
 
 		public ChangeAdapterFBCommand(final AdapterDeclaration adpDecl) {
-			super(adpDecl.getAdapterFB(), null);
+			super(adpDecl.getAdapterNetworkFB(), null);
 			setEntry(adpDecl.getType().getTypeEntry());
 		}
 
@@ -52,6 +52,28 @@ public class ChangeAdapterTypeCommand extends ChangeDataTypeCommand {
 			}
 			copy.setAdapterDecl(((AdapterFB) srcElement).getAdapterDecl());
 			return copy;
+		}
+
+		@Override
+		public void execute() {
+			super.execute();
+			setAdapterNetworkFB((AdapterFB) newElement);
+		}
+
+		@Override
+		public void undo() {
+			super.undo();
+			setAdapterNetworkFB((AdapterFB) oldElement);
+		}
+
+		@Override
+		public void redo() {
+			super.redo();
+			setAdapterNetworkFB((AdapterFB) newElement);
+		}
+
+		private static void setAdapterNetworkFB(final AdapterFB fb) {
+			fb.getAdapterDecl().setAdapterNetworkFB(fb);
 		}
 	}
 

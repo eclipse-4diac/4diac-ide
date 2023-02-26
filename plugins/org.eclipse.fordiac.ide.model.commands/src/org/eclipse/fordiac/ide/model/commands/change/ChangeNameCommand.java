@@ -71,8 +71,13 @@ public class ChangeNameCommand extends Command {
 	}
 
 	private void checkForAdapter() {
-		if ((element instanceof AdapterDeclaration) && (((AdapterDeclaration) element).getAdapterFB() != null)) {
-			adapterElement = ((AdapterDeclaration) element).getAdapterFB();
+		if (element instanceof AdapterDeclaration) {
+			final AdapterDeclaration adpDecl = (AdapterDeclaration) element;
+			if (adpDecl.getAdapterFB() != null) {
+				adapterElement = adpDecl.getAdapterFB();
+			} else if (adpDecl.getAdapterNetworkFB() != null) {
+				adapterElement = adpDecl.getAdapterNetworkFB();
+			}
 		}
 		if (element instanceof AdapterFB) {
 			adapterElement = ((AdapterFB) element).getAdapterDecl();

@@ -924,8 +924,18 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public EReference getAdapterDeclaration_AdapterNetworkFB() {
+		return (EReference)adapterDeclarationEClass.getEStructuralFeatures().get(1);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EAttribute getAdapterDeclaration_TypeEntry() {
-		return (EAttribute)adapterDeclarationEClass.getEStructuralFeatures().get(1);
+		return (EAttribute)adapterDeclarationEClass.getEStructuralFeatures().get(2);
 	}
 
 	/**
@@ -3639,6 +3649,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		// Create classes and their features
 		adapterDeclarationEClass = createEClass(ADAPTER_DECLARATION);
 		createEReference(adapterDeclarationEClass, ADAPTER_DECLARATION__ADAPTER_FB);
+		createEReference(adapterDeclarationEClass, ADAPTER_DECLARATION__ADAPTER_NETWORK_FB);
 		createEAttribute(adapterDeclarationEClass, ADAPTER_DECLARATION__TYPE_ENTRY);
 
 		adapterTypeEClass = createEClass(ADAPTER_TYPE);
@@ -4130,6 +4141,7 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		// Initialize classes and features; add operations and parameters
 		initEClass(adapterDeclarationEClass, AdapterDeclaration.class, "AdapterDeclaration", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEReference(getAdapterDeclaration_AdapterFB(), this.getAdapterFB(), null, "adapterFB", null, 0, 1, AdapterDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+		initEReference(getAdapterDeclaration_AdapterNetworkFB(), this.getAdapterFB(), null, "adapterNetworkFB", null, 0, 1, AdapterDeclaration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getAdapterDeclaration_TypeEntry(), this.getTypeEntry(), "typeEntry", null, 0, 1, AdapterDeclaration.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(adapterDeclarationEClass, this.getAdapterType(), "getAdapterType", 0, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$

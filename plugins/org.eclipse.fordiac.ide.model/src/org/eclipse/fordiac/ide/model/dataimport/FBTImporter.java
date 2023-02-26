@@ -383,7 +383,9 @@ public class FBTImporter extends TypeImporter {
 	}
 
 	private static void addAdapterFBToNetwork(final FBNetwork fbNetwork, final AdapterDeclaration adapterDecl) {
-		fbNetwork.getNetworkElements().add(adapterDecl.getAdapterFB());
+		final AdapterFB adapterFB = adapterDecl.getAdapterFB();
+		fbNetwork.getNetworkElements().add(adapterFB);
+		adapterDecl.setAdapterNetworkFB(adapterFB);
 	}
 
 	/** This method converts a FBType to a CompositeFBType.
