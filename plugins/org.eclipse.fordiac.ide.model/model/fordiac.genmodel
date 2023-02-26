@@ -30,9 +30,9 @@
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterType">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterType/adapterFBType"/>
+      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//AdapterType/plugType"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterType/getInterfaceList" body="return org.eclipse.fordiac.ide.model.Annotations.getInterfaceList(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//AdapterType/getPlugType" body="return org.eclipse.fordiac.ide.model.Annotations.getPlugType(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//AdapterType/getSocketType" body="return org.eclipse.fordiac.ide.model.Annotations.getSocketType(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterType/getSocketType" body="//the socket form is the form how adapter types are edited and stored&#xA;return getAdapterFBType();"/>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//Algorithm">
       <genOperations ecoreOperation="lib.ecore#//Algorithm/getInputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
@@ -461,7 +461,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SegmentType/varDeclaration"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterFBType">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterFBType/adapterType"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterFBType/getAdapterType" body="return (AdapterType)eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Service">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/rightInterface"/>

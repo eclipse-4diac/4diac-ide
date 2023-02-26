@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,8 +17,10 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 
 import org.eclipse.emf.ecore.EClass;
+import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
@@ -38,13 +40,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl#getAdapterFBType <em>Adapter FB Type</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl#getPlugType <em>Plug Type</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	/**
-	 * The cached value of the '{@link #getAdapterFBType() <em>Adapter FB Type</em>}' reference.
+	 * The cached value of the '{@link #getAdapterFBType() <em>Adapter FB Type</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @see #getAdapterFBType()
@@ -52,6 +55,16 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @ordered
 	 */
 	protected AdapterFBType adapterFBType;
+
+	/**
+	 * The cached value of the '{@link #getPlugType() <em>Plug Type</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getPlugType()
+	 * @generated
+	 * @ordered
+	 */
+	protected AdapterFBType plugType;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -87,12 +100,72 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public void setAdapterFBType(AdapterFBType newAdapterFBType) {
+	public NotificationChain basicSetAdapterFBType(AdapterFBType newAdapterFBType, NotificationChain msgs) {
 		AdapterFBType oldAdapterFBType = adapterFBType;
 		adapterFBType = newAdapterFBType;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE, oldAdapterFBType, adapterFBType));
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE, oldAdapterFBType, newAdapterFBType);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated NOT
+	 */
+	@Override
+	public void setAdapterFBType(AdapterFBType newAdapterFBType) {
+		if (newAdapterFBType != adapterFBType) {
+			NotificationChain msgs = null;
+			if (adapterFBType != null)
+				msgs = ((InternalEObject)adapterFBType).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE, null, msgs);
+			if (newAdapterFBType != null)
+				msgs = ((InternalEObject)newAdapterFBType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE, null, msgs);
+			msgs = basicSetAdapterFBType(newAdapterFBType, msgs);
+			msgs = updatePlugType(newAdapterFBType, msgs);
+			if (msgs != null) msgs.dispatch();
+		}
+		else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE, newAdapterFBType, newAdapterFBType));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AdapterFBType getPlugType() {
+		return plugType;
+	}
+
+	private NotificationChain updatePlugType(AdapterFBType newAdapterFBType, NotificationChain msgs) {
+		AdapterFBType newPlugType = (newAdapterFBType != null) ? org.eclipse.fordiac.ide.model.Annotations.createPlugType(newAdapterFBType) : null;
+		if (newPlugType != plugType) {
+			if (plugType != null)
+				msgs = ((InternalEObject)plugType).eInverseRemove(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, null, msgs);
+			if (newPlugType != null)
+				msgs = ((InternalEObject)newPlugType).eInverseAdd(this, EOPPOSITE_FEATURE_BASE - LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, null, msgs);
+			msgs = basicSetPlugType(newPlugType, msgs);
+		}
+		return msgs;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public NotificationChain basicSetPlugType(AdapterFBType newPlugType, NotificationChain msgs) {
+		AdapterFBType oldPlugType = plugType;
+		plugType = newPlugType;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE, oldPlugType, newPlugType);
+			if (msgs == null) msgs = notification; else msgs.add(notification);
+		}
+		return msgs;
 	}
 
 	/**
@@ -111,8 +184,9 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	@Override
-	public AdapterFBType getPlugType() {
-		return org.eclipse.fordiac.ide.model.Annotations.getPlugType(this);
+	public AdapterFBType getSocketType() {
+		//the socket form is the form how adapter types are edited and stored
+		return getAdapterFBType();
 	}
 
 	/**
@@ -121,8 +195,15 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 	 * @generated
 	 */
 	@Override
-	public AdapterFBType getSocketType() {
-		return org.eclipse.fordiac.ide.model.Annotations.getSocketType(this);
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
+				return basicSetAdapterFBType(null, msgs);
+			case LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE:
+				return basicSetPlugType(null, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
 	}
 
 	/**
@@ -135,6 +216,8 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 		switch (featureID) {
 			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
 				return getAdapterFBType();
+			case LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE:
+				return getPlugType();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -184,6 +267,8 @@ public class AdapterTypeImpl extends DataTypeImpl implements AdapterType {
 		switch (featureID) {
 			case LibraryElementPackage.ADAPTER_TYPE__ADAPTER_FB_TYPE:
 				return adapterFBType != null;
+			case LibraryElementPackage.ADAPTER_TYPE__PLUG_TYPE:
+				return plugType != null;
 			default:
 				return super.eIsSet(featureID);
 		}

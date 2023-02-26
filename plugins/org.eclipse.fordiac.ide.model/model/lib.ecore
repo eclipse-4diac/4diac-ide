@@ -19,18 +19,21 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getInterfaceList(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getPlugType" eType="#//AdapterFBType">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getPlugType(this);"/>
-      </eAnnotations>
-    </eOperations>
     <eOperations name="getSocketType" eType="#//AdapterFBType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getSocketType(this);"/>
+        <details key="body" value="//the socket form is the form how adapter types are edited and stored&#xA;return getAdapterFBType();"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterFBType" eType="#//AdapterFBType"
-        resolveProxies="false">
+        containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Service"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plugType" eType="#//AdapterFBType"
+        changeable="false" derived="true" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="Service"/>
@@ -1296,8 +1299,11 @@
         eType="#//VarDeclaration" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterFBType" eSuperTypes="#//FBType">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterType" eType="#//AdapterType"
-        transient="true"/>
+    <eOperations name="getAdapterType" eType="#//AdapterType">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return (AdapterType)eContainer();"/>
+      </eAnnotations>
+    </eOperations>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Service">
     <eOperations name="getFBType" lowerBound="1" eType="#//FBType">

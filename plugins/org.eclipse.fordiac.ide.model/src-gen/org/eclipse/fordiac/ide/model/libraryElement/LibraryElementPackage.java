@@ -430,7 +430,7 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_TYPE__TYPE_ENTRY = DataPackage.DATA_TYPE__TYPE_ENTRY;
 
 	/**
-	 * The feature id for the '<em><b>Adapter FB Type</b></em>' reference.
+	 * The feature id for the '<em><b>Adapter FB Type</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -439,13 +439,22 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_TYPE__ADAPTER_FB_TYPE = DataPackage.DATA_TYPE_FEATURE_COUNT + 0;
 
 	/**
+	 * The feature id for the '<em><b>Plug Type</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ADAPTER_TYPE__PLUG_TYPE = DataPackage.DATA_TYPE_FEATURE_COUNT + 1;
+
+	/**
 	 * The number of structural features of the '<em>Adapter Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_TYPE_FEATURE_COUNT = DataPackage.DATA_TYPE_FEATURE_COUNT + 1;
+	int ADAPTER_TYPE_FEATURE_COUNT = DataPackage.DATA_TYPE_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.ICallable <em>ICallable</em>}' class.
@@ -4836,22 +4845,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_FB_TYPE__SERVICE = FB_TYPE__SERVICE;
 
 	/**
-	 * The feature id for the '<em><b>Adapter Type</b></em>' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_FB_TYPE__ADAPTER_TYPE = FB_TYPE_FEATURE_COUNT + 0;
-
-	/**
 	 * The number of structural features of the '<em>Adapter FB Type</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 1;
+	int ADAPTER_FB_TYPE_FEATURE_COUNT = FB_TYPE_FEATURE_COUNT + 0;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl <em>Service</em>}' class.
@@ -6893,15 +6893,26 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getAdapterType();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getAdapterFBType <em>Adapter FB Type</em>}'.
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getAdapterFBType <em>Adapter FB Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Adapter FB Type</em>'.
+	 * @return the meta object for the containment reference '<em>Adapter FB Type</em>'.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getAdapterFBType()
 	 * @see #getAdapterType()
 	 * @generated
 	 */
 	EReference getAdapterType_AdapterFBType();
+
+	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getPlugType <em>Plug Type</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Plug Type</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterType#getPlugType()
+	 * @see #getAdapterType()
+	 * @generated
+	 */
+	EReference getAdapterType_PlugType();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Algorithm <em>Algorithm</em>}'.
@@ -8861,17 +8872,6 @@ public interface LibraryElementPackage extends EPackage {
 	EClass getAdapterFBType();
 
 	/**
-	 * Returns the meta object for the reference '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType#getAdapterType <em>Adapter Type</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the reference '<em>Adapter Type</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType#getAdapterType()
-	 * @see #getAdapterFBType()
-	 * @generated
-	 */
-	EReference getAdapterFBType_AdapterType();
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.Service <em>Service</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9799,12 +9799,20 @@ public interface LibraryElementPackage extends EPackage {
 		EClass ADAPTER_TYPE = eINSTANCE.getAdapterType();
 
 		/**
-		 * The meta object literal for the '<em><b>Adapter FB Type</b></em>' reference feature.
+		 * The meta object literal for the '<em><b>Adapter FB Type</b></em>' containment reference feature.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
 		 * @generated
 		 */
 		EReference ADAPTER_TYPE__ADAPTER_FB_TYPE = eINSTANCE.getAdapterType_AdapterFBType();
+
+		/**
+		 * The meta object literal for the '<em><b>Plug Type</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ADAPTER_TYPE__PLUG_TYPE = eINSTANCE.getAdapterType_PlugType();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AlgorithmImpl <em>Algorithm</em>}' class.
@@ -11381,14 +11389,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ADAPTER_FB_TYPE = eINSTANCE.getAdapterFBType();
-
-		/**
-		 * The meta object literal for the '<em><b>Adapter Type</b></em>' reference feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ADAPTER_FB_TYPE__ADAPTER_TYPE = eINSTANCE.getAdapterFBType_AdapterType();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceImpl <em>Service</em>}' class.

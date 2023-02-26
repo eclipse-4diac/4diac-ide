@@ -39,11 +39,21 @@ public class ADPImporter extends TypeImporter {
 	}
 
 	@Override
+	public void loadElement() {
+		super.loadElement();
+		// set adapterFB type to correctly set plug
+		getElement().setAdapterFBType(adapterFBType);
+	}
+
+	@Override
+	public AdapterType getElement() {
+		return (AdapterType) super.getElement();
+	}
+
+	@Override
 	public LibraryElement createRootModelElement() {
 		final AdapterType newType = LibraryElementFactory.eINSTANCE.createAdapterType();
 		adapterFBType = LibraryElementFactory.eINSTANCE.createAdapterFBType();
-		newType.setAdapterFBType(adapterFBType);
-		adapterFBType.setAdapterType(newType);
 		adapterFBType.setService(LibraryElementFactory.eINSTANCE.createService());
 		return newType;
 	}

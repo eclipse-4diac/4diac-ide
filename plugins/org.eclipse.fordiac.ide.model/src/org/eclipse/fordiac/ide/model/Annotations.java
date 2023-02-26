@@ -74,8 +74,8 @@ public final class Annotations {
 		return at.getAdapterFBType().getInterfaceList();
 	}
 
-	public static AdapterFBType getPlugType(final AdapterType adapterType) {
-		final AdapterFBType temp = EcoreUtil.copy(adapterType.getAdapterFBType());
+	public static AdapterFBType createPlugType(final AdapterFBType adapterFBType) {
+		final AdapterFBType temp = EcoreUtil.copy(adapterFBType);
 		// fetch the interface to invert it
 		final List<Event> inputEvents = new ArrayList<>(temp.getInterfaceList().getEventOutputs());
 		for (final Event event : inputEvents) {

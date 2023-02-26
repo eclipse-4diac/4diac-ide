@@ -22,12 +22,6 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  * A representation of the model object '<em><b>Adapter FB Type</b></em>'.
  * <!-- end-user-doc -->
  *
- * <p>
- * The following features are supported:
- * </p>
- * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType#getAdapterType <em>Adapter Type</em>}</li>
- * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterFBType()
  * @model
@@ -35,25 +29,11 @@ package org.eclipse.fordiac.ide.model.libraryElement;
  */
 public interface AdapterFBType extends FBType {
 	/**
-	 * Returns the value of the '<em><b>Adapter Type</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Adapter Type</em>' reference.
-	 * @see #setAdapterType(AdapterType)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterFBType_AdapterType()
-	 * @model transient="true"
+	 * @model kind="operation"
 	 * @generated
 	 */
 	AdapterType getAdapterType();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType#getAdapterType <em>Adapter Type</em>}' reference.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Adapter Type</em>' reference.
-	 * @see #getAdapterType()
-	 * @generated
-	 */
-	void setAdapterType(AdapterType value);
 
 } // AdapterFBType
