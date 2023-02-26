@@ -40,7 +40,6 @@ import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
@@ -1001,14 +1000,9 @@ public class FBTImporter extends TypeImporter {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
 			final AdapterTypeEntry entry = getTypeLibrary().getAdapterTypeEntry(typeName);
-			a.setTypeEntry(entry);
-			AdapterType dataType = null;
-			if (null != entry) {
-				dataType = entry.getType();
-			}
 			a.setTypeName(typeName);
-			if (null != dataType) {
-				a.setType(dataType);
+			if (null != entry) {
+				a.setType(entry.getType());
 			}
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_ADAPTER_DECLARATION_TYPE_EXCEPTION);
@@ -1032,7 +1026,7 @@ public class FBTImporter extends TypeImporter {
 
 	private static void createAdapterFB(final AdapterDeclaration adapter) {
 		final AdapterFB aFB = LibraryElementFactory.eINSTANCE.createAdapterFB();
-		aFB.setTypeEntry(adapter.getAdapterType().getTypeEntry());
+		aFB.setTypeEntry(adapter.getType().getTypeEntry());
 		aFB.setAdapterDecl(adapter);
 		adapter.setAdapterFB(aFB);
 		aFB.setName(adapter.getName());

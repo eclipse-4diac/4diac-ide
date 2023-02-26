@@ -45,8 +45,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.HiddenElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Adapter Declaration</b></em>'.
@@ -65,7 +63,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getTypeName <em>Type Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getAdapterFB <em>Adapter FB</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getAdapterNetworkFB <em>Adapter Network FB</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl#getTypeEntry <em>Type Entry</em>}</li>
  * </ul>
  *
  * @generated
@@ -212,26 +209,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	protected AdapterFB adapterNetworkFB;
 
 	/**
-	 * The default value of the '{@link #getTypeEntry() <em>Type Entry</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTypeEntry()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final TypeEntry TYPE_ENTRY_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getTypeEntry() <em>Type Entry</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getTypeEntry()
-	 * @generated
-	 * @ordered
-	 */
-	protected TypeEntry typeEntry = TYPE_ENTRY_EDEFAULT;
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
@@ -366,6 +343,23 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			outputConnections = new EObjectWithInverseResolvingEList<Connection>(Connection.class, this, LibraryElementPackage.ADAPTER_DECLARATION__OUTPUT_CONNECTIONS, LibraryElementPackage.CONNECTION__SOURCE);
 		}
 		return outputConnections;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DataType getType_() {
+		if (type != null && type.eIsProxy()) {
+			InternalEObject oldType = (InternalEObject)type;
+			type = (DataType)eResolveProxy(oldType);
+			if (type != oldType) {
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_DECLARATION__TYPE, oldType, type));
+			}
+		}
+		return type;
 	}
 
 	/**
@@ -527,49 +521,8 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 	 * @generated
 	 */
 	@Override
-	public TypeEntry getTypeEntry() {
-		return typeEntry;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setTypeEntry(TypeEntry newTypeEntry) {
-		TypeEntry oldTypeEntry = typeEntry;
-		typeEntry = newTypeEntry;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_DECLARATION__TYPE_ENTRY, oldTypeEntry, typeEntry));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public AdapterType getAdapterType() {
-		return (AdapterType)getType();
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public DataType getType() {
-		if (type != null && type.eIsProxy()) {
-			InternalEObject oldType = (InternalEObject)type;
-			type = (DataType)eResolveProxy(oldType);
-			if (type != oldType) {
-				if (eNotificationRequired())
-					eNotify(new ENotificationImpl(this, Notification.RESOLVE, LibraryElementPackage.ADAPTER_DECLARATION__TYPE, oldType, type));
-			}
-		}
-		return type;
+	public AdapterType getType() {
+		return (AdapterType)getType_();
 	}
 
 	/**
@@ -712,8 +665,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
 				if (resolve) return getAdapterNetworkFB();
 				return basicGetAdapterNetworkFB();
-			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_ENTRY:
-				return getTypeEntry();
 			default:
 				return super.eGet(featureID, resolve, coreType);
 		}
@@ -761,9 +712,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
 				setAdapterNetworkFB((AdapterFB)newValue);
 				return;
-			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_ENTRY:
-				setTypeEntry((TypeEntry)newValue);
-				return;
 			default:
 				super.eSet(featureID, newValue);
 				return;
@@ -808,9 +756,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
 				setAdapterNetworkFB((AdapterFB)null);
 				return;
-			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_ENTRY:
-				setTypeEntry(TYPE_ENTRY_EDEFAULT);
-				return;
 			default:
 				super.eUnset(featureID);
 				return;
@@ -845,8 +790,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 				return adapterFB != null;
 			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
 				return adapterNetworkFB != null;
-			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_ENTRY:
-				return TYPE_ENTRY_EDEFAULT == null ? typeEntry != null : !TYPE_ENTRY_EDEFAULT.equals(typeEntry);
 			default:
 				return super.eIsSet(featureID);
 		}
@@ -912,8 +855,6 @@ public class AdapterDeclarationImpl extends EObjectImpl implements AdapterDeclar
 		result.append(isInput);
 		result.append(", typeName: "); //$NON-NLS-1$
 		result.append(typeName);
-		result.append(", typeEntry: "); //$NON-NLS-1$
-		result.append(typeEntry);
 		result.append(')');
 		return result.toString();
 	}

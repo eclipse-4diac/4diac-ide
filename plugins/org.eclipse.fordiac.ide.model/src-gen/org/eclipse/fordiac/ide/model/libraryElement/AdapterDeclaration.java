@@ -16,8 +16,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Adapter Declaration</b></em>'.
@@ -29,7 +27,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterNetworkFB <em>Adapter Network FB</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getTypeEntry <em>Type Entry</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration()
@@ -82,33 +79,11 @@ public interface AdapterDeclaration extends IInterfaceElement {
 	void setAdapterNetworkFB(AdapterFB value);
 
 	/**
-	 * Returns the value of the '<em><b>Type Entry</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Type Entry</em>' attribute.
-	 * @see #setTypeEntry(TypeEntry)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration_TypeEntry()
-	 * @model dataType="org.eclipse.fordiac.ide.model.libraryElement.TypeEntry" transient="true"
-	 * @generated
-	 */
-	TypeEntry getTypeEntry();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getTypeEntry <em>Type Entry</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Type Entry</em>' attribute.
-	 * @see #getTypeEntry()
-	 * @generated
-	 */
-	void setTypeEntry(TypeEntry value);
-
-	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation"
 	 * @generated
 	 */
-	AdapterType getAdapterType();
+	AdapterType getType();
 
 } // AdapterDeclaration

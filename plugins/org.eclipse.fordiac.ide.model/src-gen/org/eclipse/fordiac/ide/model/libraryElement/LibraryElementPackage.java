@@ -302,22 +302,13 @@ public interface LibraryElementPackage extends EPackage {
 	int ADAPTER_DECLARATION__ADAPTER_NETWORK_FB = IINTERFACE_ELEMENT_FEATURE_COUNT + 1;
 
 	/**
-	 * The feature id for the '<em><b>Type Entry</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_DECLARATION__TYPE_ENTRY = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
-
-	/**
 	 * The number of structural features of the '<em>Adapter Declaration</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int ADAPTER_DECLARATION_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 3;
+	int ADAPTER_DECLARATION_FEATURE_COUNT = IINTERFACE_ELEMENT_FEATURE_COUNT + 2;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementImpl <em>Library Element</em>}' class.
@@ -6892,17 +6883,6 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getAdapterDeclaration_AdapterNetworkFB();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getTypeEntry <em>Type Entry</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Type Entry</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getTypeEntry()
-	 * @see #getAdapterDeclaration()
-	 * @generated
-	 */
-	EAttribute getAdapterDeclaration_TypeEntry();
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterType <em>Adapter Type</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -9807,14 +9787,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference ADAPTER_DECLARATION__ADAPTER_NETWORK_FB = eINSTANCE.getAdapterDeclaration_AdapterNetworkFB();
-
-		/**
-		 * The meta object literal for the '<em><b>Type Entry</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ADAPTER_DECLARATION__TYPE_ENTRY = eINSTANCE.getAdapterDeclaration_TypeEntry();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterTypeImpl <em>Adapter Type</em>}' class.

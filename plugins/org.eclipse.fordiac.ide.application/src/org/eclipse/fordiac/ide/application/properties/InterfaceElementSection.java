@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -147,7 +146,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 		currentParameterEditor = new InitialValueEditor(composite, SWT.SINGLE | SWT.BORDER);
 		currentParameterEditor.setCommandExecutor(this::executeCommand);
 		GridDataFactory.swtDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false)
-				.applyTo(currentParameterEditor.getControl());
+		.applyTo(currentParameterEditor.getControl());
 
 		currentVarConfigTextCLabel = getWidgetFactory().createCLabel(composite, FordiacMessages.VarConfig + ":"); //$NON-NLS-1$
 		currentVarConfigCheckBox = getWidgetFactory().createButton(composite, null, SWT.CHECK);
@@ -211,13 +210,7 @@ public class InterfaceElementSection extends AbstractDoubleColumnSection {
 	}
 
 	private DataType getDataType() {
-		if (getType() instanceof VarDeclaration) {
-			return ((VarDeclaration) getType()).getType();
-		}
-		if (getType() instanceof AdapterDeclaration) {
-			return ((AdapterDeclaration) getType()).getAdapterType();
-		}
-		return null;
+		return getType().getType();
 	}
 
 	private String getPinTypeName() {

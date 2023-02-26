@@ -137,8 +137,8 @@ class LuaConstants {
 
 	def static getAdapterInterfaceList(AdapterDeclaration adapter) {
 		if (adapter.isIsInput)
-			return adapter.getAdapterType.plugType.interfaceList;
-		return adapter.getAdapterType.socketType.interfaceList;
+			return adapter.getType.plugType.interfaceList;
+		return adapter.getType.socketType.interfaceList;
 	}
 
 	def static luaInternalConstants(BasicFBType type) '''

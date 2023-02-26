@@ -126,8 +126,8 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	private static Map<String, AdapterType> getAdapterTypes(final InterfaceList interfaceList) {
 		final Map<String, AdapterType> list = new HashMap<>();
-		interfaceList.getPlugs().forEach(e -> list.put(e.getTypeName(), EcoreUtil.copy(e.getAdapterType())));
-		interfaceList.getSockets().forEach(e -> list.put(e.getTypeName(), EcoreUtil.copy(e.getAdapterType())));
+		interfaceList.getPlugs().forEach(e -> list.put(e.getTypeName(), EcoreUtil.copy(e.getType())));
+		interfaceList.getSockets().forEach(e -> list.put(e.getTypeName(), EcoreUtil.copy(e.getType())));
 		return list;
 	}
 

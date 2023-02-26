@@ -167,7 +167,6 @@ public final class InterfaceListCopier {
 	public static AdapterDeclaration copyAdapter(final AdapterDeclaration adapter, final boolean copyComments) {
 		final AdapterDeclaration copy = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
 		copyInterfaceElement(adapter, copy, copyComments);
-		copy.setTypeEntry(adapter.getTypeEntry());
 		return copy;
 	}
 
