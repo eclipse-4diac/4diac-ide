@@ -19,7 +19,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.properties;
 
-import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationWithVarConfigColumnAccessor;
@@ -108,10 +107,4 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 		return true;
 	}
 
-	@Override
-	protected void setTableInputFBType(final FBType type) {
-		((FordiacInterfaceListProvider) inputProvider).setInput(type.getInterfaceList().getInputVars());
-		((FordiacInterfaceListProvider) outputProvider).setInput(type.getInterfaceList().getOutputVars());
-
-	}
 }

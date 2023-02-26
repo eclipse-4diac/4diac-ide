@@ -30,7 +30,6 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -152,9 +151,8 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	}
 
 	@Override
-	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
-		((FordiacInterfaceListProvider<VarDeclaration>) inputProvider).setInput(element.getInterface().getInputVars());
-		((FordiacInterfaceListProvider<VarDeclaration>) outputProvider)
-				.setInput(element.getInterface().getOutputVars());
+	public void setTableInput(final InterfaceList il) {
+		((FordiacInterfaceListProvider<VarDeclaration>) inputProvider).setInput(il.getInputVars());
+		((FordiacInterfaceListProvider<VarDeclaration>) outputProvider).setInput(il.getOutputVars());
 	}
 }

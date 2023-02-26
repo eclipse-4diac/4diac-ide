@@ -25,8 +25,6 @@ import org.eclipse.fordiac.ide.gef.nat.EventListProvider;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
@@ -108,15 +106,9 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 	}
 
 	@Override
-	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
-		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getEventInputs());
-		((FordiacInterfaceListProvider) outputProvider).setInput(element.getInterface().getEventOutputs());
-	}
-
-	@Override
-	public void setTableInputFBType(final FBType type) {
-		((FordiacInterfaceListProvider) inputProvider).setInput(type.getInterfaceList().getEventInputs());
-		((FordiacInterfaceListProvider) outputProvider).setInput(type.getInterfaceList().getEventOutputs());
+	public void setTableInput(final InterfaceList il) {
+		((FordiacInterfaceListProvider) inputProvider).setInput(il.getEventInputs());
+		((FordiacInterfaceListProvider) outputProvider).setInput(il.getEventOutputs());
 	}
 
 }

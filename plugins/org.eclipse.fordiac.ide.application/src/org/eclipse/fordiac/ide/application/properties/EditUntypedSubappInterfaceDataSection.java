@@ -35,7 +35,6 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -157,12 +156,6 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 	@Override
 	public boolean isEditable() {
 		return true;
-	}
-
-	@Override
-	protected void setTableInputFBType(final FBType type) {
-		// TODO Auto-generated method stub
-
 	}
 
 }

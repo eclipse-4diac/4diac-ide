@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
@@ -183,11 +184,11 @@ implements I4diacNatTableUtil {
 
 	protected void setTableInput() {
 		if (getType() instanceof FBNetworkElement) {
-			setTableInputFbNetworkElement((FBNetworkElement) getType());
+			setTableInput(((FBNetworkElement) getType()).getInterface());
 		}
 
 		if (getType() instanceof FBType) {
-			setTableInputFBType((FBType) getType());
+			setTableInput(((FBType) getType()).getInterfaceList());
 		}
 
 		if (isEditable()) {
@@ -195,9 +196,7 @@ implements I4diacNatTableUtil {
 		}
 	}
 
-	protected abstract void setTableInputFBType(final FBType type);
-
-	protected abstract void setTableInputFbNetworkElement(final FBNetworkElement element);
+	protected abstract void setTableInput(final InterfaceList il);
 
 	@SuppressWarnings("static-method")
 	protected int getInsertingIndex(final IInterfaceElement interfaceElement,
