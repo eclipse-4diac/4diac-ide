@@ -21,7 +21,6 @@ import org.eclipse.draw2d.MouseEvent;
 import org.eclipse.draw2d.MouseMotionListener;
 import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.policies.DeleteInterfaceEditPolicy;
-import org.eclipse.fordiac.ide.fbtypeeditor.policies.WithNodeEditPolicy;
 import org.eclipse.fordiac.ide.gef.draw2d.ConnectorBorder;
 import org.eclipse.fordiac.ide.gef.draw2d.UnderlineAlphaLabel;
 import org.eclipse.fordiac.ide.gef.policies.INamedElementRenameEditPolicy;
@@ -130,7 +129,6 @@ public class AdapterInterfaceEditPart extends InterfaceEditPart {
 		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new INamedElementRenameEditPolicy());
 		// allow delete of a FB
 		installEditPolicy(EditPolicy.COMPONENT_ROLE, new DeleteInterfaceEditPolicy());
-		installEditPolicy(EditPolicy.GRAPHICAL_NODE_ROLE, new WithNodeEditPolicy());
 	}
 
 	@Override
