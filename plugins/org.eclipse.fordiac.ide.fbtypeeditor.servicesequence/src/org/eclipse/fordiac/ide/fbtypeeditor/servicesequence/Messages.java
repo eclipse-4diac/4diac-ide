@@ -70,6 +70,19 @@ public final class Messages extends NLS {
 	public static String RecordServiceSequenceHandler_RUN;
 	public static String RecordServiceSequenceHandler_RANDOM;
 	public static String RecordServiceSequenceHandler_COUNT;
+	public static String ServiceSequenceAssignView_RELOAD;
+	public static String ServiceSequenceAssignView_NAME;
+	public static String ServiceSequenceAssignView_INITIAL_EVENTS;
+	public static String ServiceSequenceAssignView_INITIAL_PARAMETERS;
+	public static String ServiceSequenceAssignView_EVENT_COUNT;
+	public static String ServiceSequenceAssignView_AUTO_CONTINUE;
+	public static String ServiceSequenceAssignView_GENERATE_SEQUENCE;
+	public static String ServiceSequenceAssignView_POSSIBLE;
+	public static String ServiceSequenceAssignView_CONDITIONAL;
+	public static String ServiceSequenceAssignView_ALWAYS;
+	public static String ServiceSequenceAssignView_FORBIDDEN;
+	public static String ServiceSequenceAssignView_SKIP;
+	public static String ServiceSequenceAssignView_START;
 
 	static {
 		// initialize resource bundle
