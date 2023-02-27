@@ -136,6 +136,10 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		return outputEvents;
 	}
 
+	private static Variable<?> mapVar(final VarDeclaration vdec) {
+		return VariableOperations.newVariable(vdec, vdec.getValue().getValue());
+	}
+
 	private static void processAlgorithmWithEvaluator(final BaseFBType basefbtype, final Algorithm algorithm) {
 		if (!(algorithm instanceof STAlgorithm)) {
 			throw new IllegalArgumentException("StructuredTextAlgorithm object could not be found"); //$NON-NLS-1$
@@ -144,8 +148,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		varDecls.addAll(basefbtype.getInterfaceList().getOutputVars());
 		varDecls.addAll(basefbtype.getInternalVars());
 		varDecls.addAll(basefbtype.getInternalConstVars());
-		final List<Variable<?>> vars = varDecls.stream()
-				.map(v -> VariableOperations.newVariable(v, v.getValue().getValue())).collect(Collectors.toList());
+		final List<Variable<?>> vars = varDecls.stream().map(DefaultRunFBType::mapVar).collect(Collectors.toList());
 		final FBVariable fbVar = new FBVariable("THIS", basefbtype, Collections.emptyList()); //$NON-NLS-1$
 		Class<? extends FBType> baseFBClass = null;
 		if (basefbtype instanceof BasicFBType) {

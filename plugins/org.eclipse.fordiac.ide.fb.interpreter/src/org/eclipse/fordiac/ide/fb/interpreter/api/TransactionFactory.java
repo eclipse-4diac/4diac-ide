@@ -30,12 +30,14 @@ import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
 import org.eclipse.fordiac.ide.model.libraryElement.Service;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class TransactionFactory {
 
@@ -88,14 +90,17 @@ public final class TransactionFactory {
 			if (eventPin == null) {
 				throw new IllegalArgumentException("input primitive: event " + inputEvent + " does not exist"); //$NON-NLS-1$//$NON-NLS-2$
 			}
-			final FBType copyFb = EcoreUtil.copy(fb);
-			final FBTransaction transaction = createFrom(eventPin, RuntimeFactory.createFrom(copyFb));
+			final FBTransaction transaction = createFrom(eventPin, null);
 			// process parameter and set variables
 			final String inputParameters = st.getInputPrimitive().getParameters();
 			final var paramList = ServiceSequenceUtils.getParametersFromString(inputParameters);
 			for (final List<String> parameter : paramList) {
 				if (parameter.size() == 2) {
-					VariableUtils.setVariable(copyFb, parameter.get(0), parameter.get(1));
+					final IInterfaceElement el = EcoreUtil
+							.copy(fb.getInterfaceList().getInterfaceElement(parameter.get(0).strip()));
+
+					VariableUtils.setVariable((VarDeclaration) el, parameter.get(1));
+					transaction.getInputVariables().add((VarDeclaration) el);
 				}
 			}
 			return transaction;

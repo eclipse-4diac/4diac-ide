@@ -26,7 +26,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.FBTestRunner;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
-import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -44,7 +44,7 @@ public class RunServiceSequenceHandler extends AbstractHandler {
 		for (final Object selected : selection.toList()) {
 			final ServiceSequence seq = getSequence(selected);
 			if (seq != null) {
-				final BasicFBType fbType = EcoreUtil.copy((BasicFBType) seq.getService().getFBType());
+				final FBType fbType = EcoreUtil.copy(seq.getService().getFBType());
 				Optional<String> result;
 				if ((seq.getStartState() != null) && !seq.getStartState().isBlank()) { // $NON-NLS-1$
 					result = FBTestRunner.runFBTest(fbType, seq, seq.getStartState());
