@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.handlers.NatTableHandler;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
@@ -409,11 +410,17 @@ public class CommentPropertySection extends AbstractSection {
 			case VISIBLE_COL_ID:
 				if ((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
 						|| !rowObject.isIsInput() && rowObject.getOutputConnections().isEmpty()) {
-					cmd = new HidePinCommand(rowObject, ((Boolean) newValue).booleanValue());
+					final Boolean newValueBool = NatTableHandler.parseNewValueObject(newValue);
+					if (newValueBool != null) {
+						cmd = new HidePinCommand(rowObject, newValueBool.booleanValue());
+					}
 				}
 				break;
 			case ISVARCONFIG_COL_ID:
-				cmd = new ChangeVarConfigurationCommand(rowObject, ((Boolean) newValue).booleanValue());
+				final Boolean newValueBool = NatTableHandler.parseNewValueObject(newValue);
+				if (newValueBool != null) {
+					cmd = new ChangeVarConfigurationCommand(rowObject, newValueBool.booleanValue());
+				}
 				break;
 			default:
 				return;
