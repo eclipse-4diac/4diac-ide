@@ -28,6 +28,7 @@ import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -45,7 +46,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateAndTimeLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STDateLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STElementaryInitializerExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
@@ -140,6 +140,7 @@ final package class ExpressionAnnotations {
 		switch (feature : expr.feature) {
 			VarDeclaration,
 			STVarDeclaration,
+			AdapterDeclaration,
 			FB:
 				feature.featureType
 			ICallable:
