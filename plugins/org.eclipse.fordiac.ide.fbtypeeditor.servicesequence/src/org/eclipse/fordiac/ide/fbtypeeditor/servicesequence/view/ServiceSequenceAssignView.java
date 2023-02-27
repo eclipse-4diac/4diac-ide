@@ -90,7 +90,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 
 		final Composite headerComposite = new Composite(parentComposite, SWT.BORDER);
 		GridLayoutFactory.fillDefaults().extendedMargins(MARGIN, MARGIN, MARGIN, MARGIN)
-				.generateLayout(headerComposite);
+		.generateLayout(headerComposite);
 		GridDataFactory.fillDefaults().grab(true, false).applyTo(headerComposite);
 		final Composite subheaderComposite = new Composite(headerComposite, SWT.NONE);
 		GridLayoutFactory.fillDefaults().numColumns(2).generateLayout(subheaderComposite);
@@ -346,9 +346,11 @@ public class ServiceSequenceAssignView extends ViewPart {
 			seq.setName(name);
 			final List<String> events = ServiceSequenceUtils.splitList(textEvent.getText());
 			final List<String> parameters = ServiceSequenceUtils.splitList(textParam.getText());
+			final FBType typeCopy = EcoreUtil.copy(fbType);
+
 			try {
-				setParameters(fbType, parameters);
-				runInterpreter(seq, events, true, true, fbType, count);
+				setParameters(typeCopy, parameters);
+				runInterpreter(seq, events, true, true, typeCopy, count);
 			} catch (final Exception e) {
 				FordiacLogHelper.logError(e.getMessage(), e);
 			}
@@ -380,7 +382,7 @@ public class ServiceSequenceAssignView extends ViewPart {
 	private static void setParameters(final FBType fbType, final List<String> parameters) {
 		// parameter: format "VarName:=Value"
 		for (final String param : parameters) {
-			final String[] paramValues = param.split(":="); //$NON-NLS-1$
+			final String[] paramValues = param.split(":=", 2); //$NON-NLS-1$
 			if (paramValues.length == 2) {
 				VariableUtils.setVariable(fbType, paramValues[0], paramValues[1]);
 			}
