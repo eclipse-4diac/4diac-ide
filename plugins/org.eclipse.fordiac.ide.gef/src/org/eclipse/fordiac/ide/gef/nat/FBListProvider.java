@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023 Johannes Kepler University, Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,28 +8,27 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Michael Oberlehner - initial API and implementation and/or initial documentation
- *   Prankur Agarawal	- add handling for internal constant variables
+ *   Prankur Agarawal	- initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 
-public class VarDeclarationListProvider extends ListDataProvider<VarDeclaration>
+public class FBListProvider extends ListDataProvider<FB>
 implements FordiacInterfaceListProvider {
 
-	public VarDeclarationListProvider(final List<VarDeclaration> list,
-			final VarDeclarationColumnAccessor columnAccessor) {
+	public FBListProvider(final List<FB> list,
+			final FBColumnAccessor columnAccessor) {
 		super(list, columnAccessor);
 	}
 
-	protected VarDeclarationColumnAccessor getColumnAccessor() {
-		return (VarDeclarationColumnAccessor) columnAccessor;
+	protected FBColumnAccessor getColumnAccessor() {
+		return (FBColumnAccessor) columnAccessor;
 	}
 
 	@Override
@@ -43,11 +42,11 @@ implements FordiacInterfaceListProvider {
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T extends List<? extends INamedElement>> void setInput(final T list) {
-		this.list = (List<VarDeclaration>) list;
+		this.list = (List<FB>) list;
 	}
 
-	public void setTypeLib(final TypeLibrary dataTypeLib) {
-		getColumnAccessor().setTypeLib(dataTypeLib);
+	public void setTypeLib(final TypeLibrary typeLib) {
+		getColumnAccessor().setTypeLib(typeLib);
 	}
 
 }
