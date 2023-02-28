@@ -39,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -941,6 +942,12 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				HiddenElement hiddenElement = (HiddenElement)theEObject;
 				T result = caseHiddenElement(hiddenElement);
 				if (result == null) result = caseConfigurableObject(hiddenElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.COMMUNICATION_CONFIGURATION: {
+				CommunicationConfiguration communicationConfiguration = (CommunicationConfiguration)theEObject;
+				T result = caseCommunicationConfiguration(communicationConfiguration);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -2250,6 +2257,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseHiddenElement(HiddenElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Communication Configuration</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Communication Configuration</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCommunicationConfiguration(CommunicationConfiguration object) {
 		return null;
 	}
 

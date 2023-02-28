@@ -24,13 +24,14 @@ import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.IContainerEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.application.policies.ContainerContentLayoutPolicy;
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.commands.Command;
 
-public class ResizeGroupOrSubappCommand extends Command {
+public class ResizeGroupOrSubappCommand extends Command implements ConnectionLayoutTagger {
 
 	final GraphicalEditPart graphicalEditPart;
 	List<FBNetworkElement> fbnetworkElements;
@@ -70,13 +71,11 @@ public class ResizeGroupOrSubappCommand extends Command {
 			cmdToExecuteBefore = null;
 		}
 
-		addChangeContainerBoundCommand(checkAndCreateResizeCommand(getTargetContainerEP(), fbnetworkElements));
-
-		GraphicalEditPart parent = findNestedGraphicalEditPart(getTargetContainerEP());
+		GraphicalEditPart parent = getTargetContainerEP();
 		while (parent != null) {
-			this.fbnetworkElements = null;
-			addChangeContainerBoundCommand(checkAndCreateResizeCommand(parent, null));
+			addChangeContainerBoundCommand(checkAndCreateResizeCommand(parent, fbnetworkElements));
 			parent = findNestedGraphicalEditPart(parent);
+			this.fbnetworkElements = null;
 		}
 	}
 
@@ -87,9 +86,9 @@ public class ResizeGroupOrSubappCommand extends Command {
 
 	@Override
 	public void undo() {
-		for (final AbstractChangeContainerBoundsCommand changeBoundscmd : changeContainerBoundsCommandList) {
-			if (changeBoundscmd != null && changeBoundscmd.canUndo()) {
-				changeBoundscmd.undo();
+		for (int i = changeContainerBoundsCommandList.size() - 1; i >= 0; i--) {
+			if (changeContainerBoundsCommandList.get(i) != null && changeContainerBoundsCommandList.get(i).canUndo()) {
+				changeContainerBoundsCommandList.get(i).undo();
 			}
 		}
 		if (cmdToExecuteBefore != null) {
@@ -108,11 +107,12 @@ public class ResizeGroupOrSubappCommand extends Command {
 		if (cmdToExecuteBefore != null) {
 			cmdToExecuteBefore.redo();
 		}
-		for (int i = changeContainerBoundsCommandList.size() - 1; i >= 0; i--) {
-			if (changeContainerBoundsCommandList.get(i) != null && changeContainerBoundsCommandList.get(i).canRedo()) {
-				changeContainerBoundsCommandList.get(i).redo();
+		for (final AbstractChangeContainerBoundsCommand changeBoundscmd : changeContainerBoundsCommandList) {
+			if (changeBoundscmd != null && changeBoundscmd.canRedo()) {
+				changeBoundscmd.redo();
 			}
 		}
+
 	}
 
 	@Override
@@ -148,15 +148,20 @@ public class ResizeGroupOrSubappCommand extends Command {
 		final Rectangle containerBounds = ContainerContentLayoutPolicy.getContainerAreaBounds(containerEP);
 		if (fbBounds != null && !containerBounds.contains(fbBounds)) {
 			fbBounds.union(containerBounds);
-			if (containerEP instanceof UnfoldedSubappContentEditPart) {
-				return ContainerContentLayoutPolicy.createChangeBoundsCommand(
-						((UnfoldedSubappContentEditPart) containerEP).getModel().getSubapp(), containerBounds,
-						fbBounds);
+			final FBNetworkElement container = getContainer(containerEP);
+			if (container != null) {
+				return ContainerContentLayoutPolicy.createChangeBoundsCommand(container, containerBounds, fbBounds);
 			}
-			if (containerEP instanceof GroupContentEditPart) {
-				return ContainerContentLayoutPolicy.createChangeBoundsCommand(
-						((GroupContentEditPart) containerEP).getModel().getGroup(), containerBounds, fbBounds);
-			}
+		}
+		return null;
+	}
+
+	private static FBNetworkElement getContainer(final GraphicalEditPart containerEP) {
+		if (containerEP instanceof UnfoldedSubappContentEditPart) {
+			return ((UnfoldedSubappContentEditPart) containerEP).getModel().getSubapp();
+		}
+		if (containerEP instanceof GroupContentEditPart) {
+			return ((GroupContentEditPart) containerEP).getModel().getGroup();
 		}
 		return null;
 	}

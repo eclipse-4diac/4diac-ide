@@ -35,6 +35,11 @@ public class CMakeListsMarker implements INamedElement {
 	}
 
 	@Override
+	public String getQualifiedName() {
+		return getName();
+	}
+
+	@Override
 	public void setName(final String value) {
 		throw new UnsupportedOperationException();
 	}

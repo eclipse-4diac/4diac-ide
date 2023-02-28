@@ -18,7 +18,6 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.quickfix
 
 import com.google.common.collect.Iterables
 import java.text.MessageFormat
-import java.util.LinkedList
 import javax.swing.text.BadLocationException
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType

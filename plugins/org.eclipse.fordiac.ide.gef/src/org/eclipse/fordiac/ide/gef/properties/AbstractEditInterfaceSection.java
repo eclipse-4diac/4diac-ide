@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2017, 2018 fortiss GmbH
  * 				 2018, 2019, 2020 Johannes Kepler University Linz
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +18,7 @@
  *               - cleaned command stack handling for property sections
  *   Daniel Lindhuber - added copy/paste and the context menu
  *   				  - made typedropdown methods overrideable
+ *   Martin Jobst - add initial value cell editor support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -27,9 +29,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.create.CreateInterfaceElementCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -39,7 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
-import org.eclipse.fordiac.ide.model.ui.widgets.OpenStructMenu;
+import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
@@ -53,6 +55,7 @@ import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.NatTable;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -61,20 +64,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public abstract class AbstractEditInterfaceSection extends AbstractSection implements I4diacNatTableUtil {
+public abstract class AbstractEditInterfaceSection<T extends IInterfaceElement> extends AbstractSection
+implements I4diacNatTableUtil {
 
-	protected ListDataProvider inputProvider;
+	protected ListDataProvider<T> inputProvider;
 	protected NatTable inputTable;
 
-	protected ListDataProvider outputProvider;
+	protected ListDataProvider<T> outputProvider;
 	protected NatTable outputTable;
 
 	protected Map<String, List<String>> typeSelection = new HashMap<>();
 
-	protected abstract CreateInterfaceElementCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
+	protected abstract CreationCommand newCreateCommand(IInterfaceElement selection, boolean isInput);
 
-	protected abstract CreateInterfaceElementCommand newInsertCommand(IInterfaceElement selection, boolean isInput,
-			int index);
+	protected abstract CreationCommand newInsertCommand(IInterfaceElement selection, boolean isInput, int index);
 
 	protected abstract DeleteInterfaceCommand newDeleteCommand(IInterfaceElement selection);
 
@@ -149,8 +152,10 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 	}
 
 	// subclasses need to override this method if they use a different type dropdown
-	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value, final TableViewer viewer) {
-		final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[((Integer) value).intValue()];
+	protected Command createChangeDataTypeCommand(final VarDeclaration data, final Object value,
+			final TableViewer viewer) {
+		final String dataTypeName = ((ComboBoxCellEditor) viewer.getCellEditors()[1]).getItems()[((Integer) value)
+		                                                                                         .intValue()];
 		return newChangeTypeCommand(data, getDataTypeLib().getType(dataTypeName));
 	}
 
@@ -161,7 +166,7 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	@Override
 	protected void setInputInit() {
-		setTableInput();
+		// nothing to be done here
 	}
 
 	@Override
@@ -172,7 +177,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 			setTableInput();
 		}
 		commandStack = commandStackBuffer;
-		initTypeSelection(getDataTypeLib());
 		inputTable.refresh();
 		outputTable.refresh();
 	}
@@ -195,7 +199,6 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 
 	protected abstract void setTableInputFbNetworkElement(final FBNetworkElement element);
 
-
 	@SuppressWarnings("static-method")
 	protected int getInsertingIndex(final IInterfaceElement interfaceElement,
 			final EList<? extends IInterfaceElement> interfaceList) {
@@ -216,24 +219,44 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		outputTable.refresh();
 	}
 
-
-	public DataLayer setupDataLayer(final ListDataProvider outputProvider) {
-		final DataLayer dataLayer = new DataLayer(outputProvider);
+	protected DataLayer setupDataLayer(final ListDataProvider<T> provider) {
+		final DataLayer dataLayer = new DataLayer(provider);
 		final IConfigLabelAccumulator labelAcc = dataLayer.getConfigLabelAccumulator();
 
 		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
 			if (labelAcc != null) {
 				labelAcc.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
 			}
-			if (isEditable() && columnPosition == I4diacNatTableUtil.TYPE) {
-				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
-			} else if (columnPosition == I4diacNatTableUtil.NAME || columnPosition == I4diacNatTableUtil.COMMENT) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			}
+			configureLabels(provider, configLabels, columnPosition, rowPosition);
 		});
 		return dataLayer;
 	}
 
+	protected void configureLabels(final ListDataProvider<T> provider, final LabelStack configLabels,
+			final int columnPosition, final int rowPosition) {
+		switch (columnPosition) {
+		case I4diacNatTableUtil.TYPE:
+			if (isEditable()) {
+				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+			}
+			break;
+		case I4diacNatTableUtil.INITIAL_VALUE:
+			if (isEditable()) {
+				final VarDeclaration rowItem = (VarDeclaration) provider.getRowObject(rowPosition);
+				if (rowItem.getValue() != null && rowItem.getValue().hasError()) {
+					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+				}
+				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
+			}
+			break;
+		case I4diacNatTableUtil.NAME:
+		case I4diacNatTableUtil.COMMENT:
+			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			break;
+		default:
+			break;
+		}
+	}
 
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
 		final List<String> elementaryTypes = new ArrayList<>();
@@ -245,10 +268,5 @@ public abstract class AbstractEditInterfaceSection extends AbstractSection imple
 		dataTypeLib.getDataTypesSorted().stream().filter(StructuredType.class::isInstance)
 		.forEach(type -> structuredTypes.add(type.getName()));
 		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
-	}
-
-	// TODO reimplement
-	private void createContextMenu(final TableViewer viewer) {
-		OpenStructMenu.addTo(viewer);
 	}
 }

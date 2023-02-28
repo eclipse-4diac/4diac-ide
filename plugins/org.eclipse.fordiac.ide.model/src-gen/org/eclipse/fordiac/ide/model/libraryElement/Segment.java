@@ -30,6 +30,7 @@ import org.eclipse.emf.common.util.EList;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getWidth <em>Width</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getVarDeclarations <em>Var Declarations</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getOutConnections <em>Out Connections</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getCommunication <em>Communication</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSegment()
@@ -88,11 +89,49 @@ public interface Segment extends TypedConfigureableObject, PositionableElement, 
 	EList<Link> getOutConnections();
 
 	/**
+	 * Returns the value of the '<em><b>Communication</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Communication</em>' containment reference.
+	 * @see #setCommunication(CommunicationConfiguration)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSegment_Communication()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated
+	 */
+	CommunicationConfiguration getCommunication();
+
+	/**
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getCommunication <em>Communication</em>}' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Communication</em>' containment reference.
+	 * @see #getCommunication()
+	 * @generated
+	 */
+	void setCommunication(CommunicationConfiguration value);
+
+	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @model kind="operation" required="true"
 	 * @generated
 	 */
 	SegmentType getType();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	AutomationSystem getAutomationSystem();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	SystemConfiguration getSystemConfiguration();
 
 } // Segment

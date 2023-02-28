@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 
 class StructuredTextSupportFactory implements ILanguageSupportFactory {
 
@@ -29,6 +30,8 @@ class StructuredTextSupportFactory implements ILanguageSupportFactory {
 			new STFunctionSupport(source)
 		} else if (source instanceof ECTransition) {
 			new ECTransitionSupport(source)
+		} else if (source instanceof STVarGlobalDeclarationBlock) {
+			new VarGlobalConstantsSupport(source)
 		}
 	}
 
@@ -38,5 +41,6 @@ class StructuredTextSupportFactory implements ILanguageSupportFactory {
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", ECTransition, factory)
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", STMethod, factory)
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", STFunctionSource, factory)
+		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", STVarGlobalDeclarationBlock, factory)
 	}
 }

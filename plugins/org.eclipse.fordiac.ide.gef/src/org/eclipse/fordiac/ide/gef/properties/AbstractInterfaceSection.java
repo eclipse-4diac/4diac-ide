@@ -166,7 +166,6 @@ public abstract class AbstractInterfaceSection extends AbstractDoubleColumnSecti
 		inputViewer.setCellModifier(null);
 	}
 
-
 	@Override
 	public void refresh() {
 		if (null != type) {

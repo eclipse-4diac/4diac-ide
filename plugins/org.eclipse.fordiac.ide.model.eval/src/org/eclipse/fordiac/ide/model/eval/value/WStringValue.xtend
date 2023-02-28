@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,11 +25,29 @@ class WStringValue implements AnyStringValue, AnyWCharsValue {
 		this.value = value;
 	}
 
-	def static toWStringValue(String value) { new WStringValue(value) }
+	def static toWStringValue(String value) { value.toWStringValue(MAX_LENGTH) }
 
-	def static toWStringValue(AnyCharsValue value) { new WStringValue(value.stringValue) }
+	def static toWStringValue(String value, int maxLength) { new WStringValue(value.truncate(maxLength)) }
 
-	override WCharValue charAt(int index) { WCharValue.toWCharValue(value.charAt(index - 1)) }
+	def static toWStringValue(AnyCharsValue value) { value.toWStringValue(MAX_LENGTH) }
+
+	def static toWStringValue(AnyCharsValue value, int maxLength) { value.stringValue.toWStringValue(maxLength) }
+
+	override WCharValue charAt(int index) {
+		WCharValue.toWCharValue(index > 0 && index <= length ? value.charAt(index - 1) : '\u0000')
+	}
+
+	def withCharAt(int index, WCharValue c) {
+		if (index <= 0) {
+			throw new StringIndexOutOfBoundsException(index)
+		}
+		val newValue = new StringBuilder(value)
+		if (newValue.length < index) {
+			newValue.length = index
+		}
+		newValue.setCharAt(index - 1, c.charValue)
+		new WStringValue(newValue.toString)
+	}
 
 	override length() { value.length }
 
@@ -44,4 +62,8 @@ class WStringValue implements AnyStringValue, AnyWCharsValue {
 	override hashCode() { value.hashCode }
 
 	override toString() { WStringValueConverter.INSTANCE.toString(stringValue, true) }
+
+	def private static truncate(String value, int maxLength) {
+		if(value.length > maxLength) value.substring(0, maxLength) else value
+	}
 }

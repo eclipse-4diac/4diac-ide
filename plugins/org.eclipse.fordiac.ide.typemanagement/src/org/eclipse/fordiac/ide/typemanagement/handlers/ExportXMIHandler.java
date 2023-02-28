@@ -25,6 +25,7 @@ import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -36,13 +37,14 @@ import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
 public class ExportXMIHandler extends AbstractHandler {
-	static final String XMI_EXTENSION = "xmi"; // $NON-NLS-1$
+	static final String XMI_EXTENSION = "xmi"; //$NON-NLS-1$
 
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		final ExportAsXMI exporter = new ExportAsXMI();
-		return exporter.export((IFile) selection.getFirstElement());
+		exporter.export((IFile) selection.getFirstElement());
+		return Status.OK_STATUS;
 	}
 
 	@Override

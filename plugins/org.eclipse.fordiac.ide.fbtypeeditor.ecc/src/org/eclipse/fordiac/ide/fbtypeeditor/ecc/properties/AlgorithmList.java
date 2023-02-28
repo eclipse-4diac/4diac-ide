@@ -1,6 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2018 fortiss GmbH,
- * 				 2018 - 2020 Johannes Kepler University Linz (JKU)
+ * Copyright (c) 2015, 2022 fortiss GmbH, Johannes Kepler University Linz (JKU)
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -18,89 +17,27 @@
  *   Bianca Wiesmayr - improve element insertion
  *   Daniel Lindhuber - added copy and paste
  *   Alexander Lumplecker - allowed to reorder algorithms
+ *   Alois Zoitl - turned AlgorithmList into a read only table
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.ChangeAlgorithmTypeCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.CreateAlgorithmCommand;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteAlgorithmCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.contentprovider.AlgorithmsLabelProvider;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeAlgorithmOrderCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
-import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
-import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
-import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.gef.commands.Command;
-import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnWeightData;
-import org.eclipse.jface.viewers.ICellModifier;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
-public class AlgorithmList implements CommandExecutor {
-
-	private class AlgorithmViewerCellModifier implements ICellModifier {
-		@Override
-		public boolean canModify(final Object element, final String property) {
-			return true;
-		}
-
-		@Override
-		public Object getValue(final Object element, final String property) {
-			switch (property) {
-			case A_NAME:
-				return ((Algorithm) element).getName();
-			case A_LANGUAGE:
-				return (element instanceof STAlgorithm) ? Integer.valueOf(1) : Integer.valueOf(0);
-			default:
-				return ((Algorithm) element).getComment();
-			}
-		}
-
-		@Override
-		public void modify(final Object element, final String property, final Object value) {
-			final TableItem tableItem = (TableItem) element;
-			Algorithm data = (Algorithm) tableItem.getData();
-			Command cmd = null;
-			if (A_NAME.equals(property)) {
-				cmd = new ChangeNameCommand(data, value.toString());
-			} else if (A_LANGUAGE.equals(property)) {
-				cmd = new ChangeAlgorithmTypeCommand(type, data, ECCSection.getLanguages().get(((Integer) value).intValue()));
-			} else {
-				cmd = new ChangeCommentCommand(data, value.toString());
-			}
-			if ((null != commandStack)) {
-				executeCommand(cmd);
-				algorithmViewer.refresh(data);
-				if (cmd instanceof ChangeAlgorithmTypeCommand) {
-					data = ((ChangeAlgorithmTypeCommand) cmd).getNewAlgorithm();
-				}
-				if (null != data) {
-					algorithmViewer.setSelection(new StructuredSelection(data));
-				}
-				refresh();
-			}
-		}
-	}
+public class AlgorithmList {
 
 	private static final String A_NAME = "Name"; //$NON-NLS-1$
 	private static final String A_LANGUAGE = "Language"; //$NON-NLS-1$
@@ -111,65 +48,29 @@ public class AlgorithmList implements CommandExecutor {
 
 	private BasicFBType type;
 
-	private CommandStack commandStack;
-
 	public AlgorithmList(final Composite parent, final TabbedPropertySheetWidgetFactory widgetFactory) {
 		composite = widgetFactory.createComposite(parent);
 		composite.setLayout(new GridLayout(2, false));
 		final GridData gridDataVersionViewer = new GridData(GridData.FILL, GridData.FILL, true, true);
 		composite.setLayoutData(gridDataVersionViewer);
-		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
-		buttons.createControls(composite, widgetFactory);
 
 		createAlgorithmViewer(composite);
-		buttons.bindToTableViewer(algorithmViewer, this,
-				ref -> new CreateAlgorithmCommand(type, getInsertingIndex(), getName()),
-				ref -> new DeleteAlgorithmCommand(type, (Algorithm) ref),
-				ref -> new ChangeAlgorithmOrderCommand(type.getCallables(), (Algorithm) ref, true),
-				ref -> new ChangeAlgorithmOrderCommand(type.getCallables(), (Algorithm) ref, false));
-	}
-
-	private Algorithm getLastSelectedAlgorithm() {
-		final IStructuredSelection selection = algorithmViewer.getStructuredSelection();
-		if (selection.isEmpty()) {
-			return null;
-		}
-		return (Algorithm) selection.toList().get(selection.toList().size() - 1);
-	}
-
-	private int getInsertingIndex() {
-		final Algorithm alg = getLastSelectedAlgorithm();
-		if (null == alg) {
-			return type.getCallables().size();
-		}
-		return type.getCallables().indexOf(alg) + 1;
-	}
-
-	private String getName() {
-		final Algorithm alg = getLastSelectedAlgorithm();
-		if (null != alg) {
-			return alg.getName();
-		}
-		return null;
 	}
 
 	Composite getComposite() {
 		return composite;
 	}
 
-	public void initialize(final BasicFBType type, final CommandStack commandStack) {
+	public void initialize(final BasicFBType type) {
 		this.type = type;
-		this.commandStack = commandStack;
 	}
 
 	private void createAlgorithmViewer(final Composite parent) {
 		algorithmViewer = TableWidgetFactory.createTableViewer(parent);
 		configureTableLayout(algorithmViewer);
-		algorithmViewer.setCellEditors(createAlgorithmCellEditors(algorithmViewer.getTable()));
 		algorithmViewer.setColumnProperties(new String[] { A_NAME, A_LANGUAGE, A_COMMENT });
 		algorithmViewer.setContentProvider(new ArrayContentProvider());
 		algorithmViewer.setLabelProvider(new AlgorithmsLabelProvider());
-		algorithmViewer.setCellModifier(new AlgorithmViewerCellModifier());
 	}
 
 	private static void configureTableLayout(final TableViewer tableViewer) {
@@ -187,25 +88,11 @@ public class AlgorithmList implements CommandExecutor {
 		table.setLayout(layout);
 	}
 
-	@Override
-	public void executeCommand(final Command cmd) {
-		if ((null != type) && (commandStack != null)) {
-			commandStack.execute(cmd);
-		}
-	}
-
-	private static CellEditor[] createAlgorithmCellEditors(final Table table) {
-		return new CellEditor[] { new TextCellEditor(table), ComboBoxWidgetFactory.createComboBoxCellEditor(table,
-				ECCSection.getLanguages().toArray(new String[0]), SWT.READ_ONLY), new TextCellEditor(table) };
-	}
 
 	public void refresh() {
-		final CommandStack commandStackBuffer = commandStack;
-		commandStack = null;
 		if (null != type) {
 			algorithmViewer.setInput(type.getAlgorithm());
 		}
-		commandStack = commandStackBuffer;
 	}
 
 	public TableViewer getViewer() {

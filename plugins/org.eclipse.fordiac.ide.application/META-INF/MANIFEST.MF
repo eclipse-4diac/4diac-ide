@@ -8,7 +8,6 @@ Export-Package: org.eclipse.fordiac.ide.application,
  org.eclipse.fordiac.ide.application.handlers,
  org.eclipse.fordiac.ide.application.policies,
  org.eclipse.fordiac.ide.application.properties,
- org.eclipse.fordiac.ide.application.search,
  org.eclipse.fordiac.ide.application.utilities,
  org.eclipse.fordiac.ide.application.wizards
 Require-Bundle: org.eclipse.emf.ecore.editor,
@@ -27,8 +26,8 @@ Require-Bundle: org.eclipse.emf.ecore.editor,
  org.eclipse.fordiac.ide.model.ui,
  org.eclipse.core.expressions,
  org.eclipse.fordiac.ide.ui.errormessages,
- org.eclipse.search,
- org.eclipse.nebula.widgets.nattable.core;bundle-version="2.0.0"
+ org.eclipse.nebula.widgets.nattable.core;bundle-version="2.0.0",
+ org.eclipse.fordiac.ide.model.search
 Bundle-Vendor: Eclipse 4diac
 Bundle-ActivationPolicy: lazy
 Bundle-Version: 2.0.1.qualifier

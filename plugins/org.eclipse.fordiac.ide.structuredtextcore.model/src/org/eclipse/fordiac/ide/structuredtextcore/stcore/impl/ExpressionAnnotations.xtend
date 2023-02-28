@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.model.data.AnyDateType
 import org.eclipse.fordiac.ide.model.data.AnyDurationType
 import org.eclipse.fordiac.ide.model.data.AnyNumType
 import org.eclipse.fordiac.ide.model.data.ArrayType
-import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.LtimeType
 import org.eclipse.fordiac.ide.model.data.StringType
@@ -284,58 +283,58 @@ final package class ExpressionAnnotations {
 
 	def package static INamedElement getDeclaredResultType(STStructInitElement expr) { expr.variable.featureType }
 
-	def package static Map<INamedElement, STExpression> getMappedInputArguments(STFeatureExpression expr) {
+	def package static Map<INamedElement, STCallArgument> getMappedInputArguments(STFeatureExpression expr) {
 		expr.feature.computeMappedInputArguments(expr.parameters)
 	}
 
-	def package static Map<INamedElement, STExpression> getMappedOutputArguments(STFeatureExpression expr) {
+	def package static Map<INamedElement, STCallArgument> getMappedOutputArguments(STFeatureExpression expr) {
 		expr.feature.computeMappedOutputArguments(expr.parameters)
 	}
 
-	def package static Map<INamedElement, STExpression> getMappedInOutArguments(STFeatureExpression expr) {
+	def package static Map<INamedElement, STCallArgument> getMappedInOutArguments(STFeatureExpression expr) {
 		expr.feature.computeMappedInOutArguments(expr.parameters)
 	}
 
-	def package static Map<INamedElement, STExpression> getMappedInputArguments(STBuiltinFeatureExpression expr) {
+	def package static Map<INamedElement, STCallArgument> getMappedInputArguments(STBuiltinFeatureExpression expr) {
 		switch (expr.feature) {
 			case THIS:
 				expr.eResource?.contents?.filter(FBType)?.head?.computeMappedInputArguments(expr.parameters)
 		}
 	}
 
-	def package static Map<INamedElement, STExpression> getMappedOutputArguments(STBuiltinFeatureExpression expr) {
+	def package static Map<INamedElement, STCallArgument> getMappedOutputArguments(STBuiltinFeatureExpression expr) {
 		switch (expr.feature) {
 			case THIS:
 				expr.eResource?.contents?.filter(FBType)?.head?.computeMappedOutputArguments(expr.parameters)
 		}
 	}
 
-	def package static Map<INamedElement, STExpression> getMappedInOutArguments(STBuiltinFeatureExpression expr) {
+	def package static Map<INamedElement, STCallArgument> getMappedInOutArguments(STBuiltinFeatureExpression expr) {
 		switch (expr.feature) {
 			case THIS:
 				expr.eResource?.contents?.filter(FBType)?.head?.computeMappedInOutArguments(expr.parameters)
 		}
 	}
 
-	def package static Map<INamedElement, STExpression> computeMappedInputArguments(INamedElement feature,
+	def package static Map<INamedElement, STCallArgument> computeMappedInputArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
 			val parameters = feature.inputParameters
 			if (arguments.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
 				parameters.toInvertedMap [ parameter |
-					(arguments.get(parameters.indexOf(parameter)) as STCallUnnamedArgument).argument
+					arguments.get(parameters.indexOf(parameter))
 				].unmodifiableView
 			} else { // named arguments
 				val namedArguments = arguments.filter(STCallNamedInputArgument).toMap[parameter]
 				parameters.toInvertedMap [ parameter |
-					namedArguments.get(parameter)?.argument
+					namedArguments.get(parameter)
 				].unmodifiableView
 			}
 		} else
 			emptyMap
 	}
 
-	def package static Map<INamedElement, STExpression> computeMappedOutputArguments(INamedElement feature,
+	def package static Map<INamedElement, STCallArgument> computeMappedOutputArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
 			val parameters = feature.outputParameters
@@ -343,32 +342,31 @@ final package class ExpressionAnnotations {
 				val inputCount = feature.inputParameters.size
 				val inOutCount = feature.inOutParameters.size
 				parameters.toInvertedMap [ parameter |
-					(arguments.get(inputCount + inOutCount + parameters.indexOf(parameter)) as STCallUnnamedArgument).
-						argument
+					arguments.get(inputCount + inOutCount + parameters.indexOf(parameter))
 				].unmodifiableView
 			} else { // named arguments
 				val namedArguments = arguments.filter(STCallNamedOutputArgument).toMap[parameter]
 				parameters.toInvertedMap [ parameter |
-					namedArguments.get(parameter)?.argument
+					namedArguments.get(parameter)
 				].unmodifiableView
 			}
 		} else
 			emptyMap
 	}
 
-	def package static Map<INamedElement, STExpression> computeMappedInOutArguments(INamedElement feature,
+	def package static Map<INamedElement, STCallArgument> computeMappedInOutArguments(INamedElement feature,
 		Collection<STCallArgument> arguments) {
 		if (feature instanceof ICallable) {
 			val parameters = feature.inOutParameters
 			if (arguments.head instanceof STCallUnnamedArgument) { // first arg is unnamed -> expect remainder to be unnamed as well (mixing is illegal)
 				val inputCount = feature.inputParameters.size
 				parameters.toInvertedMap [ parameter |
-					(arguments.get(inputCount + parameters.indexOf(parameter)) as STCallUnnamedArgument).argument
+					arguments.get(inputCount + parameters.indexOf(parameter))
 				].unmodifiableView
 			} else { // named arguments
 				val namedArguments = arguments.filter(STCallNamedInputArgument).toMap[parameter]
 				parameters.toInvertedMap [ parameter |
-					namedArguments.get(parameter)?.argument
+					namedArguments.get(parameter)
 				].unmodifiableView
 			}
 		} else
@@ -388,16 +386,20 @@ final package class ExpressionAnnotations {
 	}
 
 	def package static INamedElement addDimension(INamedElement type, STArrayInitializerExpression expr) {
-		val size = expr.values.map [
-			if (initExpressions.empty)
-				1
-			else
-				(indexOrInitExpression as STElementaryInitializerExpression).value.asConstantInt
-		].fold(0)[a, b|a + b]
-		if (type instanceof ArrayType)
-			type.baseType.newArrayType(#[newSubrange(0, size - 1)] + type.subranges.map[copy])
-		else if (type instanceof DataType)
-			type.newArrayType(newSubrange(0, size - 1))
+		try {
+			val size = expr.values.map [
+				if (initExpressions.empty)
+					1
+				else
+					(indexOrInitExpression as STElementaryInitializerExpression).value.asConstantInt
+			].fold(0)[a, b|a + b]
+			if (type instanceof ArrayType)
+				type.baseType.newArrayType(#[newSubrange(0, size - 1)] + type.subranges.map[copy])
+			else if (type instanceof DataType)
+				type.newArrayType(newSubrange(0, size - 1))
+		} catch (ArithmeticException e) {
+			null // invalid initializer expression
+		}
 	}
 
 	def package static INamedElement commonSupertype(INamedElement first, INamedElement second) {

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,11 +25,20 @@ import org.eclipse.xtend.lib.annotations.Accessors
 abstract class BaseFBEvaluator<T extends BaseFBType> extends FBEvaluator<T> {
 	@Accessors final Map<Algorithm, Evaluator> algorithmEvaluators
 
+	new(T type, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
+		super(type, context, variables, parent)
+		algorithmEvaluators = type.algorithm.toInvertedMap [
+			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends Algorithm>, this.context,
+				emptySet, this)
+		]
+	}
+
+	@Deprecated(forRemoval=true)
 	new(T type, Variable<?> context, Iterable<Variable<?>> variables, Queue<Event> queue, Evaluator parent) {
 		super(type, context, variables, queue, parent)
 		algorithmEvaluators = type.algorithm.toInvertedMap [
-			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends Algorithm>, instance, emptySet,
-				this)
+			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends Algorithm>, this.context,
+				emptySet, this)
 		]
 	}
 

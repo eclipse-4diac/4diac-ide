@@ -2,6 +2,7 @@
  * Copyright (c) 2017 fortiss GmbH
  * 				 2019 - 2020 Johannes Kepler University Linz
  * 				 2020 Primetals Technologies Germany GmbH
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,6 +15,7 @@
  *     - initial API and implementation and/or initial documentation
  *   Bianca Wiesmayr - create command now has enhanced guess, added columns
  *   Daniel Lindhuber - added addEntry method & type search field
+ *   Martin Jobst - add initial value cell editor support
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
@@ -22,6 +24,8 @@ import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
+import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
@@ -31,18 +35,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
+import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.widgets.Group;
 
-public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection {
+public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection<VarDeclaration> {
 
 	protected static final String ARRAY_SIZE = "arraysize"; //$NON-NLS-1$
 	protected static final String INITIAL_VALUE = "initialvalue"; //$NON-NLS-1$
@@ -106,10 +109,10 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 	}
 
 	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof VarDeclaration) {
 			final IInterfaceElement entry2 = (IInterfaceElement) entry;
-			cmd.add(newInsertCommand(entry2, entry2.isIsInput(), index));
+			cmd.add(newInsertCommand(entry2, isInput, index));
 		}
 	}
 
@@ -119,10 +122,13 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		outputProvider = new VarDeclarationListProvider(this, null);
+		outputProvider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new VarDeclarationColumnProvider(), rule, typeSelection, this);
+				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this,
+				Boolean.FALSE);
+		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
+		outputTable.configure();
 	}
 
 
@@ -132,12 +138,20 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		inputProvider = new VarDeclarationListProvider(this, null);
+		inputProvider = new VarDeclarationListProvider(new ArrayList<>(), new VarDeclarationColumnAccessor(this, null));
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new VarDeclarationColumnProvider(), rule, typeSelection, this);
+				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this,
+				Boolean.TRUE);
+		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
+		inputTable.configure();
 	}
 
+	@Override
+	protected void setInputInit() {
+		((VarDeclarationListProvider) outputProvider).setTypeLib(getTypeLibrary());
+		((VarDeclarationListProvider) inputProvider).setTypeLib(getTypeLibrary());
+	}
 
 	@Override
 	public void setTableInputFbNetworkElement(final FBNetworkElement element) {

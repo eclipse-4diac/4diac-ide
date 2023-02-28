@@ -15,6 +15,8 @@ package org.eclipse.fordiac.ide.model.eval.value
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 
 interface AnyStringValue extends AnyCharsValue {
+	int MAX_LENGTH = 65534
+	
 	override AnyStringType getType()
 
 	def AnyCharValue charAt(int index)

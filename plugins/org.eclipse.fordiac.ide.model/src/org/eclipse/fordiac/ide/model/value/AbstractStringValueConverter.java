@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.value;
 
 import java.nio.charset.StandardCharsets;
+import java.text.MessageFormat;
 import java.util.regex.MatchResult;
 import java.util.regex.Pattern;
 
@@ -26,14 +27,15 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 	public String toValue(final String string) throws IllegalArgumentException {
 		// check length
 		if (string.length() < 2) {
-			throw new IllegalArgumentException(Messages.VALIDATOR_IllegalStringLiteral, null);
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, string));
 		}
 		// process quotes
 		final char quote = string.charAt(0);
 		if (quote != '\'' && quote != '"') {
-			throw new IllegalArgumentException(Messages.VALIDATOR_IllegalStringLiteral, null);
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, string));
 		} else if (quote != string.charAt(string.length() - 1)) {
-			throw new IllegalArgumentException(Messages.VALIDATOR_UnevenlyQuotedStringLiteral, null);
+			throw new IllegalArgumentException(
+					MessageFormat.format(Messages.VALIDATOR_UnevenlyQuotedStringLiteral, string));
 		}
 		final boolean wide = quote == '"';
 		final String unquoted = string.substring(1, string.length() - 1);
@@ -48,7 +50,7 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 		try {
 			result = pattern.matcher(unquoted).replaceAll(StringValueConverter::unescape);
 		} catch (final Exception e) {
-			throw new IllegalArgumentException(Messages.VALIDATOR_IllegalStringLiteral, e);
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_IllegalStringLiteral, string));
 		}
 		return result;
 	}
@@ -56,7 +58,8 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 	protected static String unescape(final MatchResult result) {
 		final String escape = result.group(1);
 		if (escape == null) {
-			throw new IllegalArgumentException(Messages.VALIDATOR_UnevenlyQuotedStringLiteral);
+			throw new IllegalArgumentException(
+					MessageFormat.format(Messages.VALIDATOR_IllegalEscapeInStringLiteral, escape));
 		}
 		switch (escape.charAt(0)) {
 		case '$':
@@ -80,7 +83,12 @@ public abstract class AbstractStringValueConverter implements ValueConverter<Str
 		case '"':
 			return "\""; //$NON-NLS-1$
 		default: // hex escape
-			return String.valueOf((char) Integer.parseInt(escape, 16));
+			try {
+				return String.valueOf((char) Integer.parseInt(escape, 16));
+			} catch (final NumberFormatException e) {
+				throw new IllegalArgumentException(
+						MessageFormat.format(Messages.VALIDATOR_IllegalEscapeInStringLiteral, escape), e);
+			}
 		}
 	}
 

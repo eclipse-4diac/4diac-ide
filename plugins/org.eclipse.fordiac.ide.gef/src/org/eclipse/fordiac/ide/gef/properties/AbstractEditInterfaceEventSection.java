@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.nat.EventColumnAcesssor;
 import org.eclipse.fordiac.ide.gef.nat.EventColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.EventListProvider;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
@@ -31,15 +30,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.widgets.Group;
 
-public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection {
+public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection<Event> {
 
 
 	@Override
@@ -77,10 +75,10 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 	}
 
 	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof Event) {
 			final Event entry2 = (Event) entry;
-			cmd.add(newInsertCommand(entry2, entry2.isIsInput(), index));
+			cmd.add(newInsertCommand(entry2, isInput, index));
 		}
 	}
 
@@ -91,10 +89,10 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		outputProvider = new EventListProvider(this, null);
+		outputProvider = new EventListProvider(this, new ArrayList<>());
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new EventColumnProvider(), rule, typeSelection, this);
+				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, Boolean.FALSE);
 	}
 
 	@Override
@@ -103,10 +101,10 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		inputProvider = new EventListProvider(this, null);
+		inputProvider = new EventListProvider(this, new ArrayList<>());
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new EventColumnProvider(), rule, typeSelection, this);
+				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, Boolean.TRUE);
 	}
 
 	@Override

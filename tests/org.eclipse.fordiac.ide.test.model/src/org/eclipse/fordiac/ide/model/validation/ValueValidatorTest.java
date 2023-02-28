@@ -78,7 +78,7 @@ class ValueValidatorTest {
 						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "2", //$NON-NLS-1$
 						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
-				Arguments.of(IecTypes.ElementaryTypes.BOOL, PI, 
+				Arguments.of(IecTypes.ElementaryTypes.BOOL, PI,
 						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "1970-01-30", //$NON-NLS-1$
 						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
@@ -91,7 +91,7 @@ class ValueValidatorTest {
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateInvalidBoolLiteralsTestCases")
 	void validateInvalidBoolLiterals(final DataType type, final String value, final String expectedFormatString) {
-		final String expectedString = MessageFormat.format(expectedFormatString, type.getName());
+		final String expectedString = MessageFormat.format(expectedFormatString, value);
 		final String resultString = ValueValidator.validateValue(type, value);
 		assertEquals(expectedString, resultString);
 	}
@@ -149,7 +149,7 @@ class ValueValidatorTest {
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateInvalidNumberLiteralsTestCases")
 	void validateInvalidNumberLiterals(final DataType type, final String value, final String expectedFormatString) {
-		final String expectedString = MessageFormat.format(expectedFormatString, type.getName());
+		final String expectedString = MessageFormat.format(expectedFormatString, value);
 		final String resultString = ValueValidator.validateValue(type, value);
 		assertEquals(expectedString, resultString);
 	}
@@ -257,7 +257,7 @@ class ValueValidatorTest {
 	@DisplayName("Validator tests for several incorrectly typed virtual DNS entries")
 	@ParameterizedTest
 	@ValueSource(strings = { "%sgsgs%name%sigsev%", "%Hello%sign%milsev%", "a%moduleValue%cnt%what%b",
-			"e%sign%i%vile%f" })
+	"e%sign%i%vile%f" })
 
 	void validateMultipleInvalidDNSEntries_1(final String value) {
 		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);

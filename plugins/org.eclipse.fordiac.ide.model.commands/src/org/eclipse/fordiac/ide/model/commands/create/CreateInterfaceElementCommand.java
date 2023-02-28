@@ -30,9 +30,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.commands.Command;
 
-public class CreateInterfaceElementCommand extends Command implements CreationCommand {
+public class CreateInterfaceElementCommand extends CreationCommand {
 	private IInterfaceElement newInterfaceElement;
 
 	private final String name;
@@ -50,7 +49,7 @@ public class CreateInterfaceElementCommand extends Command implements CreationCo
 	/** constructor for copying an interface element */
 	public CreateInterfaceElementCommand(final IInterfaceElement copySrc, final boolean isInput,
 			final InterfaceList targetInterfaceList,
-			int index) {
+			final int index) {
 		this(copySrc.getType(), copySrc.getName(), targetInterfaceList, isInput, index);
 		newInterfaceElement = EcoreUtil.copy(copySrc);
 	}
@@ -188,7 +187,11 @@ public class CreateInterfaceElementCommand extends Command implements CreationCo
 		@SuppressWarnings("unchecked")
 		final EList<IInterfaceElement> temp = (EList<IInterfaceElement>) interfaceElementList;
 		final int insertionPos = index == -1 ? temp.size() : index;
-		temp.add(insertionPos, newInterfaceElement);
+		if (insertionPos > temp.size()) {
+			temp.add(newInterfaceElement);
+		} else {
+			temp.add(insertionPos, newInterfaceElement);
+		}
 	}
 
 	private void createAdapterCreateCommand() {

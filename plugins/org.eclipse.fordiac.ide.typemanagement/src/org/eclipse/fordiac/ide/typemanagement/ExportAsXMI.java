@@ -20,6 +20,7 @@
 
 package org.eclipse.fordiac.ide.typemanagement;
 
+import java.io.IOException;
 import java.util.HashMap;
 
 import org.eclipse.core.resources.IFile;
@@ -39,12 +40,17 @@ import org.eclipse.xtext.resource.XtextResourceSet;
 public class ExportAsXMI {
 	static final String XMI_EXTENSION = "xmi"; //$NON-NLS-1$
 
-	public Object export(final IFile file) {
+	public void export(final IFile file) {
 		final URI uri = URI.createPlatformResourceURI(file.getParent().getFullPath().toString(), true);
-		return export(file, uri);
+
+		try {
+			export(file, uri);
+		} catch (final Exception e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
 	}
 
-	public Object export(final IFile file, final URI saveLocation) {
+	public void export(final IFile file, final URI saveLocation) throws IOException {
 		final URI xmiUri = saveLocation.appendSegment(file.getName()).trimFileExtension()
 				.appendFileExtension(XMI_EXTENSION);
 		final XtextResourceSet resourceSet = new XtextResourceSet();
@@ -80,8 +86,6 @@ public class ExportAsXMI {
 			FordiacLogHelper.logError(e.getMessage(), e);
 			System.out.println(e.getMessage() + " " + e); // log it in console for ANT Tasks //$NON-NLS-1$
 		}
-
-		return null;
 	}
 
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Martin Erich Jobst
- * 				 2022 Primetals Technologies Austria GmbH
+ * 				 2022 - 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,7 +10,8 @@
  *
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
- *   Martin Melik Merkumians - added some functions
+ *   Martin Melik Merkumians - added some functions, fixes CONCAT_DATE_LTOD to
+ *   	CONCAT_LDATE_LTOD
  *   Hesam Rezaee - add Hovering features
  *
  *******************************************************************************/
@@ -269,11 +270,11 @@ public interface StandardFunctions extends Functions {
 			@Comment("The input value.") final T value, @Comment("The highest possible value.") final T max) {
 		if (ValueOperations.operator_greaterThan(value, max)) {
 			return max;
-		} else if (ValueOperations.operator_lessThan(value, min)) {
-			return min;
-		} else {
-			return value;
 		}
+		if (ValueOperations.operator_lessThan(value, min)) {
+			return min;
+		}
+		return value;
 	}
 
 	@SafeVarargs
@@ -357,7 +358,7 @@ public interface StandardFunctions extends Functions {
 
 	/* ANY_CHARS functions */
 	@Comment("Returns the length of a String.")
-	static <T extends AnyStringValue> ULIntValue LEN(final T string) {
+	static <T extends AnyStringValue> AnyIntValue LEN(final T string) {
 		return ULIntValue.toULIntValue(string.length());
 	}
 
@@ -468,13 +469,13 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Returns the location of the first occurrence a String in a String.")
-	static <T extends AnySCharsValue> ULIntValue FIND(@Comment("The String to be searched.") final StringValue first,
+	static <T extends AnySCharsValue> AnyIntValue FIND(@Comment("The String to be searched.") final StringValue first,
 			@Comment("The String to be found.") final T second) {
 		return ULIntValue.toULIntValue(first.stringValue().indexOf(second.stringValue()) + 1L);
 	}
 
 	@Comment("Returns the location of the first occurrence a WString in a WString.")
-	static <T extends AnyWCharsValue> ULIntValue FIND(@Comment("The WString to be searched.") final WStringValue first,
+	static <T extends AnyWCharsValue> AnyIntValue FIND(@Comment("The WString to be searched.") final WStringValue first,
 			@Comment("The WString to be found.") final T second) {
 		return ULIntValue.toULIntValue(first.stringValue().indexOf(second.stringValue()) + 1L);
 	}
@@ -691,8 +692,8 @@ public interface StandardFunctions extends Functions {
 		return DateAndTimeValue.toDateAndTimeValue(first.toLocalDate().atTime(second.toLocalTime()));
 	}
 
-	@Comment("Concatenates DATE value and LTIME_OF_DAY value and returns LDATE_AND_TIME value.")
-	static LDateAndTimeValue CONCAT_DATE_LTOD(final DateValue first, final LTimeOfDayValue second) {
+	@Comment("Concatenates LDATE value and LTIME_OF_DAY value and returns LDATE_AND_TIME value.")
+	static LDateAndTimeValue CONCAT_LDATE_LTOD(final LDateValue first, final LTimeOfDayValue second) {
 		return LDateAndTimeValue.toLDateAndTimeValue(first.toLocalDate().atTime(second.toLocalTime()));
 	}
 
@@ -810,8 +811,8 @@ public interface StandardFunctions extends Functions {
 	}
 
 	@Comment("Returns the day of week of DATE value.")
-	static SIntValue DAY_OF_WEEK(final DateValue value) {
-		return SIntValue.toSIntValue((byte) value.toLocalDate().getDayOfWeek().getValue());
+	static AnyIntValue DAY_OF_WEEK(final DateValue value) {
+		return USIntValue.toUSIntValue((byte) value.toLocalDate().getDayOfWeek().getValue());
 	}
 
 	@Comment("Converts a value into the big-endian format.")

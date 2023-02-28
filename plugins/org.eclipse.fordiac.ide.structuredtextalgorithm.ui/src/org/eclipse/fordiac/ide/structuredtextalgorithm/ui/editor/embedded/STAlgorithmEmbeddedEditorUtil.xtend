@@ -12,9 +12,19 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded
 
+import java.util.Collection
+import java.util.Map
 import org.eclipse.emf.common.util.URI
+import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.model.libraryElement.FBType
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
+import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
 import org.eclipse.xtext.resource.IResourceServiceProvider
+import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditor
 import org.eclipse.xtext.ui.editor.embedded.EmbeddedEditorFactory
+
+import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 
 final class STAlgorithmEmbeddedEditorUtil {
 	static final URI SYNTHETIC_URI = URI.createURI("__synthetic.stalg")
@@ -26,5 +36,37 @@ final class STAlgorithmEmbeddedEditorUtil {
 
 	def static EmbeddedEditorFactory getEmbeddedEditorFactory() {
 		return SERVICE_PROVIDER.get(EmbeddedEditorFactory)
+	}
+
+	def static void updateEditor(EmbeddedEditor editor, INamedElement element) {
+		editor.updateEditor(element?.eResource?.URI ?: SYNTHETIC_URI, null, null, element.featureType)
+	}
+
+	def static void updateEditor(EmbeddedEditor editor, URI uri, FBType type,
+		Collection<? extends EObject> additionalContent, INamedElement expectedType) {
+		editor.updateEditor(uri, type, additionalContent, #{STCoreUtil.OPTION_EXPECTED_TYPE -> expectedType})
+	}
+
+	def static void updateEditor(EmbeddedEditor editor, URI uri, FBType type,
+		Collection<? extends EObject> additionalContent, Map<?, ?> loadOptions) {
+		editor.document?.internalModify [ resource |
+			if (uri !== null) {
+				resource.URI = uri
+			} else {
+				resource.URI = SYNTHETIC_URI
+			}
+			if (resource instanceof STAlgorithmResource) {
+				resource.fbType = type
+				resource.additionalContent.clear
+				if (additionalContent !== null) {
+					resource.additionalContent.addAll(additionalContent)
+				}
+				if (loadOptions !== null) {
+					resource.defaultLoadOptions.putAll(loadOptions)
+					resource.resourceSet?.loadOptions?.putAll(loadOptions)
+				}
+			}
+			null
+		]
 	}
 }

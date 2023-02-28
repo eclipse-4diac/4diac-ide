@@ -41,12 +41,12 @@ public class ConnectionLayoutMapping extends LayoutMapping {
 
 	private static final long serialVersionUID = -1861451931133554207L;
 
-	public List<ConnectionEditPart> connections = new ArrayList<>();
-	public FordiacLayoutData layoutData = new FordiacLayoutData();
-	public List<GroupEditPart> groups = new ArrayList<>();
-	public Map<Integer, ConnectionEditPart> groupTuples = new HashMap<>();
-	public List<UnfoldedSubappContentEditPart> expandedSubapps = new ArrayList<>();
-	public Map<GraphicalEditPart, ElkGraphElement> reverseMapping = new HashMap<>();
+	private final List<ConnectionEditPart> connections = new ArrayList<>();
+	private final FordiacLayoutData layoutData = new FordiacLayoutData();
+	private final List<GroupEditPart> groups = new ArrayList<>();
+	private final Map<Integer, ConnectionEditPart> groupTuples = new HashMap<>();
+	private final List<UnfoldedSubappContentEditPart> expandedSubapps = new ArrayList<>();
+	private final Map<GraphicalEditPart, ElkGraphElement> reverseMapping = new HashMap<>();
 
 	private boolean hasNetwork = true;
 	private boolean isExpandedSubapp = false;
@@ -101,7 +101,7 @@ public class ConnectionLayoutMapping extends LayoutMapping {
 		} else {
 			hasNetwork = false;
 		}
-		getLayoutGraph().setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.alg.libavoid");
+		getLayoutGraph().setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.alg.libavoid"); //$NON-NLS-1$
 		getLayoutGraph().setProperty(LibavoidMetaDataProvider.SHAPE_BUFFER_DISTANCE, Double.valueOf(8));
 		getLayoutGraph().setProperty(LibavoidMetaDataProvider.IDEAL_NUDGING_DISTANCE, Double.valueOf(16));
 	}
@@ -119,10 +119,10 @@ public class ConnectionLayoutMapping extends LayoutMapping {
 		if (networkEditPart instanceof EditorWithInterfaceEditPart) {
 			@SuppressWarnings("unchecked")
 			final Object figure = ((IFigure) networkEditPart.getFigure().getChildren().get(0)).getChildren()
-					.stream()
-					.filter(FreeformLayer.class::isInstance)
-					.findFirst()
-					.orElse(null);
+			.stream()
+			.filter(FreeformLayer.class::isInstance)
+			.findFirst()
+			.orElse(null);
 			if (figure instanceof IFigure) {
 				bounds = ((IFigure) figure).getBounds();
 			}
@@ -137,11 +137,10 @@ public class ConnectionLayoutMapping extends LayoutMapping {
 	}
 
 	private static AbstractFBNetworkEditPart findRootEditPart(final IWorkbenchPart workbenchPart) {
-		final Object ep = workbenchPart.getAdapter(GraphicalViewer.class)
-							.getRootEditPart()
-							.getChildren()
-							.get(0);
-		return (AbstractFBNetworkEditPart) ep;
+		return (AbstractFBNetworkEditPart) workbenchPart.getAdapter(GraphicalViewer.class)
+				.getRootEditPart()
+				.getChildren()
+				.get(0);
 	}
 
 }

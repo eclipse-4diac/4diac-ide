@@ -30,8 +30,9 @@ public class AdapterColumnProvider implements IDataProvider {
 			return FordiacMessages.Type;
 		case COMMENT:
 			return FordiacMessages.Comment;
+		default:
+			return ""; //$NON-NLS-1$
 		}
-		return "";
 	}
 
 	@Override

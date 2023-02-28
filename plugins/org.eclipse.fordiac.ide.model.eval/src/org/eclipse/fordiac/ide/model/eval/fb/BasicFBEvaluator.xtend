@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -30,13 +30,18 @@ class BasicFBEvaluator extends BaseFBEvaluator<BasicFBType> {
 	final Map<ECTransition, Evaluator> transitionEvaluators
 
 	new(BasicFBType type, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
-		this(type, context, variables, null, parent)
+		super(type, context, variables, parent)
+		transitionEvaluators = type.ECC.ECTransition.filter[!it.conditionExpression.nullOrEmpty].toInvertedMap [
+			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends ECTransition>, this.context,
+				emptySet, this)
+		]
 	}
 
+	@Deprecated(forRemoval=true)
 	new(BasicFBType type, Variable<?> context, Iterable<Variable<?>> variables, Queue<Event> queue, Evaluator parent) {
 		super(type, context, variables, queue, parent)
 		transitionEvaluators = type.ECC.ECTransition.filter[!it.conditionExpression.nullOrEmpty].toInvertedMap [
-			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends ECTransition>, instance,
+			EvaluatorFactory.createEvaluator(it, eClass.instanceClass as Class<? extends ECTransition>, this.context,
 				emptySet, this)
 		]
 	}
@@ -59,16 +64,16 @@ class BasicFBEvaluator extends BaseFBEvaluator<BasicFBType> {
 		this.state = state
 		state.trap.ECAction.forEach [
 			algorithmEvaluators.get(algorithm)?.evaluate
-			if(output !== null) queue?.add(output)
+			if(output !== null) eventQueue?.sendOutputEvent(output)
 			update(variables.values)
 		]
 	}
 
 	def ECState getState() {
-		(instance.members.get(ECStateVariable.NAME) as ECStateVariable).value.state
+		(context.members.get(ECStateVariable.NAME) as ECStateVariable).value.state
 	}
 
 	def void setState(ECState state) {
-		(instance.members.get(ECStateVariable.NAME) as ECStateVariable).value = new ECStateValue(state)
+		(context.members.get(ECStateVariable.NAME) as ECStateVariable).value = new ECStateValue(state)
 	}
 }

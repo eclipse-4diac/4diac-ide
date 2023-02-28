@@ -193,6 +193,7 @@ public final class NameRepository {
 				elements.addAll(interfaceList.getAllInterfaceElements());
 				if (interfaceList.eContainer() instanceof BaseFBType) { // has internal variables
 					elements.addAll(((BaseFBType) interfaceList.eContainer()).getInternalVars());
+					elements.addAll(((BaseFBType) interfaceList.eContainer()).getInternalConstVars());
 				}
 				elementsList = elements;
 			}

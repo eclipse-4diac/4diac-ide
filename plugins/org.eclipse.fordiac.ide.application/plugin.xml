@@ -124,6 +124,12 @@
                    indented="false"
                    label="Attributes">
       </propertyTab>
+      <propertyTab afterTab="org.eclipse.fordiac.ide.application.propertyAttributeTab"
+       			   category="Application"
+                   id="org.eclipse.fordiac.ide.application.propertyVarConfigTab"
+                   indented="false"
+                   label="Var Config">
+      </propertyTab>
       <propertyTab category="Interface"
                    id="org.eclipse.fordiac.ide.application.propertyStructInterfaceElementTab"
                    indented="false"
@@ -190,7 +196,7 @@
                        filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
                        tab="org.eclipse.fordiac.ide.application.property.tab.EditEvents">
       </propertySection>
-      <propertySection class="org.eclipse.fordiac.ide.application.properties.EditInterfaceDataSection"
+      <propertySection class="org.eclipse.fordiac.ide.application.properties.EditUntypedSubappInterfaceDataSection"
                        id="org.eclipse.fordiac.ide.application.properties.section.EditData"
                        filter="org.eclipse.fordiac.ide.application.properties.SubappInterfaceEditingFilter"
                        tab="org.eclipse.fordiac.ide.application.property.tab.EditData">
@@ -220,6 +226,11 @@
                        tab="org.eclipse.fordiac.ide.application.propertyAttributeTab">
         <input type="org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart">
         </input>
+      </propertySection>
+      <propertySection class="org.eclipse.fordiac.ide.application.properties.VarConfigurationSection"
+                       id="org.eclipse.fordiac.ide.application.properties.VarConfigSection"
+                       filter="org.eclipse.fordiac.ide.application.properties.VarConfigurationFilter"
+                       tab="org.eclipse.fordiac.ide.application.propertyVarConfigTab">
       </propertySection>
       
       <propertySection class="org.eclipse.fordiac.ide.application.properties.PinEventInfoSection"
@@ -1453,30 +1464,4 @@
                     type="java.lang.Object">
     </propertyTester>
   </extension>
- 
- <extension
-	id="ModelSearchResultPage"
-	point="org.eclipse.search.searchResultViewPages">
-	<viewPage
-		id="org.eclipse.fordiac.ide.application.search.ModelSearchResultPage"
-		searchResultClass="org.eclipse.fordiac.ide.application.search.ModelSearchResult"
-		class="org.eclipse.fordiac.ide.application.search.ModelSearchResultPage">
-	</viewPage> 
- </extension>
- 
- <extension point="org.eclipse.search.searchPages">
-		<page
-			id="org.eclipse.fordiac.ide.application.search.ModelSearchPage"
-			label="IEC 61499 Model Search"
-			sizeHint="250,160"
-			tabPosition="1"
-			extensions="*:1"
-			showScopeSection="false"		
-			canSearchEnclosingProjects="true"
-			class="org.eclipse.fordiac.ide.application.search.ModelSearchPage">
-		</page>
-	</extension>
-	
-
- 
 </plugin>

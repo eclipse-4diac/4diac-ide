@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2017 - 2018 fortiss GmbH
+ * Copyright (c) 2017, 2023 fortiss GmbH, Johanees Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,8 @@
  * Contributors:
  *   Jose Cabral
  *     - initial API and implementation and/or initial documentation
+ *   Prankur Agarwal
+ *     - add handling for Internal Constant Variables
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fmu.wizard;
 
@@ -642,6 +644,17 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		}
 
 		for (final VarDeclaration varInternal : basic.getInternalVars()) {
+			// store internal variables
+			final FMUInputOutput.variableType varType = FMUInputOutput.getTypeFromString(varInternal.getTypeName());
+			if (FMUInputOutput.variableType.UNKNOWN == varType) {
+				continue;
+			}
+			inputsAndOutputs.add(new FMUInputOutput(previousNames + fbName + "." + varInternal.getName(), false, //$NON-NLS-1$
+					FMUInputOutput.variableScope.INTERNAL, varType,
+					(null != varInternal.getValue()) ? varInternal.getValue().getValue() : null));
+		}
+
+		for (final VarDeclaration varInternal : basic.getInternalConstVars()) {
 			// store internal variables
 			final FMUInputOutput.variableType varType = FMUInputOutput.getTypeFromString(varInternal.getTypeName());
 			if (FMUInputOutput.variableType.UNKNOWN == varType) {

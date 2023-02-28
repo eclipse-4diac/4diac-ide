@@ -12,6 +12,8 @@
  */
 package org.eclipse.fordiac.ide.model.value;
 
+import java.text.MessageFormat;
+
 import org.eclipse.fordiac.ide.model.Messages;
 
 public final class BoolValueConverter implements ValueConverter<Boolean> {
@@ -30,7 +32,7 @@ public final class BoolValueConverter implements ValueConverter<Boolean> {
 		} else if (FALSE.equalsIgnoreCase(string) || "0".equals(string)) { //$NON-NLS-1$
 			return Boolean.FALSE;
 		} else {
-			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_BOOL_LITERAL);
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_INVALID_BOOL_LITERAL, string));
 		}
 	}
 }

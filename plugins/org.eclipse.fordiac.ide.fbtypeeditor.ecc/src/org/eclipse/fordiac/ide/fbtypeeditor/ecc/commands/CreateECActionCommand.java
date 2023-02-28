@@ -19,9 +19,8 @@ package org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.commands.Command;
 
-public class CreateECActionCommand extends Command implements CreationCommand {
+public class CreateECActionCommand extends CreationCommand {
 	private final ECAction action;
 	private final ECState parent;
 

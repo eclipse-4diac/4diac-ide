@@ -16,7 +16,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.doc.editors;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Base64;
@@ -122,15 +121,46 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 
 	final Bundle bundle = Platform.getBundle("org.eclipse.fordiac.ide.fbtypeeditor.doc"); //$NON-NLS-1$
 	final URL url = bundle.getEntry("icon/insert_image.png"); //$NON-NLS-1$
+
 	private class InsertConvertedImageButton extends ToolbarButton {
 		public InsertConvertedImageButton() {
-			super("insert_image", "insert_base64_image", "insert converted image", "insert", url);
+			super("insert_image", "insert_base64_image", "insert converted image", "insert", url); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
 		}
 
 		@Override
 		public Object execute() {
 			insertImage();
 			return null;
+		}
+
+		private void insertImage() {
+			final FileDialog dialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
+			final String filename = dialog.open();
+			if (filename != null) {
+				insertEncodedBase64Image(new File(filename));
+			}
+		}
+
+		private void insertEncodedBase64Image(final File image) {
+			final WorkspaceJob job = new WorkspaceJob("convert image to base64") { //$NON-NLS-1$
+				@Override
+				public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
+					try (FileInputStream fileInputStreamReader = new FileInputStream(image)) {
+						final byte[] bytes = new byte[(int) image.length()];
+						fileInputStreamReader.read(bytes);
+						final String base64 = Base64.getEncoder().encodeToString(bytes);
+						Display.getDefault().asyncExec(
+								() -> editor.insertHTML("<img src= data:image/png;base64," + base64 + ">")); //$NON-NLS-1$ //$NON-NLS-2$
+						return Status.OK_STATUS;
+					} catch (final IOException e) {
+						FordiacLogHelper.logError(e.getMessage(), e);
+					}
+					return Status.CANCEL_STATUS;
+				}
+			};
+
+			job.setRule(ResourcesPlugin.getWorkspace().getRoot());
+			job.schedule();
 		}
 	}
 
@@ -173,19 +203,17 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 
 		editorConfig.setRemoveFormat(false);
 
-		final InsertConvertedImageButton base64ImageInsert = new InsertConvertedImageButton();
-		editorConfig.addToolbarButton(base64ImageInsert);
+		// FIXME disable custom button on Gtk/WebKit, which causes the UI to hang for 10s
+		// until https://bugs.eclipse.org/bugs/show_bug.cgi?id=581144 is fixed
+		if (!SWT.getPlatform().equals("gtk")) { //$NON-NLS-1$
+			final InsertConvertedImageButton base64ImageInsert = new InsertConvertedImageButton();
+			editorConfig.addToolbarButton(base64ImageInsert);
+		}
 
 		return editorConfig;
 	}
 
-	private  void insertImage() {
-		final FileDialog dialog = new FileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell());
-		final String filename = dialog.open();
-		if (filename != null) {
-			insertEncodedBase64Image(new File(filename));
-		}
-	}
+
 
 	private void executeCommand(final Command cmd) {
 		if (commandStack != null && cmd != null) {
@@ -241,33 +269,6 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 		return null;
 	}
 
-	private void insertEncodedBase64Image(final File image) {
-		final var wrapper = new Object() {
-			String base64 = ""; //$NON-NLS-1$
-		};
 
-		final WorkspaceJob job = new WorkspaceJob("convert image to base64") { //$NON-NLS-1$
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) throws CoreException {
-				try (FileInputStream fileInputStreamReader = new FileInputStream(image)) {
-					final byte[] bytes = new byte[(int) image.length()];
-					fileInputStreamReader.read(bytes);
-					wrapper.base64 = Base64.getEncoder().encodeToString(bytes);
-					Display.getDefault().asyncExec(() -> {
-						editor.insertHTML("<img src= data:image/png;base64," + wrapper.base64 + ">"); //$NON-NLS-1$ //$NON-NLS-2$
-					});
-					return Status.OK_STATUS;
-				} catch (final FileNotFoundException e) {
-					FordiacLogHelper.logError(e.getMessage());
-				} catch (final IOException e) {
-					FordiacLogHelper.logError(e.getMessage());
-				}
-				return Status.CANCEL_STATUS;
-			}
-		};
-
-		job.setRule(ResourcesPlugin.getWorkspace().getRoot());
-		job.schedule();
-	}
 
 }

@@ -18,6 +18,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -30,7 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 import org.eclipse.gef.commands.Command;
 
-public abstract class AbstractConnectionCreateCommand extends Command {
+public abstract class AbstractConnectionCreateCommand extends Command implements ConnectionLayoutTagger {
 
 	private final ConnectionRoutingData routingData;
 

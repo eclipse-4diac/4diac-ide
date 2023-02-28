@@ -98,6 +98,8 @@
         <details key="body" value="return null;"/>
       </eAnnotations>
     </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="argument" eType="#//STExpression"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STCallUnnamedArgument" eSuperTypes="#//STCallArgument">
     <eOperations name="getResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
@@ -110,8 +112,6 @@
         <details key="body" value="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.ExpressionAnnotations.getDeclaredResultType(this);"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="argument" eType="#//STExpression"
-        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STCallNamedInputArgument" eSuperTypes="#//STCallArgument">
     <eOperations name="getResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
@@ -125,8 +125,6 @@
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="argument" eType="#//STExpression"
-        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STCallNamedOutputArgument" eSuperTypes="#//STCallArgument">
     <eOperations name="getResultType" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
@@ -141,8 +139,6 @@
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="not" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parameter" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="argument" eType="#//STExpression"
-        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="STIfStatement" eSuperTypes="#//STStatement">
     <eStructuralFeatures xsi:type="ecore:EReference" name="condition" eType="#//STExpression"
@@ -428,7 +424,7 @@
       </eAnnotations>
       <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
         <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
-        <eTypeArguments eClassifier="#//STExpression"/>
+        <eTypeArguments eClassifier="#//STCallArgument"/>
       </eGenericType>
     </eOperations>
     <eOperations name="getMappedOutputArguments">
@@ -437,7 +433,7 @@
       </eAnnotations>
       <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
         <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
-        <eTypeArguments eClassifier="#//STExpression"/>
+        <eTypeArguments eClassifier="#//STCallArgument"/>
       </eGenericType>
     </eOperations>
     <eOperations name="getMappedInOutArguments">
@@ -446,7 +442,7 @@
       </eAnnotations>
       <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
         <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
-        <eTypeArguments eClassifier="#//STExpression"/>
+        <eTypeArguments eClassifier="#//STCallArgument"/>
       </eGenericType>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="feature" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
@@ -471,7 +467,7 @@
       </eAnnotations>
       <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
         <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
-        <eTypeArguments eClassifier="#//STExpression"/>
+        <eTypeArguments eClassifier="#//STCallArgument"/>
       </eGenericType>
     </eOperations>
     <eOperations name="getMappedOutputArguments">
@@ -480,7 +476,7 @@
       </eAnnotations>
       <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
         <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
-        <eTypeArguments eClassifier="#//STExpression"/>
+        <eTypeArguments eClassifier="#//STCallArgument"/>
       </eGenericType>
     </eOperations>
     <eOperations name="getMappedInOutArguments">
@@ -489,7 +485,7 @@
       </eAnnotations>
       <eGenericType eClassifier="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EMap">
         <eTypeArguments eClassifier="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
-        <eTypeArguments eClassifier="#//STExpression"/>
+        <eTypeArguments eClassifier="#//STCallArgument"/>
       </eGenericType>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="feature" eType="#//STBuiltinFeature"/>
@@ -592,5 +588,13 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="variable" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="value" eType="#//STInitializerExpression"
         containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STExpressionSource" eSuperTypes="#//STSource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="expression" eType="#//STExpression"
+        containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="STInitializerExpressionSource" eSuperTypes="#//STSource">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="initializerExpression"
+        eType="#//STInitializerExpression" containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

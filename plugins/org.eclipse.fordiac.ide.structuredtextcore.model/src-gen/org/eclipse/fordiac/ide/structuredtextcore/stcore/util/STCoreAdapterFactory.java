@@ -285,6 +285,14 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 				return createSTStructInitElementAdapter();
 			}
 			@Override
+			public Adapter caseSTExpressionSource(STExpressionSource object) {
+				return createSTExpressionSourceAdapter();
+			}
+			@Override
+			public Adapter caseSTInitializerExpressionSource(STInitializerExpressionSource object) {
+				return createSTInitializerExpressionSourceAdapter();
+			}
+			@Override
 			public Adapter caseINamedElement(INamedElement object) {
 				return createINamedElementAdapter();
 			}
@@ -1009,6 +1017,34 @@ public class STCoreAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTStructInitElementAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource <em>ST Expression Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource
+	 * @generated
+	 */
+	public Adapter createSTExpressionSourceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource <em>ST Initializer Expression Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
+	 * @generated
+	 */
+	public Adapter createSTInitializerExpressionSourceAdapter() {
 		return null;
 	}
 

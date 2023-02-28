@@ -13,10 +13,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
-public class ChangeFBNetworkElementName extends AbstractChangeElementNameWithOppositeCommand {
+public class ChangeFBNetworkElementName extends AbstractChangeElementNameWithOppositeCommand implements ConnectionLayoutTagger {
 
 	public ChangeFBNetworkElementName(final FBNetworkElement element, final String name) {
 		super(element, name);

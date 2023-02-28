@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.application.editparts.InstanceComment;
 import org.eclipse.fordiac.ide.application.editparts.InstanceName;
+import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -50,7 +51,7 @@ public class InstanceSectionFilter implements IFilter {
 
 	private static boolean isEditableFBNetworkElement(final Object retval) {
 		return retval instanceof FBNetworkElement && !(retval instanceof Group)
-				&& !((FBNetworkElement) retval).isContainedInTypedInstance();
+				&& !((FBNetworkElement) retval).isContainedInTypedInstance() && !(retval instanceof Demultiplexer);
 	}
 
 }

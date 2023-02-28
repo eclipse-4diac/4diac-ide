@@ -1,0 +1,18 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: ST Global Constants Model
+Bundle-SymbolicName: org.eclipse.fordiac.ide.globalconstantseditor.model;singleton:=true
+Bundle-ActivationPolicy: lazy
+Bundle-Version: 2.0.1.qualifier
+Export-Package: org.eclipse.fordiac.ide.globalconstantseditor.globalConstants,
+ org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl,
+ org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.util
+Automatic-Module-Name: org.eclipse.fordiac.ide.globalconstantseditor.model
+Bundle-RequiredExecutionEnvironment: JavaSE-11
+Require-Bundle: org.eclipse.xtext.xbase.lib,
+ org.eclipse.xtend.lib,
+ org.eclipse.xtend.lib.macro,
+ org.eclipse.emf.ecore,
+ org.eclipse.emf.common,
+ org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.structuredtextcore

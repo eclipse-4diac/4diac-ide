@@ -62,6 +62,12 @@ public final class ConnectionHelper {
 					connectionState.add(ConnectionState.DATATYPE_MISSMATCH);
 					connectionState.remove(ConnectionState.VALID);
 				}
+
+				if (LinkConstraints.duplicateConnection(sourceEndpoint, destinationEndpoint)) {
+					connectionState.add(ConnectionState.DUPLICATE);
+					connectionState.remove(ConnectionState.VALID);
+				}
+
 				return;
 			}
 
@@ -177,6 +183,10 @@ public final class ConnectionHelper {
 			return connectionState.contains(ConnectionState.VALID);
 		}
 
+		public boolean isDuplicate() {
+			return connectionState.contains(ConnectionState.DUPLICATE);
+		}
+
 		public boolean isDataTypeMissmatch() {
 			return connectionState.contains(ConnectionState.DATATYPE_MISSMATCH);
 		}
@@ -200,6 +210,13 @@ public final class ConnectionHelper {
 		public boolean isMissingSourceAndDestEndpoint() {
 			return connectionState.containsAll(EnumSet.of(ConnectionState.SOURCE_ENDPOINT_MISSING,
 					ConnectionState.DEST_ENDPOINT_MISSING, ConnectionState.SOURCE_EXITS, ConnectionState.DEST_EXISTS));
+		}
+
+		public boolean dataInputHasMultipleConnections() {
+			return (!(sourceEndpoint.getType().getName().equalsIgnoreCase("Event")) && sourceEndpoint.isIsInput()
+					&& sourceEndpoint.getInputConnections().size() > 1)
+					|| (!(destinationEndpoint.getType().getName().equalsIgnoreCase("Event"))
+							&& destinationEndpoint.isIsInput() && destinationEndpoint.getInputConnections().size() > 1);
 		}
 
 		public String getSourcePinName() {
@@ -292,7 +309,7 @@ public final class ConnectionHelper {
 
 	public enum ConnectionState {
 		VALID, SOURCE_MISSING, SOURCE_ENDPOINT_MISSING, DEST_MISSING, DEST_ENDPOINT_MISSING, SOURCE_EXITS,
-		SOURCE_ENDPOINT_EXISTS, DEST_EXISTS, DEST_ENPOINT_EXITS, MISSING_TYPE, DATATYPE_MISSMATCH
+		SOURCE_ENDPOINT_EXISTS, DEST_EXISTS, DEST_ENPOINT_EXITS, MISSING_TYPE, DATATYPE_MISSMATCH, DUPLICATE
 	}
 
 	public static IInterfaceElement createRepairInterfaceElement(final IInterfaceElement connection,

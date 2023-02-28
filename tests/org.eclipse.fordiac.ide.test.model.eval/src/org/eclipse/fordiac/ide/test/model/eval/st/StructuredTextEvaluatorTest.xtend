@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.st.ECTransitionEvaluator
 import org.eclipse.fordiac.ide.model.eval.st.STAlgorithmEvaluator
+import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
@@ -568,28 +569,43 @@ class StructuredTextEvaluatorTest {
 		'''.evaluateAlgorithm)
 	}
 
-	@Test
-	def void testStringSubscript() {
-		'a'.toCharValue.assertTrace(#[STArrayAccessExpression], '''
+	@ParameterizedTest(name="{index}: {1} := '4diac IDE'{0}")
+	@MethodSource("stringSubscriptArgumentsProvider")
+	def void testStringSubscript(int index, String result) {
+		result.toCharValue.assertTrace(#[STArrayAccessExpression], '''
 			VAR_TEMP
 				test: CHAR;
 				str: STRING := '4diac IDE';
 			END_VAR
 			
-			test := str[4];
+			test := str[«index»];
 		'''.evaluateAlgorithm)
 	}
 
-	@Test
-	def void testWStringSubscript() {
-		'a'.toWCharValue.assertTrace(#[STArrayAccessExpression], '''
+	@ParameterizedTest(name="{index}: {1} := '4diac IDE'{0}")
+	@MethodSource("stringSubscriptArgumentsProvider")
+	def void testWStringSubscript(int index, String result) {
+		result.toWCharValue.assertTrace(#[STArrayAccessExpression], '''
 			VAR_TEMP
 				test: WCHAR;
 				str: WSTRING := "4diac IDE";
 			END_VAR
 			
-			test := str[4];
+			test := str[«index»];
 		'''.evaluateAlgorithm)
+	}
+
+	def static Stream<Arguments> stringSubscriptArgumentsProvider() {
+		Stream.of(
+			arguments(0, '\u0000'),
+			arguments(1, '4'),
+			arguments(4, 'a'),
+			arguments(9, 'E'),
+			arguments(10, '\u0000'),
+			arguments(42, '\u0000'),
+			arguments(-1, '\u0000'),
+			arguments(-42, '\u0000')
+		)
 	}
 
 	@Test
@@ -616,6 +632,119 @@ class StructuredTextEvaluatorTest {
 			test[8] := "D";
 			test[9] := "E";
 		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testStringSubscriptModifyOutOfBounds() {
+		"4diac\u0000IDE".toStringValue.assertTrace(STStringLiteral.repeat(3), '''
+			VAR_TEMP
+				test: STRING := '4diac';
+			END_VAR
+			
+			test[7] := 'I';
+			test[8] := 'D';
+			test[9] := 'E';
+		'''.evaluateAlgorithm)
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: STRING := '4diac';
+			END_VAR
+			
+			test[0] := '?';
+		'''.evaluateAlgorithm]
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: STRING := '4diac';
+			END_VAR
+			
+			test[-1] := '?';
+		'''.evaluateAlgorithm]
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: STRING := '4diac';
+			END_VAR
+			
+			test[-4] := '?';
+		'''.evaluateAlgorithm]
+	}
+
+	@Test
+	def void testWStringSubscriptModifyOutOfBounds() {
+		"4diac\u0000IDE".toWStringValue.assertTrace(STStringLiteral.repeat(3), '''
+			VAR_TEMP
+				test: WSTRING := "4diac";
+			END_VAR
+			
+			test[7] := "I";
+			test[8] := "D";
+			test[9] := "E";
+		'''.evaluateAlgorithm)
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: WSTRING := "4diac IDE";
+			END_VAR
+			
+			test[0] := "?";
+		'''.evaluateAlgorithm]
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: WSTRING := "4diac IDE";
+			END_VAR
+			
+			test[-1] := "?";
+		'''.evaluateAlgorithm]
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: WSTRING := "4diac IDE";
+			END_VAR
+			
+			test[-4] := "?";
+		'''.evaluateAlgorithm]
+	}
+
+
+	@Test
+	def void testStringMaxLength() {
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: STRING[5] := '4diac IDE';
+			END_VAR
+			
+			test[6] := '?';
+		'''.evaluateAlgorithm]
+	}
+
+	@Test
+	def void testStringMaxLengthDefault() {
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: STRING := '4diac IDE';
+			END_VAR
+			
+			test[«AnyStringValue.MAX_LENGTH + 1»] := '?';
+		'''.evaluateAlgorithm]
+	}
+
+	@Test
+	def void testWStringMaxLength() {
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: WSTRING[5] := "4diac IDE";
+			END_VAR
+			
+			test[6] := "?";
+		'''.evaluateAlgorithm]
+	}
+
+	@Test
+	def void testWStringMaxLengthDefault() {
+		StringIndexOutOfBoundsException.assertThrows['''
+			VAR_TEMP
+				test: WSTRING := "4diac IDE";
+			END_VAR
+			
+			test[«AnyStringValue.MAX_LENGTH + 1»] := "?";
+		'''.evaluateAlgorithm]
 	}
 
 	@Test
@@ -699,9 +828,10 @@ class StructuredTextEvaluatorTest {
 			'''
 				VAR_TEMP
 					test: ARRAY [ 0 .. 1 ] OF INT := [ 17, 4 ];
+					invalidIndex : INT := 3;
 				END_VAR
 				
-				test[3] := test[0] + test[1];
+				test[invalidIndex] := test[0] + test[1];
 			'''.evaluateAlgorithm
 		]
 	}
@@ -1247,6 +1377,39 @@ class StructuredTextEvaluatorTest {
 			test := test + INT#4;
 			RETURN;
 			test := INT#0;
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testStandardFunctionCall() {
+		21.toIntValue.assertTrace(#[STFeatureExpression], '''
+			VAR_TEMP
+				test: INT;
+			END_VAR
+			
+			test := DINT_TO_INT(DINT#21);
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testStandardFunctionCallWithInference() {
+		21.toIntValue.assertTrace(#[STFeatureExpression], '''
+			VAR_TEMP
+				test: INT;
+			END_VAR
+			
+			test := ADD(SINT#17, INT#4);
+		'''.evaluateAlgorithm)
+	}
+
+	@Test
+	def void testStandardFunctionCallWithGenericReturn() {
+		5.toIntValue.assertTrace(#[STFeatureExpression], '''
+			VAR_TEMP
+				test: INT;
+			END_VAR
+			
+			test := LEN('4diac');
 		'''.evaluateAlgorithm)
 	}
 

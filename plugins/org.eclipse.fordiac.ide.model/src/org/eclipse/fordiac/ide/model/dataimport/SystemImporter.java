@@ -147,6 +147,8 @@ public class SystemImporter extends CommonElementImporter {
 			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
 				if (isColorAttributeNode()) {
 					parseColor(segment);
+				} else if (isCommunicationAttributeNode()) {
+					parseCommunication(segment);
 				} else {
 					parseGenericAttributeNode(segment);
 				}
@@ -157,6 +159,13 @@ public class SystemImporter extends CommonElementImporter {
 		});
 	}
 
+	private void parseCommunication(final Segment segment) {
+		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
+		if (null != value) {
+			segment.setCommunication(null); // TODO load file based on information
+		}
+	}
+
 	private void parseLink(final SystemConfiguration sysConf) throws XMLStreamException {
 		final String commResource = getAttributeValue(LibraryElementTags.SEGMENT_COMM_RESOURCE);
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
@@ -165,7 +174,7 @@ public class SystemImporter extends CommonElementImporter {
 		final Segment segment = sysConf.getSegmentNamed(segmentName);
 		final Device device = sysConf.getDeviceNamed(commResource);
 
-		if (null != segment && null != device) {
+		if ((null != segment) && (null != device)) {
 			final Link link = LibraryElementFactory.eINSTANCE.createLink();
 			link.setComment(comment);
 			segment.getOutConnections().add(link);
@@ -207,7 +216,7 @@ public class SystemImporter extends CommonElementImporter {
 			FBNetworkHelper.loadSubappNetwork(fromElement);
 		}
 
-		if (null != fromElement && null != toElement) {
+		if ((null != fromElement) && (null != toElement)) {
 			getElement().getMapping().add(createMappingEntry(toElement, fromElement));
 		}
 
@@ -242,7 +251,7 @@ public class SystemImporter extends CommonElementImporter {
 						element = findMappingTargetInFBNetwork(nw, parts);
 					}
 				}
-				if (null == element && null != application) {
+				if ((null == element) && (null != application)) {
 					parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); //$NON-NLS-1$
 					parts.pollFirst();
 					nw = application.getFBNetwork();
@@ -260,7 +269,8 @@ public class SystemImporter extends CommonElementImporter {
 				if (parts.isEmpty()) {
 					// the list is empty this should be the entity we are looking for
 					return element;
-				} else if (element instanceof SubApp) {
+				}
+				if (element instanceof SubApp) {
 					// as there are more elements the current should be a subapp
 					findMappingTargetInFBNetwork(((SubApp) element).getFbNetwork(), parts);
 				}
@@ -309,6 +319,11 @@ public class SystemImporter extends CommonElementImporter {
 		proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
 	}
 
+	private boolean isCommunicationAttributeNode() {
+		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
+		return (null != name) && LibraryElementTags.SEGMENT_COMMUNICATION_CONFIG.equals(name);
+	}
+
 	private boolean isColorAttributeNode() {
 		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
 		return (null != name) && LibraryElementTags.COLOR.equals(name);
@@ -349,6 +364,5 @@ public class SystemImporter extends CommonElementImporter {
 
 		return application;
 	}
-
 
 }

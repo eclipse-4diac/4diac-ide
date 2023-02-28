@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.model.value;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.text.MessageFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -44,7 +45,8 @@ public final class NumericValueConverter implements ValueConverter<Object> {
 	public Object toValue(final String string) throws IllegalArgumentException {
 		try {
 			if (string.indexOf("__") != -1) { //$NON-NLS-1$
-				throw new IllegalArgumentException(Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
+				throw new IllegalArgumentException(
+						MessageFormat.format(Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE, string));
 			}
 			final Matcher matcher = NON_DECIMAL.matcher(string);
 			if (TRUE.equalsIgnoreCase(string)) {
@@ -61,7 +63,8 @@ public final class NumericValueConverter implements ValueConverter<Object> {
 			}
 			return new BigInteger(string.replace("_", "")); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (final Exception e) {
-			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_NUMBER_LITERAL, e);
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_INVALID_NUMBER_LITERAL, string),
+					e);
 		}
 	}
 

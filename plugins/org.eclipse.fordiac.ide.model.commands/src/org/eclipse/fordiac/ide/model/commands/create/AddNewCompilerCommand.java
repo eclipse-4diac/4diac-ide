@@ -23,12 +23,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.commands.Command;
 
 /**
  * The Class AddNewCompilerCommand.
  */
-public class AddNewCompilerCommand extends Command implements CreationCommand {
+public class AddNewCompilerCommand extends CreationCommand {
 
 	/** The new Compiler value. */
 	private Compiler compiler;

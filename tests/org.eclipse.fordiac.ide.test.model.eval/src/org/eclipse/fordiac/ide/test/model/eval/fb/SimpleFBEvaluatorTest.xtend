@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.model.eval.fb
 
-import java.util.concurrent.ArrayBlockingQueue
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
@@ -32,7 +31,9 @@ import org.junit.jupiter.api.Test
 
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
+import static extension org.eclipse.fordiac.ide.model.eval.value.BoolValue.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.IntValue.*
+import static extension org.eclipse.fordiac.ide.model.eval.value.WordValue.*
 import static extension org.junit.jupiter.api.Assertions.*
 
 class SimpleFBEvaluatorTest extends FBEvaluatorTest {
@@ -83,6 +84,46 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 			'''.newSTMethod("TEST_METHOD")
 		].evaluateSimpleFB("REQ", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
 			"DO1".newVarDeclaration(ElementaryTypes.INT, false)).variables.get("DO1").value)
+	}
+
+	@Test
+	def void testMethodCallWithNotBool() {
+		true.toBoolValue.assertEquals(#[
+			'''THIS.TEST_METHOD(A := DI1, B := DI2, NOT C => DO1);'''.newSTAlgorithm("REQ"),
+			'''
+				METHOD TEST_METHOD
+				VAR_INPUT
+					A: BOOL;
+					B: BOOL;
+				END_VAR
+				VAR_OUTPUT
+					C: BOOL;
+				END_VAR
+				C := A AND B;
+				END_METHOD
+			'''.newSTMethod("TEST_METHOD")
+		].evaluateSimpleFB("REQ", #[false.toBoolValue.newVariable("DI1"), true.toBoolValue.newVariable("DI2")],
+			"DO1".newVarDeclaration(ElementaryTypes.BOOL, false)).variables.get("DO1").value)
+	}
+
+	@Test
+	def void testMethodCallWithNotWord() {
+		4.bitwiseNot.toWordValue.assertEquals(#[
+			'''THIS.TEST_METHOD(A := DI1, B := DI2, NOT C => DO1);'''.newSTAlgorithm("REQ"),
+			'''
+				METHOD TEST_METHOD
+				VAR_INPUT
+					A: WORD;
+					B: WORD;
+				END_VAR
+				VAR_OUTPUT
+					C: WORD;
+				END_VAR
+				C := A AND B;
+				END_METHOD
+			'''.newSTMethod("TEST_METHOD")
+		].evaluateSimpleFB("REQ", #[21.toWordValue.newVariable("DI1"), 4.toWordValue.newVariable("DI2")],
+			"DO1".newVarDeclaration(ElementaryTypes.WORD, false)).variables.get("DO1").value)
 	}
 
 	@Test
@@ -615,11 +656,11 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 		] + #[output])
 		fbType.callables.addAll(callables)
 		fbType.internalFbs.addAll(internalFBs)
-		val queue = new ArrayBlockingQueue(1000)
-		val eval = new SimpleFBEvaluator(fbType, null, variables, queue, null)
-		queue.add(inputEvent)
+		val queue = new TracingFBEvaluatorEventQueue(#[inputEvent])
+		val eval = new SimpleFBEvaluator(fbType, null, variables, null)
+		eval.eventQueue = queue
 		eval.evaluate
-		#[outputEvent].assertIterableEquals(queue)
+		#[outputEvent].assertIterableEquals(queue.outputEvents)
 		return eval
 	}
 }

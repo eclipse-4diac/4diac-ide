@@ -45,6 +45,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getInternalVars <em>Internal Vars</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getInternalConstVars <em>Internal Const Vars</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getInternalFbs <em>Internal Fbs</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getAlgorithm <em>Algorithm</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeImpl#getMethods <em>Methods</em>}</li>
@@ -63,6 +64,16 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 	 * @ordered
 	 */
 	protected EList<VarDeclaration> internalVars;
+
+	/**
+	 * The cached value of the '{@link #getInternalConstVars() <em>Internal Const Vars</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getInternalConstVars()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VarDeclaration> internalConstVars;
 
 	/**
 	 * The cached value of the '{@link #getInternalFbs() <em>Internal Fbs</em>}' containment reference list.
@@ -114,6 +125,19 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 			internalVars = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS);
 		}
 		return internalVars;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<VarDeclaration> getInternalConstVars() {
+		if (internalConstVars == null) {
+			internalConstVars = new EObjectContainmentEList<VarDeclaration>(VarDeclaration.class, this, LibraryElementPackage.BASE_FB_TYPE__INTERNAL_CONST_VARS);
+		}
+		return internalConstVars;
 	}
 
 	/**
@@ -182,6 +206,8 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 		switch (featureID) {
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 				return ((InternalEList<?>)getInternalVars()).basicRemove(otherEnd, msgs);
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_CONST_VARS:
+				return ((InternalEList<?>)getInternalConstVars()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
 				return ((InternalEList<?>)getInternalFbs()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.BASE_FB_TYPE__CALLABLES:
@@ -201,6 +227,8 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 		switch (featureID) {
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 				return getInternalVars();
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_CONST_VARS:
+				return getInternalConstVars();
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
 				return getInternalFbs();
 			case LibraryElementPackage.BASE_FB_TYPE__ALGORITHM:
@@ -227,6 +255,10 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 				getInternalVars().clear();
 				getInternalVars().addAll((Collection<? extends VarDeclaration>)newValue);
 				return;
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_CONST_VARS:
+				getInternalConstVars().clear();
+				getInternalConstVars().addAll((Collection<? extends VarDeclaration>)newValue);
+				return;
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
 				getInternalFbs().clear();
 				getInternalFbs().addAll((Collection<? extends FB>)newValue);
@@ -252,6 +284,9 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 				getInternalVars().clear();
 				return;
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_CONST_VARS:
+				getInternalConstVars().clear();
+				return;
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
 				getInternalFbs().clear();
 				return;
@@ -274,6 +309,8 @@ public class BaseFBTypeImpl extends FBTypeImpl implements BaseFBType {
 		switch (featureID) {
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_VARS:
 				return internalVars != null && !internalVars.isEmpty();
+			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_CONST_VARS:
+				return internalConstVars != null && !internalConstVars.isEmpty();
 			case LibraryElementPackage.BASE_FB_TYPE__INTERNAL_FBS:
 				return internalFbs != null && !internalFbs.isEmpty();
 			case LibraryElementPackage.BASE_FB_TYPE__ALGORITHM:

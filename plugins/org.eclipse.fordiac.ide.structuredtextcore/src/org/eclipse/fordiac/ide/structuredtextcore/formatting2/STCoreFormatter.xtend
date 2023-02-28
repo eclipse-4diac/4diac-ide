@@ -105,7 +105,9 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	/** Formats the STVarTempDeclarationBlocks */
 	def dispatch void format(STVarTempDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
-		varDeclarationBlock.regionFor.keyword(STVarTempDeclarationBlockAccess.VAR_TEMPKeyword_1).prepend[setNewLines(1, 1, 2)]
+		varDeclarationBlock.regionFor.keyword(STVarTempDeclarationBlockAccess.VAR_TEMPKeyword_1).prepend [
+			setNewLines(1, 1, 2)
+		]
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarTempDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
 				oneSpace
@@ -125,7 +127,9 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	/** Formats the STVarInputDeclarationBlocks */
 	def dispatch void format(STVarInputDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
-		varDeclarationBlock.regionFor.keyword(STVarInputDeclarationBlockAccess.VAR_INPUTKeyword_1).prepend[setNewLines(1, 1, 2)]
+		varDeclarationBlock.regionFor.keyword(STVarInputDeclarationBlockAccess.VAR_INPUTKeyword_1).prepend [
+			setNewLines(1, 1, 2)
+		]
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarInputDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
 				oneSpace
@@ -145,7 +149,9 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	/** Formats the STVarOutputDeclarationBlocks */
 	def dispatch void format(STVarOutputDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
-		varDeclarationBlock.regionFor.keyword(STVarOutputDeclarationBlockAccess.VAR_OUTPUTKeyword_1).prepend[setNewLines(1, 1, 2)]
+		varDeclarationBlock.regionFor.keyword(STVarOutputDeclarationBlockAccess.VAR_OUTPUTKeyword_1).prepend [
+			setNewLines(1, 1, 2)
+		]
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarOutputDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
 				oneSpace
@@ -164,7 +170,9 @@ class STCoreFormatter extends AbstractFormatter2 {
 	}
 
 	def dispatch void format(STVarInOutDeclarationBlock varDeclarationBlock, extension IFormattableDocument document) {
-		varDeclarationBlock.regionFor.keyword(STVarInOutDeclarationBlockAccess.VAR_IN_OUTKeyword_1).prepend[setNewLines(1, 1, 2)]
+		varDeclarationBlock.regionFor.keyword(STVarInOutDeclarationBlockAccess.VAR_IN_OUTKeyword_1).prepend [
+			setNewLines(1, 1, 2)
+		]
 		if (varDeclarationBlock.constant) {
 			varDeclarationBlock.regionFor.keyword(STVarInOutDeclarationBlockAccess.constantCONSTANTKeyword_2_0).prepend [
 				oneSpace
@@ -210,9 +218,17 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 	/** Formats the STIfStatements */
 	def dispatch void format(STIfStatement ifStatement, extension IFormattableDocument document) {
+		interior(
+			ifStatement.regionFor.keyword("THEN").append[newLine],
+			ifStatement.elseifs?.isEmpty
+				? (ifStatement.^else !== null ? ifStatement.^else.regionFor.keyword("ELSE") : ifStatement.regionFor.
+				keyword("END_IF"))
+				: ifStatement.elseifs.get(0).regionFor.keyword("ELSIF"),
+			[indent]
+		)
 		ifStatement.condition.format
 		ifStatement.regionFor.keyword("THEN").append[newLine]
-		ifStatement.statements.forEach[surround[indent] format]
+		ifStatement.statements.forEach[format]
 		ifStatement.elseifs.forEach[format]
 		ifStatement.^else.format
 		ifStatement.regionFor.keyword(";").surround[noSpace]
@@ -576,6 +592,10 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 						override configureWhitespace(WhitespaceReplacer leading, WhitespaceReplacer trailing) {
 							leading.formatting.setSpace(" ".repeat(tabWidth))
+							if (leading.formatting.indentationDecrease !== null) {
+								trailing.formatting.setIndentationDecrease(leading.formatting.indentationDecrease)
+								leading.formatting.setIndentationDecrease(null)
+							}
 						}
 					}
 				else
@@ -588,6 +608,10 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 						override configureWhitespace(WhitespaceReplacer leading, WhitespaceReplacer trailing) {
 							leading.formatting.setSpace(" ".repeat(tabWidth))
+							if (leading.formatting.indentationDecrease !== null) {
+								trailing.formatting.setIndentationDecrease(leading.formatting.indentationDecrease)
+								leading.formatting.setIndentationDecrease(null)
+							}
 						}
 					}
 			}
@@ -612,7 +636,6 @@ class STCoreFormatter extends AbstractFormatter2 {
 					"(?m)^[\\s&&[^\r\n]]*\\* ", "").replaceAll("[\\s&&[^\r\n]]+", " ").trim
 			else
 				region.text.replaceFirst("^//", "").replaceFirst("\n$", "").replaceAll("\\s+", " ").trim
-				
 
 		val pattern = Pattern.compile(
 			"[\\s&&[^\r\n]]*(?:(\\S{" + commentLineLength + "})|([[\\s&&[^\r\n]]\\S]{1," + commentLineLength +
@@ -633,5 +656,4 @@ class STCoreFormatter extends AbstractFormatter2 {
 
 		context
 	}
-
 }

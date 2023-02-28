@@ -18,13 +18,11 @@ package org.eclipse.fordiac.ide.gef.properties;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.AdapterColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.AdapterListProvider;
 import org.eclipse.fordiac.ide.gef.nat.EventColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
-import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -32,16 +30,16 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
-import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.widgets.Group;
 
-public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditInterfaceSection {
+public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditInterfaceSection<AdapterDeclaration> {
 
+	private static final boolean ADAPTER_TYPE_SELECTION = true;
 
 	@Override
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
@@ -83,10 +81,10 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 	}
 
 	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
+	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
 		if (entry instanceof AdapterDeclaration) {
 			final AdapterDeclaration adapterDeclaration = (AdapterDeclaration) entry;
-			cmd.add(newInsertCommand(adapterDeclaration, adapterDeclaration.isIsInput(), index));
+			cmd.add(newInsertCommand(adapterDeclaration, isInput, index));
 		}
 	}
 
@@ -97,10 +95,10 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		outputProvider = new AdapterListProvider(this, null);
+		outputProvider = new AdapterListProvider(this, new ArrayList<>());
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer, new EventColumnProvider(),
-				rule, typeSelection, this);
+				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this, Boolean.FALSE);
 	}
 
 	@Override
@@ -109,10 +107,10 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		inputProvider = new AdapterListProvider(this, null);
+		inputProvider = new AdapterListProvider(this, new ArrayList<>());
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, new AdapterColumnProvider(),
-				rule, typeSelection, this);
+				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this, Boolean.TRUE);
 	}
 
 

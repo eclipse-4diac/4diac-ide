@@ -16,12 +16,15 @@ package org.eclipse.fordiac.ide.elk.handlers;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.elk.alg.libavoid.server.LibavoidServerException;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
+import org.eclipse.fordiac.ide.elk.Messages;
 import org.eclipse.fordiac.ide.elk.commands.ConnectionLayoutCommand;
 import org.eclipse.fordiac.ide.elk.connection.ConnectionLayoutMapping;
 import org.eclipse.fordiac.ide.elk.connection.ConnectionLayoutRunner;
 import org.eclipse.fordiac.ide.elk.connection.StandardConnectionRoutingHelper;
 import org.eclipse.gef.commands.CommandStack;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -32,14 +35,20 @@ public class ConnectionLayoutHandler extends AbstractLayoutHandler {
 		final IWorkbenchPart part = HandlerUtil.getActiveEditor(event);
 
 		if (null != part) {
-			final ConnectionLayoutMapping normalMapping = ConnectionLayoutRunner.run(part);
-			final FordiacLayoutData data = StandardConnectionRoutingHelper.INSTANCE.calculateConnections(normalMapping);
+			try {
+				final ConnectionLayoutMapping normalMapping = ConnectionLayoutRunner.run(part);
+				final FordiacLayoutData data = StandardConnectionRoutingHelper.INSTANCE.calculateConnections(normalMapping);
 
-			ConnectionLayoutRunner.runGroups(part, normalMapping, data);
-			ConnectionLayoutRunner.runSubapps(normalMapping, data);
+				ConnectionLayoutRunner.runGroups(part, normalMapping, data);
+				ConnectionLayoutRunner.runSubapps(normalMapping, data);
 
-			part.getAdapter(CommandStack.class).execute(new ConnectionLayoutCommand(data));
+				part.getAdapter(CommandStack.class).execute(new ConnectionLayoutCommand(data));
+			} catch (final LibavoidServerException e) {
+				MessageDialog.openWarning(HandlerUtil.getActiveShell(event),
+						Messages.ConnectionLayout_TimeoutTitle, Messages.ConnectionLayout_TimeoutMessage);
+			}
 		}
 		return Status.OK_STATUS;
 	}
+
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,7 +12,11 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.model.eval.fb
 
+import java.util.Collection
+import java.util.Queue
+import java.util.concurrent.ArrayBlockingQueue
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorEventQueue
 import org.eclipse.fordiac.ide.model.eval.fb.FBEvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue
@@ -25,6 +29,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
+import org.eclipse.xtend.lib.annotations.Accessors
+import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 import org.junit.jupiter.api.BeforeAll
 
 class FBEvaluatorTest {
@@ -86,5 +92,24 @@ class FBEvaluatorTest {
 
 	def static newVariable(AnyElementaryValue value, String name) {
 		new ElementaryVariable(name, value.type, value)
+	}
+
+	@FinalFieldsConstructor
+	static class TracingFBEvaluatorEventQueue implements FBEvaluatorEventQueue {
+		@Accessors final Queue<Event> inputEvents
+		@Accessors final Queue<Event> outputEvents = new ArrayBlockingQueue(1000)
+
+		new(Collection<Event> inputEvents) {
+			this(new ArrayBlockingQueue(inputEvents.size, false, inputEvents))
+		}
+
+		override receiveInputEvent() throws InterruptedException {
+			inputEvents.poll
+		}
+
+		override sendOutputEvent(Event event) {
+			outputEvents.offer(event)
+		}
+
 	}
 }

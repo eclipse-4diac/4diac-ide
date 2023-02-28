@@ -12,6 +12,7 @@
  */
 package org.eclipse.fordiac.ide.model.value;
 
+import java.text.MessageFormat;
 import java.time.LocalDate;
 
 import org.eclipse.fordiac.ide.model.Messages;
@@ -25,12 +26,13 @@ public final class DateValueConverter implements ValueConverter<LocalDate> {
 	@Override
 	public LocalDate toValue(final String string) throws IllegalArgumentException {
 		if (string.indexOf("__") != -1) { //$NON-NLS-1$
-			throw new IllegalArgumentException(Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
+			throw new IllegalArgumentException(
+					MessageFormat.format(Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE, string));
 		}
 		try {
 			return LocalDate.parse(string.replace("_", "")); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (final Exception e) {
-			throw new IllegalArgumentException(Messages.VALIDATOR_INVALID_DATE_FORMAT, e);
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_INVALID_DATE_FORMAT, string), e);
 		}
 	}
 }

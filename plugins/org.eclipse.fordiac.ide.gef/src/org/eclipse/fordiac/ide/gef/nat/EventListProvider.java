@@ -16,7 +16,7 @@ import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 
@@ -33,7 +33,7 @@ public class EventListProvider extends ListDataProvider<Event> implements Fordia
 
 
 	@Override
-	public <T extends List<? extends IInterfaceElement>> void setInput(final T varDecl) {
+	public <T extends List<? extends INamedElement>> void setInput(final T varDecl) {
 		this.list = (List<Event>) varDecl;
 
 	}

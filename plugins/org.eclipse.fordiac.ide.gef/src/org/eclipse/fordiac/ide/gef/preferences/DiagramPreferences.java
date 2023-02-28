@@ -90,6 +90,9 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 
 		// Create a Group to hold the interface pin field
 		createGroupInterfacePins();
+
+		// Create a Group to hold the layout options field
+		createGroupLayoutOptionsPins();
 	}
 
 	private Group createGroup(final String title) {
@@ -193,6 +196,14 @@ public class DiagramPreferences extends FieldEditorPreferencePage implements IWo
 				Messages.DiagramPreferences_FieldEditors_GridSpacingInPixels, group);
 		gridSpacing.setTextLimit(10);
 		addField(gridSpacing);
+		configGroup(group);
+	}
+
+	private void createGroupLayoutOptionsPins() {
+		final Group group = createGroup("Layout Options");
+		final BooleanFieldEditor connectionAutoLayout = new BooleanFieldEditor("ConnectionAutoLayout",
+				"Layout connections automatically", group);
+		addField(connectionAutoLayout);
 		configGroup(group);
 	}
 

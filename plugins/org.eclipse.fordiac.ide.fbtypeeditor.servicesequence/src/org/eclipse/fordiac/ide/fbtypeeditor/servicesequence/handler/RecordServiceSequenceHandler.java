@@ -38,6 +38,8 @@ import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -46,6 +48,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
+import org.eclipse.gef.EditPart;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -75,7 +78,16 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final IStructuredSelection selection = (IStructuredSelection) HandlerUtil.getCurrentSelection(event);
 		for (final Object selected : selection.toList()) {
-			final ServiceSequence seq = getSequence(selected);
+			ServiceSequence seq = getSequence(selected);
+			if (seq == null && selected instanceof SequenceRootEditPart && selection.toList().size() == 1) {
+				final CreateServiceSequenceCommand cmd = new CreateServiceSequenceCommand(
+						((FBType) ((EditPart) selected).getModel()).getService());
+				if (cmd.canExecute()) {
+					cmd.execute();
+				}
+				seq = getSequence(cmd.getCreatedElement());
+			}
+
 			if (seq != null) {
 				final List<String> events = new ArrayList<>();
 				final List<String> parameters = new ArrayList<>();

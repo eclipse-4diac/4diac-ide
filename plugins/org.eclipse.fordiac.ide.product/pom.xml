@@ -145,6 +145,7 @@
 								<configuration>
 									<signFiles>
 										<signFile>${project.build.directory}/products/org.eclipse.fordiac.ide.product/macosx/cocoa/x86_64/4diac-ide.app</signFile>
+										<signFile>${project.build.directory}/products/org.eclipse.fordiac.ide.product/macosx/cocoa/aarch64/4diac-ide.app</signFile>
 									</signFiles>
 								</configuration>
 							</execution>
@@ -158,7 +159,7 @@
 						<executions>
 							<execution>
 								<phase>pre-integration-test</phase>
-								<id>sign</id>
+								<id>sign_x86</id>
 								<goals>
 									<goal>package-dmg</goal>
 								</goals>
@@ -166,6 +167,20 @@
 									<volumeName>4diac-ide</volumeName>
 									<volumeIcon>${project.build.directory}/../icons/fordiac.icns</volumeIcon>
 									<source>${project.build.directory}/products/4diac-ide_${unqualifiedVersion}-macosx.cocoa.x86_64.tar.gz</source>
+									<dmgFilename>4diac-ide.dmg</dmgFilename>
+									<sign>true</sign>
+								</configuration>
+							</execution>
+							<execution>
+								<phase>pre-integration-test</phase>
+								<id>sign_aarch64</id>
+								<goals>
+									<goal>package-dmg</goal>
+								</goals>
+								<configuration>
+									<volumeName>4diac-ide</volumeName>
+									<volumeIcon>${project.build.directory}/../icons/fordiac.icns</volumeIcon>
+									<source>${project.build.directory}/products/4diac-ide_${unqualifiedVersion}-macosx.cocoa.aarch64.tar.gz</source>
 									<dmgFilename>4diac-ide.dmg</dmgFilename>
 									<sign>true</sign>
 								</configuration>

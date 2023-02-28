@@ -164,6 +164,12 @@
                tab="property.tab.ivars">
          </propertySection>
          <propertySection
+               class="org.eclipse.fordiac.ide.gef.properties.InternalConstVarsSection"
+               filter="org.eclipse.fordiac.ide.gef.properties.BaseFBFilter"
+               id="property.propertysection.icvars"
+               tab="property.tab.icvars">
+         </propertySection>
+         <propertySection
                class="org.eclipse.fordiac.ide.gef.properties.InternalFbsSection"
                filter="org.eclipse.fordiac.ide.gef.properties.BaseFBFilter"
                id="property.section.ifbs"

@@ -9,23 +9,27 @@
  *
  * Contributors:
  *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *   Prankur Agarawal	- add handling for internal constant variables
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
 import java.util.List;
 
-import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 
 public class VarDeclarationListProvider extends ListDataProvider<VarDeclaration>
-		implements FordiacInterfaceListProvider {
+implements FordiacInterfaceListProvider {
 
+	public VarDeclarationListProvider(final List<VarDeclaration> list,
+			final VarDeclarationColumnAccessor columnAccessor) {
+		super(list, columnAccessor);
+	}
 
-	public VarDeclarationListProvider(final AbstractSection section, final List<VarDeclaration> list) {
-		super(list, new VarDeclarationColumnAccessor(section));
+	protected VarDeclarationColumnAccessor getColumnAccessor() {
+		return (VarDeclarationColumnAccessor) columnAccessor;
 	}
 
 	@Override
@@ -36,14 +40,14 @@ public class VarDeclarationListProvider extends ListDataProvider<VarDeclaration>
 		return 0;
 	}
 
-	public void setInput(final Object inputElement) {
-		if (inputElement instanceof BaseFBType) {
-			this.list = ((BaseFBType) inputElement).getInternalVars();
-		}
-	}
-
+	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends List<? extends IInterfaceElement>> void setInput(final T list) {
+	public <T extends List<? extends INamedElement>> void setInput(final T list) {
 		this.list = (List<VarDeclaration>) list;
 	}
+
+	public void setTypeLib(final TypeLibrary dataTypeLib) {
+		getColumnAccessor().setTypeLib(dataTypeLib);
+	}
+
 }

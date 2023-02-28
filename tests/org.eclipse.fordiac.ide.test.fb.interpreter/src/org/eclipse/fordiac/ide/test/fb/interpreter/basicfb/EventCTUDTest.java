@@ -13,9 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
-
 import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
-import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBTest;
 import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils.setVariable;
 
 import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
@@ -28,7 +26,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 
 	@Override
 	public void test() {
-		BasicFBType fb = (BasicFBType) loadFBType("E_CTUD"); //$NON-NLS-1$
+		final BasicFBType fb = (BasicFBType) loadFBType("E_CTUD"); //$NON-NLS-1$
 		ServiceSequence seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$
@@ -74,7 +72,7 @@ public class EventCTUDTest extends AbstractInterpreterTest {
 		// $NON-NLS-3$
 		addTransaction(seq, new FBTransactionBuilder("R", "RO", "QU:=TRUE;QD:=TRUE;CV:=0")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 		// $NON-NLS-3$
-		fb = (BasicFBType) runFBTest(fb, seq);
+		runFBTest(fb, seq);
 		seq = fb.getService().getServiceSequence().get(0);
 
 		setVariable(fb, "PV", "1"); //$NON-NLS-1$ //$NON-NLS-2$

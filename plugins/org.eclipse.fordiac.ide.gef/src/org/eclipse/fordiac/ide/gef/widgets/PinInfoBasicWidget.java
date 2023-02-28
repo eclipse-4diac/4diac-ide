@@ -151,7 +151,7 @@ public class PinInfoBasicWidget implements CommandExecutor {
 				// ensure that the new value is shown
 				final Consumer<Command> commandExecutorBuffer = commandExecutor;
 				commandExecutor = null;
-				typeSelectionWidget.refresh();
+				refresh();
 				commandExecutor = commandExecutorBuffer;
 			}
 		}

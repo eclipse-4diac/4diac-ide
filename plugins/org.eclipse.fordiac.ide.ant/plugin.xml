@@ -98,6 +98,30 @@
       </antTask>
    </extension>
    <extension
+         point="org.eclipse.ant.core.antTasks">
+      <antTask
+            class="org.eclipse.fordiac.ide.ant.ant.AddBlockVersionEntry"
+            library="ant_tasks/ant-ant.jar"
+            name="fordiac.addBlockVersionEntry">
+      </antTask>
+   </extension>
+   <extension
+         point="org.eclipse.ant.core.antTasks">
+      <antTask
+            class="org.eclipse.fordiac.ide.ant.ant.SetBlockDocumentation"
+            library="ant_tasks/ant-ant.jar"
+            name="fordiac.setBlockDocumentation">
+      </antTask>
+   </extension>
+   <extension
+         point="org.eclipse.ant.core.antTasks">
+      <antTask
+            class="org.eclipse.fordiac.ide.ant.ant.SaveBlock"
+            library="ant_tasks/ant-ant.jar"
+            name="fordiac.saveBlock">
+      </antTask>
+   </extension>
+   <extension
          point="org.eclipse.ant.core.extraClasspathEntries">
       <extraClasspathEntry
             library="ant_tasks/ant-ant.jar">

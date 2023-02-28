@@ -250,7 +250,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 		return this.stackFrames.computeIfAbsent(evaluator, key -> new EvaluatorDebugStackFrame(key, thread));
 	}
 
-	protected EvaluatorDebugVariable getVariable(final Variable<?> variable) {
+	public EvaluatorDebugVariable getVariable(final Variable<?> variable) {
 		return this.variables.computeIfAbsent(variable, key -> new EvaluatorDebugVariable(key, debugTarget));
 	}
 
@@ -279,7 +279,7 @@ public class CommonEvaluatorDebugger implements EvaluatorDebugger {
 				return true;
 			});
 			// notify dead group or reschedule
-			if (threadGroup.isDestroyed()) {
+			if (debugTarget.getProcess().isTerminated()) {
 				DebugPlugin.getDefault().getBreakpointManager()
 				.removeBreakpointListener(CommonEvaluatorDebugger.this.debugTarget);
 				CommonEvaluatorDebugger.this.debugTarget.fireTerminateEvent();

@@ -14,12 +14,13 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.List;
 
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
-public abstract class AbstractChangeContainerBoundsCommand extends Command {
+public abstract class AbstractChangeContainerBoundsCommand extends Command implements ConnectionLayoutTagger {
 
 	private final int dx;
 	private final int dy;
@@ -75,8 +76,11 @@ public abstract class AbstractChangeContainerBoundsCommand extends Command {
 		if (dx != 0 || dy != 0) {
 			final CompoundCommand cmd = new CompoundCommand();
 			cmd.add(new SetPositionCommand(target, dx, dy));
-			// ensure that the children stay at their position when the group grows or shrinks on the left/top side
-			getChildren().forEach(el -> cmd.add(new SetPositionCommand(el, -dx, -dy)));
+			// Ensure that the children stay at their position when the group grows or shrinks on the left/top side
+			// If the child is in a group we must only consider it if the group the child is contained in itself is
+			// changed.
+			getChildren().stream().filter(el -> !el.isInGroup() || target.equals(el.getGroup()))
+			.forEach(el -> cmd.add(new SetPositionCommand(el, -dx, -dy)));
 			return cmd;
 		}
 		return null;

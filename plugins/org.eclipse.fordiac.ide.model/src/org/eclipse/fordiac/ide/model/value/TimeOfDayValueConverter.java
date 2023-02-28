@@ -12,6 +12,7 @@
  */
 package org.eclipse.fordiac.ide.model.value;
 
+import java.text.MessageFormat;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeFormatterBuilder;
@@ -43,12 +44,14 @@ public final class TimeOfDayValueConverter implements ValueConverter<LocalTime> 
 	@Override
 	public LocalTime toValue(final String string) {
 		if (string.indexOf("__") != -1) { //$NON-NLS-1$
-			throw new IllegalArgumentException(Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE);
+			throw new IllegalArgumentException(
+					MessageFormat.format(Messages.VALIDATOR_CONSECUTIVE_UNDERSCORES_ERROR_MESSAGE, string));
 		}
 		try {
 			return LocalTime.parse(string.replace("_", ""), TIME_OF_DAY_FORMATTER); //$NON-NLS-1$ //$NON-NLS-2$
 		} catch (final Exception e) {
-			throw new IllegalArgumentException(Messages.VALIDATOR_InvalidTimeOfDayLiteral, e);
+			throw new IllegalArgumentException(MessageFormat.format(Messages.VALIDATOR_InvalidTimeOfDayLiteral, string),
+					e);
 		}
 	}
 }

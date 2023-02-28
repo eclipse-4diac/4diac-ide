@@ -153,6 +153,16 @@ public class ServiceInterfaceImpl extends EObjectImpl implements ServiceInterfac
 	 * @generated
 	 */
 	@Override
+	public String getQualifiedName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Service getService() {
 		return (Service) this.eContainer();
 	}

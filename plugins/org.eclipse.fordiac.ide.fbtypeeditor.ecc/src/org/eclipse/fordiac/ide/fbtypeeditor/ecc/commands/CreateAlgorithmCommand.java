@@ -23,9 +23,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
-import org.eclipse.gef.commands.Command;
 
-public class CreateAlgorithmCommand extends Command implements CreationCommand {
+public class CreateAlgorithmCommand extends CreationCommand {
 	private static final String DEFAULT_ALGORITHM_NAME = "ALG1"; //$NON-NLS-1$
 
 	private final BasicFBType fbType;

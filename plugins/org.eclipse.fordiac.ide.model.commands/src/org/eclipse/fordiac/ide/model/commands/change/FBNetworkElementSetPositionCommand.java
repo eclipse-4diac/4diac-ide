@@ -14,12 +14,13 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import java.util.function.Consumer;
 
+import org.eclipse.fordiac.ide.model.ConnectionLayoutTagger;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 
-public class FBNetworkElementSetPositionCommand extends SetPositionCommand {
+public class FBNetworkElementSetPositionCommand extends SetPositionCommand implements ConnectionLayoutTagger {
 
 	private static final Consumer<IInterfaceElement> INPUT_CONSUMER = ie -> ie.getInputConnections()
 			.forEach(con -> con.getRoutingData().setNeedsValidation(true));

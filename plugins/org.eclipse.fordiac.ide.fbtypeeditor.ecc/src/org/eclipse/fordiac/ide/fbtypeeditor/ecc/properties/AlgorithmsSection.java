@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2015 - 2020 fortiss GmbH, Johannes Kepler University Linz (JKU)
+ * Copyright (c) 2015, 2022 fortiss GmbH, Johannes Kepler University Linz (JKU)
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,19 +12,14 @@
  *     - initial API and implementation and/or initial documentation
  *   Daniel Lindhuber - added copy and paste
  *   Bianca Wiesmayr - flattened hierarchy
+ *   Alois Zoitl - turned AlgorithmSection into a read only
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.commands.DeleteAlgorithmCommand;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
-import org.eclipse.fordiac.ide.model.commands.insert.InsertAlgorithmCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
-import org.eclipse.fordiac.ide.ui.widget.I4diacTableUtil;
-import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FillLayout;
@@ -33,7 +28,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class AlgorithmsSection extends AbstractSection implements I4diacTableUtil {
+public class AlgorithmsSection extends AbstractSection {
 	private final AlgorithmGroup algorithmGroup = new AlgorithmGroup();
 	private AlgorithmList algorithmList;
 
@@ -51,7 +46,6 @@ public class AlgorithmsSection extends AbstractSection implements I4diacTableUti
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		createAlgorithmControls(parent);
-		TableWidgetFactory.enableCopyPasteCut(tabbedPropertySheetPage);
 	}
 
 	public void createAlgorithmControls(final Composite parent) {
@@ -79,8 +73,7 @@ public class AlgorithmsSection extends AbstractSection implements I4diacTableUti
 
 	@Override
 	protected void setInputInit() {
-		algorithmGroup.initialize(getType(), commandStack);
-		getAlgorithmList().initialize(getType(), commandStack);
+		getAlgorithmList().initialize(getType());
 	}
 
 	private AlgorithmList getAlgorithmList() {
@@ -92,34 +85,8 @@ public class AlgorithmsSection extends AbstractSection implements I4diacTableUti
 		getAlgorithmList().refresh();
 	}
 
-	@Override
-	public TableViewer getViewer() {
-		return algorithmList.getViewer();
-	}
 
-	public Object getEntry(final int index) {
-		return getAlgorithmList().getType().getAlgorithm().get(index);
-	}
 
-	@Override
-	public void addEntry(final Object entry, final int index, final CompoundCommand cmd) {
-		if (entry instanceof Algorithm) {
-			cmd.add(new InsertAlgorithmCommand(getAlgorithmList().getType(), (Algorithm) entry, index));
-		}
-	}
-
-	@Override
-	public Object removeEntry(final int index, final CompoundCommand cmd) {
-		final Algorithm entry = (Algorithm) getEntry(index);
-		cmd.add(new DeleteAlgorithmCommand(getAlgorithmList().getType(), entry));
-		return entry;
-	}
-
-	@Override
-	public void executeCompoundCommand(final CompoundCommand cmd) {
-		getAlgorithmList().executeCommand(cmd);
-		getViewer().refresh();
-	}
 
 
 }

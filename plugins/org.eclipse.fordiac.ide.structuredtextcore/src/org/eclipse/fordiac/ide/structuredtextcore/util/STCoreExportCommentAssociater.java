@@ -1,12 +1,12 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- * 
+ *
  * SPDX-License-Identifier: EPL-2.0
- * 
+ *
  * Contributors:
  *   Ulzii Jargalsaikhan - initial API and implementation and/or initial documentation
  *******************************************************************************/
@@ -30,25 +30,25 @@ import org.eclipse.xtext.util.Pair;
 public class STCoreExportCommentAssociater extends DefaultCommentAssociater {
 
 	@Override
-	protected void associateCommentsWithSemanticEObjects(Map<ILeafNode, EObject> mapping, ICompositeNode rootNode) {
+	protected void associateCommentsWithSemanticEObjects(final Map<ILeafNode, EObject> mapping, final ICompositeNode rootNode) {
 		EObject currentEObject = null;
-		List<ILeafNode> currentComments = new ArrayList<ILeafNode>();
-		NodeIterator nodeIterator = new NodeIterator(rootNode);
+		final List<ILeafNode> currentComments = new ArrayList<>();
+		final NodeIterator nodeIterator = new NodeIterator(rootNode);
 		// rewind to previous token with token owner
 		while (nodeIterator.hasPrevious() && currentEObject == null) {
-			INode node = nodeIterator.previous();
+			final INode node = nodeIterator.previous();
 			if (tokenUtil.isToken(node)) {
 				currentEObject = tokenUtil.getTokenOwner(node);
 			}
 		}
 		while (nodeIterator.hasNext()) {
-			INode node = nodeIterator.next();
+			final INode node = nodeIterator.next();
 			if (tokenUtil.isCommentNode(node)) {
 				currentComments.add((ILeafNode) node);
 			}
-			boolean isToken = tokenUtil.isToken(node);
+			final boolean isToken = tokenUtil.isToken(node);
 			if ((node instanceof ILeafNode || isToken) && currentEObject != null) {
-				ITextRegionWithLineInformation textRegion = node.getTextRegionWithLineInformation();
+				final ITextRegionWithLineInformation textRegion = node.getTextRegionWithLineInformation();
 				if (textRegion.getLineNumber() != textRegion.getEndLineNumber()) {
 					// found a newline -> associating existing comments with currentEObject
 					addMapping(mapping, currentComments, currentEObject);
@@ -56,9 +56,9 @@ public class STCoreExportCommentAssociater extends DefaultCommentAssociater {
 				}
 			}
 			if (isToken) {
-				Pair<List<ILeafNode>, List<ILeafNode>> leadingAndTrailingHiddenTokens = tokenUtil
+				final Pair<List<ILeafNode>, List<ILeafNode>> leadingAndTrailingHiddenTokens = tokenUtil
 						.getLeadingAndTrailingHiddenTokens(node);
-				for (ILeafNode leadingHiddenNode : leadingAndTrailingHiddenTokens.getFirst()) {
+				for (final ILeafNode leadingHiddenNode : leadingAndTrailingHiddenTokens.getFirst()) {
 					if (tokenUtil.isCommentNode(leadingHiddenNode)) {
 						currentComments.add(leadingHiddenNode);
 					}
@@ -67,12 +67,12 @@ public class STCoreExportCommentAssociater extends DefaultCommentAssociater {
 				EObject currentEObjectBuffer = currentEObject;
 				currentEObject = tokenUtil.getTokenOwner(node);
 				if (currentEObjectBuffer != null) {
-					for (ILeafNode leafNode : currentComments) {
+					for (final ILeafNode leafNode : currentComments) {
 						if ((leafNode.getTotalEndLine() > NodeModelUtils.getNode(currentEObjectBuffer).getTotalEndLine()
 								+ 1)
 								|| leafNode.getGrammarElement() instanceof TerminalRule
-										&& ((TerminalRule) leafNode.getGrammarElement()).getName()
-												.equalsIgnoreCase("ML_COMMENT")) {
+								&& ((TerminalRule) leafNode.getGrammarElement()).getName()
+								.equalsIgnoreCase("ML_COMMENT")) {
 							currentEObjectBuffer = currentEObject;
 						}
 
@@ -90,7 +90,7 @@ public class STCoreExportCommentAssociater extends DefaultCommentAssociater {
 			if (currentEObject != null) {
 				addMapping(mapping, currentComments, currentEObject);
 			} else {
-				EObject objectForRemainingComments = getEObjectForRemainingComments(rootNode);
+				final EObject objectForRemainingComments = getEObjectForRemainingComments(rootNode);
 				if (objectForRemainingComments != null) {
 					addMapping(mapping, currentComments, objectForRemainingComments);
 				}
@@ -98,7 +98,7 @@ public class STCoreExportCommentAssociater extends DefaultCommentAssociater {
 		}
 	}
 
-	protected void addSingleMapping(Map<ILeafNode, EObject> mapping, ILeafNode currentComment, EObject currentEObject) {
+	protected void addSingleMapping(final Map<ILeafNode, EObject> mapping, final ILeafNode currentComment, final EObject currentEObject) {
 		mapping.put(currentComment, currentEObject);
 	}
 }

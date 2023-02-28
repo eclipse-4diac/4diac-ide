@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.st;
 
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -51,9 +52,9 @@ public class STLaunchConfigurationDelegate extends CommonLaunchConfigurationDele
 			}
 			final var function = STLaunchConfigurationAttributes.getFunction(configuration, source, null);
 			if (function == null) {
-				throw new CoreException(
-						Status.error(String.format("Cannot find function \"%s\" in source %s", configuration //$NON-NLS-1$
-								.getAttribute(STLaunchConfigurationAttributes.FUNCTION, ""), resource.getName()))); //$NON-NLS-1$
+				throw new CoreException(Status.error(MessageFormat.format(
+						Messages.STLaunchConfigurationDelegate_NoSuchFunction,
+						configuration.getAttribute(STLaunchConfigurationAttributes.FUNCTION, ""), resource.getName()))); //$NON-NLS-1$
 			}
 			final var defaultArguments = getDefaultArguments(function);
 			final var variables = LaunchConfigurationAttributes.getArguments(configuration, defaultArguments);
@@ -67,9 +68,14 @@ public class STLaunchConfigurationDelegate extends CommonLaunchConfigurationDele
 		return new STFunctionEvaluator(function, null, variables, null);
 	}
 
-	@SuppressWarnings("static-method")
-	protected List<Variable<?>> getDefaultArguments(final STFunction function) {
-		return Stream.concat(function.getInputParameters().stream(), function.getInOutParameters().stream())
-				.map(STVarDeclaration.class::cast).map(STVariableOperations::newVariable).collect(Collectors.toList());
+	public static List<Variable<?>> getDefaultArguments(final STFunction function) throws CoreException {
+		try {
+			return Stream.concat(function.getInputParameters().stream(), function.getInOutParameters().stream())
+					.map(STVarDeclaration.class::cast).map(STVariableOperations::newVariable)
+					.collect(Collectors.toList());
+		} catch (final Exception e) {
+			throw new CoreException(Status.error(MessageFormat
+					.format(Messages.STLaunchConfigurationDelegate_InvalidDefaultArguments, function.getName()), e));
+		}
 	}
 }

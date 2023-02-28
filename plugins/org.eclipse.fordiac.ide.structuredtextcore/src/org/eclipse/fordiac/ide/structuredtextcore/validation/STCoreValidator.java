@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 - 2022 Primetals Technologies Austria GmbH
- *               2022 Martin Erich Jobst
+ * Copyright (c) 2021 - 2023 Primetals Technologies Austria GmbH
+ *               2022 - 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,12 +14,17 @@
  *       - adds check for trailing underscore on identifiers
  *       - validation for unqualified FB calls (exactly one input event)
  *       - validation for partial bit access
+ *       - validaton for array access
+ *       - validaton for string access
  *   Ulzii Jargalsaikhan
  *       - custom validation for identifiers
  *   Martin Jobst
  *       - validation for reserved identifiers
  *       - validation for calls
  *       - validation for unary and binary operators
+ *       - fix type validation for literals
+ *       - validation for truncated string literals
+ *       - validation for (initializer) expression source
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.validation;
 
@@ -27,6 +32,7 @@ import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isNumericValueValid;
 import static org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.isStringValueValid;
 
+import java.math.BigInteger;
 import java.text.MessageFormat;
 import java.util.stream.StreamSupport;
 
@@ -34,6 +40,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
+import org.eclipse.fordiac.ide.model.data.AnyStringType;
+import org.eclipse.fordiac.ide.model.data.ArrayType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
@@ -45,6 +53,7 @@ import org.eclipse.fordiac.ide.model.value.NumericValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STStringValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
@@ -53,9 +62,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgume
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STFeatureExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STForStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral;
@@ -103,18 +115,187 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String STANDARD_FUNCTION_WITH_FORMAL_ARGUMENTS = ISSUE_CODE_PREFIX
 			+ "standardFunctionWithFormalArguments"; //$NON-NLS-1$
 	public static final String LITERAL_IMPLICIT_CONVERSION = ISSUE_CODE_PREFIX + "literalImplicitConversion"; //$NON-NLS-1$
-
 	public static final String ICALLABLE_NOT_VISIBLE = ISSUE_CODE_PREFIX + "iCallableNotVisible"; //$NON-NLS-1$
 	public static final String ICALLABLE_HAS_NO_RETURN_TYPE = ISSUE_CODE_PREFIX + "iCallableHasNoReturnType"; //$NON-NLS-1$
 	public static final String BIT_ACCESS_INDEX_OUT_OF_RANGE = ISSUE_CODE_PREFIX + "bitAccessIndexOutOfRange"; //$NON-NLS-1$
 	public static final String BIT_ACCESS_INDEX_INVALID_EXPRESSION = ISSUE_CODE_PREFIX + "bitAccessInvalidExpression"; //$NON-NLS-1$
 	public static final String BIT_ACCESS_INVALID_FOR_TYPE = ISSUE_CODE_PREFIX + "bitAccessInvalidForType"; //$NON-NLS-1$
 	public static final String BIT_ACCESS_INVALID_RECEIVER = ISSUE_CODE_PREFIX + "bitAccessInvalidForReceiver"; //$NON-NLS-1$
-
 	public static final String BIT_ACCESS_EXPRESSION_NOT_OF_TYPE_ANY_INT = ISSUE_CODE_PREFIX
 			+ "bitAccessExpressionNotOfTypeAnyInt"; //$NON-NLS-1$
-
 	public static final String DUPLICATE_VARIABLE_NAME = ISSUE_CODE_PREFIX + "duplicateVariableName"; //$NON-NLS-1$
+	public static final String INDEX_RANGE_TYPE_INVALID = ISSUE_CODE_PREFIX + "indexRangeTypeInvalid"; //$NON-NLS-1$
+	public static final String INDEX_RANGE_NOT_A_LITERAL = ISSUE_CODE_PREFIX + "indexRangeNotALiteral"; //$NON-NLS-1$
+	public static final String MAX_LENGTH_NOT_ALLOWED = ISSUE_CODE_PREFIX + "maxLengthNotAllowed"; //$NON-NLS-1$
+	public static final String MAX_LENGTH_TYPE_INVALID = ISSUE_CODE_PREFIX + "maxLengthTypeInvalid"; //$NON-NLS-1$
+	public static final String TOO_MANY_INDICES_GIVEN = ISSUE_CODE_PREFIX + "tooManyIndicesGiven"; //$NON-NLS-1$
+	public static final String ARRAY_ACCESS_INVALID = ISSUE_CODE_PREFIX + "arrayAccessInvalid"; //$NON-NLS-1$
+	public static final String ARRAY_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "arrayIndexOutOfBounds"; //$NON-NLS-1$
+	public static final String TRUNCATED_LITERAL = ISSUE_CODE_PREFIX + "truncatedLiteral"; //$NON-NLS-1$
+	public static final String STRING_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "stringIndexOutOfBounds"; //$NON-NLS-1$
+	public static final String STRING_INDEX_ZERO_OR_LESS_INVALID = ISSUE_CODE_PREFIX + "stringIndexZeroOrLessInvalid"; //$NON-NLS-1$
+
+	@Check
+	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
+		if (varDeclaration.isArray()) {
+			for (final STExpression range : varDeclaration.getRanges()) {
+				if (range instanceof STBinaryExpression) {
+					final STBinaryExpression binaryExpression = (STBinaryExpression) range;
+					final DataType leftType = (DataType) binaryExpression.getLeft().getResultType();
+					if (!(leftType instanceof AnyIntType)) {
+						error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, leftType.getName()),
+								range, STCorePackage.Literals.ST_BINARY_EXPRESSION__LEFT, INDEX_RANGE_TYPE_INVALID,
+								leftType.getName());
+						// Currently we can only process literals
+					}
+					if (leftType instanceof AnyIntType && !(binaryExpression.getLeft() instanceof STNumericLiteral)) {
+						error(Messages.STCoreValidator_IndexRangeNotALiteral, range,
+								STCorePackage.Literals.ST_BINARY_EXPRESSION__LEFT, INDEX_RANGE_NOT_A_LITERAL,
+								leftType.getName());
+					}
+					final DataType rightType = (DataType) binaryExpression.getRight().getResultType();
+					if (!(rightType instanceof AnyIntType)) {
+						error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, rightType.getName()),
+								range, STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_TYPE_INVALID,
+								rightType.getName());
+						// Currently we can only process literals
+					}
+					if (rightType instanceof AnyIntType && !(binaryExpression.getRight() instanceof STNumericLiteral)) {
+						error(Messages.STCoreValidator_IndexRangeNotALiteral, range,
+								STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_NOT_A_LITERAL,
+								leftType.getName());
+					}
+				}
+			}
+		}
+	}
+
+	@Check
+	public void checkIfMaxSizeOnVarDeclarationAllowed(final STVarDeclaration varDeclaration) {
+		if (varDeclaration.getMaxLength() != null && !(varDeclaration.getType() instanceof AnyStringType)) {
+			error(Messages.STCoreValidator_NonAnyStringNotMaxLengthSettingNotAllowed, varDeclaration,
+					STCorePackage.Literals.ST_VAR_DECLARATION__MAX_LENGTH, MAX_LENGTH_NOT_ALLOWED);
+		}
+	}
+
+	@Check
+	public void checkTypeofStringSizeValue(final STVarDeclaration varDeclaration) {
+		if (varDeclaration.getType() instanceof AnyStringType && varDeclaration.getMaxLength() != null
+				&& !(varDeclaration.getMaxLength().getResultType() instanceof AnyIntType)) {
+			error(MessageFormat.format(Messages.STCoreValidator_MaxLengthTypeInvalid,
+					varDeclaration.getMaxLength().getResultType().getName()), varDeclaration,
+					STCorePackage.Literals.ST_VAR_DECLARATION__MAX_LENGTH, MAX_LENGTH_TYPE_INVALID,
+					varDeclaration.getMaxLength().getResultType().getName());
+		}
+	}
+
+	@Check
+	public void checkStringIndexInBounds(final STArrayAccessExpression accessExpression) {
+		final var type = accessExpression.getReceiver().getResultType();
+		final var anyStringType = type instanceof AnyStringType ? (AnyStringType) type : null;
+		if (anyStringType != null) {
+			final var indexExpressions = accessExpression.getIndex();
+			if (indexExpressions.size() > 1) {
+				// too many indices for a string
+				error(MessageFormat.format(Messages.STCoreValidator_TooManyIndicesGivenForStringAccess,
+						indexExpressions.size()), accessExpression,
+						STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, TOO_MANY_INDICES_GIVEN);
+			} else if (indexExpressions.size() == 1 && indexExpressions.get(0) instanceof STNumericLiteral) {
+				final var maxLength = anyStringType.getMaxLength();
+				final var index = (BigInteger) ((STNumericLiteral) indexExpressions.get(0)).getValue();
+				if (anyStringType.isSetMaxLength() && index.compareTo(BigInteger.valueOf(maxLength)) > 0) {
+					warning(MessageFormat.format(Messages.STCoreValidator_StringIndexOutOfBounds, index, maxLength),
+							accessExpression, STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX,
+							STRING_INDEX_OUT_OF_BOUNDS);
+				}
+				if (index.compareTo(BigInteger.ONE) < 0) {
+					// Index is invalid, as less than 1
+					warning(MessageFormat.format(Messages.STCoreValidator_StringIndexZeroOrLess, index),
+							accessExpression, STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX,
+							STRING_INDEX_ZERO_OR_LESS_INVALID);
+				}
+			}
+			// No index at all, so no check needed
+		}
+	}
+
+	@Check
+	public void checkArrayAccessDimensions(final STArrayAccessExpression accessExpression) {
+		final var featureExpression = accessExpression.getReceiver() instanceof STFeatureExpression
+				? ((STFeatureExpression) accessExpression.getReceiver()).getFeature()
+				: null;
+		if (featureExpression instanceof STVarDeclaration) {
+			final STVarDeclaration varDeclaration = (STVarDeclaration) featureExpression;
+			if (varDeclaration.isArray()) {
+				final var indexExpressions = accessExpression.getIndex();
+				final var indexCounts = varDeclaration.getCount().size(); // unknown array dimensions [*]
+				final var indexRanges = varDeclaration.getRanges().size();
+				final var declaredArrayDimensions = Math.max(indexCounts, indexRanges);
+				if (indexExpressions.size() > declaredArrayDimensions) {
+					for (int i = 0; i < indexExpressions.size() - declaredArrayDimensions; i++) {
+						error(MessageFormat.format(Messages.STCoreValidator_TooManyIndicesGiven,
+								accessExpression.getIndex().size(), declaredArrayDimensions), accessExpression,
+								STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, declaredArrayDimensions + i,
+								TOO_MANY_INDICES_GIVEN);
+					}
+				}
+			} else if (!(varDeclaration.getType() instanceof AnyStringType)) {
+				// not an array in the first place, but exclude ANY_STRING as they are allowed
+				// this type of access for chars
+				final var indexExpressions = accessExpression.getIndex();
+				for (int i = 0; i < indexExpressions.size(); i++) {
+					error(Messages.STCoreValidator_ArrayAccessInvalidOnNonArrayVariable,
+							STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, i, ARRAY_ACCESS_INVALID);
+				}
+
+			}
+		}
+	}
+
+	@Check
+	public void checkArrayAccessIndices(final STArrayAccessExpression accessExpression) {
+		final var type = accessExpression.getReceiver().getResultType();
+		final var arrayType = type instanceof ArrayType ? (ArrayType) type : null;
+
+		if (arrayType != null) {
+			final var indexExpressions = accessExpression.getIndex();
+			for (int i = 0; i < indexExpressions.size(); i++) {
+				final STExpression expression = indexExpressions.get(i);
+				checkArrayIndexInArrayDimensionBounds(accessExpression, arrayType, i, expression);
+				checkArrayAccessIndexType(accessExpression, i, expression);
+			}
+		}
+	}
+
+	private void checkArrayIndexInArrayDimensionBounds(final STArrayAccessExpression accessExpression,
+			final ArrayType arrayType, final int i, final STExpression expression) {
+		if (expression instanceof STNumericLiteral
+				&& ((STNumericLiteral) expression).getResultType() instanceof AnyIntType
+				&& arrayType.getSubranges() != null && arrayType.getSubranges().size() > i) {
+			final var indexValue = (BigInteger) ((STNumericLiteral) expression).getValue();
+
+			final var subrange = arrayType.getSubranges().get(i);
+			if (subrange.isSetLowerLimit() && subrange.isSetUpperLimit()) {
+				final BigInteger lowerBound = BigInteger.valueOf(subrange.getLowerLimit());
+				final BigInteger upperBound = BigInteger.valueOf(subrange.getUpperLimit());
+
+				if (indexValue.compareTo(lowerBound) < 0 || indexValue.compareTo(upperBound) > 0) {
+					error(MessageFormat.format(Messages.STCoreValidator_ArrayIndexOutOfBounds, indexValue, lowerBound,
+							upperBound), accessExpression, STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, i,
+							ARRAY_INDEX_OUT_OF_BOUNDS);
+				}
+			}
+		}
+	}
+
+	private void checkArrayAccessIndexType(final STArrayAccessExpression accessExpression, final int i,
+			final STExpression expression) {
+		if (!(expression.getResultType() instanceof AnyIntType)) {
+			error(MessageFormat.format(Messages.STCoreValidator_IndexAccessTypeInvalid,
+					expression.getResultType().getName()), accessExpression,
+					STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, i, INDEX_RANGE_TYPE_INVALID);
+		}
+	}
 
 	@Check
 	public void checkConsecutiveUnderscoresInIdentifier(final INamedElement iNamedElement) {
@@ -183,6 +364,25 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			final var type = getFeatureType(declaration);
 			final var initializerType = declaration.getDefaultValue().getResultType();
 			checkTypeCompatibility(type, initializerType, STCorePackage.Literals.ST_VAR_DECLARATION__DEFAULT_VALUE);
+		}
+	}
+
+	@Check
+	public void checkExpressionSourceTypeCompatibility(final STExpressionSource source) {
+		if (source.getExpression() != null) {
+			final var type = STCoreUtil.getExpectedType(source.getExpression());
+			final var initializerType = source.getExpression().getResultType();
+			checkTypeCompatibility(type, initializerType, STCorePackage.Literals.ST_EXPRESSION_SOURCE__EXPRESSION);
+		}
+	}
+
+	@Check
+	public void checkInitializerExpressionSourceTypeCompatibility(final STInitializerExpressionSource source) {
+		if (source.getInitializerExpression() != null) {
+			final var type = STCoreUtil.getExpectedType(source.getInitializerExpression());
+			final var initializerType = source.getInitializerExpression().getResultType();
+			checkTypeCompatibility(type, initializerType,
+					STCorePackage.Literals.ST_INITIALIZER_EXPRESSION_SOURCE__INITIALIZER_EXPRESSION);
 		}
 	}
 
@@ -374,12 +574,13 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Check
 	public void checkNumericLiteral(final STNumericLiteral expression) {
 		final var type = (DataType) expression.getResultType();
-		final var expectedType = (DataType) STCoreUtil.getExpectedType(expression);
+		final var expectedType = STCoreUtil.getExpectedType(expression);
 		if (!isNumericValueValid(type, expression.getValue())) {
 			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(),
 					NumericValueConverter.INSTANCE.toString(expression.getValue())),
 					STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE, INVALID_NUMERIC_LITERAL);
-		} else if (expectedType != null && !type.equals(expectedType) && expectedType.isAssignableFrom(type)) {
+		} else if (expectedType instanceof DataType && !type.eClass().equals(expectedType.eClass())
+				&& ((DataType) expectedType).isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
 					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
 		}
@@ -393,7 +594,11 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(),
 					stringValueConverter.toString(expression.getValue())),
 					STCorePackage.Literals.ST_STRING_LITERAL__VALUE, INVALID_STRING_LITERAL);
-		} else if (expectedType instanceof DataType && !type.equals(expectedType)
+		} else if (expectedType instanceof AnyStringType && ((AnyStringType) expectedType).isSetMaxLength()
+				&& expression.getValue().length() > ((AnyStringType) expectedType).getMaxLength()) {
+			warning(MessageFormat.format(Messages.STCoreValidator_String_Literal_Truncated,
+					Integer.toString(((AnyStringType) expectedType).getMaxLength())), null, TRUNCATED_LITERAL);
+		} else if (expectedType instanceof DataType && !type.eClass().equals(expectedType.eClass())
 				&& ((DataType) expectedType).isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
 					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
@@ -509,10 +714,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	protected void checkTypeCompatibility(final DataType destination, final DataType source,
 			final EStructuralFeature feature, final int index) {
-		if (!destination.isAssignableFrom(source)) {
+		if (!(destination.isAssignableFrom(source)
+				|| (GenericTypes.isAnyType(source) && source.isAssignableFrom(destination)))) {
 			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
-					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
-					destination.getName());
+					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(), destination.getName());
 		}
 	}
 }

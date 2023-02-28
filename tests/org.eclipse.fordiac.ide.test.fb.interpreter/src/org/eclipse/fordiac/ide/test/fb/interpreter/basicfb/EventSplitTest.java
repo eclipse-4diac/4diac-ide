@@ -14,7 +14,6 @@
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
 import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
-import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBTestRunner.runFBTest;
 
 import java.util.Arrays;
 import java.util.List;

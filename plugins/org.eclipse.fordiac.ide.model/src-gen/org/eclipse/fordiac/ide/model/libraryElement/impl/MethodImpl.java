@@ -157,6 +157,16 @@ public abstract class MethodImpl extends EObjectImpl implements Method {
 	 * @generated
 	 */
 	@Override
+	public String getQualifiedName() {
+		return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EList<INamedElement> getInputParameters() {
 		// TODO: implement this method
 		// Ensure that you remove @generated or mark it @generated NOT

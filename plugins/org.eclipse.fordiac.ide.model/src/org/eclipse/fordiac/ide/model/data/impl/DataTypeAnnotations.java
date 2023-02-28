@@ -312,8 +312,10 @@ final class DataTypeAnnotations {
 			final SubrangeType otherSubrange = (SubrangeType) other;
 			// subranges are assignable if the base type is assignable and they have a subrange that fits
 			return type.getBaseType().isAssignableFrom(otherSubrange.getBaseType())
-					&& type.getSubrange().getLowerLimit() <= otherSubrange.getSubrange().getLowerLimit()
-					&& type.getSubrange().getUpperLimit() >= otherSubrange.getSubrange().getUpperLimit();
+					&& (!type.getSubrange().isSetLowerLimit()
+							|| type.getSubrange().getLowerLimit() <= otherSubrange.getSubrange().getLowerLimit())
+					&& (!type.getSubrange().isSetUpperLimit()
+							|| type.getSubrange().getUpperLimit() >= otherSubrange.getSubrange().getUpperLimit());
 		}
 		return false;
 	}

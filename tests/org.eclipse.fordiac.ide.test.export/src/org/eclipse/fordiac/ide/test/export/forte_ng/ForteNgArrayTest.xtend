@@ -54,7 +54,7 @@ class ForteNgArrayTest extends ExporterTestBasicFBTypeBase {
 		assertNoErrors(errors);
 		assertNotNull(generatedCode);
 		assertEquals('''
-			CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31> st_lv_variable = {CIEC_DWORD(0), CIEC_DWORD(1), CIEC_DWORD(2), CIEC_DWORD(7), CIEC_DWORD(7), CIEC_DWORD(7)};
+			CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31> st_lv_variable = CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31>{CIEC_DWORD(0), CIEC_DWORD(1), CIEC_DWORD(2), CIEC_DWORD(7), CIEC_DWORD(7), CIEC_DWORD(7)};
 			
 		'''.toString(), generatedCode.toString())
 	}

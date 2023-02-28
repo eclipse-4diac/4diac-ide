@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +18,8 @@ import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import java.util.Arrays
 import org.eclipse.fordiac.ide.model.value.StringValueConverter
 
+import static extension java.util.Arrays.copyOf
+
 class StringValue implements AnyStringValue, AnySCharsValue {
 	final byte[] value;
 
@@ -27,13 +29,36 @@ class StringValue implements AnyStringValue, AnySCharsValue {
 		this.value = value;
 	}
 
-	def static toStringValue(byte[] value) { new StringValue(value) }
+	def static toStringValue(String value) { value.toStringValue(MAX_LENGTH) }
 
-	def static toStringValue(String value) { value.getBytes(StandardCharsets.UTF_8).toStringValue }
+	def static toStringValue(String value, int maxLength) {
+		new StringValue(value.getBytes(StandardCharsets.UTF_8).truncate(maxLength))
+	}
 
-	def static toStringValue(AnyCharsValue value) { value.stringValue.toStringValue }
+	def static toStringValue(AnyCharsValue value) {
+		value.toStringValue(MAX_LENGTH)
+	}
 
-	override CharValue charAt(int index) { CharValue.toCharValue(value.get(index - 1)) }
+	def static toStringValue(AnyCharsValue value, int maxLength) {
+		switch (value) {
+			CharValue: maxLength > 0 ? new StringValue(#[value.charValue as byte]) : DEFAULT
+			StringValue: new StringValue(value.value.truncate(maxLength))
+			default: value.stringValue.toStringValue(maxLength)
+		}
+	}
+
+	override CharValue charAt(int index) {
+		CharValue.toCharValue(index > 0 && index <= length ? value.get(index - 1) : (0 as byte))
+	}
+
+	def withCharAt(int index, CharValue c) {
+		if (index <= 0) {
+			throw new StringIndexOutOfBoundsException(index)
+		}
+		val newValue = value.copyOf(Math.max(value.length, index))
+		newValue.set(index - 1, c.charValue as byte)
+		new StringValue(newValue)
+	}
 
 	override length() { value.length }
 
@@ -48,4 +73,8 @@ class StringValue implements AnyStringValue, AnySCharsValue {
 	override hashCode() { toString.hashCode }
 
 	override toString() { StringValueConverter.INSTANCE.toString(stringValue, false) }
+
+	def private static truncate(byte[] value, int maxLength) {
+		if(value.length > maxLength) value.copyOf(maxLength) else value
+	}
 }

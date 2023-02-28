@@ -486,6 +486,24 @@ public interface STCoreFactory extends EFactory {
 	STStructInitElement createSTStructInitElement();
 
 	/**
+	 * Returns a new object of class '<em>ST Expression Source</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Expression Source</em>'.
+	 * @generated
+	 */
+	STExpressionSource createSTExpressionSource();
+
+	/**
+	 * Returns a new object of class '<em>ST Initializer Expression Source</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Initializer Expression Source</em>'.
+	 * @generated
+	 */
+	STInitializerExpressionSource createSTInitializerExpressionSource();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
