@@ -18,39 +18,42 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.gef.commands.Command;
 
 public class InsertFBCommand extends Command {
 
-	private final FBType fbTypeEntry;
+	private final FB fb;
 	private FB internalFB;
 	private final EList<FB> internalFbs;
 	private final int index;
 
-	public InsertFBCommand(final EList<FB> internalFbs, final FBType fbTypeEntry, final int index) {
+	public InsertFBCommand(final EList<FB> internalFbs, final FB fb, final int index) {
 		this.internalFbs = internalFbs;
-		this.fbTypeEntry = fbTypeEntry;
+		this.fb = fb;
 		this.index = index;
 	}
 
 	@Override
 	public void execute() {
-		if (fbTypeEntry instanceof CompositeFBType) {
+		if (fb.getType() instanceof CompositeFBType) {
 			internalFB = LibraryElementFactory.eINSTANCE.createCFBInstance();
 		} else {
 			internalFB = LibraryElementFactory.eINSTANCE.createFB();
 		}
-		internalFB.setTypeEntry(fbTypeEntry.getTypeEntry());
+		internalFB.setTypeEntry(fb.getType().getTypeEntry());
 		internalFB.setComment(""); //$NON-NLS-1$
 		redo();
-		internalFB.setName(NameRepository.createUniqueName(internalFB, fbTypeEntry.getName()));
+		internalFB.setName(NameRepository.createUniqueName(internalFB, fb.getName()));
 	}
 
 	@Override
 	public void redo() {
-		internalFbs.add(index, internalFB);
+		if (index > internalFbs.size()) {
+			internalFbs.add(internalFB);
+		} else {
+			internalFbs.add(index, internalFB);
+		}
 	}
 
 	@Override

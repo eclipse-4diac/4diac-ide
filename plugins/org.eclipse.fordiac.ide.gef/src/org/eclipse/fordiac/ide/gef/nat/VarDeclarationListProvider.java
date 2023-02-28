@@ -20,8 +20,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 
-public class VarDeclarationListProvider extends ListDataProvider<VarDeclaration>
-implements FordiacInterfaceListProvider<VarDeclaration> {
+public class VarDeclarationListProvider extends ListDataProvider<VarDeclaration> implements FordiacInterfaceListProvider<VarDeclaration> {
 
 	public VarDeclarationListProvider(final List<VarDeclaration> list,
 			final VarDeclarationColumnAccessor columnAccessor) {
