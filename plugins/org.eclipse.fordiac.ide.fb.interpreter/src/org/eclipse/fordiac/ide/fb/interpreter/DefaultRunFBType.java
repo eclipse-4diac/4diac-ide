@@ -377,9 +377,10 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			final EventOccurrence outputEo) {
 		final List<FBTransaction> generatedT = new ArrayList<>();
 		if (outputEo.getEvent().isIsInput()) {
+			// very first transaction (if needed) / initial trigger pin
 			generatedT.add(createNewInitialTransaction(outputEo.getEvent(), fBNetworkRuntime));
 		} else {
-			// Find the Original Pins
+			// Find the Original Pins for all connected FBs
 			final List<IInterfaceElement> destinations = findConnectedPins(outputEo.getEvent());
 			for (final IInterfaceElement dest : destinations) {
 				generatedT.add(createNewTransaction(dest, fBNetworkRuntime, outputEo));
@@ -390,8 +391,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	private static FBTransaction createNewInitialTransaction(final IInterfaceElement dest,
 			final FBNetworkRuntime fBNetworkRuntime) {
-		final EventOccurrence destinationEventOccurence = EventOccFactory.createFrom((Event) EcoreUtil.copy(dest),
-				EcoreUtil.copy(fBNetworkRuntime));
+		final FBNetworkRuntime copiedRt = EcoreUtil.copy(fBNetworkRuntime);
+		final EventOccurrence destinationEventOccurence = EventOccFactory.createFrom((Event) dest, copiedRt);
 		destinationEventOccurence.setParentFB(dest.getFBNetworkElement());
 		return TransactionFactory.createFrom(destinationEventOccurence);
 	}
@@ -399,7 +400,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	private static FBTransaction createNewTransaction(final IInterfaceElement dest,
 			final FBNetworkRuntime fBNetworkRuntime, final EventOccurrence sourceEventOccurrence) {
 		final FBNetworkRuntime copyFBNetworkRuntime = EcoreUtil.copy(fBNetworkRuntime);
-		final EventOccurrence destinationEventOccurence = EventOccFactory.createFrom((Event) EcoreUtil.copy(dest),
+		final EventOccurrence destinationEventOccurence = EventOccFactory.createFrom((Event) dest,
 				copyFBNetworkRuntime);
 		destinationEventOccurence.setParentFB(dest.getFBNetworkElement());
 		final FBTransaction transaction = TransactionFactory.createFrom(destinationEventOccurence);

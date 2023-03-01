@@ -22,4 +22,42 @@
             genModel="model/OperationalSemantics.genmodel"/>
    </extension>
 
+<extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="org.eclipse.fordiac.ide.fb.interpreter.handler.RecordExecutionTraceHandler"
+            commandId="org.eclipse.fordiac.ide.fb.interpreter.recordExecutionTrace">
+      </handler>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            id="org.eclipse.fordiac.ide.fb.interpreter.recordExecutionTrace"
+            name="Record Execution Trace for Network">
+      </command>   
+   </extension>
+   <extension
+           point="org.eclipse.ui.menus">
+	<menuContribution
+         locationURI="menu:org.eclipse.4diac.ide.monitoring.menus.debug?after=org.eclipse.fordiac.ide.monitoring.monitoringAdditions">  
+      <command
+            commandId="org.eclipse.fordiac.ide.fb.interpreter.recordExecutionTrace"
+            label="Record Execution Trace for Network"
+            style="push">
+            <visibleWhen checkEnabled="true">
+				<!--	<with variable="selection">
+            			<iterate>
+            				<or>
+            					<instanceof
+                       				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
+            					<instanceof
+                       					value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            				</or>
+            			</iterate>
+        		
+            		</with>-->
+            </visibleWhen>
+       </command>
+	</menuContribution>
+</extension>
 </plugin>
