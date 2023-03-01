@@ -55,7 +55,7 @@ public final class ValidateProject {
 			}
 		};
 		job.setPriority(Job.BUILD);
-		job.setRule(null);
+		job.setRule(root);
 		job.schedule();
 	}
 

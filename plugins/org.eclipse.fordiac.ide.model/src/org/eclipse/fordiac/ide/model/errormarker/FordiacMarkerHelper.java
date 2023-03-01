@@ -135,7 +135,7 @@ public final class FordiacMarkerHelper {
 
 	public static void updateMarkers(final IResource resource, final String type,
 			final List<ErrorMarkerBuilder> builders) {
-		if (resource != null && resource.isAccessible()) {
+		if (resource != null && resource.isAccessible() && (errorMarkersNeedsUpdate(resource, type, builders))) {
 			final WorkspaceJob job = new WorkspaceJob("Update error markers on resource: " + resource.getName()) { //$NON-NLS-1$
 				@Override
 				public IStatus runInWorkspace(final IProgressMonitor monitor) {
@@ -157,6 +157,17 @@ public final class FordiacMarkerHelper {
 			job.setRule(resource);
 			job.schedule();
 		}
+	}
+
+	private static boolean errorMarkersNeedsUpdate(final IResource resource, final String type,
+			final List<ErrorMarkerBuilder> builders) {
+		try {
+			return !builders.isEmpty() || resource.findMarkers(type, true, IResource.DEPTH_INFINITE).length != 0;
+		} catch (final CoreException e) {
+			FordiacLogHelper.logWarning("Couldn't determine marker state of resoruce: " + resource.getName(), e); //$NON-NLS-1$
+
+		}
+		return false;
 	}
 
 	private FordiacMarkerHelper() {
