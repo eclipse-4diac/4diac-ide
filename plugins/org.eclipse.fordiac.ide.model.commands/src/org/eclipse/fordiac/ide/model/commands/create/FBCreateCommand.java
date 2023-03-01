@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.create;
 
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -36,13 +37,13 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	private static FB createNewFb(final FBTypeEntry typeEntry) {
-		if (typeEntry.getType().getName().equals("STRUCT_MUX")) { //$NON-NLS-1$
+		if (typeEntry.getType().getName().equals(LibraryElementTags.FB_TYPE_STRUCT_MUX)) {
 			return LibraryElementFactory.eINSTANCE.createMultiplexer();
 		}
-		if (typeEntry.getType().getName().equals("STRUCT_DEMUX")) { //$NON-NLS-1$
+		if (typeEntry.getType().getName().equals(LibraryElementTags.FB_TYPE_STRUCT_DEMUX)) {
 			return LibraryElementFactory.eINSTANCE.createDemultiplexer();
 		}
-		if (typeEntry.getType().getName().startsWith("COMM_CHANNEL")) { //$NON-NLS-1$
+		if (typeEntry.getType().getName().startsWith(LibraryElementTags.FB_TYPE_COMM_MESSAGE)) {
 			return LibraryElementFactory.eINSTANCE.createCommunicationChannel();
 		}
 		if (typeEntry.getType() instanceof CompositeFBType) {

@@ -127,10 +127,12 @@ public class TsnConfigurationImpl extends MinimalEObjectImpl.Container implement
 		return ECollections.toEList(windows);
 	}
 
-	/** <!-- begin-user-doc --> <!-- end-user-doc --> */
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public EList<VarDeclaration> getParameters() {
-		return Annotations.getParameters(windows);
+		return Annotations.getParameters(windows, cycleTime);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

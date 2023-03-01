@@ -29,7 +29,11 @@ import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetWidgetFactory;
 
 public abstract class CommunicationConfigurationDetails {
 
-	private static final String COMM_CONFIG_ID = "org.eclipse.fordiac.ide.systemconfiguration.communication";
+	public static final String COMM_EXT_ATT_ID = "id"; //$NON-NLS-1$
+	public static final String COMM_EXT_ATT_LABEL = "label"; //$NON-NLS-1$
+
+	private static final String COMM_CONFIG_ID = "org.eclipse.fordiac.ide.systemconfiguration.communication"; //$NON-NLS-1$
+
 	protected CommunicationConfigurationDetails() {
 	}
 
@@ -40,8 +44,9 @@ public abstract class CommunicationConfigurationDetails {
 
 	public abstract CommunicationConfiguration createModel(List<VarDeclaration> parameters);
 
-	public static CommunicationConfigurationDetails getCommConfigUiFromExtensionPoint(final String name) {
-		final IConfigurationElement selected = getCommConfigExtensionPoint("label", name); //$NON-NLS-1$
+	public static CommunicationConfigurationDetails getCommConfigUiFromExtensionPoint(final String name,
+			final String attribute) {
+		final IConfigurationElement selected = getCommConfigExtensionPoint(attribute, name);
 		if (selected != null) {
 			try {
 				final Object o = selected.createExecutableExtension("class"); //$NON-NLS-1$
@@ -74,16 +79,16 @@ public abstract class CommunicationConfigurationDetails {
 		final List<String> names = new ArrayList<>();
 		names.add(""); //$NON-NLS-1$
 		for (final IConfigurationElement e : config) {
-			names.add(e.getAttribute("label")); //$NON-NLS-1$
+			names.add(e.getAttribute(COMM_EXT_ATT_LABEL));
 		}
 		return names.toArray(new String[0]);
 	}
 
 	public static int getIndexOfCommunication(final String[] names, final String id) {
 		final IConfigurationElement selected = CommunicationConfigurationDetails.getCommConfigExtensionPoint("id", id); //$NON-NLS-1$
-		if ((selected == null) || (selected.getAttribute("label") == null)) {
+		if ((selected == null) || (selected.getAttribute(COMM_EXT_ATT_LABEL) == null)) {
 			return 0;
 		}
-		return Arrays.asList(names).indexOf(selected.getAttribute("label")); //$NON-NLS-1$
+		return Arrays.asList(names).indexOf(selected.getAttribute(COMM_EXT_ATT_LABEL));
 	}
 }

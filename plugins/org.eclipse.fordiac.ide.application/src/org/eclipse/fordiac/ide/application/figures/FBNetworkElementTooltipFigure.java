@@ -15,8 +15,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.figures;
 
-import java.text.MessageFormat;
-
 import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
@@ -27,13 +25,12 @@ import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.figures.VerticalLineCompartmentFigure;
+import org.eclipse.fordiac.ide.model.annotations.MappingAnnotations;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.VersionInfo;
 
 /**
@@ -95,11 +92,9 @@ public class FBNetworkElementTooltipFigure extends Figure {
 		parent.add(line);
 		parent.setConstraint(line, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 
-		final Resource res = element.getResource();
-		final Device dev = res.getDevice();
 
 		final Label mappingLabel = new Label(
-				MessageFormat.format(Messages.FBTooltipFigure_LABEL_MappedTo, dev.getName(), res.getName()));
+				MappingAnnotations.getHierarchicalName(element));
 		line.add(mappingLabel);
 		line.setConstraint(mappingLabel, new GridData(PositionConstants.CENTER, PositionConstants.MIDDLE, true, true));
 	}

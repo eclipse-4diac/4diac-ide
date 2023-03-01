@@ -23,7 +23,7 @@
       </communicationProtocol>
       <communicationProtocol
             class="org.eclipse.fordiac.ide.systemconfiguration.segment.properties.DefaultCommDetails"
-            id="defaultConfig"
+            id="Ethernet"
             label="Default"
             name="defaultProtocol">
       </communicationProtocol>

@@ -24,11 +24,11 @@ public class Annotations {
 		return TsnParameters.TSN_WINDOW_NAME + ((TsnConfiguration) w.eContainer()).getWindows().indexOf(w);
 	}
 
-	public static EList<VarDeclaration> getParameters(final EList<TsnWindow> windows) {
+	public static EList<VarDeclaration> getParameters(final EList<TsnWindow> windows, final int cycleTime) {
 		final VarDeclaration vardec = LibraryElementFactory.eINSTANCE.createVarDeclaration();
-		vardec.setName("NoChannel");
+		vardec.setName(TsnParameters.TSN_CYCLE_NAME);
 		vardec.setValue(LibraryElementFactory.eINSTANCE.createValue());
-		vardec.getValue().setValue(String.valueOf(windows.size()));
+		vardec.getValue().setValue(String.valueOf(cycleTime));
 		final BasicEList<VarDeclaration> list = new BasicEList<>();
 		list.add(vardec);
 		for (final TsnWindow window : windows) {

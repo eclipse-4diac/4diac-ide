@@ -18,6 +18,7 @@ package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -75,7 +76,7 @@ public class UpdateFBTypeCommand extends AbstractUpdateFBNElementCommand {
 		FBNetworkElement copy;
 		if (invalidType()) {
 			copy = LibraryElementFactory.eINSTANCE.createErrorMarkerFBNElement();
-		} else if (entry.getTypeName().startsWith("COMM_CHANNEL")) { //$NON-NLS-1$
+		} else if (entry.getTypeName().startsWith(LibraryElementTags.FB_TYPE_COMM_MESSAGE)) {
 			copy = LibraryElementFactory.eINSTANCE.createCommunicationChannel();
 		} else if (entry instanceof SubAppTypeEntry) {
 			copy = LibraryElementFactory.eINSTANCE.createSubApp();

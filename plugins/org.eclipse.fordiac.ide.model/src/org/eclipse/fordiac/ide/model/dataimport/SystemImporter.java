@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.Optional;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -32,7 +33,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -168,7 +171,7 @@ public class SystemImporter extends CommonElementImporter {
 	private static void parseCommunication(final Segment segment) {
 		final String typeName = segment.getTypeName();
 		final CommunicationConfigurationDetails commConfig = CommunicationConfigurationDetails
-				.getCommConfigUiFromExtensionPoint(typeName);
+				.getCommConfigUiFromExtensionPoint(typeName, CommunicationConfigurationDetails.COMM_EXT_ATT_ID);
 		if (commConfig != null) {
 			final CommunicationConfiguration config = commConfig.createModel(segment.getVarDeclarations());
 			segment.setCommunication(config);
@@ -219,8 +222,9 @@ public class SystemImporter extends CommonElementImporter {
 		final String fromValue = getAttributeValue(LibraryElementTags.MAPPING_FROM_ATTRIBUTE);
 		final String toValue = getAttributeValue(LibraryElementTags.MAPPING_TO_ATTRIBUTE);
 		final FBNetworkElement fromElement = findMappingTargetFromName(fromValue);
-		final FBNetworkElement toElement = findMappingTargetFromName(toValue);
-
+		final FBNetworkElement toElement = (fromElement instanceof CommunicationChannel)
+				? findMappingTargetFromName(toValue, fromElement)
+						: findMappingTargetFromName(toValue);
 		if (fromElement instanceof SubApp) {
 			FBNetworkHelper.loadSubappNetwork(fromElement);
 		}
@@ -242,7 +246,8 @@ public class SystemImporter extends CommonElementImporter {
 		return mapping;
 	}
 
-	private FBNetworkElement findMappingTargetFromName(final String targetName) {
+	private FBNetworkElement findMappingTargetFromName(final String targetName,
+			final FBNetworkElement copyCommunication) {
 		FBNetworkElement element = null;
 		if (null != targetName) {
 			Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); ////$NON-NLS-1$
@@ -252,6 +257,7 @@ public class SystemImporter extends CommonElementImporter {
 				// get the appropriate starting fbnetwork
 				final Device dev = getElement().getDeviceNamed(parts.getFirst());
 				final Application application = getElement().getApplicationNamed(parts.getFirst());
+				final Segment segment = getElement().getSystemConfiguration().getSegmentNamed(parts.getFirst());
 				if (null != dev) {
 					parts.pollFirst();
 					final Resource res = dev.getResourceNamed(parts.pollFirst());
@@ -266,9 +272,31 @@ public class SystemImporter extends CommonElementImporter {
 					nw = application.getFBNetwork();
 					element = findMappingTargetInFBNetwork(nw, parts);
 				}
+				if ((null == dev) && (null == application) && (null != segment)) {
+
+					parts.pollFirst();
+					final String windowName = parts.pollFirst();
+					final Optional<CommunicationMappingTarget> findWindow = segment.getCommunication()
+							.getMappingTargets().stream().filter(c -> c.getName().equals(windowName)).findFirst();
+					final CommunicationMappingTarget channel = findWindow.isPresent() ? findWindow.get() : null;
+					if (channel != null) {
+						final CommunicationChannel comm = LibraryElementFactory.eINSTANCE.createCommunicationChannel();
+						comm.setName(copyCommunication.getName());
+						comm.updatePosition(copyCommunication.getPosition().getX(),
+								copyCommunication.getPosition().getY());
+						comm.setTypeEntry(copyCommunication.getTypeEntry());
+						comm.setInterface(copyCommunication.getType().getInterfaceList().copy());
+						channel.getMappedElements().add(comm);
+						element = comm;
+					}
+				}
 			}
 		}
 		return element;
+	}
+
+	private FBNetworkElement findMappingTargetFromName(final String targetName) {
+		return findMappingTargetFromName(targetName, null);
 	}
 
 	private static FBNetworkElement findMappingTargetInFBNetwork(final FBNetwork nw, final Deque<String> parts) {

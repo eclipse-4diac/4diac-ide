@@ -24,6 +24,10 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import static org.eclipse.fordiac.ide.model.LibraryElementTags.FB_TYPE_COMM_MESSAGE;
+import static org.eclipse.fordiac.ide.model.LibraryElementTags.FB_TYPE_STRUCT_DEMUX;
+import static org.eclipse.fordiac.ide.model.LibraryElementTags.FB_TYPE_STRUCT_MUX;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -211,11 +215,11 @@ class FBNetworkImporter extends CommonElementImporter {
 		final FBType type = entry.getType();
 		if (type instanceof CompositeFBType) {
 			fb = LibraryElementFactory.eINSTANCE.createCFBInstance();
-		} else if ("STRUCT_MUX".equals(type.getName())) { //$NON-NLS-1$
+		} else if (FB_TYPE_STRUCT_MUX.equals(type.getName())) {
 			fb = LibraryElementFactory.eINSTANCE.createMultiplexer();
-		} else if ("STRUCT_DEMUX".equals(type.getName())) { //$NON-NLS-1$
+		} else if (FB_TYPE_STRUCT_DEMUX.equals(type.getName())) {
 			fb = LibraryElementFactory.eINSTANCE.createDemultiplexer();
-		} else if (type.getName().startsWith("COMM_CHANNEL")) { //$NON-NLS-1$
+		} else if (type.getName().startsWith(FB_TYPE_COMM_MESSAGE)) {
 			fb = LibraryElementFactory.eINSTANCE.createCommunicationChannel();
 		}
 		fb.setInterface(type.getInterfaceList().copy());

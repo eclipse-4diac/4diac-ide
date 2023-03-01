@@ -19,6 +19,10 @@ public final class LibraryElementTags {
 	public static final String ADAPTER_TYPE = "AdapterType"; //$NON-NLS-1$
 	public static final String DATA_TYPE = "DataType"; //$NON-NLS-1$
 
+	public static final String FB_TYPE_STRUCT_MUX = "STRUCT_MUX";//$NON-NLS-1$
+	public static final String FB_TYPE_STRUCT_DEMUX = "STRUCT_DEMUX";//$NON-NLS-1$
+	public static final String FB_TYPE_COMM_MESSAGE = "COMM_MESSAGE";//$NON-NLS-1$
+
 	public static final String SERVICE_ELEMENT = "Service"; //$NON-NLS-1$
 	public static final String RIGHT_INTERFACE_ATTRIBUTE = "RightInterface"; //$NON-NLS-1$
 	public static final String LEFT_INTERFACE_ATTRIBUTE = "LeftInterface"; //$NON-NLS-1$

@@ -9,7 +9,7 @@
     </eOperations>
     <eOperations name="getParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return Annotations.getParameters(windows);"/>
+        <details key="body" value="return Annotations.getParameters(windows,cycleTime);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cycleTime" lowerBound="1"
