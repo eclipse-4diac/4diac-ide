@@ -2,6 +2,7 @@
  * Copyright (c) 2012, 2021 Profactor GmbH, fortiss GmbH,
  *                          Primetals Technologies Austria GmbH
  *               2022 		Primetals Technologies Austria GmbH
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -15,10 +16,10 @@
  *   Lukas Wais - implemented hex conversion for AnyBit types
  *   Alois Zoitl - added value validation for direct edit of values
  *   Daniel Lindhuber - multi-line struct editing
+ *   Martin Jobst - adopt new ST editor for values
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring.editparts;
 
-import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.MarginBorder;
@@ -30,7 +31,7 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.gef.draw2d.SetableAlphaLabel;
-import org.eclipse.fordiac.ide.gef.editparts.TextDirectEditManager;
+import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -53,14 +54,11 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.editpolicies.DirectEditPolicy;
 import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.gef.tools.CellEditorLocator;
+import org.eclipse.gef.tools.DirectEditManager;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.CellEditor;
-import org.eclipse.jface.viewers.TextCellEditor;
-import org.eclipse.swt.SWT;
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.swt.widgets.Text;
 
 public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 
@@ -98,9 +96,9 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 
 		private static final int EDITOR_SIZE = 300;
 
-		private final Figure figure;
+		private final IFigure figure;
 
-		public StructFigureCellEditorLocator(final Figure figure) {
+		public StructFigureCellEditorLocator(final IFigure figure) {
 			this.figure = figure;
 		}
 
@@ -122,8 +120,6 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 			((SetableAlphaLabel) getFigure()).setAlpha(PreferenceConstants.getMonitoringTransparency());
 		}
 	};
-
-
 
 	@Override
 	public void activate() {
@@ -246,40 +242,15 @@ public class MonitoringEditPart extends AbstractMonitoringBaseEditPart {
 	}
 
 	@Override
-	protected void performDirectEdit() {
-		if (isStruct()) {
-			performStructDirectEdit();
-		} else {
-			super.performDirectEdit();
+	public DirectEditManager createDirectEditManager() {
+		final IInterfaceElement interfaceElement = getInterfaceElement();
+		if (interfaceElement instanceof VarDeclaration) {
+			return new MonitoringValueDirectEditManager(this,
+					isStruct() ? new StructFigureCellEditorLocator(getFigure())
+							: new FigureCellEditorLocator(getFigure()),
+							(VarDeclaration) interfaceElement, getModel());
 		}
-	}
-
-	private void performStructDirectEdit() {
-		new TextDirectEditManager(this, new StructFigureCellEditorLocator((Figure) getFigure())) {
-			@Override
-			protected CellEditor createCellEditorOn(final Composite composite) {
-				return new TextCellEditor((Composite) getViewer().getControl(),
-						SWT.MULTI | SWT.V_SCROLL | SWT.H_SCROLL);
-			}
-
-			@Override
-			protected void initCellEditor() {
-				super.initCellEditor();
-				final String model = StructMonitoringHelper.format(getModel().getCurrentValue());
-				// is null if forte has been turned off
-				if (model != null) {
-					getCellEditor().setValue(model);
-				}
-			}
-
-			@Override
-			public void show() {
-				super.show();
-				final Text textControl = (Text) getCellEditor().getControl();
-				textControl.setSelection(SELECTED_NONE);
-			}
-
-		}.show();
+		return super.createDirectEditManager();
 	}
 
 	@Override
