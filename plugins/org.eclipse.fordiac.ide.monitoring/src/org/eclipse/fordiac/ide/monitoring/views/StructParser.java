@@ -43,6 +43,7 @@ public final class StructParser {
 		final int START = 1;
 		final int END = struct.length() - 1;
 
+		boolean insideString = false;
 		boolean process = true;
 		int innerCnt = 0;
 		int frameStart = START;
@@ -68,11 +69,8 @@ public final class StructParser {
 				break;
 			case '\'':
 			case '\"':
-				if (innerCnt != 0) {
-					process = true;
-					innerCnt = 0;
-					break;
-				}
+				insideString = !insideString;
+				process = !insideString;
 			case '[':
 			case '(': // start of inner struct
 				// skip the whole inner struct since this will be handled recursively
