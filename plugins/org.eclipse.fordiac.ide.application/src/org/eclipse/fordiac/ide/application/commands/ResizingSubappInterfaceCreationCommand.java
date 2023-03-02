@@ -22,19 +22,38 @@ import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoun
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartViewer;
+import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.PlatformUI;
 
 public final class ResizingSubappInterfaceCreationCommand extends CreationCommand {
 
-	public static CreationCommand createCommand(final CreateSubAppInterfaceElementCommand cmd, final SubApp parent) {
-		final SubAppForFBNetworkEditPart subappEP = findSubappEP(parent);
-		if (subappEP != null) {
-			return new ResizingSubappInterfaceCreationCommand(cmd, subappEP);
+	public static CreationCommand wrapCreateCommand(final CreateSubAppInterfaceElementCommand cmd,
+			final SubApp parent) {
+
+		if (parent.isUnfolded()) {
+			final SubAppForFBNetworkEditPart subappEP = findSubappEP(parent);
+			if (subappEP != null) {
+				return new ResizingSubappInterfaceCreationCommand(cmd, subappEP);
+			}
+		} else if (parent.isInGroup()) {
+			final GraphicalEditPart groupEP = findEditPart(parent.getGroup());
+			if (groupEP != null) {
+				return new WrapedResizeGroupOrSubappCommand(groupEP, cmd);
+
+			}
+		} else if (parent.getOuterFBNetworkElement() instanceof SubApp
+				&& ((SubApp) parent.getOuterFBNetworkElement()).isUnfolded()) {
+			final GraphicalEditPart ep = findEditPart(parent.getOuterFBNetworkElement());
+			if (ep != null) {
+				return new WrapedResizeGroupOrSubappCommand(ep, cmd);
+
+			}
 		}
-		// we couldn't create a resizing command return the given one as fallback
+		// we couldn't or shouldn't create a resizing command return the given one as fallback
 		return cmd;
 	}
 
@@ -86,17 +105,25 @@ public final class ResizingSubappInterfaceCreationCommand extends CreationComman
 		return subAppEP.getViewer();
 	}
 
-	private static SubAppForFBNetworkEditPart findSubappEP(final SubApp parent) {
+	private static GraphicalEditPart findEditPart(final Object obj) {
 		final IEditorPart editor = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage()
 				.getActiveEditor();
 		if (editor != null) {
 			final GraphicalViewer viewer = HandlerHelper.getViewer(editor);
 			if (viewer != null) {
-				final Object ep = viewer.getEditPartRegistry().get(parent);
-				if (ep instanceof SubAppForFBNetworkEditPart) {
-					return (SubAppForFBNetworkEditPart) ep;
+				final Object ep = viewer.getEditPartRegistry().get(obj);
+				if (ep instanceof EditPart) {
+					return (GraphicalEditPart) ep;
 				}
 			}
+		}
+		return null;
+	}
+
+	private static SubAppForFBNetworkEditPart findSubappEP(final SubApp parent) {
+		final Object ep = findEditPart(parent);
+		if (ep instanceof SubAppForFBNetworkEditPart) {
+			return (SubAppForFBNetworkEditPart) ep;
 		}
 		return null;
 	}
@@ -110,6 +137,52 @@ public final class ResizingSubappInterfaceCreationCommand extends CreationComman
 					new Dimension(0, heightDelta),
 					new Point());
 			changeSubappHeightCmd.execute();
+		}
+	}
+
+	private static final class WrapedResizeGroupOrSubappCommand extends CreationCommand {
+		private final ResizeGroupOrSubappCommand resizeCmd;
+		private final CreateSubAppInterfaceElementCommand cmd;
+
+		private WrapedResizeGroupOrSubappCommand(final GraphicalEditPart groupEP,
+				final CreateSubAppInterfaceElementCommand cmd) {
+			this.resizeCmd = new ResizeGroupOrSubappCommand(groupEP, cmd);
+			this.cmd = cmd;
+		}
+
+		@Override
+		public boolean canExecute() {
+			return resizeCmd.canExecute();
+		}
+
+		@Override
+		public boolean canUndo() {
+			return resizeCmd.canUndo();
+		}
+
+		@Override
+		public boolean canRedo() {
+			return resizeCmd.canRedo();
+		}
+
+		@Override
+		public void execute() {
+			resizeCmd.execute();
+		}
+
+		@Override
+		public void undo() {
+			resizeCmd.undo();
+		}
+
+		@Override
+		public void redo() {
+			resizeCmd.redo();
+		}
+
+		@Override
+		public Object getCreatedElement() {
+			return cmd.getCreatedElement();
 		}
 	}
 
