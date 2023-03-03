@@ -40,11 +40,7 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 		final int pos = getInsertingIndex(interfaceElement, isInput);
 		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(last,
 				getCreationName(interfaceElement), getType().getInterface(), isInput, pos);
-		if (getType().isUnfolded()) {
-			// if the group is expanded we need to check if the subapp needs to be expanded
-			return ResizingSubappInterfaceCreationCommand.createCommand(cmd, getType());
-		}
-		return cmd;
+		return ResizingSubappInterfaceCreationCommand.wrapCreateCommand(cmd, getType());
 	}
 
 	@Override
@@ -52,11 +48,7 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 			final boolean isInput, final int index) {
 		final CreateSubAppInterfaceElementCommand cmd = new CreateSubAppInterfaceElementCommand(interfaceElement,
 				isInput, getType().getInterface(), index);
-		if (getType().isUnfolded()) {
-			// if the group is expanded we need to check if the subapp needs to be expanded
-			return ResizingSubappInterfaceCreationCommand.createCommand(cmd, getType());
-		}
-		return cmd;
+		return ResizingSubappInterfaceCreationCommand.wrapCreateCommand(cmd, getType());
 	}
 
 	@Override

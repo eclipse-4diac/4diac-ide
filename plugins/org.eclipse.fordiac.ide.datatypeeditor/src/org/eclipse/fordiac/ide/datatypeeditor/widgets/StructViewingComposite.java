@@ -138,7 +138,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 			break;
 		case I4diacNatTableUtil.INITIAL_VALUE:
 			final VarDeclaration rowItem = provider.getRowObject(rowPosition);
-			if (rowItem.getValue().hasError()) {
+			if (rowItem.getValue() != null && rowItem.getValue().hasError()) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 			}
 			configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
