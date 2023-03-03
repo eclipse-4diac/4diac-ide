@@ -59,6 +59,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedOutputArgument;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
@@ -134,6 +135,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String TRUNCATED_LITERAL = ISSUE_CODE_PREFIX + "truncatedLiteral"; //$NON-NLS-1$
 	public static final String STRING_INDEX_OUT_OF_BOUNDS = ISSUE_CODE_PREFIX + "stringIndexOutOfBounds"; //$NON-NLS-1$
 	public static final String STRING_INDEX_ZERO_OR_LESS_INVALID = ISSUE_CODE_PREFIX + "stringIndexZeroOrLessInvalid"; //$NON-NLS-1$
+	public static final String RETURNED_TYPE_IS_VOID = ISSUE_CODE_PREFIX + "returnedTypeIsVoid"; //$NON-NLS-1$
 
 	@Check
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
@@ -330,6 +332,32 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		if (!STCoreUtil.isAssignable(statement.getLeft())) {
 			error(Messages.STCoreValidator_Assignment_Invalid_Left_Side, statement,
 					STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT, NOT_ASSIGNABLE);
+		}
+	}
+
+	private boolean isValidCall(final STExpression expression) {
+		return expression instanceof STFeatureExpression && ((STFeatureExpression) expression).isCall()
+				&& ((STFeatureExpression) expression).getFeature() instanceof ICallable;
+	}
+
+	private boolean isInCallStatementOnly(final STFeatureExpression expression) {
+		if (expression.eContainer() instanceof STMemberAccessExpression) {
+			return expression.eContainer().eContainer() instanceof STCallStatement;
+		}
+		return expression.eContainer() instanceof STCallStatement;
+	}
+
+	private boolean hasReturnType(final ICallable callable) {
+		return callable.getReturnType() != null;
+	}
+
+	@Check
+	public void checkCallWithoutReturnIsOnlyInCallStatement(final STFeatureExpression expression) {
+		if (isValidCall(expression) && !hasReturnType((ICallable) expression.getFeature())
+				&& !isInCallStatementOnly(expression)) {
+			final var callable = (ICallable) expression.getFeature();
+			error(MessageFormat.format(Messages.STCoreValidator_AssignmentOfCallWithoutReturnType, callable.getName()),
+					expression, STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, RETURNED_TYPE_IS_VOID);
 		}
 	}
 
@@ -708,7 +736,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			checkTypeCompatibility((DataType) destination, (DataType) source, feature, index);
 		} else if (source != null && destination != null) {
 			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
-					source.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(), destination.getName());
+					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
+					destination.getName());
 		}
 	}
 

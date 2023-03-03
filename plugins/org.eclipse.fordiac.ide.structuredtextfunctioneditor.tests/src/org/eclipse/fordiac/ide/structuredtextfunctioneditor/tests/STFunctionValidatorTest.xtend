@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022,2023 Primetals Technologies Austria GmbH
  *               2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
@@ -17,6 +17,7 @@
  *       - validation for truncated string literals
  *   Martin Melik Merkumians
  * 		- validation for duplicate names on FUNCTIONs
+ *      - validation of return types
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor.tests
 
@@ -931,7 +932,7 @@ class STFunctionValidatorTest {
 				current := 1;
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.ICALLABLE_HAS_NO_RETURN_TYPE,
-			"Callable 'current' has no return type")
+			"Callable 'current' has return type VOID and cannot be used in assignments")
 	}
 
 	@Test
@@ -1094,5 +1095,52 @@ class STFunctionValidatorTest {
 		END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
 			STCoreValidator.TOO_MANY_INDICES_GIVEN, "Too many indices given, 2 indices given, but only 1 specified for the variable")
+	}
+	
+	@Test
+	def void testFunctionWithReturnTypeAssginedToCorrectVariableType() {
+		'''
+		FUNCTION called : REAL
+		END_FUNCTION
+		
+		FUNCTION callee
+		VAR_TEMP
+			assigned : REAL;
+		END_VAR
+		assigned := called();
+		END_FUNCTION
+		'''.parse.assertNoErrors
+	}
+	
+	@Test
+	def void testFunctionWithReturnTypeAssginedToWrongVariableType() {
+		'''
+			FUNCTION called : REAL
+			END_FUNCTION
+			
+			FUNCTION callee
+			VAR_TEMP
+				assigned : STRING;
+			END_VAR
+			assigned := called();
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES,
+			"Cannot convert from REAL to STRING")
+	}
+	
+	@Test
+	def void testFunctionWithoutReturnTypeAssginedToVariable() {
+		'''
+			FUNCTION called
+			END_FUNCTION
+			
+			FUNCTION callee
+			VAR_TEMP
+				assigned : STRING;
+			END_VAR
+			assigned := called();
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.RETURNED_TYPE_IS_VOID,
+			"Call on 'called' returns VOID, which cannot be assigned to a variable or used as a call argument")
 	}
 }
