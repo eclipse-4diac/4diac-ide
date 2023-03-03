@@ -527,14 +527,14 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		expression.getMappedOutputArguments()
 				.forEach((param, arg) -> checkTypeCompatibility(arg.getResultType(), getFeatureType(param),
 						STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
-						expression.getParameters().indexOf(arg.eContainer())));
+						expression.getParameters().indexOf(arg)));
 		expression.getMappedInOutArguments().forEach((param, arg) -> {
 			final INamedElement destination = getFeatureType(param);
 			final INamedElement source = arg.getResultType();
 			if (!source.equals(destination)) { // in&out requires strict equality
 				error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
 						destination.getName()), STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
-						expression.getParameters().indexOf(arg.eContainer()), NON_COMPATIBLE_TYPES, source.getName(),
+						expression.getParameters().indexOf(arg), NON_COMPATIBLE_TYPES, source.getName(),
 						destination.getName());
 			}
 		});
@@ -720,7 +720,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			checkTypeCompatibility((DataType) destination, (DataType) source, feature, index);
 		} else if (source != null && destination != null) {
 			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
-					source.getName()), feature, NON_COMPATIBLE_TYPES, source.getName(), destination.getName());
+					source.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(), destination.getName());
 		}
 	}
 
@@ -729,7 +729,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		if (!(destination.isAssignableFrom(source)
 				|| (GenericTypes.isAnyType(source) && source.isAssignableFrom(destination)))) {
 			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
-					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(), destination.getName());
+					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
+					destination.getName());
 		}
 	}
 }
