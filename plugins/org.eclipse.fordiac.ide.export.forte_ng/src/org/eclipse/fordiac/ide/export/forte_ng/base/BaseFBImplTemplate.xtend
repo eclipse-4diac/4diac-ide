@@ -24,16 +24,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.Method
-import org.eclipse.xtend.lib.annotations.Accessors
 
-abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate {
-	@Accessors(PROTECTED_GETTER) final T type
+abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<T> {
 	final Map<Algorithm, ILanguageSupport> algorithmLanguageSupport
 	final Map<Method, ILanguageSupport> methodLanguageSupport
 
 	new(T type, String name, Path prefix, String baseClass) {
-		super(name, prefix, baseClass)
-		this.type = type
+		super(type, name, prefix, baseClass)
 		algorithmLanguageSupport = type.algorithm.toInvertedMap [
 			ILanguageSupportFactory.createLanguageSupport("forte_ng", it)
 		]

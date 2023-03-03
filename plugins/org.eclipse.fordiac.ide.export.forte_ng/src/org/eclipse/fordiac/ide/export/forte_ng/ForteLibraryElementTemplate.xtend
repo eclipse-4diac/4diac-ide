@@ -22,18 +22,20 @@ import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
-abstract class ForteLibraryElementTemplate extends ForteNgExportTemplate {
+abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends ForteNgExportTemplate {
 
 	public static final CharSequence EXPORT_PREFIX = "st_"
+	
+	@Accessors(PROTECTED_GETTER) final T type
 
-	new(String name, Path prefix) {
+	new(T type, String name, Path prefix) {
 		super(name, prefix)
+		this.type = type;
 	}
-
-	def protected LibraryElement getType()
 
 	def protected getExportPrefix() {
 		return EXPORT_PREFIX

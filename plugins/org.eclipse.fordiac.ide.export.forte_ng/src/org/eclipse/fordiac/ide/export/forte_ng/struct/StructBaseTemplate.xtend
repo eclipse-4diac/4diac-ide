@@ -17,19 +17,15 @@ package org.eclipse.fordiac.ide.export.forte_ng.struct
 import java.nio.file.Path
 import org.eclipse.fordiac.ide.export.forte_ng.ForteLibraryElementTemplate
 import org.eclipse.fordiac.ide.model.data.StructuredType
-import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
-abstract class StructBaseTemplate extends ForteLibraryElementTemplate {
-
-	@Accessors(PROTECTED_GETTER) StructuredType type
+abstract class StructBaseTemplate extends ForteLibraryElementTemplate<StructuredType> {
 
 	override protected getExportPrefix() '''''' // currently we don't want to have prefixes for structs members
 
 	new(StructuredType type, String name, Path prefix) {
-		super(name, prefix)
-		this.type = type
+		super(type, name, prefix)
 	}
 
 	def protected getStructClassName() '''CIEC_«type.name»'''
