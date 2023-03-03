@@ -12,8 +12,6 @@
  */
 package org.eclipse.fordiac.ide.export.forte_ng.util
 
-import org.eclipse.fordiac.ide.model.data.AnyElementaryType
-import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.DateAndTimeType
@@ -22,24 +20,12 @@ import org.eclipse.fordiac.ide.model.data.LdateType
 import org.eclipse.fordiac.ide.model.data.LdtType
 import org.eclipse.fordiac.ide.model.data.LtimeType
 import org.eclipse.fordiac.ide.model.data.LtodType
-import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 final class ForteNgExportUtil {
 	private new() {
-	}
-
-	def static CharSequence generateTypeDefaultValue(DataType type) {
-		switch (type) {
-			AnyStringType: '''«type.generateTypeName»("")'''
-			AnyElementaryType: '''«type.generateTypeName»(0)'''
-			ArrayType: '''«type.generateTypeName»()'''
-			StructuredType: '''«type.generateTypeName»()'''
-			default:
-				"0"
-		}
 	}
 
 	def static CharSequence generateTypeName(VarDeclaration variable) //

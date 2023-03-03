@@ -30,10 +30,12 @@ import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
+import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.WcharType
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -85,7 +87,6 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
-import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.util.GlobalConstantsUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
@@ -395,10 +396,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateVariableDefaultValue(STVarDeclaration variable) {
 		if (variable.defaultValue !== null)
 			variable.defaultValue.generateInitializerExpression
-		else if (variable.array)
-			"{}"
 		else
-			(variable.type as DataType).generateTypeDefaultValue
+			variable.featureType.generateTypeDefaultValue
 	}
 
 	def protected dispatch CharSequence generateFeatureName(INamedElement feature) {
@@ -428,15 +427,6 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateFeatureName(AdapterDeclaration feature) '''st_«feature.name»()'''
 
-	def protected dispatch INamedElement getType(INamedElement feature) {
-		errors.add('''The feature «feature.eClass.name» is not supported''')
-		null
-	}
-
-	def protected dispatch INamedElement getType(VarDeclaration feature) { feature.type }
-
-	def protected dispatch INamedElement getType(STVarDeclaration feature) { feature.type }
-
 	def protected CharSequence generateTypeName(STVarDeclaration variable) { variable.generateTypeName(false) }
 
 	def protected CharSequence generateTypeName(STVarDeclaration variable, boolean output) {
@@ -458,6 +448,17 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				].toString
 			default:
 				ForteNgExportUtil.generateTypeName(type)
+		}
+	}
+
+	def protected CharSequence generateTypeDefaultValue(INamedElement type) {
+		switch (type) {
+			AnyStringType: '''«type.generateTypeName»("")'''
+			AnyElementaryType: '''«type.generateTypeName»(0)'''
+			ArrayType: '''«type.generateTypeName»{}'''
+			StructuredType: '''«type.generateTypeName»()'''
+			default:
+				"0"
 		}
 	}
 

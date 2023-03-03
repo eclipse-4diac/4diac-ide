@@ -46,7 +46,7 @@ class VarDeclarationSupport extends StructuredTextSupport {
 
 	override generate(Map<?, ?> options) throws ExportException {
 		if (varDeclaration.value?.value.nullOrEmpty) {
-			varDeclaration.type.generateTypeDefaultValue
+			varDeclaration.featureType.generateTypeDefaultValue
 		} else {
 			prepare(options)
 			parseResult?.initializerExpression?.generateInitializerExpression
