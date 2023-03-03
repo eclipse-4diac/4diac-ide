@@ -24,6 +24,7 @@ import java.time.LocalTime
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 import java.util.List
+import java.util.Map
 import java.util.Set
 import org.eclipse.emf.ecore.EObject
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
@@ -96,6 +97,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
 	@Accessors final List<String> warnings = newArrayList
 	@Accessors final List<String> infos = newArrayList
+	final Map<VarDeclaration, ILanguageSupport> variableLanguageSupport = newHashMap
 	int uniqueVariableIndex = 0;
 
 	def protected CharSequence generateVariables(Iterable<? extends STVarDeclarationBlock> blocks, boolean decl) '''
@@ -385,7 +387,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateVariableDefaultValue(VarDeclaration variable) {
-		val support = new VarDeclarationSupport(variable)
+		val support = variableLanguageSupport.computeIfAbsent(variable)[new VarDeclarationSupport(it)]
 		val result = support.generate(emptyMap)
 		errors.addAll(support.getErrors)
 		warnings.addAll(support.getWarnings)
@@ -516,7 +518,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected Iterable<INamedElement> getFeatureDependencies(INamedElement feature) {
 		switch (feature) {
 			VarDeclaration:
-				new VarDeclarationSupport(feature).getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})
+				variableLanguageSupport.computeIfAbsent(feature)[new VarDeclarationSupport(it)].getDependencies(
+					#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})
 			STVarDeclaration case feature.eContainer instanceof STVarGlobalDeclarationBlock:
 				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
 					name = feature.sourceName
@@ -543,7 +546,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected Iterable<INamedElement> getDefaultDependencies(INamedElement feature) {
 		switch (feature) {
 			VarDeclaration:
-				new VarDeclarationSupport(feature).getDependencies(emptyMap)
+				variableLanguageSupport.computeIfAbsent(feature)[new VarDeclarationSupport(it)].
+					getDependencies(emptyMap)
 			STVarDeclaration:
 				#[feature.type] + feature.containedDependencies
 			default:
