@@ -26,6 +26,7 @@ import java.time.temporal.ChronoUnit
 import java.util.List
 import java.util.Set
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
@@ -38,6 +39,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -382,16 +384,12 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateVariableDefaultValue(VarDeclaration variable) {
-		if (variable.value?.value.nullOrEmpty) {
-			variable.type.generateTypeDefaultValue
-		} else {
-			val support = new VarDeclarationSupport(variable)
-			val result = support.generate(emptyMap)
-			errors.addAll(support.getErrors)
-			warnings.addAll(support.getWarnings)
-			infos.addAll(support.getInfos)
-			result
-		}
+		val support = new VarDeclarationSupport(variable)
+		val result = support.generate(emptyMap)
+		errors.addAll(support.getErrors)
+		warnings.addAll(support.getWarnings)
+		infos.addAll(support.getInfos)
+		result
 	}
 
 	def protected dispatch CharSequence generateVariableDefaultValue(STVarDeclaration variable) {
@@ -490,6 +488,9 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		switch (object) {
 			STVarDeclaration:
 				#[object.type]
+			STStructInitializerExpression:
+				// need dependencies of default values generated in initializer
+				object.mappedStructInitElements.entrySet.filter[value === null].flatMap[key.defaultDependencies]
 			STNumericLiteral:
 				#[object.resultType]
 			STStringLiteral:
@@ -503,20 +504,47 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			STDateAndTimeLiteral:
 				#[object.type]
 			STFeatureExpression: // feature expressions may refer to definitions contained in other sources
-				switch (feature : object.feature) {
-					STVarDeclaration case feature.eContainer instanceof STVarGlobalDeclarationBlock:
-						#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
-							name = feature.sourceName
-						]]
-					STFunction:
-						#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
-							name = feature.sourceName
-						]]
-					default:
-						emptySet
-				}
+				object.feature.featureDependencies
 			STFunction:
 				object.returnType !== null ? #[object.returnType] : emptySet
+			default:
+				emptySet
+		}
+	}
+
+	def protected Iterable<INamedElement> getFeatureDependencies(INamedElement feature) {
+		switch (feature) {
+			VarDeclaration:
+				new VarDeclarationSupport(feature).getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})
+			STVarDeclaration case feature.eContainer instanceof STVarGlobalDeclarationBlock:
+				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
+					name = feature.sourceName
+				]]
+			STVarDeclaration:
+				#[feature.type]
+			STFunction:
+				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
+					name = feature.sourceName
+				]] + feature.parameterDependencies
+			ICallable:
+				feature.parameterDependencies
+			default:
+				emptySet
+		}
+	}
+
+	def protected Iterable<INamedElement> getParameterDependencies(ICallable feature) {
+		(feature.inputParameters + feature.outputParameters + feature.inOutParameters).flatMap [
+			defaultDependencies // need dependencies of default values possibly generated in call
+		]
+	}
+
+	def protected Iterable<INamedElement> getDefaultDependencies(INamedElement feature) {
+		switch (feature) {
+			VarDeclaration:
+				new VarDeclarationSupport(feature).getDependencies(emptyMap)
+			STVarDeclaration:
+				#[feature.type] + feature.containedDependencies
 			default:
 				emptySet
 		}

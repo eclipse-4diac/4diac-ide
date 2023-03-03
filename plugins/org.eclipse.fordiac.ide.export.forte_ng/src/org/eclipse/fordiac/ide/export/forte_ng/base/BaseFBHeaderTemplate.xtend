@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  *               2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
@@ -16,12 +16,14 @@ package org.eclipse.fordiac.ide.export.forte_ng.base
 
 import java.nio.file.Path
 import java.util.Map
+import java.util.Set
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.Method
 
 abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplate<T> {
@@ -104,10 +106,7 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		«IF !type.internalFbs.isEmpty»
 			#include "typelib.h"
 		«ENDIF»
-		«((type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).map[getType]
-			+ methodLanguageSupport.values.filterNull.flatMap[getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})]
-			+ type.internalFbs.map[getType]
-		).toSet.generateDependencyIncludes»
+		«getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE}).generateDependencyIncludes»
 		«(type.interfaceList.sockets + type.interfaceList.plugs).generateAdapterIncludes»
 		
 		«type.compilerInfo?.header»
@@ -132,14 +131,20 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 	'''
 
 	override getErrors() {
-		(errors + methodLanguageSupport.values.filterNull.flatMap[getErrors].toSet).toList
+		(super.getErrors + methodLanguageSupport.values.filterNull.flatMap[getErrors].toSet).toList
 	}
 
 	override getWarnings() {
-		(warnings + methodLanguageSupport.values.filterNull.flatMap[getWarnings].toSet).toList
+		(super.getWarnings + methodLanguageSupport.values.filterNull.flatMap[getWarnings].toSet).toList
 	}
 
 	override getInfos() {
-		(infos + methodLanguageSupport.values.filterNull.flatMap[getInfos].toSet).toList
+		(super.getInfos + methodLanguageSupport.values.filterNull.flatMap[getInfos].toSet).toList
+	}
+	
+	override Set<INamedElement> getDependencies(Map<?, ?> options) {
+		(super.getDependencies(options) +
+			methodLanguageSupport.values.filterNull.flatMap[getDependencies(options)] + type.internalFbs.map[getType]
+			).toSet
 	}
 }

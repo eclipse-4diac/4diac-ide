@@ -55,6 +55,8 @@ class StructuredTypeImplTemplate extends StructBaseTemplate {
 		#ifdef FORTE_ENABLE_GENERATED_SOURCE_CPP
 		#include "«structuredTypeFileName(type)»_gen.cpp"
 		#endif
+		
+		«getDependencies(emptyMap).generateDependencyIncludes»
 	'''
 
 }

@@ -18,6 +18,9 @@ package org.eclipse.fordiac.ide.export.forte_ng
 
 import java.nio.file.Path
 import java.util.List
+import java.util.Map
+import java.util.Set
+import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement
@@ -25,16 +28,21 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
+import static extension org.eclipse.xtext.EcoreUtil2.*
 
 abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends ForteNgExportTemplate {
 
 	public static final CharSequence EXPORT_PREFIX = "st_"
 	
 	@Accessors(PROTECTED_GETTER) final T type
+	final Map<VarDeclaration, ILanguageSupport> variableLanguageSupport
 
 	new(T type, String name, Path prefix) {
 		super(name, prefix)
 		this.type = type;
+		variableLanguageSupport = type.getAllContentsOfType(VarDeclaration).toInvertedMap [
+			ILanguageSupportFactory.createLanguageSupport("forte_ng", it)
+		]
 	}
 
 	def protected getExportPrefix() {
@@ -80,16 +88,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	def protected CharSequence generateName(VarDeclaration variable) '''var_«variable.name»'''
 
 	def CharSequence generateVariableDefaultValue(VarDeclaration decl) {
-		if (decl.value?.value.nullOrEmpty) {
-			decl.type.generateTypeDefaultValue
-		} else {
-			val support = ILanguageSupportFactory.createLanguageSupport("forte_ng", decl)
-			val result = support.generate(emptyMap)
-			errors.addAll(support.getErrors)
-			warnings.addAll(support.getWarnings)
-			infos.addAll(support.getInfos)
-			result
-		}
+		variableLanguageSupport.get(decl)?.generate(emptyMap)
 	}
 
 	def protected getFORTEStringId(String s) '''g_nStringId«s»'''
@@ -102,4 +101,19 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		elements.map['''«IF it.array»«"ARRAY".FORTEStringId», «it.arraySize», «ENDIF»«it.type.generateTypeNamePlain.FORTEStringId»'''].join(", ")
 	}
 
+	override getErrors() {
+		(super.getErrors + variableLanguageSupport.values.filterNull.flatMap[getErrors].toSet).toList
+	}
+
+	override getWarnings() {
+		(super.getWarnings + variableLanguageSupport.values.filterNull.flatMap[getWarnings].toSet).toList
+	}
+
+	override getInfos() {
+		(super.getInfos + variableLanguageSupport.values.filterNull.flatMap[getInfos].toSet).toList
+	}
+	
+	def Set<INamedElement> getDependencies(Map<?, ?> options) {
+		variableLanguageSupport.values.filterNull.flatMap[getDependencies(options)].toSet
+	}
 }
