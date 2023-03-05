@@ -38,8 +38,6 @@ public abstract class AlgorithmEditingComposite {
 	private IAlgorithmEditor editor;
 	private Algorithm currentAlgorithm;
 
-	private final boolean blockUpdates = false;
-
 	protected AlgorithmEditingComposite() {
 		stack = new StackLayout();
 	}
@@ -69,21 +67,19 @@ public abstract class AlgorithmEditingComposite {
 	}
 
 	public void setAlgorithm(final Algorithm algorithm) {
-		if (!blockUpdates) {
-			// set commandStack to null so that an update will not lead to a changed type
-			if (this.currentAlgorithm != algorithm) {
-				currentAlgorithm = algorithm;
-				if (null != currentAlgorithm) {
-					initializeEditor();
-					enableAllFields();
-				} else {
-					stack.topControl = null;
-					codeEditors.layout();
-					disableAllFields();
-				}
+		// set commandStack to null so that an update will not lead to a changed type
+		if (this.currentAlgorithm != algorithm) {
+			currentAlgorithm = algorithm;
+			if (null != currentAlgorithm) {
+				initializeEditor();
+				enableAllFields();
+			} else {
+				stack.topControl = null;
+				codeEditors.layout();
+				disableAllFields();
 			}
-			updateAlgFields();
 		}
+		updateAlgFields();
 	}
 
 	protected void enableAllFields() {

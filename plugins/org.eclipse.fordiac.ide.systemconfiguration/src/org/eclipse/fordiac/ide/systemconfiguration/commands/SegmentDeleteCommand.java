@@ -29,7 +29,6 @@ import org.eclipse.gef.commands.CompoundCommand;
 public class SegmentDeleteCommand extends Command {
 	private CompoundCommand deleteLinks;
 	private Segment segment;
-	private CommunicationConfiguration config;
 	private SystemConfiguration segmentParent;
 	private CompoundCommand unmapCommands;
 
@@ -44,7 +43,7 @@ public class SegmentDeleteCommand extends Command {
 
 	private CompoundCommand handleCommunicationMapping() {
 		final CompoundCommand cmd = new CompoundCommand();
-		config = segment.getCommunication();
+		final CommunicationConfiguration config = segment.getCommunication();
 		if (config != null) {
 			for (final CommunicationMappingTarget tgt : config.getMappingTargets()) {
 				for (final CommunicationChannel channel : tgt.getMappedElements()) {

@@ -14,7 +14,8 @@ package org.eclipse.fordiac.ide.debug;
 
 import org.eclipse.osgi.util.NLS;
 
-public class Messages extends NLS {
+@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
 	public static String FBLaunchConfigurationDelegate_InvalidDefaultArguments;
 	static {

@@ -51,7 +51,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 public class InternalFbsSection extends AbstractSection implements I4diacNatTableUtil {
-	private TabbedPropertySheetPage tabbedPropertySheetPage;
 	protected FBListProvider provider;
 	protected Map<String, List<String>> typeSelection = new HashMap<>();
 	protected NatTable table;
@@ -65,7 +64,6 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 	public void createControls(final Composite parent, final TabbedPropertySheetPage tabbedPropertySheetPage) {
 		super.createControls(parent, tabbedPropertySheetPage);
 		createInternalFbsControls(parent);
-		this.tabbedPropertySheetPage = tabbedPropertySheetPage;
 	}
 
 	public void createInternalFbsControls(final Composite parent) {
