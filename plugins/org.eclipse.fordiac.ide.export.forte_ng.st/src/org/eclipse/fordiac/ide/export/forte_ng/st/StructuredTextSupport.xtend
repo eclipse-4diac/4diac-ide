@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.WcharType
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
@@ -426,6 +427,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateFeatureName(FB feature) '''fb_«feature.name»()'''
 
 	def protected dispatch CharSequence generateFeatureName(Event feature) '''evt_«feature.name»'''
+
+	def protected dispatch CharSequence generateFeatureName(AdapterDeclaration feature) '''st_«feature.name»()'''
 
 	def protected dispatch INamedElement getType(INamedElement feature) {
 		errors.add('''The feature «feature.eClass.name» is not supported''')
