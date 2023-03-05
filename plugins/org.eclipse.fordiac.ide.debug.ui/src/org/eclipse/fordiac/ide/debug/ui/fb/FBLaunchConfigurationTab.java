@@ -14,8 +14,10 @@ package org.eclipse.fordiac.ide.debug.ui.fb;
 
 import static org.eclipse.swt.events.SelectionListener.widgetSelectedAdapter;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Stream;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
@@ -26,8 +28,11 @@ import org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.debug.fb.FBLaunchConfigurationDelegate;
 import org.eclipse.fordiac.ide.debug.ui.MainLaunchConfigurationTab;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.jface.layout.GridDataFactory;
@@ -114,7 +119,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 			}
 			repeatEventCheckbox.setSelection(FBLaunchConfigurationAttributes.isRepeatEvent(configuration));
 			keepDebuggerRunningCheckbox
-					.setSelection(FBLaunchConfigurationAttributes.isKeepRunningWhenIdle(configuration));
+			.setSelection(FBLaunchConfigurationAttributes.isKeepRunningWhenIdle(configuration));
 		} catch (final CoreException e) {
 			// ignore
 		}
@@ -126,7 +131,7 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		super.performApply(configuration);
 		final Event event = (Event) eventCombo.getStructuredSelection().getFirstElement();
 		if (event != null) {
-			configuration.setAttribute(FBLaunchConfigurationAttributes.EVENT, event.getName());
+			configuration.setAttribute(FBLaunchConfigurationAttributes.EVENT, getEventName(event));
 		} else {
 			configuration.removeAttribute(FBLaunchConfigurationAttributes.EVENT);
 		}
@@ -158,10 +163,14 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 	}
 
 	protected static List<Event> getInputEvents(final FBType fbType) {
+		final List<Event> result = new ArrayList<>();
 		if (fbType != null) {
-			return fbType.getInterfaceList().getEventInputs();
+			result.addAll(fbType.getInterfaceList().getEventInputs());
+			Stream.concat(fbType.getInterfaceList().getSockets().stream(),
+					fbType.getInterfaceList().getPlugs().stream()).map(AdapterDeclaration::getAdapterFB)
+			.map(AdapterFB::getInterface).map(InterfaceList::getEventOutputs).forEachOrdered(result::addAll);
 		}
-		return Collections.emptyList();
+		return result;
 	}
 
 	@Override
@@ -204,13 +213,19 @@ public abstract class FBLaunchConfigurationTab extends MainLaunchConfigurationTa
 		return null;
 	}
 
+	protected static String getEventName(final Event event) {
+		if (event.getFBNetworkElement() instanceof AdapterFB) {
+			return event.getFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		}
+		return event.getName();
+	}
+
 	private static class EventsLabelProvider extends LabelProvider {
 
 		@Override
 		public String getText(final Object element) {
 			if (element instanceof Event) {
-				final Event event = (Event) element;
-				return event.getName();
+				return getEventName((Event) element);
 			}
 			return super.getText(element);
 		}

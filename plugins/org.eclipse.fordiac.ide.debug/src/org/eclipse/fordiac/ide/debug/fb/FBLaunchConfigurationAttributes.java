@@ -12,9 +12,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.fb;
 
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
@@ -31,6 +37,12 @@ public interface FBLaunchConfigurationAttributes extends LaunchConfigurationAttr
 			if (event != null && event.isIsInput()) {
 				return event;
 			}
+			return Stream
+					.concat(type.getInterfaceList().getSockets().stream(), type.getInterfaceList().getPlugs().stream())
+					.map(AdapterDeclaration::getAdapterFB).map(AdapterFB::getInterface)
+					.map(iface -> iface.getEvent(eventAttribute)).filter(Objects::nonNull)
+					.filter(Predicate.not(Event::isIsInput))
+					.findAny().orElse(defaultEvent);
 		}
 		return defaultEvent;
 	}
