@@ -41,6 +41,7 @@ class FBVariable extends AbstractVariable<FBValue> {
 		super(name, type)
 		val members = variables?.toMap[getName] ?: newHashMap;
 		(type.interfaceList.inputVars + type.interfaceList.outputVars).forEach[initializeMember(members)]
+		(type.interfaceList.sockets + type.interfaceList.plugs).forEach[adapterFB.initializeMember(members)]
 		if (type instanceof BaseFBType) {
 			type.internalVars.forEach[initializeMember(members)]
 			type.internalFbs.forEach[initializeMember(members)]
