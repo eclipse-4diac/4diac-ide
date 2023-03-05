@@ -83,11 +83,11 @@ class StructVariable extends AbstractVariable<StructValue> implements Iterable<V
 		MAP_PATTERN.split(inner).forall [ elem |
 			val split = MAP_KV_PATTERN.split(elem)
 			if (split.length != 2) {
-				throw new IllegalArgumentException("Not a valid struct value")
+				return false
 			}
 			val variable = members.get(split.get(0).trim)
 			if (variable === null) {
-				throw new IllegalArgumentException("Not a valid struct value")
+				return false
 			}
 			variable.validateValue(split.get(1).trim)
 		]
