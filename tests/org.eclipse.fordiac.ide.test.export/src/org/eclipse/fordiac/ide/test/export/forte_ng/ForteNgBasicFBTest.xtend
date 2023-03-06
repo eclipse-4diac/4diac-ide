@@ -57,6 +57,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						#define _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
 						
 						#include "basicfb.h"
+						#include "iec61131_functions.h"
 						#include "forte_array_common.h"
 						#include "forte_array.h"
 						#include "forte_array_fixed.h"
@@ -120,6 +121,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						
 						#include "forte_dword.h"
 						#include "forte_sint.h"
+						#include "iec61131_functions.h"
 						#include "forte_array_common.h"
 						#include "forte_array.h"
 						#include "forte_array_fixed.h"
