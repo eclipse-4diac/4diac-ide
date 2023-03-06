@@ -29,6 +29,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
 public final class FBNetworkTestRunner {
+
+	@Deprecated
 	public static EList<Transaction> runFBNetworkTest(final FBNetwork network, final String fbInstanceName,
 			final String pinName) {
 		final FB initialFb = network.getFBNamed(fbInstanceName);
@@ -47,6 +49,26 @@ public final class FBNetworkTestRunner {
 		checkInitialTransaction(eventManager.getTransactions().get(0), fbInstanceName, pinName);
 
 		return eventManager.getTransactions();
+	}
+
+	public static EventManager runFBNetworkTestManager(final FBNetwork network, final String fbInstanceName,
+			final String pinName) {
+		final FB initialFb = network.getFBNamed(fbInstanceName);
+		if (initialFb == null) {
+			throw new IllegalArgumentException("FB to trigger does not exist"); //$NON-NLS-1$
+		}
+
+		final Event event = (Event) initialFb.getInterfaceElement(pinName);
+		if (event == null) {
+			throw new IllegalArgumentException("Event pin does not exist"); //$NON-NLS-1$
+		}
+
+		final EventManager eventManager = EventManagerFactory.createFrom(event, EcoreUtil.copy(network));
+		EventManagerUtils.processNetwork(eventManager);
+
+		checkInitialTransaction(eventManager.getTransactions().get(0), fbInstanceName, pinName);
+
+		return eventManager;
 	}
 
 	private static void checkInitialTransaction(final Transaction t0, final String fbInstanceName,
@@ -88,7 +110,7 @@ public final class FBNetworkTestRunner {
 			if (!matchFbInstanceName(result, expectedEventNames)) {
 				throw new IllegalTraceException(
 						"Unexpected input event occurrence at FB " + result.getParentFB().getName() //$NON-NLS-1$
-								+ ", expected: " + expectedEventName); //$NON-NLS-1$
+						+ ", expected: " + expectedEventName); //$NON-NLS-1$
 			}
 			if (!matchEventName(result, expectedEventNames[1])) {
 				throw new IllegalTraceException("Unexpected input event occurrence, expected: " + expectedEventName); //$NON-NLS-1$

@@ -15,6 +15,10 @@
 package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
 
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
@@ -26,6 +30,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class EventManagerUtils {
+
+	private EventManagerUtils() {
+		throw new AssertionError("This class cannot be inherited"); //$NON-NLS-1$
+	}
 
 	public static void process(final EventManager eventManager) {
 		final var transactions = eventManager.getTransactions();
@@ -112,11 +120,25 @@ public final class EventManagerUtils {
 		}
 	}
 
-	private static FBRuntimeAbstract getLatestNetworkRuntime(final FBTransaction transaction) {
-		return transaction.getInputEventOccurrence().getFbRuntime();
+	public static Resource addResourceToManager(final EventManager eventManager, final URI uri) {
+		final ResourceSet reset = new ResourceSetImpl();
+		final Resource res = reset.createResource(uri);
+		res.getContents().add(eventManager);
+		return res;
 	}
 
-	private EventManagerUtils() {
-		throw new AssertionError("This class cannot be inherited"); //$NON-NLS-1$
+	public static Resource loadResource(final URI uri) {
+		final ResourceSet reset = new ResourceSetImpl();
+		final Resource res = reset.getResource(uri, true);
+		return res;
 	}
+
+	private static FBRuntimeAbstract getLatestNetworkRuntime(final FBTransaction transaction) {
+		if (transaction.getOutputEventOccurrences().isEmpty()) {
+			return transaction.getInputEventOccurrence().getFbRuntime();
+		}
+		return transaction.getOutputEventOccurrences().get(transaction.getOutputEventOccurrences().size() - 1)
+				.getFbRuntime();
+	}
+
 }
