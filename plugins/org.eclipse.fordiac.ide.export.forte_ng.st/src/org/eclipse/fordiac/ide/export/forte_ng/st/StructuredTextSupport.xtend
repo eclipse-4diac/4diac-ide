@@ -507,7 +507,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			STDateAndTimeLiteral:
 				#[object.type]
 			STFeatureExpression: // feature expressions may refer to definitions contained in other sources
-				object.feature.featureDependencies
+				object.feature.featureDependencies + object.argumentDependencies
 			STFunction:
 				object.returnType !== null ? #[object.returnType] : emptySet
 			default:
@@ -553,6 +553,15 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			default:
 				emptySet
 		}
+	}
+
+	def protected Iterable<INamedElement> getArgumentDependencies(STFeatureExpression expression) {
+		if (expression.parameters.filter(STCallNamedOutputArgument).exists[not])
+			#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
+				name = "forte_any_bit_not_decorator"
+			]]
+		else
+			emptySet
 	}
 
 	def protected generateUniqueVariableName() '''st_lv_synthetic_«uniqueVariableIndex++»'''
