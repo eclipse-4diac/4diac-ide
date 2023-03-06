@@ -137,38 +137,36 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String STRING_INDEX_ZERO_OR_LESS_INVALID = ISSUE_CODE_PREFIX + "stringIndexZeroOrLessInvalid"; //$NON-NLS-1$
 	public static final String RETURNED_TYPE_IS_VOID = ISSUE_CODE_PREFIX + "returnedTypeIsVoid"; //$NON-NLS-1$
 
+	private void checkRangeOnValidity(final STBinaryExpression subRangeExpression) {
+		final DataType leftType = (DataType) subRangeExpression.getLeft().getResultType();
+		if (!(leftType instanceof AnyIntType)) {
+			error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, leftType.getName()),
+					subRangeExpression, STCorePackage.Literals.ST_BINARY_EXPRESSION__LEFT, INDEX_RANGE_TYPE_INVALID,
+					leftType.getName());
+			// Currently we can only process literals
+		}
+		if (leftType instanceof AnyIntType && !(subRangeExpression.getLeft() instanceof STNumericLiteral)) {
+			error(Messages.STCoreValidator_IndexRangeNotALiteral, subRangeExpression,
+					STCorePackage.Literals.ST_BINARY_EXPRESSION__LEFT, INDEX_RANGE_NOT_A_LITERAL, leftType.getName());
+		}
+		final DataType rightType = (DataType) subRangeExpression.getRight().getResultType();
+		if (!(rightType instanceof AnyIntType)) {
+			error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, rightType.getName()),
+					subRangeExpression, STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_TYPE_INVALID,
+					rightType.getName());
+			// Currently we can only process literals
+		}
+		if (rightType instanceof AnyIntType && !(subRangeExpression.getRight() instanceof STNumericLiteral)) {
+			error(Messages.STCoreValidator_IndexRangeNotALiteral, subRangeExpression,
+					STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_NOT_A_LITERAL, leftType.getName());
+		}
+	}
+
 	@Check
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
 		if (varDeclaration.isArray()) {
-			for (final STExpression range : varDeclaration.getRanges()) {
-				if (range instanceof STBinaryExpression) {
-					final STBinaryExpression binaryExpression = (STBinaryExpression) range;
-					final DataType leftType = (DataType) binaryExpression.getLeft().getResultType();
-					if (!(leftType instanceof AnyIntType)) {
-						error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, leftType.getName()),
-								range, STCorePackage.Literals.ST_BINARY_EXPRESSION__LEFT, INDEX_RANGE_TYPE_INVALID,
-								leftType.getName());
-						// Currently we can only process literals
-					}
-					if (leftType instanceof AnyIntType && !(binaryExpression.getLeft() instanceof STNumericLiteral)) {
-						error(Messages.STCoreValidator_IndexRangeNotALiteral, range,
-								STCorePackage.Literals.ST_BINARY_EXPRESSION__LEFT, INDEX_RANGE_NOT_A_LITERAL,
-								leftType.getName());
-					}
-					final DataType rightType = (DataType) binaryExpression.getRight().getResultType();
-					if (!(rightType instanceof AnyIntType)) {
-						error(MessageFormat.format(Messages.STCoreValidator_IndexRangeTypeInvalid, rightType.getName()),
-								range, STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_TYPE_INVALID,
-								rightType.getName());
-						// Currently we can only process literals
-					}
-					if (rightType instanceof AnyIntType && !(binaryExpression.getRight() instanceof STNumericLiteral)) {
-						error(Messages.STCoreValidator_IndexRangeNotALiteral, range,
-								STCorePackage.Literals.ST_BINARY_EXPRESSION__RIGHT, INDEX_RANGE_NOT_A_LITERAL,
-								leftType.getName());
-					}
-				}
-			}
+			varDeclaration.getRanges().stream().filter(STBinaryExpression.class::isInstance)
+					.map(STBinaryExpression.class::cast).forEach(this::checkRangeOnValidity);
 		}
 	}
 
