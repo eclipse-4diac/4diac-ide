@@ -544,22 +544,30 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 
 		// check argument type
-		expression.getMappedInputArguments()
-				.forEach((param, arg) -> checkTypeCompatibility(getFeatureType(param), arg.getResultType(),
+		expression.getMappedInputArguments().forEach((param, arg) -> {
+			if (arg != null) {
+				checkTypeCompatibility(getFeatureType(param), arg.getResultType(),
 						STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
-						expression.getParameters().indexOf(arg.eContainer())));
-		expression.getMappedOutputArguments()
-				.forEach((param, arg) -> checkTypeCompatibility(arg.getResultType(), getFeatureType(param),
+						expression.getParameters().indexOf(arg.eContainer()));
+			}
+		});
+		expression.getMappedOutputArguments().forEach((param, arg) -> {
+			if (arg != null) {
+				checkTypeCompatibility(arg.getResultType(), getFeatureType(param),
 						STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
-						expression.getParameters().indexOf(arg)));
+						expression.getParameters().indexOf(arg));
+			}
+		});
 		expression.getMappedInOutArguments().forEach((param, arg) -> {
-			final INamedElement destination = getFeatureType(param);
-			final INamedElement source = arg.getResultType();
-			if (!source.equals(destination)) { // in&out requires strict equality
-				error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
-						destination.getName()), STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
-						expression.getParameters().indexOf(arg), NON_COMPATIBLE_TYPES, source.getName(),
-						destination.getName());
+			if (arg != null) {
+				final INamedElement destination = getFeatureType(param);
+				final INamedElement source = arg.getResultType();
+				if (!source.equals(destination)) { // in&out requires strict equality
+					error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
+							destination.getName()), STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
+							expression.getParameters().indexOf(arg), NON_COMPATIBLE_TYPES, source.getName(),
+							destination.getName());
+				}
 			}
 		});
 	}
