@@ -43,6 +43,7 @@ import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.gef.EditPolicy;
@@ -108,9 +109,13 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 	};
 
 	public static boolean isAdapterNotification(final Object change, final Event ev) {
-		return (ev.getFBNetworkElement() instanceof AdapterFB)
-				&& ((((AdapterFB) ev.getFBNetworkElement()).getAdapterDecl() == change)
-						|| (ev.getFBNetworkElement().getName().equals(change)));
+		if (ev != null) {
+			final FBNetworkElement fbNetworkElement = ev.getFBNetworkElement();
+			return (fbNetworkElement instanceof AdapterFB)
+					&& ((((AdapterFB) fbNetworkElement).getAdapterDecl() == change)
+							|| (fbNetworkElement.getName().equals(change)));
+		}
+		return false;
 	}
 
 	private final IPropertyChangeListener propertyChangeListener = event -> {
