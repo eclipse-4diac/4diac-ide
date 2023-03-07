@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="F_ADD" Comment="Simple FB with one algorithm">
+	<Identification Standard="61499-1">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK115394" Date="2023-03-07">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
+				<With Var="IN1"/>
+				<With Var="IN2"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
+				<With Var="OUT"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="IN1" Type="ANY_MAGNITUDE" Comment=""/>
+			<VarDeclaration Name="IN2" Type="ANY_MAGNITUDE" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="OUT" Type="ANY_MAGNITUDE" Comment=""/>
+		</OutputVars>
+	</InterfaceList>
+	<SimpleFB>
+		<Algorithm Name="REQ" Comment="">
+			<ST><![CDATA[ALGORITHM REQ
+VAR_TEMP
+	X : LREAL;
+	Y : LREAL;
+END_VAR
+	X := IN1;
+	Y := IN2;
+	OUT := X + Y;
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</SimpleFB>
+</FBType>

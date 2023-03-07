@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="SimpleIO" Comment="Simple FB with one algorithm">
+<FBType Name="WORD2WORD" Comment="Simple FB with one algorithm">
 	<Identification Standard="61499-1">
 	</Identification>
-	<VersionInfo Version="1.0" Author="AK115394" Date="2022-07-04">
+	<VersionInfo Version="1.0" Author="AK115394" Date="2023-03-07">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
 			<Event Name="REQ" Type="Event" Comment="Normal Execution Request">
-				<With Var="DI1"/>
+				<With Var="IN"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
 			<Event Name="CNF" Type="Event" Comment="Execution Confirmation">
-				<With Var="DO1"/>
+				<With Var="OUT"/>
 			</Event>
 		</EventOutputs>
 		<InputVars>
-			<VarDeclaration Name="DI1" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="IN" Type="WORD" Comment=""/>
 		</InputVars>
 		<OutputVars>
-			<VarDeclaration Name="DO1" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="OUT" Type="WORD" Comment=""/>
 		</OutputVars>
 	</InterfaceList>
 	<SimpleFB>
 		<Algorithm Name="REQ" Comment="">
 			<ST><![CDATA[ALGORITHM REQ
-	DO1 := DI1;
+	OUT:=IN;
 END_ALGORITHM
 
 ]]></ST>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="EnhancedAdapter2" Comment="Basic FB with empty ECC">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK115394" Date="2023-03-07">
+	</VersionInfo>
+	<InterfaceList>
+		<Plugs>
+			<AdapterDeclaration Name="adp" Type="CompoundAdapter" Comment=""/>
+		</Plugs>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="546.6666666666667" y="420.0">
+			</ECState>
+		</ECC>
+	</BasicFB>
+</FBType>

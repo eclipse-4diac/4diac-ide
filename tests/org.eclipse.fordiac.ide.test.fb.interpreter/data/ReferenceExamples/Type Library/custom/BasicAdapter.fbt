@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="BasicAdapter" Comment="Basic FB with empty ECC">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK115394" Date="2023-03-07">
+	</VersionInfo>
+	<InterfaceList>
+		<Plugs>
+			<AdapterDeclaration Name="adp" Type="EventAdapter" Comment="" x="66.66666666666667" y="66.66666666666667"/>
+		</Plugs>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="546.6666666666667" y="420.0">
+			</ECState>
+			<ECState Name="State" Comment="" x="2126.666666666667" y="460.0">
+				<ECAction Output="adp.CNF"/>
+			</ECState>
+			<ECState Name="State_1" Comment="" x="2206.666666666667" y="1393.3333333333335">
+				<ECAction Output="adp.IND"/>
+			</ECState>
+			<ECTransition Source="START" Destination="State" Condition="adp.REQ" Comment="" x="1473.3333333333335" y="373.33333333333337"/>
+			<ECTransition Source="State" Destination="START" Condition="1" Comment="" x="1453.3333333333335" y="793.3333333333334"/>
+			<ECTransition Source="START" Destination="State_1" Condition="adp.RSP" Comment="" x="1553.3333333333335" y="1086.6666666666667"/>
+			<ECTransition Source="State_1" Destination="START" Condition="1" Comment="" x="953.3333333333334" y="1193.3333333333335"/>
+		</ECC>
+	</BasicFB>
+</FBType>

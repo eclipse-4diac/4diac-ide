@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<DataType Name="structtype" Comment="A Template for a Data Type">
+	<Identification>
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK115394" Date="2022-06-27">
+	</VersionInfo>
+	<StructuredType>
+		<VarDeclaration Name="VAR1" Type="BOOL" Comment=""/>
+		<VarDeclaration Name="VAR2" Type="BOOL" Comment=""/>
+		<VarDeclaration Name="VAR3" Type="BOOL" Comment=""/>
+		<VarDeclaration Name="VAR4" Type="BOOL" Comment=""/>
+	</StructuredType>
+</DataType>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="WithOutputs" Comment="Only UPDATE updates the data inputs">
+	<Identification Standard="61499-2">
+	</Identification>
+	<VersionInfo Version="1.0" Author="AK115394" Date="2023-03-07">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="REQ" Type="Event" Comment="">
+				<With Var="DI1"/>
+				<With Var="DI2"/>
+				<With Var="DI3"/>
+				<With Var="DI4"/>
+			</Event>
+			<Event Name="UPDATE" Type="Event" Comment="">
+				<With Var="DI1"/>
+				<With Var="DI2"/>
+				<With Var="DI3"/>
+				<With Var="DI4"/>
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CNF" Type="Event" Comment="">
+			</Event>
+			<Event Name="UPDATEO" Type="Event" Comment="">
+				<With Var="DO1"/>
+				<With Var="DO3"/>
+				<With Var="DO2"/>
+				<With Var="DO4"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="DI1" Type="BOOL" Comment=""/>
+			<VarDeclaration Name="DI2" Type="INT" Comment=""/>
+			<VarDeclaration Name="DI3" Type="UINT" Comment=""/>
+			<VarDeclaration Name="DI4" Type="REAL" Comment=""/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="DO1" Type="BOOL" Comment="" InitialValue="1"/>
+			<VarDeclaration Name="DO2" Type="INT" Comment="" InitialValue="-42"/>
+			<VarDeclaration Name="DO3" Type="UINT" Comment="" InitialValue="21"/>
+			<VarDeclaration Name="DO4" Type="REAL" Comment="" InitialValue="3.14"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="660.0" y="393.33333333333337">
+			</ECState>
+			<ECState Name="writeOutputs" Comment="" x="1586.6666666666667" y="440.0">
+				<ECAction Algorithm="updateOutputs" Output="UPDATEO"/>
+			</ECState>
+			<ECState Name="keepOutputs" Comment="" x="1620.0" y="926.6666666666667">
+				<ECAction Algorithm="updateOutputs" Output="CNF"/>
+			</ECState>
+			<ECTransition Source="writeOutputs" Destination="START" Condition="1" Comment="" x="1400.0" y="713.3333333333334"/>
+			<ECTransition Source="START" Destination="writeOutputs" Condition="UPDATE" Comment="" x="1386.6666666666667" y="213.33333333333334"/>
+			<ECTransition Source="START" Destination="keepOutputs" Condition="REQ" Comment="" x="993.3333333333334" y="1053.3333333333335"/>
+			<ECTransition Source="keepOutputs" Destination="START" Condition="1" Comment="" x="1173.3333333333335" y="833.3333333333334"/>
+		</ECC>
+		<Algorithm Name="updateOutputs" Comment="">
+			<ST><![CDATA[ALGORITHM updateOutputs
+
+DO1 := DI1;
+DO2 := DI2;
+DO3 := DI3;
+DO4 := DI4;
+
+END_ALGORITHM]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>
