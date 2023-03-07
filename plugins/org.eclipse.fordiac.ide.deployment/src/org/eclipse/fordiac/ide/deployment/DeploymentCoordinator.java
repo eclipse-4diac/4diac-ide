@@ -112,7 +112,7 @@ public final class DeploymentCoordinator {
 		}
 	}
 
-	private static List<DeviceDeploymentData> createDeploymentdata(final Object[] selection) {
+	public static List<DeviceDeploymentData> createDeploymentdata(final Object[] selection) {
 		final List<DeviceDeploymentData> data = new ArrayList<>();
 		for (final Object object : selection) {
 			if (object instanceof Resource) {
