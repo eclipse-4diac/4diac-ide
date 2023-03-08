@@ -25,8 +25,6 @@ import org.eclipse.fordiac.ide.gef.nat.EventColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -62,7 +60,7 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		}
 		final EList<AdapterDeclaration> adapterList = getAdapterList(interfaceList, isInput);
 		if (!adapterList.isEmpty()) {
-			return adapterList.get(adapterList.size() - 1).getAdapterType();
+			return adapterList.get(adapterList.size() - 1).getType();
 		}
 		return getTypeLibrary().getAdapterTypes().values().iterator().next().getType();
 	}
@@ -95,10 +93,10 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		outputProvider = new AdapterListProvider(this, new ArrayList<>());
+		outputProvider = new AdapterListProvider(this);
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer, new EventColumnProvider(),
-				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this, Boolean.FALSE);
+				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this, false);
 	}
 
 	@Override
@@ -107,23 +105,17 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		inputProvider = new AdapterListProvider(this, new ArrayList<>());
+		inputProvider = new AdapterListProvider(this);
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, new AdapterColumnProvider(),
-				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this, Boolean.TRUE);
+				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this, true);
 	}
 
 
 	@Override
-	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
-		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getSockets());
-		((FordiacInterfaceListProvider) outputProvider).setInput(element.getInterface().getPlugs());
-	}
-
-	@Override
-	public void setTableInputFBType(final FBType type) {
-		((FordiacInterfaceListProvider) inputProvider).setInput(type.getInterfaceList().getSockets());
-		((FordiacInterfaceListProvider) outputProvider).setInput(type.getInterfaceList().getPlugs());
+	public void setTableInput(final InterfaceList il) {
+		((FordiacInterfaceListProvider) inputProvider).setInput(il.getSockets());
+		((FordiacInterfaceListProvider) outputProvider).setInput(il.getPlugs());
 	}
 
 }

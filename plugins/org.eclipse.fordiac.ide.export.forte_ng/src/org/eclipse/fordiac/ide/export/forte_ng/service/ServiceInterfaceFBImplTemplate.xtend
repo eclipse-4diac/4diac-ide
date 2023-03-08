@@ -16,15 +16,11 @@ package org.eclipse.fordiac.ide.export.forte_ng.service
 import java.nio.file.Path
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceInterfaceFBType
-import org.eclipse.xtend.lib.annotations.Accessors
 
-class ServiceInterfaceFBImplTemplate extends ForteFBTemplate {
-
-	@Accessors(PROTECTED_GETTER) ServiceInterfaceFBType type
+class ServiceInterfaceFBImplTemplate extends ForteFBTemplate<ServiceInterfaceFBType> {
 
 	new(ServiceInterfaceFBType type, String name, Path prefix) {
-		super(name, prefix, "CFunctionBlock")
-		this.type = type
+		super(type, name, prefix, "CFunctionBlock")
 	}
 
 	override generate() '''

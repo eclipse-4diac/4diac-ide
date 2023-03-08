@@ -71,13 +71,13 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		public void notifyChanged(final Notification notification) {
 			final Object feature = notification.getFeature();
 
-			if(!LibraryElementPackage.eINSTANCE.getErrorMarkerRef_FileMarkerId().equals(feature)) {
+			if (!LibraryElementPackage.eINSTANCE.getErrorMarkerRef_ErrorMessage().equals(feature)) {
 				refreshVisuals();
 			}
 			if (LibraryElementPackage.eINSTANCE.getINamedElement_Comment().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getConnection_Destination().equals(feature)
 					|| LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)
-					|| LibraryElementPackage.eINSTANCE.getErrorMarkerRef_FileMarkerId().equals(feature)) {
+					|| LibraryElementPackage.eINSTANCE.getErrorMarkerRef_ErrorMessage().equals(feature)) {
 				refreshComment();
 			}
 			if (LibraryElementPackage.eINSTANCE.getConnection_Source().equals(feature)) {

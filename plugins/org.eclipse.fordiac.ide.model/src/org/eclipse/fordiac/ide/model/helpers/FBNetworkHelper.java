@@ -29,6 +29,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.Messages;
+import org.eclipse.fordiac.ide.model.annotations.MappingAnnotations;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
@@ -36,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.DataConnection;
@@ -49,6 +51,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -62,14 +65,11 @@ import org.eclipse.ui.PlatformUI;
 
 public final class FBNetworkHelper {
 
-	/**
-	 * Take the src FBNetwork and copy it into a new network.
+	/** Take the src FBNetwork and copy it into a new network.
 	 *
 	 * @param srcNetwork    the FBNetwork to copy
-	 * @param destInterface if not null the interface of the component the new
-	 *                      FBNetwork should be contained in
-	 * @return the copied FBNetwork
-	 */
+	 * @param destInterface if not null the interface of the component the new FBNetwork should be contained in
+	 * @return the copied FBNetwork */
 	public static FBNetwork copyFBNetWork(final FBNetwork srcNetwork, final InterfaceList destInterface) {
 		final FBNetwork dstNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		dstNetwork.getNetworkElements().addAll(EcoreUtil.copyAll(srcNetwork.getNetworkElements()));
@@ -92,8 +92,8 @@ public final class FBNetworkHelper {
 		return dstNetwork;
 	}
 
-	private static void createResourceTypeFBs(
-			final EList<FBNetworkElement> networkElements, final FBNetwork dstNetwork) {
+	private static void createResourceTypeFBs(final EList<FBNetworkElement> networkElements,
+			final FBNetwork dstNetwork) {
 		networkElements.forEach(fb -> createResourceTypeFB(fb, dstNetwork));
 	}
 
@@ -119,25 +119,26 @@ public final class FBNetworkHelper {
 		}
 	}
 
-	private static void createConnections(final FBNetwork srcNetwork, final FBNetwork dstNetwork, final InterfaceList destInterface) {
+	private static void createConnections(final FBNetwork srcNetwork, final FBNetwork dstNetwork,
+			final InterfaceList destInterface) {
 		for (final Connection connection : srcNetwork.getEventConnections()) {
 			dstNetwork.getEventConnections()
-			.add((EventConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
+					.add((EventConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
 		}
 
 		for (final Connection connection : srcNetwork.getDataConnections()) {
 			dstNetwork.getDataConnections()
-			.add((DataConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
+					.add((DataConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
 		}
 
 		for (final Connection connection : srcNetwork.getAdapterConnections()) {
 			dstNetwork.getAdapterConnections()
-			.add((AdapterConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
+					.add((AdapterConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
 		}
 	}
 
-	private static Connection createConnection(final FBNetwork srcNetwork, final InterfaceList destInterface, final FBNetwork dstNetwork,
-			final Connection connection) {
+	private static Connection createConnection(final FBNetwork srcNetwork, final InterfaceList destInterface,
+			final FBNetwork dstNetwork, final Connection connection) {
 		final Connection newConn = EcoreUtil.copy(connection);
 		newConn.setSource(getInterfaceElement(connection.getSource(), destInterface, dstNetwork, srcNetwork));
 		newConn.setDestination(getInterfaceElement(connection.getDestination(), destInterface, dstNetwork, srcNetwork));
@@ -146,11 +147,7 @@ public final class FBNetworkHelper {
 
 	private static IInterfaceElement getInterfaceElement(final IInterfaceElement ie, final InterfaceList typeInterface,
 			final FBNetwork dstNetwork, final FBNetwork srcNetwork) {
-		if (null == ie.getFBNetworkElement()) {
-			return typeInterface.getInterfaceElement(ie.getName());
-		}
-
-		if (!srcNetwork.equals(ie.getFBNetworkElement().getFbNetwork())) {
+		if ((null == ie.getFBNetworkElement()) || !srcNetwork.equals(ie.getFBNetworkElement().getFbNetwork())) {
 			return typeInterface.getInterfaceElement(ie.getName());
 		}
 		final FBNetworkElement element = dstNetwork.getElementNamed(ie.getFBNetworkElement().getName());
@@ -160,10 +157,7 @@ public final class FBNetworkHelper {
 		return element.getInterfaceElement(ie.getName());
 	}
 
-	/**
-	 * methods for updating position of FBNetwork after creating/flattening
-	 * subapp/...
-	 */
+	/** methods for updating position of FBNetwork after creating/flattening subapp/... */
 
 	public static Point getTopLeftCornerOfFBNetwork(final List<?> selection) {
 		Assert.isNotNull(selection);
@@ -180,8 +174,8 @@ public final class FBNetworkHelper {
 		return pt;
 	}
 
-
-	public static void moveFBNetworkByOffset(final Iterable<FBNetworkElement> fbNetwork, final int xOffset, final int yOffset) {
+	public static void moveFBNetworkByOffset(final Iterable<FBNetworkElement> fbNetwork, final int xOffset,
+			final int yOffset) {
 		for (final FBNetworkElement el : fbNetwork) {
 			final Position pos = LibraryElementFactory.eINSTANCE.createPosition();
 			pos.setX(el.getPosition().getX() + xOffset);
@@ -192,8 +186,7 @@ public final class FBNetworkHelper {
 
 	public static Point removeXYOffsetForFBNetwork(final List<FBNetworkElement> fbNetwork) {
 		final Point offset = getTopLeftCornerOfFBNetwork(fbNetwork);
-		moveFBNetworkByOffset(fbNetwork, -offset.x,
-				-offset.y);
+		moveFBNetworkByOffset(fbNetwork, -offset.x, -offset.y);
 		return offset;
 	}
 
@@ -225,7 +218,7 @@ public final class FBNetworkHelper {
 		if (editorType != null) {
 			if (type.equals(editorType)) {
 				ErrorMessenger
-				.popUpErrorMessage(MessageFormat.format(Messages.Error_SelfInsertion, editorType.getName()));
+						.popUpErrorMessage(MessageFormat.format(Messages.Error_SelfInsertion, editorType.getName()));
 				return false;
 			}
 			if (containsType(editorType, getChildFBNElements(type))) {
@@ -243,8 +236,7 @@ public final class FBNetworkHelper {
 		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
 			final List<EditPart> eps = elements.stream().map(el -> (EditPart) viewer.getEditPartRegistry().get(el))
-					.filter(Objects::nonNull)
-					.collect(Collectors.toList());
+					.filter(Objects::nonNull).collect(Collectors.toList());
 			if (eps != null) {
 				viewer.setSelection(new StructuredSelection(eps));
 			}
@@ -284,12 +276,10 @@ public final class FBNetworkHelper {
 		return null;
 	}
 
-	private static boolean containsType(final FBType editorType, final EList<? extends FBNetworkElement> networkElementList) {
+	private static boolean containsType(final FBType editorType,
+			final EList<? extends FBNetworkElement> networkElementList) {
 		for (final FBNetworkElement elem : networkElementList) {
-			if (editorType.equals(elem.getType())) {
-				return true;
-			}
-			if (containsType(editorType, getChildFBNElements(elem))) {
+			if (editorType.equals(elem.getType()) || containsType(editorType, getChildFBNElements(elem))) {
 				return true;
 			}
 		}
@@ -337,17 +327,22 @@ public final class FBNetworkHelper {
 			EObject container = fbNetworkElement;
 			do {
 				final FBNetworkElement runner = (FBNetworkElement) container;
+				if (isMappedCommunicationFb(runner)) {
+					names.addFirst("."); //$NON-NLS-1$
+					names.addFirst(MappingAnnotations.getHierarchicalName(runner));
+					break;
+				}
 				container = runner.getFbNetwork().eContainer();
 				if (!(container instanceof INamedElement)) {
 					break;
 				}
-				names.addFirst("."); //$NON-NLS-1$
-				names.addFirst(((INamedElement) container).getName());
-				if (container instanceof Resource) {
+				if (container instanceof MappingTarget) {
 					names.addFirst("."); //$NON-NLS-1$
-					names.addFirst(((Resource) container).getDevice().getName());
+					names.addFirst(MappingAnnotations.getHierarchicalName((MappingTarget) container));
 					break;
 				}
+				names.addFirst("."); //$NON-NLS-1$
+				names.addFirst(((INamedElement) container).getName());
 			} while (container instanceof FBNetworkElement); // we are still in a subapp, try to find the resource or
 			// application as stop point
 
@@ -360,14 +355,18 @@ public final class FBNetworkHelper {
 		return null;
 	}
 
+	protected static boolean isMappedCommunicationFb(final FBNetworkElement runner) {
+		return (runner instanceof CommunicationChannel) && (runner.getFbNetwork() == null);
+	}
+
 	/** Get the model from the hierarchical path
 	 *
 	 * @param fullHierarchicalName the complete path of the element separated by '.'
-	 * @param system the {@link AutomationSystem} in which to find the item in
-	 * @return the model as an {@link EObject} (can also return the {@link Application}
-	 * 		   if the path does not include any other elements)
-	 */
-	public static EObject getModelFromHierarchicalName(final String fullHierarchicalName, final AutomationSystem system) {
+	 * @param system               the {@link AutomationSystem} in which to find the item in
+	 * @return the model as an {@link EObject} (can also return the {@link Application} if the path does not include any
+	 *         other elements) */
+	public static EObject getModelFromHierarchicalName(final String fullHierarchicalName,
+			final AutomationSystem system) {
 		final String[] path = fullHierarchicalName.split("\\."); //$NON-NLS-1$
 		EObject retVal = system.getApplicationNamed(path[0]);
 		if (null != retVal) {
@@ -390,6 +389,7 @@ public final class FBNetworkHelper {
 		}
 		return retVal;
 	}
+
 	private static EObject parseSubappPath(FBNetwork network, final String[] path) {
 		EObject retVal = null;
 		for (final String element : path) {

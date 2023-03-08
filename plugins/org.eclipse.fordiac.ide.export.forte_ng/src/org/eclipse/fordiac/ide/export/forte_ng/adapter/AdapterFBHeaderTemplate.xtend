@@ -21,16 +21,12 @@ import java.util.List
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
-import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
-class AdapterFBHeaderTemplate extends ForteFBTemplate {
-
-	@Accessors(PROTECTED_GETTER) AdapterFBType type
+class AdapterFBHeaderTemplate extends ForteFBTemplate<AdapterFBType> {
 
 	new(AdapterFBType type, String name, Path prefix) {
-		super(name, prefix, "CAdapter")
-		this.type = type
+		super(type, name, prefix, "CAdapter")
 	}
 
 	override generate() '''

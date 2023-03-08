@@ -17,6 +17,7 @@ import org.eclipse.fordiac.ide.model.eval.AbstractEvaluator
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.variable.FBVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -57,7 +58,11 @@ abstract class FBEvaluator<T extends FBType> extends AbstractEvaluator {
 	 * Determine if the event is applicable to the current evaluator
 	 */
 	def boolean isApplicable(Event event) {
-		event?.eContainer?.eContainer == type && event.isInput
+		switch(container: event?.eContainer?.eContainer) {
+			case type: event.isInput
+			AdapterFB: container.adapterDecl?.eContainer?.eContainer == type && !event.isInput
+			default: false
+		}
 	}
 
 	override getName() {

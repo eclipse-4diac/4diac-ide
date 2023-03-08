@@ -53,6 +53,12 @@
             class="org.eclipse.fordiac.ide.model.typelibrary.impl.CreateSubAppTypeEntry">
       </TypeEntryCreator>
    </extension>
+   <extension
+         point="org.eclipse.fordiac.ide.model.TypeEntryCreator">
+      <TypeEntryCreator
+            class="org.eclipse.fordiac.ide.model.typelibrary.impl.CreateSystemEntry">
+      </TypeEntryCreator>
+   </extension>
 
    <extension point="org.eclipse.emf.ecore.generated_package">
       <!-- @generated virtualDNS -->
@@ -81,7 +87,7 @@
 			type="fbt">
 		</parser>
 		<parser
-			class="org.eclipse.fordiac.ide.model.resource.SystemFactory"
+			class="org.eclipse.fordiac.ide.model.resource.FordiacTypeResourceFactory"
 			type="sys">
 		</parser>
 		<parser
@@ -130,5 +136,16 @@
 		<persistent
 			value="true">
 		</persistent>
-	</extension> 
+	</extension>
+ <extension
+       id="initialValue"
+       name="4diac IDE Initial Value Problem"
+       point="org.eclipse.core.resources.markers">
+    <super
+          type="org.eclipse.fordiac.ide.model.problem">
+    </super>
+    <persistent
+          value="true">
+    </persistent>
+ </extension> 
 </plugin>

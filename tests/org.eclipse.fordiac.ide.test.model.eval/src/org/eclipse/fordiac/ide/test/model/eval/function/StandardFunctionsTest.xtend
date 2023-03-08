@@ -31,6 +31,7 @@ import org.eclipse.fordiac.ide.model.data.UsintType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.function.Functions
 import org.eclipse.fordiac.ide.model.eval.function.StandardFunctions
+import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory
 import org.eclipse.fordiac.ide.model.eval.value.AnyBitValue
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
@@ -44,6 +45,8 @@ import org.eclipse.fordiac.ide.model.eval.variable.ElementaryVariable
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
+import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
+import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
@@ -86,6 +89,13 @@ import static extension org.junit.jupiter.api.Assertions.*
 class StandardFunctionsTest {
 
 	static final double NUMERIC_DELTA = 0.0000001
+
+	@BeforeAll
+	def static void setupXtext() {
+		new DataTypeLibrary
+		STAlgorithmStandaloneSetup.doSetup
+		StructuredTextEvaluatorFactory.register
+	}
 
 	@Test
 	def void testAbs() {

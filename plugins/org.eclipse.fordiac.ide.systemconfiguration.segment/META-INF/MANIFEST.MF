@@ -9,7 +9,6 @@ Bundle-Localization: plugin
 Export-Package: org.eclipse.fordiac.ide.systemconfiguration.segment.Communication,
  org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl,
  org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.util
-Bundle-Activator: org.eclipse.fordiac.ide.systemconfiguration.segment.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.eclipse.emf.ecore;visibility:=reexport,

@@ -69,7 +69,7 @@ public class CreateGroupCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	@Override
-	protected String getInitalInstanceName() {
+	protected String getInitialInstanceName() {
 		return INITIAL_GROUP_NAME;
 	}
 

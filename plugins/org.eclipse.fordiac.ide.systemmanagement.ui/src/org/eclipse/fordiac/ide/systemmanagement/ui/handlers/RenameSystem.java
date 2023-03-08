@@ -34,7 +34,7 @@ public class RenameSystem extends AbstractHandler {
 		if ((selection instanceof TreeSelection)
 				&& (((TreeSelection) selection).getFirstElement() instanceof AutomationSystem)) {
 			final AutomationSystem system = (AutomationSystem) ((TreeSelection) selection).getFirstElement();
-			final IProject project = system.getSystemFile().getProject();
+			final IProject project = system.getTypeLibrary().getProject();
 			runRenameAction(project);
 		}
 		return null;

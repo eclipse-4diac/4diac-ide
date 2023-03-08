@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,11 +17,21 @@ import java.util.concurrent.ConcurrentHashMap
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory
 import org.eclipse.xtend.lib.annotations.Accessors
 
-class EvaluatorFactoryRegistryImpl implements EvaluatorFactory.Registry{
+class EvaluatorFactoryRegistryImpl implements EvaluatorFactory.Registry {
 	@Accessors
-	final Map<Class<?>, EvaluatorFactory> classToFactoryMap = new ConcurrentHashMap
-	
-	override getFactory(Class<?> sourceClass) {
-		classToFactoryMap.get(sourceClass)
+	final Map<String, Map<Class<?>, EvaluatorFactory>> variantClassToFactoryMap = new ConcurrentHashMap
+
+	override getFactory(String variant, Class<?> sourceClass) {
+		variantClassToFactoryMap.get(variant)?.get(sourceClass)
+	}
+
+	override registerFactory(String variant, Class<?> sourceClass, EvaluatorFactory factory) {
+		variantClassToFactoryMap.computeIfAbsent(variant ?: EvaluatorFactory.DEFAULT_VARIANT) [
+			new ConcurrentHashMap
+		].put(sourceClass, factory)
+	}
+
+	override Map<Class<?>, EvaluatorFactory> getClassToFactoryMap() {
+		variantClassToFactoryMap.computeIfAbsent(EvaluatorFactory.DEFAULT_VARIANT)[new ConcurrentHashMap]
 	}
 }

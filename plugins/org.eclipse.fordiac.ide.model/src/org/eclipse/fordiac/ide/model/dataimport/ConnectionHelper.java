@@ -13,26 +13,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.Set;
 
 import org.eclipse.fordiac.ide.model.Messages;
-import org.eclipse.fordiac.ide.model.data.DataType;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
-import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.validation.LinkConstraints;
 
 public final class ConnectionHelper {
@@ -290,64 +279,12 @@ public final class ConnectionHelper {
 		public void setSourceEndpoint(final IInterfaceElement sourceEndpoint) {
 			this.sourceEndpoint = sourceEndpoint;
 		}
-
-		public void createErrorMarkerConnection(final Connection connection) {
-
-			final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
-					sourceEndpoint.getTypeName(), destinationEndpoint.getTypeName());
-
-			final ErrorMarkerInterface srcErrorMarker = FordiacMarkerHelper.createWrongDataTypeMarker(sourceEndpoint,
-					sourceEndpoint, destinationEndpoint.getFBNetworkElement(), new ArrayList<>(), errorMessage);
-			final ErrorMarkerInterface dstErrorMarker = FordiacMarkerHelper.createWrongDataTypeMarker(
-					destinationEndpoint, destinationEndpoint, destinationEndpoint.getFBNetworkElement(),
-					new ArrayList<>(), errorMessage);
-			connection.setSource(srcErrorMarker);
-			connection.setDestination(dstErrorMarker);
-		}
-
 	}
 
 	public enum ConnectionState {
 		VALID, SOURCE_MISSING, SOURCE_ENDPOINT_MISSING, DEST_MISSING, DEST_ENDPOINT_MISSING, SOURCE_EXITS,
 		SOURCE_ENDPOINT_EXISTS, DEST_EXISTS, DEST_ENPOINT_EXITS, MISSING_TYPE, DATATYPE_MISSMATCH, DUPLICATE
 	}
-
-	public static IInterfaceElement createRepairInterfaceElement(final IInterfaceElement connection,
-			final String name) {
-		IInterfaceElement repairIE = null;
-		// adapter check has to be first
-		if (connection instanceof AdapterDeclaration) {
-			repairIE = InterfaceListCopier.copyAdapter((AdapterDeclaration) connection, true);
-		} else if (connection instanceof VarDeclaration) {
-			repairIE = InterfaceListCopier.copyVar((VarDeclaration) connection, true, true);
-		} else if (connection instanceof Event) {
-			repairIE = InterfaceListCopier.copyEvent((Event) connection, true);
-		}
-
-		if (null != repairIE) {
-			repairIE.setIsInput(!connection.isIsInput()); // this needs to be inverted for the dummy connection
-			repairIE.setName(name);
-		}
-		return repairIE;
-	}
-
-	public static ErrorMarkerInterface createErrorMarkerInterface(final DataType type, final String name,
-			final boolean isInput, final InterfaceList ieList) {
-		return ieList.getErrorMarker().stream().filter(e -> e.getName().equals(name) && isInput == e.isIsInput())
-				.findAny().orElseGet(() -> createErrorMarker(type, name, isInput, ieList));
-	}
-
-	private static ErrorMarkerInterface createErrorMarker(final DataType type, final String name, final boolean isInput,
-			final InterfaceList ieList) {
-		final ErrorMarkerInterface errorMarkerInterface = LibraryElementFactory.eINSTANCE.createErrorMarkerInterface();
-		errorMarkerInterface.setName(name);
-		errorMarkerInterface.setIsInput(isInput);
-		errorMarkerInterface.setType(type);
-		errorMarkerInterface.setTypeName(type.getName());
-		ieList.getErrorMarker().add(errorMarkerInterface);
-		return errorMarkerInterface;
-	}
-
 
 	private ConnectionHelper() {
 		throw new UnsupportedOperationException();

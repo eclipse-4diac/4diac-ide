@@ -73,8 +73,6 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 
 	private CommandStack commandStack;
 	private RichTextEditor editor;
-	private boolean blockListeners = false;
-
 
 
 	private FBType getFbType() {
@@ -217,9 +215,7 @@ public class DescriptionEditor extends EditorPart implements IFBTEditorPart {
 
 	private void executeCommand(final Command cmd) {
 		if (commandStack != null && cmd != null) {
-			blockListeners = true;
 			commandStack.execute(cmd);
-			blockListeners = false;
 		}
 	}
 

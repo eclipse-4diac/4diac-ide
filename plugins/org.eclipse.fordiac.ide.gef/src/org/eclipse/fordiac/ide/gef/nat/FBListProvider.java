@@ -15,12 +15,11 @@ package org.eclipse.fordiac.ide.gef.nat;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 
 public class FBListProvider extends ListDataProvider<FB>
-implements FordiacInterfaceListProvider {
+		implements FordiacInterfaceListProvider<FB> {
 
 	public FBListProvider(final List<FB> list,
 			final FBColumnAccessor columnAccessor) {
@@ -39,10 +38,9 @@ implements FordiacInterfaceListProvider {
 		return 0;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public <T extends List<? extends INamedElement>> void setInput(final T list) {
-		this.list = (List<FB>) list;
+	public void setInput(final List<FB> list) {
+		this.list = list;
 	}
 
 	public void setTypeLib(final TypeLibrary typeLib) {

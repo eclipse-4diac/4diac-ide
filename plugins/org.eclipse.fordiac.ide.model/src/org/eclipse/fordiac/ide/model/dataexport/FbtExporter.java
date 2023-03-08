@@ -1,7 +1,7 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2018 - 2020 Johannes Keppler University, Linz
- * 				 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ * 							Johannes Keppler University, Linz,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,6 +16,7 @@
  *               - fixed coordinate system resolution conversion in in- and export
  *               - changed exporting the Saxx cursor api
  *   Martin Melik Merkumians - adds export of internal FBs
+ *   Alois Zoitl - updated for new adapter FB handling
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataexport;
 
@@ -24,6 +25,7 @@ import java.util.List;
 import javax.xml.stream.XMLStreamException;
 
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -31,6 +33,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
@@ -205,9 +208,17 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 				getWriter().writeAttribute(LibraryElementTags.ALGORITHM_ELEMENT, action.getAlgorithm().getName());
 			}
 			if (action.getOutput() != null) {
-				getWriter().writeAttribute(LibraryElementTags.OUTPUT_ATTRIBUTE, action.getOutput().getName());
+				getWriter().writeAttribute(LibraryElementTags.OUTPUT_ATTRIBUTE,
+						getActionOutputEventName(action.getOutput()));
 			}
 		}
+	}
+
+	private static String getActionOutputEventName(final Event event) {
+		if (event.getFBNetworkElement() instanceof AdapterFB) {
+			return event.getFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		}
+		return event.getName();
 	}
 
 	/**

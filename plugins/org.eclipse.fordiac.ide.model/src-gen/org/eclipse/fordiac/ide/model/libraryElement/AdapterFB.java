@@ -36,14 +36,12 @@ package org.eclipse.fordiac.ide.model.libraryElement;
 public interface AdapterFB extends FB {
 	/**
 	 * Returns the value of the '<em><b>Adapter Decl</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Adapter Decl</em>' reference.
 	 * @see #setAdapterDecl(AdapterDeclaration)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterFB_AdapterDecl()
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB
-	 * @model opposite="adapterFB" required="true"
+	 * @model required="true"
 	 * @generated
 	 */
 	AdapterDeclaration getAdapterDecl();

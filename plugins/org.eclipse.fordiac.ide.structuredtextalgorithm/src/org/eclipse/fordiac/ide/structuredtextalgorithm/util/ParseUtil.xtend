@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 				 2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
@@ -58,9 +58,21 @@ class ParseUtil {
 	def protected static IParseResult postProcess(String name, List<String> errors, List<String> warnings,
 		List<String> infos, List<Issue> issues, IParseResult parseResult) {
 
-		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''«name» at «lineNumber»: «message» '''])
-		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''«name» at «lineNumber»: «message» '''])
-		infos?.addAll(issues.filter[severity == Severity.INFO].map['''«name» at «lineNumber»: «message» '''])
+		errors?.addAll(issues.filter[severity == Severity.ERROR].map['''«name» at «lineNumber»: «message»'''])
+		warnings?.addAll(issues.filter[severity == Severity.WARNING].map['''«name» at «lineNumber»: «message»'''])
+		infos?.addAll(issues.filter[severity == Severity.INFO].map['''«name» at «lineNumber»: «message»'''])
+		if (issues.exists[severity == Severity.ERROR]) {
+			return null
+		}
+		return parseResult
+	}
+	
+	def protected static IParseResult postProcess(IParseResult parseResult, List<String> errors, List<String> warnings,
+		List<String> infos, List<Issue> issues) {
+
+		errors?.addAll(issues.filter[severity == Severity.ERROR].map[message])
+		warnings?.addAll(issues.filter[severity == Severity.WARNING].map[message])
+		infos?.addAll(issues.filter[severity == Severity.INFO].map[message])
 		if (issues.exists[severity == Severity.ERROR]) {
 			return null
 		}

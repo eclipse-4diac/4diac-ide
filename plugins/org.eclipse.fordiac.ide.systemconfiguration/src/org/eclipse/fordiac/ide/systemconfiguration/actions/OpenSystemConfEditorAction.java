@@ -28,7 +28,7 @@ public class OpenSystemConfEditorAction extends AbstractOpenSystemElementListene
 
 	@Override
 	public void run(final IAction action) {
-		openInSystemEditor(sysConf.getAutomationSystem().getSystemFile(), sysConf);
+		openInSystemEditor(sysConf.getAutomationSystem().getTypeEntry().getFile(), sysConf);
 	}
 
 	@Override

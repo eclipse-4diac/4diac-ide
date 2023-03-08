@@ -24,19 +24,25 @@ import java.time.LocalTime
 import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
 import java.util.List
+import java.util.Map
 import java.util.Set
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
+import org.eclipse.fordiac.ide.model.data.AnyElementaryType
 import org.eclipse.fordiac.ide.model.data.AnyStringType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataType
+import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.WcharType
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
+import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -82,7 +88,6 @@ import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctio
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
-import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.util.GlobalConstantsUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.util.STFunctionUtil.*
@@ -92,6 +97,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
 	@Accessors final List<String> warnings = newArrayList
 	@Accessors final List<String> infos = newArrayList
+	final Map<VarDeclaration, ILanguageSupport> variableLanguageSupport = newHashMap
 	int uniqueVariableIndex = 0;
 
 	def protected CharSequence generateVariables(Iterable<? extends STVarDeclarationBlock> blocks, boolean decl) '''
@@ -381,16 +387,19 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateVariableDefaultValue(VarDeclaration variable) {
-		ForteNgExportUtil.generateVariableDefaultValue(variable)
+		val support = variableLanguageSupport.computeIfAbsent(variable)[new VarDeclarationSupport(it)]
+		val result = support.generate(emptyMap)
+		errors.addAll(support.getErrors)
+		warnings.addAll(support.getWarnings)
+		infos.addAll(support.getInfos)
+		result
 	}
 
 	def protected dispatch CharSequence generateVariableDefaultValue(STVarDeclaration variable) {
 		if (variable.defaultValue !== null)
 			variable.defaultValue.generateInitializerExpression
-		else if (variable.array)
-			"{}"
 		else
-			(variable.type as DataType).generateTypeDefaultValue
+			variable.featureType.generateTypeDefaultValue
 	}
 
 	def protected dispatch CharSequence generateFeatureName(INamedElement feature) {
@@ -418,14 +427,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateFeatureName(Event feature) '''evt_«feature.name»'''
 
-	def protected dispatch INamedElement getType(INamedElement feature) {
-		errors.add('''The feature «feature.eClass.name» is not supported''')
-		null
-	}
-
-	def protected dispatch INamedElement getType(VarDeclaration feature) { feature.type }
-
-	def protected dispatch INamedElement getType(STVarDeclaration feature) { feature.type }
+	def protected dispatch CharSequence generateFeatureName(AdapterDeclaration feature) '''st_«feature.name»()'''
 
 	def protected CharSequence generateTypeName(STVarDeclaration variable) { variable.generateTypeName(false) }
 
@@ -448,6 +450,17 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				].toString
 			default:
 				ForteNgExportUtil.generateTypeName(type)
+		}
+	}
+
+	def protected CharSequence generateTypeDefaultValue(INamedElement type) {
+		switch (type) {
+			AnyStringType: '''«type.generateTypeName»("")'''
+			AnyElementaryType: '''«type.generateTypeName»(0)'''
+			ArrayType: '''«type.generateTypeName»{}'''
+			StructuredType: '''«type.generateTypeName»()'''
+			default:
+				"0"
 		}
 	}
 
@@ -478,6 +491,9 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		switch (object) {
 			STVarDeclaration:
 				#[object.type]
+			STStructInitializerExpression:
+				// need dependencies of default values generated in initializer
+				object.mappedStructInitElements.entrySet.filter[value === null].flatMap[key.defaultDependencies]
 			STNumericLiteral:
 				#[object.resultType]
 			STStringLiteral:
@@ -491,20 +507,49 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			STDateAndTimeLiteral:
 				#[object.type]
 			STFeatureExpression: // feature expressions may refer to definitions contained in other sources
-				switch (feature : object.feature) {
-					STVarDeclaration case feature.eContainer instanceof STVarGlobalDeclarationBlock:
-						#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
-							name = feature.sourceName
-						]]
-					STFunction:
-						#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
-							name = feature.sourceName
-						]]
-					default:
-						emptySet
-				} + object.argumentDependencies
+				object.feature.featureDependencies + object.argumentDependencies
 			STFunction:
 				object.returnType !== null ? #[object.returnType] : emptySet
+			default:
+				emptySet
+		}
+	}
+
+	def protected Iterable<INamedElement> getFeatureDependencies(INamedElement feature) {
+		switch (feature) {
+			VarDeclaration:
+				variableLanguageSupport.computeIfAbsent(feature)[new VarDeclarationSupport(it)].getDependencies(
+					#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE})
+			STVarDeclaration case feature.eContainer instanceof STVarGlobalDeclarationBlock:
+				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
+					name = feature.sourceName
+				]]
+			STVarDeclaration:
+				#[feature.type]
+			STFunction:
+				#[LibraryElementFactory.eINSTANCE.createLibraryElement => [
+					name = feature.sourceName
+				]] + feature.parameterDependencies
+			ICallable:
+				feature.parameterDependencies
+			default:
+				emptySet
+		}
+	}
+
+	def protected Iterable<INamedElement> getParameterDependencies(ICallable feature) {
+		(feature.inputParameters + feature.outputParameters + feature.inOutParameters).flatMap [
+			defaultDependencies // need dependencies of default values possibly generated in call
+		]
+	}
+
+	def protected Iterable<INamedElement> getDefaultDependencies(INamedElement feature) {
+		switch (feature) {
+			VarDeclaration:
+				variableLanguageSupport.computeIfAbsent(feature)[new VarDeclarationSupport(it)].
+					getDependencies(emptyMap)
+			STVarDeclaration:
+				#[feature.type] + feature.containedDependencies
 			default:
 				emptySet
 		}

@@ -60,7 +60,7 @@ public abstract class AbstractXMIParser {
 
 	protected void createAdapterResource(final XtextResourceSet resourceSet, final AdapterDeclaration adapter) {
 		final var adapterResource = resourceSet.createResource(computeUnusedUri(resourceSet, FB_URI_EXTENSION));
-		adapterResource.getContents().add(adapter.getAdapterType().getAdapterFBType());
+		adapterResource.getContents().add(adapter.getType().getAdapterFBType());
 	}
 
 	protected void createStructResource(final XtextResourceSet resourceSet, final VarDeclaration variable) {

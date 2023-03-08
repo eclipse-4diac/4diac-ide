@@ -44,7 +44,7 @@ public final class EventManagerFactory {
 	public static EventManager createFrom(final List<Event> events, final FBNetwork network) {
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
 		eventManager.getTransactions()
-		.addAll(TransactionFactory.createFrom(events, RuntimeFactory.createFrom(network)));
+				.addAll(TransactionFactory.createFrom(events, RuntimeFactory.createFrom(network)));
 		return eventManager;
 	}
 
@@ -54,8 +54,8 @@ public final class EventManagerFactory {
 		return eventManager;
 	}
 
-	public static EventManager createEventManager(final FBType fbType, final List<Event> events,
-			final boolean random) {
+	public static EventManager createEventManager(final FBType fbType, final List<Event> events, final boolean random,
+			final String startStateName) {
 		if (fbType.getService() == null) {
 			fbType.setService(ServiceFactory.createDefaultServiceModel());
 		}
@@ -65,7 +65,8 @@ public final class EventManagerFactory {
 		final EventManager eventManager = OperationalSemanticsFactory.eINSTANCE.createEventManager();
 		resource.getContents().add(eventManager);
 
-		final List<EventOccurrence> createEos = EventOccFactory.createFrom(events, RuntimeFactory.createFrom(fbType));
+		final List<EventOccurrence> createEos = EventOccFactory.createFrom(events,
+				RuntimeFactory.createFrom(fbType, startStateName));
 
 		final List<FBTransaction> transactions = TransactionFactory.createFrom(createEos, random);
 		eventManager.getTransactions().addAll(transactions);

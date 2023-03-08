@@ -54,7 +54,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getName <em>Name</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getComment <em>Comment</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getAttributes <em>Attributes</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getFileMarkerId <em>File Marker Id</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#getErrorMessage <em>Error Message</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isResTypeConnection <em>Res Type Connection</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ConnectionImpl#isBrokenConnection <em>Broken Connection</em>}</li>
@@ -115,26 +114,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	 * @ordered
 	 */
 	protected EList<Attribute> attributes;
-
-	/**
-	 * The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFileMarkerId()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final long FILE_MARKER_ID_EDEFAULT = 0L;
-
-	/**
-	 * The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFileMarkerId()
-	 * @generated
-	 * @ordered
-	 */
-	protected long fileMarkerId = FILE_MARKER_ID_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
@@ -312,29 +291,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.CONNECTION__ATTRIBUTES);
 		}
 		return attributes;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public long getFileMarkerId() {
-		return fileMarkerId;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setFileMarkerId(long newFileMarkerId) {
-		long oldFileMarkerId = fileMarkerId;
-		fileMarkerId = newFileMarkerId;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.CONNECTION__FILE_MARKER_ID, oldFileMarkerId, fileMarkerId));
 	}
 
 	/**
@@ -720,7 +676,7 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 	 */
 	@Override
 	public boolean hasError() {
-		return getFileMarkerId() != 0;
+		return getErrorMessage() != null && !getErrorMessage().isBlank();
 	}
 
 	/**
@@ -819,8 +775,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 				return getComment();
 			case LibraryElementPackage.CONNECTION__ATTRIBUTES:
 				return getAttributes();
-			case LibraryElementPackage.CONNECTION__FILE_MARKER_ID:
-				return getFileMarkerId();
 			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
 				return getErrorMessage();
 			case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
@@ -859,9 +813,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 			case LibraryElementPackage.CONNECTION__ATTRIBUTES:
 				getAttributes().clear();
 				getAttributes().addAll((Collection<? extends Attribute>)newValue);
-				return;
-			case LibraryElementPackage.CONNECTION__FILE_MARKER_ID:
-				setFileMarkerId((Long)newValue);
 				return;
 			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
 				setErrorMessage((String)newValue);
@@ -904,9 +855,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 			case LibraryElementPackage.CONNECTION__ATTRIBUTES:
 				getAttributes().clear();
 				return;
-			case LibraryElementPackage.CONNECTION__FILE_MARKER_ID:
-				setFileMarkerId(FILE_MARKER_ID_EDEFAULT);
-				return;
 			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
 				setErrorMessage(ERROR_MESSAGE_EDEFAULT);
 				return;
@@ -945,8 +893,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 				return COMMENT_EDEFAULT == null ? comment != null : !COMMENT_EDEFAULT.equals(comment);
 			case LibraryElementPackage.CONNECTION__ATTRIBUTES:
 				return attributes != null && !attributes.isEmpty();
-			case LibraryElementPackage.CONNECTION__FILE_MARKER_ID:
-				return fileMarkerId != FILE_MARKER_ID_EDEFAULT;
 			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
 				return ERROR_MESSAGE_EDEFAULT == null ? errorMessage != null : !ERROR_MESSAGE_EDEFAULT.equals(errorMessage);
 			case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
@@ -979,7 +925,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 		}
 		if (baseClass == ErrorMarkerRef.class) {
 			switch (derivedFeatureID) {
-				case LibraryElementPackage.CONNECTION__FILE_MARKER_ID: return LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID;
 				case LibraryElementPackage.CONNECTION__ERROR_MESSAGE: return LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE;
 				default: return -1;
 			}
@@ -1007,7 +952,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 		}
 		if (baseClass == ErrorMarkerRef.class) {
 			switch (baseFeatureID) {
-				case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID: return LibraryElementPackage.CONNECTION__FILE_MARKER_ID;
 				case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE: return LibraryElementPackage.CONNECTION__ERROR_MESSAGE;
 				default: return -1;
 			}
@@ -1034,8 +978,6 @@ public abstract class ConnectionImpl extends EObjectImpl implements Connection {
 		result.append(name);
 		result.append(", comment: "); //$NON-NLS-1$
 		result.append(comment);
-		result.append(", fileMarkerId: "); //$NON-NLS-1$
-		result.append(fileMarkerId);
 		result.append(", errorMessage: "); //$NON-NLS-1$
 		result.append(errorMessage);
 		result.append(", resTypeConnection: "); //$NON-NLS-1$

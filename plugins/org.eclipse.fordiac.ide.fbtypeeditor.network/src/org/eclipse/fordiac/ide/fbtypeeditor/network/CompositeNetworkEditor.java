@@ -1,5 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2009, 2011 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +11,7 @@
  * Contributors:
  *   Gerhard Ebenhofer, Alois Zoitl, Monika Wenger
  *     - initial API and implementation and/or initial documentation
+ *   Martin Jobst - refactor marker handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.network;
 
@@ -21,6 +23,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.FBTypePaletteViewerProvider;
 import org.eclipse.fordiac.ide.application.utilities.FbTypeTemplateTransferDropTargetListener;
@@ -28,13 +32,12 @@ import org.eclipse.fordiac.ide.fbtypeeditor.FBTypeEditDomain;
 import org.eclipse.fordiac.ide.fbtypeeditor.contentprovider.InterfaceContextMenuProvider;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.editparts.CompositeNetworkEditPartFactory;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
@@ -114,9 +117,7 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	}
 
 	EditPart getEditPartForSelection(Object selectedElement) {
-		@SuppressWarnings("rawtypes")
-		final
-		Map map = getGraphicalViewer().getEditPartRegistry();
+		final Map<?, ?> map = getGraphicalViewer().getEditPartRegistry();
 
 		for (final Object key : map.keySet()) {
 			if (((key instanceof FB) && (((FB) key) == selectedElement)) || //
@@ -204,15 +205,9 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 	@Override
 	public void gotoMarker(final IMarker marker) {
 		try {
-			final Map<String, Object> attributes = marker.getAttributes();
-			if (FordiacMarkerHelper.markerTargetsFBNetworkElement(marker)) {
-				final Object location = attributes.get(IMarker.LOCATION);
-				if (location instanceof String) {
-					final FBNetworkElement fbne = getModel().getElementNamed((String) location);
-					if (null != fbne) {
-						selectElement(fbne);
-					}
-				}
+			final EObject target = FordiacErrorMarker.getTargetEditable(marker);
+			if (target != null) {
+				selectElement(target);
 			}
 		} catch (final CoreException e) {
 			FordiacLogHelper.logError("Could not get marker attributes", e); //$NON-NLS-1$
@@ -221,7 +216,18 @@ public class CompositeNetworkEditor extends FBNetworkEditor implements IFBTEdito
 
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
-		return FordiacMarkerHelper.markerTargetsFBNetworkElement(marker);
+		if (FordiacErrorMarker.markerTargetsValue(marker)) {
+			try {
+				final EObject target = FordiacErrorMarker.getTargetEditable(marker);
+				return EcoreUtil.isAncestor(getModel(), target);
+			} catch (final CoreException e) {
+				FordiacLogHelper.logWarning("Could not get marker attributes", e); //$NON-NLS-1$
+			}
+			return false;
+		}
+		return FordiacErrorMarker.markerTargetsFBNetworkElement(marker)
+				|| FordiacErrorMarker.markerTargetsErrorMarkerInterface(marker)
+				|| FordiacErrorMarker.markerTargetsConnection(marker);
 	}
 
 	@Override

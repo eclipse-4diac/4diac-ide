@@ -26,7 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.commands.Command;
 
 public class ResourceCreateCommand extends Command {
@@ -64,19 +63,16 @@ public class ResourceCreateCommand extends Command {
 		// resource name needs to be added after it is inserted in the device so that
 		// name checking works
 		resource.setName(NameRepository.createUniqueName(resource, entry.getTypeName()));
-		SystemManager.INSTANCE.notifyListeners();
 	}
 
 	@Override
 	public void undo() {
 		device.getResource().remove(resource);
-		SystemManager.INSTANCE.notifyListeners();
 	}
 
 	@Override
 	public void redo() {
 		device.getResource().add(index, resource);
-		SystemManager.INSTANCE.notifyListeners();
 	}
 
 	private void createResourceInputs() {

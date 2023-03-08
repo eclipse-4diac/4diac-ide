@@ -21,6 +21,8 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 public final class EventManagerUtils {
@@ -84,7 +86,9 @@ public final class EventManagerUtils {
 		if (null != inputVar) {
 			final var pin = type.getInterfaceList().getInterfaceElement(inputVar.getName());
 			if ((pin instanceof VarDeclaration) && pin.isIsInput()) {
-				((VarDeclaration) pin).setValue(inputVar.getValue());
+				final Value sampledValue = LibraryElementFactory.eINSTANCE.createValue();
+				((VarDeclaration) pin).setValue(sampledValue);
+				sampledValue.setValue(inputVar.getValue().getValue());
 			}
 		}
 	}
@@ -96,7 +100,7 @@ public final class EventManagerUtils {
 			if (transaction instanceof FBTransaction) {
 				processFbTransaction((FBTransaction) transaction);
 				((FBTransaction) transaction).getOutputEventOccurrences()
-						.forEach(outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
+				.forEach(outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
 				if (moreTransactionsLeft(transactions, i)) {
 					final FBRuntimeAbstract newfbRuntime = EcoreUtil
 							.copy(getLatestNetworkRuntime((FBTransaction) transaction));

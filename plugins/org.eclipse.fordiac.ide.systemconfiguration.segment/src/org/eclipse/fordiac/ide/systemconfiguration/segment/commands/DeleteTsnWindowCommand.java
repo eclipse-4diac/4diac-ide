@@ -13,13 +13,17 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.segment.commands;
 
+import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
 import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 
 public class DeleteTsnWindowCommand extends Command {
 	private final TsnConfiguration config;
 	private final TsnWindow toDelete;
+	private final CompoundCommand unmapCommands = new CompoundCommand();
 
 	public DeleteTsnWindowCommand(final TsnConfiguration config, final TsnWindow toDelete) {
 		this.config = config;
@@ -33,16 +37,26 @@ public class DeleteTsnWindowCommand extends Command {
 
 	@Override
 	public void execute() {
+		handleMappedElements();
 		config.getWindows().remove(toDelete);
+	}
+
+	private void handleMappedElements() {
+		for (final FBNetworkElement el : toDelete.getMappedElements()) {
+			unmapCommands.add(new UnmapCommand(el));
+		}
+		unmapCommands.execute();
 	}
 
 	@Override
 	public void undo() {
 		config.getWindows().add(toDelete);
+		unmapCommands.undo();
 	}
 
 	@Override
 	public void redo() {
 		config.getWindows().remove(toDelete);
+		unmapCommands.redo();
 	}
 }

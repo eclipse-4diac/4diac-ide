@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.systemconfiguration.segment.properties;
 
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.Messages;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationFactory;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
@@ -23,6 +24,7 @@ import org.eclipse.fordiac.ide.systemconfiguration.segment.commands.ChangeTsnWin
 import org.eclipse.fordiac.ide.systemconfiguration.segment.commands.CreateTsnWindowCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.commands.DeleteTsnWindowCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.providers.TsnWindowLabelProvider;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.widget.MappedFbMenu;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
@@ -66,12 +68,12 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 
 	private static void createCycleTimeArea(final TabbedPropertySheetWidgetFactory widgetFactory,
 			final TsnConfiguration tsnConfig, final Composite detailsComp, final CommandExecutor executor) {
-		final Label cycleTimeLbl = widgetFactory.createLabel(detailsComp, "Cycle Time: TIME#");
+		final Label cycleTimeLbl = widgetFactory.createLabel(detailsComp, Messages.TsnDetails_CycleTime);
 		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).applyTo(cycleTimeLbl);
 		final Text cycleTimeValue = widgetFactory.createText(detailsComp, String.valueOf(tsnConfig.getCycleTime()));
 		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).grab(true, false).applyTo(cycleTimeValue);
 		cycleTimeValue.requestLayout();
-		final Label msLbl = widgetFactory.createLabel(detailsComp, "ms");
+		final Label msLbl = widgetFactory.createLabel(detailsComp, Messages.TsnDetails_MS);
 		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).applyTo(msLbl);
 
 		cycleTimeValue.addModifyListener(event -> executor
@@ -93,7 +95,7 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 				new TextCellEditor(table), new TextCellEditor(table) });
 		windowViewer.setColumnProperties(new String[] { NAME_COL, VALUE_COL, TYPE_COL, COMMENT_COL });
 		windowViewer.setCellModifier(new TimeSlotCellModifier(windowViewer, executor));
-
+		MappedFbMenu.addContextMenu(windowViewer);
 		windowViewer.setInput(tsnConfig.getWindows());
 		configureButtonList(windowViewer, buttons, tsnConfig, executor);
 	}
@@ -175,4 +177,5 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 			viewer.refresh();
 		}
 	}
+
 }

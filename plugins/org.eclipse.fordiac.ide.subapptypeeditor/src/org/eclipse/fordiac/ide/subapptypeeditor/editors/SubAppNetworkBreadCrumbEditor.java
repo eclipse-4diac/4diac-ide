@@ -22,7 +22,7 @@ import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.editors.IFBTEditorPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppInstanceViewerInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeInstanceViewer;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
@@ -191,11 +191,6 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 	}
 
 	@Override
-	protected void gotoFBNetworkElement(final Object object) {
-		// TODO implement fb search and select
-	}
-
-	@Override
 	public void selectionChanged(final IWorkbenchPart part, final ISelection selection) {
 		// TODO Auto-generated method stub
 
@@ -232,9 +227,9 @@ public class SubAppNetworkBreadCrumbEditor extends AbstractBreadCrumbEditor impl
 
 	@Override
 	public boolean isMarkerTarget(final IMarker marker) {
-		return FordiacMarkerHelper.markerTargetsFBNetworkElement(marker)
-				|| FordiacMarkerHelper.markerTargetsConnection(marker)
-				|| FordiacMarkerHelper.markerTargetsValue(marker);
+		return FordiacErrorMarker.markerTargetsFBNetworkElement(marker)
+				|| FordiacErrorMarker.markerTargetsErrorMarkerInterface(marker)
+				|| FordiacErrorMarker.markerTargetsConnection(marker) || FordiacErrorMarker.markerTargetsValue(marker);
 	}
 
 	@Override

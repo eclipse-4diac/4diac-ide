@@ -19,8 +19,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
+import static extension org.eclipse.xtext.EcoreUtil2.getContainerOfType
 
 @FinalFieldsConstructor
 class ECTransitionEvaluator extends StructuredTextEvaluator {
@@ -39,7 +39,7 @@ class ECTransitionEvaluator extends StructuredTextEvaluator {
 			val warnings = newArrayList
 			val infos = newArrayList
 			parseResult = transition.conditionExpression.parse(
-				switch (root : transition.rootContainer) { FBType: root },
+				transition.getContainerOfType(FBType),
 				errors,
 				warnings,
 				infos

@@ -25,7 +25,7 @@ import java.util.Map
 import org.eclipse.fordiac.ide.export.forte_ng.base.BaseFBImplTemplate
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECState
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
@@ -104,10 +104,12 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 		}
 	}
 
-	def protected dispatch generateTransitionEvent(Event event) { event.generateEventName }
-
-	def protected dispatch generateTransitionEvent(AdapterEvent event) //
-	'''«EXPORT_PREFIX»«event.adapterDeclaration.name»().«event.adapterEventName»()'''
+	def protected generateTransitionEvent(Event event) {
+		if(event.FBNetworkElement instanceof AdapterFB){
+			return '''«EXPORT_PREFIX»«event.FBNetworkElement.name»().«event.name»()'''
+		} 
+		event.generateEventName
+	}
 
 	def protected generateStateName(ECState state) '''scm_nState«state.name»'''
 }

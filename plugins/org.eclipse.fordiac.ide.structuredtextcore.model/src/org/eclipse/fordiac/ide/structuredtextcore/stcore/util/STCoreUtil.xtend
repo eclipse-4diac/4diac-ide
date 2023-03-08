@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.model.data.WordType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
@@ -394,6 +395,8 @@ final class STCoreUtil {
 				} catch (ArithmeticException e) {
 					null // invalid declaration
 				}
+			AdapterDeclaration:
+				feature.adapterFB?.type
 			FB:
 				feature.type
 			default:

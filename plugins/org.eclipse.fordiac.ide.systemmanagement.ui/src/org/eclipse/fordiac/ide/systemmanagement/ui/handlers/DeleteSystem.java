@@ -34,25 +34,25 @@ import org.eclipse.ui.handlers.HandlerUtil;
 public class DeleteSystem extends AbstractHandler {
 
 	@Override
-	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
-		List<IProject> projectSelection = getSelectedProjects(selection);
+	public Object execute(final ExecutionEvent event) throws ExecutionException {
+		final ISelection selection = HandlerUtil.getCurrentSelection(event);
+		final List<IProject> projectSelection = getSelectedProjects(selection);
 		runDeleteAction(projectSelection);
 		return null;
 	}
 
-	private static void runDeleteAction(List<IProject> projectSelection) {
-		DeleteResourceAction action = new DeleteResourceAction(() -> Display.getDefault().getActiveShell());
+	private static void runDeleteAction(final List<IProject> projectSelection) {
+		final DeleteResourceAction action = new DeleteResourceAction(() -> Display.getDefault().getActiveShell());
 		action.selectionChanged(new StructuredSelection(projectSelection));
 		action.run();
 	}
 
-	private static List<IProject> getSelectedProjects(ISelection selection) {
-		List<IProject> projectSelection = new ArrayList<>();
+	private static List<IProject> getSelectedProjects(final ISelection selection) {
+		final List<IProject> projectSelection = new ArrayList<>();
 		if (selection instanceof IStructuredSelection) {
-			for (Object element : ((StructuredSelection) selection).toList()) {
+			for (final Object element : ((StructuredSelection) selection).toList()) {
 				if (element instanceof AutomationSystem) {
-					projectSelection.add(((AutomationSystem) element).getSystemFile().getProject());
+					projectSelection.add(((AutomationSystem) element).getTypeLibrary().getProject());
 				} else if (element instanceof IProject) {
 					projectSelection.add((IProject) element);
 				}

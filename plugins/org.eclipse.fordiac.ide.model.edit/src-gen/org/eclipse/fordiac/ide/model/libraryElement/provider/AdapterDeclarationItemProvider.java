@@ -24,6 +24,7 @@ import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -37,6 +38,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
@@ -76,7 +78,6 @@ public class AdapterDeclarationItemProvider extends ItemProviderAdapter implemen
 			addTypePropertyDescriptor(object);
 			addTypeNamePropertyDescriptor(object);
 			addAdapterFBPropertyDescriptor(object);
-			addTypeEntryPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
 	}
@@ -258,25 +259,33 @@ public class AdapterDeclarationItemProvider extends ItemProviderAdapter implemen
 	}
 
 	/**
-	 * This adds a property descriptor for the Type Entry feature.
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected void addTypeEntryPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_AdapterDeclaration_typeEntry_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_AdapterDeclaration_typeEntry_feature", "_UI_AdapterDeclaration_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.ADAPTER_DECLARATION__TYPE_ENTRY,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(LibraryElementPackage.Literals.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB);
+		}
+		return childrenFeatures;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	protected EStructuralFeature getChildFeature(Object object, Object child) {
+		// Check the type of the specified child object and return the proper feature to use for
+		// adding (see {@link AddCommand}) it as a child.
+
+		return super.getChildFeature(object, child);
 	}
 
 	/**
@@ -321,8 +330,10 @@ public class AdapterDeclarationItemProvider extends ItemProviderAdapter implemen
 			case LibraryElementPackage.ADAPTER_DECLARATION__ATTRIBUTES:
 			case LibraryElementPackage.ADAPTER_DECLARATION__IS_INPUT:
 			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_NAME:
-			case LibraryElementPackage.ADAPTER_DECLARATION__TYPE_ENTRY:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
+				return;
+			case LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB:
+				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 				return;
 			default:
 				super.notifyChanged(notification);
@@ -340,6 +351,11 @@ public class AdapterDeclarationItemProvider extends ItemProviderAdapter implemen
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
+
+		newChildDescriptors.add
+			(createChildParameter
+				(LibraryElementPackage.Literals.ADAPTER_DECLARATION__ADAPTER_NETWORK_FB,
+				 LibraryElementFactory.eINSTANCE.createAdapterFB()));
 	}
 
 	/**

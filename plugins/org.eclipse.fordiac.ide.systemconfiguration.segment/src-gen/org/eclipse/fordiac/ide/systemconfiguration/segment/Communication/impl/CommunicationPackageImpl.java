@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationFactory;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
 
@@ -39,6 +40,11 @@ public class CommunicationPackageImpl extends EPackageImpl implements Communicat
 	 *
 	 * @generated */
 	private EClass tsnWindowEClass = null;
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	private EClass defaultConfigurationEClass = null;
 
 	/** Creates an instance of the model <b>Package</b>, registered with {@link org.eclipse.emf.ecore.EPackage.Registry
 	 * EPackage.Registry} by the package package URI value.
@@ -146,6 +152,22 @@ public class CommunicationPackageImpl extends EPackageImpl implements Communicat
 	 *
 	 * @generated */
 	@Override
+	public EClass getDefaultConfiguration() {
+		return defaultConfigurationEClass;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public EReference getDefaultConfiguration_Target() {
+		return (EReference) defaultConfigurationEClass.getEStructuralFeatures().get(0);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
 	public CommunicationFactory getCommunicationFactory() {
 		return (CommunicationFactory) getEFactoryInstance();
 	}
@@ -171,6 +193,9 @@ public class CommunicationPackageImpl extends EPackageImpl implements Communicat
 
 		tsnWindowEClass = createEClass(TSN_WINDOW);
 		createEAttribute(tsnWindowEClass, TSN_WINDOW__DURATION);
+
+		defaultConfigurationEClass = createEClass(DEFAULT_CONFIGURATION);
+		createEReference(defaultConfigurationEClass, DEFAULT_CONFIGURATION__TARGET);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -204,7 +229,8 @@ public class CommunicationPackageImpl extends EPackageImpl implements Communicat
 
 		// Add supertypes to classes
 		tsnConfigurationEClass.getESuperTypes().add(theLibraryElementPackage.getCommunicationConfiguration());
-		tsnWindowEClass.getESuperTypes().add(theLibraryElementPackage.getINamedElement());
+		tsnWindowEClass.getESuperTypes().add(theLibraryElementPackage.getCommunicationMappingTarget());
+		defaultConfigurationEClass.getESuperTypes().add(theLibraryElementPackage.getCommunicationConfiguration());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(tsnConfigurationEClass, TsnConfiguration.class, "TsnConfiguration", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
@@ -213,8 +239,13 @@ public class CommunicationPackageImpl extends EPackageImpl implements Communicat
 				TsnConfiguration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE,
 				!IS_DERIVED, IS_ORDERED);
 		initEReference(getTsnConfiguration_Windows(), this.getTsnWindow(), null, "windows", null, 1, 8, //$NON-NLS-1$
-				TsnConfiguration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES,
+				TsnConfiguration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(tsnConfigurationEClass, theXMLTypePackage.getString(), "getId", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(tsnConfigurationEClass, theLibraryElementPackage.getCommunicationMappingTarget(),
+				"getMappingTargets", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(tsnWindowEClass, TsnWindow.class, "TsnWindow", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
@@ -222,6 +253,17 @@ public class CommunicationPackageImpl extends EPackageImpl implements Communicat
 				!IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(tsnWindowEClass, theXMLTypePackage.getString(), "getName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		initEClass(defaultConfigurationEClass, DefaultConfiguration.class, "DefaultConfiguration", !IS_ABSTRACT, //$NON-NLS-1$
+				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getDefaultConfiguration_Target(), theLibraryElementPackage.getCommunicationMappingTarget(), null,
+				"target", null, 1, 1, DefaultConfiguration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
+				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		addEOperation(defaultConfigurationEClass, theXMLTypePackage.getString(), "getId", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(defaultConfigurationEClass, theLibraryElementPackage.getCommunicationMappingTarget(),
+				"getMappingTargets", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		// Create resource
 		createResource(eNS_URI);

@@ -149,7 +149,7 @@ public final class NatTableWidgetFactory {
 
 	public static NatTable createRowNatTable(final Composite parent, final DataLayer bodyDataLayer,
 			final IDataProvider columnHeaderProvider, final IEditableRule editableRule,
-			final AbstractSelectionButton proposalButton, final I4diacNatTableUtil section, final Boolean isInput) {
+			final AbstractSelectionButton proposalButton, final I4diacNatTableUtil section, final boolean isInput) {
 
 		setColumnWidths(bodyDataLayer);
 

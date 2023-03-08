@@ -84,6 +84,18 @@ public class ResourceDeploymentData {
 		return params;
 	}
 
+	public void addFbs(final FBDeploymentData fb) {
+		fbs.add(fb);
+	}
+
+	public void addConnections(final ConnectionDeploymentData connection) {
+		connections.add(connection);
+	}
+
+	public void addParameter(final ParameterData param) {
+		params.add(param);
+	}
+
 	public ResourceDeploymentData(final Resource res) {
 		this.res = res;
 		addFBNetworkElements(new ArrayDeque<>(), res.getFBNetwork(), ""); //$NON-NLS-1$

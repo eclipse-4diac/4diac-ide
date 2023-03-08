@@ -27,5 +27,8 @@ Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.ui.workbench,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.model.eval,
- org.eclipse.fordiac.ide.model.edit
+ org.eclipse.fordiac.ide.model.edit,
+ org.eclipse.core.commands,
+ org.eclipse.jface,
+ org.eclipse.gef
 Bundle-ActivationPolicy: lazy

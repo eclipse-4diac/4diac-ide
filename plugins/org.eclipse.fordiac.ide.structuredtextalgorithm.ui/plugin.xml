@@ -230,6 +230,10 @@
         class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
         uriExtension="fbt">
   </resourceServiceProvider>
+  <resourceServiceProvider
+        class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+        uriExtension="sys">
+  </resourceServiceProvider>
 	</extension>
 	<!-- Quick Outline -->
 	<extension
@@ -452,5 +456,11 @@
              id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.keyword_STAlgorithm">
        </keywordReference>
     </page>
+ </extension>
+ <extension
+       point="org.eclipse.xtext.builder.participant">
+    <participant
+          class="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.STAlgorithmExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextalgorithm.ui.builder.STAlgorithmInitialValueBuilderParticipant">
+    </participant>
  </extension>
 </plugin>

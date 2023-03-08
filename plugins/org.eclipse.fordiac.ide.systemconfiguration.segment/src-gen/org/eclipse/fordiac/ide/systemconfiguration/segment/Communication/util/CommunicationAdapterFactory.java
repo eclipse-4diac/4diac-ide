@@ -126,6 +126,19 @@ public class CommunicationAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/** Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration <em>Default
+	 * Configuration</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
+	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
+	 * -->
+	 *
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration
+	 * @generated */
+	public Adapter createDefaultConfigurationAdapter() {
+		return null;
+	}
+
+	/** Creates a new adapter for an object of class
 	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration <em>Communication
 	 * Configuration</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
 	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
@@ -147,6 +160,30 @@ public class CommunicationAdapterFactory extends AdapterFactoryImpl {
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 	 * @generated */
 	public Adapter createINamedElementAdapter() {
+		return null;
+	}
+
+	/** Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.model.libraryElement.MappingTarget
+	 * <em>Mapping Target</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
+	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
+	 * -->
+	 *
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.MappingTarget
+	 * @generated */
+	public Adapter createMappingTargetAdapter() {
+		return null;
+	}
+
+	/** Creates a new adapter for an object of class
+	 * '{@link org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget <em>Communication Mapping
+	 * Target</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily ignore
+	 * cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
+	 *
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget
+	 * @generated */
+	public Adapter createCommunicationMappingTargetAdapter() {
 		return null;
 	}
 

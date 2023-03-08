@@ -25,8 +25,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.ui.Messages;
@@ -63,32 +62,32 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 
 		inputElement.forEach((key, val) -> {
 			if (val != null && !val.isEmpty()) {
-			val.forEach(value -> {
-				if (key.equals(Messages.DataTypeDropdown_Elementary_Types)) {
-					final Optional<DataType> type = dataTypes.stream()
-							.filter(dataType -> dataType.getName().equals(value))
-							.findFirst();
-					final TypeNode newNode = new TypeNode(type.get().getName(), type.get());
-					elementaries.addChild(newNode);
-				} else if (key.equals(Messages.DataTypeDropdown_STRUCT_Types)) {
-					final Optional<StructuredType> type = structuredTypes.stream()
-							.filter(structType -> structType.getName().equals(value))
-							.findFirst();
-					if (type.isPresent()) {
-						if(null != type.get().getTypeEntry()) {
-							final IPath parentPath = type.get().getTypeEntry().getFile().getParent()
-									.getProjectRelativePath();
-							createSubdirectories(structures, type.get(), parentPath);
-						} else {
-							final TypeNode runtimeNode = new TypeNode(type.get().getName(), type.get());
-							runtimeNode.setParent(structures);
-							structures.addChild(runtimeNode);
+				val.forEach(value -> {
+					if (key.equals(Messages.DataTypeDropdown_Elementary_Types)) {
+						final Optional<DataType> type = dataTypes.stream()
+								.filter(dataType -> dataType.getName().equals(value))
+								.findFirst();
+						final TypeNode newNode = new TypeNode(type.get().getName(), type.get());
+						elementaries.addChild(newNode);
+					} else if (key.equals(Messages.DataTypeDropdown_STRUCT_Types)) {
+						final Optional<StructuredType> type = structuredTypes.stream()
+								.filter(structType -> structType.getName().equals(value))
+								.findFirst();
+						if (type.isPresent()) {
+							if(null != type.get().getTypeEntry()) {
+								final IPath parentPath = type.get().getTypeEntry().getFile().getParent()
+										.getProjectRelativePath();
+								createSubdirectories(structures, type.get(), parentPath);
+							} else {
+								final TypeNode runtimeNode = new TypeNode(type.get().getName(), type.get());
+								runtimeNode.setParent(structures);
+								structures.addChild(runtimeNode);
+							}
 						}
 					}
-				}
-			});
-		}});
-		
+				});
+			}});
+
 		if (elementaries.getChildren().isEmpty()) {
 			return structures.getChildren().toArray();
 		} else if (structures.getChildren().isEmpty()) {
@@ -188,10 +187,8 @@ public class TypeSelectionTreeContentProvider implements ITreeContentProvider {
 
 	private static IFile getFileForModel(final EObject sel) {
 		final EObject root = EcoreUtil.getRootContainer(sel);
-		if (root instanceof AutomationSystem) {
-			return ((AutomationSystem) root).getSystemFile();
-		} else if (root instanceof FBType) {
-			return ((FBType) root).getTypeEntry().getFile();
+		if (root instanceof LibraryElement) {
+			return ((LibraryElement) root).getTypeEntry().getFile();
 		}
 		return null;
 	}

@@ -118,7 +118,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	@Override
-	protected String getInitalInstanceName() {
+	protected String getInitialInstanceName() {
 		return "SubApp"; //$NON-NLS-1$
 	}
 

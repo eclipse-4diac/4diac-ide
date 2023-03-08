@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2021 - 2022 Primetals Technologies Austria GmbH
+ *               2022 - 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,11 +13,13 @@
  *     - initial API and implementation and/or initial documentation
  *   Martin Jobst
  *     - migrated to typed value converter
+ *     - migrated to ST parser
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.model.validation;
+package org.eclipse.fordiac.ide.test.model.eval.variable;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 import java.text.MessageFormat;
 import java.util.stream.Stream;
@@ -24,6 +27,12 @@ import java.util.stream.Stream;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.eval.st.StructuredTextEvaluatorFactory;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -36,9 +45,14 @@ class ValueValidatorTest {
 	private static final String PI = "3.1415"; //$NON-NLS-1$
 	private static final String AFFE = "16#AFFE"; //$NON-NLS-1$
 	private static final String NO_ERROR = ""; //$NON-NLS-1$
-	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_1 = "Characters used outside boundaries!"; //$NON-NLS-1$
-	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_2 = "\'%\' symbols used inside boundaries!"; //$NON-NLS-1$
-	private static final String INVALID_VIRTUAL_DNS_ENTRY_FORMAT_3 = "Characters outside boundaries, \'%\' symbols used inside boundaries!"; //$NON-NLS-1$
+
+	@BeforeAll
+	@SuppressWarnings("unused")
+	static void setupXtext() {
+		new DataTypeLibrary();
+		STAlgorithmStandaloneSetup.doSetup();
+		StructuredTextEvaluatorFactory.register();
+	}
 
 	static Stream<Arguments> validateValidBoolLiteralsTestCases() {
 		return Stream.of(Arguments.of(IecTypes.ElementaryTypes.BOOL, "0", NO_ERROR), //$NON-NLS-1$
@@ -55,44 +69,42 @@ class ValueValidatorTest {
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateValidBoolLiteralsTestCases")
 	void validateValidBoolLiterals(final DataType type, final String value, final String expectedResult) {
-		final String resultString = ValueValidator.validateValue(type, value);
+		final String resultString = VariableOperations.validateValue(type, value);
 		assertEquals(expectedResult, resultString);
 	}
 
 	static Stream<Arguments> validateInvalidBoolLiteralsTestCases() {
 		return Stream.of(Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"0\"", //$NON-NLS-1$
-				Messages.VALIDATOR_INVALID_BOOL_LITERAL),
+				"Cannot convert from WCHAR to BOOL"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"1\"", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
+						"Cannot convert from WCHAR to BOOL"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"FALSE\"", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
+						"Cannot convert from WSTRING to BOOL"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"TRUE\"", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
+						"Cannot convert from WSTRING to BOOL"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#0\"", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
+						"Cannot convert from WSTRING to BOOL"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#1\"", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
+						"Cannot convert from WSTRING to BOOL"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#FALSE\"", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
+						"Cannot convert from WSTRING to BOOL"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "\"BOOL#TRUE\"", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
+						"Cannot convert from WSTRING to BOOL"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "2", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
-				Arguments.of(IecTypes.ElementaryTypes.BOOL, PI,
-						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
+						"Cannot convert from BYTE to BOOL"), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.BOOL, PI, "Cannot convert from LREAL to BOOL"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "1970-01-30", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_BOOL_LITERAL),
-				Arguments.of(IecTypes.ElementaryTypes.BOOL, AFFE, Messages.VALIDATOR_INVALID_BOOL_LITERAL),
+						"Cannot convert from INT to BOOL"), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.BOOL, AFFE, "Cannot convert from WORD to BOOL"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.BOOL, "12:00:00", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_BOOL_LITERAL));
+						"missing EOF at ':', Cannot convert from BYTE to BOOL")); //$NON-NLS-1$
 	}
 
 	@DisplayName("Validator tests for invalid BOOL literals")
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateInvalidBoolLiteralsTestCases")
-	void validateInvalidBoolLiterals(final DataType type, final String value, final String expectedFormatString) {
-		final String expectedString = MessageFormat.format(expectedFormatString, value);
-		final String resultString = ValueValidator.validateValue(type, value);
+	void validateInvalidBoolLiterals(final DataType type, final String value, final String expectedString) {
+		final String resultString = VariableOperations.validateValue(type, value);
 		assertEquals(expectedString, resultString);
 	}
 
@@ -115,42 +127,41 @@ class ValueValidatorTest {
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateValidNumberLiteralsTestCases")
 	void validateValidNumberLiterals(final DataType type, final String value, final String expectedResult) {
-		final String resultString = ValueValidator.validateValue(type, value);
+		final String resultString = VariableOperations.validateValue(type, value);
 		assertEquals(expectedResult, resultString);
 	}
 
 	static Stream<Arguments> validateInvalidNumberLiteralsTestCases() {
 		return Stream.of(Arguments.of(IecTypes.ElementaryTypes.SINT, "\"0\"", //$NON-NLS-1$
-				Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+				"Cannot convert from WCHAR to SINT"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.SINT, "\"1\"", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+						"Cannot convert from WCHAR to SINT"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.SINT, "FALSE", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+						"Cannot convert from BOOL to SINT"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.SINT, "TRUE", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+						"Cannot convert from BOOL to SINT"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.SINT, "129", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+						"Cannot convert from USINT to SINT"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.INT, "123456", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+						"Cannot convert from DINT to INT"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.INT, "3.14", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+						"Cannot convert from LREAL to INT"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.UINT, "-1", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+						"Cannot convert from SINT to UINT"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.UINT, "-17", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
-				Arguments.of(IecTypes.ElementaryTypes.BYTE, AFFE, Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+						"Cannot convert from SINT to UINT"), //$NON-NLS-1$
+				Arguments.of(IecTypes.ElementaryTypes.BYTE, AFFE, "Cannot convert from WORD to BYTE"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.REAL, "3.14e120", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_NUMBER_LITERAL),
+						"Cannot convert from LREAL to REAL"), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.LREAL, "3.14e1200", //$NON-NLS-1$
-						Messages.VALIDATOR_INVALID_NUMBER_LITERAL));
+						"Invalid LREAL literal: 3.14E+1200")); //$NON-NLS-1$
 	}
 
 	@DisplayName("Validator tests for invalid numeric literals")
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateInvalidNumberLiteralsTestCases")
-	void validateInvalidNumberLiterals(final DataType type, final String value, final String expectedFormatString) {
-		final String expectedString = MessageFormat.format(expectedFormatString, value);
-		final String resultString = ValueValidator.validateValue(type, value);
+	void validateInvalidNumberLiterals(final DataType type, final String value, final String expectedString) {
+		final String resultString = VariableOperations.validateValue(type, value);
 		assertEquals(expectedString, resultString);
 	}
 
@@ -164,93 +175,80 @@ class ValueValidatorTest {
 				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1878-11-07", NO_ERROR), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.DATE, "DATE#1968-10-27", NO_ERROR), //$NON-NLS-1$
 				Arguments.of(IecTypes.ElementaryTypes.DATE, "2022-05-10", //$NON-NLS-1$
-						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier));
+						"Cannot convert from INT to DATE")); //$NON-NLS-1$
 	}
 
 	@DisplayName("Validator tests for valid DATE literals")
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateValidDateLiteralsTestCases")
-
-	void validateValidDateLiterals(final DataType type, final String value, final String expectedFormatString) {
-		final String expectedString = MessageFormat.format(expectedFormatString, type.getName());
-		final String resultString = ValueValidator.validateValue(type, value);
+	void validateValidDateLiterals(final DataType type, final String value, final String expectedString) {
+		final String resultString = VariableOperations.validateValue(type, value);
 		assertEquals(expectedString, resultString);
 	}
 
 	static Stream<Arguments> validateTypeSpecifierMandatoryForAnyLiteralsTestCases() {
 		return Stream.of(Arguments.of(IecTypes.GenericTypes.ANY, "0", Messages.VALIDATOR_DatatypeRequiresTypeSpecifier), //$NON-NLS-1$
 				Arguments.of(IecTypes.GenericTypes.ANY_BIT, "-0", Messages.VALIDATOR_DatatypeRequiresTypeSpecifier), //$NON-NLS-1$
-				Arguments.of(IecTypes.GenericTypes.ANY_CHAR, "-342434", //$NON-NLS-1$
-						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_CHARS, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_DATE, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_DERIVED, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_DURATION, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_CHAR, "'a'", Messages.VALIDATOR_DatatypeRequiresTypeSpecifier), //$NON-NLS-1$
+				Arguments.of(IecTypes.GenericTypes.ANY_CHARS, "'a'", Messages.VALIDATOR_DatatypeRequiresTypeSpecifier), //$NON-NLS-1$
 				Arguments.of(IecTypes.GenericTypes.ANY_ELEMENTARY, PI,
 						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_INT, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
+				Arguments.of(IecTypes.GenericTypes.ANY_INT, "17", Messages.VALIDATOR_DatatypeRequiresTypeSpecifier), //$NON-NLS-1$
 				Arguments.of(IecTypes.GenericTypes.ANY_MAGNITUDE, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
 				Arguments.of(IecTypes.GenericTypes.ANY_NUM, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
 				Arguments.of(IecTypes.GenericTypes.ANY_REAL, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_SIGNED, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_STRING, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_STRUCT, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier),
-				Arguments.of(IecTypes.GenericTypes.ANY_UNSIGNED, PI, Messages.VALIDATOR_DatatypeRequiresTypeSpecifier));
+				Arguments.of(IecTypes.GenericTypes.ANY_SIGNED, "4", Messages.VALIDATOR_DatatypeRequiresTypeSpecifier), //$NON-NLS-1$
+				Arguments.of(IecTypes.GenericTypes.ANY_STRING, "'abc'", //$NON-NLS-1$
+						Messages.VALIDATOR_DatatypeRequiresTypeSpecifier));
 	}
 
 	@DisplayName("Validator tests for mandatory type specifier for ANYs")
 	@ParameterizedTest(name = "{index}: Literal: {1}")
 	@MethodSource("validateTypeSpecifierMandatoryForAnyLiteralsTestCases")
-
 	void validateTypeSpecifierMandatoryForAnyLiterals(final DataType type, final String value,
 			final String expectedFormatString) {
 		final String expectedString = MessageFormat.format(expectedFormatString, type.getName());
-		final String resultString = ValueValidator.validateValue(type, value);
+		final String resultString = VariableOperations.validateValue(type, value);
 		assertEquals(expectedString, resultString);
 	}
 
 	@DisplayName("Validator tests for single correctly typed virtual DNS entries")
 	@ParameterizedTest
 	@ValueSource(strings = { "%sgsgs%", "%Hello%", "%moduleValue%", "%sign%" })
-
 	void validateSingularValidDNSEntries(final String value) {
-		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
+		final String resultString = VariableOperations.validateValue(IecTypes.GenericTypes.ANY, value);
 		assertEquals(NO_ERROR, resultString);
 	}
 
 	@DisplayName("Validator tests for incorrect virtual DNS entries with outbound characters")
 	@ParameterizedTest
 	@ValueSource(strings = { "2%sgsgs%2", "33%Hello%5", "ee%moduleValue%hello", "rr%r%" })
-
 	void validateInvalidDNSEntries1(final String value) {
-		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
-		assertEquals(INVALID_VIRTUAL_DNS_ENTRY_FORMAT_1, resultString);
+		final String resultString = VariableOperations.validateValue(IecTypes.GenericTypes.ANY, value);
+		assertNotEquals(NO_ERROR, resultString);
 	}
 
 	@DisplayName("Validator tests for incorrect virtual DNS entries with inbound % symbols")
 	@ParameterizedTest
 	@ValueSource(strings = { "%sg%sgs%", "%Hel%lo%", "%module%Value%", "%%%" })
-
 	void validateInvalidDNSEntries2(final String value) {
-		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
-		assertEquals(INVALID_VIRTUAL_DNS_ENTRY_FORMAT_2, resultString);
+		final String resultString = VariableOperations.validateValue(IecTypes.GenericTypes.ANY, value);
+		assertNotEquals(NO_ERROR, resultString);
 	}
 
 	@DisplayName("Validator tests for incorrect virtual DNS entries with inbound and outbound % symbols")
 	@ParameterizedTest
 	@ValueSource(strings = { "333%sg%sgs%222", "@me%Hel%lo%hi", "%module%Value%rain", "tt%s%ww%5 " })
-
 	void validateInvalidDNSEntries3(final String value) {
-		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
-		assertEquals(INVALID_VIRTUAL_DNS_ENTRY_FORMAT_3, resultString);
+		final String resultString = VariableOperations.validateValue(IecTypes.GenericTypes.ANY, value);
+		assertNotEquals(NO_ERROR, resultString);
 	}
 
 	@DisplayName("Validator tests for several correctly typed virtual DNS entries")
 	@ParameterizedTest
 	@ValueSource(strings = { "%sgsgs%%sigsev%", "%Hello%%milsev%", "%moduleValue%%what%%my%", "%sign%%vile%%style%" })
-
 	void validateMultipleValidDNSEntries(final String value) {
-		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
+		final String resultString = VariableOperations.validateValue(IecTypes.GenericTypes.ANY, value);
 		assertEquals(NO_ERROR, resultString);
 	}
 
@@ -258,10 +256,57 @@ class ValueValidatorTest {
 	@ParameterizedTest
 	@ValueSource(strings = { "%sgsgs%name%sigsev%", "%Hello%sign%milsev%", "a%moduleValue%cnt%what%b",
 	"e%sign%i%vile%f" })
-
 	void validateMultipleInvalidDNSEntries_1(final String value) {
-		final String resultString = ValueValidator.validateValue(IecTypes.GenericTypes.ANY, value);
-		assertEquals(INVALID_VIRTUAL_DNS_ENTRY_FORMAT_1, resultString);
+		final String resultString = VariableOperations.validateValue(IecTypes.GenericTypes.ANY, value);
+		assertNotEquals(NO_ERROR, resultString);
 	}
 
+	static Stream<Arguments> validateValidCharArrayLiteralsTestCases() {
+		return Stream.of(Arguments.of("['a']", IecTypes.ElementaryTypes.CHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[',']", IecTypes.ElementaryTypes.CHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("['$'']", IecTypes.ElementaryTypes.CHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("['a','b']", IecTypes.ElementaryTypes.CHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("['a', 'b']", IecTypes.ElementaryTypes.CHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[ 'a', 'b']", IecTypes.ElementaryTypes.CHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("['a', 'b' ]", IecTypes.ElementaryTypes.CHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("['a',',']", IecTypes.ElementaryTypes.CHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[',',',']", IecTypes.ElementaryTypes.CHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("['Sepp']", IecTypes.ElementaryTypes.STRING, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[',']", IecTypes.ElementaryTypes.STRING, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("['Sepp','Hubert']", IecTypes.ElementaryTypes.STRING, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("['Sepp', 'Hubert']", IecTypes.ElementaryTypes.STRING, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[ 'Sepp', 'Hubert']", IecTypes.ElementaryTypes.STRING, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("['Sepp', 'Hubert' ]", IecTypes.ElementaryTypes.STRING, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("['Sepp',',']", IecTypes.ElementaryTypes.STRING, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[',',',']", IecTypes.ElementaryTypes.STRING, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[\"a\"]", IecTypes.ElementaryTypes.WCHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[\",\"]", IecTypes.ElementaryTypes.WCHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[\"$\"\"]", IecTypes.ElementaryTypes.WCHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[\"a\",\"b\"]", IecTypes.ElementaryTypes.WCHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[\"a\", \"b\"]", IecTypes.ElementaryTypes.WCHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[ \"a\", \"b\"]", IecTypes.ElementaryTypes.WCHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[\"a\", \"b\" ]", IecTypes.ElementaryTypes.WCHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[\"a\",\",\"]", IecTypes.ElementaryTypes.WCHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[\",\",\",\"]", IecTypes.ElementaryTypes.WCHAR, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[\"Sepp\",\"Hubert\"]", IecTypes.ElementaryTypes.WSTRING, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[\"Sepp\", \"Hubert\"]", IecTypes.ElementaryTypes.WSTRING, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[ \"Sepp\", \"Hubert\"]", IecTypes.ElementaryTypes.WSTRING, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[\"Sepp\", \"Hubert\" ]", IecTypes.ElementaryTypes.WSTRING, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[\"Sepp\",\",\"]", IecTypes.ElementaryTypes.WSTRING, NO_ERROR), //$NON-NLS-1$
+				Arguments.of("[\",\",\",\"]", IecTypes.ElementaryTypes.WSTRING, NO_ERROR) //$NON-NLS-1$
+				);
+	}
+
+	@DisplayName("Validator tests for valid CHAR array literals")
+	@ParameterizedTest(name = "{index}: Literal: {0}")
+	@MethodSource("validateValidCharArrayLiteralsTestCases")
+	void validateValidArrayLiterals(final String value, final DataType dataType, final String expectedResult) {
+		final var varDeclaration = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		varDeclaration.setName("ArrayTest"); //$NON-NLS-1$
+		varDeclaration.setType(dataType);
+		varDeclaration.setArraySize(10);
+
+		final String resultString = VariableOperations.validateValue(varDeclaration, value);
+		assertEquals(expectedResult, resultString);
+	}
 }

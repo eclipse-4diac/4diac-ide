@@ -56,6 +56,12 @@ public final class RuntimeFactory {
 		return null;
 	}
 
+	public static FBRuntimeAbstract createFrom(final FBType fbType, final String startStateName) {
+		final FBRuntimeAbstract rt = createFrom(fbType);
+		setStartState(rt, startStateName);
+		return rt;
+	}
+
 	private static FBRuntimeAbstract createFrom(final BasicFBType fb, final ECState startState) {
 		final BasicFBTypeRuntime basicFBTypeRT = OperationalSemanticsFactory.eINSTANCE.createBasicFBTypeRuntime();
 		basicFBTypeRT.setBasicfbtype(fb);
@@ -91,7 +97,7 @@ public final class RuntimeFactory {
 	public static void setStartState(final FBRuntimeAbstract fbRT, final String startStateName) {
 		if (fbRT instanceof BasicFBTypeRuntime) {
 			final BasicFBTypeRuntime basicFBTypeRT = (BasicFBTypeRuntime) fbRT;
-			if (basicFBTypeRT.getBasicfbtype() == null || basicFBTypeRT.getBasicfbtype().getECC() == null) {
+			if ((basicFBTypeRT.getBasicfbtype() == null) || (basicFBTypeRT.getBasicfbtype().getECC() == null)) {
 				FordiacLogHelper.logWarning("RuntimeFactory could not set start state of FBType"); //$NON-NLS-1$
 				return;
 			}

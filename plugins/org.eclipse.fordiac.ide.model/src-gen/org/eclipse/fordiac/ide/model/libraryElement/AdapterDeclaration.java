@@ -16,8 +16,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Adapter Declaration</b></em>'.
@@ -28,7 +26,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getTypeEntry <em>Type Entry</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterNetworkFB <em>Adapter Network FB</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration()
@@ -37,50 +35,48 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
  */
 public interface AdapterDeclaration extends IInterfaceElement {
 	/**
-	 * Returns the value of the '<em><b>Adapter FB</b></em>' reference.
-	 * It is bidirectional and its opposite is '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl <em>Adapter Decl</em>}'.
+	 * Returns the value of the '<em><b>Adapter FB</b></em>' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Adapter FB</em>' reference.
+	 * @return the value of the '<em>Adapter FB</em>' containment reference.
 	 * @see #setAdapterFB(AdapterFB)
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration_AdapterFB()
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.AdapterFB#getAdapterDecl
-	 * @model opposite="adapterDecl"
+	 * @model containment="true" resolveProxies="true"
 	 * @generated
 	 */
 	AdapterFB getAdapterFB();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}' reference.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterFB <em>Adapter FB</em>}' containment reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Adapter FB</em>' reference.
+	 * @param value the new value of the '<em>Adapter FB</em>' containment reference.
 	 * @see #getAdapterFB()
 	 * @generated
 	 */
 	void setAdapterFB(AdapterFB value);
 
 	/**
-	 * Returns the value of the '<em><b>Type Entry</b></em>' attribute.
+	 * Returns the value of the '<em><b>Adapter Network FB</b></em>' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Type Entry</em>' attribute.
-	 * @see #setTypeEntry(TypeEntry)
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration_TypeEntry()
-	 * @model dataType="org.eclipse.fordiac.ide.model.libraryElement.TypeEntry" transient="true"
+	 * @return the value of the '<em>Adapter Network FB</em>' reference.
+	 * @see #setAdapterNetworkFB(AdapterFB)
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getAdapterDeclaration_AdapterNetworkFB()
+	 * @model
 	 * @generated
 	 */
-	TypeEntry getTypeEntry();
+	AdapterFB getAdapterNetworkFB();
 
 	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getTypeEntry <em>Type Entry</em>}' attribute.
+	 * Sets the value of the '{@link org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration#getAdapterNetworkFB <em>Adapter Network FB</em>}' reference.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Type Entry</em>' attribute.
-	 * @see #getTypeEntry()
+	 * @param value the new value of the '<em>Adapter Network FB</em>' reference.
+	 * @see #getAdapterNetworkFB()
 	 * @generated
 	 */
-	void setTypeEntry(TypeEntry value);
+	void setAdapterNetworkFB(AdapterFB value);
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -88,6 +84,6 @@ public interface AdapterDeclaration extends IInterfaceElement {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	AdapterType getAdapterType();
+	AdapterType getType();
 
 } // AdapterDeclaration

@@ -2,6 +2,7 @@
  * Copyright (c) 2008, 2021 Profactor GmbH, fortiss GmbH, AIT,
  *                          Johannes Keppler University Linz
  *               2022 Primetals Technologies Austria GmbH
+ *               2023 Martin Erich Jobst
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -14,13 +15,13 @@
  *   Alois Zoitl - removed editor check from canUndo
  *   Michael Oberlehner - added support for error marker handling
  *                      - added check for error marker connection
+ *   Martin Jobst - refactor marker handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
 
-import java.util.ArrayList;
-
 import org.eclipse.fordiac.ide.model.commands.Messages;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.helpers.ConnectionsHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -38,8 +39,8 @@ public class DeleteConnectionCommand extends Command {
 	private boolean performMappingCheck;
 	private DeleteConnectionCommand deleteMapped = null;
 	private final CompoundCommand deleteInterfaceErrorMarkers = new CompoundCommand();
+	private final CompoundCommand deleteMarkersCmds = new CompoundCommand();
 	private FBNetworkElement errorFb;
-	private final ArrayList<ErrorMarkerBuilder> deleteConnectionErrorMarkers = new ArrayList<>();
 
 	private boolean keepMarker; // we want to keep the marker
 
@@ -83,17 +84,16 @@ public class DeleteConnectionCommand extends Command {
 			}
 		}
 		checkErrorMarker();
+		deleteMarkersCmds.execute();
 		deleteConnection();
 		deleteInterfaceErrorMarkers.execute();
 	}
 
 	@Override
 	public void redo() {
-		if (!deleteConnectionErrorMarkers.isEmpty()) {
-			deleteConnectionErrorMarkers.forEach(ErrorMarkerBuilder::deleteErrorMarker);
-		}
-		deleteInterfaceErrorMarkers.redo();
+		deleteMarkersCmds.redo();
 		deleteConnection();
+		deleteInterfaceErrorMarkers.redo();
 	}
 
 	private void deleteConnection() {
@@ -119,10 +119,7 @@ public class DeleteConnectionCommand extends Command {
 			deleteMapped.undo();
 		}
 
-		if (!deleteConnectionErrorMarkers.isEmpty()) {
-			deleteConnectionErrorMarkers.forEach(ErrorMarkerBuilder::createMarkerInFile);
-		}
-
+		deleteMarkersCmds.undo();
 	}
 
 	private DeleteConnectionCommand checkAndDeleteMirroredConnection() {
@@ -149,7 +146,8 @@ public class DeleteConnectionCommand extends Command {
 		}
 
 		if (connection.hasError() && !keepMarker) {
-			deleteConnectionErrorMarkers.add(ErrorMarkerBuilder.deleteErrorMarker(connection));
+			deleteMarkersCmds.add(
+					FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(connection)));
 			if (errorFb != null && source instanceof ErrorMarkerInterface
 					&& destination instanceof ErrorMarkerInterface) {
 				deleteInterfaceErrorMarkers.add(new DeleteErrorMarkerCommand((ErrorMarkerInterface) source, errorFb));
@@ -167,7 +165,8 @@ public class DeleteConnectionCommand extends Command {
 		if (source.getOutputConnections().size() == 2) {
 			for (final Connection con : source.getOutputConnections()) {
 				if ((con.getSource() == source) && (con.getDestination() == destination) && con != connection) {
-					deleteConnectionErrorMarkers.add(ErrorMarkerBuilder.deleteErrorMarker(con));
+					deleteMarkersCmds.add(
+							FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(con)));
 				}
 			}
 		}

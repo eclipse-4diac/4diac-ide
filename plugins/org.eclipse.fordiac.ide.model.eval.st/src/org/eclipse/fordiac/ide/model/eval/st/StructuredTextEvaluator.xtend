@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations
 import org.eclipse.fordiac.ide.model.eval.variable.WStringCharacterVariable
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -110,6 +111,10 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected dispatch Variable<?> findVariable(VarDeclaration variable) {
+		(context as FBVariable).value.members.get(variable.name)
+	}
+
+	def protected dispatch Variable<?> findVariable(AdapterDeclaration variable) {
 		(context as FBVariable).value.members.get(variable.name)
 	}
 
@@ -391,6 +396,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def protected dispatch Value evaluateExpression(STFeatureExpression expr) {
 		switch (feature: expr.feature) {
 			VarDeclaration,
+			AdapterDeclaration,
 			STVarDeclaration,
 			ICallable case !expr.call:
 				feature.findVariable.value
@@ -461,6 +467,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 			FBValue:
 				switch (feature : expr.feature) {
 					VarDeclaration,
+					AdapterDeclaration,
 					FB case !expr.call:
 						value.get(expr.feature.name).value
 					FB case expr.call: {
@@ -493,6 +500,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def protected dispatch Variable<?> evaluateVariable(STFeatureExpression expr) {
 		switch (feature: expr.feature) {
 			VarDeclaration,
+			AdapterDeclaration,
 			STVarDeclaration,
 			ICallable case !expr.call:
 				feature.findVariable

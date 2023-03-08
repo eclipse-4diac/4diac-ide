@@ -23,7 +23,6 @@ import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.UntypeSubAppCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -53,7 +52,6 @@ public class UntypeSubApplicationHandler extends AbstractHandler implements Comm
 			refreshSelection(subApp);
 
 			commandStack.addCommandStackEventListener(this);
-			SystemManager.INSTANCE.notifyListeners();
 		}
 		return Status.OK_STATUS;
 	}

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2011 - 2020 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
+ * Copyright (c) 2011, 2023 TU Wien ACIN, Profactor GmbH, fortiss GmbH,
  * 								Johannes Kepler University Linz (JKU)
  *
  * This program and the accompanying materials are made available under the
@@ -11,8 +11,8 @@
  * Contributors:
  *   Alois Zoitl, Gerhard Ebenhofer, Monika Wenger
  *     - initial API and implementation and/or initial documentation
- *   Bianca Wiesmayr
- *     -  consistent dropdown menu edit, redesign ECC
+ *   Bianca Wiesmayr -  consistent dropdown menu edit, redesign ECC
+ *   Alois Zoitl     - updated for new adapter FB handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts;
 
@@ -40,10 +40,10 @@ import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ComboCellEditorLocator;
 import org.eclipse.fordiac.ide.gef.editparts.ComboDirectEditManager;
 import org.eclipse.fordiac.ide.gef.policies.EmptyXYLayoutEditPolicy;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.gef.EditPolicy;
@@ -65,7 +65,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		@Override
 		public void notifyChanged(final Notification notification) {
 			super.notifyChanged(notification);
-			refreshEventLabel();
+			refreshEventLabel(getNameLabel());
 		}
 	};
 
@@ -88,8 +88,7 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		private void handleSet(final Notification notification) {
 			if ((null != getAction().getOutput()) && (notification.getNewValue() instanceof String)
 					&& (isOutputEvent(notification) || isAdapterOutputEvent(notification))) {
-				refreshEventLabel();
-
+				refreshEventLabel(getNameLabel());
 			}
 		}
 
@@ -98,20 +97,26 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		}
 
 		private boolean isAdapterOutputEvent(final Notification notification) {
-			return (getAction().getOutput() instanceof AdapterEvent) && (((AdapterEvent) getAction().getOutput())
-					.getAdapterDeclaration().getName().equals(notification.getNewValue()));
+			return isAdapterNotification(notification.getNewValue(), getAction().getOutput());
 		}
 
 		private void handleRemove(final Notification notification) {
 			if ((notification.getOldValue() == getAction().getOutput())
-					|| ((getAction().getOutput() instanceof AdapterEvent)
-							&& (notification.getOldValue() instanceof AdapterDeclaration)
-							&& (((AdapterEvent) getAction().getOutput()).getAdapterDeclaration() == notification
-							.getOldValue()))) {
+					|| isAdapterNotification(notification.getOldValue(), getAction().getOutput())) {
 				executeCommand(new ChangeOutputCommand(getAction(), null));
 			}
 		}
 	};
+
+	public static boolean isAdapterNotification(final Object change, final Event ev) {
+		if (ev != null) {
+			final FBNetworkElement fbNetworkElement = ev.getFBNetworkElement();
+			return (fbNetworkElement instanceof AdapterFB)
+					&& ((((AdapterFB) fbNetworkElement).getAdapterDecl() == change)
+							|| (fbNetworkElement.getName().equals(change)));
+		}
+		return false;
+	}
 
 	private final IPropertyChangeListener propertyChangeListener = event -> {
 		if (event.getProperty().equals(PreferenceConstants.P_ECC_EVENT_COLOR)) {
@@ -235,14 +240,27 @@ public class ECActionOutputEventEditPart extends AbstractDirectEditableEditPart 
 		eventLabel.setBackgroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_COLOR));
 		eventLabel.setForegroundColor(PreferenceGetter.getColor(PreferenceConstants.P_ECC_EVENT_TEXT_COLOR));
 		eventLabel.setOpaque(true);
-		eventLabel.setText(getAction().getOutput() != null ? getAction().getOutput().getName() : ""); //$NON-NLS-1$
+		refreshEventLabel(eventLabel);
 		eventLabel.setBorder(new MarginBorder(OUTPUT_EVENT_INSETS));
 		eventLabel.setTextAlignment(PositionConstants.LEFT);
 		eventLabel.setLabelAlignment(PositionConstants.LEFT);
 		return eventLabel;
 	}
 
-	private void refreshEventLabel() {
-		getNameLabel().setText(getAction().getOutput() != null ? getAction().getOutput().getName() : ""); //$NON-NLS-1$
+	private void refreshEventLabel(final Label eventLabel) {
+		if (eventLabel != null) {
+			eventLabel.setText(getActionOutputLabelText(getAction().getOutput()));
+		}
+	}
+
+	private static String getActionOutputLabelText(final Event event) {
+		if (event == null) {
+			return ""; //$NON-NLS-1$
+		}
+
+		if (event.getFBNetworkElement() instanceof AdapterFB) {
+			return event.getFBNetworkElement().getName() + "." + event.getName(); //$NON-NLS-1$
+		}
+		return event.getName();
 	}
 }

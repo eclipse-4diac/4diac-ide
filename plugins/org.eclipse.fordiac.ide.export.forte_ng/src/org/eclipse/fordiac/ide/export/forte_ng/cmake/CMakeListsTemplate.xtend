@@ -13,18 +13,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.cmake
 
-import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
-import org.eclipse.fordiac.ide.export.ExportException
 import java.nio.file.Path
+import org.eclipse.fordiac.ide.export.ExportException
+import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportTemplate
 
-class CMakeListsTemplate extends ForteFBTemplate {
+class CMakeListsTemplate extends ForteNgExportTemplate {
 
 	new(String name, Path prefix) {
-		super(name, prefix, null)
-	}
-
-	override protected getType() {
-		return null;
+		super(name, prefix)
 	}
 
 	override generate() throws ExportException '''

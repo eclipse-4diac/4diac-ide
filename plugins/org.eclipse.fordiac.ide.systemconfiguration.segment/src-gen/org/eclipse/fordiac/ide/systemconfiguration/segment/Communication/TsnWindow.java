@@ -13,7 +13,7 @@
  */
 package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication;
 
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 
 /** <!-- begin-user-doc --> A representation of the model object '<em><b>Tsn Window</b></em>'. <!-- end-user-doc -->
  *
@@ -28,7 +28,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
  * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage#getTsnWindow()
  * @model
  * @generated */
-public interface TsnWindow extends INamedElement {
+public interface TsnWindow extends CommunicationMappingTarget {
 	/** Returns the value of the '<em><b>Duration</b></em>' attribute. The default value is <code>"0"</code>. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *

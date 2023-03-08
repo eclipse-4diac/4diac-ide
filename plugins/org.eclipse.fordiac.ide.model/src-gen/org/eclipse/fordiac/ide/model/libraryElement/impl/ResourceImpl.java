@@ -37,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.ResourceType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -545,6 +546,11 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 				default: return -1;
 			}
 		}
+		if (baseClass == MappingTarget.class) {
+			switch (derivedFeatureID) {
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -558,6 +564,11 @@ public class ResourceImpl extends TypedConfigureableObjectImpl implements Resour
 		if (baseClass == IVarElement.class) {
 			switch (baseFeatureID) {
 				case LibraryElementPackage.IVAR_ELEMENT__VAR_DECLARATIONS: return LibraryElementPackage.RESOURCE__VAR_DECLARATIONS;
+				default: return -1;
+			}
+		}
+		if (baseClass == MappingTarget.class) {
+			switch (baseFeatureID) {
 				default: return -1;
 			}
 		}

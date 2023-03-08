@@ -37,7 +37,7 @@ public class AdapterColumnAcessor implements IColumnAccessor<AdapterDeclaration>
 		case I4diacNatTableUtil.NAME:
 			return rowObject.getName();
 		case I4diacNatTableUtil.TYPE:
-			return rowObject.getAdapterType().getName();
+			return rowObject.getType().getName();
 		case I4diacNatTableUtil.COMMENT:
 			return rowObject.getComment();
 		default:

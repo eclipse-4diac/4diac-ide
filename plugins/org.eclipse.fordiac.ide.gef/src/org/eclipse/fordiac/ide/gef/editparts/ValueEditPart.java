@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.gef.widgets.PinValueDirectEditManager;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -156,7 +155,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	public void deactivate() {
 		super.deactivate();
 		getModel().eAdapters().remove(contentAdapter);
-		getModel().getParentIE().eAdapters().remove(contentAdapter);
+		if (getModel().getParentIE() != null) {
+			getModel().getParentIE().eAdapters().remove(contentAdapter);
+		}
 	}
 
 	private final Adapter contentAdapter = new AdapterImpl() {
@@ -168,7 +169,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
 				refreshValue();
 				refreshPosition();
-			} else if (LibraryElementPackage.eINSTANCE.getErrorMarkerRef_FileMarkerId().equals(feature)) {
+			} else if (LibraryElementPackage.eINSTANCE.getErrorMarkerRef_ErrorMessage().equals(feature)) {
 				Display.getDefault().asyncExec(() -> {
 					refreshValue();
 					if (parentPart != null) {
@@ -320,7 +321,11 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 * @return true, if is input
 	 */
 	public boolean isInput() {
-		return getIInterfaceElement().isIsInput();
+		final IInterfaceElement interfaceElement = getIInterfaceElement();
+		if (interfaceElement != null) {
+			return interfaceElement.isIsInput();
+		}
+		return false;
 	}
 
 	private IInterfaceElement getIInterfaceElement() {
@@ -406,7 +411,12 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 * @return the manager
 	 */
 	public DirectEditManager createDirectEditManager() {
-		return new PinValueDirectEditManager(this, getFigure());
+		final IInterfaceElement interfaceElement = getIInterfaceElement();
+		if (interfaceElement instanceof VarDeclaration) {
+			return new InitialValueDirectEditManager(this, new FigureCellEditorLocator(getFigure()),
+					(VarDeclaration) interfaceElement);
+		}
+		return new LabelDirectEditManager(this, getFigure());
 	}
 
 	/** performs the directEdit. */

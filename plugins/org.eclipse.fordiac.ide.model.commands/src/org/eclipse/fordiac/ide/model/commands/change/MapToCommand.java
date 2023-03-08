@@ -26,6 +26,7 @@ import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -36,6 +37,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
@@ -47,14 +49,14 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public class MapToCommand extends Command {
-	private final FBNetworkElement srcElement;
-	private final Resource resource;
+	protected final FBNetworkElement srcElement;
+	private final MappingTarget resource;
 	private UnmapCommand unmapFromExistingTarget;
-	private FBNetworkElement targetElement;
+	protected FBNetworkElement targetElement;
 	private final Mapping mapping = LibraryElementFactory.eINSTANCE.createMapping();
 	private final CompoundCommand createdConnections = new CompoundCommand();
 
-	private MapToCommand(final FBNetworkElement srcElement, final Resource resource) {
+	protected MapToCommand(final FBNetworkElement srcElement, final MappingTarget resource) {
 		this.srcElement = srcElement;
 		this.resource = resource;
 	}
@@ -64,7 +66,7 @@ public class MapToCommand extends Command {
 		if (srcElement == null) {
 			return false;
 		}
-		if ((srcElement.isMapped()) && (srcElement.getOpposite().getFbNetwork().equals(resource.getFBNetwork()))) {
+		if ((srcElement.isMapped()) && (srcElement.getOpposite().getFbNetwork().equals(getTargetFBNetwork()))) {
 			ErrorMessenger.popUpErrorMessage(Messages.MapToCommand_STATUSMessage_AlreadyMapped);
 			return false; // already mapped to this resource -> nothing to do -> mapping not possible!
 		}
@@ -86,11 +88,11 @@ public class MapToCommand extends Command {
 	@Override
 	public void execute() {
 		if (srcElement.isMapped()) {
-			unmapFromExistingTarget = new UnmapCommand(srcElement.getOpposite());
+			unmapFromExistingTarget = createUnmapCommand();
 			unmapFromExistingTarget.execute();
 		}
 
-		createTargetElement();
+		targetElement = createTargetElement();
 
 		mapping.setFrom(srcElement);
 		mapping.setTo(targetElement);
@@ -103,6 +105,10 @@ public class MapToCommand extends Command {
 		createdConnections.execute();
 	}
 
+	protected UnmapCommand createUnmapCommand() {
+		return new UnmapCommand(srcElement.getOpposite());
+	}
+
 	/** Steps 1. handle broken and unbroken connections 2. for each connection create command -> execute undo 3. for
 	 * FBcreate command -> execute undo 4. remove mapping entry 5. if unmapp command is not null -> execute undo */
 	@Override
@@ -112,7 +118,7 @@ public class MapToCommand extends Command {
 		srcElement.setMapping(null); // mapping should be removed first so that all notifiers checking for mapped
 		// state will not invalily afterwards use the resource
 		targetElement.setMapping(null);
-		getTargetFBNetwork().getNetworkElements().remove(targetElement);
+		removeMappedElements();
 		getAutomationSystem().getMapping().remove(mapping);
 
 		if (null != unmapFromExistingTarget) {
@@ -120,34 +126,44 @@ public class MapToCommand extends Command {
 		}
 	}
 
-	/** Steps 1. if unmapp command is not null -> execute redo 2. for FBcreate command -> execute redo 3. readd mapping
+	protected void addMappedElements() {
+		getTargetFBNetwork().getNetworkElements().add(targetElement);
+	}
+
+	protected void removeMappedElements() {
+		getTargetFBNetwork().getNetworkElements().remove(targetElement);
+	}
+
+	/** Steps 1. if unmap command is not null -> execute redo 2. for FBcreate command -> execute redo 3. readd mapping
 	 * entry 3. for each connection create command -> execute redo 4. handle broken and unbroken connections */
 	@Override
 	public void redo() {
 		if (null != unmapFromExistingTarget) {
 			unmapFromExistingTarget.redo();
 		}
-		getTargetFBNetwork().getNetworkElements().add(targetElement);
+		addMappedElements();
 		srcElement.setMapping(mapping);
 		targetElement.setMapping(mapping);
 		getAutomationSystem().getMapping().add(mapping);
 		createdConnections.redo();
 	}
 
-	protected void createTargetElement() {
+	protected FBNetworkElement createTargetElement() {
+		FBNetworkElement created = null;
 		if (srcElement instanceof StructManipulator) {
-			targetElement = createTargetStructManipulator();
+			created = createTargetStructManipulator();
 		} else if (srcElement instanceof FB) {
-			targetElement = createTargetFB();
+			created = createTargetFB();
 		} else if (srcElement instanceof SubApp) {
 			if (((SubApp) srcElement).isTyped()) {
-				targetElement = createTargetTypedSubApp();
+				created = createTargetTypedSubApp();
 			} else {
-				targetElement = createTargetUntypedSubApp();
+				created = createTargetUntypedSubApp();
 			}
 		}
-		targetElement.setName(srcElement.getName());
-		transferFBParams();
+		created.setName(srcElement.getName());
+		transferFBParams(srcElement, created);
+		return created;
 	}
 
 	private FBNetworkElement createTargetFB() {
@@ -169,8 +185,8 @@ public class MapToCommand extends Command {
 		}
 
 		final CreateSubAppInstanceCommand cmd = new CreateSubAppInstanceCommand(
-				(SubAppTypeEntry) srcElement.getTypeEntry(), getTargetFBNetwork(),
-				srcElement.getPosition().getX(), srcElement.getPosition().getY());
+				(SubAppTypeEntry) srcElement.getTypeEntry(), getTargetFBNetwork(), srcElement.getPosition().getX(),
+				srcElement.getPosition().getY());
 		cmd.execute();
 
 		return cmd.getSubApp();
@@ -189,7 +205,7 @@ public class MapToCommand extends Command {
 		return element;
 	}
 
-	private void transferFBParams() {
+	protected void transferFBParams(final FBNetworkElement srcElement, final FBNetworkElement targetElement) {
 		final List<VarDeclaration> destInputs = targetElement.getInterface().getInputVars();
 		final List<VarDeclaration> srcInputs = srcElement.getInterface().getInputVars();
 
@@ -210,7 +226,7 @@ public class MapToCommand extends Command {
 		return srcElement.getFbNetwork().getApplication().getAutomationSystem();
 	}
 
-	private void checkConnections() {
+	protected void checkConnections() {
 		for (final IInterfaceElement interfaceElement : srcElement.getInterface().getAllInterfaceElements()) {
 			if (interfaceElement instanceof ErrorMarkerInterface) {
 				// Error marker do not get mapped
@@ -230,9 +246,8 @@ public class MapToCommand extends Command {
 				// connections to error markers will not get mapped
 				addConnectionCreateCommand(
 						connection.getSourceElement().getOpposite()
-						.getInterfaceElement(connection.getSource().getName()),
-						targetElement.getInterfaceElement(interfaceElement.getName()),
-						connection.isVisible());
+								.getInterfaceElement(connection.getSource().getName()),
+						targetElement.getInterfaceElement(interfaceElement.getName()), connection.isVisible());
 
 			}
 		}
@@ -261,8 +276,9 @@ public class MapToCommand extends Command {
 		return connection.getSourceElement() == connection.getDestinationElement();
 	}
 
-	private void addConnectionCreateCommand(final IInterfaceElement source, final IInterfaceElement destination, final boolean visible) {
-		final AbstractConnectionCreateCommand cmd = getConnectionCreatCMD(source);
+	private void addConnectionCreateCommand(final IInterfaceElement source, final IInterfaceElement destination,
+			final boolean visible) {
+		final AbstractConnectionCreateCommand cmd = getConnectionCreateCmd(source);
 		if (null != cmd) {
 			cmd.setSource(source);
 			cmd.setDestination(destination);
@@ -278,19 +294,21 @@ public class MapToCommand extends Command {
 		// which maybe have to be deleted
 	}
 
-	private AbstractConnectionCreateCommand getConnectionCreatCMD(final IInterfaceElement interfaceElement) {
+	private AbstractConnectionCreateCommand getConnectionCreateCmd(final IInterfaceElement interfaceElement) {
 		if (interfaceElement instanceof Event) {
-			return new EventConnectionCreateCommand(resource.getFBNetwork());
-		} else if (interfaceElement instanceof AdapterDeclaration) {
-			return new AdapterConnectionCreateCommand(resource.getFBNetwork());
-		} else if (interfaceElement instanceof VarDeclaration) {
-			return new DataConnectionCreateCommand(resource.getFBNetwork());
+			return new EventConnectionCreateCommand(getTargetFBNetwork());
+		}
+		if (interfaceElement instanceof AdapterDeclaration) {
+			return new AdapterConnectionCreateCommand(getTargetFBNetwork());
+		}
+		if (interfaceElement instanceof VarDeclaration) {
+			return new DataConnectionCreateCommand(getTargetFBNetwork());
 		}
 		return null;
 	}
 
-	private FBNetwork getTargetFBNetwork() {
-		return resource.getFBNetwork();
+	protected FBNetwork getTargetFBNetwork() {
+		return ((Resource) resource).getFBNetwork();
 	}
 
 	// This code is here to serve as template for handling the connections to be
@@ -323,13 +341,20 @@ public class MapToCommand extends Command {
 	 * "Remapping required deletion of Connections added within the Resource - please check your network" );
 	 * informUser.open(); // TODO check whether markers could be used! } } */
 
-	public static Command createMapToCommand(final FBNetworkElement srcElement, final Resource resource) {
-		if (srcElement instanceof Group) {
-			final CompoundCommand cmd = new CompoundCommand();
-			((Group) srcElement).getGroupElements().forEach(el -> cmd.add(new MapToCommand(el, resource)));
-			return cmd;
+	public static Command createMapToCommand(final FBNetworkElement srcElement, final MappingTarget resource) {
+		if (resource instanceof Resource) {
+			if (srcElement instanceof Group) {
+				final CompoundCommand cmd = new CompoundCommand();
+				((Group) srcElement).getGroupElements().forEach(el -> cmd.add(new MapToCommand(el, resource)));
+				return cmd;
+			}
+			return new MapToCommand(srcElement, resource);
 		}
-		return new MapToCommand(srcElement, resource);
+
+		if (resource instanceof CommunicationMappingTarget) {
+			return new MapCommunicationCommand(srcElement, (CommunicationMappingTarget) resource);
+		}
+		return null;
 	}
 
 }

@@ -63,21 +63,21 @@ public interface CommunicationPackage extends EPackage {
 	int TSN_CONFIGURATION = 0;
 
 	/** The feature id for the '<em><b>Cycle Time</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TSN_CONFIGURATION__CYCLE_TIME = LibraryElementPackage.COMMUNICATION_CONFIGURATION_FEATURE_COUNT + 0;
 
 	/** The feature id for the '<em><b>Windows</b></em>' containment reference list. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TSN_CONFIGURATION__WINDOWS = LibraryElementPackage.COMMUNICATION_CONFIGURATION_FEATURE_COUNT + 1;
 
 	/** The number of structural features of the '<em>Tsn Configuration</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int TSN_CONFIGURATION_FEATURE_COUNT = LibraryElementPackage.COMMUNICATION_CONFIGURATION_FEATURE_COUNT + 2;
@@ -92,29 +92,58 @@ public interface CommunicationPackage extends EPackage {
 	int TSN_WINDOW = 1;
 
 	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
-	int TSN_WINDOW__NAME = LibraryElementPackage.INAMED_ELEMENT__NAME;
+	int TSN_WINDOW__NAME = LibraryElementPackage.COMMUNICATION_MAPPING_TARGET__NAME;
 
 	/** The feature id for the '<em><b>Comment</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
-	int TSN_WINDOW__COMMENT = LibraryElementPackage.INAMED_ELEMENT__COMMENT;
+	int TSN_WINDOW__COMMENT = LibraryElementPackage.COMMUNICATION_MAPPING_TARGET__COMMENT;
+
+	/** The feature id for the '<em><b>Mapped Elements</b></em>' reference list. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int TSN_WINDOW__MAPPED_ELEMENTS = LibraryElementPackage.COMMUNICATION_MAPPING_TARGET__MAPPED_ELEMENTS;
 
 	/** The feature id for the '<em><b>Duration</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
-	int TSN_WINDOW__DURATION = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 0;
+	int TSN_WINDOW__DURATION = LibraryElementPackage.COMMUNICATION_MAPPING_TARGET_FEATURE_COUNT + 0;
 
 	/** The number of structural features of the '<em>Tsn Window</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
 	 * @generated
 	 * @ordered */
-	int TSN_WINDOW_FEATURE_COUNT = LibraryElementPackage.INAMED_ELEMENT_FEATURE_COUNT + 1;
+	int TSN_WINDOW_FEATURE_COUNT = LibraryElementPackage.COMMUNICATION_MAPPING_TARGET_FEATURE_COUNT + 1;
+
+	/** The meta object id for the
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.DefaultConfigurationImpl
+	 * <em>Default Configuration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.DefaultConfigurationImpl
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.CommunicationPackageImpl#getDefaultConfiguration()
+	 * @generated */
+	int DEFAULT_CONFIGURATION = 2;
+
+	/** The feature id for the '<em><b>Target</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int DEFAULT_CONFIGURATION__TARGET = LibraryElementPackage.COMMUNICATION_CONFIGURATION_FEATURE_COUNT + 0;
+
+	/** The number of structural features of the '<em>Default Configuration</em>' class. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int DEFAULT_CONFIGURATION_FEATURE_COUNT = LibraryElementPackage.COMMUNICATION_CONFIGURATION_FEATURE_COUNT + 1;
 
 	/** Returns the meta object for class
 	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration <em>Tsn
@@ -163,6 +192,25 @@ public interface CommunicationPackage extends EPackage {
 	 * @see #getTsnWindow()
 	 * @generated */
 	EAttribute getTsnWindow_Duration();
+
+	/** Returns the meta object for class
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration <em>Default
+	 * Configuration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for class '<em>Default Configuration</em>'.
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration
+	 * @generated */
+	EClass getDefaultConfiguration();
+
+	/** Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration#getTarget
+	 * <em>Target</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the reference '<em>Target</em>'.
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration#getTarget()
+	 * @see #getDefaultConfiguration()
+	 * @generated */
+	EReference getDefaultConfiguration_Target();
 
 	/** Returns the factory that creates the instances of the model. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -216,6 +264,21 @@ public interface CommunicationPackage extends EPackage {
 		 *
 		 * @generated */
 		EAttribute TSN_WINDOW__DURATION = eINSTANCE.getTsnWindow_Duration();
+
+		/** The meta object literal for the
+		 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.DefaultConfigurationImpl
+		 * <em>Default Configuration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.DefaultConfigurationImpl
+		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.CommunicationPackageImpl#getDefaultConfiguration()
+		 * @generated */
+		EClass DEFAULT_CONFIGURATION = eINSTANCE.getDefaultConfiguration();
+
+		/** The meta object literal for the '<em><b>Target</b></em>' reference feature. <!-- begin-user-doc --> <!--
+		 * end-user-doc -->
+		 *
+		 * @generated */
+		EReference DEFAULT_CONFIGURATION__TARGET = eINSTANCE.getDefaultConfiguration_Target();
 
 	}
 

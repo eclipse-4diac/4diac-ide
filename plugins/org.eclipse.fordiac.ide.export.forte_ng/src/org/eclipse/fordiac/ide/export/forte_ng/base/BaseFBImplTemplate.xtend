@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 				 2022 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
@@ -16,24 +16,23 @@ package org.eclipse.fordiac.ide.export.forte_ng.base
 
 import java.nio.file.Path
 import java.util.Map
+import java.util.Set
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.libraryElement.Method
-import org.eclipse.xtend.lib.annotations.Accessors
 
-abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate {
-	@Accessors(PROTECTED_GETTER) final T type
+abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<T> {
 	final Map<Algorithm, ILanguageSupport> algorithmLanguageSupport
 	final Map<Method, ILanguageSupport> methodLanguageSupport
 
 	new(T type, String name, Path prefix, String baseClass) {
-		super(name, prefix, baseClass)
-		this.type = type
+		super(type, name, prefix, baseClass)
 		algorithmLanguageSupport = type.algorithm.toInvertedMap [
 			ILanguageSupportFactory.createLanguageSupport("forte_ng", it)
 		]
@@ -84,16 +83,15 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate 
 		}
 	'''
 
-	def protected dispatch generateSendEvent(Event event) '''
-		sendOutputEvent(scm_nEvent«event.name»ID);
-	'''
+	def protected generateSendEvent(Event event) { 
+		if(event.FBNetworkElement instanceof AdapterFB){
+			return '''sendAdapterEvent(scm_n«event.FBNetworkElement.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«event.name»ID);'''
+		}
+		'''sendOutputEvent(scm_nEvent«event.name»ID);'''
+	}
 
-	def protected dispatch generateSendEvent(AdapterEvent event) '''
-		sendAdapterEvent(scm_n«event.adapterDeclaration.name»AdpNum, FORTE_«event.adapterDeclaration.typeName»::scm_nEvent«event.adapterEventName»ID);
-	'''
-
-	def protected getAdapterEventName(AdapterEvent event) {
-		event.name.split("\\.").get(1);
+	def private getAdapterDeclaration(Event event){
+		(event.FBNetworkElement as AdapterFB).adapterDecl;
 	}
 
 	def protected generateAlgorithms() '''
@@ -120,22 +118,32 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate 
 
 	override protected generateImplIncludes() '''
 		«super.generateImplIncludes»
-		«(algorithmLanguageSupport.values + methodLanguageSupport.values).filterNull.flatMap[getDependencies(emptyMap)].generateDependencyIncludes»
+		«getDependencies(emptyMap).generateDependencyIncludes»
 	'''
 
 	override getErrors() {
-		(errors + (algorithmLanguageSupport.values + methodLanguageSupport.values).filterNull.flatMap[getErrors].toSet).
-			toList
+		(super.getErrors + (algorithmLanguageSupport.values + methodLanguageSupport.values).filterNull.flatMap [
+			getErrors
+		].toSet).toList
 	}
 
 	override getWarnings() {
-		(warnings +
-			(algorithmLanguageSupport.values + methodLanguageSupport.values).filterNull.flatMap[getWarnings].toSet).
-			toList
+		(super.getWarnings + (algorithmLanguageSupport.values + methodLanguageSupport.values).filterNull.flatMap [
+			getWarnings
+		].toSet).toList
 	}
 
 	override getInfos() {
-		(infos + (algorithmLanguageSupport.values + methodLanguageSupport.values).filterNull.flatMap[getInfos].toSet).
-			toList
+		(super.getInfos + (algorithmLanguageSupport.values + methodLanguageSupport.values).filterNull.flatMap [
+			getInfos
+		].toSet).toList
+	}
+		
+	override Set<INamedElement> getDependencies(Map<?, ?> options) {
+		(super.getDependencies(options) +
+			(algorithmLanguageSupport.values + methodLanguageSupport.values).filterNull.flatMap [
+				getDependencies(options)
+			]
+		).toSet
 	}
 }

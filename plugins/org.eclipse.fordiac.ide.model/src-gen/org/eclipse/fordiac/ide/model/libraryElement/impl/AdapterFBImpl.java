@@ -17,13 +17,10 @@
 package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
-
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -104,34 +101,12 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public NotificationChain basicSetAdapterDecl(AdapterDeclaration newAdapterDecl, NotificationChain msgs) {
-		AdapterDeclaration oldAdapterDecl = adapterDecl;
-		adapterDecl = newAdapterDecl;
-		if (eNotificationRequired()) {
-			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL, oldAdapterDecl, newAdapterDecl);
-			if (msgs == null) msgs = notification; else msgs.add(notification);
-		}
-		return msgs;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	@Override
 	public void setAdapterDecl(AdapterDeclaration newAdapterDecl) {
-		if (newAdapterDecl != adapterDecl) {
-			NotificationChain msgs = null;
-			if (adapterDecl != null)
-				msgs = ((InternalEObject)adapterDecl).eInverseRemove(this, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, AdapterDeclaration.class, msgs);
-			if (newAdapterDecl != null)
-				msgs = ((InternalEObject)newAdapterDecl).eInverseAdd(this, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, AdapterDeclaration.class, msgs);
-			msgs = basicSetAdapterDecl(newAdapterDecl, msgs);
-			if (msgs != null) msgs.dispatch();
-		}
-		else if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL, newAdapterDecl, newAdapterDecl));
+		AdapterDeclaration oldAdapterDecl = adapterDecl;
+		adapterDecl = newAdapterDecl;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL, oldAdapterDecl, adapterDecl));
 	}
 
 	/**
@@ -162,38 +137,6 @@ public class AdapterFBImpl extends FBImpl implements AdapterFB {
 	@Override
 	public boolean isPlug() {
 		return org.eclipse.fordiac.ide.model.Annotations.isPlug(this);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL:
-				if (adapterDecl != null)
-					msgs = ((InternalEObject)adapterDecl).eInverseRemove(this, LibraryElementPackage.ADAPTER_DECLARATION__ADAPTER_FB, AdapterDeclaration.class, msgs);
-				return basicSetAdapterDecl((AdapterDeclaration)otherEnd, msgs);
-			default:
-				return super.eInverseAdd(otherEnd, featureID, msgs);
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case LibraryElementPackage.ADAPTER_FB__ADAPTER_DECL:
-				return basicSetAdapterDecl(null, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
-		}
 	}
 
 	/**
