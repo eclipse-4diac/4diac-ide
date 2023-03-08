@@ -56,6 +56,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_StringIndexOutOfBounds;
 	public static String STCoreValidator_StringIndexZeroOrLess;
 	public static String STCoreValidator_TooManyIndicesGivenForStringAccess;
+	public static String STCoreValidator_AssignmentOfCallWithoutReturnType;
 
 	static {
 		// initialize resource bundle
