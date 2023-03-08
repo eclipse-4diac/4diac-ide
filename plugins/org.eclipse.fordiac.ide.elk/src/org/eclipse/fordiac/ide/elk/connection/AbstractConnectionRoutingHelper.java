@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppInternalInterfaceEdit
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UntypedSubAppInterfaceElementEditPart;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
+import org.eclipse.fordiac.ide.elk.helpers.FordiacGraphBuilder;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -46,7 +47,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 
-abstract class AbstractConnectionRoutingHelper {
+public abstract class AbstractConnectionRoutingHelper {
 
 	protected static ElkGraphFactory factory = ElkGraphFactory.eINSTANCE;
 	private static final PrecisionPoint START_POINT = new PrecisionPoint();
@@ -110,7 +111,7 @@ abstract class AbstractConnectionRoutingHelper {
 		}
 	}
 
-	private void processValue(final ConnectionLayoutMapping mapping, final ValueEditPart value) {
+	private static void processValue(final ConnectionLayoutMapping mapping, final ValueEditPart value) {
 		final ElkNode node = factory.createElkNode();
 		final ElkNode layoutGraph = mapping.getLayoutGraph();
 
@@ -203,7 +204,8 @@ abstract class AbstractConnectionRoutingHelper {
 		return (ElkPort) mapping.getReverseMapping().computeIfAbsent(interfaceEditPart, ie -> createPort(point, interfaceEditPart, mapping, isGraphPin));
 	}
 
-	private ElkPort createPort(final Point point, final InterfaceEditPart ie, final ConnectionLayoutMapping mapping, final boolean isGraphPin) {
+	private static ElkPort createPort(final Point point, final InterfaceEditPart ie,
+			final ConnectionLayoutMapping mapping, final boolean isGraphPin) {
 		final EditPart parent = ie.getParent();
 		ElkNode parentNode = (ElkNode) mapping.getReverseMapping().get(parent);
 
@@ -232,7 +234,6 @@ abstract class AbstractConnectionRoutingHelper {
 		return port;
 	}
 
-	@SuppressWarnings("unchecked")
 	protected void flattenGroup(final ConnectionLayoutMapping mapping, final GroupEditPart group) {
 		final GraphicalEditPart groupNetwork = group.getContentEP();
 		final Rectangle commentBounds = group.getCommentBounds();
@@ -246,7 +247,7 @@ abstract class AbstractConnectionRoutingHelper {
 		groupNetwork.getChildren().forEach(child -> handleChild(mapping, child));
 	}
 
-	// can be overridden for different group handling
+	@SuppressWarnings("static-method") // can be overridden for different group handling
 	protected void processGroup(final ConnectionLayoutMapping mapping, final GroupEditPart group) {
 		final ElkNode node = factory.createElkNode();
 		mapping.getLayoutGraph().getChildren().add(node);
@@ -258,15 +259,20 @@ abstract class AbstractConnectionRoutingHelper {
 		mapping.getGroups().add(group);
 	}
 
-	abstract void saveConnections(final ConnectionLayoutMapping mapping, final InterfaceEditPart ie);
+	protected void saveConnections(final ConnectionLayoutMapping mapping, final InterfaceEditPart ie) {
+		ie.getTargetConnections().stream().filter(ConnectionEditPart.class::isInstance)
+		.filter(con -> FordiacGraphBuilder.isVisible((ConnectionEditPart) con))
+		.forEach(con -> saveConnection(mapping, (ConnectionEditPart) con));
+	}
 
-	public FordiacLayoutData calculateConnections(final ConnectionLayoutMapping mapping) {
+	protected abstract void saveConnection(ConnectionLayoutMapping mapping, ConnectionEditPart con);
+
+	public static FordiacLayoutData calculateConnections(final ConnectionLayoutMapping mapping) {
 		mapping.getLayoutGraph().getContainedEdges().forEach(edge -> processConnection(mapping, edge));
 		return mapping.getLayoutData();
 	}
 
-	private void processConnection(final ConnectionLayoutMapping mapping, final ElkEdge edge) {
-		final ConnectionEditPart connEp = (ConnectionEditPart) mapping.getGraphMap().get(edge);
+	private static void processConnection(final ConnectionLayoutMapping mapping, final ElkEdge edge) {
 
 		if (edge.getSources().isEmpty() || edge.getTargets().isEmpty() || edge.getSections().isEmpty()) {
 			// do not really know why this happens, these lists should normally never be empty
@@ -274,6 +280,7 @@ abstract class AbstractConnectionRoutingHelper {
 			return;
 		}
 
+		final ConnectionEditPart connEp = (ConnectionEditPart) mapping.getGraphMap().get(edge);
 		final ElkPort startPort = (ElkPort) edge.getSources().get(0);
 		final ElkPort endPort = (ElkPort) edge.getTargets().get(0);
 		final ElkEdgeSection elkEdgeSection = edge.getSections().get(0);
@@ -282,7 +289,8 @@ abstract class AbstractConnectionRoutingHelper {
 		mapping.getLayoutData().addConnectionPoints(connEp.getModel(), createPointList(startPort, endPort, bendPoints));
 	}
 
-	private PointList createPointList(final ElkPort startPort, final ElkPort endPort, final List<ElkBendPoint> bendPoints) {
+	private static PointList createPointList(final ElkPort startPort, final ElkPort endPort,
+			final List<ElkBendPoint> bendPoints) {
 		// needs to translate coordinates back from relative to absolute
 
 		final PointList list = new PointList();

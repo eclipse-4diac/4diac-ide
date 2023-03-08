@@ -46,11 +46,12 @@ import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutMapping;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ValueEditPart;
+import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 
-public class FordiacGraphBuilder {
+public final class FordiacGraphBuilder {
 
 	private static final PrecisionPoint START_POINT = new PrecisionPoint();
 	private static final PrecisionPoint END_POINT = new PrecisionPoint();
@@ -106,7 +107,6 @@ public class FordiacGraphBuilder {
 		label.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
 	}
 
-	@SuppressWarnings("unchecked")
 	private static void processInterface(final LayoutMapping mapping, final Object child) {
 		final InterfaceEditPart ep = ((InterfaceEditPart) child);
 
@@ -116,12 +116,19 @@ public class FordiacGraphBuilder {
 		}
 
 		// since we iterate over every interface its enough to only save target connections
-		ep.getTargetConnections().forEach(conn -> saveConnection(mapping, conn));
+		ep.getTargetConnections().stream().filter(ConnectionEditPart.class::isInstance)
+		.filter(con -> isVisible((ConnectionEditPart) con))
+		.forEach(conn -> saveConnection(mapping, (ConnectionEditPart) conn));
 
 		// add all editor interfaces to the elk graph to ensure the right order in the sidebar
 		if (ep.getParent() instanceof EditorWithInterfaceEditPart) {
 			getPort(new Point(0, 0), ep, mapping); // point is irrelevant since the interface element gets moved along the graph border (sidebar)
 		}
+	}
+
+	public static boolean isVisible(final ConnectionEditPart con) {
+		final HideableConnection conFigure = con.getFigure();
+		return conFigure.isVisible() && !conFigure.isHidden();
 	}
 
 	private static boolean isUnfoldedSubAppInterface(final InterfaceEditPart ep) {
@@ -132,17 +139,16 @@ public class FordiacGraphBuilder {
 		return false;
 	}
 
-	private static void saveConnection(final LayoutMapping mapping, final Object conn) {
-		if (conn instanceof ConnectionEditPart && !mapping.getProperty(CONNECTIONS).contains(conn)) {
-			final ConnectionEditPart connEditPart = (ConnectionEditPart) conn;
-			final Object sourceContainer = connEditPart.getSource().getParent().getParent();
-			final Object targetContainer = connEditPart.getTarget().getParent().getParent();
+	private static void saveConnection(final LayoutMapping mapping, final ConnectionEditPart conn) {
+		if (!mapping.getProperty(CONNECTIONS).contains(conn)) {
+			final Object sourceContainer = conn.getSource().getParent().getParent();
+			final Object targetContainer = conn.getTarget().getParent().getParent();
 			// save connections for later
 			if ((sourceContainer instanceof GroupContentEditPart || targetContainer instanceof GroupContentEditPart)
 					&& sourceContainer != targetContainer) {
-				mapping.getProperty(HIERARCHY_CROSSING_CONNECTIONS).add(connEditPart);
+				mapping.getProperty(HIERARCHY_CROSSING_CONNECTIONS).add(conn);
 			} else {
-				mapping.getProperty(CONNECTIONS).add(connEditPart);
+				mapping.getProperty(CONNECTIONS).add(conn);
 			}
 		}
 	}
