@@ -161,7 +161,8 @@ final class STCoreUtil {
 
 	def static boolean isApplicableTo(STBinaryOperator operator, INamedElement first, INamedElement second) {
 		switch (operator) {
-			case first.anyType || second.anyType: false
+			case first.anyType || second.anyType:
+				false
 			case ADD:
 				(first instanceof AnyMagnitudeType && second instanceof AnyMagnitudeType) ||
 					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) ||
@@ -258,12 +259,16 @@ final class STCoreUtil {
 
 	def static INamedElement getExpectedType(STExpression expression) {
 		switch (it : expression.eContainer) {
-			STUnaryExpression case op.arithmetic,
-			STBinaryExpression case op.arithmetic || op.range:
+			STUnaryExpression case op.arithmetic:
 				expectedType.equivalentAnyNumType
-			STUnaryExpression case op.logical,
-			STBinaryExpression case op.logical:
+			STUnaryExpression case op.logical:
 				expectedType.equivalentAnyBitType
+			STBinaryExpression case op.arithmetic || op.range:
+				expectedType.equivalentAnyNumType ?: //
+				(expression === left ? right?.declaredResultType : left.declaredResultType).equivalentAnyNumType
+			STBinaryExpression case op.logical:
+				expectedType.equivalentAnyBitType ?: //
+				(expression === left ? right?.declaredResultType : left.declaredResultType).equivalentAnyBitType
 			STBinaryExpression case op.comparison:
 				expression === left ? right?.declaredResultType : left.declaredResultType
 			STAssignmentStatement:
