@@ -112,13 +112,16 @@ public abstract class AbstractConnectionRoutingHelper {
 	}
 
 	private static void processValue(final ConnectionLayoutMapping mapping, final ValueEditPart value) {
-		final ElkNode node = factory.createElkNode();
-		final ElkNode layoutGraph = mapping.getLayoutGraph();
+		if (value.getModel().getParentIE().getInputConnections().isEmpty()) {
+			// only add the value if the pin does not have connections
+			final ElkNode node = factory.createElkNode();
+			final ElkNode layoutGraph = mapping.getLayoutGraph();
 
-		final Rectangle bounds = value.getFigure().getBounds();
-		node.setLocation(bounds.x - layoutGraph.getX(), bounds.y - layoutGraph.getY()); // translate from absolute to relative
-		node.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
-		layoutGraph.getChildren().add(node);
+			final Rectangle bounds = value.getFigure().getBounds();
+			node.setLocation(bounds.x - layoutGraph.getX(), bounds.y - layoutGraph.getY()); // translate from absolute to relative
+			node.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
+			layoutGraph.getChildren().add(node);
+		}
 	}
 
 	private void processBlock(final ConnectionLayoutMapping mapping, final AbstractFBNElementEditPart block) {
