@@ -972,8 +972,26 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public STString createSTString(final String it) {
+		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStringAnnotations.createSTString(it);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public STString createSTStringFromString(EDataType eDataType, String initialValue) {
-		return (STString)super.createFromString(eDataType, initialValue);
+		return createSTString(initialValue);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public String convertSTString(final STString it) {
+		return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStringAnnotations.convertSTString(it);
 	}
 
 	/**
@@ -982,7 +1000,7 @@ public class STCoreFactoryImpl extends EFactoryImpl implements STCoreFactory {
 	 * @generated
 	 */
 	public String convertSTStringToString(EDataType eDataType, Object instanceValue) {
-		return super.convertToString(eDataType, instanceValue);
+		return convertSTString((STString)instanceValue);
 	}
 
 	/**
