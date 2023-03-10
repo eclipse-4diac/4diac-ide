@@ -154,7 +154,7 @@ public abstract class AbstractConnectionRoutingHelper {
 
 				// target connections would be inside the subapp and does not need to be saved
 				if (isExpandedSubAppInterface(ie) && !ie.isInput()) {
-					return;
+					continue;
 				}
 
 				saveConnections(mapping, ie);
