@@ -13,12 +13,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.elk.connection;
 
+import java.text.MessageFormat;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.draw2d.geometry.PointList;
-import org.eclipse.draw2d.geometry.PrecisionPoint;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.elk.core.options.CoreOptions;
 import org.eclipse.elk.core.options.PortConstraints;
@@ -50,8 +50,6 @@ import org.eclipse.gef.GraphicalEditPart;
 public abstract class AbstractConnectionRoutingHelper {
 
 	protected static ElkGraphFactory factory = ElkGraphFactory.eINSTANCE;
-	private static final PrecisionPoint START_POINT = new PrecisionPoint();
-	private static final PrecisionPoint END_POINT = new PrecisionPoint();
 	private static final double GROUP_PADDING = 20;
 	private static final double GROUP_PADDING_HALF = GROUP_PADDING / 2;
 
@@ -73,13 +71,10 @@ public abstract class AbstractConnectionRoutingHelper {
 	private void addSubAppPins(final ConnectionLayoutMapping mapping) {
 		final SubAppForFBNetworkEditPart subapp = (SubAppForFBNetworkEditPart) ((UnfoldedSubappContentEditPart) mapping.getParentElement()).getParent();
 		final List<UntypedSubAppInterfaceElementEditPart> pins = (List<UntypedSubAppInterfaceElementEditPart>) subapp.getChildren()
-				.stream()
-				.filter(UntypedSubAppInterfaceElementEditPart.class::isInstance)
-				.collect(Collectors.toList());
+				.stream().filter(UntypedSubAppInterfaceElementEditPart.class::isInstance).collect(Collectors.toList());
 
 		for (final UntypedSubAppInterfaceElementEditPart pin : pins) {
-			final ElkPort port = getPort(null, pin, mapping, true);
-			port.setProperty(CoreOptions.PORT_SIDE, !pin.isInput() ? PortSide.WEST : PortSide.EAST);
+			addPort(pin, mapping, true);
 			saveConnections(mapping, pin);
 		}
 	}
@@ -88,13 +83,10 @@ public abstract class AbstractConnectionRoutingHelper {
 	private void addEditorPins(final ConnectionLayoutMapping mapping) {
 		final EditorWithInterfaceEditPart editor = (EditorWithInterfaceEditPart) mapping.getParentElement();
 		final List<SubAppInternalInterfaceEditPart> pins = (List<SubAppInternalInterfaceEditPart>) editor.getChildren()
-				.stream()
-				.filter(InterfaceEditPart.class::isInstance)
-				.collect(Collectors.toList());
+				.stream().filter(SubAppInternalInterfaceEditPart.class::isInstance).collect(Collectors.toList());
 
 		for (final InterfaceEditPart pin : pins) {
-			final ElkPort port = getPort(null, pin, mapping, true);
-			port.setProperty(CoreOptions.PORT_SIDE, !pin.isInput() ? PortSide.WEST : PortSide.EAST);
+			addPort(pin, mapping, true);
 			saveConnections(mapping, pin);
 		}
 	}
@@ -148,15 +140,11 @@ public abstract class AbstractConnectionRoutingHelper {
 		for (final Object child : block.getChildren()) {
 			if (child instanceof InterfaceEditPart) {
 				final InterfaceEditPart ie = (InterfaceEditPart) child;
-
-				final Rectangle ieBounds = ie.getFigure().getBounds();
-				getPort(new PrecisionPoint(ieBounds.preciseX(), ieBounds.preciseY()), ie, mapping, false);
-
+				addPort(ie, mapping, false);
 				// target connections would be inside the subapp and does not need to be saved
 				if (isExpandedSubAppInterface(ie) && !ie.isInput()) {
 					continue;
 				}
-
 				saveConnections(mapping, ie);
 			}
 		}
@@ -179,20 +167,17 @@ public abstract class AbstractConnectionRoutingHelper {
 				? (Group) ((FBNetworkElement) model).getGroup() : null;
 	}
 
-	private void processConnections(final ConnectionLayoutMapping mapping) {
+	private static void processConnections(final ConnectionLayoutMapping mapping) {
 		for (final ConnectionEditPart conn : mapping.getConnections()) {
-			final org.eclipse.draw2d.Connection connFig = conn.getFigure();
-
-			START_POINT.setLocation(connFig.getSourceAnchor().getLocation(connFig.getSourceAnchor().getReferencePoint()));
-			END_POINT.setLocation(connFig.getTargetAnchor().getLocation(connFig.getTargetAnchor().getReferencePoint()));
-
-			connFig.translateToRelative(START_POINT);
-			connFig.translateToRelative(END_POINT);
-
 			final InterfaceEditPart source = (InterfaceEditPart) conn.getSource();
-			final ElkPort sourcePort = getPort(START_POINT, source, mapping, false);
+			final ElkPort sourcePort = getPort(source, mapping);
+			Assert.isNotNull(sourcePort, MessageFormat.format("Source port for pin: {0} should not be null!", //$NON-NLS-1$
+					source.getModel().getQualifiedName()));
+
 			final InterfaceEditPart target = (InterfaceEditPart) conn.getTarget();
-			final ElkPort destinationPort = getPort(END_POINT, target, mapping, false);
+			final ElkPort destinationPort = getPort(target, mapping);
+			Assert.isNotNull(destinationPort, MessageFormat.format("Destination port for pin: {0} should not be null!", //$NON-NLS-1$
+					target.getModel().getQualifiedName()));
 
 			final ElkEdge edge = factory.createElkEdge();
 			mapping.getLayoutGraph().getContainedEdges().add(edge);
@@ -203,33 +188,40 @@ public abstract class AbstractConnectionRoutingHelper {
 		}
 	}
 
-	private ElkPort getPort(final Point point, final InterfaceEditPart interfaceEditPart, final ConnectionLayoutMapping mapping, final boolean isGraphPin) {
-		return (ElkPort) mapping.getReverseMapping().computeIfAbsent(interfaceEditPart, ie -> createPort(point, interfaceEditPart, mapping, isGraphPin));
+	private static ElkPort getPort(final InterfaceEditPart interfaceEditPart, final ConnectionLayoutMapping mapping) {
+		return (ElkPort) mapping.getReverseMapping().get(interfaceEditPart);
 	}
 
-	private static ElkPort createPort(final Point point, final InterfaceEditPart ie,
+	private static void addPort(final InterfaceEditPart interfaceEditPart, final ConnectionLayoutMapping mapping,
+			final boolean isGraphPin) {
+		mapping.getReverseMapping().computeIfAbsent(interfaceEditPart,
+				ie -> createPort(interfaceEditPart, mapping, isGraphPin));
+	}
+
+	private static ElkPort createPort(final InterfaceEditPart ie,
 			final ConnectionLayoutMapping mapping, final boolean isGraphPin) {
 		final EditPart parent = ie.getParent();
 		ElkNode parentNode = (ElkNode) mapping.getReverseMapping().get(parent);
 
 		final ElkPort port = factory.createElkPort();
-		port.setProperty(CoreOptions.PORT_SIDE, ie.isInput() ? PortSide.WEST : PortSide.EAST);
+		final boolean isInput = ie.getModel().isIsInput();  // use themodel to always get the right information
+
+
+		final Rectangle ieBounds = ie.getFigure().getBounds();
+		double y = ieBounds.getCenter().preciseY() - mapping.getLayoutGraph().getY();
 
 		if (isGraphPin) {
-			final Rectangle ieBounds = ie.getFigure().getBounds();
-			final boolean isLeft = (parent instanceof EditorWithInterfaceEditPart) ? !ie.isInput() : ie.isInput();
-			final double x = isLeft ? 0 : mapping.getLayoutGraph().getWidth();
-			final double y = ieBounds.preciseY() - mapping.getLayoutGraph().getY() + 5;
-			port.setLocation(x, y);
-
+			port.setProperty(CoreOptions.PORT_SIDE, isInput ? PortSide.EAST : PortSide.WEST);
 			// because ie parent is the subapp itself but the mapped edit part (for the layout graph)
 			// is the content network (because we need to be able to distinguish between expanded and normal subapp)
 			parentNode = mapping.getLayoutGraph();
 		} else {
-			final double x = (ie.isInput()) ? 0 : parentNode.getWidth();
-			final double y = point.preciseY() - parentNode.getY() - mapping.getLayoutGraph().getY();
-			port.setLocation(x, y);
+			port.setProperty(CoreOptions.PORT_SIDE, isInput ? PortSide.WEST : PortSide.EAST);
+			y -= parentNode.getY();
 		}
+
+		final double x = isInput ? 0 : parentNode.getWidth();
+		port.setLocation(x, y);
 
 		parentNode.getPorts().add(port);
 
