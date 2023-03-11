@@ -14,30 +14,45 @@
 package org.eclipse.fordiac.ide.elk;
 
 import java.util.AbstractMap.SimpleEntry;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
+import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 
 public class FordiacLayoutData {
-	
+
+	// this helper class should get a record when upgrading to Java 17
+	public static class ConnectionLayoutData {
+		public final Connection con;
+		public final ConnectionRoutingData routingData;
+
+		public ConnectionLayoutData(final Connection con, final ConnectionRoutingData routingData) {
+			this.con = con;
+			this.routingData = routingData;
+		}
+	}
+
 	private final Map<FBNetworkElement, Position> positions = new HashMap<>();
-	private final Map<Connection, PointList> connPoints = new HashMap<>();
+	private final List<ConnectionLayoutData> connData = new ArrayList<>();
 	private final Map<IInterfaceElement, Integer> pins = new HashMap<>();
 	private final Map<Group, Entry<Integer, Integer>> groups = new HashMap<>();
-	
+
 	public Map<FBNetworkElement, Position> getPositions() {
 		return positions;
 	}
 
-	public Map<Connection, PointList> getConnectionPoints() {
-		return connPoints;
+	public List<ConnectionLayoutData> getConnectionPoints() {
+		return connData;
 	}
 
 	public Map<IInterfaceElement, Integer> getPins() {
@@ -51,17 +66,31 @@ public class FordiacLayoutData {
 	public void addPosition(final FBNetworkElement element, final Position position) {
 		positions.put(element, position);
 	}
-	
+
 	public void addConnectionPoints(final Connection connection, final PointList pointList) {
-		connPoints.put(connection, pointList);
+		connData.add(new ConnectionLayoutData(connection, createRoutingData(pointList)));
 	}
-	
+
 	public void addPin(final IInterfaceElement pin, final Integer padding) {
 		pins.put(pin, padding);
 	}
-	
+
 	public void addGroup(final Group group, final int height, final int width) {
 		groups.put(group, new SimpleEntry<>(Integer.valueOf(height), Integer.valueOf(width)));
 	}
-	
+
+	private static ConnectionRoutingData createRoutingData(final PointList pointList) {
+		final ConnectionRoutingData routingData = LibraryElementFactory.eINSTANCE.createConnectionRoutingData();
+		if (pointList.size() > 2) {
+			// 3 segments
+			routingData.setDx1(pointList.getPoint(1).x() - pointList.getFirstPoint().x());
+			if (pointList.size() > 4) {
+				// 5 segments
+				routingData.setDy(pointList.getPoint(2).y() - pointList.getFirstPoint().y());
+				routingData.setDx2(pointList.getLastPoint().x() - pointList.getPoint(pointList.size() - 2).x());
+			}
+		}
+		return routingData;
+	}
+
 }

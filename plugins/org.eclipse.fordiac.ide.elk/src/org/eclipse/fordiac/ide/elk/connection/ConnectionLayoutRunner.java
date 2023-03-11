@@ -31,9 +31,8 @@ public final class ConnectionLayoutRunner {
 			final FordiacLayoutData subappData = AbstractConnectionRoutingHelper.calculateConnections(subappMapping);
 			ConnectionLayoutRunner.runGroups(subapp, subappMapping, subappData);
 			ConnectionLayoutRunner.runSubapps(subappMapping, subappData);
-
 			// combine the recursive subapp runs
-			data.getConnectionPoints().putAll(subappData.getConnectionPoints());
+			data.getConnectionPoints().addAll(subappData.getConnectionPoints());
 		}
 	}
 
@@ -44,7 +43,7 @@ public final class ConnectionLayoutRunner {
 			final FordiacLayoutData groupData = AbstractConnectionRoutingHelper.calculateConnections(groupMapping);
 
 			// combine data
-			data.getConnectionPoints().putAll(groupData.getConnectionPoints());
+			data.getConnectionPoints().addAll(groupData.getConnectionPoints());
 		}
 
 		// group-to-group connections
@@ -57,7 +56,7 @@ public final class ConnectionLayoutRunner {
 					.calculateConnections(groupToGroupMapping);
 
 			// combine data
-			data.getConnectionPoints().putAll(groupToGroupData.getConnectionPoints());
+			data.getConnectionPoints().addAll(groupToGroupData.getConnectionPoints());
 		}
 	}
 
