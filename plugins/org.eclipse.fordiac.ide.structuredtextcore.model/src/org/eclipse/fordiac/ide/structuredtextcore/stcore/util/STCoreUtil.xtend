@@ -66,7 +66,9 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpre
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryOperator
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallNamedInputArgument
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallUnnamedArgument
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCaseCases
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
@@ -204,6 +206,26 @@ final class STCoreUtil {
 			STArrayAccessExpression case receiver.assignable,
 			STMemberAccessExpression case receiver.assignable && member.assignable: true
 			default: false
+		}
+	}
+
+	def static AccessMode getAccessMode(STExpression expression) {
+		switch (container : expression.eContainer) {
+			STCallStatement: AccessMode.NONE
+			STAssignmentStatement case container.left == expression: AccessMode.WRITE
+			STMemberAccessExpression case container.member == expression: container.accessMode
+			STArrayAccessExpression case container.receiver == expression: container.accessMode
+			STCallArgument: container.accessMode
+			default: AccessMode.READ
+		}
+	}
+
+	def static AccessMode getAccessMode(STCallArgument argument) {
+		switch (container : argument.eContainer) {
+			STFeatureExpression case container.mappedInputArguments.containsValue(argument): AccessMode.READ
+			STFeatureExpression case container.mappedOutputArguments.containsValue(argument): AccessMode.WRITE
+			STFeatureExpression case container.mappedInOutArguments.containsValue(argument): AccessMode.READ_WRITE
+			default: AccessMode.NONE
 		}
 	}
 
