@@ -83,6 +83,8 @@
         upperBound="-1" eType="#//EventOccurrence" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputVariables" upperBound="-1"
         eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="resultFBRuntime" eType="#//FBRuntimeAbstract"
+        containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ConnectionToValueMap" instanceClassName="java.util.Map$Entry">
     <eStructuralFeatures xsi:type="ecore:EReference" name="key" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//Connection"/>

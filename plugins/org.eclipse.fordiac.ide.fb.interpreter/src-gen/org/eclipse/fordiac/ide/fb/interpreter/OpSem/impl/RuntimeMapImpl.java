@@ -26,67 +26,52 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Runtime
- * Map</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Runtime Map</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.RuntimeMapImpl#getTypedKey
- * <em>Key</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.RuntimeMapImpl#getTypedValue
- * <em>Value</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.RuntimeMapImpl#getTypedKey <em>Key</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.RuntimeMapImpl#getTypedValue <em>Value</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class RuntimeMapImpl extends MinimalEObjectImpl.Container
 		implements BasicEMap.Entry<FBNetworkElement, FBRuntimeAbstract> {
-	/**
-	 * The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getTypedKey() <em>Key</em>}' reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @see #getTypedKey()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected FBNetworkElement key;
 
-	/**
-	 * The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getTypedValue() <em>Value</em>}' containment reference. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
 	 * @see #getTypedValue()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected FBRuntimeAbstract value;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	protected RuntimeMapImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return OperationalSemanticsPackage.Literals.RUNTIME_MAP;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	public FBNetworkElement getTypedKey() {
 		if (key != null && key.eIsProxy()) {
 			InternalEObject oldKey = (InternalEObject) key;
@@ -100,20 +85,16 @@ public class RuntimeMapImpl extends MinimalEObjectImpl.Container
 		return key;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	public FBNetworkElement basicGetTypedKey() {
 		return key;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	public void setTypedKey(FBNetworkElement newKey) {
 		FBNetworkElement oldKey = key;
 		key = newKey;
@@ -122,11 +103,9 @@ public class RuntimeMapImpl extends MinimalEObjectImpl.Container
 					key));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	public FBRuntimeAbstract getTypedValue() {
 		if (value != null && value.eIsProxy()) {
 			InternalEObject oldValue = (InternalEObject) value;
@@ -149,20 +128,16 @@ public class RuntimeMapImpl extends MinimalEObjectImpl.Container
 		return value;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	public FBRuntimeAbstract basicGetTypedValue() {
 		return value;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	public NotificationChain basicSetTypedValue(FBRuntimeAbstract newValue, NotificationChain msgs) {
 		FBRuntimeAbstract oldValue = value;
 		value = newValue;
@@ -177,11 +152,9 @@ public class RuntimeMapImpl extends MinimalEObjectImpl.Container
 		return msgs;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	public void setTypedValue(FBRuntimeAbstract newValue) {
 		if (newValue != value) {
 			NotificationChain msgs = null;
@@ -199,25 +172,22 @@ public class RuntimeMapImpl extends MinimalEObjectImpl.Container
 					newValue, newValue));
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.RUNTIME_MAP__VALUE:
 			return basicSetTypedValue(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -229,15 +199,14 @@ public class RuntimeMapImpl extends MinimalEObjectImpl.Container
 			if (resolve)
 				return getTypedValue();
 			return basicGetTypedValue();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
@@ -247,15 +216,15 @@ public class RuntimeMapImpl extends MinimalEObjectImpl.Container
 		case OperationalSemanticsPackage.RUNTIME_MAP__VALUE:
 			setTypedValue((FBRuntimeAbstract) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -265,15 +234,15 @@ public class RuntimeMapImpl extends MinimalEObjectImpl.Container
 		case OperationalSemanticsPackage.RUNTIME_MAP__VALUE:
 			setTypedValue((FBRuntimeAbstract) null);
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -281,22 +250,19 @@ public class RuntimeMapImpl extends MinimalEObjectImpl.Container
 			return key != null;
 		case OperationalSemanticsPackage.RUNTIME_MAP__VALUE:
 			return value != null;
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	protected int hash = -1;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public int getHash() {
 		if (hash == -1) {
@@ -306,51 +272,41 @@ public class RuntimeMapImpl extends MinimalEObjectImpl.Container
 		return hash;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setHash(int hash) {
 		this.hash = hash;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBNetworkElement getKey() {
 		return getTypedKey();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void setKey(FBNetworkElement key) {
 		setTypedKey(key);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBRuntimeAbstract getValue() {
 		return getTypedValue();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public FBRuntimeAbstract setValue(FBRuntimeAbstract value) {
 		FBRuntimeAbstract oldValue = getValue();
@@ -358,11 +314,9 @@ public class RuntimeMapImpl extends MinimalEObjectImpl.Container
 		return oldValue;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	public EMap<FBNetworkElement, FBRuntimeAbstract> getEMap() {
 		EObject container = eContainer();

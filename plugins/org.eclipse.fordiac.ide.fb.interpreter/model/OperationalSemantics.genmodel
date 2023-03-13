@@ -63,6 +63,7 @@
     <genClasses ecoreClass="OperationalSemantics.ecore#//FBTransaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/outputEventOccurrences"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/inputVariables"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/resultFBRuntime"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//ConnectionToValueMap">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//ConnectionToValueMap/key"/>
