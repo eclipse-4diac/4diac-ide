@@ -54,6 +54,11 @@ public class ProviderDocumentUndoChange extends Change {
 	}
 
 	@Override
+	public Object[] getAffectedObjects() {
+		return new Object[] { editorInput.getFile() };
+	}
+
+	@Override
 	public void initializeValidationData(final IProgressMonitor pm) {
 		// empty
 	}

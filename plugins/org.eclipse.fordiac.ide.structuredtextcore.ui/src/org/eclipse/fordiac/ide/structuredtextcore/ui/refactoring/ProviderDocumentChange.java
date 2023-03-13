@@ -29,7 +29,7 @@ public class ProviderDocumentChange extends TextChange {
 	private final IDocumentProvider documentProvider;
 	private long modificationStamp = -1L;
 
-	protected ProviderDocumentChange(final String name, final IFileEditorInput editorInput,
+	public ProviderDocumentChange(final String name, final IFileEditorInput editorInput,
 			final IDocumentProvider documentProvider) {
 		super(name);
 		this.editorInput = editorInput;
@@ -78,5 +78,10 @@ public class ProviderDocumentChange extends TextChange {
 	@Override
 	public Object getModifiedElement() {
 		return editorInput.getFile();
+	}
+
+	@Override
+	public Object[] getAffectedObjects() {
+		return new Object[] { editorInput.getFile() };
 	}
 }
