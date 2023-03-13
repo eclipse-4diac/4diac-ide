@@ -56,7 +56,7 @@ public final class InitialValueHelper {
 			try {
 				return (IecTypes.GenericTypes.isAnyType(varDec.getType())) ? "" //$NON-NLS-1$
 						: VariableOperations.newVariable(varDec).getValue().toString();
-			} catch (final IllegalArgumentException exc) {
+			} catch (final Exception exc) {
 				// we are only logging it and jump to default value below
 				FordiacLogHelper.logWarning("could not aquire VarDec default value", exc); //$NON-NLS-1$
 			}

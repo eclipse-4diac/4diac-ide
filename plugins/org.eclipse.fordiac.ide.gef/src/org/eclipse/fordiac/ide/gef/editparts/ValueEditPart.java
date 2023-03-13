@@ -243,7 +243,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		if ((ie instanceof VarDeclaration) && !IecTypes.GenericTypes.isAnyType(ie.getType())) {
 			try {
 				return VariableOperations.newVariable((VarDeclaration) ie).getValue().toString();
-			} catch (final IllegalArgumentException ex) {
+			} catch (final Exception ex) {
 				// we are only logging it and jump to default value below
 				FordiacLogHelper.logWarning("could not aquire type default value", ex); //$NON-NLS-1$
 			}

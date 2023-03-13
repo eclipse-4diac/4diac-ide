@@ -33,10 +33,10 @@ public class DeviceValueEditPart extends ValueEditPart {
 				}
 				// we should never be here as all device interface need a type entry, but as backup
 				return VariableOperations.newVariable((VarDeclaration) ie).getValue().toString();
-		} catch (final IllegalArgumentException ex) {
-			// we are only logging it and jump to default value below
-			FordiacLogHelper.logWarning("could not aquire type default value", ex); //$NON-NLS-1$
-		}
+			} catch (final Exception ex) {
+				// we are only logging it and jump to default value below
+				FordiacLogHelper.logWarning("could not aquire type default value", ex); //$NON-NLS-1$
+			}
 		}
 		return ""; //$NON-NLS-1$
 	}
