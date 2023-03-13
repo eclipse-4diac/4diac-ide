@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui;
 
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities;
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreCommentDocumentationProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider;
@@ -31,6 +32,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+import org.eclipse.xtext.ui.editor.XtextSourceViewer;
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
 import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider;
@@ -48,77 +50,68 @@ import com.google.inject.name.Names;
 /**
  * Use this class to register components to be used within the Eclipse IDE.
  */
-@SuppressWarnings("restriction")
+@SuppressWarnings({ "restriction", "static-method" })
 public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public STFunctionUiModule(final AbstractUIPlugin plugin) {
 		super(plugin);
 	}
 
-	@SuppressWarnings("static-method")
 	public Class<? extends XtextDocument> bindXtextDocument() {
 		return STFunctionDocument.class;
 	}
 
-	@SuppressWarnings("static-method")
 	public Class<? extends IEObjectHoverProvider> bindIEObjectHoverProvider() {
 		return STCoreHoverProvider.class;
 	}
 
-	@SuppressWarnings("static-method")
 	public Class<? extends IEObjectHoverDocumentationProvider> bindIEObjectHoverDocumentationProvider() {
 		return STCoreHoverDocumentationProvider.class;
 	}
 
-	@SuppressWarnings("static-method")
 	public void configureIEObjectDocumentationProvider(final Binder binder) {
 		binder.bindConstant().annotatedWith(Names.named(AbstractMultiLineCommentProvider.START_TAG)).to("[/(]\\*\\*?"); //$NON-NLS-1$
 		binder.bindConstant().annotatedWith(Names.named(AbstractMultiLineCommentProvider.END_TAG)).to("\\*[/)]"); //$NON-NLS-1$
 	}
 
-	@SuppressWarnings("static-method")
 	public Class<? extends IRefactoringDocument.Provider> bindIRefactoringDocument$Provider() {
 		return STCoreRefactoringDocumentProvider.class;
 	}
 
-	@SuppressWarnings("static-method")
 	public void configureCodeMinings(final Binder binder) {
 		binder.bind(IPreferenceStoreInitializer.class).annotatedWith(Names.named("codeMiningInitializer")) //$NON-NLS-1$
-				.to(STCoreCodeMiningPreferences.Initializer.class);
+		.to(STCoreCodeMiningPreferences.Initializer.class);
 	}
 
-	@SuppressWarnings("static-method")
 	public Class<? extends IHighlightingConfiguration> bindIHighlightingConfiguration() {
 		return STCoreHighlightingConfiguration.class;
 	}
 
-	@SuppressWarnings("static-method")
 	public Class<? extends ISemanticHighlightingCalculator> bindISemanticHighlightingCalculator() {
 		return STCoreSemanticHighlightingCalculator.class;
 	}
 
-	@SuppressWarnings("static-method")
 	public Class<? extends DefaultAntlrTokenToAttributeIdMapper> bindDefaultAntlrTokenToAttributeIdMapper() {
 		return STCoreAntlrTokenToAttributeIdMapper.class;
 	}
 
-	@SuppressWarnings("static-method")
 	public Class<? extends IEObjectDocumentationProvider> bindIEObjectDocumentationProvider() {
 		return STCoreCommentDocumentationProvider.class;
 	}
 
-	@SuppressWarnings("static-method")
 	public Class<? extends ISimilarityMatcher> bindISimilarityMatcher() {
 		return CaseInsensitiveSimilarityMatcher.class;
 	}
 
-	@SuppressWarnings("static-method")
 	public Class<? extends IOccurrenceComputer> bindIOccurrenceComputer() {
 		return STCoreOccurrenceComputer.class;
 	}
 
-	@SuppressWarnings("static-method")
 	public Class<? extends IContentProposalPriorities> bindIContentProposalPriorities() {
 		return STCoreContentProposalPriorities.class;
+	}
+
+	public Class<? extends XtextSourceViewer.Factory> bindXtextSourceViewer$Factory() {
+		return STCoreSourceViewerFactory.class;
 	}
 }

@@ -22,9 +22,12 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDo
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.document.STAlgorithmDocumentProvider
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.embedded.STAlgorithmURIEditorOpener
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.hyperlinking.STAlgorithmHyperlinkHelper
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.quickfix.STAlgorithmQuickAssistProcessor
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.reconciler.STAlgorithmDocumentReconcileStrategy
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceForIEditorInputFactory
 import org.eclipse.fordiac.ide.structuredtextcore.ui.codemining.STCoreCodeMiningPreferences
+import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities
+import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.STCoreSourceViewerFactory
 import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences.STCoreOccurrenceComputer
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreCommentDocumentationProvider
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverDocumentationProvider
@@ -43,6 +46,8 @@ import org.eclipse.xtext.resource.IContainer
 import org.eclipse.xtext.resource.containers.StateBasedContainerManager
 import org.eclipse.xtext.ui.LanguageSpecific
 import org.eclipse.xtext.ui.editor.IURIEditorOpener
+import org.eclipse.xtext.ui.editor.XtextSourceViewer
+import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider
 import org.eclipse.xtext.ui.editor.hover.html.IEObjectHoverDocumentationProvider
 import org.eclipse.xtext.ui.editor.hyperlinking.IHyperlinkHelper
@@ -51,15 +56,12 @@ import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider
 import org.eclipse.xtext.ui.editor.occurrences.IOccurrenceComputer
 import org.eclipse.xtext.ui.editor.preferences.IPreferenceStoreInitializer
 import org.eclipse.xtext.ui.editor.quickfix.ISimilarityMatcher
+import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor
 import org.eclipse.xtext.ui.editor.reconciler.XtextDocumentReconcileStrategy
 import org.eclipse.xtext.ui.editor.syntaxcoloring.DefaultAntlrTokenToAttributeIdMapper
 import org.eclipse.xtext.ui.editor.syntaxcoloring.IHighlightingConfiguration
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument
 import org.eclipse.xtext.ui.shared.Access
-import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities
-import org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist.STCoreContentProposalPriorities
-import org.eclipse.xtext.ui.editor.quickfix.XtextQuickAssistProcessor
-import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.quickfix.STAlgorithmQuickAssistProcessor
 
 /**
  * Use this class to register components to be used within the Eclipse IDE.
@@ -152,5 +154,9 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	def Class<? extends XtextQuickAssistProcessor> bindXtextQuickAssistProcessor() {
 		return STAlgorithmQuickAssistProcessor
+	}
+
+	def Class<? extends XtextSourceViewer.Factory> bindXtextSourceViewer$Factory() {
+		return STCoreSourceViewerFactory;
 	}
 }
