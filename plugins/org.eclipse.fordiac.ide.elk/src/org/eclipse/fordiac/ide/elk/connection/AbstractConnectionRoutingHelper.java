@@ -201,29 +201,34 @@ public abstract class AbstractConnectionRoutingHelper {
 	private static ElkPort createPort(final InterfaceEditPart ie,
 			final ConnectionLayoutMapping mapping, final boolean isGraphPin) {
 		final EditPart parent = ie.getParent();
-		ElkNode parentNode = (ElkNode) mapping.getReverseMapping().get(parent);
+		final ElkNode parentNode = (ElkNode) mapping.getReverseMapping().get(parent);
 
 		final ElkPort port = factory.createElkPort();
 		final boolean isInput = ie.getModel().isIsInput();  // use themodel to always get the right information
 
 
 		final Rectangle ieBounds = ie.getFigure().getBounds();
-		double y = ieBounds.getCenter().preciseY() - mapping.getLayoutGraph().getY();
+		final ElkNode layoutGraph = mapping.getLayoutGraph();
+		double y = ieBounds.getCenter().preciseY() - layoutGraph.getY();
 
 		if (isGraphPin) {
 			port.setProperty(CoreOptions.PORT_SIDE, isInput ? PortSide.EAST : PortSide.WEST);
-			// because ie parent is the subapp itself but the mapped edit part (for the layout graph)
-			// is the content network (because we need to be able to distinguish between expanded and normal subapp)
-			parentNode = mapping.getLayoutGraph();
+
+			// create dummy node for graph port pin. This is needed to get better layout results for expanded subapps
+			final ElkNode node = factory.createElkNode();
+			node.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS);
+			final double x = isInput ? 0 : layoutGraph.getWidth();
+			node.setLocation(x, y);
+			node.setDimensions(1, 1);  // a min size is needed that the layout alg uses the node.
+			layoutGraph.getChildren().add(node);
+			node.getPorts().add(port);
 		} else {
 			port.setProperty(CoreOptions.PORT_SIDE, isInput ? PortSide.WEST : PortSide.EAST);
+			final double x = isInput ? 0 : parentNode.getWidth();
 			y -= parentNode.getY();
+			port.setLocation(x, y);
+			parentNode.getPorts().add(port);
 		}
-
-		final double x = isInput ? 0 : parentNode.getWidth();
-		port.setLocation(x, y);
-
-		parentNode.getPorts().add(port);
 
 		mapping.getGraphMap().put(port, ie.getModel());
 		return port;
@@ -290,44 +295,22 @@ public abstract class AbstractConnectionRoutingHelper {
 
 		final PointList list = new PointList();
 
-		final ElkNode layoutGraph;
-		if (isEditorPort(startPort)) {
-			layoutGraph = startPort.getParent();
-			final int startX = (int) (startPort.getX() + layoutGraph.getX());
-			final int startY = (int) (startPort.getY() + layoutGraph.getY());
-			list.addPoint(startX, startY);
-		} else {
-			final ElkNode fb = startPort.getParent();
-			layoutGraph = fb.getParent();
-			final int startX = (int) (startPort.getX() + fb.getX() + layoutGraph.getX());
-			final int startY = (int) (startPort.getY() + fb.getY() + layoutGraph.getY());
-			list.addPoint(startX, startY);
-		}
+		final ElkNode startNode = startPort.getParent();
+		final ElkNode layoutGraph = startNode.getParent();
+		final int startX = (int) (startPort.getX() + startNode.getX() + layoutGraph.getX());
+		final int startY = (int) (startPort.getY() + startNode.getY() + layoutGraph.getY());
+		list.addPoint(startX, startY);
 
 		for (final ElkBendPoint point : bendPoints) {
 			list.addPoint((int) (point.getX() + layoutGraph.getX()), (int) (point.getY() + layoutGraph.getY()));
 		}
 
-		if (isEditorPort(endPort)) {
-			final int endX = (int) (endPort.getX() + layoutGraph.getX());
-			final int endY = (int) (endPort.getY() + layoutGraph.getY());
-			list.addPoint(endX, endY);
-		} else {
-			final ElkNode fb = endPort.getParent();
-			final int endX = (int) (endPort.getX() + fb.getX() + layoutGraph.getX());
-			final int endY = (int) (endPort.getY() + fb.getY() + layoutGraph.getY());
-			list.addPoint(endX, endY);
-		}
+		final ElkNode endNode = endPort.getParent();
+		final int endX = (int) (endPort.getX() + endNode.getX() + layoutGraph.getX());
+		final int endY = (int) (endPort.getY() + endNode.getY() + layoutGraph.getY());
+		list.addPoint(endX, endY);
 
 		return list;
-	}
-
-	private static boolean isEditorPort(final ElkPort port) {
-		/*
-		 * FB 		-> 	1: FB Node, 2: layout graph, 3: dummy parent graph
-		 * Editor 	-> 	1: layout graph, 2: dummy parent
-		 */
-		return port.getParent().getParent().getParent() == null;
 	}
 
 }
