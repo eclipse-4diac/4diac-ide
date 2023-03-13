@@ -31,7 +31,7 @@ public class FordiacMatchEngineFactory implements IMatchEngine.Factory {
 
 	@Override
 	public void setRanking(final int parseInt) {
-		this.ranking = 20;
+		this.ranking = parseInt;
 	}
 
 	@Override
