@@ -114,9 +114,11 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 			if (type == null) {
 				reloadType();
 			} else if (isFileContentChanged()) {
-				reloadType();
-				// reset editable type
+				// reset editable type to force a fresh copy the next time the editable type is accessed
+				// also needs to happen before the reload, since SystemEntry delegates to setType,
+				// which would otherwise reset the freshly reloaded type
 				setTypeEditable(null);
+				reloadType();
 			}
 		}
 		return type;
