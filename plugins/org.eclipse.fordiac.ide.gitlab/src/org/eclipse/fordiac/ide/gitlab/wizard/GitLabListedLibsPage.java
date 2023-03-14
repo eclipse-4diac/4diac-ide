@@ -1,136 +1,125 @@
 package org.eclipse.fordiac.ide.gitlab.wizard;
 
-import java.io.File;
-import java.util.Collections;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloadManager;
+import org.eclipse.fordiac.ide.gitlab.treeviewer.GLTreeContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
-import org.eclipse.jface.viewers.ColumnPixelData;
-import org.eclipse.jface.viewers.TableLayout;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.TableViewerColumn;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.TreeViewerColumn;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeItem;
 import org.gitlab4j.api.models.Package;
+import org.gitlab4j.api.models.Project;
 
 public class GitLabListedLibsPage extends WizardPage {
 	
-	private static final String PATH = "";
-	private static final String DIRECTORY = ".fblib";
-	private TableViewer viewer;
+	private TreeViewer treeViewer;
+	private Package selectedPackage;
 
 	protected GitLabListedLibsPage(String pageName) {
 		super(pageName);
 		setTitle(pageName);
 		setDescription("Available packages in GitLab");
 	}
+	
+	@Override
+	public void setPageComplete(boolean complete) {
+		super.setPageComplete(complete);
+		if (complete) {
+			try {
+				((GitLabImportWizardPage) getPreviousPage()).getDownloadManager().packageDownloader(selectedPackage, ((GitLabImportWizardPage)getPreviousPage()).getToken());
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+		}
+	}
 
 	@Override
 	public void createControl(Composite parent) {
 		Composite container = new Composite(parent, SWT.NONE);
-        GridLayout layout = new GridLayout();
+		GridData gd = new GridData(SWT.FILL, SWT.FILL, true, true);
+	    container.setLayoutData(gd);
+	    
+        GridLayout layout = new GridLayout(1, true);
         container.setLayout(layout);
-        layout.numColumns = 1;
+        
+        treeViewer = new TreeViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
+        treeViewer.setContentProvider(new GLTreeContentProvider());
+        
+        treeViewer.getTree().setHeaderVisible(true);
+        treeViewer.getTree().setLinesVisible(true);
+        treeViewer.getTree().setLayoutData(new GridData(GridData.FILL_BOTH));
        
-        viewer = TableWidgetFactory.createPropertyTableViewer(container,
-        		SWT.CHECK | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-        viewer.setContentProvider(new ArrayContentProvider());
-        createColumns(viewer);
-
-        final Table table = viewer.getTable();
-        table.setHeaderVisible(true);
-        table.setLinesVisible(true);
-        table.setLayout(createTableLayout());
+        createColumns(treeViewer);
         
-        table.addListener(SWT.Selection, event -> {
-			if (event.detail == SWT.CHECK) {
-				final TableItem tableItem = (TableItem) event.item;
-				if (tableItem.getData() instanceof Package) {
-					setPageComplete(true);
-				}
-			}
-		});
+        Tree tree = (Tree) treeViewer.getControl();
+        tree.addSelectionListener(new SelectionAdapter() {
+          @Override
+          public void widgetSelected(SelectionEvent e) {
+              TreeItem item = (TreeItem) e.item;
+                if (item.getItemCount() > 0 && item.getData() instanceof Package) {
+                	selectedPackage = ((Package) item.getData());
+                	setPageComplete(true);
+                }
+            }
+        });
         
+        treeViewer.expandAll();
         // required to avoid an error in the system
         setControl(container);
         setPageComplete(false);
 	}
 	
-	private void createColumns(TableViewer viewer) {
-		// Check-box column
-		final TableViewerColumn colCheckBox = new TableViewerColumn(viewer, SWT.WRAP);
-		colCheckBox.getColumn().setText("Download");
-
-		colCheckBox.setLabelProvider(new ColumnLabelProvider() {
-			@Override
-			public String getText(final Object element) {
-				return ""; //$NON-NLS-1$
-			}
-		});
-		
-		// Package name column
-		TableViewerColumn colPackageName = new TableViewerColumn(viewer, SWT.NONE);
-		colPackageName.getColumn().setText("Package name");
-		colPackageName.setLabelProvider(new ColumnLabelProvider() {
-		    @Override
-		    public String getText(Object element) {
-		    	if (element instanceof Package) {
-		    		Package p = (Package) element;
-		    		return p.getName();
-		    	}
-		        return "";
-		    }
-		});
-		
-				
-		// Version column
-		TableViewerColumn colVersion = new TableViewerColumn(viewer, SWT.NONE);
-		colVersion.getColumn().setText("Version");
-		colVersion.setLabelProvider(new ColumnLabelProvider() {
-		    @Override
-		    public String getText(Object element) {
-		    	if (element instanceof Package) {
-		    		Package p = (Package) element;
-		    		return p.getVersion();
-		    	}
-		        return "";
-		    }
-		});
+	private void createColumns(TreeViewer viewer) {
+		// Projects and packages column
+		TreeViewerColumn viewerColumn = new TreeViewerColumn(viewer, SWT.NONE);
+        viewerColumn.getColumn().setWidth(300);
+        viewerColumn.getColumn().setText("Packages and projects");
+        viewerColumn.setLabelProvider(new ColumnLabelProvider() {
+        	@Override
+        	public String getText(Object element) {
+        		if (element instanceof Project) {
+        			return ((Project) element).getName();
+        		} else if (element instanceof Package) {
+        			return ((Package) element).getName();
+        		} else if (element instanceof String) {
+        			return (String) element;
+        		}
+        		return "kme";
+        	}
+        });
+        
+        // Version column
+//        TreeViewerColumn versionColumn = new TreeViewerColumn(viewer, SWT.NONE);
+//        versionColumn.getColumn().setWidth(200);
+//        versionColumn.getColumn().setText("Version");
+//        versionColumn.setLabelProvider(new ColumnLabelProvider());
 	}
 	
-	private static TableLayout createTableLayout() {
-		final TableLayout layout = new TableLayout();
-		layout.addColumnData(new ColumnPixelData(200));
-		layout.addColumnData(new ColumnPixelData(200));
-		layout.addColumnData(new ColumnPixelData(100));
-		return layout;
-	}
 	
 	@Override
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		// Setting the input here insures that we have already connected to GitLab and that the packages are indeed available
-		viewer.setInput(getPackages());
+		treeViewer.setInput(getProjectAndPackagesMap());
 	}
 
-	private List<Package> getPackages() {
+	private Map<Project, List<Package>> getProjectAndPackagesMap() {
 		if (getPreviousPage() instanceof GitLabImportWizardPage && getPreviousPage().isPageComplete()) {
-				return ((GitLabImportWizardPage) getPreviousPage()).getDownloadManager().getPackages();
+				return ((GitLabImportWizardPage)getPreviousPage()).getDownloadManager().getMap();
 		}
-		return Collections.emptyList();
+		return new HashMap<>(); 
 	}
-
-	private void saveTypeLibrary() {
-		File directory = new File(PATH + DIRECTORY);
-		directory.mkdirs();
-		
-	}
-	
 
 }
