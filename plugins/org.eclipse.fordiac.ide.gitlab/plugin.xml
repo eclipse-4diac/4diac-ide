@@ -18,5 +18,13 @@
          </description>
       </wizard>
    </extension>
-
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.gitlab.preferences.GitLabPackageDownloaderPage"
+            id="org.eclipse.fordiac.ide.gitlab.preferences.GitLabPackageDownloaderPage"
+            name="GitLab Package Downloader">
+      </page>
+   </extension>
 </plugin>
