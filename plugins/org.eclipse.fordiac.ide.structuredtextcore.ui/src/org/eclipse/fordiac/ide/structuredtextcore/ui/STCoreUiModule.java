@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.ui.editor.STCoreSourceViewer.S
 import org.eclipse.fordiac.ide.structuredtextcore.ui.hovering.STCoreHoverProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.STCoreRefactoringDocumentProvider;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.XtextSourceViewer;
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
@@ -59,5 +60,10 @@ public class STCoreUiModule extends AbstractSTCoreUiModule {
 
 	public Class<? extends XtextSourceViewer.Factory> bindXtextSourceViewer$Factory() {
 		return STCoreSourceViewerFactory.class;
+	}
+
+	public void configureKeyBindingScope(final Binder binder) {
+		binder.bindConstant().annotatedWith(Names.named(XtextEditor.KEY_BINDING_SCOPE))
+				.to("org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"); //$NON-NLS-1$
 	}
 }

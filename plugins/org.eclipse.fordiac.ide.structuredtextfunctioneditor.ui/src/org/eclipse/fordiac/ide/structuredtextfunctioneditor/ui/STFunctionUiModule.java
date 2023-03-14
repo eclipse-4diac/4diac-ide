@@ -32,6 +32,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.eclipse.xtext.documentation.IEObjectDocumentationProvider;
 import org.eclipse.xtext.documentation.impl.AbstractMultiLineCommentProvider;
 import org.eclipse.xtext.ide.editor.syntaxcoloring.ISemanticHighlightingCalculator;
+import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.editor.XtextSourceViewer;
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities;
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider;
@@ -113,5 +114,10 @@ public class STFunctionUiModule extends AbstractSTFunctionUiModule {
 
 	public Class<? extends XtextSourceViewer.Factory> bindXtextSourceViewer$Factory() {
 		return STCoreSourceViewerFactory.class;
+	}
+
+	public void configureKeyBindingScope(final Binder binder) {
+		binder.bindConstant().annotatedWith(Names.named(XtextEditor.KEY_BINDING_SCOPE))
+				.to("org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"); //$NON-NLS-1$
 	}
 }

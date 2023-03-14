@@ -400,6 +400,15 @@
 			</attribute>
 		</markerResolutionGenerator>
 	</extension>
+	<extension
+		point="org.eclipse.ui.contexts">
+		<context
+			description="Structured Text Editor"
+			id="org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"
+			name="ST Editor"
+			parentId="org.eclipse.xtext.ui.XtextEditorScope">
+		</context>
+	</extension>
 	<!-- Rename Refactoring -->
 	<extension point="org.eclipse.ui.handlers">
 		<handler

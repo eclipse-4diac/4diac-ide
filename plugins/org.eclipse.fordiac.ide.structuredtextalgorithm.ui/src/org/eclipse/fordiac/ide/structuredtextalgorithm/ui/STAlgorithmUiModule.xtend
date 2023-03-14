@@ -46,6 +46,7 @@ import org.eclipse.xtext.resource.IContainer
 import org.eclipse.xtext.resource.containers.StateBasedContainerManager
 import org.eclipse.xtext.ui.LanguageSpecific
 import org.eclipse.xtext.ui.editor.IURIEditorOpener
+import org.eclipse.xtext.ui.editor.XtextEditor
 import org.eclipse.xtext.ui.editor.XtextSourceViewer
 import org.eclipse.xtext.ui.editor.contentassist.IContentProposalPriorities
 import org.eclipse.xtext.ui.editor.hover.IEObjectHoverProvider
@@ -158,5 +159,10 @@ class STAlgorithmUiModule extends AbstractSTAlgorithmUiModule {
 
 	def Class<? extends XtextSourceViewer.Factory> bindXtextSourceViewer$Factory() {
 		return STCoreSourceViewerFactory;
+	}
+
+	def void configureKeyBindingScope(Binder binder) {
+		binder.bindConstant().annotatedWith(Names.named(XtextEditor.KEY_BINDING_SCOPE)).to(
+			"org.eclipse.fordiac.ide.structuredtextcore.ui.STCoreEditorScope"); // $NON-NLS-1$
 	}
 }
