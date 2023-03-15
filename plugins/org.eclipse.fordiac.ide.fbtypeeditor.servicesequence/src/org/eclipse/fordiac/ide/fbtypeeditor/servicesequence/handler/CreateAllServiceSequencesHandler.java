@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.commands.AbstractHandler;
@@ -31,6 +30,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
+import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers.Permutations;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -39,9 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.gef.EditPart;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
-
-import com.google.common.collect.ImmutableSet;
-import com.google.common.collect.Sets;
 
 public class CreateAllServiceSequencesHandler extends AbstractHandler {
 
@@ -53,7 +50,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 
 		if ((selection.getFirstElement() instanceof SequenceRootEditPart) && (selection.toList().size() == 1)) {
 
-			final Set<Set<Object>> allCombinationsSimple = getAllCombinationsOfEvents(
+			final List<List<Object>> allCombinationsSimple = getAllCombinationsOfEvents(
 					((FBType) ((EditPart) selection.getFirstElement()).getModel()).getInterfaceList().getEventInputs()
 							.stream().toArray());
 
@@ -86,22 +83,19 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 		return null;
 	}
 
-	private static Set<Set<Object>> getAllCombinationsOfEvents(final Object[] events) {
-		Set<Set<Object>> combinations = Sets.combinations(ImmutableSet.copyOf(events), 1);
-		if (events.length > 1) {
-			for (int i = 2; i < events.length; i++) {
-				combinations = Sets.union(combinations, Sets.combinations(ImmutableSet.copyOf(events), i));
-			}
-		}
-		return combinations;
+	private static List<List<Object>> getAllCombinationsOfEvents(final Object[] events) {
+
+		// TODO call permutations also recursively to get even more combinations
+
+		return Permutations.permute(events);
 	}
 
-	private List<InputObject> getAllCombinationsWithStartStates(final Set<Set<Object>> eventCombinations,
+	private List<InputObject> getAllCombinationsWithStartStates(final List<List<Object>> allCombinationsSimple,
 			final EList<ECState> states) {
 
 		final List<InputObject> combinations = new ArrayList<>();
 
-		for (final Set<Object> events : eventCombinations) {
+		for (final List<Object> events : allCombinationsSimple) {
 			for (final ECState state : states) {
 				combinations.add(new InputObject(
 						(ArrayList<Event>) events.stream().map(Event.class::cast).collect(Collectors.toList()), state));
