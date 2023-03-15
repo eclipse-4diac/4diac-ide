@@ -23,6 +23,7 @@ import org.eclipse.emf.ecore.EObject;
  * <ul>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getInputEventOccurrence <em>Input Event
  * Occurrence</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getParentEO <em>Parent EO</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getTransaction()
@@ -46,5 +47,25 @@ public interface Transaction extends EObject {
 	 * @see #getInputEventOccurrence()
 	 * @generated */
 	void setInputEventOccurrence(EventOccurrence value);
+
+	/** Returns the value of the '<em><b>Parent EO</b></em>' reference. It is bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getCreatedTransactions <em>Created
+	 * Transactions</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the value of the '<em>Parent EO</em>' reference.
+	 * @see #setParentEO(EventOccurrence)
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getTransaction_ParentEO()
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getCreatedTransactions
+	 * @model opposite="createdTransactions"
+	 * @generated */
+	EventOccurrence getParentEO();
+
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getParentEO <em>Parent
+	 * EO</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @param value the new value of the '<em>Parent EO</em>' reference.
+	 * @see #getParentEO()
+	 * @generated */
+	void setParentEO(EventOccurrence value);
 
 } // Transaction

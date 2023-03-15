@@ -2,11 +2,11 @@
 <opsem:EventManager xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:opsem="http://OperationalSemantics/1.0">
   <transactions xsi:type="opsem:FBTransaction">
     <inputEventOccurrence active="false">
-      <event href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.1/@interface/@eventInputs.0"/>
+      <event href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.0/@interface/@eventInputs.0"/>
       <fbRuntime xsi:type="opsem:FBNetworkRuntime">
         <fbnetwork href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork"/>
         <typeRuntimes>
-          <key href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.1"/>
+          <key href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.0"/>
           <value xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.0/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
             <basicfbtype name="E_SPLIT" comment="Template for an empty basic function block">
               <versionInfo author="Alois Zoitl" date="2017" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
@@ -40,9 +40,9 @@
           </value>
         </typeRuntimes>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.1"/>
+      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.0"/>
     </inputEventOccurrence>
-    <outputEventOccurrences event="//@transactions.0/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.0">
+    <outputEventOccurrences event="//@transactions.0/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.0" createdTransactions="//@transactions.1">
       <fbRuntime xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.0/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
         <basicfbtype name="E_SPLIT" comment="Template for an empty basic function block">
           <versionInfo author="Alois Zoitl" date="2017" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
@@ -74,9 +74,9 @@
           </eCC>
         </basicfbtype>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.1"/>
+      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.0"/>
     </outputEventOccurrences>
-    <outputEventOccurrences event="//@transactions.0/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.1">
+    <outputEventOccurrences event="//@transactions.0/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@interfaceList/@eventOutputs.1" createdTransactions="//@transactions.2">
       <fbRuntime xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.0/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
         <basicfbtype name="E_SPLIT" comment="Template for an empty basic function block">
           <versionInfo author="Alois Zoitl" date="2017" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
@@ -108,7 +108,81 @@
           </eCC>
         </basicfbtype>
       </fbRuntime>
-      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.1"/>
+      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.0"/>
     </outputEventOccurrences>
+  </transactions>
+  <transactions xsi:type="opsem:FBTransaction" parentEO="//@transactions.0/@outputEventOccurrences.0">
+    <inputEventOccurrence>
+      <event href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.2/@interface/@eventInputs.0"/>
+      <fbRuntime xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.0/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
+        <basicfbtype name="E_SPLIT" comment="Template for an empty basic function block">
+          <versionInfo author="Alois Zoitl" date="2017" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
+          <identification classification="event function block" description="Copyright (c) 2017 fortiss GmbH &#xA;  &#xA;This program and the accompanying materials are made &#xA;available under the terms of the Eclipse Public License 2.0 &#xA;which is available at https://www.eclipse.org/legal/epl-2.0/ &#xA; &#xA;SPDX-License-Identifier: EPL-2.0" function="Split one event into two events" standard="61499-1 Annex A"/>
+          <interfaceList>
+            <eventInputs name="EI" isInput="true"/>
+            <eventOutputs name="EO1"/>
+            <eventOutputs name="EO2"/>
+          </interfaceList>
+          <service/>
+          <internalVars name="Sx" typeName="BOOL" arraySize="-1">
+            <value value="FALSE"/>
+          </internalVars>
+          <eCC start="//@transactions.1/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCState.0">
+            <eCState name="START" comment="Initial State" outTransitions="//@transactions.1/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCTransition.0" inTransitions="//@transactions.1/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCTransition.1">
+              <position x="82" y="63"/>
+            </eCState>
+            <eCState name="SE" comment="&quot;&quot;" outTransitions="//@transactions.1/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.1/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCTransition.0">
+              <position x="263" y="42"/>
+              <eCAction output="//@transactions.1/@inputEventOccurrence/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.0"/>
+              <eCAction output="//@transactions.1/@inputEventOccurrence/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.1"/>
+            </eCState>
+            <eCTransition conditionExpression="" source="//@transactions.1/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.1/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.1/@inputEventOccurrence/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.0">
+              <position x="190" y="59"/>
+            </eCTransition>
+            <eCTransition source="//@transactions.1/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.1/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCState.0">
+              <position x="189" y="90"/>
+            </eCTransition>
+          </eCC>
+        </basicfbtype>
+      </fbRuntime>
+      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.2"/>
+    </inputEventOccurrence>
+  </transactions>
+  <transactions xsi:type="opsem:FBTransaction" parentEO="//@transactions.0/@outputEventOccurrences.1">
+    <inputEventOccurrence>
+      <event href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.2/@interface/@eventInputs.1"/>
+      <fbRuntime xsi:type="opsem:BasicFBTypeRuntime" activeState="//@transactions.0/@inputEventOccurrence/@fbRuntime/@typeRuntimes.0/@value/@basicfbtype/@eCC/@eCState.0">
+        <basicfbtype name="E_SPLIT" comment="Template for an empty basic function block">
+          <versionInfo author="Alois Zoitl" date="2017" organization="fortiss GmbH" remarks="initial API and implementation and/or initial documentation" version="1.0"/>
+          <identification classification="event function block" description="Copyright (c) 2017 fortiss GmbH &#xA;  &#xA;This program and the accompanying materials are made &#xA;available under the terms of the Eclipse Public License 2.0 &#xA;which is available at https://www.eclipse.org/legal/epl-2.0/ &#xA; &#xA;SPDX-License-Identifier: EPL-2.0" function="Split one event into two events" standard="61499-1 Annex A"/>
+          <interfaceList>
+            <eventInputs name="EI" isInput="true"/>
+            <eventOutputs name="EO1"/>
+            <eventOutputs name="EO2"/>
+          </interfaceList>
+          <service/>
+          <internalVars name="Sx" typeName="BOOL" arraySize="-1">
+            <value value="FALSE"/>
+          </internalVars>
+          <eCC start="//@transactions.2/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCState.0">
+            <eCState name="START" comment="Initial State" outTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCTransition.0" inTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCTransition.1">
+              <position x="82" y="63"/>
+            </eCState>
+            <eCState name="SE" comment="&quot;&quot;" outTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCTransition.1" inTransitions="//@transactions.2/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCTransition.0">
+              <position x="263" y="42"/>
+              <eCAction output="//@transactions.2/@inputEventOccurrence/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.0"/>
+              <eCAction output="//@transactions.2/@inputEventOccurrence/@fbRuntime/@basicfbtype/@interfaceList/@eventOutputs.1"/>
+            </eCState>
+            <eCTransition conditionExpression="" source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCState.0" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCState.1" conditionEvent="//@transactions.2/@inputEventOccurrence/@fbRuntime/@basicfbtype/@interfaceList/@eventInputs.0">
+              <position x="190" y="59"/>
+            </eCTransition>
+            <eCTransition source="//@transactions.2/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCState.1" destination="//@transactions.2/@inputEventOccurrence/@fbRuntime/@basicfbtype/@eCC/@eCState.0">
+              <position x="189" y="90"/>
+            </eCTransition>
+          </eCC>
+        </basicfbtype>
+      </fbRuntime>
+      <parentFB href="../ReferenceExamples.sys#//@application.0/@fBNetwork/@networkElements.1/@subAppNetwork/@networkElements.2"/>
+    </inputEventOccurrence>
   </transactions>
 </opsem:EventManager>

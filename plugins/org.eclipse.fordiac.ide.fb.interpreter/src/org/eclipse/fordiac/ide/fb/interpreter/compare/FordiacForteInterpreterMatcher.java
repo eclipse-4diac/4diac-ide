@@ -43,7 +43,7 @@ public class FordiacForteInterpreterMatcher implements IEObjectMatcher {
 			if (monitor.isCanceled()) {
 				throw new ComparisonCanceledException();
 			}
-
+			// Check the type of the element
 			if (leftEObject instanceof FBTransaction) {
 				createListItemMatch(leftEventManager.getTransactions(), rightEventManager.getTransactions(),
 						leftEObject, matches);
@@ -52,6 +52,7 @@ public class FordiacForteInterpreterMatcher implements IEObjectMatcher {
 						.findFirst()
 						.orElse(null);
 				if (match != null) {
+					// This is to check if this object is an Output or Input EO
 					final EStructuralFeature structFeat = leftEObject.eContainingFeature();
 					if (structFeat
 							.getFeatureID() == OperationalSemanticsPackage.FB_TRANSACTION__INPUT_EVENT_OCCURRENCE) {
@@ -60,25 +61,20 @@ public class FordiacForteInterpreterMatcher implements IEObjectMatcher {
 						createListItemMatch(((FBTransaction) leftEObject.eContainer()).getOutputEventOccurrences(),
 								((FBTransaction) match.getRight()).getOutputEventOccurrences(), leftEObject, matches);
 					}
-				} else {
-					// createMatch(leftEObject, null, matches);
 				}
 			} else if (leftEObject instanceof FBRuntimeAbstract) {
 				final Match match = matches.stream().filter(m -> m.getLeft().equals(leftEObject.eContainer()))
 						.findFirst()
 						.orElse(null);
-				if (match != null) {
+				if (match != null
+						&& leftEObject.eClass().equals(((EventOccurrence) match.getRight()).getFbRuntime().eClass())) {
 					createMatch(leftEObject, ((EventOccurrence)match.getRight()).getFbRuntime(), matches);
-				} else {
-					// createMatch(leftEObject, null, matches);
 				}
 			} else if (leftEObject instanceof RuntimeMapImpl) {
 				final Match match = matches.stream().filter(m -> m.getLeft().equals(leftEObject.eContainer()))
 						.findFirst().orElse(null);
-				if (match != null) {
+				if (match != null && match.getRight() instanceof FBNetworkRuntime) {
 					createMapKeyMatch((RuntimeMapImpl) leftEObject, (FBNetworkRuntime) match.getRight(), matches);
-				} else {
-					// createMatch(leftEObject, null, matches);
 				}
 			}
 		}
@@ -106,6 +102,7 @@ public class FordiacForteInterpreterMatcher implements IEObjectMatcher {
 		matches.add(match);
 	}
 
+	/* This method matches the left object with the right object in the same position */
 	private void createListItemMatch(final EList<? extends EObject> leftEObjects,
 			final EList<? extends EObject> rightEObjects,
 			final EObject leftEObject, final Set<Match> matches) {
@@ -113,11 +110,10 @@ public class FordiacForteInterpreterMatcher implements IEObjectMatcher {
 		final int size = rightEObjects.size();
 		if (index < size) {
 			createMatch(leftEObject, rightEObjects.get(index), matches);
-		} else {
-			// createMatch(leftEObject, null, matches);
 		}
 	}
 
+	// Match the root objects. EventManager
 	private EventManager getManagerFromIterator(final Iterator<? extends EObject> eObjects) {
 		// Get the right EventManager
 		if (eObjects.hasNext()) {

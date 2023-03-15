@@ -10,7 +10,7 @@
     <eStructuralFeatures xsi:type="ecore:EReference" name="fbRuntime" lowerBound="1"
         eType="#//FBRuntimeAbstract" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="createdTransactions" upperBound="-1"
-        eType="#//Transaction"/>
+        eType="#//Transaction" eOpposite="#//Transaction/parentEO"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="parentFB" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FBNetworkElement"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="EventManager">
@@ -64,6 +64,8 @@
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputEventOccurrence" lowerBound="1"
         eType="#//EventOccurrence" containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="parentEO" eType="#//EventOccurrence"
+        eOpposite="#//EventOccurrence/createdTransactions"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FBNetworkRuntime" eSuperTypes="#//FBRuntimeAbstract">
     <eOperations name="getModel" lowerBound="1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//FBNetwork">

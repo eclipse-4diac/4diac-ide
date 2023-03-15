@@ -109,11 +109,14 @@ public interface EventOccurrence extends EObject {
 	void setFbRuntime(FBRuntimeAbstract value);
 
 	/** Returns the value of the '<em><b>Created Transactions</b></em>' reference list. The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction}. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction}. It is bidirectional and its opposite is
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getParentEO <em>Parent EO</em>}'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @return the value of the '<em>Created Transactions</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getEventOccurrence_CreatedTransactions()
-	 * @model
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getParentEO
+	 * @model opposite="parentEO"
 	 * @generated */
 	EList<Transaction> getCreatedTransactions();
 

@@ -22,7 +22,8 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-import org.eclipse.emf.ecore.util.EObjectResolvingEList;
+import org.eclipse.emf.ecore.util.EObjectWithInverseResolvingEList;
+import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
@@ -281,8 +282,9 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 	@Override
 	public EList<Transaction> getCreatedTransactions() {
 		if (createdTransactions == null) {
-			createdTransactions = new EObjectResolvingEList<>(Transaction.class, this,
-					OperationalSemanticsPackage.EVENT_OCCURRENCE__CREATED_TRANSACTIONS);
+			createdTransactions = new EObjectWithInverseResolvingEList<>(Transaction.class, this,
+					OperationalSemanticsPackage.EVENT_OCCURRENCE__CREATED_TRANSACTIONS,
+					OperationalSemanticsPackage.TRANSACTION__PARENT_EO);
 		}
 		return createdTransactions;
 	}
@@ -326,11 +328,28 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
+	@SuppressWarnings("unchecked")
+	@Override
+	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
+		switch (featureID) {
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__CREATED_TRANSACTIONS:
+			return ((InternalEList<InternalEObject>) (InternalEList<?>) getCreatedTransactions()).basicAdd(otherEnd,
+					msgs);
+		default:
+			return super.eInverseAdd(otherEnd, featureID, msgs);
+		}
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__FB_RUNTIME:
 			return basicSetFbRuntime(null, msgs);
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__CREATED_TRANSACTIONS:
+			return ((InternalEList<?>) getCreatedTransactions()).basicRemove(otherEnd, msgs);
 		default:
 			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}

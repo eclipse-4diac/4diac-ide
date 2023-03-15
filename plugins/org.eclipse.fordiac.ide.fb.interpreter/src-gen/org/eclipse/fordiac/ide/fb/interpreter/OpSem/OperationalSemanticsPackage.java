@@ -214,12 +214,18 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @ordered */
 	int TRANSACTION__INPUT_EVENT_OCCURRENCE = 0;
 
+	/** The feature id for the '<em><b>Parent EO</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int TRANSACTION__PARENT_EO = 1;
+
 	/** The number of structural features of the '<em>Transaction</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
 	 *
 	 * @generated
 	 * @ordered */
-	int TRANSACTION_FEATURE_COUNT = 1;
+	int TRANSACTION_FEATURE_COUNT = 2;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBNetworkRuntimeImpl <em>FB
 	 * Network Runtime</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -268,6 +274,12 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int FB_TRANSACTION__INPUT_EVENT_OCCURRENCE = TRANSACTION__INPUT_EVENT_OCCURRENCE;
+
+	/** The feature id for the '<em><b>Parent EO</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int FB_TRANSACTION__PARENT_EO = TRANSACTION__PARENT_EO;
 
 	/** The feature id for the '<em><b>Output Event Occurrences</b></em>' containment reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
@@ -520,6 +532,16 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see #getTransaction()
 	 * @generated */
 	EReference getTransaction_InputEventOccurrence();
+
+	/** Returns the meta object for the reference
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getParentEO <em>Parent EO</em>}'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the reference '<em>Parent EO</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction#getParentEO()
+	 * @see #getTransaction()
+	 * @generated */
+	EReference getTransaction_ParentEO();
 
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime <em>FB
 	 * Network Runtime</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -795,6 +817,12 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 *
 		 * @generated */
 		EReference TRANSACTION__INPUT_EVENT_OCCURRENCE = eINSTANCE.getTransaction_InputEventOccurrence();
+
+		/** The meta object literal for the '<em><b>Parent EO</b></em>' reference feature. <!-- begin-user-doc --> <!--
+		 * end-user-doc -->
+		 *
+		 * @generated */
+		EReference TRANSACTION__PARENT_EO = eINSTANCE.getTransaction_ParentEO();
 
 		/** The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBNetworkRuntimeImpl <em>FB Network Runtime</em>}'
