@@ -70,8 +70,8 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 				FordiacLogHelper.logError(e.getMessage());
 			}
 		}
-		final IFile file = folder.getFile(/* "abc.xmi"); */
-				triggerEvent.getFBNetworkElement().getQualifiedName() + "." + triggerEvent.getName() + ".xmi");  //$NON-NLS-1$//$NON-NLS-2$
+		final IFile file = folder.getFile(
+				triggerEvent.getFBNetworkElement().getQualifiedName() + "." + triggerEvent.getName() + ".opsem");  //$NON-NLS-1$//$NON-NLS-2$
 		if (!file.exists()) {
 			// check for the next free filename
 		}
