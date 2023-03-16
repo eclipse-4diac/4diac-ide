@@ -380,7 +380,7 @@ final class STCoreUtil {
 					feature.type.newArrayType(newSubrange(0, feature.arraySize - 1))
 				else
 					feature.type
-			STVarDeclaration case feature.type instanceof DataType:
+			STVarDeclaration:
 				try {
 					val type = switch (type: feature.type) {
 						AnyStringType case feature.maxLength !== null:
@@ -414,11 +414,14 @@ final class STCoreUtil {
 	}
 
 	def static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
-		DataFactory.eINSTANCE.createArrayType => [
-			name = '''ARRAY [«arraySubranges.map['''«IF setLowerLimit && setUpperLimit»«lowerLimit»..«upperLimit»«ELSE»*«ENDIF»'''].join(", ")»] OF «arrayBaseType.name»'''
-			baseType = arrayBaseType
-			subranges.addAll(arraySubranges)
-		]
+		if (arrayBaseType !== null)
+			DataFactory.eINSTANCE.createArrayType => [
+				name = '''ARRAY [«arraySubranges.map['''«IF setLowerLimit && setUpperLimit»«lowerLimit»..«upperLimit»«ELSE»*«ENDIF»'''].join(", ")»] OF «arrayBaseType.name»'''
+				baseType = arrayBaseType
+				subranges.addAll(arraySubranges)
+			]
+		else
+			null
 	}
 
 	def static Subrange toSubrange(STExpression expr) {
@@ -431,10 +434,13 @@ final class STCoreUtil {
 	}
 
 	def static AnyStringType newStringType(AnyStringType template, int maxLengthValue) {
-		DataFactory.eINSTANCE.create(template.eClass) as AnyStringType => [
-			name = '''«template.name»[«maxLengthValue»]'''
-			maxLength = maxLengthValue
-		]
+		if (template !== null)
+			DataFactory.eINSTANCE.create(template.eClass) as AnyStringType => [
+				name = '''«template.name»[«maxLengthValue»]'''
+				maxLength = maxLengthValue
+			]
+		else
+			null
 	}
 
 	def static int asConstantInt(STExpression expr) {
