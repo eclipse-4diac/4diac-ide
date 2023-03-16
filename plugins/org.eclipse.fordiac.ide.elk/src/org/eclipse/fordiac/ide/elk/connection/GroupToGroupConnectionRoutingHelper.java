@@ -15,7 +15,6 @@ package org.eclipse.fordiac.ide.elk.connection;
 
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 
 public class GroupToGroupConnectionRoutingHelper extends AbstractConnectionRoutingHelper {
@@ -35,15 +34,13 @@ public class GroupToGroupConnectionRoutingHelper extends AbstractConnectionRouti
 	}
 
 	@Override
-	protected void saveConnections(final ConnectionLayoutMapping mapping, final InterfaceEditPart ie) {
-		for (final Object obj : ie.getTargetConnections()) {
-			final ConnectionEditPart conn = (ConnectionEditPart) obj;
-			final Group sourceGroup = getGroupFromModel(conn.getSource().getParent().getModel());
-			final Group targetGroup = getGroupFromModel(conn.getTarget().getParent().getModel());
+	protected void saveConnection(final ConnectionLayoutMapping mapping, final ConnectionEditPart con) {
+		final Group sourceGroup = getGroupFromModel(con.getSource().getParent().getModel());
+		final Group targetGroup = getGroupFromModel(con.getTarget().getParent().getModel());
 
-			if ((group1.equals(sourceGroup) && group2.equals(targetGroup)) || (group2.equals(sourceGroup) && group1.equals(targetGroup))) {
-				mapping.getConnections().add(conn);
-			}
+		if ((group1.equals(sourceGroup) && group2.equals(targetGroup))
+				|| (group2.equals(sourceGroup) && group1.equals(targetGroup))) {
+			mapping.getConnections().add(con);
 		}
 	}
 

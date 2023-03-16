@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -32,6 +32,7 @@ import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;
 import org.eclipse.fordiac.ide.debug.LaunchConfigurationAttributes;
 import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable;
+import org.eclipse.fordiac.ide.model.eval.variable.FBVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -299,6 +300,8 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 				return ((ArrayVariable) parentElement).getElements().toArray();
 			} else if (parentElement instanceof StructVariable) {
 				return ((StructVariable) parentElement).getMembers().values().toArray();
+			} else if (parentElement instanceof FBVariable) {
+				return ((FBVariable) parentElement).getMembers().values().toArray();
 			}
 			return new Object[0];
 		}
@@ -310,7 +313,8 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 
 		@Override
 		public boolean hasChildren(final Object element) {
-			return element instanceof ArrayVariable || element instanceof StructVariable;
+			return element instanceof ArrayVariable || element instanceof StructVariable
+					|| element instanceof FBVariable;
 		}
 	}
 
@@ -386,12 +390,16 @@ public abstract class MainLaunchConfigurationTab extends AbstractLaunchConfigura
 					((ArrayVariable) variable).getElements().forEach(child -> getViewer().update(child, null));
 				} else if (variable instanceof StructVariable) {
 					((StructVariable) variable).getMembers().values().forEach(child -> getViewer().update(child, null));
+				} else if (variable instanceof FBVariable) {
+					((FBVariable) variable).getMembers().values().forEach(child -> getViewer().update(child, null));
 				}
 				// update parent element (if exists)
 				MainLaunchConfigurationTab.this.arguments.stream().filter(
 						arg -> (arg instanceof ArrayVariable && ((ArrayVariable) arg).getElements().contains(element))
 						|| (arg instanceof StructVariable
-								&& ((StructVariable) arg).getMembers().values().contains(element)))
+								&& ((StructVariable) arg).getMembers().values().contains(element))
+						|| (arg instanceof FBVariable
+								&& ((FBVariable) arg).getMembers().values().contains(element)))
 				.forEach(container -> getViewer().update(container, null));
 				MainLaunchConfigurationTab.this.updateLaunchConfigurationDialog();
 			}

@@ -34,6 +34,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteMemberVariableCommand
 import org.eclipse.fordiac.ide.model.commands.insert.InsertVariableCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
@@ -106,13 +107,13 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	private void createNatTable(final Composite parent) {
-		structMemberProvider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
+		structMemberProvider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
 		structMemberProvider.setInput(getType().getMemberVariables());
-		structMemberProvider.setTypeLib(getType().getTypeLibrary());
+		structMemberProvider.setTypeLib(getDataTypeLibrary());
 		final DataLayer inputDataLayer = setupDataLayer(structMemberProvider);
 		initTypeSelection(getType().getTypeLibrary().getDataTypeLibrary());
 		natTable = NatTableWidgetFactory.createRowNatTable(parent, inputDataLayer, new VarDeclarationColumnProvider(),
-				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, Boolean.FALSE);
+				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, false);
 		natTable.addConfiguration(new InitialValueEditorConfiguration(structMemberProvider));
 		natTable.configure();
 	}
@@ -132,12 +133,15 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 	private static void configureLabels(final VarDeclarationListProvider provider, final LabelStack configLabels,
 			final int columnPosition, final int rowPosition) {
+		final VarDeclaration rowItem = provider.getRowObject(rowPosition);
 		switch (columnPosition) {
 		case I4diacNatTableUtil.TYPE:
+			if (rowItem.getType() instanceof ErrorMarkerDataType) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+			}
 			configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
 			break;
 		case I4diacNatTableUtil.INITIAL_VALUE:
-			final VarDeclaration rowItem = provider.getRowObject(rowPosition);
 			if (rowItem.getValue() != null && rowItem.getValue().hasError()) {
 				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 			}

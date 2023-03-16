@@ -34,16 +34,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.With
 
 import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 
-abstract class ForteFBTemplate extends ForteLibraryElementTemplate {
+abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemplate<T> {
 
 	final String DEFAULT_BASE_CLASS
 
-	new(String name, Path prefix, String baseClass) {
-		super(name, prefix)
+	new(T type, String name, Path prefix, String baseClass) {
+		super(type, name, prefix)
 		this.DEFAULT_BASE_CLASS = baseClass
 	}
-
-	override protected FBType getType()
 
 	def protected baseClass() {
 		if (type?.compilerInfo?.classdef !== null) {

@@ -21,7 +21,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.gef.commands.Command;
@@ -30,28 +30,16 @@ import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
 public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclaration> {
 
 	private final CommandExecutor section;
-	private TypeLibrary library;
+	private DataTypeLibrary dataTypeLib;
 
 	public VarDeclarationColumnAccessor(final CommandExecutor section) {
 		this.section = section;
-	}
-
-	public VarDeclarationColumnAccessor(final CommandExecutor section, final TypeLibrary library) {
-		this.section = section;
-		setTypeLib(library);
 	}
 
 	protected CommandExecutor getSection() {
 		return section;
 	}
 
-	protected TypeLibrary getLibrary() {
-		return library;
-	}
-
-	private void setLibrary(final TypeLibrary library) {
-		this.library = library;
-	}
 
 	@Override
 	public Object getDataValue(final VarDeclaration rowObject, final int columnIndex) {
@@ -83,8 +71,9 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 			cmd = new ChangeNameCommand(rowObject, value);
 			break;
 		case I4diacNatTableUtil.TYPE:
-			final DataType dataType = getLibrary().getDataTypeLibrary().getTypeIfExists(value);
+			final DataType dataType = dataTypeLib.getTypeIfExists(value);
 			if (dataType == null) {
+				// we couldn't find a data type do nothing.
 				return;
 			}
 			cmd = new ChangeDataTypeCommand(rowObject, dataType);
@@ -110,9 +99,7 @@ public class VarDeclarationColumnAccessor implements IColumnAccessor<VarDeclarat
 		return 5;
 	}
 
-	public void setTypeLib(final TypeLibrary dataTypeLib) {
-		if (getLibrary() == null) {
-			setLibrary(dataTypeLib);
-		}
+	public void setTypeLib(final DataTypeLibrary dataTypeLib) {
+		this.dataTypeLib = dataTypeLib;
 	}
 }

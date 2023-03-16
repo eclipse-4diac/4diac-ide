@@ -15,7 +15,7 @@
 package org.eclipse.fordiac.ide.export.forte_ng.struct
 
 import java.nio.file.Path
-import org.eclipse.fordiac.ide.export.forte_ng.struct.StructBaseTemplate
+import org.eclipse.fordiac.ide.export.forte_ng.ForteNgExportFilter
 import org.eclipse.fordiac.ide.model.data.StructuredType
 
 class StructuredTypeHeaderTemplate extends StructBaseTemplate {
@@ -57,7 +57,7 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 	def protected generateHeaderIncludes() '''
 		#include "forte_struct.h"
 		
-		«type.memberVariables.map[type].generateTypeIncludes»
+		«getDependencies(#{ForteNgExportFilter.OPTION_HEADER -> Boolean.TRUE}).generateDependencyIncludes»
 		
 		«type.compilerInfo?.header»
 	'''

@@ -20,15 +20,11 @@ import java.nio.file.Path
 import org.eclipse.fordiac.ide.export.forte_ng.ForteFBTemplate
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType
-import org.eclipse.xtend.lib.annotations.Accessors
 
-class CompositeFBHeaderTemplate extends ForteFBTemplate {
-
-	@Accessors(PROTECTED_GETTER) CompositeFBType type
+class CompositeFBHeaderTemplate extends ForteFBTemplate<CompositeFBType> {
 
 	new(CompositeFBType type, String name, Path prefix) {
-		super(name, prefix, "CCompositeFB")
-		this.type = type
+		super(type, name, prefix, "CCompositeFB")
 	}
 
 	override generate() '''

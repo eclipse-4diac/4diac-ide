@@ -20,9 +20,9 @@ import org.eclipse.elk.alg.libavoid.server.LibavoidServerException;
 import org.eclipse.fordiac.ide.elk.FordiacLayoutData;
 import org.eclipse.fordiac.ide.elk.Messages;
 import org.eclipse.fordiac.ide.elk.commands.ConnectionLayoutCommand;
+import org.eclipse.fordiac.ide.elk.connection.AbstractConnectionRoutingHelper;
 import org.eclipse.fordiac.ide.elk.connection.ConnectionLayoutMapping;
 import org.eclipse.fordiac.ide.elk.connection.ConnectionLayoutRunner;
-import org.eclipse.fordiac.ide.elk.connection.StandardConnectionRoutingHelper;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.ui.IWorkbenchPart;
@@ -37,7 +37,7 @@ public class ConnectionLayoutHandler extends AbstractLayoutHandler {
 		if (null != part) {
 			try {
 				final ConnectionLayoutMapping normalMapping = ConnectionLayoutRunner.run(part);
-				final FordiacLayoutData data = StandardConnectionRoutingHelper.INSTANCE.calculateConnections(normalMapping);
+				final FordiacLayoutData data = AbstractConnectionRoutingHelper.calculateConnections(normalMapping);
 
 				ConnectionLayoutRunner.runGroups(part, normalMapping, data);
 				ConnectionLayoutRunner.runSubapps(normalMapping, data);

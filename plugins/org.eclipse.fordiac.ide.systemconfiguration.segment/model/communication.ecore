@@ -7,14 +7,37 @@
         <details key="body" value="return &quot;tsnConfig&quot;;"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getMappingTargets" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//CommunicationMappingTarget">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return ECollections.toEList(windows);"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cycleTime" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="windows" lowerBound="1"
         upperBound="8" eType="#//TsnWindow" containment="true"/>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="TsnWindow" eSuperTypes="../../org.eclipse.fordiac.ide.model/model/lib.ecore#//INamedElement">
-    <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+  <eClassifiers xsi:type="ecore:EClass" name="TsnWindow" eSuperTypes="../../org.eclipse.fordiac.ide.model/model/lib.ecore#//CommunicationMappingTarget">
+    <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return Annotations.getTsnWindowName(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="duration" lowerBound="1"
         eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" defaultValueLiteral="0"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="DefaultConfiguration" eSuperTypes="../../org.eclipse.fordiac.ide.model/model/lib.ecore#//CommunicationConfiguration">
+    <eOperations name="getId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return &quot;defaultConfig&quot;;"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getMappingTargets" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//CommunicationMappingTarget">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return ECollections.asEList(target);"/>
+      </eAnnotations>
+    </eOperations>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//CommunicationMappingTarget"/>
   </eClassifiers>
 </ecore:EPackage>

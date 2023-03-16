@@ -90,7 +90,7 @@ class StructuredTextParseUtil {
 
 	def private static void createAdapterResource(AdapterDeclaration adapter, XtextResourceSet resourceSet) {
 		val adapterResource = resourceSet.createResource(resourceSet.computeUnusedUri(FB_URI_EXTENSION));
-		adapterResource.contents.add(adapter.getAdapterType.adapterFBType);
+		adapterResource.contents.add(adapter.getType.adapterFBType);
 	}
 
 	def private static void createStructResource(VarDeclaration variable, XtextResourceSet resourceSet) {

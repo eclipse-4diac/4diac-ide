@@ -165,7 +165,7 @@ public class MoveElementsFromSubAppCommand extends Command {
 
 	@Override
 	public void redo() {
-		removeFromGroup.execute();
+		removeFromGroup.redo();
 		redoRemoveElementsFromSubapp();
 		redoAddElementsToDestination();
 	}

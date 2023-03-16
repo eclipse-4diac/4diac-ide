@@ -1,5 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, fortiss GmbH
+ * Copyright (c) 2008, 2023 Profactor GmbH, fortiss GmbH,
+ *                          Johannes Kepler Unviersity Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,14 +11,13 @@
  * Contributors:
  *   Gerhard Ebenhofer, Monika Wenger, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
+ *   Alois Zoitl - updated for new adapter FB handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.gef.commands.Command;
 
@@ -25,8 +25,7 @@ public class ChangeNameCommand extends Command {
 	private final INamedElement element;
 	private final String name;
 	private String oldName;
-	private FBNetworkElement fbNetworkElement;
-	private AdapterDeclaration adapterDeclaration;
+	private INamedElement adapterElement;
 
 	public ChangeNameCommand(final INamedElement element, final String name) {
 		super();
@@ -42,12 +41,7 @@ public class ChangeNameCommand extends Command {
 	@Override
 	public void execute() {
 		oldName = element.getName();
-		if ((element instanceof AdapterDeclaration) && (element.eContainer().eContainer() instanceof CompositeFBType)) {
-			fbNetworkElement = ((AdapterDeclaration) element).getAdapterFB();
-		}
-		if (element instanceof AdapterFB) {
-			adapterDeclaration = ((AdapterFB) element).getAdapterDecl();
-		}
+		checkForAdapter();
 		setName(name);
 	}
 
@@ -63,11 +57,8 @@ public class ChangeNameCommand extends Command {
 
 	private void setName(final String name) {
 		element.setName(name);
-		if (null != fbNetworkElement) {
-			fbNetworkElement.setName(name);
-		}
-		if (null != adapterDeclaration) {
-			adapterDeclaration.setName(name);
+		if (null != adapterElement) {
+			adapterElement.setName(name);
 		}
 	}
 
@@ -77,6 +68,20 @@ public class ChangeNameCommand extends Command {
 
 	public String getOldName() {
 		return oldName;
+	}
+
+	private void checkForAdapter() {
+		if (element instanceof AdapterDeclaration) {
+			final AdapterDeclaration adpDecl = (AdapterDeclaration) element;
+			if (adpDecl.getAdapterFB() != null) {
+				adapterElement = adpDecl.getAdapterFB();
+			} else if (adpDecl.getAdapterNetworkFB() != null) {
+				adapterElement = adpDecl.getAdapterNetworkFB();
+			}
+		}
+		if (element instanceof AdapterFB) {
+			adapterElement = ((AdapterFB) element).getAdapterDecl();
+		}
 	}
 
 }

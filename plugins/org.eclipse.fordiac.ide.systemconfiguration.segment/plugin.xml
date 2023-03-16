@@ -21,6 +21,11 @@
             label="TSN"
             name="tsnProtocol">
       </communicationProtocol>
+      <communicationProtocol
+            class="org.eclipse.fordiac.ide.systemconfiguration.segment.properties.DefaultCommDetails"
+            id="defaultConfig"
+            label="Default"
+            name="defaultProtocol">
+      </communicationProtocol>
    </extension>
-
 </plugin>

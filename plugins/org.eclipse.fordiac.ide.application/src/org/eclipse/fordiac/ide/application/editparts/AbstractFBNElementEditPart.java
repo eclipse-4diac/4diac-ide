@@ -46,7 +46,7 @@ import org.eclipse.fordiac.ide.gef.policies.DragHighlightEditPolicy;
 import org.eclipse.fordiac.ide.gef.tools.ScrollingDragEditPartsTracker;
 import org.eclipse.fordiac.ide.model.commands.change.UpdateFBTypeCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -98,7 +98,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		}
 	}
 
-	private Device referencedDevice;
+	private ColorizableElement referencedDevice;
 
 	private DiagramFontChangeListener fontChangeListener;
 
@@ -169,7 +169,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	protected void updateDeviceListener() {
-		final Device device = findDevice();
+		final ColorizableElement device = findDevice();
 		if (device != referencedDevice) {
 			if (referencedDevice != null) {
 				referencedDevice.eAdapters().remove(colorChangeListener);
@@ -216,7 +216,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		final List<EditPart> selection = getViewer().getSelectedEditParts();
 		if (selection.size() > 1) {
 			return false;
-		} else if (selection.size() == 1) {
+		}
+		if (selection.size() == 1) {
 			return selection.get(0) == this;
 		}
 		return true;
@@ -281,7 +282,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	protected void backgroundColorChanged(final IFigure figure) {
 		Color color = null;
 		if (getModel() != null) {
-			final Device dev = findDevice();
+			final ColorizableElement dev = findDevice();
 			if (dev != null) {
 				color = LibraryElementFactory.eINSTANCE.createColor();
 				color.setRed(dev.getColor().getRed());
@@ -292,7 +293,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		setColor(figure, color);
 	}
 
-	private Device findDevice() {
+	protected ColorizableElement findDevice() {
 		Resource res = null;
 		if ((null != getModel()) && getModel().isMapped()) {
 			res = getModel().getResource();
@@ -416,20 +417,15 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	protected List<Object> getModelChildren() {
 		final List<Object> elements = new ArrayList<>();
 		elements.add(getInstanceName());
-		elements.addAll(getModel().getInterface()
-				.getAllInterfaceElements());
-		elements.removeAll(getModel().getInterface().getInputVars()
-				.stream()
-				.filter(it -> !it.isVisible())
+		elements.addAll(getModel().getInterface().getAllInterfaceElements());
+		elements.removeAll(getModel().getInterface().getInputVars().stream().filter(it -> !it.isVisible())
 				.collect(Collectors.toList()));
-		elements.removeAll(getModel().getInterface().getOutputVars()
-				.stream()
-				.filter(it -> !it.isVisible())
+		elements.removeAll(getModel().getInterface().getOutputVars().stream().filter(it -> !it.isVisible())
 				.collect(Collectors.toList()));
 		return elements;
 	}
 
-	private InstanceName getInstanceName() {
+	protected InstanceName getInstanceName() {
 		if (instanceName == null) {
 			instanceName = new InstanceName(getModel());
 		}
@@ -458,7 +454,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			// forward direct edit request to instance name
 			final List<EditPart> children = getChildren();
 			children.stream().filter(InstanceNameEditPart.class::isInstance)
-			.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
+					.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
 			return;
 		}
 		super.performRequest(request);

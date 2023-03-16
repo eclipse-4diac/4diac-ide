@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.GraphicalViewer;
@@ -65,7 +64,6 @@ public class ConvertToSubappHandler extends AbstractHandler implements CommandSt
 			}
 
 			commandStack.addCommandStackEventListener(this);
-			SystemManager.INSTANCE.notifyListeners();
 		}
 		return Status.OK_STATUS;
 	}

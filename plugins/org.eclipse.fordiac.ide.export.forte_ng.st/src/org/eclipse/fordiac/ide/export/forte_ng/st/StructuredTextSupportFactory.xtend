@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,6 +18,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 
 class StructuredTextSupportFactory implements ILanguageSupportFactory {
 
@@ -32,6 +33,8 @@ class StructuredTextSupportFactory implements ILanguageSupportFactory {
 			new ECTransitionSupport(source)
 		} else if (source instanceof STVarGlobalDeclarationBlock) {
 			new VarGlobalConstantsSupport(source)
+		} else if (source instanceof VarDeclaration) {
+			new VarDeclarationSupport(source)
 		}
 	}
 
@@ -42,5 +45,6 @@ class StructuredTextSupportFactory implements ILanguageSupportFactory {
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", STMethod, factory)
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", STFunctionSource, factory)
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", STVarGlobalDeclarationBlock, factory)
+		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_ng", VarDeclaration, factory)
 	}
 }

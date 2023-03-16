@@ -22,7 +22,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.search.Messages;
 import org.eclipse.fordiac.ide.model.search.ModelSearchResultPage;
-import org.eclipse.fordiac.ide.model.search.types.StructSearch;
+import org.eclipse.fordiac.ide.model.search.types.InstanceSearch;
+import org.eclipse.fordiac.ide.model.search.types.StructManipulatorSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
@@ -99,7 +100,7 @@ public class StructUpdateDialog extends MessageDialog {
 	}
 
 	protected void createfilterButtons(final Composite parent) {
-		// Override this method to add filter buttons
+		// Override this method to add searchFilter buttons
 	}
 
 	public void refresh() {
@@ -107,8 +108,8 @@ public class StructUpdateDialog extends MessageDialog {
 	}
 
 	protected List<INamedElement> performStructSearch() {
-		final StructSearch structSearch = new StructSearch(dataTypeEntry);
-		return structSearch.getAllTypesWithStruct();
+		final InstanceSearch structSearch = new StructManipulatorSearch(dataTypeEntry);
+		return structSearch.performCompleteSearch();
 	}
 
 	private static TableViewer createTableViewer(final Composite parent) {

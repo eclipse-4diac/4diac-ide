@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.typelibrary.AdapterTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
@@ -53,15 +54,9 @@ public final class ValidateProject {
 				return Status.OK_STATUS;
 			}
 		};
-		job.setRule(null);
+		job.setPriority(Job.BUILD);
+		job.setRule(root);
 		job.schedule();
-		try {
-			job.join();
-		} catch (final InterruptedException e) {
-			FordiacLogHelper.logError("checkTypeLibraryInProjectsInWorkspaceJob interrupted", e); //$NON-NLS-1$
-			Thread.currentThread().interrupt();
-		}
-
 	}
 
 	public static void checkTypeLibraryInProjects(final IProject project) {

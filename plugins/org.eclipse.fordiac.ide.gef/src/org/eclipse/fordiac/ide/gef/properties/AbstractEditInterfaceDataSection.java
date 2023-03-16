@@ -30,7 +30,6 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -122,11 +121,10 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		outputProvider = new VarDeclarationListProvider(null, new VarDeclarationColumnAccessor(this, null));
+		outputProvider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this,
-				Boolean.FALSE);
+				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, false);
 		outputTable.addConfiguration(new InitialValueEditorConfiguration(outputProvider));
 		outputTable.configure();
 	}
@@ -138,25 +136,23 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		inputProvider = new VarDeclarationListProvider(new ArrayList<>(), new VarDeclarationColumnAccessor(this, null));
+		inputProvider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this,
-				Boolean.TRUE);
+				new VarDeclarationColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, true);
 		inputTable.addConfiguration(new InitialValueEditorConfiguration(inputProvider));
 		inputTable.configure();
 	}
 
 	@Override
 	protected void setInputInit() {
-		((VarDeclarationListProvider) outputProvider).setTypeLib(getTypeLibrary());
-		((VarDeclarationListProvider) inputProvider).setTypeLib(getTypeLibrary());
+		((VarDeclarationListProvider) outputProvider).setTypeLib(getDataTypeLib());
+		((VarDeclarationListProvider) inputProvider).setTypeLib(getDataTypeLib());
 	}
 
 	@Override
-	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
-		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getInputVars());
-		final EList<VarDeclaration> outputVars = element.getInterface().getOutputVars();
-		((FordiacInterfaceListProvider) outputProvider).setInput(outputVars);
+	public void setTableInput(final InterfaceList il) {
+		((FordiacInterfaceListProvider<VarDeclaration>) inputProvider).setInput(il.getInputVars());
+		((FordiacInterfaceListProvider<VarDeclaration>) outputProvider).setInput(il.getOutputVars());
 	}
 }

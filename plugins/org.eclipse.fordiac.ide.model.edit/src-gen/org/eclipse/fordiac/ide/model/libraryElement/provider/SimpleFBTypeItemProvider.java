@@ -123,6 +123,8 @@ public class SimpleFBTypeItemProvider extends BaseFBTypeItemProvider {
 		Object childObject = child;
 
 		boolean qualify =
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_VARS ||
+			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_CONST_VARS ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__INTERNAL_FBS ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__CALLABLES ||
 			childFeature == LibraryElementPackage.Literals.BASE_FB_TYPE__ALGORITHM ||

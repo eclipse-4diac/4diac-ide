@@ -12,28 +12,28 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.nat;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.nebula.widgets.nattable.data.IColumnAccessor;
 import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 
-public class AdapterListProvider extends ListDataProvider<AdapterDeclaration> implements FordiacInterfaceListProvider {
+public class AdapterListProvider extends ListDataProvider<AdapterDeclaration>
+		implements FordiacInterfaceListProvider<AdapterDeclaration> {
 
-	public AdapterListProvider(final AbstractSection section, final List<AdapterDeclaration> list) {
-		super(list, new AdapterColumnAcessor(section));
+	public AdapterListProvider(final AbstractSection section) {
+		super(Collections.emptyList(), new AdapterColumnAcessor(section));
 	}
 
-	public AdapterListProvider(final List<AdapterDeclaration> list,
-			final IColumnAccessor<AdapterDeclaration> columnAccessor) {
-		super(list, columnAccessor);
+	public AdapterListProvider(final IColumnAccessor<AdapterDeclaration> columnAccessor) {
+		super(Collections.emptyList(), columnAccessor);
 	}
 
 	@Override
-	public <T extends List<? extends INamedElement>> void setInput(final T varDecl) {
-		this.list = (List<AdapterDeclaration>) varDecl;
+	public void setInput(final List<AdapterDeclaration> varDecl) {
+		this.list = varDecl;
 	}
 
 }

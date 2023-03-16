@@ -23,22 +23,23 @@ public class StandardConnectionRoutingHelper extends AbstractConnectionRoutingHe
 	public static final StandardConnectionRoutingHelper INSTANCE = new StandardConnectionRoutingHelper();
 
 	@Override
-	void saveConnections(final ConnectionLayoutMapping mapping, final InterfaceEditPart ie) {
+	protected void saveConnections(final ConnectionLayoutMapping mapping, final InterfaceEditPart ie) {
 		if (mapping.getParentElement() instanceof UnfoldedSubappContentEditPart
 				&& ((UnfoldedSubappContentEditPart) mapping.getParentElement()).getParent() == ie.getParent()
 				&& ie.getModel().isIsInput()) {
 			// we have an unfolded subapp input pin. for this we don't want the connection targets as these are outside
 			return;
 		}
+		super.saveConnections(mapping, ie);
+	}
 
-		for (final Object obj : ie.getTargetConnections()) {
-			final ConnectionEditPart conn = (ConnectionEditPart) obj;
-			final Group sourceGroup = getGroupFromModel(conn.getSource().getParent().getModel());
-			final Group targetGroup = getGroupFromModel(conn.getTarget().getParent().getModel());
+	@Override
+	protected void saveConnection(final ConnectionLayoutMapping mapping, final ConnectionEditPart con) {
+		final Group sourceGroup = getGroupFromModel(con.getSource().getParent().getModel());
+		final Group targetGroup = getGroupFromModel(con.getTarget().getParent().getModel());
 
-			if (sourceGroup == null && targetGroup == null) {
-				mapping.getConnections().add(conn);
-			}
+		if (sourceGroup == null && targetGroup == null) {
+			mapping.getConnections().add(con);
 		}
 	}
 

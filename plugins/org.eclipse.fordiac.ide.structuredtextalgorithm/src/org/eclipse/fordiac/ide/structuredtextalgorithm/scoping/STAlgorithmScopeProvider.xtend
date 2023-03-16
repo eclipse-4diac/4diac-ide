@@ -24,7 +24,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBuiltinFeatureExpress
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage
 import org.eclipse.xtext.resource.IEObjectDescription
 
-import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
+import static extension org.eclipse.xtext.EcoreUtil2.*
 
 /**
  * This class contains custom scoping description.
@@ -42,8 +42,8 @@ class STAlgorithmScopeProvider extends AbstractSTAlgorithmScopeProvider {
 				STBuiltinFeatureExpression: {
 					switch (receiver.feature) {
 						case THIS: {
-							val source = context.rootContainer
-							if (source instanceof STAlgorithmSource) {
+							val source = context.getContainerOfType(STAlgorithmSource)
+							if (source !== null) {
 								return scopeFor(source.elements.filter(STMethod), super.getScope(context, reference))
 							}
 						}

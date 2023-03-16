@@ -1,7 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008, 2021 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
  * 		            Johannes Kepler University Linz
  *                          Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  *
  * This program and the accompanying materials are made available under the
@@ -19,6 +20,7 @@
  *               - Added support for project renameing
  *   Martin Jobst
  *     - add Xtext nature and builder
+ *     - migrate system handling to typelib
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
@@ -52,15 +54,13 @@ import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.typelibrary.SystemEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
 import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
-import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
-import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.IEditorPart;
 import org.eclipse.xtext.ui.XtextProjectHelper;
 
 /** The Class SystemManager.
@@ -80,9 +80,6 @@ public enum SystemManager {
 	public static final String SYSTEM_FILE_ENDING_WITH_DOT = ".sys"; //$NON-NLS-1$
 
 	public static final String TYPE_LIB_FOLDER_NAME = "Type Library"; //$NON-NLS-1$
-
-	/** The model systems. */
-	private final Map<IProject, Map<IFile, SystemEntry>> allSystemsInWS = new HashMap<>();
 
 	private final Map<IProject, ArrayList<ITagProvider>> tagProviders = new HashMap<>();
 
@@ -110,6 +107,7 @@ public enum SystemManager {
 				&& SystemManager.SYSTEM_FILE_ENDING.equalsIgnoreCase(((IFile) entry).getFileExtension()));
 	}
 
+	@SuppressWarnings("static-method")
 	public IProject createNew4diacProject(final String projectName, final IPath location,
 			final boolean importDefaultTypeLibrary, final IProgressMonitor monitor) throws CoreException {
 		final IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
@@ -137,83 +135,31 @@ public enum SystemManager {
 		if (importDefaultTypeLibrary) {
 			SystemPaletteManagement.copyToolTypeLibToDestination(project.getFolder(TYPE_LIB_FOLDER_NAME));
 		}
-		getProjectSystemEntries(project); // insert the project into the project list
+		TypeLibraryManager.INSTANCE.getTypeLibrary(project); // insert the project into the project list
 		return project;
 	}
 
+	@SuppressWarnings("static-method")
 	public synchronized AutomationSystem createNewSystem(final IContainer location, final String name) {
 		final IFile systemFile = location.getFile(new Path(name + SystemManager.SYSTEM_FILE_ENDING_WITH_DOT));
-		final Map<IFile, SystemEntry> projectSystems = getProjectSystemEntries(location.getProject());
-		final SystemEntry entry = projectSystems.computeIfAbsent(systemFile,
-				sysFile -> TypeLibraryManager.INSTANCE.getTypeLibrary(sysFile.getProject()).createSystemEntry(sysFile));
+		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject());
+		SystemEntry entry = (SystemEntry) typeLibrary.getTypeEntry(systemFile);
+		if (entry == null) {
+			entry = (SystemEntry) typeLibrary.createTypeEntry(systemFile);
+		}
 		entry.setType(SystemImporter.createAutomationSystem(systemFile));
 		saveSystem(entry.getSystem());
 		return entry.getSystem();
 	}
 
 	public synchronized void removeProject(final IProject project) {
-		allSystemsInWS.remove(project);
 		TypeLibraryManager.INSTANCE.removeProject(project);
 		notifyListeners();
 	}
 
 	public synchronized void renameProject(final IProject oldProject, final IProject newProject) {
-		final Map<IFile, SystemEntry> projectSystems = allSystemsInWS.remove(oldProject);
-		if (projectSystems != null) {
-			allSystemsInWS.put(newProject, projectSystems);
-		}
-	}
-
-	public synchronized AutomationSystem replaceSystemFromFile(final AutomationSystem system, final IFile file) {
-		removeSystem(system);
-		return SystemManager.INSTANCE.getSystem(file);
-	}
-
-	/** Remove a system from the set of systems managed by the system manager
-	 *
-	 * @param system to be added */
-	public void removeSystem(final AutomationSystem system) {
-		removeSystem(system.getSystemFile());
-	}
-
-	public synchronized void removeSystem(final IFile systemFile) {
-		final Map<IFile, SystemEntry> projectSystems = getProjectSystemEntries(systemFile.getProject());
-		final SystemEntry refSystemEntry = projectSystems.remove(systemFile);
-		if (null != refSystemEntry) {
-			closeAllSystemEditors(refSystemEntry.getSystem());
-			notifyListeners();
-		}
-	}
-
-	public synchronized void moveSystemToNewProject(final IFile oldSystemFile, final IFile newSystemFile) {
-		final Map<IFile, SystemEntry> projectSystems = getProjectSystemEntries(oldSystemFile.getProject());
-		final SystemEntry systemEntry = projectSystems.remove(oldSystemFile);
-		if (null != systemEntry) {
-			final AutomationSystem system = systemEntry.getSystem();
-			systemEntry.setFile(newSystemFile);
-			system.setSystemFile(newSystemFile);
-			final Map<IFile, SystemEntry> newProjectSystems = getProjectSystemEntries(oldSystemFile.getProject());
-			newProjectSystems.put(newSystemFile, systemEntry);
-			notifyListeners();
-		}
-	}
-
-	/** Search for a system with the old System file and change it to the new file entry
-	 *
-	 * @param targetProject the project where to search for the system file, this may be different the old system file's
-	 *                      project in case of project renames
-	 * @param oldSystemFile
-	 * @param newSystemFile */
-	public synchronized void updateSystemFile(final IProject targetProject, final IFile oldSystemFile,
-			final IFile newSystemFile) {
-		final Map<IFile, SystemEntry> projectSystems = getProjectSystemEntries(targetProject);
-		final SystemEntry systemEntry = projectSystems.remove(oldSystemFile);
-		if (null != systemEntry) {
-			final AutomationSystem system = systemEntry.getSystem();
-			systemEntry.setFile(newSystemFile);
-			system.setSystemFile(newSystemFile);
-			projectSystems.put(newSystemFile, systemEntry);
-		}
+		TypeLibraryManager.INSTANCE.renameProject(oldProject, newProject);
+		notifyListeners();
 	}
 
 	/** Load system.
@@ -224,19 +170,20 @@ public enum SystemManager {
 	 * @return the system entry */
 	private static SystemEntry initSystem(final IFile systemFile) {
 		if (systemFile.exists()) {
-			return TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject()).createSystemEntry(systemFile);
+			return (SystemEntry) TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject())
+					.createTypeEntry(systemFile);
 		}
 		return null;
 	}
 
 	public static void saveTagProvider(final AutomationSystem system, final ITagProvider tagProvider) {
-		final IProject project = system.getSystemFile().getProject();
+		final IProject project = system.getTypeLibrary().getProject();
 		final IPath projectPath = project.getLocation();
 		tagProvider.saveTagConfiguration(projectPath);
 	}
 
 	public String getReplacedString(final AutomationSystem system, final String value) {
-		final ArrayList<ITagProvider> tagProvider = getTagProviderList(system.getSystemFile().getProject());
+		final ArrayList<ITagProvider> tagProvider = getTagProviderList(system.getTypeLibrary().getProject());
 		String result = null;
 		for (final ITagProvider iTagProvider : tagProvider) {
 			result = iTagProvider.getReplacedString(value);
@@ -252,34 +199,38 @@ public enum SystemManager {
 	 * @param system the system
 	 * @param all    the all */
 	public static void saveSystem(final AutomationSystem system) {
-		saveSystem(system, system.getSystemFile());
+		final TypeEntry typeEntry = system.getTypeEntry();
+		Assert.isNotNull(typeEntry); // there should be no system without type entry
+		typeEntry.save();
 	}
 
 	public static void saveSystem(final AutomationSystem system, final IFile file) {
-		Assert.isNotNull(system.getTypeEntry()); // there should be no system without type entry
-		system.getTypeEntry().save();
+		final TypeEntry typeEntry = system.getTypeEntry();
+		Assert.isNotNull(typeEntry); // there should be no system without type entry
+		typeEntry.getTypeLibrary().removeTypeEntry(typeEntry);
+		typeEntry.setFile(file);
+		TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject()).addTypeEntry(typeEntry);
+		typeEntry.save();
 	}
 
+	@SuppressWarnings("static-method")
 	public synchronized AutomationSystem getSystem(final IFile systemFile) {
-		final Map<IFile, SystemEntry> projectSystems = getProjectSystemEntries(systemFile.getProject());
-		final SystemEntry sysEntry = projectSystems.computeIfAbsent(systemFile, SystemManager::initSystem);
-		return sysEntry.getSystem();
+		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(systemFile.getProject());
+		SystemEntry sysEntry = (SystemEntry) typeLibrary.getTypeEntry(systemFile);
+		if (sysEntry == null) {
+			sysEntry = initSystem(systemFile);
+		}
+		return sysEntry != null ? sysEntry.getSystem() : null;
 	}
 
-	public synchronized Map<IFile, SystemEntry> getProjectSystemEntries(final IProject project) {
-		return allSystemsInWS.computeIfAbsent(project, p -> {
-			loadTagProviders(project);
-			return new HashMap<>();
-		});
+	@SuppressWarnings("static-method")
+	public synchronized List<AutomationSystem> getProjectSystems(final IProject project) {
+		return TypeLibraryManager.INSTANCE.getTypeLibrary(project).getSystems().values().stream()
+				.map(SystemEntry::getSystem).collect(Collectors.toList());
 	}
 
-	public synchronized List<AutomationSystem> getProjectSystems(final IProject porject) {
-		return getProjectSystemEntries(porject).values().stream().map(SystemEntry::getSystem)
-				.collect(Collectors.toList());
-	}
-
-	private void loadTagProviders(final IProject project) {
-		final ArrayList<ITagProvider> providers = getTagProviderList(project);
+	private static ArrayList<ITagProvider> loadTagProviders(final IProject project) {
+		final ArrayList<ITagProvider> providers = new ArrayList<>();
 		if (project.exists()) {
 			final IExtensionRegistry registry = Platform.getExtensionRegistry();
 			final IConfigurationElement[] elems = registry.getConfigurationElementsFor(PLUGIN_ID, "tagProvider"); //$NON-NLS-1$
@@ -297,10 +248,11 @@ public enum SystemManager {
 				}
 			}
 		}
+		return providers;
 	}
 
 	public ITagProvider getTagProvider(final Class<?> class1, final AutomationSystem system) {
-		final ArrayList<ITagProvider> tagProviderList = getTagProviderList(system.getSystemFile().getProject());
+		final ArrayList<ITagProvider> tagProviderList = getTagProviderList(system.getTypeLibrary().getProject());
 		for (final ITagProvider iTagProvider : tagProviderList) {
 			if (iTagProvider.getClass().equals(class1)) {
 				return iTagProvider;
@@ -325,7 +277,7 @@ public enum SystemManager {
 	}
 
 	private ArrayList<ITagProvider> getTagProviderList(final IProject project) {
-		return tagProviders.computeIfAbsent(project, p -> new ArrayList<>());
+		return tagProviders.computeIfAbsent(project, SystemManager::loadTagProviders);
 	}
 
 	private static String[] getNatureIDs() {
@@ -334,14 +286,6 @@ public enum SystemManager {
 
 	private static String[] getBuilderIDs() {
 		return new String[] { XtextProjectHelper.BUILDER_ID };
-	}
-
-	private static void closeAllSystemEditors(final AutomationSystem refSystem) {
-		// display related stuff needs to run in a display thread
-		Display.getDefault().asyncExec(
-				() -> EditorUtils.closeEditorsFiltered((final IEditorPart editor) -> (editor instanceof ISystemEditor)
-						&& (refSystem.equals(((ISystemEditor) editor).getSystem()))));
-
 	}
 
 	/** Notify listeners. */
@@ -356,15 +300,6 @@ public enum SystemManager {
 		if (!listeners.contains(listener)) {
 			listeners.add(listener);
 		}
-	}
-
-	public TypeEntry getTypeEntry(final IFile file) {
-		final Map<IFile, SystemEntry> map = allSystemsInWS.get(file.getProject());
-
-		if (map == null) {
-			return null;
-		}
-		return map.get(file);
 	}
 
 }

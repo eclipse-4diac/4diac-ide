@@ -1,6 +1,7 @@
 /*******************************************************************************
  * Copyright (c) 2008, 2022 Profactor GmbH, fortiss GmbH,
  *                          Johannes Kepler University Linz
+ *               2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,50 +14,60 @@
  *       - initial API and implementation and/or initial documentation
  *   Alois Zoitl - fixed issues in adapter update
  *               - moved adapter type handling to own adapter command
+ *   Martin Jobst - add value validation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.gef.commands.Command;
+import org.eclipse.gef.commands.CompoundCommand;
 
-public class ChangeDataTypeCommand extends Command {
-	private final IInterfaceElement interfaceElement;
+public class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand {
+	private final IInterfaceElement oldElement;
 	private final DataType dataType;
 	private DataType oldDataType;
-
+	private final CompoundCommand additionalCommands = new CompoundCommand();
 
 	public ChangeDataTypeCommand(final IInterfaceElement interfaceElement, final DataType dataType) {
-		super();
-		this.interfaceElement = interfaceElement;
+		super(interfaceElement);
 		this.dataType = dataType;
+		this.oldElement = interfaceElement;
 	}
 
 	@Override
-	public void execute() {
-		oldDataType = interfaceElement.getType();
+	protected void doExecute() {
+		oldDataType = getInterfaceElement().getType();
 		setNewType();
+		if (oldDataType instanceof ErrorMarkerDataType) {
+			getErrorMarkerUpdateCmds().add(
+					FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(oldElement)));
+		}
+		additionalCommands.execute();
 	}
 
 
 	@Override
-	public void undo() {
-		interfaceElement.setType(oldDataType);
-		interfaceElement.setTypeName(oldDataType.getName());
-
+	protected void doUndo() {
+		additionalCommands.undo();
+		getInterfaceElement().setType(oldDataType);
+		getInterfaceElement().setTypeName(oldDataType.getName());
 	}
 
 	@Override
-	public void redo() {
+	protected void doRedo() {
 		setNewType();
+		additionalCommands.redo();
 	}
 
 	private void setNewType() {
-		interfaceElement.setType(dataType);
-		interfaceElement.setTypeName(dataType.getName());
+		getInterfaceElement().setType(dataType);
+		getInterfaceElement().setTypeName(dataType.getName());
 	}
 
-	protected IInterfaceElement getInterfaceElement() {
-		return interfaceElement;
+	public CompoundCommand getAdditionalCommands() {
+		return additionalCommands;
 	}
 }

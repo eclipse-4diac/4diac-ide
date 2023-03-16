@@ -37,7 +37,7 @@ public class OpenGroupEditorAction extends AbstractOpenSystemElementListener {
 	public void run(final IAction action) {
 		final EObject root = EcoreUtil.getRootContainer(group);
 		if (root instanceof AutomationSystem) {
-			openInSystemEditor(((AutomationSystem) root).getSystemFile(), group);
+			openInSystemEditor(((AutomationSystem) root).getTypeEntry().getFile(), group);
 		}
 	}
 

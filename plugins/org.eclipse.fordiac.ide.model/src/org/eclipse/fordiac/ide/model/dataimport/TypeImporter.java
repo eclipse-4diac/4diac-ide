@@ -1,6 +1,7 @@
 /********************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
  * 				 2019 - 2020 Johannes Kepler University, Linz
+ * 				 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,8 +19,11 @@
  *                 importer
  *  			 - Changed XML parsing to Staxx cursor interface for improved
  *  			   parsing performance
+ *  Fabio Gandolfi - added errormarker for missing datatype
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
+
+import java.text.MessageFormat;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -28,6 +32,8 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.Messages;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -60,6 +66,14 @@ public abstract class TypeImporter extends CommonElementImporter {
 			if (dataType != null) {
 				v.setType(dataType);
 			}
+
+			if (dataType instanceof ErrorMarkerDataType) {
+				errorMarkerBuilders.add(ErrorMarkerBuilder
+						.createErrorMarkerBuilder(MessageFormat.format(Messages.TypeImporter_TypeMissing,
+								typeName, v.getName()))
+						.setTarget(v));
+			}
+
 		} else {
 			throw new TypeImportException(Messages.Import_ERROR_InputVariableTypeNotDefined);
 		}
@@ -92,6 +106,7 @@ public abstract class TypeImporter extends CommonElementImporter {
 		});
 
 		proceedToEndElementNamed(LibraryElementTags.VAR_DECLARATION_ELEMENT);
+
 		return v;
 	}
 }

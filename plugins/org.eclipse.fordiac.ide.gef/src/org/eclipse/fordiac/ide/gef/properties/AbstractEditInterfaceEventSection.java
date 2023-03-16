@@ -25,8 +25,6 @@ import org.eclipse.fordiac.ide.gef.nat.EventListProvider;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
-import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
@@ -89,10 +87,10 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		outputProvider = new EventListProvider(this, new ArrayList<>());
+		outputProvider = new EventListProvider(this);
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
 		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
-				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, Boolean.FALSE);
+				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, false);
 	}
 
 	@Override
@@ -101,22 +99,16 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		if (isEditable()) {
 			rule = IEditableRule.ALWAYS_EDITABLE;
 		}
-		inputProvider = new EventListProvider(this, new ArrayList<>());
+		inputProvider = new EventListProvider(this);
 		final DataLayer inputDataLayer = setupDataLayer(inputProvider);
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer,
-				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, Boolean.TRUE);
+				new EventColumnProvider(), rule, new DataTypeSelectionButton(typeSelection), this, true);
 	}
 
 	@Override
-	public void setTableInputFbNetworkElement(final FBNetworkElement element) {
-		((FordiacInterfaceListProvider) inputProvider).setInput(element.getInterface().getEventInputs());
-		((FordiacInterfaceListProvider) outputProvider).setInput(element.getInterface().getEventOutputs());
-	}
-
-	@Override
-	public void setTableInputFBType(final FBType type) {
-		((FordiacInterfaceListProvider) inputProvider).setInput(type.getInterfaceList().getEventInputs());
-		((FordiacInterfaceListProvider) outputProvider).setInput(type.getInterfaceList().getEventOutputs());
+	public void setTableInput(final InterfaceList il) {
+		((FordiacInterfaceListProvider) inputProvider).setInput(il.getEventInputs());
+		((FordiacInterfaceListProvider) outputProvider).setInput(il.getEventOutputs());
 	}
 
 }

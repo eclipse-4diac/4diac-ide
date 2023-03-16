@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.application.handlers;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -35,7 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SubAppType;
 import org.eclipse.fordiac.ide.model.search.dialog.StructUpdateDialog;
-import org.eclipse.fordiac.ide.model.search.types.StructSearch;
+import org.eclipse.fordiac.ide.model.search.types.StructManipulatorSearch;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeEntry;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -67,20 +68,20 @@ public class TransferInstanceCommentsHandler extends AbstractHandler {
 				(DataTypeEntry) struct.getModel().getStructType().getTypeEntry()) {
 			@Override
 			protected final List<INamedElement> performStructSearch() {
-				final StructSearch structSearch = new StructSearch(dataTypeEntry);
+				final StructManipulatorSearch structSearch = new StructManipulatorSearch(dataTypeEntry);
 
-				List<INamedElement> elements = new ArrayList<>();
+				List<INamedElement> elements = Collections.emptyList();
 
 				final EObject root = EcoreUtil.getRootContainer(struct.getModel());
 				if (root instanceof AutomationSystem) {
-					elements = structSearch.getAllTypesWithStructFromSystem((AutomationSystem) root);
+					elements = structSearch.performApplicationSearch((AutomationSystem) root);
 				} else if (root instanceof SubAppType) {
-					elements = structSearch.getAllTypesWithStructFromNetworkElements(
-							((SubAppType) root).getFBNetwork().getNetworkElements());
+					elements = structSearch.performFBNetworkSearch(
+							((SubAppType) root).getFBNetwork());
 				}
 				elements.removeIf(el -> el.equals(struct.getModel()) || isTypedOrContainedInTypedInstance(el));
 
-				// output connected elements only filter
+				// output connected elements only searchFilter
 				final List<INamedElement> elementsFilteredOut = new ArrayList<>();
 				if (outputConnectedOnlyBtn != null && !outputConnectedOnlyBtn.isDisposed() && outputConnectedOnlyBtn.getSelection()) {
 					final List<FBNetworkElement> connectedFbs = FBEndpointFinder.getConnectedFbs(new ArrayList<>(),

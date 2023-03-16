@@ -33,9 +33,7 @@ import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.gef.widgets.PinValueDirectEditManager;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -156,7 +154,9 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	public void deactivate() {
 		super.deactivate();
 		getModel().eAdapters().remove(contentAdapter);
-		getModel().getParentIE().eAdapters().remove(contentAdapter);
+		if (getModel().getParentIE() != null) {
+			getModel().getParentIE().eAdapters().remove(contentAdapter);
+		}
 	}
 
 	private final Adapter contentAdapter = new AdapterImpl() {
@@ -168,7 +168,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 					|| LibraryElementPackage.eINSTANCE.getIInterfaceElement_Type().equals(feature)) {
 				refreshValue();
 				refreshPosition();
-			} else if (LibraryElementPackage.eINSTANCE.getErrorMarkerRef_FileMarkerId().equals(feature)) {
+			} else if (LibraryElementPackage.eINSTANCE.getErrorMarkerRef_ErrorMessage().equals(feature)) {
 				Display.getDefault().asyncExec(() -> {
 					refreshValue();
 					if (parentPart != null) {
@@ -239,17 +239,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	@SuppressWarnings("static-method") // allow subclasses to overwrite this method
 	protected String getDefaultValue(final IInterfaceElement ie) {
-		if ((ie instanceof VarDeclaration) && !IecTypes.GenericTypes.isAnyType(ie.getType())) {
-			try {
-				return VariableOperations.newVariable((VarDeclaration) ie).getValue().toString();
-			} catch (final IllegalArgumentException ex) {
-				// we are only logging it and jump to default value below
-				FordiacLogHelper.logWarning("could not aquire type default value", ex); //$NON-NLS-1$
-			}
-		}
-		// we should only arrive here in case of an errormarker interface without value
-		// OR ANY type
-		return ""; //$NON-NLS-1$
+		return InitialValueHelper.getDefaultValue(ie);
 	}
 
 	private EList<Connection> getOuterConnections() {
@@ -320,7 +310,11 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 * @return true, if is input
 	 */
 	public boolean isInput() {
-		return getIInterfaceElement().isIsInput();
+		final IInterfaceElement interfaceElement = getIInterfaceElement();
+		if (interfaceElement != null) {
+			return interfaceElement.isIsInput();
+		}
+		return false;
 	}
 
 	private IInterfaceElement getIInterfaceElement() {
@@ -406,7 +400,12 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	 * @return the manager
 	 */
 	public DirectEditManager createDirectEditManager() {
-		return new PinValueDirectEditManager(this, getFigure());
+		final IInterfaceElement interfaceElement = getIInterfaceElement();
+		if (interfaceElement instanceof VarDeclaration) {
+			return new InitialValueDirectEditManager(this, new FigureCellEditorLocator(getFigure()),
+					(VarDeclaration) interfaceElement);
+		}
+		return new LabelDirectEditManager(this, getFigure());
 	}
 
 	/** performs the directEdit. */

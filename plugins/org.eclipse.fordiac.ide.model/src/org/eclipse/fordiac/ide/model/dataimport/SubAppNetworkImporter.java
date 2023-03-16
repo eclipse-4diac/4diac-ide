@@ -22,7 +22,6 @@ import org.eclipse.fordiac.ide.model.CoordinateConverter;
 import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -77,12 +76,10 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 		fbNetworkElementMap.put(subApp.getName(), subApp);
 
 		if ((null == subApp.getTypeEntry() && type != null) || (subApp instanceof ErrorMarkerRef)) {
-			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createErrorMarkerBuilder(
-					MessageFormat.format("Type ({0}) could not be loaded for Subapplication: {1}", type, //$NON-NLS-1$
-							subApp.getName()),
-					subApp, getLineNumber());
-			errorMarkerBuilders.add(e);
-			e.setErrorMarkerRef((ErrorMarkerRef) subApp);
+			final String errorMessage = MessageFormat.format("Type ({0}) could not be loaded for Subapplication: {1}", //$NON-NLS-1$
+					type, subApp.getName());
+			errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(subApp)
+					.setLineNumber(getLineNumber()));
 		}
 
 	}
@@ -95,14 +92,12 @@ class SubAppNetworkImporter extends FBNetworkImporter {
 
 		final SubAppTypeEntry subEntry = getTypeLibrary().getSubAppTypeEntry(type);
 		if (subEntry == null) {
-			return FordiacMarkerHelper.createTypeErrorMarkerFB(type, getTypeLibrary(),
-					LibraryElementFactory.eINSTANCE.createSubAppType());
+			return createTypeErrorMarkerFB(type, getTypeLibrary(), LibraryElementFactory.eINSTANCE.createSubAppType());
 		}
 		subApp.setTypeEntry(subEntry);
 		subApp.setInterface(subEntry.getType().getInterfaceList().copy());
 		return subApp;
 	}
-
 
 	private void parseUntypedSubapp(final SubApp subApp) throws TypeImportException, XMLStreamException {
 		processChildren(LibraryElementTags.SUBAPP_ELEMENT, name -> {

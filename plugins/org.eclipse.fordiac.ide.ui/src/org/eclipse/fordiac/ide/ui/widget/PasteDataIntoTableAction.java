@@ -101,7 +101,7 @@ public class PasteDataIntoTableAction implements IKeyAction {
 			if (selectionLayer == null) {
 				int i = 0;
 				for (final Object entry : (Object[]) contents) {
-					section.addEntry(entry, rowHeaderDataProvider.getIsInput(), i++, cmpCommand);
+					section.addEntry(entry, rowHeaderDataProvider.isInput(), i++, cmpCommand);
 				}
 				section.executeCompoundCommand(cmpCommand);
 			} else {
@@ -111,7 +111,7 @@ public class PasteDataIntoTableAction implements IKeyAction {
 				int i = 0;
 				for (final Object entry : (Object[]) contents) {
 					selectedIndices[i++] = index;
-					section.addEntry(entry, rowHeaderDataProvider.getIsInput(), index++, cmpCommand);
+					section.addEntry(entry, rowHeaderDataProvider.isInput(), index++, cmpCommand);
 				}
 				section.executeCompoundCommand(cmpCommand);
 				for (final int ind : selectedIndices) {

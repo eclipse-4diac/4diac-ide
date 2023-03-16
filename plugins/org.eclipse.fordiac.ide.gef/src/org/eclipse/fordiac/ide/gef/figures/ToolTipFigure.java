@@ -19,12 +19,14 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.With;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
+import org.eclipse.jface.resource.JFaceResources;
 
 /**
  * The Class ToolTipFigure.
@@ -51,7 +53,15 @@ public class ToolTipFigure extends Figure {
 			nameLine += " - " + ((IInterfaceElement) element).getType().getName(); //$NON-NLS-1$
 		}
 
-		add(new Label(nameLine));
+		if (element instanceof ErrorMarkerRef && ((ErrorMarkerRef) element).hasError()) {
+			nameLine += System.lineSeparator() + ((ErrorMarkerRef) element).getErrorMessage();
+		}
+
+		final Label nameLabel = new Label(nameLine);
+		if (element instanceof ErrorMarkerRef && ((ErrorMarkerRef) element).hasError()) {
+			nameLabel.setIcon(JFaceResources.getImage("dialog_error_image")); //$NON-NLS-1$
+		}
+		add(nameLabel);
 
 		line = new VerticalLineCompartmentFigure();
 		add(line);

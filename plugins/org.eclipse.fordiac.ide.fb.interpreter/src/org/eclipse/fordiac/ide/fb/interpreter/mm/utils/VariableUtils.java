@@ -21,7 +21,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 
 public final class VariableUtils {
 
@@ -42,11 +41,7 @@ public final class VariableUtils {
 		setVariable((VarDeclaration) el, ServiceSequenceUtils.removeKeyword(value));
 	}
 
-	public static void initVariable(final VarDeclaration varDeclaration, final DataTypeLibrary lib) {
-		// first set type, then add value
-		if (varDeclaration.getType() == null) {
-			varDeclaration.setType(lib.getType(varDeclaration.getTypeName()));
-		}
+	public static void initVariable(final VarDeclaration varDeclaration) {
 		// if there is no initial value, we take a default value
 		if ((varDeclaration.getValue() == null) || (varDeclaration.getValue().getValue() == null)
 				|| varDeclaration.getValue().getValue().isBlank()) {
@@ -56,33 +51,31 @@ public final class VariableUtils {
 
 	// Init all FB Variables
 	public static void fBVariableInitialization(final BaseFBType baseFbType) {
-		final var lib = new DataTypeLibrary();
-		initInternalVars(baseFbType, lib);
-		initInternalConstVars(baseFbType, lib);
-		initInputVars(baseFbType, lib);
-		initOutputVars(baseFbType, lib);
+		initInternalVars(baseFbType);
+		initInternalConstVars(baseFbType);
+		initInputVars(baseFbType);
+		initOutputVars(baseFbType);
 	}
 
 	public static void fBVariableInitialization(final CompositeFBType compFBType) {
-		final var lib = new DataTypeLibrary();
-		initInputVars(compFBType, lib);
-		initOutputVars(compFBType, lib);
+		initInputVars(compFBType);
+		initOutputVars(compFBType);
 	}
 
-	public static void initOutputVars(final FBType fbType, final DataTypeLibrary lib) {
-		fbType.getInterfaceList().getOutputVars().forEach(outputVar -> VariableUtils.initVariable(outputVar, lib));
+	public static void initOutputVars(final FBType fbType) {
+		fbType.getInterfaceList().getOutputVars().forEach(VariableUtils::initVariable);
 	}
 
-	public static void initInputVars(final FBType fbType, final DataTypeLibrary lib) {
-		fbType.getInterfaceList().getInputVars().forEach(inputVar -> VariableUtils.initVariable(inputVar, lib));
+	public static void initInputVars(final FBType fbType) {
+		fbType.getInterfaceList().getInputVars().forEach(VariableUtils::initVariable);
 	}
 
-	public static void initInternalVars(final BaseFBType basicFbType, final DataTypeLibrary lib) {
-		basicFbType.getInternalVars().forEach(interVar -> VariableUtils.initVariable(interVar, lib));
+	public static void initInternalVars(final BaseFBType basicFbType) {
+		basicFbType.getInternalVars().forEach(VariableUtils::initVariable);
 	}
 
-	public static void initInternalConstVars(final BaseFBType basicFbType, final DataTypeLibrary lib) {
-		basicFbType.getInternalConstVars().forEach(interVar -> VariableUtils.initVariable(interVar, lib));
+	public static void initInternalConstVars(final BaseFBType basicFbType) {
+		basicFbType.getInternalConstVars().forEach(VariableUtils::initVariable);
 	}
 
 	private VariableUtils() {

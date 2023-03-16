@@ -33,7 +33,6 @@ import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
@@ -102,14 +101,6 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 					if (receiverType instanceof StructuredType) {
 						final var structuredVarType = (StructuredType) receiverType;
 						return scopeFor(structuredVarType.getMemberVariables());
-					} else if (receiverType instanceof AdapterType) {
-						final var adapterType = (AdapterType) receiverType;
-						final var adapterFBType = adapterType.getAdapterFBType();
-						if (adapterFBType != null) {
-							final var interfaceList = adapterFBType.getInterfaceList();
-							return scopeFor(
-									Iterables.concat(interfaceList.getInputVars(), interfaceList.getOutputVars()));
-						}
 					} else if (receiverType instanceof FBType) {
 						final var fbType = (FBType) receiverType;
 						final var interfaceList = fbType.getInterfaceList();
@@ -185,6 +176,7 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 		final var clazz = description.getEClass();
 		return STCorePackage.eINSTANCE.getSTVarDeclaration().isSuperTypeOf(clazz)
 				|| LibraryElementPackage.eINSTANCE.getVarDeclaration().isSuperTypeOf(clazz)
+				|| LibraryElementPackage.eINSTANCE.getAdapterDeclaration().isSuperTypeOf(clazz)
 				|| LibraryElementPackage.eINSTANCE.getFB().isSuperTypeOf(clazz)
 				|| (LibraryElementPackage.eINSTANCE.getICallable().isSuperTypeOf(clazz)
 						&& !LibraryElementPackage.eINSTANCE.getFBType().isSuperTypeOf(clazz)

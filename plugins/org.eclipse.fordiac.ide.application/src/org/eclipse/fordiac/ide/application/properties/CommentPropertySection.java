@@ -29,8 +29,8 @@ import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeFBNetworkElementName;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeValueCommand;
-import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeVarConfigurationCommand;
+import org.eclipse.fordiac.ide.model.commands.change.HidePinCommand;
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -40,6 +40,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
+import org.eclipse.fordiac.ide.ui.handlers.NatTableHandler;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
@@ -366,7 +367,7 @@ public class CommentPropertySection extends AbstractSection {
 		}
 	}
 
-	public class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<VarDeclaration> { // IColumnPropertyAccessor
+	public class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<VarDeclaration> {
 		protected final boolean isInputData;
 
 		public VarDeclarationColumnAccessor(final boolean isInputData) {
@@ -409,11 +410,17 @@ public class CommentPropertySection extends AbstractSection {
 			case VISIBLE_COL_ID:
 				if ((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
 						|| !rowObject.isIsInput() && rowObject.getOutputConnections().isEmpty()) {
-					cmd = new HidePinCommand(rowObject, ((Boolean) newValue).booleanValue());
+					final Boolean newValueBool = NatTableHandler.parseNewValueObject(newValue);
+					if (newValueBool != null) {
+						cmd = new HidePinCommand(rowObject, newValueBool.booleanValue());
+					}
 				}
 				break;
 			case ISVARCONFIG_COL_ID:
-				cmd = new ChangeVarConfigurationCommand(rowObject, ((Boolean) newValue).booleanValue());
+				final Boolean newValueBool = NatTableHandler.parseNewValueObject(newValue);
+				if (newValueBool != null) {
+					cmd = new ChangeVarConfigurationCommand(rowObject, newValueBool.booleanValue());
+				}
 				break;
 			default:
 				return;

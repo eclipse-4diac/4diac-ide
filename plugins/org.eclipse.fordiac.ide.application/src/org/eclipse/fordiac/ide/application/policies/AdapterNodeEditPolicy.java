@@ -47,7 +47,8 @@ public class AdapterNodeEditPolicy extends InterfaceElementEditPolicy {
 	}
 
 	private static void openAdapterType(final InterfaceEditPart host) {
-		final AdapterTypeEntry entry = (AdapterTypeEntry) ((AdapterDeclaration) host.getModel()).getTypeEntry();
+		final AdapterTypeEntry entry = (AdapterTypeEntry) ((AdapterDeclaration) host.getModel()).getType()
+				.getTypeEntry();
 		if (null != entry) {
 			final IEditorDescriptor desc = PlatformUI.getWorkbench().getEditorRegistry()
 					.getDefaultEditor(entry.getFile().getName());

@@ -533,7 +533,12 @@
   <eClassifiers xsi:type="ecore:EDataType" name="STTime" instanceClassName="java.time.Duration"/>
   <eClassifiers xsi:type="ecore:EDataType" name="STTimeOfDay" instanceClassName="java.time.LocalTime"/>
   <eClassifiers xsi:type="ecore:EDataType" name="STDateAndTime" instanceClassName="java.time.LocalDateTime"/>
-  <eClassifiers xsi:type="ecore:EDataType" name="STString" instanceClassName="org.eclipse.fordiac.ide.structuredtextcore.stcore.STString"/>
+  <eClassifiers xsi:type="ecore:EDataType" name="STString" instanceClassName="org.eclipse.fordiac.ide.structuredtextcore.stcore.STString">
+    <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+      <details key="convert" value="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStringAnnotations.convertSTString(it);"/>
+      <details key="create" value="return org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STStringAnnotations.createSTString(it);"/>
+    </eAnnotations>
+  </eClassifiers>
   <eClassifiers xsi:type="ecore:EEnum" name="STAccessSpecifier">
     <eLiterals name="PUBLIC"/>
     <eLiterals name="PROTECTED"/>

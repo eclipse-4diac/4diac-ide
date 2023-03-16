@@ -1,6 +1,6 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2019 - 2021 Johannes Kepler University Linz
+ * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH
+ * 				            Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -40,8 +40,7 @@ import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.preferences.PreferenceGetter;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractDirectEditableEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.ZoomScalableFreeformRootEditPart;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
@@ -122,15 +121,13 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			super.notifyChanged(notification);
 			if (notification.getEventType() == Notification.REMOVE) {
 				if ((notification.getOldValue() == getModel().getConditionEvent())
-						|| ((getModel().getConditionEvent() instanceof AdapterEvent)
-								&& (notification.getOldValue() instanceof AdapterDeclaration)
-								&& (((AdapterEvent) getModel().getConditionEvent())
-										.getAdapterDeclaration() == notification.getOldValue()))) {
+						|| ECActionOutputEventEditPart.isAdapterNotification(notification.getOldValue(),
+								getModel().getConditionEvent())) {
 					AbstractDirectEditableEditPart.executeCommand(new ChangeConditionEventCommand(getModel(), "")); //$NON-NLS-1$
 				}
 			} else if (notification.getEventType() == Notification.SET) {
 				if (null != getModel().getConditionEvent()) {
-					handleCondiationEventUpdate(notification);
+					handleConditionEventUpdate(notification);
 				}
 
 				if (notification.getNotifier() instanceof VarDeclaration) {
@@ -139,14 +136,12 @@ public class ECTransitionEditPart extends AbstractConnectionEditPart {
 			}
 		}
 
-		private void handleCondiationEventUpdate(final Notification notification) {
+		private void handleConditionEventUpdate(final Notification notification) {
 			if (notification.getNewValue() instanceof String) {
 				final String newValue = (String) notification.getNewValue();
-				if ((getModel().getConditionEvent().getName().equals(newValue))
-						|| ((getModel().getConditionEvent() instanceof AdapterEvent)
-								&& (((AdapterEvent) getModel().getConditionEvent()).getAdapterDeclaration().getName()
-										.equals(newValue)))) {
-					super.notifyChanged(notification);
+				final Event ce = getModel().getConditionEvent();
+				if ((ce.getName().equals(newValue)) || ((ce.getFBNetworkElement() instanceof AdapterFB)
+						&& (((AdapterFB) ce.getFBNetworkElement()).getName().equals(newValue)))) {
 					refresh();
 				}
 			}

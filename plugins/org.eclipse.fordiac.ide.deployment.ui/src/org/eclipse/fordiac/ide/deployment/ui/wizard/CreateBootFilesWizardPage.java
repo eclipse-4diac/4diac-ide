@@ -20,12 +20,14 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.deployment.ui.Messages;
 import org.eclipse.fordiac.ide.deployment.ui.views.DownloadSelectionTree;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.DirectoryChooserControl;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -214,14 +216,11 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 			if (SystemManager.isSystemFile(obj)) {
 				selectedASFiles.add((IFile) obj);
 			}
-			if (obj instanceof AutomationSystem) {
-				selectedASFiles.add(((AutomationSystem) obj).getSystemFile());
-			} else if (obj instanceof Device) {
-				selectedASFiles.add(((Device) obj).getAutomationSystem().getSystemFile());
-			} else if (obj instanceof Resource) {
-				selectedASFiles.add(((Resource) obj).getAutomationSystem().getSystemFile());
-			} else if (obj instanceof SystemConfiguration) {
-				selectedASFiles.add(((SystemConfiguration) obj).getAutomationSystem().getSystemFile());
+			if (obj instanceof EObject) {
+				final EObject root = EcoreUtil.getRootContainer((EObject) obj);
+				if (root instanceof LibraryElement) {
+					selectedASFiles.add(((LibraryElement) root).getTypeEntry().getFile());
+				}
 			}
 		});
 

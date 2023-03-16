@@ -35,10 +35,12 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
@@ -183,11 +185,11 @@ implements I4diacNatTableUtil {
 
 	protected void setTableInput() {
 		if (getType() instanceof FBNetworkElement) {
-			setTableInputFbNetworkElement((FBNetworkElement) getType());
+			setTableInput(((FBNetworkElement) getType()).getInterface());
 		}
 
 		if (getType() instanceof FBType) {
-			setTableInputFBType((FBType) getType());
+			setTableInput(((FBType) getType()).getInterfaceList());
 		}
 
 		if (isEditable()) {
@@ -195,9 +197,7 @@ implements I4diacNatTableUtil {
 		}
 	}
 
-	protected abstract void setTableInputFBType(final FBType type);
-
-	protected abstract void setTableInputFbNetworkElement(final FBNetworkElement element);
+	protected abstract void setTableInput(final InterfaceList il);
 
 	@SuppressWarnings("static-method")
 	protected int getInsertingIndex(final IInterfaceElement interfaceElement,
@@ -234,15 +234,19 @@ implements I4diacNatTableUtil {
 
 	protected void configureLabels(final ListDataProvider<T> provider, final LabelStack configLabels,
 			final int columnPosition, final int rowPosition) {
+		final VarDeclaration rowItem = (VarDeclaration) provider.getRowObject(rowPosition);
 		switch (columnPosition) {
 		case I4diacNatTableUtil.TYPE:
+			if (rowItem.getType() instanceof ErrorMarkerDataType) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+			}
 			if (isEditable()) {
+
 				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
 			}
 			break;
 		case I4diacNatTableUtil.INITIAL_VALUE:
 			if (isEditable()) {
-				final VarDeclaration rowItem = (VarDeclaration) provider.getRowObject(rowPosition);
 				if (rowItem.getValue() != null && rowItem.getValue().hasError()) {
 					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
 				}

@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.editor.hyperlinking;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
@@ -74,6 +75,9 @@ public class STAlgorithmHyperlinkHelper extends HyperlinkHelper {
 				} else if (target instanceof Event && target.eContainer() instanceof InterfaceList
 						&& target.eContainer().eContainer() instanceof FBType) {
 					createHyperlinksToType(resource, node, (FBType) target.eContainer().eContainer(), acceptor);
+				} else if (target instanceof AdapterDeclaration) {
+					createHyperlinksToType(resource, node, ((AdapterDeclaration) target).getAdapterFB().getType(),
+							acceptor);
 				} else {
 					createHyperlinksTo(resource, node, target, acceptor);
 				}

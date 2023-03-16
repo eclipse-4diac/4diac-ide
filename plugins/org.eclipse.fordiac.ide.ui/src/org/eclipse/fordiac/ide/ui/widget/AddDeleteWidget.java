@@ -19,7 +19,6 @@ import java.util.List;
 import org.eclipse.fordiac.ide.ui.providers.CommandProvider;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommandProvider;
-import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.viewers.StructuredSelection;
@@ -106,8 +105,8 @@ public class AddDeleteWidget {
 	public void setButtonEnablement(final boolean enable) {
 		deleteButton.setEnabled(enable);
 		deleteButton
-				.setImage((enable) ? PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE)
-						: PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
+		.setImage((enable) ? PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE)
+				: PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_TOOL_DELETE_DISABLED));
 	}
 
 	public void setCreateButtonEnablement(final boolean enable) {
@@ -275,8 +274,8 @@ public class AddDeleteWidget {
 			final CreationCommandProvider commandProvider) {
 		return ev -> {
 			final CreationCommand cmd = commandProvider.getCommand(getReferencedElement(viewer));
-			if (((Command) cmd).canExecute()) {
-				executor.executeCommand((Command) cmd);
+			if (cmd.canExecute()) {
+				executor.executeCommand(cmd);
 				viewer.refresh();
 				final StructuredSelection selection = new StructuredSelection(cmd.getCreatedElement());
 				viewer.setSelection(selection);
@@ -302,7 +301,7 @@ public class AddDeleteWidget {
 			}
 
 			final CreationCommand cmd = commandProvider.getCommand(refObject);
-			executor.executeCommand((Command) cmd);
+			executor.executeCommand(cmd);
 			table.refresh();
 			if ((selectionLayer != null) && (rows != null) && (rows.length > 0)) {
 				selectionLayer.selectRow(0, rows[rows.length - 1] + 1, false, false);

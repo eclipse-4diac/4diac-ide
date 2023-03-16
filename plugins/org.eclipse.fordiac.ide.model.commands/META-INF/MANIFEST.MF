@@ -6,17 +6,20 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.model.commands;singleton:=true
 Bundle-Version: 2.0.1.qualifier
 Bundle-RequiredExecutionEnvironment: JavaSE-11
 Require-Bundle: org.eclipse.fordiac.ide.model,
+ org.eclipse.fordiac.ide.model.eval,
  org.eclipse.gef,
  org.eclipse.ui.workbench,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.core.runtime,
  org.eclipse.jface,
  org.eclipse.fordiac.ide.ui.errormessages,
- org.eclipse.core.resources
+ org.eclipse.core.resources,
+ org.eclipse.ui.ide
 Export-Package: org.eclipse.fordiac.ide.model.commands,
  org.eclipse.fordiac.ide.model.commands.change,
  org.eclipse.fordiac.ide.model.commands.create,
  org.eclipse.fordiac.ide.model.commands.delete,
- org.eclipse.fordiac.ide.model.commands.insert
+ org.eclipse.fordiac.ide.model.commands.insert,
+ org.eclipse.fordiac.ide.model.commands.util
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.model.commands

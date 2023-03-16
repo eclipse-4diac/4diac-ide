@@ -41,6 +41,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
@@ -260,10 +261,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private void collectTypeEntries(final IResourceDelta delta) {
 		final IFile file = (IFile) delta.getResource();
 
-		TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-		if (typeEntryForFile == null) {
-			typeEntryForFile = systemManager.getTypeEntry(file);
-		}
+		final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 		if (typeEntryForFile != null
 				&& typeEntryForFile.getLastModificationTimestamp() != file.getModificationStamp()) {
 			changedFiles.add(typeEntryForFile);
@@ -327,22 +325,19 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(delta.getResource().getProject());
 		final IFile file = (IFile) delta.getResource();
 
-		if (isSystemFile(file)) {
-			systemManager.removeSystem(file);
-		} else {
-			final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
-			if (null != entry) {
-				closeAllEditorsForFile(file);
-				final FileToRenameEntry rnEntry = getFileRenameEntry(entry);
-				if(rnEntry != null) {
-					// the file was moved to a new location update the type entry and do not remove it from the
-					// rename list
-					entry.setFile(rnEntry.getFile());
-					filesToRename.remove(rnEntry);
-				} else {
-					typeLib.removeTypeEntry(entry);
-				}
+		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+		if (null != entry) {
+			closeAllEditorsForFile(file);
+			final FileToRenameEntry rnEntry = getFileRenameEntry(entry);
+			if(rnEntry != null) {
+				// the file was moved to a new location update the type entry and do not remove it from the
+				// rename list
+				entry.setFile(rnEntry.getFile());
+				filesToRename.remove(rnEntry);
+			} else {
+				typeLib.removeTypeEntry(entry);
 			}
+			systemManager.notifyListeners();
 		}
 	}
 
@@ -401,6 +396,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				return Status.OK_STATUS;
 			}
 		};
+		job.setUser(false);
+		job.setSystem(true);
+		job.setPriority(Job.SHORT);
 		job.setRule(entry.getFile().getProject());
 		job.schedule();
 	}
@@ -434,6 +432,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				return Status.OK_STATUS;
 			}
 		};
+		job.setUser(false);
+		job.setSystem(true);
+		job.setPriority(Job.SHORT);
 		job.setRule(file.getProject());
 		job.schedule();
 	}
@@ -442,7 +443,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		final IProject oldProject = ResourcesPlugin.getWorkspace().getRoot()
 				.getProject(delta.getMovedFromPath().lastSegment());
 		final IProject newProject = delta.getResource().getProject();
-		TypeLibraryManager.INSTANCE.renameProject(oldProject, newProject);
 		systemManager.renameProject(oldProject, newProject);
 	}
 
@@ -470,44 +470,30 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private void handleFileMoveBetweenProjects(final IFile src, final IFile dst) {
-		if (isSystemFile(src)) {
-			systemManager.moveSystemToNewProject(src, dst);
-		} else {
-			final TypeLibrary srcTypeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(src.getProject());
-			final TypeEntry entry = srcTypeLib.getTypeEntry(src);
-			if (null != entry) {
-				srcTypeLib.removeTypeEntry(entry);
-				entry.setFile(dst);
-				final TypeLibrary dstTypeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(dst.getProject());
-				dstTypeLib.addTypeEntry(entry);
-			}
+	private static void handleFileMoveBetweenProjects(final IFile src, final IFile dst) {
+		final TypeLibrary srcTypeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(src.getProject());
+		final TypeEntry entry = srcTypeLib.getTypeEntry(src);
+		if (null != entry) {
+			srcTypeLib.removeTypeEntry(entry);
+			entry.setFile(dst);
+			final TypeLibrary dstTypeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(dst.getProject());
+			dstTypeLib.addTypeEntry(entry);
 		}
 	}
 
-	private void handleFileAfterProjectRename(final IFile src, final IFile dst) {
-		if (isSystemFile(src)) {
-			systemManager.updateSystemFile(dst.getProject(), src, dst);  // if loaded the system should already be in
-			// the list of the new project
+	private static void handleFileAfterProjectRename(final IFile src, final IFile dst) {
+		final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(dst.getProject());
+		final TypeEntry entry = typeLib.getTypeEntry(src);
+		if (entry == null) {
+			// we have to create the entry
+			typeLib.createTypeEntry(dst);
 		} else {
-			final TypeLibrary typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(dst.getProject());
-			final TypeEntry entry = typeLib.getTypeEntry(src);
-			if (entry == null) {
-				// we have to create the entry
-				typeLib.createTypeEntry(dst);
-			} else {
-				entry.setFile(dst);
-			}
+			entry.setFile(dst);
 		}
-
 	}
 
 	private void handleFileRename(final IFile dst, final IFile src) {
-		if (isSystemFile(dst)) {
-			renameSystemFile(dst);
-		} else {
-			handleTypeRename(src, dst);
-		}
+		handleTypeRename(src, dst);
 		systemManager.notifyListeners();
 	}
 
@@ -519,25 +505,6 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		} else {
 			updateTypeEntry(file, typeLibrary.createTypeEntry(file));
 		}
-	}
-
-	private void renameSystemFile(final IFile file) {
-		final WorkspaceJob job = new WorkspaceJob(Messages.FordiacResourceChangeListener_7 + file.getName()) {
-			@Override
-			public IStatus runInWorkspace(final IProgressMonitor monitor) {
-				final AutomationSystem system = systemManager.getSystem(file);
-				if (null != system) {
-					final String newTypeName = TypeEntry.getTypeNameFromFile(file);
-					if (!newTypeName.equals(system.getName())) {
-						system.setName(TypeEntry.getTypeNameFromFile(file));
-						SystemManager.saveSystem(system);
-					}
-				}
-				return Status.OK_STATUS;
-			}
-		};
-		job.setRule(file.getProject());
-		job.schedule();
 	}
 
 	private static void updateTypeEntry(final IFile newFile, final TypeEntry entry) {
@@ -562,6 +529,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 					return Status.OK_STATUS;
 				}
 			};
+			job.setUser(false);
+			job.setSystem(true);
+			job.setPriority(Job.SHORT);
 			job.setRule(newFile.getProject());
 			job.schedule();
 		}
@@ -582,7 +552,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			}
 			if (editor instanceof ISystemEditor) {
 				final AutomationSystem system = ((ISystemEditor) editor).getSystem();
-				return project.equals(system.getSystemFile().getProject());
+				return project.equals(system.getTypeLibrary().getProject());
 			}
 			return false;
 		}));

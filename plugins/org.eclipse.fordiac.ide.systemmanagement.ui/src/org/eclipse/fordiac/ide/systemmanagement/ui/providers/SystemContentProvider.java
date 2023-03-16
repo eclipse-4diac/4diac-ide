@@ -74,13 +74,13 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 		if (object instanceof Application) {
 			final Application app = (Application) object;
 			// the automation system can be null if the the app was just deleted
-			return (null != app.getAutomationSystem()) ? app.getAutomationSystem().getSystemFile() : null;
+			return (null != app.getAutomationSystem()) ? app.getAutomationSystem().getTypeEntry().getFile() : null;
 		}
 		if (object instanceof SystemConfiguration) {
-			return ((SystemConfiguration) object).getAutomationSystem().getSystemFile();
+			return ((SystemConfiguration) object).getAutomationSystem().getTypeEntry().getFile();
 		}
 		if (object instanceof AutomationSystem) {
-			return ((AutomationSystem) object).getSystemFile();
+			return ((AutomationSystem) object).getTypeEntry().getFile();
 		}
 		final Object parent = super.getParent(object);
 		if (parent instanceof FBType) {
@@ -115,7 +115,7 @@ public class SystemContentProvider extends AdapterFactoryContentProvider impleme
 		if (notification.getNotifier() instanceof AutomationSystem) {
 			// as the automation system is changed we need to perform a special refresh here
 			final AutomationSystem system = (AutomationSystem) notification.getNotifier();
-			super.notifyChanged(new ViewerNotification(notification, system.getSystemFile()));
+			super.notifyChanged(new ViewerNotification(notification, system.getTypeEntry().getFile()));
 		} else {
 			super.notifyChanged(notification);
 			if (LibraryElementPackage.INAMED_ELEMENT == notification.getFeatureID(ConfigurableObject.class)

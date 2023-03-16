@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -29,7 +29,7 @@ class FBEvaluatorFactory implements EvaluatorFactory {
 
 	def static void register() {
 		val factory = new FBEvaluatorFactory
-		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(SimpleFBType, factory)
-		EvaluatorFactory.Registry.INSTANCE.classToFactoryMap.putIfAbsent(BasicFBType, factory)
+		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, SimpleFBType, factory)
+		EvaluatorFactory.Registry.INSTANCE.registerFactory(EvaluatorFactory.DEFAULT_VARIANT, BasicFBType, factory)
 	}
 }

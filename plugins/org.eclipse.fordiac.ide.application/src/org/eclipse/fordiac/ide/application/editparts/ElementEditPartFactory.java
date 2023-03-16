@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -51,9 +52,11 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 	protected EditPart getPartForElement(final EditPart context, final Object modelElement) {
 		if (modelElement instanceof UnfoldedSubappContentNetwork) {
 			return new UnfoldedSubappContentEditPart();
-		} else if (modelElement instanceof GroupContentNetwork) {
+		}
+		if (modelElement instanceof GroupContentNetwork) {
 			return new GroupContentEditPart();
-		} else if (modelElement instanceof FBNetwork) {
+		}
+		if (modelElement instanceof FBNetwork) {
 			return getPartForFBNetwork((FBNetwork) modelElement);
 		} else if (modelElement instanceof FBNetworkElement) {
 			return getPartForFBNetworkElement((FBNetworkElement) modelElement);
@@ -79,11 +82,15 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		if (element instanceof ErrorMarkerFBNElement) {
 			return new ErrorMarkerFBNEditPart();
 		}
+		if (element instanceof CommunicationChannel) {
+			return new CommunicationChannelEditPart();
+		}
 		if (element instanceof FB) {
 			if (null != ((FB) element).getType()) {
 				if (((FB) element).getType().getName().contentEquals("STRUCT_MUX")) { //$NON-NLS-1$
 					return new MultiplexerEditPart();
-				} else if (((FB) element).getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
+				}
+				if (((FB) element).getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
 					return new DemultiplexerEditPart();
 				}
 			}
@@ -117,10 +124,7 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 
 		if ((element.getFBNetworkElement() instanceof StructManipulator)
 				&& (element.getType() instanceof StructuredType)) {
-			if (isMuxOutput(element)) {
-				return new StructInterfaceEditPart();
-			}
-			if (isDemuxInput(element)) {
+			if (isMuxOutput(element) || isDemuxInput(element)) {
 				return new StructInterfaceEditPart();
 			}
 		}

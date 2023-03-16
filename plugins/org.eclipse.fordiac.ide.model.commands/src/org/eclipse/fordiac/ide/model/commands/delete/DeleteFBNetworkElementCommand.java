@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2016, 2021 fortiss GmbH, Johannes Keppler University Linz
+ * Copyright (c) 2016, 2023 fortiss GmbH, Johannes Keppler University Linz
  *                          Primetals Technologies Austria GmbH
+ *                          Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,19 +14,17 @@
  *       - initial API and implementation and/or initial documentation
  *   Alois Zoitl - removed editor check from canUndo
  *               - added checks for value errormarkers
+ *   Martin Jobst - refactor marker handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.delete;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.Messages;
 import org.eclipse.fordiac.ide.model.commands.change.UnmapCommand;
-import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -42,8 +41,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 	private FBNetwork fbParent;
 	private final FBNetworkElement element;
 	private final CompoundCommand cmds = new CompoundCommand();
-	private ErrorMarkerBuilder errorMarker;
-	private final List<ErrorMarkerBuilder> valueErrorMarkers = new ArrayList<>();
+	private final CompoundCommand deleteMarkersCmds = new CompoundCommand();
 	private final Group group;
 
 	public DeleteFBNetworkElementCommand(final FBNetworkElement element) {
@@ -66,16 +64,13 @@ public class DeleteFBNetworkElementCommand extends Command {
 
 	@Override
 	public void execute() {
-		if (element instanceof ErrorMarkerRef) {
-			errorMarker = ErrorMarkerBuilder.deleteErrorMarker((ErrorMarkerRef) element);
-		}
-
 		fbParent = element.getFbNetwork();
 		if (element.isMapped()) {
 			cmds.add(new UnmapCommand(element));
 		}
 		collectDeleteCommands(element);
 		handleErrorMarkers();
+		deleteMarkersCmds.execute();
 		// Before removing the fbnetwork element the connections, value error markers, and mapping should be removed
 		if (cmds.canExecute()) {
 			cmds.execute();
@@ -98,10 +93,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (cmds.canUndo()) {
 			cmds.undo();
 		}
-		if (element instanceof ErrorMarkerRef && errorMarker != null) {
-			errorMarker.createMarkerInFile();
-		}
-		restoreValueErrorMarkers();
+		deleteMarkersCmds.undo();
 	}
 
 	@Override
@@ -109,10 +101,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (cmds.canRedo()) {
 			cmds.redo();
 		}
-		handleErrorMarkers();
-		if (element instanceof ErrorMarkerRef) {
-			errorMarker = ErrorMarkerBuilder.deleteErrorMarker((ErrorMarkerRef) element);
-		}
+		deleteMarkersCmds.redo();
 		if (group != null) {
 			element.setGroup(null);
 		}
@@ -134,22 +123,19 @@ public class DeleteFBNetworkElementCommand extends Command {
 	}
 
 	private void handleErrorMarkers() {
+		deleteMarkersCmds
+		.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(element)));
+
 		for (final VarDeclaration varIn : element.getInterface().getInputVars()) {
 			if ((varIn.getValue() != null) && (varIn.getValue().hasError())) {
-				valueErrorMarkers.add(ErrorMarkerBuilder.deleteErrorMarker(varIn.getValue()));
+				deleteMarkersCmds.add(FordiacMarkerCommandHelper
+						.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(varIn.getValue())));
 			}
 		}
 		for (final ErrorMarkerInterface errorMarkerInterf : element.getInterface().getErrorMarker()) {
-				valueErrorMarkers.add(ErrorMarkerBuilder.deleteErrorMarker(errorMarkerInterf));
+			deleteMarkersCmds.add(FordiacMarkerCommandHelper
+					.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(errorMarkerInterf)));
 		}
-
-	}
-
-	private void restoreValueErrorMarkers() {
-		for (final ErrorMarkerBuilder errorMarkerBuilder : valueErrorMarkers) {
-			errorMarkerBuilder.createMarkerInFile();
-		}
-		valueErrorMarkers.clear();
 	}
 
 	public FBNetwork getFbParent() {

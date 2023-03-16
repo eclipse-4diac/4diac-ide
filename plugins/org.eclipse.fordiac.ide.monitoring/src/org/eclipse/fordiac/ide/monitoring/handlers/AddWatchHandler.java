@@ -203,7 +203,7 @@ public class AddWatchHandler extends AbstractMonitoringHandler {
 	private static void createMonitoredAdpaterFBView(final MonitoringAdapterElement adpaterElement) {
 		final AdapterFB fb = LibraryElementFactory.eINSTANCE.createAdapterFB();
 		final AdapterDeclaration interfaceElement = (AdapterDeclaration) adpaterElement.getPort().getInterfaceElement();
-		final TypeEntry entry = interfaceElement.getTypeEntry();
+		final TypeEntry entry = interfaceElement.getType().getTypeEntry();
 		fb.setTypeEntry(entry);
 		fb.setAdapterDecl(interfaceElement);
 		fb.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());

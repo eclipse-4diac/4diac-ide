@@ -117,7 +117,7 @@ public final class ServiceSequenceUtils {
 	public static void convertTransactionToServiceModel(final ServiceSequence seq, final FBType destType,
 			final FBTransaction transaction) {
 		final InputPrimitive ip = ServiceFactory.createInputPrimitiveFrom(destType.getService().getLeftInterface(),
-				transaction.getInputEventOccurrence().getEvent(), destType.getInterfaceList().getInputVars());
+				transaction.getInputEventOccurrence().getEvent(), transaction.getInputVariables());
 		final List<OutputPrimitive> ops = new ArrayList<>();
 		for (final EventOccurrence outputEvent : transaction.getOutputEventOccurrences()) {
 			final FBType type = getFbTypeFromRuntime(outputEvent);

@@ -72,6 +72,11 @@ class BasicFBEvaluator extends BaseFBEvaluator<BasicFBType> {
 	def ECState getState() {
 		(context.members.get(ECStateVariable.NAME) as ECStateVariable).value.state
 	}
+	
+	def Map<ECTransition, Evaluator> getTransitionEvaluators() {
+		 transitionEvaluators;
+	}
+	
 
 	def void setState(ECState state) {
 		(context.members.get(ECStateVariable.NAME) as ECStateVariable).value = new ECStateValue(state)

@@ -27,7 +27,6 @@ import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryLabelProvider;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditor;
 import org.eclipse.fordiac.ide.application.editors.ApplicationEditorInput;
-import org.eclipse.fordiac.ide.application.editors.FBNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubAppNetworkEditor;
 import org.eclipse.fordiac.ide.application.editors.SubApplicationEditorInput;
 import org.eclipse.fordiac.ide.fbtypeeditor.network.viewer.CompositeAndSubAppInstanceViewerInput;
@@ -40,7 +39,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
@@ -110,12 +108,9 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	private void loadSystem() {
-
 		if (getEditorInput() instanceof FileEditorInput) {
-			system = SystemManager.INSTANCE.getSystem(((FileEditorInput) getEditorInput()).getFile()); // register as
-			// listener and
-			// call this
-			// method
+			system = SystemManager.INSTANCE.getSystem(((FileEditorInput) getEditorInput()).getFile());
+			// register as listener and call this method
 			if (null != system) {
 				getCommandStack().addCommandStackEventListener(this);
 				getCommandStack().addCommandStackEventListener(subEditorCommandStackListener);
@@ -241,14 +236,14 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 			return;
 		}
 		final SaveAsDialog saveAsDialog = new SaveAsDialog(getSite().getShell());
-		saveAsDialog.setOriginalName(system.getSystemFile().getName());
+		saveAsDialog.setOriginalName(getFile().getName());
 		saveAsDialog.open();
 		final IPath path = saveAsDialog.getResult();
 		if (path == null) {
 			return;
 		}
 
-		final IPath fullPath = system.getSystemFile().getFullPath();
+		final IPath fullPath = getFile().getFullPath();
 		if (fullPath.equals(path)) {
 			doSave(null);
 			return;
@@ -290,27 +285,8 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 	}
 
 	@Override
-	protected void gotoFBNetworkElement(final Object object) {
-		final String name = (String) object;
-		final String[] split = name.split("\\."); //$NON-NLS-1$
-		if (split.length >= 2) {
-			final String fullNameOfParent = name.substring(0, name.lastIndexOf('.'));
-			final EObject targetmodel = FBNetworkHelper.getModelFromHierarchicalName(fullNameOfParent, system);
-			if (null != targetmodel) {
-				getBreadcrumb().setInput(targetmodel);
-				final FBNetworkEditor fbEditor = getAdapter(FBNetworkEditor.class);
-				if (null != fbEditor) {
-					final FBNetworkElement elementToSelect = fbEditor.getModel()
-							.getElementNamed(split[split.length - 1]);
-					fbEditor.selectElement(elementToSelect);
-				}
-			}
-		}
-	}
-
-	@Override
 	public IFile getFile() {
-		return system.getSystemFile();
+		return system.getTypeEntry().getFile();
 	}
 
 	@Override
@@ -334,10 +310,12 @@ public class AutomationSystemEditor extends AbstractBreadCrumbEditor implements 
 
 		final String path = getBreadcrumb().serializePath();
 
-		system = SystemManager.INSTANCE.replaceSystemFromFile(system, getFile());
-
+		final SystemEntry typeEntry = (SystemEntry) system.getTypeEntry();
+		typeEntry.setSystem(null);
+		system = typeEntry.getSystem();
 		system.setCommandStack(commandStack);
 		getCommandStack().flush();
+		setPartName(system.getName());
 
 		if (!getBreadcrumb().openPath(path, system)) {
 			if (!system.getApplication().isEmpty()) {

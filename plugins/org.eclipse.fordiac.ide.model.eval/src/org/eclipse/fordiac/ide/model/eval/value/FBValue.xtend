@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -37,7 +37,7 @@ class FBValue implements Value, Iterable<Value> {
 		members.hashCode
 	}
 
-	override toString() { type.name }
+	override toString() '''(«FOR member : members.values SEPARATOR ","»«member.name»:=«member.value»«ENDFOR»)'''
 
 	override iterator() {
 		members.values.sortBy[name].map[value].iterator

@@ -79,7 +79,7 @@ public class SaveAsSubappWizard extends AbstractSaveAsWizard {
 		if (obj instanceof SubAppType) {
 			project = ((SubAppType) obj).getTypeEntry().getFile().getProject();
 		} else {
-			project = getSystem().getSystemFile().getProject();
+			project = getSystem().getTypeLibrary().getProject();
 		}
 		return project;
 	}

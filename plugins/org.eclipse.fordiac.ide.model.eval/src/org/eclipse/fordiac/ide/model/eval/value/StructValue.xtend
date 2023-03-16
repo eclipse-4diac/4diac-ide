@@ -37,7 +37,7 @@ class StructValue implements AnyDerivedValue, Iterable<Value> {
 		members.hashCode
 	}
 
-	override toString() { members.toString }
+	override toString() '''(«FOR member : members.values SEPARATOR ","»«member.name»:=«member.value»«ENDFOR»)'''
 
 	override iterator() {
 		members.values.sortBy[name].map[value].iterator

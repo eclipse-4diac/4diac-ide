@@ -16,6 +16,7 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 /**
@@ -44,5 +45,13 @@ public interface CommunicationConfiguration extends EObject {
 	 * @generated
 	 */
 	String getId();
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation"
+	 * @generated
+	 */
+	EList<CommunicationMappingTarget> getMappingTargets();
 
 } // CommunicationConfiguration

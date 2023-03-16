@@ -15,6 +15,7 @@
  *   Alois Zoitl - reworked this class for the new device managment interaction
  *                 interface
  *   Jan Holzweber - reworked deploying mechanism
+ *   Fabio Gandolfi - reconstruct subapp hierarchy from resources + connections
  *******************************************************************************/
 package org.eclipse.fordiac.ide.deployment.iec61499;
 
@@ -26,9 +27,12 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.text.MessageFormat;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import javax.xml.XMLConstants;
 import javax.xml.parsers.ParserConfigurationException;
@@ -36,29 +40,26 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
+import org.eclipse.fordiac.ide.application.commands.CreateSubAppCrossingConnectionsCommand;
+import org.eclipse.fordiac.ide.application.commands.NewSubAppCommand;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
 import org.eclipse.fordiac.ide.deployment.data.FBDeploymentData;
 import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
 import org.eclipse.fordiac.ide.model.Annotations;
-import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.AdapterConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand;
-import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
-import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -67,6 +68,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
@@ -74,6 +76,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryTags;
 import org.eclipse.fordiac.ide.systemconfiguration.commands.ResourceCreateCommand;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.swt.widgets.Display;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -125,8 +128,8 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 
 	private static Map<String, AdapterType> getAdapterTypes(final InterfaceList interfaceList) {
 		final Map<String, AdapterType> list = new HashMap<>();
-		interfaceList.getPlugs().forEach(e -> list.put(e.getTypeName(), EcoreUtil.copy(e.getAdapterType())));
-		interfaceList.getSockets().forEach(e -> list.put(e.getTypeName(), EcoreUtil.copy(e.getAdapterType())));
+		interfaceList.getPlugs().forEach(e -> list.put(e.getTypeName(), EcoreUtil.copy(e.getType())));
+		interfaceList.getSockets().forEach(e -> list.put(e.getTypeName(), EcoreUtil.copy(e.getType())));
 		return list;
 	}
 
@@ -306,12 +309,28 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		if (null != response.getEndpointlist()) {
 			for (final org.eclipse.fordiac.ide.deployment.devResponse.Connection connection : response.getEndpointlist()
 					.getConnection()) {
-				// TODO currently no subapps supported - bug 538333
 				final String[] src = connection.getSource().split("\\."); //$NON-NLS-1$
-				final FB srcFB = Annotations.getFBNamed(res.getFBNetwork(), src[0]);
+				final FB srcFB;
+				if(src.length > 2) {
+					final SubApp srcSubapp = findSubAppOfFB(
+							Arrays.asList(src).subList(0, src.length - 2).stream().collect(Collectors.joining(".")),
+							res.getFBNetwork());
+					srcFB = srcSubapp.getSubAppNetwork().getFBNamed(src[src.length - 2]);
+				} else {
+					srcFB = Annotations.getFBNamed(res.getFBNetwork(), src[0]);
+				}
 				final IInterfaceElement srcIE = srcFB.getInterfaceElement(src[src.length - 1]);
+
 				final String[] dst = connection.getDestination().split("\\."); //$NON-NLS-1$
-				final FB dstFB = Annotations.getFBNamed(res.getFBNetwork(), dst[0]);
+				final FB dstFB;
+				if (dst.length > 2) {
+					final SubApp dstFBSubApp = findSubAppOfFB(
+							Arrays.asList(dst).subList(0, dst.length - 2).stream().collect(Collectors.joining(".")),
+							res.getFBNetwork());
+					dstFB = dstFBSubApp.getSubAppNetwork().getFBNamed(dst[dst.length - 2]);
+				} else {
+					dstFB = Annotations.getFBNamed(res.getFBNetwork(), dst[0]);
+				}
 				final IInterfaceElement dstIE = dstFB.getInterfaceElement(dst[dst.length - 1]);
 				createConnectionCommand(res.getFBNetwork(), srcIE, dstIE);
 			}
@@ -319,20 +338,9 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 	}
 
 	private static void createConnectionCommand(final FBNetwork fbNet, final IInterfaceElement srcIE, final IInterfaceElement dstIE) {
-		AbstractConnectionCreateCommand cmd = null;
-		if (srcIE instanceof Event) {
-			cmd = new EventConnectionCreateCommand(fbNet);
-		} else if (srcIE instanceof AdapterDeclaration) {
-			cmd = new AdapterConnectionCreateCommand(fbNet);
-		} else if (srcIE instanceof VarDeclaration) {
-			cmd = new DataConnectionCreateCommand(fbNet);
-		}
-		if (null != cmd) {
-			cmd.setSource(srcIE);
-			cmd.setDestination(dstIE);
-			if (cmd.canExecute()) {
-				cmd.execute();
-			}
+		final Command cmd = CreateSubAppCrossingConnectionsCommand.createProcessBorderCrossingConnection(srcIE, dstIE);
+		if (null != cmd && cmd.canExecute()) {
+			cmd.execute();
 		}
 	}
 
@@ -374,14 +382,29 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 			if (!"E_RESTART".equals(fbresult.getType())) { //$NON-NLS-1$
 				FBTypeEntry entry = res.getDevice().getAutomationSystem().getTypeLibrary()
 						.getFBTypeEntry(fbresult.getType());
+
 				if (null == entry) {
 					addTypeToTypelib(res, fbresult.getType(), TypeLibraryTags.FB_TYPE_FILE_ENDING, QUERY_FB_TYPE);
 					entry = res.getDevice().getAutomationSystem().getTypeLibrary().getFBTypeEntry(fbresult.getType());
 				}
-				final FBCreateCommand fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
-				if (fbcmd.canExecute()) {
+
+				FBCreateCommand fbcmd = null;
+				if (fbresult.getName().contains(".")) {
+					final SubApp parent = findSubAppOfFB(
+							fbresult.getName().substring(0, fbresult.getName().lastIndexOf(".")), res.getFBNetwork());
+					fbcmd = new FBCreateCommand(entry, parent.getSubAppNetwork(),
+							10, 10);
+				} else {
+					fbcmd = new FBCreateCommand(entry, res.getFBNetwork(), 100 * i, 10);
+				}
+				if (fbcmd != null && fbcmd.canExecute()) {
 					fbcmd.execute();
-					fbcmd.getFB().setName(fbresult.getName());
+					if (fbresult.getName().contains(".")) {
+						fbcmd.getFB().setName(fbresult.getName().substring(fbresult.getName().lastIndexOf(".") + 1,
+								fbresult.getName().length()));
+					} else {
+						fbcmd.getFB().setName(fbresult.getName());
+					}
 				}
 				i++;
 			}
@@ -397,12 +420,13 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 				result = result.replaceFirst("</Response>", ""); //$NON-NLS-1$ //$NON-NLS-2$
 				if (!result.contains("Reason=\"UNSUPPORTED_TYPE\"") && !result.contains("Reason=\"UNSUPPORTED_CMD\"")) { //$NON-NLS-1$ //$NON-NLS-2$
 					final AutomationSystem system = res.getDevice().getAutomationSystem();
-					final Path path = Paths.get(system.getSystemFile().getLocation() + File.separator + "generated" //$NON-NLS-1$
+					final IFile sysFile = system.getTypeEntry().getFile();
+					final Path path = Paths.get(sysFile.getLocation() + File.separator + "generated" //$NON-NLS-1$
 							+ File.separator + typeName + "." + extension); //$NON-NLS-1$
 					final File file = new File(path.toString());
 					file.getParentFile().mkdirs();
 					Files.write(path, result.getBytes(), StandardOpenOption.CREATE);
-					TypeLibraryManager.INSTANCE.refreshTypeLib(system.getSystemFile());
+					TypeLibraryManager.INSTANCE.refreshTypeLib(sysFile);
 				}
 			}
 		} catch (final Exception e) {
@@ -415,6 +439,36 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 						e);
 			}
 		}
+	}
+
+	private static SubApp findSubAppOfFB(final String path, final FBNetwork network) {
+		final String[] paths = path.split("\\.");
+		SubApp subapp = null;
+		for (final String pathPice : paths) {
+			if (Arrays.asList(paths).indexOf(pathPice) == 0) {
+				subapp = network.getSubAppNamed(pathPice);
+				if (subapp == null) {
+					subapp = createSubApp(network, pathPice);
+				}
+			} else {
+				final SubApp newSubapp = subapp.getSubAppNetwork().getSubAppNamed(pathPice);
+				if (newSubapp == null) {
+					subapp = createSubApp(subapp.getSubAppNetwork(), pathPice);
+				} else {
+					subapp = newSubapp;
+				}
+			}
+		}
+		return subapp;
+	}
+
+	private static SubApp createSubApp(final FBNetwork network, final String name) {
+		final NewSubAppCommand subapp = new NewSubAppCommand(network, Collections.emptyList(), 10, 10);
+		if (subapp.canExecute()) {
+			subapp.execute();
+			subapp.getElement().setName(name);
+		}
+		return subapp.getElement();
 	}
 
 	private static ResourceTypeEntry getResourceType(final Device device, final String resTypeName) {

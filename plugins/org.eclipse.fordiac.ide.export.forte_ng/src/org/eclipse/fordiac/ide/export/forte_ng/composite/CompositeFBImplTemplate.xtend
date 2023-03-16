@@ -28,11 +28,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.EventConnection
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.xtend.lib.annotations.Accessors
 
-class CompositeFBImplTemplate extends ForteFBTemplate {
-
-	@Accessors(PROTECTED_GETTER) CompositeFBType type
+class CompositeFBImplTemplate extends ForteFBTemplate<CompositeFBType> {
 
 	var fbs = new ArrayList<FBNetworkElement>
 	var numCompFBParams = 0;
@@ -42,8 +39,7 @@ class CompositeFBImplTemplate extends ForteFBTemplate {
 	var fannedOutDataConns = 0
 
 	new(CompositeFBType type, String name, Path prefix) {
-		super(name, prefix, "CCompositeFB")
-		this.type = type
+		super(type, name, prefix, "CCompositeFB")
 		fbs.addAll(type.FBNetwork.networkElements.filter[!(it.type instanceof AdapterFBType)])
 	}
 

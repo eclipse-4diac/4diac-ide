@@ -13,17 +13,16 @@ package org.eclipse.fordiac.ide.systemconfiguration.commands;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.gef.commands.Command;
 
 public class ResourceMoveCommand extends Command {
-	private Resource resource;
+	private final Resource resource;
 	private Device device;
-	private Device targetDevice;
-	private int indexNew;
+	private final Device targetDevice;
+	private final int indexNew;
 	private int indexOld;
 
-	public ResourceMoveCommand(Resource resource, Device targetDevice, int indexNew) {
+	public ResourceMoveCommand(final Resource resource, final Device targetDevice, final int indexNew) {
 		this.resource = resource;
 		this.indexNew = indexNew;
 		this.targetDevice = targetDevice;
@@ -44,7 +43,6 @@ public class ResourceMoveCommand extends Command {
 			targetDevice.getResource().remove(resource);
 			device.getResource().add(indexOld, resource);
 		}
-		SystemManager.INSTANCE.notifyListeners();
 	}
 
 	@Override
@@ -59,6 +57,5 @@ public class ResourceMoveCommand extends Command {
 			device.getResource().remove(resource);
 			targetDevice.getResource().add(indexNew, resource);
 		}
-		SystemManager.INSTANCE.notifyListeners();
 	}
 }

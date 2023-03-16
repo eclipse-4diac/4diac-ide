@@ -20,6 +20,7 @@ import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationFactory;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
 
@@ -60,6 +61,8 @@ public class CommunicationFactoryImpl extends EFactoryImpl implements Communicat
 			return createTsnConfiguration();
 		case CommunicationPackage.TSN_WINDOW:
 			return createTsnWindow();
+		case CommunicationPackage.DEFAULT_CONFIGURATION:
+			return createDefaultConfiguration();
 		default:
 			throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -81,6 +84,15 @@ public class CommunicationFactoryImpl extends EFactoryImpl implements Communicat
 	public TsnWindow createTsnWindow() {
 		TsnWindowImpl tsnWindow = new TsnWindowImpl();
 		return tsnWindow;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public DefaultConfiguration createDefaultConfiguration() {
+		DefaultConfigurationImpl defaultConfiguration = new DefaultConfigurationImpl();
+		return defaultConfiguration;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

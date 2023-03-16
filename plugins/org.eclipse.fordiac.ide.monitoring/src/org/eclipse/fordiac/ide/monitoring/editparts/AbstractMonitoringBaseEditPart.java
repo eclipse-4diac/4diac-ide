@@ -187,7 +187,7 @@ public abstract class AbstractMonitoringBaseEditPart extends AbstractViewEditPar
 					}
 				} else if (interfaceElement instanceof AdapterDeclaration) {
 					IInterfaceElement subInterfaceElement = null;
-					final InterfaceList interfaceList = ((AdapterDeclaration) interfaceElement).getAdapterType()
+					final InterfaceList interfaceList = ((AdapterDeclaration) interfaceElement).getType()
 							.getInterfaceList();
 					final List<IInterfaceElement> list = new ArrayList<>();
 					list.addAll(interfaceList.getEventInputs());

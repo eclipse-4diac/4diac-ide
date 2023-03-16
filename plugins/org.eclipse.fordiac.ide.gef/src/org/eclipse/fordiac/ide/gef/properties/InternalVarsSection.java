@@ -29,8 +29,6 @@
 package org.eclipse.fordiac.ide.gef.properties;
 
 
-import java.util.ArrayList;
-
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
@@ -43,12 +41,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
-import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
-import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -65,26 +61,11 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(composite, getWidgetFactory());
 
-		provider = new VarDeclarationListProvider(new ArrayList<>(), new VarDeclarationColumnAccessor(this, null));
-		final DataLayer dataLayer = new DataLayer(provider);
-		final IConfigLabelAccumulator dataLayerLabelAccumulator = dataLayer.getConfigLabelAccumulator();
-		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
-			if (dataLayerLabelAccumulator != null) {
-				dataLayerLabelAccumulator.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
-			}
-			if (columnPosition == I4diacNatTableUtil.TYPE) {
-				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
-			}
-			if (columnPosition == I4diacNatTableUtil.NAME
-					|| columnPosition == I4diacNatTableUtil.COMMENT) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			}
-			if (columnPosition == I4diacNatTableUtil.INITIAL_VALUE) {
-				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
-			}
-		});
+		provider = new VarDeclarationListProvider(new VarDeclarationColumnAccessor(this));
+		final DataLayer dataLayer = setupDataLayer();
+
 		table = NatTableWidgetFactory.createRowNatTable(composite, dataLayer, new VarDeclarationColumnProvider(),
-				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, Boolean.FALSE);
+				IEditableRule.ALWAYS_EDITABLE, new DataTypeSelectionButton(typeSelection), this, false);
 		table.addConfiguration(new InitialValueEditorConfiguration(provider));
 		table.configure();
 
@@ -100,7 +81,7 @@ public class InternalVarsSection extends AbstractInternalVarsSection {
 		final BaseFBType currentType = getType();
 		if (currentType != null) {
 			provider.setInput(currentType.getInternalVars());
-			provider.setTypeLib(currentType.getTypeLibrary());
+			provider.setTypeLib(getDataTypeLib());
 			initTypeSelection(getDataTypeLib());
 		}
 	}

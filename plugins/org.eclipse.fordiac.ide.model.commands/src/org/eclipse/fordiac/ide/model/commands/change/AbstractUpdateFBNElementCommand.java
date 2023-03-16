@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2021 Primetals Technologies Austria GmbH
- *               2022 Martin Erich Jobst
+ *               2022 - 2023 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
  *   Michael Oberlehner - added Error Marker Handling
  *   Martin Jobst - fix data type compatibility handling
  *                - refactor and clean up
+ *                - refactor marker handling
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
@@ -28,11 +29,15 @@ import org.eclipse.fordiac.ide.model.commands.create.DataConnectionCreateCommand
 import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteConnectionCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteErrorMarkerCommand;
+import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.EventType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarkerInterfaceHelper;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -79,14 +84,13 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	protected FBNetworkElement oldElement;
 	protected FBNetwork network;
 
-	protected final List<ErrorMarkerBuilder> errorPins;
-	protected ErrorMarkerBuilder errorMarkerBuilder;
+	protected final CompoundCommand createMarkersCmds = new CompoundCommand();
+	protected final CompoundCommand deleteMarkersCmds = new CompoundCommand();
 	protected TypeEntry entry;
 
 	protected AbstractUpdateFBNElementCommand(final FBNetworkElement oldElement) {
 		this.oldElement = oldElement;
 		this.network = this.oldElement.getFbNetwork();
-		errorPins = new ArrayList<>();
 	}
 
 	@Override
@@ -113,6 +117,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 		handleErrorMarker();
 
+		// deletion has to be done before old element is removed
+		deleteMarkersCmds.execute();
+
 		// Find connectionless pins which should be saved
 		handleParameters();
 
@@ -132,6 +139,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 				recreateResourceConns(resourceConns);
 			}
 		}
+
+		// creation has to be done after new element is inserted
+		createMarkersCmds.execute();
 	}
 
 	@Override
@@ -142,20 +152,14 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		checkGroup(oldElement, newElement);
 
 		// deletion has to be done before old element is removed
-		if ((errorMarkerBuilder != null) && onlyOldElementIsErrorMarker()) {
-			ErrorMarkerBuilder.deleteErrorMarker((ErrorMarkerRef) oldElement);
-		}
+		deleteMarkersCmds.redo();
 
 		network.getNetworkElements().add(newElement);
 		reconnCmds.redo();
 		network.getNetworkElements().remove(oldElement);
 
-		errorPins.forEach(ErrorMarkerBuilder::createMarkerInFile);
-
 		// creation has to be done after new element is inserted
-		if ((errorMarkerBuilder != null) && onlyNewElementIsErrorMarker()) {
-			errorMarkerBuilder.createMarkerInFile();
-		}
+		createMarkersCmds.redo();
 
 		if (mapCmd != null) {
 			mapCmd.redo();
@@ -170,21 +174,15 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			mapCmd.undo();
 		}
 
-		errorPins.stream().map(ErrorMarkerBuilder::getErrorMarkerRef).forEach(ErrorMarkerBuilder::deleteErrorMarker);
-
 		// the deletion has to be done before the new element is removed
-		if ((errorMarkerBuilder != null) && onlyNewElementIsErrorMarker()) {
-			ErrorMarkerBuilder.deleteErrorMarker((ErrorMarkerRef) newElement);
-		}
+		createMarkersCmds.undo();
 
 		network.getNetworkElements().add(oldElement);
 		reconnCmds.undo();
 		network.getNetworkElements().remove(newElement);
 
 		// the creation has to be done after the old element was inserted
-		if ((errorMarkerBuilder != null) && onlyOldElementIsErrorMarker()) {
-			errorMarkerBuilder.createMarkerInFile();
-		}
+		deleteMarkersCmds.undo();
 
 		checkGroup(newElement, oldElement);
 
@@ -240,14 +238,17 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		if ((oldInterface != null) && (oldInterface.getFBNetworkElement() == oldElement)) {
 			// origView is an interface of the original FB => find same interface on copied
 			// FB
-			final IInterfaceElement interfaceElement = updateSelectedInterface(oldInterface, newElement);
+			IInterfaceElement interfaceElement = updateSelectedInterface(oldInterface, newElement);
 
 			if (!interfaceElement.getType().isAssignableFrom(oldInterface.getType())) {
 				final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
 						oldInterface.getTypeName(), interfaceElement.getTypeName());
 
-				return FordiacMarkerHelper.createWrongDataTypeMarker(oldInterface, interfaceElement, newElement,
-						errorPins, errorMessage);
+				final List<ErrorMarkerBuilder> errorMarkerBuilders = new ArrayList<>();
+				interfaceElement = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterfaceElement(newElement,
+						oldInterface, errorMessage, errorMarkerBuilders);
+				errorMarkerBuilders.stream().map(FordiacMarkerCommandHelper::newCreateMarkersCommand)
+				.forEachOrdered(createMarkersCmds::add);
 			}
 
 			return interfaceElement;
@@ -317,10 +318,9 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		if (onlyNewElementIsErrorMarker()) {
 			final String errorMessage = MessageFormat.format("Type File: {0} could not be loaded for FB", //$NON-NLS-1$
 					entry.getFile() != null ? entry.getFile().getFullPath() : "null type"); //$NON-NLS-1$
-			errorMarkerBuilder = ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage, newElement, 0);
-			errorMarkerBuilder.setErrorMarkerRef((ErrorMarkerRef) newElement);
 			((ErrorMarkerRef) newElement).setErrorMessage(errorMessage);
-			errorMarkerBuilder.createMarkerInFile();
+			createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(
+					ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(newElement)));
 			moveEntryToErrorLib();
 		}
 
@@ -329,9 +329,31 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		}
 
 		if (onlyOldElementIsErrorMarker()) {
-			errorMarkerBuilder = ErrorMarkerBuilder.deleteErrorMarker((ErrorMarkerRef) oldElement);
+			deleteMarkersCmds.add(
+					FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(oldElement)));
 		}
 
+		for (final IInterfaceElement element : oldElement.getInterface().getAllInterfaceElements()) {
+			deleteMarkersCmds
+			.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(element)));
+		}
+
+		for (final VarDeclaration input : oldElement.getInterface().getInputVars()) {
+			deleteMarkersCmds.add(FordiacMarkerCommandHelper.newDeleteMarkersCommand(
+					FordiacMarkerHelper.findMarkers(input.getValue(), FordiacErrorMarker.INITIAL_VALUE_MARKER)));
+		}
+
+		for (final VarDeclaration input : newElement.getInterface().getInputVars()) {
+			if (hasValue(input.getValue())) {
+				final String errorMessage = VariableOperations.validateValue(input);
+				input.getValue().setErrorMessage(errorMessage);
+				if (!errorMessage.isBlank()) {
+					createMarkersCmds.add(FordiacMarkerCommandHelper.newCreateMarkersCommand(
+							ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage)
+									.setType(FordiacErrorMarker.INITIAL_VALUE_MARKER).setTarget(input.getValue())));
+				}
+			}
+		}
 	}
 
 	// Ensure that connectionless pins with a value are saved as well
@@ -346,18 +368,16 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 		for (final VarDeclaration output : oldElement.getInterface().getOutputVars()) {
 			if (output.getOutputConnections().isEmpty() && hasValue(output.getValue())) {
 				updateSelectedInterface(output, newElement);
-
 			}
 		}
 		checkErrorMarkerPinParameters();
-
 	}
 
 	private void checkErrorMarkerPinParameters() {
 		for (final ErrorMarkerInterface erroMarker : oldElement.getInterface().getErrorMarker()) {
 			if (hasValue(erroMarker.getValue())) {
 				final IInterfaceElement updatedSelected = newElement.getInterfaceElement(erroMarker.getName());
-				if (FordiacMarkerHelper.isVariable(updatedSelected)) {
+				if (updatedSelected instanceof VarDeclaration) {
 					final Value value = LibraryElementFactory.eINSTANCE.createValue();
 					value.setValue(erroMarker.getValue().getValue());
 					((VarDeclaration) updatedSelected).setValue(value);
@@ -388,10 +408,8 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 	}
 
 	private void copyErrorMarkerRef() {
-		final long id = ((ErrorMarkerFBNElement) oldElement).getFileMarkerId();
 		final String errorMessage = ((ErrorMarkerFBNElement) oldElement).getErrorMessage();
 		final FBNetworkElement repairedElement = ((ErrorMarkerFBNElement) oldElement).getRepairedElement();
-		((ErrorMarkerFBNElement) newElement).setFileMarkerId(id);
 		((ErrorMarkerFBNElement) newElement).setErrorMessage(errorMessage);
 		if (repairedElement != null) {
 			((ErrorMarkerFBNElement) newElement).setRepairedElement(repairedElement);
@@ -407,8 +425,14 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 
 	private ErrorMarkerInterface createMissingMarker(final IInterfaceElement oldInterface,
 			final FBNetworkElement element) {
-		return FordiacMarkerHelper.createErrorMarkerInterfaceElement(element, oldInterface,
-				MessageFormat.format(Messages.UpdateFBTypeCommand_Pin_not_found, oldInterface.getName()), errorPins);
+		final List<ErrorMarkerBuilder> errorMarkerBuilders = new ArrayList<>();
+		final ErrorMarkerInterface errorMarkerInterface = FordiacErrorMarkerInterfaceHelper
+				.createErrorMarkerInterfaceElement(element, oldInterface,
+						MessageFormat.format(Messages.UpdateFBTypeCommand_Pin_not_found, oldInterface.getName()),
+						errorMarkerBuilders);
+		errorMarkerBuilders.stream().map(FordiacMarkerCommandHelper::newCreateMarkersCommand)
+		.forEachOrdered(createMarkersCmds::add);
+		return errorMarkerInterface;
 	}
 
 	private IInterfaceElement updateSelectedInterface(final IInterfaceElement oldInterface,
@@ -441,13 +465,16 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			// if connected with itself, prefer marker in destination
 			final String errorMessage = MessageFormat.format(Messages.UpdateFBTypeCommand_type_mismatch,
 					source.getTypeName(), destination.getTypeName());
+			final List<ErrorMarkerBuilder> errorMarkerBuilders = new ArrayList<>();
 			if (connection.getDestinationElement() == oldElement) {
-				destination = FordiacMarkerHelper.createWrongDataTypeMarker(connection.getDestination(), destination,
-						newElement, errorPins, errorMessage);
+				destination = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterfaceElement(newElement,
+						destination, errorMessage, errorMarkerBuilders);
 			} else {
-				source = FordiacMarkerHelper.createWrongDataTypeMarker(connection.getSource(), source, newElement,
-						errorPins, errorMessage);
+				source = FordiacErrorMarkerInterfaceHelper.createErrorMarkerInterfaceElement(newElement, source,
+						errorMessage, errorMarkerBuilders);
 			}
+			errorMarkerBuilders.stream().map(FordiacMarkerCommandHelper::newCreateMarkersCommand)
+			.forEachOrdered(createMarkersCmds::add);
 		}
 
 		// set repaired endpoints
@@ -477,8 +504,6 @@ public abstract class AbstractUpdateFBNElementCommand extends Command implements
 			reconnCmds.add(cmd);
 		}
 	}
-
-
 
 	protected boolean isConnectionInList(final Connection conn) {
 		for (final Object cmd : reconnCmds.getCommands()) {

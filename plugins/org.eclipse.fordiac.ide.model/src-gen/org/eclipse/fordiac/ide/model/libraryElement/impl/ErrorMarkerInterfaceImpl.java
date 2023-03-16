@@ -62,7 +62,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getOutputConnections <em>Output Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getType <em>Type</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getTypeName <em>Type Name</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getFileMarkerId <em>File Marker Id</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getErrorMessage <em>Error Message</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getRepairedEndpoint <em>Repaired Endpoint</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerInterfaceImpl#getValue <em>Value</em>}</li>
@@ -190,26 +189,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 * @ordered
 	 */
 	protected String typeName = TYPE_NAME_EDEFAULT;
-
-	/**
-	 * The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFileMarkerId()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final long FILE_MARKER_ID_EDEFAULT = 0L;
-
-	/**
-	 * The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFileMarkerId()
-	 * @generated
-	 * @ordered
-	 */
-	protected long fileMarkerId = FILE_MARKER_ID_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
@@ -457,29 +436,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 * @generated
 	 */
 	@Override
-	public long getFileMarkerId() {
-		return fileMarkerId;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setFileMarkerId(long newFileMarkerId) {
-		long oldFileMarkerId = fileMarkerId;
-		fileMarkerId = newFileMarkerId;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID, oldFileMarkerId, fileMarkerId));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String getErrorMessage() {
 		return errorMessage;
 	}
@@ -612,7 +568,7 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 	 */
 	@Override
 	public boolean hasError() {
-		return getFileMarkerId() != 0;
+		return getErrorMessage() != null && !getErrorMessage().isBlank();
 	}
 
 	/**
@@ -749,8 +705,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 				return basicGetType();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE_NAME:
 				return getTypeName();
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID:
-				return getFileMarkerId();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
 				return getErrorMessage();
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
@@ -800,9 +754,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE_NAME:
 				setTypeName((String)newValue);
 				return;
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID:
-				setFileMarkerId((Long)newValue);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
 				setErrorMessage((String)newValue);
 				return;
@@ -850,9 +801,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE_NAME:
 				setTypeName(TYPE_NAME_EDEFAULT);
 				return;
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID:
-				setFileMarkerId(FILE_MARKER_ID_EDEFAULT);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
 				setErrorMessage(ERROR_MESSAGE_EDEFAULT);
 				return;
@@ -892,8 +840,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 				return type != null;
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__TYPE_NAME:
 				return TYPE_NAME_EDEFAULT == null ? typeName != null : !TYPE_NAME_EDEFAULT.equals(typeName);
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID:
-				return fileMarkerId != FILE_MARKER_ID_EDEFAULT;
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE:
 				return ERROR_MESSAGE_EDEFAULT == null ? errorMessage != null : !ERROR_MESSAGE_EDEFAULT.equals(errorMessage);
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE__REPAIRED_ENDPOINT:
@@ -925,7 +871,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 		}
 		if (baseClass == ErrorMarkerRef.class) {
 			switch (derivedFeatureID) {
-				case LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID: return LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID;
 				case LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE: return LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE;
 				default: return -1;
 			}
@@ -953,7 +898,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 		}
 		if (baseClass == ErrorMarkerRef.class) {
 			switch (baseFeatureID) {
-				case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID: return LibraryElementPackage.ERROR_MARKER_INTERFACE__FILE_MARKER_ID;
 				case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE: return LibraryElementPackage.ERROR_MARKER_INTERFACE__ERROR_MESSAGE;
 				default: return -1;
 			}
@@ -979,8 +923,6 @@ public class ErrorMarkerInterfaceImpl extends EObjectImpl implements ErrorMarker
 		result.append(isInput);
 		result.append(", typeName: "); //$NON-NLS-1$
 		result.append(typeName);
-		result.append(", fileMarkerId: "); //$NON-NLS-1$
-		result.append(fileMarkerId);
 		result.append(", errorMessage: "); //$NON-NLS-1$
 		result.append(errorMessage);
 		result.append(')');

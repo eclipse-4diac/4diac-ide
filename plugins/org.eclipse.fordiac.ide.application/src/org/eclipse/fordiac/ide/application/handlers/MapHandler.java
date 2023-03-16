@@ -22,11 +22,13 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.model.annotations.MappingAnnotations;
 import org.eclipse.fordiac.ide.model.commands.change.MapToCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
-import org.eclipse.fordiac.ide.model.libraryElement.Device;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.ui.editors.HandlerHelper;
@@ -59,7 +61,6 @@ public class MapHandler extends AbstractHandler {
 				HandlerHelper.getCommandStack(editor).execute(mapCommands);
 			}
 		}
-
 		return Status.OK_STATUS;
 	}
 
@@ -68,12 +69,12 @@ public class MapHandler extends AbstractHandler {
 		final CompoundCommand mapCommands = new CompoundCommand();
 
 		// save system for the auto select with one resource
-		final ElementTreeSelectionDialog dialog = createDialog(shell, system);
+		final ElementTreeSelectionDialog dialog = createDialog(shell, system, containsCommunicationMapping(fbelements));
 		if (Window.OK == dialog.open()) {
 			final Object firstResult = dialog.getFirstResult();
-			if (firstResult instanceof Resource) {
+			if (firstResult instanceof MappingTarget) {
 				fbelements.forEach(fb -> {
-					final Command cmd = MapToCommand.createMapToCommand(fb, (Resource) firstResult);
+					final Command cmd = MapToCommand.createMapToCommand(fb, (MappingTarget) firstResult);
 					if (cmd.canExecute()) {
 						mapCommands.add(cmd);
 					}
@@ -83,8 +84,9 @@ public class MapHandler extends AbstractHandler {
 		return mapCommands;
 	}
 
-	private static ElementTreeSelectionDialog createDialog(final Shell shell, final AutomationSystem system) {
-		final ITreeContentProvider treeProvider = createTreeContentProvider();
+	private static ElementTreeSelectionDialog createDialog(final Shell shell, final AutomationSystem system,
+			final boolean mapCommunication) {
+		final ITreeContentProvider treeProvider = createTreeContentProvider(mapCommunication);
 		final ElementTreeSelectionDialog dialog = new ElementTreeSelectionDialog(shell, createTreeLabelProvider(),
 				treeProvider) {
 			@Override
@@ -112,9 +114,8 @@ public class MapHandler extends AbstractHandler {
 		return new LabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof Resource) {
-					return ((Resource) element).getDevice().getName() + "." //$NON-NLS-1$
-							+ ((Resource) element).getName();
+				if (element instanceof MappingTarget) {
+					return MappingAnnotations.getHierarchicalName((MappingTarget) element);
 				}
 				return super.getText(element);
 			}
@@ -123,10 +124,11 @@ public class MapHandler extends AbstractHandler {
 			public Image getImage(final Object element) {
 				return FordiacImage.ICON_RESOURCE.getImage();
 			}
+
 		};
 	}
 
-	private static ITreeContentProvider createTreeContentProvider() {
+	private static ITreeContentProvider createTreeContentProvider(final boolean mapCommunication) {
 		return new ITreeContentProvider() {
 
 			@Override
@@ -149,15 +151,12 @@ public class MapHandler extends AbstractHandler {
 
 			@Override
 			public Object[] getChildren(final Object parentElement) {
-				if (parentElement instanceof AutomationSystem) {
-					final AutomationSystem system = (AutomationSystem) parentElement;
-					return system.getSystemConfiguration().getDevices().stream()
-							.flatMap(dev -> dev.getResource().stream()).toArray(Resource[]::new);
-				}
-
-				if (parentElement instanceof Device) {
-					final Device device = (Device) parentElement;
-					return device.getResource().toArray();
+				if (parentElement instanceof EObject) {
+					if (mapCommunication) {
+						return MappingAnnotations.getContainedCommunicationMappingTargets((EObject) parentElement)
+								.toArray();
+					}
+					return MappingAnnotations.getContainedMappingTargets((EObject) parentElement).toArray();
 				}
 				return new Object[0];
 			}
@@ -170,7 +169,8 @@ public class MapHandler extends AbstractHandler {
 				ISources.ACTIVE_EDITOR_NAME);
 		if (editor != null) {
 			final FBNetwork network = editor.getAdapter(FBNetwork.class);
-			setBaseEnabled(isValidSelection(evaluationContext) && isMapable(network) && hasDevices(network));
+			setBaseEnabled(isValidSelection(evaluationContext) && MappingAnnotations.isMapable(network)
+					&& hasDevices(network));
 		} else {
 			setBaseEnabled(false);
 		}
@@ -179,8 +179,17 @@ public class MapHandler extends AbstractHandler {
 	private static boolean isValidSelection(final Object evaluationContext) {
 		final ISelection selection = (ISelection) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
-		final List<FBNetworkElement> fbs = HandlerHelper.getSelectedFBNElements(selection);
-		return !fbs.isEmpty() && allFbsAreMapable(fbs);
+		final List<FBNetworkElement> selected = HandlerHelper.getSelectedFBNElements(selection);
+		if (selected.isEmpty()) {
+			return false;
+		}
+		// cannot mix communication mapping to segments with fb mapping to devices
+		return ((!containsCommunicationMapping(selected) && allFbsAreMapable(selected))
+				|| selected.stream().allMatch(CommunicationChannel.class::isInstance));
+	}
+
+	private static boolean containsCommunicationMapping(final List<FBNetworkElement> selected) {
+		return selected.stream().anyMatch(CommunicationChannel.class::isInstance);
 	}
 
 	private static boolean allFbsAreMapable(final List<FBNetworkElement> fbs) {

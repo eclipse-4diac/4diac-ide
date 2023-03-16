@@ -30,20 +30,13 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.ISources;
 import org.eclipse.ui.handlers.HandlerUtil;
 
-/**
- * Handler to open the corresponding FB in its application if selected in a
- * Resource.
+/** Handler to open the corresponding FB in its application if selected in a Resource.
  *
  * @see org.eclipse.core.commands.IHandler
- * @see org.eclipse.core.commands.AbstractHandler
- */
+ * @see org.eclipse.core.commands.AbstractHandler */
 public class ShowFBInApp extends AbstractHandler {
 
-
-	/**
-	 * the command has been executed, so extract extract the needed information from
-	 * the application context.
-	 */
+	/** the command has been executed, so extract extract the needed information from the application context. */
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
@@ -61,26 +54,24 @@ public class ShowFBInApp extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 		final FBNetworkElement appFB = getAppFB(selection);
-		setBaseEnabled(appFB != null && getApplication(appFB) != null);
+		setBaseEnabled((appFB != null) && (getApplication(appFB) != null));
 	}
 
-	/**
-	 * Finds the corresponding application of a <em>mapped</em> FB.
+	/** Finds the corresponding application of a <em>mapped</em> FB.
 	 *
 	 * @param fbView
-	 * @return the application of the fbView if available
-	 */
+	 * @return the application of the fbView if available */
 	private static Application getApplication(final FBNetworkElement fb) {
-		if (fb != null) {
+		if ((fb != null) && (fb.getFbNetwork() != null)) {
 			return fb.getFbNetwork().getApplication();
 		}
 		return null;
 	}
 
 	private static FBNetworkElement getAppFB(final Object selection) {
-		if (selection instanceof IStructuredSelection && ((IStructuredSelection) selection).size() == 1) {
+		if ((selection instanceof IStructuredSelection) && (((IStructuredSelection) selection).size() == 1)) {
 			final Object first = ((IStructuredSelection) selection).getFirstElement();
-			if (first instanceof EditPart && ((EditPart) first).getModel() instanceof FBNetworkElement) {
+			if ((first instanceof EditPart) && (((EditPart) first).getModel() instanceof FBNetworkElement)) {
 				final FBNetworkElement fb = (FBNetworkElement) ((EditPart) first).getModel();
 				return fb.getOpposite();
 			}

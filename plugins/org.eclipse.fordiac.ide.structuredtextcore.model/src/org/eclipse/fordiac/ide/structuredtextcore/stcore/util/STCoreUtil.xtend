@@ -55,6 +55,7 @@ import org.eclipse.fordiac.ide.model.data.WordType
 import org.eclipse.fordiac.ide.model.data.WstringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
@@ -160,7 +161,8 @@ final class STCoreUtil {
 
 	def static boolean isApplicableTo(STBinaryOperator operator, INamedElement first, INamedElement second) {
 		switch (operator) {
-			case first.anyType || second.anyType: false
+			case first.anyType || second.anyType:
+				false
 			case ADD:
 				(first instanceof AnyMagnitudeType && second instanceof AnyMagnitudeType) ||
 					(first.instanceofAnyTimeOfDayType && second instanceof AnyDurationType) ||
@@ -257,12 +259,16 @@ final class STCoreUtil {
 
 	def static INamedElement getExpectedType(STExpression expression) {
 		switch (it : expression.eContainer) {
-			STUnaryExpression case op.arithmetic,
-			STBinaryExpression case op.arithmetic || op.range:
+			STUnaryExpression case op.arithmetic:
 				expectedType.equivalentAnyNumType
-			STUnaryExpression case op.logical,
-			STBinaryExpression case op.logical:
+			STUnaryExpression case op.logical:
 				expectedType.equivalentAnyBitType
+			STBinaryExpression case op.arithmetic || op.range:
+				expectedType.equivalentAnyNumType ?: //
+				(expression === left ? right?.declaredResultType : left.declaredResultType).equivalentAnyNumType
+			STBinaryExpression case op.logical:
+				expectedType.equivalentAnyBitType ?: //
+				(expression === left ? right?.declaredResultType : left.declaredResultType).equivalentAnyBitType
 			STBinaryExpression case op.comparison:
 				expression === left ? right?.declaredResultType : left.declaredResultType
 			STAssignmentStatement:
@@ -374,7 +380,7 @@ final class STCoreUtil {
 					feature.type.newArrayType(newSubrange(0, feature.arraySize - 1))
 				else
 					feature.type
-			STVarDeclaration case feature.type instanceof DataType:
+			STVarDeclaration:
 				try {
 					val type = switch (type: feature.type) {
 						AnyStringType case feature.maxLength !== null:
@@ -394,6 +400,8 @@ final class STCoreUtil {
 				} catch (ArithmeticException e) {
 					null // invalid declaration
 				}
+			AdapterDeclaration:
+				feature.adapterFB?.type
 			FB:
 				feature.type
 			default:
@@ -406,11 +414,14 @@ final class STCoreUtil {
 	}
 
 	def static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
-		DataFactory.eINSTANCE.createArrayType => [
-			name = '''ARRAY [«arraySubranges.map['''«IF setLowerLimit && setUpperLimit»«lowerLimit»..«upperLimit»«ELSE»*«ENDIF»'''].join(", ")»] OF «arrayBaseType.name»'''
-			baseType = arrayBaseType
-			subranges.addAll(arraySubranges)
-		]
+		if (arrayBaseType !== null)
+			DataFactory.eINSTANCE.createArrayType => [
+				name = '''ARRAY [«arraySubranges.map['''«IF setLowerLimit && setUpperLimit»«lowerLimit»..«upperLimit»«ELSE»*«ENDIF»'''].join(", ")»] OF «arrayBaseType.name»'''
+				baseType = arrayBaseType
+				subranges.addAll(arraySubranges)
+			]
+		else
+			null
 	}
 
 	def static Subrange toSubrange(STExpression expr) {
@@ -423,10 +434,13 @@ final class STCoreUtil {
 	}
 
 	def static AnyStringType newStringType(AnyStringType template, int maxLengthValue) {
-		DataFactory.eINSTANCE.create(template.eClass) as AnyStringType => [
-			name = '''«template.name»[«maxLengthValue»]'''
-			maxLength = maxLengthValue
-		]
+		if (template !== null)
+			DataFactory.eINSTANCE.create(template.eClass) as AnyStringType => [
+				name = '''«template.name»[«maxLengthValue»]'''
+				maxLength = maxLengthValue
+			]
+		else
+			null
 	}
 
 	def static int asConstantInt(STExpression expr) {

@@ -1,8 +1,8 @@
 /********************************************************************************
- * Copyright (c) 2008 - 2017  Profactor GmbH, TU Wien ACIN, fortiss GmbH
- * 				 2018 TU Wien/ACIN
- * 				 2020, 2023 Johannes Kepler University, Linz
- *               2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2008, 2023  Profactor GmbH, TU Wien ACIN, fortiss GmbH,
+ *                           TU Wien/ACIN, Johannes Kepler University, Linz,
+ *                           Primetals Technologies Austria GmbH,
+ *                           Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -17,6 +17,8 @@
  *  Alois Zoitl - Changed XML parsing to Staxx cursor interface for improved
  *  			  parsing performance
  *  Martin Melik Merkumians - added import of internal FBs
+ *  Martin Jobst - refactor marker handling
+ *  Alois Zoitl - updated for new adapter FB handling
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
@@ -37,9 +39,7 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
@@ -61,7 +61,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherMethod;
 import org.eclipse.fordiac.ide.model.libraryElement.OutputPrimitive;
-import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Primitive;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod;
@@ -90,10 +89,6 @@ public class FBTImporter extends TypeImporter {
 
 	/** The output events. */
 	private final Map<String, Event> outputEvents = new HashMap<>();
-
-	/** The adapters. */
-	private final Map<String, AdapterDeclaration> adapters = new HashMap<>();
-	private final Map<String, PositionableElement> adapterPositions = new HashMap<>();
 
 	/** The algorithm name ec action mapping. */
 	private final Map<String, List<ECAction>> algorithmNameECActionMapping = new HashMap<>();
@@ -376,31 +371,20 @@ public class FBTImporter extends TypeImporter {
 	private void parseFBNetwork(final CompositeFBType type) throws TypeImportException, XMLStreamException {
 		final FBNetwork fbNetwork = LibraryElementFactory.eINSTANCE.createFBNetwork();
 		type.setFBNetwork(fbNetwork);
-		adapters.values().forEach(adapter -> addAdapterFB(fbNetwork, adapter));
+		addAdaptersToFBNetwork(fbNetwork);
 		final FBNetworkImporter fbnInmporter = new FBNetworkImporter(this, fbNetwork, type.getInterfaceList());
 		fbnInmporter.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 	}
 
-	private void addAdapterFB(final FBNetwork fbNetwork, final AdapterDeclaration adapter) {
-		final AdapterFB aFB = LibraryElementFactory.eINSTANCE.createAdapterFB();
-		aFB.setTypeEntry(getTypeLibrary().getAdapterTypeEntry(adapter.getTypeName()));
-		aFB.setAdapterDecl(adapter);
+	private void addAdaptersToFBNetwork(final FBNetwork fbNetwork) {
+		getElement().getInterfaceList().getPlugs().forEach(plg -> addAdapterFBToNetwork(fbNetwork, plg));
+		getElement().getInterfaceList().getSockets().forEach(sct -> addAdapterFBToNetwork(fbNetwork, sct));
+	}
 
-		aFB.setName(adapter.getName());
-		final PositionableElement position = adapterPositions.get(adapter.getName());
-		if (position == null) {
-			aFB.setPosition(LibraryElementFactory.eINSTANCE.createPosition());
-		} else {
-			aFB.setPosition(position.getPosition());
-		}
-		if (null != aFB.getType() && null != aFB.getType().getInterfaceList()) {
-			aFB.setInterface(aFB.getType().getInterfaceList().copy());
-		} else {
-			// if we don't have a type or interface list set an empty interface list to
-			// adapter
-			aFB.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
-		}
-		fbNetwork.getNetworkElements().add(aFB);
+	private static void addAdapterFBToNetwork(final FBNetwork fbNetwork, final AdapterDeclaration adapterDecl) {
+		final AdapterFB adapterFB = adapterDecl.getAdapterFB();
+		fbNetwork.getNetworkElements().add(adapterFB);
+		adapterDecl.setAdapterNetworkFB(adapterFB);
 	}
 
 	/** This method converts a FBType to a CompositeFBType.
@@ -872,13 +856,10 @@ public class FBTImporter extends TypeImporter {
 		type.getInternalFbs().add(fb);
 
 		if (fb.getTypeEntry() == null) {
-			// we don't have a type create error marker.
-			// This can only be done after fb has been added to FB network,
-			// so that the error marker can determine the location!
-			final ErrorMarkerBuilder e = ErrorMarkerBuilder.createErrorMarkerBuilder(
-					MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", typeFbElement, fb.getName()), //$NON-NLS-1$
-					fb, getLineNumber());
-			errorMarkerBuilders.add(e);
+			final String errorMessage = MessageFormat.format("Type ({0}) could not be loaded for FB: {1}", //$NON-NLS-1$
+					typeFbElement, fb.getName());
+			errorMarkerBuilders.add(ErrorMarkerBuilder.createErrorMarkerBuilder(errorMessage).setTarget(fb)
+					.setLineNumber(getLineNumber()));
 		}
 	}
 
@@ -983,80 +964,52 @@ public class FBTImporter extends TypeImporter {
 			final boolean isInput) throws TypeImportException, XMLStreamException {
 		processChildren(adpaterListName, name -> {
 			if (LibraryElementTags.ADAPTER_DECLARATION_ELEMENT.equals(name)) {
-				final AdapterDeclaration a = parseAdapterDeclaration();
-				a.setIsInput(isInput);
-				adapters.put(a.getName(), a);
+				final AdapterDeclaration a = parseAdapterDeclaration(isInput);
 				adpaterList.add(a);
-				final InterfaceList adapterInterfaceList = a.getAdapterType().getInterfaceList();
-				if ((null != a.getType()) && (null != adapterInterfaceList)) {
-					if (isInput) {
-						addAdapterEventInputs(adapterInterfaceList.getEventOutputs(), a);
-						addAdapterEventOutputs(adapterInterfaceList.getEventInputs(), a);
-					} else {
-						addAdapterEventInputs(adapterInterfaceList.getEventInputs(), a);
-						addAdapterEventOutputs(adapterInterfaceList.getEventOutputs(), a);
-					}
-				}
+				addAdapterEvents(a);
 				return true;
 			}
 			return false;
 		});
 	}
 
-	private void addAdapterEventOutputs(final EList<Event> eventOutputs, final AdapterDeclaration a) {
-		for (final Event event : eventOutputs) {
-			final AdapterEvent ae = createAdapterEvent(event, a);
-			outputEvents.put(ae.getName(), ae);
+	private void addAdapterEvents(final AdapterDeclaration a) {
+		final InterfaceList adapterInterfaceList = a.getAdapterFB().getInterface();
+		final String prefix = a.getName() + "."; //$NON-NLS-1$
+		if ((null != a.getType()) && (null != adapterInterfaceList)) {
+			adapterInterfaceList.getEventOutputs().forEach(ae -> inputEvents.put(prefix + ae.getName(), ae));
+			adapterInterfaceList.getEventInputs().forEach(ae -> outputEvents.put(prefix + ae.getName(), ae));
 		}
-
-	}
-
-	private void addAdapterEventInputs(final EList<Event> eventInputs, final AdapterDeclaration a) {
-		for (final Event event : eventInputs) {
-			final AdapterEvent ae = createAdapterEvent(event, a);
-			inputEvents.put(ae.getName(), ae);
-		}
-	}
-
-	private static AdapterEvent createAdapterEvent(final Event event, final AdapterDeclaration a) {
-		final AdapterEvent ae = LibraryElementFactory.eINSTANCE.createAdapterEvent();
-		ae.setName(event.getName());
-		ae.setComment(event.getComment());
-		ae.setAdapterDeclaration(a);
-
-		return ae;
 	}
 
 	/** This method parses AdapterDeclaration.
 	 *
-	 * @param node - the node in the DTD of the AdapterDeclaration being parsed
+	 * @param input - flag indicating if it is an in or output of our fb
 	 *
 	 * @return a - the AdapterDeclaration
 	 *
 	 * @throws TypeImportException the FBT import exception
 	 * @throws XMLStreamException */
-	private AdapterDeclaration parseAdapterDeclaration() throws TypeImportException, XMLStreamException {
+	private AdapterDeclaration parseAdapterDeclaration(final boolean input)
+			throws TypeImportException, XMLStreamException {
 		final AdapterDeclaration a = LibraryElementFactory.eINSTANCE.createAdapterDeclaration();
 		readNameCommentAttributes(a);
+		// set input needs be done right after name and comment so that interface creation below creates the right
+		// socket or plug interface
+		a.setIsInput(input);
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
 			final AdapterTypeEntry entry = getTypeLibrary().getAdapterTypeEntry(typeName);
-			a.setTypeEntry(entry);
-			AdapterType dataType = null;
-			if (null != entry) {
-				dataType = entry.getType();
-			}
 			a.setTypeName(typeName);
-			if (null != dataType) {
-				a.setType(dataType);
+			if (null != entry) {
+				a.setType(entry.getType());
 			}
 		} else {
 			throw new TypeImportException(Messages.FBTImporter_ADAPTER_DECLARATION_TYPE_EXCEPTION);
 		}
 
-		final PositionableElement pos = LibraryElementFactory.eINSTANCE.createPositionableElement();
-		getXandY(pos);
-		adapterPositions.put(a.getName(), pos);
+		createAdapterFB(a);
+		getXandY(a.getAdapterFB());
 
 		processChildren(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT, name -> {
 			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
@@ -1069,6 +1022,22 @@ public class FBTImporter extends TypeImporter {
 
 		proceedToEndElementNamed(LibraryElementTags.ADAPTER_DECLARATION_ELEMENT);
 		return a;
+	}
+
+	private static void createAdapterFB(final AdapterDeclaration adapter) {
+		final AdapterFB aFB = LibraryElementFactory.eINSTANCE.createAdapterFB();
+		aFB.setTypeEntry(adapter.getType().getTypeEntry());
+		aFB.setAdapterDecl(adapter);
+		adapter.setAdapterFB(aFB);
+		aFB.setName(adapter.getName());
+
+		if (null != aFB.getType() && null != aFB.getType().getInterfaceList()) {
+			aFB.setInterface(aFB.getType().getInterfaceList().copy());
+		} else {
+			// if we don't have a type or interface list set an empty interface list to
+			// adapter
+			aFB.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
+		}
 	}
 
 	protected void processWiths() {

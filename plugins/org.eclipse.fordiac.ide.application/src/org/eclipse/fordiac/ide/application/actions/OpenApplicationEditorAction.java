@@ -31,7 +31,7 @@ public class OpenApplicationEditorAction extends AbstractOpenSystemElementListen
 
 	@Override
 	public void run(final IAction action) {
-		final IFile file = app.getAutomationSystem().getSystemFile();
+		final IFile file = app.getAutomationSystem().getTypeEntry().getFile();
 		openInSystemEditor(file, app);
 	}
 

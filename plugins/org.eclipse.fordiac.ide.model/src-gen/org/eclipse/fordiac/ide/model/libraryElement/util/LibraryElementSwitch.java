@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,7 +25,6 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
-import org.eclipse.fordiac.ide.model.libraryElement.AdapterEvent;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
@@ -39,7 +38,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
@@ -54,6 +55,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.ECAction;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
@@ -77,6 +79,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.LocalVariable;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
+import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Method;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.OtherAlgorithm;
@@ -412,6 +415,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				T result = caseResource(resource);
 				if (result == null) result = caseTypedConfigureableObject(resource);
 				if (result == null) result = caseIVarElement(resource);
+				if (result == null) result = caseMappingTarget(resource);
 				if (result == null) result = caseINamedElement(resource);
 				if (result == null) result = caseConfigurableObject(resource);
 				if (result == null) result = defaultCase(theEObject);
@@ -503,6 +507,7 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				AutomationSystem automationSystem = (AutomationSystem)theEObject;
 				T result = caseAutomationSystem(automationSystem);
 				if (result == null) result = caseLibraryElement(automationSystem);
+				if (result == null) result = caseConfigurableObject(automationSystem);
 				if (result == null) result = caseINamedElement(automationSystem);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
@@ -675,18 +680,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryElementPackage.ADAPTER_EVENT: {
-				AdapterEvent adapterEvent = (AdapterEvent)theEObject;
-				T result = caseAdapterEvent(adapterEvent);
-				if (result == null) result = caseEvent(adapterEvent);
-				if (result == null) result = caseIInterfaceElement(adapterEvent);
-				if (result == null) result = caseICallable(adapterEvent);
-				if (result == null) result = caseINamedElement(adapterEvent);
-				if (result == null) result = caseHiddenElement(adapterEvent);
-				if (result == null) result = caseConfigurableObject(adapterEvent);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			case LibraryElementPackage.SERVICE: {
 				Service service = (Service)theEObject;
 				T result = caseService(service);
@@ -853,6 +846,16 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.ERROR_MARKER_DATA_TYPE: {
+				ErrorMarkerDataType errorMarkerDataType = (ErrorMarkerDataType)theEObject;
+				T result = caseErrorMarkerDataType(errorMarkerDataType);
+				if (result == null) result = caseDataType(errorMarkerDataType);
+				if (result == null) result = caseErrorMarkerRef(errorMarkerDataType);
+				if (result == null) result = caseLibraryElement(errorMarkerDataType);
+				if (result == null) result = caseINamedElement(errorMarkerDataType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.ERROR_MARKER_INTERFACE: {
 				ErrorMarkerInterface errorMarkerInterface = (ErrorMarkerInterface)theEObject;
 				T result = caseErrorMarkerInterface(errorMarkerInterface);
@@ -948,6 +951,34 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.COMMUNICATION_CONFIGURATION: {
 				CommunicationConfiguration communicationConfiguration = (CommunicationConfiguration)theEObject;
 				T result = caseCommunicationConfiguration(communicationConfiguration);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.MAPPING_TARGET: {
+				MappingTarget mappingTarget = (MappingTarget)theEObject;
+				T result = caseMappingTarget(mappingTarget);
+				if (result == null) result = caseINamedElement(mappingTarget);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.COMMUNICATION_MAPPING_TARGET: {
+				CommunicationMappingTarget communicationMappingTarget = (CommunicationMappingTarget)theEObject;
+				T result = caseCommunicationMappingTarget(communicationMappingTarget);
+				if (result == null) result = caseMappingTarget(communicationMappingTarget);
+				if (result == null) result = caseINamedElement(communicationMappingTarget);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.COMMUNICATION_CHANNEL: {
+				CommunicationChannel communicationChannel = (CommunicationChannel)theEObject;
+				T result = caseCommunicationChannel(communicationChannel);
+				if (result == null) result = caseFB(communicationChannel);
+				if (result == null) result = caseFBNetworkElement(communicationChannel);
+				if (result == null) result = caseICallable(communicationChannel);
+				if (result == null) result = caseTypedConfigureableObject(communicationChannel);
+				if (result == null) result = casePositionableElement(communicationChannel);
+				if (result == null) result = caseINamedElement(communicationChannel);
+				if (result == null) result = caseConfigurableObject(communicationChannel);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -1826,21 +1857,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Adapter Event</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Adapter Event</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAdapterEvent(AdapterEvent object) {
-		return null;
-	}
-
-	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Service</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -2111,6 +2127,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Marker Data Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Marker Data Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorMarkerDataType(ErrorMarkerDataType object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Error Marker Interface</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -2272,6 +2303,51 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseCommunicationConfiguration(CommunicationConfiguration object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Mapping Target</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Mapping Target</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMappingTarget(MappingTarget object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Communication Mapping Target</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Communication Mapping Target</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCommunicationMappingTarget(CommunicationMappingTarget object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Communication Channel</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Communication Channel</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCommunicationChannel(CommunicationChannel object) {
 		return null;
 	}
 

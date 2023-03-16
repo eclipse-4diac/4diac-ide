@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.model.eval.variable
 
 import java.util.Map
+import java.util.regex.Pattern
 import org.eclipse.fordiac.ide.model.eval.value.FBValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
@@ -25,6 +26,9 @@ import org.eclipse.xtend.lib.annotations.Accessors
 import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 class FBVariable extends AbstractVariable<FBValue> {
+	static final Pattern MAP_PATTERN = Pattern.compile(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
+	static final Pattern MAP_KV_PATTERN = Pattern.compile(":=(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
+
 	@Accessors final Map<String, Variable<?>> members
 	@Accessors final FBValue value
 
@@ -41,6 +45,7 @@ class FBVariable extends AbstractVariable<FBValue> {
 		super(name, type)
 		val members = variables?.toMap[getName] ?: newHashMap;
 		(type.interfaceList.inputVars + type.interfaceList.outputVars).forEach[initializeMember(members)]
+		(type.interfaceList.sockets + type.interfaceList.plugs).forEach[adapterFB.initializeMember(members)]
 		if (type instanceof BaseFBType) {
 			type.internalVars.forEach[initializeMember(members)]
 			type.internalFbs.forEach[initializeMember(members)]
@@ -79,8 +84,40 @@ class FBVariable extends AbstractVariable<FBValue> {
 	}
 
 	override setValue(String value) {
-		throw new UnsupportedOperationException("Cannot parse FB value")
+		val trimmed = value.trim
+		if (!trimmed.startsWith("(") || !trimmed.endsWith(")")) {
+			throw new IllegalArgumentException("Not a valid FB value")
+		}
+		val inner = trimmed.substring(1, trimmed.length - 1)
+		MAP_PATTERN.split(inner).forEach [ elem |
+			val split = MAP_KV_PATTERN.split(elem)
+			if (split.length != 2) {
+				throw new IllegalArgumentException("Not a valid FB value")
+			}
+			val variable = members.get(split.get(0).trim)
+			if (variable === null) {
+				throw new IllegalArgumentException("Not a valid FB value")
+			}
+			variable.value = split.get(1).trim
+		]
 	}
 
-	override validateValue(String value) { false }
+	override validateValue(String value) {
+		val trimmed = value.trim
+		if (!trimmed.startsWith("(") || !trimmed.endsWith(")")) {
+			return false
+		}
+		val inner = trimmed.substring(1, trimmed.length - 1)
+		MAP_PATTERN.split(inner).forall [ elem |
+			val split = MAP_KV_PATTERN.split(elem)
+			if (split.length != 2) {
+				return false
+			}
+			val variable = members.get(split.get(0).trim)
+			if (variable === null) {
+				return false
+			}
+			variable.validateValue(split.get(1).trim)
+		]
+	}
 }

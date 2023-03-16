@@ -34,33 +34,12 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * The following features are implemented:
  * </p>
  * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl#getFileMarkerId <em>File Marker Id</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ErrorMarkerRefImpl#getErrorMessage <em>Error Message</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
-	/**
-	 * The default value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFileMarkerId()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final long FILE_MARKER_ID_EDEFAULT = 0L;
-
-	/**
-	 * The cached value of the '{@link #getFileMarkerId() <em>File Marker Id</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getFileMarkerId()
-	 * @generated
-	 * @ordered
-	 */
-	protected long fileMarkerId = FILE_MARKER_ID_EDEFAULT;
-
 	/**
 	 * The default value of the '{@link #getErrorMessage() <em>Error Message</em>}' attribute.
 	 * <!-- begin-user-doc -->
@@ -106,29 +85,6 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 	 * @generated
 	 */
 	@Override
-	public long getFileMarkerId() {
-		return fileMarkerId;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setFileMarkerId(long newFileMarkerId) {
-		long oldFileMarkerId = fileMarkerId;
-		fileMarkerId = newFileMarkerId;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID, oldFileMarkerId, fileMarkerId));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public String getErrorMessage() {
 		return errorMessage;
 	}
@@ -153,7 +109,7 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 	 */
 	@Override
 	public boolean hasError() {
-		return getFileMarkerId() != 0;
+		return getErrorMessage() != null && !getErrorMessage().isBlank();
 	}
 
 	/**
@@ -164,8 +120,6 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID:
-				return getFileMarkerId();
 			case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE:
 				return getErrorMessage();
 			default:
@@ -181,9 +135,6 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID:
-				setFileMarkerId((Long)newValue);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE:
 				setErrorMessage((String)newValue);
 				return;
@@ -201,9 +152,6 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID:
-				setFileMarkerId(FILE_MARKER_ID_EDEFAULT);
-				return;
 			case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE:
 				setErrorMessage(ERROR_MESSAGE_EDEFAULT);
 				return;
@@ -221,8 +169,6 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
-			case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID:
-				return fileMarkerId != FILE_MARKER_ID_EDEFAULT;
 			case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE:
 				return ERROR_MESSAGE_EDEFAULT == null ? errorMessage != null : !ERROR_MESSAGE_EDEFAULT.equals(errorMessage);
 			default:
@@ -240,9 +186,7 @@ public class ErrorMarkerRefImpl extends EObjectImpl implements ErrorMarkerRef {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (fileMarkerId: "); //$NON-NLS-1$
-		result.append(fileMarkerId);
-		result.append(", errorMessage: "); //$NON-NLS-1$
+		result.append(" (errorMessage: "); //$NON-NLS-1$
 		result.append(errorMessage);
 		result.append(')');
 		return result.toString();

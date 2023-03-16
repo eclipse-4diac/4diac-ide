@@ -1,7 +1,7 @@
 /**
  * *******************************************************************************
  * Copyright (c) 2008 - 2018 Profactor GmbH, TU Wien ACIN, fortiss GmbH
- *               2022 Martin Erich Jobst
+ *               2022-2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -18,8 +18,6 @@ package org.eclipse.fordiac.ide.model.libraryElement.impl;
 
 import java.util.Collection;
 
-import org.eclipse.core.resources.IFile;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 
@@ -34,7 +32,9 @@ import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
+import org.eclipse.fordiac.ide.model.libraryElement.ConfigurableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Mapping;
@@ -50,16 +50,26 @@ import org.eclipse.gef.commands.CommandStack;
  * The following features are implemented:
  * </p>
  * <ul>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getAttributes <em>Attributes</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getApplication <em>Application</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getMapping <em>Mapping</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getSystemConfiguration <em>System Configuration</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getSystemFile <em>System File</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AutomationSystemImpl#getCommandStack <em>Command Stack</em>}</li>
  * </ul>
  *
  * @generated
  */
 public class AutomationSystemImpl extends LibraryElementImpl implements AutomationSystem {
+	/**
+	 * The cached value of the '{@link #getAttributes() <em>Attributes</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getAttributes()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<Attribute> attributes;
+
 	/**
 	 * The cached value of the '{@link #getApplication() <em>Application</em>}' containment reference list.
 	 * <!-- begin-user-doc -->
@@ -89,26 +99,6 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @ordered
 	 */
 	protected SystemConfiguration systemConfiguration;
-
-	/**
-	 * The default value of the '{@link #getSystemFile() <em>System File</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSystemFile()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final IFile SYSTEM_FILE_EDEFAULT = null;
-
-	/**
-	 * The cached value of the '{@link #getSystemFile() <em>System File</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getSystemFile()
-	 * @generated
-	 * @ordered
-	 */
-	protected IFile systemFile = SYSTEM_FILE_EDEFAULT;
 
 	/**
 	 * The default value of the '{@link #getCommandStack() <em>Command Stack</em>}' attribute.
@@ -147,6 +137,19 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	@Override
 	protected EClass eStaticClass() {
 		return LibraryElementPackage.Literals.AUTOMATION_SYSTEM;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EList<Attribute> getAttributes() {
+		if (attributes == null) {
+			attributes = new EObjectContainmentEList.Resolving<Attribute>(Attribute.class, this, LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES);
+		}
+		return attributes;
 	}
 
 	/**
@@ -249,29 +252,6 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @generated
 	 */
 	@Override
-	public IFile getSystemFile() {
-		return systemFile;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setSystemFile(IFile newSystemFile) {
-		IFile oldSystemFile = systemFile;
-		systemFile = newSystemFile;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE, oldSystemFile, systemFile));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public CommandStack getCommandStack() {
 		return commandStack;
 	}
@@ -315,8 +295,50 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @generated
 	 */
 	@Override
+	public void setAttribute(final String attributeName, final String type, final String value, final String comment) {
+		org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Attribute getAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public String getAttributeValue(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public boolean deleteAttribute(final String attributeName) {
+		return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
+				return ((InternalEList<?>)getAttributes()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				return ((InternalEList<?>)getApplication()).basicRemove(otherEnd, msgs);
 			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
@@ -336,6 +358,8 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
+			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
+				return getAttributes();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				return getApplication();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
@@ -343,8 +367,6 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 				if (resolve) return getSystemConfiguration();
 				return basicGetSystemConfiguration();
-			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
-				return getSystemFile();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
 				return getCommandStack();
 			default:
@@ -361,6 +383,10 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	@Override
 	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
+			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
+				getAttributes().clear();
+				getAttributes().addAll((Collection<? extends Attribute>)newValue);
+				return;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				getApplication().clear();
 				getApplication().addAll((Collection<? extends Application>)newValue);
@@ -371,9 +397,6 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 				return;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 				setSystemConfiguration((SystemConfiguration)newValue);
-				return;
-			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
-				setSystemFile((IFile)newValue);
 				return;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
 				setCommandStack((CommandStack)newValue);
@@ -392,6 +415,9 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
+			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
+				getAttributes().clear();
+				return;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				getApplication().clear();
 				return;
@@ -400,9 +426,6 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 				return;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 				setSystemConfiguration((SystemConfiguration)null);
-				return;
-			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
-				setSystemFile(SYSTEM_FILE_EDEFAULT);
 				return;
 			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
 				setCommandStack(COMMAND_STACK_EDEFAULT);
@@ -421,14 +444,14 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
+			case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES:
+				return attributes != null && !attributes.isEmpty();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__APPLICATION:
 				return application != null && !application.isEmpty();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__MAPPING:
 				return mapping != null && !mapping.isEmpty();
 			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_CONFIGURATION:
 				return systemConfiguration != null;
-			case LibraryElementPackage.AUTOMATION_SYSTEM__SYSTEM_FILE:
-				return SYSTEM_FILE_EDEFAULT == null ? systemFile != null : !SYSTEM_FILE_EDEFAULT.equals(systemFile);
 			case LibraryElementPackage.AUTOMATION_SYSTEM__COMMAND_STACK:
 				return COMMAND_STACK_EDEFAULT == null ? commandStack != null : !COMMAND_STACK_EDEFAULT.equals(commandStack);
 			default:
@@ -442,13 +465,43 @@ public class AutomationSystemImpl extends LibraryElementImpl implements Automati
 	 * @generated
 	 */
 	@Override
+	public int eBaseStructuralFeatureID(int derivedFeatureID, Class<?> baseClass) {
+		if (baseClass == ConfigurableObject.class) {
+			switch (derivedFeatureID) {
+				case LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES: return LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public int eDerivedStructuralFeatureID(int baseFeatureID, Class<?> baseClass) {
+		if (baseClass == ConfigurableObject.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.CONFIGURABLE_OBJECT__ATTRIBUTES: return LibraryElementPackage.AUTOMATION_SYSTEM__ATTRIBUTES;
+				default: return -1;
+			}
+		}
+		return super.eDerivedStructuralFeatureID(baseFeatureID, baseClass);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public String toString() {
 		if (eIsProxy()) return super.toString();
 
 		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (systemFile: "); //$NON-NLS-1$
-		result.append(systemFile);
-		result.append(", commandStack: "); //$NON-NLS-1$
+		result.append(" (commandStack: "); //$NON-NLS-1$
 		result.append(commandStack);
 		result.append(')');
 		return result.toString();

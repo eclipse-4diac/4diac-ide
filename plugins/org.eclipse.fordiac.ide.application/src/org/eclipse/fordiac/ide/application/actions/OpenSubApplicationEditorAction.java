@@ -42,7 +42,7 @@ public class OpenSubApplicationEditorAction extends AbstractOpenSystemElementLis
 	public void run(final IAction action) {
 		final EObject root = EcoreUtil.getRootContainer(subApp);
 		if (root instanceof AutomationSystem) {
-			openInSystemEditor(((AutomationSystem) root).getSystemFile(), subApp);
+			openInSystemEditor(((AutomationSystem) root).getTypeEntry().getFile(), subApp);
 		} else if (root instanceof SubAppType) {
 			openInSubappTypeEditor((SubAppType) root, subApp);
 		}

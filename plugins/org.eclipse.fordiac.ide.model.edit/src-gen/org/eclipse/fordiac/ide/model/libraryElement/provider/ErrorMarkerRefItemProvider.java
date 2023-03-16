@@ -60,22 +60,9 @@ public class ErrorMarkerRefItemProvider extends ItemProviderAdapter implements I
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addFileMarkerIdPropertyDescriptor(object);
+			addErrorMessagePropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/** This adds a property descriptor for the File Marker Id feature. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
-	 * @generated */
-	protected void addFileMarkerIdPropertyDescriptor(Object object) {
-		itemPropertyDescriptors
-				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
-						getResourceLocator(), getString("_UI_ErrorMarkerRef_fileMarkerId_feature"), //$NON-NLS-1$
-						getString("_UI_PropertyDescriptor_description", "_UI_ErrorMarkerRef_fileMarkerId_feature", //$NON-NLS-1$ //$NON-NLS-2$
-								"_UI_ErrorMarkerRef_type"),  //$NON-NLS-1$
-						LibraryElementPackage.Literals.ERROR_MARKER_REF__FILE_MARKER_ID, true, false, false,
-						ItemPropertyDescriptor.INTEGRAL_VALUE_IMAGE, null, null));
 	}
 
 	/** This adds a property descriptor for the Error Message feature. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -103,9 +90,9 @@ public class ErrorMarkerRefItemProvider extends ItemProviderAdapter implements I
 	 * 
 	 * @generated */
 	@Override
-	public String getText(Object object) {
-		ErrorMarkerRef errorMarkerRef = (ErrorMarkerRef) object;
-		return getString("_UI_ErrorMarkerRef_type") + " " + errorMarkerRef.getFileMarkerId(); //$NON-NLS-1$ //$NON-NLS-2$
+	public String getText(final Object object) {
+		final ErrorMarkerRef errorMarkerRef = (ErrorMarkerRef) object;
+		return getString("_UI_ErrorMarkerRef_type") + " " + errorMarkerRef.getErrorMessage(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/** This handles model notifications by calling {@link #updateChildren} to update any cached children and by
@@ -118,7 +105,7 @@ public class ErrorMarkerRefItemProvider extends ItemProviderAdapter implements I
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(ErrorMarkerRef.class)) {
-		case LibraryElementPackage.ERROR_MARKER_REF__FILE_MARKER_ID:
+		case LibraryElementPackage.ERROR_MARKER_REF__ERROR_MESSAGE:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 			return;
 		default:

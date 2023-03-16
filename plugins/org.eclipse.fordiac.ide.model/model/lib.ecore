@@ -3,15 +3,14 @@
     xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="libraryElement" nsURI="org.eclipse.fordiac.ide.model.libraryElement"
     nsPrefix="libraryElement">
   <eClassifiers xsi:type="ecore:EClass" name="AdapterDeclaration" eSuperTypes="#//IInterfaceElement">
-    <eOperations name="getAdapterType" eType="#//AdapterType">
+    <eOperations name="getType" eType="#//AdapterType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return (AdapterType)getType();"/>
+        <details key="body" value="return (AdapterType)getType_();"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterFB" eType="#//AdapterFB"
-        eOpposite="#//AdapterFB/adapterDecl"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="typeEntry" eType="#//TypeEntry"
-        transient="true"/>
+        containment="true"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterNetworkFB" eType="#//AdapterFB"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterType" eSuperTypes="data.ecore#//DataType">
     <eOperations name="getInterfaceList" eType="#//InterfaceList">
@@ -19,18 +18,21 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getInterfaceList(this);"/>
       </eAnnotations>
     </eOperations>
-    <eOperations name="getPlugType" eType="#//AdapterFBType">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getPlugType(this);"/>
-      </eAnnotations>
-    </eOperations>
     <eOperations name="getSocketType" eType="#//AdapterFBType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getSocketType(this);"/>
+        <details key="body" value="//the socket form is the form how adapter types are edited and stored&#xA;return getAdapterFBType();"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterFBType" eType="#//AdapterFBType"
-        resolveProxies="false">
+        containment="true" resolveProxies="false">
+      <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
+        <details key="kind" value="element"/>
+        <details key="name" value="Service"/>
+        <details key="namespace" value="##targetNamespace"/>
+      </eAnnotations>
+    </eStructuralFeatures>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="plugType" eType="#//AdapterFBType"
+        changeable="false" derived="true" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="Service"/>
@@ -780,7 +782,7 @@
       </eAnnotations>
     </eStructuralFeatures>
   </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="Resource" eSuperTypes="#//TypedConfigureableObject #//IVarElement">
+  <eClassifiers xsi:type="ecore:EClass" name="Resource" eSuperTypes="#//TypedConfigureableObject #//IVarElement #//MappingTarget">
     <eOperations name="getAutomationSystem" lowerBound="1" eType="#//AutomationSystem">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
@@ -992,7 +994,7 @@
     </eStructuralFeatures>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="SubAppType" eSuperTypes="#//CompositeFBType"/>
-  <eClassifiers xsi:type="ecore:EClass" name="AutomationSystem" eSuperTypes="#//LibraryElement">
+  <eClassifiers xsi:type="ecore:EClass" name="AutomationSystem" eSuperTypes="#//LibraryElement #//ConfigurableObject">
     <eOperations name="getDeviceNamed" lowerBound="1" eType="#//Device">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);"/>
@@ -1023,8 +1025,6 @@
     </eStructuralFeatures>
     <eStructuralFeatures xsi:type="ecore:EReference" name="systemConfiguration" lowerBound="1"
         eType="#//SystemConfiguration" containment="true"/>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="systemFile" eType="#//IFile"
-        transient="true"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="commandStack" eType="#//CommandStack"
         transient="true"/>
   </eClassifiers>
@@ -1250,8 +1250,8 @@
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="devices" lowerBound="1"
-        upperBound="-1" eType="#//Device" containment="true" resolveProxies="false">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="devices" upperBound="-1"
+        eType="#//Device" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
         <details key="name" value="Device"/>
@@ -1298,17 +1298,11 @@
         eType="#//VarDeclaration" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="AdapterFBType" eSuperTypes="#//FBType">
-    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterType" eType="#//AdapterType"
-        transient="true"/>
-  </eClassifiers>
-  <eClassifiers xsi:type="ecore:EClass" name="AdapterEvent" eSuperTypes="#//Event">
-    <eOperations name="getName" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
+    <eOperations name="getAdapterType" eType="#//AdapterType">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="if (getAdapterDeclaration() == null) {&#xA;&#x9;return super.getName();&#xA;}&#xA;return getAdapterDeclaration().getName() + &quot;.&quot; + super.getName(); //$NON-NLS-1$&#xA;"/>
+        <details key="body" value="return (AdapterType)eContainer();"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="adapterDeclaration" lowerBound="1"
-        eType="#//AdapterDeclaration"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Service">
     <eOperations name="getFBType" lowerBound="1" eType="#//FBType">
@@ -1365,7 +1359,7 @@
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="adapterDecl" lowerBound="1"
-        eType="#//AdapterDeclaration" eOpposite="#//AdapterDeclaration/adapterFB"/>
+        eType="#//AdapterDeclaration"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EDataType" name="IProject" instanceClassName="org.eclipse.core.resources.IProject"/>
   <eClassifiers xsi:type="ecore:EClass" name="Primitive">
@@ -1543,6 +1537,7 @@
   <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerFBNElement" eSuperTypes="#//FBNetworkElement #//ErrorMarkerRef">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repairedElement" eType="#//FBNetworkElement"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerDataType" eSuperTypes="data.ecore#//DataType #//ErrorMarkerRef"/>
   <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerInterface" eSuperTypes="#//IInterfaceElement #//ErrorMarkerRef">
     <eStructuralFeatures xsi:type="ecore:EReference" name="repairedEndpoint" eType="#//IInterfaceElement"
         transient="true"/>
@@ -1566,10 +1561,9 @@
   <eClassifiers xsi:type="ecore:EClass" name="ErrorMarkerRef">
     <eOperations name="hasError" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Boolean">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return getFileMarkerId() != 0;"/>
+        <details key="body" value="return getErrorMessage() != null &amp;&amp; !getErrorMessage().isBlank();"/>
       </eAnnotations>
     </eOperations>
-    <eStructuralFeatures xsi:type="ecore:EAttribute" name="fileMarkerId" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//ELong"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="errorMessage" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="Group" eSuperTypes="#//FBNetworkElement">
@@ -1638,5 +1632,12 @@
       </eAnnotations>
     </eOperations>
     <eOperations name="getId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+    <eOperations name="getMappingTargets" upperBound="-1" eType="#//CommunicationMappingTarget"/>
   </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="MappingTarget" eSuperTypes="#//INamedElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="CommunicationMappingTarget" eSuperTypes="#//MappingTarget">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="mappedElements" upperBound="-1"
+        eType="#//CommunicationChannel" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="CommunicationChannel" eSuperTypes="#//FB"/>
 </ecore:EPackage>

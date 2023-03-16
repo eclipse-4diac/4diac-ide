@@ -17,16 +17,22 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
+import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.nebula.widgets.nattable.NatTable;
+import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
+import org.eclipse.nebula.widgets.nattable.layer.cell.IConfigLabelAccumulator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
@@ -146,4 +152,43 @@ public abstract class AbstractInternalVarsSection extends AbstractSection implem
 				.filter(StructuredType.class::isInstance).map(DataType::getName).collect(Collectors.toList());
 		typeSelection.put("Structured Types", structuredTypes); //$NON-NLS-1$
 	}
+
+	protected DataLayer setupDataLayer() {
+		final DataLayer dataLayer = new DataLayer(provider);
+		final IConfigLabelAccumulator dataLayerLabelAccumulator = dataLayer.getConfigLabelAccumulator();
+		dataLayer.setConfigLabelAccumulator((configLabels, columnPosition, rowPosition) -> {
+			if (dataLayerLabelAccumulator != null) {
+				dataLayerLabelAccumulator.accumulateConfigLabels(configLabels, columnPosition, rowPosition);
+			}
+			configureLabels(configLabels, columnPosition, rowPosition);
+		});
+
+		return dataLayer;
+	}
+
+	protected void configureLabels(final LabelStack configLabels, final int columnPosition, final int rowPosition) {
+		final VarDeclaration rowItem = provider.getRowObject(rowPosition);
+		switch (columnPosition) {
+		case I4diacNatTableUtil.TYPE:
+			if (rowItem.getType() instanceof ErrorMarkerDataType) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+			}
+			configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+
+			break;
+		case I4diacNatTableUtil.INITIAL_VALUE:
+			if (rowItem.getValue() != null && rowItem.getValue().hasError()) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+			}
+			configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
+			break;
+		case I4diacNatTableUtil.NAME:
+		case I4diacNatTableUtil.COMMENT:
+			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			break;
+		default:
+			break;
+		}
+	}
+
 }

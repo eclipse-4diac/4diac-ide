@@ -24,6 +24,7 @@ package org.eclipse.fordiac.ide.model.annotations;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -34,6 +35,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 public final class FBNetworkElementAnnotations {
 
 	public static Resource getResource(final FBNetworkElement fbne) {
+		if (fbne instanceof CommunicationChannel) {
+			return null;
+		}
 		if (null != fbne.getFbNetwork()) {
 			final EObject container = fbne.getFbNetwork().eContainer();
 			if (container instanceof Resource) {

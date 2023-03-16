@@ -18,9 +18,9 @@ import org.eclipse.nebula.widgets.nattable.grid.data.DefaultRowHeaderDataProvide
 
 public class RowHeaderDataProvider extends DefaultRowHeaderDataProvider {
 
-	private final Boolean isInput;
+	private final boolean isInput;
 
-	public RowHeaderDataProvider(final IDataProvider bodyDataProvider, final Boolean isInput) {
+	public RowHeaderDataProvider(final IDataProvider bodyDataProvider, final boolean isInput) {
 		super(bodyDataProvider);
 		this.isInput = isInput;
 	}
@@ -29,7 +29,7 @@ public class RowHeaderDataProvider extends DefaultRowHeaderDataProvider {
 		return this.bodyDataProvider;
 	}
 
-	public Boolean getIsInput() {
+	public boolean isInput() {
 		return this.isInput;
 	}
 
