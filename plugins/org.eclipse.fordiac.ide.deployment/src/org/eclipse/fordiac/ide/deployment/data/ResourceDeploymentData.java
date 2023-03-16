@@ -130,7 +130,7 @@ public class ResourceDeploymentData {
 
 	private void addSubAppParams(final SubApp subApp, final Deque<SubApp> subAppHierarchy, final String prefix) {
 		for (final VarDeclaration dataInput : subApp.getInterface().getInputVars()) {
-			final String val = DeploymentHelper.getVariableValue(dataInput, res.getAutomationSystem());
+			final String val = DeploymentHelper.getVariableValue(dataInput);
 			if (null != val) {
 				for (final ConDeploymentDest destData : getSubappInterfaceconnections(subAppHierarchy, prefix, dataInput)) {
 					params.add(new ParameterData(val, destData.prefix, (VarDeclaration) destData.destination));
