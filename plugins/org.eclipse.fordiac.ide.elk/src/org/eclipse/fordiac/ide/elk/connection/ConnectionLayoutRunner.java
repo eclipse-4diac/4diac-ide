@@ -28,12 +28,11 @@ public final class ConnectionLayoutRunner {
 	public static void runSubapps(final ConnectionLayoutMapping mapping, final FordiacLayoutData data) {
 		for (final UnfoldedSubappContentEditPart subapp : mapping.getExpandedSubapps()) {
 			final ConnectionLayoutMapping subappMapping = run(subapp);
-			final FordiacLayoutData subappData = StandardConnectionRoutingHelper.INSTANCE.calculateConnections(subappMapping);
+			final FordiacLayoutData subappData = AbstractConnectionRoutingHelper.calculateConnections(subappMapping);
 			ConnectionLayoutRunner.runGroups(subapp, subappMapping, subappData);
 			ConnectionLayoutRunner.runSubapps(subappMapping, subappData);
-
 			// combine the recursive subapp runs
-			data.getConnectionPoints().putAll(subappData.getConnectionPoints());
+			data.getConnectionPoints().addAll(subappData.getConnectionPoints());
 		}
 	}
 
@@ -41,10 +40,10 @@ public final class ConnectionLayoutRunner {
 		// separate run for every group
 		for (final GroupEditPart group : mapping.getGroups()) {
 			final ConnectionLayoutMapping groupMapping = run(parent, group, mapping);
-			final FordiacLayoutData groupData = StandardConnectionRoutingHelper.INSTANCE.calculateConnections(groupMapping);
+			final FordiacLayoutData groupData = AbstractConnectionRoutingHelper.calculateConnections(groupMapping);
 
 			// combine data
-			data.getConnectionPoints().putAll(groupData.getConnectionPoints());
+			data.getConnectionPoints().addAll(groupData.getConnectionPoints());
 		}
 
 		// group-to-group connections
@@ -53,10 +52,11 @@ public final class ConnectionLayoutRunner {
 			final Group targetGroup = ((FBNetworkElement) conn.getTarget().getParent().getModel()).getGroup();
 
 			final ConnectionLayoutMapping groupToGroupMapping = run(parent, sourceGroup, targetGroup);
-			final FordiacLayoutData groupToGroupData = StandardConnectionRoutingHelper.INSTANCE.calculateConnections(groupToGroupMapping);
+			final FordiacLayoutData groupToGroupData = AbstractConnectionRoutingHelper
+					.calculateConnections(groupToGroupMapping);
 
 			// combine data
-			data.getConnectionPoints().putAll(groupToGroupData.getConnectionPoints());
+			data.getConnectionPoints().addAll(groupToGroupData.getConnectionPoints());
 		}
 	}
 

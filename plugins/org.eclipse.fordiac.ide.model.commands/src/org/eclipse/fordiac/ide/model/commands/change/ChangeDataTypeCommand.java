@@ -18,11 +18,15 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.commands.change;
 
+import org.eclipse.fordiac.ide.model.commands.util.FordiacMarkerCommandHelper;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.gef.commands.CompoundCommand;
 
 public class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand {
+	private final IInterfaceElement oldElement;
 	private final DataType dataType;
 	private DataType oldDataType;
 	private final CompoundCommand additionalCommands = new CompoundCommand();
@@ -30,12 +34,17 @@ public class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand
 	public ChangeDataTypeCommand(final IInterfaceElement interfaceElement, final DataType dataType) {
 		super(interfaceElement);
 		this.dataType = dataType;
+		this.oldElement = interfaceElement;
 	}
 
 	@Override
 	protected void doExecute() {
 		oldDataType = getInterfaceElement().getType();
 		setNewType();
+		if (oldDataType instanceof ErrorMarkerDataType) {
+			getErrorMarkerUpdateCmds().add(
+					FordiacMarkerCommandHelper.newDeleteMarkersCommand(FordiacMarkerHelper.findMarkers(oldElement)));
+		}
 		additionalCommands.execute();
 	}
 

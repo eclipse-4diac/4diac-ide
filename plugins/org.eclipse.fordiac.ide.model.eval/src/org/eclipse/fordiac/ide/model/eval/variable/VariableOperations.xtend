@@ -85,7 +85,7 @@ final class VariableOperations {
 		try {
 			evaluator?.prepare
 			""
-		} catch (IllegalArgumentException e) {
+		} catch (Exception e) {
 			e.message;
 		}
 	}

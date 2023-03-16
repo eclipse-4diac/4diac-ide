@@ -137,7 +137,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	@SuppressWarnings("static-method")
 	protected void createMarker(final IFile file, final EObject object, final Issue issue) throws CoreException {
 		ErrorMarkerBuilder.createErrorMarkerBuilder(issue.getMessage()).setType(FordiacErrorMarker.INITIAL_VALUE_MARKER)
-		.setTarget(object).createMarker(file);
+		.setSeverity(getMarkerSeverity(issue)).setTarget(object).createMarker(file);
 	}
 
 	@SuppressWarnings("static-method")

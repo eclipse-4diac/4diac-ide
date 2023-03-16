@@ -167,9 +167,13 @@ public class MapHandler extends AbstractHandler {
 	public void setEnabled(final Object evaluationContext) {
 		final IEditorPart editor = (IEditorPart) HandlerUtil.getVariable(evaluationContext,
 				ISources.ACTIVE_EDITOR_NAME);
-		final FBNetwork network = editor.getAdapter(FBNetwork.class);
-		setBaseEnabled(
-				isValidSelection(evaluationContext) && MappingAnnotations.isMapable(network) && hasDevices(network));
+		if (editor != null) {
+			final FBNetwork network = editor.getAdapter(FBNetwork.class);
+			setBaseEnabled(isValidSelection(evaluationContext) && MappingAnnotations.isMapable(network)
+					&& hasDevices(network));
+		} else {
+			setBaseEnabled(false);
+		}
 	}
 
 	private static boolean isValidSelection(final Object evaluationContext) {

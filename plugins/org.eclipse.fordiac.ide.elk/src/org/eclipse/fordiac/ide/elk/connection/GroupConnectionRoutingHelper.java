@@ -18,7 +18,6 @@ import java.util.Objects;
 
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
-import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 
 public class GroupConnectionRoutingHelper extends AbstractConnectionRoutingHelper {
@@ -38,18 +37,15 @@ public class GroupConnectionRoutingHelper extends AbstractConnectionRoutingHelpe
 	}
 
 	@Override
-	protected void saveConnections(final ConnectionLayoutMapping mapping, final InterfaceEditPart ie) {
-		for (final Object obj : ie.getTargetConnections()) {
-			final ConnectionEditPart conn = (ConnectionEditPart) obj;
-			final Group sourceGroup = getGroupFromModel(conn.getSource().getParent().getModel());
-			final Group targetGroup = getGroupFromModel(conn.getTarget().getParent().getModel());
+	protected void saveConnection(final ConnectionLayoutMapping mapping, final ConnectionEditPart con) {
+		final Group sourceGroup = getGroupFromModel(con.getSource().getParent().getModel());
+		final Group targetGroup = getGroupFromModel(con.getTarget().getParent().getModel());
 
-			if (sourceGroup != null && targetGroup != null && (sourceGroup != targetGroup)) {
-				final int hash = Objects.hash(sourceGroup, targetGroup);
-				groupToGroup.computeIfAbsent(hash, val -> conn);
-			} else if (currentGroup.getModel().equals(sourceGroup) || currentGroup.getModel().equals(targetGroup)) {
-				mapping.getConnections().add(conn);
-			}
+		if (sourceGroup != null && targetGroup != null && (sourceGroup != targetGroup)) {
+			final int hash = Objects.hash(sourceGroup, targetGroup);
+			groupToGroup.computeIfAbsent(hash, val -> con);
+		} else if (currentGroup.getModel().equals(sourceGroup) || currentGroup.getModel().equals(targetGroup)) {
+			mapping.getConnections().add(con);
 		}
 	}
 

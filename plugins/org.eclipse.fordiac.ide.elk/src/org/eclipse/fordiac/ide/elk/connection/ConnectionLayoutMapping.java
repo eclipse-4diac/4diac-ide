@@ -102,8 +102,11 @@ public class ConnectionLayoutMapping extends LayoutMapping {
 			hasNetwork = false;
 		}
 		getLayoutGraph().setProperty(CoreOptions.ALGORITHM, "org.eclipse.elk.alg.libavoid"); //$NON-NLS-1$
-		getLayoutGraph().setProperty(LibavoidMetaDataProvider.SHAPE_BUFFER_DISTANCE, Double.valueOf(8));
-		getLayoutGraph().setProperty(LibavoidMetaDataProvider.IDEAL_NUDGING_DISTANCE, Double.valueOf(16));
+		getLayoutGraph().setProperty(LibavoidMetaDataProvider.SHAPE_BUFFER_DISTANCE, Double.valueOf(10));
+		getLayoutGraph().setProperty(LibavoidMetaDataProvider.IDEAL_NUDGING_DISTANCE, Double.valueOf(5));
+		getLayoutGraph().setProperty(LibavoidMetaDataProvider.FIXED_SHARED_PATH_PENALTY, Double.valueOf(100));
+		getLayoutGraph().setProperty(LibavoidMetaDataProvider.NUDGE_ORTHOGONAL_SEGMENTS_CONNECTED_TO_SHAPES,
+				Boolean.valueOf(true));
 	}
 
 	private void createGraphRoot(final AbstractFBNetworkEditPart networkEditPart) {

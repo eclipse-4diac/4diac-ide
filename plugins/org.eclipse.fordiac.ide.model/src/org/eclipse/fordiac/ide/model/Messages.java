@@ -225,6 +225,8 @@ public final class Messages extends NLS {
 
 	public static String FBNetworkImporter_ConnectionTypeMismatch;
 
+	public static String TypeImporter_TypeMissing;
+
 	public static String VALIDATOR_LITERAL_TYPE_INCOMPATIBLE_WITH_INPUT_TYPE;
 	public static String VALIDATOR_INVALID_BOOL_LITERAL;
 	public static String VALIDATOR_TypeNotSupported;

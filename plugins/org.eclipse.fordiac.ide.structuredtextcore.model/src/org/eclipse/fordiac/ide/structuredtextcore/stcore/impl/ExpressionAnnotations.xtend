@@ -97,8 +97,13 @@ final package class ExpressionAnnotations {
 					ElementaryTypes.BOOL
 				else
 					null
-			}
-		} else
+			} else if (declared)
+				left // if looking for declared result type and right is null/invalid, propagate left
+			else
+				null
+		} else if (declared && right instanceof DataType)
+			right // if looking for declared result type and left is null/invalid, propagate right
+		else
 			null
 	}
 

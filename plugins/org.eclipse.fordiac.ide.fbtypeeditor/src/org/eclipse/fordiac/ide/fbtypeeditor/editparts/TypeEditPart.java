@@ -32,6 +32,7 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeAdapterTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -45,7 +46,9 @@ import org.eclipse.gef.requests.DirectEditRequest;
 import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CCombo;
+import org.eclipse.swt.widgets.Display;
 
 public class TypeEditPart extends AbstractInterfaceElementEditPart {
 
@@ -128,6 +131,17 @@ public class TypeEditPart extends AbstractInterfaceElementEditPart {
 	@Override
 	protected void update() {
 		comment.setText(getTypeName());
+
+		final Display display = Display.getCurrent();
+		if (null != display) {
+			if (getINamedElement() instanceof VarDeclaration
+					&& ((VarDeclaration) getINamedElement()).getType() instanceof ErrorMarkerDataType) {
+				comment.setOpaque(true);
+				comment.setBackgroundColor(display.getSystemColor(SWT.COLOR_RED));
+			} else {
+				comment.setOpaque(false);
+			}
+		}
 	}
 
 	private String getTypeName() {

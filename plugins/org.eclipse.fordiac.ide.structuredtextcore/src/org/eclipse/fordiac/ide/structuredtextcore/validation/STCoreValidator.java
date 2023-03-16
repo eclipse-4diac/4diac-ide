@@ -562,14 +562,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		});
 		expression.getMappedInOutArguments().forEach((param, arg) -> {
 			if (arg != null) {
-				final INamedElement destination = getFeatureType(param);
-				final INamedElement source = arg.getResultType();
-				if (!source.equals(destination)) { // in&out requires strict equality
-					error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
-							destination.getName()), STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
-							expression.getParameters().indexOf(arg), NON_COMPATIBLE_TYPES, source.getName(),
-							destination.getName());
-				}
+				checkTypeStrictCompatibility(arg.getResultType(), getFeatureType(param),
+						STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
+						expression.getParameters().indexOf(arg));
 			}
 		});
 	}
@@ -620,8 +615,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			error(MessageFormat.format(Messages.STCoreValidator_Literal_Requires_Type_Specifier,
 					expectedType.getName()), STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE,
 					LITERAL_REQUIRES_TYPE_SPECIFIER);
-		} else if (expectedType instanceof DataType && !type.eClass().equals(expectedType.eClass())
-				&& ((DataType) expectedType).isAssignableFrom(type)) {
+		} else if (expectedType instanceof DataType && !IecTypes.GenericTypes.isAnyType((DataType) expectedType)
+				&& !type.eClass().equals(expectedType.eClass()) && ((DataType) expectedType).isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
 					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
 		}
@@ -644,8 +639,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				&& expression.getValue().length() > ((AnyStringType) expectedType).getMaxLength()) {
 			warning(MessageFormat.format(Messages.STCoreValidator_String_Literal_Truncated,
 					Integer.toString(((AnyStringType) expectedType).getMaxLength())), null, TRUNCATED_LITERAL);
-		} else if (expectedType instanceof DataType && !type.eClass().equals(expectedType.eClass())
-				&& ((DataType) expectedType).isAssignableFrom(type)) {
+		} else if (expectedType instanceof DataType && !IecTypes.GenericTypes.isAnyType((DataType) expectedType)
+				&& !type.eClass().equals(expectedType.eClass()) && ((DataType) expectedType).isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
 					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
 		}
@@ -697,10 +692,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 	}
 
-	/*
-	 * Here we already know that we have a MultibitPartialExpression. This function
-	 * checks bound on static access (without "()")
-	 */
+	/* Here we already know that we have a MultibitPartialExpression. This function checks bound on static access
+	 * (without "()") */
 	private void checkMultibitPartialExpression(final STMultibitPartialExpression expression,
 			final DataType accessorType, final DataType receiverType) {
 		if (receiverType instanceof AnyBitType) {
@@ -763,6 +756,26 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			final EStructuralFeature feature, final int index) {
 		if (!(destination.isAssignableFrom(source)
 				|| (GenericTypes.isAnyType(source) && source.isAssignableFrom(destination)))) {
+			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
+					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
+					destination.getName());
+		}
+	}
+
+	protected void checkTypeStrictCompatibility(final INamedElement destination, final INamedElement source,
+			final EStructuralFeature feature, final int index) {
+		if (destination instanceof DataType && source instanceof DataType) {
+			checkTypeStrictCompatibility((DataType) destination, (DataType) source, feature, index);
+		} else if (source != null && destination != null) {
+			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
+					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
+					destination.getName());
+		}
+	}
+
+	protected void checkTypeStrictCompatibility(final DataType destination, final DataType source,
+			final EStructuralFeature feature, final int index) {
+		if (!(destination.isAssignableFrom(source) && source.isAssignableFrom(destination))) {
 			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
 					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
 					destination.getName());

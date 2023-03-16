@@ -17,6 +17,7 @@
 
 package org.eclipse.fordiac.ide.model.edit.helper;
 
+import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerInterface;
@@ -52,13 +53,13 @@ public final class InitialValueHelper {
 	public static String getDefaultValue(final Object element) {
 		if (element instanceof VarDeclaration) {
 			final VarDeclaration varDec = (VarDeclaration) element;
-
-			try {
-				return (IecTypes.GenericTypes.isAnyType(varDec.getType())) ? "" //$NON-NLS-1$
-						: VariableOperations.newVariable(varDec).getValue().toString();
-			} catch (final IllegalArgumentException exc) {
-				// we are only logging it and jump to default value below
-				FordiacLogHelper.logWarning("could not aquire VarDec default value", exc); //$NON-NLS-1$
+			if (varDec.getType() instanceof AnyType && !IecTypes.GenericTypes.isAnyType(varDec.getType())) {
+				try {
+					return VariableOperations.newVariable(varDec).toString();
+				} catch (final Exception exc) {
+					// we are only logging it and jump to default value below
+					FordiacLogHelper.logWarning("could not aquire VarDec default value", exc); //$NON-NLS-1$
+				}
 			}
 		}
 		return ""; //$NON-NLS-1$
