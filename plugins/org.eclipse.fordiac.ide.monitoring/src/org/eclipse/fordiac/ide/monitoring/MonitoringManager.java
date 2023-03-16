@@ -1,6 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2012 - 2018 Profactor GmbH, AIT, TU Wien ACIN, fortiss GmbH,
+ * Copyright (c) 2012 - 2023 Profactor GmbH, AIT, TU Wien ACIN, fortiss GmbH,
  * 							 Johannes Kepler University
+ * 							 Martin Erich Jobst
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -13,10 +14,12 @@
  *     - initial API and implementation and/or initial documentation
  *   Alois Zoitl - Harmonized deployment and monitoring
  *   Michael Oberlehner - added subapp monitoring
+ *   Martin Jobst - adopt new ST editor for values
  *******************************************************************************/
 package org.eclipse.fordiac.ide.monitoring;
 
 import java.lang.reflect.InvocationTargetException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -35,6 +38,7 @@ import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteracto
 import org.eclipse.fordiac.ide.deployment.monitoringbase.AbstractMonitoringManager;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.MonitoringBaseElement;
 import org.eclipse.fordiac.ide.deployment.monitoringbase.PortElement;
+import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFB;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
@@ -48,6 +52,7 @@ import org.eclipse.fordiac.ide.model.monitoring.SubappMonitoringElement;
 import org.eclipse.fordiac.ide.monitoring.handlers.RemoveAllWatchesHandler;
 import org.eclipse.fordiac.ide.monitoring.model.SubAppPortHelper;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -324,7 +329,7 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		}
 	}
 
-	public void writeValue(final MonitoringElement element, final String value) {
+	public void writeValue(final MonitoringElement element, String value) {
 		final AutomationSystem automationSystem = element.getPort().getSystem();
 
 		if (automationSystem == null) {
@@ -335,6 +340,15 @@ public class MonitoringManager extends AbstractMonitoringManager {
 		if (device == null) {
 			showDeviceNotFounderroMsg(element);
 			return;
+		}
+		final IInterfaceElement interfaceElement = element.getPort().getInterfaceElement();
+		if (interfaceElement instanceof VarDeclaration) {
+			try {
+				value = VariableOperations.newVariable((VarDeclaration) interfaceElement, value).toString();
+			} catch (final Exception e) {
+				showInvalidValueErrorMsg(element, value);
+				return;
+			}
 		}
 
 		final SystemMonitoringData data = getSystemMonitoringData(automationSystem);
@@ -434,4 +448,8 @@ public class MonitoringManager extends AbstractMonitoringManager {
 				"System could not be found for FB port: " + element.getPort() + ".");  //$NON-NLS-1$//$NON-NLS-2$
 	}
 
+	private static void showInvalidValueErrorMsg(final MonitoringElement element, final String value) {
+		ErrorMessenger.popUpErrorMessage(MessageFormat.format(Messages.MonitoringManager_InvalidValue,
+				element.getPort().getInterfaceElement().getQualifiedName(), value));
+	}
 }
