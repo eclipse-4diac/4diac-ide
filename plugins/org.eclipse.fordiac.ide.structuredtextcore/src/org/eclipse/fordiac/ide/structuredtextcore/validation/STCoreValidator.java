@@ -615,8 +615,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			error(MessageFormat.format(Messages.STCoreValidator_Literal_Requires_Type_Specifier,
 					expectedType.getName()), STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE,
 					LITERAL_REQUIRES_TYPE_SPECIFIER);
-		} else if (expectedType instanceof DataType && !type.eClass().equals(expectedType.eClass())
-				&& ((DataType) expectedType).isAssignableFrom(type)) {
+		} else if (expectedType instanceof DataType && !IecTypes.GenericTypes.isAnyType((DataType) expectedType)
+				&& !type.eClass().equals(expectedType.eClass()) && ((DataType) expectedType).isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
 					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
 		}
@@ -639,8 +639,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				&& expression.getValue().length() > ((AnyStringType) expectedType).getMaxLength()) {
 			warning(MessageFormat.format(Messages.STCoreValidator_String_Literal_Truncated,
 					Integer.toString(((AnyStringType) expectedType).getMaxLength())), null, TRUNCATED_LITERAL);
-		} else if (expectedType instanceof DataType && !type.eClass().equals(expectedType.eClass())
-				&& ((DataType) expectedType).isAssignableFrom(type)) {
+		} else if (expectedType instanceof DataType && !IecTypes.GenericTypes.isAnyType((DataType) expectedType)
+				&& !type.eClass().equals(expectedType.eClass()) && ((DataType) expectedType).isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
 					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
 		}
