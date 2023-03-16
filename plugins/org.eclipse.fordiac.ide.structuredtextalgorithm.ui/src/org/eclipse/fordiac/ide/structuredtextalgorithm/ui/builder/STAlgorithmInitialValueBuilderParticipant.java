@@ -27,6 +27,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
@@ -37,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.Messages;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.swt.widgets.Display;
@@ -45,7 +47,9 @@ import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.IResourceDescription;
+import org.eclipse.xtext.validation.CheckType;
 import org.eclipse.xtext.validation.Issue;
+import org.eclipse.xtext.validation.Issue.IssueImpl;
 
 public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderParticipant {
 
@@ -98,6 +102,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		final String value = getValue(varDeclaration);
 		final List<Issue> issues = StructuredTextParseUtil.validate(value, delta.getUri(),
 				STCoreUtil.getFeatureType(varDeclaration), null, null);
+		validateGenericValue(varDeclaration, value, issues);
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
 		}
@@ -109,6 +114,34 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 				updateMarkers(file, canonicalValue, issues, monitor);
 			}
 		}
+	}
+
+	@SuppressWarnings("static-method")
+	protected void validateGenericValue(final VarDeclaration varDeclaration, final String value,
+			final List<Issue> issues) {
+		if (varDeclaration.isIsInput() && GenericTypes.isAnyType(varDeclaration.getType())) {
+			if (varDeclaration.getFBNetworkElement() != null) {
+				if (varDeclaration.getInputConnections().isEmpty() && value.isEmpty()) {
+					issues.add(createIssue(
+							Messages.STAlgorithmInitialValueBuilderParticipant_MissingValueForGenericInstanceVariable,
+							Severity.WARNING));
+				}
+			} else {
+				if (!value.isEmpty()) {
+					issues.add(createIssue(
+							Messages.STAlgorithmInitialValueBuilderParticipant_SpecifiedValueForGenericTypeVariable,
+							Severity.WARNING));
+				}
+			}
+		}
+	}
+
+	protected static Issue createIssue(final String message, final Severity severity) {
+		final IssueImpl issue = new IssueImpl();
+		issue.setMessage(message);
+		issue.setSeverity(severity);
+		issue.setType(CheckType.FAST);
+		return issue;
 	}
 
 	@SuppressWarnings("static-method")
