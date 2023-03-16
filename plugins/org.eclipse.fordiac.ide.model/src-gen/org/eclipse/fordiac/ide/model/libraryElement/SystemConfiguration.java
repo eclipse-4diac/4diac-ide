@@ -46,7 +46,7 @@ public interface SystemConfiguration extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Devices</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSystemConfiguration_Devices()
-	 * @model containment="true" required="true"
+	 * @model containment="true"
 	 *        extendedMetaData="kind='element' name='Device' namespace='##targetNamespace'"
 	 * @generated
 	 */
