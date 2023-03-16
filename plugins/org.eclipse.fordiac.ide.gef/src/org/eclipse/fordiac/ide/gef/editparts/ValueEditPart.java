@@ -33,10 +33,8 @@ import org.eclipse.fordiac.ide.gef.FixedAnchor;
 import org.eclipse.fordiac.ide.gef.figures.ValueToolTipFigure;
 import org.eclipse.fordiac.ide.gef.policies.ValueEditPartChangeEditPolicy;
 import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
-import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
-import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
@@ -241,18 +239,7 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 
 	@SuppressWarnings("static-method") // allow subclasses to overwrite this method
 	protected String getDefaultValue(final IInterfaceElement ie) {
-		if ((ie instanceof VarDeclaration) && !IecTypes.GenericTypes.isAnyType(ie.getType())
-				&& !(ie.getType() instanceof ErrorMarkerDataType)) {
-			try {
-				return VariableOperations.newVariable((VarDeclaration) ie).getValue().toString();
-			} catch (final Exception ex) {
-				// we are only logging it and jump to default value below
-				FordiacLogHelper.logWarning("could not aquire type default value", ex); //$NON-NLS-1$
-			}
-		}
-		// we should only arrive here in case of an errormarker interface without value
-		// OR ANY type
-		return ""; //$NON-NLS-1$
+		return InitialValueHelper.getDefaultValue(ie);
 	}
 
 	private EList<Connection> getOuterConnections() {
