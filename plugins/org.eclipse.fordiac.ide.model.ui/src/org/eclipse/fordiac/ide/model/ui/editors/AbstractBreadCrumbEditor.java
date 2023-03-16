@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.ui.widgets.BreadcrumbWidget;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.editors.AbstractCloseAbleFormEditor;
 import org.eclipse.gef.GraphicalViewer;
+import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CommandStackEvent;
 import org.eclipse.gef.commands.CommandStackEventListener;
@@ -59,6 +60,7 @@ import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IMemento;
@@ -82,34 +84,13 @@ INavigationLocationProvider, IPersistableEditor {
 	private static final String TAG_GRAPHICAL_VIEWER_HOR_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_HOR_SCROLL"; //$NON-NLS-1$
 	private static final String TAG_GRAPHICAL_VIEWER_VER_SCROLL = "FORDIAC_GRAPHICAL_VIEWER_VER_SCROLL"; //$NON-NLS-1$
 
-	@SuppressWarnings("unchecked")
-	private final CommandStackEventListener listener = event -> {
-		if (event.isPostChangeEvent() && isConnectionLayoutPreferenceTicked()) {
-			/*
-			 * FBNetworkElementSetPositionCommand
-			 * ResizeGroupOrSubappCommand
-			 * AbstractConnectionCreateCommand
-			 * ToggleSubAppRepresentationCommand
-			 * AbstractChangeContainerBoundsCommand
-			 * AbstractCreateFBNetworkElementCommand
-			 * ChangeFBNetworkElementName
-			 * ChangeSubAppIENameCommand
-			 * AbstractUpdateFBNElementCommand
-			 */
-			if (event.getCommand() instanceof ConnectionLayoutTagger
-					|| (event.getCommand() instanceof CompoundCommand
-							&& ((CompoundCommand) event.getCommand()).getCommands().stream().anyMatch(ConnectionLayoutTagger.class::isInstance))) {
-				getActiveEditor().getAdapter(GraphicalViewer.class).flush();
-				triggerConnectionLayout();
-			}
-		}
-	};
-
 	private Map<Object, Integer> modelToEditorNum = new HashMap<>();
 
 	private BreadcrumbWidget breadcrumb;
 	// the memento we got for recreating the editor state
 	private IMemento memento;
+	// the last used (automatically triggered) connection layout command
+	private Command layoutCommand;
 
 
 	public BreadcrumbWidget getBreadcrumb() {
@@ -136,7 +117,6 @@ INavigationLocationProvider, IPersistableEditor {
 		// only add the selection change listener when our editor is full up
 		breadcrumb.addSelectionChangedListener(
 				event -> handleBreadCrumbSelection(((StructuredSelection) event.getSelection()).getFirstElement()));
-		getCommandStack().addCommandStackEventListener(listener);
 	}
 
 	private void initializeBreadcrumb() {
@@ -241,12 +221,32 @@ INavigationLocationProvider, IPersistableEditor {
 	@Override
 	public void stackChanged(final CommandStackEvent event) {
 		firePropertyChange(IEditorPart.PROP_DIRTY);
+		if (isConnectionLayoutPreferenceTicked() && isTagged(event)) {
+			if (event.isPostChangeEvent()) {
+				if (event.getDetail() == CommandStack.POST_EXECUTE) {
+					layoutCommand = createConnectionLayoutCommand();
+					layoutCommand.execute();
+				} else if (layoutCommand != null && event.getDetail() == CommandStack.POST_REDO) {
+					layoutCommand.redo();
+				}
+			} else if (event.isPreChangeEvent()) {
+				if (layoutCommand != null && event.getDetail() == CommandStack.PRE_UNDO) {
+					layoutCommand.undo();
+				}
+			}
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	private boolean isTagged(final CommandStackEvent event) {
+		return event.getCommand() instanceof ConnectionLayoutTagger
+				|| (event.getCommand() instanceof CompoundCommand
+						&& ((CompoundCommand) event.getCommand()).getCommands().stream().anyMatch(ConnectionLayoutTagger.class::isInstance));
 	}
 
 	@Override
 	public void dispose() {
 		if (null != getCommandStack()) {
-			getCommandStack().removeCommandStackEventListener(listener);
 			getCommandStack().removeCommandStackEventListener(this);
 		}
 		super.dispose();
@@ -381,10 +381,12 @@ INavigationLocationProvider, IPersistableEditor {
 		return InstanceScope.INSTANCE.getNode("org.eclipse.fordiac.ide.gef").getBoolean("ConnectionAutoLayout", false);
 	}
 
-	private static void triggerConnectionLayout() {
+	private static Command createConnectionLayoutCommand() {
 		final IHandlerService handlerService = getHandlerService();
 		try {
-			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.connectionLayout", null); //$NON-NLS-1$
+			final Event mule = new Event();
+			handlerService.executeCommand("org.eclipse.fordiac.ide.elk.connectionLayout", mule); //$NON-NLS-1$
+			return (Command) mule.data;
 		} catch (final Exception ex) {
 			throw new RuntimeException("Could not execute layout command"); //$NON-NLS-1$
 		}
