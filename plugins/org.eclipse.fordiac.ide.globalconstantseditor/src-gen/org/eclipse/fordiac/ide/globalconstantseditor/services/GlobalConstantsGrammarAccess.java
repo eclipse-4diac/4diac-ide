@@ -23,6 +23,29 @@ import org.eclipse.xtext.service.GrammarProvider;
 @Singleton
 public class GlobalConstantsGrammarAccess extends AbstractElementFinder.AbstractGrammarElementFinder {
 	
+	public class STGlobalConstsSourceElements extends AbstractParserRuleElementFinder {
+		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.STGlobalConstsSource");
+		private final Group cGroup = (Group)rule.eContents().get(1);
+		private final Action cSTGlobalConstsSourceAction_0 = (Action)cGroup.eContents().get(0);
+		private final Assignment cElementsAssignment_1 = (Assignment)cGroup.eContents().get(1);
+		private final RuleCall cElementsSTVarGlobalDeclarationBlockParserRuleCall_1_0 = (RuleCall)cElementsAssignment_1.eContents().get(0);
+		
+		//STGlobalConstsSource returns stcore::STSource:
+		//    {STGlobalConstsSource} elements+=STVarGlobalDeclarationBlock*;
+		@Override public ParserRule getRule() { return rule; }
+		
+		//{STGlobalConstsSource} elements+=STVarGlobalDeclarationBlock*
+		public Group getGroup() { return cGroup; }
+		
+		//{STGlobalConstsSource}
+		public Action getSTGlobalConstsSourceAction_0() { return cSTGlobalConstsSourceAction_0; }
+		
+		//elements+=STVarGlobalDeclarationBlock*
+		public Assignment getElementsAssignment_1() { return cElementsAssignment_1; }
+		
+		//STVarGlobalDeclarationBlock
+		public RuleCall getElementsSTVarGlobalDeclarationBlockParserRuleCall_1_0() { return cElementsSTVarGlobalDeclarationBlockParserRuleCall_1_0; }
+	}
 	public class STVarGlobalDeclarationBlockElements extends AbstractParserRuleElementFinder {
 		private final ParserRule rule = (ParserRule) GrammarUtil.findRuleForName(getGrammar(), "org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.STVarGlobalDeclarationBlock");
 		private final Group cGroup = (Group)rule.eContents().get(1);
@@ -37,13 +60,13 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 		//STVarGlobalDeclarationBlock returns STVarGlobalDeclarationBlock:
 		//    {STVarGlobalDeclarationBlock}
 		//    'VAR_GLOBAL' (constant?='CONSTANT')?
-		//        varDeclarations+=STVarDeclaration*
+		//    varDeclarations+=STVarDeclaration*
 		//    'END_VAR';
 		@Override public ParserRule getRule() { return rule; }
 		
 		//{STVarGlobalDeclarationBlock}
 		//'VAR_GLOBAL' (constant?='CONSTANT')?
-		//    varDeclarations+=STVarDeclaration*
+		//varDeclarations+=STVarDeclaration*
 		//'END_VAR'
 		public Group getGroup() { return cGroup; }
 		
@@ -70,6 +93,7 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 	}
 	
 	
+	private final STGlobalConstsSourceElements pSTGlobalConstsSource;
 	private final STVarGlobalDeclarationBlockElements pSTVarGlobalDeclarationBlock;
 	
 	private final Grammar grammar;
@@ -81,6 +105,7 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 			STCoreGrammarAccess gaSTCore) {
 		this.grammar = internalFindGrammar(grammarProvider);
 		this.gaSTCore = gaSTCore;
+		this.pSTGlobalConstsSource = new STGlobalConstsSourceElements();
 		this.pSTVarGlobalDeclarationBlock = new STVarGlobalDeclarationBlockElements();
 	}
 	
@@ -111,10 +136,20 @@ public class GlobalConstantsGrammarAccess extends AbstractElementFinder.Abstract
 	}
 
 	
+	//STGlobalConstsSource returns stcore::STSource:
+	//    {STGlobalConstsSource} elements+=STVarGlobalDeclarationBlock*;
+	public STGlobalConstsSourceElements getSTGlobalConstsSourceAccess() {
+		return pSTGlobalConstsSource;
+	}
+	
+	public ParserRule getSTGlobalConstsSourceRule() {
+		return getSTGlobalConstsSourceAccess().getRule();
+	}
+	
 	//STVarGlobalDeclarationBlock returns STVarGlobalDeclarationBlock:
 	//    {STVarGlobalDeclarationBlock}
 	//    'VAR_GLOBAL' (constant?='CONSTANT')?
-	//        varDeclarations+=STVarDeclaration*
+	//    varDeclarations+=STVarDeclaration*
 	//    'END_VAR';
 	public STVarGlobalDeclarationBlockElements getSTVarGlobalDeclarationBlockAccess() {
 		return pSTVarGlobalDeclarationBlock;

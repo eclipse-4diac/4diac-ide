@@ -19,7 +19,7 @@
                type="org.eclipse.fordiac.ide.model.libraryElement.ECTransition">
          </source>
          <source
-               type="org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock">
+               type="org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource">
          </source>
          <source
                type="org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration">

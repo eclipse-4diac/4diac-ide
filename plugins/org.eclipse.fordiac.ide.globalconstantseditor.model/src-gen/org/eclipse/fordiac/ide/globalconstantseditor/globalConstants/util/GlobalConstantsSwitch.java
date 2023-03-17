@@ -9,6 +9,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.util.Switch;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.*;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 
 /**
  * <!-- begin-user-doc -->
@@ -67,6 +68,13 @@ public class GlobalConstantsSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE: {
+				STGlobalConstsSource stGlobalConstsSource = (STGlobalConstsSource)theEObject;
+				T result = caseSTGlobalConstsSource(stGlobalConstsSource);
+				if (result == null) result = caseSTSource(stGlobalConstsSource);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK: {
 				STVarGlobalDeclarationBlock stVarGlobalDeclarationBlock = (STVarGlobalDeclarationBlock)theEObject;
 				T result = caseSTVarGlobalDeclarationBlock(stVarGlobalDeclarationBlock);
@@ -75,6 +83,21 @@ public class GlobalConstantsSwitch<T> extends Switch<T> {
 			}
 			default: return defaultCase(theEObject);
 		}
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Global Consts Source</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Global Consts Source</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTGlobalConstsSource(STGlobalConstsSource object) {
+		return null;
 	}
 
 	/**
@@ -89,6 +112,21 @@ public class GlobalConstantsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSTVarGlobalDeclarationBlock(STVarGlobalDeclarationBlock object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Source</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Source</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTSource(STSource object) {
 		return null;
 	}
 

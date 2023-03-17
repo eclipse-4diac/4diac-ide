@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsFactory;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage;
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 
 import org.eclipse.fordiac.ide.model.data.DataPackage;
@@ -27,6 +28,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
  * @generated
  */
 public class GlobalConstantsPackageImpl extends EPackageImpl implements GlobalConstantsPackage {
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass stGlobalConstsSourceEClass = null;
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -105,6 +112,26 @@ public class GlobalConstantsPackageImpl extends EPackageImpl implements GlobalCo
 	 * @generated
 	 */
 	@Override
+	public EClass getSTGlobalConstsSource() {
+		return stGlobalConstsSourceEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EReference getSTGlobalConstsSource_Elements() {
+		return (EReference)stGlobalConstsSourceEClass.getEStructuralFeatures().get(0);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public EClass getSTVarGlobalDeclarationBlock() {
 		return stVarGlobalDeclarationBlockEClass;
 	}
@@ -158,6 +185,9 @@ public class GlobalConstantsPackageImpl extends EPackageImpl implements GlobalCo
 		isCreated = true;
 
 		// Create classes and their features
+		stGlobalConstsSourceEClass = createEClass(ST_GLOBAL_CONSTS_SOURCE);
+		createEReference(stGlobalConstsSourceEClass, ST_GLOBAL_CONSTS_SOURCE__ELEMENTS);
+
 		stVarGlobalDeclarationBlockEClass = createEClass(ST_VAR_GLOBAL_DECLARATION_BLOCK);
 		createEAttribute(stVarGlobalDeclarationBlockEClass, ST_VAR_GLOBAL_DECLARATION_BLOCK__CONSTANT);
 		createEReference(stVarGlobalDeclarationBlockEClass, ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS);
@@ -194,8 +224,12 @@ public class GlobalConstantsPackageImpl extends EPackageImpl implements GlobalCo
 		// Set bounds for type parameters
 
 		// Add supertypes to classes
+		stGlobalConstsSourceEClass.getESuperTypes().add(theSTCorePackage.getSTSource());
 
 		// Initialize classes and features; add operations and parameters
+		initEClass(stGlobalConstsSourceEClass, STGlobalConstsSource.class, "STGlobalConstsSource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+		initEReference(getSTGlobalConstsSource_Elements(), this.getSTVarGlobalDeclarationBlock(), null, "elements", null, 0, -1, STGlobalConstsSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
 		initEClass(stVarGlobalDeclarationBlockEClass, STVarGlobalDeclarationBlock.class, "STVarGlobalDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEAttribute(getSTVarGlobalDeclarationBlock_Constant(), ecorePackage.getEBoolean(), "constant", null, 0, 1, STVarGlobalDeclarationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEReference(getSTVarGlobalDeclarationBlock_VarDeclarations(), theSTCorePackage.getSTVarDeclaration(), null, "varDeclarations", null, 0, -1, STVarGlobalDeclarationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

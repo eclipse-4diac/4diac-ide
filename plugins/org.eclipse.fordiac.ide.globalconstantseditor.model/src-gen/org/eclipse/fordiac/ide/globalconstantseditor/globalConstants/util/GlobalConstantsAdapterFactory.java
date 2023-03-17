@@ -11,6 +11,7 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.*;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
 
 /**
  * <!-- begin-user-doc -->
@@ -69,8 +70,16 @@ public class GlobalConstantsAdapterFactory extends AdapterFactoryImpl {
 	protected GlobalConstantsSwitch<Adapter> modelSwitch =
 		new GlobalConstantsSwitch<Adapter>() {
 			@Override
+			public Adapter caseSTGlobalConstsSource(STGlobalConstsSource object) {
+				return createSTGlobalConstsSourceAdapter();
+			}
+			@Override
 			public Adapter caseSTVarGlobalDeclarationBlock(STVarGlobalDeclarationBlock object) {
 				return createSTVarGlobalDeclarationBlockAdapter();
+			}
+			@Override
+			public Adapter caseSTSource(STSource object) {
+				return createSTSourceAdapter();
 			}
 			@Override
 			public Adapter defaultCase(EObject object) {
@@ -93,6 +102,20 @@ public class GlobalConstantsAdapterFactory extends AdapterFactoryImpl {
 
 
 	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource <em>ST Global Consts Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource
+	 * @generated
+	 */
+	public Adapter createSTGlobalConstsSourceAdapter() {
+		return null;
+	}
+
+	/**
 	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock <em>ST Var Global Declaration Block</em>}'.
 	 * <!-- begin-user-doc -->
 	 * This default implementation returns null so that we can easily ignore cases;
@@ -103,6 +126,20 @@ public class GlobalConstantsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTVarGlobalDeclarationBlockAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource <em>ST Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource
+	 * @generated
+	 */
+	public Adapter createSTSourceAdapter() {
 		return null;
 	}
 

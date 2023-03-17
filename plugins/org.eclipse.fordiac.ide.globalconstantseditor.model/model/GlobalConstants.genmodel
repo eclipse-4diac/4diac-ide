@@ -6,6 +6,9 @@
     complianceLevel="17.0" copyrightFields="false" runtimeVersion="2.33" usedGenPackages="../../org.eclipse.fordiac.ide.structuredtextcore.model/model/STCore.genmodel#//stcore ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data">
   <genPackages prefix="GlobalConstants" basePackage="org.eclipse.fordiac.ide.globalconstantseditor"
       disposableProviderFactory="true" fileExtensions="globalconsts" ecorePackage="GlobalConstants.ecore#/">
+    <genClasses ecoreClass="GlobalConstants.ecore#//STGlobalConstsSource">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GlobalConstants.ecore#//STGlobalConstsSource/elements"/>
+    </genClasses>
     <genClasses ecoreClass="GlobalConstants.ecore#//STVarGlobalDeclarationBlock">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute GlobalConstants.ecore#//STVarGlobalDeclarationBlock/constant"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference GlobalConstants.ecore#//STVarGlobalDeclarationBlock/varDeclarations"/>
