@@ -56,7 +56,8 @@ public class ExportFBsAsXMI extends AbstractExportFBs {
 
 		// Export only SimpleFBs or STFunc, remove this line to export all FB Types
 		if (isSimpleFBType(ifile)
-				|| file.getName().toUpperCase().endsWith(TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT)) {
+				|| file.getName().toUpperCase().endsWith(TypeLibraryTags.FC_TYPE_FILE_ENDING_WITH_DOT)
+				|| file.getName().toUpperCase().endsWith(TypeLibraryTags.GLOBAL_CONST_FILE_ENDING_WITH_DOT)) {
 			final URI folderURI = URI.createFileURI(folder.getAbsolutePath());
 			try {
 				exporter.export(ifile, folderURI);

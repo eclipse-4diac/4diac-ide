@@ -55,7 +55,9 @@ public class ExportXMIHandler extends AbstractHandler {
 			final IStructuredSelection structuredSelection = (IStructuredSelection) selection;
 			if (structuredSelection.size() == 1 && structuredSelection.getFirstElement() instanceof IFile) {
 				final IFile fbFile = (IFile) structuredSelection.getFirstElement();
-				if (fbFile.getFullPath().getFileExtension().equalsIgnoreCase(TypeLibraryTags.FC_TYPE_FILE_ENDING)) {
+				if (fbFile.getFullPath().getFileExtension().equalsIgnoreCase(TypeLibraryTags.FC_TYPE_FILE_ENDING)
+						|| fbFile.getFullPath().getFileExtension()
+						.equalsIgnoreCase(TypeLibraryTags.GLOBAL_CONST_FILE_ENDING)) {
 					setBaseEnabled(true);
 					return;
 				}

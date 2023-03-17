@@ -62,6 +62,11 @@ public final class TypeLibraryTags {
 
 	public static final String FC_TYPE_FILE_ENDING_WITH_DOT = "." + FC_TYPE_FILE_ENDING; //$NON-NLS-1$
 
+	/** The Constant for the file ending of global constants files. */
+	public static final String GLOBAL_CONST_FILE_ENDING = "GLOBALCONSTS"; //$NON-NLS-1$
+
+	public static final String GLOBAL_CONST_FILE_ENDING_WITH_DOT = "." + GLOBAL_CONST_FILE_ENDING; //$NON-NLS-1$
+
 	private TypeLibraryTags() {
 		throw new UnsupportedOperationException("Helper class TypeLibraryTags can not be instantiated."); //$NON-NLS-1$
 	}
