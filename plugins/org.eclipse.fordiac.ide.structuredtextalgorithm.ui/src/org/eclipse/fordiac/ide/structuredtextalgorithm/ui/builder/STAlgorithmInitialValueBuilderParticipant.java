@@ -80,6 +80,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 					validateValue((VarDeclaration) target, delta, monitor);
 				}
 			}
+		} catch (final OperationCanceledException e) {
+			throw e;
 		} catch (final RuntimeException e) {
 			throw new CoreException(Status.error("Exception processing build delta " + delta.getUri().toString(), e)); //$NON-NLS-1$
 		}
