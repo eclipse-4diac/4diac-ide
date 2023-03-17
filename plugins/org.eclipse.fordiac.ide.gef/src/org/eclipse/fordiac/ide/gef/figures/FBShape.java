@@ -96,6 +96,12 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 	/** The data outputs. */
 	private final Figure errorMarkerOutput = new Figure();
 
+	/** The indicator for hidden input pins */
+	private final Figure pinIndicatorInput = new Figure();
+
+	/** The indicator for hidden output pins */
+	private final Figure pinIndicatorOutput = new Figure();
+
 	/** The plugs. */
 	private final Figure plugs = new Figure();
 
@@ -156,6 +162,14 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 
 	public Figure getErrorMarkerOutput() {
 		return errorMarkerOutput;
+	}
+
+	public Figure getPinIndicatorInput() {
+		return pinIndicatorInput;
+	}
+
+	public Figure getPinIndicatorOutput() {
+		return pinIndicatorOutput;
 	}
 
 	public Figure getPlugs() {
@@ -246,6 +260,19 @@ public class FBShape extends Figure implements IFontUpdateListener, ITransparenc
 		bottom.setLayoutManager(createTopBottomLayout());
 		addBottom();
 		setBottomIOs();
+		setPinIndicators();
+	}
+
+	private void setPinIndicators() {
+		pinIndicatorInput.setLayoutManager(new ToolbarLayout(false));
+		((ToolbarLayout) pinIndicatorInput.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		errorMarkerInput.add(pinIndicatorInput);
+		
+		// use the error marker container for now as this will anyhow be changed later
+
+		pinIndicatorOutput.setLayoutManager(new ToolbarLayout(false));
+		((ToolbarLayout) pinIndicatorOutput.getLayoutManager()).setMinorAlignment(OrderedLayout.ALIGN_BOTTOMRIGHT);
+		errorMarkerOutput.add(pinIndicatorOutput);
 	}
 
 	protected void addBottom() {

@@ -254,6 +254,9 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 
 	private InstanceName instanceName;
 
+	private HiddenPinIndicator inputPinIndicator;
+	private HiddenPinIndicator outputPinIndicator;
+
 	/** Returns an <code>IPropertyChangeListener</code> with implemented <code>propertyChange()</code>. e.g. a color
 	 * change event repaints the FunctionBlock.
 	 *
@@ -300,8 +303,18 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof final InterfaceEditPart interfaceEditPart) {
 			getTargetFigure(interfaceEditPart).add(child, getInterfaceElementIndex(interfaceEditPart));
+		} else if (childEditPart instanceof HiddenPinIndicatorEditPart) {
+			addPinIndicatorFigure((HiddenPinIndicatorEditPart) childEditPart, child);
 		} else {
 			getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
+		}
+	}
+
+	private void addPinIndicatorFigure(final HiddenPinIndicatorEditPart indicatorEditPart, final IFigure indicatorFigure) {
+		if (((HiddenPinIndicator) indicatorEditPart.getModel()).isInput()) {
+			getFigure().getPinIndicatorInput().add(indicatorFigure);
+		} else {
+			getFigure().getPinIndicatorOutput().add(indicatorFigure);
 		}
 	}
 
@@ -412,8 +425,18 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
 		if (childEditPart instanceof final InterfaceEditPart interfaceEditPart) {
 			getTargetFigure(interfaceEditPart).remove(child);
+		} else if (childEditPart instanceof HiddenPinIndicatorEditPart) {
+			removePinIndicatorFigure((HiddenPinIndicatorEditPart) childEditPart, child);
 		} else {
 			super.removeChildVisual(childEditPart);
+		}
+	}
+
+	private void removePinIndicatorFigure(final HiddenPinIndicatorEditPart indicatorEditPart, final IFigure indicatorFigure) {
+		if (((HiddenPinIndicator) indicatorEditPart.getModel()).isInput()) {
+			getFigure().getPinIndicatorInput().remove(indicatorFigure);
+		} else {
+			getFigure().getPinIndicatorOutput().remove(indicatorFigure);
 		}
 	}
 
@@ -422,9 +445,31 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		final List<Object> elements = new ArrayList<>();
 		elements.add(getInstanceName());
 		elements.addAll(getModel().getInterface().getAllInterfaceElements());
-		elements.removeAll(getModel().getInterface().getInputVars().stream().filter(it -> !it.isVisible()).toList());
-		elements.removeAll(getModel().getInterface().getOutputVars().stream().filter(it -> !it.isVisible()).toList());
+		final List<VarDeclaration> inputRemovalList = getModel().getInterface().getInputVars().stream()
+				.filter(it -> !it.isVisible()).toList();
+		final List<VarDeclaration> outputRemovalList = getModel().getInterface().getOutputVars().stream()
+				.filter(it -> !it.isVisible()).toList();
+		elements.removeAll(inputRemovalList);
+		elements.removeAll(outputRemovalList);
+		elements.addAll(getPinIndicators(!inputRemovalList.isEmpty(), !outputRemovalList.isEmpty()));
 		return elements;
+	}
+
+	private List<Object> getPinIndicators(final boolean input, final boolean output) {
+		final List<Object> indicators = new ArrayList<>(2);
+		if (input) {
+			if (inputPinIndicator == null) {
+				inputPinIndicator = new HiddenPinIndicator(getModel(), true);
+			}
+			indicators.add(inputPinIndicator);
+		}
+		if (output) {
+			if (outputPinIndicator == null) {
+				outputPinIndicator = new HiddenPinIndicator(getModel(), false);
+			}
+			indicators.add(outputPinIndicator);
+		}
+		return indicators;
 	}
 
 	protected InstanceName getInstanceName() {
