@@ -224,8 +224,14 @@ INavigationLocationProvider, IPersistableEditor {
 		if (isConnectionLayoutPreferenceTicked() && isTagged(event)) {
 			if (event.isPostChangeEvent()) {
 				if (event.getDetail() == CommandStack.POST_EXECUTE) {
-					layoutCommand = createConnectionLayoutCommand();
-					layoutCommand.execute();
+					final GraphicalViewer viewer = getActiveEditor().getAdapter(GraphicalViewer.class);
+					// running the layout without flushing the viewer results in a bad state of the libavoid process
+					// -> do not allow auto layout if that is the case
+					if (viewer != null) {
+						viewer.flush();
+						layoutCommand = createConnectionLayoutCommand();
+						layoutCommand.execute();
+					}
 				} else if (layoutCommand != null && event.getDetail() == CommandStack.POST_REDO) {
 					layoutCommand.redo();
 				}
