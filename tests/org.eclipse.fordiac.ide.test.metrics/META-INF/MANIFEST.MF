@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.test.metrics
 Bundle-Version: 2.0.0.qualifier
 Fragment-Host: org.eclipse.fordiac.ide.metrics
 Automatic-Module-Name: org.eclipse.fordiac.ide.test.metrics
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Eclipse 4diac
 Import-Package: org.junit.jupiter.api,
  org.junit.jupiter.params,

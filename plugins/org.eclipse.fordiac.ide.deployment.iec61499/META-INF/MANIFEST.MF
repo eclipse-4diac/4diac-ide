@@ -22,5 +22,5 @@ Bundle-Name: IEC 61499 Deployment
 Bundle-Activator: org.eclipse.fordiac.ide.deployment.iec61499.Activator
 Bundle-ManifestVersion: 2
 Bundle-SymbolicName: org.eclipse.fordiac.ide.deployment.iec61499;singleton:=true
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Automatic-Module-Name: org.eclipse.fordiac.ide.deployment.iec61499

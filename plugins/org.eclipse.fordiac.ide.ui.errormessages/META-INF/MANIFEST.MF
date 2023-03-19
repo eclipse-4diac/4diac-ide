@@ -5,7 +5,7 @@ Bundle-ActivationPolicy: lazy
 Bundle-SymbolicName: org.eclipse.fordiac.ide.ui.errormessages
 Bundle-Activator: org.eclipse.fordiac.ide.ui.errormessages.Activator
 Bundle-Version: 1.13.0.qualifier
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ui.errormessages
 Import-Package: org.osgi.framework
