@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -41,31 +41,32 @@ import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage;
  *
  * @generated */
 public class VirtualDNSManagementImpl extends EObjectImpl implements VirtualDNSManagement {
-	/** The cached value of the '{@link #getAvailableDNSCollections() <em>Available DNS Collections</em>}' containment
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The cached value of the '{@link #getAvailableDNSCollections() <em>Available DNS Collections</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getAvailableDNSCollections()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<VirtualDNSCollection> availableDNSCollections;
 
 	/** The cached value of the '{@link #getActiveVirtualDNS() <em>Active Virtual DNS</em>}' reference. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see #getActiveVirtualDNS()
 	 * @generated
 	 * @ordered */
 	protected VirtualDNSCollection activeVirtualDNS;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected VirtualDNSManagementImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -73,19 +74,19 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements VirtualDNSM
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EList<VirtualDNSCollection> getAvailableDNSCollections() {
 		if (availableDNSCollections == null) {
-			availableDNSCollections = new EObjectContainmentEList<VirtualDNSCollection>(VirtualDNSCollection.class,
+			availableDNSCollections = new EObjectContainmentEList<>(VirtualDNSCollection.class,
 					this, VirtualDNSPackage.VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS);
 		}
 		return availableDNSCollections;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public VirtualDNSCollection getActiveVirtualDNS() {
@@ -103,14 +104,14 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements VirtualDNSM
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	public VirtualDNSCollection basicGetActiveVirtualDNS() {
 		return activeVirtualDNS;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setActiveVirtualDNS(VirtualDNSCollection newActiveVirtualDNS) {
@@ -123,7 +124,7 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements VirtualDNSM
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -136,7 +137,7 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements VirtualDNSM
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -153,7 +154,7 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements VirtualDNSM
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -173,7 +174,7 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements VirtualDNSM
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -191,7 +192,7 @@ public class VirtualDNSManagementImpl extends EObjectImpl implements VirtualDNSM
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {

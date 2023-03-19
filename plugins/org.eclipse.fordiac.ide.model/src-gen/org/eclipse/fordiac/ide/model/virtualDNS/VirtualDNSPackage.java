@@ -26,76 +26,86 @@ import org.eclipse.emf.ecore.EReference;
  * <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * 
+ *
  * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSFactory
  * @model kind="package"
  * @generated */
 public interface VirtualDNSPackage extends EPackage {
 	/** The package name. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	String eNAME = "virtualDNS"; //$NON-NLS-1$
 
 	/** The package namespace URI. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	String eNS_URI = "org.eclipse.fordiac.ide.virtualDNS"; //$NON-NLS-1$
 
 	/** The package namespace name. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	String eNS_PREFIX = "virtualDNS"; //$NON-NLS-1$
 
 	/** The singleton instance of the package. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	VirtualDNSPackage eINSTANCE = org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSPackageImpl.init();
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSEntryImpl
 	 * <em>Entry</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSEntryImpl
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSPackageImpl#getVirtualDNSEntry()
 	 * @generated */
 	int VIRTUAL_DNS_ENTRY = 0;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int VIRTUAL_DNS_ENTRY__NAME = 0;
 
-	/** The feature id for the '<em><b>Value</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The feature id for the '<em><b>Value</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int VIRTUAL_DNS_ENTRY__VALUE = 1;
 
-	/** The number of structural features of the '<em>Entry</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
+	/**
+	 * The number of structural features of the '<em>Entry</em>' class.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int VIRTUAL_DNS_ENTRY_FEATURE_COUNT = 2;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSCollectionImpl
 	 * <em>Collection</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSCollectionImpl
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSPackageImpl#getVirtualDNSCollection()
 	 * @generated */
 	int VIRTUAL_DNS_COLLECTION = 1;
 
-	/** The feature id for the '<em><b>Virtual DNS Entries</b></em>' containment reference list. <!-- begin-user-doc -->
+	/**
+	 * The feature id for the '<em><b>Virtual DNS Entries</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int VIRTUAL_DNS_COLLECTION__VIRTUAL_DNS_ENTRIES = 0;
 
-	/** The feature id for the '<em><b>Name</b></em>' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The feature id for the '<em><b>Name</b></em>' attribute.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	int VIRTUAL_DNS_COLLECTION__NAME = 1;
 
 	/** The number of structural features of the '<em>Collection</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
@@ -107,7 +117,7 @@ public interface VirtualDNSPackage extends EPackage {
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSManagementImpl
 	 * <em>Management</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSManagementImpl
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSPackageImpl#getVirtualDNSManagement()
 	 * @generated */
@@ -115,7 +125,7 @@ public interface VirtualDNSPackage extends EPackage {
 
 	/** The feature id for the '<em><b>Available DNS Collections</b></em>' containment reference list. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated
 	 * @ordered */
 	int VIRTUAL_DNS_MANAGEMENT__AVAILABLE_DNS_COLLECTIONS = 0;
@@ -136,7 +146,7 @@ public interface VirtualDNSPackage extends EPackage {
 
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSEntry
 	 * <em>Entry</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for class '<em>Entry</em>'.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSEntry
 	 * @generated */
@@ -145,7 +155,7 @@ public interface VirtualDNSPackage extends EPackage {
 	/** Returns the meta object for the attribute
 	 * '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSEntry#getName <em>Name</em>}'. <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSEntry#getName()
 	 * @see #getVirtualDNSEntry()
@@ -155,7 +165,7 @@ public interface VirtualDNSPackage extends EPackage {
 	/** Returns the meta object for the attribute
 	 * '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSEntry#getValue <em>Value</em>}'. <!-- begin-user-doc
 	 * --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for the attribute '<em>Value</em>'.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSEntry#getValue()
 	 * @see #getVirtualDNSEntry()
@@ -164,7 +174,7 @@ public interface VirtualDNSPackage extends EPackage {
 
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection
 	 * <em>Collection</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for class '<em>Collection</em>'.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection
 	 * @generated */
@@ -173,7 +183,7 @@ public interface VirtualDNSPackage extends EPackage {
 	/** Returns the meta object for the containment reference list
 	 * '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getVirtualDNSEntries <em>Virtual DNS
 	 * Entries</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for the containment reference list '<em>Virtual DNS Entries</em>'.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getVirtualDNSEntries()
 	 * @see #getVirtualDNSCollection()
@@ -183,7 +193,7 @@ public interface VirtualDNSPackage extends EPackage {
 	/** Returns the meta object for the attribute
 	 * '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getName <em>Name</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for the attribute '<em>Name</em>'.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSCollection#getName()
 	 * @see #getVirtualDNSCollection()
@@ -192,7 +202,7 @@ public interface VirtualDNSPackage extends EPackage {
 
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement
 	 * <em>Management</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for class '<em>Management</em>'.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement
 	 * @generated */
@@ -201,7 +211,7 @@ public interface VirtualDNSPackage extends EPackage {
 	/** Returns the meta object for the containment reference list
 	 * '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getAvailableDNSCollections <em>Available
 	 * DNS Collections</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for the containment reference list '<em>Available DNS Collections</em>'.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getAvailableDNSCollections()
 	 * @see #getVirtualDNSManagement()
@@ -211,7 +221,7 @@ public interface VirtualDNSPackage extends EPackage {
 	/** Returns the meta object for the reference
 	 * '{@link org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getActiveVirtualDNS <em>Active Virtual
 	 * DNS</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @return the meta object for the reference '<em>Active Virtual DNS</em>'.
 	 * @see org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSManagement#getActiveVirtualDNS()
 	 * @see #getVirtualDNSManagement()
@@ -232,12 +242,12 @@ public interface VirtualDNSPackage extends EPackage {
 	 * <li>and each data type</li>
 	 * </ul>
 	 * <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	interface Literals {
 		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSEntryImpl
 		 * <em>Entry</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSEntryImpl
 		 * @see org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSPackageImpl#getVirtualDNSEntry()
 		 * @generated */
@@ -245,20 +255,20 @@ public interface VirtualDNSPackage extends EPackage {
 
 		/** The meta object literal for the '<em><b>Name</b></em>' attribute feature. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
-		 * 
+		 *
 		 * @generated */
 		EAttribute VIRTUAL_DNS_ENTRY__NAME = eINSTANCE.getVirtualDNSEntry_Name();
 
 		/** The meta object literal for the '<em><b>Value</b></em>' attribute feature. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
-		 * 
+		 *
 		 * @generated */
 		EAttribute VIRTUAL_DNS_ENTRY__VALUE = eINSTANCE.getVirtualDNSEntry_Value();
 
 		/** The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSCollectionImpl <em>Collection</em>}' class.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSCollectionImpl
 		 * @see org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSPackageImpl#getVirtualDNSCollection()
 		 * @generated */
@@ -272,14 +282,14 @@ public interface VirtualDNSPackage extends EPackage {
 
 		/** The meta object literal for the '<em><b>Name</b></em>' attribute feature. <!-- begin-user-doc --> <!--
 		 * end-user-doc -->
-		 * 
+		 *
 		 * @generated */
 		EAttribute VIRTUAL_DNS_COLLECTION__NAME = eINSTANCE.getVirtualDNSCollection_Name();
 
 		/** The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSManagementImpl <em>Management</em>}' class.
 		 * <!-- begin-user-doc --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @see org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSManagementImpl
 		 * @see org.eclipse.fordiac.ide.model.virtualDNS.impl.VirtualDNSPackageImpl#getVirtualDNSManagement()
 		 * @generated */
@@ -294,7 +304,7 @@ public interface VirtualDNSPackage extends EPackage {
 
 		/** The meta object literal for the '<em><b>Active Virtual DNS</b></em>' reference feature. <!-- begin-user-doc
 		 * --> <!-- end-user-doc -->
-		 * 
+		 *
 		 * @generated */
 		EReference VIRTUAL_DNS_MANAGEMENT__ACTIVE_VIRTUAL_DNS = eINSTANCE.getVirtualDNSManagement_ActiveVirtualDNS();
 

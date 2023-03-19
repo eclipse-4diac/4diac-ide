@@ -391,13 +391,11 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
 	 */
   public static StructuredTextPackage init()
   {
-		if (isInited) {
-			return (StructuredTextPackage)EPackage.Registry.INSTANCE.getEPackage(StructuredTextPackage.eNS_URI);
-		}
+		if (isInited) return (StructuredTextPackage)EPackage.Registry.INSTANCE.getEPackage(StructuredTextPackage.eNS_URI);
 
 		// Obtain or create and register package
-		final Object registeredStructuredTextPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
-		final StructuredTextPackageImpl theStructuredTextPackage = registeredStructuredTextPackage instanceof StructuredTextPackageImpl ? (StructuredTextPackageImpl)registeredStructuredTextPackage : new StructuredTextPackageImpl();
+		Object registeredStructuredTextPackage = EPackage.Registry.INSTANCE.get(eNS_URI);
+		StructuredTextPackageImpl theStructuredTextPackage = registeredStructuredTextPackage instanceof StructuredTextPackageImpl ? (StructuredTextPackageImpl)registeredStructuredTextPackage : new StructuredTextPackageImpl();
 
 		isInited = true;
 
@@ -1634,9 +1632,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
 	 */
   public void createPackageContents()
   {
-		if (isCreated) {
-			return;
-		}
+		if (isCreated) return;
 		isCreated = true;
 
 		// Create classes and their features
@@ -1805,9 +1801,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
 	 */
   public void initializePackageContents()
   {
-		if (isInitialized) {
-			return;
-		}
+		if (isInitialized) return;
 		isInitialized = true;
 
 		// Initialize package
@@ -1816,7 +1810,7 @@ public class StructuredTextPackageImpl extends EPackageImpl implements Structure
 		setNsURI(eNS_URI);
 
 		// Obtain other dependent packages
-		final LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
+		LibraryElementPackage theLibraryElementPackage = (LibraryElementPackage)EPackage.Registry.INSTANCE.getEPackage(LibraryElementPackage.eNS_URI);
 
 		// Create type parameters
 

@@ -1,7 +1,7 @@
 /**
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
- * * 
+ * *
  * * This program and the accompanying materials are made available under the
  * * terms of the Eclipse Public License 2.0 which is available at
  * * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,7 @@
  * *     - initial API and implementation and/or initial documentation
  * *   Alois Zoitl - moved to deployment and reworked it to a device response model
  * ******************************************************************************
- * 
+ *
  */
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
@@ -171,7 +171,7 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 	@Override
 	public EList<FB> getFbs() {
 		if (fbs == null) {
-			fbs = new EObjectContainmentEList<FB>(FB.class, this, DevResponsePackage.RESOURCE__FBS);
+			fbs = new EObjectContainmentEList<>(FB.class, this, DevResponsePackage.RESOURCE__FBS);
 		}
 		return fbs;
 	}
@@ -186,8 +186,9 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 		switch (featureID) {
 			case DevResponsePackage.RESOURCE__FBS:
 				return ((InternalEList<?>)getFbs()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -204,8 +205,9 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 				return getType();
 			case DevResponsePackage.RESOURCE__FBS:
 				return getFbs();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -227,8 +229,10 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 				getFbs().clear();
 				getFbs().addAll((Collection<? extends FB>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -248,8 +252,10 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 			case DevResponsePackage.RESOURCE__FBS:
 				getFbs().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -266,8 +272,9 @@ public class ResourceImpl extends EObjectImpl implements Resource {
 				return TYPE_EDEFAULT == null ? type != null : !TYPE_EDEFAULT.equals(type);
 			case DevResponsePackage.RESOURCE__FBS:
 				return fbs != null && !fbs.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**

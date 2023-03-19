@@ -1,7 +1,7 @@
 /**
  * ******************************************************************************
  * * Copyright (c) 2012, 2013, 2018 Profactor GmbH, fortiss GmbH, Johannes Kepler University
- * * 
+ * *
  * * This program and the accompanying materials are made available under the
  * * terms of the Eclipse Public License 2.0 which is available at
  * * http://www.eclipse.org/legal/epl-2.0.
@@ -13,7 +13,7 @@
  * *     - initial API and implementation and/or initial documentation
  * *   Alois Zoitl - moved to deployment and reworked it to a device response model
  * ******************************************************************************
- * 
+ *
  */
 package org.eclipse.fordiac.ide.deployment.devResponse.impl;
 
@@ -77,7 +77,7 @@ public class FBListImpl extends EObjectImpl implements FBList {
 	@Override
 	public EList<FB> getFbs() {
 		if (fbs == null) {
-			fbs = new EObjectResolvingEList<FB>(FB.class, this, DevResponsePackage.FB_LIST__FBS);
+			fbs = new EObjectResolvingEList<>(FB.class, this, DevResponsePackage.FB_LIST__FBS);
 		}
 		return fbs;
 	}
@@ -92,8 +92,9 @@ public class FBListImpl extends EObjectImpl implements FBList {
 		switch (featureID) {
 			case DevResponsePackage.FB_LIST__FBS:
 				return getFbs();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -109,8 +110,10 @@ public class FBListImpl extends EObjectImpl implements FBList {
 				getFbs().clear();
 				getFbs().addAll((Collection<? extends FB>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -124,8 +127,10 @@ public class FBListImpl extends EObjectImpl implements FBList {
 			case DevResponsePackage.FB_LIST__FBS:
 				getFbs().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -138,8 +143,9 @@ public class FBListImpl extends EObjectImpl implements FBList {
 		switch (featureID) {
 			case DevResponsePackage.FB_LIST__FBS:
 				return fbs != null && !fbs.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } //FBListImpl

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2009 Profactor GmbH
- * 
+ *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -40,17 +40,18 @@ import org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage;
  *
  * @generated */
 public class VirtualDNSCollectionImpl extends EObjectImpl implements VirtualDNSCollection {
-	/** The cached value of the '{@link #getVirtualDNSEntries() <em>Virtual DNS Entries</em>}' containment reference
-	 * list. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	/**
+	 * The cached value of the '{@link #getVirtualDNSEntries() <em>Virtual DNS Entries</em>}' containment reference list.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * @see #getVirtualDNSEntries()
 	 * @generated
-	 * @ordered */
+	 * @ordered
+	 */
 	protected EList<VirtualDNSEntry> virtualDNSEntries;
 
 	/** The default value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered */
@@ -58,21 +59,21 @@ public class VirtualDNSCollectionImpl extends EObjectImpl implements VirtualDNSC
 
 	/** The cached value of the '{@link #getName() <em>Name</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc
 	 * -->
-	 * 
+	 *
 	 * @see #getName()
 	 * @generated
 	 * @ordered */
 	protected String name = NAME_EDEFAULT;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	protected VirtualDNSCollectionImpl() {
 		super();
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
@@ -80,19 +81,19 @@ public class VirtualDNSCollectionImpl extends EObjectImpl implements VirtualDNSC
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public EList<VirtualDNSEntry> getVirtualDNSEntries() {
 		if (virtualDNSEntries == null) {
-			virtualDNSEntries = new EObjectContainmentEList<VirtualDNSEntry>(VirtualDNSEntry.class, this,
+			virtualDNSEntries = new EObjectContainmentEList<>(VirtualDNSEntry.class, this,
 					VirtualDNSPackage.VIRTUAL_DNS_COLLECTION__VIRTUAL_DNS_ENTRIES);
 		}
 		return virtualDNSEntries;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String getName() {
@@ -100,7 +101,7 @@ public class VirtualDNSCollectionImpl extends EObjectImpl implements VirtualDNSC
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void setName(String newName) {
@@ -112,7 +113,7 @@ public class VirtualDNSCollectionImpl extends EObjectImpl implements VirtualDNSC
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -125,7 +126,7 @@ public class VirtualDNSCollectionImpl extends EObjectImpl implements VirtualDNSC
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
@@ -140,7 +141,7 @@ public class VirtualDNSCollectionImpl extends EObjectImpl implements VirtualDNSC
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
@@ -160,7 +161,7 @@ public class VirtualDNSCollectionImpl extends EObjectImpl implements VirtualDNSC
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
@@ -178,7 +179,7 @@ public class VirtualDNSCollectionImpl extends EObjectImpl implements VirtualDNSC
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
@@ -193,7 +194,7 @@ public class VirtualDNSCollectionImpl extends EObjectImpl implements VirtualDNSC
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 * 
+	 *
 	 * @generated */
 	@Override
 	public String toString() {

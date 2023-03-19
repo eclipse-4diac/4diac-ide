@@ -94,6 +94,23 @@ public class SegmentItemProvider extends TypedConfigureableObjectItemProvider {
 						LibraryElementPackage.Literals.SEGMENT__OUT_CONNECTIONS, true, false, true, null, null, null));
 	}
 
+	/**
+	 * This specifies how to implement {@link #getChildren} and is used to deduce an appropriate feature for an
+	 * {@link org.eclipse.emf.edit.command.AddCommand}, {@link org.eclipse.emf.edit.command.RemoveCommand} or
+	 * {@link org.eclipse.emf.edit.command.MoveCommand} in {@link #createCommand}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+		if (childrenFeatures == null) {
+			super.getChildrenFeatures(object);
+			childrenFeatures.add(LibraryElementPackage.Literals.SEGMENT__COMMUNICATION);
+		}
+		return childrenFeatures;
+	}
+
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 * 
 	 * @generated */

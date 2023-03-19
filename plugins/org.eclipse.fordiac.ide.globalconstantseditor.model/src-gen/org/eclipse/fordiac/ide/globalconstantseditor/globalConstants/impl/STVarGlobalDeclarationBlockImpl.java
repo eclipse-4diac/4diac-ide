@@ -134,8 +134,9 @@ public class STVarGlobalDeclarationBlockImpl extends MinimalEObjectImpl.Containe
 		switch (featureID) {
 			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS:
 				return ((InternalEList<?>)getVarDeclarations()).basicRemove(otherEnd, msgs);
+			default:
+				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -150,8 +151,9 @@ public class STVarGlobalDeclarationBlockImpl extends MinimalEObjectImpl.Containe
 				return isConstant();
 			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS:
 				return getVarDeclarations();
+			default:
+				return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -170,8 +172,10 @@ public class STVarGlobalDeclarationBlockImpl extends MinimalEObjectImpl.Containe
 				getVarDeclarations().clear();
 				getVarDeclarations().addAll((Collection<? extends STVarDeclaration>)newValue);
 				return;
+			default:
+				super.eSet(featureID, newValue);
+				return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -188,8 +192,10 @@ public class STVarGlobalDeclarationBlockImpl extends MinimalEObjectImpl.Containe
 			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS:
 				getVarDeclarations().clear();
 				return;
+			default:
+				super.eUnset(featureID);
+				return;
 		}
-		super.eUnset(featureID);
 	}
 
 	/**
@@ -204,8 +210,9 @@ public class STVarGlobalDeclarationBlockImpl extends MinimalEObjectImpl.Containe
 				return constant != CONSTANT_EDEFAULT;
 			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS:
 				return varDeclarations != null && !varDeclarations.isEmpty();
+			default:
+				return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 	/**
