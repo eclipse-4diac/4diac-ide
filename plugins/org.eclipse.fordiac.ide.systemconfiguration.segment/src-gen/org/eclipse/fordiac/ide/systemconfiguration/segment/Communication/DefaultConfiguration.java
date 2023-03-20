@@ -16,6 +16,7 @@ package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /** <!-- begin-user-doc --> A representation of the model object '<em><b>Default Configuration</b></em>'. <!--
  * end-user-doc -->
@@ -37,7 +38,7 @@ public interface DefaultConfiguration extends CommunicationConfiguration {
 	 * @return the value of the '<em>Target</em>' reference.
 	 * @see #setTarget(CommunicationMappingTarget)
 	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage#getDefaultConfiguration_Target()
-	 * @model
+	 * @model required="true"
 	 * @generated */
 	CommunicationMappingTarget getTarget();
 
@@ -62,5 +63,12 @@ public interface DefaultConfiguration extends CommunicationConfiguration {
 	 * @generated */
 	@Override
 	EList<CommunicationMappingTarget> getMappingTargets();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model kind="operation"
+	 * @generated */
+	@Override
+	EList<VarDeclaration> getParameters();
 
 } // DefaultConfiguration

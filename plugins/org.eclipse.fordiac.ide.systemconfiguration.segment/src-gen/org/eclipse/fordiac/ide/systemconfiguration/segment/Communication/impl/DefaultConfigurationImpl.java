@@ -67,12 +67,13 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	@Override
 	public CommunicationMappingTarget getTarget() {
 		if (target != null && target.eIsProxy()) {
-			InternalEObject oldTarget = (InternalEObject) target;
+			final InternalEObject oldTarget = (InternalEObject) target;
 			target = (CommunicationMappingTarget) eResolveProxy(oldTarget);
 			if (target != oldTarget) {
-				if (eNotificationRequired())
+				if (eNotificationRequired()) {
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							CommunicationPackage.DEFAULT_CONFIGURATION__TARGET, oldTarget, target));
+				}
 			}
 		}
 		return target;
@@ -89,12 +90,13 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	 *
 	 * @generated */
 	@Override
-	public void setTarget(CommunicationMappingTarget newTarget) {
-		CommunicationMappingTarget oldTarget = target;
+	public void setTarget(final CommunicationMappingTarget newTarget) {
+		final CommunicationMappingTarget oldTarget = target;
 		target = newTarget;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
 			eNotify(new ENotificationImpl(this, Notification.SET, CommunicationPackage.DEFAULT_CONFIGURATION__TARGET,
 					oldTarget, target));
+		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -117,6 +119,14 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	 *
 	 * @generated */
 	@Override
+	public EList<VarDeclaration> getParameters() {
+		return ECollections.emptyEList();
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
 	public Segment getSegment() {
 		return (Segment) eContainer();
 	}
@@ -125,19 +135,12 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	 *
 	 * @generated */
 	@Override
-	public EList<VarDeclaration> getParameters() {
-		throw new UnsupportedOperationException();
-	}
-
-	/** <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @generated */
-	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
 		switch (featureID) {
 		case CommunicationPackage.DEFAULT_CONFIGURATION__TARGET:
-			if (resolve)
+			if (resolve) {
 				return getTarget();
+			}
 			return basicGetTarget();
 		default:
 			return super.eGet(featureID, resolve, coreType);
@@ -148,7 +151,7 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	 *
 	 * @generated */
 	@Override
-	public void eSet(int featureID, Object newValue) {
+	public void eSet(final int featureID, final Object newValue) {
 		switch (featureID) {
 		case CommunicationPackage.DEFAULT_CONFIGURATION__TARGET:
 			setTarget((CommunicationMappingTarget) newValue);
@@ -163,7 +166,7 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	 *
 	 * @generated */
 	@Override
-	public void eUnset(int featureID) {
+	public void eUnset(final int featureID) {
 		switch (featureID) {
 		case CommunicationPackage.DEFAULT_CONFIGURATION__TARGET:
 			setTarget((CommunicationMappingTarget) null);
@@ -178,7 +181,7 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	 *
 	 * @generated */
 	@Override
-	public boolean eIsSet(int featureID) {
+	public boolean eIsSet(final int featureID) {
 		switch (featureID) {
 		case CommunicationPackage.DEFAULT_CONFIGURATION__TARGET:
 			return target != null;

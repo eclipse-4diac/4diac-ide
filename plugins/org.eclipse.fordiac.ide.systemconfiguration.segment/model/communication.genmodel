@@ -34,6 +34,8 @@
           body="return &quot;defaultConfig&quot;;"/>
       <genOperations ecoreOperation="communication.ecore#//DefaultConfiguration/getMappingTargets"
           body="return ECollections.asEList(target);"/>
+      <genOperations ecoreOperation="communication.ecore#//DefaultConfiguration/getParameters"
+          body="return ECollections.emptyEList();"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>
