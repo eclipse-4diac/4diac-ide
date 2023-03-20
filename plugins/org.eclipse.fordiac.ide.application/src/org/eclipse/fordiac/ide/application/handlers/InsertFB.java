@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.fordiac.ide.application.editors.FBNetworkContextMenuProvider;
 import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.RequestConstants;
@@ -46,8 +47,7 @@ public class InsertFB extends AbstractHandler {
 	@Override
 	public void setEnabled(final Object evaluationContext) {
 		final IWorkbenchPart part = (IWorkbenchPart) HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_EDITOR_NAME);
-		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
-		setBaseEnabled(null != viewer);
+		setBaseEnabled((part != null) && (part.getAdapter(FBNetwork.class) != null));
 	}
 
 	private static Point getInsertPoint(final GraphicalViewer viewer) {
