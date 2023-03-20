@@ -311,7 +311,7 @@ final class STCoreUtil {
 		switch (it : expression.eContainer) {
 			STVarDeclaration:
 				featureType
-			STArrayInitElement:
+			STArrayInitElement case initExpressions.empty || initExpressions.contains(expression):
 				expectedType
 			STStructInitElement:
 				variable.featureType
