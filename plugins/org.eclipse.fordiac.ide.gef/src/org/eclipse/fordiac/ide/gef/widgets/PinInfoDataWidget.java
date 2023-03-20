@@ -11,6 +11,7 @@
  * Contributors:
  *   Dunja Životin - initial API and implementation and/or initial documentation
  *   Martin Jobst - adopt ST editor for initial values
+ *                - fix refresh for array size changes
  *   Martin Melik Merkumians - add VarConfig checkbox for data pins
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.widgets;
@@ -82,8 +83,10 @@ public class PinInfoDataWidget extends PinInfoBasicWidget {
 		super.createWidget(parent);
 		widgetFactory.createCLabel(parent, FordiacMessages.ArraySize + ":"); //$NON-NLS-1$
 		arraySizeText = createText(parent);
-		arraySizeText
-				.addModifyListener(e -> executeCommand(new ChangeArraySizeCommand(getType(), arraySizeText.getText())));
+		arraySizeText.addModifyListener(e -> {
+			executeCommand(new ChangeArraySizeCommand(getType(), arraySizeText.getText()));
+			initialValueEditor.refresh();
+		});
 
 		widgetFactory.createCLabel(parent, FordiacMessages.InitialValue + ":"); //$NON-NLS-1$
 		initialValueEditor = new InitialValueEditor(parent, SWT.SINGLE | SWT.BORDER);

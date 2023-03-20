@@ -5,6 +5,7 @@
          point="org.eclipse.debug.ui.launchShortcuts">
       <shortcut
             class="org.eclipse.fordiac.ide.debug.ui.simple.SimpleFBLaunchShortcut"
+            icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_simple.png"
             id="org.eclipse.fordiac.ide.debug.ui.simpleFBShortcut"
             label="Evaluate Simple FB"
             modes="run, debug">
@@ -38,6 +39,7 @@
       </shortcut>
       <shortcut
             class="org.eclipse.fordiac.ide.debug.ui.basic.BasicFBLaunchShortcut"
+            icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_basic.png"
             id="org.eclipse.fordiac.ide.debug.ui.basicFBShortcut"
             label="Evaluate Basic FB"
             modes="run, debug">
@@ -96,6 +98,19 @@
                perspective="org.eclipse.debug.ui.DebugPerspective">
          </launchMode>
       </launchConfigurationTabGroup>
+   </extension>
+   <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.fordiac.ide.debug.simpleFBLaunch"
+            icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_simple.png"
+            id="org.eclipse.fordiac.ide.debug.ui.launchConfigurationTypeImage.simpleFBLaunch">
+      </launchConfigurationTypeImage>
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.fordiac.ide.debug.basicFBLaunch"
+            icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/fb_basic.png"
+            id="org.eclipse.fordiac.ide.debug.ui.launchConfigurationTypeImage.basicFBLaunch">
+      </launchConfigurationTypeImage>
    </extension>
    <extension
          point="org.eclipse.debug.ui.debugModelPresentations">
