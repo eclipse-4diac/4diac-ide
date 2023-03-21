@@ -17,6 +17,14 @@
       </launchConfigurationTabGroup>
    </extension>
    <extension
+         point="org.eclipse.debug.ui.launchConfigurationTypeImages">
+      <launchConfigurationTypeImage
+            configTypeID="org.eclipse.fordiac.ide.debug.stFunctionLaunch"
+            icon="platform:/plugin/org.eclipse.fordiac.ide.images/images/function.png"
+            id="org.eclipse.fordiac.ide.debug.ui.st.launchConfigurationTypeImage.stFunctionLaunch">
+      </launchConfigurationTypeImage>
+   </extension>
+   <extension
          point="org.eclipse.core.runtime.adapters">
       <factory
             adaptableType="org.eclipse.xtext.ui.editor.XtextEditor"

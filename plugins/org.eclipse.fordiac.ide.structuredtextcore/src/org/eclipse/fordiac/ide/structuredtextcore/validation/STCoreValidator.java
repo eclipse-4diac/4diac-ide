@@ -168,7 +168,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
 		if (varDeclaration.isArray()) {
 			varDeclaration.getRanges().stream().filter(STBinaryExpression.class::isInstance)
-			.map(STBinaryExpression.class::cast).forEach(this::checkRangeOnValidity);
+					.map(STBinaryExpression.class::cast).forEach(this::checkRangeOnValidity);
 		}
 	}
 
@@ -225,7 +225,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public void checkArrayAccessDimensions(final STArrayAccessExpression accessExpression) {
 		final var featureExpression = accessExpression.getReceiver() instanceof STFeatureExpression
 				? ((STFeatureExpression) accessExpression.getReceiver()).getFeature()
-						: null;
+				: null;
 		if (featureExpression instanceof STVarDeclaration) {
 			final STVarDeclaration varDeclaration = (STVarDeclaration) featureExpression;
 			if (varDeclaration.isArray()) {
@@ -550,7 +550,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			if (arg != null) {
 				checkTypeCompatibility(getFeatureType(param), arg.getResultType(),
 						STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS,
-						expression.getParameters().indexOf(arg.eContainer()));
+						expression.getParameters().indexOf(arg));
 			}
 		});
 		expression.getMappedOutputArguments().forEach((param, arg) -> {
@@ -692,8 +692,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 	}
 
-	/* Here we already know that we have a MultibitPartialExpression. This function checks bound on static access
-	 * (without "()") */
+	/*
+	 * Here we already know that we have a MultibitPartialExpression. This function
+	 * checks bound on static access (without "()")
+	 */
 	private void checkMultibitPartialExpression(final STMultibitPartialExpression expression,
 			final DataType accessorType, final DataType receiverType) {
 		if (receiverType instanceof AnyBitType) {
