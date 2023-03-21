@@ -108,16 +108,18 @@ public final class EventManagerUtils {
 			if (transaction instanceof FBTransaction) {
 				processFbTransaction((FBTransaction) transaction);
 				((FBTransaction) transaction).getOutputEventOccurrences()
-				.forEach(outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
+						.forEach(outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
 				if (moreTransactionsLeft(transactions, i)) {
-					final FBRuntimeAbstract newfbRuntime = EcoreUtil
-							.copy(getLatestNetworkRuntime((FBTransaction) transaction));
+					final FBRuntimeAbstract newfbRuntime = getLatestFbNetworkRuntime((FBTransaction) transaction);
 					// use fb network runtime in the next transaction
 					transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(newfbRuntime);
 				}
-
 			}
 		}
+	}
+
+	private static FBRuntimeAbstract getLatestFbNetworkRuntime(final FBTransaction transaction) {
+		return transaction.getResultFBRuntime();
 	}
 
 	public static Resource addResourceToManager(final EventManager eventManager, final URI uri) {
@@ -131,14 +133,6 @@ public final class EventManagerUtils {
 		final ResourceSet reset = new ResourceSetImpl();
 		final Resource res = reset.getResource(uri, true);
 		return res;
-	}
-
-	private static FBRuntimeAbstract getLatestNetworkRuntime(final FBTransaction transaction) {
-		if (transaction.getOutputEventOccurrences().isEmpty()) {
-			return transaction.getInputEventOccurrence().getFbRuntime();
-		}
-		return transaction.getOutputEventOccurrences().get(transaction.getOutputEventOccurrences().size() - 1)
-				.getFbRuntime();
 	}
 
 }

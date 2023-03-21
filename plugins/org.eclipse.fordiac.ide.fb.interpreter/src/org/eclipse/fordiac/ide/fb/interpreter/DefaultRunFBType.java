@@ -224,8 +224,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	}
 
 	private static void processOutputEvent(final FBRuntimeAbstract runtime, final Event output,
-			final BasicEList<EventOccurrence> outputEvents/* , Resource fBTypeResource */,
-			final FBType executedFbtype) {
+			final BasicEList<EventOccurrence> outputEvents, final FBType executedFbtype) {
 		// Copy FBTypeRuntime
 		final FBRuntimeAbstract newFBTypeRT = EcoreUtil.copy(runtime);
 		// Copy FBType
@@ -313,6 +312,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// mapping the output event occurrences to the network
 		createTransactionsForConnectedPins(outputEvents, fBNetworkRuntime);
 
+		final FBTransaction currentTransaction = (FBTransaction) eventOccurrence.eContainer();
+		currentTransaction.setResultFBRuntime(EcoreUtil.copy(fBNetworkRuntime));
 		return outputEvents;
 	}
 
@@ -399,9 +400,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 
 	private static FBTransaction createNewTransaction(final IInterfaceElement dest,
 			final FBNetworkRuntime fBNetworkRuntime, final EventOccurrence sourceEventOccurrence) {
-		final FBNetworkRuntime copyFBNetworkRuntime = EcoreUtil.copy(fBNetworkRuntime);
-		final EventOccurrence destinationEventOccurence = EventOccFactory.createFrom((Event) dest,
-				copyFBNetworkRuntime);
+		final EventOccurrence destinationEventOccurence = EventOccFactory.createFrom((Event) dest, null);
 		destinationEventOccurence.setParentFB(dest.getFBNetworkElement());
 		final FBTransaction transaction = TransactionFactory.createFrom(destinationEventOccurence);
 		sourceEventOccurrence.getCreatedTransactions().add(transaction);
@@ -432,8 +431,11 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	}
 
 	private static IInterfaceElement findTypeOfPinInNetwork(final EventOccurrence sourceEventOcurrence) {
-		return sourceEventOcurrence.getParentFB().getType().getInterfaceList()
-				.getInterfaceElement(sourceEventOcurrence.getEvent().getName());
+		final FBType type = sourceEventOcurrence.getParentFB().getType();
+		if (type == null) {
+			// untyped subapp
+		}
+		return type.getInterfaceList().getInterfaceElement(sourceEventOcurrence.getEvent().getName());
 	}
 
 	private static List<IInterfaceElement> findConnectedPins(final IInterfaceElement interfaceElement) {
