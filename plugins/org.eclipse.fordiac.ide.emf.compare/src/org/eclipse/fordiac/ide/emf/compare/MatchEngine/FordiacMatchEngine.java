@@ -21,6 +21,7 @@ import org.eclipse.emf.compare.match.DefaultMatchEngine;
 import org.eclipse.emf.compare.match.eobject.IEObjectMatcher;
 import org.eclipse.emf.compare.utils.UseIdentifiers;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 
@@ -40,7 +41,7 @@ public class FordiacMatchEngine extends DefaultMatchEngine {
 
 
 	static Function<EObject, String> idFunction = input -> {
-		if (input instanceof FBType || input instanceof AutomationSystem) {
+		if (input instanceof FBType || input instanceof AutomationSystem || input instanceof StructuredType) {
 			return input.getClass().getName();
 		}
 
