@@ -113,12 +113,6 @@
       </dragAssistant>
    </extension>
    <extension point="org.eclipse.ui.commands">
-       <command
-            categoryId="org.eclipse.fordiac.ide.commands.category"
-            id="org.eclipse.fordiac.ide.typemanagement.commands.exportXMI"
-            defaultHandler="org.eclipse.fordiac.ide.typemanagement.handlers.ExportXMIHandler"
-            name="Export as XMI">
-      </command>
     	<command
         	id="org.eclipse.fordiac.ide.typemanagement.openType"
         	name="Open Type">
@@ -552,53 +546,6 @@
                Show type comment beside the type name.
             </description>
       </decorator>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            allPopups="false"
-            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
-         <command
-               commandId="org.eclipse.fordiac.ide.typemanagement.commands.exportXMI"
-               label="Export as XMI"
-               style="push">
-            <visibleWhen
-                  checkEnabled="true">
-               <with
-                     variable="selection">
-                  <count
-                        value="1">
-                  </count>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <instanceof
-                              value="org.eclipse.core.resources.IFile">
-                        </instanceof>
-                        <or>
-                           <test
-                                 forcePluginActivation="true"
-                                 property="org.eclipse.core.resources.extension"
-                                 value="stfunc">
-                           </test>
-                           <test
-                                 forcePluginActivation="true"
-                                 property="org.eclipse.core.resources.extension"
-                                 value="fbt">
-                           </test>
-                           <test
-                                 forcePluginActivation="true"
-                                 property="org.eclipse.core.resources.extension"
-                                 value="globalconsts">
-                           </test>
-                        </or>
-                     </and>
-                  </iterate>
-               </with>
-            </visibleWhen>
-         </command>
-      </menuContribution>
    </extension>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">

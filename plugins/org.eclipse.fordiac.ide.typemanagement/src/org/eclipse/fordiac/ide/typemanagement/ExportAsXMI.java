@@ -37,6 +37,8 @@ import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
 
+/** @deprecated Use org.eclipse.fordiac.ide.export.xmi.XMIExportFilter instead. */
+@Deprecated(forRemoval = true)
 public class ExportAsXMI {
 	static final String XMI_EXTENSION = "xmi"; //$NON-NLS-1$
 
