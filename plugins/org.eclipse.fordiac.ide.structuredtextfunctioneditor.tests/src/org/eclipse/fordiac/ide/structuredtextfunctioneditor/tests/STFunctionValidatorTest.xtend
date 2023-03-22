@@ -255,7 +255,7 @@ class STFunctionValidatorTest {
 				int1 : INT := LINT#17;
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STElementaryInitializerExpression, STCoreValidator.NON_COMPATIBLE_TYPES)
 
 	}
 
@@ -266,7 +266,14 @@ class STFunctionValidatorTest {
 				testArray: ARRAY [ 0 .. 3 ] OF INT := [LINT#17, 4];
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STElementaryInitializerExpression, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''
+			FUNCTION hubert
+			VAR
+				testArray: ARRAY [ 0 .. 3 ] OF INT := [17, '4diac'];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STElementaryInitializerExpression, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	def void testInvalidArrayDimensionsInitializer() {
@@ -276,21 +283,21 @@ class STFunctionValidatorTest {
 				testArray: ARRAY [ 0 .. 3 ] OF INT := [[17, 4]];
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STElementaryInitializerExpression, STCoreValidator.NON_COMPATIBLE_TYPES)
 		'''
 			FUNCTION hubert
 			VAR
 				testArray: ARRAY [ 0 .. 3, 0 .. 2 ] OF INT := [17, 4, 21];
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STElementaryInitializerExpression, STCoreValidator.NON_COMPATIBLE_TYPES)
 		'''
 			FUNCTION hubert
 			VAR
 				testArray: ARRAY [ 0 .. 3, 0 .. 2 ] OF INT := [[17, 4], 21];
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STElementaryInitializerExpression, STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
