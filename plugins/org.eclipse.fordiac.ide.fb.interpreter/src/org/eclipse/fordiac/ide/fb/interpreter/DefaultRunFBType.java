@@ -360,7 +360,9 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			}
 			final VarDeclaration typeVarDec = (VarDeclaration) ((FBType) runtime.getModel()).getInterfaceList()
 					.getInterfaceElement(varDec.getName());
-			typeVarDec.setValue(EcoreUtil.copy(value));
+			if (!VariableUtils.isEmptyValue(value)) {
+				typeVarDec.setValue(EcoreUtil.copy(value));
+			}
 		});
 	}
 

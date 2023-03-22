@@ -32,21 +32,24 @@ public final class VariableUtils {
 		varDecl.getValue().setValue(value);
 	}
 
+	@Deprecated
 	public static void setVariable(final FBType fb, final String name, final String value) {
 		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name.strip());
 		if (!(el instanceof VarDeclaration)) {
 			throw new IllegalArgumentException("variable " + name + " does not exist in FB"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-
 		setVariable((VarDeclaration) el, ServiceSequenceUtils.removeKeyword(value));
 	}
 
 	public static void initVariable(final VarDeclaration varDeclaration) {
 		// if there is no initial value, we take a default value
-		if ((varDeclaration.getValue() == null) || (varDeclaration.getValue().getValue() == null)
-				|| varDeclaration.getValue().getValue().isBlank()) {
+		if ((varDeclaration != null) && isEmptyValue(varDeclaration.getValue())) {
 			setVariable(varDeclaration, InitialValueHelper.getDefaultValue(varDeclaration));
 		}
+	}
+
+	public static boolean isEmptyValue(final Value value) {
+		return (value == null) || (value.getValue() == null) || value.getValue().isBlank();
 	}
 
 	// Init all FB Variables
