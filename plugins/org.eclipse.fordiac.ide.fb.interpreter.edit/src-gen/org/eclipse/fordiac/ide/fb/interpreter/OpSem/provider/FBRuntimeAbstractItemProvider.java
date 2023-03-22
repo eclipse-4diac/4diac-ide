@@ -19,6 +19,7 @@ import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.ResourceLocator;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
@@ -26,6 +27,7 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin;
 
 /** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract}
@@ -37,7 +39,7 @@ public class FBRuntimeAbstractItemProvider extends ItemProviderAdapter implement
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	public FBRuntimeAbstractItemProvider(AdapterFactory adapterFactory) {
+	public FBRuntimeAbstractItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -45,7 +47,7 @@ public class FBRuntimeAbstractItemProvider extends ItemProviderAdapter implement
 	 *
 	 * @generated */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -57,15 +59,22 @@ public class FBRuntimeAbstractItemProvider extends ItemProviderAdapter implement
 	 *
 	 * @generated */
 	@Override
-	public Object getImage(Object object) {
+	public Object getImage(final Object object) {
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBRuntimeAbstract")); //$NON-NLS-1$
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated NOT */
 	@Override
-	public String getText(Object object) {
+	public String getText(final Object object) {
+		if (object instanceof final EObject eObj) {
+			if (eObj.eContainingFeature()
+					.getFeatureID() == OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME) {
+				return "Result Runtime "; //$NON-NLS-1$
+			}
+			return "Runtime "; //$NON-NLS-1$
+		}
 		return getString("_UI_FBRuntimeAbstract_type"); //$NON-NLS-1$
 	}
 
@@ -75,7 +84,7 @@ public class FBRuntimeAbstractItemProvider extends ItemProviderAdapter implement
 	 *
 	 * @generated */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
 		super.notifyChanged(notification);
 	}
@@ -85,7 +94,7 @@ public class FBRuntimeAbstractItemProvider extends ItemProviderAdapter implement
 	 *
 	 * @generated */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 	}
 

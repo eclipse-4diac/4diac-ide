@@ -14,5 +14,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.fb.interpreter;visibility:=reexport,
  org.eclipse.emf.edit;visibility:=reexport,
  org.eclipse.fordiac.ide.model;visibility:=reexport,
- org.eclipse.fordiac.ide.model.edit;visibility:=reexport
+ org.eclipse.fordiac.ide.model.edit;visibility:=reexport,
+ org.eclipse.fordiac.ide.ui,
+ org.eclipse.jface
 Bundle-ActivationPolicy: lazy

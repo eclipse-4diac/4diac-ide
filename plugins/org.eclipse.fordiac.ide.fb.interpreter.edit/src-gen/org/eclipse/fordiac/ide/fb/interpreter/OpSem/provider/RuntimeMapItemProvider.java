@@ -30,9 +30,12 @@ import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin;
+import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /** This is the item provider adapter for a {@link java.util.Map.Entry} object. <!-- begin-user-doc --> <!--
  * end-user-doc -->
@@ -43,7 +46,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	public RuntimeMapItemProvider(AdapterFactory adapterFactory) {
+	public RuntimeMapItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -51,7 +54,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	 *
 	 * @generated */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -63,7 +66,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	/** This adds a property descriptor for the Key feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	protected void addKeyPropertyDescriptor(Object object) {
+	protected void addKeyPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_RuntimeMap_key_feature"), //$NON-NLS-1$
@@ -79,7 +82,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	 *
 	 * @generated */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(OperationalSemanticsPackage.Literals.RUNTIME_MAP__VALUE);
@@ -91,7 +94,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	 *
 	 * @generated */
 	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
+	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
 		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
@@ -100,18 +103,22 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 
 	/** This returns RuntimeMap.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated NOT */
 	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/RuntimeMap")); //$NON-NLS-1$
+	public Object getImage(final Object object) {
+		return overlayImage(object, FordiacImage.ICON_DEVICE);
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated NOT */
 	@Override
-	public String getText(Object object) {
-		Map.Entry<?, ?> runtimeMap = (Map.Entry<?, ?>) object;
+	public String getText(final Object object) {
+		final Map.Entry<?, ?> runtimeMap = (Map.Entry<?, ?>) object;
+		if (runtimeMap.getKey() instanceof final FBNetworkElement fb
+				&& runtimeMap.getValue() instanceof final FBRuntimeAbstract rt) {
+			return "Contained Runtime for FB " + fb.getQualifiedName(); //$NON-NLS-1$
+		}
 		return "" + runtimeMap.getKey() + " -> " + runtimeMap.getValue(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -121,7 +128,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	 *
 	 * @generated */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Map.Entry.class)) {
@@ -139,7 +146,7 @@ public class RuntimeMapItemProvider extends ItemProviderAdapter implements IEdit
 	 *
 	 * @generated */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors.add(createChildParameter(OperationalSemanticsPackage.Literals.RUNTIME_MAP__VALUE,

@@ -25,6 +25,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction} object.
  * <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -34,7 +35,7 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	public FBTransactionItemProvider(AdapterFactory adapterFactory) {
+	public FBTransactionItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -42,7 +43,7 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 	 *
 	 * @generated */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -54,7 +55,7 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 	/** This adds a property descriptor for the Input Variables feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	protected void addInputVariablesPropertyDescriptor(Object object) {
+	protected void addInputVariablesPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_FBTransaction_inputVariables_feature"), //$NON-NLS-1$
@@ -71,7 +72,7 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 	 *
 	 * @generated */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(OperationalSemanticsPackage.Literals.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES);
@@ -83,7 +84,7 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 	 *
 	 * @generated */
 	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
+	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
 		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
@@ -92,17 +93,24 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 
 	/** This returns FBTransaction.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated NOT */
 	@Override
-	public Object getImage(Object object) {
+	public Object getImage(final Object object) {
+		if (object instanceof final FBTransaction tr) {
+			return overlayImage(object, FordiacImage.ICON_TRANSACTION.getImage());
+		}
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/FBTransaction")); //$NON-NLS-1$
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated NOT */
 	@Override
-	public String getText(Object object) {
+	public String getText(final Object object) {
+		if (object instanceof final FBTransaction tr) {
+			return getString("_UI_FBTransaction_type") + ": " + tr.getOutputEventOccurrences().size() //$NON-NLS-1$ //$NON-NLS-2$
+					+ " Output EO";  //$NON-NLS-1$
+		}
 		return getString("_UI_FBTransaction_type"); //$NON-NLS-1$
 	}
 
@@ -112,7 +120,7 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 	 *
 	 * @generated */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(FBTransaction.class)) {
@@ -130,7 +138,7 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 	 *
 	 * @generated */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors
@@ -143,12 +151,13 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 	 *
 	 * @generated */
 	@Override
-	public String getCreateChildText(Object owner, Object feature, Object child, Collection<?> selection) {
-		Object childFeature = feature;
-		Object childObject = child;
+	public String getCreateChildText(final Object owner, final Object feature, final Object child,
+			final Collection<?> selection) {
+		final Object childFeature = feature;
+		final Object childObject = child;
 
-		boolean qualify = childFeature == OperationalSemanticsPackage.Literals.TRANSACTION__INPUT_EVENT_OCCURRENCE
-				|| childFeature == OperationalSemanticsPackage.Literals.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES;
+		final boolean qualify = (childFeature == OperationalSemanticsPackage.Literals.TRANSACTION__INPUT_EVENT_OCCURRENCE)
+				|| (childFeature == OperationalSemanticsPackage.Literals.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES);
 
 		if (qualify) {
 			return getString("_UI_CreateChild_text2", //$NON-NLS-1$

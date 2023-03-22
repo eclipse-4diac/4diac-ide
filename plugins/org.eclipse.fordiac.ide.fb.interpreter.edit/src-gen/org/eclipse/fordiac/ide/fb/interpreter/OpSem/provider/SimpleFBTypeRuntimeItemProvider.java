@@ -21,9 +21,11 @@ import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.BasicFBTypeRuntime;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /** This is the item provider adapter for a {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime}
  * object. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -33,7 +35,7 @@ public class SimpleFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvid
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	public SimpleFBTypeRuntimeItemProvider(AdapterFactory adapterFactory) {
+	public SimpleFBTypeRuntimeItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -41,7 +43,7 @@ public class SimpleFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvid
 	 *
 	 * @generated */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -56,7 +58,7 @@ public class SimpleFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvid
 	 *
 	 * @generated */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(OperationalSemanticsPackage.Literals.SIMPLE_FB_TYPE_RUNTIME__SIMPLE_FB_TYPE);
@@ -68,7 +70,7 @@ public class SimpleFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvid
 	 *
 	 * @generated */
 	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
+	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
 		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
@@ -79,15 +81,19 @@ public class SimpleFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvid
 	 *
 	 * @generated */
 	@Override
-	public Object getImage(Object object) {
-		return overlayImage(object, getResourceLocator().getImage("full/obj16/SimpleFBTypeRuntime")); //$NON-NLS-1$
+	public Object getImage(final Object object) {
+		return overlayImage(object, FordiacImage.ICON_RESOURCE.getImage());
 	}
 
 	/** This returns the label text for the adapted class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
 	@Override
-	public String getText(Object object) {
+	public String getText(final Object object) {
+		if (object instanceof final BasicFBTypeRuntime rt && (rt.getBasicfbtype() != null)) {
+			return super.getText(object) + getString("_UI_SimpleFBTypeRuntime_type") + " for type " //$NON-NLS-1$ //$NON-NLS-2$
+					+ rt.getBasicfbtype().getName();
+		}
 		return getString("_UI_SimpleFBTypeRuntime_type"); //$NON-NLS-1$
 	}
 
@@ -97,7 +103,7 @@ public class SimpleFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvid
 	 *
 	 * @generated */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(SimpleFBTypeRuntime.class)) {
@@ -115,7 +121,7 @@ public class SimpleFBTypeRuntimeItemProvider extends FBRuntimeAbstractItemProvid
 	 *
 	 * @generated */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors

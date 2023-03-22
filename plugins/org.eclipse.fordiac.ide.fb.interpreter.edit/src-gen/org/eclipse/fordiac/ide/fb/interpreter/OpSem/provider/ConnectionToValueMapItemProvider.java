@@ -31,8 +31,12 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.provider.OperationalSemanticsEditPlugin;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.Value;
+import org.eclipse.fordiac.ide.ui.imageprovider.FordiacImage;
 
 /** This is the item provider adapter for a {@link java.util.Map.Entry} object. <!-- begin-user-doc --> <!--
  * end-user-doc -->
@@ -43,7 +47,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	/** This constructs an instance from a factory and a notifier. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	public ConnectionToValueMapItemProvider(AdapterFactory adapterFactory) {
+	public ConnectionToValueMapItemProvider(final AdapterFactory adapterFactory) {
 		super(adapterFactory);
 	}
 
@@ -51,7 +55,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 *
 	 * @generated */
 	@Override
-	public List<IItemPropertyDescriptor> getPropertyDescriptors(Object object) {
+	public List<IItemPropertyDescriptor> getPropertyDescriptors(final Object object) {
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
@@ -63,7 +67,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	/** This adds a property descriptor for the Key feature. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	protected void addKeyPropertyDescriptor(Object object) {
+	protected void addKeyPropertyDescriptor(final Object object) {
 		itemPropertyDescriptors
 				.add(createItemPropertyDescriptor(((ComposeableAdapterFactory) adapterFactory).getRootAdapterFactory(),
 						getResourceLocator(), getString("_UI_ConnectionToValueMap_key_feature"), //$NON-NLS-1$
@@ -80,7 +84,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 *
 	 * @generated */
 	@Override
-	public Collection<? extends EStructuralFeature> getChildrenFeatures(Object object) {
+	public Collection<? extends EStructuralFeature> getChildrenFeatures(final Object object) {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(OperationalSemanticsPackage.Literals.CONNECTION_TO_VALUE_MAP__VALUE);
@@ -92,7 +96,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 *
 	 * @generated */
 	@Override
-	protected EStructuralFeature getChildFeature(Object object, Object child) {
+	protected EStructuralFeature getChildFeature(final Object object, final Object child) {
 		// Check the type of the specified child object and return the proper feature to use for
 		// adding (see {@link AddCommand}) it as a child.
 
@@ -101,9 +105,15 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 
 	/** This returns ConnectionToValueMap.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated */
+	 * @generated NOT */
 	@Override
-	public Object getImage(Object object) {
+	public Object getImage(final Object object) {
+		if (object instanceof final ConnectionToValueMapImpl mapItem) {
+			if (mapItem.getKey() instanceof final Connection conn && conn.getDestination().isIsInput()) {
+				return overlayImage(object, FordiacImage.ICON_DATA_INPUT.getImage());
+			}
+			return overlayImage(object, FordiacImage.ICON_DATA_OUTPUT.getImage());
+		}
 		return overlayImage(object, getResourceLocator().getImage("full/obj16/ConnectionToValueMap")); //$NON-NLS-1$
 	}
 
@@ -111,8 +121,13 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 *
 	 * @generated */
 	@Override
-	public String getText(Object object) {
-		Map.Entry<?, ?> connectionToValueMap = (Map.Entry<?, ?>) object;
+	public String getText(final Object object) {
+		final Map.Entry<?, ?> connectionToValueMap = (Map.Entry<?, ?>) object;
+		if (connectionToValueMap.getKey() instanceof final Connection conn
+				&& connectionToValueMap.getValue() instanceof final Value value) {
+			return "Conn " + conn.getSource().getName() + "->" + conn.getDestination().getName() + ": " //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+					+ value.getValue();
+		}
 		return "" + connectionToValueMap.getKey() + " -> " + connectionToValueMap.getValue(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -122,7 +137,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 *
 	 * @generated */
 	@Override
-	public void notifyChanged(Notification notification) {
+	public void notifyChanged(final Notification notification) {
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Map.Entry.class)) {
@@ -140,7 +155,7 @@ public class ConnectionToValueMapItemProvider extends ItemProviderAdapter implem
 	 *
 	 * @generated */
 	@Override
-	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
+	protected void collectNewChildDescriptors(final Collection<Object> newChildDescriptors, final Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
 
 		newChildDescriptors
