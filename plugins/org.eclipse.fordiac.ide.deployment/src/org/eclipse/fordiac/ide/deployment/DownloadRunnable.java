@@ -207,7 +207,7 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 			final Shell shell = Display.getDefault().getActiveShell();
 			MessageDialog.openError(shell, Messages.DownloadRunnable_MajorDownloadError,
 					MessageFormat.format(Messages.DownloadRunnable_DownloadErrorDetails, device.getName(),
-							DeploymentHelper.getMgrID(device), e.getMessage()));
+							DeploymentHelper.getMgrIDSafe(device), e.getMessage()));
 		});
 	}
 

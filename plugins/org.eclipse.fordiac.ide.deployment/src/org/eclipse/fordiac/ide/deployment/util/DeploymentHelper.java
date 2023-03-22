@@ -17,6 +17,7 @@ package org.eclipse.fordiac.ide.deployment.util;
 import java.text.MessageFormat;
 
 import org.eclipse.fordiac.ide.deployment.Messages;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.model.eval.variable.VariableOperations;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
@@ -26,13 +27,13 @@ public interface DeploymentHelper {
 
 	String MGR_ID = "MGR_ID";  //$NON-NLS-1$
 
-	static String getVariableValue(final VarDeclaration varDecl) {
+	static String getVariableValue(final VarDeclaration varDecl) throws DeploymentException {
 		if (hasInitalValue(varDecl)) {
 			try {
 				return VariableOperations.newVariable(varDecl).toString();
 			} catch (final Exception e) {
-				FordiacLogHelper.logWarning(MessageFormat.format(Messages.DeploymentHelper_VariableValueError,
-						varDecl.getQualifiedName(), varDecl.getValue().getValue()), e);
+				throw new DeploymentException(MessageFormat.format(Messages.DeploymentHelper_VariableValueError,
+						varDecl.getValue().getValue(), varDecl.getQualifiedName(), e.getMessage()), e);
 			}
 		}
 		return null;
@@ -43,7 +44,7 @@ public interface DeploymentHelper {
 				&& !varDecl.getValue().getValue().isEmpty();
 	}
 
-	static String getMgrID(final Device dev) {
+	static String getMgrID(final Device dev) throws DeploymentException {
 		for (final VarDeclaration varDecl : dev.getVarDeclarations()) {
 			if (MGR_ID.equalsIgnoreCase(varDecl.getName())) {
 				final String val = DeploymentHelper.getVariableValue(varDecl);
@@ -51,6 +52,15 @@ public interface DeploymentHelper {
 					return val;
 				}
 			}
+		}
+		return ""; //$NON-NLS-1$
+	}
+
+	static String getMgrIDSafe(final Device dev) {
+		try {
+			return getMgrID(dev);
+		} catch (final DeploymentException e) {
+			FordiacLogHelper.logWarning(e.getMessage(), e);
 		}
 		return ""; //$NON-NLS-1$
 	}
