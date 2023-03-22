@@ -43,10 +43,7 @@ public final class FBNetworkTestRunner {
 			throw new IllegalArgumentException("Event pin does not exist"); //$NON-NLS-1$
 		}
 
-		final EventManager eventManager = EventManagerFactory.createFrom(event, EcoreUtil.copy(network));
-		EventManagerUtils.processNetwork(eventManager);
-
-		checkInitialTransaction(eventManager.getTransactions().get(0), fbInstanceName, pinName);
+		final EventManager eventManager = runFBNetworkTestManager(network, event);
 
 		return eventManager.getTransactions();
 	}
@@ -63,10 +60,15 @@ public final class FBNetworkTestRunner {
 			throw new IllegalArgumentException("Event pin does not exist"); //$NON-NLS-1$
 		}
 
+		final EventManager eventManager = runFBNetworkTestManager(network, event);
+		checkInitialTransaction(eventManager.getTransactions().get(0), fbInstanceName, pinName);
+
+		return eventManager;
+	}
+
+	public static EventManager runFBNetworkTestManager(final FBNetwork network, final Event event) {
 		final EventManager eventManager = EventManagerFactory.createFrom(event, EcoreUtil.copy(network));
 		EventManagerUtils.processNetwork(eventManager);
-
-		checkInitialTransaction(eventManager.getTransactions().get(0), fbInstanceName, pinName);
 
 		return eventManager;
 	}
@@ -110,7 +112,7 @@ public final class FBNetworkTestRunner {
 			if (!matchFbInstanceName(result, expectedEventNames)) {
 				throw new IllegalTraceException(
 						"Unexpected input event occurrence at FB " + result.getParentFB().getName() //$NON-NLS-1$
-						+ ", expected: " + expectedEventName); //$NON-NLS-1$
+								+ ", expected: " + expectedEventName); //$NON-NLS-1$
 			}
 			if (!matchEventName(result, expectedEventNames[1])) {
 				throw new IllegalTraceException("Unexpected input event occurrence, expected: " + expectedEventName); //$NON-NLS-1$
