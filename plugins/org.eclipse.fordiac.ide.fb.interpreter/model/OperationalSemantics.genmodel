@@ -24,6 +24,7 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventOccurrence/fbRuntime"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventOccurrence/createdTransactions"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventOccurrence/parentFB"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventOccurrence/resultFBRuntime"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//EventManager">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventManager/transactions"/>
@@ -64,7 +65,6 @@
     <genClasses ecoreClass="OperationalSemantics.ecore#//FBTransaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/outputEventOccurrences"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/inputVariables"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/resultFBRuntime"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//ConnectionToValueMap">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//ConnectionToValueMap/key"/>

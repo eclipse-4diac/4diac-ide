@@ -75,7 +75,6 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 		if (childrenFeatures == null) {
 			super.getChildrenFeatures(object);
 			childrenFeatures.add(OperationalSemanticsPackage.Literals.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES);
-			childrenFeatures.add(OperationalSemanticsPackage.Literals.FB_TRANSACTION__RESULT_FB_RUNTIME);
 		}
 		return childrenFeatures;
 	}
@@ -118,7 +117,6 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 
 		switch (notification.getFeatureID(FBTransaction.class)) {
 		case OperationalSemanticsPackage.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES:
-		case OperationalSemanticsPackage.FB_TRANSACTION__RESULT_FB_RUNTIME:
 			fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), true, false));
 			return;
 		default:
@@ -138,18 +136,6 @@ public class FBTransactionItemProvider extends TransactionItemProvider {
 		newChildDescriptors
 				.add(createChildParameter(OperationalSemanticsPackage.Literals.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES,
 						OperationalSemanticsFactory.eINSTANCE.createEventOccurrence()));
-
-		newChildDescriptors
-				.add(createChildParameter(OperationalSemanticsPackage.Literals.FB_TRANSACTION__RESULT_FB_RUNTIME,
-						OperationalSemanticsFactory.eINSTANCE.createBasicFBTypeRuntime()));
-
-		newChildDescriptors
-				.add(createChildParameter(OperationalSemanticsPackage.Literals.FB_TRANSACTION__RESULT_FB_RUNTIME,
-						OperationalSemanticsFactory.eINSTANCE.createSimpleFBTypeRuntime()));
-
-		newChildDescriptors
-				.add(createChildParameter(OperationalSemanticsPackage.Literals.FB_TRANSACTION__RESULT_FB_RUNTIME,
-						OperationalSemanticsFactory.eINSTANCE.createFBNetworkRuntime()));
 	}
 
 	/** This returns the label text for {@link org.eclipse.emf.edit.command.CreateChildCommand}. <!-- begin-user-doc -->

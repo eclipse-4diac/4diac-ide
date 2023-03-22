@@ -45,6 +45,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getCreatedTransactions <em>Created
  * Transactions</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getParentFB <em>Parent FB</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventOccurrenceImpl#getResultFBRuntime <em>Result FB
+ * Runtime</em>}</li>
  * </ul>
  *
  * @generated */
@@ -112,6 +114,14 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 	 * @generated
 	 * @ordered */
 	protected FBNetworkElement parentFB;
+
+	/** The cached value of the '{@link #getResultFBRuntime() <em>Result FB Runtime</em>}' containment reference. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see #getResultFBRuntime()
+	 * @generated
+	 * @ordered */
+	protected FBRuntimeAbstract resultFBRuntime;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -328,6 +338,84 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
+	@Override
+	public FBRuntimeAbstract getResultFBRuntime() {
+		if (resultFBRuntime != null && resultFBRuntime.eIsProxy()) {
+			InternalEObject oldResultFBRuntime = (InternalEObject) resultFBRuntime;
+			resultFBRuntime = (FBRuntimeAbstract) eResolveProxy(oldResultFBRuntime);
+			if (resultFBRuntime != oldResultFBRuntime) {
+				InternalEObject newResultFBRuntime = (InternalEObject) resultFBRuntime;
+				NotificationChain msgs = oldResultFBRuntime.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME, null,
+						null);
+				if (newResultFBRuntime.eInternalContainer() == null) {
+					msgs = newResultFBRuntime.eInverseAdd(this,
+							EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME,
+							null, msgs);
+				}
+				if (msgs != null)
+					msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME, oldResultFBRuntime,
+							resultFBRuntime));
+			}
+		}
+		return resultFBRuntime;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	public FBRuntimeAbstract basicGetResultFBRuntime() {
+		return resultFBRuntime;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	public NotificationChain basicSetResultFBRuntime(FBRuntimeAbstract newResultFBRuntime, NotificationChain msgs) {
+		FBRuntimeAbstract oldResultFBRuntime = resultFBRuntime;
+		resultFBRuntime = newResultFBRuntime;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME, oldResultFBRuntime,
+					newResultFBRuntime);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public void setResultFBRuntime(FBRuntimeAbstract newResultFBRuntime) {
+		if (newResultFBRuntime != resultFBRuntime) {
+			NotificationChain msgs = null;
+			if (resultFBRuntime != null)
+				msgs = ((InternalEObject) resultFBRuntime).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME, null,
+						msgs);
+			if (newResultFBRuntime != null)
+				msgs = ((InternalEObject) newResultFBRuntime).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME, null,
+						msgs);
+			msgs = basicSetResultFBRuntime(newResultFBRuntime, msgs);
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET,
+					OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME, newResultFBRuntime,
+					newResultFBRuntime));
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
@@ -350,6 +438,8 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 			return basicSetFbRuntime(null, msgs);
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__CREATED_TRANSACTIONS:
 			return ((InternalEList<?>) getCreatedTransactions()).basicRemove(otherEnd, msgs);
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME:
+			return basicSetResultFBRuntime(null, msgs);
 		default:
 			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -379,6 +469,10 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 			if (resolve)
 				return getParentFB();
 			return basicGetParentFB();
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME:
+			if (resolve)
+				return getResultFBRuntime();
+			return basicGetResultFBRuntime();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -410,6 +504,9 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB:
 			setParentFB((FBNetworkElement) newValue);
 			return;
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME:
+			setResultFBRuntime((FBRuntimeAbstract) newValue);
+			return;
 		default:
 			super.eSet(featureID, newValue);
 			return;
@@ -440,6 +537,9 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB:
 			setParentFB((FBNetworkElement) null);
 			return;
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME:
+			setResultFBRuntime((FBRuntimeAbstract) null);
+			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -464,6 +564,8 @@ public class EventOccurrenceImpl extends MinimalEObjectImpl.Container implements
 			return createdTransactions != null && !createdTransactions.isEmpty();
 		case OperationalSemanticsPackage.EVENT_OCCURRENCE__PARENT_FB:
 			return parentFB != null;
+		case OperationalSemanticsPackage.EVENT_OCCURRENCE__RESULT_FB_RUNTIME:
+			return resultFBRuntime != null;
 		default:
 			return super.eIsSet(featureID);
 		}

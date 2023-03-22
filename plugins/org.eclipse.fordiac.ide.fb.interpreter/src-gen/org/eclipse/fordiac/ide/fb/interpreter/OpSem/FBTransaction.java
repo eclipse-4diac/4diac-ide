@@ -26,8 +26,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * Occurrences</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getInputVariables <em>Input
  * Variables</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getResultFBRuntime <em>Result FB
- * Runtime</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBTransaction()
@@ -53,23 +51,5 @@ public interface FBTransaction extends Transaction {
 	 * @model
 	 * @generated */
 	EList<VarDeclaration> getInputVariables();
-
-	/** Returns the value of the '<em><b>Result FB Runtime</b></em>' containment reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
-	 * @return the value of the '<em>Result FB Runtime</em>' containment reference.
-	 * @see #setResultFBRuntime(FBRuntimeAbstract)
-	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBTransaction_ResultFBRuntime()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated */
-	FBRuntimeAbstract getResultFBRuntime();
-
-	/** Sets the value of the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getResultFBRuntime
-	 * <em>Result FB Runtime</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @param value the new value of the '<em>Result FB Runtime</em>' containment reference.
-	 * @see #getResultFBRuntime()
-	 * @generated */
-	void setResultFBRuntime(FBRuntimeAbstract value);
 
 } // FBTransaction

@@ -98,12 +98,19 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @ordered */
 	int EVENT_OCCURRENCE__PARENT_FB = 5;
 
+	/** The feature id for the '<em><b>Result FB Runtime</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int EVENT_OCCURRENCE__RESULT_FB_RUNTIME = 6;
+
 	/** The number of structural features of the '<em>Event Occurrence</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered */
-	int EVENT_OCCURRENCE_FEATURE_COUNT = 6;
+	int EVENT_OCCURRENCE_FEATURE_COUNT = 7;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventManagerImpl <em>Event
 	 * Manager</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -295,19 +302,12 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @ordered */
 	int FB_TRANSACTION__INPUT_VARIABLES = TRANSACTION_FEATURE_COUNT + 1;
 
-	/** The feature id for the '<em><b>Result FB Runtime</b></em>' containment reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
-	 *
-	 * @generated
-	 * @ordered */
-	int FB_TRANSACTION__RESULT_FB_RUNTIME = TRANSACTION_FEATURE_COUNT + 2;
-
 	/** The number of structural features of the '<em>FB Transaction</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered */
-	int FB_TRANSACTION_FEATURE_COUNT = TRANSACTION_FEATURE_COUNT + 3;
+	int FB_TRANSACTION_FEATURE_COUNT = TRANSACTION_FEATURE_COUNT + 2;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImpl
 	 * <em>Connection To Value Map</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -432,6 +432,16 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see #getEventOccurrence()
 	 * @generated */
 	EReference getEventOccurrence_ParentFB();
+
+	/** Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getResultFBRuntime <em>Result FB
+	 * Runtime</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference '<em>Result FB Runtime</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getResultFBRuntime()
+	 * @see #getEventOccurrence()
+	 * @generated */
+	EReference getEventOccurrence_ResultFBRuntime();
 
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager <em>Event
 	 * Manager</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -609,16 +619,6 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated */
 	EReference getFBTransaction_InputVariables();
 
-	/** Returns the meta object for the containment reference
-	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getResultFBRuntime <em>Result FB
-	 * Runtime</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
-	 *
-	 * @return the meta object for the containment reference '<em>Result FB Runtime</em>'.
-	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getResultFBRuntime()
-	 * @see #getFBTransaction()
-	 * @generated */
-	EReference getFBTransaction_ResultFBRuntime();
-
 	/** Returns the meta object for class '{@link java.util.Map.Entry <em>Connection To Value Map</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -738,6 +738,12 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 *
 		 * @generated */
 		EReference EVENT_OCCURRENCE__PARENT_FB = eINSTANCE.getEventOccurrence_ParentFB();
+
+		/** The meta object literal for the '<em><b>Result FB Runtime</b></em>' containment reference feature. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @generated */
+		EReference EVENT_OCCURRENCE__RESULT_FB_RUNTIME = eINSTANCE.getEventOccurrence_ResultFBRuntime();
 
 		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventManagerImpl
 		 * <em>Event Manager</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -870,12 +876,6 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 *
 		 * @generated */
 		EReference FB_TRANSACTION__INPUT_VARIABLES = eINSTANCE.getFBTransaction_InputVariables();
-
-		/** The meta object literal for the '<em><b>Result FB Runtime</b></em>' containment reference feature. <!--
-		 * begin-user-doc --> <!-- end-user-doc -->
-		 *
-		 * @generated */
-		EReference FB_TRANSACTION__RESULT_FB_RUNTIME = eINSTANCE.getFBTransaction_ResultFBRuntime();
 
 		/** The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImpl <em>Connection To Value

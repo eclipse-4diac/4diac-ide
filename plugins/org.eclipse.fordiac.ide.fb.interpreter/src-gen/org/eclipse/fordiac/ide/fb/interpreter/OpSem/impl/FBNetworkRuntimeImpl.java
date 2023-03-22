@@ -127,8 +127,8 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 	@Override
 	public EMap<Connection, Value> getTransferData() {
 		if (transferData == null) {
-			transferData = new EcoreEMap<>(OperationalSemanticsPackage.Literals.CONNECTION_TO_VALUE_MAP,
-					ConnectionToValueMapImpl.class, this,
+			transferData = new EcoreEMap<>(
+					OperationalSemanticsPackage.Literals.CONNECTION_TO_VALUE_MAP, ConnectionToValueMapImpl.class, this,
 					OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TRANSFER_DATA);
 		}
 		return transferData;
@@ -140,7 +140,8 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 	@Override
 	public EMap<FBNetworkElement, FBRuntimeAbstract> getTypeRuntimes() {
 		if (typeRuntimes == null) {
-			typeRuntimes = new EcoreEMap<>(OperationalSemanticsPackage.Literals.RUNTIME_MAP, RuntimeMapImpl.class, this,
+			typeRuntimes = new EcoreEMap<>(
+					OperationalSemanticsPackage.Literals.RUNTIME_MAP, RuntimeMapImpl.class, this,
 					OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TYPE_RUNTIMES);
 		}
 		return typeRuntimes;

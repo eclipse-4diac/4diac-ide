@@ -1,0 +1,796 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xmi:XMI xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:description="http://www.eclipse.org/sirius/description/1.1.0" xmlns:description_1="http://www.eclipse.org/sirius/diagram/description/1.1.0" xmlns:description_2="http://www.eclipse.org/sirius/table/description/1.1.0" xmlns:diagram="http://www.eclipse.org/sirius/diagram/1.1.0" xmlns:notation="http://www.eclipse.org/gmf/runtime/1.0.3/notation" xmlns:opsem="http://OperationalSemantics/1.0" xmlns:org.eclipse.fordiac.ide.model.libraryElement="org.eclipse.fordiac.ide.model.libraryElement" xmlns:style="http://www.eclipse.org/sirius/diagram/description/style/1.1.0" xmlns:table="http://www.eclipse.org/sirius/table/1.1.0" xmlns:viewpoint="http://www.eclipse.org/sirius/1.1.0" xsi:schemaLocation="http://www.eclipse.org/sirius/description/1.1.0 http://www.eclipse.org/sirius/1.1.0#//description http://www.eclipse.org/sirius/diagram/description/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description http://www.eclipse.org/sirius/table/description/1.1.0 http://www.eclipse.org/sirius/table/1.1.0#//description http://OperationalSemantics/1.0 platform:/resource/org.eclipse.fordiac.ide.fb.interpreter/model/OperationalSemantics.ecore http://www.eclipse.org/sirius/diagram/description/style/1.1.0 http://www.eclipse.org/sirius/diagram/1.1.0#//description/style">
+  <viewpoint:DAnalysis uid="_sbrisMNIEe2kK57dxjXZjA" selectedViews="_cSrCUMNJEe2kK57dxjXZjA" version="15.0.0.202209061200">
+    <semanticResources>ReferenceExamples.sys</semanticResources>
+    <semanticResources>Type%20Library/SimpleIO.fbt</semanticResources>
+    <semanticResources>Type%20Library/SimpleNOT.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_CTD.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_CTU.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_CTUD.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_CYCLE.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_DEMUX.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_D_FF.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_F_TRIG.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_MERGE.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_N_TABLE.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_PERMIT.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_REND.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_RESTART.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_RS.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_RTimeOut.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_R_TRIG.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_SELECT.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_SPLIT.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_SR.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_SWITCH.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_T_FF.fbt</semanticResources>
+    <semanticResources>Type%20Library/events/E_TimeOut.fbt</semanticResources>
+    <semanticResources>Type%20Library/convert/BOOL2BOOL.fbt</semanticResources>
+    <semanticResources>Type%20Library/convert/INT2INT.fbt</semanticResources>
+    <semanticResources>Type%20Library/convert/INT2UINT.fbt</semanticResources>
+    <semanticResources>Type%20Library/convert/REAL2REAL.fbt</semanticResources>
+    <semanticResources>Type%20Library/convert/UINT2INT.fbt</semanticResources>
+    <semanticResources>Type%20Library/convert/WORD2WORD.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/BasicAdapter.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/BasicAdapter2.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/CompoundAdapter.adp</semanticResources>
+    <semanticResources>Type%20Library/custom/E_CTU.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/E_DEFAULT_PERMIT.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/E_MERGE.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/E_PERMIT.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/E_REND.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/E_SPLIT.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/EnhancedAdapter.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/EnhancedAdapter2.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/EventAdapter.adp</semanticResources>
+    <semanticResources>Type%20Library/custom/F_ADD.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/SimpleNOT.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/WithInputs.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/WithOutputs.fbt</semanticResources>
+    <semanticResources>Type%20Library/custom/structtype.dtp</semanticResources>
+    <semanticResources>virtualDNS.dns</semanticResources>
+    <ownedViews xmi:type="viewpoint:DView" uid="_cSrCUMNJEe2kK57dxjXZjA">
+      <viewpoint xmi:type="description:Viewpoint" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']"/>
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_z6aWYMNOEe2eTaDh8rGj-A" name="new OpSem" repPath="#_z6ZvUMNOEe2eTaDh8rGj-A" changeId="49c31517-6706-492f-b938-ec326a89bf13">
+        <description xmi:type="description_1:DiagramDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']"/>
+        <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex1b.E_SPLIT.EI.opsem#/"/>
+      </ownedRepresentationDescriptors>
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_MVhTAMNSEe2eTaDh8rGj-A" name="new OpSem" repPath="#_MVgr8MNSEe2eTaDh8rGj-A" changeId="bb88a62c-4d74-496a-a3e3-b9acc72c99ba">
+        <description xmi:type="description_1:DiagramDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']"/>
+        <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex6a.E_PERMIT.EI.opsem#/"/>
+      </ownedRepresentationDescriptors>
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_jZhFsMSoEe2oftKDUZ9kcw" name="new Output Data Values" repPath="#_jZgeoMSoEe2oftKDUZ9kcw" changeId="b4f17925-541d-412c-aa0a-346f3dfe59fd">
+        <description xmi:type="description_2:CrossTableDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']"/>
+        <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex6a.E_PERMIT.EI.opsem#//@transactions.1"/>
+      </ownedRepresentationDescriptors>
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_veU7YMSoEe2oftKDUZ9kcw" name="new Output Data Values" repPath="#_veUUUMSoEe2oftKDUZ9kcw" changeId="d6256d23-2594-4a00-b16d-7740099ae3aa">
+        <description xmi:type="description_2:CrossTableDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']"/>
+        <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+      </ownedRepresentationDescriptors>
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_HpuIYcSpEe2oftKDUZ9kcw" name="new Output Data Values Edition" repPath="#_HpuIYMSpEe2oftKDUZ9kcw" changeId="e7d1aea3-701f-430b-b4e8-80d437bc755b">
+        <description xmi:type="description_2:EditionTableDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values%20Edition']"/>
+        <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1"/>
+      </ownedRepresentationDescriptors>
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_P5LdIcSpEe2oftKDUZ9kcw" name="new OpSem" repPath="#_P5Jn8MSpEe2oftKDUZ9kcw" changeId="a73b9e04-3dce-4233-8d58-8651d9094ee5">
+        <description xmi:type="description_1:DiagramDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']"/>
+        <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#/"/>
+      </ownedRepresentationDescriptors>
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_WFpHoMiUEe2l0JnMlaLHyw" name="new OpSem" repPath="#_WFn5gMiUEe2l0JnMlaLHyw" changeId="528b3a30-4317-4ee9-ac15-9ecd02038136">
+        <description xmi:type="description_1:DiagramDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']"/>
+        <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#/"/>
+      </ownedRepresentationDescriptors>
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_dG1ScMiUEe2l0JnMlaLHyw" name="new Output Data Values Edition" repPath="#_dGwZ8MiUEe2l0JnMlaLHyw" changeId="bc9579ba-45ab-496a-a951-c6ee7073261d">
+        <description xmi:type="description_2:EditionTableDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values%20Edition']"/>
+        <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+      </ownedRepresentationDescriptors>
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_63lI88iVEe2l0JnMlaLHyw" name="new Output Data Values" repPath="#_63lI8MiVEe2l0JnMlaLHyw" changeId="9b6772ef-5475-46a1-ae7b-3a0ecbdb0cc3">
+        <description xmi:type="description_2:EditionTableDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']"/>
+        <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+      </ownedRepresentationDescriptors>
+      <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_-VOUgsiVEe2l0JnMlaLHyw" name="new Output Data Values" repPath="#_-VNtcMiVEe2l0JnMlaLHyw" changeId="4f71389a-22d6-4eed-af58-a45208ad9a9a">
+        <description xmi:type="description_2:EditionTableDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']"/>
+        <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1"/>
+      </ownedRepresentationDescriptors>
+    </ownedViews>
+  </viewpoint:DAnalysis>
+  <diagram:DSemanticDiagram uid="_z6ZvUMNOEe2eTaDh8rGj-A">
+    <ownedAnnotationEntries xmi:type="description:AnnotationEntry" uid="_z6aWYsNOEe2eTaDh8rGj-A" source="GMF_DIAGRAMS">
+      <data xmi:type="notation:Diagram" xmi:id="_z6aWY8NOEe2eTaDh8rGj-A" type="Sirius" element="_z6ZvUMNOEe2eTaDh8rGj-A" measurementUnit="Pixel">
+        <children xmi:type="notation:Node" xmi:id="_z6cyoMNOEe2eTaDh8rGj-A" type="2001" element="_z6a9cMNOEe2eTaDh8rGj-A">
+          <children xmi:type="notation:Node" xmi:id="_z6cyo8NOEe2eTaDh8rGj-A" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_z6cypMNOEe2eTaDh8rGj-A" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_z6dZvMNOEe2eTaDh8rGj-A" type="3003" element="_z6a9ccNOEe2eTaDh8rGj-A">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_z6dZvcNOEe2eTaDh8rGj-A" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6dZvsNOEe2eTaDh8rGj-A"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_z6cyocNOEe2eTaDh8rGj-A" fontColor="14120960" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6cyosNOEe2eTaDh8rGj-A" x="276" y="132" width="115" height="30"/>
+        </children>
+        <children xmi:type="notation:Node" xmi:id="_z6cypcNOEe2eTaDh8rGj-A" type="2001" element="_z6bkgcNOEe2eTaDh8rGj-A">
+          <children xmi:type="notation:Node" xmi:id="_z6dZsMNOEe2eTaDh8rGj-A" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_z6dZscNOEe2eTaDh8rGj-A" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_z6dZv8NOEe2eTaDh8rGj-A" type="3003" element="_z6bkgsNOEe2eTaDh8rGj-A">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_z6dZwMNOEe2eTaDh8rGj-A" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6dZwcNOEe2eTaDh8rGj-A"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_z6cypsNOEe2eTaDh8rGj-A" fontColor="14120960" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6cyp8NOEe2eTaDh8rGj-A" x="205" y="230" width="111" height="30"/>
+        </children>
+        <children xmi:type="notation:Node" xmi:id="_z6dZssNOEe2eTaDh8rGj-A" type="2001" element="_z6bkhMNOEe2eTaDh8rGj-A">
+          <children xmi:type="notation:Node" xmi:id="_z6dZtcNOEe2eTaDh8rGj-A" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_z6dZtsNOEe2eTaDh8rGj-A" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_z6dZwsNOEe2eTaDh8rGj-A" type="3003" element="_z6bkhcNOEe2eTaDh8rGj-A">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_z6dZw8NOEe2eTaDh8rGj-A" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6dZxMNOEe2eTaDh8rGj-A"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_z6dZs8NOEe2eTaDh8rGj-A" fontColor="14120960" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6dZtMNOEe2eTaDh8rGj-A" x="435" y="220" width="121" height="30"/>
+        </children>
+        <children xmi:type="notation:Node" xmi:id="_z6dZt8NOEe2eTaDh8rGj-A" type="2001" element="_z6bkh8NOEe2eTaDh8rGj-A">
+          <children xmi:type="notation:Node" xmi:id="_z6dZusNOEe2eTaDh8rGj-A" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_z6dZu8NOEe2eTaDh8rGj-A" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_z6eAwMNOEe2eTaDh8rGj-A" type="3002" element="_z6bkiMNOEe2eTaDh8rGj-A">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_z6eAwcNOEe2eTaDh8rGj-A" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6eAwsNOEe2eTaDh8rGj-A"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_z6dZuMNOEe2eTaDh8rGj-A" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6dZucNOEe2eTaDh8rGj-A" x="315" y="35" width="30" height="30"/>
+        </children>
+        <styles xmi:type="notation:DiagramStyle" xmi:id="_z6aWZMNOEe2eTaDh8rGj-A"/>
+        <edges xmi:type="notation:Edge" xmi:id="_z6eAw8NOEe2eTaDh8rGj-A" type="4001" element="_z6bkisNOEe2eTaDh8rGj-A" source="_z6cyoMNOEe2eTaDh8rGj-A" target="_z6cypcNOEe2eTaDh8rGj-A">
+          <children xmi:type="notation:Node" xmi:id="_z6eAx8NOEe2eTaDh8rGj-A" type="6001">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6eAyMNOEe2eTaDh8rGj-A" x="2" y="61"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_z6eAycNOEe2eTaDh8rGj-A" type="6002">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6eAysNOEe2eTaDh8rGj-A" x="22" y="3"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_z6eAy8NOEe2eTaDh8rGj-A" type="6003">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6eAzMNOEe2eTaDh8rGj-A" x="11" y="3"/>
+          </children>
+          <styles xmi:type="notation:ConnectorStyle" xmi:id="_z6eAxMNOEe2eTaDh8rGj-A"/>
+          <styles xmi:type="notation:FontStyle" xmi:id="_z6eAxcNOEe2eTaDh8rGj-A" fontName="Segoe UI" fontHeight="12"/>
+          <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_z6eAxsNOEe2eTaDh8rGj-A" points="[-15, 27, 56, -101]$[-71, 128, 0, 0]"/>
+          <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_z6eAzcNOEe2eTaDh8rGj-A" id="(0.13043478260869568,0.0)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_z6eAzsNOEe2eTaDh8rGj-A" id="(0.13513513513513514,1.0)"/>
+        </edges>
+        <edges xmi:type="notation:Edge" xmi:id="_z6eAz8NOEe2eTaDh8rGj-A" type="4001" element="_z6cLlMNOEe2eTaDh8rGj-A" source="_z6cyoMNOEe2eTaDh8rGj-A" target="_z6dZssNOEe2eTaDh8rGj-A">
+          <children xmi:type="notation:Node" xmi:id="_z6eA08NOEe2eTaDh8rGj-A" type="6001">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6eA1MNOEe2eTaDh8rGj-A" x="38" y="-58"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_z6eA1cNOEe2eTaDh8rGj-A" type="6002">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6eA1sNOEe2eTaDh8rGj-A" x="-8" y="-8"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_z6eA18NOEe2eTaDh8rGj-A" type="6003">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6eA2MNOEe2eTaDh8rGj-A" x="-14" y="-10"/>
+          </children>
+          <styles xmi:type="notation:ConnectorStyle" xmi:id="_z6eA0MNOEe2eTaDh8rGj-A"/>
+          <styles xmi:type="notation:FontStyle" xmi:id="_z6eA0cNOEe2eTaDh8rGj-A" fontName="Segoe UI" fontHeight="12"/>
+          <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_z6eA0sNOEe2eTaDh8rGj-A" points="[40, 30, -119, -88]$[159, 118, 0, 0]"/>
+          <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_z6eA2cNOEe2eTaDh8rGj-A" id="(0.13043478260869568,0.0)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_z6eA2sNOEe2eTaDh8rGj-A" id="(0.12396694214876033,1.0)"/>
+        </edges>
+        <edges xmi:type="notation:Edge" xmi:id="_z6eA28NOEe2eTaDh8rGj-A" type="4001" element="_z6cLmcNOEe2eTaDh8rGj-A" source="_z6dZt8NOEe2eTaDh8rGj-A" target="_z6cyoMNOEe2eTaDh8rGj-A">
+          <children xmi:type="notation:Node" xmi:id="_z6eA38NOEe2eTaDh8rGj-A" type="6001">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6eA4MNOEe2eTaDh8rGj-A" x="-11" y="45"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_z6eA4cNOEe2eTaDh8rGj-A" type="6002">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6eA4sNOEe2eTaDh8rGj-A" x="2"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_z6eA48NOEe2eTaDh8rGj-A" type="6003">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_z6eA5MNOEe2eTaDh8rGj-A" x="8" y="2"/>
+          </children>
+          <styles xmi:type="notation:ConnectorStyle" xmi:id="_z6eA3MNOEe2eTaDh8rGj-A"/>
+          <styles xmi:type="notation:FontStyle" xmi:id="_z6eA3cNOEe2eTaDh8rGj-A" fontName="Segoe UI" fontHeight="12"/>
+          <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_z6eA3sNOEe2eTaDh8rGj-A" points="[-10, 30, 29, -97]$[-39, 127, 0, 0]"/>
+          <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_z6en0MNOEe2eTaDh8rGj-A" id="(0.5,0.0)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_z6en0cNOEe2eTaDh8rGj-A" id="(0.13043478260869568,1.0)"/>
+        </edges>
+      </data>
+    </ownedAnnotationEntries>
+    <ownedAnnotationEntries xmi:type="description:AnnotationEntry" uid="_z6cLnsNOEe2eTaDh8rGj-A" source="DANNOTATION_CUSTOMIZATION_KEY">
+      <data xmi:type="diagram:ComputedStyleDescriptionRegistry" uid="_z6cLn8NOEe2eTaDh8rGj-A"/>
+    </ownedAnnotationEntries>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_z6a9cMNOEe2eTaDh8rGj-A" name="T0:E_SPLIT" outgoingEdges="_z6bkisNOEe2eTaDh8rGj-A _z6cLlMNOEe2eTaDh8rGj-A" incomingEdges="_z6cLmcNOEe2eTaDh8rGj-A" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex1b.E_SPLIT.EI.opsem#//@transactions.0"/>
+      <semanticElements xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex1b.E_SPLIT.EI.opsem#//@transactions.0"/>
+      <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+      <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+      <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+      <ownedStyle xmi:type="diagram:Square" uid="_z6a9ccNOEe2eTaDh8rGj-A" labelSize="12" showIcon="false" labelColor="0,120,215" borderColor="234,234,234" labelPosition="node" color="234,234,234">
+        <description xmi:type="style:SquareDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_z6bkgcNOEe2eTaDh8rGj-A" name="T1:E_REND" incomingEdges="_z6bkisNOEe2eTaDh8rGj-A" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex1b.E_SPLIT.EI.opsem#//@transactions.1"/>
+      <semanticElements xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex1b.E_SPLIT.EI.opsem#//@transactions.1"/>
+      <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+      <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+      <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+      <ownedStyle xmi:type="diagram:Square" uid="_z6bkgsNOEe2eTaDh8rGj-A" labelSize="12" showIcon="false" labelColor="0,120,215" borderColor="234,234,234" labelPosition="node" color="234,234,234">
+        <description xmi:type="style:SquareDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_z6bkhMNOEe2eTaDh8rGj-A" name="T2:E_REND" incomingEdges="_z6cLlMNOEe2eTaDh8rGj-A" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex1b.E_SPLIT.EI.opsem#//@transactions.2"/>
+      <semanticElements xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex1b.E_SPLIT.EI.opsem#//@transactions.2"/>
+      <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+      <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+      <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+      <ownedStyle xmi:type="diagram:Square" uid="_z6bkhcNOEe2eTaDh8rGj-A" labelSize="12" showIcon="false" labelColor="0,120,215" borderColor="234,234,234" labelPosition="node" color="234,234,234">
+        <description xmi:type="style:SquareDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_z6bkh8NOEe2eTaDh8rGj-A" outgoingEdges="_z6cLmcNOEe2eTaDh8rGj-A" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex1b.E_SPLIT.EI.opsem#/"/>
+      <semanticElements xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex1b.E_SPLIT.EI.opsem#/"/>
+      <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+      <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+      <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+      <ownedStyle xmi:type="diagram:Dot" uid="_z6bkiMNOEe2eTaDh8rGj-A" labelSize="12" showIcon="false" labelPosition="node" backgroundColor="0,0,0">
+        <description xmi:type="style:DotDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='InitNode']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='InitNode']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DEdge" uid="_z6bkisNOEe2eTaDh8rGj-A" name="E_REND.EI1" sourceNode="_z6a9cMNOEe2eTaDh8rGj-A" targetNode="_z6bkgcNOEe2eTaDh8rGj-A">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex1b.E_SPLIT.EI.opsem#//@transactions.0"/>
+      <ownedStyle xmi:type="diagram:EdgeStyle" uid="_z6cLkMNOEe2eTaDh8rGj-A" size="2" strokeColor="0,0,0">
+        <description xmi:type="style:EdgeStyleDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']/@style"/>
+        <centerLabelStyle xmi:type="diagram:CenterLabelStyle" uid="_z6cLkcNOEe2eTaDh8rGj-A" labelSize="12" showIcon="false"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DEdge" uid="_z6cLlMNOEe2eTaDh8rGj-A" name="E_REND.EI2" sourceNode="_z6a9cMNOEe2eTaDh8rGj-A" targetNode="_z6bkhMNOEe2eTaDh8rGj-A">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex1b.E_SPLIT.EI.opsem#//@transactions.0"/>
+      <ownedStyle xmi:type="diagram:EdgeStyle" uid="_z6cLlcNOEe2eTaDh8rGj-A" size="2" strokeColor="0,0,0">
+        <description xmi:type="style:EdgeStyleDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']/@style"/>
+        <centerLabelStyle xmi:type="diagram:CenterLabelStyle" uid="_z6cLlsNOEe2eTaDh8rGj-A" labelSize="12" showIcon="false"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DEdge" uid="_z6cLmcNOEe2eTaDh8rGj-A" name="E_SPLIT.EI" sourceNode="_z6bkh8NOEe2eTaDh8rGj-A" targetNode="_z6a9cMNOEe2eTaDh8rGj-A">
+      <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex1b.E_SPLIT.EI.opsem#/"/>
+      <ownedStyle xmi:type="diagram:EdgeStyle" uid="_z6cLmsNOEe2eTaDh8rGj-A" size="2" strokeColor="0,0,0">
+        <description xmi:type="style:EdgeStyleDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='InitToInitialTransaction']/@style"/>
+        <centerLabelStyle xmi:type="diagram:CenterLabelStyle" uid="_z6cLm8NOEe2eTaDh8rGj-A" labelSize="12" showIcon="false"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='InitToInitialTransaction']"/>
+    </ownedDiagramElements>
+    <description xmi:type="description_1:DiagramDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']"/>
+    <filterVariableHistory xmi:type="diagram:FilterVariableHistory" uid="_z6ZvUcNOEe2eTaDh8rGj-A"/>
+    <activatedLayers xmi:type="description_1:Layer" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer"/>
+    <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex1b.E_SPLIT.EI.opsem#/"/>
+  </diagram:DSemanticDiagram>
+  <diagram:DSemanticDiagram uid="_MVgr8MNSEe2eTaDh8rGj-A">
+    <ownedAnnotationEntries xmi:type="description:AnnotationEntry" uid="_MVhTAsNSEe2eTaDh8rGj-A" source="GMF_DIAGRAMS">
+      <data xmi:type="notation:Diagram" xmi:id="_MVhTA8NSEe2eTaDh8rGj-A" type="Sirius" element="_MVgr8MNSEe2eTaDh8rGj-A" measurementUnit="Pixel">
+        <children xmi:type="notation:Node" xmi:id="_MVlkdcNSEe2eTaDh8rGj-A" type="2001" element="_MVjvQMNSEe2eTaDh8rGj-A">
+          <children xmi:type="notation:Node" xmi:id="_MVlkeMNSEe2eTaDh8rGj-A" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_MVlkecNSEe2eTaDh8rGj-A" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_MVmylsNSEe2eTaDh8rGj-A" type="3003" element="_MVjvQcNSEe2eTaDh8rGj-A">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_MVmyl8NSEe2eTaDh8rGj-A" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MVmymMNSEe2eTaDh8rGj-A"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_MVlkdsNSEe2eTaDh8rGj-A" fontColor="14120960" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MVlkd8NSEe2eTaDh8rGj-A" x="130" y="190" width="187" height="30"/>
+        </children>
+        <children xmi:type="notation:Node" xmi:id="_MVlkesNSEe2eTaDh8rGj-A" type="2001" element="_MVjvQ8NSEe2eTaDh8rGj-A">
+          <children xmi:type="notation:Node" xmi:id="_MVmLgMNSEe2eTaDh8rGj-A" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_MVmLgcNSEe2eTaDh8rGj-A" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_MVmymcNSEe2eTaDh8rGj-A" type="3003" element="_MVjvRMNSEe2eTaDh8rGj-A">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_MVmymsNSEe2eTaDh8rGj-A" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MVmym8NSEe2eTaDh8rGj-A"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_MVlke8NSEe2eTaDh8rGj-A" fontColor="14120960" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MVlkfMNSEe2eTaDh8rGj-A" x="114" y="288" width="145" height="30"/>
+        </children>
+        <children xmi:type="notation:Node" xmi:id="_MVmLgsNSEe2eTaDh8rGj-A" type="2001" element="_MVjvRsNSEe2eTaDh8rGj-A">
+          <children xmi:type="notation:Node" xmi:id="_MVmLhcNSEe2eTaDh8rGj-A" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_MVmLhsNSEe2eTaDh8rGj-A" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_MVmynMNSEe2eTaDh8rGj-A" type="3002" element="_MVjvR8NSEe2eTaDh8rGj-A">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_MVmyncNSEe2eTaDh8rGj-A" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MVmynsNSEe2eTaDh8rGj-A"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_MVmLg8NSEe2eTaDh8rGj-A" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MVmLhMNSEe2eTaDh8rGj-A" x="108" y="78" width="30" height="30"/>
+        </children>
+        <styles xmi:type="notation:DiagramStyle" xmi:id="_MVhTBMNSEe2eTaDh8rGj-A"/>
+        <edges xmi:type="notation:Edge" xmi:id="_MVnZrMNSEe2eTaDh8rGj-A" type="4001" element="_MVkWV8NSEe2eTaDh8rGj-A" source="_MVlkdcNSEe2eTaDh8rGj-A" target="_MVlkesNSEe2eTaDh8rGj-A">
+          <children xmi:type="notation:Node" xmi:id="_MVnZsMNSEe2eTaDh8rGj-A" type="6001">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MVnZscNSEe2eTaDh8rGj-A" x="-1" y="-52"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_MVnZssNSEe2eTaDh8rGj-A" type="6002">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MVnZs8NSEe2eTaDh8rGj-A" x="16" y="2"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_MVnZtMNSEe2eTaDh8rGj-A" type="6003">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MVnZtcNSEe2eTaDh8rGj-A" x="-60" y="2"/>
+          </children>
+          <styles xmi:type="notation:ConnectorStyle" xmi:id="_MVnZrcNSEe2eTaDh8rGj-A"/>
+          <styles xmi:type="notation:FontStyle" xmi:id="_MVnZrsNSEe2eTaDh8rGj-A" fontName="Segoe UI" fontHeight="12"/>
+          <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_MVnZr8NSEe2eTaDh8rGj-A" points="[-4, 30, 12, -98]$[-16, 128, 0, 0]"/>
+          <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_MVnZtsNSEe2eTaDh8rGj-A" id="(0.08021390374331551,0.0)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_MVnZt8NSEe2eTaDh8rGj-A" id="(0.10344827586206896,1.0)"/>
+        </edges>
+        <edges xmi:type="notation:Edge" xmi:id="_MVnZuMNSEe2eTaDh8rGj-A" type="4001" element="_MVkWXMNSEe2eTaDh8rGj-A" source="_MVmLgsNSEe2eTaDh8rGj-A" target="_MVlkdcNSEe2eTaDh8rGj-A">
+          <children xmi:type="notation:Node" xmi:id="_MVnZvMNSEe2eTaDh8rGj-A" type="6001">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MVnZvcNSEe2eTaDh8rGj-A" x="9"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_MVnZvsNSEe2eTaDh8rGj-A" type="6002">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MVnZv8NSEe2eTaDh8rGj-A" x="14" y="-2"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_MVnZwMNSEe2eTaDh8rGj-A" type="6003">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_MVnZwcNSEe2eTaDh8rGj-A" x="-70" y="-1"/>
+          </children>
+          <styles xmi:type="notation:ConnectorStyle" xmi:id="_MVnZucNSEe2eTaDh8rGj-A"/>
+          <styles xmi:type="notation:FontStyle" xmi:id="_MVnZusNSEe2eTaDh8rGj-A" fontName="Segoe UI" fontHeight="12"/>
+          <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_MVnZu8NSEe2eTaDh8rGj-A" points="[4, 30, -18, -112]$[22, 142, 0, 0]"/>
+          <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_MVnZwsNSEe2eTaDh8rGj-A" id="(0.5,0.0)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_MVnZw8NSEe2eTaDh8rGj-A" id="(0.08021390374331551,1.0)"/>
+        </edges>
+      </data>
+    </ownedAnnotationEntries>
+    <ownedAnnotationEntries xmi:type="description:AnnotationEntry" uid="_MVkWYcNSEe2eTaDh8rGj-A" source="DANNOTATION_CUSTOMIZATION_KEY">
+      <data xmi:type="diagram:ComputedStyleDescriptionRegistry" uid="_MVkWYsNSEe2eTaDh8rGj-A"/>
+    </ownedAnnotationEntries>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_MVjvQMNSEe2eTaDh8rGj-A" name="T0:E_PERMIT" outgoingEdges="_MVkWV8NSEe2eTaDh8rGj-A" incomingEdges="_MVkWXMNSEe2eTaDh8rGj-A" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex6a.E_PERMIT.EI.opsem#//@transactions.0"/>
+      <semanticElements xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex6a.E_PERMIT.EI.opsem#//@transactions.0"/>
+      <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+      <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+      <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+      <ownedStyle xmi:type="diagram:Square" uid="_MVjvQcNSEe2eTaDh8rGj-A" labelSize="12" showIcon="false" labelColor="0,120,215" borderColor="234,234,234" labelPosition="node" color="234,234,234">
+        <description xmi:type="style:SquareDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_MVjvQ8NSEe2eTaDh8rGj-A" name="T1:E_CTU" incomingEdges="_MVkWV8NSEe2eTaDh8rGj-A" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex6a.E_PERMIT.EI.opsem#//@transactions.1"/>
+      <semanticElements xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex6a.E_PERMIT.EI.opsem#//@transactions.1"/>
+      <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+      <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+      <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+      <ownedStyle xmi:type="diagram:Square" uid="_MVjvRMNSEe2eTaDh8rGj-A" labelSize="12" showIcon="false" labelColor="0,120,215" borderColor="234,234,234" labelPosition="node" color="234,234,234">
+        <description xmi:type="style:SquareDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_MVjvRsNSEe2eTaDh8rGj-A" outgoingEdges="_MVkWXMNSEe2eTaDh8rGj-A" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex6a.E_PERMIT.EI.opsem#/"/>
+      <semanticElements xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex6a.E_PERMIT.EI.opsem#/"/>
+      <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+      <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+      <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+      <ownedStyle xmi:type="diagram:Dot" uid="_MVjvR8NSEe2eTaDh8rGj-A" labelSize="12" showIcon="false" labelPosition="node" backgroundColor="0,0,0">
+        <description xmi:type="style:DotDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='InitNode']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='InitNode']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DEdge" uid="_MVkWV8NSEe2eTaDh8rGj-A" name="E_CTU.CU" sourceNode="_MVjvQMNSEe2eTaDh8rGj-A" targetNode="_MVjvQ8NSEe2eTaDh8rGj-A">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex6a.E_PERMIT.EI.opsem#//@transactions.0"/>
+      <ownedStyle xmi:type="diagram:EdgeStyle" uid="_MVkWWMNSEe2eTaDh8rGj-A" size="2" strokeColor="0,0,0">
+        <description xmi:type="style:EdgeStyleDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']/@style"/>
+        <centerLabelStyle xmi:type="diagram:CenterLabelStyle" uid="_MVkWWcNSEe2eTaDh8rGj-A" labelSize="12" showIcon="false"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DEdge" uid="_MVkWXMNSEe2eTaDh8rGj-A" name="E_PERMIT.EI" sourceNode="_MVjvRsNSEe2eTaDh8rGj-A" targetNode="_MVjvQMNSEe2eTaDh8rGj-A">
+      <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex6a.E_PERMIT.EI.opsem#/"/>
+      <ownedStyle xmi:type="diagram:EdgeStyle" uid="_MVkWXcNSEe2eTaDh8rGj-A" size="2" strokeColor="0,0,0">
+        <description xmi:type="style:EdgeStyleDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='InitToInitialTransaction']/@style"/>
+        <centerLabelStyle xmi:type="diagram:CenterLabelStyle" uid="_MVkWXsNSEe2eTaDh8rGj-A" labelSize="12" showIcon="false"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='InitToInitialTransaction']"/>
+    </ownedDiagramElements>
+    <description xmi:type="description_1:DiagramDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']"/>
+    <filterVariableHistory xmi:type="diagram:FilterVariableHistory" uid="_MVgr8cNSEe2eTaDh8rGj-A"/>
+    <activatedLayers xmi:type="description_1:Layer" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer"/>
+    <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex6a.E_PERMIT.EI.opsem#/"/>
+  </diagram:DSemanticDiagram>
+  <table:DTable uid="_jZgeoMSoEe2oftKDUZ9kcw" headerColumnWidth="15">
+    <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex6a.E_PERMIT.EI.opsem#//@transactions.1"/>
+    <description xmi:type="description_2:CrossTableDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']"/>
+  </table:DTable>
+  <table:DTable uid="_veUUUMSoEe2oftKDUZ9kcw" headerColumnWidth="15">
+    <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+    <description xmi:type="description_2:CrossTableDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']"/>
+  </table:DTable>
+  <table:DTable uid="_HpuIYMSpEe2oftKDUZ9kcw" headerColumnWidth="97">
+    <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1"/>
+    <description xmi:type="description_2:EditionTableDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values%20Edition']"/>
+  </table:DTable>
+  <diagram:DSemanticDiagram uid="_P5Jn8MSpEe2oftKDUZ9kcw">
+    <ownedAnnotationEntries xmi:type="description:AnnotationEntry" uid="_P5PHgMSpEe2oftKDUZ9kcw" source="GMF_DIAGRAMS">
+      <data xmi:type="notation:Diagram" xmi:id="_P5PHgcSpEe2oftKDUZ9kcw" type="Sirius" element="_P5Jn8MSpEe2oftKDUZ9kcw" measurementUnit="Pixel">
+        <children xmi:type="notation:Node" xmi:id="_P5UAAMSpEe2oftKDUZ9kcw" type="2001" element="_P5PukMSpEe2oftKDUZ9kcw">
+          <children xmi:type="notation:Node" xmi:id="_P5V1MMSpEe2oftKDUZ9kcw" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_P5V1McSpEe2oftKDUZ9kcw" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_P5XDUsSpEe2oftKDUZ9kcw" type="3003" element="_P5QVoMSpEe2oftKDUZ9kcw">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_P5XDU8SpEe2oftKDUZ9kcw" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5XDVMSpEe2oftKDUZ9kcw"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_P5UAAcSpEe2oftKDUZ9kcw" fontColor="14120960" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5UAAsSpEe2oftKDUZ9kcw" x="216" y="255" width="30" height="30"/>
+        </children>
+        <children xmi:type="notation:Node" xmi:id="_P5WcQMSpEe2oftKDUZ9kcw" type="2001" element="_P5Q8scSpEe2oftKDUZ9kcw">
+          <children xmi:type="notation:Node" xmi:id="_P5WcQ8SpEe2oftKDUZ9kcw" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_P5WcRMSpEe2oftKDUZ9kcw" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_P5XDVcSpEe2oftKDUZ9kcw" type="3003" element="_P5Q8ssSpEe2oftKDUZ9kcw">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_P5XDVsSpEe2oftKDUZ9kcw" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5XDV8SpEe2oftKDUZ9kcw"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_P5WcQcSpEe2oftKDUZ9kcw" fontColor="14120960" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5WcQsSpEe2oftKDUZ9kcw" x="380" y="284" width="30" height="30"/>
+        </children>
+        <children xmi:type="notation:Node" xmi:id="_P5WcRcSpEe2oftKDUZ9kcw" type="2001" element="_P5Q8tMSpEe2oftKDUZ9kcw">
+          <children xmi:type="notation:Node" xmi:id="_P5WcSMSpEe2oftKDUZ9kcw" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_P5WcScSpEe2oftKDUZ9kcw" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_P5XqYMSpEe2oftKDUZ9kcw" type="3003" element="_P5Q8tcSpEe2oftKDUZ9kcw">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_P5XqYcSpEe2oftKDUZ9kcw" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5XqYsSpEe2oftKDUZ9kcw"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_P5WcRsSpEe2oftKDUZ9kcw" fontColor="14120960" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5WcR8SpEe2oftKDUZ9kcw" x="175" y="400" width="30" height="30"/>
+        </children>
+        <children xmi:type="notation:Node" xmi:id="_P5WcSsSpEe2oftKDUZ9kcw" type="2001" element="_P5Q8t8SpEe2oftKDUZ9kcw">
+          <children xmi:type="notation:Node" xmi:id="_P5XDUMSpEe2oftKDUZ9kcw" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_P5XDUcSpEe2oftKDUZ9kcw" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_P5XqY8SpEe2oftKDUZ9kcw" type="3002" element="_P5Q8uMSpEe2oftKDUZ9kcw">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_P5XqZMSpEe2oftKDUZ9kcw" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5XqZcSpEe2oftKDUZ9kcw"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_P5WcS8SpEe2oftKDUZ9kcw" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5WcTMSpEe2oftKDUZ9kcw" x="45" y="180" width="30" height="30"/>
+        </children>
+        <styles xmi:type="notation:DiagramStyle" xmi:id="_P5PHgsSpEe2oftKDUZ9kcw"/>
+        <edges xmi:type="notation:Edge" xmi:id="_P5Y4gMSpEe2oftKDUZ9kcw" type="4001" element="_P5RjwcSpEe2oftKDUZ9kcw" source="_P5UAAMSpEe2oftKDUZ9kcw" target="_P5WcQMSpEe2oftKDUZ9kcw">
+          <children xmi:type="notation:Node" xmi:id="_P5ZfkMSpEe2oftKDUZ9kcw" type="6001">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5ZfkcSpEe2oftKDUZ9kcw" x="-6"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_P5ZfksSpEe2oftKDUZ9kcw" type="6002">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5Zfk8SpEe2oftKDUZ9kcw" x="4"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_P5aGoMSpEe2oftKDUZ9kcw" type="6003">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5aGocSpEe2oftKDUZ9kcw" x="1"/>
+          </children>
+          <styles xmi:type="notation:ConnectorStyle" xmi:id="_P5Y4gcSpEe2oftKDUZ9kcw"/>
+          <styles xmi:type="notation:FontStyle" xmi:id="_P5Y4gsSpEe2oftKDUZ9kcw" fontName="Segoe UI" fontHeight="12"/>
+          <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_P5Y4g8SpEe2oftKDUZ9kcw" points="[15, 5, -149, -54]$[164, 59, 0, 0]"/>
+          <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_P5b70MSpEe2oftKDUZ9kcw" id="(0.5,0.0)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_P5b70cSpEe2oftKDUZ9kcw" id="(0.5,1.0)"/>
+        </edges>
+        <edges xmi:type="notation:Edge" xmi:id="_P5b70sSpEe2oftKDUZ9kcw" type="4001" element="_P5RjxsSpEe2oftKDUZ9kcw" source="_P5UAAMSpEe2oftKDUZ9kcw" target="_P5WcRcSpEe2oftKDUZ9kcw">
+          <children xmi:type="notation:Node" xmi:id="_P5ci4MSpEe2oftKDUZ9kcw" type="6001">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5ci4cSpEe2oftKDUZ9kcw" x="5" y="8"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_P5ci4sSpEe2oftKDUZ9kcw" type="6002">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5ci48SpEe2oftKDUZ9kcw" x="-6" y="-8"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_P5ci5MSpEe2oftKDUZ9kcw" type="6003">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5ci5cSpEe2oftKDUZ9kcw" x="-8" y="-7"/>
+          </children>
+          <styles xmi:type="notation:ConnectorStyle" xmi:id="_P5b708SpEe2oftKDUZ9kcw"/>
+          <styles xmi:type="notation:FontStyle" xmi:id="_P5b71MSpEe2oftKDUZ9kcw" fontName="Segoe UI" fontHeight="12"/>
+          <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_P5b71cSpEe2oftKDUZ9kcw" points="[-8, 30, 33, -145]$[-41, 175, 0, 0]"/>
+          <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_P5ci5sSpEe2oftKDUZ9kcw" id="(0.5,0.0)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_P5ci58SpEe2oftKDUZ9kcw" id="(0.5,1.0)"/>
+        </edges>
+        <edges xmi:type="notation:Edge" xmi:id="_P5ci6MSpEe2oftKDUZ9kcw" type="4001" element="_P5SK0sSpEe2oftKDUZ9kcw" source="_P5WcSsSpEe2oftKDUZ9kcw" target="_P5UAAMSpEe2oftKDUZ9kcw">
+          <children xmi:type="notation:Node" xmi:id="_P5ci7MSpEe2oftKDUZ9kcw" type="6001">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5ci7cSpEe2oftKDUZ9kcw" x="-9" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_P5ci7sSpEe2oftKDUZ9kcw" type="6002">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5ci78SpEe2oftKDUZ9kcw" x="9" y="-5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_P5ci8MSpEe2oftKDUZ9kcw" type="6003">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_P5ci8cSpEe2oftKDUZ9kcw" x="9" y="-5"/>
+          </children>
+          <styles xmi:type="notation:ConnectorStyle" xmi:id="_P5ci6cSpEe2oftKDUZ9kcw"/>
+          <styles xmi:type="notation:FontStyle" xmi:id="_P5ci6sSpEe2oftKDUZ9kcw" fontName="Segoe UI" fontHeight="12"/>
+          <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_P5ci68SpEe2oftKDUZ9kcw" points="[15, 9, -156, -96]$[171, 105, 0, 0]"/>
+          <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_P5ci8sSpEe2oftKDUZ9kcw" id="(0.5,0.0)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_P5ci88SpEe2oftKDUZ9kcw" id="(0.5,1.0)"/>
+        </edges>
+      </data>
+    </ownedAnnotationEntries>
+    <ownedAnnotationEntries xmi:type="description:AnnotationEntry" uid="_P5SK18SpEe2oftKDUZ9kcw" source="DANNOTATION_CUSTOMIZATION_KEY">
+      <data xmi:type="diagram:ComputedStyleDescriptionRegistry" uid="_P5SK2MSpEe2oftKDUZ9kcw"/>
+    </ownedAnnotationEntries>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_P5PukMSpEe2oftKDUZ9kcw" name="T0:E_SPLIT" outgoingEdges="_P5RjwcSpEe2oftKDUZ9kcw _P5RjxsSpEe2oftKDUZ9kcw" incomingEdges="_P5SK0sSpEe2oftKDUZ9kcw" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+      <semanticElements xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+      <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+      <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+      <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+      <ownedStyle xmi:type="diagram:Square" uid="_P5QVoMSpEe2oftKDUZ9kcw" labelSize="12" showIcon="false" labelColor="0,120,215" borderColor="234,234,234" labelPosition="node" color="234,234,234">
+        <description xmi:type="style:SquareDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_P5Q8scSpEe2oftKDUZ9kcw" name="T1:E_CTU" incomingEdges="_P5RjwcSpEe2oftKDUZ9kcw" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1"/>
+      <semanticElements xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1"/>
+      <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+      <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+      <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+      <ownedStyle xmi:type="diagram:Square" uid="_P5Q8ssSpEe2oftKDUZ9kcw" labelSize="12" showIcon="false" labelColor="0,120,215" borderColor="234,234,234" labelPosition="node" color="234,234,234">
+        <description xmi:type="style:SquareDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_P5Q8tMSpEe2oftKDUZ9kcw" name="T2:E_CTU" incomingEdges="_P5RjxsSpEe2oftKDUZ9kcw" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.2"/>
+      <semanticElements xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.2"/>
+      <arrangeConstraints>KEEP_LOCATION</arrangeConstraints>
+      <arrangeConstraints>KEEP_SIZE</arrangeConstraints>
+      <arrangeConstraints>KEEP_RATIO</arrangeConstraints>
+      <ownedStyle xmi:type="diagram:Square" uid="_P5Q8tcSpEe2oftKDUZ9kcw" labelSize="12" showIcon="false" labelColor="0,120,215" borderColor="234,234,234" labelPosition="node" color="234,234,234">
+        <description xmi:type="style:SquareDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_P5Q8t8SpEe2oftKDUZ9kcw" outgoingEdges="_P5SK0sSpEe2oftKDUZ9kcw" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#/"/>
+      <semanticElements xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#/"/>
+      <ownedStyle xmi:type="diagram:Dot" uid="_P5Q8uMSpEe2oftKDUZ9kcw" labelSize="12" showIcon="false" labelPosition="node" backgroundColor="0,0,0">
+        <description xmi:type="style:DotDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='InitNode']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='InitNode']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DEdge" uid="_P5RjwcSpEe2oftKDUZ9kcw" name="E_CTU.CU" sourceNode="_P5PukMSpEe2oftKDUZ9kcw" targetNode="_P5Q8scSpEe2oftKDUZ9kcw">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+      <ownedStyle xmi:type="diagram:EdgeStyle" uid="_P5RjwsSpEe2oftKDUZ9kcw" size="2" strokeColor="0,0,0">
+        <description xmi:type="style:EdgeStyleDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']/@style"/>
+        <centerLabelStyle xmi:type="diagram:CenterLabelStyle" uid="_P5Rjw8SpEe2oftKDUZ9kcw" labelSize="12" showIcon="false"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DEdge" uid="_P5RjxsSpEe2oftKDUZ9kcw" name="E_CTU.CU" sourceNode="_P5PukMSpEe2oftKDUZ9kcw" targetNode="_P5Q8tMSpEe2oftKDUZ9kcw">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+      <ownedStyle xmi:type="diagram:EdgeStyle" uid="_P5Rjx8SpEe2oftKDUZ9kcw" size="2" strokeColor="0,0,0">
+        <description xmi:type="style:EdgeStyleDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']/@style"/>
+        <centerLabelStyle xmi:type="diagram:CenterLabelStyle" uid="_P5RjyMSpEe2oftKDUZ9kcw" labelSize="12" showIcon="false"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DEdge" uid="_P5SK0sSpEe2oftKDUZ9kcw" name="E_SPLIT.EI" sourceNode="_P5Q8t8SpEe2oftKDUZ9kcw" targetNode="_P5PukMSpEe2oftKDUZ9kcw">
+      <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#/"/>
+      <ownedStyle xmi:type="diagram:EdgeStyle" uid="_P5SK08SpEe2oftKDUZ9kcw" size="2" strokeColor="0,0,0">
+        <description xmi:type="style:EdgeStyleDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='InitToInitialTransaction']/@style"/>
+        <centerLabelStyle xmi:type="diagram:CenterLabelStyle" uid="_P5SK1MSpEe2oftKDUZ9kcw" labelSize="12" showIcon="false"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='InitToInitialTransaction']"/>
+    </ownedDiagramElements>
+    <description xmi:type="description_1:DiagramDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']"/>
+    <filterVariableHistory xmi:type="diagram:FilterVariableHistory" uid="_P5LdIMSpEe2oftKDUZ9kcw"/>
+    <activatedLayers xmi:type="description_1:Layer" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer"/>
+    <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples.EventConnections.Ex3a.E_SPLIT.EI.opsem#/"/>
+  </diagram:DSemanticDiagram>
+  <diagram:DSemanticDiagram uid="_WFn5gMiUEe2l0JnMlaLHyw">
+    <ownedAnnotationEntries xmi:type="description:AnnotationEntry" uid="_WFvOQMiUEe2l0JnMlaLHyw" source="GMF_DIAGRAMS">
+      <data xmi:type="notation:Diagram" xmi:id="_WFvOQciUEe2l0JnMlaLHyw" type="Sirius" element="_WFn5gMiUEe2l0JnMlaLHyw" measurementUnit="Pixel">
+        <children xmi:type="notation:Node" xmi:id="_WF3KEMiUEe2l0JnMlaLHyw" type="2001" element="_WFv1UMiUEe2l0JnMlaLHyw">
+          <children xmi:type="notation:Node" xmi:id="_WF4_QMiUEe2l0JnMlaLHyw" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_WF4_QciUEe2l0JnMlaLHyw" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_WF6NYsiUEe2l0JnMlaLHyw" type="3003" element="_WFy4oMiUEe2l0JnMlaLHyw">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_WF6NY8iUEe2l0JnMlaLHyw" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WF6NZMiUEe2l0JnMlaLHyw"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_WF3KEciUEe2l0JnMlaLHyw" fontColor="14120960" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WF3KEsiUEe2l0JnMlaLHyw" x="45" y="90" width="151" height="30"/>
+        </children>
+        <children xmi:type="notation:Node" xmi:id="_WF5mUMiUEe2l0JnMlaLHyw" type="2001" element="_WFzfsMiUEe2l0JnMlaLHyw">
+          <children xmi:type="notation:Node" xmi:id="_WF5mU8iUEe2l0JnMlaLHyw" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_WF5mVMiUEe2l0JnMlaLHyw" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_WF6NZciUEe2l0JnMlaLHyw" type="3003" element="_WFzfsciUEe2l0JnMlaLHyw">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_WF6NZsiUEe2l0JnMlaLHyw" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WF6NZ8iUEe2l0JnMlaLHyw"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_WF5mUciUEe2l0JnMlaLHyw" fontColor="14120960" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WF5mUsiUEe2l0JnMlaLHyw" width="66" height="30"/>
+        </children>
+        <children xmi:type="notation:Node" xmi:id="_WF5mVciUEe2l0JnMlaLHyw" type="2001" element="_WFzfs8iUEe2l0JnMlaLHyw">
+          <children xmi:type="notation:Node" xmi:id="_WF5mWMiUEe2l0JnMlaLHyw" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_WF5mWciUEe2l0JnMlaLHyw" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_WF60cMiUEe2l0JnMlaLHyw" type="3003" element="_WFzftMiUEe2l0JnMlaLHyw">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_WF60cciUEe2l0JnMlaLHyw" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WF60csiUEe2l0JnMlaLHyw"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_WF5mVsiUEe2l0JnMlaLHyw" fontColor="14120960" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WF5mV8iUEe2l0JnMlaLHyw" x="90" width="106" height="30"/>
+        </children>
+        <children xmi:type="notation:Node" xmi:id="_WF5mWsiUEe2l0JnMlaLHyw" type="2001" element="_WF0GwciUEe2l0JnMlaLHyw">
+          <children xmi:type="notation:Node" xmi:id="_WF6NYMiUEe2l0JnMlaLHyw" type="5002">
+            <layoutConstraint xmi:type="notation:Location" xmi:id="_WF6NYciUEe2l0JnMlaLHyw" y="5"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_WF60c8iUEe2l0JnMlaLHyw" type="3002" element="_WF0GwsiUEe2l0JnMlaLHyw">
+            <styles xmi:type="notation:ShapeStyle" xmi:id="_WF60dMiUEe2l0JnMlaLHyw" fontName="Segoe UI"/>
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WF60dciUEe2l0JnMlaLHyw"/>
+          </children>
+          <styles xmi:type="notation:ShapeStyle" xmi:id="_WF5mW8iUEe2l0JnMlaLHyw" fontName="Segoe UI" fontHeight="12"/>
+          <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WF5mXMiUEe2l0JnMlaLHyw" x="45" y="180" width="30" height="30"/>
+        </children>
+        <styles xmi:type="notation:DiagramStyle" xmi:id="_WFvOQsiUEe2l0JnMlaLHyw"/>
+        <edges xmi:type="notation:Edge" xmi:id="_WF8CkMiUEe2l0JnMlaLHyw" type="4001" element="_WF0GxMiUEe2l0JnMlaLHyw" source="_WF3KEMiUEe2l0JnMlaLHyw" target="_WF5mUMiUEe2l0JnMlaLHyw">
+          <children xmi:type="notation:Node" xmi:id="_WF8poMiUEe2l0JnMlaLHyw" type="6001">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WF8pociUEe2l0JnMlaLHyw" y="-10"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_WF9QsMiUEe2l0JnMlaLHyw" type="6002">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WF9QsciUEe2l0JnMlaLHyw" y="10"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_WF9QssiUEe2l0JnMlaLHyw" type="6003">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WF9Qs8iUEe2l0JnMlaLHyw" y="10"/>
+          </children>
+          <styles xmi:type="notation:ConnectorStyle" xmi:id="_WF8CkciUEe2l0JnMlaLHyw"/>
+          <styles xmi:type="notation:FontStyle" xmi:id="_WF8CksiUEe2l0JnMlaLHyw" fontName="Segoe UI" fontHeight="12"/>
+          <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_WF8Ck8iUEe2l0JnMlaLHyw" points="[0, 0, 45, 60]$[-45, -60, 0, 0]"/>
+          <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_WGA7EMiUEe2l0JnMlaLHyw" id="(0.09933774834437085,0.0)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_WGA7EciUEe2l0JnMlaLHyw" id="(0.22727272727272727,1.0)"/>
+        </edges>
+        <edges xmi:type="notation:Edge" xmi:id="_WGA7EsiUEe2l0JnMlaLHyw" type="4001" element="_WF0t0siUEe2l0JnMlaLHyw" source="_WF3KEMiUEe2l0JnMlaLHyw" target="_WF5mVciUEe2l0JnMlaLHyw">
+          <children xmi:type="notation:Node" xmi:id="_WGA7FsiUEe2l0JnMlaLHyw" type="6001">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WGA7F8iUEe2l0JnMlaLHyw" y="-10"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_WGBiIMiUEe2l0JnMlaLHyw" type="6002">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WGBiIciUEe2l0JnMlaLHyw" y="10"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_WGBiIsiUEe2l0JnMlaLHyw" type="6003">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WGBiI8iUEe2l0JnMlaLHyw" y="10"/>
+          </children>
+          <styles xmi:type="notation:ConnectorStyle" xmi:id="_WGA7E8iUEe2l0JnMlaLHyw"/>
+          <styles xmi:type="notation:FontStyle" xmi:id="_WGA7FMiUEe2l0JnMlaLHyw" fontName="Segoe UI" fontHeight="12"/>
+          <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_WGA7FciUEe2l0JnMlaLHyw" points="[0, 0, -45, 60]$[45, -60, 0, 0]"/>
+          <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_WGBiJMiUEe2l0JnMlaLHyw" id="(0.09933774834437085,0.0)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_WGBiJciUEe2l0JnMlaLHyw" id="(0.14150943396226415,1.0)"/>
+        </edges>
+        <edges xmi:type="notation:Edge" xmi:id="_WGBiJsiUEe2l0JnMlaLHyw" type="4001" element="_WF1U4MiUEe2l0JnMlaLHyw" source="_WF5mWsiUEe2l0JnMlaLHyw" target="_WF3KEMiUEe2l0JnMlaLHyw">
+          <children xmi:type="notation:Node" xmi:id="_WGBiKsiUEe2l0JnMlaLHyw" type="6001">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WGBiK8iUEe2l0JnMlaLHyw" y="-10"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_WGBiLMiUEe2l0JnMlaLHyw" type="6002">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WGBiLciUEe2l0JnMlaLHyw" y="10"/>
+          </children>
+          <children xmi:type="notation:Node" xmi:id="_WGBiLsiUEe2l0JnMlaLHyw" type="6003">
+            <layoutConstraint xmi:type="notation:Bounds" xmi:id="_WGBiL8iUEe2l0JnMlaLHyw" y="10"/>
+          </children>
+          <styles xmi:type="notation:ConnectorStyle" xmi:id="_WGBiJ8iUEe2l0JnMlaLHyw"/>
+          <styles xmi:type="notation:FontStyle" xmi:id="_WGBiKMiUEe2l0JnMlaLHyw" fontName="Segoe UI" fontHeight="12"/>
+          <bendpoints xmi:type="notation:RelativeBendpoints" xmi:id="_WGBiKciUEe2l0JnMlaLHyw" points="[0, 0, 0, 60]$[0, -60, 0, 0]"/>
+          <sourceAnchor xmi:type="notation:IdentityAnchor" xmi:id="_WGBiMMiUEe2l0JnMlaLHyw" id="(0.5,0.0)"/>
+          <targetAnchor xmi:type="notation:IdentityAnchor" xmi:id="_WGBiMciUEe2l0JnMlaLHyw" id="(0.09933774834437085,1.0)"/>
+        </edges>
+      </data>
+    </ownedAnnotationEntries>
+    <ownedAnnotationEntries xmi:type="description:AnnotationEntry" uid="_WF1U5ciUEe2l0JnMlaLHyw" source="DANNOTATION_CUSTOMIZATION_KEY">
+      <data xmi:type="diagram:ComputedStyleDescriptionRegistry" uid="_WF1U5siUEe2l0JnMlaLHyw"/>
+    </ownedAnnotationEntries>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_WFv1UMiUEe2l0JnMlaLHyw" name="T0:E_SPLIT" outgoingEdges="_WF0GxMiUEe2l0JnMlaLHyw _WF0t0siUEe2l0JnMlaLHyw" incomingEdges="_WF1U4MiUEe2l0JnMlaLHyw" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+      <semanticElements xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+      <ownedStyle xmi:type="diagram:Square" uid="_WFy4oMiUEe2l0JnMlaLHyw" labelSize="12" showIcon="false" labelColor="0,120,215" borderColor="234,234,234" labelPosition="node" color="234,234,234">
+        <description xmi:type="style:SquareDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_WFzfsMiUEe2l0JnMlaLHyw" name="T1:E_CTU" incomingEdges="_WF0GxMiUEe2l0JnMlaLHyw" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1"/>
+      <semanticElements xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1"/>
+      <ownedStyle xmi:type="diagram:Square" uid="_WFzfsciUEe2l0JnMlaLHyw" labelSize="12" showIcon="false" labelColor="0,120,215" borderColor="234,234,234" labelPosition="node" color="234,234,234">
+        <description xmi:type="style:SquareDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_WFzfs8iUEe2l0JnMlaLHyw" name="T2:E_CTU" incomingEdges="_WF0t0siUEe2l0JnMlaLHyw" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.2"/>
+      <semanticElements xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.2"/>
+      <ownedStyle xmi:type="diagram:Square" uid="_WFzftMiUEe2l0JnMlaLHyw" labelSize="12" showIcon="false" labelColor="0,120,215" borderColor="234,234,234" labelPosition="node" color="234,234,234">
+        <description xmi:type="style:SquareDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='Transaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DNode" uid="_WF0GwciUEe2l0JnMlaLHyw" outgoingEdges="_WF1U4MiUEe2l0JnMlaLHyw" width="3" height="3" resizeKind="NSEW">
+      <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#/"/>
+      <semanticElements xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#/"/>
+      <ownedStyle xmi:type="diagram:Dot" uid="_WF0GwsiUEe2l0JnMlaLHyw" labelSize="12" showIcon="false" labelPosition="node" backgroundColor="0,0,0">
+        <description xmi:type="style:DotDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='InitNode']/@style"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:NodeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@nodeMappings[name='InitNode']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DEdge" uid="_WF0GxMiUEe2l0JnMlaLHyw" name="E_CTU.CU" sourceNode="_WFv1UMiUEe2l0JnMlaLHyw" targetNode="_WFzfsMiUEe2l0JnMlaLHyw">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+      <ownedStyle xmi:type="diagram:EdgeStyle" uid="_WF0GxciUEe2l0JnMlaLHyw" size="2" strokeColor="0,0,0">
+        <description xmi:type="style:EdgeStyleDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']/@style"/>
+        <centerLabelStyle xmi:type="diagram:CenterLabelStyle" uid="_WF0GxsiUEe2l0JnMlaLHyw" labelSize="12" showIcon="false"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DEdge" uid="_WF0t0siUEe2l0JnMlaLHyw" name="E_CTU.CU" sourceNode="_WFv1UMiUEe2l0JnMlaLHyw" targetNode="_WFzfs8iUEe2l0JnMlaLHyw">
+      <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+      <ownedStyle xmi:type="diagram:EdgeStyle" uid="_WF0t08iUEe2l0JnMlaLHyw" size="2" strokeColor="0,0,0">
+        <description xmi:type="style:EdgeStyleDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']/@style"/>
+        <centerLabelStyle xmi:type="diagram:CenterLabelStyle" uid="_WF0t1MiUEe2l0JnMlaLHyw" labelSize="12" showIcon="false"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='TransactionToTransaction']"/>
+    </ownedDiagramElements>
+    <ownedDiagramElements xmi:type="diagram:DEdge" uid="_WF1U4MiUEe2l0JnMlaLHyw" name="E_SPLIT.EI" sourceNode="_WF0GwciUEe2l0JnMlaLHyw" targetNode="_WFv1UMiUEe2l0JnMlaLHyw">
+      <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#/"/>
+      <ownedStyle xmi:type="diagram:EdgeStyle" uid="_WF1U4ciUEe2l0JnMlaLHyw" size="2" strokeColor="0,0,0">
+        <description xmi:type="style:EdgeStyleDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='InitToInitialTransaction']/@style"/>
+        <centerLabelStyle xmi:type="diagram:CenterLabelStyle" uid="_WF1U4siUEe2l0JnMlaLHyw" labelSize="12" showIcon="false"/>
+      </ownedStyle>
+      <actualMapping xmi:type="description_1:EdgeMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer/@edgeMappings[name='InitToInitialTransaction']"/>
+    </ownedDiagramElements>
+    <description xmi:type="description_1:DiagramDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']"/>
+    <filterVariableHistory xmi:type="diagram:FilterVariableHistory" uid="_WFogkMiUEe2l0JnMlaLHyw"/>
+    <activatedLayers xmi:type="description_1:Layer" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='OpSem']/@defaultLayer"/>
+    <target xmi:type="opsem:EventManager" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#/"/>
+  </diagram:DSemanticDiagram>
+  <table:DTable uid="_dGwZ8MiUEe2l0JnMlaLHyw" headerColumnWidth="18">
+    <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+    <columns xmi:type="table:DFeatureColumn" uid="_71WOMMiUEe2l0JnMlaLHyw" label="Variable Name" featureName="parentEO">
+      <originMapping xmi:type="description_2:FeatureColumnMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values%20Edition']/@ownedColumnMappings[name='']"/>
+    </columns>
+    <description xmi:type="description_2:EditionTableDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values%20Edition']"/>
+  </table:DTable>
+  <table:DTable uid="_63lI8MiVEe2l0JnMlaLHyw" headerColumnWidth="72">
+    <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.0"/>
+    <columns xmi:type="table:DFeatureColumn" uid="_63lI8ciVEe2l0JnMlaLHyw" label="Name" width="153" featureName="name">
+      <originMapping xmi:type="description_2:FeatureColumnMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']/@ownedColumnMappings[name='Variable%20Name']"/>
+    </columns>
+    <columns xmi:type="table:DFeatureColumn" uid="_l6pKEciXEe2l0JnMlaLHyw" label="Value" width="43" featureName="value">
+      <originMapping xmi:type="description_2:FeatureColumnMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']/@ownedColumnMappings[name='ValueColumn']"/>
+    </columns>
+    <description xmi:type="description_2:EditionTableDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']"/>
+  </table:DTable>
+  <table:DTable uid="_-VNtcMiVEe2l0JnMlaLHyw" headerColumnWidth="210">
+    <target xmi:type="opsem:FBTransaction" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1"/>
+    <lines xmi:type="table:DLine" uid="_PTB5cMiWEe2l0JnMlaLHyw" label="Var Declaration Q">
+      <originMapping xmi:type="description_2:LineMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']/@ownedLineMappings[name='VarDeclarationLine']"/>
+      <cells xmi:type="table:DCell" uid="_PTDHkMiWEe2l0JnMlaLHyw" label="Q" column="_-VOUgMiVEe2l0JnMlaLHyw">
+        <target xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
+        <semanticElements xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
+      </cells>
+      <cells xmi:type="table:DCell" uid="_i-qWlciWEe2l0JnMlaLHyw" label="" column="_i-qWk8iWEe2l0JnMlaLHyw">
+        <target xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
+        <semanticElements xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
+      </cells>
+      <target xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
+      <semanticElements xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.0"/>
+    </lines>
+    <lines xmi:type="table:DLine" uid="_PTB5csiWEe2l0JnMlaLHyw" label="Var Declaration CV">
+      <originMapping xmi:type="description_2:LineMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']/@ownedLineMappings[name='VarDeclarationLine']"/>
+      <cells xmi:type="table:DCell" uid="_PTDuoMiWEe2l0JnMlaLHyw" label="CV" column="_-VOUgMiVEe2l0JnMlaLHyw">
+        <target xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
+        <semanticElements xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
+      </cells>
+      <cells xmi:type="table:DCell" uid="_i-qWmMiWEe2l0JnMlaLHyw" label="" column="_i-qWk8iWEe2l0JnMlaLHyw">
+        <target xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
+        <semanticElements xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
+      </cells>
+      <target xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
+      <semanticElements xmi:type="org.eclipse.fordiac.ide.model.libraryElement:VarDeclaration" href="network_traces/ReferenceExamples._01_EventConnections.Ex3a.E_SPLIT.EI.opsem#//@transactions.1/@outputEventOccurrences.0/@fbRuntime/@basicfbtype/@interfaceList/@outputVars.1"/>
+    </lines>
+    <columns xmi:type="table:DFeatureColumn" uid="_-VOUgMiVEe2l0JnMlaLHyw" label="Name" cells="_PTDHkMiWEe2l0JnMlaLHyw _PTDuoMiWEe2l0JnMlaLHyw" width="120" featureName="name">
+      <originMapping xmi:type="description_2:FeatureColumnMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']/@ownedColumnMappings[name='Variable%20Name']"/>
+    </columns>
+    <columns xmi:type="table:DFeatureColumn" uid="_i-qWk8iWEe2l0JnMlaLHyw" label="Value" cells="_i-qWlciWEe2l0JnMlaLHyw _i-qWmMiWEe2l0JnMlaLHyw" width="62" featureName="value">
+      <originMapping xmi:type="description_2:FeatureColumnMapping" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']/@ownedColumnMappings[name='ValueColumn']"/>
+    </columns>
+    <description xmi:type="description_2:EditionTableDescription" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']/@ownedRepresentations[name='Output%20Data%20Values']"/>
+  </table:DTable>
+</xmi:XMI>

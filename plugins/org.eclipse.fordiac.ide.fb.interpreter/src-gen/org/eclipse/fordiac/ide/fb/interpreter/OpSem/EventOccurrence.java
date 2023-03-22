@@ -32,6 +32,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getCreatedTransactions <em>Created
  * Transactions</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getParentFB <em>Parent FB</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getResultFBRuntime <em>Result FB
+ * Runtime</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getEventOccurrence()
@@ -136,5 +138,23 @@ public interface EventOccurrence extends EObject {
 	 * @see #getParentFB()
 	 * @generated */
 	void setParentFB(FBNetworkElement value);
+
+	/** Returns the value of the '<em><b>Result FB Runtime</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @return the value of the '<em>Result FB Runtime</em>' containment reference.
+	 * @see #setResultFBRuntime(FBRuntimeAbstract)
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getEventOccurrence_ResultFBRuntime()
+	 * @model containment="true" resolveProxies="true"
+	 * @generated */
+	FBRuntimeAbstract getResultFBRuntime();
+
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence#getResultFBRuntime
+	 * <em>Result FB Runtime</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @param value the new value of the '<em>Result FB Runtime</em>' containment reference.
+	 * @see #getResultFBRuntime()
+	 * @generated */
+	void setResultFBRuntime(FBRuntimeAbstract value);
 
 } // EventOccurrence

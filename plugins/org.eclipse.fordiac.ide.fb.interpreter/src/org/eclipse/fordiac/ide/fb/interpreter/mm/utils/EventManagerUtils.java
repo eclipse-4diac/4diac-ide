@@ -14,6 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
 
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -21,6 +22,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
@@ -51,12 +53,7 @@ public final class EventManagerUtils {
 	}
 
 	public static FBRuntimeAbstract getLatestFbRuntime(final FBTransaction transaction) {
-		// choose the latest: input event occurr. or last output event occurr.
-		if (transaction.getOutputEventOccurrences().isEmpty()) {
-			return transaction.getInputEventOccurrence().getFbRuntime();
-		}
-		return transaction.getOutputEventOccurrences().get(transaction.getOutputEventOccurrences().size() - 1)
-				.getFbRuntime();
+		return transaction.getInputEventOccurrence().getResultFBRuntime();
 	}
 
 	public static FBType getLastTypeFromSequence(final FBType startFb, final EventManager eventManager) {
@@ -85,8 +82,15 @@ public final class EventManagerUtils {
 				setInputVariable(inputVar, (FBType) element);
 			}
 		}
-		// run transaction
-		final var result = transaction.getInputEventOccurrence().getFbRuntime().run();
+		final var result = new BasicEList<EventOccurrence>();
+		if (transaction.getInputEventOccurrence().getResultFBRuntime() == null) {
+			final FBRuntimeAbstract runtime = EcoreUtil.copy(transaction.getInputEventOccurrence().getFbRuntime());
+			transaction.getInputEventOccurrence().setResultFBRuntime(runtime);
+			// run transaction
+			result.addAll(runtime.run());
+		} else {
+			result.addAll(transaction.getInputEventOccurrence().getResultFBRuntime().run());
+		}
 		transaction.getOutputEventOccurrences().addAll(result);
 	}
 
@@ -108,7 +112,7 @@ public final class EventManagerUtils {
 			if (transaction instanceof FBTransaction) {
 				processFbTransaction((FBTransaction) transaction);
 				((FBTransaction) transaction).getOutputEventOccurrences()
-						.forEach(outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
+				.forEach(outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
 				if (moreTransactionsLeft(transactions, i)) {
 					final FBRuntimeAbstract newfbRuntime = getLatestFbNetworkRuntime((FBTransaction) transaction);
 					// use fb network runtime in the next transaction
@@ -119,7 +123,7 @@ public final class EventManagerUtils {
 	}
 
 	private static FBRuntimeAbstract getLatestFbNetworkRuntime(final FBTransaction transaction) {
-		return transaction.getResultFBRuntime();
+		return transaction.getInputEventOccurrence().getResultFBRuntime();
 	}
 
 	public static Resource addResourceToManager(final EventManager eventManager, final URI uri) {
