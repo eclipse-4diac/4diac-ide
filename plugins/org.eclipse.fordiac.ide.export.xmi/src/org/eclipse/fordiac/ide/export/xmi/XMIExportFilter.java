@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Optional;
+import java.util.Spliterators;
+import java.util.stream.StreamSupport;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.URI;
@@ -27,9 +30,16 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.fordiac.ide.export.ExportException;
 import org.eclipse.fordiac.ide.export.ExportFilter;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceSetInitializer;
+import org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreCommentAssociater;
+import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportFactory;
+import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValue;
+import org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportInitialValues;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.xtext.resource.XtextResource;
@@ -71,12 +81,13 @@ public class XMIExportFilter extends ExportFilter {
 				}
 			}
 		}
+		resource.getContents().add(createInitialValues(resource));
 
 		final ResourceSetImpl xmiResourceSet = new ResourceSetImpl();
 		Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap().putIfAbsent(XMI_EXTENSION,
 				new XMIResourceFactoryImpl());
-		final Resource xmiRessource = xmiResourceSet.createResource(xmiUri);
-		xmiRessource.getContents().addAll(EcoreUtil.copyAll(resource.getContents()));
+		final Resource xmiResource = xmiResourceSet.createResource(xmiUri);
+		xmiResource.getContents().addAll(EcoreUtil.copyAll(resource.getContents()));
 
 		if (!forceOverwrite && xmiResourceSet.getURIConverter().exists(xmiUri, Collections.emptyMap())
 				&& !MessageDialog.openConfirm(Display.getDefault().getActiveShell(),
@@ -89,9 +100,40 @@ public class XMIExportFilter extends ExportFilter {
 			final HashMap<String, Object> options = new HashMap<>();
 			options.put(XMLResource.OPTION_PROCESS_DANGLING_HREF, XMLResource.OPTION_PROCESS_DANGLING_HREF_DISCARD);
 			options.put(XMLResource.OPTION_SKIP_ESCAPE_URI, Boolean.FALSE);
-			xmiRessource.save(options);
+			xmiResource.save(options);
 		} catch (final IOException e) {
 			getErrors().add(e.getMessage());
 		}
+	}
+
+	protected XMIExportInitialValues createInitialValues(final Resource resource) {
+		final var result = XMIExportFactory.eINSTANCE.createXMIExportInitialValues();
+		StreamSupport
+		.stream(Spliterators.spliteratorUnknownSize(EcoreUtil.getAllProperContents(resource, true), 0), false)
+		.filter(VarDeclaration.class::isInstance).map(VarDeclaration.class::cast)
+		.filter(XMIExportFilter::hasInitialValue).map(this::createInitialValue).flatMap(Optional::stream)
+		.forEachOrdered(result.getInitialValues()::add);
+		return result;
+	}
+
+	protected Optional<XMIExportInitialValue> createInitialValue(final VarDeclaration varDeclaration) {
+		final var source = parseInitialValue(varDeclaration);
+		if (source == null || source.getInitializerExpression() == null) {
+			return Optional.empty();
+		}
+		final var result = XMIExportFactory.eINSTANCE.createXMIExportInitialValue();
+		result.setVariable(varDeclaration);
+		result.setExpression(source.getInitializerExpression());
+		return Optional.of(result);
+	}
+
+	protected STInitializerExpressionSource parseInitialValue(final VarDeclaration varDeclaration) {
+		return StructuredTextParseUtil.parse(varDeclaration.getValue().getValue(), varDeclaration.eResource().getURI(),
+				STCoreUtil.getFeatureType(varDeclaration), null, null, getErrors(), getWarnings(), getInfos());
+	}
+
+	protected static boolean hasInitialValue(final VarDeclaration varDeclaration) {
+		return varDeclaration.getValue() != null && varDeclaration.getValue().getValue() != null
+				&& !varDeclaration.getValue().getValue().isBlank();
 	}
 }
