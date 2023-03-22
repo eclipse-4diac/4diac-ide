@@ -67,6 +67,26 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	}
 
 	@Test
+	def void testSimpleFBInternalVar() {
+		42.toIntValue.assertEquals(#[
+			'''DO1 := (DI1 + DI2) * INTERNALVAR1;'''.newSTAlgorithm("REQ")
+		].evaluateSimpleFB("REQ", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
+			"DO1".newVarDeclaration(ElementaryTypes.INT, false),
+			#["INTERNALVAR1".newVarDeclaration(ElementaryTypes.INT, false, "2")], emptyList, emptyList).variables.get(
+			"DO1").value)
+	}
+
+	@Test
+	def void testSimpleFBInternalConst() {
+		42.toIntValue.assertEquals(#[
+			'''DO1 := (DI1 + DI2) * INTERNALCONST1;'''.newSTAlgorithm("REQ")
+		].evaluateSimpleFB("REQ", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
+			"DO1".newVarDeclaration(ElementaryTypes.INT, false), emptyList,
+			#["INTERNALCONST1".newVarDeclaration(ElementaryTypes.INT, false, "2")], emptyList).variables.get("DO1").
+			value)
+	}
+
+	@Test
 	def void testMethodCall() {
 		21.toIntValue.assertEquals(#[
 			'''THIS.TEST_METHOD(A := DI1, B := DI2, C => DO1);'''.newSTAlgorithm("REQ"),
@@ -619,7 +639,8 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 				FB1.REQ(DI1 := FB1.DO1, DO1 => DO1);
 			'''.newSTAlgorithm("REQ")
 		].evaluateSimpleFB("REQ", #[17.toIntValue.newVariable("DI1"), 4.toIntValue.newVariable("DI2")],
-			"DO1".newVarDeclaration(ElementaryTypes.INT, false), #[internalFB]).variables.get("DO1").value)
+			"DO1".newVarDeclaration(ElementaryTypes.INT, false), emptyList, emptyList, #[internalFB]).variables.get(
+			"DO1").value)
 	}
 
 	def FBType newTestSimpleFBType() {
@@ -642,11 +663,12 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 
 	def static evaluateSimpleFB(Iterable<? extends ICallable> callables, String inputEventName,
 		Iterable<Variable<?>> variables, VarDeclaration output) {
-		evaluateSimpleFB(callables, inputEventName, variables, output, emptyList)
+		evaluateSimpleFB(callables, inputEventName, variables, output, emptyList, emptyList, emptyList)
 	}
 
 	def static evaluateSimpleFB(Iterable<? extends ICallable> callables, String inputEventName,
-		Iterable<Variable<?>> variables, VarDeclaration output, Iterable<FB> internalFBs) {
+		Iterable<Variable<?>> variables, VarDeclaration output, Iterable<VarDeclaration> internalVars,
+		Iterable<VarDeclaration> internalConstVars, Iterable<FB> internalFBs) {
 		val inputEvent = inputEventName.newEvent(true)
 		val outputEvent = "CNF".newEvent(false)
 		val fbType = LibraryElementFactory.eINSTANCE.createSimpleFBType
@@ -655,6 +677,8 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 			newVarDeclaration(name, type as DataType, true)
 		] + #[output])
 		fbType.callables.addAll(callables)
+		fbType.internalVars.addAll(internalVars)
+		fbType.internalConstVars.addAll(internalConstVars)
 		fbType.internalFbs.addAll(internalFBs)
 		val queue = new TracingFBEvaluatorEventQueue(#[inputEvent])
 		val eval = new SimpleFBEvaluator(fbType, null, variables, null)

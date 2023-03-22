@@ -76,6 +76,17 @@ class FBEvaluatorTest {
 		return decl
 	}
 
+	def static newVarDeclaration(String name, DataType type, boolean input, String defaultValue) {
+		val decl = LibraryElementFactory.eINSTANCE.createVarDeclaration
+		decl.name = name;
+		decl.type = type;
+		decl.isInput = input
+		decl.value = LibraryElementFactory.eINSTANCE.createValue => [
+			value = defaultValue
+		]
+		return decl
+	}
+
 	def static newSTAlgorithm(CharSequence text, String name) {
 		val alg = LibraryElementFactory.eINSTANCE.createSTAlgorithm
 		alg.name = name
