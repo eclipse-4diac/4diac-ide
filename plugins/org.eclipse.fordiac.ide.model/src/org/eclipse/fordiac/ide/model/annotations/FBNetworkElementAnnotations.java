@@ -50,7 +50,10 @@ public final class FBNetworkElementAnnotations {
 		}
 		if (fbne.isMapped()) {
 			// get the Resource of the mapped FB
-			return fbne.getMapping().getTo().getResource();
+			final FBNetworkElement to = fbne.getMapping().getTo();
+			if (to != null) {
+				return to.getResource();
+			}
 		}
 		return null;
 	}
