@@ -41,6 +41,7 @@ import org.eclipse.fordiac.ide.fb.interpreter.api.LambdaVisitor;
 import org.eclipse.fordiac.ide.fb.interpreter.api.RuntimeFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils;
+import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.eval.Evaluator;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorException;
 import org.eclipse.fordiac.ide.model.eval.EvaluatorFactory;
@@ -60,6 +61,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -292,7 +294,8 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// run FB Type to get the output events for the instance in the network
 		FBRuntimeAbstract runtime = fBNetworkRuntime.getTypeRuntimes().get(eventOccurrence.getParentFB());
 		if (runtime == null) {
-			runtime = RuntimeFactory.createFrom(EcoreUtil.copy(eventOccurrence.getParentFB().getType()));
+			final BaseFBType copiedType = (BaseFBType) EcoreUtil.copy(eventOccurrence.getParentFB().getType());
+			runtime = RuntimeFactory.createFrom(copiedType);
 			fBNetworkRuntime.getTypeRuntimes().put(eventOccurrence.getParentFB(), runtime);
 		}
 		// sample Data Input
@@ -354,16 +357,20 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 				// Only one data input allowed
 				final Connection conn = varDec.getInputConnections().get(0);
 				value = fBNetworkRuntime.getTransferData().get(conn);
-				if ((value == null) || value.getValue().isBlank()) {
+				if (VariableUtils.isEmptyValue(value)) {
 					value = varDec.getValue();
 				}
 			}
-			final VarDeclaration typeVarDec = (VarDeclaration) ((FBType) runtime.getModel()).getInterfaceList()
-					.getInterfaceElement(varDec.getName());
+			final VarDeclaration typeVarDec = getEquivalentPinFromType(runtime, varDec);
 			if (!VariableUtils.isEmptyValue(value)) {
 				typeVarDec.setValue(EcoreUtil.copy(value));
 			}
 		});
+	}
+
+	protected static VarDeclaration getEquivalentPinFromType(final FBRuntimeAbstract runtime,
+			final VarDeclaration varDec) {
+		return (VarDeclaration) ((FBType) runtime.getModel()).getInterfaceList().getInterfaceElement(varDec.getName());
 	}
 
 	private static List<FBTransaction> processEventConns(final FBNetworkRuntime fBNetworkRuntime,
@@ -400,10 +407,37 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 	}
 
 	private static void writeDataOutputsToConnections(final EventOccurrence eo, final FBNetworkRuntime runtime) {
-		final EList<VarDeclaration> networkVarsSample = getAssociatedDataPins(eo);
 		final EMap<Connection, Value> map = runtime.getTransferData();
-		networkVarsSample.forEach(variable -> variable.getOutputConnections().stream()
-				.forEach(outputConnection -> map.put(outputConnection, EcoreUtil.copy(variable.getValue()))));
+		// if connection does not have a value yet, initialize it with the default value
+		final FBType type = eo.getParentFB().getType();
+		type.getInterfaceList().getOutputVars()
+				.forEach(pin -> getEquivalentNetworkPin(eo, pin).getOutputConnections().stream().forEach(conn -> {
+					if (map.get(conn) == null) {
+						final String val = InitialValueHelper.getInitalOrDefaultValue(pin);
+						final Value value = LibraryElementFactory.eINSTANCE.createValue();
+						value.setValue(val);
+						map.put(conn, value);
+					}
+				}));
+
+		final EList<VarDeclaration> networkVarsSample = getAssociatedDataPins(eo);
+
+		networkVarsSample.forEach(variable -> variable.getOutputConnections().stream().forEach(
+				outputConnection -> map.put(outputConnection, EcoreUtil.copy(getOutputValue(variable, runtime)))));
+
+	}
+
+	protected static Value getOutputValue(final VarDeclaration variable, final FBNetworkRuntime runtime) {
+		if (!VariableUtils.isEmptyValue(variable.getValue())) {
+			return variable.getValue();
+		}
+		final var typePin = getEquivalentPinFromType(runtime, variable);
+		if (!VariableUtils.isEmptyValue(typePin.getValue())) {
+			return typePin.getValue();
+		}
+		final Value value = LibraryElementFactory.eINSTANCE.createValue();
+		value.setValue(InitialValueHelper.getDefaultValue(variable));
+		return value;
 	}
 
 	private static EList<VarDeclaration> getAssociatedDataPins(final EventOccurrence sourceEventOcurrence) {
@@ -415,11 +449,14 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 		// Find the pins on the network
 		final EList<VarDeclaration> networkVarsSample = new BasicEList<>();
 		varsToSample.forEach(iel -> {
-			final IInterfaceElement interfaceElement = sourceEventOcurrence.getParentFB().getInterface()
-					.getInterfaceElement(iel.getName());
+			final IInterfaceElement interfaceElement = getEquivalentNetworkPin(sourceEventOcurrence, iel);
 			networkVarsSample.add((VarDeclaration) interfaceElement);
 		});
 		return networkVarsSample;
+	}
+
+	protected static IInterfaceElement getEquivalentNetworkPin(final EventOccurrence eo, final IInterfaceElement iel) {
+		return eo.getParentFB().getInterface().getInterfaceElement(iel.getName());
 	}
 
 	private static IInterfaceElement findTypeOfPinInNetwork(final EventOccurrence sourceEventOcurrence) {
