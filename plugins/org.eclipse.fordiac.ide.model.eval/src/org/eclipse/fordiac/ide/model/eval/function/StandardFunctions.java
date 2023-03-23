@@ -1028,6 +1028,11 @@ public interface StandardFunctions extends Functions {
 	}
 
 	/* DINT_TO */
+	@Comment("Converts DINT value to LREAL value.")
+	static LRealValue DINT_TO_LREAL(final DIntValue value) {
+		return LRealValue.toLRealValue(value);
+	}
+
 	@Comment("Converts DINT value to REAL value.")
 	static RealValue DINT_TO_REAL(final DIntValue value) {
 		return RealValue.toRealValue(value);
