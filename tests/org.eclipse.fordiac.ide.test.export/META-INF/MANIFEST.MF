@@ -13,7 +13,6 @@ Import-Package: org.eclipse.fordiac.ide.export.forte_lua,
  org.junit.jupiter.params.provider,
  org.opentest4j
 Require-Bundle: org.eclipse.fordiac.ide.export.forte_ng.st,
- org.eclipse.fordiac.ide.model.structuredtext,
  org.eclipse.fordiac.ide.model.xtext.fbt,
  org.eclipse.fordiac.ide.structuredtextalgorithm,
  org.eclipse.fordiac.ide.export.forte_lua.st

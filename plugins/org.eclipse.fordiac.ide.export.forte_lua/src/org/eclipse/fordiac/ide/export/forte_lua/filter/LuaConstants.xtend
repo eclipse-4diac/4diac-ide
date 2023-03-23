@@ -30,8 +30,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBType
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.model.libraryElement.With
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterRoot
-import org.eclipse.fordiac.ide.model.structuredtext.structuredText.AdapterVariable
 
 import static extension org.eclipse.emf.ecore.util.EcoreUtil.getRootContainer
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaUtils.*
@@ -185,43 +183,10 @@ class LuaConstants {
 		«ENDIF»
 	'''
 
-	def static luaFBAdapterVariablesPrefix(Iterable<AdapterVariable> variables) '''
-		«FOR av : variables»
-			«var index = variables.toList.indexOf(av)»
-			«var sublist = variables.toList.subList(0, index)»
-			«IF !(sublist.map[it.^var].contains(av.^var) && sublist.map[it.adapter].contains(av.adapter))»
-				«IF av.adapter.isIsInput»
-					local «av.^var.name.luaAdapterVariable(av.adapter.name)» = fb[«if(av.^var.isInput) av.^var.luaFBAdapterOutputVarName(av.adapter.name) else av.^var.luaFBAdapterInputVarName(av.adapter.name)»]
-				«ELSE»
-					local «av.^var.name.luaAdapterVariable(av.adapter.name)» = fb[«if(av.^var.isInput) av.^var.luaFBAdapterInputVarName(av.adapter.name) else av.^var.luaFBAdapterOutputVarName(av.adapter.name)»]
-				«ENDIF»
-			«ENDIF»
-		«ENDFOR»
-	'''
-
-	protected def static VarDeclaration getAdapter(AdapterVariable adapterVar) {
-		(adapterVar.curr as AdapterRoot).adapter
-	}
-
 	def static luaFBVariablesSuffix(Iterable<VarDeclaration> variables) '''
 		«FOR variable : variables.filter[!it.isIsInput]»
 			«variable.luaFBVariable» = «variable.luaVariable»
 		«ENDFOR»
-	'''
-
-	def static luaFBAdapterVariablesSuffix(Iterable<AdapterVariable> variables) '''	
-		«FOR av : variables»
-			«var index = variables.toList.indexOf(av)»
-			«var sublist = variables.toList.subList(0, index)»
-			«IF !(sublist.map[it.^var].contains(av.^var) && sublist.map[it.adapter].contains(av.adapter))»
-				«IF av.adapter.isIsInput»
-					fb[«if(av.^var.isInput) av.^var.luaFBAdapterOutputVarName(av.adapter.name) else av.^var.luaFBAdapterInputVarName(av.adapter.name)»] = «av.^var.name.luaAdapterVariable(av.adapter.name)»
-				«ELSE»
-					fb[«if(av.^var.isInput) av.^var.luaFBAdapterInputVarName(av.adapter.name) else av.^var.luaFBAdapterOutputVarName(av.adapter.name)»] = «av.^var.name.luaAdapterVariable(av.adapter.name)»
-				«ENDIF»
-			«ENDIF»
-			«ENDFOR»
-			
 	'''
 
 	def static luaSendOutputEvent(Event event) '''fb(«event.luaOutputEventName»)'''
