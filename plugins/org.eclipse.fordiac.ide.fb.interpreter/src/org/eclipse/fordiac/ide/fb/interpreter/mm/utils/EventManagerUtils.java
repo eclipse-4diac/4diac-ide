@@ -112,11 +112,11 @@ public final class EventManagerUtils {
 			if (transaction instanceof FBTransaction) {
 				processFbTransaction((FBTransaction) transaction);
 				((FBTransaction) transaction).getOutputEventOccurrences()
-				.forEach(outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
+						.forEach(outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
 				if (moreTransactionsLeft(transactions, i)) {
 					final FBRuntimeAbstract newfbRuntime = getLatestFbNetworkRuntime((FBTransaction) transaction);
 					// use fb network runtime in the next transaction
-					transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(newfbRuntime);
+					transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(EcoreUtil.copy(newfbRuntime));
 				}
 			}
 		}
