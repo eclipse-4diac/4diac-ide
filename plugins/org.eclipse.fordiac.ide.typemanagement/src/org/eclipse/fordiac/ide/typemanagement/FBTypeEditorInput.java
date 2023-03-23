@@ -77,16 +77,22 @@ public class FBTypeEditorInput implements IFileEditorInput {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj instanceof FBTypeEditorInput) {
-			final FBTypeEditorInput input = (FBTypeEditorInput) obj;
-			return fbType.equals(input.getContent()) && entry.getFile().equals(input.getTypeEntry().getFile());
+		// must yield the same result as FileEditorInput#equals(Object)
+		// to be compatible with different editing contexts (e.g., refactoring)
+		if (this == obj) {
+			return true;
+		}
+		if (obj instanceof final IFileEditorInput other) {
+			return getFile().equals(other.getFile());
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		return fbType.hashCode();
+		// must yield the same result as FileEditorInput#hashCode()
+		// to be compatible with different editing contexts (e.g., refactoring)
+		return getFile().hashCode();
 	}
 
 	public void setFbType(final FBType fbType) {
