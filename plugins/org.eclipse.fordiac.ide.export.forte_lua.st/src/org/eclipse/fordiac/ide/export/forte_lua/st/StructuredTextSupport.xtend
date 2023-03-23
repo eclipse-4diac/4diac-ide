@@ -108,46 +108,45 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected CharSequence generateFBVariablePrefix(InterfaceList vars) '''
 		«FOR in : vars.inputVars»
-			local fb_var_«in.name» = fb[DI_«in.name»]
+			ENV.fb_var_«in.name» = fb[DI_«in.name»]
 		«ENDFOR»
 		«FOR out : vars.outputVars»
-			local fb_var_«out.name» = fb[DO_«out.name»]
+			ENV.fb_var_«out.name» = fb[DO_«out.name»]
 		«ENDFOR»
 	'''
 
 	def protected CharSequence generateFBVariableSuffix(InterfaceList vars) '''
 		«FOR out : vars.outputVars»
-			fb[DO_«out.name»] = fb_var_«out.name»
+			fb[DO_«out.name»] = ENV.fb_var_«out.name»
 		«ENDFOR»
 	'''
 
 	def protected CharSequence generateInternalVariablePrefix(Iterable<? extends VarDeclaration> vars) '''
 		«FOR in : vars»
-			local fb_var_«in.name» = fb[IN_«in.name»]
+			ENV.fb_var_«in.name» = fb[IN_«in.name»]
 		«ENDFOR»
 	'''
 
 	def protected CharSequence generateInternalVariableSuffix(Iterable<? extends VarDeclaration> vars) '''
 		«FOR in : vars»
-			fb[IN_«in.name»] = fb_var_«in.name»
+			fb[IN_«in.name»] = ENV.fb_var_«in.name»
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateLocalVariables(Iterable<? extends STVarDeclarationBlock> blocks,
-		boolean temp) '''
+	def protected CharSequence generateLocalVariables(Iterable<? extends STVarDeclarationBlock> blocks) '''
 		«FOR block : blocks»
-			«block.generateLocalVariableBlock(temp)»
+			«block.generateLocalVariableBlock»
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateLocalVariableBlock(STVarDeclarationBlock block, boolean temp) '''
+	def protected CharSequence generateLocalVariableBlock(STVarDeclarationBlock block) '''
 		«FOR variable : block.varDeclarations.filter(STVarDeclaration)»
-			«variable.generateLocalVariable(temp, block.constant)»
+			«variable.generateLocalVariable(block.constant)»
 		«ENDFOR»
 	'''
 
-	def protected CharSequence generateLocalVariable(STVarDeclaration variable, boolean temp, boolean const) {
-		'''«IF temp»local «ENDIF»«variable.generateFeatureName»«IF variable.defaultValue !== null» = «variable.defaultValue.generateInitializerExpression»«ENDIF»'''
+	def protected CharSequence generateLocalVariable(STVarDeclaration variable, boolean const) {
+		'''«variable.generateFeatureName» = «IF variable.defaultValue !== null»«variable.defaultValue.generateInitializerExpression»«ELSE»nil«ENDIF»'''
 	}
 
 	def protected dispatch CharSequence generateInitializerExpression(STElementaryInitializerExpression expr) {
@@ -293,7 +292,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				if (expr.left.resultType instanceof AnyNumType) {
 					'''(«expr.left.generateExpression» + «expr.right.generateExpression»)'''
 				} else if (expr.left.resultType instanceof AnyDurationType) {
-					'''''' // TODO: Time type handling
+					'''(«expr.left.generateExpression» + «expr.right.generateExpression»)'''
 				} else {
 					errors.add('''The ADD operation for «expr.left.resultType.name» is not yet supported''')
 					''''''
@@ -302,7 +301,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 				if (expr.left.resultType instanceof AnyNumType) {
 					'''(«expr.left.generateExpression» - «expr.right.generateExpression»)'''
 				} else if (expr.left.resultType instanceof AnyDurationType) {
-					'''''' // TODO: Time type handling
+					'''(«expr.left.generateExpression» - «expr.right.generateExpression»)'''
 				} else {
 					errors.add('''The SUB operation for «expr.left.resultType.name» is not yet supported''')
 					''''''
@@ -380,6 +379,16 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 					case "atan2": { // TODO: check if functionally the same
 						call = "math.atan"
 					}
+					// selection functions
+					case "min",
+					case "max": {
+						call = '''math.«name»'''
+					}
+					case "limit",
+					case "sel",
+					case "mux": {
+						call = '''STfunc.«name.toUpperCase»'''
+					}
 					// bit operations
 					case "shl",
 					case "shr",
@@ -399,6 +408,343 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 						}
 						call = '''STfunc.«name.toUpperCase»«bits»'''
 					}
+					// cast operations - byte values
+					case "bool_to_byte",
+					case "bool_to_word",
+					case "bool_to_dword",
+					case "bool_to_lword",
+					case "bool_to_sint",
+					case "bool_to_usint",
+					case "bool_to_int",
+					case "bool_to_uint",
+					case "bool_to_dint",
+					case "bool_to_udint",
+					case "bool_to_lint",
+					case "bool_to_ulint": {
+						call = '''STfunc.BOOL_TO_INT'''
+					}
+					case "byte_to_bool": {
+						call = '''STfunc.BYTE_TO_BOOL'''
+					}
+					case "byte_to_char": {
+						call = '''string.char'''
+					}
+					case "byte_to_word",
+					case "byte_to_dword",
+					case "byte_to_lword",
+					case "byte_to_sint",
+					case "byte_to_usint",
+					case "byte_to_int",
+					case "byte_to_uint",
+					case "byte_to_dint",
+					case "byte_to_udint",
+					case "byte_to_lint",
+					case "byte_to_ulint": {
+						call = ''''''
+					}
+					case "word_to_bool": {
+						call = '''STfunc.BYTE_TO_BOOL'''
+					}
+					case "word_to_byte": {
+						call = '''STfunc.VAL_TO_BYTE'''
+					}
+					case "word_to_dword",
+					case "word_to_lword": {
+						call = ''''''
+					}
+					case "word_to_sint",
+					case "word_to_usint": {
+						call = '''STfunc.VAL_TO_BYTE'''
+					}
+					case "word_to_int",
+					case "word_to_uint",
+					case "word_to_dint",
+					case "word_to_udint",
+					case "word_to_lint",
+					case "word_to_ulint": {
+						call = ''''''
+					}
+					case "dword_to_bool": {
+						call = '''STfunc.BYTE_TO_BOOL'''
+					}
+					case "dword_to_byte": {
+						call = '''STfunc.VAL_TO_BYTE'''
+					}
+					case "dword_to_word": {
+						call = '''STfunc.VAL_TO_WORD'''
+					}
+					case "dword_to_lword": {
+						call = ''''''
+					}
+					case "dword_to_sint",
+					case "dword_to_usint": {
+						call = '''STfunc.VAL_TO_BYTE'''
+					}
+					case "dword_to_int",
+					case "dword_to_uint": {
+						call = '''STfunc.VAL_TO_WORD'''
+					}
+					case "dword_to_dint",
+					case "dword_to_udint",
+					case "dword_to_lint",
+					case "dword_to_ulint",
+					case "dword_to_real": {
+						call = ''''''
+					}
+					case "lword_to_bool": {
+						call = '''STfunc.BYTE_TO_BOOL'''
+					}
+					case "lword_to_byte": {
+						call = '''STfunc.VAL_TO_BYTE'''
+					}
+					case "lword_to_word": {
+						call = '''STfunc.VAL_TO_WORD'''
+					}
+					case "lword_to_dword": {
+						call = '''STfunc.VAL_TO_DWORD'''
+					}
+					case "lword_to_sint",
+					case "lword_to_usint": {
+						call = '''STfunc.VAL_TO_BYTE'''
+					}
+					case "lword_to_int",
+					case "lword_to_uint": {
+						call = '''STfunc.VAL_TO_WORD'''
+					}
+					case "lword_to_dint",
+					case "lword_to_udint": {
+						call = '''STfunc.VAL_TO_DWORD'''
+					}
+					case "lword_to_lint",
+					case "lword_to_ulint",
+					case "lword_to_lreal": {
+						call = ''''''
+					}
+					// cast operations - integer values
+					case "sint_to_byte",
+					case "sint_to_word",
+					case "sint_to_dword",
+					case "sint_to_lword",
+					case "sint_to_usint",
+					case "sint_to_int",
+					case "sint_to_uint",
+					case "sint_to_dint",
+					case "sint_to_udint",
+					case "sint_to_lint",
+					case "sint_to_ulint": {
+						call = ''''''
+					}
+					case "usint_to_byte",
+					case "usint_to_word",
+					case "usint_to_dword",
+					case "usint_to_lword",
+					case "usint_to_sint",
+					case "usint_to_int",
+					case "usint_to_uint",
+					case "usint_to_dint",
+					case "usint_to_udint",
+					case "usint_to_lint",
+					case "usint_to_ulint": {
+						call = ''''''
+					}
+					case "int_to_byte": {
+						call = '''STfunc.VAL_TO_BYTE'''
+					}
+					case "int_to_word",
+					case "int_to_dword",
+					case "int_to_lword",
+					case "int_to_sint",
+					case "int_to_usint",
+					case "int_to_uint",
+					case "int_to_dint",
+					case "int_to_udint",
+					case "int_to_lint",
+					case "int_to_ulint": {
+						call = ''''''
+					}
+					case "uint_to_byte": {
+						call = '''STfunc.VAL_TO_BYTE'''
+					}
+					case "uint_to_word",
+					case "uint_to_dword",
+					case "uint_to_lword",
+					case "uint_to_sint",
+					case "uint_to_usint",
+					case "uint_to_int",
+					case "uint_to_dint",
+					case "uint_to_udint",
+					case "uint_to_lint",
+					case "uint_to_ulint": {
+						call = ''''''
+					}
+					case "dint_to_byte": {
+						call = '''STfunc.VAL_TO_BYTE'''
+					}
+					case "dint_to_word": {
+						call = '''STfunc.VAL_TO_WORD'''
+					}
+					case "dint_to_dword",
+					case "dint_to_lword",
+					case "dint_to_sint",
+					case "dint_to_usint",
+					case "dint_to_int",
+					case "dint_to_udint",
+					case "dint_to_uint",
+					case "dint_to_lint",
+					case "dint_to_ulint",
+					case "dint_to_real",
+					case "dint_to_lreal": {
+						call = ''''''
+					}
+					case "udint_to_byte": {
+						call = '''STfunc.VAL_TO_BYTE'''
+					}
+					case "udint_to_word": {
+						call = '''STfunc.VAL_TO_WORD'''
+					}
+					case "udint_to_dword",
+					case "udint_to_lword",
+					case "udint_to_sint",
+					case "udint_to_usint",
+					case "udint_to_int",
+					case "udint_to_dint",
+					case "udint_to_uint",
+					case "udint_to_lint",
+					case "udint_to_ulint",
+					case "udint_to_real",
+					case "udint_to_lreal": {
+						call = ''''''
+					}
+					case "lint_to_byte": {
+						call = '''STfunc.VAL_TO_BYTE'''
+					}
+					case "lint_to_word": {
+						call = '''STfunc.VAL_TO_WORD'''
+					}
+					case "lint_to_dword": {
+						call = '''STfunc.VAL_TO_DWORD'''
+					}
+					case "lint_to_lword",
+					case "lint_to_sint",
+					case "lint_to_usint",
+					case "lint_to_int",
+					case "lint_to_dint",
+					case "lint_to_udint",
+					case "lint_to_uint",
+					case "lint_to_ulint",
+					case "lint_to_real",
+					case "lint_to_lreal": {
+						call = ''''''
+					}
+					case "ulint_to_byte": {
+						call = '''STfunc.VAL_TO_BYTE'''
+					}
+					case "ulint_to_word": {
+						call = '''STfunc.VAL_TO_WORD'''
+					}
+					case "ulint_to_dword": {
+						call = '''STfunc.VAL_TO_DWORD'''
+					}
+					case "ulint_to_lword",
+					case "ulint_to_sint",
+					case "ulint_to_usint",
+					case "ulint_to_int",
+					case "ulint_to_dint",
+					case "ulint_to_udint",
+					case "ulint_to_uint",
+					case "ulint_to_lint",
+					case "ulint_to_real",
+					case "ulint_to_lreal": {
+						call = ''''''
+					}
+					// cast operations - integer values
+					case "real_to_dword": {
+						call = ''''''
+					}
+					case "real_to_sint",
+					case "real_to_usint",
+					case "real_to_int",
+					case "real_to_uint",
+					case "real_to_dint",
+					case "real_to_udint",
+					case "real_to_lint",
+					case "real_to_ulint": {
+						call = '''math.floor'''
+					}
+					case "real_to_lreal": {
+						call = ''''''
+					}
+					case "lreal_to_lword": {
+						call = ''''''
+					}
+					case "lreal_to_sint",
+					case "lreal_to_usint",
+					case "lreal_to_int",
+					case "lreal_to_uint",
+					case "lreal_to_dint",
+					case "lreal_to_udint",
+					case "lreal_to_lint",
+					case "lreal_to_ulint": {
+						call = '''math.floor'''
+					}
+					case "lreal_to_real": {
+						call = ''''''
+					}
+					// cast operations - string values
+					case "char_to_byte",
+					case "char_to_word",
+					case "char_to_dword",
+					case "char_to_lword": {
+						call = '''string.byte'''
+					}
+					case "char_to_string": {
+						call = ''''''
+					}
+					case "char_to_wchar": {
+						call = '''STfunc.CHAR_TO_WCHAR'''
+					}
+					case "wchar_to_word",
+					case "wchar_to_dword",
+					case "wchar_to_lword": {
+						call = '''STfunc.WCHAR_TO_BYTE'''
+					}
+					case "wchar_to_wstring": {
+						call = ''''''
+					}
+					case "wchar_to_char": {
+						call = '''string.sub'''
+						addPars = ''',2,2'''
+					}
+					case "string_to_char": {
+						call = '''string.sub'''
+						addPars = ''',1,1'''
+					}
+					case "string_to_wstring": {
+						call = '''STfunc.STRING_TO_WSTRING'''
+					}
+					case "wstring_to_wchar": {
+						call = '''string.sub'''
+						addPars = ''',1,2'''
+					}
+					case "wstring_to_string": {
+						call = '''STfunc.WSTRING_TO_STRING'''
+					}
+					// cast operations - temporal values
+					case "ltime_to_time",
+					case "time_to_ltime",
+					case "dt_to_date",
+					case "dt_to_ldt",
+					case "dt_to_ltod",
+					case "dt_to_tod",
+					case "ldt_to_date",
+					case "ldt_to_dt",
+					case "ldt_to_ltod",
+					case "ldt_to_tod",
+					case "tod_to_ltod",
+					case "ltod_to_tod": {
+						call = ''''''
+					}
+					// aliases
 					default:
 						call = '''«expr.feature.generateFeatureName»'''
 				}
@@ -514,9 +860,9 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		""
 	}
 
-	def protected dispatch CharSequence generateFeatureName(VarDeclaration feature) '''fb_var_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(VarDeclaration feature) '''ENV.fb_var_«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) '''st_lv_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) '''ENV.st_lv_«feature.name»'''
 
 	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''func_«feature.name»'''
 
@@ -603,7 +949,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		switch (type) {
 			AnyStringType: '''""'''
 			AnyElementaryType: '''0'''
-			ArrayType: '''()'''
+			ArrayType: '''{}'''
 			StructuredType: '''{}'''
 			default: '''0'''
 		}
