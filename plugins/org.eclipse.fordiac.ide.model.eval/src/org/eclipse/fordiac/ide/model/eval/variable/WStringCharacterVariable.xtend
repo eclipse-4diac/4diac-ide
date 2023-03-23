@@ -47,12 +47,12 @@ class WStringCharacterVariable extends AbstractVariable<WCharValue> {
 	}
 
 	override setValue(String value) {
-		setValue(value.parseValue(type))
+		setValue(value?.trim.parseValue(type))
 	}
 
 	override validateValue(String value) {
 		try {
-			value.parseValue(type)
+			value?.trim.parseValue(type)
 			true
 		} catch (Exception e) {
 			false

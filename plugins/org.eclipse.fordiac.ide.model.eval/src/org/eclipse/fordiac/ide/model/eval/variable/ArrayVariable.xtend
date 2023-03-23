@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -87,8 +87,11 @@ class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Var
 		}
 		val inner = trimmed.substring(1, trimmed.length - 1)
 		val elementStrings = ARRAY_PATTERN.split(inner)
+		if(elementStrings.size > elements.size) {
+			return false
+		}
 		for (i : 0 ..< elementStrings.size) {
-			if (!elements.get(i).validateValue(elementStrings.get(i))) {
+			if (!elements.get(i).validateValue(elementStrings.get(i).trim)) {
 				return false
 			}
 		}
