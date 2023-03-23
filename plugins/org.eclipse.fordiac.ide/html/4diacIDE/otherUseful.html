@@ -50,7 +50,6 @@
 <ol>
   <li><a href="#ImportSystem">Import an Existing System</a></li>
   <li><a href="#ImportType">Import Existing IEC&nbsp;61499 Types</a></li>
-  <li><a href="#VirtualDNS">Virtual DNS Functionality</a></li>
   <li><a href="#CreateBootfiles">Creating Boot-Files</a></li>
 
 </ol>
@@ -76,21 +75,6 @@
 	  <p>By default, new systems contain a copy of the IEC&nbsp;61499 types in the tool-library. 
 	  If different types are needed, for example from another project or another IEC&nbsp;61499 engineering tool, these type files can be easily added by copying them into the project directory to the desired location. 
 	  Furthermore, the Type Navigator allows to drag and drop types between projects as well as within a project to a different folder.</p>
-
-<!--********************************************************************************************-->
-	    
-	<h2 id= "VirtualDNS">Virtual DNS Functionality</h2>
-
-	  <p>The Properties View provides a Virtual DNS editor. This functionality allows defining a set of variables, which are replaced by a specified value. 
-	  The variable names can be used for parameters of Function Blocks and Devices. 
-	  During the deployment, all variables which are available in the VirtualDNS are replaced with the specified value. 
-	  For using a variable, the variable name has to be written between %. 
-	  In the example below, two Configurations were created: local and rasbpi. 
-	  The configuration rasbpi has the ip variable set to a value of 192.168.0.7, and the local to 127.0.0.1. 
-	  In the main view, the variable ip is used as the ip address of the 4diac&nbsp;FORTE device. 
-	  When you want to use a local 4diac&nbsp;FORTE, just change the configuration and check Active Configuration instead of changing each time the value.</p> 
-	 
-	<img src="../../html/4diacIDE/img/virtualDNS.png" alt="Virtual DNS"/>
 
 <!--********************************************************************************************-->
 

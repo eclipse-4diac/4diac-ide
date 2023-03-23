@@ -103,10 +103,6 @@
                    id="org.eclipse.fordiac.ide.application.propertyAppearanceTab"
                    label="Appearance">
       </propertyTab>
-      <propertyTab category="FB"
-                   id="org.eclipse.fordiac.ide.application.VirtualDNSTab"
-                   label="VirtualDNS">
-      </propertyTab>
       <propertyTab category="Connection"
                    id="org.eclipse.fordiac.ide.application.propertyConnectionTab"
                    label="Connection">

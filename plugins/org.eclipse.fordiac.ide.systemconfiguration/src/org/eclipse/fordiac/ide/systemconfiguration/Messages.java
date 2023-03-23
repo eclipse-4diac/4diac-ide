@@ -37,20 +37,6 @@ public final class Messages extends NLS {
 	/** The System conf palette factory_ labe l_ tools. */
 	public static String SystemConfPaletteFactory_LABEL_Tools;
 
-	public static String virtualDNSConfigurationTitle;
-	public static String virtualDNSNewConfiguration;
-	public static String virtualDNSDeleteConfiguration;
-	public static String virtualDNSNewConfigTitle;
-	public static String virtualDNSNewConfigMessage;
-	public static String virtualDNSNewConfigDefaultName;
-	public static String virtualDNSValueNotSet;
-	public static String virtualDNSNewEntryButtonText;
-	public static String virtualDNSDeleteEntryButtonText;
-	public static String virtualDNSActiveConfigurationText;
-	public static String virtualDNSFirstColumnTitle;
-	public static String virtualDNSSecondColumnTitle;
-	public static String virtualDNSSameVariableNameError;
-	public static String virtualDNSEmptyNameError;
 	static {
 		// initialize resource bundle
 		NLS.initializeMessages(BUNDLE_NAME, Messages.class);

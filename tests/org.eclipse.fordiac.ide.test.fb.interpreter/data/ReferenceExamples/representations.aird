@@ -48,7 +48,6 @@
     <semanticResources>Type%20Library/custom/WithInputs.fbt</semanticResources>
     <semanticResources>Type%20Library/custom/WithOutputs.fbt</semanticResources>
     <semanticResources>Type%20Library/custom/structtype.dtp</semanticResources>
-    <semanticResources>virtualDNS.dns</semanticResources>
     <ownedViews xmi:type="viewpoint:DView" uid="_cSrCUMNJEe2kK57dxjXZjA">
       <viewpoint xmi:type="description:Viewpoint" href="platform:/resource/org.eclipse.fordiac.ide.fb.interpreter.design/description/OpSem.odesign#//@ownedViewpoints[name='OpSem%20Viewpoint']"/>
       <ownedRepresentationDescriptors xmi:type="viewpoint:DRepresentationDescriptor" uid="_z6aWYMNOEe2eTaDh8rGj-A" name="new OpSem" repPath="#_z6ZvUMNOEe2eTaDh8rGj-A" changeId="49c31517-6706-492f-b938-ec326a89bf13">
