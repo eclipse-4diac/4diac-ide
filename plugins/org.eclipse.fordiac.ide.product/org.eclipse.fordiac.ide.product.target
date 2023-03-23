@@ -29,6 +29,10 @@
 			<unit id="org.eclipse.gef.sdk.feature.group" version="3.15.0.202211301913"/>
 			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.18.0.v20221201-0557"/>
 			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.30.0.v20230227-1344"/>
+			<unit id="org.eclipse.sirius.properties.feature.feature.group" version="7.0.7.202301170754"/>
+			<unit id="org.eclipse.sirius.samples.feature.group" version="7.0.7.202301170754"/>
+			<unit id="org.eclipse.sirius.specifier.feature.group" version="7.0.7.202301170754"/>
+			<unit id="org.eclipse.sirius.specifier.properties.feature.feature.group" version="7.0.7.202301170754"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/nebula/releases/3.0.0/"/>
