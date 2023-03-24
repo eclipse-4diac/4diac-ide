@@ -90,14 +90,15 @@ public final class STCoreRefactoringUtil {
 
 	public static ITextSelection trimSelection(final ITextSelection selection) {
 		final String selectionText = selection.getText();
-		int offset = 0, length = selection.getLength();
+		int offset = 0;
+		int length = selection.getLength();
 		while (offset < length && Character.isWhitespace(selectionText.charAt(offset))) {
 			offset++;
 		}
 		while (length > offset && Character.isWhitespace(selectionText.charAt(length - 1))) {
 			length--;
 		}
-		return new TextSelection(selection.getOffset() + offset, length);
+		return new TextSelection(selection.getOffset() + offset, length - offset);
 	}
 
 	private static boolean contains(final ITextRegion region, final ITextSelection selection) {
