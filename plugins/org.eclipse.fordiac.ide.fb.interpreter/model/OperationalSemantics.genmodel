@@ -60,7 +60,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBNetworkRuntime/transferData"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBNetworkRuntime/typeRuntimes"/>
       <genOperations ecoreOperation="OperationalSemantics.ecore#//FBNetworkRuntime/getModel"
-          body="return this.getFbnetwork();"/>
+          body="return this.fbnetwork;"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//FBTransaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/outputEventOccurrences"/>

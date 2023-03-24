@@ -345,7 +345,7 @@ public class DefaultRunFBType implements IRunFBTypeVisitor {
 			final VarDeclaration associatedVar = w.getVariables();
 			final VarDeclaration destVar = (VarDeclaration) eventOccurrence.getParentFB()
 					.getInterfaceElement(associatedVar.getName());
-			destVar.setValue(associatedVar.getValue());
+			destVar.setValue(EcoreUtil.copy(associatedVar.getValue()));
 		}
 	}
 

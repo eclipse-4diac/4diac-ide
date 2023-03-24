@@ -46,8 +46,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.Value;
  *
  * @generated */
 public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNetworkRuntime {
-	/** The cached value of the '{@link #getFbnetwork() <em>Fbnetwork</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getFbnetwork() <em>Fbnetwork</em>}' containment reference. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 *
 	 * @see #getFbnetwork()
 	 * @generated
@@ -94,6 +94,16 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 			InternalEObject oldFbnetwork = (InternalEObject) fbnetwork;
 			fbnetwork = (FBNetwork) eResolveProxy(oldFbnetwork);
 			if (fbnetwork != oldFbnetwork) {
+				InternalEObject newFbnetwork = (InternalEObject) fbnetwork;
+				NotificationChain msgs = oldFbnetwork.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.FB_NETWORK_RUNTIME__FBNETWORK, null, null);
+				if (newFbnetwork.eInternalContainer() == null) {
+					msgs = newFbnetwork.eInverseAdd(this,
+							EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.FB_NETWORK_RUNTIME__FBNETWORK, null,
+							msgs);
+				}
+				if (msgs != null)
+					msgs.dispatch();
 				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							OperationalSemanticsPackage.FB_NETWORK_RUNTIME__FBNETWORK, oldFbnetwork, fbnetwork));
@@ -112,13 +122,39 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	@Override
-	public void setFbnetwork(FBNetwork newFbnetwork) {
+	public NotificationChain basicSetFbnetwork(FBNetwork newFbnetwork, NotificationChain msgs) {
 		FBNetwork oldFbnetwork = fbnetwork;
 		fbnetwork = newFbnetwork;
-		if (eNotificationRequired())
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					OperationalSemanticsPackage.FB_NETWORK_RUNTIME__FBNETWORK, oldFbnetwork, newFbnetwork);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public void setFbnetwork(FBNetwork newFbnetwork) {
+		if (newFbnetwork != fbnetwork) {
+			NotificationChain msgs = null;
+			if (fbnetwork != null)
+				msgs = ((InternalEObject) fbnetwork).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.FB_NETWORK_RUNTIME__FBNETWORK, null, msgs);
+			if (newFbnetwork != null)
+				msgs = ((InternalEObject) newFbnetwork).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.FB_NETWORK_RUNTIME__FBNETWORK, null, msgs);
+			msgs = basicSetFbnetwork(newFbnetwork, msgs);
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET,
-					OperationalSemanticsPackage.FB_NETWORK_RUNTIME__FBNETWORK, oldFbnetwork, fbnetwork));
+					OperationalSemanticsPackage.FB_NETWORK_RUNTIME__FBNETWORK, newFbnetwork, newFbnetwork));
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -152,7 +188,7 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 	 * @generated */
 	@Override
 	public FBNetwork getModel() {
-		return this.getFbnetwork();
+		return this.fbnetwork;
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -161,6 +197,8 @@ public class FBNetworkRuntimeImpl extends FBRuntimeAbstractImpl implements FBNet
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
+		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__FBNETWORK:
+			return basicSetFbnetwork(null, msgs);
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TRANSFER_DATA:
 			return ((InternalEList<?>) getTransferData()).basicRemove(otherEnd, msgs);
 		case OperationalSemanticsPackage.FB_NETWORK_RUNTIME__TYPE_RUNTIMES:

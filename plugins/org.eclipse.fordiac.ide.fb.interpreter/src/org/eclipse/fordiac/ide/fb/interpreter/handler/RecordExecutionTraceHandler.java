@@ -27,6 +27,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.Messages;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
@@ -61,7 +62,7 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 
 		// record the trace
 		final EventManager manager = EventManagerFactory.createFrom(triggerEvent,
-				triggerEvent.getFBNetworkElement().getFbNetwork());
+				EcoreUtil.copy(triggerEvent.getFBNetworkElement().getFbNetwork()));
 		EventManagerUtils.processNetwork(manager);
 
 		// serialize event manager

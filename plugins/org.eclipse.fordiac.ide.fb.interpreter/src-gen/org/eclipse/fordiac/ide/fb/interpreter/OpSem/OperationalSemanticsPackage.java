@@ -242,7 +242,8 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated */
 	int FB_NETWORK_RUNTIME = 6;
 
-	/** The feature id for the '<em><b>Fbnetwork</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Fbnetwork</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered */
@@ -561,11 +562,11 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated */
 	EClass getFBNetworkRuntime();
 
-	/** Returns the meta object for the reference
+	/** Returns the meta object for the containment reference
 	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getFbnetwork <em>Fbnetwork</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @return the meta object for the reference '<em>Fbnetwork</em>'.
+	 * @return the meta object for the containment reference '<em>Fbnetwork</em>'.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBNetworkRuntime#getFbnetwork()
 	 * @see #getFBNetworkRuntime()
 	 * @generated */
@@ -839,8 +840,8 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 * @generated */
 		EClass FB_NETWORK_RUNTIME = eINSTANCE.getFBNetworkRuntime();
 
-		/** The meta object literal for the '<em><b>Fbnetwork</b></em>' reference feature. <!-- begin-user-doc --> <!--
-		 * end-user-doc -->
+		/** The meta object literal for the '<em><b>Fbnetwork</b></em>' containment reference feature. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
 		 *
 		 * @generated */
 		EReference FB_NETWORK_RUNTIME__FBNETWORK = eINSTANCE.getFBNetworkRuntime_Fbnetwork();
