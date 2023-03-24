@@ -8,6 +8,7 @@
 	</classpathentry>
 	<classpathentry kind="src" path="src-gen">
 		<attributes>
+			<attribute name="ignore_optional_problems" value="true"/>
 			<attribute name="test" value="true"/>
 		</attributes>
 	</classpathentry>
