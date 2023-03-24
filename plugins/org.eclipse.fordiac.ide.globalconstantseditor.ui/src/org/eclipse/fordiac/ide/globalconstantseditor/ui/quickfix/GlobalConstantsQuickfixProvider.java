@@ -37,8 +37,7 @@ public class GlobalConstantsQuickfixProvider extends DefaultQuickfixProvider {
 		acceptor.accept(issue, Messages.GlobalConstQuickFix_AddConstantKeyword,
 				Messages.GlobalConstQuickFix_AddConstantKeyword, null,
 				(final EObject object, final IModificationContext context) -> {
-					if (object instanceof STVarGlobalDeclarationBlock) {
-						final var block = (STVarGlobalDeclarationBlock) object;
+					if (object instanceof final STVarGlobalDeclarationBlock block) {
 						block.setConstant(true);
 					}
 				});
