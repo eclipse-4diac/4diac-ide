@@ -11,7 +11,7 @@
  *   Antonio Garmenda, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
+package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
 import org.eclipse.fordiac.ide.model.edit.helper.InitialValueHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
@@ -32,7 +32,6 @@ public final class VariableUtils {
 		varDecl.getValue().setValue(value);
 	}
 
-	@Deprecated
 	public static void setVariable(final FBType fb, final String name, final String value) {
 		final IInterfaceElement el = fb.getInterfaceList().getInterfaceElement(name.strip());
 		if (!(el instanceof VarDeclaration)) {

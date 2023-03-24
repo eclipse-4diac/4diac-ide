@@ -26,7 +26,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Event Manager</b></em>'. <!-- end-user-doc -->
  * <p>

@@ -48,6 +48,8 @@ public abstract class AbstractValueRandom {
 	protected static final String LREAL = "LREAL#"; //$NON-NLS-1$
 
 	protected static final class LocalRandom extends Random {
+		private static final long serialVersionUID = 136710794835658751L;
+
 		int nextbits(final int bits) {
 			return super.next(bits);
 		}

@@ -14,7 +14,7 @@
  *   	 -cleanup and extend matching
  *******************************************************************************/
 
-package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
+package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
 import java.util.List;
 import java.util.Optional;

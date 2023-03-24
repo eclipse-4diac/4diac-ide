@@ -13,7 +13,7 @@
  *   Paul Pavlicek
  *   	 -cleanup and us factory methods
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
+package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
 import java.util.List;
 import java.util.Optional;

@@ -26,8 +26,8 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.InputPrimitive;
@@ -46,7 +46,7 @@ public final class TransactionFactory {
 	private static FBTransaction createFrom(final EventOccurrence inputEO, final boolean addRandomData) {
 		final FBTransaction createdTr = OperationalSemanticsFactory.eINSTANCE.createFBTransaction();
 		createdTr.setInputEventOccurrence(inputEO);
-		if (addRandomData && null != inputEO) {
+		if (addRandomData && (null != inputEO)) {
 			createdTr.getInputVariables().addAll(InputGenerator.getRandomData(inputEO.getEvent()));
 		}
 		return createdTr;
@@ -79,7 +79,7 @@ public final class TransactionFactory {
 	}
 
 	public static FBTransaction createFrom(final FBType fb, final ServiceTransaction st) {
-		if (st == null || st.getInputPrimitive() == null) {
+		if ((st == null) || (st.getInputPrimitive() == null)) {
 			throw new IllegalArgumentException("TransactionFactory could not access ServiceTransaction: invalid"); //$NON-NLS-1$
 		}
 		final String inputEvent = st.getInputPrimitive().getEvent();
@@ -129,7 +129,6 @@ public final class TransactionFactory {
 
 	public static ServiceTransaction addTransaction(final ServiceSequence seq,
 			final org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder fbtrans) {
-		// TODO Move Somewere better
 		final ServiceTransaction transaction = LibraryElementFactory.eINSTANCE.createServiceTransaction();
 		seq.getServiceTransaction().add(transaction);
 		if (fbtrans.getInputEventName() != null) {
@@ -152,6 +151,7 @@ public final class TransactionFactory {
 		}
 		return transaction;
 	}
+
 	private TransactionFactory() {
 		throw new UnsupportedOperationException("this class should not be instantiated"); //$NON-NLS-1$
 	}

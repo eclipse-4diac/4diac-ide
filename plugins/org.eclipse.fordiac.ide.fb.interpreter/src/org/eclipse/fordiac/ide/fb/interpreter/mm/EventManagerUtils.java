@@ -12,9 +12,10 @@
  *       - initial implementation and/or documentation
  *   Paul Pavlicek - cleanup
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
+package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
-import org.eclipse.emf.common.util.BasicEList;
+import java.util.List;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -41,10 +42,10 @@ public final class EventManagerUtils {
 		final var transactions = eventManager.getTransactions();
 		for (var i = 0; i < transactions.size(); i++) {
 			final var transaction = transactions.get(i);
-			if (transaction instanceof FBTransaction) {
-				processFbTransaction((FBTransaction) transaction);
+			if (transaction instanceof final FBTransaction fbtransaction) {
+				processFbTransaction(fbtransaction);
 				if (moreTransactionsLeft(transactions, i)) {
-					final FBRuntimeAbstract newfbRuntime = getLatestFbRuntime((FBTransaction) transaction);
+					final FBRuntimeAbstract newfbRuntime = getLatestFbRuntime(fbtransaction);
 					// use fb runtime in the next transaction
 					transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(EcoreUtil.copy(newfbRuntime));
 				}
@@ -74,32 +75,34 @@ public final class EventManagerUtils {
 		return (i + 1) < transactions.size();
 	}
 
-	private static void processFbTransaction(final FBTransaction transaction) {
+	public static void processFbTransaction(final FBTransaction transaction) {
 		// set the input vars
 		for (final var inputVar : transaction.getInputVariables()) {
 			final var element = transaction.getInputEventOccurrence().getFbRuntime().getModel();
-			if (element instanceof FBType) {
-				setInputVariable(inputVar, (FBType) element);
+			if (element instanceof final FBType fbtype) {
+				setInputVariable(inputVar, fbtype);
 			}
 		}
-		final var result = new BasicEList<EventOccurrence>();
-		if (transaction.getInputEventOccurrence().getResultFBRuntime() == null) {
-			final FBRuntimeAbstract runtime = EcoreUtil.copy(transaction.getInputEventOccurrence().getFbRuntime());
-			transaction.getInputEventOccurrence().setResultFBRuntime(runtime);
-			// run transaction
-			result.addAll(runtime.run());
-		} else {
-			result.addAll(transaction.getInputEventOccurrence().getResultFBRuntime().run());
-		}
+		final var result = processEventOccurrence(transaction.getInputEventOccurrence());
 		transaction.getOutputEventOccurrences().addAll(result);
+	}
+
+	private static List<EventOccurrence> processEventOccurrence(final EventOccurrence eo) {
+		final FBRuntimeAbstract runtime = eo.getFbRuntime();
+		FBRuntimeAbstract resultRuntime = eo.getResultFBRuntime();
+		if (resultRuntime == null) {
+			resultRuntime = EcoreUtil.copy(runtime);
+			eo.setResultFBRuntime(resultRuntime);
+		}
+		return resultRuntime.run();
 	}
 
 	private static void setInputVariable(final VarDeclaration inputVar, final FBType type) {
 		if (null != inputVar) {
 			final var pin = type.getInterfaceList().getInterfaceElement(inputVar.getName());
-			if ((pin instanceof VarDeclaration) && pin.isIsInput()) {
+			if ((pin instanceof final VarDeclaration datapin) && pin.isIsInput()) {
 				final Value sampledValue = LibraryElementFactory.eINSTANCE.createValue();
-				((VarDeclaration) pin).setValue(sampledValue);
+				datapin.setValue(sampledValue);
 				sampledValue.setValue(inputVar.getValue().getValue());
 			}
 		}
@@ -109,12 +112,12 @@ public final class EventManagerUtils {
 		final var transactions = eventManager.getTransactions();
 		for (var i = 0; i < transactions.size(); i++) {
 			final var transaction = transactions.get(i);
-			if (transaction instanceof FBTransaction) {
-				processFbTransaction((FBTransaction) transaction);
-				((FBTransaction) transaction).getOutputEventOccurrences()
+			if (transaction instanceof final FBTransaction fbtransaction) {
+				processFbTransaction(fbtransaction);
+				fbtransaction.getOutputEventOccurrences()
 						.forEach(outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
 				if (moreTransactionsLeft(transactions, i)) {
-					final FBRuntimeAbstract newfbRuntime = getLatestFbNetworkRuntime((FBTransaction) transaction);
+					final FBRuntimeAbstract newfbRuntime = getLatestFbNetworkRuntime(fbtransaction);
 					// use fb network runtime in the next transaction
 					transactions.get(i + 1).getInputEventOccurrence().setFbRuntime(EcoreUtil.copy(newfbRuntime));
 				}
@@ -135,8 +138,7 @@ public final class EventManagerUtils {
 
 	public static Resource loadResource(final URI uri) {
 		final ResourceSet reset = new ResourceSetImpl();
-		final Resource res = reset.getResource(uri, true);
-		return res;
+		return reset.getResource(uri, true);
 	}
 
 }

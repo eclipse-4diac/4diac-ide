@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2023 Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -8,12 +8,13 @@
  * SPDX-License-Identifier: EPL-2.0
  *
  * Contributors:
- *   Michael Oberlehner - initial API and implementation and/or initial documentation
+ *   Bianca Wiesmayr - initial API and implementation and/or initial documentation
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fb.interpreter;
 
 import org.eclipse.osgi.util.NLS;
 
+@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
 public class Messages extends NLS {
 	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
 	public static String RecordExecutionTraceHandler_Incorrect_Selection;

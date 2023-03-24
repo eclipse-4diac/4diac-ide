@@ -12,13 +12,12 @@
  *       - initial implementation and/or documentation
  *   Paul Pavlicek - cleanup and factory methods
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
+package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
@@ -37,7 +36,6 @@ public final class ServiceSequenceUtils {
 	public static final String EXTERNAL_INTERFACE = "external"; //$NON-NLS-1$
 	public static final String INTERNAL_INTERFACE = "internal"; //$NON-NLS-1$
 	public static final String START_STATE = "START"; //$NON-NLS-1$
-
 
 	public static ServiceSequence addServiceSequence(final org.eclipse.fordiac.ide.model.libraryElement.Service s) {
 		return ServiceFactory.addServiceSequenceTo(s, "Test" + s.getServiceSequence().size(), //$NON-NLS-1$
@@ -67,8 +65,7 @@ public final class ServiceSequenceUtils {
 			return Collections.emptyList();
 		}
 		return Arrays.asList(text.split(separator, 0)).stream().filter(s -> !s.isBlank()).map(String::strip)
-				.map(ServiceSequenceUtils::removeSemicolon)
-				.collect(Collectors.toList());
+				.map(ServiceSequenceUtils::removeSemicolon).toList();
 	}
 
 	private static String removeSemicolon(final String s) {
@@ -93,9 +90,7 @@ public final class ServiceSequenceUtils {
 
 	public static String summarizeParameters(final Iterable<VarDeclaration> inputVars) {
 		final StringBuilder builder = new StringBuilder();
-		inputVars.forEach(variable ->
-		summarize(builder, variable)
-				);
+		inputVars.forEach(variable -> summarize(builder, variable));
 		return builder.toString();
 	}
 
@@ -112,7 +107,6 @@ public final class ServiceSequenceUtils {
 		}
 		builder.append(";\n"); //$NON-NLS-1$
 	}
-
 
 	public static void convertTransactionToServiceModel(final ServiceSequence seq, final FBType destType,
 			final FBTransaction transaction) {
@@ -132,12 +126,11 @@ public final class ServiceSequenceUtils {
 
 	private static FBType getFbTypeFromRuntime(final EventOccurrence eo) {
 		final EObject type = eo.getFbRuntime().getModel();
-		if (type instanceof FBType) {
-			return (FBType) type;
+		if (type instanceof final FBType fbtype) {
+			return fbtype;
 		}
 		return null;
 	}
-
 
 	private ServiceSequenceUtils() {
 		throw new UnsupportedOperationException("utility class should not be instantiated"); //$NON-NLS-1$

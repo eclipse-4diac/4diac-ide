@@ -30,7 +30,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.fordiac.ide.fb.interpreter.Messages;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -107,8 +107,8 @@ public class RecordExecutionTraceHandler extends AbstractHandler {
 		if (selected instanceof EditPart) {
 			selected = ((EditPart) structuredSelection.getFirstElement()).getModel();
 		}
-		if (selected instanceof Event) {
-			return (Event) selected;
+		if (selected instanceof final Event selectedEvent) {
+			return selectedEvent;
 		}
 		return null;
 	}

@@ -14,7 +14,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.fb.interpreter.fbnetwork;
 
-import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBNetworkTestRunner.runFBNetworkTestManager;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.FBNetworkTestRunner.runFBNetworkTestManager;
 import static org.junit.Assert.assertNotNull;
 
 import org.eclipse.emf.common.util.URI;
@@ -22,9 +22,9 @@ import org.eclipse.emf.compare.Comparison;
 import org.eclipse.emf.compare.utils.EMFComparePrettyPrinter;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerComparisonUtils;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.FBNetworkTestRunner.IllegalTraceException;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerComparisonUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.FBNetworkTestRunner.IllegalTraceException;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;

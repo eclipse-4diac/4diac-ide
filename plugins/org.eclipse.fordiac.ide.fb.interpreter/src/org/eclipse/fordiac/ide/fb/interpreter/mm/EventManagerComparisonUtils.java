@@ -1,4 +1,4 @@
-package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
+package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
 /*******************************************************************************
  * Copyright (c) 2023 Johannes Kepler University Linz and others

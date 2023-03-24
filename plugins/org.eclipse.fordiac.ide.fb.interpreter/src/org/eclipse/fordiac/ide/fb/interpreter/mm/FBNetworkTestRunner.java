@@ -11,7 +11,7 @@
  *   Paul Pavlicek, Bianca Wiesmayr
  *       - initial implementation and/or documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.fb.interpreter.mm.utils;
+package org.eclipse.fordiac.ide.fb.interpreter.mm;
 
 import java.util.Optional;
 
