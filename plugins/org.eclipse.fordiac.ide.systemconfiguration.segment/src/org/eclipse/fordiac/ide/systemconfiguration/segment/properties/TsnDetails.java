@@ -91,7 +91,7 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 		buttons.createControls(detailsComp, widgetFactory);
 		final TableViewer windowViewer = TableWidgetFactory.createTableViewer(detailsComp);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).span(2, 1)
-		.applyTo(windowViewer.getTable());
+				.applyTo(windowViewer.getTable());
 
 		final Table table = windowViewer.getTable();
 		configureTableLayout(table);
@@ -190,10 +190,10 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 		for (final VarDeclaration parameter : parameters) {
 			if (parameter.getName().startsWith(TsnParameters.TSN_WINDOW_NAME)) {
 				final TsnWindow window = CommunicationFactory.eINSTANCE.createTsnWindow();
-				window.setDuration(Integer.valueOf(parameter.getValue().getValue()));
+				window.setDuration(Integer.parseInt(parameter.getValue().getValue()));
 				configuration.getWindows().add(window);
 			} else if (parameter.getName().equals(TsnParameters.TSN_CYCLE_NAME)) {
-				configuration.setCycleTime(Integer.valueOf(parameter.getValue().getValue()));
+				configuration.setCycleTime(Integer.parseInt(parameter.getValue().getValue()));
 			}
 		}
 		int sum;

@@ -78,8 +78,8 @@ public class MappedFbMenu {
 	}
 
 	private static CommunicationMappingTarget getSelectedWindow(final Item[] selected) {
-		if ((selected.length > 0) && (selected[0].getData() instanceof CommunicationMappingTarget)) {
-			return (CommunicationMappingTarget) selected[0].getData();
+		if ((selected.length > 0) && (selected[0].getData() instanceof final CommunicationMappingTarget window)) {
+			return window;
 		}
 		return null;
 	}
@@ -100,8 +100,7 @@ public class MappedFbMenu {
 		return new LabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof CommunicationChannel) {
-					final CommunicationChannel channel = (CommunicationChannel) element;
+				if (element instanceof final CommunicationChannel channel) {
 					return MappingAnnotations.getHierarchicalName(channel) + "." + channel.getName(); //$NON-NLS-1$
 				}
 				return super.getText(element);
@@ -120,8 +119,8 @@ public class MappedFbMenu {
 
 			@Override
 			public Object[] getElements(final Object inputElement) {
-				if (inputElement instanceof CommunicationMappingTarget) {
-					return ((CommunicationMappingTarget) inputElement).getMappedElements().toArray();
+				if (inputElement instanceof final CommunicationMappingTarget target) {
+					return target.getMappedElements().toArray();
 				}
 				return new Object[0];
 			}
