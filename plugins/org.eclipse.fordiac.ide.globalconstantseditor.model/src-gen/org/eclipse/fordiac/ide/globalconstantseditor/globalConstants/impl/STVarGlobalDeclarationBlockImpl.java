@@ -23,52 +23,16 @@ import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConst
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.impl.STVarDeclarationBlockImpl;
 
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>ST Var Global Declaration Block</b></em>'.
  * <!-- end-user-doc -->
- * <p>
- * The following features are implemented:
- * </p>
- * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STVarGlobalDeclarationBlockImpl#isConstant <em>Constant</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STVarGlobalDeclarationBlockImpl#getVarDeclarations <em>Var Declarations</em>}</li>
- * </ul>
  *
  * @generated
  */
-public class STVarGlobalDeclarationBlockImpl extends MinimalEObjectImpl.Container implements STVarGlobalDeclarationBlock {
-	/**
-	 * The default value of the '{@link #isConstant() <em>Constant</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isConstant()
-	 * @generated
-	 * @ordered
-	 */
-	protected static final boolean CONSTANT_EDEFAULT = false;
-
-	/**
-	 * The cached value of the '{@link #isConstant() <em>Constant</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #isConstant()
-	 * @generated
-	 * @ordered
-	 */
-	protected boolean constant = CONSTANT_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVarDeclarations()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<STVarDeclaration> varDeclarations;
-
+public class STVarGlobalDeclarationBlockImpl extends STVarDeclarationBlockImpl implements STVarGlobalDeclarationBlock {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -86,149 +50,6 @@ public class STVarGlobalDeclarationBlockImpl extends MinimalEObjectImpl.Containe
 	@Override
 	protected EClass eStaticClass() {
 		return GlobalConstantsPackage.Literals.ST_VAR_GLOBAL_DECLARATION_BLOCK;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean isConstant() {
-		return constant;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void setConstant(boolean newConstant) {
-		boolean oldConstant = constant;
-		constant = newConstant;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__CONSTANT, oldConstant, constant));
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EList<STVarDeclaration> getVarDeclarations() {
-		if (varDeclarations == null) {
-			varDeclarations = new EObjectContainmentEList<STVarDeclaration>(STVarDeclaration.class, this, GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS);
-		}
-		return varDeclarations;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS:
-				return ((InternalEList<?>)getVarDeclarations()).basicRemove(otherEnd, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__CONSTANT:
-				return isConstant();
-			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS:
-				return getVarDeclarations();
-			default:
-				return super.eGet(featureID, resolve, coreType);
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@SuppressWarnings("unchecked")
-	@Override
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__CONSTANT:
-				setConstant((Boolean)newValue);
-				return;
-			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS:
-				getVarDeclarations().clear();
-				getVarDeclarations().addAll((Collection<? extends STVarDeclaration>)newValue);
-				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public void eUnset(int featureID) {
-		switch (featureID) {
-			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__CONSTANT:
-				setConstant(CONSTANT_EDEFAULT);
-				return;
-			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS:
-				getVarDeclarations().clear();
-				return;
-			default:
-				super.eUnset(featureID);
-				return;
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__CONSTANT:
-				return constant != CONSTANT_EDEFAULT;
-			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS:
-				return varDeclarations != null && !varDeclarations.isEmpty();
-			default:
-				return super.eIsSet(featureID);
-		}
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public String toString() {
-		if (eIsProxy()) return super.toString();
-
-		StringBuilder result = new StringBuilder(super.toString());
-		result.append(" (constant: ");
-		result.append(constant);
-		result.append(')');
-		return result.toString();
 	}
 
 } //STVarGlobalDeclarationBlockImpl

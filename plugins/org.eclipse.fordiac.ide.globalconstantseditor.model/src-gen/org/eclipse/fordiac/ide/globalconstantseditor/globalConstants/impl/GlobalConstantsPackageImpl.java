@@ -142,26 +142,6 @@ public class GlobalConstantsPackageImpl extends EPackageImpl implements GlobalCo
 	 * @generated
 	 */
 	@Override
-	public EAttribute getSTVarGlobalDeclarationBlock_Constant() {
-		return (EAttribute)stVarGlobalDeclarationBlockEClass.getEStructuralFeatures().get(0);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EReference getSTVarGlobalDeclarationBlock_VarDeclarations() {
-		return (EReference)stVarGlobalDeclarationBlockEClass.getEStructuralFeatures().get(1);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public GlobalConstantsFactory getGlobalConstantsFactory() {
 		return (GlobalConstantsFactory)getEFactoryInstance();
 	}
@@ -189,8 +169,6 @@ public class GlobalConstantsPackageImpl extends EPackageImpl implements GlobalCo
 		createEReference(stGlobalConstsSourceEClass, ST_GLOBAL_CONSTS_SOURCE__ELEMENTS);
 
 		stVarGlobalDeclarationBlockEClass = createEClass(ST_VAR_GLOBAL_DECLARATION_BLOCK);
-		createEAttribute(stVarGlobalDeclarationBlockEClass, ST_VAR_GLOBAL_DECLARATION_BLOCK__CONSTANT);
-		createEReference(stVarGlobalDeclarationBlockEClass, ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS);
 	}
 
 	/**
@@ -225,14 +203,13 @@ public class GlobalConstantsPackageImpl extends EPackageImpl implements GlobalCo
 
 		// Add supertypes to classes
 		stGlobalConstsSourceEClass.getESuperTypes().add(theSTCorePackage.getSTSource());
+		stVarGlobalDeclarationBlockEClass.getESuperTypes().add(theSTCorePackage.getSTVarDeclarationBlock());
 
 		// Initialize classes and features; add operations and parameters
 		initEClass(stGlobalConstsSourceEClass, STGlobalConstsSource.class, "STGlobalConstsSource", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getSTGlobalConstsSource_Elements(), this.getSTVarGlobalDeclarationBlock(), null, "elements", null, 0, -1, STGlobalConstsSource.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(stVarGlobalDeclarationBlockEClass, STVarGlobalDeclarationBlock.class, "STVarGlobalDeclarationBlock", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-		initEAttribute(getSTVarGlobalDeclarationBlock_Constant(), ecorePackage.getEBoolean(), "constant", null, 0, 1, STVarGlobalDeclarationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-		initEReference(getSTVarGlobalDeclarationBlock_VarDeclarations(), theSTCorePackage.getSTVarDeclaration(), null, "varDeclarations", null, 0, -1, STVarGlobalDeclarationBlock.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);

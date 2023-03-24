@@ -12,6 +12,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.*;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 
 /**
  * <!-- begin-user-doc -->
@@ -82,6 +83,10 @@ public class GlobalConstantsAdapterFactory extends AdapterFactoryImpl {
 				return createSTSourceAdapter();
 			}
 			@Override
+			public Adapter caseSTVarDeclarationBlock(STVarDeclarationBlock object) {
+				return createSTVarDeclarationBlockAdapter();
+			}
+			@Override
 			public Adapter defaultCase(EObject object) {
 				return createEObjectAdapter();
 			}
@@ -140,6 +145,20 @@ public class GlobalConstantsAdapterFactory extends AdapterFactoryImpl {
 	 * @generated
 	 */
 	public Adapter createSTSourceAdapter() {
+		return null;
+	}
+
+	/**
+	 * Creates a new adapter for an object of class '{@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock <em>ST Var Declaration Block</em>}'.
+	 * <!-- begin-user-doc -->
+	 * This default implementation returns null so that we can easily ignore cases;
+	 * it's useful to ignore a case when inheritance will catch all the cases anyway.
+	 * <!-- end-user-doc -->
+	 * @return the new adapter.
+	 * @see org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock
+	 * @generated
+	 */
+	public Adapter createSTVarDeclarationBlockAdapter() {
 		return null;
 	}
 

@@ -87,9 +87,8 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 		switch (featureID) {
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
 				return ((InternalEList<?>)getElements()).basicRemove(otherEnd, msgs);
-			default:
-				return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
+		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
 	/**
@@ -102,9 +101,8 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 		switch (featureID) {
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
 				return getElements();
-			default:
-				return super.eGet(featureID, resolve, coreType);
 		}
+		return super.eGet(featureID, resolve, coreType);
 	}
 
 	/**
@@ -120,10 +118,8 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 				getElements().clear();
 				getElements().addAll((Collection<? extends STVarGlobalDeclarationBlock>)newValue);
 				return;
-			default:
-				super.eSet(featureID, newValue);
-				return;
 		}
+		super.eSet(featureID, newValue);
 	}
 
 	/**
@@ -137,10 +133,8 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
 				getElements().clear();
 				return;
-			default:
-				super.eUnset(featureID);
-				return;
 		}
+		super.eUnset(featureID);
 	}
 
 	/**
@@ -153,9 +147,8 @@ public class STGlobalConstsSourceImpl extends STSourceImpl implements STGlobalCo
 		switch (featureID) {
 			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE__ELEMENTS:
 				return elements != null && !elements.isEmpty();
-			default:
-				return super.eIsSet(featureID);
 		}
+		return super.eIsSet(featureID);
 	}
 
 } //STGlobalConstsSourceImpl

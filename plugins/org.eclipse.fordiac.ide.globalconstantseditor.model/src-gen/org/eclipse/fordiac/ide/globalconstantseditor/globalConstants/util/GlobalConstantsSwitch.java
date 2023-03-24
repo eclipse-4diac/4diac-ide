@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.util.Switch;
 
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.*;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 
 /**
  * <!-- begin-user-doc -->
@@ -78,6 +79,7 @@ public class GlobalConstantsSwitch<T> extends Switch<T> {
 			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK: {
 				STVarGlobalDeclarationBlock stVarGlobalDeclarationBlock = (STVarGlobalDeclarationBlock)theEObject;
 				T result = caseSTVarGlobalDeclarationBlock(stVarGlobalDeclarationBlock);
+				if (result == null) result = caseSTVarDeclarationBlock(stVarGlobalDeclarationBlock);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -127,6 +129,21 @@ public class GlobalConstantsSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSTSource(STSource object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ST Var Declaration Block</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ST Var Declaration Block</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSTVarDeclarationBlock(STVarDeclarationBlock object) {
 		return null;
 	}
 
