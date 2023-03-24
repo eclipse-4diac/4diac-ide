@@ -150,7 +150,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	protected void updateErrorMessage(final ErrorMarkerRef object, final List<Issue> issues) {
 		final String errorMessage = issues.stream().filter(issue -> issue.getSeverity() == Severity.ERROR)
 				.map(Issue::getMessage).collect(Collectors.joining(", ")); //$NON-NLS-1$
-		final Display display = PlatformUI.getWorkbench().getDisplay();
+		// when ran through an ANT task the workbench is not started
+		final Display display = PlatformUI.isWorkbenchRunning() ? PlatformUI.getWorkbench().getDisplay() : null;
 		if (display != null && !display.isDisposed()) {
 			display.asyncExec(() -> object.setErrorMessage(errorMessage));
 		} else {
