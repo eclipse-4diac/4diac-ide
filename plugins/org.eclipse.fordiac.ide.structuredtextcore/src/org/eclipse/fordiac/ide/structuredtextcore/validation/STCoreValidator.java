@@ -194,8 +194,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Check
 	public void checkStringIndexInBounds(final STArrayAccessExpression accessExpression) {
 		final var type = accessExpression.getReceiver().getResultType();
-		final var anyStringType = type instanceof AnyStringType ? (AnyStringType) type : null;
-		if (anyStringType != null) {
+		if (type instanceof final AnyStringType anyStringType) {
 			final var indexExpressions = accessExpression.getIndex();
 			if (indexExpressions.size() > 1) {
 				// too many indices for a string
@@ -223,11 +222,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Check
 	public void checkArrayAccessDimensions(final STArrayAccessExpression accessExpression) {
-		final var featureExpression = accessExpression.getReceiver() instanceof STFeatureExpression
-				? ((STFeatureExpression) accessExpression.getReceiver()).getFeature()
+		final var feature = accessExpression.getReceiver() instanceof final STFeatureExpression featureExpression
+				? featureExpression.getFeature()
 				: null;
-		if (featureExpression instanceof STVarDeclaration) {
-			final STVarDeclaration varDeclaration = (STVarDeclaration) featureExpression;
+		if (feature instanceof final STVarDeclaration varDeclaration) {
 			if (varDeclaration.isArray()) {
 				final var indexExpressions = accessExpression.getIndex();
 				final var indexCounts = varDeclaration.getCount().size(); // unknown array dimensions [*]
@@ -249,7 +247,6 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					error(Messages.STCoreValidator_ArrayAccessInvalidOnNonArrayVariable,
 							STCorePackage.Literals.ST_ARRAY_ACCESS_EXPRESSION__INDEX, i, ARRAY_ACCESS_INVALID);
 				}
-
 			}
 		}
 	}
@@ -257,9 +254,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	@Check
 	public void checkArrayAccessIndices(final STArrayAccessExpression accessExpression) {
 		final var type = accessExpression.getReceiver().getResultType();
-		final var arrayType = type instanceof ArrayType ? (ArrayType) type : null;
 
-		if (arrayType != null) {
+		if (type instanceof final ArrayType arrayType) {
 			final var indexExpressions = accessExpression.getIndex();
 			for (int i = 0; i < indexExpressions.size(); i++) {
 				final STExpression expression = indexExpressions.get(i);
@@ -271,10 +267,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	private void checkArrayIndexInArrayDimensionBounds(final STArrayAccessExpression accessExpression,
 			final ArrayType arrayType, final int i, final STExpression expression) {
-		if (expression instanceof STNumericLiteral
-				&& ((STNumericLiteral) expression).getResultType() instanceof AnyIntType
-				&& arrayType.getSubranges() != null && arrayType.getSubranges().size() > i) {
-			final var indexValue = (BigInteger) ((STNumericLiteral) expression).getValue();
+		if (expression instanceof final STNumericLiteral numericLiteral
+				&& numericLiteral.getResultType() instanceof AnyIntType && arrayType.getSubranges() != null
+				&& arrayType.getSubranges().size() > i) {
+			final var indexValue = (BigInteger) numericLiteral.getValue();
 
 			final var subrange = arrayType.getSubranges().get(i);
 			if (subrange.isSetLowerLimit() && subrange.isSetUpperLimit()) {
@@ -336,7 +332,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	private boolean isValidCall(final STExpression expression) {
-		return expression instanceof STFeatureExpression && ((STFeatureExpression) expression).isCall()
+		return expression instanceof final STFeatureExpression featureExpression && featureExpression.isCall()
 				&& ((STFeatureExpression) expression).getFeature() instanceof ICallable;
 	}
 
@@ -461,13 +457,11 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 
 		// check feature is callable
-		if (!(feature instanceof ICallable)) {
+		if (!(feature instanceof final ICallable callable)) {
 			error(MessageFormat.format(Messages.STCoreValidator_Feature_Not_Callable, feature.getName()), expression,
 					STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE, FEATURE_NOT_CALLABLE);
 			return;
 		}
-		final ICallable callable = (ICallable) feature;
-
 		// check unnamed arguments
 		if (expression.getParameters().stream().anyMatch(STCallUnnamedArgument.class::isInstance)) {
 			// check that arguments are either all formal or non-formal
@@ -512,21 +506,18 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			boolean error = false;
 			for (int index = 0; index < expression.getParameters().size(); ++index) {
 				final STCallArgument elem = expression.getParameters().get(index);
-				if (elem instanceof STCallNamedInputArgument) {
-					final STCallNamedInputArgument arg = (STCallNamedInputArgument) elem;
+				if (elem instanceof final STCallNamedInputArgument arg) {
 					if (callable.getInOutParameters().contains(arg.getParameter())
 							&& !STCoreUtil.isAssignable(arg.getArgument())) {
 						error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
 								STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, NOT_ASSIGNABLE);
 						error = true;
 					}
-				} else if (elem instanceof STCallNamedOutputArgument) {
-					final STCallNamedOutputArgument arg = (STCallNamedOutputArgument) elem;
-					if (!STCoreUtil.isAssignable(arg.getArgument())) {
-						error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
-								STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, NOT_ASSIGNABLE);
-						error = true;
-					}
+				} else if (elem instanceof final STCallNamedOutputArgument arg
+						&& !STCoreUtil.isAssignable(arg.getArgument())) {
+					error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
+							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, NOT_ASSIGNABLE);
+					error = true;
 				}
 			}
 			if (error) {
@@ -581,13 +572,11 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Check
 	public void checkCalledFBWithoutEventSpecificerHasOnlyOneInputEvent(final STFeatureExpression expression) {
-		if (expression.isCall() && expression.getFeature() instanceof FB) {
-			final FB functionBlock = (FB) expression.getFeature();
-			if (functionBlock.getInterface().getEventInputs().size() != 1) {
-				error(Messages.STCoreValidator_Unqualified_FB_Call_On_FB_With_Input_Event_Size_Not_One,
-						STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
-						UNQUALIFIED_FB_CALL_ON_FB_WITH_INPUT_EVENT_SIZE_NOT_ONE);
-			}
+		if (expression.isCall() && expression.getFeature() instanceof final FB functionBlock
+				&& functionBlock.getInterface().getEventInputs().size() != 1) {
+			error(Messages.STCoreValidator_Unqualified_FB_Call_On_FB_With_Input_Event_Size_Not_One,
+					STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE,
+					UNQUALIFIED_FB_CALL_ON_FB_WITH_INPUT_EVENT_SIZE_NOT_ONE);
 		}
 	}
 
@@ -599,13 +588,14 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(),
 					NumericValueConverter.INSTANCE.toString(expression.getValue())),
 					STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE, INVALID_NUMERIC_LITERAL);
-		} else if (expectedType instanceof DataType && IecTypes.GenericTypes.isAnyType((DataType) expectedType)
-				&& expression.getType() == null) {
+		} else if (expectedType instanceof final DataType expectedDataType
+				&& IecTypes.GenericTypes.isAnyType(expectedDataType) && expression.getType() == null) {
 			error(MessageFormat.format(Messages.STCoreValidator_Literal_Requires_Type_Specifier,
-					expectedType.getName()), STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE,
+					expectedDataType.getName()), STCorePackage.Literals.ST_NUMERIC_LITERAL__VALUE,
 					LITERAL_REQUIRES_TYPE_SPECIFIER);
-		} else if (expectedType instanceof DataType && !IecTypes.GenericTypes.isAnyType((DataType) expectedType)
-				&& !type.eClass().equals(expectedType.eClass()) && ((DataType) expectedType).isAssignableFrom(type)) {
+		} else if (expectedType instanceof final DataType expectedDataType
+				&& !IecTypes.GenericTypes.isAnyType(expectedDataType)
+				&& !type.eClass().equals(expectedDataType.eClass()) && expectedDataType.isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
 					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
 		}
@@ -619,27 +609,28 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			error(MessageFormat.format(Messages.STCoreValidator_Invalid_Literal, type.getName(),
 					stringValueConverter.toString(expression.getValue())),
 					STCorePackage.Literals.ST_STRING_LITERAL__VALUE, INVALID_STRING_LITERAL);
-		} else if (expectedType instanceof DataType && IecTypes.GenericTypes.isAnyType((DataType) expectedType)
-				&& expression.getType() == null) {
+		} else if (expectedType instanceof final DataType expectedDataType
+				&& IecTypes.GenericTypes.isAnyType(expectedDataType) && expression.getType() == null) {
 			error(MessageFormat.format(Messages.STCoreValidator_Literal_Requires_Type_Specifier,
-					expectedType.getName()), STCorePackage.Literals.ST_STRING_LITERAL__VALUE,
+					expectedDataType.getName()), STCorePackage.Literals.ST_STRING_LITERAL__VALUE,
 					LITERAL_REQUIRES_TYPE_SPECIFIER);
-		} else if (expectedType instanceof AnyStringType && ((AnyStringType) expectedType).isSetMaxLength()
+		} else if (expectedType instanceof final AnyStringType expectedAnyStringType
+				&& expectedAnyStringType.isSetMaxLength()
 				&& expression.getValue().length() > ((AnyStringType) expectedType).getMaxLength()) {
 			warning(MessageFormat.format(Messages.STCoreValidator_String_Literal_Truncated,
-					Integer.toString(((AnyStringType) expectedType).getMaxLength())), null, TRUNCATED_LITERAL);
-		} else if (expectedType instanceof DataType && !IecTypes.GenericTypes.isAnyType((DataType) expectedType)
-				&& !type.eClass().equals(expectedType.eClass()) && ((DataType) expectedType).isAssignableFrom(type)) {
+					Integer.toString(expectedAnyStringType.getMaxLength())), null, TRUNCATED_LITERAL);
+		} else if (expectedType instanceof final DataType expectedDataType
+				&& !IecTypes.GenericTypes.isAnyType(expectedDataType)
+				&& !type.eClass().equals(expectedDataType.eClass()) && (expectedDataType).isAssignableFrom(type)) {
 			warning(MessageFormat.format(Messages.STCoreValidator_Implicit_Conversion_In_Literal, type.getName(),
-					expectedType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
+					expectedDataType.getName()), null, LITERAL_IMPLICIT_CONVERSION);
 		}
 	}
 
 	@Check
 	public void checkReturnValueCanOnlyBeAssignedToCurrentICallable(final STFeatureExpression expression) {
 		final var feature = expression.getFeature();
-		if (feature instanceof ICallable && !expression.isCall() && !(feature instanceof FB)) {
-			final var callable = (ICallable) feature;
+		if (feature instanceof final ICallable callable && !expression.isCall() && !(feature instanceof FB)) {
 			final var containingElement = getICallableContainer(expression);
 			if (callable != containingElement) {
 				error(MessageFormat.format(Messages.STCoreValidator_NameNotVisible, callable.getName()),
@@ -659,8 +650,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		final DataType receiverType = (DataType) receiverExpression.getResultType();
 		// Valid target receiver is a variable or a function name usable as variable
 		if (memberAccessExpr.getReceiver() instanceof STMemberAccessExpression
-				|| (memberAccessExpr.getReceiver() instanceof STFeatureExpression
-						&& !((STFeatureExpression) memberAccessExpr.getReceiver()).isCall())) {
+				|| (memberAccessExpr.getReceiver() instanceof final STFeatureExpression featureExpression
+						&& !(featureExpression.isCall()))) {
 			checkMultibitPartialExpression(expression, accessType, receiverType);
 
 		} else {
@@ -710,9 +701,10 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	}
 
 	protected static int getBitAccessMaxIndex(final DataType accessorType, final DataType receiverType) {
-		if (accessorType instanceof AnyBitType && receiverType instanceof AnyBitType) {
-			final var bitSize = ((AnyBitType) receiverType).getBitSize();
-			final var bitFactor = ((AnyBitType) accessorType).getBitSize();
+		if (accessorType instanceof final AnyBitType accessorBitType
+				&& receiverType instanceof final AnyBitType receiverBitType) {
+			final var bitSize = receiverBitType.getBitSize();
+			final var bitFactor = accessorBitType.getBitSize();
 			return bitFactor > 0 && bitSize > bitFactor ? bitSize / bitFactor - 1 : -1;
 		}
 		return -1;
@@ -720,8 +712,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	protected static ICallable getICallableContainer(final EObject eObject) {
 		for (EObject parent = eObject.eContainer(); parent != null; parent = parent.eContainer()) {
-			if (parent instanceof ICallable) {
-				return (ICallable) parent;
+			if (parent instanceof final ICallable callable) {
+				return callable;
 			}
 		}
 		return null;
@@ -734,8 +726,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	protected void checkTypeCompatibility(final INamedElement destination, final INamedElement source,
 			final EStructuralFeature feature, final int index) {
-		if (destination instanceof DataType && source instanceof DataType) {
-			checkTypeCompatibility((DataType) destination, (DataType) source, feature, index);
+		if (destination instanceof final DataType destinationDataType
+				&& source instanceof final DataType sourceDataType) {
+			checkTypeCompatibility(destinationDataType, sourceDataType, feature, index);
 		} else if (source != null && destination != null) {
 			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
 					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
@@ -755,8 +748,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	protected void checkTypeStrictCompatibility(final INamedElement destination, final INamedElement source,
 			final EStructuralFeature feature, final int index) {
-		if (destination instanceof DataType && source instanceof DataType) {
-			checkTypeStrictCompatibility((DataType) destination, (DataType) source, feature, index);
+		if (destination instanceof final DataType destinationDataType
+				&& source instanceof final DataType sourceDataType) {
+			checkTypeStrictCompatibility(destinationDataType, sourceDataType, feature, index);
 		} else if (source != null && destination != null) {
 			error(MessageFormat.format(Messages.STCoreValidator_Non_Compatible_Types, source.getName(),
 					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
