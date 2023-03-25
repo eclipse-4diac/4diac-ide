@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -74,12 +75,16 @@ class FBNetworkExporter extends CommonElementExporter {
 			if (!isExportableErrorMarker(fbnElement)) {
 				continue;
 			}
-			final String nodeName = getFBNElementNodeName(fbnElement);
-			if (nodeName != null) {
-				addStartElement(nodeName);
-				addFBNetworkElementXMLAttributes(fbnElement);
-				addFBNetworkElementChildren(fbnElement);
-				addEndElement();
+			if (fbnElement instanceof final Comment comment) {
+				addCommentElement(comment);
+			} else {
+				final String nodeName = getFBNElementNodeName(fbnElement);
+				if (nodeName != null) {
+					addStartElement(nodeName);
+					addFBNetworkElementXMLAttributes(fbnElement);
+					addFBNetworkElementChildren(fbnElement);
+					addEndElement();
+				}
 			}
 		}
 	}
@@ -91,9 +96,20 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 		addCommentAttribute(fbnElement);
 		addXYAttributes(fbnElement);
-		if (fbnElement instanceof Group) {
-			addGroupAttributes((Group) fbnElement);
+		if (fbnElement instanceof final Group group) {
+			addGroupAttributes(group);
 		}
+	}
+
+	private void addCommentElement(final Comment comment) throws XMLStreamException {
+		addEmptyStartElement(LibraryElementTags.COMMENT_ELEMENT);
+		addCommentAttribute(comment);
+		addXYAttributes(comment);
+		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE,
+				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getWidth()));
+		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE,
+				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getHeight()));
+		addEndElement();
 	}
 
 	private void addGroupAttributes(final Group group) throws XMLStreamException {
