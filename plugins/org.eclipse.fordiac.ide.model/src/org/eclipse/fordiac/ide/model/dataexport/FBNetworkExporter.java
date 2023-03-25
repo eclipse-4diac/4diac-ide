@@ -109,7 +109,6 @@ class FBNetworkExporter extends CommonElementExporter {
 				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getWidth()));
 		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE,
 				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getHeight()));
-		addEndElement();
 	}
 
 	private void addGroupAttributes(final Group group) throws XMLStreamException {
@@ -126,7 +125,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 
 		addAttributes(fbnElement.getAttributes());
-		if (!isUntypedSubapp(fbnElement)) {
+		if (!isUntypedSubapp(fbnElement) && !(fbnElement instanceof Group)) {
 			// for untyped subapp initial values are stored in the vardeclarations
 			addParamsConfig(fbnElement.getInterface().getInputVars());
 			addErrorMarkerParamsConfig(fbnElement.getInterface().getErrorMarker());

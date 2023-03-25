@@ -97,13 +97,14 @@ public class CopyEditPartsAction extends SelectionAction {
 	private static Collection<ConnectionReference> getAllFBNElementConnections(final FBNetworkElement model,
 			final Set<Connection> connectionSet) {
 		final List<ConnectionReference> connections = new ArrayList<>();
-
-		for (final IInterfaceElement elem : model.getInterface().getAllInterfaceElements()) {
-			getConnectionList(elem).stream().filter(conn -> !connectionSet.contains(conn)).forEach(conn -> {
-				connectionSet.add(conn);
-				connections.add(new ConnectionReference(conn));
-			});
-		}
+		if (model.getInterface() != null) {
+			for (final IInterfaceElement elem : model.getInterface().getAllInterfaceElements()) {
+				getConnectionList(elem).stream().filter(conn -> !connectionSet.contains(conn)).forEach(conn -> {
+					connectionSet.add(conn);
+					connections.add(new ConnectionReference(conn));
+				});
+			}
+	}
 		return connections;
 	}
 

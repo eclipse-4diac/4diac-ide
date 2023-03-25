@@ -114,10 +114,12 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 	protected Collection<Value> getFBValues() {
 		final ArrayList<Value> valueElements = new ArrayList<>();
 		for (final FBNetworkElement element : getNetworkElements()) {
-			element.getInterface().getVisibleInputVars().stream().filter(di -> (di.getValue() != null))
-					.forEach(di -> valueElements.add(di.getValue()));
-			element.getInterface().getErrorMarker().stream().filter(er -> (er.getValue() != null))
-					.forEach(er -> valueElements.add(er.getValue()));
+			if (element.getInterface() != null) {
+				element.getInterface().getVisibleInputVars().stream().filter(di -> (di.getValue() != null))
+						.forEach(di -> valueElements.add(di.getValue()));
+				element.getInterface().getErrorMarker().stream().filter(er -> (er.getValue() != null))
+						.forEach(er -> valueElements.add(er.getValue()));
+			}
 		}
 		return valueElements;
 	}

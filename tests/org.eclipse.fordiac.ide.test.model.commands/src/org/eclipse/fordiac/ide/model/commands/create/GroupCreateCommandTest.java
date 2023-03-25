@@ -43,8 +43,7 @@ public class GroupCreateCommandTest extends FBNetworkTestBase {
 		t.test(state.getFbNetwork().getNetworkElements().get(0) instanceof Group);
 
 		final Group group = (Group) state.getFbNetwork().getNetworkElements().get(0);
-		t.test(group.getInterface());
-		t.test(group.getInterface().getAllInterfaceElements().isEmpty());
+		t.test(group.getInterface() == null);
 		t.test(group.getGroupElements().isEmpty());
 		t.test(null == group.getOpposite());
 

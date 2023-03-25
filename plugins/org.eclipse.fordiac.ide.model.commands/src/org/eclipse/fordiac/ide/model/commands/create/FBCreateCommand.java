@@ -90,8 +90,8 @@ public class FBCreateCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	@Override
-	protected InterfaceList getTypeInterfaceList() {
-		return typeEntry.getType().getInterfaceList();
+	protected InterfaceList createInterfaceList() {
+		return typeEntry.getType().getInterfaceList().copy();
 	}
 
 }

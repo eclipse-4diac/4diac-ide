@@ -292,6 +292,11 @@
              name="Group">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
+             defaultHandler="org.eclipse.fordiac.ide.application.handlers.NewCommentHandler"
+             id="org.eclipse.fordiac.ide.application.commands.newComment"
+             name="New Comment">
+    </command>
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.UngroupHandler"
              id="org.eclipse.fordiac.ide.application.commands.ungroup"
              name="Ungroup">
@@ -841,6 +846,10 @@
                label="Group"
                tooltip="Create a new group">
       </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
+               label="Comment"
+               tooltip="Create a new comment">
+      </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
                label="Ungroup"
                tooltip="Remove group">
@@ -976,7 +985,7 @@
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
-               label="New group"
+               label="New Group"
                tooltip="Create a new group">
         <visibleWhen checkEnabled="false">
           <and>
@@ -998,6 +1007,17 @@
                   <instanceof value="org.eclipse.fordiac.ide.subapptypeeditor.editparts.TypedSubAppNetworkEditPart"/>
                 </or>
               </iterate>
+            </with>
+          </and>
+        </visibleWhen>
+      </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
+               label="New Comment"
+               tooltip="Create a new Comment">
+        <visibleWhen checkEnabled="false">
+          <and>
+            <with variable="activeEditor">
+              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
             </with>
           </and>
         </visibleWhen>

@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -131,8 +132,8 @@ public class AddElementsToSubAppCommand extends Command {
 
 	private static void addToNetwork(final EList<FBNetworkElement> fbNetwork, final FBNetworkElement element) {
 		fbNetwork.add(element);
-		if (element instanceof Group) {
-			((Group) element).getGroupElements().forEach(fbNetwork::add);
+		if (element instanceof final Group group) {
+			group.getGroupElements().forEach(fbNetwork::add);
 		}
 	}
 
@@ -152,18 +153,18 @@ public class AddElementsToSubAppCommand extends Command {
 			cmd.execute();
 			setUniqueName.add(cmd);
 		}
-		if (element instanceof Group) {
-			((Group) element).getGroupElements().forEach(this::ensureUniqueName);
+		if (element instanceof final Group group) {
+			group.getGroupElements().forEach(this::ensureUniqueName);
 		}
 	}
 
 	private void fillElementList(final List<?> selection) {
 		for (final Object fbNetworkElement : selection) {
-			if ((fbNetworkElement instanceof EditPart)
-					&& (((EditPart) fbNetworkElement).getModel() instanceof FBNetworkElement)) {
-				addElement((FBNetworkElement) ((EditPart) fbNetworkElement).getModel());
-			} else if (fbNetworkElement instanceof FBNetworkElement) {
-				addElement((FBNetworkElement) fbNetworkElement);
+			if ((fbNetworkElement instanceof final EditPart ep)
+					&& (ep.getModel() instanceof final FBNetworkElement fbel)) {
+				addElement(fbel);
+			} else if (fbNetworkElement instanceof final FBNetworkElement fbel) {
+				addElement(fbel);
 			}
 		}
 	}
@@ -177,25 +178,28 @@ public class AddElementsToSubAppCommand extends Command {
 		if (element.isMapped()) {
 			unmappingCmds.add(new UnmapCommand(element));
 		}
-		if (element instanceof Group) {
-			((Group) element).getGroupElements().forEach(this::checkMapping);
+		if (element instanceof final Group group) {
+			group.getGroupElements().forEach(this::checkMapping);
 		}
 	}
 
 	private void checkElementConnections(final FBNetworkElement element) {
-		for (final IInterfaceElement ie : element.getInterface().getAllInterfaceElements()) {
-			if (ie.isIsInput()) {
-				for (final Connection con : ie.getInputConnections()) {
-					checkConnection(con, con.getSource(), ie);
-				}
-			} else {
-				for (final Connection con : ie.getOutputConnections()) {
-					checkConnection(con, con.getDestination(), ie);
+		final InterfaceList interfaceList = element.getInterface();
+		if (interfaceList != null) {
+			for (final IInterfaceElement ie : interfaceList.getAllInterfaceElements()) {
+				if (ie.isIsInput()) {
+					for (final Connection con : ie.getInputConnections()) {
+						checkConnection(con, con.getSource(), ie);
+					}
+				} else {
+					for (final Connection con : ie.getOutputConnections()) {
+						checkConnection(con, con.getDestination(), ie);
+					}
 				}
 			}
 		}
-		if (element instanceof Group) {
-			((Group) element).getGroupElements().forEach(this::checkElementConnections);
+		if (element instanceof final Group group) {
+			group.getGroupElements().forEach(this::checkElementConnections);
 		}
 	}
 

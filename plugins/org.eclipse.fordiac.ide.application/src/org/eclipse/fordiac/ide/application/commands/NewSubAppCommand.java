@@ -113,7 +113,7 @@ public class NewSubAppCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	@Override
-	protected final InterfaceList getTypeInterfaceList() {
+	protected final InterfaceList createInterfaceList() {
 		return LibraryElementFactory.eINSTANCE.createInterfaceList();
 	}
 
