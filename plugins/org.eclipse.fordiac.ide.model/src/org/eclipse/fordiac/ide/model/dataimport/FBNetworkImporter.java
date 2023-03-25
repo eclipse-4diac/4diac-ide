@@ -56,6 +56,7 @@ import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
@@ -141,6 +142,9 @@ class FBNetworkImporter extends CommonElementImporter {
 		case LibraryElementTags.GROUP_ELEMENT:
 			parseGroup();
 			break;
+		case LibraryElementTags.COMMENT_ELEMENT:
+			parseComment();
+			break;
 		case LibraryElementTags.EVENT_CONNECTIONS_ELEMENT:
 			parseConnectionList(LibraryElementPackage.eINSTANCE.getEventConnection(), fbNetwork.getEventConnections(),
 					LibraryElementTags.EVENT_CONNECTIONS_ELEMENT);
@@ -178,6 +182,24 @@ class FBNetworkImporter extends CommonElementImporter {
 		fbNetwork.getNetworkElements().add(group);
 		fbNetworkElementMap.put(group.getName(), group);
 		proceedToEndElementNamed(LibraryElementTags.GROUP_ELEMENT);
+	}
+
+	private void parseComment() throws TypeImportException, XMLStreamException {
+		final Comment comment = LibraryElementFactory.eINSTANCE.createComment();
+		readCommentAttribute(comment);
+		getXandY(comment);
+
+		final String width = getAttributeValue(LibraryElementTags.WIDTH_ATTRIBUTE);
+		if (width != null) {
+			comment.setWidth(CoordinateConverter.INSTANCE.convertFrom1499XML(width));
+		}
+		final String height = getAttributeValue(LibraryElementTags.HEIGHT_ATTRIBUTE);
+		if (height != null) {
+			comment.setHeight(CoordinateConverter.INSTANCE.convertFrom1499XML(height));
+		}
+
+		fbNetwork.getNetworkElements().add(comment);
+		proceedToEndElementNamed(LibraryElementTags.COMMENT_ELEMENT);
 	}
 
 	private void parseFB() throws TypeImportException, XMLStreamException {

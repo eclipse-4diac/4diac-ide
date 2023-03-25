@@ -429,7 +429,7 @@ public abstract class CommonElementImporter {
 		}
 	}
 
-	private void readCommentAttribute(final INamedElement namedElement) {
+	protected void readCommentAttribute(final INamedElement namedElement) {
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
 			namedElement.setComment(fullyUnEscapeValue(comment));
@@ -752,8 +752,8 @@ public abstract class CommonElementImporter {
 		}
 		if (element instanceof Segment) {
 			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((SegmentTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
+			.addAll(EcoreUtil.copyAll(((SegmentTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+					.getType().getVarDeclaration()));
 		}
 		for (final VarDeclaration varDecl : element.getVarDeclarations()) {
 			final Value value = LibraryElementFactory.eINSTANCE.createValue();
