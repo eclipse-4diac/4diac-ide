@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
+import org.eclipse.draw2d.Cursors;
 import org.eclipse.draw2d.GridData;
 import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.IFigure;
@@ -60,6 +61,7 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 			setupFigure();
 			setupRootLayout();
 			comment = new InstanceCommentFigure();
+			comment.setCursor(Cursors.SIZEALL);
 			add(comment, new GridData(GridData.HORIZONTAL_ALIGN_FILL | GridData.GRAB_HORIZONTAL));
 		}
 
@@ -219,8 +221,8 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 			public void notifyChanged(final Notification notification) {
 				super.notifyChanged(notification);
 				final Object feature = notification.getFeature();
-				if (LibraryElementPackage.eINSTANCE.getGroup_Width().equals(feature)
-						|| LibraryElementPackage.eINSTANCE.getGroup_Height().equals(feature)) {
+				if (LibraryElementPackage.eINSTANCE.getComment_Width().equals(feature)
+						|| LibraryElementPackage.eINSTANCE.getComment_Height().equals(feature)) {
 					refreshPosition();
 				}
 			}
