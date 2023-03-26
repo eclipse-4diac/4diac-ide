@@ -23,7 +23,6 @@ import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterImpl;
-import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.figures.InstanceCommentFigure;
 import org.eclipse.fordiac.ide.gef.editparts.AbstractPositionableElementEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.FigureCellEditorLocator;
@@ -90,14 +89,13 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 
 	}
 
-	private class GroupCommentRenameEditPolicy extends AbstractViewRenameEditPolicy {
+	private class CommentRenameEditPolicy extends AbstractViewRenameEditPolicy {
 		@Override
 		protected Command getDirectEditCommand(final DirectEditRequest request) {
-			if (getHost() instanceof CommentEditPart) {
+			if (getHost() instanceof final CommentEditPart ep) {
 				final String str = (String) request.getCellEditor().getValue();
 				if (!InstanceCommentFigure.EMPTY_COMMENT.equals(str)) {
-					return new ResizeGroupOrSubappCommand((GraphicalEditPart) getHost(),
-							(Command) new ChangeCommentCommand(((CommentEditPart) getHost()).getModel(), str));
+					return new ChangeCommentCommand(ep.getModel(), str);
 				}
 			}
 			return null;
@@ -184,7 +182,7 @@ public class CommentEditPart extends AbstractPositionableElementEditPart {
 				return new DeleteFBNetworkElementCommand((Comment) getHost().getModel());
 			}
 		});
-		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new GroupCommentRenameEditPolicy());
+		installEditPolicy(EditPolicy.DIRECT_EDIT_ROLE, new CommentRenameEditPolicy());
 	}
 
 	@Override
