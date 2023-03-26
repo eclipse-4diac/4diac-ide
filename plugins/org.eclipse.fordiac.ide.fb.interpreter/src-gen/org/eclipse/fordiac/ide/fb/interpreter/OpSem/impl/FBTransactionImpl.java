@@ -15,16 +15,19 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl;
 
 import java.util.Collection;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
+import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.EObjectResolvingEList;
 import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
@@ -38,6 +41,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * Event Occurrences</em>}</li>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBTransactionImpl#getInputVariables <em>Input
  * Variables</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.FBTransactionImpl#getTrace <em>Trace</em>}</li>
  * </ul>
  *
  * @generated */
@@ -57,6 +61,14 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 	 * @generated
 	 * @ordered */
 	protected EList<VarDeclaration> inputVariables;
+
+	/** The cached value of the '{@link #getTrace() <em>Trace</em>}' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
+	 *
+	 * @see #getTrace()
+	 * @generated
+	 * @ordered */
+	protected Trace trace;
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -101,6 +113,77 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 	 *
 	 * @generated */
 	@Override
+	public Trace getTrace() {
+		if (trace != null && trace.eIsProxy()) {
+			InternalEObject oldTrace = (InternalEObject) trace;
+			trace = (Trace) eResolveProxy(oldTrace);
+			if (trace != oldTrace) {
+				InternalEObject newTrace = (InternalEObject) trace;
+				NotificationChain msgs = oldTrace.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.FB_TRANSACTION__TRACE, null, null);
+				if (newTrace.eInternalContainer() == null) {
+					msgs = newTrace.eInverseAdd(this,
+							EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.FB_TRANSACTION__TRACE, null, msgs);
+				}
+				if (msgs != null)
+					msgs.dispatch();
+				if (eNotificationRequired())
+					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
+							OperationalSemanticsPackage.FB_TRANSACTION__TRACE, oldTrace, trace));
+			}
+		}
+		return trace;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	public Trace basicGetTrace() {
+		return trace;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	public NotificationChain basicSetTrace(Trace newTrace, NotificationChain msgs) {
+		Trace oldTrace = trace;
+		trace = newTrace;
+		if (eNotificationRequired()) {
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					OperationalSemanticsPackage.FB_TRANSACTION__TRACE, oldTrace, newTrace);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
+		}
+		return msgs;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public void setTrace(Trace newTrace) {
+		if (newTrace != trace) {
+			NotificationChain msgs = null;
+			if (trace != null)
+				msgs = ((InternalEObject) trace).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.FB_TRANSACTION__TRACE, null, msgs);
+			if (newTrace != null)
+				msgs = ((InternalEObject) newTrace).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - OperationalSemanticsPackage.FB_TRANSACTION__TRACE, null, msgs);
+			msgs = basicSetTrace(newTrace, msgs);
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, OperationalSemanticsPackage.FB_TRANSACTION__TRACE,
+					newTrace, newTrace));
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
 	public void process() {
 		EventManagerUtils.processFbTransaction(this);
 	}
@@ -113,6 +196,8 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 		switch (featureID) {
 		case OperationalSemanticsPackage.FB_TRANSACTION__OUTPUT_EVENT_OCCURRENCES:
 			return ((InternalEList<?>) getOutputEventOccurrences()).basicRemove(otherEnd, msgs);
+		case OperationalSemanticsPackage.FB_TRANSACTION__TRACE:
+			return basicSetTrace(null, msgs);
 		default:
 			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
@@ -128,6 +213,10 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 			return getOutputEventOccurrences();
 		case OperationalSemanticsPackage.FB_TRANSACTION__INPUT_VARIABLES:
 			return getInputVariables();
+		case OperationalSemanticsPackage.FB_TRANSACTION__TRACE:
+			if (resolve)
+				return getTrace();
+			return basicGetTrace();
 		default:
 			return super.eGet(featureID, resolve, coreType);
 		}
@@ -148,6 +237,9 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 			getInputVariables().clear();
 			getInputVariables().addAll((Collection<? extends VarDeclaration>) newValue);
 			return;
+		case OperationalSemanticsPackage.FB_TRANSACTION__TRACE:
+			setTrace((Trace) newValue);
+			return;
 		default:
 			super.eSet(featureID, newValue);
 			return;
@@ -166,6 +258,9 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 		case OperationalSemanticsPackage.FB_TRANSACTION__INPUT_VARIABLES:
 			getInputVariables().clear();
 			return;
+		case OperationalSemanticsPackage.FB_TRANSACTION__TRACE:
+			setTrace((Trace) null);
+			return;
 		default:
 			super.eUnset(featureID);
 			return;
@@ -182,6 +277,8 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 			return outputEventOccurrences != null && !outputEventOccurrences.isEmpty();
 		case OperationalSemanticsPackage.FB_TRANSACTION__INPUT_VARIABLES:
 			return inputVariables != null && !inputVariables.isEmpty();
+		case OperationalSemanticsPackage.FB_TRANSACTION__TRACE:
+			return trace != null;
 		default:
 			return super.eIsSet(featureID);
 		}

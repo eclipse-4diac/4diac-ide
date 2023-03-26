@@ -303,12 +303,19 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @ordered */
 	int FB_TRANSACTION__INPUT_VARIABLES = TRANSACTION_FEATURE_COUNT + 1;
 
+	/** The feature id for the '<em><b>Trace</b></em>' containment reference. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 *
+	 * @generated
+	 * @ordered */
+	int FB_TRANSACTION__TRACE = TRANSACTION_FEATURE_COUNT + 2;
+
 	/** The number of structural features of the '<em>FB Transaction</em>' class. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered */
-	int FB_TRANSACTION_FEATURE_COUNT = TRANSACTION_FEATURE_COUNT + 2;
+	int FB_TRANSACTION_FEATURE_COUNT = TRANSACTION_FEATURE_COUNT + 3;
 
 	/** The meta object id for the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImpl
 	 * <em>Connection To Value Map</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -365,6 +372,42 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated
 	 * @ordered */
 	int RUNTIME_MAP_FEATURE_COUNT = 2;
+
+	/** The meta object id for the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TraceImpl <em>Trace</em>}'
+	 * class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TraceImpl
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getTrace()
+	 * @generated */
+	int TRACE = 10;
+
+	/** The number of structural features of the '<em>Trace</em>' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated
+	 * @ordered */
+	int TRACE_FEATURE_COUNT = 0;
+
+	/** The meta object id for the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EccTraceImpl <em>Ecc
+	 * Trace</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EccTraceImpl
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getEccTrace()
+	 * @generated */
+	int ECC_TRACE = 11;
+
+	/** The feature id for the '<em><b>Transitions</b></em>' reference list. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 *
+	 * @generated
+	 * @ordered */
+	int ECC_TRACE__TRANSITIONS = TRACE_FEATURE_COUNT + 0;
+
+	/** The number of structural features of the '<em>Ecc Trace</em>' class. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
+	 *
+	 * @generated
+	 * @ordered */
+	int ECC_TRACE_FEATURE_COUNT = TRACE_FEATURE_COUNT + 1;
 
 	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence <em>Event
 	 * Occurrence</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -620,6 +663,16 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @generated */
 	EReference getFBTransaction_InputVariables();
 
+	/** Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getTrace <em>Trace</em>}'. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the containment reference '<em>Trace</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getTrace()
+	 * @see #getFBTransaction()
+	 * @generated */
+	EReference getFBTransaction_Trace();
+
 	/** Returns the meta object for class '{@link java.util.Map.Entry <em>Connection To Value Map</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -677,6 +730,32 @@ public interface OperationalSemanticsPackage extends EPackage {
 	 * @see #getRuntimeMap()
 	 * @generated */
 	EReference getRuntimeMap_Value();
+
+	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace <em>Trace</em>}'.
+	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for class '<em>Trace</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace
+	 * @generated */
+	EClass getTrace();
+
+	/** Returns the meta object for class '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace <em>Ecc
+	 * Trace</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for class '<em>Ecc Trace</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace
+	 * @generated */
+	EClass getEccTrace();
+
+	/** Returns the meta object for the reference list
+	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace#getTransitions <em>Transitions</em>}'. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @return the meta object for the reference list '<em>Transitions</em>'.
+	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.EccTrace#getTransitions()
+	 * @see #getEccTrace()
+	 * @generated */
+	EReference getEccTrace_Transitions();
 
 	/** Returns the factory that creates the instances of the model. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -878,6 +957,12 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 * @generated */
 		EReference FB_TRANSACTION__INPUT_VARIABLES = eINSTANCE.getFBTransaction_InputVariables();
 
+		/** The meta object literal for the '<em><b>Trace</b></em>' containment reference feature. <!-- begin-user-doc
+		 * --> <!-- end-user-doc -->
+		 *
+		 * @generated */
+		EReference FB_TRANSACTION__TRACE = eINSTANCE.getFBTransaction_Trace();
+
 		/** The meta object literal for the
 		 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.ConnectionToValueMapImpl <em>Connection To Value
 		 * Map</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -918,6 +1003,28 @@ public interface OperationalSemanticsPackage extends EPackage {
 		 *
 		 * @generated */
 		EReference RUNTIME_MAP__VALUE = eINSTANCE.getRuntimeMap_Value();
+
+		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TraceImpl
+		 * <em>Trace</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.TraceImpl
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getTrace()
+		 * @generated */
+		EClass TRACE = eINSTANCE.getTrace();
+
+		/** The meta object literal for the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EccTraceImpl
+		 * <em>Ecc Trace</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
+		 *
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EccTraceImpl
+		 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.OperationalSemanticsPackageImpl#getEccTrace()
+		 * @generated */
+		EClass ECC_TRACE = eINSTANCE.getEccTrace();
+
+		/** The meta object literal for the '<em><b>Transitions</b></em>' reference list feature. <!-- begin-user-doc
+		 * --> <!-- end-user-doc -->
+		 *
+		 * @generated */
+		EReference ECC_TRACE__TRANSITIONS = eINSTANCE.getEccTrace_Transitions();
 
 	}
 

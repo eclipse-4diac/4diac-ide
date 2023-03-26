@@ -20,14 +20,20 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsFactory;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Trace;
+import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils;
+import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -155,6 +161,29 @@ public final class TransactionFactory {
 			}
 		}
 		return transaction;
+	}
+
+	public static Transaction addTraceInfoTo(final Transaction transaction) {
+		final BasicEList<Transaction> asList = new BasicEList<>();
+		asList.add(transaction);
+		return addTraceInfoTo(asList).get(0);
+	}
+
+	private static void createBasicFbTrace(final Transaction transaction) {
+		final Trace trace = OperationalSemanticsFactory.eINSTANCE.createEccTrace();
+		((FBTransaction) transaction).setTrace(trace);
+	}
+
+	public static List<Transaction> addTraceInfoTo(final EList<Transaction> transactions) {
+		final FBRuntimeAbstract fbRuntime = transactions.get(0).getInputEventOccurrence().getFbRuntime();
+		if (fbRuntime != null) {
+			final EObject executedModel = fbRuntime.getModel();
+			if (!(executedModel instanceof BasicFBType) || !(transactions.get(0) instanceof FBTransaction)) {
+				throw new UnsupportedOperationException("not implemented"); //$NON-NLS-1$
+			}
+			transactions.forEach(t -> createBasicFbTrace(t));
+		}
+		return transactions;
 	}
 
 	private TransactionFactory() {
