@@ -51,6 +51,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.CommandStack;
 
 public class SystemImporter extends CommonElementImporter {
@@ -62,6 +63,14 @@ public class SystemImporter extends CommonElementImporter {
 	@Override
 	public AutomationSystem getElement() {
 		return (AutomationSystem) super.getElement();
+	}
+
+	@Override
+	public void loadElement() {
+		final long start = System.nanoTime();
+		super.loadElement();
+		final long elapsed = System.nanoTime() - start;
+		FordiacLogHelper.logInfo("System \"" + getElement().getName() + "\" load time: " + elapsed / 1_000_000 + "ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override
