@@ -26,6 +26,10 @@ import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -33,6 +37,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -216,14 +221,16 @@ public abstract class CommonElementImporter {
 	}
 
 	protected void restorePersistedErrorMessages() {
-		EcoreUtil.getAllProperContents(element, false).forEachRemaining(this::restorePersistedErrorMessage);
+		FordiacMarkerHelper.findAllMarkers(file, element, FordiacErrorMarker.INITIAL_VALUE_MARKER,
+				CommonElementImporter::restorePersistedErrorMessage);
 	}
 
-	protected void restorePersistedErrorMessage(final Object object) {
-		if (object instanceof Value) {
-			final String errorMessage = FordiacMarkerHelper.findPersistedErrorMessage(file, (EObject) object,
-					FordiacErrorMarker.INITIAL_VALUE_MARKER);
-			((ErrorMarkerRef) object).setErrorMessage(errorMessage);
+	protected static void restorePersistedErrorMessage(final EObject target, final IMarker marker) {
+		if (target instanceof final ErrorMarkerRef errorMarkerRef
+				&& marker.getAttribute(IMarker.SEVERITY, 0) == IMarker.SEVERITY_ERROR) {
+			final String message = marker.getAttribute(IMarker.MESSAGE, null);
+			errorMarkerRef.setErrorMessage(Stream.of(errorMarkerRef.getErrorMessage(), message).filter(Objects::nonNull)
+					.filter(Predicate.not(String::isBlank)).collect(Collectors.joining(", "))); //$NON-NLS-1$
 		}
 	}
 
