@@ -25,6 +25,7 @@ public class GitLabPackageDownloaderPage extends FieldEditorPreferencePage imple
 
 	public GitLabPackageDownloaderPage() {
 		super(GRID);
+		setPreferenceStore(new ScopedPreferenceStore(InstanceScope.INSTANCE, Messages.GitLab_PreferenceId));
 	}
 
 	/**
@@ -51,8 +52,7 @@ public class GitLabPackageDownloaderPage extends FieldEditorPreferencePage imple
 
 	@Override
 	public void init(final IWorkbench workbench) {
-		setPreferenceStore(
-				new ScopedPreferenceStore(InstanceScope.INSTANCE, Messages.GitLab_PreferenceId));
+		
 	}
 
 }
