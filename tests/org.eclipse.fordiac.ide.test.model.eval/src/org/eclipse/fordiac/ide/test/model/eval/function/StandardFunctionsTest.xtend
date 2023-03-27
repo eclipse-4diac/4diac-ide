@@ -693,6 +693,24 @@ class StandardFunctionsTest {
 	}
 
 	@Test
+	def void testLowerBound() {
+		val array = new ArrayVariable("TEST", newArrayType(ElementaryTypes.INT, newSubrange(4, 17))).value
+		4.toDIntValue.assertEquals(StandardFunctions.invoke("LOWER_BOUND", array, 1.toIntValue))
+		val multiArray = new ArrayVariable("TEST", newArrayType(ElementaryTypes.INT, newSubrange(0, 1), newSubrange(4, 17))).value
+		0.toDIntValue.assertEquals(StandardFunctions.invoke("LOWER_BOUND", multiArray, 1.toIntValue))
+		4.toDIntValue.assertEquals(StandardFunctions.invoke("LOWER_BOUND", multiArray, 2.toIntValue))
+	}
+
+	@Test
+	def void testUpperBound() {
+		val array = new ArrayVariable("TEST", newArrayType(ElementaryTypes.INT, newSubrange(4, 17))).value
+		17.toDIntValue.assertEquals(StandardFunctions.invoke("UPPER_BOUND", array, 1.toIntValue))
+		val multiArray = new ArrayVariable("TEST", newArrayType(ElementaryTypes.INT, newSubrange(0, 1), newSubrange(4, 17))).value
+		1.toDIntValue.assertEquals(StandardFunctions.invoke("UPPER_BOUND", multiArray, 1.toIntValue))
+		17.toDIntValue.assertEquals(StandardFunctions.invoke("UPPER_BOUND", multiArray, 2.toIntValue))
+	}
+
+	@Test
 	def void testAddTime() {
 		Duration.ofSeconds(21).toTimeValue.assertEquals(
 			StandardFunctions.invoke("ADD", Duration.ofSeconds(17).toTimeValue, Duration.ofSeconds(4).toTimeValue))

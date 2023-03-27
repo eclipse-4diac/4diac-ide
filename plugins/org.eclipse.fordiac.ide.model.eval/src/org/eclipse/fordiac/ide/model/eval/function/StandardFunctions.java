@@ -44,6 +44,7 @@ import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyUnsignedValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyValue;
 import org.eclipse.fordiac.ide.model.eval.value.AnyWCharsValue;
+import org.eclipse.fordiac.ide.model.eval.value.ArrayValue;
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue;
 import org.eclipse.fordiac.ide.model.eval.value.ByteValue;
 import org.eclipse.fordiac.ide.model.eval.value.CharValue;
@@ -478,6 +479,18 @@ public interface StandardFunctions extends Functions {
 	static <T extends AnyWCharsValue> AnyIntValue FIND(@Comment("The WString to be searched.") final WStringValue first,
 			@Comment("The WString to be found.") final T second) {
 		return ULIntValue.toULIntValue(first.stringValue().indexOf(second.stringValue()) + 1L);
+	}
+
+	/* Array functions */
+
+	@Comment("Returns the lower bound of the dimension of the given array")
+	static <T extends ArrayValue, U extends AnyIntValue> AnyIntValue LOWER_BOUND(final T array, final U dimension) {
+		return DIntValue.toDIntValue(array.getType().getSubranges().get(dimension.intValue() - 1).getLowerLimit());
+	}
+
+	@Comment("Returns the upper bound of the dimension of the given array")
+	static <T extends ArrayValue, U extends AnyIntValue> AnyIntValue UPPER_BOUND(final T array, final U dimension) {
+		return DIntValue.toDIntValue(array.getType().getSubranges().get(dimension.intValue() - 1).getUpperLimit());
 	}
 
 	/* Numeric functions for time and date */

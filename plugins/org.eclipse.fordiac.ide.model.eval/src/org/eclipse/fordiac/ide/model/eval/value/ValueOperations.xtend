@@ -68,6 +68,8 @@ import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter
+import org.eclipse.fordiac.ide.model.data.ArrayType
+import org.eclipse.fordiac.ide.model.data.StructuredType
 
 final class ValueOperations {
 
@@ -1417,6 +1419,8 @@ final class ValueOperations {
 			AnyCharsType: AnyCharsValue
 			AnyDateType: AnyDateValue
 			AnyElementaryType: AnyElementaryValue
+			ArrayType: ArrayValue
+			StructuredType: StructValue
 			AnyDerivedType: AnyDerivedValue
 			AnyType: AnyValue
 			default: null
