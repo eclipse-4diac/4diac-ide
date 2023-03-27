@@ -146,7 +146,17 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''
 
 	def protected CharSequence generateLocalVariable(STVarDeclaration variable, boolean const) {
-		'''«variable.generateFeatureName(false)» = «IF variable.defaultValue !== null»«variable.defaultValue.generateInitializerExpression»«ELSE»nil«ENDIF»'''
+		/*if (variable.array) {
+		 * 	return '''«variable.generateFeatureName(false)» = STfunc.array({«variable.generateArrayRanges»}, «(variable.type as DataType).generateTypeDefaultValue», {})'''
+		 * }
+		 '''«variable.generateFeatureName(false)» = «IF variable.defaultValue !== null»«variable.defaultValue.generateInitializerExpression»«ELSE»nil«ENDIF»'''*/
+		'''«variable.generateFeatureName(false)» = «IF variable.array»STfunc.array({«variable.generateArrayRanges»}, «(variable.type as DataType).generateTypeDefaultValue», «IF variable.defaultValue !== null»«variable.defaultValue.generateInitializerExpression»«ELSE»{nil}«ENDIF»)
+		«ELSE»«IF variable.defaultValue !== null»«variable.defaultValue.generateInitializerExpression»«ELSE»«(variable.type as DataType).generateTypeDefaultValue»«ENDIF»«ENDIF»'''
+
+	}
+
+	def protected CharSequence generateArrayRanges(STVarDeclaration variable) {
+		'''«FOR range : variable.ranges SEPARATOR ', '»{«(range as STBinaryExpression).left.generateExpression», «(range as STBinaryExpression).right.generateExpression»}«ENDFOR»'''
 	}
 
 	def protected dispatch CharSequence generateInitializerExpression(STElementaryInitializerExpression expr) {
@@ -160,7 +170,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''«IF elem.initExpressions.empty»«elem.indexOrInitExpression.generateInitializerExpression»«ELSE»«elem.generateMultiArrayInitElement»«ENDIF»'''
 
 	def protected CharSequence generateMultiArrayInitElement(STArrayInitElement elem) //
-	'''«FOR i : 0..<(elem.indexOrInitExpression as STElementaryInitializerExpression).value.integerFromConstantExpression SEPARATOR ", "»«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateInitializerExpression»«ENDFOR»«ENDFOR»'''
+	//'''«FOR i : 0..<(elem.indexOrInitExpression as STElementaryInitializerExpression).value.integerFromConstantExpression SEPARATOR ", "»«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateInitializerExpression»«ENDFOR»«ENDFOR»'''
+	'''{«elem.indexOrInitExpression.generateInitializerExpression», {«FOR initExpression : elem.initExpressions SEPARATOR ", "»«initExpression.generateInitializerExpression»«ENDFOR»}}'''
 
 	def protected CharSequence generateStatementList(List<STStatement> statements) '''
 		«FOR statement : statements»
@@ -412,6 +423,11 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 							bits = "64"
 						}
 						call = '''STfunc.«name.toUpperCase»«bits»'''
+					}
+					// array functions
+					case "lower_bound",
+					case "upper_bound": {
+						call = '''STfunc.«name.toUpperCase»'''
 					}
 					// cast operations - byte values
 					case "bool_to_byte",
@@ -765,8 +781,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected Iterable<CharSequence> generateCallArguments(STFeatureExpression expr) {
 		try {
 			expr.mappedInputArguments.entrySet.map[key.generateInputCallArgument(value)] +
-				expr.mappedInOutArguments.entrySet.map[key.generateInOutCallArgument(value)] //+
-				//expr.mappedOutputArguments.entrySet.map[key.generateOutputCallArgument(value)]
+				expr.mappedInOutArguments.entrySet.map[key.generateInOutCallArgument(value)] // +
+				// expr.mappedOutputArguments.entrySet.map[key.generateOutputCallArgument(value)]
 		} catch (IndexOutOfBoundsException e) {
 			errors.add('''Not enough arguments for «expr.feature.name»''')
 			emptyList
@@ -775,7 +791,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			emptyList
 		}
 	}
-	
+
 	def protected Iterable<CharSequence> generateReturnArguments(STFeatureExpression expr) {
 		try {
 			expr.mappedInOutArguments.entrySet.map[key.generateOutputReturnArgument(value)] +
@@ -811,11 +827,11 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		errors.add('''The expression «expr.eClass.name» is not supported as an out parameter''')
 		""
 	}
-	
+
 	def protected dispatch CharSequence generateOutputExpression(STFeatureExpression expr) {
 		'''«expr.feature.generateOutputFeatureName»'''
 	}
-	
+
 	def protected dispatch CharSequence generateOutputFeatureName(INamedElement feature) {
 		errors.add('''The feature «feature.eClass.name» is not supported as an out parameter''')
 		""
@@ -825,9 +841,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateOutputFeatureName(STVarDeclaration feature) '''st_lv_«feature.name»'''
 
-	//def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //
-	//'''partial<«expr.specifier.generateMultiBitAccessSpecifier»>(«IF expr.expression !== null»«expr.expression.generateExpression»«ELSE»«expr.index»«ENDIF»)'''
-
+	// def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //
+	// '''partial<«expr.specifier.generateMultiBitAccessSpecifier»>(«IF expr.expression !== null»«expr.expression.generateExpression»«ELSE»«expr.index»«ENDIF»)'''
 //	def protected CharSequence generateMultiBitAccessSpecifier(STMultiBitAccessSpecifier spec) {
 //		switch (spec) {
 //			case null,
@@ -838,7 +853,6 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 //			case L: "CIEC_LWORD"
 //		}
 //	}
-
 	def protected dispatch CharSequence generateExpression(STNumericLiteral expr) //
 	'''«expr.value»'''
 
@@ -876,7 +890,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateVariableDefaultValue(VarDeclaration variable) {
-		//generateVariableDefaultValue(variable)
+		// generateVariableDefaultValue(variable)
 		'''nil'''
 	}
 
@@ -884,7 +898,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		if (variable.defaultValue !== null)
 			variable.defaultValue.generateInitializerExpression
 		else if (variable.array)
-			"{}"
+			"{lo=0, up=0}"
 		else
 			(variable.type as DataType).generateTypeDefaultValue
 	}
@@ -985,8 +999,9 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def static CharSequence generateTypeDefaultValue(DataType type) {
 		switch (type) {
 			AnyStringType: '''""'''
+			BoolType: '''false'''
 			AnyElementaryType: '''0'''
-			ArrayType: '''{}'''
+			ArrayType: '''{lo=0, up=0}'''
 			StructuredType: '''{}'''
 			default: '''0'''
 		}
