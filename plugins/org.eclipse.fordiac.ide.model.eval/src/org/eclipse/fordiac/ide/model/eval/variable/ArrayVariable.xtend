@@ -37,7 +37,7 @@ class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Var
 
 	new(String name, ArrayType type) {
 		super(name, type)
-		if(!type.subranges.forall[setLowerLimit && setUpperLimit]) {
+		if (!type.subranges.forall[isSetLowerLimit && isSetUpperLimit]) {
 			throw new IllegalArgumentException("Cannot instantiate array variable with unknown bounds")
 		}
 		elementType = if (type.subranges.size > 1)
@@ -56,7 +56,7 @@ class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Var
 	}
 
 	new(String name, ArrayType type, Value value) {
-		this(name, type)
+		this(name, type.withKnownBounds(value))
 		if(value !== null) this.value = value
 	}
 
@@ -102,13 +102,29 @@ class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Var
 		super.type as ArrayType
 	}
 
+	def protected static ArrayType withKnownBounds(ArrayType type, Value value) {
+		if (value instanceof ArrayValue) {
+			type.withKnownBounds(value.type.subranges)
+		} else
+			throw new ClassCastException('''Cannot assign value with incompatible type «value.type.name» as «type.name»''')
+	}
+
+	def protected static ArrayType withKnownBounds(ArrayType type, List<Subrange> knownSubranges) {
+		if (!type.subranges.forall[isSetLowerLimit && isSetUpperLimit]) {
+			type.baseType.newArrayType(type.subranges.indexed.map [
+				it.value.isSetLowerLimit && it.value.isSetUpperLimit ? it.value : knownSubranges.get(it.key)
+			].map[copy])
+		} else
+			type
+	}
+
 	def static ArrayType newArrayType(DataType arrayBaseType, Subrange... arraySubranges) {
 		arrayBaseType.newArrayType(arraySubranges as Iterable<Subrange>)
 	}
 
 	def static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
 		DataFactory.eINSTANCE.createArrayType => [
-			name = '''ARRAY [«arraySubranges.map['''«IF setLowerLimit && setUpperLimit»«lowerLimit»..«upperLimit»«ELSE»*«ENDIF»'''].join(", ")»] OF «arrayBaseType.name»'''
+			name = '''ARRAY [«arraySubranges.map['''«IF isSetLowerLimit && isSetUpperLimit»«lowerLimit»..«upperLimit»«ELSE»*«ENDIF»'''].join(", ")»] OF «arrayBaseType.name»'''
 			baseType = arrayBaseType
 			subranges.addAll(arraySubranges)
 		]
