@@ -146,7 +146,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''
 
 	def protected CharSequence generateLocalVariable(STVarDeclaration variable, boolean const) {
-		'''«variable.generateFeatureName» = «IF variable.defaultValue !== null»«variable.defaultValue.generateInitializerExpression»«ELSE»nil«ENDIF»'''
+		'''«variable.generateFeatureName(false)» = «IF variable.defaultValue !== null»«variable.defaultValue.generateInitializerExpression»«ELSE»nil«ENDIF»'''
 	}
 
 	def protected dispatch CharSequence generateInitializerExpression(STElementaryInitializerExpression expr) {
@@ -212,7 +212,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		loopStack.push("loop_" + loopIndex);
 		loopIndex++;
 		'''
-			for «stmt.variable.generateFeatureName» = «stmt.from.generateExpression», «stmt.to.generateExpression», «IF stmt.by !== null»«stmt.by.generateExpression»«ELSE»1«ENDIF» do
+			for «stmt.variable.generateFeatureName(false)» = «stmt.from.generateExpression», «stmt.to.generateExpression», «IF stmt.by !== null»«stmt.by.generateExpression»«ELSE»1«ENDIF» do
 			  «stmt.statements.generateStatementList»
 			  ::«loopStack.pop()»::
 			end
@@ -307,7 +307,12 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 					''''''
 				}
 			case MUL: '''(«expr.left.generateExpression» * «expr.right.generateExpression»)'''
-			case DIV: '''(«expr.left.generateExpression» «IF expr.left.resultType instanceof AnyRealType || expr.right.resultType instanceof AnyRealType»/«ELSE»//«ENDIF» «expr.right.generateExpression»)'''
+			case DIV:
+				if (expr.left.resultType instanceof AnyRealType || expr.right.resultType instanceof AnyRealType) {
+					'''(«expr.left.generateExpression» / «expr.right.generateExpression»)'''
+				} else {
+					'''math.floor(«expr.left.generateExpression» / «expr.right.generateExpression»)'''
+				}
 			case MOD: '''(«expr.left.generateExpression» % «expr.right.generateExpression»)'''
 			case POWER: '''(«expr.left.generateExpression»^«expr.right.generateExpression»)'''
 			default: {
@@ -349,7 +354,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	def protected dispatch CharSequence generateExpression(STArrayAccessExpression expr) //
 	'''«expr.receiver.generateExpression»«FOR index : expr.index»[«index.generateExpression»]«ENDFOR»'''
 
-	def protected dispatch CharSequence generateExpression(STFeatureExpression expr) { // TODO: function call
+	def protected dispatch CharSequence generateExpression(STFeatureExpression expr) {
 		if (expr.call) {
 			if (expr.feature instanceof STStandardFunction) {
 				var name = expr.feature.name.toLowerCase
@@ -746,25 +751,35 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 					}
 					// aliases
 					default:
-						call = '''«expr.feature.generateFeatureName»'''
+						call = '''«expr.feature.generateFeatureName(true)»'''
 				}
 				return '''«call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»«addPars»)'''
 			} else {
-				if (expr.mappedInOutArguments.size == 0 && expr.mappedOutputArguments == 0) { // inlining possible
-					return '''«expr.feature.generateFeatureName»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)'''
-				} else {
-				}
+				val list = '''{«FOR arg : expr.generateReturnArguments SEPARATOR ", "»'«arg»'«ENDFOR»}'''
+				return '''STfunc.wrapfunc(«expr.feature.generateFeatureName(true)», fb, ENV, «list»«FOR arg : expr.generateCallArguments BEFORE ', ' SEPARATOR ", "»«arg»«ENDFOR»)'''
 			}
 		}
-		'''«expr.feature.generateFeatureName»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
-
+		'''«expr.feature.generateFeatureName(false)»'''
 	}
 
 	def protected Iterable<CharSequence> generateCallArguments(STFeatureExpression expr) {
 		try {
 			expr.mappedInputArguments.entrySet.map[key.generateInputCallArgument(value)] +
-				expr.mappedInOutArguments.entrySet.map[key.generateInOutCallArgument(value)] +
-				expr.mappedOutputArguments.entrySet.map[key.generateOutputCallArgument(value)]
+				expr.mappedInOutArguments.entrySet.map[key.generateInOutCallArgument(value)] //+
+				//expr.mappedOutputArguments.entrySet.map[key.generateOutputCallArgument(value)]
+		} catch (IndexOutOfBoundsException e) {
+			errors.add('''Not enough arguments for «expr.feature.name»''')
+			emptyList
+		} catch (ClassCastException e) {
+			errors.add('''Mixing named and unnamed arguments is not allowed''')
+			emptyList
+		}
+	}
+	
+	def protected Iterable<CharSequence> generateReturnArguments(STFeatureExpression expr) {
+		try {
+			expr.mappedInOutArguments.entrySet.map[key.generateOutputReturnArgument(value)] +
+				expr.mappedOutputArguments.entrySet.map[key.generateOutputReturnArgument(value)]
 		} catch (IndexOutOfBoundsException e) {
 			errors.add('''Not enough arguments for «expr.feature.name»''')
 			emptyList
@@ -785,26 +800,44 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			argument.argument.generateExpression
 	}
 
-	def protected CharSequence generateOutputCallArgument(INamedElement parameter, STCallArgument argument) {
+	def protected CharSequence generateOutputReturnArgument(INamedElement parameter, STCallArgument argument) {
 		if (argument === null)
 			'''nil'''
 		else
-			argument.argument.generateExpression
+			argument.argument.generateOutputExpression
 	}
 
-	def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //
-	'''partial<«expr.specifier.generateMultiBitAccessSpecifier»>(«IF expr.expression !== null»«expr.expression.generateExpression»«ELSE»«expr.index»«ENDIF»)'''
-
-	def protected CharSequence generateMultiBitAccessSpecifier(STMultiBitAccessSpecifier spec) {
-		switch (spec) {
-			case null,
-			case X: "CIEC_BOOL"
-			case B: "CIEC_BYTE"
-			case W: "CIEC_WORD"
-			case D: "CIEC_DWORD"
-			case L: "CIEC_LWORD"
-		}
+	def protected dispatch CharSequence generateOutputExpression(STExpression expr) {
+		errors.add('''The expression «expr.eClass.name» is not supported as an out parameter''')
+		""
 	}
+	
+	def protected dispatch CharSequence generateOutputExpression(STFeatureExpression expr) {
+		'''«expr.feature.generateOutputFeatureName»'''
+	}
+	
+	def protected dispatch CharSequence generateOutputFeatureName(INamedElement feature) {
+		errors.add('''The feature «feature.eClass.name» is not supported as an out parameter''')
+		""
+	}
+
+	def protected dispatch CharSequence generateOutputFeatureName(VarDeclaration feature) '''fb_var_«feature.name»'''
+
+	def protected dispatch CharSequence generateOutputFeatureName(STVarDeclaration feature) '''st_lv_«feature.name»'''
+
+	//def protected dispatch CharSequence generateExpression(STMultibitPartialExpression expr) //
+	//'''partial<«expr.specifier.generateMultiBitAccessSpecifier»>(«IF expr.expression !== null»«expr.expression.generateExpression»«ELSE»«expr.index»«ENDIF»)'''
+
+//	def protected CharSequence generateMultiBitAccessSpecifier(STMultiBitAccessSpecifier spec) {
+//		switch (spec) {
+//			case null,
+//			case X: "CIEC_BOOL"
+//			case B: "CIEC_BYTE"
+//			case W: "CIEC_WORD"
+//			case D: "CIEC_DWORD"
+//			case L: "CIEC_LWORD"
+//		}
+//	}
 
 	def protected dispatch CharSequence generateExpression(STNumericLiteral expr) //
 	'''«expr.value»'''
@@ -813,16 +846,16 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	'''"«expr.value.toString.convertToJavaString»"'''
 
 	def protected dispatch CharSequence generateExpression(STDateLiteral expr) //
-	'''CIEC_DATE(«expr.value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L»)'''
+	'''«expr.value.toEpochSecond(LocalTime.MIDNIGHT, ZoneOffset.UTC) * 1000000000L»'''
 
 	def protected dispatch CharSequence generateExpression(STTimeLiteral expr) //
-	'''CIEC_TIME(«expr.value.toNanos»)'''
+	'''«expr.value.toNanos»'''
 
 	def protected dispatch CharSequence generateExpression(STTimeOfDayLiteral expr) //
-	'''CIEC_TIME_OF_DAY(«expr.value.toNanoOfDay»)'''
+	'''«expr.value.toNanoOfDay»'''
 
 	def protected dispatch CharSequence generateExpression(STDateAndTimeLiteral expr) //
-	'''CIEC_DATE_AND_TIME(«LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(expr.value, ChronoUnit.NANOS)»)'''
+	'''«LocalDateTime.ofInstant(Instant.EPOCH, ZoneOffset.UTC).until(expr.value, ChronoUnit.NANOS)»'''
 
 	def protected dispatch CharSequence generateTemplateExpression(STBinaryExpression expr) {
 		switch (expr.op) {
@@ -843,7 +876,8 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateVariableDefaultValue(VarDeclaration variable) {
-		generateVariableDefaultValue(variable)
+		//generateVariableDefaultValue(variable)
+		'''nil'''
 	}
 
 	def protected dispatch CharSequence generateVariableDefaultValue(STVarDeclaration variable) {
@@ -855,24 +889,27 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 			(variable.type as DataType).generateTypeDefaultValue
 	}
 
-	def protected dispatch CharSequence generateFeatureName(INamedElement feature) {
+	def protected dispatch CharSequence generateFeatureName(INamedElement feature, boolean call) {
 		errors.add('''The feature «feature.eClass.name» is not supported''')
 		""
 	}
 
-	def protected dispatch CharSequence generateFeatureName(VarDeclaration feature) '''ENV.fb_var_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(VarDeclaration feature,
+		boolean call) '''ENV.fb_var_«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) '''ENV.st_lv_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature,
+		boolean call) '''ENV.st_lv_«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(STFunction feature) '''func_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(STFunction feature, boolean call) '''func_«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(STStandardFunction feature) '''STfunc.«feature.name»''' // TODO: map standard functions
+	def protected dispatch CharSequence generateFeatureName(STStandardFunction feature,
+		boolean call) '''STfunc.«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(STMethod feature) '''method_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(STMethod feature, boolean call) '''method_«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(FB feature) '''fb_«feature.name»()'''
+	def protected dispatch CharSequence generateFeatureName(FB feature, boolean call) '''fb_«feature.name»()'''
 
-	def protected dispatch CharSequence generateFeatureName(Event feature) '''evt_«feature.name»'''
+	def protected dispatch CharSequence generateFeatureName(Event feature, boolean call) '''evt_«feature.name»'''
 
 	def protected dispatch INamedElement getType(INamedElement feature) {
 		errors.add('''The feature «feature.eClass.name» is not supported''')

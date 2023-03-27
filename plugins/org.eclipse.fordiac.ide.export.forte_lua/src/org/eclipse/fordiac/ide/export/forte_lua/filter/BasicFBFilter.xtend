@@ -33,6 +33,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static extension org.eclipse.fordiac.ide.export.forte_lua.filter.LuaConstants.*
+import org.eclipse.fordiac.ide.model.libraryElement.STMethod
+import org.eclipse.fordiac.ide.model.libraryElement.Method
 
 class BasicFBFilter {
 	Map<ECTransition, ILanguageSupport> transitionLanguageSupport;
@@ -52,6 +54,8 @@ class BasicFBFilter {
 		local STfunc = require "STfunc"
 		
 		«type.luaConstants»
+		
+		«type.luaMethods»
 		
 		«type.luaAlgorithms»
 		
@@ -156,6 +160,25 @@ class BasicFBFilter {
 		  return true
 		end
 	'''
+
+	def private luaMethods(BasicFBType type) '''
+		«FOR meth : type.methods»
+			«meth.luaMethod»
+			
+		«ENDFOR»
+	'''
+	
+	def private dispatch luaMethod(Method meth) {
+		throw new UnsupportedOperationException("Cannot export algorithm " + meth.class)
+	}
+	
+	def private dispatch luaMethod(STMethod meth) {
+		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", meth)
+		val result = '''«lang.generate(Collections.emptyMap())»'''
+		errors.addAll(lang.errors.map['''Error in algorithm «meth.name»: «it»'''])
+		lang.errors.clear()
+		return result
+	}
 
 	def private luaAlgorithms(BasicFBType type) '''
 		«FOR alg : type.algorithm»

@@ -24,11 +24,15 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlo
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInOutDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 
 @FinalFieldsConstructor
 class STFunctionSupport extends StructuredTextSupport {
 	final STFunctionSource source
 	STFunction currentFunction
+	CharSequence outReturn
 
 	override prepare(Map<?, ?> options) {
 		return true
@@ -36,74 +40,97 @@ class STFunctionSupport extends StructuredTextSupport {
 
 	override generate(Map<?, ?> options) throws ExportException {
 		prepare(options)
-//		if (options.get(ForteNgExportFilter.OPTION_HEADER) == Boolean.TRUE)
-//			source.generateStructuredTextFunctionSourceHeader
-//		else
-			source.generateStructuredTextFunctionSourceImpl
+		source.generateStructuredTextFunctionSource
 	}
 
-	def private CharSequence generateStructuredTextFunctionSourceHeader(STFunctionSource source) {
+	def private CharSequence generateStructuredTextFunctionSource(STFunctionSource source) {
 		val result = new StringBuilder
 		for (function : source.functions) {
 			currentFunction = function
-			result.append(function.generateStructuredTextFunctionHeader)
+			result.append(function.generateStructuredTextFunction)
 			currentFunction = null
 		}
 		result
 	}
 
-	def private CharSequence generateStructuredTextFunctionSourceImpl(STFunctionSource source) {
-		val result = new StringBuilder
-		for (function : source.functions) {
-			currentFunction = function
-			result.append(function.generateStructuredTextFunctionImpl)
-			currentFunction = null
-		}
-		result
+	def private CharSequence generateStructuredTextFunction(STFunction func) {
+		outReturn = generateOutReturn(func)
+		return '''
+			local function func_«func.name»(fb, «func.generateStructuredTextFunctionParameters»)
+				local ENV = {}
+				st_ret_val = nil
+				«func.varDeclarations.filter(STVarInputDeclarationBlock).generateInParameterPrefix»
+				«func.varDeclarations.filter(STVarInOutDeclarationBlock).generateInParameterPrefix»
+				«func.varDeclarations.filter(STVarTempDeclarationBlock).generateLocalVariables»
+				
+				«func.code.generateStatementList»
+				
+				return st_ret_val«outReturn»
+			end
+		'''
 	}
-
-	def private CharSequence generateStructuredTextFunctionHeader(STFunction func) '''
-		«func.generateStructuredTextFunctionDeclaration»;
-	'''
-
-	def private CharSequence generateStructuredTextFunctionImpl(STFunction func) '''
-		«func.generateStructuredTextFunctionDeclaration» {
-		  «func.generateStructuredTextFunctionBody»
-		}
-		
-	'''
-
-	def private CharSequence generateStructuredTextFunctionDeclaration(STFunction func) //
-	'''local function func_«func.name»(«func.generateStructuredTextFunctionParameters»)'''
 
 	def private CharSequence generateStructuredTextFunctionParameters(STFunction func) //
-	'''«FOR param : func.structuredTextFunctionParameters SEPARATOR ", "» «IF param.value»&«ENDIF»«param.key.generateFeatureName»«ENDFOR»'''
+	'''«FOR param : func.structuredTextFunctionParameters SEPARATOR ', '»par_«param.name»«ENDFOR»'''
 
 	def private getStructuredTextFunctionParameters(STFunction func) {
-		func.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations].map[it -> false] +
-			func.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations].map[it -> true]
+		func.varDeclarations.filter(STVarInputDeclarationBlock).flatMap[varDeclarations] +
+			func.varDeclarations.filter(STVarInOutDeclarationBlock).flatMap[varDeclarations] // +
+			// method.body.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations].map[it -> true]
 	}
 
-	def private CharSequence generateStructuredTextFunctionBody(STFunction func) '''
-«««		«IF func.returnType !== null»«func.returnType.generateTypeName» st_ret_val = «func.returnType.generateDefaultValue»;«ENDIF»
-		local ENV = {}
-		«func.varDeclarations.filter(STVarPlainDeclarationBlock).generateLocalVariables»
-		«func.varDeclarations.filter(STVarTempDeclarationBlock).generateLocalVariables»
-		
-		«func.code.generateStatementList»
-		
-		«IF func.returnType !== null»return st_ret_val;«ENDIF»
+	def private getStructuredTextOutParameters(STFunction func) {
+		func.varDeclarations.filter(STVarInOutDeclarationBlock).flatMap[varDeclarations] +
+			func.varDeclarations.filter(STVarOutputDeclarationBlock).flatMap[varDeclarations]
+	}
+
+	def protected CharSequence generateInParameterPrefix(Iterable<? extends STVarDeclarationBlock> blocks) '''
+		«FOR block : blocks»
+			«block.generateInParameterBlock»
+		«ENDFOR»
 	'''
 
-	override protected dispatch CharSequence generateStatement(STReturn stmt) //
-	'''return«IF currentFunction.returnType !== null» st_ret_val«ENDIF»;'''
+	def protected CharSequence generateInParameterBlock(STVarDeclarationBlock block) '''
+		«FOR variable : block.varDeclarations.filter(STVarDeclaration)»
+			«variable.generateInParameter»
+		«ENDFOR»
+	'''
 
-	override protected dispatch CharSequence generateExpression(STFeatureExpression expr) {
-		if (expr.feature === currentFunction && !expr.call)
-			"st_ret_val"
-		else
-			'''«expr.feature.generateFeatureName»«IF expr.call»(«FOR arg : expr.generateCallArguments SEPARATOR ", "»«arg»«ENDFOR»)«ENDIF»'''
+	def protected CharSequence generateInParameter(STVarDeclaration variable) '''
+		ENV.st_lv_«variable.name» = par_«variable.name»
+	'''
+
+	def protected CharSequence generateOutParameterSuffix(Iterable<? extends STVarDeclarationBlock> blocks) '''
+		«FOR block : blocks»
+			«block.generateOutParameterBlock»
+		«ENDFOR»
+	'''
+
+	def protected CharSequence generateOutParameterBlock(STVarDeclarationBlock block) '''
+		«FOR variable : block.varDeclarations.filter(STVarDeclaration)»
+			«variable.generateOutParameter»
+		«ENDFOR»
+	'''
+
+	def protected CharSequence generateOutParameter(STVarDeclaration variable) '''
+		par_«variable.name» = ENV.st_lv_«variable.name»
+	'''
+
+	override protected dispatch CharSequence generateFeatureName(STFunction feature, boolean call) {
+		if (call) {
+			return '''method_«feature.name»'''
+		} else {
+			return '''st_ret_val'''
+		}
 	}
+
+	override protected dispatch CharSequence generateStatement(STReturn stmt) '''
+		return st_ret_val«outReturn»
+	'''
+
+	def private CharSequence generateOutReturn(STFunction function) '''
+		«FOR param : function.structuredTextOutParameters BEFORE ', ' SEPARATOR ', '»«param.generateFeatureName(false)»«ENDFOR»
+	'''
 
 	override getDependencies(Map<?, ?> options) {
 		prepare(options)
@@ -114,6 +141,6 @@ class STFunctionSupport extends StructuredTextSupport {
 //				]
 //			].flatMap[varDeclarations].map[type]).toSet
 //		else
-			source.containedDependencies
+		source.containedDependencies
 	}
 }

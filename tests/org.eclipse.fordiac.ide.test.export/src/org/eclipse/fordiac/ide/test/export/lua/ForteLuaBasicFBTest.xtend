@@ -47,6 +47,7 @@ class ForteLuaBasicFBTest extends ExporterTestBasicFBTypeAdvanced {
 			local ADO_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_OUTPUT_NAME» = 167772160
 			local ADI_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_INPUT_NAME» = 201326592
 			
+			
 			local function alg_ALG1(fb)
 			  local ENV = {}
 			  ENV.fb_var_«DATA_INPUT_NAME» = fb[DI_«DATA_INPUT_NAME»]

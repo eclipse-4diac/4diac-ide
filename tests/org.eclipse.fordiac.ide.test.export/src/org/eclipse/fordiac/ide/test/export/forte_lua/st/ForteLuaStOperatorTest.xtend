@@ -128,7 +128,7 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			«var_a» = nil
 			
 			«var_a» = 1
-			«var_a» = («var_a» // 1)
+			«var_a» = math.floor(«var_a» / 1)
 		'''.toString(), result.toString())
 	}
 
@@ -468,7 +468,7 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 			«var_a» = 1.1
 			«var_b» = 5
 			«var_c» = 2
-			«var_a» = («var_a» * («var_b» // -«var_c»))
+			«var_a» = («var_a» * math.floor(«var_b» / -«var_c»))
 			«var_a» = ((«var_a» * «var_b») / «var_c»)
 			«var_a» = ((«var_a» * «var_b») + «var_c»)
 		'''.toString(), result.toString())
