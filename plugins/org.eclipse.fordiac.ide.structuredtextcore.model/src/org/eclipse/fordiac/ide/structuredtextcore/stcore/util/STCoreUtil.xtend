@@ -80,7 +80,6 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STIfStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMemberAccessExpression
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STMultibitPartialExpression
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STNumericLiteral
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STRepeatStatement
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STString
@@ -196,16 +195,6 @@ final class STCoreUtil {
 			case LT,
 			case RANGE:
 				true
-		}
-	}
-
-	def static boolean isAssignable(STExpression expression) {
-		switch (it : expression) {
-			STMultibitPartialExpression,
-			STFeatureExpression case !call,
-			STArrayAccessExpression case receiver.assignable,
-			STMemberAccessExpression case receiver.assignable && member.assignable: true
-			default: false
 		}
 	}
 

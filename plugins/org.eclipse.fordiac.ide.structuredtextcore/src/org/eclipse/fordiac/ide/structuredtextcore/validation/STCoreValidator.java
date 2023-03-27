@@ -16,6 +16,7 @@
  *       - validation for partial bit access
  *       - validaton for array access
  *       - validaton for string access
+ *       - validation for assignability (cannot assign to consts/inputs)
  *   Ulzii Jargalsaikhan
  *       - custom validation for identifiers
  *   Martin Jobst
@@ -46,10 +47,13 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
+import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.value.NumericValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STStringValueConverter;
@@ -78,9 +82,12 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStringLiteral;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STUnaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarInputDeclarationBlock;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil;
 import org.eclipse.xtext.EcoreUtil2;
+import org.eclipse.xtext.diagnostics.Severity;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.validation.Check;
@@ -101,7 +108,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			+ "consecutiveUnderscoreInIdentifierError"; //$NON-NLS-1$
 	public static final String TRAILING_UNDERSCORE_IN_IDENTIFIER_ERROR = ISSUE_CODE_PREFIX
 			+ "identiferEndsInUnderscoreError"; //$NON-NLS-1$
-	public static final String NOT_ASSIGNABLE = ISSUE_CODE_PREFIX + "notAssignable"; //$NON-NLS-1$
+	public static final String VALUE_NOT_ASSIGNABLE = ISSUE_CODE_PREFIX + "valueNotAssignable"; //$NON-NLS-1$
 	public static final String NON_COMPATIBLE_TYPES = ISSUE_CODE_PREFIX + "nonCompatibleTypes"; //$NON-NLS-1$
 	public static final String WRONG_NAME_CASE = ISSUE_CODE_PREFIX + "wrongNameCase"; //$NON-NLS-1$
 	public static final String RESERVED_IDENTIFIER_ERROR = ISSUE_CODE_PREFIX + "reservedIdentifierError"; //$NON-NLS-1$
@@ -325,9 +332,22 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 
 	@Check
 	public void checkValidLHS(final STAssignmentStatement statement) {
-		if (!STCoreUtil.isAssignable(statement.getLeft())) {
-			error(Messages.STCoreValidator_Assignment_Invalid_Left_Side, statement,
-					STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT, NOT_ASSIGNABLE);
+		final var assignability = isAssignable(statement.getLeft());
+		switch (assignability.getSeverity()) {
+		case ERROR:
+			error(assignability.getMessage(), statement, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT,
+					assignability.getCode());
+			break;
+		case WARNING:
+			warning(assignability.getMessage(), statement, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT,
+					assignability.getCode());
+			break;
+		case INFO:
+			info(assignability.getMessage(), statement, STCorePackage.Literals.ST_ASSIGNMENT_STATEMENT__LEFT,
+					assignability.getCode());
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -364,7 +384,6 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		final INode node = NodeModelUtils.getNode(featureExpression);
 
 		if (node != null && feature != null) {
-
 			final String originalName = feature.getName();
 			final String nameInText = node.getText().trim().substring(0, originalName.length());
 
@@ -484,9 +503,9 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 			boolean error = false;
 			for (int index = callable.getInputParameters().size(); index < expression.getParameters().size(); ++index) {
 				final STCallUnnamedArgument arg = (STCallUnnamedArgument) expression.getParameters().get(index);
-				if (!STCoreUtil.isAssignable(arg.getArgument())) {
+				if (isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
 					error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
-							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, NOT_ASSIGNABLE);
+							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, VALUE_NOT_ASSIGNABLE);
 					error = true;
 				}
 			}
@@ -508,15 +527,15 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 				final STCallArgument elem = expression.getParameters().get(index);
 				if (elem instanceof final STCallNamedInputArgument arg) {
 					if (callable.getInOutParameters().contains(arg.getParameter())
-							&& !STCoreUtil.isAssignable(arg.getArgument())) {
+							&& isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
 						error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
-								STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, NOT_ASSIGNABLE);
+								STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, VALUE_NOT_ASSIGNABLE);
 						error = true;
 					}
 				} else if (elem instanceof final STCallNamedOutputArgument arg
-						&& !STCoreUtil.isAssignable(arg.getArgument())) {
+						&& isAssignable(arg.getArgument()) != IsAssignableResult.ASSIGNABLE) {
 					error(Messages.STCoreValidator_Argument_Not_Assignable, expression,
-							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, NOT_ASSIGNABLE);
+							STCorePackage.Literals.ST_FEATURE_EXPRESSION__PARAMETERS, index, VALUE_NOT_ASSIGNABLE);
 					error = true;
 				}
 			}
@@ -765,5 +784,92 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 					destination.getName()), feature, index, NON_COMPATIBLE_TYPES, source.getName(),
 					destination.getName());
 		}
+	}
+
+	protected static IsAssignableResult isAssignable(final STExpression expression) {
+		if (expression instanceof final STMultibitPartialExpression) {
+			return IsAssignableResult.ASSIGNABLE;
+		}
+		if (expression instanceof final STFeatureExpression featureExpression) {
+			return isFeatureExpressionAssignable(featureExpression);
+		}
+		if (expression instanceof final STArrayAccessExpression arrayAccessExpression) {
+			return isAssignable(arrayAccessExpression.getReceiver());
+		}
+		if (expression instanceof final STMemberAccessExpression memberAccessExpression) {
+			return isMemberExpressionAssignable(memberAccessExpression);
+		}
+		return IsAssignableResult.NOT_ASSIGNABLE;
+	}
+
+	private static IsAssignableResult isMemberExpressionAssignable(
+			final STMemberAccessExpression memberAccessExpression) {
+		final IsAssignableResult receiverResult = isAssignable(memberAccessExpression.getReceiver());
+		final IsAssignableResult memberResult = isAssignable(memberAccessExpression.getMember());
+		if (receiverResult != IsAssignableResult.ASSIGNABLE) {
+			return receiverResult;
+		}
+		if (memberResult != IsAssignableResult.ASSIGNABLE) {
+			return memberResult;
+		}
+		return IsAssignableResult.ASSIGNABLE;
+	}
+
+	private static IsAssignableResult isFeatureExpressionAssignable(final STFeatureExpression featureExpression) {
+		if (featureExpression.isCall()) {
+			return IsAssignableResult.CALL_NOT_ASSIGNABLE;
+		}
+		final var feature = featureExpression.getFeature();
+		if (feature instanceof final VarDeclaration varDeclaration
+				&& EcoreUtil2.getContainerOfType(varDeclaration, FBType.class) instanceof final BaseFBType baseFBType) {
+			if (baseFBType.getInternalConstVars().stream()
+					.anyMatch(variable -> variable.getName().equals(varDeclaration.getName()))) {
+				return IsAssignableResult.CONST_NOT_ASSIGNABLE;
+			}
+			if (baseFBType.getInterfaceList().getInputVars().stream()
+					.anyMatch(variable -> variable.getName().equals(varDeclaration.getName()))) {
+				return IsAssignableResult.INPUT_NOT_ASSIGNABLE;
+			}
+		}
+		if (feature instanceof final STVarDeclaration varDeclaration
+				&& varDeclaration.eContainer() instanceof final STVarDeclarationBlock varBlock) {
+			if (varBlock.isConstant()) {
+				return IsAssignableResult.CONST_NOT_ASSIGNABLE;
+			}
+			if (varBlock instanceof STVarInputDeclarationBlock) {
+				return IsAssignableResult.INPUT_NOT_ASSIGNABLE;
+			}
+		}
+		return IsAssignableResult.ASSIGNABLE;
+	}
+
+	private enum IsAssignableResult {
+		ASSIGNABLE(null, null, null),
+		NOT_ASSIGNABLE(Severity.ERROR, VALUE_NOT_ASSIGNABLE, Messages.STCoreValidator_Assignment_Invalid_Left_Side),
+		CALL_NOT_ASSIGNABLE(Severity.ERROR, VALUE_NOT_ASSIGNABLE, Messages.STCoreValidator_CallsCannotBeAssignedTo),
+		CONST_NOT_ASSIGNABLE(Severity.ERROR, VALUE_NOT_ASSIGNABLE, Messages.STCoreValidator_ConstantsCannotBeAssigned),
+		INPUT_NOT_ASSIGNABLE(Severity.WARNING, VALUE_NOT_ASSIGNABLE, Messages.STCoreValidator_InputsCannotBeAssigned);
+
+		IsAssignableResult(final Severity severity, final String code, final String message) {
+			this.severity = severity;
+			this.code = code;
+			this.message = message;
+		}
+
+		public Severity getSeverity() {
+			return severity;
+		}
+
+		public String getCode() {
+			return code;
+		}
+
+		public String getMessage() {
+			return message;
+		}
+
+		final Severity severity;
+		final String code;
+		private final String message;
 	}
 }

@@ -239,7 +239,12 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	@Test
 	def void testMethodCallWithInOut() {
 		42.toIntValue.assertEquals(#[
-			'''THIS.TEST_METHOD(X := DI1, A := DI2, O => DO1); DO1 := DO1 + DI1;'''.newSTAlgorithm("REQ"),
+			'''
+				VAR_TEMP
+					tempVar : INT;
+				END_VAR
+				tempVar := DI1;
+				THIS.TEST_METHOD(X := tempVar, A := DI2, O => DO1); DO1 := DO1 + tempVar;'''.newSTAlgorithm("REQ"),
 			'''
 				METHOD TEST_METHOD
 				VAR_INPUT
@@ -261,7 +266,12 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	@Test
 	def void testMethodCallNonFormalWithInOut() {
 		42.toIntValue.assertEquals(#[
-			'''THIS.TEST_METHOD(DI2, DI1, DO1); DO1 := DO1 + DI1;'''.newSTAlgorithm("REQ"),
+			'''
+				VAR_TEMP
+					tempVar : INT;
+				END_VAR
+				tempVar := DI1;
+				THIS.TEST_METHOD(DI2, tempVar, DO1); DO1 := DO1 + tempVar;'''.newSTAlgorithm("REQ"),
 			'''
 				METHOD TEST_METHOD
 				VAR_INPUT
@@ -523,7 +533,15 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	@Test
 	def void testMethod2MethodCallWithInOut() {
 		42.toIntValue.assertEquals(#[
-			'''THIS.TEST_METHOD(X := DI1, A := DI2, O => DO1); DO1 := DO1 + DI1;'''.newSTAlgorithm("REQ"),
+			'''
+				ALGORITHM REQ
+				VAR_TEMP
+					tempVar : INT;
+				END_VAR
+				tempVar := DI1;
+				THIS.TEST_METHOD(X := tempVar, A := DI2, O => DO1); DO1 := DO1 + tempVar;
+				END_ALGORITHM
+			'''.newSTAlgorithm("REQ"),
 			'''
 				METHOD TEST_METHOD
 				VAR_INPUT
@@ -559,7 +577,12 @@ class SimpleFBEvaluatorTest extends FBEvaluatorTest {
 	@Test
 	def void testMethod2MethodCallNonFormalWithInOut() {
 		21.toIntValue.assertEquals(#[
-			'''THIS.TEST_METHOD(DI2, DI1); DO1 := DI1;'''.newSTAlgorithm("REQ"),
+			'''
+				VAR_TEMP
+					tempVar : INT;
+				END_VAR
+				tempVar := DI1;
+				THIS.TEST_METHOD(DI2, tempVar); DO1 := tempVar;'''.newSTAlgorithm("REQ"),
 			'''
 				METHOD TEST_METHOD
 				VAR_INPUT
