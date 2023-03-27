@@ -77,7 +77,7 @@ public class SubAppItemProviderForSystem extends SubAppItemProvider {
 		return super.getParent(object);
 	}
 
-	private FBNetwork getFBNetwork(final Object object) {
+	protected FBNetwork getFBNetwork(final Object object) {
 		final SubApp subapp = ((SubApp) object);
 		FBNetwork subAppNetwork = subapp.getSubAppNetwork();
 		if ((null == subAppNetwork) && subapp.isTyped()) {
@@ -90,6 +90,10 @@ public class SubAppItemProviderForSystem extends SubAppItemProvider {
 			subAppNetwork.eAdapters().add(subAppNetworkItemProvider);
 		}
 		return subAppNetwork;
+	}
+
+	protected FBNetworkItemProvider getSubAppNetworkItemProvider() {
+		return subAppNetworkItemProvider;
 	}
 
 	@Override
