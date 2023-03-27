@@ -30,6 +30,6 @@ final class STVariableOperations {
 	}
 
 	def static Variable<?> newVariable(STVarDeclaration decl, Value value) {
-		newVariable(decl.name, value)
+		newVariable(decl.name, decl.featureType, value)
 	}
 }

@@ -56,7 +56,7 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator {
 
 	override evaluate() {
 		prepare
-		val result = newVariable(varDeclaration.name, varDeclaration.actualType)
+		val result = newVariable(varDeclaration.name, parseResult?.initializerExpression?.resultType ?: varDeclaration.actualType)
 		if (parseResult?.initializerExpression !== null) {
 			result.evaluateInitializerExpression(parseResult.initializerExpression)
 		}
