@@ -62,4 +62,50 @@ END_ALGORITHM
 ]]></ST>
 		</Algorithm>
 	</BasicFB>
+	<Service RightInterface="right interface" LeftInterface="left interface" Comment="Event driven up counter">
+		<ServiceSequence Name="Service Sequence" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters="CV:=0"/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="CV:=1"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="Service Sequence" Comment="">
+			<Attribute Name="StartState" Type="STRING" Value="START"/>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters=""/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="Q:=BOOL#TRUE; CV:=UINT#1; "/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters=""/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="Q:=BOOL#TRUE; CV:=UINT#2; "/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="Service Sequence" Comment="">
+			<Attribute Name="StartState" Type="STRING" Value="START"/>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters=""/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="Q:=BOOL#TRUE;
+CV:=UINT#1;
+"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters=""/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="Q:=BOOL#TRUE;
+CV:=UINT#1;
+"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters=""/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="Q:=BOOL#TRUE;
+CV:=UINT#1;
+"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters=""/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="Q:=BOOL#TRUE;
+CV:=UINT#1;
+"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+	</Service>
 </FBType>

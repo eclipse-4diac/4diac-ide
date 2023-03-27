@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<FBType Name="BasicAdapter2" Comment="Basic FB with empty ECC">
-	<Identification Standard="61499-2">
+<FBType Name="BasicAdapter2" Comment="Adapter communication, events only">
+	<Identification Standard="61499-2" Description="Copyright (c) 2023 Johannes Kepler University Linz This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0&#10;" >
 	</Identification>
-	<VersionInfo Version="1.0" Author="AK115394" Date="2023-03-07">
+	<VersionInfo Organization="Johannes Kepler University Linz" Version="1.0" Author="Bianca Wiesmayr" Date="2023-03-07" Remarks="initial API and implementation and/or initial documentation">
 	</VersionInfo>
 	<InterfaceList>
 		<EventInputs>
@@ -23,22 +23,22 @@
 		<ECC>
 			<ECState Name="START" Comment="Initial State" x="546.6666666666667" y="420.0">
 			</ECState>
-			<ECState Name="State_2" Comment="" x="1926.6666666666667" y="26.666666666666668">
+			<ECState Name="request" Comment="" x="1926.6666666666667" y="26.666666666666668">
 				<ECAction Output="adp.REQ"/>
 				<ECAction Output="RSP"/>
 			</ECState>
-			<ECState Name="State" Comment="" x="1560.0" y="753.3333333333334">
+			<ECState Name="confirm" Comment="" x="1560.0" y="753.3333333333334">
 				<ECAction Output="CNF"/>
 			</ECState>
-			<ECState Name="State_1" Comment="" x="773.3333333333334" y="1353.3333333333335">
+			<ECState Name="response" Comment="" x="773.3333333333334" y="1353.3333333333335">
 				<ECAction Output="RSP"/>
 			</ECState>
-			<ECTransition Source="START" Destination="State_2" Condition="REQ" Comment="" x="1420.0" y="160.0"/>
-			<ECTransition Source="State_2" Destination="START" Condition="1" Comment="" x="1540.0" y="420.0"/>
-			<ECTransition Source="START" Destination="State" Condition="adp.CNF" Comment="" x="1153.3333333333335" y="793.3333333333334"/>
-			<ECTransition Source="START" Destination="State_1" Condition="adp.IND" Comment="" x="540.0" y="1020.0"/>
-			<ECTransition Source="State_1" Destination="START" Condition="1" Comment="" x="893.3333333333334" y="973.3333333333334"/>
-			<ECTransition Source="State" Destination="START" Condition="1" Comment="" x="1300.0" y="613.3333333333334"/>
+			<ECTransition Source="START" Destination="request" Condition="REQ" Comment="" x="1420.0" y="160.0"/>
+			<ECTransition Source="request" Destination="START" Condition="1" Comment="" x="1540.0" y="420.0"/>
+			<ECTransition Source="START" Destination="confirm" Condition="adp.CNF" Comment="" x="1153.3333333333335" y="793.3333333333334"/>
+			<ECTransition Source="START" Destination="response" Condition="adp.IND" Comment="" x="540.0" y="1020.0"/>
+			<ECTransition Source="response" Destination="START" Condition="1" Comment="" x="893.3333333333334" y="973.3333333333334"/>
+			<ECTransition Source="confirm" Destination="START" Condition="1" Comment="" x="1300.0" y="613.3333333333334"/>
 		</ECC>
 	</BasicFB>
 </FBType>

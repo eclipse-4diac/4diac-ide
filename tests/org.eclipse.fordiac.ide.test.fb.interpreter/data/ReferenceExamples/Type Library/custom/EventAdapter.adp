@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<AdapterType Name="EventAdapter" Comment="">
-	<Identification Standard="61499-1">
+<AdapterType Name="EventAdapter" Comment="Adapter with only events">
+	<Identification Standard="61499-1" Description="Copyright (c) 2023 Johannes Kepler University Linz This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0&#10;" >
 	</Identification>
-	<VersionInfo Version="1.0" Author="AK115394" Date="2023-03-07">
+	<VersionInfo Organization="Johannes Kepler University Linz" Version="1.0" Author="Bianca Wiesmayr" Date="2023-03-07" Remarks="initial API and implementation and/or initial documentation">
 	</VersionInfo>
 	<CompilerInfo header="package fb.test;">
 	</CompilerInfo>
@@ -20,7 +20,7 @@
 			</Event>
 		</EventOutputs>
 	</InterfaceList>
-	<Service RightInterface="SOCKET" LeftInterface="PLUG" Comment="">
+	<Service RightInterface="SOCKET" LeftInterface="PLUG" Comment="Adapter with only events">
 		<ServiceSequence Name="request_confirm" Comment="">
 			<ServiceTransaction>
 				<InputPrimitive Interface="SOCKET" Event="REQ" Parameters="REQD"/>
