@@ -66,7 +66,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
-public class CommentPropertySection extends AbstractSection {
+public class InstancePropertySection extends AbstractSection {
 
 	private static final int ONE_COLUMN = 1;
 	private static final int TWO_COLUMNS = 2;
