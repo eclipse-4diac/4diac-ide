@@ -2,7 +2,7 @@
  * Copyright (c) 2019 fortiss GmbH
  *               2020 Johannes Kepler University
  *               2020 TU Wien/ACIN
- *               2022 Martin Erich Jobst
+ *               2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -22,6 +22,7 @@ package org.eclipse.fordiac.ide.export.forte_ng.basic
 
 import java.nio.file.Path
 import java.util.Map
+import java.util.Set
 import org.eclipse.fordiac.ide.export.forte_ng.base.BaseFBImplTemplate
 import org.eclipse.fordiac.ide.export.language.ILanguageSupport
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
@@ -30,6 +31,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType
 import org.eclipse.fordiac.ide.model.libraryElement.ECState
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
 import org.eclipse.fordiac.ide.model.libraryElement.Event
+import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 
 class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	final Map<ECTransition, ILanguageSupport> transitionLanguageSupport
@@ -105,11 +107,35 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 	}
 
 	def protected generateTransitionEvent(Event event) {
-		if(event.FBNetworkElement instanceof AdapterFB){
+		if (event.FBNetworkElement instanceof AdapterFB) {
 			return '''«EXPORT_PREFIX»«event.FBNetworkElement.name»().«event.name»()'''
-		} 
+		}
 		event.generateEventName
 	}
 
 	def protected generateStateName(ECState state) '''scm_nState«state.name»'''
+
+	override getErrors() {
+		(super.getErrors + transitionLanguageSupport.values.filterNull.flatMap [
+			getErrors
+		].toSet).toList
+	}
+
+	override getWarnings() {
+		(super.getWarnings + transitionLanguageSupport.values.filterNull.flatMap [
+			getWarnings
+		].toSet).toList
+	}
+
+	override getInfos() {
+		(super.getInfos + transitionLanguageSupport.values.filterNull.flatMap [
+			getInfos
+		].toSet).toList
+	}
+
+	override Set<INamedElement> getDependencies(Map<?, ?> options) {
+		(super.getDependencies(options) + transitionLanguageSupport.values.filterNull.flatMap [
+			getDependencies(options)
+		]).toSet
+	}
 }
