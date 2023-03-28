@@ -18,7 +18,7 @@ package org.eclipse.fordiac.ide.typemanagement;
 
 import org.eclipse.osgi.util.NLS;
 
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.typemanagement.messages"; //$NON-NLS-1$
 
@@ -38,7 +38,6 @@ public final class Messages extends NLS {
 	public static String NewFBTypeWizardPage_InvalidOrNoComment;
 	public static String RenameType_Name;
 	public static String RenameType_TypeExists;
-	public static String RenameType_NameReservedKeyWord;
 	public static String OpenTypeHandler_EDITOR_OPEN_ERROR_MESSAGE;
 	public static String OpenTypeHandler_NO_FILES_IN_WORKSPACE;
 	public static String OpenTypeHandler_NO_FILES_SELECTED;
