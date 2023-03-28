@@ -42,7 +42,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
-import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.Command;
@@ -184,17 +183,14 @@ public class AddElementsToSubAppCommand extends Command {
 	}
 
 	private void checkElementConnections(final FBNetworkElement element) {
-		final InterfaceList interfaceList = element.getInterface();
-		if (interfaceList != null) {
-			for (final IInterfaceElement ie : interfaceList.getAllInterfaceElements()) {
-				if (ie.isIsInput()) {
-					for (final Connection con : ie.getInputConnections()) {
-						checkConnection(con, con.getSource(), ie);
-					}
-				} else {
-					for (final Connection con : ie.getOutputConnections()) {
-						checkConnection(con, con.getDestination(), ie);
-					}
+		for (final IInterfaceElement ie : element.getInterface().getAllInterfaceElements()) {
+			if (ie.isIsInput()) {
+				for (final Connection con : ie.getInputConnections()) {
+					checkConnection(con, con.getSource(), ie);
+				}
+			} else {
+				for (final Connection con : ie.getOutputConnections()) {
+					checkConnection(con, con.getDestination(), ie);
 				}
 			}
 		}

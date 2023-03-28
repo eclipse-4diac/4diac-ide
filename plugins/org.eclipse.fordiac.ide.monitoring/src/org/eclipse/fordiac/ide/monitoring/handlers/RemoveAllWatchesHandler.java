@@ -47,9 +47,9 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 		super.execute(event);
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
 
-		if (selection instanceof StructuredSelection) {
+		if (selection instanceof final StructuredSelection sSel) {
 			final MonitoringManager manager = MonitoringManager.getInstance();
-			final Set<IInterfaceElement> foundElements = getSelectedWatchedelements(manager, (StructuredSelection) selection);
+			final Set<IInterfaceElement> foundElements = getSelectedWatchedelements(manager, sSel);
 			for (final IInterfaceElement ifElement : foundElements) {
 				removeMonitoringElement(manager, ifElement);
 			}
@@ -64,9 +64,8 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 		boolean needToAdd = false;
 		final Object selection = HandlerUtil.getVariable(evaluationContext, ISources.ACTIVE_CURRENT_SELECTION_NAME);
 
-		if (selection instanceof StructuredSelection) {
-			needToAdd = !getSelectedWatchedelements(MonitoringManager.getInstance(), (StructuredSelection) selection)
-					.isEmpty();
+		if (selection instanceof final StructuredSelection sSel) {
+			needToAdd = !getSelectedWatchedelements(MonitoringManager.getInstance(), sSel).isEmpty();
 		}
 		setBaseEnabled(needToAdd);
 	}
@@ -75,19 +74,18 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 			final StructuredSelection selection) {
 		final Set<IInterfaceElement> foundElements = new HashSet<>();
 		for (final Object selectedObject : selection) {
-			if (selectedObject instanceof EditPart) {
-				if (selectedObject instanceof MonitoringEditPart) {
-					final IInterfaceElement ie = ((MonitoringEditPart) selectedObject).getModel().getPort()
+			if (selectedObject instanceof final EditPart ep) {
+				if (selectedObject instanceof final MonitoringEditPart mEP) {
+					final IInterfaceElement ie = mEP.getModel().getPort()
 							.getInterfaceElement();
 					if (manager.containsPort(ie)) {
 						foundElements.add(ie);
 					}
-				} else if (((EditPart) selectedObject).getModel() instanceof EObject) {
-					foundElements.addAll(getWatchedelementsForLibrayElement(manager,
-							(EObject) ((EditPart) selectedObject).getModel()));
+				} else if (ep.getModel() instanceof final EObject eObject) {
+					foundElements.addAll(getWatchedelementsForLibrayElement(manager, eObject));
 				}
-			} else if (selectedObject instanceof EObject) {
-				foundElements.addAll(getWatchedelementsForLibrayElement(manager, (EObject) selectedObject));
+			} else if (selectedObject instanceof final EObject eObject) {
+				foundElements.addAll(getWatchedelementsForLibrayElement(manager, eObject));
 			}
 		}
 		return foundElements;
@@ -96,18 +94,18 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 	private static Set<IInterfaceElement> getWatchedelementsForLibrayElement(final MonitoringManager manager,
 			final EObject element) {
 		final Set<IInterfaceElement> foundElements = new HashSet<>();
-		if (element instanceof FBNetworkElement) {
-			foundElements.addAll(getWatchedIfElementsForFB(manager, (FBNetworkElement) element));
-		} else if (element instanceof FBNetwork) {
-			foundElements.addAll(getWatchedElementsFromFBNetwork(manager, (FBNetwork) element));
-		} else if (element instanceof IInterfaceElement) {
-			if (manager.containsPort((IInterfaceElement) element)) {
-				foundElements.add((IInterfaceElement) element);
+		if (element instanceof final FBNetworkElement fbe) {
+			foundElements.addAll(getWatchedIfElementsForFB(manager, fbe));
+		} else if (element instanceof final FBNetwork fbn) {
+			foundElements.addAll(getWatchedElementsFromFBNetwork(manager, fbn));
+		} else if (element instanceof final IInterfaceElement ie) {
+			if (manager.containsPort(ie)) {
+				foundElements.add(ie);
 			}
-		} else if (element instanceof AutomationSystem) {
-			foundElements.addAll(getWatchedElementsFromSystem(manager, (AutomationSystem) element));
-		} else if (element instanceof Application) {
-			foundElements.addAll(getWatchedElementsFromFBNetwork(manager, ((Application) element).getFBNetwork()));
+		} else if (element instanceof final AutomationSystem as) {
+			foundElements.addAll(getWatchedElementsFromSystem(manager, as));
+		} else if (element instanceof final Application app) {
+			foundElements.addAll(getWatchedElementsFromFBNetwork(manager, app.getFBNetwork()));
 		}
 		return foundElements;
 	}
@@ -124,13 +122,11 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 	public static Set<IInterfaceElement> getWatchedIfElementsForFB(final MonitoringManager manager,
 			final FBNetworkElement model) {
 		final Set<IInterfaceElement> foundElements = new HashSet<>();
-		if (model.getInterface() != null) {
 			for (final IInterfaceElement element : model.getInterface().getAllInterfaceElements()) {
 				if (manager.containsPort(element)) {
 					foundElements.add(element);
 				}
-			}
-	}
+		}
 		return foundElements;
 	}
 
@@ -146,8 +142,8 @@ public class RemoveAllWatchesHandler extends AbstractMonitoringHandler {
 	private static void removeMonitoringElement(final MonitoringManager manager, final IInterfaceElement port) {
 		final MonitoringBaseElement element = manager.getMonitoringElement(port);
 
-		if (element instanceof MonitoringAdapterElement) {
-			for (final MonitoringElement child : ((MonitoringAdapterElement) element).getElements()) {
+		if (element instanceof final MonitoringAdapterElement monAE) {
+			for (final MonitoringElement child : monAE.getElements()) {
 				manager.removeMonitoringElement(child);
 			}
 		}

@@ -98,4 +98,12 @@ public interface Group extends FBNetworkElement {
 	 */
 	void setHeight(int value);
 
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	InterfaceList getInterface();
+
 } // Group

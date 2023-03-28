@@ -29,10 +29,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 
 public final class FBNetworkElementAnnotations {
+
+	public static final InterfaceList EMPTY_INTERFACE_LIST = LibraryElementFactory.eINSTANCE.createInterfaceList();
 
 	public static Resource getResource(final FBNetworkElement fbne) {
 		if (fbne instanceof CommunicationChannel) {
@@ -40,8 +44,8 @@ public final class FBNetworkElementAnnotations {
 		}
 		if (null != fbne.getFbNetwork()) {
 			final EObject container = fbne.getFbNetwork().eContainer();
-			if (container instanceof Resource) {
-				return (Resource) container;
+			if (container instanceof final Resource res) {
+				return res;
 			}
 			if ((container instanceof SubApp) || (container instanceof CFBInstance)) {
 				// if we are in a subapp or CFBInstance look recursively for a resource
@@ -77,7 +81,7 @@ public final class FBNetworkElementAnnotations {
 	public static FBNetwork getFbNetwork(final FBNetworkElement fbne) {
 		// an FB should always be put in an fbNetwork this is at the same time also a
 		// null check
-		return (fbne.eContainer() instanceof FBNetwork) ? (FBNetwork) fbne.eContainer() : null;
+		return (fbne.eContainer() instanceof final FBNetwork fbn) ? fbn : null;
 	}
 
 	public static void checkConnections(final FBNetworkElement fbne) {
