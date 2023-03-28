@@ -53,6 +53,18 @@ public interface EventManager extends EObject {
 	 *
 	 * @model
 	 * @generated */
+	void process();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model
+	 * @generated */
+	void processNetwork();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model
+	 * @generated */
 	void process(EventManager eventManager);
 
 } // EventManager

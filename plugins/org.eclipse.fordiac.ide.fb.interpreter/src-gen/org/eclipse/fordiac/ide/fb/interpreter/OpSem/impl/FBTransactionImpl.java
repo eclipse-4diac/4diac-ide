@@ -25,6 +25,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>FB Transaction</b></em>'. <!-- end-user-doc
@@ -94,6 +95,14 @@ public class FBTransactionImpl extends TransactionImpl implements FBTransaction 
 					OperationalSemanticsPackage.FB_TRANSACTION__INPUT_VARIABLES);
 		}
 		return inputVariables;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public void process() {
+		EventManagerUtils.processFbTransaction(this);
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->

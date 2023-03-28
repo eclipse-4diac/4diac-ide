@@ -30,9 +30,9 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventManager/transactions"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//EventManager/readyQueue"/>
       <genOperations ecoreOperation="OperationalSemantics.ecore#//EventManager/process"
-          body="EventManagerUtils.process(this);">
-        <genParameters ecoreParameter="OperationalSemantics.ecore#//EventManager/process/eventManager"/>
-      </genOperations>
+          body="EventManagerUtils.process(this);"/>
+      <genOperations ecoreOperation="OperationalSemantics.ecore#//EventManager/processNetwork"
+          body="EventManagerUtils.processNetwork(this);"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//FBRuntimeAbstract">
       <genOperations ecoreOperation="OperationalSemantics.ecore#//FBRuntimeAbstract/run"
@@ -65,6 +65,8 @@
     <genClasses ecoreClass="OperationalSemantics.ecore#//FBTransaction">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/outputEventOccurrences"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//FBTransaction/inputVariables"/>
+      <genOperations ecoreOperation="OperationalSemantics.ecore#//FBTransaction/process"
+          body="EventManagerUtils.processFbTransaction(this);"/>
     </genClasses>
     <genClasses ecoreClass="OperationalSemantics.ecore#//ConnectionToValueMap">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference OperationalSemantics.ecore#//ConnectionToValueMap/key"/>

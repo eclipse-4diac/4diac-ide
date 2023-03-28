@@ -52,4 +52,10 @@ public interface FBTransaction extends Transaction {
 	 * @generated */
 	EList<VarDeclaration> getInputVariables();
 
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model
+	 * @generated */
+	void process();
+
 } // FBTransaction

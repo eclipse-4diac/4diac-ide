@@ -43,7 +43,7 @@ public final class EventManagerUtils {
 		for (var i = 0; i < transactions.size(); i++) {
 			final var transaction = transactions.get(i);
 			if (transaction instanceof final FBTransaction fbtransaction) {
-				processFbTransaction(fbtransaction);
+				fbtransaction.process();
 				if (moreTransactionsLeft(transactions, i)) {
 					final FBRuntimeAbstract newfbRuntime = getLatestFbRuntime(fbtransaction);
 					// use fb runtime in the next transaction
@@ -99,7 +99,7 @@ public final class EventManagerUtils {
 		for (var i = 0; i < transactions.size(); i++) {
 			final var transaction = transactions.get(i);
 			if (transaction instanceof final FBTransaction fbtransaction) {
-				processFbTransaction(fbtransaction);
+				fbtransaction.process();
 				fbtransaction.getOutputEventOccurrences()
 						.forEach(outputEO -> eventManager.getTransactions().addAll(outputEO.getCreatedTransactions()));
 				if (moreTransactionsLeft(transactions, i)) {

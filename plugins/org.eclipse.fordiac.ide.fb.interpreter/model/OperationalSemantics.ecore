@@ -18,7 +18,14 @@
   <eClassifiers xsi:type="ecore:EClass" name="EventManager">
     <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel"/>
     <eOperations name="process">
-      <eParameters name="eventManager" eType="#//EventManager"/>
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="EventManagerUtils.process(this);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="processNetwork">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="EventManagerUtils.processNetwork(this);"/>
+      </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="transactions" upperBound="-1"
         eType="#//Transaction" containment="true"/>
@@ -84,6 +91,11 @@
         eType="#//RuntimeMap" containment="true"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="FBTransaction" eSuperTypes="#//Transaction">
+    <eOperations name="process">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="EventManagerUtils.processFbTransaction(this);"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="outputEventOccurrences"
         upperBound="-1" eType="#//EventOccurrence" containment="true"/>
     <eStructuralFeatures xsi:type="ecore:EReference" name="inputVariables" upperBound="-1"
