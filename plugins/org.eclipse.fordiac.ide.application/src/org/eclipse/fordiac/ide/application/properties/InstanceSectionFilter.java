@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.application.properties;
 
 import org.eclipse.fordiac.ide.application.editparts.InstanceComment;
 import org.eclipse.fordiac.ide.application.editparts.InstanceName;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -30,28 +31,34 @@ public class InstanceSectionFilter implements IFilter {
 
 	static FBNetworkElement getFBNetworkElementFromSelectedElement(final Object element) {
 		Object retval = element;
-		if (retval instanceof EditPart) {
-			retval = ((EditPart) retval).getModel();
+		if (retval instanceof final EditPart ep) {
+			retval = ep.getModel();
 		}
 
-		if (retval instanceof FBNetwork) {
-			retval = ((FBNetwork) retval).eContainer();
+		if (retval instanceof final FBNetwork fbn) {
+			retval = fbn.eContainer();
 		}
 
-		if (retval instanceof InstanceComment) {
-			retval = ((InstanceComment) retval).getRefElement();
+		if (retval instanceof final InstanceComment ic) {
+			retval = ic.getRefElement();
 		}
 
-		if (retval instanceof InstanceName) {
-			retval = ((InstanceName) retval).getRefElement();
+		if (retval instanceof final InstanceName in) {
+			retval = in.getRefElement();
 		}
 
 		return isEditableFBNetworkElement(retval) ? (FBNetworkElement) retval : null;
 	}
 
 	private static boolean isEditableFBNetworkElement(final Object retval) {
-		return retval instanceof FBNetworkElement && !(retval instanceof Group)
-				&& !((FBNetworkElement) retval).isContainedInTypedInstance() && !(retval instanceof Demultiplexer);
+		if (retval instanceof final FBNetworkElement fnbEl) {
+			if (retval instanceof Group || retval instanceof Comment || retval instanceof Demultiplexer) {
+				// these three do not have instance information to show
+				return false;
+			}
+			return !fnbEl.isContainedInTypedInstance();
+		}
+		return false;
 	}
 
 }

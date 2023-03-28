@@ -64,8 +64,9 @@ public class CreateGroupCommand extends AbstractCreateFBNetworkElementCommand {
 	}
 
 	@Override
-	protected final InterfaceList getTypeInterfaceList() {
-		return LibraryElementFactory.eINSTANCE.createInterfaceList();
+	protected final InterfaceList createInterfaceList() {
+		// groups do not have an interface list
+		return null;
 	}
 
 	@Override

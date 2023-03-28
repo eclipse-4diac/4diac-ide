@@ -36,8 +36,8 @@ public class AdapterCreateCommand extends FBCreateCommand {
 	}
 
 	@Override
-	protected InterfaceList getTypeInterfaceList() {
-		return getAdapterFB().getType().getInterfaceList();
+	protected InterfaceList createInterfaceList() {
+		return getAdapterFB().getType().getInterfaceList().copy();
 	}
 
 	@Override
@@ -48,8 +48,8 @@ public class AdapterCreateCommand extends FBCreateCommand {
 	}
 
 	private static FBNetwork getFBNetwork(final FBType parent) {
-		if (parent instanceof CompositeFBType && !(parent instanceof SubAppType)) {
-			return ((CompositeFBType) parent).getFBNetwork();
+		if (parent instanceof final CompositeFBType cFBType && !(parent instanceof SubAppType)) {
+			return cFBType.getFBNetwork();
 		}
 		return null;
 	}

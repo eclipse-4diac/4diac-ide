@@ -81,8 +81,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 		@Override
 		protected Command getDirectEditCommand(final DirectEditRequest request) {
 			final Object value = request.getCellEditor().getValue();
-			if (value instanceof TypeEntry) {
-				return new UpdateFBTypeCommand(getHost().getModel(), (TypeEntry) value);
+			if (value instanceof final TypeEntry te) {
+				return new UpdateFBTypeCommand(getHost().getModel(), te);
 			}
 			return null;
 		}
@@ -304,8 +304,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-		if (childEditPart instanceof InterfaceEditPart) {
-			final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
+		if (childEditPart instanceof final InterfaceEditPart interfaceEditPart) {
 			getTargetFigure(interfaceEditPart).add(child, getInterfaceElementIndex(interfaceEditPart));
 		} else {
 			getFigure().add(child, new GridData(GridData.HORIZONTAL_ALIGN_CENTER), index);
@@ -405,8 +404,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
 		final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
-		if (childEditPart instanceof InterfaceEditPart) {
-			final InterfaceEditPart interfaceEditPart = (InterfaceEditPart) childEditPart;
+		if (childEditPart instanceof final InterfaceEditPart interfaceEditPart) {
 			getTargetFigure(interfaceEditPart).remove(child);
 		} else {
 			super.removeChildVisual(childEditPart);
@@ -454,7 +452,7 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 			// forward direct edit request to instance name
 			final List<EditPart> children = getChildren();
 			children.stream().filter(InstanceNameEditPart.class::isInstance)
-					.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
+			.forEach(e -> ((InstanceNameEditPart) e).performRequest(request));
 			return;
 		}
 		super.performRequest(request);
@@ -503,8 +501,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	}
 
 	private TypeLibrary getTypeLibrary() {
-		if (getModel().eContainer().eContainer() instanceof FBType) {
-			return ((FBType) getModel().eContainer().eContainer()).getTypeEntry().getTypeLibrary();
+		if (getModel().eContainer().eContainer() instanceof final FBType fbt) {
+			return fbt.getTypeEntry().getTypeLibrary();
 		}
 		// we are in an app or supp
 		return getModel().getFbNetwork().getAutomationSystem().getTypeLibrary();
@@ -513,8 +511,8 @@ public abstract class AbstractFBNElementEditPart extends AbstractPositionableEle
 	@Override
 	public void setTransparency(final int value) {
 		for (final Object ep : getChildren()) {
-			if (ep instanceof AbstractViewEditPart) {
-				((AbstractViewEditPart) ep).setTransparency(value);
+			if (ep instanceof final AbstractViewEditPart avep) {
+				avep.setTransparency(value);
 			}
 		}
 		super.setTransparency(value);

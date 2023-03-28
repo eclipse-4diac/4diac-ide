@@ -4283,6 +4283,8 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEAttribute(getComment_Width(), theXMLTypePackage.getInt(), "width", "200", 0, 1, Comment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 		initEAttribute(getComment_Height(), theXMLTypePackage.getInt(), "height", "100", 0, 1, Comment.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
+		addEOperation(commentEClass, this.getInterfaceList(), "getInterface", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
 		initEClass(communicationChannelEClass, CommunicationChannel.class, "CommunicationChannel", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
 		initEClass(communicationConfigurationEClass, CommunicationConfiguration.class, "CommunicationConfiguration", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
@@ -4557,6 +4559,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getGroup_GroupElements(), this.getFBNetworkElement(), this.getFBNetworkElement_Group(), "groupElements", null, 0, -1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEAttribute(getGroup_Width(), theXMLTypePackage.getInt(), "width", "200", 0, 1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 		initEAttribute(getGroup_Height(), theXMLTypePackage.getInt(), "height", "100", 0, 1, Group.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+
+		addEOperation(groupEClass, this.getInterfaceList(), "getInterface", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(groupEClass, this.getInterfaceList(), "getInterface", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(hiddenElementEClass, HiddenElement.class, "HiddenElement", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 

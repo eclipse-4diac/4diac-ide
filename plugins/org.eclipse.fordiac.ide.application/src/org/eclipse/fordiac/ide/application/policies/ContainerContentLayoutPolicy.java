@@ -77,17 +77,15 @@ public class ContainerContentLayoutPolicy extends FBNetworkXYLayoutEditPolicy {
 	}
 
 	protected FBNetworkElement getParentModel() {
-		return (getHost() instanceof AbstractContainerContentEditPart)
-				? ((AbstractContainerContentEditPart) getHost()).getContainerElement()
-						: null;
+		return (getHost() instanceof final AbstractContainerContentEditPart accep) ? accep.getContainerElement() : null;
 	}
 
 	protected Rectangle getNewContentBounds(final List<EditPart> editParts) {
 		Rectangle selectionExtend = null;
 		for (final EditPart selElem : editParts) {
-			if (selElem instanceof GraphicalEditPart && selElem.getModel() instanceof FBNetworkElement) {
+			if (selElem instanceof final GraphicalEditPart gep && selElem.getModel() instanceof FBNetworkElement) {
 				// only consider the selected FBNetworkElements
-				final Rectangle fbBounds = ((GraphicalEditPart) selElem).getFigure().getBounds();
+				final Rectangle fbBounds = gep.getFigure().getBounds();
 				if (selectionExtend == null) {
 					selectionExtend = fbBounds.getCopy();
 				} else {

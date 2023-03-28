@@ -21,7 +21,6 @@ import java.util.Arrays;
 import java.util.Deque;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.BasicEList;
@@ -123,17 +122,17 @@ public final class FBNetworkHelper {
 			final InterfaceList destInterface) {
 		for (final Connection connection : srcNetwork.getEventConnections()) {
 			dstNetwork.getEventConnections()
-					.add((EventConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
+			.add((EventConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
 		}
 
 		for (final Connection connection : srcNetwork.getDataConnections()) {
 			dstNetwork.getDataConnections()
-					.add((DataConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
+			.add((DataConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
 		}
 
 		for (final Connection connection : srcNetwork.getAdapterConnections()) {
 			dstNetwork.getAdapterConnections()
-					.add((AdapterConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
+			.add((AdapterConnection) createConnection(srcNetwork, destInterface, dstNetwork, connection));
 		}
 	}
 
@@ -164,9 +163,9 @@ public final class FBNetworkHelper {
 		final Point pt = new Point(Integer.MAX_VALUE, Integer.MAX_VALUE);
 		Object fb = null;
 		for (final Object sel : selection) {
-			fb = (sel instanceof EditPart) ? ((EditPart) sel).getModel() : sel;
-			if (fb instanceof FBNetworkElement) {
-				final Position pos = ((FBNetworkElement) fb).getPosition();
+			fb = (sel instanceof final EditPart ep) ? ep.getModel() : sel;
+			if (fb instanceof final FBNetworkElement fbnEL) {
+				final Position pos = fbnEL.getPosition();
 				pt.x = Math.min(pt.x, pos.getX());
 				pt.y = Math.min(pt.y, pos.getY());
 			}
@@ -218,7 +217,7 @@ public final class FBNetworkHelper {
 		if (editorType != null) {
 			if (type.equals(editorType)) {
 				ErrorMessenger
-						.popUpErrorMessage(MessageFormat.format(Messages.Error_SelfInsertion, editorType.getName()));
+				.popUpErrorMessage(MessageFormat.format(Messages.Error_SelfInsertion, editorType.getName()));
 				return false;
 			}
 			if (containsType(editorType, getChildFBNElements(type))) {
@@ -236,7 +235,7 @@ public final class FBNetworkHelper {
 		final GraphicalViewer viewer = part.getAdapter(GraphicalViewer.class);
 		if (viewer != null) {
 			final List<EditPart> eps = elements.stream().map(el -> (EditPart) viewer.getEditPartRegistry().get(el))
-					.filter(Objects::nonNull).collect(Collectors.toList());
+					.filter(Objects::nonNull).toList();
 			if (eps != null) {
 				viewer.setSelection(new StructuredSelection(eps));
 			}
@@ -244,8 +243,7 @@ public final class FBNetworkHelper {
 	}
 
 	private static EList<? extends FBNetworkElement> getChildFBNElements(final FBNetworkElement networkElem) {
-		if (networkElem instanceof SubApp) {
-			final SubApp subapp = (SubApp) networkElem;
+		if (networkElem instanceof final SubApp subapp) {
 			if (subapp.isTyped()) {
 				return subapp.getType().getFBNetwork().getNetworkElements();
 			}
@@ -259,19 +257,19 @@ public final class FBNetworkHelper {
 	}
 
 	private static EList<? extends FBNetworkElement> getChildFBNElements(final FBType type) {
-		if (type instanceof BaseFBType) { // basic and simple fb type
-			return ((BaseFBType) type).getInternalFbs();
+		if (type instanceof final BaseFBType baseFBType) { // basic and simple fb type
+			return baseFBType.getInternalFbs();
 		}
-		if (type instanceof CompositeFBType) { // subapp and composite fb type
-			return ((CompositeFBType) type).getFBNetwork().getNetworkElements();
+		if (type instanceof final CompositeFBType cFBType) { // subapp and composite fb type
+			return cFBType.getFBNetwork().getNetworkElements();
 		}
 		return new BasicEList<>();
 	}
 
 	public static FBType getRootType(final EObject element) {
 		final EObject root = EcoreUtil.getRootContainer(element);
-		if (root instanceof FBType) {
-			return (FBType) root;
+		if (root instanceof final FBType fbType) {
+			return fbType;
 		}
 		return null;
 	}
@@ -291,14 +289,12 @@ public final class FBNetworkHelper {
 	}
 
 	public static void loadSubappNetwork(final FBNetworkElement network) {
-		if (network instanceof SubApp) {
-			final SubApp subApp = (SubApp) network;
+		if (network instanceof final SubApp subApp) {
 			subApp.loadSubAppNetwork();
 			parseSubNetworks(subApp.getSubAppNetwork().getNetworkElements());
-		} else if (network instanceof CFBInstance) {
-			final CFBInstance compositeFunctionBlock = (CFBInstance) network;
-			compositeFunctionBlock.loadCFBNetwork();
-			parseSubNetworks(compositeFunctionBlock.getCfbNetwork().getNetworkElements());
+		} else if (network instanceof final CFBInstance cFB) {
+			cFB.loadCFBNetwork();
+			parseSubNetworks(cFB.getCfbNetwork().getNetworkElements());
 		}
 	}
 
@@ -394,10 +390,10 @@ public final class FBNetworkHelper {
 		EObject retVal = null;
 		for (final String element : path) {
 			retVal = network.getElementNamed(element);
-			if (retVal instanceof SubApp) {
-				network = ((SubApp) retVal).loadSubAppNetwork();
-			} else if (retVal instanceof CFBInstance) {
-				network = ((CFBInstance) retVal).loadCFBNetwork();
+			if (retVal instanceof final SubApp subApp) {
+				network = subApp.loadSubAppNetwork();
+			} else if (retVal instanceof final CFBInstance cFB) {
+				network = cFB.loadCFBNetwork();
 			} else {
 				return null;
 			}

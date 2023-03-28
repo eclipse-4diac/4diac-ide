@@ -16,7 +16,6 @@
  */
 package org.eclipse.fordiac.ide.model.libraryElement;
 
-
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>Comment</b></em>'.
@@ -80,5 +79,13 @@ public interface Comment extends FBNetworkElement {
 	 * @generated
 	 */
 	void setHeight(int value);
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @model kind="operation" required="true"
+	 * @generated
+	 */
+	InterfaceList getInterface();
 
 } // Comment

@@ -165,7 +165,6 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	private void parseGroup() throws TypeImportException, XMLStreamException {
 		final Group group = LibraryElementFactory.eINSTANCE.createGroup();
-		group.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		readNameCommentAttributes(group);
 		getXandY(group);
 

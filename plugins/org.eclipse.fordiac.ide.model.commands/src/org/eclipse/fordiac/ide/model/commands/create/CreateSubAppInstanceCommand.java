@@ -38,8 +38,8 @@ public class CreateSubAppInstanceCommand extends AbstractCreateFBNetworkElementC
 	}
 
 	@Override
-	protected InterfaceList getTypeInterfaceList() {
-		return typeEntry.getType().getInterfaceList();
+	protected InterfaceList createInterfaceList() {
+		return typeEntry.getType().getInterfaceList().copy();
 	}
 
 	public SubApp getSubApp() {

@@ -33,6 +33,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
 /**
@@ -177,6 +178,16 @@ public class GroupImpl extends FBNetworkElementImpl implements Group {
 		height = newHeight;
 		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, LibraryElementPackage.GROUP__HEIGHT, oldHeight, height));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public InterfaceList getInterface() {
+		return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.EMPTY_INTERFACE_LIST;
 	}
 
 	/**

@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.Rectangle;
+import org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations;
 import org.eclipse.fordiac.ide.model.commands.testinfra.FBNetworkTestBase;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -43,8 +44,7 @@ public class GroupCreateCommandTest extends FBNetworkTestBase {
 		t.test(state.getFbNetwork().getNetworkElements().get(0) instanceof Group);
 
 		final Group group = (Group) state.getFbNetwork().getNetworkElements().get(0);
-		t.test(group.getInterface());
-		t.test(group.getInterface().getAllInterfaceElements().isEmpty());
+		t.test(group.getInterface() == FBNetworkElementAnnotations.EMPTY_INTERFACE_LIST);
 		t.test(group.getGroupElements().isEmpty());
 		t.test(null == group.getOpposite());
 
