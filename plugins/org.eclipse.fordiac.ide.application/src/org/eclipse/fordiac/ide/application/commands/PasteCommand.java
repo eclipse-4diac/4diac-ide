@@ -50,9 +50,7 @@ import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.swt.graphics.Point;
 
-/**
- * The Class PasteCommand.
- */
+/** The Class PasteCommand. */
 public class PasteCommand extends Command {
 
 	private static final int DEFAULT_DELTA = 20;
@@ -75,14 +73,11 @@ public class PasteCommand extends Command {
 
 	private CutAndPasteFromSubAppCommand cutPasteCmd;
 
-	/**
-	 * Instantiates a new paste command.
+	/** Instantiates a new paste command.
 	 *
 	 * @param templates   the elements that should be copied to the destination
-	 * @param destination the destination fbnetwork where the elements should be
-	 *                    copied to
-	 * @param pasteRefPos the reference position for pasting the elements
-	 */
+	 * @param destination the destination fbnetwork where the elements should be copied to
+	 * @param pasteRefPos the reference position for pasting the elements */
 	public PasteCommand(final List<? extends Object> templates, final FBNetwork destination, final Point pasteRefPos) {
 		this.templates = templates;
 		this.dstFBNetwork = destination;
@@ -113,9 +108,7 @@ public class PasteCommand extends Command {
 			copyConnections();
 			ElementSelector.selectViewObjects(copiedElements.values());
 			if (!ErrorMessenger.unpauseMessages().isEmpty()) {
-				ErrorMessenger.popUpErrorMessage(
-						Messages.PasteRecreateNotPossible,
-						ErrorMessenger.USE_DEFAULT_TIMEOUT);
+				ErrorMessenger.popUpErrorMessage(Messages.PasteRecreateNotPossible, ErrorMessenger.USE_DEFAULT_TIMEOUT);
 			}
 		}
 	}
@@ -146,8 +139,7 @@ public class PasteCommand extends Command {
 		int y = Integer.MAX_VALUE;
 
 		for (final Object object : templates) {
-			if (object instanceof FBNetworkElement) {
-				final FBNetworkElement element = (FBNetworkElement) object;
+			if (object instanceof final FBNetworkElement element) {
 				if (null == srcFBNetwork) {
 					srcFBNetwork = element.getFbNetwork();
 				}
@@ -155,10 +147,10 @@ public class PasteCommand extends Command {
 				final Position outermostPos = getPositionOfOutermostNetwork(element);
 				x = Math.min(x, outermostPos.getX());
 				y = Math.min(y, outermostPos.getY());
-			} else if (object instanceof ConnectionReference) {
-				connectionsToCopy.add((ConnectionReference) object);
-			} else if (object instanceof FBNetwork) {
-				srcFBNetwork = (FBNetwork) object;
+			} else if (object instanceof final ConnectionReference conRef) {
+				connectionsToCopy.add(conRef);
+			} else if (object instanceof final FBNetwork fbn) {
+				srcFBNetwork = fbn;
 			}
 		}
 
@@ -218,7 +210,6 @@ public class PasteCommand extends Command {
 		return copiedElement;
 	}
 
-
 	private FBNetworkElement createElementCopyFB(final FBNetworkElement element, final boolean isNested) {
 		final FBNetworkElement copiedElement = EcoreUtil.copy(element);
 		// clear the connection references
@@ -241,14 +232,13 @@ public class PasteCommand extends Command {
 		}
 
 		// copy content of Groups
-		if (element instanceof Group) {
-			final Group group = (Group) element;
+		if (element instanceof final Group group) {
 			group.getFbNetwork().getEventConnections()
-					.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
+			.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
 			group.getFbNetwork().getDataConnections()
-					.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
+			.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
 			group.getFbNetwork().getAdapterConnections()
-					.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
+			.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
 
 			for (final FBNetworkElement groupElement : group.getGroupElements()) {
 				((Group) copiedElement).getGroupElements().add(copyAndCreateFB(groupElement, true));
@@ -314,8 +304,8 @@ public class PasteCommand extends Command {
 		return cmd;
 	}
 
-	private void copyConnection(final ConnectionReference connRef, final FBNetworkElement copiedSrc, final FBNetworkElement copiedDest,
-			final AbstractConnectionCreateCommand cmd) {
+	private void copyConnection(final ConnectionReference connRef, final FBNetworkElement copiedSrc,
+			final FBNetworkElement copiedDest, final AbstractConnectionCreateCommand cmd) {
 		final IInterfaceElement source = getInterfaceElement(connRef.getSource(), copiedSrc);
 		final IInterfaceElement destination = getInterfaceElement(connRef.getDestination(), copiedDest);
 
