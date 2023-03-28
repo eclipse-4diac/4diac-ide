@@ -105,6 +105,12 @@
                id="org.eclipse.fordiac.ide.fbnet.properties.InterfaceSection"
                tab="org.eclipse.fordiac.ide.fbnet.propertyInterfaceTab">
          </propertySection>
+               <propertySection
+            class="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
+            filter="org.eclipse.fordiac.ide.application.properties.CommentSectionFilter"
+            id="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
+            tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
+      </propertySection>
          <propertySection
             class="org.eclipse.fordiac.ide.application.properties.GroupPropertySection"
             filter="org.eclipse.fordiac.ide.application.properties.GroupSectionFilter"

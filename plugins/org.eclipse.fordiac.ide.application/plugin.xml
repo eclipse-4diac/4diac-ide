@@ -46,6 +46,10 @@
                    id="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab"
                    label="Struct Handling">
       </propertyTab>
+      <propertyTab category="FB"
+                   id="org.eclipse.fordiac.ide.application.propertyCommentTab"
+                   label="Comment">
+      </propertyTab>
       <propertyTab category="Resource"
                    id="org.eclipse.fordiac.ide.application.propertyResourceInterfaceTab"
                    label="Instance">
@@ -146,6 +150,12 @@
             filter="org.eclipse.fordiac.ide.application.properties.GroupSectionFilter"
             id="org.eclipse.fordiac.ide.application.properties.GroupPropertySection"
             tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
+      </propertySection>
+      <propertySection
+            class="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
+            filter="org.eclipse.fordiac.ide.application.properties.CommentSectionFilter"
+            id="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
+            tab="org.eclipse.fordiac.ide.application.propertyCommentTab">
       </propertySection>
       <propertySection class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
                        id="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
