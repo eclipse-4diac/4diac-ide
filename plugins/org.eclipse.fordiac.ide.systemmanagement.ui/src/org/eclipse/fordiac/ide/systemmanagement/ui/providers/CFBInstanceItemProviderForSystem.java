@@ -64,7 +64,7 @@ public class CFBInstanceItemProviderForSystem extends CFBInstanceItemProvider {
 		return super.getParent(object);
 	}
 
-	private FBNetwork getFBNetwork(final Object object) {
+	protected FBNetwork getFBNetwork(final Object object) {
 		final CFBInstance cfbInstance = ((CFBInstance) object);
 		FBNetwork fbNetwork = cfbInstance.getCfbNetwork();
 		if (null == fbNetwork) {

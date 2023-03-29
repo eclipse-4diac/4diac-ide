@@ -100,7 +100,11 @@ class BasicFBImplTemplate extends BaseFBImplTemplate<BasicFBType> {
 			case conditionEvent !== null: //
 			'''«generateTransitionEvent(transition.conditionEvent)» == pa_nEIID'''
 			case !conditionExpression.nullOrEmpty:
-				transitionLanguageSupport.get(transition)?.generate(emptyMap)
+				if(conditionExpression == "1"){
+					"1"	
+				} else {
+					transitionLanguageSupport.get(transition)?.generate(emptyMap)
+				}
 			default:
 				"1"
 		}

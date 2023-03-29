@@ -25,4 +25,20 @@ public class AutomationSystemItemProviderEmfCompare extends AutomationSystemProv
 		}
 		return fbNetworkElementItemProvider;
 	}
+
+	@Override
+	public Adapter createSubAppAdapter() {
+		if (subAppItemProvider == null) {
+			subAppItemProvider = new SubAppItemProviderEmfCompare(this);
+		}
+		return subAppItemProvider;
+	}
+
+	@Override
+	public Adapter createCFBInstanceAdapter() {
+		if (cfbInstanceItemProvider == null) {
+			cfbInstanceItemProvider = new CFBInstanceItemProviderEmfCompare(this);
+		}
+		return cfbInstanceItemProvider;
+	}
 }
