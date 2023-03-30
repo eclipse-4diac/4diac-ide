@@ -51,12 +51,13 @@ class STMethodSupport extends StructuredTextSupport {
 
 	def private CharSequence generateStructuredTextMethod(STMethod method) {
 		outReturn = generateOutReturn(method)
-		if (method.rootContainer instanceof BaseFBType) {
-			val container = method.rootContainer as BaseFBType
+		if (this.method.rootContainer instanceof BaseFBType) {
+			val container = this.method.rootContainer as BaseFBType
 			return '''
 				local function method_«method.name»(fb, «method.generateStructuredTextMethodParameters»)
 					local ENV = {}
 					st_ret_val = nil
+					«container.interfaceList.generateFBVariablePrefix»
 					«container.internalVars.generateInternalVariablePrefix»
 					«method.body.varDeclarations.filter(STVarInputDeclarationBlock).generateInParameterPrefix»
 					«method.body.varDeclarations.filter(STVarInOutDeclarationBlock).generateInParameterPrefix»
@@ -64,6 +65,7 @@ class STMethodSupport extends StructuredTextSupport {
 					
 					«method.body.statements.generateStatementList»
 					«container.internalVars.generateInternalVariableSuffix»
+					«container.interfaceList.generateFBVariableSuffix»
 					return st_ret_val«outReturn»
 				end
 			'''

@@ -98,13 +98,11 @@ import static extension org.eclipse.xtext.util.Strings.convertToJavaString
 
 abstract class StructuredTextSupport implements ILanguageSupport {
 	@Accessors final List<String> errors = newArrayList
+	@Accessors final List<String> warnings = newArrayList
+	@Accessors final List<String> infos = newArrayList
 	int uniqueVariableIndex = 0;
 	int loopIndex = 0;
 	Stack<String> loopStack = new Stack<String>();
-
-	override getInfos() { emptyList }
-
-	override getWarnings() { emptyList }
 
 	def protected CharSequence generateFBVariablePrefix(InterfaceList vars) '''
 		«FOR in : vars.inputVars»
