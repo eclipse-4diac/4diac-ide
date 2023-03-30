@@ -71,7 +71,7 @@
          point="org.eclipse.core.contenttype.contentTypes">
       <file-association
             content-type=" org.eclipse.emf.compare.content.type"
-            file-extensions="xmi">
+            file-extensions="opsem">
       </file-association>
    </extension>
    <extension
