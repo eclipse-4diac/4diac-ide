@@ -114,13 +114,13 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 			return false;
 		}
 		if (this.getClass() == obj.getClass()) {
-			return this.variable.getName().equals(((EvaluatorDebugVariable) obj).variable.getName());
+			return this.variable.equals(((EvaluatorDebugVariable) obj).variable);
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		return this.variable.getName().hashCode();
+		return this.variable.hashCode();
 	}
 }
