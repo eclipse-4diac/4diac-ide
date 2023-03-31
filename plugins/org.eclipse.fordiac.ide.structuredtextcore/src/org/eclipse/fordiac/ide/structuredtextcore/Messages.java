@@ -59,6 +59,7 @@ public final class Messages extends NLS {
 	public static String STCoreValidator_AssignmentOfCallWithoutReturnType;
 	public static String STCoreValidator_ConstantsCannotBeAssigned;
 	public static String STCoreValidator_InputsCannotBeAssigned;
+	public static String STCoreValidator_InsufficientArrayDimensions;
 	public static String STCoreValidator_CallsCannotBeAssignedTo;
 
 	static {

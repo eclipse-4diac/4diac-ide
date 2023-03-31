@@ -59,6 +59,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.Messages;
 import org.eclipse.fordiac.ide.structuredtextcore.converter.STStringValueConverter;
 import org.eclipse.fordiac.ide.structuredtextcore.scoping.STStandardFunctionProvider;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayAccessExpression;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STArrayInitializerExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STAssignmentStatement;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STBinaryExpression;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCallArgument;
@@ -145,6 +146,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public static final String STRING_INDEX_ZERO_OR_LESS_INVALID = ISSUE_CODE_PREFIX + "stringIndexZeroOrLessInvalid"; //$NON-NLS-1$
 	public static final String RETURNED_TYPE_IS_VOID = ISSUE_CODE_PREFIX + "returnedTypeIsVoid"; //$NON-NLS-1$
 	public static final String LITERAL_REQUIRES_TYPE_SPECIFIER = ISSUE_CODE_PREFIX + "literalRequiresTypeSpecifier"; //$NON-NLS-1$
+	public static final String INSUFFICIENT_ARRAY_DIMENSIONS = ISSUE_CODE_PREFIX + "insufficientArrayDimensions"; //$NON-NLS-1$
 
 	private void checkRangeOnValidity(final STBinaryExpression subRangeExpression) {
 		final DataType leftType = (DataType) subRangeExpression.getLeft().getResultType();
@@ -175,7 +177,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public void checkIndexRangeValueType(final STVarDeclaration varDeclaration) {
 		if (varDeclaration.isArray()) {
 			varDeclaration.getRanges().stream().filter(STBinaryExpression.class::isInstance)
-					.map(STBinaryExpression.class::cast).forEach(this::checkRangeOnValidity);
+			.map(STBinaryExpression.class::cast).forEach(this::checkRangeOnValidity);
 		}
 	}
 
@@ -231,7 +233,7 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 	public void checkArrayAccessDimensions(final STArrayAccessExpression accessExpression) {
 		final var feature = accessExpression.getReceiver() instanceof final STFeatureExpression featureExpression
 				? featureExpression.getFeature()
-				: null;
+						: null;
 		if (feature instanceof final STVarDeclaration varDeclaration) {
 			if (varDeclaration.isArray()) {
 				final var indexExpressions = accessExpression.getIndex();
@@ -407,6 +409,14 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		final var initializerType = initializerExpression.getValue().getResultType();
 		checkTypeCompatibility(type, initializerType,
 				STCorePackage.Literals.ST_ELEMENTARY_INITIALIZER_EXPRESSION__VALUE);
+	}
+
+	@Check
+	public void checkInitializerTypeCompatibility(final STArrayInitializerExpression initializerExpression) {
+		final var type = STCoreUtil.getExpectedType(initializerExpression);
+		if (type != null && !(type instanceof ArrayType)) {
+			error(Messages.STCoreValidator_InsufficientArrayDimensions, null, INSUFFICIENT_ARRAY_DIMENSIONS);
+		}
 	}
 
 	@Check
@@ -691,10 +701,8 @@ public class STCoreValidator extends AbstractSTCoreValidator {
 		}
 	}
 
-	/*
-	 * Here we already know that we have a MultibitPartialExpression. This function
-	 * checks bound on static access (without "()")
-	 */
+	/* Here we already know that we have a MultibitPartialExpression. This function checks bound on static access
+	 * (without "()") */
 	private void checkMultibitPartialExpression(final STMultibitPartialExpression expression,
 			final DataType accessorType, final DataType receiverType) {
 		if (receiverType instanceof AnyBitType) {

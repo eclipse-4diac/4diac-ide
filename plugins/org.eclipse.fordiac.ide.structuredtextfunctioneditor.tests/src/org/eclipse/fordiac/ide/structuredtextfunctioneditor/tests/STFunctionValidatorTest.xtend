@@ -136,6 +136,7 @@ class STFunctionValidatorTest {
 
 	}
 
+	@Test
 	def void testInvalidArrayAssignment() {
 		'''
 			FUNCTION hubert
@@ -260,6 +261,7 @@ class STFunctionValidatorTest {
 
 	}
 
+	@Test
 	def void testInvalidArrayInitializer() {
 		'''
 			FUNCTION hubert
@@ -279,6 +281,7 @@ class STFunctionValidatorTest {
 			STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
+	@Test
 	def void testInvalidArrayDimensionsInitializer() {
 		'''
 			FUNCTION hubert
@@ -286,8 +289,8 @@ class STFunctionValidatorTest {
 				testArray: ARRAY [ 0 .. 3 ] OF INT := [[17, 4]];
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STElementaryInitializerExpression,
-			STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayInitializerExpression,
+			STCoreValidator.INSUFFICIENT_ARRAY_DIMENSIONS)
 		'''
 			FUNCTION hubert
 			VAR
