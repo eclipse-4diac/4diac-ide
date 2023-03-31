@@ -25,10 +25,10 @@ Export-Package: org.eclipse.fordiac.ide.structuredtextcore,
  org.eclipse.fordiac.ide.structuredtextcore.parser.antlr,
  org.eclipse.fordiac.ide.structuredtextcore.parser.antlr.internal,
  org.eclipse.fordiac.ide.structuredtextcore.parser.antlr.lexer,
+ org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr,
  org.eclipse.fordiac.ide.structuredtextcore.scoping,
  org.eclipse.fordiac.ide.structuredtextcore.serializer,
  org.eclipse.fordiac.ide.structuredtextcore.services,
- org.eclipse.fordiac.ide.structuredtextcore.util,
  org.eclipse.fordiac.ide.structuredtextcore.validation
 Import-Package: org.apache.log4j,
  org.eclipse.osgi.util;version="1.1.0"

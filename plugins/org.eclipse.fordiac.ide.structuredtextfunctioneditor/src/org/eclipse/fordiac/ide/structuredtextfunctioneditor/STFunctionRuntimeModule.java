@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor;
 
-import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreExportCommentAssociater;
+import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.converter.STFunctionValueConverters;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
@@ -22,6 +22,7 @@ import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
  * Use this class to register components to be used at runtime / without the
  * Equinox extension registry.
  */
+@SuppressWarnings("static-method")
 public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
 
 	@Override
@@ -30,6 +31,6 @@ public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
 	}
 
 	public Class<? extends ICommentAssociater> bindICommentAssociater() {
-		return STCoreExportCommentAssociater.class;
+		return STCoreCommentAssociater.class;
 	}
 }
