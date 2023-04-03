@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.ui.IDebugModelPresentation;
 import org.eclipse.debug.ui.IValueDetailListener;
@@ -28,6 +29,7 @@ import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorDescriptor;
@@ -101,6 +103,11 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 
 	@Override
 	public void computeDetail(final IValue value, final IValueDetailListener listener) {
+		try {
+			listener.detailComputed(value, value.getValueString());
+		} catch (final DebugException e) {
+			FordiacLogHelper.logWarning("Cannot compute value detail", e); //$NON-NLS-1$
+		}
 	}
 
 	@Override
