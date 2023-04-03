@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.test.model.eval.function
 
+import org.eclipse.emf.ecore.resource.impl.ResourceImpl
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
@@ -25,7 +26,9 @@ import org.eclipse.fordiac.ide.model.eval.value.IntValue
 import org.eclipse.fordiac.ide.model.eval.value.StructValue
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory
-import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
+import org.eclipse.fordiac.ide.model.typelibrary.testmocks.DataTypeEntryMock
 import org.eclipse.fordiac.ide.structuredtextalgorithm.STAlgorithmStandaloneSetup
 import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
@@ -41,9 +44,11 @@ import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations
 import static extension org.junit.jupiter.api.Assertions.*
 
 class FunctionsTest {
+	protected static TypeLibrary typeLib
+
 	@BeforeAll
 	def static void setupXtext() {
-		new DataTypeLibrary
+		typeLib = TypeLibraryManager.INSTANCE.getTypeLibrary(null)
 		STAlgorithmStandaloneSetup.doSetup
 		StructuredTextEvaluatorFactory.register
 	}
@@ -287,6 +292,9 @@ class FunctionsTest {
 				LibraryElementFactory.eINSTANCE.createVarDeclaration => [name = "b" type = ElementaryTypes.INT]
 			])
 		]
+		typeLib.addTypeEntry(new DataTypeEntryMock(structType, typeLib, null))
+		val structResource = new ResourceImpl
+		structResource.contents.add(structType)
 		// lookup
 		SampleFunctions.findMethodFromDataTypes("GENERIC_TYPE", structType).assertNotNull
 		// return type

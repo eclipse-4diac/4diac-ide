@@ -12,14 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable
 
+import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue
 import org.eclipse.fordiac.ide.model.eval.value.CharValue
 import org.eclipse.fordiac.ide.model.eval.value.StringValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
-
-import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
 
 class StringCharacterVariable extends AbstractVariable<CharValue> {
 	final Variable<StringValue> delegate
@@ -47,15 +46,14 @@ class StringCharacterVariable extends AbstractVariable<CharValue> {
 	}
 
 	override setValue(String value) {
-		setValue(value?.trim.parseValue(type))
+		value = VariableOperations.evaluateValue(type, value)
 	}
 
 	override validateValue(String value) {
-		try {
-			value?.trim.parseValue(type)
-			true
-		} catch (Exception e) {
-			false
-		}
+		VariableOperations.validateValue(type, value).nullOrEmpty
+	}
+
+	override CharType getType() {
+		super.type as CharType
 	}
 }

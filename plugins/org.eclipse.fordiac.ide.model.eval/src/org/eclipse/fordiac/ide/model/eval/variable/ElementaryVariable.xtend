@@ -27,7 +27,8 @@ final class ElementaryVariable<T extends AnyElementaryValue> extends AbstractVar
 	}
 
 	new(String name, AnyType type, String value) {
-		this(name, type, value?.parseValue(type))
+		this(name, type)
+		setValue(value)
 	}
 
 	new(String name, AnyType type, Value value) {
@@ -40,15 +41,14 @@ final class ElementaryVariable<T extends AnyElementaryValue> extends AbstractVar
 	}
 
 	override setValue(String value) {
-		setValue(value?.trim.parseValue(type))
+		value = VariableOperations.evaluateValue(type, value)
 	}
 
 	override validateValue(String value) {
-		try {
-			value?.trim.parseValue(type)
-			true
-		} catch (Exception e) {
-			false
-		}
+		VariableOperations.validateValue(type, value).nullOrEmpty
+	}
+
+	override AnyType getType() {
+		super.type as AnyType
 	}
 }

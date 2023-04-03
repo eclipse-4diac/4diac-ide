@@ -12,10 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug.ui.view.editparts;
 
+import org.eclipse.debug.core.DebugException;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugTarget;
 import org.eclipse.fordiac.ide.debug.EvaluatorDebugVariable;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 
 public class InterfaceValueEntity {
 
@@ -45,7 +47,11 @@ public class InterfaceValueEntity {
 
 	public void updateValue(final String newValue) {
 		final EvaluatorDebugVariable debugVar = debugTarget.getDebugger().getVariable(getVariable());
-		debugVar.setValue(newValue);
+		try {
+			debugVar.setValue(newValue);
+		} catch (final DebugException e) {
+			ErrorMessenger.popUpErrorMessage(e.getLocalizedMessage());
+		}
 	}
 
 }

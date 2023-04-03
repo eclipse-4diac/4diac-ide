@@ -33,24 +33,23 @@ class PartialVariable<T extends Value> extends AbstractVariable<T> {
 	}
 
 	override getValue() {
-		delegate.value.partial(type as DataType, index) as T
+		delegate.value.partial(type, index) as T
 	}
 
 	override setValue(Value value) {
-		delegate.value = delegate.value.partial(type as DataType, index, value)
+		delegate.value = delegate.value.partial(type, index, value)
 	}
 
 	override setValue(String value) {
-		setValue(value?.trim.parseValue(type))
+		value = VariableOperations.evaluateValue(type, value)
 	}
 
 	override validateValue(String value) {
-		try {
-			value?.trim.parseValue(type)
-			true
-		} catch (Exception e) {
-			false
-		}
+		VariableOperations.validateValue(type, value).nullOrEmpty
+	}
+
+	override DataType getType() {
+		super.type as DataType
 	}
 
 	def private static getPartialName(DataType type) {

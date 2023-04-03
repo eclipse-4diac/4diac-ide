@@ -103,6 +103,14 @@ final class VariableOperations {
 		]).validateValue
 	}
 
+	def static Value evaluateValue(DataType dataType, String initialValue) {
+		(LibraryElementFactory.eINSTANCE.createVarDeclaration => [
+			name = "dummy"
+			type = dataType
+			value = LibraryElementFactory.eINSTANCE.createValue => [value = initialValue]
+		]).newVariable.value
+	}
+
 	def static String getInitialValue(VarDeclaration decl) {
 		decl.declaredInitialValue ?: decl.inheritedInitialValue
 	}
