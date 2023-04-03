@@ -102,13 +102,22 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private void addCommentElement(final Comment comment) throws XMLStreamException {
-		addEmptyStartElement(LibraryElementTags.COMMENT_ELEMENT);
+		if (comment.isInGroup()) {
+			addStartElement(LibraryElementTags.COMMENT_ELEMENT);
+		} else {
+			addEmptyStartElement(LibraryElementTags.COMMENT_ELEMENT);
+		}
+
 		addCommentAttribute(comment);
 		addXYAttributes(comment);
 		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE,
 				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getWidth()));
 		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE,
 				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getHeight()));
+		if (comment.isInGroup()) {
+			addGroupAttribute(comment.getGroup());
+			addEndElement();
+		}
 	}
 
 	private void addGroupAttributes(final Group group) throws XMLStreamException {
@@ -135,8 +144,8 @@ class FBNetworkExporter extends CommonElementExporter {
 			addPinVarConfigurationAttribute(fbnElement);
 		}
 
-		if (fbnElement instanceof SubApp && isUntypedSubapp(fbnElement)) {
-			addSubappHeightAndWidthAttributes((SubApp) fbnElement);
+		if (fbnElement instanceof final SubApp subApp && isUntypedSubapp(fbnElement)) {
+			addSubappHeightAndWidthAttributes(subApp);
 		}
 
 		if (fbnElement.isInGroup()) {
@@ -157,7 +166,7 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private static boolean isUntypedSubapp(final FBNetworkElement fbnElement) {
-		return (fbnElement instanceof SubApp) && (!((SubApp) fbnElement).isTyped());
+		return (fbnElement instanceof final SubApp subApp) && (!subApp.isTyped());
 	}
 
 	private static String getFBNElementNodeName(final FBNetworkElement fbnElement) {
