@@ -21,18 +21,21 @@ import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.gef.nat.AdapterColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.AdapterListProvider;
-import org.eclipse.fordiac.ide.gef.nat.EventColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditInterfaceSection<AdapterDeclaration> {
@@ -86,6 +89,29 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		}
 	}
 
+	@Override
+	protected void configureLabels(final ListDataProvider<AdapterDeclaration> provider, final LabelStack configLabels,
+			final int columnPosition, final int rowPosition) {
+		final AdapterDeclaration rowItem = provider.getRowObject(rowPosition);
+		switch (columnPosition) {
+		case I4diacNatTableUtil.TYPE:
+			if (rowItem.getType() instanceof ErrorMarkerDataType) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+			}
+			if (isEditable()) {
+
+				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+			}
+			break;
+		case I4diacNatTableUtil.NAME:
+		case I4diacNatTableUtil.COMMENT:
+			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			break;
+		default:
+			break;
+		}
+	}
+
 
 	@Override
 	public void setupOutputTable(final Group outputsGroup) {
@@ -95,7 +121,8 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		}
 		outputProvider = new AdapterListProvider(this);
 		final DataLayer outputDataLayer = setupDataLayer(outputProvider);
-		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer, new EventColumnProvider(),
+		outputTable = NatTableWidgetFactory.createRowNatTable(outputsGroup, outputDataLayer,
+				new AdapterColumnProvider(),
 				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this, false);
 	}
 
@@ -110,7 +137,6 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		inputTable = NatTableWidgetFactory.createRowNatTable(inputsGroup, inputDataLayer, new AdapterColumnProvider(),
 				rule, new DataTypeSelectionButton(typeSelection, ADAPTER_TYPE_SELECTION), this, true);
 	}
-
 
 	@Override
 	public void setTableInput(final InterfaceList il) {

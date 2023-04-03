@@ -135,7 +135,7 @@ class FBNetworkExporter extends CommonElementExporter {
 			addPinVarConfigurationAttribute(fbnElement);
 		}
 
-		if (fbnElement instanceof SubApp) {
+		if (fbnElement instanceof SubApp && isUntypedSubapp(fbnElement)) {
 			addSubappHeightAndWidthAttributes((SubApp) fbnElement);
 		}
 

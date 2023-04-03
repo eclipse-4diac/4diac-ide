@@ -29,13 +29,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
-import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
@@ -47,7 +45,6 @@ import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.ComboBoxWidgetFactory;
 import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
-import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -90,6 +87,9 @@ implements I4diacNatTableUtil {
 	protected abstract void setupOutputTable(Group outputsGroup);
 
 	protected abstract void setupInputTable(Group inputsGroup);
+
+	protected abstract void configureLabels(final ListDataProvider<T> provider, final LabelStack configLabels,
+			final int columnPosition, final int rowPosition);
 
 	@Override
 	protected abstract INamedElement getInputType(Object input);
@@ -230,36 +230,6 @@ implements I4diacNatTableUtil {
 			configureLabels(provider, configLabels, columnPosition, rowPosition);
 		});
 		return dataLayer;
-	}
-
-	protected void configureLabels(final ListDataProvider<T> provider, final LabelStack configLabels,
-			final int columnPosition, final int rowPosition) {
-		final VarDeclaration rowItem = (VarDeclaration) provider.getRowObject(rowPosition);
-		switch (columnPosition) {
-		case I4diacNatTableUtil.TYPE:
-			if (rowItem.getType() instanceof ErrorMarkerDataType) {
-				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
-			}
-			if (isEditable()) {
-
-				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
-			}
-			break;
-		case I4diacNatTableUtil.INITIAL_VALUE:
-			if (isEditable()) {
-				if (rowItem.getValue() != null && rowItem.getValue().hasError()) {
-					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
-				}
-				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
-			}
-			break;
-		case I4diacNatTableUtil.NAME:
-		case I4diacNatTableUtil.COMMENT:
-			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			break;
-		default:
-			break;
-		}
 	}
 
 	public void initTypeSelection(final DataTypeLibrary dataTypeLib) {
