@@ -52,7 +52,7 @@ import org.eclipse.swt.widgets.Composite;
 
 public class CommentEditPart extends AbstractPositionableElementEditPart {
 
-	private static final class CommentFigure extends BorderedRoundedRectangle {
+	public static final class CommentFigure extends BorderedRoundedRectangle {
 
 		final InstanceCommentFigure comment;
 
