@@ -183,6 +183,11 @@ public class UnfoldedSubappContentNetwork implements FBNetwork {
 	}
 
 	@Override
+	public void addConnectionWithIndex(final Connection connection, final int index) {
+		subappContent.addConnectionWithIndex(connection, index);
+	}
+
+	@Override
 	public void removeConnection(final Connection connection) {
 		subappContent.removeConnection(connection);
 	}
@@ -230,5 +235,10 @@ public class UnfoldedSubappContentNetwork implements FBNetwork {
 	@Override
 	public FBNetworkElement getElementNamed(final String name) {
 		return subappContent.getElementNamed(name);
+	}
+
+	@Override
+	public int getConnectionIndex(final Connection connection) {
+		return subappContent.getConnectionIndex(connection);
 	}
 }

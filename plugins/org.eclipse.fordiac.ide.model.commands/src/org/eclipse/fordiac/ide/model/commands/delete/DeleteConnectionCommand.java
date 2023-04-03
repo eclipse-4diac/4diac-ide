@@ -41,6 +41,7 @@ public class DeleteConnectionCommand extends Command {
 	private final CompoundCommand deleteInterfaceErrorMarkers = new CompoundCommand();
 	private final CompoundCommand deleteMarkersCmds = new CompoundCommand();
 	private FBNetworkElement errorFb;
+	private int elementIndex;
 
 	private boolean keepMarker; // we want to keep the marker
 
@@ -103,6 +104,7 @@ public class DeleteConnectionCommand extends Command {
 			deleteMapped.redo();
 		}
 		if (connectionParent != null) {
+			elementIndex = connectionParent.getConnectionIndex(connection);
 			connectionParent.removeConnection(connection);
 		}
 	}
@@ -113,7 +115,7 @@ public class DeleteConnectionCommand extends Command {
 		connection.setSource(source);
 		connection.setDestination(destination);
 		if (connectionParent != null) {
-			connectionParent.addConnection(connection);
+			connectionParent.addConnectionWithIndex(connection, elementIndex);
 		}
 		if (null != deleteMapped) {
 			deleteMapped.undo();

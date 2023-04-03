@@ -43,6 +43,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 	private final CompoundCommand cmds = new CompoundCommand();
 	private final CompoundCommand deleteMarkersCmds = new CompoundCommand();
 	private final Group group;
+	private int elementIndex;
 
 	public DeleteFBNetworkElementCommand(final FBNetworkElement element) {
 		super(Messages.DeleteFBNetworkElementCommand_DeleteFBOrSubapplication);
@@ -78,6 +79,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (group != null) {
 			element.setGroup(null);
 		}
+		elementIndex = fbParent.getNetworkElements().indexOf(element);
 		fbParent.getNetworkElements().remove(element);
 		if (element instanceof SubApp) {
 			closeSubApplicationEditor((SubApp) element);
@@ -86,7 +88,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 
 	@Override
 	public void undo() {
-		fbParent.getNetworkElements().add(element);
+		fbParent.getNetworkElements().add(elementIndex, element);
 		if (group != null) {
 			element.setGroup(group);
 		}
@@ -105,6 +107,7 @@ public class DeleteFBNetworkElementCommand extends Command {
 		if (group != null) {
 			element.setGroup(null);
 		}
+		elementIndex = fbParent.getNetworkElements().indexOf(element);
 		fbParent.getNetworkElements().remove(element);
 
 	}

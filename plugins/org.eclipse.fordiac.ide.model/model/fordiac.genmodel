@@ -293,6 +293,11 @@
       <genOperations ecoreOperation="lib.ecore#//FBNetwork/addConnection" body="org.eclipse.fordiac.ide.model.Annotations.addConnection(this, connection);">
         <genParameters ecoreParameter="lib.ecore#//FBNetwork/addConnection/connection"/>
       </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/addConnectionWithIndex"
+          body="org.eclipse.fordiac.ide.model.Annotations.addConnectionWithIndex(this, connection, index);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/addConnectionWithIndex/connection"/>
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/addConnectionWithIndex/index"/>
+      </genOperations>
       <genOperations ecoreOperation="lib.ecore#//FBNetwork/removeConnection" body="org.eclipse.fordiac.ide.model.Annotations.removeConnection(this, connection);">
         <genParameters ecoreParameter="lib.ecore#//FBNetwork/removeConnection/connection"/>
       </genOperations>
@@ -311,6 +316,9 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//FBNetwork/getElementNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getElementNamed(this, name);">
         <genParameters ecoreParameter="lib.ecore#//FBNetwork/getElementNamed/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/getConnectionIndex" body="return org.eclipse.fordiac.ide.model.Annotations.getConnectionIndex(this, connection);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/getConnectionIndex/connection"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBNetworkElement">

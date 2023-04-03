@@ -748,6 +748,13 @@
       </eAnnotations>
       <eParameters name="connection" lowerBound="1" eType="#//Connection"/>
     </eOperations>
+    <eOperations name="addConnectionWithIndex">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.addConnectionWithIndex(this, connection, index);"/>
+      </eAnnotations>
+      <eParameters name="connection" lowerBound="1" eType="#//Connection"/>
+      <eParameters name="index" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int"/>
+    </eOperations>
     <eOperations name="removeConnection">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="org.eclipse.fordiac.ide.model.Annotations.removeConnection(this, connection);"/>
@@ -801,6 +808,12 @@
         <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getElementNamed(this, name);"/>
       </eAnnotations>
       <eParameters name="name" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String"/>
+    </eOperations>
+    <eOperations name="getConnectionIndex" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//Int">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return org.eclipse.fordiac.ide.model.Annotations.getConnectionIndex(this, connection);"/>
+      </eAnnotations>
+      <eParameters name="connection" lowerBound="1" eType="#//Connection"/>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="networkElements" upperBound="-1"
         eType="#//FBNetworkElement" containment="true" resolveProxies="false">

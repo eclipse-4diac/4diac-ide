@@ -352,14 +352,30 @@ public final class Annotations {
 
 	// *** FBNetwork ***//
 	public static void addConnection(final FBNetwork fbn, final Connection connection) {
+		addConnectionWithIndex(fbn, connection, -1);
+	}
+
+	public static void addConnectionWithIndex(final FBNetwork fbn, final Connection connection, final int index) {
 		if (connection instanceof EventConnection) {
-			fbn.getEventConnections().add((EventConnection) connection);
+			if (index != -1) {
+				fbn.getEventConnections().add(index, (EventConnection) connection);
+			} else {
+				fbn.getEventConnections().add((EventConnection) connection);
+			}
 		}
 		if (connection instanceof DataConnection) {
-			fbn.getDataConnections().add((DataConnection) connection);
+			if (index != -1) {
+				fbn.getDataConnections().add(index, (DataConnection) connection);
+			} else {
+				fbn.getDataConnections().add((DataConnection) connection);
+			}
 		}
 		if (connection instanceof AdapterConnection) {
-			fbn.getAdapterConnections().add((AdapterConnection) connection);
+			if (index != -1) {
+				fbn.getAdapterConnections().add(index, (AdapterConnection) connection);
+			} else {
+				fbn.getAdapterConnections().add((AdapterConnection) connection);
+			}
 		}
 	}
 
@@ -373,6 +389,19 @@ public final class Annotations {
 		if (connection instanceof AdapterConnection) {
 			fbn.getAdapterConnections().remove(connection);
 		}
+	}
+
+	public static int getConnectionIndex(final FBNetwork fbn, final Connection connection) {
+		if (connection instanceof EventConnection) {
+			return fbn.getEventConnections().indexOf(connection);
+		}
+		if (connection instanceof DataConnection) {
+			return fbn.getDataConnections().indexOf(connection);
+		}
+		if (connection instanceof AdapterConnection) {
+			return fbn.getAdapterConnections().indexOf(connection);
+		}
+		return -1;
 	}
 
 	public static boolean isApplicationNetwork(final FBNetwork fbn) {
