@@ -367,6 +367,11 @@ public class CommentPropertySection extends AbstractSection {
 		}
 	}
 
+	protected static boolean isExpandedSubAppPinAndConnected(final VarDeclaration rowObject) {
+		return rowObject.getFBNetworkElement() instanceof SubApp && ((SubApp) rowObject.getFBNetworkElement()).isUnfolded()
+				&& !rowObject.getOutputConnections().isEmpty() && !rowObject.getOutputConnections().isEmpty();
+	}
+
 	public class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<VarDeclaration> {
 		protected final boolean isInputData;
 
@@ -409,7 +414,7 @@ public class CommentPropertySection extends AbstractSection {
 				break;
 			case VISIBLE_COL_ID:
 				if ((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
-						|| !rowObject.isIsInput() && rowObject.getOutputConnections().isEmpty()) {
+						&& !isExpandedSubAppPinAndConnected(rowObject)) {
 					final Boolean newValueBool = NatTableHandler.parseNewValueObject(newValue);
 					if (newValueBool != null) {
 						cmd = new HidePinCommand(rowObject, newValueBool.booleanValue());
@@ -427,6 +432,7 @@ public class CommentPropertySection extends AbstractSection {
 			}
 			executeCommand(cmd);
 		}
+
 
 		@Override
 		public int getColumnCount() {
