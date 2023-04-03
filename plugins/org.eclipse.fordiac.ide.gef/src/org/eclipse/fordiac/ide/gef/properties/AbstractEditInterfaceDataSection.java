@@ -30,18 +30,22 @@ import org.eclipse.fordiac.ide.gef.nat.VarDeclarationColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceDataSection extends AbstractEditInterfaceSection<VarDeclaration> {
@@ -112,6 +116,37 @@ public abstract class AbstractEditInterfaceDataSection extends AbstractEditInter
 		if (entry instanceof VarDeclaration) {
 			final IInterfaceElement entry2 = (IInterfaceElement) entry;
 			cmd.add(newInsertCommand(entry2, isInput, index));
+		}
+	}
+
+	@Override
+	protected void configureLabels(final ListDataProvider<VarDeclaration> provider, final LabelStack configLabels,
+			final int columnPosition, final int rowPosition) {
+		final VarDeclaration rowItem = provider.getRowObject(rowPosition);
+		switch (columnPosition) {
+		case I4diacNatTableUtil.TYPE:
+			if (rowItem.getType() instanceof ErrorMarkerDataType) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+			}
+			if (isEditable()) {
+
+				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+			}
+			break;
+		case I4diacNatTableUtil.INITIAL_VALUE:
+			if (isEditable()) {
+				if (rowItem.getValue() != null && rowItem.getValue().hasError()) {
+					configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+				}
+				configLabels.addLabel(InitialValueEditorConfiguration.INITIAL_VALUE_CELL);
+			}
+			break;
+		case I4diacNatTableUtil.NAME:
+		case I4diacNatTableUtil.COMMENT:
+			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			break;
+		default:
+			break;
 		}
 	}
 

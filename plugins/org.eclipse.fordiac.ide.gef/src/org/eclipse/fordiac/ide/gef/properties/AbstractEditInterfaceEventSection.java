@@ -24,15 +24,19 @@ import org.eclipse.fordiac.ide.gef.nat.EventColumnProvider;
 import org.eclipse.fordiac.ide.gef.nat.EventListProvider;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.model.data.DataType;
+import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerDataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.typelibrary.EventTypeLibrary;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
+import org.eclipse.fordiac.ide.ui.widget.I4diacNatTableUtil;
 import org.eclipse.fordiac.ide.ui.widget.NatTableWidgetFactory;
 import org.eclipse.gef.commands.CompoundCommand;
 import org.eclipse.nebula.widgets.nattable.config.IEditableRule;
+import org.eclipse.nebula.widgets.nattable.data.ListDataProvider;
 import org.eclipse.nebula.widgets.nattable.layer.DataLayer;
+import org.eclipse.nebula.widgets.nattable.layer.LabelStack;
 import org.eclipse.swt.widgets.Group;
 
 public abstract class AbstractEditInterfaceEventSection extends AbstractEditInterfaceSection<Event> {
@@ -80,6 +84,28 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 		}
 	}
 
+	@Override
+	protected void configureLabels(final ListDataProvider<Event> provider, final LabelStack configLabels,
+			final int columnPosition, final int rowPosition) {
+		final Event rowItem = provider.getRowObject(rowPosition);
+		switch (columnPosition) {
+		case I4diacNatTableUtil.TYPE:
+			if (rowItem.getType() instanceof ErrorMarkerDataType) {
+				configLabels.addLabelOnTop(NatTableWidgetFactory.ERROR_CELL);
+			}
+			if (isEditable()) {
+
+				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
+			}
+			break;
+		case I4diacNatTableUtil.NAME:
+		case I4diacNatTableUtil.COMMENT:
+			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
+			break;
+		default:
+			break;
+		}
+	}
 
 	@Override
 	public void setupOutputTable(final Group outputsGroup) {
