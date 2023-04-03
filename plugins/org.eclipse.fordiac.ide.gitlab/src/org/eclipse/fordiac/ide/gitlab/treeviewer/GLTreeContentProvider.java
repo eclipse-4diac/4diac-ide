@@ -14,6 +14,7 @@ package org.eclipse.fordiac.ide.gitlab.treeviewer;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.gitlab4j.api.models.Package;
@@ -44,6 +45,15 @@ public class GLTreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public Object getParent(Object element) {
+		if (element instanceof Package) {
+			Object[] parent = new Object[1]; // To surpass the final/effectively final issue
+			((HashMap<Project, List<Package>>) projectsAndPackages).forEach((key, value) -> {
+				if(value.contains(element)) {
+					parent[0] = key;
+				}
+			});
+			return parent[0];
+		}
 		return null;
 	}
 

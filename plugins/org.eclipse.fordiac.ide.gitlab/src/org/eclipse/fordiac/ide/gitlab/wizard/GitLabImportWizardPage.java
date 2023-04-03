@@ -35,7 +35,7 @@ public class GitLabImportWizardPage extends WizardPage {
 
 	public GitLabImportWizardPage(String pageName) {
 		super(pageName);
-		setTitle(pageName); //NON-NLS-1
+		setTitle(pageName); 
 		setDescription("Import files from GitLab into the workspace"); //NON-NLS-1
 	}
 	
@@ -60,7 +60,7 @@ public class GitLabImportWizardPage extends WizardPage {
 	}
 	
 	private void connect() {
-		downloadManager = new GitLabDownloadManager();
+		downloadManager = new GitLabDownloadManager(this);
     	downloadManager.connectToGitLab(getUrl(), getToken());
     	
 	}

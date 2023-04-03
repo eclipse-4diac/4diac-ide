@@ -19,6 +19,8 @@ import org.eclipse.osgi.util.NLS;
 public final class Messages extends NLS {
 	private static String BUNDLE_NAME = "org.eclipse.fordiac.ide.gitlab.messages"; //$NON-NLS-1$
 
+	public static String GET;
+	
 	public static String GitLab_Token;
 
 	public static String GitLab_Token_Title;
@@ -28,6 +30,8 @@ public final class Messages extends NLS {
 	public static String GitLab_Url_Title;
 
 	public static String GitLab_PreferenceId;
+	
+	public static String Private_Token;
 
 	static {
 		// initialize resource bundle

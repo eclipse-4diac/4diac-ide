@@ -26,6 +26,7 @@ public class GitLabListedLibsPage extends WizardPage {
 	
 	private TreeViewer treeViewer;
 	private Package selectedPackage;
+	private Object parentItem;
 
 	protected GitLabListedLibsPage(String pageName) {
 		super(pageName);
@@ -38,7 +39,7 @@ public class GitLabListedLibsPage extends WizardPage {
 		super.setPageComplete(complete);
 		if (complete) {
 			try {
-				((GitLabImportWizardPage) getPreviousPage()).getDownloadManager().packageDownloader(selectedPackage, ((GitLabImportWizardPage)getPreviousPage()).getToken());
+				((GitLabImportWizardPage) getPreviousPage()).getDownloadManager().packageDownloader(selectedPackage, parentItem);
 			} catch (IOException e1) {
 				e1.printStackTrace();
 			}
@@ -70,6 +71,7 @@ public class GitLabListedLibsPage extends WizardPage {
               TreeItem item = (TreeItem) e.item;
                 if (item.getItemCount() > 0 && item.getData() instanceof Package) {
                 	selectedPackage = ((Package) item.getData());
+                	parentItem = item.getParentItem().getData();
                 	setPageComplete(true);
                 }
             }
@@ -84,7 +86,7 @@ public class GitLabListedLibsPage extends WizardPage {
 	private void createColumns(TreeViewer viewer) {
 		// Projects and packages column
 		TreeViewerColumn viewerColumn = new TreeViewerColumn(viewer, SWT.NONE);
-        viewerColumn.getColumn().setWidth(300);
+        viewerColumn.getColumn().setWidth(500);
         viewerColumn.getColumn().setText("Packages and projects");
         viewerColumn.setLabelProvider(new ColumnLabelProvider() {
         	@Override
@@ -96,15 +98,9 @@ public class GitLabListedLibsPage extends WizardPage {
         		} else if (element instanceof String) {
         			return (String) element;
         		}
-        		return "kme";
+        		return "";
         	}
         });
-        
-        // Version column
-//        TreeViewerColumn versionColumn = new TreeViewerColumn(viewer, SWT.NONE);
-//        versionColumn.getColumn().setWidth(200);
-//        versionColumn.getColumn().setText("Version");
-//        versionColumn.setLabelProvider(new ColumnLabelProvider());
 	}
 	
 	
