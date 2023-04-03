@@ -39,6 +39,10 @@ class ArrayValue implements AnyDerivedValue, Iterable<Value> {
 		elements.get(index - start)
 	}
 
+	def List<Variable<?>> subList(int fromIndex, int toIndex) {
+		elements.subList(fromIndex - start, toIndex - start);
+	}
+
 	def Variable<?> get(Iterable<Integer> indices) {
 		if (indices.size > 1) {
 			(indices.head.get as ArrayVariable).value.get(indices.tail)

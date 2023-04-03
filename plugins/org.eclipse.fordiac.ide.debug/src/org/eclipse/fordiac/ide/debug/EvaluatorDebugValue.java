@@ -12,11 +12,10 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug;
 
-import java.util.stream.Collectors;
-
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IDebugTarget;
-import org.eclipse.debug.core.model.IValue;
+import org.eclipse.debug.core.model.IIndexedValue;
 import org.eclipse.debug.core.model.IVariable;
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue;
 import org.eclipse.fordiac.ide.model.eval.value.FBValue;
@@ -24,7 +23,7 @@ import org.eclipse.fordiac.ide.model.eval.value.StructValue;
 import org.eclipse.fordiac.ide.model.eval.value.Value;
 import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 
-public class EvaluatorDebugValue extends EvaluatorDebugElement implements IValue {
+public class EvaluatorDebugValue extends EvaluatorDebugElement implements IIndexedValue {
 	private final Value value;
 
 	public EvaluatorDebugValue(final Value value, final IDebugTarget target) {
@@ -52,15 +51,15 @@ public class EvaluatorDebugValue extends EvaluatorDebugElement implements IValue
 	}
 
 	public EvaluatorDebugVariable getVariable(final String name) {
-		if (value instanceof StructValue) {
+		if (value instanceof final StructValue structValue) {
 			final var debugger = getDebugTarget().getDebugger();
-			final Variable<?> variable = ((StructValue) value).get(name);
+			final Variable<?> variable = structValue.get(name);
 			if (variable != null) {
 				return debugger.getVariable(variable);
 			}
-		} else if (value instanceof FBValue) {
+		} else if (value instanceof final FBValue fbValue) {
 			final var debugger = getDebugTarget().getDebugger();
-			final Variable<?> variable = ((FBValue) value).get(name);
+			final Variable<?> variable = fbValue.get(name);
 			if (variable != null) {
 				return debugger.getVariable(variable);
 			}
@@ -70,21 +69,13 @@ public class EvaluatorDebugValue extends EvaluatorDebugElement implements IValue
 
 	@Override
 	public IVariable[] getVariables() throws DebugException {
-		if (value instanceof ArrayValue) {
-			final var debugger = getDebugTarget().getDebugger();
-			final var elements = ((ArrayValue) value).getElements().stream().map(debugger::getVariable)
-					.collect(Collectors.toList());
-			return elements.toArray(new IVariable[elements.size()]);
-		} else if (value instanceof StructValue) {
-			final var debugger = getDebugTarget().getDebugger();
-			final var members = ((StructValue) value).getMembers().values().stream().map(debugger::getVariable)
-					.collect(Collectors.toList());
-			return members.toArray(new IVariable[members.size()]);
-		} else if (value instanceof FBValue) {
-			final var debugger = getDebugTarget().getDebugger();
-			final var members = ((FBValue) value).getMembers().values().stream().map(debugger::getVariable)
-					.collect(Collectors.toList());
-			return members.toArray(new IVariable[members.size()]);
+		final var debugger = getDebugTarget().getDebugger();
+		if (value instanceof final ArrayValue arrayValue) {
+			return arrayValue.getElements().stream().map(debugger::getVariable).toArray(IVariable[]::new);
+		} else if (value instanceof final StructValue structValue) {
+			return structValue.getMembers().values().stream().map(debugger::getVariable).toArray(IVariable[]::new);
+		} else if (value instanceof final FBValue fbValue) {
+			return fbValue.getMembers().values().stream().map(debugger::getVariable).toArray(IVariable[]::new);
 		}
 		return new IVariable[0];
 	}
@@ -92,6 +83,49 @@ public class EvaluatorDebugValue extends EvaluatorDebugElement implements IValue
 	@Override
 	public boolean hasVariables() throws DebugException {
 		return value instanceof ArrayValue || value instanceof StructValue || value instanceof FBValue;
+	}
+
+	@Override
+	public IVariable getVariable(final int offset) throws DebugException {
+		if (value instanceof final ArrayValue arrayValue) {
+			try {
+				return getDebugTarget().getDebugger().getVariable(arrayValue.get(offset));
+			} catch (final IndexOutOfBoundsException e) {
+				throw new DebugException(Status.error("Cannot get variable at index " + offset, e)); //$NON-NLS-1$
+			}
+		}
+		throw new DebugException(Status.error("Cannot get variable at index of non-array value")); //$NON-NLS-1$
+	}
+
+	@Override
+	public IVariable[] getVariables(final int offset, final int length) throws DebugException {
+		if (value instanceof final ArrayValue arrayValue) {
+			try {
+				final var debugger = getDebugTarget().getDebugger();
+				return arrayValue.subList(offset, offset + length).stream().map(debugger::getVariable)
+						.toArray(IVariable[]::new);
+			} catch (final IndexOutOfBoundsException e) {
+				throw new DebugException(
+						Status.error("Cannot get variables from index " + offset + " to " + (offset + length), e)); //$NON-NLS-1$ //$NON-NLS-2$
+			}
+		}
+		throw new DebugException(Status.error("Cannot get variables in range of non-array value")); //$NON-NLS-1$
+	}
+
+	@Override
+	public int getSize() throws DebugException {
+		if (value instanceof final ArrayValue arrayValue) {
+			return arrayValue.getElements().size();
+		}
+		throw new DebugException(Status.error("Cannot determine size of non-array value")); //$NON-NLS-1$
+	}
+
+	@Override
+	public int getInitialOffset() {
+		if (value instanceof final ArrayValue arrayValue) {
+			return arrayValue.getType().getSubranges().get(0).getLowerLimit();
+		}
+		return 0;
 	}
 
 	@Override
