@@ -119,9 +119,13 @@ public final class WatchValueTreeNodeUtils {
 				return value + ".0"; //$NON-NLS-1$
 			}
 		} else if (type instanceof WstringType) {
-			return StringValueConverter.INSTANCE.toString(value, true);
+			if (!value.startsWith("\"")) { //$NON-NLS-1$
+				return StringValueConverter.INSTANCE.toString(value, true);
+			}
 		} else if (type instanceof StringType) {
-			return StringValueConverter.INSTANCE.toString(value, false);
+			if (!value.startsWith("'")) { //$NON-NLS-1$
+				return StringValueConverter.INSTANCE.toString(value, false);
+			}
 		}
 		return value;
 	}

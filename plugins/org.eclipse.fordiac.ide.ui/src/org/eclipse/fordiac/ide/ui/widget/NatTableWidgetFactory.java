@@ -243,6 +243,11 @@ public final class NatTableWidgetFactory {
 	private static void setColumnWidths(final DataLayer dataLayer) {
 		dataLayer.setColumnPercentageSizing(true);
 		switch (dataLayer.getColumnCount()) {
+		case 3:
+			dataLayer.setColumnWidthPercentageByPosition(0, 33);
+			dataLayer.setColumnWidthPercentageByPosition(1, 34);
+			dataLayer.setColumnWidthPercentageByPosition(2, 33);
+			break;
 		case 4:
 			dataLayer.setColumnWidthPercentageByPosition(0, 20);
 			dataLayer.setColumnWidthPercentageByPosition(1, 20);
