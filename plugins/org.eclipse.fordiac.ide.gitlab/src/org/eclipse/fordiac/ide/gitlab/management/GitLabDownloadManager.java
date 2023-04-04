@@ -17,34 +17,33 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Scanner;
-import java.util.stream.Collectors;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.fordiac.ide.gitlab.Messages;
-import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
 import org.eclipse.fordiac.ide.gitlab.wizard.GitLabImportWizardPage;
-import org.eclipse.jface.wizard.WizardPage;
 import org.gitlab4j.api.GitLabApi;
 import org.gitlab4j.api.GitLabApiException;
 import org.gitlab4j.api.models.Package;
-import org.gitlab4j.api.models.PackageType;
 import org.gitlab4j.api.models.Project;
 
 public class GitLabDownloadManager {
 	
 	private static final String PATH = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toPortableString();
 	private static final String DIRECTORY = ".fblib";
+	private static final String API_VERSION = "api/v4/projects/";
+	private static final String PACKAGES = "/packages/";
+	private static final String PACKAGE_FILES = "/package_files";
 	private GitLabApi gitLabApi;
 	private HashMap<Project, List<Package>> projectAndPackageMap;
 	private GitLabImportWizardPage gitLabImportPage;
@@ -87,25 +86,25 @@ public class GitLabDownloadManager {
 	
 	public void packageDownloader(Package p, Object project) throws IOException {
 		if (project instanceof Project) {
-			String filename = findFilenameForPackage(p, ((Project)project));
-		
-			URL url = new URL(buildDownloadURL(p, project, filename));
-		
-			HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
-			httpConn.setRequestMethod(Messages.GET);
-			httpConn.setRequestProperty(Messages.Private_Token, gitLabImportPage.getToken());
+			for(String filename: findFilenamesInPackage(p, ((Project)project))) {
+				URL url = new URL(buildDownloadURL(p, project, filename));
+				
+				HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
+				httpConn.setRequestMethod(Messages.GET);
+				httpConn.setRequestProperty(Messages.Private_Token, gitLabImportPage.getToken());
 
-			InputStream responseStream = httpConn.getInputStream();
+				InputStream responseStream = httpConn.getInputStream();
 
-			createDir();
-			Files.copy(responseStream, Paths.get(PATH, DIRECTORY, filename), StandardCopyOption.REPLACE_EXISTING);
-		
-			responseStream.close();
-			httpConn.disconnect();
+				createDir();
+				Files.copy(responseStream, Paths.get(PATH, DIRECTORY, filename), StandardCopyOption.REPLACE_EXISTING);
+			
+				responseStream.close();
+				httpConn.disconnect();
+			}
 		}
 	}
 	
-	private String findFilenameForPackage(Package pack, Project project) throws IOException {
+	private List<String> findFilenamesInPackage(Package pack, Project project) throws IOException {
 		URL url = new URL(buildPackageFileURL(pack, project));
 		
 		HttpURLConnection httpConn = (HttpURLConnection) url.openConnection();
@@ -113,37 +112,37 @@ public class GitLabDownloadManager {
 		httpConn.setRequestProperty(Messages.Private_Token, gitLabImportPage.getToken());
 
 		InputStream responseStream = httpConn.getInputStream();
-		String filenameInPackage = parseResponse(responseStream);
+		List<String> filenames = parseResponse(responseStream);
 		
 		responseStream.close();
 		httpConn.disconnect();
-		return filenameInPackage;
+		return filenames;
 	}
 	
 	private String buildDownloadURL(Package p, Object project, String filename) {
-		return gitLabImportPage.getUrl() + "api/v4/projects/" + ((Project)project).getId() + 
-				"/packages/" + p.getPackageType() + "/" + p.getName() + "/" + p.getVersion() + "/" + filename;
+		return gitLabImportPage.getUrl() + API_VERSION + ((Project)project).getId() + 
+				PACKAGES + p.getPackageType() + "/" + p.getName() + "/" + p.getVersion() + "/" + filename;
 	}
 	
 	private String buildPackageFileURL(Package p, Project project) {
-		return gitLabImportPage.getUrl() + "api/v4/projects/" + project.getId() +  
-				"/packages/" + p.getId() +"/package_files";
+		return gitLabImportPage.getUrl() + API_VERSION + project.getId() +  
+				PACKAGES + p.getId() + PACKAGE_FILES;
 	}
 	
-	private String parseResponse(InputStream responseStream) throws IOException {
-		String filename = "";
+	private List<String> parseResponse(InputStream responseStream) throws IOException {
+		List<String> filenames = new ArrayList<>();
 		String response = "";
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(responseStream))) {
 	        response = reader.readLine();
 	    }
 		
-		String[] responseSplit = response.split(",");
-		for (int i = 0; i < responseSplit.length; i++) {
-			if (responseSplit[i].contains("file_name")) {
-				String[] filenameParsing = responseSplit[i].split(":");
-				filename = filenameParsing[1].replace("\"", ""); // Removing unnecessary quotes
-			}
+		String regex = "\"file_name\":\"(\\w+\\.[a-zA-Z0-9]*)";
+		Pattern p = Pattern.compile(regex);
+		Matcher m = p.matcher(response);
+		while(m.find()) {
+			filenames.add(m.group(1));
 		}
-		return filename;
+		
+		return filenames;
 	}
 }
