@@ -65,6 +65,7 @@ import org.eclipse.text.edits.ReplaceEdit;
 import org.eclipse.text.edits.TextEdit;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.xtext.EcoreUtil2;
+import org.eclipse.xtext.nodemodel.ICompositeNode;
 import org.eclipse.xtext.nodemodel.INode;
 import org.eclipse.xtext.nodemodel.util.NodeModelUtils;
 import org.eclipse.xtext.resource.ILocationInFileProvider;
@@ -73,6 +74,7 @@ import org.eclipse.xtext.ui.editor.XtextEditor;
 import org.eclipse.xtext.ui.resource.XtextLiveScopeResourceSetProvider;
 import org.eclipse.xtext.util.ITextRegion;
 import org.eclipse.xtext.util.ReplaceRegion;
+import org.eclipse.xtext.util.TextRegion;
 
 import com.google.inject.Inject;
 
@@ -144,8 +146,15 @@ public class ExtractCallableRefactoring extends Refactoring {
 	}
 
 	protected ITextRegion calculateSelectedSemanticElementsRegion() {
+		final ICompositeNode rootNode = resourceCopy.getParseResult().getRootNode();
+		final ITextSelection trimmedSelection = STCoreRefactoringUtil.trimSelection(selection);
+		final ITextRegion trimmedSelectedRegion = new TextRegion(trimmedSelection.getOffset(),
+				trimmedSelection.getLength());
+		final ITextRegion alignedSelectedRegion = STCoreRefactoringUtil.alignRegion(trimmedSelectedRegion, rootNode);
 		return selectedSemanticElements.stream().map(NodeModelUtils::findActualNodeFor).map(INode::getTextRegion)
-				.reduce(ITextRegion::merge).orElse(ITextRegion.EMPTY_REGION);
+				.reduce(ITextRegion::merge).map(region -> region.merge(alignedSelectedRegion))
+				.map(region -> STCoreRefactoringUtil.trimRegion(region, rootNode))
+				.orElse(ITextRegion.EMPTY_REGION);
 	}
 
 	protected Optional<String> calculateSelectedSemanticElementsText() {
