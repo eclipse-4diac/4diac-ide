@@ -369,7 +369,7 @@ public class CommentPropertySection extends AbstractSection {
 
 	protected static boolean isExpandedSubAppPinAndConnected(final VarDeclaration rowObject) {
 		return rowObject.getFBNetworkElement() instanceof SubApp && ((SubApp) rowObject.getFBNetworkElement()).isUnfolded()
-				&& !rowObject.getOutputConnections().isEmpty() && !rowObject.getOutputConnections().isEmpty();
+				&& !rowObject.getInputConnections().isEmpty() && !rowObject.getOutputConnections().isEmpty();
 	}
 
 	public class VarDeclarationColumnAccessor implements IColumnPropertyAccessor<VarDeclaration> {
