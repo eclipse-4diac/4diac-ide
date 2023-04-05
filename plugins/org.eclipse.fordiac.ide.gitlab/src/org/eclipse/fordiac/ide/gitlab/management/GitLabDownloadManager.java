@@ -40,7 +40,7 @@ import org.gitlab4j.api.models.Project;
 public class GitLabDownloadManager {
 	
 	private static final String PATH = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toPortableString();
-	private static final String DIRECTORY = ".fblib";
+	private static final String ROOT_DIRECTORY = ".fblib";
 	private static final String API_VERSION = "api/v4/projects/";
 	private static final String PACKAGES = "/packages/";
 	private static final String PACKAGE_FILES = "/package_files";
@@ -77,8 +77,15 @@ public class GitLabDownloadManager {
 		return projectAndPackageMap;
 	}
 
-	private void createDir() throws IOException {
-		Path path = Paths.get(PATH, DIRECTORY);
+	private void createRootDir() throws IOException {
+		Path path = Paths.get(PATH, ROOT_DIRECTORY);
+		if (!Files.exists(path)) {
+			Files.createDirectories(path);
+		}
+	}
+	
+	private void createPackageDir(Package p) throws IOException {
+		Path path = Paths.get(PATH, ROOT_DIRECTORY, p.getName() + "-" + p.getVersion());
 		if (!Files.exists(path)) {
 			Files.createDirectories(path);
 		}
@@ -95,8 +102,9 @@ public class GitLabDownloadManager {
 
 				InputStream responseStream = httpConn.getInputStream();
 
-				createDir();
-				Files.copy(responseStream, Paths.get(PATH, DIRECTORY, filename), StandardCopyOption.REPLACE_EXISTING);
+				createRootDir();
+				createPackageDir(p);
+				Files.copy(responseStream, Paths.get(PATH, ROOT_DIRECTORY, p.getName() + "-" + p.getVersion(), filename), StandardCopyOption.REPLACE_EXISTING);
 			
 				responseStream.close();
 				httpConn.disconnect();
