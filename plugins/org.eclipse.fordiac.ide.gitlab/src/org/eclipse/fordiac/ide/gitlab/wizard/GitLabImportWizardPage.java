@@ -13,6 +13,7 @@
 package org.eclipse.fordiac.ide.gitlab.wizard;
 
 import org.eclipse.fordiac.ide.gitlab.management.GitLabDownloadManager;
+import org.eclipse.fordiac.ide.gitlab.preferences.PreferenceConstants;
 import org.eclipse.jface.widgets.WidgetFactory;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -34,7 +35,7 @@ public class GitLabImportWizardPage extends WizardPage {
 
 	public GitLabImportWizardPage(String pageName) {
 		super(pageName);
-		setTitle(pageName); //NON-NLS-1
+		setTitle(pageName); 
 		setDescription("Import files from GitLab into the workspace"); //NON-NLS-1
 	}
 	
@@ -59,7 +60,7 @@ public class GitLabImportWizardPage extends WizardPage {
 	}
 	
 	private void connect() {
-		downloadManager = new GitLabDownloadManager();
+		downloadManager = new GitLabDownloadManager(this);
     	downloadManager.connectToGitLab(getUrl(), getToken());
     	
 	}
@@ -78,10 +79,13 @@ public class GitLabImportWizardPage extends WizardPage {
         
         createLabel("URL:");
         url  = new Text(container, SWT.BORDER | SWT.SINGLE);
+        url.setText(PreferenceConstants.getURL());
         url.setFocus();
         
         createLabel("Token:");
         token = new Text(container, SWT.PASSWORD | SWT.BORDER | SWT.SINGLE);
+        token.setText(PreferenceConstants.getToken());
+        
         
         // We could also bind connecting to pressing enter instead of having a button
         connectionButton = WidgetFactory.button(NONE).text("Connect").create(container);
