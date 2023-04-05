@@ -204,33 +204,33 @@ public abstract class AbstractConnectionRoutingHelper {
 		final ElkNode parentNode = (ElkNode) mapping.getReverseMapping().get(parent);
 
 		final ElkPort port = factory.createElkPort();
-		final boolean isInput = ie.getModel().isIsInput();  // use themodel to always get the right information
+		mapping.getGraphMap().put(port, ie.getModel());
 
-
+		final boolean isInput = ie.getModel().isIsInput();  // use the model to always get the right information
 		final Rectangle ieBounds = ie.getFigure().getBounds();
 		final ElkNode layoutGraph = mapping.getLayoutGraph();
 		double y = ieBounds.getCenter().preciseY() - layoutGraph.getY();
 
-		if (isGraphPin) {
-			port.setProperty(CoreOptions.PORT_SIDE, isInput ? PortSide.EAST : PortSide.WEST);
+		final ElkNode dummyNode = factory.createElkNode();
+		dummyNode.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS);
+		dummyNode.setDimensions(1, 1);  // a min size is needed that the layout alg uses the node.
+		dummyNode.getPorts().add(port);
+		layoutGraph.getChildren().add(dummyNode);
+		mapping.getPortParentMapping().put(port, dummyNode);
 
-			// create dummy node for graph port pin. This is needed to get better layout results for expanded subapps
-			final ElkNode node = factory.createElkNode();
-			node.setProperty(CoreOptions.PORT_CONSTRAINTS, PortConstraints.FIXED_POS);
+		if (isGraphPin) {
+			// Dummy node is needed to get better layout results for expanded subapps.
+			port.setProperty(CoreOptions.PORT_SIDE, isInput ? PortSide.EAST : PortSide.WEST);
 			final double x = isInput ? 0 : layoutGraph.getWidth();
-			node.setLocation(x, y);
-			node.setDimensions(1, 1);  // a min size is needed that the layout alg uses the node.
-			layoutGraph.getChildren().add(node);
-			node.getPorts().add(port);
+			dummyNode.setLocation(x, y);
 		} else {
+			// Dummy node ensures that connections are treated as hyperedges.
 			port.setProperty(CoreOptions.PORT_SIDE, isInput ? PortSide.WEST : PortSide.EAST);
 			final double x = isInput ? 0 : parentNode.getWidth();
 			y -= parentNode.getY();
-			port.setLocation(x, y);
-			parentNode.getPorts().add(port);
+			dummyNode.setLocation(parentNode.getX() + x, parentNode.getY() + y);
 		}
 
-		mapping.getGraphMap().put(port, ie.getModel());
 		return port;
 	}
 
@@ -286,16 +286,16 @@ public abstract class AbstractConnectionRoutingHelper {
 		final ElkEdgeSection elkEdgeSection = edge.getSections().get(0);
 		final List<ElkBendPoint> bendPoints = elkEdgeSection.getBendPoints();
 
-		mapping.getLayoutData().addConnectionPoints(connEp.getModel(), createPointList(startPort, endPort, bendPoints));
+		mapping.getLayoutData().addConnectionPoints(connEp.getModel(), createPointList(mapping, startPort, endPort, bendPoints));
 	}
 
-	private static PointList createPointList(final ElkPort startPort, final ElkPort endPort,
+	private static PointList createPointList(final ConnectionLayoutMapping mapping, final ElkPort startPort, final ElkPort endPort,
 			final List<ElkBendPoint> bendPoints) {
 		// needs to translate coordinates back from relative to absolute
 
 		final PointList list = new PointList();
 
-		final ElkNode startNode = startPort.getParent();
+		final ElkNode startNode = (ElkNode) mapping.getPortParentMapping().get(startPort);
 		final ElkNode layoutGraph = startNode.getParent();
 		final int startX = (int) (startPort.getX() + startNode.getX() + layoutGraph.getX());
 		final int startY = (int) (startPort.getY() + startNode.getY() + layoutGraph.getY());
@@ -305,7 +305,7 @@ public abstract class AbstractConnectionRoutingHelper {
 			list.addPoint((int) (point.getX() + layoutGraph.getX()), (int) (point.getY() + layoutGraph.getY()));
 		}
 
-		final ElkNode endNode = endPort.getParent();
+		final ElkNode endNode = (ElkNode) mapping.getPortParentMapping().get(endPort);
 		final int endX = (int) (endPort.getX() + endNode.getX() + layoutGraph.getX());
 		final int endY = (int) (endPort.getY() + endNode.getY() + layoutGraph.getY());
 		list.addPoint(endX, endY);
