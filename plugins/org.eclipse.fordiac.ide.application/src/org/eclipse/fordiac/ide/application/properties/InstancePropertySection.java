@@ -322,6 +322,12 @@ public class InstancePropertySection extends AbstractSection {
 		outputTable.refresh();
 	}
 
+	protected static boolean isExpandedSubAppPinAndConnected(final VarDeclaration rowObject) {
+		return rowObject.getFBNetworkElement() instanceof SubApp
+				&& ((SubApp) rowObject.getFBNetworkElement()).isUnfolded() && !rowObject.getInputConnections().isEmpty()
+				&& !rowObject.getOutputConnections().isEmpty();
+	}
+
 	private class VarDeclarationListProvider extends ListDataProvider<VarDeclaration> {
 		private final boolean isInputData;
 
@@ -409,7 +415,7 @@ public class InstancePropertySection extends AbstractSection {
 				break;
 			case VISIBLE_COL_ID:
 				if ((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
-						|| !rowObject.isIsInput() && rowObject.getOutputConnections().isEmpty()) {
+						&& !isExpandedSubAppPinAndConnected(rowObject)) {
 					final Boolean newValueBool = NatTableHandler.parseNewValueObject(newValue);
 					if (newValueBool != null) {
 						cmd = new HidePinCommand(rowObject, newValueBool.booleanValue());
