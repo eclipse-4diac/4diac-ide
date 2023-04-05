@@ -13,8 +13,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextfunctioneditor;
 
+import org.eclipse.fordiac.ide.structuredtextcore.converter.STCoreValueConverters;
 import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
-import org.eclipse.fordiac.ide.structuredtextfunctioneditor.converter.STFunctionValueConverters;
 import org.eclipse.xtext.conversion.IValueConverterService;
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater;
 
@@ -27,7 +27,7 @@ public class STFunctionRuntimeModule extends AbstractSTFunctionRuntimeModule {
 
 	@Override
 	public Class<? extends IValueConverterService> bindIValueConverterService() {
-		return STFunctionValueConverters.class;
+		return STCoreValueConverters.class;
 	}
 
 	public Class<? extends ICommentAssociater> bindICommentAssociater() {

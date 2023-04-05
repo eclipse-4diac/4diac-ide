@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextcore.scoping
 
+import com.google.inject.Singleton
 import java.lang.reflect.Method
 import java.text.MessageFormat
 import java.util.List
@@ -31,6 +32,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 
+@Singleton
 class STStandardFunctionProvider {
 	public static final URI STANDARD_FUNCTIONS_URI = URI.createURI("__st_standard_functions.stfunc")
 

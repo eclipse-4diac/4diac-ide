@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.converter
 
 import com.google.inject.Inject
+import com.google.inject.Singleton
 import java.time.Duration
 import java.time.LocalDate
 import java.time.LocalDateTime
@@ -28,6 +29,7 @@ import org.eclipse.xtext.conversion.IValueConverter
 import org.eclipse.xtext.conversion.ValueConverter
 import org.eclipse.xtext.conversion.impl.AbstractDeclarativeValueConverterService
 
+@Singleton
 class STCoreValueConverters extends AbstractDeclarativeValueConverterService {
 
 	DelegatingValueConverter<Object> numericValueConverter = new DelegatingValueConverter(
