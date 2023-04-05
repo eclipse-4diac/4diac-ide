@@ -32,6 +32,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import javax.xml.XMLConstants;
@@ -53,7 +55,10 @@ import org.eclipse.fordiac.ide.deployment.devResponse.Response;
 import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.export.forte_lua.ForteLuaExportFilter;
 import org.eclipse.fordiac.ide.model.Annotations;
+import org.eclipse.fordiac.ide.model.LibraryElementTags;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeStructCommand;
 import org.eclipse.fordiac.ide.model.commands.create.FBCreateCommand;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
@@ -68,9 +73,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -381,7 +388,7 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 		for (final org.eclipse.fordiac.ide.deployment.devResponse.FB fbresult : (object).getFblist().getFbs()) {
 			if (!"E_RESTART".equals(fbresult.getType())) { //$NON-NLS-1$
 				FBTypeEntry entry = res.getDevice().getAutomationSystem().getTypeLibrary()
-						.getFBTypeEntry(fbresult.getType());
+						.getFBTypeEntry(getPlainType(fbresult));
 
 				if (null == entry) {
 					addTypeToTypelib(res, fbresult.getType(), TypeLibraryTags.FB_TYPE_FILE_ENDING, QUERY_FB_TYPE);
@@ -406,9 +413,38 @@ public class DynamicTypeLoadDeploymentExecutor extends DeploymentExecutor {
 						fbcmd.getFB().setName(fbresult.getName());
 					}
 				}
+
+				if (fbcmd.getFB() instanceof StructManipulator && getStructFromMultiplexer(res, fbresult) != null) {
+					final ChangeStructCommand changeStructCmd = new ChangeStructCommand(
+							(StructManipulator) fbcmd.getFB(),
+							getStructFromMultiplexer(res, fbresult));
+					if (changeStructCmd.canExecute()) {
+						changeStructCmd.execute();
+					}
+				}
 				i++;
 			}
 		}
+	}
+
+	private static String getPlainType(final org.eclipse.fordiac.ide.deployment.devResponse.FB fb) {
+		if (fb.getType().contains(LibraryElementTags.FB_TYPE_STRUCT_MUX)) {
+			return LibraryElementTags.FB_TYPE_STRUCT_MUX;
+		} else if (fb.getType().contains(LibraryElementTags.FB_TYPE_STRUCT_DEMUX)) {
+			return LibraryElementTags.FB_TYPE_STRUCT_DEMUX;
+		}
+		return fb.getType();
+	}
+
+	private static StructuredType getStructFromMultiplexer(final Resource res,
+			final org.eclipse.fordiac.ide.deployment.devResponse.FB devFB) {
+		// find number in STRUCT_MUX_1_STRUCTNAME or STRUT_DEMUX_1_STRUCTNAME
+		final Matcher matcher = Pattern.compile("[^0-9]*([0-9]+).*").matcher(devFB.getType());
+		if (matcher.matches()) {
+			final DataTypeLibrary library = res.getDevice().getAutomationSystem().getTypeLibrary().getDataTypeLibrary();
+			return library.getStructuredType(devFB.getType().substring(devFB.getType().indexOf(matcher.group(1)) + 1));
+		}
+		return null;
 	}
 
 	private void addTypeToTypelib(final Resource res, final String typeName, final String extension, final String messageType) {
