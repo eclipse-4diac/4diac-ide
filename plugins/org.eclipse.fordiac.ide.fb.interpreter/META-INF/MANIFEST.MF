@@ -7,28 +7,30 @@ Bundle-Version: 2.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.fordiac.ide.fb.interpreter.OpSem,
  org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl,
  org.eclipse.fordiac.ide.fb.interpreter.OpSem.util,
- org.eclipse.fordiac.ide.fb.interpreter.mm.utils,
  org.eclipse.fordiac.ide.fb.interpreter.api,
- org.eclipse.fordiac.ide.fb.interpreter.inputgenerator
+ org.eclipse.fordiac.ide.fb.interpreter.inputgenerator,
+ org.eclipse.fordiac.ide.fb.interpreter.mm
 Require-Bundle: org.eclipse.emf.ecore;visibility:=reexport,
  org.eclipse.fordiac.ide.model;visibility:=reexport,
  org.eclipse.core.runtime,
- com.google.guava,
  org.eclipse.xtext.xbase.lib,
  org.eclipse.xtend.lib,
  org.eclipse.xtend.lib.macro,
  org.eclipse.xtext,
- org.eclipse.fordiac.ide.model.structuredtext;bundle-version="1.13.1",
- org.eclipse.xtext.builder;bundle-version="2.24.0",
+ org.eclipse.xtext.builder,
  org.eclipse.ui.workbench,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.fordiac.ide.model.eval,
  org.eclipse.fordiac.ide.model.edit,
  org.eclipse.core.commands,
  org.eclipse.jface,
- org.eclipse.gef
+ org.eclipse.gef,
+ org.eclipse.emf.compare,
+ org.eclipse.emf.compare.rcp,
+ org.eclipse.emf.compare.edit,
+ org.eclipse.ui.ide
 Bundle-ActivationPolicy: lazy

@@ -8,7 +8,6 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.globalconstantseditor; singleton:=t
 Bundle-ActivationPolicy: lazy
 Require-Bundle: org.eclipse.xtext,
  org.eclipse.xtext.xbase,
- org.eclipse.equinox.common;bundle-version="3.5.0",
  org.eclipse.emf.ecore,
  org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
  org.eclipse.xtext.util,
@@ -20,7 +19,7 @@ Require-Bundle: org.eclipse.xtext,
  org.eclipse.fordiac.ide.structuredtextcore.ui,
  org.eclipse.fordiac.ide.structuredtextcore.ide,
  org.eclipse.fordiac.ide.globalconstantseditor.model;visibility:=reexport
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.fordiac.ide.globalconstantseditor,
  org.eclipse.fordiac.ide.globalconstantseditor.scoping,
  org.eclipse.fordiac.ide.globalconstantseditor.parser.antlr.internal,
@@ -32,5 +31,4 @@ Export-Package: org.eclipse.fordiac.ide.globalconstantseditor,
  org.eclipse.fordiac.ide.globalconstantseditor.formatting2,
  org.eclipse.fordiac.ide.globalconstantseditor.parser.antlr.lexer
 Import-Package: org.apache.log4j,
- org.eclipse.fordiac.ide.globalconstantseditor.globalConstants,
- org.eclipse.osgi.util;version="1.1.0"
+ org.eclipse.osgi.util

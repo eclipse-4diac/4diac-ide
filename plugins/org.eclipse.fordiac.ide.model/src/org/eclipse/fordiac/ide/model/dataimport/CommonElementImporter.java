@@ -26,6 +26,10 @@ import java.io.InputStream;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.xml.stream.XMLInputFactory;
 import javax.xml.stream.XMLStreamConstants;
@@ -33,6 +37,7 @@ import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamReader;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
@@ -69,6 +74,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.PositionableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
+import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.TypedConfigureableObject;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -78,6 +84,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.FBTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.ResourceTypeEntry;
+import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
@@ -214,14 +221,16 @@ public abstract class CommonElementImporter {
 	}
 
 	protected void restorePersistedErrorMessages() {
-		EcoreUtil.getAllProperContents(element, false).forEachRemaining(this::restorePersistedErrorMessage);
+		FordiacMarkerHelper.findAllMarkers(file, element, FordiacErrorMarker.INITIAL_VALUE_MARKER,
+				CommonElementImporter::restorePersistedErrorMessage);
 	}
 
-	protected void restorePersistedErrorMessage(final Object object) {
-		if (object instanceof Value) {
-			final String errorMessage = FordiacMarkerHelper.findPersistedErrorMessage(file, (EObject) object,
-					FordiacErrorMarker.INITIAL_VALUE_MARKER);
-			((ErrorMarkerRef) object).setErrorMessage(errorMessage);
+	protected static void restorePersistedErrorMessage(final EObject target, final IMarker marker) {
+		if (target instanceof final ErrorMarkerRef errorMarkerRef
+				&& marker.getAttribute(IMarker.SEVERITY, 0) == IMarker.SEVERITY_ERROR) {
+			final String message = marker.getAttribute(IMarker.MESSAGE, null);
+			errorMarkerRef.setErrorMessage(Stream.of(errorMarkerRef.getErrorMessage(), message).filter(Objects::nonNull)
+					.filter(Predicate.not(String::isBlank)).collect(Collectors.joining(", "))); //$NON-NLS-1$
 		}
 	}
 
@@ -420,7 +429,7 @@ public abstract class CommonElementImporter {
 		}
 	}
 
-	private void readCommentAttribute(final INamedElement namedElement) {
+	protected void readCommentAttribute(final INamedElement namedElement) {
 		final String comment = getAttributeValue(LibraryElementTags.COMMENT_ATTRIBUTE);
 		if (null != comment) {
 			namedElement.setComment(fullyUnEscapeValue(comment));
@@ -512,7 +521,7 @@ public abstract class CommonElementImporter {
 		final String[] temp = pinNameAndVarConfig.split(":"); //$NON-NLS-1$
 		final VarDeclaration inVar = block.getInterface().getVariable(temp[0]);
 		if (inVar != null) {
-			inVar.setVarConfig(IS_VAR_CONFIGED);	
+			inVar.setVarConfig(IS_VAR_CONFIGED);
 		}
 	}
 
@@ -683,7 +692,7 @@ public abstract class CommonElementImporter {
 			switch (name) {
 			case LibraryElementTags.FBNETWORK_ELEMENT:
 				new ResDevFBNetworkImporter(this, fbNetwork, resource.getVarDeclarations())
-						.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
+				.parseFBNetwork(LibraryElementTags.FBNETWORK_ELEMENT);
 				break;
 			case LibraryElementTags.ATTRIBUTE_ELEMENT:
 				parseGenericAttributeNode(resource);
@@ -715,7 +724,7 @@ public abstract class CommonElementImporter {
 			final ResourceTypeEntry entry = getTypeLibrary().getResourceTypeEntry(typeName);
 			if (null != entry) {
 				resource.setTypeEntry(entry);
-				createParamters(resource);
+				createParameters(resource);
 			}
 		}
 	}
@@ -730,16 +739,21 @@ public abstract class CommonElementImporter {
 	}
 
 	/** Creates the values. */
-	public static void createParamters(final IVarElement element) {
+	public static void createParameters(final IVarElement element) {
 		if (element instanceof Device) {
 			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((DeviceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
+			.addAll(EcoreUtil.copyAll(((DeviceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+					.getType().getVarDeclaration()));
 		}
 		if (element instanceof Resource) {
 			element.getVarDeclarations()
-					.addAll(EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
-							.getType().getVarDeclaration()));
+			.addAll(EcoreUtil.copyAll(((ResourceTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+					.getType().getVarDeclaration()));
+		}
+		if (element instanceof Segment) {
+			element.getVarDeclarations()
+			.addAll(EcoreUtil.copyAll(((SegmentTypeEntry) ((TypedConfigureableObject) element).getTypeEntry())
+					.getType().getVarDeclaration()));
 		}
 		for (final VarDeclaration varDecl : element.getVarDeclarations()) {
 			final Value value = LibraryElementFactory.eINSTANCE.createValue();

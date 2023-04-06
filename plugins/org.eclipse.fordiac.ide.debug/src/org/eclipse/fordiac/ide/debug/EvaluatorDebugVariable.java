@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.debug;
 
+import org.eclipse.core.runtime.Status;
 import org.eclipse.debug.core.DebugEvent;
 import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
@@ -21,7 +22,7 @@ import org.eclipse.fordiac.ide.model.eval.variable.Variable;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 
 public class EvaluatorDebugVariable extends EvaluatorDebugElement
-		implements IVariable, Comparable<EvaluatorDebugVariable> {
+implements IVariable, Comparable<EvaluatorDebugVariable> {
 	private final Variable<?> variable;
 	private EvaluatorDebugValue cachedValue;
 
@@ -32,8 +33,12 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 	}
 
 	@Override
-	public void setValue(final String expression) {
-		this.variable.setValue(expression);
+	public void setValue(final String expression) throws DebugException {
+		try {
+			this.variable.setValue(expression);
+		} catch (final Exception e) {
+			throw new DebugException(Status.error(e.getMessage(), e));
+		}
 		this.fireChangeEvent(DebugEvent.CONTENT);
 	}
 
@@ -114,13 +119,13 @@ public class EvaluatorDebugVariable extends EvaluatorDebugElement
 			return false;
 		}
 		if (this.getClass() == obj.getClass()) {
-			return this.variable.getName().equals(((EvaluatorDebugVariable) obj).variable.getName());
+			return this.variable.equals(((EvaluatorDebugVariable) obj).variable);
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		return this.variable.getName().hashCode();
+		return this.variable.hashCode();
 	}
 }

@@ -108,6 +108,13 @@ public abstract class AbstractEditInterfaceEventSection extends AbstractEditInte
 	}
 
 	@Override
+	public void removeEntry(final Object entry, final CompoundCommand cmd) {
+		if (entry instanceof Event) {
+			cmd.add(newDeleteCommand((Event) entry));
+		}
+	}
+
+	@Override
 	public void setupOutputTable(final Group outputsGroup) {
 		IEditableRule rule = IEditableRule.NEVER_EDITABLE;
 		if (isEditable()) {

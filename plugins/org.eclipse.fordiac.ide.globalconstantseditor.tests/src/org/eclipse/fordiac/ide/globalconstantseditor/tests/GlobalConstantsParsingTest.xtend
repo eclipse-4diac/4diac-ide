@@ -14,7 +14,7 @@
 package org.eclipse.fordiac.ide.globalconstantseditor.tests
 
 import com.google.inject.Inject
-import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource
 import org.eclipse.xtext.testing.InjectWith
 import org.eclipse.xtext.testing.extensions.InjectionExtension
 import org.eclipse.xtext.testing.util.ParseHelper
@@ -26,7 +26,7 @@ import org.junit.jupiter.api.^extension.ExtendWith
 @InjectWith(GlobalConstantsInjectorProvider)
 class GlobalConstantsParsingTest {
 	@Inject
-	ParseHelper<STVarGlobalDeclarationBlock> parseHelper
+	ParseHelper<STGlobalConstsSource> parseHelper
 
 	@Test
 	def void loadModel() {

@@ -30,9 +30,9 @@ import org.eclipse.fordiac.ide.model.data.AnyUnsignedType
 import org.eclipse.fordiac.ide.model.data.BoolType
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.Evaluator
-import org.eclipse.fordiac.ide.model.eval.st.ECTransitionEvaluator
 import org.eclipse.fordiac.ide.model.eval.st.STAlgorithmEvaluator
 import org.eclipse.fordiac.ide.model.eval.value.AnyStringValue
+import org.eclipse.fordiac.ide.model.eval.st.ScopedExpressionEvaluator
 import org.eclipse.fordiac.ide.model.eval.value.ArrayValue
 import org.eclipse.fordiac.ide.model.eval.value.BoolValue
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
@@ -1422,9 +1422,7 @@ class StructuredTextEvaluatorTest {
 	}
 
 	def static evaluateExpression(CharSequence expression, Collection<Variable<?>> variables) {
-		val transition = LibraryElementFactory.eINSTANCE.createECTransition
-		transition.conditionExpression = expression.toString
-		new ECTransitionEvaluator(transition, null, variables, null).evaluate
+		new ScopedExpressionEvaluator(expression.toString, null, variables, null).evaluate
 	}
 
 	def static evaluateAlgorithm(CharSequence algorithm) {

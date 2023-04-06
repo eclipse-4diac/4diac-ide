@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.IVarElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Link;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
@@ -57,8 +58,8 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getPosition <em>Position</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getColor <em>Color</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getWidth <em>Width</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getVarDeclarations <em>Var Declarations</em>}</li>
+ *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getWidth <em>Width</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getOutConnections <em>Out Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.impl.SegmentImpl#getCommunication <em>Communication</em>}</li>
  * </ul>
@@ -87,6 +88,16 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	protected Color color;
 
 	/**
+	 * The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #getVarDeclarations()
+	 * @generated
+	 * @ordered
+	 */
+	protected EList<VarDeclaration> varDeclarations;
+
+	/**
 	 * The default value of the '{@link #getWidth() <em>Width</em>}' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -105,16 +116,6 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 	 * @ordered
 	 */
 	protected int width = WIDTH_EDEFAULT;
-
-	/**
-	 * The cached value of the '{@link #getVarDeclarations() <em>Var Declarations</em>}' containment reference list.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @see #getVarDeclarations()
-	 * @generated
-	 * @ordered
-	 */
-	protected EList<VarDeclaration> varDeclarations;
 
 	/**
 	 * The cached value of the '{@link #getOutConnections() <em>Out Connections</em>}' reference list.
@@ -520,10 +521,10 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 			case LibraryElementPackage.SEGMENT__COLOR:
 				if (resolve) return getColor();
 				return basicGetColor();
-			case LibraryElementPackage.SEGMENT__WIDTH:
-				return getWidth();
 			case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
 				return getVarDeclarations();
+			case LibraryElementPackage.SEGMENT__WIDTH:
+				return getWidth();
 			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 				return getOutConnections();
 			case LibraryElementPackage.SEGMENT__COMMUNICATION:
@@ -549,12 +550,12 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 			case LibraryElementPackage.SEGMENT__COLOR:
 				setColor((Color)newValue);
 				return;
-			case LibraryElementPackage.SEGMENT__WIDTH:
-				setWidth((Integer)newValue);
-				return;
 			case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
 				getVarDeclarations().clear();
 				getVarDeclarations().addAll((Collection<? extends VarDeclaration>)newValue);
+				return;
+			case LibraryElementPackage.SEGMENT__WIDTH:
+				setWidth((Integer)newValue);
 				return;
 			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 				getOutConnections().clear();
@@ -583,11 +584,11 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 			case LibraryElementPackage.SEGMENT__COLOR:
 				setColor((Color)null);
 				return;
-			case LibraryElementPackage.SEGMENT__WIDTH:
-				setWidth(WIDTH_EDEFAULT);
-				return;
 			case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
 				getVarDeclarations().clear();
+				return;
+			case LibraryElementPackage.SEGMENT__WIDTH:
+				setWidth(WIDTH_EDEFAULT);
 				return;
 			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 				getOutConnections().clear();
@@ -613,10 +614,10 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 				return position != null;
 			case LibraryElementPackage.SEGMENT__COLOR:
 				return color != null;
-			case LibraryElementPackage.SEGMENT__WIDTH:
-				return width != WIDTH_EDEFAULT;
 			case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS:
 				return varDeclarations != null && !varDeclarations.isEmpty();
+			case LibraryElementPackage.SEGMENT__WIDTH:
+				return width != WIDTH_EDEFAULT;
 			case LibraryElementPackage.SEGMENT__OUT_CONNECTIONS:
 				return outConnections != null && !outConnections.isEmpty();
 			case LibraryElementPackage.SEGMENT__COMMUNICATION:
@@ -645,6 +646,12 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 				default: return -1;
 			}
 		}
+		if (baseClass == IVarElement.class) {
+			switch (derivedFeatureID) {
+				case LibraryElementPackage.SEGMENT__VAR_DECLARATIONS: return LibraryElementPackage.IVAR_ELEMENT__VAR_DECLARATIONS;
+				default: return -1;
+			}
+		}
 		return super.eBaseStructuralFeatureID(derivedFeatureID, baseClass);
 	}
 
@@ -664,6 +671,12 @@ public class SegmentImpl extends TypedConfigureableObjectImpl implements Segment
 		if (baseClass == ColorizableElement.class) {
 			switch (baseFeatureID) {
 				case LibraryElementPackage.COLORIZABLE_ELEMENT__COLOR: return LibraryElementPackage.SEGMENT__COLOR;
+				default: return -1;
+			}
+		}
+		if (baseClass == IVarElement.class) {
+			switch (baseFeatureID) {
+				case LibraryElementPackage.IVAR_ELEMENT__VAR_DECLARATIONS: return LibraryElementPackage.SEGMENT__VAR_DECLARATIONS;
 				default: return -1;
 			}
 		}

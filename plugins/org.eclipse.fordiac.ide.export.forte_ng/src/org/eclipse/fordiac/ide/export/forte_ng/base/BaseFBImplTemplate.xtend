@@ -56,8 +56,12 @@ abstract class BaseFBImplTemplate<T extends BaseFBType> extends ForteFBTemplate<
 			«type.generateInternalVarDefinition»
 			
 		«ENDIF»
+		«IF !type.internalConstVars.isEmpty»
+			«type.generateInternalConstsDefinition»
+			
+		«ENDIF»
 		«IF !type.internalFbs.isEmpty»
-			«type.generateInteralFbDeclarations»
+			«type.generateInternalFbDeclarations»
 			
 		«ENDIF»	
 		«IF !(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).empty»

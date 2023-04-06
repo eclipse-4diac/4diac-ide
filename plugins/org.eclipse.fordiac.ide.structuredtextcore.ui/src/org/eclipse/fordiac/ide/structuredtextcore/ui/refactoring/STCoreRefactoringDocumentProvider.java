@@ -35,7 +35,6 @@ import org.eclipse.xtext.ui.editor.model.XtextDocumentProvider;
 import org.eclipse.xtext.ui.refactoring.impl.DefaultRefactoringDocumentProvider;
 import org.eclipse.xtext.ui.refactoring.impl.IRefactoringDocument;
 import org.eclipse.xtext.ui.refactoring.impl.StatusWrapper;
-import org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferences;
 import org.eclipse.xtext.ui.util.DisplayRunnableWithResult;
 import org.eclipse.xtext.util.internal.Nullable;
 
@@ -46,9 +45,6 @@ public class STCoreRefactoringDocumentProvider extends DefaultRefactoringDocumen
 	@Inject(optional = true)
 	@Nullable
 	private IWorkbench workbench;
-
-	@Inject
-	private RefactoringPreferences preferences;
 
 	@Inject
 	private IGlobalServiceProvider globalServiceProvider;
@@ -81,10 +77,9 @@ public class STCoreRefactoringDocumentProvider extends DefaultRefactoringDocumen
 						}
 					}.syncExec();
 					if (editor != null) {
-						final IDocument document = editor.getDocumentProvider().getDocument(fileEditorInput);
-						if (document != null) {
-							return new EditorDocument(resourceURI, editor, document,
-									preferences.isSaveAllBeforeRefactoring() || !editor.isDirty());
+						final IDocumentProvider documentProvider = editor.getDocumentProvider();
+						if (documentProvider != null) {
+							return new ProviderDocument(resourceURI, fileEditorInput, documentProvider);
 						}
 					}
 				}

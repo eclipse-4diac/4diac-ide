@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -9,6 +9,7 @@
  *
  * Contributors:
  *   Fabio Gandolfi - initial implementation and/or documentation
+ *   Ernst Blecha - changed base class
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ant.ant;
 
@@ -20,8 +21,7 @@ import java.util.List;
 
 import org.apache.tools.ant.BuildException;
 
-public class ExportFolderFBs extends ExportFBs {
-
+public class ExportFolderFBs extends AbstractExportFBs {
 	private String folderNameString;
 	private List<String> excludeSubfolder = Collections.emptyList();
 
@@ -36,7 +36,6 @@ public class ExportFolderFBs extends ExportFBs {
 	@Override
 	protected File getDirectory() {
 		final File folder = findFolderInProject(new File(getFordiacProject().getLocationURI()), folderNameString);
-
 		if (folder == null) {
 			throw new BuildException(
 					"No folder named '" + folderNameString + "' in Project '" + getFordiacProject().getName() + "'");//$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -53,5 +52,4 @@ public class ExportFolderFBs extends ExportFBs {
 	protected List<String> getExcludeSubfolder() {
 		return excludeSubfolder;
 	}
-
 }

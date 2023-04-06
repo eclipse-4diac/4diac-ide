@@ -39,8 +39,9 @@ public class FBNetworkElementSetPositionCommand extends SetPositionCommand imple
 	@Override
 	protected void setPosition(final Position pos) {
 		super.setPosition(pos);
-		invalidateInputConnections(getPositionableElement().getInterface());
-		invalidateOutputConnections(getPositionableElement().getInterface());
+		final InterfaceList interfaceList = getPositionableElement().getInterface();
+		invalidateInputConnections(interfaceList);
+		invalidateOutputConnections(interfaceList);
 	}
 
 	private static void invalidateInputConnections(final InterfaceList il) {

@@ -75,8 +75,8 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 
 	@Override
 	protected void addChildVisual(final EditPart childEditPart, final int index) {
-		if (childEditPart instanceof SpecificLayerEditPart) {
-			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
+		if (childEditPart instanceof final SpecificLayerEditPart slEP) {
+			final String layer = slEP.getSpecificLayer();
 			final IFigure layerFig = getLayer(layer);
 			if (layerFig != null) {
 				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
@@ -92,8 +92,8 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 
 	@Override
 	protected void removeChildVisual(final EditPart childEditPart) {
-		if (childEditPart instanceof SpecificLayerEditPart) {
-			final String layer = ((SpecificLayerEditPart) childEditPart).getSpecificLayer();
+		if (childEditPart instanceof final SpecificLayerEditPart slEP) {
+			final String layer = slEP.getSpecificLayer();
 			final IFigure layerFig = getLayer(layer);
 			if (layerFig != null) {
 				final IFigure child = ((GraphicalEditPart) childEditPart).getFigure();
@@ -115,9 +115,9 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 		final ArrayList<Value> valueElements = new ArrayList<>();
 		for (final FBNetworkElement element : getNetworkElements()) {
 			element.getInterface().getVisibleInputVars().stream().filter(di -> (di.getValue() != null))
-					.forEach(di -> valueElements.add(di.getValue()));
+			.forEach(di -> valueElements.add(di.getValue()));
 			element.getInterface().getErrorMarker().stream().filter(er -> (er.getValue() != null))
-					.forEach(er -> valueElements.add(er.getValue()));
+			.forEach(er -> valueElements.add(er.getValue()));
 		}
 		return valueElements;
 	}
@@ -137,8 +137,7 @@ public abstract class AbstractFBNetworkEditPart extends AbstractDiagramEditPart 
 		for (final IConfigurationElement element : elems) {
 			try {
 				final Object object = element.createExecutableExtension("class"); //$NON-NLS-1$
-				if (object instanceof IChildrenProvider) {
-					final IChildrenProvider childrenProvider = (IChildrenProvider) object;
+				if (object instanceof final IChildrenProvider childrenProvider) {
 					childProviders.add(childrenProvider);
 				}
 			} catch (final CoreException corex) {

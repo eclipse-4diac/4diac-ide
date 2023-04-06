@@ -20,11 +20,4 @@
          </run>
       </runtime>
    </extension>
-   <extension-point id="tagProvider" name="tagProvider" schema="schema/tagProvider.exsd"/>
-   <extension
-         point="org.eclipse.fordiac.ide.systemmanagement.tagProvider">
-      <tagprovider
-            Interface="org.eclipse.fordiac.ide.systemmanagement.VirtualDNSTagProvider">
-      </tagprovider>
-   </extension>
 </plugin>

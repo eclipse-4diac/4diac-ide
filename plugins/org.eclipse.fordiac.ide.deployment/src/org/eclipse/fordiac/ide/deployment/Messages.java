@@ -50,6 +50,8 @@ public final class Messages extends NLS {
 
 	public static String DeploymentCoordinator_MESSAGE_ProfileNotSet;
 
+	public static String DeploymentHelper_VariableValueError;
+
 	public static String DownloadRunnable_DownloadErrorDetails;
 
 	public static String DownloadRunnable_MajorDownloadError;

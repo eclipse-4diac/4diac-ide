@@ -30,6 +30,7 @@ import org.eclipse.elk.graph.ElkGraphFactory;
 import org.eclipse.elk.graph.ElkNode;
 import org.eclipse.elk.graph.ElkPort;
 import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
+import org.eclipse.fordiac.ide.application.editparts.CommentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.application.editparts.EditorWithInterfaceEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupEditPart;
@@ -92,15 +93,29 @@ public abstract class AbstractConnectionRoutingHelper {
 	}
 
 	protected void handleChild(final ConnectionLayoutMapping mapping, final Object child) {
-		if (child instanceof GroupEditPart) {
-			processGroup(mapping, (GroupEditPart) child);
+		if (child instanceof final GroupEditPart group) {
+			processGroup(mapping, group);
 		}
-		if (child instanceof AbstractFBNElementEditPart) {
-			processBlock(mapping, (AbstractFBNElementEditPart) child);
+		if (child instanceof final CommentEditPart comment) {
+			processComment(mapping, comment);
 		}
-		if (child instanceof ValueEditPart) {
-			processValue(mapping, (ValueEditPart) child);
+		if (child instanceof final AbstractFBNElementEditPart fbnEl) {
+			processBlock(mapping, fbnEl);
 		}
+		if (child instanceof final ValueEditPart value) {
+			processValue(mapping, value);
+		}
+	}
+
+	private static void processComment(final ConnectionLayoutMapping mapping, final CommentEditPart comment) {
+		final ElkNode node = factory.createElkNode();
+		final ElkNode layoutGraph = mapping.getLayoutGraph();
+
+		final Rectangle bounds = comment.getFigure().getBounds();
+		// translate from absolute to relative
+		node.setLocation(bounds.x - layoutGraph.getX(), bounds.y - layoutGraph.getY());
+		node.setDimensions(bounds.preciseWidth(), bounds.preciseHeight());
+		layoutGraph.getChildren().add(node);
 	}
 
 	private static void processValue(final ConnectionLayoutMapping mapping, final ValueEditPart value) {

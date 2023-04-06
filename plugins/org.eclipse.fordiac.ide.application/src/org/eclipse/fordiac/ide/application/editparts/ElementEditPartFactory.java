@@ -21,6 +21,7 @@ package org.eclipse.fordiac.ide.application.editparts;
 
 import org.eclipse.fordiac.ide.gef.editparts.Abstract4diacEditPartFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
@@ -56,10 +57,10 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		if (modelElement instanceof GroupContentNetwork) {
 			return new GroupContentEditPart();
 		}
-		if (modelElement instanceof FBNetwork) {
-			return getPartForFBNetwork((FBNetwork) modelElement);
-		} else if (modelElement instanceof FBNetworkElement) {
-			return getPartForFBNetworkElement((FBNetworkElement) modelElement);
+		if (modelElement instanceof final FBNetwork network) {
+			return getPartForFBNetwork(network);
+		} else if (modelElement instanceof final FBNetworkElement fbnel) {
+			return getPartForFBNetworkElement(fbnel);
 		} else if (modelElement instanceof StructuredType) {
 			return new StructuredTypeEditPart();
 		} else if (modelElement instanceof InstanceName) {
@@ -85,12 +86,12 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		if (element instanceof CommunicationChannel) {
 			return new CommunicationChannelEditPart();
 		}
-		if (element instanceof FB) {
-			if (null != ((FB) element).getType()) {
-				if (((FB) element).getType().getName().contentEquals("STRUCT_MUX")) { //$NON-NLS-1$
+		if (element instanceof final FB fb) {
+			if (null != fb.getType()) {
+				if (fb.getType().getName().contentEquals("STRUCT_MUX")) { //$NON-NLS-1$
 					return new MultiplexerEditPart();
 				}
-				if (((FB) element).getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
+				if (fb.getType().getName().contentEquals("STRUCT_DEMUX")) { //$NON-NLS-1$
 					return new DemultiplexerEditPart();
 				}
 			}
@@ -101,6 +102,9 @@ public class ElementEditPartFactory extends Abstract4diacEditPartFactory {
 		}
 		if (element instanceof Group) {
 			return new GroupEditPart();
+		}
+		if (element instanceof Comment) {
+			return new CommentEditPart();
 		}
 
 		throw createEditpartCreationException(element);

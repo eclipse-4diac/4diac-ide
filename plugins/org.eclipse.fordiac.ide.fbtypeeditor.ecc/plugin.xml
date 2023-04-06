@@ -92,6 +92,12 @@
                id="property.section.algorithms"
                tab="property.tab.algorithms">
          </propertySection>
+         <propertySection
+               class="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.TransitionSection"
+               filter="org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties.ECTransitionFilter"
+               id="property.section.transition"
+               tab="property.tab.transition">            
+         </propertySection> 
       </propertySections>
    </extension>
 </plugin>

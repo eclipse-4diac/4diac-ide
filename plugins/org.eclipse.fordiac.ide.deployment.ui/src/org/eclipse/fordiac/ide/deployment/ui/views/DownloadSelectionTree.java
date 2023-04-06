@@ -173,7 +173,7 @@ public class DownloadSelectionTree extends ContainerCheckedTreeViewer {
 				return getText(element);
 			case 1:
 				if (element instanceof Device) {
-					return DeploymentHelper.getMgrID((Device) element);
+					return DeploymentHelper.getMgrIDSafe((Device) element);
 				}
 				break;
 			case 2:

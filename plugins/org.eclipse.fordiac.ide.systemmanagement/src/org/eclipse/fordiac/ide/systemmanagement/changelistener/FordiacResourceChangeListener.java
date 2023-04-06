@@ -118,7 +118,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private void handleChangedFiles() {
 		Display.getDefault().syncExec(() -> {
-			final List<IEditorPart> changedOpenedDirtyEditors = collectOpenedEditors();
+			final List<IEditorPart> changedOpenedDirtyEditors = collectOpenedEditors(changedFiles);
 			final List<IEditorFileChangeListener> editorListener = changedOpenedDirtyEditors.stream()
 					.filter(IEditorFileChangeListener.class::isInstance).map(IEditorFileChangeListener.class::cast)
 					.collect(Collectors.toList());
@@ -177,7 +177,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return dialog.open();
 	}
 
-	private List<IEditorPart> collectOpenedEditors() {
+	public static List<IEditorPart> collectOpenedEditors(final Collection<TypeEntry> changedFiles) {
 		final List<IEditorPart> changedOpenedDirtyEditors = new ArrayList<>();
 		IEditorPart activeEditor = null;
 
@@ -497,7 +497,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		systemManager.notifyListeners();
 	}
 
-	private static void handleTypeRename(final IFile src, final IFile file) {
+	public static void handleTypeRename(final IFile src, final IFile file) {
 		final TypeLibrary typeLibrary = TypeLibraryManager.INSTANCE.getTypeLibrary(file.getProject());
 		final TypeEntry entry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(src);
 		if (entry != null && src.equals(entry.getFile())) {
@@ -507,34 +507,25 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	private static void updateTypeEntry(final IFile newFile, final TypeEntry entry) {
-		if (null != entry) {
-			final String newTypeName = TypeEntry.getTypeNameFromFile(newFile);
-			entry.getTypeLibrary().removeTypeEntry(entry);
-			entry.setFile(newFile);
-			entry.getTypeLibrary().addTypeEntry(entry);
-
-			final WorkspaceJob job = new WorkspaceJob("Save Renamed type: " + entry.getTypeName()) { //$NON-NLS-1$
-				@Override
-				public IStatus runInWorkspace(final IProgressMonitor monitor) {
-					// do the actual work in here
-					final LibraryElement type = entry.getTypeEditable();
-					if ((null != type) && // this means we couldn't load the type seems
-							// like a problem in the type's XML file
-							// TODO report on error
-							(!newTypeName.equals(type.getName()))) {
-						type.setName(newTypeName);
-						entry.save();
-					}
-					return Status.OK_STATUS;
-				}
-			};
-			job.setUser(false);
-			job.setSystem(true);
-			job.setPriority(Job.SHORT);
-			job.setRule(newFile.getProject());
-			job.schedule();
+	public static void updateTypeEntry(final IFile newFile, final TypeEntry entry) {
+		if (entry == null) { // change to Assert ?
+			return;
 		}
+		final String newTypeName = TypeEntry.getTypeNameFromFile(newFile);
+		entry.getTypeLibrary().removeTypeEntry(entry);
+		entry.setFile(newFile);
+		entry.getTypeLibrary().addTypeEntry(entry);
+
+		final LibraryElement type = entry.getTypeEditable();
+		if ((null != type) && // this means we couldn't load the type seems
+				// like a problem in the type's XML file
+				// TODO report on error
+				(!newTypeName.equals(type.getName()))) {
+			type.setName(newTypeName);
+			entry.save();
+		}
+
+
 	}
 
 	private void handleProjectRemove(final IResourceDelta delta) {

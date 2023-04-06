@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="EnhancedAdapterWith2" Comment="FB for testing an adapter WITH connection">
+	<Identification Standard="61499-2" Description="Copyright (c) 2023 Johannes Kepler University Linz This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0 &#10;" >
+	</Identification>
+	<VersionInfo Organization="Johannes Kepler University Linz" Version="1.0" Author="Bianca Wiesmayr" Date="2023-03-07" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<Plugs>
+			<AdapterDeclaration Name="adp" Type="CompoundAdapterWith" Comment=""/>
+		</Plugs>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="546.6666666666667" y="420.0">
+			</ECState>
+			<ECState Name="State" Comment="" x="2033.3333333333335" y="400.0">
+				<ECAction Algorithm="passAdapterData" Output="adp.CNF"/>
+			</ECState>
+			<ECTransition Source="START" Destination="State" Condition="adp.REQ" Comment="" x="1553.3333333333335" y="380.0"/>
+			<ECTransition Source="State" Destination="START" Condition="1" Comment="" x="1440.0" y="666.6666666666667"/>
+		</ECC>
+		<Algorithm Name="passAdapterData" Comment="">
+			<ST><![CDATA[ALGORITHM passAdapterData
+	adp.DO1 := adp.DI1;
+	adp.DO2 := adp.DI2;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+	</BasicFB>
+</FBType>

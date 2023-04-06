@@ -46,6 +46,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
@@ -163,85 +164,86 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	@Override
 	public EObject create(EClass eClass) {
 		switch (eClass.getClassifierID()) {
+			case LibraryElementPackage.ADAPTER_CONNECTION: return createAdapterConnection();
 			case LibraryElementPackage.ADAPTER_DECLARATION: return createAdapterDeclaration();
+			case LibraryElementPackage.ADAPTER_FB: return createAdapterFB();
+			case LibraryElementPackage.ADAPTER_FB_TYPE: return createAdapterFBType();
 			case LibraryElementPackage.ADAPTER_TYPE: return createAdapterType();
 			case LibraryElementPackage.APPLICATION: return createApplication();
+			case LibraryElementPackage.ATTRIBUTE: return createAttribute();
+			case LibraryElementPackage.ATTRIBUTE_DECLARATION: return createAttributeDeclaration();
+			case LibraryElementPackage.BASE_FB_TYPE: return createBaseFBType();
 			case LibraryElementPackage.BASIC_FB_TYPE: return createBasicFBType();
-			case LibraryElementPackage.COMPILER_INFO: return createCompilerInfo();
+			case LibraryElementPackage.AUTOMATION_SYSTEM: return createAutomationSystem();
+			case LibraryElementPackage.CFB_INSTANCE: return createCFBInstance();
+			case LibraryElementPackage.COLOR: return createColor();
+			case LibraryElementPackage.COLORIZABLE_ELEMENT: return createColorizableElement();
+			case LibraryElementPackage.COMMENT: return createComment();
+			case LibraryElementPackage.COMMUNICATION_CHANNEL: return createCommunicationChannel();
+			case LibraryElementPackage.COMMUNICATION_MAPPING_TARGET: return createCommunicationMappingTarget();
+			case LibraryElementPackage.COMPILABLE_TYPE: return createCompilableType();
 			case LibraryElementPackage.COMPILER: return createCompiler();
+			case LibraryElementPackage.COMPILER_INFO: return createCompilerInfo();
+			case LibraryElementPackage.COMPOSITE_FB_TYPE: return createCompositeFBType();
+			case LibraryElementPackage.CONFIGURABLE_OBJECT: return createConfigurableObject();
 			case LibraryElementPackage.CONNECTION_ROUTING_DATA: return createConnectionRoutingData();
+			case LibraryElementPackage.DATA_CONNECTION: return createDataConnection();
+			case LibraryElementPackage.DEMULTIPLEXER: return createDemultiplexer();
 			case LibraryElementPackage.DEVICE: return createDevice();
 			case LibraryElementPackage.DEVICE_TYPE: return createDeviceType();
 			case LibraryElementPackage.EC_ACTION: return createECAction();
 			case LibraryElementPackage.ECC: return createECC();
 			case LibraryElementPackage.EC_STATE: return createECState();
 			case LibraryElementPackage.EC_TRANSITION: return createECTransition();
+			case LibraryElementPackage.ERROR_MARKER_DATA_TYPE: return createErrorMarkerDataType();
+			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT: return createErrorMarkerFBNElement();
+			case LibraryElementPackage.ERROR_MARKER_INTERFACE: return createErrorMarkerInterface();
+			case LibraryElementPackage.ERROR_MARKER_REF: return createErrorMarkerRef();
 			case LibraryElementPackage.EVENT: return createEvent();
+			case LibraryElementPackage.EVENT_CONNECTION: return createEventConnection();
 			case LibraryElementPackage.FB: return createFB();
+			case LibraryElementPackage.FB_NETWORK: return createFBNetwork();
 			case LibraryElementPackage.FB_NETWORK_ELEMENT: return createFBNetworkElement();
-			case LibraryElementPackage.SUB_APP: return createSubApp();
 			case LibraryElementPackage.FB_TYPE: return createFBType();
+			case LibraryElementPackage.GROUP: return createGroup();
+			case LibraryElementPackage.HIDDEN_ELEMENT: return createHiddenElement();
 			case LibraryElementPackage.IDENTIFICATION: return createIdentification();
 			case LibraryElementPackage.INPUT_PRIMITIVE: return createInputPrimitive();
 			case LibraryElementPackage.INTERFACE_LIST: return createInterfaceList();
+			case LibraryElementPackage.LIBRARY_ELEMENT: return createLibraryElement();
 			case LibraryElementPackage.LINK: return createLink();
+			case LibraryElementPackage.LOCAL_VARIABLE: return createLocalVariable();
 			case LibraryElementPackage.MAPPING: return createMapping();
+			case LibraryElementPackage.MAPPING_TARGET: return createMappingTarget();
+			case LibraryElementPackage.MULTIPLEXER: return createMultiplexer();
 			case LibraryElementPackage.OTHER_ALGORITHM: return createOtherAlgorithm();
+			case LibraryElementPackage.OTHER_METHOD: return createOtherMethod();
 			case LibraryElementPackage.OUTPUT_PRIMITIVE: return createOutputPrimitive();
-			case LibraryElementPackage.ATTRIBUTE: return createAttribute();
+			case LibraryElementPackage.POSITION: return createPosition();
+			case LibraryElementPackage.POSITIONABLE_ELEMENT: return createPositionableElement();
+			case LibraryElementPackage.PRIMITIVE: return createPrimitive();
 			case LibraryElementPackage.RESOURCE: return createResource();
 			case LibraryElementPackage.RESOURCE_TYPE_NAME: return createResourceTypeName();
 			case LibraryElementPackage.RESOURCE_TYPE: return createResourceType();
+			case LibraryElementPackage.RESOURCE_TYPE_FB: return createResourceTypeFB();
 			case LibraryElementPackage.SEGMENT: return createSegment();
+			case LibraryElementPackage.SEGMENT_TYPE: return createSegmentType();
+			case LibraryElementPackage.SERVICE: return createService();
 			case LibraryElementPackage.SERVICE_SEQUENCE: return createServiceSequence();
 			case LibraryElementPackage.SERVICE_TRANSACTION: return createServiceTransaction();
+			case LibraryElementPackage.SERVICE_INTERFACE: return createServiceInterface();
 			case LibraryElementPackage.SERVICE_INTERFACE_FB_TYPE: return createServiceInterfaceFBType();
+			case LibraryElementPackage.SIMPLE_FB_TYPE: return createSimpleFBType();
 			case LibraryElementPackage.ST_ALGORITHM: return createSTAlgorithm();
-			case LibraryElementPackage.FB_NETWORK: return createFBNetwork();
+			case LibraryElementPackage.ST_METHOD: return createSTMethod();
+			case LibraryElementPackage.SUB_APP: return createSubApp();
 			case LibraryElementPackage.SUB_APP_TYPE: return createSubAppType();
-			case LibraryElementPackage.AUTOMATION_SYSTEM: return createAutomationSystem();
+			case LibraryElementPackage.SYSTEM_CONFIGURATION: return createSystemConfiguration();
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT: return createTypedConfigureableObject();
+			case LibraryElementPackage.VALUE: return createValue();
 			case LibraryElementPackage.VAR_DECLARATION: return createVarDeclaration();
 			case LibraryElementPackage.VERSION_INFO: return createVersionInfo();
 			case LibraryElementPackage.WITH: return createWith();
-			case LibraryElementPackage.LIBRARY_ELEMENT: return createLibraryElement();
-			case LibraryElementPackage.COMPILABLE_TYPE: return createCompilableType();
-			case LibraryElementPackage.CONFIGURABLE_OBJECT: return createConfigurableObject();
-			case LibraryElementPackage.COMPOSITE_FB_TYPE: return createCompositeFBType();
-			case LibraryElementPackage.DATA_CONNECTION: return createDataConnection();
-			case LibraryElementPackage.EVENT_CONNECTION: return createEventConnection();
-			case LibraryElementPackage.ADAPTER_CONNECTION: return createAdapterConnection();
-			case LibraryElementPackage.SERVICE_INTERFACE: return createServiceInterface();
-			case LibraryElementPackage.VALUE: return createValue();
-			case LibraryElementPackage.SYSTEM_CONFIGURATION: return createSystemConfiguration();
-			case LibraryElementPackage.RESOURCE_TYPE_FB: return createResourceTypeFB();
-			case LibraryElementPackage.SEGMENT_TYPE: return createSegmentType();
-			case LibraryElementPackage.ADAPTER_FB_TYPE: return createAdapterFBType();
-			case LibraryElementPackage.SERVICE: return createService();
-			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT: return createTypedConfigureableObject();
-			case LibraryElementPackage.ADAPTER_FB: return createAdapterFB();
-			case LibraryElementPackage.PRIMITIVE: return createPrimitive();
-			case LibraryElementPackage.POSITIONABLE_ELEMENT: return createPositionableElement();
-			case LibraryElementPackage.POSITION: return createPosition();
-			case LibraryElementPackage.COLOR: return createColor();
-			case LibraryElementPackage.COLORIZABLE_ELEMENT: return createColorizableElement();
-			case LibraryElementPackage.ATTRIBUTE_DECLARATION: return createAttributeDeclaration();
-			case LibraryElementPackage.SIMPLE_FB_TYPE: return createSimpleFBType();
-			case LibraryElementPackage.BASE_FB_TYPE: return createBaseFBType();
-			case LibraryElementPackage.DEMULTIPLEXER: return createDemultiplexer();
-			case LibraryElementPackage.MULTIPLEXER: return createMultiplexer();
-			case LibraryElementPackage.LOCAL_VARIABLE: return createLocalVariable();
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT: return createErrorMarkerFBNElement();
-			case LibraryElementPackage.ERROR_MARKER_DATA_TYPE: return createErrorMarkerDataType();
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE: return createErrorMarkerInterface();
-			case LibraryElementPackage.CFB_INSTANCE: return createCFBInstance();
-			case LibraryElementPackage.ERROR_MARKER_REF: return createErrorMarkerRef();
-			case LibraryElementPackage.GROUP: return createGroup();
-			case LibraryElementPackage.OTHER_METHOD: return createOtherMethod();
-			case LibraryElementPackage.ST_METHOD: return createSTMethod();
-			case LibraryElementPackage.HIDDEN_ELEMENT: return createHiddenElement();
-			case LibraryElementPackage.MAPPING_TARGET: return createMappingTarget();
-			case LibraryElementPackage.COMMUNICATION_MAPPING_TARGET: return createCommunicationMappingTarget();
-			case LibraryElementPackage.COMMUNICATION_CHANNEL: return createCommunicationChannel();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
@@ -257,12 +259,12 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 		switch (eDataType.getClassifierID()) {
 			case LibraryElementPackage.LANGUAGE:
 				return createLanguageFromString(eDataType, initialValue);
-			case LibraryElementPackage.IPROJECT:
-				return createIProjectFromString(eDataType, initialValue);
-			case LibraryElementPackage.IFILE:
-				return createIFileFromString(eDataType, initialValue);
 			case LibraryElementPackage.COMMAND_STACK:
 				return createCommandStackFromString(eDataType, initialValue);
+			case LibraryElementPackage.IFILE:
+				return createIFileFromString(eDataType, initialValue);
+			case LibraryElementPackage.IPROJECT:
+				return createIProjectFromString(eDataType, initialValue);
 			case LibraryElementPackage.POINT:
 				return createPointFromString(eDataType, initialValue);
 			case LibraryElementPackage.TYPE_ENTRY:
@@ -286,12 +288,12 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 		switch (eDataType.getClassifierID()) {
 			case LibraryElementPackage.LANGUAGE:
 				return convertLanguageToString(eDataType, instanceValue);
-			case LibraryElementPackage.IPROJECT:
-				return convertIProjectToString(eDataType, instanceValue);
-			case LibraryElementPackage.IFILE:
-				return convertIFileToString(eDataType, instanceValue);
 			case LibraryElementPackage.COMMAND_STACK:
 				return convertCommandStackToString(eDataType, instanceValue);
+			case LibraryElementPackage.IFILE:
+				return convertIFileToString(eDataType, instanceValue);
+			case LibraryElementPackage.IPROJECT:
+				return convertIProjectToString(eDataType, instanceValue);
 			case LibraryElementPackage.POINT:
 				return convertPointToString(eDataType, instanceValue);
 			case LibraryElementPackage.TYPE_ENTRY:
@@ -311,9 +313,42 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public AdapterConnection createAdapterConnection() {
+		AdapterConnectionImpl adapterConnection = new AdapterConnectionImpl();
+		return adapterConnection;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public AdapterDeclaration createAdapterDeclaration() {
 		AdapterDeclarationImpl adapterDeclaration = new AdapterDeclarationImpl();
 		return adapterDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AdapterFB createAdapterFB() {
+		AdapterFBImpl adapterFB = new AdapterFBImpl();
+		return adapterFB;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AdapterFBType createAdapterFBType() {
+		AdapterFBTypeImpl adapterFBType = new AdapterFBTypeImpl();
+		return adapterFBType;
 	}
 
 	/**
@@ -344,6 +379,39 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public Attribute createAttribute() {
+		AttributeImpl attribute = new AttributeImpl();
+		return attribute;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public AttributeDeclaration createAttributeDeclaration() {
+		AttributeDeclarationImpl attributeDeclaration = new AttributeDeclarationImpl();
+		return attributeDeclaration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public BaseFBType createBaseFBType() {
+		BaseFBTypeImpl baseFBType = new BaseFBTypeImpl();
+		return baseFBType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public BasicFBType createBasicFBType() {
 		BasicFBTypeImpl basicFBType = new BasicFBTypeImpl();
 		return basicFBType;
@@ -355,9 +423,86 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public CompilerInfo createCompilerInfo() {
-		CompilerInfoImpl compilerInfo = new CompilerInfoImpl();
-		return compilerInfo;
+	public AutomationSystem createAutomationSystem() {
+		AutomationSystemImpl automationSystem = new AutomationSystemImpl();
+		return automationSystem;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CFBInstance createCFBInstance() {
+		CFBInstanceImpl cfbInstance = new CFBInstanceImpl();
+		return cfbInstance;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Color createColor() {
+		ColorImpl color = new ColorImpl();
+		return color;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ColorizableElement createColorizableElement() {
+		ColorizableElementImpl colorizableElement = new ColorizableElementImpl();
+		return colorizableElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Comment createComment() {
+		CommentImpl comment = new CommentImpl();
+		return comment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CommunicationChannel createCommunicationChannel() {
+		CommunicationChannelImpl communicationChannel = new CommunicationChannelImpl();
+		return communicationChannel;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CommunicationMappingTarget createCommunicationMappingTarget() {
+		CommunicationMappingTargetImpl communicationMappingTarget = new CommunicationMappingTargetImpl();
+		return communicationMappingTarget;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CompilableType createCompilableType() {
+		CompilableTypeImpl compilableType = new CompilableTypeImpl();
+		return compilableType;
 	}
 
 	/**
@@ -377,9 +522,64 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public CompilerInfo createCompilerInfo() {
+		CompilerInfoImpl compilerInfo = new CompilerInfoImpl();
+		return compilerInfo;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public CompositeFBType createCompositeFBType() {
+		CompositeFBTypeImpl compositeFBType = new CompositeFBTypeImpl();
+		return compositeFBType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ConfigurableObject createConfigurableObject() {
+		ConfigurableObjectImpl configurableObject = new ConfigurableObjectImpl();
+		return configurableObject;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ConnectionRoutingData createConnectionRoutingData() {
 		ConnectionRoutingDataImpl connectionRoutingData = new ConnectionRoutingDataImpl();
 		return connectionRoutingData;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public DataConnection createDataConnection() {
+		DataConnectionImpl dataConnection = new DataConnectionImpl();
+		return dataConnection;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Demultiplexer createDemultiplexer() {
+		DemultiplexerImpl demultiplexer = new DemultiplexerImpl();
+		return demultiplexer;
 	}
 
 	/**
@@ -454,9 +654,64 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public ErrorMarkerDataType createErrorMarkerDataType() {
+		ErrorMarkerDataTypeImpl errorMarkerDataType = new ErrorMarkerDataTypeImpl();
+		return errorMarkerDataType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorMarkerFBNElement createErrorMarkerFBNElement() {
+		ErrorMarkerFBNElementImpl errorMarkerFBNElement = new ErrorMarkerFBNElementImpl();
+		return errorMarkerFBNElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorMarkerInterface createErrorMarkerInterface() {
+		ErrorMarkerInterfaceImpl errorMarkerInterface = new ErrorMarkerInterfaceImpl();
+		return errorMarkerInterface;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public ErrorMarkerRef createErrorMarkerRef() {
+		ErrorMarkerRefImpl errorMarkerRef = new ErrorMarkerRefImpl();
+		return errorMarkerRef;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Event createEvent() {
 		EventImpl event = new EventImpl();
 		return event;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public EventConnection createEventConnection() {
+		EventConnectionImpl eventConnection = new EventConnectionImpl();
+		return eventConnection;
 	}
 
 	/**
@@ -476,6 +731,17 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public FBNetwork createFBNetwork() {
+		FBNetworkImpl fbNetwork = new FBNetworkImpl();
+		return fbNetwork;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public FBNetworkElement createFBNetworkElement() {
 		FBNetworkElementImpl fbNetworkElement = new FBNetworkElementImpl();
 		return fbNetworkElement;
@@ -487,9 +753,9 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public SubApp createSubApp() {
-		SubAppImpl subApp = new SubAppImpl();
-		return subApp;
+	public FBType createFBType() {
+		FBTypeImpl fbType = new FBTypeImpl();
+		return fbType;
 	}
 
 	/**
@@ -498,9 +764,20 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public FBType createFBType() {
-		FBTypeImpl fbType = new FBTypeImpl();
-		return fbType;
+	public Group createGroup() {
+		GroupImpl group = new GroupImpl();
+		return group;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public HiddenElement createHiddenElement() {
+		HiddenElementImpl hiddenElement = new HiddenElementImpl();
+		return hiddenElement;
 	}
 
 	/**
@@ -542,9 +819,31 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public LibraryElement createLibraryElement() {
+		LibraryElementImpl libraryElement = new LibraryElementImpl();
+		return libraryElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Link createLink() {
 		LinkImpl link = new LinkImpl();
 		return link;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public LocalVariable createLocalVariable() {
+		LocalVariableImpl localVariable = new LocalVariableImpl();
+		return localVariable;
 	}
 
 	/**
@@ -564,9 +863,42 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public MappingTarget createMappingTarget() {
+		MappingTargetImpl mappingTarget = new MappingTargetImpl();
+		return mappingTarget;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Multiplexer createMultiplexer() {
+		MultiplexerImpl multiplexer = new MultiplexerImpl();
+		return multiplexer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public OtherAlgorithm createOtherAlgorithm() {
 		OtherAlgorithmImpl otherAlgorithm = new OtherAlgorithmImpl();
 		return otherAlgorithm;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public OtherMethod createOtherMethod() {
+		OtherMethodImpl otherMethod = new OtherMethodImpl();
+		return otherMethod;
 	}
 
 	/**
@@ -586,9 +918,31 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public Attribute createAttribute() {
-		AttributeImpl attribute = new AttributeImpl();
-		return attribute;
+	public Position createPosition() {
+		PositionImpl position = new PositionImpl();
+		return position;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public PositionableElement createPositionableElement() {
+		PositionableElementImpl positionableElement = new PositionableElementImpl();
+		return positionableElement;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Primitive createPrimitive() {
+		PrimitiveImpl primitive = new PrimitiveImpl();
+		return primitive;
 	}
 
 	/**
@@ -630,9 +984,42 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public ResourceTypeFB createResourceTypeFB() {
+		ResourceTypeFBImpl resourceTypeFB = new ResourceTypeFBImpl();
+		return resourceTypeFB;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public Segment createSegment() {
 		SegmentImpl segment = new SegmentImpl();
 		return segment;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SegmentType createSegmentType() {
+		SegmentTypeImpl segmentType = new SegmentTypeImpl();
+		return segmentType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Service createService() {
+		ServiceImpl service = new ServiceImpl();
+		return service;
 	}
 
 	/**
@@ -663,9 +1050,31 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
+	public ServiceInterface createServiceInterface() {
+		ServiceInterfaceImpl serviceInterface = new ServiceInterfaceImpl();
+		return serviceInterface;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
 	public ServiceInterfaceFBType createServiceInterfaceFBType() {
 		ServiceInterfaceFBTypeImpl serviceInterfaceFBType = new ServiceInterfaceFBTypeImpl();
 		return serviceInterfaceFBType;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SimpleFBType createSimpleFBType() {
+		SimpleFBTypeImpl simpleFBType = new SimpleFBTypeImpl();
+		return simpleFBType;
 	}
 
 	/**
@@ -685,9 +1094,20 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public FBNetwork createFBNetwork() {
-		FBNetworkImpl fbNetwork = new FBNetworkImpl();
-		return fbNetwork;
+	public STMethod createSTMethod() {
+		STMethodImpl stMethod = new STMethodImpl();
+		return stMethod;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public SubApp createSubApp() {
+		SubAppImpl subApp = new SubAppImpl();
+		return subApp;
 	}
 
 	/**
@@ -707,9 +1127,31 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public AutomationSystem createAutomationSystem() {
-		AutomationSystemImpl automationSystem = new AutomationSystemImpl();
-		return automationSystem;
+	public SystemConfiguration createSystemConfiguration() {
+		SystemConfigurationImpl systemConfiguration = new SystemConfigurationImpl();
+		return systemConfiguration;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public TypedConfigureableObject createTypedConfigureableObject() {
+		TypedConfigureableObjectImpl typedConfigureableObject = new TypedConfigureableObjectImpl();
+		return typedConfigureableObject;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Value createValue() {
+		ValueImpl value = new ValueImpl();
+		return value;
 	}
 
 	/**
@@ -750,435 +1192,6 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	@Override
-	public LibraryElement createLibraryElement() {
-		LibraryElementImpl libraryElement = new LibraryElementImpl();
-		return libraryElement;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public CompilableType createCompilableType() {
-		CompilableTypeImpl compilableType = new CompilableTypeImpl();
-		return compilableType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ConfigurableObject createConfigurableObject() {
-		ConfigurableObjectImpl configurableObject = new ConfigurableObjectImpl();
-		return configurableObject;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public CompositeFBType createCompositeFBType() {
-		CompositeFBTypeImpl compositeFBType = new CompositeFBTypeImpl();
-		return compositeFBType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public DataConnection createDataConnection() {
-		DataConnectionImpl dataConnection = new DataConnectionImpl();
-		return dataConnection;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public EventConnection createEventConnection() {
-		EventConnectionImpl eventConnection = new EventConnectionImpl();
-		return eventConnection;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public AdapterConnection createAdapterConnection() {
-		AdapterConnectionImpl adapterConnection = new AdapterConnectionImpl();
-		return adapterConnection;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ServiceInterface createServiceInterface() {
-		ServiceInterfaceImpl serviceInterface = new ServiceInterfaceImpl();
-		return serviceInterface;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Value createValue() {
-		ValueImpl value = new ValueImpl();
-		return value;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public SystemConfiguration createSystemConfiguration() {
-		SystemConfigurationImpl systemConfiguration = new SystemConfigurationImpl();
-		return systemConfiguration;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceTypeFB createResourceTypeFB() {
-		ResourceTypeFBImpl resourceTypeFB = new ResourceTypeFBImpl();
-		return resourceTypeFB;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public SegmentType createSegmentType() {
-		SegmentTypeImpl segmentType = new SegmentTypeImpl();
-		return segmentType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public AdapterFBType createAdapterFBType() {
-		AdapterFBTypeImpl adapterFBType = new AdapterFBTypeImpl();
-		return adapterFBType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Service createService() {
-		ServiceImpl service = new ServiceImpl();
-		return service;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public TypedConfigureableObject createTypedConfigureableObject() {
-		TypedConfigureableObjectImpl typedConfigureableObject = new TypedConfigureableObjectImpl();
-		return typedConfigureableObject;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public AdapterFB createAdapterFB() {
-		AdapterFBImpl adapterFB = new AdapterFBImpl();
-		return adapterFB;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Primitive createPrimitive() {
-		PrimitiveImpl primitive = new PrimitiveImpl();
-		return primitive;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public PositionableElement createPositionableElement() {
-		PositionableElementImpl positionableElement = new PositionableElementImpl();
-		return positionableElement;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Position createPosition() {
-		PositionImpl position = new PositionImpl();
-		return position;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Color createColor() {
-		ColorImpl color = new ColorImpl();
-		return color;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ColorizableElement createColorizableElement() {
-		ColorizableElementImpl colorizableElement = new ColorizableElementImpl();
-		return colorizableElement;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public AttributeDeclaration createAttributeDeclaration() {
-		AttributeDeclarationImpl attributeDeclaration = new AttributeDeclarationImpl();
-		return attributeDeclaration;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public SimpleFBType createSimpleFBType() {
-		SimpleFBTypeImpl simpleFBType = new SimpleFBTypeImpl();
-		return simpleFBType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public BaseFBType createBaseFBType() {
-		BaseFBTypeImpl baseFBType = new BaseFBTypeImpl();
-		return baseFBType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Demultiplexer createDemultiplexer() {
-		DemultiplexerImpl demultiplexer = new DemultiplexerImpl();
-		return demultiplexer;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Multiplexer createMultiplexer() {
-		MultiplexerImpl multiplexer = new MultiplexerImpl();
-		return multiplexer;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public LocalVariable createLocalVariable() {
-		LocalVariableImpl localVariable = new LocalVariableImpl();
-		return localVariable;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ErrorMarkerFBNElement createErrorMarkerFBNElement() {
-		ErrorMarkerFBNElementImpl errorMarkerFBNElement = new ErrorMarkerFBNElementImpl();
-		return errorMarkerFBNElement;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ErrorMarkerDataType createErrorMarkerDataType() {
-		ErrorMarkerDataTypeImpl errorMarkerDataType = new ErrorMarkerDataTypeImpl();
-		return errorMarkerDataType;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ErrorMarkerInterface createErrorMarkerInterface() {
-		ErrorMarkerInterfaceImpl errorMarkerInterface = new ErrorMarkerInterfaceImpl();
-		return errorMarkerInterface;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public CFBInstance createCFBInstance() {
-		CFBInstanceImpl cfbInstance = new CFBInstanceImpl();
-		return cfbInstance;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ErrorMarkerRef createErrorMarkerRef() {
-		ErrorMarkerRefImpl errorMarkerRef = new ErrorMarkerRefImpl();
-		return errorMarkerRef;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public Group createGroup() {
-		GroupImpl group = new GroupImpl();
-		return group;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public OtherMethod createOtherMethod() {
-		OtherMethodImpl otherMethod = new OtherMethodImpl();
-		return otherMethod;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public STMethod createSTMethod() {
-		STMethodImpl stMethod = new STMethodImpl();
-		return stMethod;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public HiddenElement createHiddenElement() {
-		HiddenElementImpl hiddenElement = new HiddenElementImpl();
-		return hiddenElement;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public MappingTarget createMappingTarget() {
-		MappingTargetImpl mappingTarget = new MappingTargetImpl();
-		return mappingTarget;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public CommunicationMappingTarget createCommunicationMappingTarget() {
-		CommunicationMappingTargetImpl communicationMappingTarget = new CommunicationMappingTargetImpl();
-		return communicationMappingTarget;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public CommunicationChannel createCommunicationChannel() {
-		CommunicationChannelImpl communicationChannel = new CommunicationChannelImpl();
-		return communicationChannel;
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
 	public Language createLanguageFromString(EDataType eDataType, String initialValue) {
 		Language result = Language.get(initialValue);
 		if (result == null) throw new IllegalArgumentException("The value '" + initialValue + "' is not a valid enumerator of '" + eDataType.getName() + "'"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
@@ -1199,8 +1212,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public IProject createIProjectFromString(EDataType eDataType, String initialValue) {
-		return (IProject)super.createFromString(eDataType, initialValue);
+	public CommandStack createCommandStackFromString(EDataType eDataType, String initialValue) {
+		return (CommandStack)super.createFromString(eDataType, initialValue);
 	}
 
 	/**
@@ -1208,7 +1221,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertIProjectToString(EDataType eDataType, Object instanceValue) {
+	public String convertCommandStackToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 
@@ -1235,8 +1248,8 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public CommandStack createCommandStackFromString(EDataType eDataType, String initialValue) {
-		return (CommandStack)super.createFromString(eDataType, initialValue);
+	public IProject createIProjectFromString(EDataType eDataType, String initialValue) {
+		return (IProject)super.createFromString(eDataType, initialValue);
 	}
 
 	/**
@@ -1244,7 +1257,7 @@ public class LibraryElementFactoryImpl extends EFactoryImpl implements LibraryEl
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	public String convertCommandStackToString(EDataType eDataType, Object instanceValue) {
+	public String convertIProjectToString(EDataType eDataType, Object instanceValue) {
 		return super.convertToString(eDataType, instanceValue);
 	}
 

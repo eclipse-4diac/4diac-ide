@@ -24,11 +24,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemmanagement;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -42,8 +39,6 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -58,7 +53,6 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.DistributedSystemListener;
 import org.eclipse.fordiac.ide.systemmanagement.changelistener.FordiacResourceChangeListener;
-import org.eclipse.fordiac.ide.systemmanagement.extension.ITagProvider;
 import org.eclipse.fordiac.ide.systemmanagement.util.SystemPaletteManagement;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.ui.XtextProjectHelper;
@@ -81,7 +75,6 @@ public enum SystemManager {
 
 	public static final String TYPE_LIB_FOLDER_NAME = "Type Library"; //$NON-NLS-1$
 
-	private final Map<IProject, ArrayList<ITagProvider>> tagProviders = new HashMap<>();
 
 	/** The listeners. */
 	private final List<DistributedSystemListener> listeners = new ArrayList<>();
@@ -176,23 +169,6 @@ public enum SystemManager {
 		return null;
 	}
 
-	public static void saveTagProvider(final AutomationSystem system, final ITagProvider tagProvider) {
-		final IProject project = system.getTypeLibrary().getProject();
-		final IPath projectPath = project.getLocation();
-		tagProvider.saveTagConfiguration(projectPath);
-	}
-
-	public String getReplacedString(final AutomationSystem system, final String value) {
-		final ArrayList<ITagProvider> tagProvider = getTagProviderList(system.getTypeLibrary().getProject());
-		String result = null;
-		for (final ITagProvider iTagProvider : tagProvider) {
-			result = iTagProvider.getReplacedString(value);
-			if (result != null) {
-				break;
-			}
-		}
-		return result;
-	}
 
 	/** Save system.
 	 *
@@ -227,57 +203,6 @@ public enum SystemManager {
 	public synchronized List<AutomationSystem> getProjectSystems(final IProject project) {
 		return TypeLibraryManager.INSTANCE.getTypeLibrary(project).getSystems().values().stream()
 				.map(SystemEntry::getSystem).collect(Collectors.toList());
-	}
-
-	private static ArrayList<ITagProvider> loadTagProviders(final IProject project) {
-		final ArrayList<ITagProvider> providers = new ArrayList<>();
-		if (project.exists()) {
-			final IExtensionRegistry registry = Platform.getExtensionRegistry();
-			final IConfigurationElement[] elems = registry.getConfigurationElementsFor(PLUGIN_ID, "tagProvider"); //$NON-NLS-1$
-			for (final IConfigurationElement element : elems) {
-				try {
-					final Object object = element.createExecutableExtension("Interface"); //$NON-NLS-1$
-					if (object instanceof ITagProvider) {
-						final ITagProvider tagProvider = (ITagProvider) object;
-						if (tagProvider.loadTagConfiguration(project.getLocation())) {
-							providers.add(tagProvider);
-						}
-					}
-				} catch (final CoreException corex) {
-					FordiacLogHelper.logError("Error loading TagProviders!", corex); //$NON-NLS-1$
-				}
-			}
-		}
-		return providers;
-	}
-
-	public ITagProvider getTagProvider(final Class<?> class1, final AutomationSystem system) {
-		final ArrayList<ITagProvider> tagProviderList = getTagProviderList(system.getTypeLibrary().getProject());
-		for (final ITagProvider iTagProvider : tagProviderList) {
-			if (iTagProvider.getClass().equals(class1)) {
-				return iTagProvider;
-			}
-		}
-
-		ITagProvider provider = null;
-		try {
-			final Object obj = class1.getDeclaredConstructor().newInstance();
-			if (obj instanceof ITagProvider) {
-				provider = (ITagProvider) obj;
-				provider.initialzeNewTagProvider();
-				saveTagProvider(system, provider);
-				tagProviderList.add(provider);
-			}
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
-				| NoSuchMethodException | SecurityException e) {
-			FordiacLogHelper.logError("Error on creating TagProvider instance!", e); //$NON-NLS-1$
-			return null;
-		}
-		return provider;
-	}
-
-	private ArrayList<ITagProvider> getTagProviderList(final IProject project) {
-		return tagProviders.computeIfAbsent(project, SystemManager::loadTagProviders);
 	}
 
 	private static String[] getNatureIDs() {

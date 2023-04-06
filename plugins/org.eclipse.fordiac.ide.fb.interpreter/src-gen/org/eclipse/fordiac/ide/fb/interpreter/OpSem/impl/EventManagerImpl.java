@@ -26,68 +26,55 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>Event
- * Manager</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>Event Manager</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
  * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventManagerImpl#getTransactions
  * <em>Transactions</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventManagerImpl#getReadyQueue
- * <em>Ready Queue</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.impl.EventManagerImpl#getReadyQueue <em>Ready
+ * Queue</em>}</li>
  * </ul>
  *
- * @generated
- */
+ * @generated */
 public class EventManagerImpl extends MinimalEObjectImpl.Container implements EventManager {
-	/**
-	 * The cached value of the '{@link #getTransactions() <em>Transactions</em>}'
-	 * containment reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getTransactions() <em>Transactions</em>}' containment reference list. <!--
+	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see #getTransactions()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<Transaction> transactions;
 
-	/**
-	 * The cached value of the '{@link #getReadyQueue() <em>Ready Queue</em>}'
-	 * reference list. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The cached value of the '{@link #getReadyQueue() <em>Ready Queue</em>}' reference list. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
 	 * @see #getReadyQueue()
 	 * @generated
-	 * @ordered
-	 */
+	 * @ordered */
 	protected EList<Transaction> readyQueue;
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	protected EventManagerImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return OperationalSemanticsPackage.Literals.EVENT_MANAGER;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<Transaction> getTransactions() {
 		if (transactions == null) {
@@ -97,11 +84,9 @@ public class EventManagerImpl extends MinimalEObjectImpl.Container implements Ev
 		return transactions;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<Transaction> getReadyQueue() {
 		if (readyQueue == null) {
@@ -111,35 +96,46 @@ public class EventManagerImpl extends MinimalEObjectImpl.Container implements Ev
 		return readyQueue;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
+	@Override
+	public void process() {
+		EventManagerUtils.process(this);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public void processNetwork() {
+		EventManagerUtils.processNetwork(this);
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
 	@Override
 	public void process(final EventManager eventManager) {
 		EventManagerUtils.process(this);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case OperationalSemanticsPackage.EVENT_MANAGER__TRANSACTIONS:
 			return ((InternalEList<?>) getTransactions()).basicRemove(otherEnd, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
 		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
@@ -147,15 +143,14 @@ public class EventManagerImpl extends MinimalEObjectImpl.Container implements Ev
 			return getTransactions();
 		case OperationalSemanticsPackage.EVENT_MANAGER__READY_QUEUE:
 			return getReadyQueue();
+		default:
+			return super.eGet(featureID, resolve, coreType);
 		}
-		return super.eGet(featureID, resolve, coreType);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
 	public void eSet(int featureID, Object newValue) {
@@ -168,15 +163,15 @@ public class EventManagerImpl extends MinimalEObjectImpl.Container implements Ev
 			getReadyQueue().clear();
 			getReadyQueue().addAll((Collection<? extends Transaction>) newValue);
 			return;
+		default:
+			super.eSet(featureID, newValue);
+			return;
 		}
-		super.eSet(featureID, newValue);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public void eUnset(int featureID) {
 		switch (featureID) {
@@ -186,15 +181,15 @@ public class EventManagerImpl extends MinimalEObjectImpl.Container implements Ev
 		case OperationalSemanticsPackage.EVENT_MANAGER__READY_QUEUE:
 			getReadyQueue().clear();
 			return;
+		default:
+			super.eUnset(featureID);
+			return;
 		}
-		super.eUnset(featureID);
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public boolean eIsSet(int featureID) {
 		switch (featureID) {
@@ -202,8 +197,9 @@ public class EventManagerImpl extends MinimalEObjectImpl.Container implements Ev
 			return transactions != null && !transactions.isEmpty();
 		case OperationalSemanticsPackage.EVENT_MANAGER__READY_QUEUE:
 			return readyQueue != null && !readyQueue.isEmpty();
+		default:
+			return super.eIsSet(featureID);
 		}
-		return super.eIsSet(featureID);
 	}
 
 } // EventManagerImpl

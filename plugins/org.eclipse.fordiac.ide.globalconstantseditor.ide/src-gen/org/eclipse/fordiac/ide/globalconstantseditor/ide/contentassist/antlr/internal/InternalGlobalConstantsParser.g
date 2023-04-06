@@ -214,6 +214,31 @@ import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGra
 	}
 }
 
+// Entry rule entryRuleSTGlobalConstsSource
+entryRuleSTGlobalConstsSource
+:
+{ before(grammarAccess.getSTGlobalConstsSourceRule()); }
+	 ruleSTGlobalConstsSource
+{ after(grammarAccess.getSTGlobalConstsSourceRule()); } 
+	 EOF 
+;
+
+// Rule STGlobalConstsSource
+ruleSTGlobalConstsSource 
+	@init {
+		int stackSize = keepStackSize();
+	}
+	:
+	(
+		{ before(grammarAccess.getSTGlobalConstsSourceAccess().getGroup()); }
+		(rule__STGlobalConstsSource__Group__0)
+		{ after(grammarAccess.getSTGlobalConstsSourceAccess().getGroup()); }
+	)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
 // Entry rule entryRuleSTVarGlobalDeclarationBlock
 entryRuleSTVarGlobalDeclarationBlock
 :
@@ -3228,6 +3253,60 @@ rule__STMultiBitAccessSpecifier__Alternatives
 finally {
 	restoreStackSize(stackSize);
 }
+
+rule__STGlobalConstsSource__Group__0
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__STGlobalConstsSource__Group__0__Impl
+	rule__STGlobalConstsSource__Group__1
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstsSource__Group__0__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getSTGlobalConstsSourceAccess().getSTGlobalConstsSourceAction_0()); }
+	()
+	{ after(grammarAccess.getSTGlobalConstsSourceAccess().getSTGlobalConstsSourceAction_0()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstsSource__Group__1
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	rule__STGlobalConstsSource__Group__1__Impl
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
+rule__STGlobalConstsSource__Group__1__Impl
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+(
+	{ before(grammarAccess.getSTGlobalConstsSourceAccess().getElementsAssignment_1()); }
+	(rule__STGlobalConstsSource__ElementsAssignment_1)*
+	{ after(grammarAccess.getSTGlobalConstsSourceAccess().getElementsAssignment_1()); }
+)
+;
+finally {
+	restoreStackSize(stackSize);
+}
+
 
 rule__STVarGlobalDeclarationBlock__Group__0
 	@init {
@@ -10876,6 +10955,21 @@ finally {
 	restoreStackSize(stackSize);
 }
 
+
+rule__STGlobalConstsSource__ElementsAssignment_1
+	@init {
+		int stackSize = keepStackSize();
+	}
+:
+	(
+		{ before(grammarAccess.getSTGlobalConstsSourceAccess().getElementsSTVarGlobalDeclarationBlockParserRuleCall_1_0()); }
+		ruleSTVarGlobalDeclarationBlock
+		{ after(grammarAccess.getSTGlobalConstsSourceAccess().getElementsSTVarGlobalDeclarationBlockParserRuleCall_1_0()); }
+	)
+;
+finally {
+	restoreStackSize(stackSize);
+}
 
 rule__STVarGlobalDeclarationBlock__ConstantAssignment_2
 	@init {

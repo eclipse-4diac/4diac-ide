@@ -12,12 +12,33 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication;
 
+import org.eclipse.emf.common.util.BasicEList;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.TsnParameters;
 
 public class Annotations {
 	// TsnWindow
 	public static String getTsnWindowName(final TsnWindow w) {
 		return TsnParameters.TSN_WINDOW_NAME + ((TsnConfiguration) w.eContainer()).getWindows().indexOf(w);
+	}
+
+	public static EList<VarDeclaration> getParameters(final EList<TsnWindow> windows, final int cycleTime) {
+		final VarDeclaration vardec = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+		vardec.setName(TsnParameters.TSN_CYCLE_NAME);
+		vardec.setValue(LibraryElementFactory.eINSTANCE.createValue());
+		vardec.getValue().setValue(String.valueOf(cycleTime));
+		final BasicEList<VarDeclaration> list = new BasicEList<>();
+		list.add(vardec);
+		for (final TsnWindow window : windows) {
+			final VarDeclaration win = LibraryElementFactory.eINSTANCE.createVarDeclaration();
+			win.setName(window.getName());
+			win.setValue(LibraryElementFactory.eINSTANCE.createValue());
+			win.getValue().setValue(String.valueOf(window.getDuration()));
+			list.add(win);
+		}
+		return list;
 	}
 
 	private Annotations() {

@@ -23,6 +23,7 @@ import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager
 import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmPartitioner
 import org.eclipse.fordiac.ide.structuredtextcore.FBTypeXtextResource
 import org.eclipse.xtext.util.LazyStringInputStream
+import org.eclipse.xtext.resource.impl.ResourceDescriptionsProvider
 
 class STAlgorithmResource extends FBTypeXtextResource {
 	public static final String OPTION_PLAIN_ST = STAlgorithmResource.name + ".PLAIN_ST";
@@ -33,7 +34,7 @@ class STAlgorithmResource extends FBTypeXtextResource {
 	override doLoad(InputStream inputStream, Map<?, ?> options) throws IOException {
 		val actualOptions = options ?: defaultLoadOptions
 		clearInternalFBType
-		if (actualOptions.loadPlainST) {
+		if (actualOptions.loadPlainST || isLoadLiveScope(actualOptions, inputStream)) {
 			super.doLoad(inputStream, actualOptions)
 		} else {
 			try {
@@ -54,10 +55,13 @@ class STAlgorithmResource extends FBTypeXtextResource {
 		updateInternalFBType
 	}
 
-	def boolean isLoadPlainST(Map<?, ?> options) {
+	def protected boolean isLoadPlainST(Map<?, ?> options) {
 		"stalg".equalsIgnoreCase(uri.fileExtension) || Boolean.TRUE.equals(options?.get(OPTION_PLAIN_ST) ?: "")
 	}
 
+	def protected boolean isLoadLiveScope(Map<?, ?> options, InputStream inputStream) {
+		options?.get(ResourceDescriptionsProvider.LIVE_SCOPE) == Boolean.TRUE && inputStream instanceof LazyStringInputStream
+	}
 
 	def Map<Object, Object> getDefaultLoadOptions() {
 		if (defaultLoadOptions === null) {

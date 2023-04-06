@@ -140,7 +140,8 @@ public abstract class AbstractDeploymentCommand extends AbstractHandler {
 						interactor.connect();
 						executeCommand(interactor);
 					} catch (final DeploymentException e) {
-						errorChecker.showDeploymentError(e.getMessage(), DeploymentHelper.getMgrID(device), this, true);
+						errorChecker.showDeploymentError(e.getMessage(), DeploymentHelper.getMgrIDSafe(device), this,
+								true);
 					}
 					interactor.removeDeploymentListener(errorChecker);
 					DeploymentCoordinator.disableOutput(interactor);

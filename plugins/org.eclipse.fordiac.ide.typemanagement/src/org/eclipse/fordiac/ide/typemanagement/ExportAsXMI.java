@@ -31,12 +31,14 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 import org.eclipse.fordiac.ide.structuredtextalgorithm.ui.resource.STAlgorithmResourceSetInitializer;
+import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater;
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STSource;
-import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreCommentAssociater;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.xtext.resource.XtextResource;
 import org.eclipse.xtext.resource.XtextResourceSet;
 
+/** @deprecated Use org.eclipse.fordiac.ide.export.xmi.XMIExportFilter instead. */
+@Deprecated(forRemoval = true)
 public class ExportAsXMI {
 	static final String XMI_EXTENSION = "xmi"; //$NON-NLS-1$
 

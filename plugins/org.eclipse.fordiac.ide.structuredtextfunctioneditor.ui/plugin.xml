@@ -394,19 +394,45 @@
 				</reference>
 			</activeWhen>
 		</handler>
+  <handler
+        class="org.eclipse.fordiac.ide.structuredtextfunctioneditor.ui.STFunctionExecutableExtensionFactory:org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallableHandler"
+        commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallable">
+     <activeWhen>
+        <reference
+              definitionId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.Editor.opened">
+        </reference>
+     </activeWhen>
+  </handler>
 	</extension>
 	<extension point="org.eclipse.ui.menus">
-		<menuContribution
-			locationURI="popup:#TextEditorContext?after=group.edit">
-			<command commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
-				style="push">
-				<visibleWhen checkEnabled="false">
-					<reference
-						definitionId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.Editor.opened">
-					</reference>
-				</visibleWhen>
-			</command>
-		</menuContribution>
+  <menuContribution
+        locationURI="popup:#TextEditorContext?after=xtext.ui.SourceMenu">
+     <menu
+           id="org.eclipse.fordiac.ide.structuredtextalgorithm.ui.RefactoringMenu"
+           label="Refactor">
+        <command
+              commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
+              style="push">
+           <visibleWhen
+                 checkEnabled="false">
+              <reference
+                    definitionId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.Editor.opened">
+              </reference>
+           </visibleWhen>
+        </command>
+        <command
+              commandId="org.eclipse.fordiac.ide.structuredtextcore.ui.refactoring.ExtractCallable"
+              label="Extract Function"
+              style="push">
+           <visibleWhen
+                 checkEnabled="false">
+              <reference
+                    definitionId="org.eclipse.fordiac.ide.structuredtextfunctioneditor.STFunction.Editor.opened">
+              </reference>
+           </visibleWhen>
+        </command>
+     </menu>
+  </menuContribution>
 	</extension>
 	<extension point="org.eclipse.ui.preferencePages">
 		<page

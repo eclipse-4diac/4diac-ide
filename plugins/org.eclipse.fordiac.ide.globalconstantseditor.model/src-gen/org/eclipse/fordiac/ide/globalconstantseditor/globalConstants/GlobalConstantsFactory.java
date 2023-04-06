@@ -23,6 +23,15 @@ public interface GlobalConstantsFactory extends EFactory {
 	GlobalConstantsFactory eINSTANCE = org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.GlobalConstantsFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>ST Global Consts Source</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>ST Global Consts Source</em>'.
+	 * @generated
+	 */
+	STGlobalConstsSource createSTGlobalConstsSource();
+
+	/**
 	 * Returns a new object of class '<em>ST Var Global Declaration Block</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

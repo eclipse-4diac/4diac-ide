@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,10 +12,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable
 
+import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.xtend.lib.annotations.Accessors
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
+
+import static extension org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes.isAnyType
 
 @FinalFieldsConstructor
 abstract class AbstractVariable<T extends Value> implements Variable<T> {
@@ -23,6 +26,9 @@ abstract class AbstractVariable<T extends Value> implements Variable<T> {
 	@Accessors final INamedElement type
 	
 	override toString() {
-		value.toString
+		switch(type) {
+			DataType case type.isAnyType: '''«value.type.name»#«value»'''
+			default: value.toString
+		}
 	}
 }

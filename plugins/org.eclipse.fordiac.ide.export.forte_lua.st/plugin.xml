@@ -7,6 +7,9 @@
             class="org.eclipse.fordiac.ide.export.forte_lua.st.StructuredTextSupportFactory"
             filter="forte_lua">
          <source
+               type="org.eclipse.fordiac.ide.model.libraryElement.ECTransition">
+         </source>
+         <source
                type="org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm">
          </source>
          <source

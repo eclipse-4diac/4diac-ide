@@ -16,50 +16,46 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>FB
- * Transaction</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>FB Transaction</b></em>'. <!-- end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getOutputEventOccurrences
- * <em>Output Event Occurrences</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getInputVariables
- * <em>Input Variables</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getOutputEventOccurrences <em>Output Event
+ * Occurrences</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction#getInputVariables <em>Input
+ * Variables</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBTransaction()
  * @model
- * @generated
- */
+ * @generated */
 public interface FBTransaction extends Transaction {
-	/**
-	 * Returns the value of the '<em><b>Output Event Occurrences</b></em>'
-	 * containment reference list. The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence}. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Returns the value of the '<em><b>Output Event Occurrences</b></em>' containment reference list. The list
+	 * contents are of type {@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence}. <!-- begin-user-doc
+	 * --> <!-- end-user-doc -->
 	 *
-	 * @return the value of the '<em>Output Event Occurrences</em>' containment
-	 *         reference list.
+	 * @return the value of the '<em>Output Event Occurrences</em>' containment reference list.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBTransaction_OutputEventOccurrences()
 	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
+	 * @generated */
 	EList<EventOccurrence> getOutputEventOccurrences();
 
-	/**
-	 * Returns the value of the '<em><b>Input Variables</b></em>' reference list.
-	 * The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}. <!--
-	 * begin-user-doc --> <!-- end-user-doc -->
+	/** Returns the value of the '<em><b>Input Variables</b></em>' reference list. The list contents are of type
+	 * {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @return the value of the '<em>Input Variables</em>' reference list.
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getFBTransaction_InputVariables()
 	 * @model
-	 * @generated
-	 */
+	 * @generated */
 	EList<VarDeclaration> getInputVariables();
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @model
+	 * @generated */
+	void process();
 
 } // FBTransaction

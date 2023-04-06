@@ -112,6 +112,13 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 		}
 	}
 
+	@Override
+	public void removeEntry(final Object entry, final CompoundCommand cmd) {
+		if (entry instanceof AdapterDeclaration) {
+			cmd.add(newDeleteCommand((AdapterDeclaration) entry));
+		}
+	}
+
 
 	@Override
 	public void setupOutputTable(final Group outputsGroup) {

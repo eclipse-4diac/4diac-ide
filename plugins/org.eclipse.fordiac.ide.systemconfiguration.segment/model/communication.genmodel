@@ -8,7 +8,7 @@
     editPluginClass="" editorPluginClass="org.eclipse.fordiac.ide.fb.intepreter.mm.OpSem.presentation.OperationalSemanticsEditorPlugin"
     nonNLSMarkers="true" rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container"
     codeFormatting="true" commentFormatting="true" importerID="org.eclipse.emf.importer.ecore"
-    containmentProxies="true" complianceLevel="11.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.systemconfiguration.segment"
+    containmentProxies="true" complianceLevel="17.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.systemconfiguration.segment"
     editorPluginID="org.eclipse.fordiac.ide.fb.interpreter.mm.OpSem.editor" testsPluginID="org.eclipse.fordiac.ide.systemconfiguration.segment.tests"
     usedGenPackages="../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//libraryElement ../../org.eclipse.fordiac.ide.model/model/fordiac.genmodel#//data"
     importOrganizing="true" cleanup="true" eclipsePlatformVersion="2022-09">
@@ -19,10 +19,10 @@
     <genClasses ecoreClass="communication.ecore#//TsnConfiguration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute communication.ecore#//TsnConfiguration/cycleTime"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference communication.ecore#//TsnConfiguration/windows"/>
-      <genOperations ecoreOperation="communication.ecore#//TsnConfiguration/getId"
-          body="return &quot;tsnConfig&quot;;"/>
       <genOperations ecoreOperation="communication.ecore#//TsnConfiguration/getMappingTargets"
           body="return ECollections.toEList(windows);"/>
+      <genOperations ecoreOperation="communication.ecore#//TsnConfiguration/getParameters"
+          body="return Annotations.getParameters(windows,cycleTime);"/>
     </genClasses>
     <genClasses ecoreClass="communication.ecore#//TsnWindow">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute communication.ecore#//TsnWindow/duration"/>
@@ -34,6 +34,8 @@
           body="return &quot;defaultConfig&quot;;"/>
       <genOperations ecoreOperation="communication.ecore#//DefaultConfiguration/getMappingTargets"
           body="return ECollections.asEList(target);"/>
+      <genOperations ecoreOperation="communication.ecore#//DefaultConfiguration/getParameters"
+          body="return ECollections.emptyEList();"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

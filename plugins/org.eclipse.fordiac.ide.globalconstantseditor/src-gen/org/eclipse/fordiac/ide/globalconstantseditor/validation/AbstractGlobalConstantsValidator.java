@@ -13,8 +13,8 @@ public abstract class AbstractGlobalConstantsValidator extends STCoreValidator {
 	@Override
 	protected List<EPackage> getEPackages() {
 		List<EPackage> result = new ArrayList<EPackage>(super.getEPackages());
-		result.add(EPackage.Registry.INSTANCE.getEPackage("http://www.eclipse.org/fordiac/ide/globalconstantseditor/GlobalConstants"));
 		result.add(EPackage.Registry.INSTANCE.getEPackage("http://www.eclipse.org/fordiac/ide/structuredtextcore/STCore"));
+		result.add(EPackage.Registry.INSTANCE.getEPackage("http://www.eclipse.org/fordiac/ide/globalconstantseditor/GlobalConstants"));
 		return result;
 	}
 }

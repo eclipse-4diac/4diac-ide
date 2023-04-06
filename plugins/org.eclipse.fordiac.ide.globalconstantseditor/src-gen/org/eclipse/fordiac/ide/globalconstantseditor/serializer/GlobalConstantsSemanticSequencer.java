@@ -8,6 +8,7 @@ import java.util.Set;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage;
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource;
 import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock;
 import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGrammarAccess;
 import org.eclipse.fordiac.ide.structuredtextcore.serializer.STCoreSemanticSequencer;
@@ -75,6 +76,9 @@ public class GlobalConstantsSemanticSequencer extends STCoreSemanticSequencer {
 		Set<Parameter> parameters = context.getEnabledBooleanParameters();
 		if (epackage == GlobalConstantsPackage.eINSTANCE)
 			switch (semanticObject.eClass().getClassifierID()) {
+			case GlobalConstantsPackage.ST_GLOBAL_CONSTS_SOURCE:
+				sequence_STGlobalConstsSource(context, (STGlobalConstsSource) semanticObject); 
+				return; 
 			case GlobalConstantsPackage.ST_VAR_GLOBAL_DECLARATION_BLOCK:
 				sequence_STVarGlobalDeclarationBlock(context, (STVarGlobalDeclarationBlock) semanticObject); 
 				return; 
@@ -217,6 +221,20 @@ public class GlobalConstantsSemanticSequencer extends STCoreSemanticSequencer {
 		if (errorAcceptor != null)
 			errorAcceptor.accept(diagnosticProvider.createInvalidContextOrTypeDiagnostic(semanticObject, context));
 	}
+	
+	/**
+	 * <pre>
+	 * Contexts:
+	 *     STGlobalConstsSource returns STGlobalConstsSource
+	 *
+	 * Constraint:
+	 *     elements+=STVarGlobalDeclarationBlock*
+	 * </pre>
+	 */
+	protected void sequence_STGlobalConstsSource(ISerializationContext context, STGlobalConstsSource semanticObject) {
+		genericSequencer.createSequence(context, semanticObject);
+	}
+	
 	
 	/**
 	 * <pre>

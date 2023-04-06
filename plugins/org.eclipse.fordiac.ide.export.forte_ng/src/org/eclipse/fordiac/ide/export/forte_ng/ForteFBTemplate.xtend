@@ -3,6 +3,7 @@
  * 				 2020 Johannes Kepler Unviersity Linz
  * 				 2020 TU Wien
  *               2022 Martin Erich Jobst
+ *               2023 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -14,7 +15,8 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Alois Zoitl  - extracted base class for all types from fbtemplate
  *   Martin Melik Merkumians - adds clause to prevent generation of zero size arrays
- *   Martin Melik Merkumians - adds generation of initial value assignment
+ *                           - adds generation of initial value assignment
+ *                           - adds export of internal constants
  *   Martin Jobst - add event accessors
  *                - add constructor calls for initial value assignments
  *                - add value conversion for initial value assignments
@@ -232,11 +234,19 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		};
 	'''
 
-	def protected generateInternalVarDelcaration(BaseFBType baseFBType) '''
+	def protected generateInternalVarDeclaration(BaseFBType baseFBType) '''
 		«IF !baseFBType.internalVars.isEmpty»
 			static const CStringDictionary::TStringId scm_anInternalsNames[];
 			static const CStringDictionary::TStringId scm_anInternalsTypeIds[];
 			static const SInternalVarsInformation scm_stInternalVars;
+		«ENDIF»
+	'''
+	
+	def protected generateInternalConstsDeclaration(BaseFBType baseFBType) '''
+		«IF !baseFBType.internalConstVars.isEmpty»
+		«FOR constant : baseFBType.internalConstVars»
+			static const «constant.generateTypeName» st_const_«constant.name»;
+		«ENDFOR»
 		«ENDIF»
 	'''
 
@@ -268,6 +278,14 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 			const CStringDictionary::TStringId «FBClassName»::scm_anInternalsNames[] = {«baseFBType.internalVars.FORTENameList»};
 			const CStringDictionary::TStringId «FBClassName»::scm_anInternalsTypeIds[] = {«baseFBType.internalVars.FORTETypeList»};
 			const SInternalVarsInformation «FBClassName»::scm_stInternalVars = {«baseFBType.internalVars.size», scm_anInternalsNames, scm_anInternalsTypeIds};
+		«ENDIF»
+	'''
+	
+	def protected generateInternalConstsDefinition(BaseFBType baseFBType) '''
+		«IF !baseFBType.internalConstVars.isEmpty»
+		«FOR constant : baseFBType.internalConstVars»
+			const «constant.generateTypeName» «FBClassName»::st_const_«constant.name» = «constant.generateVariableDefaultValue»;
+		«ENDFOR»
 		«ENDIF»
 	'''
 
@@ -338,7 +356,7 @@ abstract class ForteFBTemplate<T extends FBType> extends ForteLibraryElementTemp
 		static const SCFB_FBInstanceData scmInternalFBDefinitions[];
 	'''
 
-	def generateInteralFbDeclarations(BaseFBType type) '''
+	def generateInternalFbDeclarations(BaseFBType type) '''
 		const SCFB_FBInstanceData «FBClassName»::scmInternalFBDefinitions[] = {
 		  «FOR elem : type.internalFbs SEPARATOR ",\n"»{«elem.name.FORTEStringId», «elem.type.name.FORTEStringId»}«ENDFOR»
 		};

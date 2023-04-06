@@ -113,12 +113,6 @@
       </dragAssistant>
    </extension>
    <extension point="org.eclipse.ui.commands">
-       <command
-            categoryId="org.eclipse.fordiac.ide.commands.category"
-            id="org.eclipse.fordiac.ide.typemanagement.commands.exportXMI"
-            defaultHandler="org.eclipse.fordiac.ide.typemanagement.handlers.ExportXMIHandler"
-            name="Export as XMI">
-      </command>
     	<command
         	id="org.eclipse.fordiac.ide.typemanagement.openType"
         	name="Open Type">
@@ -441,7 +435,7 @@
    <extension
          point="org.eclipse.ltk.core.refactoring.renameParticipants">
       <renameParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.RenameType"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameType"
             id="org.eclipse.fordiac.ide.typemanagement.renameType"
             name="Rename Type handler">
          <enablement>
@@ -493,7 +487,7 @@
    <extension
          point="org.eclipse.ltk.core.refactoring.deleteParticipants">
       <deleteParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.DeleteFBTypeParticipant"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.DeleteFBTypeParticipant"
             id="org.eclipse.fordiac.ide.typemanagement.deleteFBType"
             name="Delete FB Type Handler">
          <enablement>
@@ -554,48 +548,6 @@
       </decorator>
    </extension>
    <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            allPopups="false"
-            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
-         <command
-               commandId="org.eclipse.fordiac.ide.typemanagement.commands.exportXMI"
-               label="Export as XMI"
-               style="push">
-            <visibleWhen
-                  checkEnabled="true">
-               <with
-                     variable="selection">
-                  <count
-                        value="1">
-                  </count>
-                  <iterate
-                        ifEmpty="false"
-                        operator="or">
-                     <and>
-                        <instanceof
-                              value="org.eclipse.core.resources.IFile">
-                        </instanceof>
-                        <or>
-                           <test
-                                 forcePluginActivation="true"
-                                 property="org.eclipse.core.resources.extension"
-                                 value="stfunc">
-                           </test>
-                           <test
-                                 forcePluginActivation="true"
-                                 property="org.eclipse.core.resources.extension"
-                                 value="fbt">
-                           </test>
-                        </or>
-                     </and>
-                  </iterate>
-               </with>
-            </visibleWhen>
-         </command>
-      </menuContribution>
-   </extension>
-   <extension
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
             class="org.eclipse.fordiac.ide.typemanagement.util.FBTypePropertyTester"
@@ -604,5 +556,48 @@
             properties="fbType"
             type="org.eclipse.core.resources.IResource">
       </propertyTester>
+   </extension>  
+    <extension
+         point="org.eclipse.ltk.core.refactoring.refactoringContributions">
+      <contribution
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameTypeRefactoringContribution"
+            id="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"/>
+   </extension>
+    <extension
+         point="org.eclipse.ui.actionSets">
+      <actionSet
+            description="4diac action set"
+            id="org.eclipse.refactoring.actionSet"
+            label="4diac"
+            visible="true">
+         <menu
+               id="org.eclipse.refactoring.menu"
+               label="Refactoring"
+               path="edit">
+            <separator name="renameType"/>
+         </menu>
+         <action
+               class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameTypeAction"
+               definitionId="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
+               enablesFor="1"
+               helpContextId="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
+               id="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
+               label="Rename Type..."
+               menubarPath="org.eclipse.refactoring.menu/renameType"
+               style="push"
+               tooltip="Rename Type"/>
+      </actionSet>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <category
+            description="Rename a type and search for affected references"
+            id="org.eclipse.refactoring.category"
+            name="Refactoring"/>
+      <command
+            categoryId="org.eclipse.refactoring.category"
+            description="Renames a iec 61499 type"
+            id="org.eclipse.fordiac.ide.typemanagement.refactoring.renametype"
+            name="Rename Type"/>
    </extension>
 </plugin>

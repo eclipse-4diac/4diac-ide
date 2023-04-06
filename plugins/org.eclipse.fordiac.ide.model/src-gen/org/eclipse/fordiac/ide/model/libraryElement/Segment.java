@@ -28,7 +28,6 @@ import org.eclipse.emf.common.util.EList;
  * </p>
  * <ul>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getWidth <em>Width</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getVarDeclarations <em>Var Declarations</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getOutConnections <em>Out Connections</em>}</li>
  *   <li>{@link org.eclipse.fordiac.ide.model.libraryElement.Segment#getCommunication <em>Communication</em>}</li>
  * </ul>
@@ -37,7 +36,7 @@ import org.eclipse.emf.common.util.EList;
  * @model
  * @generated
  */
-public interface Segment extends TypedConfigureableObject, PositionableElement, ColorizableElement {
+public interface Segment extends TypedConfigureableObject, PositionableElement, ColorizableElement, IVarElement {
 	/**
 	 * Returns the value of the '<em><b>Width</b></em>' attribute.
 	 * The default value is <code>"200"</code>.
@@ -61,18 +60,6 @@ public interface Segment extends TypedConfigureableObject, PositionableElement, 
 	 * @generated
 	 */
 	void setWidth(int value);
-
-	/**
-	 * Returns the value of the '<em><b>Var Declarations</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Var Declarations</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage#getSegment_VarDeclarations()
-	 * @model containment="true" resolveProxies="true"
-	 * @generated
-	 */
-	EList<VarDeclaration> getVarDeclarations();
 
 	/**
 	 * Returns the value of the '<em><b>Out Connections</b></em>' reference list.

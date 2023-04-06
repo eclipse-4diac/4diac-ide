@@ -36,6 +36,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.deployment.AbstractFileManagementHandler;
 import org.eclipse.fordiac.ide.deployment.DeploymentCoordinator;
 import org.eclipse.fordiac.ide.deployment.IDeviceManagementCommunicationHandler;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
+import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.fmu.Activator;
 import org.eclipse.fordiac.ide.fmu.Messages;
 import org.eclipse.fordiac.ide.fmu.preferences.PreferenceConstants;
@@ -54,7 +56,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Resource;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.systemmanagement.SystemManager;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
@@ -730,13 +731,10 @@ public final class FMUDeviceManagementCommunicationHandler extends AbstractFileM
 		}
 
 		if (value != null && !value.getValue().isEmpty()) { // has some literal
-			initialValue = value.getValue();
-			if (initialValue.contains("%")) { //$NON-NLS-1$
-				final String replaced = SystemManager.INSTANCE.getReplacedString(paFBNetwork.getAutomationSystem(),
-						initialValue);
-				if (replaced != null) {
-					initialValue = replaced;
-				}
+			try {
+				initialValue = DeploymentHelper.getVariableValue(variable);
+			} catch (final DeploymentException e) {
+				FordiacLogHelper.logWarning(e.getMessage(), e);
 			}
 			if (-1 != initialValue.indexOf('#')) {
 				if (FMUInputOutput.variableType.UNKNOWN == type) {

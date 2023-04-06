@@ -107,6 +107,10 @@
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence">
       </handler>
       <handler
+            class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.CreateAllServiceSequencesHandler"
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createAllSequences">
+      </handler> 
+      <handler
             class="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler.SetServiceSequenceTypeHandler"
             commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.setPossible">
       </handler>
@@ -140,7 +144,11 @@
       <command
             id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.recordSequence"
             name="Record Service Sequence">
-      </command>      
+      </command>
+      <command
+            id="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createAllSequences"
+            name="Create all Service Sequences">
+      </command>    
    </extension>
    <extension
            point="org.eclipse.ui.menus">
@@ -297,6 +305,21 @@
                        				value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.ServiceSequenceEditPart" />
             				<instanceof
                        				value="org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence" />
+            			</or>
+            		</iterate>
+            	</with>
+            </visibleWhen>
+       </command>
+	   <command
+            commandId="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.createAllSequences"
+            label="Create all Service Sequences"
+            style="push">
+            <visibleWhen checkEnabled="true">
+            	<with variable="selection">
+            		<iterate>
+            			<or>
+            				<instanceof
+                       			value="org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart" />
             			</or>
             		</iterate>
             	</with>

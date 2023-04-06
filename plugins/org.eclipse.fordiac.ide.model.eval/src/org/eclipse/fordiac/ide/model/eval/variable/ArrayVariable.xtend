@@ -13,7 +13,6 @@
 package org.eclipse.fordiac.ide.model.eval.variable
 
 import java.util.List
-import java.util.regex.Pattern
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataFactory
 import org.eclipse.fordiac.ide.model.data.DataType
@@ -29,15 +28,13 @@ import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
 
 class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Variable<?>> {
-	static final Pattern ARRAY_PATTERN = Pattern.compile(",(?=(?:[^\"']*(?:(?:\"[^\"]*\")|(?:\'[^\']*\')))*[^\"']*$)")
-
 	@Accessors final DataType elementType
 	@Accessors final List<Variable<?>> elements
 	@Accessors final ArrayValue value
 
 	new(String name, ArrayType type) {
 		super(name, type)
-		if(!type.subranges.forall[setLowerLimit && setUpperLimit]) {
+		if (!type.subranges.forall[isSetLowerLimit && isSetUpperLimit]) {
 			throw new IllegalArgumentException("Cannot instantiate array variable with unknown bounds")
 		}
 		elementType = if (type.subranges.size > 1)
@@ -56,7 +53,7 @@ class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Var
 	}
 
 	new(String name, ArrayType type, Value value) {
-		this(name, type)
+		this(name, type.withKnownBounds(value))
 		if(value !== null) this.value = value
 	}
 
@@ -70,36 +67,31 @@ class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Var
 	}
 
 	override setValue(String value) {
-		val trimmed = value.trim
-		if (!trimmed.startsWith("[") || !trimmed.endsWith("]")) {
-			throw new IllegalArgumentException("Not a valid array value")
-		}
-		val inner = trimmed.substring(1, trimmed.length - 1)
-		ARRAY_PATTERN.split(inner).forEach [ elem, index |
-			elements.get(index).value = elem.trim
-		]
+		value = VariableOperations.evaluateValue(type, value)
 	}
 
 	override validateValue(String value) {
-		val trimmed = value.trim
-		if (!trimmed.startsWith("[") || !trimmed.endsWith("]")) {
-			return false
-		}
-		val inner = trimmed.substring(1, trimmed.length - 1)
-		val elementStrings = ARRAY_PATTERN.split(inner)
-		if(elementStrings.size > elements.size) {
-			return false
-		}
-		for (i : 0 ..< elementStrings.size) {
-			if (!elements.get(i).validateValue(elementStrings.get(i).trim)) {
-				return false
-			}
-		}
-		return true
+		VariableOperations.validateValue(type, value).nullOrEmpty
 	}
 
 	override ArrayType getType() {
 		super.type as ArrayType
+	}
+
+	def protected static ArrayType withKnownBounds(ArrayType type, Value value) {
+		if (value instanceof ArrayValue) {
+			type.withKnownBounds(value.type.subranges)
+		} else
+			throw new ClassCastException('''Cannot assign value with incompatible type «value.type.name» as «type.name»''')
+	}
+
+	def protected static ArrayType withKnownBounds(ArrayType type, List<Subrange> knownSubranges) {
+		if (!type.subranges.forall[isSetLowerLimit && isSetUpperLimit]) {
+			type.baseType.newArrayType(type.subranges.indexed.map [
+				it.value.isSetLowerLimit && it.value.isSetUpperLimit ? it.value : knownSubranges.get(it.key)
+			].map[copy])
+		} else
+			type
 	}
 
 	def static ArrayType newArrayType(DataType arrayBaseType, Subrange... arraySubranges) {
@@ -108,7 +100,7 @@ class ArrayVariable extends AbstractVariable<ArrayValue> implements Iterable<Var
 
 	def static ArrayType newArrayType(DataType arrayBaseType, Iterable<Subrange> arraySubranges) {
 		DataFactory.eINSTANCE.createArrayType => [
-			name = '''ARRAY [«arraySubranges.map['''«IF setLowerLimit && setUpperLimit»«lowerLimit»..«upperLimit»«ELSE»*«ENDIF»'''].join(", ")»] OF «arrayBaseType.name»'''
+			name = '''ARRAY [«arraySubranges.map['''«IF isSetLowerLimit && isSetUpperLimit»«lowerLimit»..«upperLimit»«ELSE»*«ENDIF»'''].join(", ")»] OF «arrayBaseType.name»'''
 			baseType = arrayBaseType
 			subranges.addAll(arraySubranges)
 		]

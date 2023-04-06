@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.importWizards">
+      <category
+            id="org.eclipse.fordiac.ide.gitlab.wizard.sampleCategory"
+            name="GitLab">
+      </category>
+      <wizard
+            category="org.eclipse.fordiac.ide.gitlab.wizard.sampleCategory"
+            class="org.eclipse.fordiac.ide.gitlab.wizard.GitLabImportWizard"
+            icon="icons/sample.png"
+            id="org.eclipse.fordiac.ide.gitlab.wizard.GitLabImportWizard"
+            name="Package Import">
+         <description>
+            Import a file from GitLab into the workspace.
+         </description>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="org.eclipse.fordiac.ide.preferences.FordiacPreferencePage"
+            class="org.eclipse.fordiac.ide.gitlab.preferences.GitLabPackageDownloaderPage"
+            id="org.eclipse.fordiac.ide.gitlab.preferences.GitLabPackageDownloaderPage"
+            name="GitLab Package Downloader">
+      </page>
+   </extension>
+</plugin>

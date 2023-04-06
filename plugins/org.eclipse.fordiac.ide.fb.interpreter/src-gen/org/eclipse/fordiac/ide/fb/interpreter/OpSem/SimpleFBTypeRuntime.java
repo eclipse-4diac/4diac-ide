@@ -15,54 +15,43 @@ package org.eclipse.fordiac.ide.fb.interpreter.OpSem;
 
 import org.eclipse.fordiac.ide.model.libraryElement.SimpleFBType;
 
-/**
- * <!-- begin-user-doc --> A representation of the model object '<em><b>Simple
- * FB Type Runtime</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> A representation of the model object '<em><b>Simple FB Type Runtime</b></em>'. <!--
+ * end-user-doc -->
  *
  * <p>
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime#getSimpleFBType
- * <em>Simple FB Type</em>}</li>
+ * <li>{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime#getSimpleFBType <em>Simple FB
+ * Type</em>}</li>
  * </ul>
  *
  * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getSimpleFBTypeRuntime()
  * @model
- * @generated
- */
+ * @generated */
 public interface SimpleFBTypeRuntime extends FBRuntimeAbstract {
-	/**
-	 * Returns the value of the '<em><b>Simple FB Type</b></em>' containment
-	 * reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** Returns the value of the '<em><b>Simple FB Type</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
 	 * @return the value of the '<em>Simple FB Type</em>' containment reference.
 	 * @see #setSimpleFBType(SimpleFBType)
 	 * @see org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage#getSimpleFBTypeRuntime_SimpleFBType()
 	 * @model containment="true" resolveProxies="true" required="true"
-	 * @generated
-	 */
+	 * @generated */
 	SimpleFBType getSimpleFBType();
 
-	/**
-	 * Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime#getSimpleFBType
-	 * <em>Simple FB Type</em>}' containment reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** Sets the value of the '{@link org.eclipse.fordiac.ide.fb.interpreter.OpSem.SimpleFBTypeRuntime#getSimpleFBType
+	 * <em>Simple FB Type</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @param value the new value of the '<em>Simple FB Type</em>' containment
-	 *              reference.
+	 * @param value the new value of the '<em>Simple FB Type</em>' containment reference.
 	 * @see #getSimpleFBType()
-	 * @generated
-	 */
+	 * @generated */
 	void setSimpleFBType(SimpleFBType value);
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @model kind="operation" required="true"
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	SimpleFBType getModel();
 

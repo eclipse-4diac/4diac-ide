@@ -160,7 +160,7 @@ public abstract class AbstractTypeEntryImpl extends BasicNotifierImpl implements
 
 	@Override
 	public synchronized LibraryElement getTypeEditable() {
-		if ((getFile() != null) && (typeEditable == null || isFileContentChanged())) {
+		if ((getFile() != null) && (typeEditable == null  || isFileContentChanged() )) {
 			// if the editable type is null load it from the file and set a copy
 			setTypeEditable(EcoreUtil.copy(getType()));
 		}

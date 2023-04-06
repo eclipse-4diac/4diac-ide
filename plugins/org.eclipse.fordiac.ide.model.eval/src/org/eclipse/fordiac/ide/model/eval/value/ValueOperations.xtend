@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.value
 
+import java.math.BigDecimal
 import java.nio.charset.StandardCharsets
 import java.time.Duration
 import java.time.LocalDate
@@ -67,6 +68,8 @@ import org.eclipse.fordiac.ide.model.eval.variable.ArrayVariable
 import org.eclipse.fordiac.ide.model.eval.variable.StructVariable
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement
 import org.eclipse.fordiac.ide.model.value.TypedValueConverter
+import org.eclipse.fordiac.ide.model.data.ArrayType
+import org.eclipse.fordiac.ide.model.data.StructuredType
 
 final class ValueOperations {
 
@@ -929,16 +932,41 @@ final class ValueOperations {
 				LDateValue.DEFAULT
 			DateType:
 				DateValue.DEFAULT
+			AnyDateType:
+				LDateAndTimeValue.DEFAULT
+			AnyCharType:
+				WCharValue.DEFAULT
+			AnyStringType,
+			AnyCharsType:
+				WStringValue.DEFAULT
+			AnyBitType:
+				DWordValue.DEFAULT
+			AnyDurationType:
+				LTimeValue.DEFAULT
+			AnyRealType:
+				LRealValue.DEFAULT
+			AnyUnsignedType:
+				UDIntValue.DEFAULT
+			AnySignedType,
+			AnyIntType,
+			AnyNumType,
+			AnyMagnitudeType,
+			AnyElementaryType,
+			AnyType:
+				DIntValue.DEFAULT
 			default:
 				throw new UnsupportedOperationException('''The type «type.name» does not have a default''')
 		}
 	}
 
 	def static dispatch Value castValue(Value value, INamedElement type) {
-		if (value.type != type) {
-			throw new ClassCastException('''The value «value» with type «value.type.name» cannot be cast to «type.name»''')
+		switch (type) {
+			case value.type == type,
+			DataType case value.type instanceof DataType && type.isAssignableFrom(value.type as DataType):
+				value
+			default:
+				throw new ClassCastException('''The value «value» with type «value.type.name» cannot be cast to «type.name»''')
 		}
-		return value
 	}
 
 	def static dispatch Value castValue(Void value, INamedElement type) { null }
@@ -956,6 +984,8 @@ final class ValueOperations {
 				WordValue.toWordValue(value.shortValue)
 			ByteType:
 				ByteValue.toByteValue(value.byteValue)
+			DataType case type.isAssignableFrom(value.type):
+				value
 			default:
 				throw new ClassCastException('''The value «value» with type «value.type.name» cannot be cast to «type.name»''')
 		}
@@ -998,6 +1028,8 @@ final class ValueOperations {
 				WordValue.toWordValue(value.shortValue)
 			ByteType:
 				ByteValue.toByteValue(value.byteValue)
+			DataType case type.isAssignableFrom(value.type):
+				value
 			default:
 				throw new ClassCastException('''The value «value» with type «value.type.name» cannot be cast to «type.name»''')
 		}
@@ -1036,6 +1068,8 @@ final class ValueOperations {
 				WordValue.toWordValue(value)
 			ByteType:
 				ByteValue.toByteValue(value)
+			DataType case type.isAssignableFrom(value.type):
+				value
 			default:
 				throw new ClassCastException('''The value «value» with type «value.type.name» cannot be cast to «type.name»''')
 		}
@@ -1060,6 +1094,8 @@ final class ValueOperations {
 				WCharValue.toWCharValue(value)
 			CharType:
 				CharValue.toCharValue(value)
+			DataType case type.isAssignableFrom(value.type):
+				value
 			default:
 				throw new ClassCastException('''The value «value» with type «value.type.name» cannot be cast to «type.name»''')
 		}
@@ -1082,6 +1118,8 @@ final class ValueOperations {
 				LDateValue.toLDateValue(value)
 			DateType:
 				DateValue.toDateValue(value)
+			DataType case type.isAssignableFrom(value.type):
+				value
 			default:
 				throw new ClassCastException('''The value «value» with type «value.type.name» cannot be cast to «type.name»''')
 		}
@@ -1239,6 +1277,91 @@ final class ValueOperations {
 						LocalDate: DateValue.toDateValue(value)
 						default: DateValue.toDateValue(value.toString)
 					}
+				AnyDateType:
+					switch (value) {
+						Number: LDateAndTimeValue.toLDateAndTimeValue(value)
+						LocalDateTime: LDateAndTimeValue.toLDateAndTimeValue(value)
+						LocalTime: LTimeOfDayValue.toLTimeOfDayValue(value)
+						LocalDate: LDateValue.toLDateValue(value)
+						default: LDateAndTimeValue.toLDateAndTimeValue(value.toString)
+					}
+				AnyCharType:
+					switch (value) {
+						Byte: CharValue.toCharValue(value)
+						Character: WCharValue.toWCharValue(value.charValue)
+						default: WCharValue.toWCharValue(value.toString)
+					}
+				AnyStringType,
+				AnyCharsType:
+					WStringValue.toWStringValue(value.toString)
+				AnyBitType:
+					switch (value) {
+						Byte: ByteValue.toByteValue(value)
+						Short: WordValue.toWordValue(value)
+						Character: WordValue.toWordValue(value.charValue as int)
+						Integer: DWordValue.toDWordValue(value)
+						Long: LWordValue.toLWordValue(value)
+						Number: DWordValue.toDWordValue(value)
+						default: DWordValue.toDWordValue(value.toString)
+					}
+				AnyDurationType:
+					switch (value) {
+						Number: LTimeValue.toLTimeValue(value)
+						Duration: LTimeValue.toLTimeValue(value)
+						default: LTimeValue.toLTimeValue(value.toString)
+					}
+				AnyRealType:
+					switch (value) {
+						Float: RealValue.toRealValue(value)
+						Number: LRealValue.toLRealValue(value)
+						default: LRealValue.toLRealValue(value.toString)
+					}
+				AnyUnsignedType:
+					switch (value) {
+						Byte: USIntValue.toUSIntValue(value)
+						Short: UIntValue.toUIntValue(value)
+						Character: UIntValue.toUIntValue(value.charValue as int)
+						Integer: UDIntValue.toUDIntValue(value)
+						Long: ULIntValue.toULIntValue(value)
+						Number: UDIntValue.toUDIntValue(value)
+						default: UDIntValue.toUDIntValue(value.toString)
+					}
+				AnySignedType:
+					switch (value) {
+						Byte: SIntValue.toSIntValue(value)
+						Short: IntValue.toIntValue(value)
+						Character: IntValue.toIntValue(value.charValue as int)
+						Integer: DIntValue.toDIntValue(value)
+						Long: LIntValue.toLIntValue(value)
+						Number: DIntValue.toDIntValue(value)
+						default: DIntValue.toDIntValue(value.toString)
+					}
+				AnyIntType:
+					switch (value) {
+						Byte: SIntValue.toSIntValue(value)
+						Short: IntValue.toIntValue(value)
+						Character: UIntValue.toUIntValue(value.charValue as int)
+						Integer: DIntValue.toDIntValue(value)
+						Long: LIntValue.toLIntValue(value)
+						Number: DIntValue.toDIntValue(value)
+						default: DIntValue.toDIntValue(value.toString)
+					}
+				AnyNumType,
+				AnyMagnitudeType,
+				AnyElementaryType,
+				AnyType:
+					switch (value) {
+						Byte: SIntValue.toSIntValue(value)
+						Short: IntValue.toIntValue(value)
+						Character: UIntValue.toUIntValue(value.charValue as int)
+						Integer: DIntValue.toDIntValue(value)
+						Long: LIntValue.toLIntValue(value)
+						Float: RealValue.toRealValue(value)
+						Double: LRealValue.toLRealValue(value)
+						BigDecimal: LRealValue.toLRealValue(value)
+						Number: DIntValue.toDIntValue(value)
+						default: DIntValue.toDIntValue(value.toString)
+					}
 				default:
 					throw new UnsupportedOperationException('''The type «type.name» is not supported''')
 			}
@@ -1296,6 +1419,8 @@ final class ValueOperations {
 			AnyCharsType: AnyCharsValue
 			AnyDateType: AnyDateValue
 			AnyElementaryType: AnyElementaryValue
+			ArrayType: ArrayValue
+			StructuredType: StructValue
 			AnyDerivedType: AnyDerivedValue
 			AnyType: AnyValue
 			default: null

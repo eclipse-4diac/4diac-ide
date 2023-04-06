@@ -36,6 +36,11 @@ class FBVariable extends AbstractVariable<FBValue> {
 		this(name, type, emptySet)
 	}
 
+	new(String name, FBType type, String value) {
+		this(name, type)
+		if(!value.nullOrEmpty) this.value = value
+	}
+
 	new(String name, FBType type, Value value) {
 		this(name, type)
 		if(value !== null) this.value = value

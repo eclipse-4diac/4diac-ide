@@ -17,7 +17,7 @@ import org.eclipse.emf.compare.scope.IComparisonScope;
 
 public class FordiacMatchEngineFactory implements IMatchEngine.Factory {
 
-	private int ranking = 20;
+	private int ranking;
 
 	@Override
 	public IMatchEngine getMatchEngine() {
@@ -31,7 +31,7 @@ public class FordiacMatchEngineFactory implements IMatchEngine.Factory {
 
 	@Override
 	public void setRanking(final int parseInt) {
-		this.ranking = 20;
+		this.ranking = parseInt;
 	}
 
 	@Override

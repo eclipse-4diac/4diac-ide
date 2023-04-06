@@ -17,6 +17,7 @@ import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.emf.common.util.SegmentSequence;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -24,6 +25,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
@@ -89,6 +91,19 @@ public final class FordiacErrorMarker {
 			}
 			final ResourceSet resourceSet = new ResourceSetImpl();
 			return resourceSet.getEObject(targetUri, true);
+		}
+		return null;
+	}
+
+	public static EObject getTargetRelative(final IMarker marker, final EObject root)
+			throws IllegalArgumentException, CoreException {
+		final URI targetUri = FordiacErrorMarker.getTargetUri(marker);
+		if (targetUri != null) {
+			final SegmentSequence segments = SegmentSequence.create("/", targetUri.fragment()); //$NON-NLS-1$
+			if (segments.segmentCount() > 2) {
+				final String relativeFragment = String.join("/", segments.subSegments(2)); //$NON-NLS-1$
+				return EcoreUtil.getEObject(root, relativeFragment);
+			}
 		}
 		return null;
 	}

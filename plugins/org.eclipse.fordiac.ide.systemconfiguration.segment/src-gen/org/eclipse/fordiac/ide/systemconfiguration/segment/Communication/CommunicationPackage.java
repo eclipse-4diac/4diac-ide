@@ -103,8 +103,8 @@ public interface CommunicationPackage extends EPackage {
 	 * @ordered */
 	int TSN_WINDOW__COMMENT = LibraryElementPackage.COMMUNICATION_MAPPING_TARGET__COMMENT;
 
-	/** The feature id for the '<em><b>Mapped Elements</b></em>' reference list. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The feature id for the '<em><b>Mapped Elements</b></em>' containment reference list. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
 	 * @generated
 	 * @ordered */

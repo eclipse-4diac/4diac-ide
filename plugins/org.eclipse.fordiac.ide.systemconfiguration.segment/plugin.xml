@@ -17,13 +17,13 @@
          point="org.eclipse.fordiac.ide.systemconfiguration.communication">
       <communicationProtocol
             class="org.eclipse.fordiac.ide.systemconfiguration.segment.properties.TsnDetails"
-            id="tsnConfig"
+            id="EthernetTSN"
             label="TSN"
             name="tsnProtocol">
       </communicationProtocol>
       <communicationProtocol
             class="org.eclipse.fordiac.ide.systemconfiguration.segment.properties.DefaultCommDetails"
-            id="defaultConfig"
+            id="Ethernet"
             label="Default"
             name="defaultProtocol">
       </communicationProtocol>

@@ -41,10 +41,10 @@ public interface CommunicationConfiguration extends EObject {
 	/**
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @model kind="operation" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
+	 * @model kind="operation"
 	 * @generated
 	 */
-	String getId();
+	EList<CommunicationMappingTarget> getMappingTargets();
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -52,6 +52,6 @@ public interface CommunicationConfiguration extends EObject {
 	 * @model kind="operation"
 	 * @generated
 	 */
-	EList<CommunicationMappingTarget> getMappingTargets();
+	EList<VarDeclaration> getParameters();
 
 } // CommunicationConfiguration

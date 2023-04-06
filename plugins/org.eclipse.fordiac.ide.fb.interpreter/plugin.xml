@@ -60,4 +60,27 @@
        </command>
 	</menuContribution>
 </extension>
+   <extension
+         point="org.eclipse.emf.compare.rcp.matchEngine">
+      <engineFactory
+            class="org.eclipse.fordiac.ide.fb.interpreter.compare.FordiacForteInterpreterMatchEngine"
+            ranking="150">
+      </engineFactory>
+   </extension>
+   <extension
+         point="org.eclipse.core.contenttype.contentTypes">
+      <file-association
+            content-type=" org.eclipse.emf.compare.content.type"
+            file-extensions="opsem">
+      </file-association>
+   </extension>
+   <extension
+         point="org.eclipse.emf.compare.edit.adapterFactory">
+      <factory
+            class="org.eclipse.fordiac.ide.fb.interpreter.compare.OpSemRankedAdapterFactory"
+            ranking="150"
+            supportedTypes="org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager"
+            uri="http://OperationalSemantics/1.0">
+      </factory>
+   </extension>
 </plugin>

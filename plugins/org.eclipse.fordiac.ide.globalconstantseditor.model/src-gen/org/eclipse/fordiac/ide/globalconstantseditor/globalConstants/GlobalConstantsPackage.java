@@ -7,6 +7,7 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STCorePackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -57,6 +58,43 @@ public interface GlobalConstantsPackage extends EPackage {
 	GlobalConstantsPackage eINSTANCE = org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.GlobalConstantsPackageImpl.init();
 
 	/**
+	 * The meta object id for the '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STGlobalConstsSourceImpl <em>ST Global Consts Source</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STGlobalConstsSourceImpl
+	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.GlobalConstantsPackageImpl#getSTGlobalConstsSource()
+	 * @generated
+	 */
+	int ST_GLOBAL_CONSTS_SOURCE = 0;
+
+	/**
+	 * The feature id for the '<em><b>Comments</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_GLOBAL_CONSTS_SOURCE__COMMENTS = STCorePackage.ST_SOURCE__COMMENTS;
+
+	/**
+	 * The feature id for the '<em><b>Elements</b></em>' containment reference list.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_GLOBAL_CONSTS_SOURCE__ELEMENTS = STCorePackage.ST_SOURCE_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of structural features of the '<em>ST Global Consts Source</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int ST_GLOBAL_CONSTS_SOURCE_FEATURE_COUNT = STCorePackage.ST_SOURCE_FEATURE_COUNT + 1;
+
+	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STVarGlobalDeclarationBlockImpl <em>ST Var Global Declaration Block</em>}' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -64,7 +102,7 @@ public interface GlobalConstantsPackage extends EPackage {
 	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.GlobalConstantsPackageImpl#getSTVarGlobalDeclarationBlock()
 	 * @generated
 	 */
-	int ST_VAR_GLOBAL_DECLARATION_BLOCK = 0;
+	int ST_VAR_GLOBAL_DECLARATION_BLOCK = 1;
 
 	/**
 	 * The feature id for the '<em><b>Constant</b></em>' attribute.
@@ -73,7 +111,7 @@ public interface GlobalConstantsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_VAR_GLOBAL_DECLARATION_BLOCK__CONSTANT = 0;
+	int ST_VAR_GLOBAL_DECLARATION_BLOCK__CONSTANT = STCorePackage.ST_VAR_DECLARATION_BLOCK__CONSTANT;
 
 	/**
 	 * The feature id for the '<em><b>Var Declarations</b></em>' containment reference list.
@@ -82,7 +120,7 @@ public interface GlobalConstantsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS = 1;
+	int ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS = STCorePackage.ST_VAR_DECLARATION_BLOCK__VAR_DECLARATIONS;
 
 	/**
 	 * The number of structural features of the '<em>ST Var Global Declaration Block</em>' class.
@@ -91,8 +129,29 @@ public interface GlobalConstantsPackage extends EPackage {
 	 * @generated
 	 * @ordered
 	 */
-	int ST_VAR_GLOBAL_DECLARATION_BLOCK_FEATURE_COUNT = 2;
+	int ST_VAR_GLOBAL_DECLARATION_BLOCK_FEATURE_COUNT = STCorePackage.ST_VAR_DECLARATION_BLOCK_FEATURE_COUNT + 0;
 
+
+	/**
+	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource <em>ST Global Consts Source</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>ST Global Consts Source</em>'.
+	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource
+	 * @generated
+	 */
+	EClass getSTGlobalConstsSource();
+
+	/**
+	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getElements <em>Elements</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference list '<em>Elements</em>'.
+	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STGlobalConstsSource#getElements()
+	 * @see #getSTGlobalConstsSource()
+	 * @generated
+	 */
+	EReference getSTGlobalConstsSource_Elements();
 
 	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock <em>ST Var Global Declaration Block</em>}'.
@@ -103,28 +162,6 @@ public interface GlobalConstantsPackage extends EPackage {
 	 * @generated
 	 */
 	EClass getSTVarGlobalDeclarationBlock();
-
-	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock#isConstant <em>Constant</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Constant</em>'.
-	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock#isConstant()
-	 * @see #getSTVarGlobalDeclarationBlock()
-	 * @generated
-	 */
-	EAttribute getSTVarGlobalDeclarationBlock_Constant();
-
-	/**
-	 * Returns the meta object for the containment reference list '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock#getVarDeclarations <em>Var Declarations</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the containment reference list '<em>Var Declarations</em>'.
-	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock#getVarDeclarations()
-	 * @see #getSTVarGlobalDeclarationBlock()
-	 * @generated
-	 */
-	EReference getSTVarGlobalDeclarationBlock_VarDeclarations();
 
 	/**
 	 * Returns the factory that creates the instances of the model.
@@ -149,6 +186,24 @@ public interface GlobalConstantsPackage extends EPackage {
 	 */
 	interface Literals {
 		/**
+		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STGlobalConstsSourceImpl <em>ST Global Consts Source</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STGlobalConstsSourceImpl
+		 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.GlobalConstantsPackageImpl#getSTGlobalConstsSource()
+		 * @generated
+		 */
+		EClass ST_GLOBAL_CONSTS_SOURCE = eINSTANCE.getSTGlobalConstsSource();
+
+		/**
+		 * The meta object literal for the '<em><b>Elements</b></em>' containment reference list feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference ST_GLOBAL_CONSTS_SOURCE__ELEMENTS = eINSTANCE.getSTGlobalConstsSource_Elements();
+
+		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.impl.STVarGlobalDeclarationBlockImpl <em>ST Var Global Declaration Block</em>}' class.
 		 * <!-- begin-user-doc -->
 		 * <!-- end-user-doc -->
@@ -157,22 +212,6 @@ public interface GlobalConstantsPackage extends EPackage {
 		 * @generated
 		 */
 		EClass ST_VAR_GLOBAL_DECLARATION_BLOCK = eINSTANCE.getSTVarGlobalDeclarationBlock();
-
-		/**
-		 * The meta object literal for the '<em><b>Constant</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute ST_VAR_GLOBAL_DECLARATION_BLOCK__CONSTANT = eINSTANCE.getSTVarGlobalDeclarationBlock_Constant();
-
-		/**
-		 * The meta object literal for the '<em><b>Var Declarations</b></em>' containment reference list feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EReference ST_VAR_GLOBAL_DECLARATION_BLOCK__VAR_DECLARATIONS = eINSTANCE.getSTVarGlobalDeclarationBlock_VarDeclarations();
 
 	}
 

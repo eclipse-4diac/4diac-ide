@@ -44,14 +44,14 @@ public final class RuntimeFactory {
 	}
 
 	public static FBRuntimeAbstract createFrom(final FBType fbType) {
-		if (fbType instanceof BasicFBType) {
-			return (createFrom((BasicFBType) fbType));
+		if (fbType instanceof final BasicFBType basic) {
+			return (createFrom(basic));
 		}
-		if (fbType instanceof SimpleFBType) {
-			return (createFrom((SimpleFBType) fbType));
+		if (fbType instanceof final SimpleFBType simple) {
+			return (createFrom(simple));
 		}
-		if (fbType instanceof CompositeFBType) {
-			return (createFrom((CompositeFBType) fbType));
+		if (fbType instanceof final CompositeFBType composite) {
+			return (createFrom(composite));
 		}
 		return null;
 	}
@@ -95,8 +95,7 @@ public final class RuntimeFactory {
 	}
 
 	public static void setStartState(final FBRuntimeAbstract fbRT, final String startStateName) {
-		if (fbRT instanceof BasicFBTypeRuntime) {
-			final BasicFBTypeRuntime basicFBTypeRT = (BasicFBTypeRuntime) fbRT;
+		if (fbRT instanceof final BasicFBTypeRuntime basicFBTypeRT) {
 			if ((basicFBTypeRT.getBasicfbtype() == null) || (basicFBTypeRT.getBasicfbtype().getECC() == null)) {
 				FordiacLogHelper.logWarning("RuntimeFactory could not set start state of FBType"); //$NON-NLS-1$
 				return;

@@ -22,17 +22,20 @@ import org.eclipse.xtext.ui.editor.model.XtextDocument
 import org.eclipse.xtext.ui.editor.model.edit.ITextEditComposer
 
 class FBTypeXtextDocument extends XtextDocument implements IAdaptable {
-	
+
 	@Inject
 	new(DocumentTokenSource tokenSource, ITextEditComposer composer) {
 		super(tokenSource, composer)
 	}
 
 	override <T> T getAdapter(Class<T> adapterType) {
-		if(FBType.equals(adapterType)) adapterType.cast(FBType) else super.getAdapter(adapterType);
+		if (FBType === adapterType)
+			adapterType.cast(resourceFBType)
+		else
+			super.getAdapter(adapterType);
 	}
 
-	def FBType getFBType() {
+	def FBType getResourceFBType() {
 		readOnly[resource|if(resource instanceof FBTypeXtextResource) resource.fbType else null]
 	}
 }

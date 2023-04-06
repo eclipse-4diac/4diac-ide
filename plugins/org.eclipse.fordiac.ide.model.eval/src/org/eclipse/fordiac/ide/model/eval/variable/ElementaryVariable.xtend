@@ -12,7 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.variable
 
-import org.eclipse.fordiac.ide.model.data.AnyElementaryType
+import org.eclipse.fordiac.ide.model.data.AnyType
 import org.eclipse.fordiac.ide.model.eval.value.AnyElementaryValue
 import org.eclipse.fordiac.ide.model.eval.value.Value
 import org.eclipse.xtend.lib.annotations.Accessors
@@ -22,15 +22,16 @@ import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations
 final class ElementaryVariable<T extends AnyElementaryValue> extends AbstractVariable<T> {
 	@Accessors(PUBLIC_GETTER) T value
 
-	new(String name, AnyElementaryType type) {
+	new(String name, AnyType type) {
 		this(name, type, null as Value)
 	}
 
-	new(String name, AnyElementaryType type, String value) {
-		this(name, type, value?.parseValue(type))
+	new(String name, AnyType type, String value) {
+		this(name, type)
+		setValue(value)
 	}
 
-	new(String name, AnyElementaryType type, Value value) {
+	new(String name, AnyType type, Value value) {
 		super(name, type)
 		setValue(value)
 	}
@@ -40,15 +41,14 @@ final class ElementaryVariable<T extends AnyElementaryValue> extends AbstractVar
 	}
 
 	override setValue(String value) {
-		setValue(value?.trim.parseValue(type))
+		value = VariableOperations.evaluateValue(type, value)
 	}
 
 	override validateValue(String value) {
-		try {
-			value?.trim.parseValue(type)
-			true
-		} catch (Exception e) {
-			false
-		}
+		VariableOperations.validateValue(type, value).nullOrEmpty
+	}
+
+	override AnyType getType() {
+		super.type as AnyType
 	}
 }

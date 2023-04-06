@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Primetals Technologies Austria GmbH
+ * Copyright (c) 2022, 2023 Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,6 +10,7 @@
  * Contributors:
  *   Fabio Gandolfi
  *     - initial API and implementation and/or initial documentation
+ *   Ernst Blecha - changed base class
  *******************************************************************************/
 package org.eclipse.fordiac.ide.ant.ant;
 
@@ -17,7 +18,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ExportSingleLibElement extends ExportLibElements {
+public class ExportSingleLibElement extends AbstractExportLibElements {
 
 	private String fBNameString;
 

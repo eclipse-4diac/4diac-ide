@@ -92,8 +92,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 				ISources.ACTIVE_CURRENT_SELECTION_NAME);
 
 		boolean enabeled = false;
-		if (sel instanceof StructuredSelection) {
-			final StructuredSelection selection = (StructuredSelection) sel;
+		if (sel instanceof final StructuredSelection selection) {
 			if (createNewEmptyContainerElement(selection)) {
 				enabeled = true;
 			} else {
@@ -106,7 +105,7 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		setBaseEnabled(enabeled);
 	}
 
-	protected abstract AbstractCreateFBNetworkElementCommand createContainerCreationCommand(
+	protected abstract Command createContainerCreationCommand(
 			final List<?> selection, final FBNetwork network, final Rectangle posSizeRef);
 
 	private FBNetwork getFBNetwork(final StructuredSelection selection, final ExecutionEvent event) {
@@ -114,14 +113,11 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 			return getFBNetworkFromContainer(selection.getFirstElement(), event);
 		}
 		for (final Object o : selection) {
-			if (o instanceof EditPart) {
-				final Object model = ((EditPart) o).getModel();
-				if (model instanceof FBNetworkElement) {
-					// we check already in the setEnabled() that we are in the same group and same network so we can
-					// stop at the first element
-					group = ((FBNetworkElement) model).getGroup();
-					return ((FBNetworkElement) model).getFbNetwork();
-				}
+			if ((o instanceof final EditPart ep) && (ep.getModel() instanceof final FBNetworkElement fbnEl)) {
+				// we check already in the setEnabled() that we are in the same group and same network so we can
+				// stop at the first element
+				group = fbnEl.getGroup();
+				return fbnEl.getFbNetwork();
 			}
 		}
 		return null;
@@ -129,15 +125,14 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 
 	protected FBNetwork getFBNetworkFromContainer(final Object selection,
 			final ExecutionEvent event) {
-		if (selection instanceof AbstractContainerContentEditPart) {
-			final FBNetworkElement containerElement = ((AbstractContainerContentEditPart) selection)
-					.getContainerElement();
-			if (containerElement instanceof Group) {
-				group = (Group) containerElement;
+		if (selection instanceof final AbstractContainerContentEditPart cEP) {
+			final FBNetworkElement containerElement = cEP.getContainerElement();
+			if (containerElement instanceof final Group group) {
+				this.group = group;
 				return containerElement.getFbNetwork();
 			}
-			if (containerElement instanceof SubApp) {
-				return ((SubApp) containerElement).getSubAppNetwork();
+			if (containerElement instanceof final SubApp subApp) {
+				return subApp.getSubAppNetwork();
 			}
 		}
 		return HandlerUtil.getActiveEditor(event).getAdapter(FBNetwork.class);
@@ -151,11 +146,11 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		}
 		Rectangle selectionExtend = null;
 		for (final Object selElem : selection.toList()) {
-			if (selElem instanceof GraphicalEditPart
-					&& ((GraphicalEditPart) selElem).getModel() instanceof FBNetworkElement) {
+			if (selElem instanceof final GraphicalEditPart gEP
+					&& gEP.getModel() instanceof final FBNetworkElement fbnEl) {
 				// only consider the selected FBNetworkElements
-				final Rectangle fbBounds = ((GraphicalEditPart) selElem).getFigure().getBounds();
-				final Position position = ((FBNetworkElement) ((GraphicalEditPart) selElem).getModel()).getPosition();
+				final Rectangle fbBounds = gEP.getFigure().getBounds();
+				final Position position = fbnEl.getPosition();
 				fbBounds.x = position.getX();
 				fbBounds.y = position.getY();
 				if (selectionExtend == null) {
@@ -205,17 +200,17 @@ abstract class AbstractContainerElementHandler extends AbstractHandler {
 		return group == null && HandlerUtil.getActiveEditor(event).getAdapter(FBNetwork.class) == network;
 	}
 
-	private static boolean createNewEmptyContainerElement(final StructuredSelection selection) {
+	protected static boolean createNewEmptyContainerElement(final StructuredSelection selection) {
 		return (selection.size() == 1)
-				&& (selection.getFirstElement() instanceof EditPart)
-				&& !(((EditPart) selection.getFirstElement()).getModel() instanceof FBNetworkElement);
+				&& (selection.getFirstElement() instanceof final EditPart ep)
+				&& !(ep.getModel() instanceof FBNetworkElement);
 	}
 
-	protected static Object getModelElement(final Object ep) {
-		if (ep instanceof EditPart) {
-			return ((EditPart) ep).getModel();
+	protected static Object getModelElement(final Object obj) {
+		if (obj instanceof final EditPart ep) {
+			return ep.getModel();
 		}
-		return ep;
+		return obj;
 	}
 
 	private GraphicalEditPart getContainerEP(final EditPartViewer viewer, final FBNetwork network) {

@@ -341,7 +341,7 @@
       <extension
          point="org.eclipse.ltk.core.refactoring.renameParticipants">
       <renameParticipant
-            class="org.eclipse.fordiac.ide.typemanagement.RenameType"
+            class="org.eclipse.fordiac.ide.typemanagement.refactoring.RenameType"
             id="org.eclipse.fordiac.ide.typemanagement.renameType"
             name="Rename Type handler">
          <enablement>

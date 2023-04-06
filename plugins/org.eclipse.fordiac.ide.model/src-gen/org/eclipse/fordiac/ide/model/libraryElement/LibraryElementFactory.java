@@ -36,6 +36,15 @@ public interface LibraryElementFactory extends EFactory {
 	LibraryElementFactory eINSTANCE = org.eclipse.fordiac.ide.model.libraryElement.impl.LibraryElementFactoryImpl.init();
 
 	/**
+	 * Returns a new object of class '<em>Adapter Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Adapter Connection</em>'.
+	 * @generated
+	 */
+	AdapterConnection createAdapterConnection();
+
+	/**
 	 * Returns a new object of class '<em>Adapter Declaration</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -43,6 +52,24 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	AdapterDeclaration createAdapterDeclaration();
+
+	/**
+	 * Returns a new object of class '<em>Adapter FB</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Adapter FB</em>'.
+	 * @generated
+	 */
+	AdapterFB createAdapterFB();
+
+	/**
+	 * Returns a new object of class '<em>Adapter FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Adapter FB Type</em>'.
+	 * @generated
+	 */
+	AdapterFBType createAdapterFBType();
 
 	/**
 	 * Returns a new object of class '<em>Adapter Type</em>'.
@@ -63,6 +90,33 @@ public interface LibraryElementFactory extends EFactory {
 	Application createApplication();
 
 	/**
+	 * Returns a new object of class '<em>Attribute</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Attribute</em>'.
+	 * @generated
+	 */
+	Attribute createAttribute();
+
+	/**
+	 * Returns a new object of class '<em>Attribute Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Attribute Declaration</em>'.
+	 * @generated
+	 */
+	AttributeDeclaration createAttributeDeclaration();
+
+	/**
+	 * Returns a new object of class '<em>Base FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Base FB Type</em>'.
+	 * @generated
+	 */
+	BaseFBType createBaseFBType();
+
+	/**
 	 * Returns a new object of class '<em>Basic FB Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -72,13 +126,76 @@ public interface LibraryElementFactory extends EFactory {
 	BasicFBType createBasicFBType();
 
 	/**
-	 * Returns a new object of class '<em>Compiler Info</em>'.
+	 * Returns a new object of class '<em>Automation System</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Compiler Info</em>'.
+	 * @return a new object of class '<em>Automation System</em>'.
 	 * @generated
 	 */
-	CompilerInfo createCompilerInfo();
+	AutomationSystem createAutomationSystem();
+
+	/**
+	 * Returns a new object of class '<em>CFB Instance</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>CFB Instance</em>'.
+	 * @generated
+	 */
+	CFBInstance createCFBInstance();
+
+	/**
+	 * Returns a new object of class '<em>Color</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Color</em>'.
+	 * @generated
+	 */
+	Color createColor();
+
+	/**
+	 * Returns a new object of class '<em>Colorizable Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Colorizable Element</em>'.
+	 * @generated
+	 */
+	ColorizableElement createColorizableElement();
+
+	/**
+	 * Returns a new object of class '<em>Comment</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Comment</em>'.
+	 * @generated
+	 */
+	Comment createComment();
+
+	/**
+	 * Returns a new object of class '<em>Communication Channel</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Communication Channel</em>'.
+	 * @generated
+	 */
+	CommunicationChannel createCommunicationChannel();
+
+	/**
+	 * Returns a new object of class '<em>Communication Mapping Target</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Communication Mapping Target</em>'.
+	 * @generated
+	 */
+	CommunicationMappingTarget createCommunicationMappingTarget();
+
+	/**
+	 * Returns a new object of class '<em>Compilable Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Compilable Type</em>'.
+	 * @generated
+	 */
+	CompilableType createCompilableType();
 
 	/**
 	 * Returns a new object of class '<em>Compiler</em>'.
@@ -90,6 +207,33 @@ public interface LibraryElementFactory extends EFactory {
 	Compiler createCompiler();
 
 	/**
+	 * Returns a new object of class '<em>Compiler Info</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Compiler Info</em>'.
+	 * @generated
+	 */
+	CompilerInfo createCompilerInfo();
+
+	/**
+	 * Returns a new object of class '<em>Composite FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Composite FB Type</em>'.
+	 * @generated
+	 */
+	CompositeFBType createCompositeFBType();
+
+	/**
+	 * Returns a new object of class '<em>Configurable Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Configurable Object</em>'.
+	 * @generated
+	 */
+	ConfigurableObject createConfigurableObject();
+
+	/**
 	 * Returns a new object of class '<em>Connection Routing Data</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -97,6 +241,24 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	ConnectionRoutingData createConnectionRoutingData();
+
+	/**
+	 * Returns a new object of class '<em>Data Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Data Connection</em>'.
+	 * @generated
+	 */
+	DataConnection createDataConnection();
+
+	/**
+	 * Returns a new object of class '<em>Demultiplexer</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Demultiplexer</em>'.
+	 * @generated
+	 */
+	Demultiplexer createDemultiplexer();
 
 	/**
 	 * Returns a new object of class '<em>Device</em>'.
@@ -153,6 +315,42 @@ public interface LibraryElementFactory extends EFactory {
 	ECTransition createECTransition();
 
 	/**
+	 * Returns a new object of class '<em>Error Marker Data Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Marker Data Type</em>'.
+	 * @generated
+	 */
+	ErrorMarkerDataType createErrorMarkerDataType();
+
+	/**
+	 * Returns a new object of class '<em>Error Marker FBN Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Marker FBN Element</em>'.
+	 * @generated
+	 */
+	ErrorMarkerFBNElement createErrorMarkerFBNElement();
+
+	/**
+	 * Returns a new object of class '<em>Error Marker Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Marker Interface</em>'.
+	 * @generated
+	 */
+	ErrorMarkerInterface createErrorMarkerInterface();
+
+	/**
+	 * Returns a new object of class '<em>Error Marker Ref</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Error Marker Ref</em>'.
+	 * @generated
+	 */
+	ErrorMarkerRef createErrorMarkerRef();
+
+	/**
 	 * Returns a new object of class '<em>Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -160,6 +358,15 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	Event createEvent();
+
+	/**
+	 * Returns a new object of class '<em>Event Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Event Connection</em>'.
+	 * @generated
+	 */
+	EventConnection createEventConnection();
 
 	/**
 	 * Returns a new object of class '<em>FB</em>'.
@@ -171,6 +378,15 @@ public interface LibraryElementFactory extends EFactory {
 	FB createFB();
 
 	/**
+	 * Returns a new object of class '<em>FB Network</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>FB Network</em>'.
+	 * @generated
+	 */
+	FBNetwork createFBNetwork();
+
+	/**
 	 * Returns a new object of class '<em>FB Network Element</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -180,15 +396,6 @@ public interface LibraryElementFactory extends EFactory {
 	FBNetworkElement createFBNetworkElement();
 
 	/**
-	 * Returns a new object of class '<em>Sub App</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Sub App</em>'.
-	 * @generated
-	 */
-	SubApp createSubApp();
-
-	/**
 	 * Returns a new object of class '<em>FB Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -196,6 +403,24 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	FBType createFBType();
+
+	/**
+	 * Returns a new object of class '<em>Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Group</em>'.
+	 * @generated
+	 */
+	Group createGroup();
+
+	/**
+	 * Returns a new object of class '<em>Hidden Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Hidden Element</em>'.
+	 * @generated
+	 */
+	HiddenElement createHiddenElement();
 
 	/**
 	 * Returns a new object of class '<em>Identification</em>'.
@@ -225,6 +450,15 @@ public interface LibraryElementFactory extends EFactory {
 	InterfaceList createInterfaceList();
 
 	/**
+	 * Returns a new object of class '<em>Library Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Library Element</em>'.
+	 * @generated
+	 */
+	LibraryElement createLibraryElement();
+
+	/**
 	 * Returns a new object of class '<em>Link</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -232,6 +466,15 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	Link createLink();
+
+	/**
+	 * Returns a new object of class '<em>Local Variable</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Local Variable</em>'.
+	 * @generated
+	 */
+	LocalVariable createLocalVariable();
 
 	/**
 	 * Returns a new object of class '<em>Mapping</em>'.
@@ -243,6 +486,24 @@ public interface LibraryElementFactory extends EFactory {
 	Mapping createMapping();
 
 	/**
+	 * Returns a new object of class '<em>Mapping Target</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Mapping Target</em>'.
+	 * @generated
+	 */
+	MappingTarget createMappingTarget();
+
+	/**
+	 * Returns a new object of class '<em>Multiplexer</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Multiplexer</em>'.
+	 * @generated
+	 */
+	Multiplexer createMultiplexer();
+
+	/**
 	 * Returns a new object of class '<em>Other Algorithm</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -250,6 +511,15 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	OtherAlgorithm createOtherAlgorithm();
+
+	/**
+	 * Returns a new object of class '<em>Other Method</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Other Method</em>'.
+	 * @generated
+	 */
+	OtherMethod createOtherMethod();
 
 	/**
 	 * Returns a new object of class '<em>Output Primitive</em>'.
@@ -261,13 +531,31 @@ public interface LibraryElementFactory extends EFactory {
 	OutputPrimitive createOutputPrimitive();
 
 	/**
-	 * Returns a new object of class '<em>Attribute</em>'.
+	 * Returns a new object of class '<em>Position</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Attribute</em>'.
+	 * @return a new object of class '<em>Position</em>'.
 	 * @generated
 	 */
-	Attribute createAttribute();
+	Position createPosition();
+
+	/**
+	 * Returns a new object of class '<em>Positionable Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Positionable Element</em>'.
+	 * @generated
+	 */
+	PositionableElement createPositionableElement();
+
+	/**
+	 * Returns a new object of class '<em>Primitive</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Primitive</em>'.
+	 * @generated
+	 */
+	Primitive createPrimitive();
 
 	/**
 	 * Returns a new object of class '<em>Resource</em>'.
@@ -297,6 +585,15 @@ public interface LibraryElementFactory extends EFactory {
 	ResourceType createResourceType();
 
 	/**
+	 * Returns a new object of class '<em>Resource Type FB</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Resource Type FB</em>'.
+	 * @generated
+	 */
+	ResourceTypeFB createResourceTypeFB();
+
+	/**
 	 * Returns a new object of class '<em>Segment</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -304,6 +601,24 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	Segment createSegment();
+
+	/**
+	 * Returns a new object of class '<em>Segment Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Segment Type</em>'.
+	 * @generated
+	 */
+	SegmentType createSegmentType();
+
+	/**
+	 * Returns a new object of class '<em>Service</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Service</em>'.
+	 * @generated
+	 */
+	Service createService();
 
 	/**
 	 * Returns a new object of class '<em>Service Sequence</em>'.
@@ -324,6 +639,15 @@ public interface LibraryElementFactory extends EFactory {
 	ServiceTransaction createServiceTransaction();
 
 	/**
+	 * Returns a new object of class '<em>Service Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Service Interface</em>'.
+	 * @generated
+	 */
+	ServiceInterface createServiceInterface();
+
+	/**
 	 * Returns a new object of class '<em>Service Interface FB Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -331,6 +655,15 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	ServiceInterfaceFBType createServiceInterfaceFBType();
+
+	/**
+	 * Returns a new object of class '<em>Simple FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Simple FB Type</em>'.
+	 * @generated
+	 */
+	SimpleFBType createSimpleFBType();
 
 	/**
 	 * Returns a new object of class '<em>ST Algorithm</em>'.
@@ -342,13 +675,22 @@ public interface LibraryElementFactory extends EFactory {
 	STAlgorithm createSTAlgorithm();
 
 	/**
-	 * Returns a new object of class '<em>FB Network</em>'.
+	 * Returns a new object of class '<em>ST Method</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>FB Network</em>'.
+	 * @return a new object of class '<em>ST Method</em>'.
 	 * @generated
 	 */
-	FBNetwork createFBNetwork();
+	STMethod createSTMethod();
+
+	/**
+	 * Returns a new object of class '<em>Sub App</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Sub App</em>'.
+	 * @generated
+	 */
+	SubApp createSubApp();
 
 	/**
 	 * Returns a new object of class '<em>Sub App Type</em>'.
@@ -360,13 +702,31 @@ public interface LibraryElementFactory extends EFactory {
 	SubAppType createSubAppType();
 
 	/**
-	 * Returns a new object of class '<em>Automation System</em>'.
+	 * Returns a new object of class '<em>System Configuration</em>'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Automation System</em>'.
+	 * @return a new object of class '<em>System Configuration</em>'.
 	 * @generated
 	 */
-	AutomationSystem createAutomationSystem();
+	SystemConfiguration createSystemConfiguration();
+
+	/**
+	 * Returns a new object of class '<em>Typed Configureable Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Typed Configureable Object</em>'.
+	 * @generated
+	 */
+	TypedConfigureableObject createTypedConfigureableObject();
+
+	/**
+	 * Returns a new object of class '<em>Value</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Value</em>'.
+	 * @generated
+	 */
+	Value createValue();
 
 	/**
 	 * Returns a new object of class '<em>Var Declaration</em>'.
@@ -394,357 +754,6 @@ public interface LibraryElementFactory extends EFactory {
 	 * @generated
 	 */
 	With createWith();
-
-	/**
-	 * Returns a new object of class '<em>Library Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Library Element</em>'.
-	 * @generated
-	 */
-	LibraryElement createLibraryElement();
-
-	/**
-	 * Returns a new object of class '<em>Compilable Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Compilable Type</em>'.
-	 * @generated
-	 */
-	CompilableType createCompilableType();
-
-	/**
-	 * Returns a new object of class '<em>Configurable Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Configurable Object</em>'.
-	 * @generated
-	 */
-	ConfigurableObject createConfigurableObject();
-
-	/**
-	 * Returns a new object of class '<em>Composite FB Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Composite FB Type</em>'.
-	 * @generated
-	 */
-	CompositeFBType createCompositeFBType();
-
-	/**
-	 * Returns a new object of class '<em>Data Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Data Connection</em>'.
-	 * @generated
-	 */
-	DataConnection createDataConnection();
-
-	/**
-	 * Returns a new object of class '<em>Event Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Event Connection</em>'.
-	 * @generated
-	 */
-	EventConnection createEventConnection();
-
-	/**
-	 * Returns a new object of class '<em>Adapter Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Adapter Connection</em>'.
-	 * @generated
-	 */
-	AdapterConnection createAdapterConnection();
-
-	/**
-	 * Returns a new object of class '<em>Service Interface</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Service Interface</em>'.
-	 * @generated
-	 */
-	ServiceInterface createServiceInterface();
-
-	/**
-	 * Returns a new object of class '<em>Value</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Value</em>'.
-	 * @generated
-	 */
-	Value createValue();
-
-	/**
-	 * Returns a new object of class '<em>System Configuration</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>System Configuration</em>'.
-	 * @generated
-	 */
-	SystemConfiguration createSystemConfiguration();
-
-	/**
-	 * Returns a new object of class '<em>Resource Type FB</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Resource Type FB</em>'.
-	 * @generated
-	 */
-	ResourceTypeFB createResourceTypeFB();
-
-	/**
-	 * Returns a new object of class '<em>Segment Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Segment Type</em>'.
-	 * @generated
-	 */
-	SegmentType createSegmentType();
-
-	/**
-	 * Returns a new object of class '<em>Adapter FB Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Adapter FB Type</em>'.
-	 * @generated
-	 */
-	AdapterFBType createAdapterFBType();
-
-	/**
-	 * Returns a new object of class '<em>Service</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Service</em>'.
-	 * @generated
-	 */
-	Service createService();
-
-	/**
-	 * Returns a new object of class '<em>Typed Configureable Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Typed Configureable Object</em>'.
-	 * @generated
-	 */
-	TypedConfigureableObject createTypedConfigureableObject();
-
-	/**
-	 * Returns a new object of class '<em>Adapter FB</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Adapter FB</em>'.
-	 * @generated
-	 */
-	AdapterFB createAdapterFB();
-
-	/**
-	 * Returns a new object of class '<em>Primitive</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Primitive</em>'.
-	 * @generated
-	 */
-	Primitive createPrimitive();
-
-	/**
-	 * Returns a new object of class '<em>Positionable Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Positionable Element</em>'.
-	 * @generated
-	 */
-	PositionableElement createPositionableElement();
-
-	/**
-	 * Returns a new object of class '<em>Position</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Position</em>'.
-	 * @generated
-	 */
-	Position createPosition();
-
-	/**
-	 * Returns a new object of class '<em>Color</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Color</em>'.
-	 * @generated
-	 */
-	Color createColor();
-
-	/**
-	 * Returns a new object of class '<em>Colorizable Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Colorizable Element</em>'.
-	 * @generated
-	 */
-	ColorizableElement createColorizableElement();
-
-	/**
-	 * Returns a new object of class '<em>Attribute Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Attribute Declaration</em>'.
-	 * @generated
-	 */
-	AttributeDeclaration createAttributeDeclaration();
-
-	/**
-	 * Returns a new object of class '<em>Simple FB Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Simple FB Type</em>'.
-	 * @generated
-	 */
-	SimpleFBType createSimpleFBType();
-
-	/**
-	 * Returns a new object of class '<em>Base FB Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Base FB Type</em>'.
-	 * @generated
-	 */
-	BaseFBType createBaseFBType();
-
-	/**
-	 * Returns a new object of class '<em>Demultiplexer</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Demultiplexer</em>'.
-	 * @generated
-	 */
-	Demultiplexer createDemultiplexer();
-
-	/**
-	 * Returns a new object of class '<em>Multiplexer</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Multiplexer</em>'.
-	 * @generated
-	 */
-	Multiplexer createMultiplexer();
-
-	/**
-	 * Returns a new object of class '<em>Local Variable</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Local Variable</em>'.
-	 * @generated
-	 */
-	LocalVariable createLocalVariable();
-
-	/**
-	 * Returns a new object of class '<em>Error Marker FBN Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Error Marker FBN Element</em>'.
-	 * @generated
-	 */
-	ErrorMarkerFBNElement createErrorMarkerFBNElement();
-
-	/**
-	 * Returns a new object of class '<em>Error Marker Data Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Error Marker Data Type</em>'.
-	 * @generated
-	 */
-	ErrorMarkerDataType createErrorMarkerDataType();
-
-	/**
-	 * Returns a new object of class '<em>Error Marker Interface</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Error Marker Interface</em>'.
-	 * @generated
-	 */
-	ErrorMarkerInterface createErrorMarkerInterface();
-
-	/**
-	 * Returns a new object of class '<em>CFB Instance</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>CFB Instance</em>'.
-	 * @generated
-	 */
-	CFBInstance createCFBInstance();
-
-	/**
-	 * Returns a new object of class '<em>Error Marker Ref</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Error Marker Ref</em>'.
-	 * @generated
-	 */
-	ErrorMarkerRef createErrorMarkerRef();
-
-	/**
-	 * Returns a new object of class '<em>Group</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Group</em>'.
-	 * @generated
-	 */
-	Group createGroup();
-
-	/**
-	 * Returns a new object of class '<em>Other Method</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Other Method</em>'.
-	 * @generated
-	 */
-	OtherMethod createOtherMethod();
-
-	/**
-	 * Returns a new object of class '<em>ST Method</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>ST Method</em>'.
-	 * @generated
-	 */
-	STMethod createSTMethod();
-
-	/**
-	 * Returns a new object of class '<em>Hidden Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Hidden Element</em>'.
-	 * @generated
-	 */
-	HiddenElement createHiddenElement();
-
-	/**
-	 * Returns a new object of class '<em>Mapping Target</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Mapping Target</em>'.
-	 * @generated
-	 */
-	MappingTarget createMappingTarget();
-
-	/**
-	 * Returns a new object of class '<em>Communication Mapping Target</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Communication Mapping Target</em>'.
-	 * @generated
-	 */
-	CommunicationMappingTarget createCommunicationMappingTarget();
-
-	/**
-	 * Returns a new object of class '<em>Communication Channel</em>'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Communication Channel</em>'.
-	 * @generated
-	 */
-	CommunicationChannel createCommunicationChannel();
 
 	/**
 	 * Returns the package supported by this factory.

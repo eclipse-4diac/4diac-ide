@@ -8,11 +8,10 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.xtend.lib,
  org.eclipse.fordiac.ide.export,
  org.eclipse.fordiac.ide.model,
- org.eclipse.fordiac.ide.model.structuredtext,
  org.eclipse.fordiac.ide.ui,
  org.eclipse.ui.workbench,
  org.eclipse.xtext
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Export-Package: org.eclipse.fordiac.ide.export.forte_lua
 Bundle-Vendor: Eclipse 4diac

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="BasicAdapter" Comment="Adapter communication, events only">
+	<Identification Standard="61499-1 Annex A" Description="Copyright (c) 2023 Johannes Kepler University Linz This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0 &#10;" >
+	</Identification>
+	<VersionInfo Organization="Johannes Kepler University Linz" Version="1.0" Author="Bianca Wiesmayr" Date="2023-03-08" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<Plugs>
+			<AdapterDeclaration Name="adp" Type="EventAdapter" Comment=""/>
+		</Plugs>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="546.6666666666667" y="420.0">
+			</ECState>
+			<ECState Name="request" Comment="" x="2126.666666666667" y="460.0">
+				<ECAction Output="adp.CNF"/>
+			</ECState>
+			<ECState Name="response" Comment="" x="2206.666666666667" y="1393.3333333333335">
+				<ECAction Output="adp.IND"/>
+			</ECState>
+			<ECTransition Source="START" Destination="request" Condition="adp.REQ" Comment="" x="1473.3333333333335" y="373.33333333333337"/>
+			<ECTransition Source="request" Destination="START" Condition="1" Comment="" x="1453.3333333333335" y="793.3333333333334"/>
+			<ECTransition Source="START" Destination="response" Condition="adp.RSP" Comment="" x="1553.3333333333335" y="1086.6666666666667"/>
+			<ECTransition Source="response" Destination="START" Condition="1" Comment="" x="953.3333333333334" y="1193.3333333333335"/>
+		</ECC>
+	</BasicFB>
+	<Attribute Name="Documentation" Type="WSTRING"><![CDATA[<p>ch</p>
+]]></Attribute>
+</FBType>

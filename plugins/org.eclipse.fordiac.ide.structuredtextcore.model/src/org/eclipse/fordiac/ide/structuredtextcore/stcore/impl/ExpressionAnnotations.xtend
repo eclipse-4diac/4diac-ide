@@ -260,11 +260,13 @@ final package class ExpressionAnnotations {
 	}
 
 	def package static INamedElement getResultType(STArrayInitializerExpression expr) {
-		expr.values.map[resultType].reduce[first, second|first.commonSupertype(second)].addDimension(expr)
+		expr.expectedType ?:
+			expr.values.map[resultType].reduce[first, second|first.commonSupertype(second)].addDimension(expr)
 	}
 
 	def package static INamedElement getDeclaredResultType(STArrayInitializerExpression expr) {
-		expr.values.map[declaredResultType].reduce[first, second|first.commonSupertype(second)].addDimension(expr)
+		expr.expectedType ?:
+			expr.values.map[declaredResultType].reduce[first, second|first.commonSupertype(second)].addDimension(expr)
 	}
 
 	def package static INamedElement getResultType(STArrayInitElement expr) {

@@ -24,6 +24,10 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import static org.eclipse.fordiac.ide.model.LibraryElementTags.FB_TYPE_COMM_MESSAGE;
+import static org.eclipse.fordiac.ide.model.LibraryElementTags.FB_TYPE_STRUCT_DEMUX;
+import static org.eclipse.fordiac.ide.model.LibraryElementTags.FB_TYPE_STRUCT_MUX;
+
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -52,6 +56,7 @@ import org.eclipse.fordiac.ide.model.helpers.InterfaceListCopier;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterConnection;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
@@ -120,9 +125,8 @@ class FBNetworkImporter extends CommonElementImporter {
 		getFbNetwork().getNetworkElements().stream().forEach(el -> {
 			final Attribute groupAttr = el.getAttribute(LibraryElementTags.GROUP_NAME);
 			if (groupAttr != null) {
-				final FBNetworkElement group = fbNetworkElementMap.get(groupAttr.getValue());
-				if (group instanceof Group) {
-					el.setGroup((Group) group);
+				if (fbNetworkElementMap.get(groupAttr.getValue()) instanceof final Group group) {
+					el.setGroup(group);
 					el.deleteAttribute(LibraryElementTags.GROUP_NAME);
 				}
 			}
@@ -136,6 +140,9 @@ class FBNetworkImporter extends CommonElementImporter {
 			break;
 		case LibraryElementTags.GROUP_ELEMENT:
 			parseGroup();
+			break;
+		case LibraryElementTags.COMMENT_ELEMENT:
+			parseComment();
 			break;
 		case LibraryElementTags.EVENT_CONNECTIONS_ELEMENT:
 			parseConnectionList(LibraryElementPackage.eINSTANCE.getEventConnection(), fbNetwork.getEventConnections(),
@@ -157,7 +164,6 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	private void parseGroup() throws TypeImportException, XMLStreamException {
 		final Group group = LibraryElementFactory.eINSTANCE.createGroup();
-		group.setInterface(LibraryElementFactory.eINSTANCE.createInterfaceList());
 		readNameCommentAttributes(group);
 		getXandY(group);
 
@@ -174,6 +180,34 @@ class FBNetworkImporter extends CommonElementImporter {
 		fbNetwork.getNetworkElements().add(group);
 		fbNetworkElementMap.put(group.getName(), group);
 		proceedToEndElementNamed(LibraryElementTags.GROUP_ELEMENT);
+	}
+
+	private void parseComment() throws TypeImportException, XMLStreamException {
+		final Comment comment = LibraryElementFactory.eINSTANCE.createComment();
+		readCommentAttribute(comment);
+		getXandY(comment);
+
+		final String width = getAttributeValue(LibraryElementTags.WIDTH_ATTRIBUTE);
+		if (width != null) {
+			comment.setWidth(CoordinateConverter.INSTANCE.convertFrom1499XML(width));
+		}
+		final String height = getAttributeValue(LibraryElementTags.HEIGHT_ATTRIBUTE);
+		if (height != null) {
+			comment.setHeight(CoordinateConverter.INSTANCE.convertFrom1499XML(height));
+		}
+
+		fbNetwork.getNetworkElements().add(comment);
+
+		processChildren(LibraryElementTags.COMMENT_ELEMENT, name -> {
+			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
+				parseGenericAttributeNode(comment);
+				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			}
+			return false;
+		});
+
+		proceedToEndElementNamed(LibraryElementTags.COMMENT_ELEMENT);
 	}
 
 	private void parseFB() throws TypeImportException, XMLStreamException {
@@ -211,11 +245,11 @@ class FBNetworkImporter extends CommonElementImporter {
 		final FBType type = entry.getType();
 		if (type instanceof CompositeFBType) {
 			fb = LibraryElementFactory.eINSTANCE.createCFBInstance();
-		} else if ("STRUCT_MUX".equals(type.getName())) { //$NON-NLS-1$
+		} else if (FB_TYPE_STRUCT_MUX.equals(type.getName())) {
 			fb = LibraryElementFactory.eINSTANCE.createMultiplexer();
-		} else if ("STRUCT_DEMUX".equals(type.getName())) { //$NON-NLS-1$
+		} else if (FB_TYPE_STRUCT_DEMUX.equals(type.getName())) {
 			fb = LibraryElementFactory.eINSTANCE.createDemultiplexer();
-		} else if (type.getName().startsWith("COMM_CHANNEL")) { //$NON-NLS-1$
+		} else if (type.getName().startsWith(FB_TYPE_COMM_MESSAGE)) {
 			fb = LibraryElementFactory.eINSTANCE.createCommunicationChannel();
 		}
 		fb.setInterface(type.getInterfaceList().copy());
@@ -303,15 +337,15 @@ class FBNetworkImporter extends CommonElementImporter {
 
 	private <T extends Connection> void checkAndHandleMultipleInputConnections(final EList<T> connectionlist) {
 		for (final Connection con : connectionlist) {
-			if ((con instanceof DataConnection) && !(((DataConnection) con).getSource() instanceof ErrorMarkerInterface)
-					&& ((DataConnection) con).getDataSource().isIsInput()
-					&& (((DataConnection) con).getDataSource().getInputConnections().size() > 1)) {
-				handleMultipleConnectionsOnInput(((DataConnection) con).getDataSource());
-			} else if ((con instanceof DataConnection)
-					&& !(((DataConnection) con).getDestination() instanceof ErrorMarkerInterface)
-					&& ((DataConnection) con).getDataDestination().isIsInput()
-					&& (((DataConnection) con).getDataDestination().getInputConnections().size() > 1)) {
-				handleMultipleConnectionsOnInput(((DataConnection) con).getDataDestination());
+			if ((con instanceof final DataConnection datacon) && !(datacon.getSource() instanceof ErrorMarkerInterface)
+					&& datacon.getDataSource().isIsInput()
+					&& (datacon.getDataSource().getInputConnections().size() > 1)) {
+				handleMultipleConnectionsOnInput(datacon.getDataSource());
+			} else if ((con instanceof final DataConnection datacon)
+					&& !(datacon.getDestination() instanceof ErrorMarkerInterface)
+					&& datacon.getDataDestination().isIsInput()
+					&& (datacon.getDataDestination().getInputConnections().size() > 1)) {
+				handleMultipleConnectionsOnInput(datacon.getDataDestination());
 			}
 		}
 	}
@@ -523,19 +557,18 @@ class FBNetworkImporter extends CommonElementImporter {
 		return errorMarkerInterface;
 	}
 
-	private static IInterfaceElement createRepairInterfaceElement(final IInterfaceElement connection,
-			final String name) {
+	private static IInterfaceElement createRepairInterfaceElement(final IInterfaceElement ie, final String name) {
 		IInterfaceElement repairIE = null;
-		if (connection instanceof AdapterDeclaration) {
-			repairIE = InterfaceListCopier.copyAdapter((AdapterDeclaration) connection, true);
-		} else if (connection instanceof VarDeclaration) {
-			repairIE = InterfaceListCopier.copyVar((VarDeclaration) connection, true, true);
-		} else if (connection instanceof Event) {
-			repairIE = InterfaceListCopier.copyEvent((Event) connection, true);
+		if (ie instanceof final AdapterDeclaration adp) {
+			repairIE = InterfaceListCopier.copyAdapter(adp, true);
+		} else if (ie instanceof final VarDeclaration varDecl) {
+			repairIE = InterfaceListCopier.copyVar(varDecl, true, true);
+		} else if (ie instanceof final Event event) {
+			repairIE = InterfaceListCopier.copyEvent(event, true);
 		}
 
 		if (null != repairIE) {
-			repairIE.setIsInput(!connection.isIsInput()); // this needs to be inverted for the dummy connection
+			repairIE.setIsInput(!ie.isIsInput()); // this needs to be inverted for the dummy connection
 			repairIE.setName(name);
 		}
 		return repairIE;
@@ -654,9 +687,9 @@ class FBNetworkImporter extends CommonElementImporter {
 		VarDeclaration retVal;
 		boolean hasType = true;
 
-		if (interfaceList.eContainer() instanceof FB) {
+		if (interfaceList.eContainer() instanceof final FB fb) {
 			// only if it is an FB check if it is typed
-			hasType = (null != ((FB) interfaceList.eContainer()).getTypeEntry());
+			hasType = (null != fb.getTypeEntry());
 		}
 
 		if (hasType) {

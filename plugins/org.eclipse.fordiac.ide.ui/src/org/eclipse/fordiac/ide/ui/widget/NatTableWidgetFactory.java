@@ -111,6 +111,7 @@ public final class NatTableWidgetFactory {
 		setColumnWidths(dataLayer);
 
 		final SelectionLayer selectionLayer = new SelectionLayer(dataLayer);
+		selectionLayer.setSelectionModel(new FordiacSelectionModel(selectionLayer));
 		selectionLayer.addConfiguration(new DefaultSelectionBindings() {
 			@Override
 			public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
@@ -154,14 +155,17 @@ public final class NatTableWidgetFactory {
 		setColumnWidths(bodyDataLayer);
 
 		final SelectionLayer selectionLayer = new SelectionLayer(bodyDataLayer);
+		selectionLayer.setSelectionModel(new FordiacSelectionModel(selectionLayer));
 		selectionLayer.addConfiguration(new DefaultSelectionBindings() {
 			@Override
 			public void configureUiBindings(final UiBindingRegistry uiBindingRegistry) {
 				uiBindingRegistry.unregisterKeyBinding(new KeyEventMatcher(SWT.MOD1, 'c'));
+				uiBindingRegistry.unregisterKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'));
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'c'), new CopyDataFromTableAction());
 				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'v'),
 						new PasteDataIntoTableAction(section));
-				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'), new CutDataFromTableAction());
+				uiBindingRegistry.registerKeyBinding(new KeyEventMatcher(SWT.MOD1, 'x'),
+						new CutDataFromTableAction(section));
 			}
 		});
 		selectionLayer.registerCommandHandler(new CopyDataCommandHandler(selectionLayer));

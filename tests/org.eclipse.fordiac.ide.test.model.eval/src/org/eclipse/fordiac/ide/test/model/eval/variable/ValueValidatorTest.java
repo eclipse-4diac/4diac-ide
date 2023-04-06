@@ -212,51 +212,10 @@ class ValueValidatorTest {
 		assertEquals(expectedString, resultString);
 	}
 
-	@DisplayName("Validator tests for single correctly typed virtual DNS entries")
+	@DisplayName("Validator tests for removed virtual DNS entries")
 	@ParameterizedTest
 	@ValueSource(strings = { "%sgsgs%", "%Hello%", "%moduleValue%", "%sign%" })
 	void validateSingularValidDNSEntries(final String value) {
-		final String resultString = VariableOperations.validateValue(IecTypes.GenericTypes.ANY, value);
-		assertEquals(NO_ERROR, resultString);
-	}
-
-	@DisplayName("Validator tests for incorrect virtual DNS entries with outbound characters")
-	@ParameterizedTest
-	@ValueSource(strings = { "2%sgsgs%2", "33%Hello%5", "ee%moduleValue%hello", "rr%r%" })
-	void validateInvalidDNSEntries1(final String value) {
-		final String resultString = VariableOperations.validateValue(IecTypes.GenericTypes.ANY, value);
-		assertNotEquals(NO_ERROR, resultString);
-	}
-
-	@DisplayName("Validator tests for incorrect virtual DNS entries with inbound % symbols")
-	@ParameterizedTest
-	@ValueSource(strings = { "%sg%sgs%", "%Hel%lo%", "%module%Value%", "%%%" })
-	void validateInvalidDNSEntries2(final String value) {
-		final String resultString = VariableOperations.validateValue(IecTypes.GenericTypes.ANY, value);
-		assertNotEquals(NO_ERROR, resultString);
-	}
-
-	@DisplayName("Validator tests for incorrect virtual DNS entries with inbound and outbound % symbols")
-	@ParameterizedTest
-	@ValueSource(strings = { "333%sg%sgs%222", "@me%Hel%lo%hi", "%module%Value%rain", "tt%s%ww%5 " })
-	void validateInvalidDNSEntries3(final String value) {
-		final String resultString = VariableOperations.validateValue(IecTypes.GenericTypes.ANY, value);
-		assertNotEquals(NO_ERROR, resultString);
-	}
-
-	@DisplayName("Validator tests for several correctly typed virtual DNS entries")
-	@ParameterizedTest
-	@ValueSource(strings = { "%sgsgs%%sigsev%", "%Hello%%milsev%", "%moduleValue%%what%%my%", "%sign%%vile%%style%" })
-	void validateMultipleValidDNSEntries(final String value) {
-		final String resultString = VariableOperations.validateValue(IecTypes.GenericTypes.ANY, value);
-		assertEquals(NO_ERROR, resultString);
-	}
-
-	@DisplayName("Validator tests for several incorrectly typed virtual DNS entries")
-	@ParameterizedTest
-	@ValueSource(strings = { "%sgsgs%name%sigsev%", "%Hello%sign%milsev%", "a%moduleValue%cnt%what%b",
-	"e%sign%i%vile%f" })
-	void validateMultipleInvalidDNSEntries_1(final String value) {
 		final String resultString = VariableOperations.validateValue(IecTypes.GenericTypes.ANY, value);
 		assertNotEquals(NO_ERROR, resultString);
 	}

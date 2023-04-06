@@ -217,6 +217,7 @@ United States, other countries, or both.\n
       <import plugin="org.eclipse.ui.forms"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="org.eclipse.core.net"/>
+      <import plugin="gitlab4j-api" version="5.0.1" match="greaterOrEqual"/>
       <import plugin="org.apache.commons.lang" version="2.6.0" match="compatible"/>
       <import plugin="com.google.guava"/>
       <import plugin="org.eclipse.osgi"/>
@@ -472,13 +473,6 @@ United States, other countries, or both.\n
          unpack="false"/>
 
    <plugin
-         id="org.eclipse.fordiac.ide.metrics"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="org.eclipse.fordiac.ide.validation"
          download-size="0"
          install-size="0"
@@ -543,6 +537,13 @@ United States, other countries, or both.\n
 
    <plugin
          id="org.eclipse.fordiac.ide.model.search"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+     
+   <plugin
+         id="org.eclipse.fordiac.ide.gitlab"
          download-size="0"
          install-size="0"
          version="0.0.0"

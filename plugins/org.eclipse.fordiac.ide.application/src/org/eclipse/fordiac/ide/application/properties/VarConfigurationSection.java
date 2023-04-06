@@ -336,7 +336,7 @@ public class VarConfigurationSection extends AbstractSection {
 				break;
 			case VISIBLE_COL_ID:
 				if ((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
-						&& !CommentPropertySection.isExpandedSubAppPinAndConnected(rowObject)) {
+						&& !InstancePropertySection.isExpandedSubAppPinAndConnected(rowObject)) {
 					cmd = new HidePinCommand(rowObject, ((Boolean) newValue).booleanValue());
 				}
 				break;

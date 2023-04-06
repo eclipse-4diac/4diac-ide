@@ -5,7 +5,7 @@ Bundle-SymbolicName: org.eclipse.fordiac.ide.debug.ui;singleton:=true
 Bundle-Version: 2.0.1.qualifier
 Bundle-Vendor: Eclipse 4diac
 Automatic-Module-Name: org.eclipse.fordiac.ide.debug.ui
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.resources,
  org.eclipse.jface,
@@ -24,7 +24,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.fordiac.ide.gef,
  org.eclipse.fordiac.ide.fbtypeeditor,
  org.eclipse.fordiac.ide.systemmanagement,
- org.eclipse.fordiac.ide.model.ui
+ org.eclipse.fordiac.ide.model.ui,
+ org.eclipse.fordiac.ide.ui.errormessages
 Export-Package: org.eclipse.fordiac.ide.debug.ui,
  org.eclipse.fordiac.ide.debug.ui.basic,
  org.eclipse.fordiac.ide.debug.ui.breakpoint,

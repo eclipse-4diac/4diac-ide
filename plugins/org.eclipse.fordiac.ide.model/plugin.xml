@@ -60,21 +60,7 @@
       </TypeEntryCreator>
    </extension>
 
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- @generated virtualDNS -->
-      <package
-            uri="org.eclipse.fordiac.ide.virtualDNS"
-            class="org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage"
-            genModel="model/virtualDNS.genmodel"/>
-   </extension>
-   <extension point="org.eclipse.emf.ecore.generated_package">
-      <!-- added for loading virtualDNS files with the old name space -->
-      <package
-            uri="org.fordiac.ide.virtualDNS"
-            class="org.eclipse.fordiac.ide.model.virtualDNS.VirtualDNSPackage"
-            genModel="model/virtualDNS.genmodel"/>
-   </extension>
-      <extension
+  <extension
          point="org.eclipse.core.runtime.preferences">
       <initializer
             class="org.eclipse.fordiac.ide.model.PreferenceInitializer">

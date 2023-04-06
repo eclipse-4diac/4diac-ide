@@ -8,57 +8,18 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration;
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock;
 
 /**
  * <!-- begin-user-doc -->
  * A representation of the model object '<em><b>ST Var Global Declaration Block</b></em>'.
  * <!-- end-user-doc -->
  *
- * <p>
- * The following features are supported:
- * </p>
- * <ul>
- *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock#isConstant <em>Constant</em>}</li>
- *   <li>{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock#getVarDeclarations <em>Var Declarations</em>}</li>
- * </ul>
  *
  * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage#getSTVarGlobalDeclarationBlock()
  * @model
  * @generated
  */
-public interface STVarGlobalDeclarationBlock extends EObject {
-	/**
-	 * Returns the value of the '<em><b>Constant</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Constant</em>' attribute.
-	 * @see #setConstant(boolean)
-	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage#getSTVarGlobalDeclarationBlock_Constant()
-	 * @model
-	 * @generated
-	 */
-	boolean isConstant();
-
-	/**
-	 * Sets the value of the '{@link org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock#isConstant <em>Constant</em>}' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @param value the new value of the '<em>Constant</em>' attribute.
-	 * @see #isConstant()
-	 * @generated
-	 */
-	void setConstant(boolean value);
-
-	/**
-	 * Returns the value of the '<em><b>Var Declarations</b></em>' containment reference list.
-	 * The list contents are of type {@link org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration}.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the value of the '<em>Var Declarations</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.GlobalConstantsPackage#getSTVarGlobalDeclarationBlock_VarDeclarations()
-	 * @model containment="true"
-	 * @generated
-	 */
-	EList<STVarDeclaration> getVarDeclarations();
+public interface STVarGlobalDeclarationBlock extends STVarDeclarationBlock {
 
 } // STVarGlobalDeclarationBlock

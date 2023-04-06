@@ -20,6 +20,8 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.util.STAlgorithmReconcile
 import org.eclipse.fordiac.ide.structuredtextcore.ui.document.FBTypeXtextDocumentProvider
 import org.eclipse.jface.text.IDocument
 import org.eclipse.swt.widgets.Display
+import org.eclipse.ui.IFileEditorInput
+import org.eclipse.ui.part.FileEditorInput
 import org.eclipse.xtext.ui.editor.model.XtextDocument
 
 class STAlgorithmDocumentProvider extends FBTypeXtextDocumentProvider {
@@ -29,12 +31,12 @@ class STAlgorithmDocumentProvider extends FBTypeXtextDocumentProvider {
 	@Inject
 	extension STAlgorithmReconciler reconciler
 
-
 	override void setDocumentContent(IDocument document, BaseFBType fbType) {
 		document.set(fbType.combine)
 	}
 
-	override void doSaveDocument(IProgressMonitor monitor, BaseFBType element, XtextDocument document) {
+	override void doSaveDocument(IProgressMonitor monitor, IFileEditorInput fileEditorInput, BaseFBType element,
+		XtextDocument document) {
 		monitor.beginTask("Saving", 2)
 		try {
 			monitor.subTask("Partitioning")
@@ -43,7 +45,11 @@ class STAlgorithmDocumentProvider extends FBTypeXtextDocumentProvider {
 			monitor.subTask("Reconciling")
 			Display.^default.syncExec [
 				element.callables.reconcile(partition)
-				element.typeEntry.save
+				// save type if opened directly from a file and not in an FB type editor,
+				// indicated by a FileEditorInput instead of a FBTypeEditorInput
+				if (fileEditorInput instanceof FileEditorInput) {
+					element.typeEntry.save
+				}
 			]
 		} catch (Exception e) {
 			Platform.getLog(class).error("Error saving algorithms to FB type", e)
@@ -51,5 +57,4 @@ class STAlgorithmDocumentProvider extends FBTypeXtextDocumentProvider {
 			monitor.done
 		}
 	}
-	
 }

@@ -13,10 +13,13 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.typemanagement;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IStorage;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IPersistableElement;
 
 /**
@@ -24,7 +27,7 @@ import org.eclipse.ui.IPersistableElement;
  * method is adapted that EditorInput is equal to another EditorInput if the
  * content is equal.
  */
-public class FBTypeEditorInput implements IEditorInput {
+public class FBTypeEditorInput implements IFileEditorInput {
 	private FBType fbType;
 	private final TypeEntry entry;
 
@@ -74,19 +77,35 @@ public class FBTypeEditorInput implements IEditorInput {
 
 	@Override
 	public boolean equals(final Object obj) {
-		if (obj instanceof FBTypeEditorInput) {
-			final FBTypeEditorInput input = (FBTypeEditorInput) obj;
-			return fbType.equals(input.getContent()) && entry.getFile().equals(input.getTypeEntry().getFile());
+		// must yield the same result as FileEditorInput#equals(Object)
+		// to be compatible with different editing contexts (e.g., refactoring)
+		if (this == obj) {
+			return true;
+		}
+		if (obj instanceof final IFileEditorInput other) {
+			return getFile().equals(other.getFile());
 		}
 		return false;
 	}
 
 	@Override
 	public int hashCode() {
-		return fbType.hashCode();
+		// must yield the same result as FileEditorInput#hashCode()
+		// to be compatible with different editing contexts (e.g., refactoring)
+		return getFile().hashCode();
 	}
 
 	public void setFbType(final FBType fbType) {
 		this.fbType = fbType;
+	}
+
+	@Override
+	public IStorage getStorage() throws CoreException {
+		return getFile();
+	}
+
+	@Override
+	public IFile getFile() {
+		return entry.getFile();
 	}
 }
