@@ -60,44 +60,36 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		  «IF !type.internalVars.isEmpty»
 		  	«generateInternalVarDeclaration(type)»
 		  	
+		  	«type.internalVars.generateVariableDeclarations(false)»
+		  	
 		  «ENDIF»
 		  «IF !type.internalConstVars.isEmpty»
-		    «generateInternalConstsDeclaration(type)»
-		    
+		  	«type.internalConstVars.generateVariableDeclarations(true)»
+		  	
 		  «ENDIF»
-		  «IF !(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).empty»
-		  	«generateInitialValueAssignmentDeclaration»
-		  «ENDIF»
-		  «type.internalVars.generateAccessors("getVarInternal")»
+		  «generateAccessorDeclaration("getVarInternal", false)»
 		  «type.internalFbs.generateInternalFBAccessors»
 		  «generateAlgorithms»
 		  «generateMethods»
 		  «generateAdditionalDeclarations»
 		
-		  virtual void executeEvent(int pa_nEIID);
+		  void executeEvent(int pa_nEIID) override;
 		
-		  «type.generateBasicFBDataArray»
+		  «generateReadInputDataDeclaration»
+		  «generateWriteOutputDataDeclaration»
 		
 		public:
-		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-		    «baseClass»(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, «IF !type.internalVars.empty»&scm_stInternalVars«ELSE»nullptr«ENDIF», m_anFBConnData, m_anFBVarsData) {
-		  };
+		  «FBClassName»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes);
 		
-		  «IF !type.internalFbs.empty»
-		  	EMGMResponse changeFBExecutionState(EMGMCommandType paCommand) override;
-		  	
-		  	~«FBClassName»() override {
-		  	  deleteInternalFBs(csmAmountOfInternalFBs, mInternalFBs);
-		  	};
-		  «ELSE»
-		  	~«FBClassName»() override = default;
-		  «ENDIF»
+		«IF !type.internalFbs.empty»
+			  EMGMResponse changeFBExecutionState(EMGMCommandType paCommand) override;
+			
+			  ~«FBClassName»() override {
+			    deleteInternalFBs(csmAmountOfInternalFBs, mInternalFBs);
+			  };
+		«ENDIF»
 		
-		  «type.interfaceList.inputVars.generateAccessors("getDI")»
-		  «type.interfaceList.outputVars.generateAccessors("getDO")»
-		  «(type.interfaceList.sockets + type.interfaceList.plugs).toList.generateAccessors»
-		  «generateEventAccessorDefinitions»
-		
+		  «generateInterfaceDeclarations»
 		};
 		
 		«generateIncludeGuardEnd»

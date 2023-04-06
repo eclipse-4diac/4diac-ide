@@ -19,7 +19,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
-import static extension org.eclipse.fordiac.ide.export.forte_ng.util.ForteNgExportUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 

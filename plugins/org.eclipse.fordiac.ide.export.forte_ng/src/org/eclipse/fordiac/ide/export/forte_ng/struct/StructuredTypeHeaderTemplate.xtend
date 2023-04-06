@@ -11,6 +11,7 @@
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Martin Jobst - add constructor with member list
+ *                - refactor memory layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.struct
 
@@ -27,31 +28,41 @@ class StructuredTypeHeaderTemplate extends StructBaseTemplate {
 
 	override generate() '''
 		«generateHeader»
-
+		
 		«generateIncludeGuardStart»
-
+		
 		«generateHeaderIncludes»
-
-		class «structClassName»: public CIEC_STRUCT {
+		
+		class «className»: public CIEC_STRUCT {
 		  DECLARE_FIRMWARE_DATATYPE(«type.name»)
-
+		
 		  public:
-		    «structClassName»();
-
-		    «structClassName»(«generateConstructorParameters»);
-
-		    virtual ~«structClassName»() = default;
-
-            «type.memberVariables.generateAccessors("getMember")»
-
+		    «className»();
+		
+		    «className»(«generateConstructorParameters»);
+		
+		    «type.memberVariables.generateVariableDeclarations(false)»
+		
+		    size_t getStructSize() const override {
+		      return «type.memberVariables.size»;
+		    }
+		
+		    const CStringDictionary::TStringId* elementNames() const override {
+		      return scmElementNames;
+		    }
+		
+		    CStringDictionary::TStringId getStructTypeNameID() const override;
+		
+		    «generateAccessorDeclaration("getMember", false)»
+		    «generateAccessorDeclaration("getMember", true)»
+		
 		  private:
-		    static const CStringDictionary::TStringId scmElementTypes[];
 		    static const CStringDictionary::TStringId scmElementNames[];
-
+		
 		};
-
+		
 		«generateIncludeGuardEnd»
-
+		
 	'''
 
 	def protected generateHeaderIncludes() '''

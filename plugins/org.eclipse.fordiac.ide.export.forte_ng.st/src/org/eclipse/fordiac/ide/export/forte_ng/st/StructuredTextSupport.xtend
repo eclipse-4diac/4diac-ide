@@ -38,8 +38,8 @@ import org.eclipse.fordiac.ide.model.data.CharType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.data.WcharType
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration
-import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.Event
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.ICallable
@@ -408,15 +408,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 	}
 
 	def protected dispatch CharSequence generateFeatureName(VarDeclaration feature) {
-		if(feature.rootContainer instanceof BaseFBType) {
-			val fbType = feature.rootContainer as BaseFBType
-			if(fbType.internalConstVars.contains(feature)) 
-				'''st_const_«feature.name»'''
-			else
-				'''st_«feature.name»()'''
-		} else {
-			'''«feature.name»()'''
-		}
+		ForteNgExportUtil.generateName(feature)
 	}
 
 	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) {
@@ -436,7 +428,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected dispatch CharSequence generateFeatureName(Event feature) '''evt_«feature.name»'''
 
-	def protected dispatch CharSequence generateFeatureName(AdapterDeclaration feature) '''st_«feature.name»()'''
+	def protected dispatch CharSequence generateFeatureName(AdapterDeclaration feature) '''var_«feature.name»()'''
 
 	def protected CharSequence generateTypeName(STVarDeclaration variable) { variable.generateTypeName(false) }
 
@@ -464,6 +456,7 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 
 	def protected CharSequence generateTypeDefaultValue(INamedElement type) {
 		switch (type) {
+			DataType case GenericTypes.isAnyType(type): '''«type.generateTypeName»()'''
 			AnyStringType: '''«type.generateTypeName»("")'''
 			AnyElementaryType: '''«type.generateTypeName»(0)'''
 			ArrayType: '''«type.generateTypeName»{}'''

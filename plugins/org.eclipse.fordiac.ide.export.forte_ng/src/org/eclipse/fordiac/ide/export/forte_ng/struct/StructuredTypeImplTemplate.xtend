@@ -5,12 +5,13 @@
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
- *
+ * 
  * SPDX-License-Identifier: EPL-2.0
  * 
  * Contributors:
  *   Alois Zoitl - initial API and implementation and/or initial documentation
  *   Martin Jobst - add constructor with member list
+ *                - refactor memory layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.struct
 
@@ -19,35 +20,33 @@ import org.eclipse.fordiac.ide.model.data.StructuredType
 
 class StructuredTypeImplTemplate extends StructBaseTemplate {
 
-
 	new(StructuredType type, String name, Path prefix) {
 		super(type, name, prefix)
 	}
 
 	override generate() '''
 		«generateHeader»
-
+		
 		«generateImplIncludes»
-
+		
 		DEFINE_FIRMWARE_DATATYPE(«type.name», «type.name.FORTEStringId»);
 		
-		«structClassName»::«structClassName»() :
-		    CIEC_STRUCT(«type.name.FORTEStringId», «type.memberVariables.size», scmElementTypes, scmElementNames, e_APPLICATION + e_CONSTRUCTED + 1) {
-		  «FOR member : type.memberVariables»
-		  «exportPrefix»«member.name»() = «member.generateVariableDefaultValue»;
-		  «ENDFOR»
+		const CStringDictionary::TStringId «className»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
+		
+		«className»::«className»() :
+		    CIEC_STRUCT()«type.memberVariables.generateVariableInitializer» {
 		}
 		
-		«structClassName»::«structClassName»(«generateConstructorParameters») :
-		    CIEC_STRUCT(«type.name.FORTEStringId», «type.memberVariables.size», scmElementTypes, scmElementNames, e_APPLICATION + e_CONSTRUCTED + 1) {
-		  «FOR member : type.memberVariables»
-		  «exportPrefix»«member.name»() = «member.generateName»;
-		  «ENDFOR»
+		«className»::«className»(«generateConstructorParameters») :
+		    CIEC_STRUCT()«type.memberVariables.generateVariableInitializerFromParameters» {
 		}
 		
-		const CStringDictionary::TStringId «structClassName»::scmElementNames[] = {«type.memberVariables.FORTENameList»};
-		const CStringDictionary::TStringId «structClassName»::scmElementTypes[] = {«type.memberVariables.FORTETypeList»};
-
+		CStringDictionary::TStringId «className»::getStructTypeNameID() const {
+		  return «type.name.FORTEStringId»;
+		}
+		
+		«type.memberVariables.generateAccessorDefinition("getMember", false)»
+		«type.memberVariables.generateAccessorDefinition("getMember", true)»
 	'''
 
 	def protected generateImplIncludes() '''

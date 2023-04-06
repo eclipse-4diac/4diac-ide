@@ -53,8 +53,7 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						 *** Version:
 						 *************************************************************************/
 						
-						#ifndef _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
-						#define _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
+						#pragma once
 						
 						#include "basicfb.h"
 						#include "iec61131_functions.h"
@@ -74,26 +73,33 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						  
 						
 						  static const SFBInterfaceSpec scm_stFBInterfaceSpec;
+						  CIEC_ANY *getVarInternal(size_t) override;
 						  void «EXPORTED_ALGORITHM_NAME»(void);
 						  static const TForteInt16 scm_nStateINIT = 0;
 						  
 						  void enterStateINIT(void);
 						
-						  virtual void executeEvent(int pa_nEIID);
+						  void executeEvent(int pa_nEIID) override;
 						
-						  FORTE_BASIC_FB_DATA_ARRAY(0, 0, 0, 0, 0);
+						  void readInputData(size_t pa_nEIID) override;
+						  void writeOutputData(size_t pa_nEIID) override;
 						
 						public:
-						  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
-						    CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr, m_anFBConnData, m_anFBVarsData) {
-						  };
-						
-						  ~«EXPORTED_FUNCTIONBLOCK_NAME»() override = default;
+						  «EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes);
 						
 						
+						  
+						  
+						  CIEC_ANY *getDI(size_t) override;
+						  CIEC_ANY *getDO(size_t) override;
+						  CEventConnection *getEOConUnchecked(TPortId) override;
+						  CDataConnection **getDIConUnchecked(TPortId) override;
+						  CDataConnection *getDOConUnchecked(TPortId) override;
+						  
+						  
+						  
 						};
 						
-						#endif // _«ExporterTestBase.BASICFUNCTIONBLOCK_NAME.toUpperCase»_H_
 						
 					'''.toString(), export.data.toString())
 					assertNoErrors(export.errors)
@@ -119,6 +125,8 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						#include "«ExporterTestBase.BASICFUNCTIONBLOCK_NAME»_gen.cpp"
 						#endif
 						
+						#include "criticalregion.h"
+						#include "resource.h"
 						#include "forte_dword.h"
 						#include "forte_sint.h"
 						#include "iec61131_functions.h"
@@ -142,6 +150,11 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						  0, nullptr
 						};
 						
+						
+						«EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_FUNCTIONBLOCK_NAME»(CStringDictionary::TStringId pa_nInstanceNameId, CResource *pa_poSrcRes) :
+						    CBasicFB(pa_poSrcRes, &scm_stFBInterfaceSpec, pa_nInstanceNameId, nullptr) {
+						}
+						
 						void «EXPORTED_FUNCTIONBLOCK_NAME»::«EXPORTED_ALGORITHM_NAME»(void) {
 						  CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31> st_lv_variable = CIEC_ARRAY_FIXED<CIEC_DWORD, 0, 31>{};
 						  
@@ -162,8 +175,38 @@ class ForteNgBasicFBTest extends ExporterTestBasicFBTypeBase {
 						  } while(true);
 						}
 						
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::readInputData(size_t pa_nEIID) {
+						}
 						
-						void FORTE_functionblock::enterStateINIT(void) {
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::writeOutputData(size_t pa_nEIID) {
+						}
+						
+						CIEC_ANY *«EXPORTED_FUNCTIONBLOCK_NAME»::getDI(size_t) {
+						  return nullptr;
+						}
+						
+						CIEC_ANY *«EXPORTED_FUNCTIONBLOCK_NAME»::getDO(size_t) {
+						  return nullptr;
+						}
+						
+						CEventConnection *«EXPORTED_FUNCTIONBLOCK_NAME»::getEOConUnchecked(TPortId) {
+						  return nullptr;
+						}
+						
+						CDataConnection **«EXPORTED_FUNCTIONBLOCK_NAME»::getDIConUnchecked(TPortId) {
+						  return nullptr;
+						}
+						
+						CDataConnection *«EXPORTED_FUNCTIONBLOCK_NAME»::getDOConUnchecked(TPortId) {
+						  return nullptr;
+						}
+						
+						CIEC_ANY *«EXPORTED_FUNCTIONBLOCK_NAME»::getVarInternal(size_t) {
+						  return nullptr;
+						}
+						
+						
+						void «EXPORTED_FUNCTIONBLOCK_NAME»::enterStateINIT(void) {
 						  m_nECCState = scm_nStateINIT;
 						}
 						

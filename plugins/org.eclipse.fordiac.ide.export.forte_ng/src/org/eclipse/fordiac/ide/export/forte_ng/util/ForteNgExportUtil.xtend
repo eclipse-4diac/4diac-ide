@@ -20,20 +20,33 @@ import org.eclipse.fordiac.ide.model.data.LdateType
 import org.eclipse.fordiac.ide.model.data.LdtType
 import org.eclipse.fordiac.ide.model.data.LtimeType
 import org.eclipse.fordiac.ide.model.data.LtodType
+import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
-import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
-import org.eclipse.fordiac.ide.model.data.StringType
 import org.eclipse.fordiac.ide.model.data.WstringType
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes
+import org.eclipse.fordiac.ide.model.libraryElement.AdapterType
+import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+
+import static extension org.eclipse.emf.ecore.util.EcoreUtil.*
 
 final class ForteNgExportUtil {
 	private new() {
 	}
 
+	def static CharSequence generateName(VarDeclaration variable) {
+		switch(root : variable.rootContainer) {
+			BaseFBType case root.internalConstVars.contains(variable): '''var_const_«variable.name»'''
+			AdapterType: '''var_«variable.name»()'''
+			default: '''var_«variable.name»'''
+		}
+	}
+
 	def static CharSequence generateTypeName(VarDeclaration variable) //
 	'''«IF variable.array»CIEC_ARRAY_COMMON<«ENDIF»«variable.type.generateTypeName»«IF variable.array»>«ENDIF»'''
 
-	def static CharSequence generateTypeName(DataType type) '''CIEC_«type.generateTypeNamePlain»'''
+	def static CharSequence generateTypeName(DataType type) '''CIEC_«type.generateTypeNamePlain»«IF GenericTypes.isAnyType(type)»_VARIANT«ENDIF»'''
 
 	def static String generateTypeNamePlain(DataType type) {
 		switch (type) {

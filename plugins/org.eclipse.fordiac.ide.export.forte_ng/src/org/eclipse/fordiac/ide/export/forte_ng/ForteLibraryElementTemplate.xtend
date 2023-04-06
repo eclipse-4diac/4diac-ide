@@ -13,6 +13,7 @@
  *   Martin Jobst - initial API and implementation and/or initial documentation
  *   Alois Zoitl  - extracted base class for all types from fbtemplate
  *   Martin Jobst - generate variable default values with constant expressions
+ *                - refactor memory layout
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng
 
@@ -32,8 +33,8 @@ import static extension org.eclipse.xtext.EcoreUtil2.*
 
 abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends ForteNgExportTemplate {
 
-	public static final CharSequence EXPORT_PREFIX = "st_"
-	
+	public static final CharSequence EXPORT_PREFIX = "var_"
+
 	@Accessors(PROTECTED_GETTER) final T type
 	final Map<VarDeclaration, ILanguageSupport> variableLanguageSupport
 
@@ -45,9 +46,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 		]
 	}
 
-	def protected getExportPrefix() {
-		return EXPORT_PREFIX
-	}
+	def protected getClassName() '''FORTE_«type.name»'''
 
 	def protected generateHeader() '''
 		/*************************************************************************
@@ -65,27 +64,57 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	'''
 
 	def protected generateIncludeGuardStart() '''
-		#ifndef _«type.name.toUpperCase»_H_
-		#define _«type.name.toUpperCase»_H_
+		#pragma once
 	'''
 
 	def protected generateIncludeGuardEnd() '''
-		#endif // _«type.name.toUpperCase»_H_
 	'''
 
-	def protected generateAccessors(List<VarDeclaration> vars, String function) '''
-		«FOR v : vars»
-			«v.generateInterfaceTypeName» &«exportPrefix»«v.name»() {
-			  return *static_cast<«v.generateInterfaceTypeName»*>(«function»(«vars.indexOf(v)»));
-			}
-			
+	def protected generateVariableDeclarations(List<VarDeclaration> variables, boolean const) '''
+		«FOR variable : variables»
+			«IF const»static const «ENDIF»«variable.generateInterfaceTypeName» «variable.generateName»;
 		«ENDFOR»
 	'''
 
+	def protected generateVariableDefinitions(List<VarDeclaration> variables, boolean const) '''
+		«FOR variable : variables»
+			«IF const»const «ENDIF»«variable.generateInterfaceTypeName» FORTE_«type.name»::«variable.generateName» = «variable.generateVariableDefaultValue»;
+		«ENDFOR»
+	'''
+
+	def protected generateVariableInitializer(Iterable<VarDeclaration> variables) ///
+	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateName»(«variable.generateVariableDefaultValue»)«ENDFOR»'''
+
+	def protected generateVariableInitializerFromParameters(Iterable<VarDeclaration> variables) //
+	'''«FOR variable : variables BEFORE ",\n" SEPARATOR ",\n"»«variable.generateName»(«variable.generateNameAsParameter»)«ENDFOR»'''
+
+	def protected generateAccessorDeclaration(String function, boolean const) '''
+		«IF const»const «ENDIF»CIEC_ANY *«function»(size_t)«IF const» const«ENDIF» override;
+	'''
+
+	def protected generateAccessorDefinition(List<VarDeclaration> variables, String function, boolean const) '''
+		«IF variables.empty»
+			«IF const»const «ENDIF»CIEC_ANY *«className»::«function»(size_t)«IF const» const«ENDIF» {
+			  return nullptr;
+			}
+			
+		«ELSE»
+			«IF const»const «ENDIF»CIEC_ANY *«className»::«function»(size_t paIndex)«IF const» const«ENDIF» {
+			  switch(paIndex) {
+			    «FOR variable : variables»
+			    	case «variables.indexOf(variable)»: return &«variable.generateName»;
+			    «ENDFOR»
+			  }
+			  return nullptr;
+			}
+			
+		«ENDIF»
+	'''
+
+	def protected CharSequence generateNameAsParameter(VarDeclaration variable) '''pa_«variable.name»'''
+
 	def protected CharSequence generateInterfaceTypeName(VarDeclaration variable) //
 	'''«IF variable.array»CIEC_ARRAY<«ENDIF»«variable.type.generateTypeName»«IF variable.array»>«ENDIF»'''
-
-	def protected CharSequence generateName(VarDeclaration variable) '''var_«variable.name»'''
 
 	def CharSequence generateVariableDefaultValue(VarDeclaration decl) {
 		variableLanguageSupport.get(decl)?.generate(emptyMap)
@@ -98,7 +127,9 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	}
 
 	def protected getFORTETypeList(List<? extends VarDeclaration> elements) {
-		elements.map['''«IF it.array»«"ARRAY".FORTEStringId», «it.arraySize», «ENDIF»«it.type.generateTypeNamePlain.FORTEStringId»'''].join(", ")
+		elements.map [
+			'''«IF it.array»«"ARRAY".FORTEStringId», «it.arraySize», «ENDIF»«it.type.generateTypeNamePlain.FORTEStringId»'''
+		].join(", ")
 	}
 
 	override getErrors() {
@@ -112,7 +143,7 @@ abstract class ForteLibraryElementTemplate<T extends LibraryElement> extends For
 	override getInfos() {
 		(super.getInfos + variableLanguageSupport.values.filterNull.flatMap[getInfos].toSet).toList
 	}
-	
+
 	def Set<INamedElement> getDependencies(Map<?, ?> options) {
 		variableLanguageSupport.values.filterNull.flatMap[getDependencies(options)].toSet
 	}
