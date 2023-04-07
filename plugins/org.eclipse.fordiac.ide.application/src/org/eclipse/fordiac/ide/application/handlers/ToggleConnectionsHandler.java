@@ -29,7 +29,6 @@ import org.eclipse.fordiac.ide.application.editparts.ConnectionEditPart;
 import org.eclipse.fordiac.ide.gef.editparts.InterfaceEditPart;
 import org.eclipse.fordiac.ide.model.commands.change.HideConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.ui.editors.EditorUtils;
 import org.eclipse.gef.GraphicalEditPart;
@@ -50,13 +49,13 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 	@Override
 	public Object execute(final ExecutionEvent event) throws ExecutionException {
 		final ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (selection instanceof IStructuredSelection) {
+		if (selection instanceof final IStructuredSelection structSel) {
 			final CompoundCommand commands = new CompoundCommand();
 			final IEditorPart editor = HandlerUtil.getActiveEditor(event);
 			final CommandStack stack = editor.getAdapter(CommandStack.class);
 			final GraphicalViewer viewer = editor.getAdapter(GraphicalViewer.class);
 
-			final boolean isVisible = checkVisibilityOfSelection(((IStructuredSelection) selection).toList());
+			final boolean isVisible = checkVisibilityOfSelection(structSel.toList());
 			toggleConnections(commands, (IStructuredSelection) selection, isVisible);
 
 			if (null != stack) {
@@ -73,11 +72,10 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 	private static boolean checkVisibilityOfSelection(final List<Object> selection) {
 		final Set<Boolean> visibility = new HashSet<>();
 		for (final Object obj : selection) {
-			if (obj instanceof ConnectionEditPart) {
-				visibility.add(!((ConnectionEditPart) obj).getFigure().isHidden());
-			} else if (obj instanceof AbstractFBNElementEditPart) {
-				for (final IInterfaceElement element : ((AbstractFBNElementEditPart) obj).getModel().getInterface()
-						.getAllInterfaceElements()) {
+			if (obj instanceof final ConnectionEditPart conep) {
+				visibility.add(!conep.getFigure().isHidden());
+			} else if (obj instanceof final AbstractFBNElementEditPart fbEP) {
+				for (final IInterfaceElement element : fbEP.getModel().getInterface().getAllInterfaceElements()) {
 					if (element.isIsInput() && !element.getInputConnections().isEmpty()) {
 						element.getInputConnections().forEach(conn -> visibility.add(conn.isVisible()));
 					}
@@ -85,8 +83,8 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 						element.getOutputConnections().forEach(conn -> visibility.add(conn.isVisible()));
 					}
 				}
-			} else if (obj instanceof InterfaceEditPart) {
-				visibility.add(checkPinVisibility(((InterfaceEditPart) obj).getModel()));
+			} else if (obj instanceof final InterfaceEditPart iep) {
+				visibility.add(checkPinVisibility(iep.getModel()));
 			}
 		}
 
@@ -100,16 +98,13 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 	private static void toggleConnections(final CompoundCommand commands, final IStructuredSelection selection,
 			final boolean isVisible) {
 		for (final Object obj : selection.toList()) {
-			if (obj instanceof ConnectionEditPart) {
-				final ConnectionEditPart con = (ConnectionEditPart) obj;
-				addHideCommand(commands, con.getModel(), !isVisible);
-			} else if (obj instanceof AbstractFBNElementEditPart) {
-				final AbstractFBNElementEditPart fb = (AbstractFBNElementEditPart) obj;
-				fb.getModel().getInterface().getAllInterfaceElements()
+			if (obj instanceof final ConnectionEditPart conEP) {
+				addHideCommand(commands, conEP.getModel(), !isVisible);
+			} else if (obj instanceof final AbstractFBNElementEditPart fbEP) {
+				fbEP.getModel().getInterface().getAllInterfaceElements()
 				.forEach(pin -> togglePinConnections(commands, pin, isVisible));
-			} else if (obj instanceof InterfaceEditPart) {
-				final InterfaceEditPart pin = (InterfaceEditPart) obj;
-				togglePinConnections(commands, pin.getModel(), isVisible);
+			} else if (obj instanceof final InterfaceEditPart iep) {
+				togglePinConnections(commands, iep.getModel(), isVisible);
 			}
 		}
 	}
@@ -161,23 +156,21 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 	}
 
 	private static boolean selectionContainsConnectionsOrFbs(final ISelection selection) {
-		if (selection instanceof IStructuredSelection && !selection.isEmpty()) {
-			return ((IStructuredSelection) selection).toList().stream().anyMatch(
-					ep -> isConnection(ep) || hasConnection(ep));
+		if (selection instanceof final IStructuredSelection structSel && !selection.isEmpty()) {
+			return structSel.toList().stream().anyMatch(ep -> isConnection(ep) || hasConnection(ep));
 		}
 		return false;
 	}
 
 	private static boolean hasConnection(final Object ep) {
-		if (ep instanceof AbstractFBNElementEditPart) {
-			final FBNetworkElement fb = ((AbstractFBNElementEditPart) ep).getModel();
-			for (final IInterfaceElement ie : fb.getInterface().getAllInterfaceElements()) {
+		if (ep instanceof final AbstractFBNElementEditPart fbEP) {
+			for (final IInterfaceElement ie : fbEP.getModel().getInterface().getAllInterfaceElements()) {
 				if(hasConnection(ie)) {
 					return true;
 				}
 			}
 		}
-		return ((ep instanceof InterfaceEditPart) && (hasConnection(((InterfaceEditPart) ep).getModel())));
+		return ((ep instanceof final InterfaceEditPart iep) && (hasConnection(iep.getModel())));
 	}
 
 	private static boolean hasConnection(final IInterfaceElement ie) {
@@ -186,15 +179,17 @@ public class ToggleConnectionsHandler extends AbstractHandler implements IElemen
 	}
 
 	private static boolean isConnection(final Object ep) {
-		return ep instanceof ConnectionEditPart && ((ConnectionEditPart) ep).getFigure() != null;
+		return ep instanceof final ConnectionEditPart cep && cep.getFigure() != null;
 	}
 
 	@Override
 	public void updateElement(final UIElement element, final Map parameters) {
 		final GraphicalViewer viewer = EditorUtils.getCurrentActiveEditor().getAdapter(GraphicalViewer.class);
-		final boolean isVisible = checkVisibilityOfSelection(viewer.getSelectedEditParts());
-		setElementText(element, isVisible, viewer.getSelectedEditParts().size() == 1
-				&& viewer.getSelectedEditParts().get(0) instanceof ConnectionEditPart);
+		if (viewer != null) {
+			final boolean isVisible = checkVisibilityOfSelection(viewer.getSelectedEditParts());
+			setElementText(element, isVisible, viewer.getSelectedEditParts().size() == 1
+					&& viewer.getSelectedEditParts().get(0) instanceof ConnectionEditPart);
+		}
 	}
 
 	private static void setElementText(final UIElement element, final boolean isVisible, final boolean isSingular) {
