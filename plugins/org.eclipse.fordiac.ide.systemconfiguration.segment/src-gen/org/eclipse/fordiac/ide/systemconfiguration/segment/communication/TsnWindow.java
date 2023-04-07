@@ -11,7 +11,7 @@
  *          - initial implementation and/or documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication;
+package org.eclipse.fordiac.ide.systemconfiguration.segment.communication;
 
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 
@@ -21,11 +21,11 @@ import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow#getDuration
+ * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow#getDuration
  * <em>Duration</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage#getTsnWindow()
+ * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage#getTsnWindow()
  * @model
  * @generated */
 public interface TsnWindow extends CommunicationMappingTarget {
@@ -34,13 +34,13 @@ public interface TsnWindow extends CommunicationMappingTarget {
 	 *
 	 * @return the value of the '<em>Duration</em>' attribute.
 	 * @see #setDuration(int)
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage#getTsnWindow_Duration()
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage#getTsnWindow_Duration()
 	 * @model default="0" required="true"
 	 * @generated */
 	int getDuration();
 
 	/** Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow#getDuration
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow#getDuration
 	 * <em>Duration</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @param value the new value of the '<em>Duration</em>' attribute.

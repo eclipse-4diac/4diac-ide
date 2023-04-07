@@ -11,22 +11,25 @@
  *          - initial implementation and/or documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.util;
+package org.eclipse.fordiac.ide.systemconfiguration.segment.communication.util;
 
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notifier;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
+import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.DefaultConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow;
 
 /** <!-- begin-user-doc --> The <b>Adapter Factory</b> for the model. It provides an adapter <code>createXXX</code>
  * method for each class of the model. <!-- end-user-doc -->
  *
- * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage
+ * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage
  * @generated */
 public class CommunicationAdapterFactory extends AdapterFactoryImpl {
 	/** The cached model package. <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -75,6 +78,11 @@ public class CommunicationAdapterFactory extends AdapterFactoryImpl {
 		}
 
 		@Override
+		public Adapter caseDefaultConfiguration(DefaultConfiguration object) {
+			return createDefaultConfigurationAdapter();
+		}
+
+		@Override
 		public Adapter caseCommunicationConfiguration(CommunicationConfiguration object) {
 			return createCommunicationConfigurationAdapter();
 		}
@@ -82,6 +90,16 @@ public class CommunicationAdapterFactory extends AdapterFactoryImpl {
 		@Override
 		public Adapter caseINamedElement(INamedElement object) {
 			return createINamedElementAdapter();
+		}
+
+		@Override
+		public Adapter caseMappingTarget(MappingTarget object) {
+			return createMappingTargetAdapter();
+		}
+
+		@Override
+		public Adapter caseCommunicationMappingTarget(CommunicationMappingTarget object) {
+			return createCommunicationMappingTargetAdapter();
 		}
 
 		@Override
@@ -101,38 +119,38 @@ public class CommunicationAdapterFactory extends AdapterFactoryImpl {
 	}
 
 	/** Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration <em>Tsn
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration <em>Tsn
 	 * Configuration</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
 	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
 	 * -->
 	 *
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration
 	 * @generated */
 	public Adapter createTsnConfigurationAdapter() {
 		return null;
 	}
 
 	/** Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow <em>Tsn Window</em>}'. <!--
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow <em>Tsn Window</em>}'. <!--
 	 * begin-user-doc --> This default implementation returns null so that we can easily ignore cases; it's useful to
 	 * ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc -->
 	 *
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow
 	 * @generated */
 	public Adapter createTsnWindowAdapter() {
 		return null;
 	}
 
 	/** Creates a new adapter for an object of class
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration <em>Default
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.DefaultConfiguration <em>Default
 	 * Configuration</em>}'. <!-- begin-user-doc --> This default implementation returns null so that we can easily
 	 * ignore cases; it's useful to ignore a case when inheritance will catch all the cases anyway. <!-- end-user-doc
 	 * -->
 	 *
 	 * @return the new adapter.
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.DefaultConfiguration
 	 * @generated */
 	public Adapter createDefaultConfigurationAdapter() {
 		return null;

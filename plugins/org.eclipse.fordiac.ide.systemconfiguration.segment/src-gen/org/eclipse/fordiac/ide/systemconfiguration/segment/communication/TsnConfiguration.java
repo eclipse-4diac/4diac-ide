@@ -11,7 +11,7 @@
  *          - initial implementation and/or documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication;
+package org.eclipse.fordiac.ide.systemconfiguration.segment.communication;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
@@ -25,13 +25,13 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration#getCycleTime <em>Cycle
+ * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration#getCycleTime <em>Cycle
  * Time</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration#getWindows
+ * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration#getWindows
  * <em>Windows</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage#getTsnConfiguration()
+ * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage#getTsnConfiguration()
  * @model
  * @generated */
 public interface TsnConfiguration extends CommunicationConfiguration {
@@ -39,13 +39,13 @@ public interface TsnConfiguration extends CommunicationConfiguration {
 	 *
 	 * @return the value of the '<em>Cycle Time</em>' attribute.
 	 * @see #setCycleTime(int)
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage#getTsnConfiguration_CycleTime()
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage#getTsnConfiguration_CycleTime()
 	 * @model required="true"
 	 * @generated */
 	int getCycleTime();
 
 	/** Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration#getCycleTime <em>Cycle
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration#getCycleTime <em>Cycle
 	 * Time</em>}' attribute. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @param value the new value of the '<em>Cycle Time</em>' attribute.
@@ -54,11 +54,11 @@ public interface TsnConfiguration extends CommunicationConfiguration {
 	void setCycleTime(int value);
 
 	/** Returns the value of the '<em><b>Windows</b></em>' containment reference list. The list contents are of type
-	 * {@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow}. <!-- begin-user-doc --> <!--
+	 * {@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow}. <!-- begin-user-doc --> <!--
 	 * end-user-doc -->
 	 *
 	 * @return the value of the '<em>Windows</em>' containment reference list.
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage#getTsnConfiguration_Windows()
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage#getTsnConfiguration_Windows()
 	 * @model containment="true" resolveProxies="true" required="true" upper="8"
 	 * @generated */
 	EList<TsnWindow> getWindows();

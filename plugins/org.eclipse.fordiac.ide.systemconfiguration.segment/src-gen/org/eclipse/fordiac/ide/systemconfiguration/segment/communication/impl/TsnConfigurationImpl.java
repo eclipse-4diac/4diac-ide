@@ -11,7 +11,7 @@
  *          - initial implementation and/or documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl;
+package org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl;
 
 import java.util.Collection;
 
@@ -28,10 +28,9 @@ import org.eclipse.emf.ecore.util.InternalEList;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.Annotations;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Tsn Configuration</b></em>'. <!-- end-user-doc
  * -->
@@ -39,9 +38,9 @@ import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWind
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.TsnConfigurationImpl#getCycleTime
+ * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.TsnConfigurationImpl#getCycleTime
  * <em>Cycle Time</em>}</li>
- * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.TsnConfigurationImpl#getWindows
+ * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.TsnConfigurationImpl#getWindows
  * <em>Windows</em>}</li>
  * </ul>
  *
@@ -98,13 +97,12 @@ public class TsnConfigurationImpl extends MinimalEObjectImpl.Container implement
 	 *
 	 * @generated */
 	@Override
-	public void setCycleTime(final int newCycleTime) {
-		final int oldCycleTime = cycleTime;
+	public void setCycleTime(int newCycleTime) {
+		int oldCycleTime = cycleTime;
 		cycleTime = newCycleTime;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CommunicationPackage.TSN_CONFIGURATION__CYCLE_TIME,
 					oldCycleTime, cycleTime));
-		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -147,8 +145,7 @@ public class TsnConfigurationImpl extends MinimalEObjectImpl.Container implement
 	 *
 	 * @generated */
 	@Override
-	public NotificationChain eInverseRemove(final InternalEObject otherEnd, final int featureID,
-			final NotificationChain msgs) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case CommunicationPackage.TSN_CONFIGURATION__WINDOWS:
 			return ((InternalEList<?>) getWindows()).basicRemove(otherEnd, msgs);
@@ -161,7 +158,7 @@ public class TsnConfigurationImpl extends MinimalEObjectImpl.Container implement
 	 *
 	 * @generated */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case CommunicationPackage.TSN_CONFIGURATION__CYCLE_TIME:
 			return getCycleTime();
@@ -177,7 +174,7 @@ public class TsnConfigurationImpl extends MinimalEObjectImpl.Container implement
 	 * @generated */
 	@SuppressWarnings("unchecked")
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 		case CommunicationPackage.TSN_CONFIGURATION__CYCLE_TIME:
 			setCycleTime((Integer) newValue);
@@ -196,7 +193,7 @@ public class TsnConfigurationImpl extends MinimalEObjectImpl.Container implement
 	 *
 	 * @generated */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
 		case CommunicationPackage.TSN_CONFIGURATION__CYCLE_TIME:
 			setCycleTime(CYCLE_TIME_EDEFAULT);
@@ -214,7 +211,7 @@ public class TsnConfigurationImpl extends MinimalEObjectImpl.Container implement
 	 *
 	 * @generated */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case CommunicationPackage.TSN_CONFIGURATION__CYCLE_TIME:
 			return cycleTime != CYCLE_TIME_EDEFAULT;
@@ -230,11 +227,10 @@ public class TsnConfigurationImpl extends MinimalEObjectImpl.Container implement
 	 * @generated */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
+		if (eIsProxy())
 			return super.toString();
-		}
 
-		final StringBuilder result = new StringBuilder(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (cycleTime: "); //$NON-NLS-1$
 		result.append(cycleTime);
 		result.append(')');
