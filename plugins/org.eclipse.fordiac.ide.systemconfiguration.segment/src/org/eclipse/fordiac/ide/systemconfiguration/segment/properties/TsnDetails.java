@@ -20,14 +20,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Messages;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.TsnParameters;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationFactory;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.commands.ChangeTsnCycleTimeCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.commands.ChangeTsnWindowDurationCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.commands.ChangeTsnWindowOrderCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.commands.CreateTsnWindowCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.commands.DeleteTsnWindowCommand;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationFactory;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.providers.TsnWindowLabelProvider;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.widget.MappedFbMenu;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
@@ -91,7 +91,7 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 		buttons.createControls(detailsComp, widgetFactory);
 		final TableViewer windowViewer = TableWidgetFactory.createTableViewer(detailsComp);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).span(2, 1)
-				.applyTo(windowViewer.getTable());
+		.applyTo(windowViewer.getTable());
 
 		final Table table = windowViewer.getTable();
 		configureTableLayout(table);

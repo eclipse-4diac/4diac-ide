@@ -11,7 +11,7 @@
  *          - initial implementation and/or documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication;
+package org.eclipse.fordiac.ide.systemconfiguration.segment.communication;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -28,14 +28,14 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * </ul>
  * <!-- end-user-doc -->
  *
- * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationFactory
+ * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationFactory
  * @model kind="package"
  * @generated */
 public interface CommunicationPackage extends EPackage {
 	/** The package name. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	String eNAME = "Communication"; //$NON-NLS-1$
+	String eNAME = "communication"; //$NON-NLS-1$
 
 	/** The package namespace URI. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
@@ -50,15 +50,15 @@ public interface CommunicationPackage extends EPackage {
 	/** The singleton instance of the package. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	CommunicationPackage eINSTANCE = org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.CommunicationPackageImpl
+	CommunicationPackage eINSTANCE = org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.CommunicationPackageImpl
 			.init();
 
 	/** The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.TsnConfigurationImpl <em>Tsn
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.TsnConfigurationImpl <em>Tsn
 	 * Configuration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.TsnConfigurationImpl
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.CommunicationPackageImpl#getTsnConfiguration()
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.TsnConfigurationImpl
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.CommunicationPackageImpl#getTsnConfiguration()
 	 * @generated */
 	int TSN_CONFIGURATION = 0;
 
@@ -83,11 +83,11 @@ public interface CommunicationPackage extends EPackage {
 	int TSN_CONFIGURATION_FEATURE_COUNT = LibraryElementPackage.COMMUNICATION_CONFIGURATION_FEATURE_COUNT + 2;
 
 	/** The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.TsnWindowImpl <em>Tsn
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.TsnWindowImpl <em>Tsn
 	 * Window</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.TsnWindowImpl
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.CommunicationPackageImpl#getTsnWindow()
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.TsnWindowImpl
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.CommunicationPackageImpl#getTsnWindow()
 	 * @generated */
 	int TSN_WINDOW = 1;
 
@@ -124,15 +124,16 @@ public interface CommunicationPackage extends EPackage {
 	int TSN_WINDOW_FEATURE_COUNT = LibraryElementPackage.COMMUNICATION_MAPPING_TARGET_FEATURE_COUNT + 1;
 
 	/** The meta object id for the
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.DefaultConfigurationImpl
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.DefaultConfigurationImpl
 	 * <em>Default Configuration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.DefaultConfigurationImpl
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.CommunicationPackageImpl#getDefaultConfiguration()
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.DefaultConfigurationImpl
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.CommunicationPackageImpl#getDefaultConfiguration()
 	 * @generated */
 	int DEFAULT_CONFIGURATION = 2;
 
-	/** The feature id for the '<em><b>Target</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** The feature id for the '<em><b>Target</b></em>' containment reference. <!-- begin-user-doc --> <!-- end-user-doc
+	 * -->
 	 *
 	 * @generated
 	 * @ordered */
@@ -146,68 +147,68 @@ public interface CommunicationPackage extends EPackage {
 	int DEFAULT_CONFIGURATION_FEATURE_COUNT = LibraryElementPackage.COMMUNICATION_CONFIGURATION_FEATURE_COUNT + 1;
 
 	/** Returns the meta object for class
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration <em>Tsn
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration <em>Tsn
 	 * Configuration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @return the meta object for class '<em>Tsn Configuration</em>'.
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration
 	 * @generated */
 	EClass getTsnConfiguration();
 
 	/** Returns the meta object for the attribute
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration#getCycleTime <em>Cycle
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration#getCycleTime <em>Cycle
 	 * Time</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @return the meta object for the attribute '<em>Cycle Time</em>'.
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration#getCycleTime()
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration#getCycleTime()
 	 * @see #getTsnConfiguration()
 	 * @generated */
 	EAttribute getTsnConfiguration_CycleTime();
 
-	/** Returns the meta object for the reference list
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration#getWindows
+	/** Returns the meta object for the containment reference list
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration#getWindows
 	 * <em>Windows</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @return the meta object for the reference list '<em>Windows</em>'.
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration#getWindows()
+	 * @return the meta object for the containment reference list '<em>Windows</em>'.
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration#getWindows()
 	 * @see #getTsnConfiguration()
 	 * @generated */
 	EReference getTsnConfiguration_Windows();
 
 	/** Returns the meta object for class
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow <em>Tsn Window</em>}'. <!--
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow <em>Tsn Window</em>}'. <!--
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @return the meta object for class '<em>Tsn Window</em>'.
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow
 	 * @generated */
 	EClass getTsnWindow();
 
 	/** Returns the meta object for the attribute
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow#getDuration
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow#getDuration
 	 * <em>Duration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @return the meta object for the attribute '<em>Duration</em>'.
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow#getDuration()
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow#getDuration()
 	 * @see #getTsnWindow()
 	 * @generated */
 	EAttribute getTsnWindow_Duration();
 
 	/** Returns the meta object for class
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration <em>Default
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.DefaultConfiguration <em>Default
 	 * Configuration</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @return the meta object for class '<em>Default Configuration</em>'.
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.DefaultConfiguration
 	 * @generated */
 	EClass getDefaultConfiguration();
 
-	/** Returns the meta object for the reference
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration#getTarget
+	/** Returns the meta object for the containment reference
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.DefaultConfiguration#getTarget
 	 * <em>Target</em>}'. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @return the meta object for the reference '<em>Target</em>'.
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration#getTarget()
+	 * @return the meta object for the containment reference '<em>Target</em>'.
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.DefaultConfiguration#getTarget()
 	 * @see #getDefaultConfiguration()
 	 * @generated */
 	EReference getDefaultConfiguration_Target();
@@ -230,11 +231,11 @@ public interface CommunicationPackage extends EPackage {
 	 * @generated */
 	interface Literals {
 		/** The meta object literal for the
-		 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.TsnConfigurationImpl <em>Tsn
+		 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.TsnConfigurationImpl <em>Tsn
 		 * Configuration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.TsnConfigurationImpl
-		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.CommunicationPackageImpl#getTsnConfiguration()
+		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.TsnConfigurationImpl
+		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.CommunicationPackageImpl#getTsnConfiguration()
 		 * @generated */
 		EClass TSN_CONFIGURATION = eINSTANCE.getTsnConfiguration();
 
@@ -244,18 +245,18 @@ public interface CommunicationPackage extends EPackage {
 		 * @generated */
 		EAttribute TSN_CONFIGURATION__CYCLE_TIME = eINSTANCE.getTsnConfiguration_CycleTime();
 
-		/** The meta object literal for the '<em><b>Windows</b></em>' reference list feature. <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+		/** The meta object literal for the '<em><b>Windows</b></em>' containment reference list feature. <!--
+		 * begin-user-doc --> <!-- end-user-doc -->
 		 *
 		 * @generated */
 		EReference TSN_CONFIGURATION__WINDOWS = eINSTANCE.getTsnConfiguration_Windows();
 
 		/** The meta object literal for the
-		 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.TsnWindowImpl <em>Tsn
+		 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.TsnWindowImpl <em>Tsn
 		 * Window</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.TsnWindowImpl
-		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.CommunicationPackageImpl#getTsnWindow()
+		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.TsnWindowImpl
+		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.CommunicationPackageImpl#getTsnWindow()
 		 * @generated */
 		EClass TSN_WINDOW = eINSTANCE.getTsnWindow();
 
@@ -266,16 +267,16 @@ public interface CommunicationPackage extends EPackage {
 		EAttribute TSN_WINDOW__DURATION = eINSTANCE.getTsnWindow_Duration();
 
 		/** The meta object literal for the
-		 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.DefaultConfigurationImpl
+		 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.DefaultConfigurationImpl
 		 * <em>Default Configuration</em>}' class. <!-- begin-user-doc --> <!-- end-user-doc -->
 		 *
-		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.DefaultConfigurationImpl
-		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.CommunicationPackageImpl#getDefaultConfiguration()
+		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.DefaultConfigurationImpl
+		 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.CommunicationPackageImpl#getDefaultConfiguration()
 		 * @generated */
 		EClass DEFAULT_CONFIGURATION = eINSTANCE.getDefaultConfiguration();
 
-		/** The meta object literal for the '<em><b>Target</b></em>' reference feature. <!-- begin-user-doc --> <!--
-		 * end-user-doc -->
+		/** The meta object literal for the '<em><b>Target</b></em>' containment reference feature. <!-- begin-user-doc
+		 * --> <!-- end-user-doc -->
 		 *
 		 * @generated */
 		EReference DEFAULT_CONFIGURATION__TARGET = eINSTANCE.getDefaultConfiguration_Target();

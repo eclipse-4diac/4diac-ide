@@ -11,22 +11,21 @@
  *          - initial implementation and/or documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl;
+package org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.impl.CommunicationMappingTargetImpl;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.Annotations;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Tsn Window</b></em>'. <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.TsnWindowImpl#getDuration
+ * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.TsnWindowImpl#getDuration
  * <em>Duration</em>}</li>
  * </ul>
  *
@@ -75,13 +74,12 @@ public class TsnWindowImpl extends CommunicationMappingTargetImpl implements Tsn
 	 *
 	 * @generated */
 	@Override
-	public void setDuration(final int newDuration) {
-		final int oldDuration = duration;
+	public void setDuration(int newDuration) {
+		int oldDuration = duration;
 		duration = newDuration;
-		if (eNotificationRequired()) {
+		if (eNotificationRequired())
 			eNotify(new ENotificationImpl(this, Notification.SET, CommunicationPackage.TSN_WINDOW__DURATION,
 					oldDuration, duration));
-		}
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -96,7 +94,7 @@ public class TsnWindowImpl extends CommunicationMappingTargetImpl implements Tsn
 	 *
 	 * @generated */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
 		switch (featureID) {
 		case CommunicationPackage.TSN_WINDOW__DURATION:
 			return getDuration();
@@ -109,7 +107,7 @@ public class TsnWindowImpl extends CommunicationMappingTargetImpl implements Tsn
 	 *
 	 * @generated */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 		case CommunicationPackage.TSN_WINDOW__DURATION:
 			setDuration((Integer) newValue);
@@ -124,7 +122,7 @@ public class TsnWindowImpl extends CommunicationMappingTargetImpl implements Tsn
 	 *
 	 * @generated */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
 		case CommunicationPackage.TSN_WINDOW__DURATION:
 			setDuration(DURATION_EDEFAULT);
@@ -139,7 +137,7 @@ public class TsnWindowImpl extends CommunicationMappingTargetImpl implements Tsn
 	 *
 	 * @generated */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case CommunicationPackage.TSN_WINDOW__DURATION:
 			return duration != DURATION_EDEFAULT;
@@ -153,11 +151,10 @@ public class TsnWindowImpl extends CommunicationMappingTargetImpl implements Tsn
 	 * @generated */
 	@Override
 	public String toString() {
-		if (eIsProxy()) {
+		if (eIsProxy())
 			return super.toString();
-		}
 
-		final StringBuilder result = new StringBuilder(super.toString());
+		StringBuilder result = new StringBuilder(super.toString());
 		result.append(" (duration: "); //$NON-NLS-1$
 		result.append(duration);
 		result.append(')');

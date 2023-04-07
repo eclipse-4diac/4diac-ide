@@ -11,7 +11,7 @@
  *          - initial implementation and/or documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl;
+package org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl;
 
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -21,11 +21,11 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
 import org.eclipse.fordiac.ide.model.data.DataPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationFactory;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationFactory;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.DefaultConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow;
 
 /** <!-- begin-user-doc --> An implementation of the model <b>Package</b>. <!-- end-user-doc -->
  *
@@ -54,7 +54,7 @@ public class CommunicationPackageImpl extends EPackageImpl implements Communicat
 	 * begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @see org.eclipse.emf.ecore.EPackage.Registry
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage#eNS_URI
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage#eNS_URI
 	 * @see #init()
 	 * @generated */
 	private CommunicationPackageImpl() {
@@ -242,10 +242,11 @@ public class CommunicationPackageImpl extends EPackageImpl implements Communicat
 				TsnConfiguration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, IS_RESOLVE_PROXIES,
 				!IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
-		addEOperation(tsnConfigurationEClass, theXMLTypePackage.getString(), "getId", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
-
 		addEOperation(tsnConfigurationEClass, theLibraryElementPackage.getCommunicationMappingTarget(),
 				"getMappingTargets", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(tsnConfigurationEClass, theLibraryElementPackage.getVarDeclaration(), "getParameters", 0, -1, //$NON-NLS-1$
+				IS_UNIQUE, IS_ORDERED);
 
 		initEClass(tsnWindowEClass, TsnWindow.class, "TsnWindow", !IS_ABSTRACT, !IS_INTERFACE, //$NON-NLS-1$
 				IS_GENERATED_INSTANCE_CLASS);
@@ -258,12 +259,15 @@ public class CommunicationPackageImpl extends EPackageImpl implements Communicat
 				!IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getDefaultConfiguration_Target(), theLibraryElementPackage.getCommunicationMappingTarget(), null,
 				"target", null, 1, 1, DefaultConfiguration.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, //$NON-NLS-1$
-				!IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+				IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		addEOperation(defaultConfigurationEClass, theXMLTypePackage.getString(), "getId", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(defaultConfigurationEClass, theLibraryElementPackage.getCommunicationMappingTarget(),
 				"getMappingTargets", 0, -1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(defaultConfigurationEClass, theLibraryElementPackage.getVarDeclaration(), "getParameters", 0, -1, //$NON-NLS-1$
+				IS_UNIQUE, IS_ORDERED);
 
 		// Create resource
 		createResource(eNS_URI);
