@@ -161,6 +161,11 @@ public class CreateBootFilesWizardPage extends WizardExportResourcesPage {
 		getDialogSettings().put(SETTING_CURRENT_DIR, getDirectory());
 	}
 
+	@Override // this override is needed to make it public for access by the wizard
+	public void saveWidgetValues() {
+		super.saveWidgetValues();
+	}
+
 	/**
 	 * Sets the directory.
 	 *
