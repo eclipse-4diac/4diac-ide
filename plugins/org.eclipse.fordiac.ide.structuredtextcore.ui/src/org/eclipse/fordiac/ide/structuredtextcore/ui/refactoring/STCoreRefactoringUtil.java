@@ -139,7 +139,7 @@ public final class STCoreRefactoringUtil {
 	public static ITextRegion alignRegion(final ITextRegion region, final ICompositeNode rootNode) {
 		final ILeafNode firstLeafNode = NodeModelUtils.findLeafNodeAtOffset(rootNode, region.getOffset());
 		final ILeafNode lastLeafNode = NodeModelUtils.findLeafNodeAtOffset(rootNode,
-				region.getOffset() + region.getLength());
+				region.getOffset() + (region.getLength() > 0 ? region.getLength() - 1 : 0));
 		return new TextRegion(firstLeafNode.getOffset(), lastLeafNode.getEndOffset() - firstLeafNode.getOffset());
 	}
 
