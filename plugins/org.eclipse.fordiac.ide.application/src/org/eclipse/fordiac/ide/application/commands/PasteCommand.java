@@ -71,8 +71,6 @@ public class PasteCommand extends Command {
 	private boolean calcualteDelta = false;
 	private Point pasteRefPos;
 
-	private CutAndPasteFromSubAppCommand cutPasteCmd;
-
 	/** Instantiates a new paste command.
 	 *
 	 * @param templates   the elements that should be copied to the destination
@@ -117,9 +115,6 @@ public class PasteCommand extends Command {
 	public void undo() {
 		connCreateCmds.undo();
 		dstFBNetwork.getNetworkElements().removeAll(copiedElements.values());
-		if (cutPasteCmd != null) {
-			cutPasteCmd.undo();
-		}
 		ElementSelector.selectViewObjects(templates);
 
 	}
@@ -128,9 +123,6 @@ public class PasteCommand extends Command {
 	public void redo() {
 		dstFBNetwork.getNetworkElements().addAll(copiedElements.values());
 		connCreateCmds.redo();
-		if (cutPasteCmd != null) {
-			cutPasteCmd.redo();
-		}
 		ElementSelector.selectViewObjects(copiedElements.values());
 	}
 
@@ -355,17 +347,6 @@ public class PasteCommand extends Command {
 		return pastePos;
 	}
 
-	protected CutAndPasteFromSubAppCommand getCutPasteCmd() {
-		return cutPasteCmd;
-	}
-
-	public void setCutPasteCmd(final CutAndPasteFromSubAppCommand cutPasteCmd) {
-		this.cutPasteCmd = cutPasteCmd;
-	}
-
-	public Collection<? extends Object> getTemplates() {
-		return templates;
-	}
 
 	public Collection<FBNetworkElement> getCopiedFBs() {
 		return copiedElements.values();
