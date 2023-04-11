@@ -46,6 +46,7 @@ public class GitLabDownloadManager {
 	private static final String PACKAGE_FILES = "/package_files";
 	private GitLabApi gitLabApi;
 	private HashMap<Project, List<Package>> projectAndPackageMap;
+	private HashMap<String, List<String>> packagesAndVersions;
 	private GitLabImportWizardPage gitLabImportPage;
 	
 	public GitLabDownloadManager(GitLabImportWizardPage gitLabImportPage) {
@@ -56,6 +57,10 @@ public class GitLabDownloadManager {
 		return gitLabApi;
 	}
 	
+	public Map<String, List<String>> getPackagesAndVersions() {
+		return packagesAndVersions;
+	}
+	
 	public void connectToGitLab(String url, String personalToken) {
 		gitLabApi = new GitLabApi(url, personalToken);
 		filterData();
@@ -63,9 +68,18 @@ public class GitLabDownloadManager {
 	
 	private void filterData() {
 		try {
+			List<Package> packages;
 			projectAndPackageMap = new HashMap<>();
+			packagesAndVersions = new HashMap<>();
 			for(Project p: gitLabApi.getProjectApi().getProjects()) {
-				projectAndPackageMap.put(p, gitLabApi.getPackagesApi().getPackages(p.getId()));
+				packages = gitLabApi.getPackagesApi().getPackages(p.getId());
+				projectAndPackageMap.put(p, packages);
+				for(Package pack: packages) {
+					if (packagesAndVersions.get(pack.getName()) == null) {
+						packagesAndVersions.put(pack.getName(), new ArrayList<>());
+					} 
+					packagesAndVersions.get(pack.getName()).add(pack.getVersion());
+				}
 			}
 		} catch (GitLabApiException e) {
 			e.printStackTrace();
@@ -73,7 +87,7 @@ public class GitLabDownloadManager {
 		
 	}
 	
-	public Map<Project, List<Package>> getMap() {
+	public Map<Project, List<Package>> getProjectsAndPackages() {
 		return projectAndPackageMap;
 	}
 

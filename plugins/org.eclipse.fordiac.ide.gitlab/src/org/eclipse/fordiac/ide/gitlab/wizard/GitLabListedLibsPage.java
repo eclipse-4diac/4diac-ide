@@ -56,7 +56,7 @@ public class GitLabListedLibsPage extends WizardPage {
         container.setLayout(layout);
         
         treeViewer = new TreeViewer(container, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER);
-        treeViewer.setContentProvider(new GLTreeContentProvider());
+        
         
         treeViewer.getTree().setHeaderVisible(true);
         treeViewer.getTree().setLinesVisible(true);
@@ -108,12 +108,13 @@ public class GitLabListedLibsPage extends WizardPage {
 	public void setVisible(boolean visible) {
 		super.setVisible(visible);
 		// Setting the input here insures that we have already connected to GitLab and that the packages are indeed available
+		treeViewer.setContentProvider(new GLTreeContentProvider(((GitLabImportWizardPage)getPreviousPage()).getDownloadManager().getPackagesAndVersions()));
 		treeViewer.setInput(getProjectAndPackagesMap());
 	}
 
 	private Map<Project, List<Package>> getProjectAndPackagesMap() {
 		if (getPreviousPage() instanceof GitLabImportWizardPage && getPreviousPage().isPageComplete()) {
-				return ((GitLabImportWizardPage)getPreviousPage()).getDownloadManager().getMap();
+				return ((GitLabImportWizardPage)getPreviousPage()).getDownloadManager().getProjectsAndPackages();
 		}
 		return new HashMap<>(); 
 	}
