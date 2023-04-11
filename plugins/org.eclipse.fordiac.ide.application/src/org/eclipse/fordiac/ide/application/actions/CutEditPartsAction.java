@@ -12,13 +12,8 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
 
-import java.util.List;
-
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.actions.CopyPasteMessage.CopyStatus;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteFBNetworkElementCommand;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
-import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.ui.FordiacClipboard;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
@@ -44,24 +39,15 @@ public class CutEditPartsAction extends CopyEditPartsAction {
 
 	@Override
 	public void run() {
-		final List<Object> templates = getSelectedTemplates();
-		final CopyPasteMessage message = new CopyPasteMessage(CopyStatus.CUT_FROM_ROOT, templates);
-		final Command fbDeleteCommands = getFBDeleteCommands(templates);
-
+		final CopyPasteData copyPasteData = getSelectedTemplates();
+		final Command fbDeleteCommands = getFBDeleteCommands(copyPasteData);
 		execute(fbDeleteCommands);
-		// add the src FBNetwork to the model as the cut deletes the FBs from the
-		// network and we therefore loose the source fbnetwork for checks in pasting
-		templates.add(getWorkbenchPart().getAdapter(FBNetwork.class));
-		FordiacClipboard.INSTANCE.setGraphicalContents(message);
+		FordiacClipboard.INSTANCE.setGraphicalContents(copyPasteData);
 	}
 
-	private static Command getFBDeleteCommands(final List<Object> templates) {
+	private static Command getFBDeleteCommands(final CopyPasteData copyPasteData) {
 		final CompoundCommand cmd = new CompoundCommand();
-		for (final Object obj : templates) {
-			if (obj instanceof final FBNetworkElement fbnEl) {
-				cmd.add(new DeleteFBNetworkElementCommand(fbnEl));
-			}
-		}
+		copyPasteData.elements().forEach(fbnEl -> cmd.add(new DeleteFBNetworkElementCommand(fbnEl)));
 		return cmd;
 	}
 

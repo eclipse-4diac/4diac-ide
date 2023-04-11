@@ -16,17 +16,14 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.commands;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.application.Messages;
+import org.eclipse.fordiac.ide.application.actions.CopyPasteData;
 import org.eclipse.fordiac.ide.gef.utilities.ElementSelector;
 import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractConnectionCreateCommand;
@@ -36,6 +33,7 @@ import org.eclipse.fordiac.ide.model.commands.create.EventConnectionCreateComman
 import org.eclipse.fordiac.ide.model.helpers.FBNetworkHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterDeclaration;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
+import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.Event;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -54,15 +52,10 @@ import org.eclipse.swt.graphics.Point;
 public class PasteCommand extends Command {
 
 	private static final int DEFAULT_DELTA = 20;
-	private final Collection<? extends Object> templates;
+	private final CopyPasteData copyPasteData;
 	private final FBNetwork dstFBNetwork;
-	private FBNetwork srcFBNetwork = null;
 
 	private final Map<FBNetworkElement, FBNetworkElement> copiedElements = new HashMap<>();
-
-	private final List<FBNetworkElement> elementsToCopy = new ArrayList<>();
-
-	private final Set<ConnectionReference> connectionsToCopy = new HashSet<>();
 
 	private final CompoundCommand connCreateCmds = new CompoundCommand();
 
@@ -73,20 +66,20 @@ public class PasteCommand extends Command {
 
 	/** Instantiates a new paste command.
 	 *
-	 * @param templates   the elements that should be copied to the destination
-	 * @param destination the destination fbnetwork where the elements should be copied to
-	 * @param pasteRefPos the reference position for pasting the elements */
-	public PasteCommand(final List<? extends Object> templates, final FBNetwork destination, final Point pasteRefPos) {
-		this.templates = templates;
+	 * @param copyPasteData the elements that should be copied to the destination
+	 * @param destination   the destination fbnetwork where the elements should be copied to
+	 * @param pasteRefPos   the reference position for pasting the elements */
+	public PasteCommand(final CopyPasteData copyPasteData, final FBNetwork destination, final Point pasteRefPos) {
+		this.copyPasteData = copyPasteData;
 		this.dstFBNetwork = destination;
 		this.pasteRefPos = pasteRefPos;
 		calcualteDelta = true;
 
 	}
 
-	public PasteCommand(final List<? extends Object> templates, final FBNetwork destination, final int copyDeltaX,
+	public PasteCommand(final CopyPasteData copyPasteData, final FBNetwork destination, final int copyDeltaX,
 			final int copyDeltaY) {
-		this.templates = templates;
+		this.copyPasteData = copyPasteData;
 		this.dstFBNetwork = destination;
 		xDelta = copyDeltaX;
 		yDelta = copyDeltaY;
@@ -94,15 +87,15 @@ public class PasteCommand extends Command {
 
 	@Override
 	public boolean canExecute() {
-		return (null != templates) && (null != dstFBNetwork);
+		return (null != copyPasteData) && !copyPasteData.isEmpty() && (null != dstFBNetwork);
 	}
 
 	@Override
 	public void execute() {
 		if (dstFBNetwork != null) {
 			ErrorMessenger.pauseMessages();
-			gatherCopyData();
-			copyFBs();
+			updateDelta();
+			copyPasteData.elements().forEach(this::copyAndCreateFB);
 			copyConnections();
 			ElementSelector.selectViewObjects(copiedElements.values());
 			if (!ErrorMessenger.unpauseMessages().isEmpty()) {
@@ -115,8 +108,6 @@ public class PasteCommand extends Command {
 	public void undo() {
 		connCreateCmds.undo();
 		dstFBNetwork.getNetworkElements().removeAll(copiedElements.values());
-		ElementSelector.selectViewObjects(templates);
-
 	}
 
 	@Override
@@ -126,30 +117,16 @@ public class PasteCommand extends Command {
 		ElementSelector.selectViewObjects(copiedElements.values());
 	}
 
-	private void gatherCopyData() {
+	private void updateDelta() {
 		int x = Integer.MAX_VALUE;
 		int y = Integer.MAX_VALUE;
 
-		for (final Object object : templates) {
-			if (object instanceof final FBNetworkElement element) {
-				if (null == srcFBNetwork) {
-					srcFBNetwork = element.getFbNetwork();
-				}
-				elementsToCopy.add(element);
-				final Position outermostPos = getPositionOfOutermostNetwork(element);
-				x = Math.min(x, outermostPos.getX());
-				y = Math.min(y, outermostPos.getY());
-			} else if (object instanceof final ConnectionReference conRef) {
-				connectionsToCopy.add(conRef);
-			} else if (object instanceof final FBNetwork fbn) {
-				srcFBNetwork = fbn;
-			}
+		for (final FBNetworkElement element : copyPasteData.elements()) {
+			final Position outermostPos = getPositionOfOutermostNetwork(element);
+			x = Math.min(x, outermostPos.getX());
+			y = Math.min(y, outermostPos.getY());
 		}
 
-		updateDelta(x, y);
-	}
-
-	private void updateDelta(final int x, final int y) {
 		if (calcualteDelta) {
 			if (null != pasteRefPos) {
 				xDelta = pasteRefPos.x - x;
@@ -182,12 +159,6 @@ public class PasteCommand extends Command {
 			}
 		}
 		return pos;
-	}
-
-	private void copyFBs() {
-		for (final FBNetworkElement element : elementsToCopy) {
-			copyAndCreateFB(element);
-		}
 	}
 
 	private FBNetworkElement copyAndCreateFB(final FBNetworkElement element) {
@@ -225,19 +196,19 @@ public class PasteCommand extends Command {
 
 		// copy content of Groups
 		if (element instanceof final Group group) {
-			group.getFbNetwork().getEventConnections()
-			.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
-			group.getFbNetwork().getDataConnections()
-			.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
-			group.getFbNetwork().getAdapterConnections()
-			.forEach(con -> connectionsToCopy.add(new ConnectionReference(con)));
-
+			addConnections(group.getFbNetwork().getEventConnections());
+			addConnections(group.getFbNetwork().getDataConnections());
+			addConnections(group.getFbNetwork().getAdapterConnections());
 			for (final FBNetworkElement groupElement : group.getGroupElements()) {
 				((Group) copiedElement).getGroupElements().add(copyAndCreateFB(groupElement, true));
 			}
 		}
 
 		return copiedElement;
+	}
+
+	private void addConnections(final EList<? extends Connection> conns) {
+		copyPasteData.conns().addAll(conns.stream().map(ConnectionReference::new).toList());
 	}
 
 	private static void checkDataValues(final FBNetworkElement src, final FBNetworkElement copy) {
@@ -257,7 +228,7 @@ public class PasteCommand extends Command {
 	}
 
 	private void copyConnections() {
-		for (final ConnectionReference connRef : connectionsToCopy) {
+		for (final ConnectionReference connRef : copyPasteData.conns()) {
 			final FBNetworkElement copiedSrc = copiedElements.get(connRef.getSourceElement());
 			final FBNetworkElement copiedDest = copiedElements.get(connRef.getDestinationElement());
 
@@ -265,7 +236,7 @@ public class PasteCommand extends Command {
 				// Only copy if one end of the connection is copied as well otherwise we will
 				// get a duplicate connection
 
-				if ((dstFBNetwork.isSubApplicationNetwork() || srcFBNetwork.isSubApplicationNetwork())) {
+				if ((dstFBNetwork.isSubApplicationNetwork() || copyPasteData.srcNetwork().isSubApplicationNetwork())) {
 					final Command cmd = copyConnectionToSubApp(connRef, copiedSrc, copiedDest);
 					if (cmd != null && cmd.canExecute()) { // checks if the resulting connection is valid
 						connCreateCmds.add(cmd);
@@ -329,8 +300,8 @@ public class PasteCommand extends Command {
 		if (null != copiedElement) {
 			// we have a copied connection target get the interface element from it
 			return copiedElement.getInterfaceElement(orig.getName());
-		} else if (dstFBNetwork.equals(srcFBNetwork)
-				|| (dstFBNetwork.isSubApplicationNetwork() || srcFBNetwork.isSubApplicationNetwork())) {
+		} else if (dstFBNetwork.equals(copyPasteData.srcNetwork())
+				|| (dstFBNetwork.isSubApplicationNetwork() || copyPasteData.srcNetwork().isSubApplicationNetwork())) {
 			// we have a connection target to an existing FBNElement, only retrieve the
 			// interface element if the target FBNetwrok is the same as the source. In this
 			// case it is save to return the original interface element.

@@ -1,7 +1,7 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2017 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH
- * 		 2018 - 2020 Johannes Kepler University
- * 		 2021 Primetals Technologies Austria GmbH
+ * Copyright (c) 2008, 2023 Profactor GmbH, TU Wien ACIN, AIT, fortiss GmbH,
+ *                          Johannes Kepler University,
+ *                          Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -16,18 +16,15 @@
  *   Bianca Wiesmayr - fixed copy/paste position
  *   Bianca Wiesmayr, Daniel Lindhuber, Lukas Wais - fixed ctrl+c, ctrl+v, ctrl+v
  *   Fabio Gandolfi - growing frame for copy in group & subapp
+ *   Alois Zoitl - harmonized cut and copy paste
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.actions;
-
-import java.util.Collections;
-import java.util.List;
 
 import org.eclipse.draw2d.FigureCanvas;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.fordiac.ide.application.Messages;
-import org.eclipse.fordiac.ide.application.actions.CopyPasteMessage.CopyStatus;
 import org.eclipse.fordiac.ide.application.commands.CopyElementsToGroupCommand;
 import org.eclipse.fordiac.ide.application.commands.PasteCommand;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
@@ -82,7 +79,7 @@ public class PasteEditPartsAction extends SelectionAction {
 			if (editPart != null) {
 				Command cmd = null;
 				if ((editPart instanceof final GroupContentEditPart groupEP)
-						&& getClipboardContents().stream().noneMatch(Group.class::isInstance)) {
+						&& getClipboardContents().elements().stream().noneMatch(Group.class::isInstance)) {
 					cmd = createPasteCommandForGroup(groupEP);
 				}
 
@@ -131,12 +128,12 @@ public class PasteEditPartsAction extends SelectionAction {
 		return ContainerContentLayoutPolicy.getContainerAreaBounds(group).getTopLeft();
 	}
 
-	private static List<? extends Object> getClipboardContents() {
+	private static CopyPasteData getClipboardContents() {
 		final Object obj = FordiacClipboard.INSTANCE.getGraphicalContents();
-		if (obj instanceof final CopyPasteMessage copyPasteMessage) {
-			return copyPasteMessage.getData();
+		if (obj instanceof final CopyPasteData copyPasteMessage) {
+			return copyPasteMessage;
 		}
-		return Collections.emptyList();
+		return CopyPasteData.EMPTY_COPY_PASTE_DATA;
 	}
 
 	@Override
@@ -184,23 +181,12 @@ public class PasteEditPartsAction extends SelectionAction {
 	@Override
 	public void run() {
 		final FordiacClipboard clipboard = FordiacClipboard.INSTANCE;
-		if (clipboard.getGraphicalContents() instanceof CopyPasteMessage) {
+		if (clipboard.getGraphicalContents() instanceof CopyPasteData) {
 			execute(createPasteCommand());
 		}
 		pasteRefPosition = null;
 	}
 
-
-	@Override
-	protected void execute(final Command command) {
-		if ((command != null) && command.canExecute()) {
-			final CopyPasteMessage copyPasteMessage = (CopyPasteMessage) FordiacClipboard.INSTANCE.getGraphicalContents();
-			if (copyPasteMessage.getCopyStatus() == CopyStatus.CUT_FROM_ROOT) {
-				copyPasteMessage.setCopyInfo(CopyStatus.CUT_PASTED);
-			}
-		}
-		super.execute(command);
-	}
 
 	private FBNetwork getFBNetwork() {
 		if (getWorkbenchPart() instanceof IEditorPart) {
