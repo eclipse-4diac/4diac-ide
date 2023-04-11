@@ -80,10 +80,19 @@
                 </separator>
             </menu>
         </menuContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commandImages">
-      <image
+        
+       	<!-- Refactor menu definitions to be used by the different plugins of Eclipse 4diac or external contributions.
+          -->
+		<menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=org.eclipse.4diac.ide.source.menu">                
+			<menu label="Refactor"
+					mnemonic="t"
+			   		id="org.eclipse.4diac.ide.refactor.menu">
+				<separator name="typeGroup" visible="true"/>
+			</menu>
+		</menuContribution>
+	</extension>
+   	<extension point="org.eclipse.ui.commandImages">
+    	<image
             commandId="org.eclipse.fordiac.ide.ui.contribute"
             icon="platform:/plugin/org.eclipse.ui.ide/icons/full/elcl16/smartmode_co.png">
       </image>
