@@ -24,8 +24,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
@@ -33,7 +35,6 @@ import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
-import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -45,7 +46,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.xtext.builder.IXtextBuilderParticipant;
 import org.eclipse.xtext.diagnostics.Severity;
-import org.eclipse.xtext.resource.IEObjectDescription;
 import org.eclipse.xtext.resource.IResourceDescription;
 import org.eclipse.xtext.validation.CheckType;
 import org.eclipse.xtext.validation.Issue;
@@ -72,16 +72,15 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	protected void doBuild(final IResourceDescription.Delta delta, final IBuildContext context,
 			final IProgressMonitor monitor) throws CoreException {
 		try {
-			final Iterable<IEObjectDescription> varDeclarationDescriptions = delta.getNew()
-					.getExportedObjectsByType(LibraryElementPackage.eINSTANCE.getVarDeclaration());
-			for (final var varDeclarationDescription : varDeclarationDescriptions) {
+			final Resource resource = context.getResourceSet().getResource(delta.getUri(), true);
+			final TreeIterator<EObject> allContents = EcoreUtil.getAllContents(resource, true);
+			while (allContents.hasNext()) {
 				if (monitor.isCanceled()) {
 					throw new OperationCanceledException();
 				}
-				final EObject target = context.getResourceSet().getEObject(varDeclarationDescription.getEObjectURI(),
-						true);
-				if (target instanceof VarDeclaration) {
-					validateValue((VarDeclaration) target, delta, monitor);
+				final EObject target = allContents.next();
+				if (target instanceof final VarDeclaration varDeclaration) {
+					validateValue(varDeclaration, delta, monitor);
 				}
 			}
 		} catch (final OperationCanceledException e) {
@@ -187,8 +186,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	@SuppressWarnings("unchecked")
 	protected static <T extends EObject> T getCanonicalObject(final T object) {
 		final EObject root = EcoreUtil.getRootContainer(object);
-		if (root instanceof LibraryElement) {
-			final TypeEntry typeEntry = ((LibraryElement) root).getTypeEntry();
+		if (root instanceof final LibraryElement libraryElement) {
+			final TypeEntry typeEntry = libraryElement.getTypeEntry();
 			if (typeEntry != null) {
 				final LibraryElement typeEditable = typeEntry.getTypeEditable();
 				if (typeEditable != null) {
@@ -224,7 +223,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	}
 
 	protected List<IResourceDescription.Delta> getRelevantDeltas(final IBuildContext context) {
-		return context.getDeltas().stream().filter(this::isRelevantDelta).collect(Collectors.toList());
+		return context.getDeltas().stream().filter(this::isRelevantDelta).toList();
 	}
 
 	protected boolean isRelevantDelta(final IResourceDescription.Delta delta) {
