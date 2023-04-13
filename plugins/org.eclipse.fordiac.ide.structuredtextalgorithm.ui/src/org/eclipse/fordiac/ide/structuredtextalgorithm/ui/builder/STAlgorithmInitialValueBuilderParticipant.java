@@ -35,6 +35,7 @@ import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
+import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
@@ -79,7 +80,9 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 					throw new OperationCanceledException();
 				}
 				final EObject target = allContents.next();
-				if (target instanceof final VarDeclaration varDeclaration) {
+				if (target instanceof SystemConfiguration) {
+					allContents.prune();
+				} else if (target instanceof final VarDeclaration varDeclaration) {
 					validateValue(varDeclaration, delta, monitor);
 				}
 			}
@@ -176,7 +179,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	@SuppressWarnings("static-method")
 	protected void createMarker(final IFile file, final EObject object, final Issue issue) throws CoreException {
 		ErrorMarkerBuilder.createErrorMarkerBuilder(issue.getMessage()).setType(FordiacErrorMarker.INITIAL_VALUE_MARKER)
-				.setSeverity(getMarkerSeverity(issue)).setTarget(object).createMarker(file);
+		.setSeverity(getMarkerSeverity(issue)).setTarget(object).createMarker(file);
 	}
 
 	@SuppressWarnings("unchecked")
