@@ -33,7 +33,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.GenericTypes;
 import org.eclipse.fordiac.ide.model.errormarker.ErrorMarkerBuilder;
 import org.eclipse.fordiac.ide.model.errormarker.FordiacErrorMarker;
-import org.eclipse.fordiac.ide.model.errormarker.FordiacMarkerHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerRef;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Value;
@@ -114,9 +113,11 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		final Value canonicalValue = getCanonicalObject(varDeclaration.getValue());
 		if (canonicalValue != null) {
 			updateErrorMessage(canonicalValue, issues);
-			final IFile file = getFile(delta.getUri());
-			if (file != null && file.exists()) {
-				updateMarkers(file, canonicalValue, issues, monitor);
+			if (!issues.isEmpty()) {
+				final IFile file = getFile(delta.getUri());
+				if (file != null && file.exists()) {
+					createMarkers(file, canonicalValue, issues, monitor);
+				}
 			}
 		}
 	}
@@ -162,9 +163,8 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 		}
 	}
 
-	protected void updateMarkers(final IFile file, final EObject object, final List<Issue> issues,
+	protected void createMarkers(final IFile file, final EObject object, final List<Issue> issues,
 			final IProgressMonitor monitor) throws CoreException {
-		deleteMarkers(file, object);
 		for (final Issue issue : issues) {
 			if (monitor.isCanceled()) {
 				throw new OperationCanceledException();
@@ -176,15 +176,7 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	@SuppressWarnings("static-method")
 	protected void createMarker(final IFile file, final EObject object, final Issue issue) throws CoreException {
 		ErrorMarkerBuilder.createErrorMarkerBuilder(issue.getMessage()).setType(FordiacErrorMarker.INITIAL_VALUE_MARKER)
-		.setSeverity(getMarkerSeverity(issue)).setTarget(object).createMarker(file);
-	}
-
-	@SuppressWarnings("static-method")
-	protected void deleteMarkers(final IFile file, final EObject object) throws CoreException {
-		for (final IMarker marker : FordiacMarkerHelper.findMarkers(file, object,
-				FordiacErrorMarker.INITIAL_VALUE_MARKER)) {
-			marker.delete();
-		}
+				.setSeverity(getMarkerSeverity(issue)).setTarget(object).createMarker(file);
 	}
 
 	@SuppressWarnings("unchecked")
