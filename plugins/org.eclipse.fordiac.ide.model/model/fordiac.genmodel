@@ -521,6 +521,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceSequence/serviceTransaction"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ServiceSequence/serviceSequenceType"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EAttribute lib.ecore#//ServiceSequence/startState"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceSequence/eventManager"/>
       <genOperations ecoreOperation="lib.ecore#//ServiceSequence/getService" body="return (Service) this.eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceTransaction">

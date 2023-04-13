@@ -78,6 +78,7 @@ public class CreateAllServiceSequencesHandler extends AbstractHandler {
 
 				seq.setComment(
 						"Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions())); //$NON-NLS-1$
+				seq.setEventManager(eventManager);
 
 				for (final Transaction transaction : eventManager.getTransactions()) {
 

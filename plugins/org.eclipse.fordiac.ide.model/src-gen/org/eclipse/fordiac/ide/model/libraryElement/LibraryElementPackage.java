@@ -5931,13 +5931,22 @@ public interface LibraryElementPackage extends EPackage {
 	int SERVICE_SEQUENCE__START_STATE = INAMED_ELEMENT_FEATURE_COUNT + 3;
 
 	/**
+	 * The feature id for the '<em><b>Event Manager</b></em>' containment reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int SERVICE_SEQUENCE__EVENT_MANAGER = INAMED_ELEMENT_FEATURE_COUNT + 4;
+
+	/**
 	 * The number of structural features of the '<em>Service Sequence</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int SERVICE_SEQUENCE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 4;
+	int SERVICE_SEQUENCE_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl <em>Service Transaction</em>}' class.
@@ -9253,6 +9262,17 @@ public interface LibraryElementPackage extends EPackage {
 	EAttribute getServiceSequence_StartState();
 
 	/**
+	 * Returns the meta object for the containment reference '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getEventManager <em>Event Manager</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the containment reference '<em>Event Manager</em>'.
+	 * @see org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence#getEventManager()
+	 * @see #getServiceSequence()
+	 * @generated
+	 */
+	EReference getServiceSequence_EventManager();
+
+	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.ServiceTransaction <em>Service Transaction</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11745,6 +11765,14 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute SERVICE_SEQUENCE__START_STATE = eINSTANCE.getServiceSequence_StartState();
+
+		/**
+		 * The meta object literal for the '<em><b>Event Manager</b></em>' containment reference feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EReference SERVICE_SEQUENCE__EVENT_MANAGER = eINSTANCE.getServiceSequence_EventManager();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.ServiceTransactionImpl <em>Service Transaction</em>}' class.

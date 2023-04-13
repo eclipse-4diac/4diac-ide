@@ -83,6 +83,9 @@ public final class Messages extends NLS {
 	public static String ServiceSequenceAssignView_FORBIDDEN;
 	public static String ServiceSequenceAssignView_SKIP;
 	public static String ServiceSequenceAssignView_START;
+	public static String Coverage_NAME;
+	public static String Coverage_VISITED_STATES;
+	public static String Coverage_TESTSUITE;
 
 	static {
 		// initialize resource bundle

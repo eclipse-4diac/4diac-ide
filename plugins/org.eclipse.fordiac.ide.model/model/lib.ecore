@@ -1419,6 +1419,8 @@
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="serviceSequenceType" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
         defaultValueLiteral="POSSIBLE"/>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="startState" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="eventManager" eType="ecore:EClass http://www.eclipse.org/emf/2002/Ecore#//EObject"
+        containment="true" resolveProxies="false"/>
   </eClassifiers>
   <eClassifiers xsi:type="ecore:EClass" name="ServiceTransaction">
     <eOperations name="getServiceSequence" lowerBound="1" eType="#//ServiceSequence">
