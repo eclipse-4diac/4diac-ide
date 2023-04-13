@@ -134,7 +134,6 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		for (final Transaction transaction : eventManager.getTransactions()) {
 			ServiceSequenceUtils.convertTransactionToServiceModel(seq, fbType, (FBTransaction) transaction);
 		}
-
 		seq.setComment("Coverage: " + CoverageCalculator.calculateCoverageOfSequence(eventManager.getTransactions()));
 		seq.setEventManager(eventManager);
 	}

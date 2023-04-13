@@ -14,6 +14,7 @@
 
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.helpers;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -25,15 +26,24 @@ public class CoverageCalculator {
 
 		final EccTraceHelper eccTraceHelper = new EccTraceHelper(transactions);
 
-		return eccTraceHelper.getAllStates().size() / (float) eccTraceHelper.getAllPossibleStates().size();
+		return eccTraceHelper.getAllStatesOfSequence().size() / (float) eccTraceHelper.getAllPossibleStates().size();
 	}
 
-	public static float calculateCoverageOfSuiteBy(final HashMap<String, Integer> visitedStates) {
+	public static float calculateNodeCoverageOfSuiteBy(final HashMap<String, Integer> visitedStates) {
 
 		final Integer allPossibleStates = visitedStates.size();
 
 		final long visitedStatesNumber = visitedStates.entrySet().stream().filter(s -> s.getValue() > 0).count();
 
 		return visitedStatesNumber / (float) allPossibleStates;
+	}
+
+	public static float calculatePathCoverageOfSuiteBy(final HashMap<ArrayList<String>, Integer> visitedPaths) {
+
+		final Integer allPossiblePaths = visitedPaths.size();
+
+		final long visitedPathNumber = visitedPaths.entrySet().stream().filter(s -> s.getValue() > 0).count();
+
+		return visitedPathNumber / (float) allPossiblePaths;
 	}
 }

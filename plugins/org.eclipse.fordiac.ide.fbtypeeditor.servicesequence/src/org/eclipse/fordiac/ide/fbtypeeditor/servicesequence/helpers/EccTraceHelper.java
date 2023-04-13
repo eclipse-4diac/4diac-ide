@@ -34,22 +34,41 @@ public class EccTraceHelper {
 		this.transactions = transactions;
 	}
 
-	public List<ECState> getAllStates() {
+	public List<ECState> getAllStatesOfSequence() {
 		final List<ECState> states = new ArrayList<>();
 		if (getStartState() != null) {
-			states.add(getStartState());
+			// TODO : IS THE START STATE NEEDED to save?
+			// states.add(getStartState());
 			for (final Transaction transac : transactions) {
 				if (getEccTrace((FBTransaction)transac) != null) {
 					for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions()) {
-						if (states.stream().filter(s -> s.getName().equals(transi.getDestination().getName()))
-								.findAny().isEmpty()) {
-							states.add(transi.getDestination());
-						}
+						// TODO: IS IT NEEDED TO CHECK FO NO DUPLICATES?
+						// if (states.stream().filter(s -> s.getName().equals(transi.getDestination().getName()))
+						// .findAny().isEmpty()) {
+						states.add(transi.getDestination());
+						// }
 					}
 				}
 			}
 		}
 		return states;
+	}
+
+	public List<ArrayList<String>> getAllPathsOfSequence() {
+		final List<ArrayList<String>> paths = new ArrayList<>();
+
+		for (final Transaction transac : transactions) {
+			if (getEccTrace((FBTransaction) transac) != null) {
+				for (final ECTransition transi : getEccTrace((FBTransaction) transac).getTransitions()) {
+					final ArrayList<String> path = new ArrayList<>();
+					path.add(transi.getSource().getName());
+					path.add(transi.getDestination().getName());
+					paths.add(path);
+				}
+			}
+		}
+
+		return paths;
 	}
 
 	public ECState getStartState() {
@@ -107,6 +126,25 @@ public class EccTraceHelper {
 		return new ArrayList<>();
 	}
 
+	public List<ArrayList<String>> getAllPossiblePaths() {
+		final List<ArrayList<String>> allPossiblePaths = new ArrayList<>();
+
+		for (final ECState state : getAllPossibleStates()) {
+			if (state.getOutTransitions().size() > 0) {
+				for (final ECTransition outTrans : state.getOutTransitions()) {
+					final ArrayList<String> path = new ArrayList<>();
+					path.add(state.getName());
+					path.add(outTrans.getDestination().getName());
+					allPossiblePaths.add(path);
+				}
+			} else {
+				// path of length 0 -> single node
+				final ArrayList<String> path = new ArrayList<>();
+				path.add(state.getName());
+			}
+		}
+		return allPossiblePaths;
+	}
 
 
 }

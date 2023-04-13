@@ -85,7 +85,9 @@ public final class Messages extends NLS {
 	public static String ServiceSequenceAssignView_START;
 	public static String Coverage_NAME;
 	public static String Coverage_VISITED_STATES;
-	public static String Coverage_TESTSUITE;
+	public static String Coverage_VISITED_PATHS;
+	public static String Coverage_NODECOVERAGE;
+	public static String Coverage_PATHCOVERAGE;
 
 	static {
 		// initialize resource bundle

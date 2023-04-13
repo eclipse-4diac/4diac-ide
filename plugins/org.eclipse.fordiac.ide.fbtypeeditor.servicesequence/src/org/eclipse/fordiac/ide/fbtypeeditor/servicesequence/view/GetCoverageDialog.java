@@ -13,6 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.view;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
@@ -31,36 +32,59 @@ import org.eclipse.swt.widgets.Shell;
 public class GetCoverageDialog extends MessageDialog {
 
 	HashMap<String, Integer> visitedStates;
+	HashMap<ArrayList<String>, Integer> visitedPaths;
 
-	public GetCoverageDialog(final Shell parentShell, final HashMap<String, Integer> visitedStates) {
+	public GetCoverageDialog(final Shell parentShell, final HashMap<String, Integer> visitedStates,
+			final HashMap<ArrayList<String>, Integer> visitedPaths) {
 		super(parentShell, Messages.Coverage_NAME, null, "Shows the Coverage of the given Tests:", //$NON-NLS-1$
 				MessageDialog.INFORMATION, 0,
 				"OK"); //$NON-NLS-1$
 		this.visitedStates = visitedStates;
+		this.visitedPaths = visitedPaths;
 	}
 
 	@Override
 	protected Control createCustomArea(final Composite parent) {
 		parent.setLayout(new FillLayout());
 		final Composite dialogArea = new Composite(parent, SWT.NONE);
-		final GridLayout layout = new GridLayout(1, false);
+		final GridLayout layout = new GridLayout(2, false);
 		dialogArea.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
 		dialogArea.setLayout(layout);
 
 		final Group vistedStatesGroup = new Group(dialogArea, SWT.NONE);
 		vistedStatesGroup.setText(Messages.Coverage_VISITED_STATES);
 		vistedStatesGroup.setLayout(new GridLayout(1, false));
-		vistedStatesGroup.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, true));
+		vistedStatesGroup.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, true, true));
 
 		visitedStates.entrySet().forEach(entry -> {
 			final Label label = new Label(vistedStatesGroup, SWT.None);
 			label.setText(entry.getKey() + "   :    " + entry.getValue() + " \n");
 		});
 
-		final Label label = new Label(dialogArea, SWT.None);
-		label.setText(Messages.Coverage_TESTSUITE + ": "
-				+ CoverageCalculator.calculateCoverageOfSuiteBy(visitedStates) * 100
+		Label label = new Label(vistedStatesGroup, SWT.None);
+		label.setText(Messages.Coverage_NODECOVERAGE + ": "
+				+ CoverageCalculator.calculateNodeCoverageOfSuiteBy(visitedStates) * 100
 				+ "% \n");
+
+		final Group vistedPathsGroup = new Group(dialogArea, SWT.NONE);
+		vistedPathsGroup.setText(Messages.Coverage_VISITED_PATHS);
+		vistedPathsGroup.setLayout(new GridLayout(1, false));
+		vistedPathsGroup.setLayoutData(new GridData(SWT.CENTER, SWT.TOP, true, true));
+
+		visitedPaths.entrySet().forEach(entry -> {
+			final Label label2 = new Label(vistedPathsGroup, SWT.None);
+			String pathString = "";
+
+			for (final String state : entry.getKey()) {
+				pathString += state + " -> ";
+			}
+			pathString = pathString.substring(0, pathString.length() - 4);
+			label2.setText(pathString + "   :    " + entry.getValue() + " \n");
+		});
+
+		label = new Label(vistedPathsGroup, SWT.None);
+		label.setText(Messages.Coverage_PATHCOVERAGE + ": "
+				+ CoverageCalculator.calculatePathCoverageOfSuiteBy(visitedPaths) * 100 + "% \n");
 
 
 		return dialogArea;
