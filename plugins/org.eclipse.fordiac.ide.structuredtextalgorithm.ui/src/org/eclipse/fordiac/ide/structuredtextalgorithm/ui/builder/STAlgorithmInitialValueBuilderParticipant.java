@@ -12,6 +12,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.structuredtextalgorithm.ui.builder;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -101,8 +102,11 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 	protected void validateValue(final VarDeclaration varDeclaration, final IResourceDescription.Delta delta,
 			final IProgressMonitor monitor) throws CoreException {
 		final String value = getValue(varDeclaration);
-		final List<Issue> issues = StructuredTextParseUtil.validate(value, delta.getUri(),
-				STCoreUtil.getFeatureType(varDeclaration), null, null);
+		final List<Issue> issues = new ArrayList<>();
+		if (!value.isBlank()) { // do not parse value if blank
+			StructuredTextParseUtil.validate(value, delta.getUri(), STCoreUtil.getFeatureType(varDeclaration), null,
+					null, issues);
+		}
 		validateGenericValue(varDeclaration, value, issues);
 		if (monitor.isCanceled()) {
 			throw new OperationCanceledException();
@@ -122,13 +126,13 @@ public class STAlgorithmInitialValueBuilderParticipant implements IXtextBuilderP
 			final List<Issue> issues) {
 		if (varDeclaration.isIsInput() && GenericTypes.isAnyType(varDeclaration.getType())) {
 			if (varDeclaration.getFBNetworkElement() != null) {
-				if (varDeclaration.getInputConnections().isEmpty() && value.isEmpty()) {
+				if (varDeclaration.getInputConnections().isEmpty() && value.isBlank()) {
 					issues.add(createIssue(
 							Messages.STAlgorithmInitialValueBuilderParticipant_MissingValueForGenericInstanceVariable,
 							Severity.WARNING));
 				}
 			} else {
-				if (!value.isEmpty()) {
+				if (!value.isBlank()) {
 					issues.add(createIssue(
 							Messages.STAlgorithmInitialValueBuilderParticipant_SpecifiedValueForGenericTypeVariable,
 							Severity.WARNING));
