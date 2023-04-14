@@ -9,6 +9,7 @@
 			<Event Name="REQ" Type="Event" Comment="Set Value out of structure">
 				<With Var="member"/>
 				<With Var="in_struct"/>
+				<With Var="element_value"/>
 			</Event>
 		</EventInputs>
 		<EventOutputs>
