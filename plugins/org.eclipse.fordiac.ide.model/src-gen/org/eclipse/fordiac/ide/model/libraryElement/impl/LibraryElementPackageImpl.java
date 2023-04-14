@@ -2410,16 +2410,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 	 * @generated
 	 */
 	@Override
-	public EAttribute getIInterfaceElement_TypeName() {
-		return (EAttribute)iInterfaceElementEClass.getEStructuralFeatures().get(4);
-	}
-
-	/**
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
 	public EClass getINamedElement() {
 		return iNamedElementEClass;
 	}
@@ -3880,7 +3870,6 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		createEReference(iInterfaceElementEClass, IINTERFACE_ELEMENT__INPUT_CONNECTIONS);
 		createEReference(iInterfaceElementEClass, IINTERFACE_ELEMENT__OUTPUT_CONNECTIONS);
 		createEReference(iInterfaceElementEClass, IINTERFACE_ELEMENT__TYPE);
-		createEAttribute(iInterfaceElementEClass, IINTERFACE_ELEMENT__TYPE_NAME);
 
 		iNamedElementEClass = createEClass(INAMED_ELEMENT);
 		createEAttribute(iNamedElementEClass, INAMED_ELEMENT__NAME);
@@ -4594,9 +4583,10 @@ public class LibraryElementPackageImpl extends EPackageImpl implements LibraryEl
 		initEReference(getIInterfaceElement_InputConnections(), this.getConnection(), this.getConnection_Destination(), "inputConnections", null, 0, -1, IInterfaceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getIInterfaceElement_OutputConnections(), this.getConnection(), this.getConnection_Source(), "outputConnections", null, 0, -1, IInterfaceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 		initEReference(getIInterfaceElement_Type(), theDataPackage.getDataType(), null, "type", null, 0, 1, IInterfaceElement.class, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-		initEAttribute(getIInterfaceElement_TypeName(), ecorePackage.getEString(), "typeName", null, 0, 1, IInterfaceElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
 		addEOperation(iInterfaceElementEClass, this.getFBNetworkElement(), "getFBNetworkElement", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
+
+		addEOperation(iInterfaceElementEClass, ecorePackage.getEString(), "getTypeName", 1, 1, IS_UNIQUE, IS_ORDERED); //$NON-NLS-1$
 
 		initEClass(iNamedElementEClass, INamedElement.class, "INamedElement", IS_ABSTRACT, IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 		initEAttribute(getINamedElement_Name(), theXMLTypePackage.getString(), "name", "", 1, 1, INamedElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$

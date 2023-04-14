@@ -380,9 +380,9 @@
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//IInterfaceElement/inputConnections"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//IInterfaceElement/outputConnections"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//IInterfaceElement/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//IInterfaceElement/typeName"/>
       <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getFBNetworkElement"
           body="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getTypeName" body="DataType dataType = getType();&#xA;if(dataType != null){&#xA;&#x9;return dataType.getName();&#xA;}&#xA;return null;"/>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//INamedElement">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//INamedElement/name"/>

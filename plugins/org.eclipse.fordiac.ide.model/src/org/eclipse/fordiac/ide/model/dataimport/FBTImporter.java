@@ -1000,7 +1000,6 @@ public class FBTImporter extends TypeImporter {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
 			final AdapterTypeEntry entry = getTypeLibrary().getAdapterTypeEntry(typeName);
-			a.setTypeName(typeName);
 			if (null != entry) {
 				a.setType(entry.getType());
 			}

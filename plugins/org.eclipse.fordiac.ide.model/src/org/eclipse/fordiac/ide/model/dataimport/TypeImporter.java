@@ -62,15 +62,12 @@ public abstract class TypeImporter extends CommonElementImporter {
 		final String typeName = getAttributeValue(LibraryElementTags.TYPE_ATTRIBUTE);
 		if (null != typeName) {
 			final DataType dataType = getDataTypeLibrary().getType(typeName);
-			v.setTypeName(typeName);
-			if (dataType != null) {
-				v.setType(dataType);
-			}
+			v.setType(dataType);
 
 			if (dataType instanceof ErrorMarkerDataType) {
 				errorMarkerBuilders.add(ErrorMarkerBuilder
-						.createErrorMarkerBuilder(MessageFormat.format(Messages.TypeImporter_TypeMissing,
-								typeName, v.getName()))
+						.createErrorMarkerBuilder(
+								MessageFormat.format(Messages.TypeImporter_TypeMissing, typeName, v.getName()))
 						.setTarget(v));
 			}
 

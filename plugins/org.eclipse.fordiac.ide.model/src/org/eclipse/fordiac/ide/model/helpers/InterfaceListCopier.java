@@ -120,7 +120,6 @@ public final class InterfaceListCopier {
 		dst.setIsInput(src.isIsInput());
 		dst.setName(src.getName());
 		dst.setType(src.getType());
-		dst.setTypeName(src.getTypeName());
 	}
 
 	/**

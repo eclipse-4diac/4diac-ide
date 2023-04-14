@@ -384,22 +384,13 @@ public interface LibraryElementPackage extends EPackage {
 	int IINTERFACE_ELEMENT__TYPE = INAMED_ELEMENT_FEATURE_COUNT + 4;
 
 	/**
-	 * The feature id for the '<em><b>Type Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int IINTERFACE_ELEMENT__TYPE_NAME = INAMED_ELEMENT_FEATURE_COUNT + 5;
-
-	/**
 	 * The number of structural features of the '<em>IInterface Element</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int IINTERFACE_ELEMENT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 6;
+	int IINTERFACE_ELEMENT_FEATURE_COUNT = INAMED_ELEMENT_FEATURE_COUNT + 5;
 
 	/**
 	 * The meta object id for the '{@link org.eclipse.fordiac.ide.model.libraryElement.impl.AdapterDeclarationImpl <em>Adapter Declaration</em>}' class.
@@ -473,15 +464,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int ADAPTER_DECLARATION__TYPE = IINTERFACE_ELEMENT__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Type Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ADAPTER_DECLARATION__TYPE_NAME = IINTERFACE_ELEMENT__TYPE_NAME;
 
 	/**
 	 * The feature id for the '<em><b>Adapter FB</b></em>' containment reference.
@@ -3812,15 +3794,6 @@ public interface LibraryElementPackage extends EPackage {
 	int ERROR_MARKER_INTERFACE__TYPE = IINTERFACE_ELEMENT__TYPE;
 
 	/**
-	 * The feature id for the '<em><b>Type Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int ERROR_MARKER_INTERFACE__TYPE_NAME = IINTERFACE_ELEMENT__TYPE_NAME;
-
-	/**
 	 * The feature id for the '<em><b>Error Message</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -3956,15 +3929,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int EVENT__TYPE = IINTERFACE_ELEMENT__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Type Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int EVENT__TYPE_NAME = IINTERFACE_ELEMENT__TYPE_NAME;
 
 	/**
 	 * The feature id for the '<em><b>With</b></em>' containment reference list.
@@ -4698,15 +4662,6 @@ public interface LibraryElementPackage extends EPackage {
 	int VAR_DECLARATION__TYPE = IINTERFACE_ELEMENT__TYPE;
 
 	/**
-	 * The feature id for the '<em><b>Type Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int VAR_DECLARATION__TYPE_NAME = IINTERFACE_ELEMENT__TYPE_NAME;
-
-	/**
 	 * The feature id for the '<em><b>Array Size</b></em>' attribute.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -4814,15 +4769,6 @@ public interface LibraryElementPackage extends EPackage {
 	 * @ordered
 	 */
 	int LOCAL_VARIABLE__TYPE = VAR_DECLARATION__TYPE;
-
-	/**
-	 * The feature id for the '<em><b>Type Name</b></em>' attribute.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 * @ordered
-	 */
-	int LOCAL_VARIABLE__TYPE_NAME = VAR_DECLARATION__TYPE_NAME;
 
 	/**
 	 * The feature id for the '<em><b>Array Size</b></em>' attribute.
@@ -8623,17 +8569,6 @@ public interface LibraryElementPackage extends EPackage {
 	EReference getIInterfaceElement_Type();
 
 	/**
-	 * Returns the meta object for the attribute '{@link org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getTypeName <em>Type Name</em>}'.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @return the meta object for the attribute '<em>Type Name</em>'.
-	 * @see org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement#getTypeName()
-	 * @see #getIInterfaceElement()
-	 * @generated
-	 */
-	EAttribute getIInterfaceElement_TypeName();
-
-	/**
 	 * Returns the meta object for class '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -11264,14 +11199,6 @@ public interface LibraryElementPackage extends EPackage {
 		 * @generated
 		 */
 		EReference IINTERFACE_ELEMENT__TYPE = eINSTANCE.getIInterfaceElement_Type();
-
-		/**
-		 * The meta object literal for the '<em><b>Type Name</b></em>' attribute feature.
-		 * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
-		 * @generated
-		 */
-		EAttribute IINTERFACE_ELEMENT__TYPE_NAME = eINSTANCE.getIInterfaceElement_TypeName();
 
 		/**
 		 * The meta object literal for the '{@link org.eclipse.fordiac.ide.model.libraryElement.INamedElement <em>INamed Element</em>}' class.

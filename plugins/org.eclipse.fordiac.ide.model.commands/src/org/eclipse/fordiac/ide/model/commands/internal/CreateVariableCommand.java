@@ -89,7 +89,6 @@ public abstract class CreateVariableCommand extends CreationCommand {
 		}
 		varDecl = LibraryElementFactory.eINSTANCE.createVarDeclaration();
 		varDecl.setType(dataType);
-		varDecl.setTypeName(dataType.getName());
 		varDecl.setComment(""); //$NON-NLS-1$
 		varDecl.setArraySize(0);
 		final Value value = LibraryElementFactory.eINSTANCE.createValue();

@@ -53,7 +53,6 @@ public class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand
 	protected void doUndo() {
 		additionalCommands.undo();
 		getInterfaceElement().setType(oldDataType);
-		getInterfaceElement().setTypeName(oldDataType.getName());
 	}
 
 	@Override
@@ -64,7 +63,6 @@ public class ChangeDataTypeCommand extends AbstractChangeInterfaceElementCommand
 
 	private void setNewType() {
 		getInterfaceElement().setType(dataType);
-		getInterfaceElement().setTypeName(dataType.getName());
 	}
 
 	public CompoundCommand getAdditionalCommands() {

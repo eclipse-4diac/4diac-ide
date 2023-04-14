@@ -164,7 +164,6 @@ public class CreateInterfaceElementCommand extends CreationCommand {
 
 		newInterfaceElement.setIsInput(isInput);
 		newInterfaceElement.setType(dataType);
-		newInterfaceElement.setTypeName(dataType.getName());
 	}
 
 	@Override
