@@ -16,6 +16,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.hovering
 
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType
 import org.eclipse.fordiac.ide.model.libraryElement.FB
@@ -33,14 +34,15 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarPlainDeclarationBl
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarTempDeclarationBlock
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
 import org.eclipse.xtext.ui.editor.hover.html.DefaultEObjectHoverProvider
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclarationBlock
 
 class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 
 	override protected getFirstLine(EObject o) {
-		val label =  switch (o) {
+		val label = switch (o) {
 			VarDeclaration: o.label + " : " + o.type.name
 			FB: o.typeEntry.type.name
-			default: o.label 
+			default: o.label
 		}
 		return o.getKind() + ( (label !== null) ? "<b>" + label + "</b>" : "");
 	}
@@ -52,11 +54,16 @@ class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 	def dispatch getKind(STMethod object) '''METHOD '''
 
 	def dispatch getKind(STVarDeclaration object) {
-		if(object.eContainer instanceof STVarInputDeclarationBlock) return '''INPUT '''
-		if(object.eContainer instanceof STVarOutputDeclarationBlock) return '''OUTPUT '''
-		if(object.eContainer instanceof STVarInOutDeclarationBlock) return '''IN_OUT '''
-		if(object.eContainer instanceof STVarPlainDeclarationBlock) return '''VAR '''
-		if(object.eContainer instanceof STVarTempDeclarationBlock) return '''VAR_TEMP '''
+		if(object.eContainer instanceof STVarDeclarationBlock) {
+			switch (object.eContainer) {
+				STVarInputDeclarationBlock: '''INPUT '''
+				STVarOutputDeclarationBlock: '''OUTPUT '''
+				STVarInOutDeclarationBlock: '''IN_OUT '''
+				STVarPlainDeclarationBlock: '''VAR '''
+				STVarTempDeclarationBlock: '''VAR_TEMP '''
+				STVarGlobalDeclarationBlock: '''VAR_GLOBAL '''
+			} + '''«IF (object.eContainer as STVarDeclarationBlock).constant»CONSTANT «ENDIF»'''		
+		}
 	}
 
 	def dispatch getKind(VarDeclaration object) {
@@ -91,4 +98,3 @@ class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 
 	def dispatch getKind(EObject object) '''«object.eClass().getName()» '''
 }
-

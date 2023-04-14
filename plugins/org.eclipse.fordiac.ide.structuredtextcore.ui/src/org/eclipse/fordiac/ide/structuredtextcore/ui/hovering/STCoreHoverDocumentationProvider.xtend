@@ -17,6 +17,7 @@
 package org.eclipse.fordiac.ide.structuredtextcore.ui.hovering
 
 import org.eclipse.emf.ecore.EObject
+import org.eclipse.fordiac.ide.globalconstantseditor.globalConstants.STVarGlobalDeclarationBlock
 import org.eclipse.fordiac.ide.model.data.StructuredType
 import org.eclipse.fordiac.ide.model.libraryElement.FB
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
@@ -25,6 +26,7 @@ import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STMethod
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STStandardFunction
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STVarDeclaration
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunction
+import org.eclipse.xtext.nodemodel.util.NodeModelUtils
 import org.eclipse.xtext.ui.editor.hover.html.DefaultHoverDocumentationProvider
 
 class STCoreHoverDocumentationProvider extends DefaultHoverDocumentationProvider {
@@ -159,11 +161,24 @@ class STCoreHoverDocumentationProvider extends DefaultHoverDocumentationProvider
 	'''
 
 	def dispatch getSTElementAutoDocumentation(StructuredType object) '''
-		
+	
 		<p>DESCRIPTION: 
 			<div style="text-indent:10px;"><b>«object.comment»</b></div>
 		</p>	
 		
+	'''
+
+	def dispatch getSTElementAutoDocumentation(STVarDeclaration varDeclaration) {
+		if(varDeclaration.eContainer instanceof STVarGlobalDeclarationBlock) {
+			getVarGlobalDescription(varDeclaration)
+		}
+	}
+
+	private def getVarGlobalDescription(STVarDeclaration declaration) '''
+	
+		<p>File location: <b>«declaration.eResource.URI.toPlatformString(true)»</b></p>
+		
+		<p>Expression: <b>«NodeModelUtils.getNode(declaration.defaultValue)?.text»</b></p>
 	'''
 
 	def dispatch getSTElementAutoDocumentation(EObject object) '''''' // No ST element or no auto-documentation needed ST element
