@@ -43,7 +43,6 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.fordiac.ide.ui.preferences.PreferenceConstants;
 import org.eclipse.gef.ConnectionEditPart;
-import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.GraphicalEditPart;
 import org.eclipse.gef.NodeEditPart;
@@ -58,7 +57,6 @@ import org.eclipse.swt.widgets.Display;
 
 public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEditPart {
 
-	private EditPart context;
 	private InterfaceEditPart parentPart;
 
 	private static int maxWidth = -1;
@@ -86,8 +84,8 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 		// also add the adapter to parent to refresh the init value after type change
 		getModel().getParentIE().eAdapters().add(contentAdapter);
 		final Object part = getViewer().getEditPartRegistry().get(getModel().getParentIE());
-		if (part instanceof InterfaceEditPart) {
-			parentPart = (InterfaceEditPart) part;
+		if (part instanceof final InterfaceEditPart iep) {
+			parentPart = iep;
 			final IFigure parentFigure = parentPart.getFigure();
 			parentFigure.addAncestorListener(new AncestorListener() {
 
@@ -377,33 +375,14 @@ public class ValueEditPart extends AbstractGraphicalEditPart implements NodeEdit
 	}
 
 	/**
-	 * Gets the context.
-	 *
-	 * @return the context
-	 */
-	public EditPart getContext() {
-		return context;
-	}
-
-	/**
-	 * Sets the context.
-	 *
-	 * @param context the new context
-	 */
-	public void setContext(final EditPart context) {
-		this.context = context;
-	}
-
-	/**
 	 * Gets the manager.
 	 *
 	 * @return the manager
 	 */
 	public DirectEditManager createDirectEditManager() {
 		final IInterfaceElement interfaceElement = getIInterfaceElement();
-		if (interfaceElement instanceof VarDeclaration) {
-			return new InitialValueDirectEditManager(this, new FigureCellEditorLocator(getFigure()),
-					(VarDeclaration) interfaceElement);
+		if (interfaceElement instanceof final VarDeclaration varDecl) {
+			return new InitialValueDirectEditManager(this, new FigureCellEditorLocator(getFigure()), varDecl);
 		}
 		return new LabelDirectEditManager(this, getFigure());
 	}
