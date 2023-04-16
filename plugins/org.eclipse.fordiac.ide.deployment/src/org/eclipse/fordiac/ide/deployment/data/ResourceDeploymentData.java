@@ -172,8 +172,7 @@ public class ResourceDeploymentData {
 	private void addConnection(final Deque<SubApp> subAppHierarchy, final Connection con, final String prefix) {
 		// Only handle the conneciton if it is no subapp, typed subapp originated or
 		// resourcetype connection
-		if (null != con.getSourceElement() && !(con.getSourceElement() instanceof SubApp)
-				&& !con.isResTypeConnection()) {
+		if (null != con.getSourceElement() && !(con.getSourceElement() instanceof SubApp)) {
 			for (final ConDeploymentDest destData : getConnectionEndPoint(subAppHierarchy, prefix, con.getDestination())) {
 				connections.add(
 						new ConnectionDeploymentData(prefix, con.getSource(), destData.prefix, destData.destination));

@@ -94,7 +94,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		if (fbnElement.getType() != null) {
 			addTypeAttribute(fbnElement.getType());
 		}
-		addCommentAttribute(fbnElement);
+		addCommentAttribute(fbnElement.getComment());
 		addXYAttributes(fbnElement);
 		if (fbnElement instanceof final Group group) {
 			addGroupAttributes(group);
@@ -108,7 +108,7 @@ class FBNetworkExporter extends CommonElementExporter {
 			addEmptyStartElement(LibraryElementTags.COMMENT_ELEMENT);
 		}
 
-		addCommentAttribute(comment);
+		addCommentAttribute(comment.getComment());
 		addXYAttributes(comment);
 		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE,
 				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getWidth()));
@@ -231,7 +231,7 @@ class FBNetworkExporter extends CommonElementExporter {
 			getWriter().writeAttribute(LibraryElementTags.DESTINATION_ATTRIBUTE,
 					getConnectionEndpointIdentifier(connection.getDestination(), fbNetwork));
 		}
-		addCommentAttribute(connection);
+		addCommentAttribute(connection.getComment());
 		addConnectionCoordinates(connection);
 
 		if (hasAttributes) {

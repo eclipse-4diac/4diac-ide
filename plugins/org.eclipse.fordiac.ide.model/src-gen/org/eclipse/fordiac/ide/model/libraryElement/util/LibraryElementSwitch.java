@@ -177,7 +177,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				AdapterConnection adapterConnection = (AdapterConnection)theEObject;
 				T result = caseAdapterConnection(adapterConnection);
 				if (result == null) result = caseConnection(adapterConnection);
-				if (result == null) result = caseINamedElement(adapterConnection);
 				if (result == null) result = caseErrorMarkerRef(adapterConnection);
 				if (result == null) result = caseHiddenElement(adapterConnection);
 				if (result == null) result = caseConfigurableObject(adapterConnection);
@@ -399,7 +398,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.CONNECTION: {
 				Connection connection = (Connection)theEObject;
 				T result = caseConnection(connection);
-				if (result == null) result = caseINamedElement(connection);
 				if (result == null) result = caseErrorMarkerRef(connection);
 				if (result == null) result = caseHiddenElement(connection);
 				if (result == null) result = caseConfigurableObject(connection);
@@ -416,7 +414,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				DataConnection dataConnection = (DataConnection)theEObject;
 				T result = caseDataConnection(dataConnection);
 				if (result == null) result = caseConnection(dataConnection);
-				if (result == null) result = caseINamedElement(dataConnection);
 				if (result == null) result = caseErrorMarkerRef(dataConnection);
 				if (result == null) result = caseHiddenElement(dataConnection);
 				if (result == null) result = caseConfigurableObject(dataConnection);
@@ -540,7 +537,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				EventConnection eventConnection = (EventConnection)theEObject;
 				T result = caseEventConnection(eventConnection);
 				if (result == null) result = caseConnection(eventConnection);
-				if (result == null) result = caseINamedElement(eventConnection);
 				if (result == null) result = caseErrorMarkerRef(eventConnection);
 				if (result == null) result = caseHiddenElement(eventConnection);
 				if (result == null) result = caseConfigurableObject(eventConnection);

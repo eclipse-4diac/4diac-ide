@@ -21,7 +21,7 @@ package org.eclipse.fordiac.ide.gef.properties;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.fordiac.ide.gef.Messages;
-import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeConnectionCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.HideConnectionCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.CompositeFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
@@ -67,7 +67,7 @@ public class ConnectionSection extends AbstractSection {
 		commentText = createGroupText(composite, true);
 		commentText.addModifyListener(event -> {
 			removeContentAdapter();
-			executeCommand(new ChangeCommentCommand(getType(), commentText.getText()));
+			executeCommand(new ChangeConnectionCommentCommand(getType(), commentText.getText()));
 			addContentAdapter();
 		});
 

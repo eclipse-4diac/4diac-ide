@@ -67,12 +67,12 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 
 	@Override
 	protected void createBlockTypeSpecificXMLEntries() throws XMLStreamException {
-		if (getType() instanceof CompositeFBType) {
-			new FBNetworkExporter(this).createFBNetworkElement(((CompositeFBType) getType()).getFBNetwork());
-		} else if (getType() instanceof BasicFBType) {
-			addBasicFB((BasicFBType) getType());
-		} else if (getType() instanceof SimpleFBType) {
-			addSimpleFB((SimpleFBType) getType());
+		if (getType() instanceof final CompositeFBType cFBT) {
+			new FBNetworkExporter(this).createFBNetworkElement(cFBT.getFBNetwork());
+		} else if (getType() instanceof final BasicFBType bFBT) {
+			addBasicFB(bFBT);
+		} else if (getType() instanceof final SimpleFBType sFBT) {
+			addSimpleFB(sFBT);
 		}
 	}
 
@@ -187,8 +187,7 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 	private void createECState(final ECState state) throws XMLStreamException {
 		addStartElement(LibraryElementTags.ECSTATE_ELEMENT);
 
-		addNameAttribute(state.getName());
-		addCommentAttribute(state);
+		addNameAndCommentAttribute(state);
 		addXYAttributes(state);
 		addECActions(state.getECAction());
 
@@ -246,13 +245,12 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 	private void addAlgorithm(final Algorithm algorithm) throws XMLStreamException {
 		addStartElement(LibraryElementTags.ALGORITHM_ELEMENT);
 
-		addNameAttribute(algorithm.getName());
-		addCommentAttribute(algorithm);
+		addNameAndCommentAttribute(algorithm);
 
-		if (algorithm instanceof STAlgorithm) {
-			addSTAlgorithm((STAlgorithm) algorithm);
-		} else if (algorithm instanceof OtherAlgorithm) {
-			addOtherAlgorithm((OtherAlgorithm) algorithm);
+		if (algorithm instanceof final STAlgorithm stAlg) {
+			addSTAlgorithm(stAlg);
+		} else if (algorithm instanceof final OtherAlgorithm oAlg) {
+			addOtherAlgorithm(oAlg);
 		}
 		addEndElement();
 	}
@@ -262,10 +260,10 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 	 * @param method the method
 	 * @throws XMLStreamException */
 	private void addICallable(final ICallable callable) throws XMLStreamException {
-		if (callable instanceof Algorithm) {
-			addAlgorithm((Algorithm) callable);
-		} else if (callable instanceof Method) {
-			addMethod((Method) callable);
+		if (callable instanceof final Algorithm alg) {
+			addAlgorithm(alg);
+		} else if (callable instanceof final Method method) {
+			addMethod(method);
 		}
 	}
 
@@ -278,12 +276,12 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 
 		addNameAttribute(method.getName());
 		addTypeAttribute(method.getReturnType());
-		addCommentAttribute(method);
+		addCommentAttribute(method.getComment());
 
-		if (method instanceof STMethod) {
-			addSTMethod((STMethod) method);
-		} else if (method instanceof OtherMethod) {
-			addOtherMethod((OtherMethod) method);
+		if (method instanceof final STMethod stMethod) {
+			addSTMethod(stMethod);
+		} else if (method instanceof final OtherMethod oMethod) {
+			addOtherMethod(oMethod);
 		}
 		addEndElement();
 	}
@@ -326,8 +324,8 @@ public class FbtExporter extends AbstractBlockTypeExporter {
 	}
 
 	private void addParameter(final INamedElement element) throws XMLStreamException {
-		if (element instanceof VarDeclaration) {
-			addVarDeclaration((VarDeclaration) element);
+		if (element instanceof final VarDeclaration varDecl) {
+			addVarDeclaration(varDecl);
 		}
 	}
 

@@ -166,11 +166,11 @@
       </genOperations>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//Connection">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Connection/resTypeConnection"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Connection/brokenConnection"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Connection/source"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Connection/destination"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Connection/routingData"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Connection/comment"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/getSourceElement" body="return org.eclipse.fordiac.ide.model.Annotations.getSourceElement(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Connection/getDestinationElement"
           body="return org.eclipse.fordiac.ide.model.Annotations.getDestinationElement(this);"/>

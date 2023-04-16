@@ -275,7 +275,6 @@ class FBNetworkImporter extends CommonElementImporter {
 			throws XMLStreamException, TypeImportException {
 		@SuppressWarnings("unchecked")
 		final T connection = (T) LibraryElementFactory.eINSTANCE.create(conType);
-		connection.setResTypeConnection(false);
 
 		final String sourceElement = getAttributeValue(LibraryElementTags.SOURCE_ATTRIBUTE);
 		final String destinationElement = getAttributeValue(LibraryElementTags.DESTINATION_ATTRIBUTE);

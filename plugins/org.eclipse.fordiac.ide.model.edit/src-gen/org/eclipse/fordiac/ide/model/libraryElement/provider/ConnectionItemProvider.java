@@ -22,22 +22,10 @@ import java.util.List;
 
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
-import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
-import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
-import org.eclipse.emf.edit.provider.IItemLabelProvider;
 import org.eclipse.emf.edit.provider.IItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.IItemPropertySource;
-import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
-import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
-import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
-
-import org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin;
-
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
 
@@ -48,13 +36,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementPackage;
  * @generated
  */
 public class ConnectionItemProvider 
-	extends ItemProviderAdapter
-	implements
-		IEditingDomainItemProvider,
-		IStructuredItemContentProvider,
-		ITreeItemContentProvider,
-		IItemLabelProvider,
-		IItemPropertySource {
+	extends ConfigurableObjectItemProvider {
 	/**
 	 * This constructs an instance from a factory and a notifier.
 	 * <!-- begin-user-doc -->
@@ -76,38 +58,14 @@ public class ConnectionItemProvider
 		if (itemPropertyDescriptors == null) {
 			super.getPropertyDescriptors(object);
 
-			addNamePropertyDescriptor(object);
-			addCommentPropertyDescriptor(object);
 			addErrorMessagePropertyDescriptor(object);
-			addResTypeConnectionPropertyDescriptor(object);
 			addBrokenConnectionPropertyDescriptor(object);
 			addSourcePropertyDescriptor(object);
 			addDestinationPropertyDescriptor(object);
 			addRoutingDataPropertyDescriptor(object);
+			addCommentPropertyDescriptor(object);
 		}
 		return itemPropertyDescriptors;
-	}
-
-	/**
-	 * This adds a property descriptor for the Name feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addNamePropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_INamedElement_name_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_name_feature", "_UI_INamedElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.INAMED_ELEMENT__NAME,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
 	}
 
 	/**
@@ -121,9 +79,9 @@ public class ConnectionItemProvider
 			(createItemPropertyDescriptor
 				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
 				 getResourceLocator(),
-				 getString("_UI_INamedElement_comment_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_INamedElement_comment_feature", "_UI_INamedElement_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.INAMED_ELEMENT__COMMENT,
+				 getString("_UI_Connection_comment_feature"), //$NON-NLS-1$
+				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_comment_feature", "_UI_Connection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+				 LibraryElementPackage.Literals.CONNECTION__COMMENT,
 				 true,
 				 false,
 				 false,
@@ -150,28 +108,6 @@ public class ConnectionItemProvider
 				 false,
 				 false,
 				 ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
-				 null,
-				 null));
-	}
-
-	/**
-	 * This adds a property descriptor for the Res Type Connection feature.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected void addResTypeConnectionPropertyDescriptor(Object object) {
-		itemPropertyDescriptors.add
-			(createItemPropertyDescriptor
-				(((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
-				 getResourceLocator(),
-				 getString("_UI_Connection_resTypeConnection_feature"), //$NON-NLS-1$
-				 getString("_UI_PropertyDescriptor_description", "_UI_Connection_resTypeConnection_feature", "_UI_Connection_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-				 LibraryElementPackage.Literals.CONNECTION__RES_TYPE_CONNECTION,
-				 true,
-				 false,
-				 false,
-				 ItemPropertyDescriptor.BOOLEAN_VALUE_IMAGE,
 				 null,
 				 null));
 	}
@@ -272,7 +208,7 @@ public class ConnectionItemProvider
 	 */
 	@Override
 	public String getText(Object object) {
-		String label = ((Connection)object).getName();
+		String label = ((Connection)object).getErrorMessage();
 		return label == null || label.length() == 0 ?
 			getString("_UI_Connection_type") : //$NON-NLS-1$
 			getString("_UI_Connection_type") + " " + label; //$NON-NLS-1$ //$NON-NLS-2$
@@ -291,12 +227,9 @@ public class ConnectionItemProvider
 		updateChildren(notification);
 
 		switch (notification.getFeatureID(Connection.class)) {
-			case LibraryElementPackage.CONNECTION__NAME:
-			case LibraryElementPackage.CONNECTION__COMMENT:
-			case LibraryElementPackage.CONNECTION__ATTRIBUTES:
 			case LibraryElementPackage.CONNECTION__ERROR_MESSAGE:
-			case LibraryElementPackage.CONNECTION__RES_TYPE_CONNECTION:
 			case LibraryElementPackage.CONNECTION__BROKEN_CONNECTION:
+			case LibraryElementPackage.CONNECTION__COMMENT:
 				fireNotifyChanged(new ViewerNotification(notification, notification.getNotifier(), false, true));
 				return;
 			default:
@@ -315,17 +248,6 @@ public class ConnectionItemProvider
 	@Override
 	protected void collectNewChildDescriptors(Collection<Object> newChildDescriptors, Object object) {
 		super.collectNewChildDescriptors(newChildDescriptors, object);
-	}
-
-	/**
-	 * Return the resource locator for this item provider's resources.
-	 * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	@Override
-	public ResourceLocator getResourceLocator() {
-		return FordiacEditPlugin.INSTANCE;
 	}
 
 }
