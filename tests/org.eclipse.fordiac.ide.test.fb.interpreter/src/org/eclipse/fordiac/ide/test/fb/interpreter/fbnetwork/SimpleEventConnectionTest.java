@@ -22,7 +22,7 @@ import org.eclipse.emf.compare.Comparison;
 import org.eclipse.emf.compare.utils.EMFComparePrettyPrinter;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventManager;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerComparisonUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.compare.EventManagerComparisonUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
 import org.eclipse.fordiac.ide.fb.interpreter.mm.FBNetworkTestRunner.IllegalTraceException;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;

@@ -1,4 +1,4 @@
-package org.eclipse.fordiac.ide.fb.interpreter.mm;
+package org.eclipse.fordiac.ide.fb.interpreter.compare;
 
 /*******************************************************************************
  * Copyright (c) 2023 Johannes Kepler University Linz and others
@@ -28,6 +28,7 @@ import org.eclipse.emf.compare.rcp.EMFCompareRCPPlugin;
 import org.eclipse.emf.compare.scope.DefaultComparisonScope;
 import org.eclipse.emf.compare.scope.IComparisonScope;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.compare.match.eobject.IEObjectMatcher;
 
 public class EventManagerComparisonUtils {
 
@@ -39,17 +40,21 @@ public class EventManagerComparisonUtils {
 		// Default diff processor
 		final IDiffProcessor diffProcessor = new DiffBuilder();
 		final IDiffEngine diffEngine = new DefaultDiffEngine(diffProcessor);
-
+		
 		final IComparisonScope scope = new DefaultComparisonScope(left, right, null);
 		final IMatchEngine.Factory.Registry registry = EMFCompareRCPPlugin.getDefault().getMatchEngineFactoryRegistry();
+		registry.clear();
 		// Custom Matcher
-		// final IEObjectMatcher modularizableMatcher = new ModularizableMatcher();
+		final IEObjectMatcher fordiacForteIntepreterMatcher = new FordiacForteInterpreterMatcher();
 		final IComparisonFactory comparisonFactory = new DefaultComparisonFactory(new DefaultEqualityHelperFactory());
+		
 		@SuppressWarnings("deprecation")
-		final MatchEngineFactoryImpl matchEngineFactory = new MatchEngineFactoryImpl();
+		final MatchEngineFactoryImpl matchEngineFactory = new MatchEngineFactoryImpl(fordiacForteIntepreterMatcher,comparisonFactory);
 		matchEngineFactory.setRanking(20);
 		registry.add(matchEngineFactory);
-		return EMFCompare.builder().setMatchEngineFactoryRegistry(registry).setDiffEngine(diffEngine).build()
+		return EMFCompare.builder()
+				.setMatchEngineFactoryRegistry(registry)
+				.setDiffEngine(diffEngine).build()
 				.compare(scope);
 	}
 

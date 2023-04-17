@@ -66,10 +66,17 @@ public class FordiacForteInterpreterMatcher implements IEObjectMatcher {
 	private static void matchRuntime(final Set<Match> matches, final EObject leftEObject) {
 		final Match match = matches.stream().filter(m -> m.getLeft().equals(leftEObject.eContainer())).findFirst()
 				.orElse(null);
-		if ((match != null)
-				&& leftEObject.eClass().equals(((EventOccurrence) match.getRight()).getFbRuntime().eClass())) {
-			createMatch(leftEObject, ((EventOccurrence) match.getRight()).getFbRuntime(), matches);
-		}
+		if (match != null) {
+			// This is to check if this object is an FBRuntime or FBResult
+			final EStructuralFeature structFeat = leftEObject.eContainingFeature();
+			if (structFeat.getFeatureID() == OperationalSemanticsPackage.EVENT_OCCURRENCE__FB_RUNTIME) {
+				if(leftEObject.eClass().equals(((EventOccurrence) match.getRight()).getFbRuntime().eClass())) 
+					createMatch(leftEObject, ((EventOccurrence) match.getRight()).getFbRuntime(), matches);
+			} else {
+				if(leftEObject.eClass().equals(((EventOccurrence) match.getRight()).getResultFBRuntime().eClass())) 
+					createMatch(leftEObject, ((EventOccurrence) match.getRight()).getResultFBRuntime(), matches);
+			}
+		}		
 	}
 
 	private static void matchEventOccurrence(final Set<Match> matches, final EObject leftEObject) {
