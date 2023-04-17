@@ -14,9 +14,9 @@
 package org.eclipse.fordiac.ide.systemconfiguration.segment.commands;
 
 import org.eclipse.fordiac.ide.systemconfiguration.segment.TsnParameters;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationFactory;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationFactory;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 
 /** This command allows adding windows to a TSN configuration. */

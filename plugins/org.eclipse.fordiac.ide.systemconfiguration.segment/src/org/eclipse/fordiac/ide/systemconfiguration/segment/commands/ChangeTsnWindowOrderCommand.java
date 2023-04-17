@@ -14,8 +14,8 @@ package org.eclipse.fordiac.ide.systemconfiguration.segment.commands;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeListElementOrderCommand;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow;
 
 public class ChangeTsnWindowOrderCommand extends AbstractChangeListElementOrderCommand<TsnWindow> {
 

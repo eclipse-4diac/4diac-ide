@@ -11,9 +11,10 @@
  *          - initial implementation and/or documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl;
+package org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl;
 
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.NotificationChain;
 import org.eclipse.emf.common.util.ECollections;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -23,8 +24,8 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.DefaultConfiguration;
 
 /** <!-- begin-user-doc --> An implementation of the model object '<em><b>Default Configuration</b></em>'. <!--
  * end-user-doc -->
@@ -32,14 +33,14 @@ import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.Default
  * The following features are implemented:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl.DefaultConfigurationImpl#getTarget
+ * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl.DefaultConfigurationImpl#getTarget
  * <em>Target</em>}</li>
  * </ul>
  *
  * @generated */
 public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container implements DefaultConfiguration {
-	/** The cached value of the '{@link #getTarget() <em>Target</em>}' reference. <!-- begin-user-doc --> <!--
-	 * end-user-doc -->
+	/** The cached value of the '{@link #getTarget() <em>Target</em>}' containment reference. <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
 	 *
 	 * @see #getTarget()
 	 * @generated
@@ -67,13 +68,21 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	@Override
 	public CommunicationMappingTarget getTarget() {
 		if (target != null && target.eIsProxy()) {
-			final InternalEObject oldTarget = (InternalEObject) target;
+			InternalEObject oldTarget = (InternalEObject) target;
 			target = (CommunicationMappingTarget) eResolveProxy(oldTarget);
 			if (target != oldTarget) {
-				if (eNotificationRequired()) {
+				InternalEObject newTarget = (InternalEObject) target;
+				NotificationChain msgs = oldTarget.eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - CommunicationPackage.DEFAULT_CONFIGURATION__TARGET, null, null);
+				if (newTarget.eInternalContainer() == null) {
+					msgs = newTarget.eInverseAdd(this,
+							EOPPOSITE_FEATURE_BASE - CommunicationPackage.DEFAULT_CONFIGURATION__TARGET, null, msgs);
+				}
+				if (msgs != null)
+					msgs.dispatch();
+				if (eNotificationRequired())
 					eNotify(new ENotificationImpl(this, Notification.RESOLVE,
 							CommunicationPackage.DEFAULT_CONFIGURATION__TARGET, oldTarget, target));
-				}
 			}
 		}
 		return target;
@@ -89,14 +98,39 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
 	 * @generated */
-	@Override
-	public void setTarget(final CommunicationMappingTarget newTarget) {
-		final CommunicationMappingTarget oldTarget = target;
+	public NotificationChain basicSetTarget(CommunicationMappingTarget newTarget, NotificationChain msgs) {
+		CommunicationMappingTarget oldTarget = target;
 		target = newTarget;
 		if (eNotificationRequired()) {
-			eNotify(new ENotificationImpl(this, Notification.SET, CommunicationPackage.DEFAULT_CONFIGURATION__TARGET,
-					oldTarget, target));
+			ENotificationImpl notification = new ENotificationImpl(this, Notification.SET,
+					CommunicationPackage.DEFAULT_CONFIGURATION__TARGET, oldTarget, newTarget);
+			if (msgs == null)
+				msgs = notification;
+			else
+				msgs.add(notification);
 		}
+		return msgs;
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public void setTarget(CommunicationMappingTarget newTarget) {
+		if (newTarget != target) {
+			NotificationChain msgs = null;
+			if (target != null)
+				msgs = ((InternalEObject) target).eInverseRemove(this,
+						EOPPOSITE_FEATURE_BASE - CommunicationPackage.DEFAULT_CONFIGURATION__TARGET, null, msgs);
+			if (newTarget != null)
+				msgs = ((InternalEObject) newTarget).eInverseAdd(this,
+						EOPPOSITE_FEATURE_BASE - CommunicationPackage.DEFAULT_CONFIGURATION__TARGET, null, msgs);
+			msgs = basicSetTarget(newTarget, msgs);
+			if (msgs != null)
+				msgs.dispatch();
+		} else if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, CommunicationPackage.DEFAULT_CONFIGURATION__TARGET,
+					newTarget, newTarget));
 	}
 
 	/** <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -135,12 +169,24 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	 *
 	 * @generated */
 	@Override
-	public Object eGet(final int featureID, final boolean resolve, final boolean coreType) {
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
 		case CommunicationPackage.DEFAULT_CONFIGURATION__TARGET:
-			if (resolve) {
+			return basicSetTarget(null, msgs);
+		default:
+			return super.eInverseRemove(otherEnd, featureID, msgs);
+		}
+	}
+
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
+	 *
+	 * @generated */
+	@Override
+	public Object eGet(int featureID, boolean resolve, boolean coreType) {
+		switch (featureID) {
+		case CommunicationPackage.DEFAULT_CONFIGURATION__TARGET:
+			if (resolve)
 				return getTarget();
-			}
 			return basicGetTarget();
 		default:
 			return super.eGet(featureID, resolve, coreType);
@@ -151,7 +197,7 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	 *
 	 * @generated */
 	@Override
-	public void eSet(final int featureID, final Object newValue) {
+	public void eSet(int featureID, Object newValue) {
 		switch (featureID) {
 		case CommunicationPackage.DEFAULT_CONFIGURATION__TARGET:
 			setTarget((CommunicationMappingTarget) newValue);
@@ -166,7 +212,7 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	 *
 	 * @generated */
 	@Override
-	public void eUnset(final int featureID) {
+	public void eUnset(int featureID) {
 		switch (featureID) {
 		case CommunicationPackage.DEFAULT_CONFIGURATION__TARGET:
 			setTarget((CommunicationMappingTarget) null);
@@ -181,7 +227,7 @@ public class DefaultConfigurationImpl extends MinimalEObjectImpl.Container imple
 	 *
 	 * @generated */
 	@Override
-	public boolean eIsSet(final int featureID) {
+	public boolean eIsSet(int featureID) {
 		switch (featureID) {
 		case CommunicationPackage.DEFAULT_CONFIGURATION__TARGET:
 			return target != null;

@@ -10,15 +10,17 @@
  * Contributors:
  *   Bianca Wiesmayr - initial API and implementation and/or initial documentation
  *******************************************************************************/
-package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication;
+package org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.TsnParameters;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow;
 
-public class Annotations {
+public final class Annotations {
 	// TsnWindow
 	public static String getTsnWindowName(final TsnWindow w) {
 		return TsnParameters.TSN_WINDOW_NAME + ((TsnConfiguration) w.eContainer()).getWindows().indexOf(w);

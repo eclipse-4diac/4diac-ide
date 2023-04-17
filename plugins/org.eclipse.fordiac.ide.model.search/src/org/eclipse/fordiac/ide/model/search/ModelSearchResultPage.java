@@ -53,7 +53,7 @@ import org.eclipse.ui.IMemento;
 
 public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
-	private static final String ID = "org.eclipse.fordiac.ide.application.search.ModelSearchResultPage"; //$NON-NLS-1$
+	private static final String ID = "org.eclipse.fordiac.ide.model.search.ModelSearchResultPage"; //$NON-NLS-1$
 	private ModelSearchTableContentProvider contentProvider;
 	private String searchDescription;
 
@@ -61,7 +61,7 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	private static final int NAME_COMMENT_COLUMN_WIDTH = 200;
 	private static final int FULL_HIERARCHICAL_NAME_COLUMN_WIDTH = 300;
 
-	private static final String FULL_NAME_COLUMN = "Full Hierarchical Name";
+	private static final String FULL_NAME_COLUMN = "Full Hierarchical Name"; //$NON-NLS-1$
 
 	public ModelSearchResultPage() {
 		super(AbstractTextSearchViewPage.FLAG_LAYOUT_FLAT); // FLAG_LAYOUT_FLAT = table layout
@@ -146,8 +146,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		colName.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof INamedElement) {
-					return ((INamedElement) element).getName();
+				if (element instanceof final INamedElement ne) {
+					return ne.getName();
 				}
 				return super.getText(element);
 			}
@@ -157,8 +157,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		colComment.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof INamedElement) {
-					return ((INamedElement) element).getComment();
+				if (element instanceof final INamedElement ne) {
+					return ne.getComment();
 				}
 				return super.getText(element);
 			}
@@ -169,23 +169,22 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		colType.setLabelProvider(new ColumnLabelProvider() {
 			@Override
 			public String getText(final Object element) {
-				if (element instanceof FBType) {
-					return ((FBType) element).getName();
+				if (element instanceof final FBType fbType) {
+					return fbType.getName();
 				}
-				if (element instanceof TypedConfigureableObject) {
-					final LibraryElement type = ((TypedConfigureableObject) element).getType();
+				if (element instanceof final TypedConfigureableObject to) {
+					final LibraryElement type = to.getType();
 					return type != null ? type.getName() : "untyped";
 				}
-				if (element instanceof IInterfaceElement) {
-					final LibraryElement type = ((IInterfaceElement) element).getType();
+				if (element instanceof final IInterfaceElement ie) {
+					final LibraryElement type = ie.getType();
 					return type != null ? type.getName() : "unknown";
 				}
-				if (element instanceof CompilableType) {
-					return ((CompilableType) element).getName();
+				if (element instanceof final CompilableType ct) {
+					return ct.getName();
 				}
-				if (element instanceof DataType) {
-					final DataType typeEntry = (DataType) element;
-					return typeEntry.getName();
+				if (element instanceof final DataType dt) {
+					return dt.getName();
 				}
 				return super.getText(element);
 			}
@@ -207,8 +206,8 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 		final StructuredSelection selectionList = (StructuredSelection) doubleClick.getSelection();
 		if (!selectionList.isEmpty()) {
 			final Object selection = selectionList.getFirstElement();
-			if (selection instanceof EObject) {
-				jumpHelper((EObject) selection);
+			if (selection instanceof final EObject eobj) {
+				jumpHelper(eobj);
 			}
 		}
 	}
@@ -220,11 +219,11 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	}
 
 	private static EObject getParent(final EObject eobj) {
-		if (eobj instanceof IInterfaceElement) {
-			return ((IInterfaceElement) eobj).getFBNetworkElement().eContainer().eContainer();
+		if (eobj instanceof final IInterfaceElement ie) {
+			return ie.getFBNetworkElement().eContainer().eContainer();
 		}
-		if (eobj instanceof Device) {
-			return ((Device) eobj).getPosition().eContainer().eContainer();
+		if (eobj instanceof final Device dev) {
+			return dev.getPosition().eContainer().eContainer();
 		}
 		if ((eobj instanceof Application) || (eobj instanceof FBType)) {
 			return eobj;
@@ -233,36 +232,33 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 	}
 
 	public static String hierarchicalName(final Object element) {
-		if (element instanceof FBNetworkElement) {
-			return FBNetworkHelper.getFullHierarchicalName((FBNetworkElement) element);
+		if (element instanceof final FBNetworkElement fbne) {
+			return FBNetworkHelper.getFullHierarchicalName(fbne);
 		}
-		if (element instanceof IInterfaceElement) {
-			final String FBName = FBNetworkHelper
-					.getFullHierarchicalName(((IInterfaceElement) element).getFBNetworkElement());
-			return FBName + "." + ((IInterfaceElement) element).getName(); //$NON-NLS-1$
+		if (element instanceof final IInterfaceElement ie) {
+			final String FBName = FBNetworkHelper.getFullHierarchicalName(ie.getFBNetworkElement());
+			return FBName + "." + ie.getName(); //$NON-NLS-1$
 		}
-		if (element instanceof Device) {
-			final Device device = (Device) element;
+		if (element instanceof final Device device) {
 			// systemname.device
 			return device.getAutomationSystem().getName() + "." + device.getName(); //$NON-NLS-1$
 		}
-		if (element instanceof Resource) {
-			final Resource res = (Resource) element;
+		if (element instanceof final Resource res) {
 			// systemname.devicename.resource
 			return res.getDevice().getAutomationSystem().getName() + "." + res.getDevice().getName() + "." //$NON-NLS-1$
 					+ res.getName();
 		}
-		if (element instanceof Application) {
-			return ((Application) element).getName();
+		if (element instanceof final Application app) {
+			return app.getName();
 		}
-		if (element instanceof FBType) {
-			return ((FBType) element).getName();
+		if (element instanceof final FBType fbtype) {
+			return fbtype.getName();
 		}
-		if (element instanceof CompilableType) {
-			return ((CompilableType) element).getName();
+		if (element instanceof final CompilableType ct) {
+			return ct.getName();
 		}
-		if (element instanceof DataType) {
-			return ((DataType) element).getName();
+		if (element instanceof final DataType dt) {
+			return dt.getName();
 		}
 		return element.toString();
 	}
@@ -290,14 +286,14 @@ public class ModelSearchResultPage extends AbstractTextSearchViewPage {
 
 	public static void showResult(final EObject obj) {
 		EObject toOpen = obj;
-		if (obj instanceof IInterfaceElement) {
-			toOpen = ((IInterfaceElement) obj).getFBNetworkElement();
+		if (obj instanceof final IInterfaceElement ie) {
+			toOpen = ie.getFBNetworkElement();
 		}
 		if (obj instanceof SubApp) {
 			toOpen = ((SubApp) toOpen).getOuterFBNetworkElement();
 		}
-		if (toOpen instanceof FBNetworkElement) {
-			final IEditorPart p = HandlerHelper.openParentEditor((FBNetworkElement) toOpen);
+		if (toOpen instanceof final FBNetworkElement fbne) {
+			final IEditorPart p = HandlerHelper.openParentEditor(fbne);
 			HandlerHelper.selectElement(obj, p);
 		}
 		HandlerHelper.openEditor(obj);

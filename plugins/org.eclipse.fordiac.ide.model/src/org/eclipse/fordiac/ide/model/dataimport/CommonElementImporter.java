@@ -294,17 +294,23 @@ public abstract class CommonElementImporter {
 			if (XMLStreamConstants.START_ELEMENT == event) {
 				if (!childHandler.checkChild(getReader().getLocalName())) {
 					throw new XMLStreamException(
-							"Unexpected xml child (" + getReader().getLocalName() + ") found in " + elementName); //$NON-NLS-1$ //$NON-NLS-2$
+							"Unexpected xml child (" + getReader().getLocalName() + ") found in " + elementName //$NON-NLS-1$ //$NON-NLS-2$
+									+ getParseLocation());
 				}
 			} else if (XMLStreamConstants.END_ELEMENT == event) {
 				if (!getReader().getLocalName().equals(elementName)) {
 					throw new XMLStreamException(
-							"Unexpected xml end tag found in " + elementName + ": " + getReader().getLocalName()); //$NON-NLS-1$ //$NON-NLS-2$
+							"Unexpected xml end tag found in " + elementName + ": " + getReader().getLocalName() //$NON-NLS-1$ //$NON-NLS-2$
+									+ getParseLocation());
 				}
 				// we came to the end
 				break;
 			}
 		}
+	}
+
+	private String getParseLocation() {
+		return " in file: " + getFile() + " location: " + getReader().getLocation(); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
 	/**

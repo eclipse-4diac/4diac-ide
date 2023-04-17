@@ -40,12 +40,13 @@ import org.gitlab4j.api.models.Project;
 public class GitLabDownloadManager {
 	
 	private static final String PATH = ResourcesPlugin.getWorkspace().getRoot().getRawLocation().toPortableString();
-	private static final String DIRECTORY = ".fblib";
+	private static final String ROOT_DIRECTORY = ".fblib";
 	private static final String API_VERSION = "api/v4/projects/";
 	private static final String PACKAGES = "/packages/";
 	private static final String PACKAGE_FILES = "/package_files";
 	private GitLabApi gitLabApi;
 	private HashMap<Project, List<Package>> projectAndPackageMap;
+	private HashMap<String, List<String>> packagesAndVersions;
 	private GitLabImportWizardPage gitLabImportPage;
 	
 	public GitLabDownloadManager(GitLabImportWizardPage gitLabImportPage) {
@@ -56,6 +57,10 @@ public class GitLabDownloadManager {
 		return gitLabApi;
 	}
 	
+	public Map<String, List<String>> getPackagesAndVersions() {
+		return packagesAndVersions;
+	}
+	
 	public void connectToGitLab(String url, String personalToken) {
 		gitLabApi = new GitLabApi(url, personalToken);
 		filterData();
@@ -63,9 +68,18 @@ public class GitLabDownloadManager {
 	
 	private void filterData() {
 		try {
+			List<Package> packages;
 			projectAndPackageMap = new HashMap<>();
+			packagesAndVersions = new HashMap<>();
 			for(Project p: gitLabApi.getProjectApi().getProjects()) {
-				projectAndPackageMap.put(p, gitLabApi.getPackagesApi().getPackages(p.getId()));
+				packages = gitLabApi.getPackagesApi().getPackages(p.getId());
+				projectAndPackageMap.put(p, packages);
+				for(Package pack: packages) {
+					if (packagesAndVersions.get(pack.getName()) == null) {
+						packagesAndVersions.put(pack.getName(), new ArrayList<>());
+					} 
+					packagesAndVersions.get(pack.getName()).add(pack.getVersion());
+				}
 			}
 		} catch (GitLabApiException e) {
 			e.printStackTrace();
@@ -73,12 +87,19 @@ public class GitLabDownloadManager {
 		
 	}
 	
-	public Map<Project, List<Package>> getMap() {
+	public Map<Project, List<Package>> getProjectsAndPackages() {
 		return projectAndPackageMap;
 	}
 
-	private void createDir() throws IOException {
-		Path path = Paths.get(PATH, DIRECTORY);
+	private void createRootDir() throws IOException {
+		Path path = Paths.get(PATH, ROOT_DIRECTORY);
+		if (!Files.exists(path)) {
+			Files.createDirectories(path);
+		}
+	}
+	
+	private void createPackageDir(Package p) throws IOException {
+		Path path = Paths.get(PATH, ROOT_DIRECTORY, p.getName() + "-" + p.getVersion());
 		if (!Files.exists(path)) {
 			Files.createDirectories(path);
 		}
@@ -95,8 +116,9 @@ public class GitLabDownloadManager {
 
 				InputStream responseStream = httpConn.getInputStream();
 
-				createDir();
-				Files.copy(responseStream, Paths.get(PATH, DIRECTORY, filename), StandardCopyOption.REPLACE_EXISTING);
+				createRootDir();
+				createPackageDir(p);
+				Files.copy(responseStream, Paths.get(PATH, ROOT_DIRECTORY, p.getName() + "-" + p.getVersion(), filename), StandardCopyOption.REPLACE_EXISTING);
 			
 				responseStream.close();
 				httpConn.disconnect();

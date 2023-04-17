@@ -11,18 +11,18 @@
  *          - initial implementation and/or documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.impl;
+package org.eclipse.fordiac.ide.systemconfiguration.segment.communication.impl;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationFactory;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationFactory;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.DefaultConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow;
 
 /** <!-- begin-user-doc --> An implementation of the model <b>Factory</b>. <!-- end-user-doc -->
  *

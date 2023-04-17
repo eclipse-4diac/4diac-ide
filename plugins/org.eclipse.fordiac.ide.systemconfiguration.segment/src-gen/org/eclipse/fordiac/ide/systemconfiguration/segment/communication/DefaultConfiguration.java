@@ -11,7 +11,7 @@
  *          - initial implementation and/or documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication;
+package org.eclipse.fordiac.ide.systemconfiguration.segment.communication;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
@@ -25,28 +25,29 @@ import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
  * The following features are supported:
  * </p>
  * <ul>
- * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration#getTarget
+ * <li>{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.DefaultConfiguration#getTarget
  * <em>Target</em>}</li>
  * </ul>
  *
- * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage#getDefaultConfiguration()
+ * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage#getDefaultConfiguration()
  * @model
  * @generated */
 public interface DefaultConfiguration extends CommunicationConfiguration {
-	/** Returns the value of the '<em><b>Target</b></em>' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** Returns the value of the '<em><b>Target</b></em>' containment reference. <!-- begin-user-doc --> <!--
+	 * end-user-doc -->
 	 *
-	 * @return the value of the '<em>Target</em>' reference.
+	 * @return the value of the '<em>Target</em>' containment reference.
 	 * @see #setTarget(CommunicationMappingTarget)
-	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage#getDefaultConfiguration_Target()
-	 * @model required="true"
+	 * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage#getDefaultConfiguration_Target()
+	 * @model containment="true" resolveProxies="true" required="true"
 	 * @generated */
 	CommunicationMappingTarget getTarget();
 
 	/** Sets the value of the
-	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration#getTarget
-	 * <em>Target</em>}' reference. <!-- begin-user-doc --> <!-- end-user-doc -->
+	 * '{@link org.eclipse.fordiac.ide.systemconfiguration.segment.communication.DefaultConfiguration#getTarget
+	 * <em>Target</em>}' containment reference. <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @param value the new value of the '<em>Target</em>' reference.
+	 * @param value the new value of the '<em>Target</em>' containment reference.
 	 * @see #getTarget()
 	 * @generated */
 	void setTarget(CommunicationMappingTarget value);

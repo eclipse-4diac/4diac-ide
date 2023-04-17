@@ -13,7 +13,7 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.segment.commands;
 
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration;
 import org.eclipse.gef.commands.Command;
 
 /** This command allows changing the cycle time of a TSN configuration. */

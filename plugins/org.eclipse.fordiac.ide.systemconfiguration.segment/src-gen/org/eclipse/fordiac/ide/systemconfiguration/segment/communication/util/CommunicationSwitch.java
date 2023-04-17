@@ -11,7 +11,7 @@
  *          - initial implementation and/or documentation
  * *******************************************************************************
  */
-package org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.util;
+package org.eclipse.fordiac.ide.systemconfiguration.segment.communication.util;
 
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EPackage;
@@ -20,17 +20,17 @@ import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.INamedElement;
 import org.eclipse.fordiac.ide.model.libraryElement.MappingTarget;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.DefaultConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.DefaultConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow;
 
 /** <!-- begin-user-doc --> The <b>Switch</b> for the model's inheritance hierarchy. It supports the call
  * {@link #doSwitch(EObject) doSwitch(object)} to invoke the <code>caseXXX</code> method for each class of the model,
  * starting with the actual class of the object and proceeding up the inheritance hierarchy until a non-null result is
  * returned, which is the result of the switch. <!-- end-user-doc -->
  *
- * @see org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationPackage
+ * @see org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationPackage
  * @generated */
 public class CommunicationSwitch<T> extends Switch<T> {
 	/** The cached model package <!-- begin-user-doc --> <!-- end-user-doc -->
@@ -78,7 +78,20 @@ public class CommunicationSwitch<T> extends Switch<T> {
 			TsnWindow tsnWindow = (TsnWindow) theEObject;
 			T result = caseTsnWindow(tsnWindow);
 			if (result == null)
+				result = caseCommunicationMappingTarget(tsnWindow);
+			if (result == null)
+				result = caseMappingTarget(tsnWindow);
+			if (result == null)
 				result = caseINamedElement(tsnWindow);
+			if (result == null)
+				result = defaultCase(theEObject);
+			return result;
+		}
+		case CommunicationPackage.DEFAULT_CONFIGURATION: {
+			DefaultConfiguration defaultConfiguration = (DefaultConfiguration) theEObject;
+			T result = caseDefaultConfiguration(defaultConfiguration);
+			if (result == null)
+				result = caseCommunicationConfiguration(defaultConfiguration);
 			if (result == null)
 				result = defaultCase(theEObject);
 			return result;

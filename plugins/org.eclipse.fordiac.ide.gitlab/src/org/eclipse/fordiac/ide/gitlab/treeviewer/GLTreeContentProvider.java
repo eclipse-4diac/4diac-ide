@@ -15,6 +15,10 @@ package org.eclipse.fordiac.ide.gitlab.treeviewer;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.gitlab4j.api.models.Package;
@@ -22,23 +26,31 @@ import org.gitlab4j.api.models.Project;
 
 public class GLTreeContentProvider implements ITreeContentProvider {
 
-	private Object projectsAndPackages;
+	private Map<Project, List<Package>> projectsAndPackages;
+	private Map<String, List<String>> packagesAndVersions;
 	
+	public GLTreeContentProvider(Map<String, List<String>> packagesAndVersions) {
+		this.packagesAndVersions = packagesAndVersions;
+	}
+
 	@Override
 	public Object[] getElements(Object inputElement) {
 		if (inputElement instanceof HashMap) {
-			projectsAndPackages = inputElement;
-			return ((HashMap<Project, List<Package>>) inputElement).keySet().toArray();
+			projectsAndPackages = (HashMap<Project, List<Package>>) inputElement;
+			return projectsAndPackages.keySet().toArray();
 		}
 		return new Object[0];
 	}
 
 	@Override
 	public Object[] getChildren(Object parentElement) {
-		if (projectsAndPackages instanceof HashMap && parentElement instanceof Project) {
-			return ((HashMap<Project, List<Package>>) projectsAndPackages).get(parentElement).toArray();
+		if (parentElement instanceof Project) {
+			return ((HashMap<Project, List<Package>>) projectsAndPackages).get(parentElement)
+					.stream()
+					.filter(distinctByPackageName(Package::getName))
+					.toArray();
 		} else if (parentElement instanceof Package) {
-			return new String[] {((Package) parentElement).getVersion()};
+			return packagesAndVersions.get(((Package) parentElement).getName()).toArray();
 		}
 		return new String[0] ;
  	}
@@ -47,7 +59,7 @@ public class GLTreeContentProvider implements ITreeContentProvider {
 	public Object getParent(Object element) {
 		if (element instanceof Package) {
 			Object[] parent = new Object[1]; // To surpass the final/effectively final issue
-			((HashMap<Project, List<Package>>) projectsAndPackages).forEach((key, value) -> {
+			projectsAndPackages.forEach((key, value) -> {
 				if(value.contains(element)) {
 					parent[0] = key;
 				}
@@ -59,7 +71,14 @@ public class GLTreeContentProvider implements ITreeContentProvider {
 
 	@Override
 	public boolean hasChildren(Object element) {
-		return element instanceof Project || element instanceof Package; // extend the check with hasElements
+		return (element instanceof Project && !projectsAndPackages.get((Project) element).isEmpty()) || 
+				(element instanceof Package && !packagesAndVersions.get(((Package)element).getName()).isEmpty());
+	}
+	
+	// Needed to filter the packages based on names instead their equals()
+	private static <T> Predicate<T> distinctByPackageName(Function<? super T, ?> nameExtractor) {
+	    Set<Object> seen = ConcurrentHashMap.newKeySet();
+	    return t -> seen.add(nameExtractor.apply(t));
 	}
 
 }
