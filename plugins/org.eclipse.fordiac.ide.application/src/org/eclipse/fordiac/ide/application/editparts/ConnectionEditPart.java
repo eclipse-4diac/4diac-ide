@@ -1,8 +1,8 @@
 /*******************************************************************************
- * Copyright (c) 2008 - 2022 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
- * 							 Johannes Kepler University Linz,
- * 							 Primetals Technologies Germany GmbH,
- *                           Primetals Technologies Austria GmbH
+ * Copyright (c) 2008 - 2022,2023 Profactor GmbH, TU Wien ACIN, fortiss GmbH, AIT,
+ * 							 	  Johannes Kepler University Linz,
+ * 							 	  Primetals Technologies Germany GmbH,
+ *                           	  Primetals Technologies Austria GmbH
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -21,6 +21,7 @@
  *   Michael Oberlehner - added support for hidden connections
  *   Alois Zoitl - extracted FBNConnectionEndPointHandle to own java file
  *               - update selection on visibilty toggling
+ *   Prankur Agarwal - update property listener for max hidden connection label size
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.editparts;
 
@@ -38,6 +39,7 @@ import org.eclipse.fordiac.ide.application.policies.DeleteConnectionEditPolicy;
 import org.eclipse.fordiac.ide.application.policies.FBNConnectionEndpointPolicy;
 import org.eclipse.fordiac.ide.application.tools.ConnectionSelectEditPartTracker;
 import org.eclipse.fordiac.ide.gef.figures.HideableConnection;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.gef.router.BendpointPolicyRouter;
 import org.eclipse.fordiac.ide.model.data.AnyBitType;
 import org.eclipse.fordiac.ide.model.data.AnyIntType;
@@ -158,6 +160,9 @@ public class ConnectionEditPart extends AbstractConnectionEditPart {
 		if (event.getProperty().equals(PreferenceConstants.P_HIDE_EVENT_CON)
 				&& (getModel() instanceof EventConnection)) {
 			getFigure().setVisible(!((Boolean) event.getNewValue()).booleanValue());
+		}
+		if (event.getProperty().equals(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE)) {
+			getFigure().updateConLabels();
 		}
 	};
 

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2014, 2021 Profactor GbmH, fortiss GmbH,
- *                          Johannes Kepler University Linz
+ *               2023       Johannes Kepler University Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,6 +12,8 @@
  *   Gerhard Ebenhofer, Alois Zoitl
  *     - initial API and implementation and/or initial documentation
  *   Muddasir Shakil - Added double line for Adapter and Struct connection
+ *   Prankur Agarwal - Added handling for truncating label according to the
+ *   				   max size preference option value
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.figures;
 
@@ -38,6 +40,8 @@ import org.eclipse.draw2d.text.FlowPage;
 import org.eclipse.draw2d.text.ParagraphTextLayout;
 import org.eclipse.draw2d.text.TextFlow;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.fordiac.ide.gef.Activator;
+import org.eclipse.fordiac.ide.gef.preferences.DiagramPreferences;
 import org.eclipse.fordiac.ide.model.data.AnyType;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
@@ -62,6 +66,12 @@ public class HideableConnection extends PolylineConnection {
 	private boolean hidden = false;
 	private Connection model;
 	private Color lighterColor;
+	private static int maxWidth;
+
+	static {
+		maxWidth = Activator.getDefault().getPreferenceStore()
+				.getInt(DiagramPreferences.MAX_HIDDEN_CONNECTION_LABEL_SIZE);
+	}
 
 	public static class ConnectionLabel extends RoundedRectangle implements RotatableDecoration {
 
@@ -259,6 +269,7 @@ public class HideableConnection extends PolylineConnection {
 		return ""; //$NON-NLS-1$
 	}
 
+
 	private String generateIEString(final IInterfaceElement ie) {
 		final StringBuilder builder = new StringBuilder();
 		if (ie.getFBNetworkElement() != null && !isInterfaceBarElement(ie)) {
@@ -266,7 +277,13 @@ public class HideableConnection extends PolylineConnection {
 			builder.append('.');
 		}
 		builder.append(ie.getName());
-		return builder.toString();
+		final String iesString = builder.toString();
+
+		if (iesString.length() > maxWidth) {
+			return "..." + iesString.substring(iesString.length() - maxWidth); //$NON-NLS-1$
+		}
+
+		return iesString;
 	}
 
 	private boolean isInterfaceBarElement(final IInterfaceElement ie) {
