@@ -69,8 +69,8 @@ public class CommentPropertySection extends AbstractSection {
 
 	@Override
 	protected Comment getType() {
-		if (type instanceof Comment) {
-			return (Comment) type;
+		if (type instanceof final Comment comment) {
+			return comment;
 		}
 		return null;
 	}

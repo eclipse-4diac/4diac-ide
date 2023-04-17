@@ -16,8 +16,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.application.properties;
 
-import org.eclipse.fordiac.ide.application.editparts.AbstractFBNElementEditPart;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.nat.FordiacInterfaceListProvider;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceDataSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeDataTypeCommand;
@@ -28,22 +26,16 @@ import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.Demultiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.Multiplexer;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
-import org.eclipse.gef.EditPart;
 
 public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 	@Override
 	protected FBNetworkElement getInputType(final Object input) {
-		if ((input instanceof SubAppForFBNetworkEditPart) || (input instanceof AbstractFBNElementEditPart)) {
-			return (FBNetworkElement) ((EditPart) input).getModel();
-		}
-		if (input instanceof FBNetworkElement) {
-			return (FBNetworkElement) input;
-		}
-		return null;
+		return ShowInterfaceAdapterSection.getFBNetworkElementFromInput(input);
 	}
 
 	@Override
@@ -85,14 +77,14 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 			final StructManipulator structManipulator = (StructManipulator) selection;
 			if (selection instanceof Multiplexer) {
 				((FordiacInterfaceListProvider) inputProvider)
-						.setInput(structManipulator.getStructType().getMemberVariables());
+				.setInput(structManipulator.getStructType().getMemberVariables());
 				((FordiacInterfaceListProvider) outputProvider)
-						.setInput(structManipulator.getInterface().getOutputVars());
+				.setInput(structManipulator.getInterface().getOutputVars());
 			} else if (selection instanceof Demultiplexer) {
 				((FordiacInterfaceListProvider) inputProvider)
-						.setInput(structManipulator.getInterface().getInputVars());
+				.setInput(structManipulator.getInterface().getInputVars());
 				((FordiacInterfaceListProvider) outputProvider)
-						.setInput(structManipulator.getStructType().getMemberVariables());
+				.setInput(structManipulator.getStructType().getMemberVariables());
 			}
 		} else if (selection instanceof SubApp && selection.getType() != null) { // typed subapp
 			setTableInput(selection.getType().getInterfaceList());
@@ -107,5 +99,9 @@ public class ShowInterfaceDataSection extends AbstractEditInterfaceDataSection {
 		return false;
 	}
 
+	@Override
+	protected InterfaceList getInterface() {
+		return getType().getInterface();
+	}
 
 }

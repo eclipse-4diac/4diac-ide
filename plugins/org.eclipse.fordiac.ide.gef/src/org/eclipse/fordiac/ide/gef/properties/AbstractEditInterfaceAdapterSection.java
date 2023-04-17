@@ -83,8 +83,7 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 
 	@Override
 	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
-		if (entry instanceof AdapterDeclaration) {
-			final AdapterDeclaration adapterDeclaration = (AdapterDeclaration) entry;
+		if (entry instanceof final AdapterDeclaration adapterDeclaration) {
 			cmd.add(newInsertCommand(adapterDeclaration, isInput, index));
 		}
 	}
@@ -103,10 +102,9 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 				configLabels.addLabel(NatTableWidgetFactory.PROPOSAL_CELL);
 			}
 			break;
-		case I4diacNatTableUtil.NAME:
-		case I4diacNatTableUtil.COMMENT:
+		case I4diacNatTableUtil.NAME, I4diacNatTableUtil.COMMENT:
 			configLabels.addLabelOnTop(NatTableWidgetFactory.LEFT_ALIGNMENT);
-			break;
+		break;
 		default:
 			break;
 		}
@@ -114,8 +112,8 @@ public abstract class AbstractEditInterfaceAdapterSection extends AbstractEditIn
 
 	@Override
 	public void removeEntry(final Object entry, final CompoundCommand cmd) {
-		if (entry instanceof AdapterDeclaration) {
-			cmd.add(newDeleteCommand((AdapterDeclaration) entry));
+		if (entry instanceof final AdapterDeclaration adapterDeclaration) {
+			cmd.add(newDeleteCommand(adapterDeclaration));
 		}
 	}
 

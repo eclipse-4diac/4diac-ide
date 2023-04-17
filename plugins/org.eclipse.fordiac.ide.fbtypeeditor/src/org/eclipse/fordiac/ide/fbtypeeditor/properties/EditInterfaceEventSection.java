@@ -24,6 +24,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 
 public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection {
 	@Override
@@ -64,6 +65,11 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 	@Override
 	public boolean isEditable() {
 		return true;
+	}
+
+	@Override
+	protected InterfaceList getInterface() {
+		return (getType() != null) ? getType().getInterfaceList() : null;
 	}
 
 }

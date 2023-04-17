@@ -23,8 +23,6 @@ import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCo
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.commands.ResizingSubappInterfaceCreationCommand;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.nat.InitialValueEditorConfiguration;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationListProvider;
 import org.eclipse.fordiac.ide.gef.nat.VarDeclarationWithVarConfigColumnAccessor;
@@ -36,6 +34,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.edit.providers.DataLabelProvider;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
@@ -121,16 +120,7 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 
 	@Override
 	protected SubApp getInputType(final Object input) {
-		if (input instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) input).getModel();
-		}
-		if (input instanceof UISubAppNetworkEditPart) {
-			return ((UISubAppNetworkEditPart) input).getSubApp();
-		}
-		if (input instanceof SubApp) {
-			return (SubApp) input;
-		}
-		return null;
+		return EditInterfaceAdapterSection.getSubAppFromInput(input);
 	}
 
 	@Override
@@ -156,6 +146,11 @@ public class EditUntypedSubappInterfaceDataSection extends AbstractEditInterface
 	@Override
 	public boolean isEditable() {
 		return true;
+	}
+
+	@Override
+	protected InterfaceList getInterface() {
+		return (getType() != null) ? getType().getInterface() : null;
 	}
 
 }

@@ -115,18 +115,14 @@ public class ConnectionSection extends AbstractSection {
 	private boolean isViewer() {
 		final EObject sourceBlock = getType().getSource().eContainer().eContainer();
 		return (sourceBlock instanceof CompositeFBType) || // connection to interface
-				((sourceBlock instanceof FBNetworkElement)
-						&& ((FBNetworkElement) sourceBlock).isContainedInTypedInstance());
+				((sourceBlock instanceof final FBNetworkElement fbne) && fbne.isContainedInTypedInstance());
 	}
 
 	@Override
 	protected Connection getInputType(final Object input) {
-		final Object inputHelper = input instanceof EditPart ? ((EditPart) input).getModel() : input;
-		if (inputHelper instanceof Connection) {
-			final Connection con = (Connection) inputHelper;
-			if (isValidConnection(con)) {
-				return con;
-			}
+		final Object inputHelper = (input instanceof final EditPart ep) ? ep.getModel() : input;
+		if ((inputHelper instanceof final Connection con) && (isValidConnection(con))) {
+			return con;
 		}
 		return null;
 	}
@@ -139,9 +135,7 @@ public class ConnectionSection extends AbstractSection {
 	}
 
 	private static String getFBNameFromIInterfaceElement(final IInterfaceElement element) {
-		return element.eContainer().eContainer() instanceof FBNetworkElement
-				? ((FBNetworkElement) element.eContainer().eContainer()).getName()
-						: ""; //$NON-NLS-1$
+		return (element.eContainer().eContainer() instanceof final FBNetworkElement fbne) ? fbne.getName() : ""; //$NON-NLS-1$
 	}
 
 	@Override

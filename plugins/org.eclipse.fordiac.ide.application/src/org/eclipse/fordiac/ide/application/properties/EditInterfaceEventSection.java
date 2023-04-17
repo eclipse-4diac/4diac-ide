@@ -20,13 +20,12 @@ import org.eclipse.fordiac.ide.application.commands.ChangeSubAppInterfaceOrderCo
 import org.eclipse.fordiac.ide.application.commands.CreateSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.commands.DeleteSubAppInterfaceElementCommand;
 import org.eclipse.fordiac.ide.application.commands.ResizingSubappInterfaceCreationCommand;
-import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
-import org.eclipse.fordiac.ide.application.editparts.UISubAppNetworkEditPart;
 import org.eclipse.fordiac.ide.gef.properties.AbstractEditInterfaceEventSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeInterfaceOrderCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
 
@@ -51,16 +50,7 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 
 	@Override
 	protected SubApp getInputType(final Object input) {
-		if (input instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) input).getModel();
-		}
-		if (input instanceof UISubAppNetworkEditPart) {
-			return ((UISubAppNetworkEditPart) input).getSubApp();
-		}
-		if (input instanceof SubApp) {
-			return (SubApp) input;
-		}
-		return null;
+		return EditInterfaceAdapterSection.getSubAppFromInput(input);
 	}
 
 	@Override
@@ -81,6 +71,11 @@ public class EditInterfaceEventSection extends AbstractEditInterfaceEventSection
 	@Override
 	public boolean isEditable() {
 		return true;
+	}
+
+	@Override
+	protected InterfaceList getInterface() {
+		return (getType() != null) ? getType().getInterface() : null;
 	}
 
 

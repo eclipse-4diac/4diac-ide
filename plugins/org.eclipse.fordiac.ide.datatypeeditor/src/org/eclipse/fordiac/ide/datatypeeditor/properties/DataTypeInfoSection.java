@@ -80,8 +80,8 @@ public class DataTypeInfoSection extends AbstractSection {
 
 	@Override
 	protected Object getInputType(final Object input) {
-		if (input instanceof StructViewingComposite) {
-			return ((StructViewingComposite) input).getStruct();
+		if (input instanceof final StructViewingComposite structViewingComposite) {
+			return structViewingComposite.getStruct();
 		}
 		return null;
 	}
@@ -94,7 +94,7 @@ public class DataTypeInfoSection extends AbstractSection {
 	@Override
 	public void refresh() {
 		if (null != getType()) {
-			commentText.setText((null != getType().getComment()) ? getType().getComment() : "");
+			commentText.setText((null != getType().getComment()) ? getType().getComment() : ""); //$NON-NLS-1$
 			typeInfoWidget.refresh();
 		}
 	}

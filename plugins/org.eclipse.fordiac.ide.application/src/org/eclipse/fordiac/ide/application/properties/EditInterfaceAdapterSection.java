@@ -29,6 +29,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.providers.CreationCommand;
@@ -53,14 +54,18 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 
 	@Override
 	protected SubApp getInputType(final Object input) {
-		if (input instanceof SubAppForFBNetworkEditPart) {
-			return ((SubAppForFBNetworkEditPart) input).getModel();
+		return getSubAppFromInput(input);
+	}
+
+	public static SubApp getSubAppFromInput(final Object input) {
+		if (input instanceof final SubAppForFBNetworkEditPart subAppEP) {
+			return subAppEP.getModel();
 		}
-		if (input instanceof UISubAppNetworkEditPart) {
-			return ((UISubAppNetworkEditPart) input).getSubApp();
+		if (input instanceof final UISubAppNetworkEditPart uiSubAppNEP) {
+			return uiSubAppNEP.getSubApp();
 		}
-		if (input instanceof SubApp) {
-			return (SubApp) input;
+		if (input instanceof final SubApp subApp) {
+			return subApp;
 		}
 		return null;
 	}
@@ -90,5 +95,9 @@ public class EditInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 		return true;
 	}
 
+	@Override
+	protected InterfaceList getInterface() {
+		return (getType() != null) ? getType().getInterface() : null;
+	}
 
 }

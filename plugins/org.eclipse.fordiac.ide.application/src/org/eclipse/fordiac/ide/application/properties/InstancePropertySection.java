@@ -21,6 +21,10 @@ package org.eclipse.fordiac.ide.application.properties;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
@@ -165,9 +169,8 @@ public class InstancePropertySection extends AbstractSection {
 				final FBType fbType = rowItem.getFBNetworkElement().getType();
 				final INamedElement currentFB = getType();
 
-				if (currentFB instanceof StructManipulator) {
-					final List<VarDeclaration> variableList = ((StructManipulator) currentFB).getStructType()
-							.getMemberVariables();
+				if (currentFB instanceof final StructManipulator structMan) {
+					final List<VarDeclaration> variableList = structMan.getStructType().getMemberVariables();
 					if (!variableList.isEmpty()) {
 						defaultComment = variableList.get(rowPosition).getComment();
 					}
@@ -182,9 +185,8 @@ public class InstancePropertySection extends AbstractSection {
 				rowItem = outputDataProvider.getRowObject(rowPosition);
 				final FBType fbType = rowItem.getFBNetworkElement().getType();
 				final INamedElement currentFB = getType();
-				if (currentFB instanceof StructManipulator) {
-					final List<VarDeclaration> variableList = ((StructManipulator) currentFB).getStructType()
-							.getMemberVariables();
+				if (currentFB instanceof final StructManipulator structMan) {
+					final List<VarDeclaration> variableList = structMan.getStructType().getMemberVariables();
 					if (!variableList.isEmpty()) {
 						defaultComment = variableList.get(rowPosition).getComment();
 					}
@@ -223,9 +225,7 @@ public class InstancePropertySection extends AbstractSection {
 		nameText = createGroupText(fbInfoGroup, true);
 		nameText.addModifyListener(e -> {
 			removeContentAdapter();
-			if (getType() instanceof FBNetworkElement) {
-				executeCommand(new ChangeFBNetworkElementName((FBNetworkElement) getType(), nameText.getText()));
-			}
+			executeCommand(new ChangeFBNetworkElementName(getType(), nameText.getText()));
 			addContentAdapter();
 		});
 
@@ -248,10 +248,9 @@ public class InstancePropertySection extends AbstractSection {
 		if (EditorUtils.getGraphicalViewerFromCurrentActiveEditor() != null && getType() instanceof SubApp) {
 			final Object subAppforFBNetworkEditPart = EditorUtils.getGraphicalViewerFromCurrentActiveEditor()
 					.getEditPartRegistry().get(getType());
-			if (subAppforFBNetworkEditPart instanceof SubAppForFBNetworkEditPart
-					&& ((SubAppForFBNetworkEditPart) subAppforFBNetworkEditPart).getContentEP() != null) {
-				cmd = new ResizeGroupOrSubappCommand(
-						((SubAppForFBNetworkEditPart) subAppforFBNetworkEditPart).getContentEP(), cmd);
+			if (subAppforFBNetworkEditPart instanceof final SubAppForFBNetworkEditPart subappEP
+					&& subappEP.getContentEP() != null) {
+				cmd = new ResizeGroupOrSubappCommand(subappEP.getContentEP(), cmd);
 			}
 		}
 		return cmd;
@@ -301,9 +300,9 @@ public class InstancePropertySection extends AbstractSection {
 	}
 
 	@Override
-	protected INamedElement getType() {
-		if (type instanceof FBNetworkElement) {
-			return (FBNetworkElement) type;
+	protected FBNetworkElement getType() {
+		if (type instanceof final FBNetworkElement fbne) {
+			return fbne;
 		}
 		return null;
 	}
@@ -322,9 +321,43 @@ public class InstancePropertySection extends AbstractSection {
 		outputTable.refresh();
 	}
 
+	private final Adapter interfaceAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			notifiyRefresh();
+		}
+	};
+
+	private final Adapter fbnElementAdapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			notifiyRefresh();
+		}
+	};
+
+	@Override
+	protected void addContentAdapter() {
+		// for performance reasons (we could have many children) do not call super here.
+		if (getType() != null) {
+			getType().eAdapters().add(fbnElementAdapter);
+			getType().getInterface().eAdapters().add(interfaceAdapter);
+		}
+	}
+
+	@Override
+	protected void removeContentAdapter() {
+		// for performance reasons (we could have many children) do not call super here.
+		if (getType() != null) {
+			getType().eAdapters().remove(fbnElementAdapter);
+			getType().getInterface().eAdapters().remove(interfaceAdapter);
+		}
+	}
+
 	protected static boolean isExpandedSubAppPinAndConnected(final VarDeclaration rowObject) {
-		return rowObject.getFBNetworkElement() instanceof SubApp
-				&& ((SubApp) rowObject.getFBNetworkElement()).isUnfolded() && !rowObject.getInputConnections().isEmpty()
+		return rowObject.getFBNetworkElement() instanceof final SubApp subApp && subApp.isUnfolded()
+				&& !rowObject.getInputConnections().isEmpty()
 				&& !rowObject.getOutputConnections().isEmpty();
 	}
 
@@ -346,11 +379,11 @@ public class InstancePropertySection extends AbstractSection {
 		}
 
 		public void setInput(final Object inputElement) {
-			if (inputElement instanceof FBNetworkElement) {
+			if (inputElement instanceof final FBNetworkElement fbne) {
 				if (isInputData) {
-					this.list = ((FBNetworkElement) inputElement).getInterface().getInputVars();
+					this.list = fbne.getInterface().getInputVars();
 				} else {
-					this.list = ((FBNetworkElement) inputElement).getInterface().getOutputVars();
+					this.list = fbne.getInterface().getOutputVars();
 				}
 			}
 		}
