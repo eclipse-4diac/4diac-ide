@@ -46,6 +46,8 @@
 			<unit id="org.eclipse.emf.compare.rcp.ui.feature.group" version="3.3.21.202212280858"/>
 			<unit id="org.eclipse.emf.compare.rcp.ui.source.feature.group" version="3.3.21.202212280858"/>
 			<unit id="org.eclipse.emf.compare.source.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.egit.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.egit.source.feature.group" version="3.3.21.202212280858"/>
 		</location>
 		<location includeDependencyDepth="infinite" includeDependencyScopes="compile,provided,runtime,test,system,import" includeSource="true" missingManifest="generate" type="Maven">
 			<dependencies>
