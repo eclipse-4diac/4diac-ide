@@ -81,6 +81,9 @@ class STCoreHoverProvider extends DefaultEObjectHoverProvider {
 			if (baseFbType.internalVars.contains(object)) {
 				return '''VAR '''
 			}
+			if (baseFbType.internalConstVars.contains(object)) {
+				return '''VAR CONST '''
+			}
 			if (baseFbType.internalFbs.contains(object)) {
 				return '''FUNCTION_BLOCK '''
 			}
