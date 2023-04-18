@@ -135,18 +135,4 @@
             id="org.eclipse.fordiac.ide.systemconfiguration.editor.SystemConfigurationEditorInputFactory">
       </factory>
    </extension>
-<extension
-      point="org.eclipse.ui.views">
-   <category
-         id="org.eclipse.fordiac.ide.systemmanagement"
-         name="%category.name.0">
-   </category>
-   <view
-   		category="org.eclipse.fordiac.ide.view.category"
-         class="org.eclipse.fordiac.ide.systemconfiguration.views.VirtualDNSViewer"
-         id="org.eclipse.fordiac.ide.systemconfiguration.virtualDNS"
-         name="Virtual DNS"
-         restorable="true">
-   </view>
-</extension>
 </plugin>

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -25,7 +25,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.STMethod
 import org.eclipse.fordiac.ide.structuredtextalgorithm.parser.antlr.STAlgorithmParser
 import org.eclipse.fordiac.ide.structuredtextalgorithm.resource.STAlgorithmResource
 import org.eclipse.fordiac.ide.structuredtextalgorithm.stalgorithm.STAlgorithmSource
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil
 import org.eclipse.xtext.ParserRule
@@ -102,16 +102,17 @@ class StructuredTextParseUtil extends ParseUtil {
 		return issues
 	}
 
-	def static STExpression parse(String expression, FBType fbType, List<String> errors, List<String> warnings,
-		List<String> infos) {
-		expression.parse(fbType, null, errors, warnings, infos)
+	def static STExpressionSource parse(String expression, INamedElement expectedType, FBType fbType,
+		List<String> errors, List<String> warnings, List<String> infos) {
+		expression.parse(expectedType, fbType, null, errors, warnings, infos)
 	}
 
-	def static STExpression parse(String expression, FBType fbType, Collection<? extends EObject> additionalContent,
-		List<String> errors, List<String> warnings, List<String> infos) {
+	def static STExpressionSource parse(String expression, INamedElement expectedType, FBType fbType,
+		Collection<? extends EObject> additionalContent, List<String> errors, List<String> warnings,
+		List<String> infos) {
 		val parser = SERVICE_PROVIDER.get(IParser) as STAlgorithmParser
-		expression.parse(parser.grammarAccess.STExpressionRule, fbType?.eResource?.URI, null, fbType, additionalContent,
-			errors, warnings, infos)?.rootASTElement as STExpression
+		expression.parse(parser.grammarAccess.STExpressionSourceRule, fbType?.eResource?.URI, expectedType, fbType,
+			additionalContent, errors, warnings, infos)?.rootASTElement as STExpressionSource
 	}
 
 	def static STInitializerExpressionSource parse(String expression, URI uri, INamedElement expectedType,
@@ -144,7 +145,7 @@ class StructuredTextParseUtil extends ParseUtil {
 	}
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, FBType fbType, List<Issue> issues) {
-		text.parse(entryPoint, fbType?.eResource?.URI ?: SYNTHETIC_URI, null, fbType, null, issues)
+		text.parse(entryPoint, fbType?.eResource?.URI, null, fbType, null, issues)
 	}
 
 	def private static IParseResult parse(String text, ParserRule entryPoint, URI uri, INamedElement expectedType,

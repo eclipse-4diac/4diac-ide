@@ -1486,6 +1486,29 @@ public class LibraryElementItemProviderAdapterFactory extends LibraryElementAdap
 	}
 
 	/**
+	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.Comment} instances.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected CommentItemProvider commentItemProvider;
+
+	/**
+	 * This creates an adapter for a {@link org.eclipse.fordiac.ide.model.libraryElement.Comment}.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	@Override
+	public Adapter createCommentAdapter() {
+		if (commentItemProvider == null) {
+			commentItemProvider = new CommentItemProvider(this);
+		}
+
+		return commentItemProvider;
+	}
+
+	/**
 	 * This keeps track of the one adapter used for all {@link org.eclipse.fordiac.ide.model.libraryElement.AttributeDeclaration} instances.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

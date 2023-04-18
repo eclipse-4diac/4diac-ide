@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2022 Martin Erich Jobst
+ * Copyright (c) 2022 - 2023 Martin Erich Jobst
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -12,11 +12,12 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.st
 
+import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes.ElementaryTypes
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
 import org.eclipse.fordiac.ide.model.libraryElement.FBType
-import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpression
+import org.eclipse.fordiac.ide.structuredtextcore.stcore.STExpressionSource
 import org.eclipse.xtend.lib.annotations.FinalFieldsConstructor
 
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
@@ -26,7 +27,7 @@ import static extension org.eclipse.xtext.EcoreUtil2.getContainerOfType
 class ECTransitionEvaluator extends StructuredTextEvaluator {
 	final ECTransition transition
 
-	STExpression parseResult
+	STExpressionSource parseResult
 
 	new(ECTransition transition, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		super("anonymous", context, variables, parent)
@@ -39,6 +40,7 @@ class ECTransitionEvaluator extends StructuredTextEvaluator {
 			val warnings = newArrayList
 			val infos = newArrayList
 			parseResult = transition.conditionExpression.parse(
+				ElementaryTypes.BOOL,
 				transition.getContainerOfType(FBType),
 				errors,
 				warnings,
@@ -55,7 +57,7 @@ class ECTransitionEvaluator extends StructuredTextEvaluator {
 
 	override evaluate() {
 		prepare();
-		parseResult.trap.evaluateExpression
+		parseResult.expression.trap.evaluateExpression
 	}
 
 	override ECTransition getSourceElement() {

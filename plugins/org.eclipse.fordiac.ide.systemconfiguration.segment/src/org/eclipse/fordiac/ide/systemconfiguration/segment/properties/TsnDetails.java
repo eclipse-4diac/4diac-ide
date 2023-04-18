@@ -12,23 +12,27 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.systemconfiguration.segment.properties;
 
+import java.util.List;
+
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.Messages;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.CommunicationFactory;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnConfiguration;
-import org.eclipse.fordiac.ide.systemconfiguration.segment.Communication.TsnWindow;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.TsnParameters;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.commands.ChangeTsnCycleTimeCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.commands.ChangeTsnWindowDurationCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.commands.ChangeTsnWindowOrderCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.commands.CreateTsnWindowCommand;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.commands.DeleteTsnWindowCommand;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.CommunicationFactory;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnConfiguration;
+import org.eclipse.fordiac.ide.systemconfiguration.segment.communication.TsnWindow;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.providers.TsnWindowLabelProvider;
 import org.eclipse.fordiac.ide.systemconfiguration.segment.widget.MappedFbMenu;
 import org.eclipse.fordiac.ide.ui.widget.AddDeleteReorderListWidget;
 import org.eclipse.fordiac.ide.ui.widget.CommandExecutor;
 import org.eclipse.fordiac.ide.ui.widget.TableWidgetFactory;
-import org.eclipse.fordiac.systemconfiguration.api.CommunicationConfigurationDetails;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.jface.layout.GridDataFactory;
 import org.eclipse.jface.layout.GridLayoutFactory;
@@ -57,10 +61,11 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 	@Override
 	public Composite createUi(final Composite parent, final CommunicationConfiguration config,
 			final CommandExecutor executor, final TabbedPropertySheetWidgetFactory widgetFactory) {
-		final TsnConfiguration tsnConfig = (TsnConfiguration) config;
-		final Composite detailsComp = widgetFactory.createComposite(parent, SWT.BORDER);
+		final TsnConfiguration tsnConfig = config == null ? CommunicationFactory.eINSTANCE.createTsnConfiguration()
+				: (TsnConfiguration) config;
+		final Composite detailsComp = widgetFactory.createComposite(parent, SWT.NONE);
 		GridLayoutFactory.fillDefaults().numColumns(3).applyTo(detailsComp);
-		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).applyTo(detailsComp);
+		GridDataFactory.fillDefaults().grab(true, true).align(SWT.FILL, SWT.FILL).applyTo(detailsComp);
 		createCycleTimeArea(widgetFactory, tsnConfig, detailsComp, executor);
 		createTsnWindowArea(widgetFactory, tsnConfig, detailsComp, executor);
 		return detailsComp;
@@ -71,7 +76,7 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 		final Label cycleTimeLbl = widgetFactory.createLabel(detailsComp, Messages.TsnDetails_CycleTime);
 		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).applyTo(cycleTimeLbl);
 		final Text cycleTimeValue = widgetFactory.createText(detailsComp, String.valueOf(tsnConfig.getCycleTime()));
-		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).grab(true, false).applyTo(cycleTimeValue);
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.CENTER).grab(true, false).applyTo(cycleTimeValue);
 		cycleTimeValue.requestLayout();
 		final Label msLbl = widgetFactory.createLabel(detailsComp, Messages.TsnDetails_MS);
 		GridDataFactory.fillDefaults().align(SWT.BEGINNING, SWT.CENTER).applyTo(msLbl);
@@ -85,7 +90,8 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 		final AddDeleteReorderListWidget buttons = new AddDeleteReorderListWidget();
 		buttons.createControls(detailsComp, widgetFactory);
 		final TableViewer windowViewer = TableWidgetFactory.createTableViewer(detailsComp);
-		GridDataFactory.fillDefaults().grab(true, true).span(2, 1).applyTo(windowViewer.getTable());
+		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.FILL).grab(true, true).span(2, 1)
+		.applyTo(windowViewer.getTable());
 
 		final Table table = windowViewer.getTable();
 		configureTableLayout(table);
@@ -176,6 +182,26 @@ public class TsnDetails extends CommunicationConfigurationDetails {
 			executor.executeCommand(cmd);
 			viewer.refresh();
 		}
+	}
+
+	@Override
+	public CommunicationConfiguration createModel(final List<VarDeclaration> parameters) {
+		final TsnConfiguration configuration = (TsnConfiguration) createModel();
+		for (final VarDeclaration parameter : parameters) {
+			if (parameter.getName().startsWith(TsnParameters.TSN_WINDOW_NAME)) {
+				final TsnWindow window = CommunicationFactory.eINSTANCE.createTsnWindow();
+				window.setDuration(Integer.parseInt(parameter.getValue().getValue()));
+				configuration.getWindows().add(window);
+			} else if (parameter.getName().equals(TsnParameters.TSN_CYCLE_NAME)) {
+				configuration.setCycleTime(Integer.parseInt(parameter.getValue().getValue()));
+			}
+		}
+		int sum;
+		if ((sum = configuration.getWindows().stream().mapToInt(TsnWindow::getDuration).sum()) > configuration
+				.getCycleTime()) {
+			configuration.setCycleTime(sum);
+		}
+		return configuration;
 	}
 
 }

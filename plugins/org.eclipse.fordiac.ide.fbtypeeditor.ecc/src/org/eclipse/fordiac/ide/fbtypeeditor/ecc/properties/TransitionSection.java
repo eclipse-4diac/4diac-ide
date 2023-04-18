@@ -80,8 +80,8 @@ public class TransitionSection extends AbstractSection {
 
 	@Override
 	protected Object getInputType(Object input) {
-		if (input instanceof EditPart) {
-			input = ((EditPart) input).getModel();
+		if (input instanceof final EditPart ep) {
+			input = ep.getModel();
 		}
 		if (input instanceof ECTransition) {
 			return input;

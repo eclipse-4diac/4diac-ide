@@ -16,7 +16,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.e4.ui.workbench,
  org.eclipse.ui.forms,
  org.eclipse.e4.ui.di
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-ActivationPolicy: lazy
 Import-Package: javax.annotation;version="1.0.0";resolution:=optional,
  javax.inject;version="1.0.0"

@@ -27,7 +27,7 @@ public class GlobalConstantsParser extends AbstractAntlrParser {
 
 	@Override 
 	protected String getDefaultRuleName() {
-		return "STVarGlobalDeclarationBlock";
+		return "STGlobalConstsSource";
 	}
 
 	public GlobalConstantsGrammarAccess getGrammarAccess() {

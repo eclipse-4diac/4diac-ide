@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.fordiac.ide.export.exportFilter">
+      <ExportFilter
+            class="org.eclipse.fordiac.ide.export.xmi.XMIExportFilter"
+            description="XMI Export"
+            name="XMI"
+            sortIndex="50">
+      </ExportFilter>
+   </extension>
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated xmiexport -->
+      <package
+            uri="http://www.eclipse.org/fordiac/ide/xmiexport/XMIExport"
+            class="org.eclipse.fordiac.ide.xmiexport.xmiexport.XMIExportPackage"
+            genModel="model/xmiexport.genmodel"/>
+   </extension>
+
+</plugin>

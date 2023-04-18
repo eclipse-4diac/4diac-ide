@@ -27,6 +27,7 @@ import org.eclipse.fordiac.ide.model.LibraryElementTags;
 import org.eclipse.fordiac.ide.model.datatype.helper.IecTypes;
 import org.eclipse.fordiac.ide.model.libraryElement.AdapterFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Attribute;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.ConnectionRoutingData;
 import org.eclipse.fordiac.ide.model.libraryElement.ErrorMarkerFBNElement;
@@ -74,12 +75,16 @@ class FBNetworkExporter extends CommonElementExporter {
 			if (!isExportableErrorMarker(fbnElement)) {
 				continue;
 			}
-			final String nodeName = getFBNElementNodeName(fbnElement);
-			if (nodeName != null) {
-				addStartElement(nodeName);
-				addFBNetworkElementXMLAttributes(fbnElement);
-				addFBNetworkElementChildren(fbnElement);
-				addEndElement();
+			if (fbnElement instanceof final Comment comment) {
+				addCommentElement(comment);
+			} else {
+				final String nodeName = getFBNElementNodeName(fbnElement);
+				if (nodeName != null) {
+					addStartElement(nodeName);
+					addFBNetworkElementXMLAttributes(fbnElement);
+					addFBNetworkElementChildren(fbnElement);
+					addEndElement();
+				}
 			}
 		}
 	}
@@ -91,8 +96,27 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 		addCommentAttribute(fbnElement);
 		addXYAttributes(fbnElement);
-		if (fbnElement instanceof Group) {
-			addGroupAttributes((Group) fbnElement);
+		if (fbnElement instanceof final Group group) {
+			addGroupAttributes(group);
+		}
+	}
+
+	private void addCommentElement(final Comment comment) throws XMLStreamException {
+		if (comment.isInGroup()) {
+			addStartElement(LibraryElementTags.COMMENT_ELEMENT);
+		} else {
+			addEmptyStartElement(LibraryElementTags.COMMENT_ELEMENT);
+		}
+
+		addCommentAttribute(comment);
+		addXYAttributes(comment);
+		getWriter().writeAttribute(LibraryElementTags.WIDTH_ATTRIBUTE,
+				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getWidth()));
+		getWriter().writeAttribute(LibraryElementTags.HEIGHT_ATTRIBUTE,
+				CoordinateConverter.INSTANCE.convertTo1499XML(comment.getHeight()));
+		if (comment.isInGroup()) {
+			addGroupAttribute(comment.getGroup());
+			addEndElement();
 		}
 	}
 
@@ -110,7 +134,7 @@ class FBNetworkExporter extends CommonElementExporter {
 		}
 
 		addAttributes(fbnElement.getAttributes());
-		if (!isUntypedSubapp(fbnElement)) {
+		if (!isUntypedSubapp(fbnElement) && !(fbnElement instanceof Group)) {
 			// for untyped subapp initial values are stored in the vardeclarations
 			addParamsConfig(fbnElement.getInterface().getInputVars());
 			addErrorMarkerParamsConfig(fbnElement.getInterface().getErrorMarker());
@@ -120,8 +144,8 @@ class FBNetworkExporter extends CommonElementExporter {
 			addPinVarConfigurationAttribute(fbnElement);
 		}
 
-		if (fbnElement instanceof SubApp && isUntypedSubapp(fbnElement)) {
-			addSubappHeightAndWidthAttributes((SubApp) fbnElement);
+		if (fbnElement instanceof final SubApp subApp && isUntypedSubapp(fbnElement)) {
+			addSubappHeightAndWidthAttributes(subApp);
 		}
 
 		if (fbnElement.isInGroup()) {
@@ -142,7 +166,7 @@ class FBNetworkExporter extends CommonElementExporter {
 	}
 
 	private static boolean isUntypedSubapp(final FBNetworkElement fbnElement) {
-		return (fbnElement instanceof SubApp) && (!((SubApp) fbnElement).isTyped());
+		return (fbnElement instanceof final SubApp subApp) && (!subApp.isTyped());
 	}
 
 	private static String getFBNElementNodeName(final FBNetworkElement fbnElement) {

@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.Algorithm;
 import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.BaseFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.ECC;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
@@ -91,19 +92,19 @@ public final class NameRepository {
 
 	}
 
-	/**
-	 * Check and if necessary adapt the given name proposal so that it is a valid
-	 * name for the given INamedElement
+	/** Check and if necessary adapt the given name proposal so that it is a valid name for the given INamedElement
 	 *
-	 * This method expects that the element is already correctly inserted in the
-	 * model and that its eContainer returns the correct container. The nameProposal
-	 * needs to be a valid identifier
+	 * This method expects that the element is already correctly inserted in the model and that its eContainer returns
+	 * the correct container. The nameProposal needs to be a valid identifier
 	 *
 	 * @param element      the element for which the name should be created
 	 * @param nameProposal a proposal for a name of the element
-	 * @return a valid unique element name
-	 */
+	 * @return a valid unique element name */
 	public static String createUniqueName(final INamedElement element, final String nameProposal) {
+		if (element instanceof Comment) {
+			return null;
+		}
+		// currently this method should only be used for non comments
 		String retVal = nameProposal;
 
 		if (IdentifierVerifier.verifyIdentifier(nameProposal).isPresent() && nameProposal.contains(".")) //$NON-NLS-1$
@@ -123,18 +124,19 @@ public final class NameRepository {
 		return getUniqueName(getRefNames(element), retVal);
 	}
 
-	/**
-	 * Check if the given nameProposal is a valid name for the given named element.
+	/** Check if the given nameProposal is a valid name for the given named element.
 	 *
-	 * @param element      the named element for which a new name proposal should be
-	 *                     checked
+	 * @param element      the named element for which a new name proposal should be checked
 	 * @param nameProposal the new name to be checked
-	 * @return true if the nameProposal is a valid new name for the named element
-	 */
+	 * @return true if the nameProposal is a valid new name for the named element */
 	public static boolean isValidName(final INamedElement element, final String nameProposal) {
 		Assert.isNotNull(element.eContainer(),
 				"For a correct operation createuniqueName expects that the model element is already added in its containing model!"); //$NON-NLS-1$
 
+		if (element instanceof Comment) {
+			// comment has no name therefore all are valid.
+			return true;
+		}
 		if (IdentifierVerifier.verifyIdentifier(nameProposal).isPresent()) {
 			ErrorMessenger.popUpErrorMessage(
 					MessageFormat.format(Messages.NameRepository_NameNotAValidIdentifier, nameProposal));
@@ -160,45 +162,44 @@ public final class NameRepository {
 
 		// TODO consider moving this instance of cascade into the model utilizing the
 		// inheritance hierarchy to our advantage
-		if (refElement instanceof Algorithm) {
-			elementsList = ((BasicFBType) ((Algorithm) refElement).eContainer()).getAlgorithm();
-		} else if (refElement instanceof Application) {
-			elementsList = ((Application) refElement).getAutomationSystem().getApplication();
-		} else if (refElement instanceof Device) {
-			elementsList = ((Device) refElement).getSystemConfiguration().getDevices();
-		} else if (refElement instanceof FBNetworkElement) {
+		if (refElement instanceof final Algorithm alg) {
+			elementsList = ((BasicFBType) alg.eContainer()).getAlgorithm();
+		} else if (refElement instanceof final Application app) {
+			elementsList = app.getAutomationSystem().getApplication();
+		} else if (refElement instanceof final Device dev) {
+			elementsList = dev.getSystemConfiguration().getDevices();
+		} else if (refElement instanceof final FBNetworkElement fbe) {
 			if (refElement.eContainer() instanceof BaseFBType) {
 				elementsList = ((BaseFBType) (refElement.eContainer())).getInternalFbs();
 			} else {
-				elementsList = ((FBNetworkElement) refElement).getFbNetwork().getNetworkElements();
+				elementsList = fbe.getFbNetwork().getNetworkElements();
 			}
-		} else if (refElement instanceof Resource) {
-			elementsList = ((Resource) refElement).getDevice().getResource();
-		} else if (refElement instanceof Segment) {
-			elementsList = ((SystemConfiguration) ((Segment) refElement).eContainer()).getSegments();
+		} else if (refElement instanceof final Resource res) {
+			elementsList = res.getDevice().getResource();
+		} else if (refElement instanceof final Segment seg) {
+			elementsList = ((SystemConfiguration) seg.eContainer()).getSegments();
 		} else if (refElement instanceof ECState) {
 			elementsList = ((ECC) ((ECState) refElement).eContainer()).getECState();
-		} else if (refElement instanceof IInterfaceElement) {
-			if (((IInterfaceElement) refElement).eContainer() instanceof StructuredType) {
-				elementsList = ((StructuredType) ((IInterfaceElement) refElement).eContainer()).getMemberVariables();
+		} else if (refElement instanceof final IInterfaceElement ie) {
+			if (ie.eContainer() instanceof final StructuredType structType) {
+				elementsList = structType.getMemberVariables();
 			} else {
 				final EList<INamedElement> elements = new BasicEList<>();
 				InterfaceList interfaceList = null;
-				if (((IInterfaceElement) refElement).eContainer() instanceof InterfaceList) {
-					interfaceList = (InterfaceList) ((IInterfaceElement) refElement).eContainer();
+				if (ie.eContainer() instanceof final InterfaceList il) {
+					interfaceList = il;
 				} else {
 					// this is an internal variable
 					interfaceList = ((BaseFBType) ((IInterfaceElement) refElement).eContainer()).getInterfaceList();
 				}
 				elements.addAll(interfaceList.getAllInterfaceElements());
-				if (interfaceList.eContainer() instanceof BaseFBType) { // has internal variables
-					elements.addAll(((BaseFBType) interfaceList.eContainer()).getInternalVars());
-					elements.addAll(((BaseFBType) interfaceList.eContainer()).getInternalConstVars());
+				if (interfaceList.eContainer() instanceof final BaseFBType baseFBType) { // has internal variables
+					elements.addAll(baseFBType.getInternalVars());
+					elements.addAll(baseFBType.getInternalConstVars());
 				}
 				elementsList = elements;
 			}
-		} else if (refElement instanceof ServiceSequence) {
-			final ServiceSequence seq = (ServiceSequence) refElement;
+		} else if (refElement instanceof final ServiceSequence seq) {
 			elementsList = seq.getService().getServiceSequence();
 		} else {
 			throw new IllegalArgumentException(
@@ -279,4 +280,3 @@ public final class NameRepository {
 		return name;
 	}
 }
-

@@ -44,16 +44,14 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.navigator.CommonNavigator;
-import org.eclipse.ui.part.FileEditorInput;
 
 public class ModelSearchPage extends DialogPage implements ISearchPage {
 
-	public static final String EXTENSION_POINT_ID = "org.eclipse.fordiac.ide.application.search.ModelSearchPage"; //$NON-NLS-1$
-	public static final String ID = "ModelSearchPage"; //$NON-NLS-1$
 	public static final int NUMBER_OF_SEARCH_OPTIONS = 4;
 	public static final int NUMBER_OF_SCOPES = 2;
 
@@ -201,6 +199,7 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 
 	@Override
 	public void setContainer(final ISearchPageContainer container) {
+		System.out.println("Set container!");
 		this.container = container;
 	}
 
@@ -217,8 +216,8 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 		final IEditorPart openEditor = page.getActiveEditor();
 		if (openEditor != null) {
 			final IEditorInput editorInput = openEditor.getEditorInput();
-			if (editorInput instanceof FileEditorInput) {
-				return ((FileEditorInput) editorInput).getFile().getProject();
+			if (editorInput instanceof final IFileEditorInput ifEI) {
+				return ifEI.getFile().getProject();
 			}
 		}
 		return null;
@@ -227,15 +226,15 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 	private static IProject getProjectFromProjectExplorerSelction(final IWorkbenchPage page) {
 		final IViewPart view = page.findView("org.eclipse.fordiac.ide.systemmanagement.ui.systemexplorer"); //$NON-NLS-1$
 
-		if (view instanceof CommonNavigator) {
-			final ISelection selection = ((CommonNavigator) view).getCommonViewer().getSelection();
-			if (selection instanceof StructuredSelection && !((StructuredSelection) selection).isEmpty()) {
-				Object selElement = ((StructuredSelection) selection).getFirstElement();
-				if (selElement instanceof EObject) {
-					selElement = getFileForModel((EObject) selElement);
+		if (view instanceof final CommonNavigator cn) {
+			final ISelection selection = cn.getCommonViewer().getSelection();
+			if (selection instanceof final StructuredSelection structSel && !structSel.isEmpty()) {
+				Object selElement = structSel.getFirstElement();
+				if (selElement instanceof final EObject eo) {
+					selElement = getFileForModel(eo);
 				}
-				if (selElement instanceof IResource) {
-					return ((IResource) selElement).getProject();
+				if (selElement instanceof final IResource iRes) {
+					return iRes.getProject();
 				}
 			}
 		}
@@ -245,8 +244,8 @@ public class ModelSearchPage extends DialogPage implements ISearchPage {
 
 	private static IFile getFileForModel(final EObject sel) {
 		final EObject root = EcoreUtil.getRootContainer(sel);
-		if (root instanceof LibraryElement) {
-			return ((LibraryElement) root).getTypeEntry().getFile();
+		if (root instanceof final LibraryElement le) {
+			return le.getTypeEntry().getFile();
 		}
 		return null;
 	}

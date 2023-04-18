@@ -16,7 +16,6 @@
 package org.eclipse.fordiac.ide.application.policies;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import org.eclipse.draw2d.FigureCanvas;
@@ -31,14 +30,17 @@ import org.eclipse.fordiac.ide.application.editparts.FBNetworkEditPart;
 import org.eclipse.fordiac.ide.application.editparts.GroupContentEditPart;
 import org.eclipse.fordiac.ide.application.editparts.UnfoldedSubappContentEditPart;
 import org.eclipse.fordiac.ide.gef.policies.ModifiedNonResizeableEditPolicy;
+import org.eclipse.fordiac.ide.gef.policies.ModifiedResizeablePolicy;
 import org.eclipse.fordiac.ide.gef.utilities.RequestUtil;
 import org.eclipse.fordiac.ide.model.commands.change.AbstractChangeContainerBoundsCommand;
+import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeGroupBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeSubAppBoundsCommand;
 import org.eclipse.fordiac.ide.model.commands.change.FBNetworkElementSetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.change.RemoveElementsFromGroup;
 import org.eclipse.fordiac.ide.model.commands.change.SetPositionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AbstractCreateFBNetworkElementCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.Group;
@@ -60,12 +62,17 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	@Override
 	protected EditPolicy createChildEditPolicy(final EditPart child) {
-		if ((child.getModel() instanceof Group)
-				|| (child.getModel() instanceof SubApp && ((SubApp) child.getModel()).isUnfolded())) {
+		final Object model = child.getModel();
+		if ((model instanceof Group)
+				|| (model instanceof final SubApp subApp && subApp.isUnfolded())) {
 			return new ContainerResizePolicy();
 		}
 
-		if (child.getModel() instanceof FBNetworkElement) {
+		if (model instanceof Comment) {
+			return new ModifiedResizeablePolicy();
+		}
+
+		if (model instanceof FBNetworkElement) {
 			return new FBNetworkElementNonResizeableEP();
 		}
 
@@ -75,12 +82,12 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	@Override
 	protected Command createChangeConstraintCommand(final ChangeBoundsRequest request, final EditPart child,
 			final Object constraint) {
-		if ((child.getModel() instanceof Group || child.getModel() instanceof SubApp)
-				&& RequestUtil.isResizeRequest(request)) {
+		if ((child.getModel() instanceof Group || child.getModel() instanceof SubApp
+				|| child.getModel() instanceof Comment) && RequestUtil.isResizeRequest(request)) {
 			return createChangeSizeCommand((FBNetworkElement) child.getModel(), request);
 		}
-		if ((child.getModel() instanceof PositionableElement) && (RequestUtil.isMoveRequest(request))) {
-			return createMoveCommand((PositionableElement) child.getModel(), request, constraint);
+		if ((child.getModel() instanceof final PositionableElement pe) && (RequestUtil.isMoveRequest(request))) {
+			return createMoveCommand(pe, request, constraint);
 		}
 		return null;
 	}
@@ -97,13 +104,16 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	public static AbstractChangeContainerBoundsCommand createChangeBoundsCommand(final FBNetworkElement container,
 			final Dimension sizeDelta, final Point moveDelta) {
-		if (container instanceof Group) {
-			return new ChangeGroupBoundsCommand((Group) container, moveDelta.x, moveDelta.y, sizeDelta.width,
+		if (container instanceof final Group group) {
+			return new ChangeGroupBoundsCommand(group, moveDelta.x, moveDelta.y, sizeDelta.width,
 					sizeDelta.height);
 		}
-		if (container instanceof SubApp) {
-			return new ChangeSubAppBoundsCommand((SubApp) container, moveDelta.x, moveDelta.y, sizeDelta.width,
+		if (container instanceof final SubApp subApp) {
+			return new ChangeSubAppBoundsCommand(subApp, moveDelta.x, moveDelta.y, sizeDelta.width,
 					sizeDelta.height);
+		}
+		if (container instanceof final Comment comment) {
+			return new ChangeCommentBoundsCommand(comment, moveDelta.x, moveDelta.y, sizeDelta.width, sizeDelta.height);
 		}
 		return null;
 	}
@@ -113,12 +123,9 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 		if (null != request) {
 			final Object childClass = request.getNewObjectType();
 			final Rectangle constraint = (Rectangle) getConstraintFor(request);
-			if (getHost().getModel() instanceof FBNetwork) {
-				final FBNetwork fbNetwork = (FBNetwork) getHost().getModel();
-				if (childClass instanceof TypeEntry) {
-					return AbstractCreateFBNetworkElementCommand.createCreateCommand((TypeEntry) childClass, fbNetwork,
-							constraint.getLocation().x, constraint.getLocation().y);
-				}
+			if ((getHost().getModel() instanceof final FBNetwork fbNetwork) && (childClass instanceof final TypeEntry typeEntry)) {
+				return AbstractCreateFBNetworkElementCommand.createCreateCommand(typeEntry, fbNetwork,
+						constraint.getLocation().x, constraint.getLocation().y);
 			}
 		}
 		return null;
@@ -175,7 +182,7 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 				.map(ep -> (FBNetworkElement) ep.getModel()).filter(FBNetworkElement::isNestedInSubApp)
 				.filter(el -> !el.getFbNetwork().equals(fbNetwork))   // only take fbentworkelements that are not in the
 				// same subapp
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	private static GroupContentEditPart getGroupContentEditPart(final List<EditPart> editParts) {
@@ -185,13 +192,13 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	private static List<FBNetworkElement> collectFromGroupDraggedFBs(final List<EditPart> editParts) {
 		return editParts.stream().filter(ep -> ep.getParent() instanceof GroupContentEditPart)
-				.map(ep -> (FBNetworkElement) ep.getModel()).collect(Collectors.toList());
+				.map(ep -> (FBNetworkElement) ep.getModel()).toList();
 	}
 
 	@Override
 	protected Command getCloneCommand(final ChangeBoundsRequest request) {
 		final List<EObject> elements = ((Stream<?>) (request.getEditParts()).stream())
-				.map(n -> (EObject) (((EditPart) n).getModel())).collect(Collectors.toList());
+				.map(n -> (EObject) (((EditPart) n).getModel())).toList();
 		final Point scaledPoint = getDestinationPoint(request);
 		return new PasteCommand(elements, (FBNetwork) getHost().getModel(), scaledPoint.x, scaledPoint.y);
 	}
@@ -210,15 +217,15 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 
 	private FBNetwork getFBNetwork() {
 		final Object model = getHost().getModel();
-		return (model instanceof FBNetwork) ? (FBNetwork) model : null;
+		return (model instanceof final FBNetwork fbNetwork) ? fbNetwork : null;
 	}
 
 	private Command createMoveCommand(final PositionableElement model, final ChangeBoundsRequest request,
 			final Object constraint) {
 		final Point moveDelta = (isAlignRequest(request)) ? getAlignmentDelta(model, constraint) :
 			getScaledMoveDelta(request);
-		if (model instanceof FBNetworkElement) {
-			return new FBNetworkElementSetPositionCommand((FBNetworkElement) model, moveDelta.x, moveDelta.y);
+		if (model instanceof final FBNetworkElement fbnEl) {
+			return new FBNetworkElementSetPositionCommand(fbnEl, moveDelta.x, moveDelta.y);
 		}
 		return new SetPositionCommand(model, moveDelta.x, moveDelta.y);
 	}
@@ -228,8 +235,8 @@ public class FBNetworkXYLayoutEditPolicy extends XYLayoutEditPolicy {
 	}
 
 	private static Point getAlignmentDelta(final PositionableElement model, final Object constraint) {
-		if (constraint instanceof Rectangle) {
-			final Point newPos = ((Rectangle) constraint).getTopLeft();
+		if (constraint instanceof final Rectangle rect) {
+			final Point newPos = rect.getTopLeft();
 			return new Point(newPos.x - model.getPosition().getX(), newPos.y - model.getPosition().getY());
 		}
 		// we don't have new positions keep the old one

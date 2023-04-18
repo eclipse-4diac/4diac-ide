@@ -115,7 +115,7 @@ class STFunctionValidatorTest {
 			3 := 4;
 			2+3 := 5;
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NOT_ASSIGNABLE)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE)
 	}
 
 	@Test
@@ -136,6 +136,7 @@ class STFunctionValidatorTest {
 
 	}
 
+	@Test
 	def void testInvalidArrayAssignment() {
 		'''
 			FUNCTION hubert
@@ -255,10 +256,12 @@ class STFunctionValidatorTest {
 				int1 : INT := LINT#17;
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STElementaryInitializerExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES)
 
 	}
 
+	@Test
 	def void testInvalidArrayInitializer() {
 		'''
 			FUNCTION hubert
@@ -266,9 +269,19 @@ class STFunctionValidatorTest {
 				testArray: ARRAY [ 0 .. 3 ] OF INT := [LINT#17, 4];
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STElementaryInitializerExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''
+			FUNCTION hubert
+			VAR
+				testArray: ARRAY [ 0 .. 3 ] OF INT := [17, '4diac'];
+			END_VAR
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STElementaryInitializerExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
+	@Test
 	def void testInvalidArrayDimensionsInitializer() {
 		'''
 			FUNCTION hubert
@@ -276,21 +289,24 @@ class STFunctionValidatorTest {
 				testArray: ARRAY [ 0 .. 3 ] OF INT := [[17, 4]];
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayInitializerExpression,
+			STCoreValidator.INSUFFICIENT_ARRAY_DIMENSIONS)
 		'''
 			FUNCTION hubert
 			VAR
 				testArray: ARRAY [ 0 .. 3, 0 .. 2 ] OF INT := [17, 4, 21];
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STElementaryInitializerExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES)
 		'''
 			FUNCTION hubert
 			VAR
 				testArray: ARRAY [ 0 .. 3, 0 .. 2 ] OF INT := [[17, 4], 21];
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.NON_COMPATIBLE_TYPES)
+		'''.parse.assertError(STCorePackage.eINSTANCE.STElementaryInitializerExpression,
+			STCoreValidator.NON_COMPATIBLE_TYPES)
 	}
 
 	@Test
@@ -672,7 +688,7 @@ class STFunctionValidatorTest {
 		
 		FUNCTION hubert
 		emil(17, 4, 21);
-		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.NOT_ASSIGNABLE)
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.VALUE_NOT_ASSIGNABLE)
 	}
 
 	@Test
@@ -690,7 +706,7 @@ class STFunctionValidatorTest {
 		
 		FUNCTION hubert
 		emil(A := 17, B := 4, X := 21);
-		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.NOT_ASSIGNABLE)
+		END_FUNCTION'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.VALUE_NOT_ASSIGNABLE)
 	}
 
 	@Test
@@ -959,7 +975,7 @@ class STFunctionValidatorTest {
 		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.DUPLICATE_VARIABLE_NAME,
 			"Variable with duplicate name bol1")
 	}
-	
+
 	@Test
 	def void testDuplicateVariableNameIsForbiddenInFunction_1() {
 		'''
@@ -977,28 +993,27 @@ class STFunctionValidatorTest {
 		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.DUPLICATE_VARIABLE_NAME,
 			"Variable with duplicate name bol1")
 	}
-	
+
 	@Test
-	def void testAnyIntRangesAreValid(){
+	def void testAnyIntRangesAreValid() {
 		'''
-		FUNCTION ArrayTestDeclarationTest
-		VAR
-			arrayTest : ARRAY [-1 .. 65535] OF REAL;
-		END_VAR
-		END_FUNCTION
+			FUNCTION ArrayTestDeclarationTest
+			VAR
+				arrayTest : ARRAY [-1 .. 65535] OF REAL;
+			END_VAR
+			END_FUNCTION
 		'''.parse.assertNoErrors
 	}
-	
+
 	def static Stream<Arguments> invalidArrayRangeOrMaxLengthArgument() {
 		return Stream.of(Arguments.of("REAL#1.0", "REAL"), Arguments.of("LREAL#1.0", "LREAL"),
-			Arguments.of("\"3\"", "WCHAR"), Arguments.of("'5'", "CHAR"),
-			Arguments.of("WSTRING#\"4\"", "WSTRING"), Arguments.of("STRING#'6'", "STRING"),
-			Arguments.of("T#4h", "TIME"), Arguments.of("TOD#12:00:00", "TOD"),
+			Arguments.of("\"3\"", "WCHAR"), Arguments.of("'5'", "CHAR"), Arguments.of("WSTRING#\"4\"", "WSTRING"),
+			Arguments.of("STRING#'6'", "STRING"), Arguments.of("T#4h", "TIME"), Arguments.of("TOD#12:00:00", "TOD"),
 			Arguments.of("DATE#20-03-2017", "DATE"), Arguments.of("DT#20-03-2017-16:48:00", "DT"),
 			Arguments.of("LT#4h", "LTIME"), Arguments.of("LTOD#12:00:00", "LTOD"),
 			Arguments.of("LDATE#20-03-2017", "LDATE"), Arguments.of("LDT#20-03-2017-16:48:00", "LDT"))
 	}
-	
+
 	@ParameterizedTest(name="{index}: argument {0}")
 	@MethodSource("invalidArrayRangeOrMaxLengthArgument")
 	def void testNonAnyIntRangesAreInvalid(String argument, String argumentTypeName) {
@@ -1008,14 +1023,15 @@ class STFunctionValidatorTest {
 				arrayTest : ARRAY [«argument» .. 65535] OF REAL;
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STBinaryExpression, STCoreValidator.INDEX_RANGE_TYPE_INVALID,
-			'''Type «argumentTypeName» is not valid for defining ranges. Ranges must be of type ANY_INT''')
+		'''.parse.assertError(STCorePackage.eINSTANCE.STBinaryExpression,
+			STCoreValidator.
+				INDEX_RANGE_TYPE_INVALID, '''Type «argumentTypeName» is not valid for defining ranges. Ranges must be of type ANY_INT''')
 	}
-	
+
 	def static Stream<Arguments> validTypesForMaxLengthSpecifier() {
 		DataTypeLibrary.nonUserDefinedDataTypes.stream.filter[(it instanceof AnyStringType)].map[arguments(it.name)]
 	}
-	
+
 	@ParameterizedTest(name="{index}: argument {0}")
 	@MethodSource("validTypesForMaxLengthSpecifier")
 	def void testTypesValidForMaxLength(String typeName) {
@@ -1027,11 +1043,11 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertNoErrors
 	}
-	
+
 	def static Stream<Arguments> invalidTypesForMaxLengthSpecifier() {
 		DataTypeLibrary.nonUserDefinedDataTypes.stream.filter[!(it instanceof AnyStringType)].map[arguments(it.name)]
 	}
-	
+
 	@ParameterizedTest(name="{index}: argument {0}")
 	@MethodSource("invalidTypesForMaxLengthSpecifier")
 	def void testTypesInvalidForMaxLength(String typeName) {
@@ -1044,7 +1060,7 @@ class STFunctionValidatorTest {
 		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.MAX_LENGTH_NOT_ALLOWED,
 			"For types not of ANY_STRING no maximum length may be defined")
 	}
-	
+
 	@ParameterizedTest(name="{index}: argument {0}")
 	@MethodSource("invalidArrayRangeOrMaxLengthArgument")
 	def void testInvalidMaxLengthTypes(String argument, String argumentTypeName) {
@@ -1054,23 +1070,22 @@ class STFunctionValidatorTest {
 				testVar : STRING[«argument»];
 			END_VAR
 			END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration,
-			STCoreValidator.
-				MAX_LENGTH_TYPE_INVALID, '''Type «argumentTypeName» is not valid to specify an ANY_STRING max length. Max length must be of type ANY_INT''')
+		'''.parse.assertError(STCorePackage.eINSTANCE.STVarDeclaration, STCoreValidator.
+			MAX_LENGTH_TYPE_INVALID, '''Type «argumentTypeName» is not valid to specify an ANY_STRING max length. Max length must be of type ANY_INT''')
 	}
-	
+
 	@Test
 	def void testValidArrayAccessOperator() {
 		'''
-		FUNCTION ArrayTestDeclarationTest
-			VAR
-				arrayTest : ARRAY [0 .. 10] OF REAL;
-			END_VAR
-		arrayTest[0] := arrayTest[1];
-		END_FUNCTION
+			FUNCTION ArrayTestDeclarationTest
+				VAR
+					arrayTest : ARRAY [0 .. 10] OF REAL;
+				END_VAR
+			arrayTest[0] := arrayTest[1];
+			END_FUNCTION
 		'''.parse.assertNoErrors
 	}
-	
+
 	@Test
 	def void testOutOfBoundsArrayAccessOperator() {
 		'''
@@ -1083,35 +1098,35 @@ class STFunctionValidatorTest {
 		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
 			STCoreValidator.ARRAY_INDEX_OUT_OF_BOUNDS, "Index 11 out of array dimension bounds [0..10]")
 	}
-	
+
 	@Test
 	def void testTooManyIndicesArrayAccessOperator() {
 		'''
-		FUNCTION ArrayTestDeclarationTest
-			VAR
-				arrayTest : ARRAY [0 .. 10] OF REAL;
-			END_VAR
-		arrayTest[0] := arrayTest[1,1];
-		END_FUNCTION
-		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression,
-			STCoreValidator.TOO_MANY_INDICES_GIVEN, "Too many indices given, 2 indices given, but only 1 specified for the variable")
+			FUNCTION ArrayTestDeclarationTest
+				VAR
+					arrayTest : ARRAY [0 .. 10] OF REAL;
+				END_VAR
+			arrayTest[0] := arrayTest[1,1];
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STArrayAccessExpression, STCoreValidator.TOO_MANY_INDICES_GIVEN,
+			"Too many indices given, 2 indices given, but only 1 specified for the variable")
 	}
-	
+
 	@Test
 	def void testFunctionWithReturnTypeAssginedToCorrectVariableType() {
 		'''
-		FUNCTION called : REAL
-		END_FUNCTION
-		
-		FUNCTION callee
-		VAR_TEMP
-			assigned : REAL;
-		END_VAR
-		assigned := called();
-		END_FUNCTION
+			FUNCTION called : REAL
+			END_FUNCTION
+			
+			FUNCTION callee
+			VAR_TEMP
+				assigned : REAL;
+			END_VAR
+			assigned := called();
+			END_FUNCTION
 		'''.parse.assertNoErrors
 	}
-	
+
 	@Test
 	def void testFunctionWithReturnTypeAssginedToWrongVariableType() {
 		'''
@@ -1127,7 +1142,7 @@ class STFunctionValidatorTest {
 		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.NON_COMPATIBLE_TYPES,
 			"Cannot convert from REAL to STRING")
 	}
-	
+
 	@Test
 	def void testFunctionWithoutReturnTypeAssginedToVariable() {
 		'''
@@ -1142,5 +1157,44 @@ class STFunctionValidatorTest {
 			END_FUNCTION
 		'''.parse.assertError(STCorePackage.eINSTANCE.STFeatureExpression, STCoreValidator.RETURNED_TYPE_IS_VOID,
 			"Call on 'called' returns VOID, which cannot be assigned to a variable or used as a call argument")
+	}
+
+	@Test
+	def void testWriteOnInputIsNotAllowed() { // currently a warning
+		'''
+			FUNCTION test
+			VAR_INPUT
+				in1 : INT;
+			END_VAR
+			in1 := 2;
+			END_FUNCTION
+		'''.parse.assertWarning(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE,
+			"Inputs shall not be be assigned. This will be elevated to an error in the future")
+	}
+	
+	@Test
+	def void testWriteOnConstantVarTempIsNotAllowed() {
+		'''
+			FUNCTION test
+			VAR_TEMP CONSTANT
+				in1 : INT;
+			END_VAR
+			in1 := 2;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE,
+			"Constants cannot be assigned.")
+	}
+	
+	@Test
+	def void testWriteOnConstantVarIsNotAllowed() { // same as VAR_TEMP in a function
+		'''
+			FUNCTION test
+			VAR CONSTANT
+				in1 : INT;
+			END_VAR
+			in1 := 2;
+			END_FUNCTION
+		'''.parse.assertError(STCorePackage.eINSTANCE.STAssignmentStatement, STCoreValidator.VALUE_NOT_ASSIGNABLE,
+			"Constants cannot be assigned.")
 	}
 }

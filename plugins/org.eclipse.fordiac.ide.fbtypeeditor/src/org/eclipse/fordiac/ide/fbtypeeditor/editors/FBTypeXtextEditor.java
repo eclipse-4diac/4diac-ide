@@ -17,7 +17,6 @@ package org.eclipse.fordiac.ide.fbtypeeditor.editors;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
-import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.swt.widgets.Composite;
@@ -26,7 +25,6 @@ import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.INavigationLocation;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.xtext.ui.editor.XtextEditor;
@@ -34,10 +32,7 @@ import org.eclipse.xtext.ui.editor.XtextEditor;
 public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEditorPart{
 
 	@Override
-	public void init(final IEditorSite site, IEditorInput input) throws PartInitException {
-		if (input instanceof FBTypeEditorInput) {
-			input = new FileEditorInput(((FBTypeEditorInput) input).getTypeEntry().getFile());
-		}
+	public void init(final IEditorSite site, final IEditorInput input) throws PartInitException {
 		super.init(site, input);
 	}
 
@@ -48,10 +43,7 @@ public abstract class FBTypeXtextEditor extends XtextEditor implements IFBTEdito
 	}
 
 	@Override
-	protected void doSetInput(IEditorInput input) throws CoreException {
-		if (input instanceof FBTypeEditorInput) {
-			input = new FileEditorInput(((FBTypeEditorInput) input).getTypeEntry().getFile());
-		}
+	protected void doSetInput(final IEditorInput input) throws CoreException {
 		removeFBTypeUpdater();
 		super.doSetInput(input);
 	}

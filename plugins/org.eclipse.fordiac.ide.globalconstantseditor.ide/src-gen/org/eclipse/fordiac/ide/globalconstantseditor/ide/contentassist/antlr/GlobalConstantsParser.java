@@ -70,6 +70,7 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getUnaryOperatorAccess().getAlternatives(), "rule__UnaryOperator__Alternatives");
 			builder.put(grammarAccess.getSTMultiBitAccessSpecifierAccess().getAlternatives(), "rule__STMultiBitAccessSpecifier__Alternatives");
 			builder.put(grammarAccess.getSTAccessSpecifierAccess().getAlternatives(), "rule__STAccessSpecifier__Alternatives");
+			builder.put(grammarAccess.getSTGlobalConstsSourceAccess().getGroup(), "rule__STGlobalConstsSource__Group__0");
 			builder.put(grammarAccess.getSTVarGlobalDeclarationBlockAccess().getGroup(), "rule__STVarGlobalDeclarationBlock__Group__0");
 			builder.put(grammarAccess.getSTCoreSourceAccess().getGroup(), "rule__STCoreSource__Group__0");
 			builder.put(grammarAccess.getSTExpressionSourceAccess().getGroup(), "rule__STExpressionSource__Group__0");
@@ -175,6 +176,7 @@ public class GlobalConstantsParser extends AbstractContentAssistParser {
 			builder.put(grammarAccess.getDateAndTimeAccess().getGroup_11(), "rule__DateAndTime__Group_11__0");
 			builder.put(grammarAccess.getTimeOfDayAccess().getGroup(), "rule__TimeOfDay__Group__0");
 			builder.put(grammarAccess.getTimeOfDayAccess().getGroup_5(), "rule__TimeOfDay__Group_5__0");
+			builder.put(grammarAccess.getSTGlobalConstsSourceAccess().getElementsAssignment_1(), "rule__STGlobalConstsSource__ElementsAssignment_1");
 			builder.put(grammarAccess.getSTVarGlobalDeclarationBlockAccess().getConstantAssignment_2(), "rule__STVarGlobalDeclarationBlock__ConstantAssignment_2");
 			builder.put(grammarAccess.getSTVarGlobalDeclarationBlockAccess().getVarDeclarationsAssignment_3(), "rule__STVarGlobalDeclarationBlock__VarDeclarationsAssignment_3");
 			builder.put(grammarAccess.getSTCoreSourceAccess().getStatementsAssignment_1(), "rule__STCoreSource__StatementsAssignment_1");

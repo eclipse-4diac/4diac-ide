@@ -82,6 +82,7 @@ import org.eclipse.fordiac.ide.structuredtextcore.stcore.STWhileStatement
 import org.eclipse.xtend.lib.annotations.Accessors
 
 import static org.eclipse.fordiac.ide.model.eval.st.variable.STVariableOperations.*
+import static org.eclipse.fordiac.ide.model.eval.variable.VariableOperations.*
 
 import static extension org.eclipse.fordiac.ide.model.eval.function.Functions.*
 import static extension org.eclipse.fordiac.ide.model.eval.value.ValueOperations.*
@@ -125,7 +126,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	def protected dispatch Variable<?> findVariable(STVarDeclaration variable) {
 		if (variable.eContainer instanceof STVarGlobalDeclarationBlock)
 			cachedGlobalConstants.computeIfAbsent(variable.name) [
-				newVariable(variable).evaluateInitializerExpression(variable.defaultValue)
+				newVariable(variable)
 			]
 		else
 			variables.get(variable.name)
@@ -136,7 +137,7 @@ abstract class StructuredTextEvaluator extends AbstractEvaluator {
 	}
 
 	def protected void evaluateVariableInitialization(STVarDeclaration variable) {
-		variables.put(variable.name, newVariable(variable).evaluateInitializerExpression(variable.defaultValue))
+		variables.put(variable.name, newVariable(variable.name, variable.featureType).evaluateInitializerExpression(variable.defaultValue))
 	}
 
 	def protected dispatch Variable<?> evaluateInitializerExpression(Variable<?> variable, Void expression) {

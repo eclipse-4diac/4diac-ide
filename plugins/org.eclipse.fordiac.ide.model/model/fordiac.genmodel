@@ -5,7 +5,7 @@
     editDirectory="/org.eclipse.fordiac.ide.model.edit/src-gen" modelPluginID="org.eclipse.fordiac.ide.model"
     templateDirectory="" modelName="fordiac" editPluginClass="org.eclipse.fordiac.ide.model.data.provider.FordiacEditPlugin"
     nonNLSMarkers="true" commentFormatting="true" importerID="org.eclipse.emf.importer.ecore"
-    containmentProxies="true" complianceLevel="11.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.model.edit"
+    containmentProxies="true" complianceLevel="17.0" copyrightFields="false" editPluginID="org.eclipse.fordiac.ide.model.edit"
     language="" importOrganizing="true">
   <genPackages prefix="LibraryElement" basePackage="org.eclipse.fordiac.ide.model"
       disposableProviderFactory="true" fileExtensions="" ecorePackage="lib.ecore#/">
@@ -15,17 +15,32 @@
       <genEnumLiterals ecoreEnumLiteral="lib.ecore#//Language/Java"/>
       <genEnumLiterals ecoreEnumLiteral="lib.ecore#//Language/Cpp"/>
     </genEnums>
-    <genDataTypes ecoreDataType="lib.ecore#//IProject"/>
-    <genDataTypes ecoreDataType="lib.ecore#//IFile"/>
     <genDataTypes ecoreDataType="lib.ecore#//CommandStack"/>
+    <genDataTypes ecoreDataType="lib.ecore#//IFile"/>
+    <genDataTypes ecoreDataType="lib.ecore#//IProject"/>
     <genDataTypes ecoreDataType="lib.ecore#//Point"/>
     <genDataTypes ecoreDataType="lib.ecore#//TypeEntry"/>
     <genDataTypes ecoreDataType="lib.ecore#//TypeLibrary"/>
     <genDataTypes ecoreDataType="lib.ecore#//VarDeclList"/>
+    <genClasses ecoreClass="lib.ecore#//AdapterConnection">
+      <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterSource"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getAdapterSource(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterDestination"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getAdapterDestination(this);"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterDeclaration">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterFB"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterDeclaration/adapterNetworkFB"/>
       <genOperations ecoreOperation="lib.ecore#//AdapterDeclaration/getType" body="return (AdapterType)getType_();"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//AdapterFB">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterFB/adapterDecl"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterFB/isSocket" body="return org.eclipse.fordiac.ide.model.Annotations.isSocket(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterFB/getType" body="return org.eclipse.fordiac.ide.model.Annotations.getType(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//AdapterFB/isPlug" body="return org.eclipse.fordiac.ide.model.Annotations.isPlug(this);"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//AdapterFBType">
+      <genOperations ecoreOperation="lib.ecore#//AdapterFBType/getAdapterType" body="return (AdapterType)eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//AdapterType">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterType/adapterFBType"/>
@@ -45,19 +60,110 @@
       <genOperations ecoreOperation="lib.ecore#//Application/getAutomationSystem"
           body="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Attribute">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Attribute/attributeDeclaration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Attribute/value"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//AttributeDeclaration">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AttributeDeclaration/initialValue"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//BaseFBType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalVars"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalConstVars"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalFbs"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/algorithm"
+          get="return org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeAnnotations.getAlgorithm(this);"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/methods"
+          get="return org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeAnnotations.getMethods(this);"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/callables"/>
+      <genOperations ecoreOperation="lib.ecore#//BaseFBType/getAlgorithmNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//BaseFBType/getAlgorithmNamed/name"/>
+      </genOperations>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//BasicFBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BasicFBType/eCC"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//CompilerInfo">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilerInfo/compiler"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//CompilerInfo/classdef"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//CompilerInfo/header"/>
+    <genClasses ecoreClass="lib.ecore#//AutomationSystem">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/application"/>
+      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/mapping"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/systemConfiguration"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AutomationSystem/commandStack"/>
+      <genOperations ecoreOperation="lib.ecore#//AutomationSystem/getDeviceNamed"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//AutomationSystem/getDeviceNamed/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//AutomationSystem/getApplicationNamed"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getApplicationNamed(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//AutomationSystem/getApplicationNamed/name"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//CFBInstance">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CFBInstance/cfbNetwork"/>
+      <genOperations ecoreOperation="lib.ecore#//CFBInstance/loadCFBNetwork" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.loadCFBNetwork(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//CFBInstance/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xA;if(type instanceof CompositeFBType){&#xA;   return (CompositeFBType) type; &#xA;}&#xA;return null;"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Color">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Color/red"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Color/green"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Color/blue"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ColorizableElement">
+      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ColorizableElement/color"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Comment">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Comment/width"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Comment/height"/>
+      <genOperations ecoreOperation="lib.ecore#//Comment/getInterface" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.EMPTY_INTERFACE_LIST;"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//CommunicationChannel"/>
+    <genClasses image="false" ecoreClass="lib.ecore#//CommunicationConfiguration">
+      <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getSegment"
+          body="return (Segment) eContainer();"/>
+      <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getMappingTargets"/>
+      <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getParameters"
+          body="return new EList&lt;?>();"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//CommunicationMappingTarget">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//CommunicationMappingTarget/mappedElements"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//CompilableType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilableType/compilerInfo"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Compiler">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Compiler/language"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Compiler/product"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Compiler/vendor"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Compiler/version"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//CompilerInfo">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilerInfo/compiler"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//CompilerInfo/classdef"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//CompilerInfo/header"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//CompositeFBType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompositeFBType/fBNetwork"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ConfigurableObject">
+      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//ConfigurableObject/attributes"/>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/setAttribute"
+          body="org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/attributeName"/>
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/type"/>
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/value"/>
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/comment"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/getAttribute"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/getAttribute/attributeName"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/getAttributeValue"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/getAttributeValue/attributeName"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/deleteAttribute"
+          body="return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);">
+        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/deleteAttribute/attributeName"/>
+      </genOperations>
     </genClasses>
     <genClasses image="false" ecoreClass="lib.ecore#//Connection">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Connection/resTypeConnection"/>
@@ -93,6 +199,12 @@
       <genOperations ecoreOperation="lib.ecore#//ConnectionRoutingData/is5SegementData"
           body="return getDx1() != 0 &amp;&amp; getDy() != 0;"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//DataConnection">
+      <genOperations ecoreOperation="lib.ecore#//DataConnection/getDataSource" body="return org.eclipse.fordiac.ide.model.Annotations.getDataSource(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//DataConnection/getDataDestination"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getDataDestination(this);"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Demultiplexer"/>
     <genClasses ecoreClass="lib.ecore#//Device">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Device/resource"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Device/profile"/>
@@ -140,12 +252,29 @@
       <genOperations ecoreOperation="lib.ecore#//ECTransition/getConditionText" body="return org.eclipse.fordiac.ide.model.Annotations.getConditionText(this);"/>
       <genOperations ecoreOperation="lib.ecore#//ECTransition/getPriority" body="return getSource().getOutTransitions().indexOf(this) + 1;"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ErrorMarkerDataType"/>
+    <genClasses ecoreClass="lib.ecore#//ErrorMarkerFBNElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerFBNElement/repairedElement"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ErrorMarkerInterface">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerInterface/repairedEndpoint"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerInterface/value"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ErrorMarkerRef">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ErrorMarkerRef/errorMessage"/>
+      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerRef/hasError" body="return getErrorMessage() != null &amp;&amp; !getErrorMessage().isBlank();"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//Event">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Event/with"/>
       <genOperations ecoreOperation="lib.ecore#//Event/getInputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Event/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Event/getInOutParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Event/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//EventConnection">
+      <genOperations ecoreOperation="lib.ecore#//EventConnection/getEventSource" body="return org.eclipse.fordiac.ide.model.Annotations.getEventSource(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//EventConnection/getEventDestination"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getEventDestination(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FB">
       <genOperations ecoreOperation="lib.ecore#//FB/isResourceFB" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.isResourceFB(this);"/>
@@ -155,6 +284,34 @@
       <genOperations ecoreOperation="lib.ecore#//FB/getOutputParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getOutputParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FB/getInOutParameters" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getInOutParameters(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FB/getReturnType" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.CallableAnnotations.getReturnType(this);"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//FBNetwork">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetwork/networkElements"/>
+      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetwork/dataConnections"/>
+      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetwork/eventConnections"/>
+      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetwork/adapterConnections"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/addConnection" body="org.eclipse.fordiac.ide.model.Annotations.addConnection(this, connection);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/addConnection/connection"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/removeConnection" body="org.eclipse.fordiac.ide.model.Annotations.removeConnection(this, connection);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/removeConnection/connection"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/isApplicationNetwork" body="return org.eclipse.fordiac.ide.model.Annotations.isApplicationNetwork(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/isSubApplicationNetwork"
+          body="return org.eclipse.fordiac.ide.model.Annotations.isSubApplicationNetwork(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/isResourceNetwork" body="return org.eclipse.fordiac.ide.model.Annotations.isResourceNetwork(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/isCFBTypeNetwork" body="return org.eclipse.fordiac.ide.model.Annotations.isCFBTypeNetwork(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/getAutomationSystem" body="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/getApplication" body="return org.eclipse.fordiac.ide.model.Annotations.getApplication(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/getFBNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getFBNamed(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/getFBNamed/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/getSubAppNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getSubAppNamed(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/getSubAppNamed/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//FBNetwork/getElementNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getElementNamed(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//FBNetwork/getElementNamed/name"/>
+      </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBNetworkElement">
       <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//FBNetworkElement/interface"/>
@@ -179,16 +336,6 @@
           body="return org.eclipse.fordiac.ide.model.helpers.FBNetworkElementHelper.isContainedInTypedInstance(this);"/>
       <genOperations ecoreOperation="lib.ecore#//FBNetworkElement/isInGroup" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.isInGroup(this);"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//SubApp">
-      <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
-          ecoreFeature="ecore:EReference lib.ecore#//SubApp/subAppNetwork"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//SubApp/width"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//SubApp/height"/>
-      <genOperations ecoreOperation="lib.ecore#//SubApp/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xD;&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xD;&#xA;if(type instanceof SubAppType){&#xD;&#xA;   return (SubAppType) type; &#xD;&#xA;}&#xD;&#xA;return null;"/>
-      <genOperations ecoreOperation="lib.ecore#//SubApp/isUnfolded" body="org.eclipse.fordiac.ide.model.libraryElement.Attribute attr = this.getAttribute(org.eclipse.fordiac.ide.model.LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);&#xA;return (attr != null) &amp;&amp; &quot;true&quot;.equals(attr.getValue()); //$NON-NLS-1$&#xA;"/>
-      <genOperations ecoreOperation="lib.ecore#//SubApp/isTyped" body="return (getType() != null);"/>
-      <genOperations ecoreOperation="lib.ecore#//SubApp/loadSubAppNetwork" body="return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.loadSubAppNetwork(this);"/>
-    </genClasses>
     <genClasses ecoreClass="lib.ecore#//FBType">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/interfaceList"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBType/service"/>
@@ -201,6 +348,25 @@
       </genOperations>
       <genOperations ecoreOperation="lib.ecore#//FBType/getDocumentation" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.FBTypeAnnotations.getDocumentation(this);"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Group">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Group/groupElements"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/width"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/height"/>
+      <genOperations ecoreOperation="lib.ecore#//Group/getInterface" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.EMPTY_INTERFACE_LIST;"/>
+      <genOperations ecoreOperation="lib.ecore#//Comment/getInterface" body="return org.eclipse.fordiac.ide.model.annotations.FBNetworkElementAnnotations.EMPTY_INTERFACE_LIST;"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//HiddenElement">
+      <genOperations ecoreOperation="lib.ecore#//HiddenElement/setVisible" body="org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);">
+        <genParameters ecoreParameter="lib.ecore#//HiddenElement/setVisible/visible"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//HiddenElement/isVisible" body="return org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.isVisible(this);"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="lib.ecore#//ICallable">
+      <genOperations ecoreOperation="lib.ecore#//ICallable/getInputParameters"/>
+      <genOperations ecoreOperation="lib.ecore#//ICallable/getOutputParameters"/>
+      <genOperations ecoreOperation="lib.ecore#//ICallable/getInOutParameters"/>
+      <genOperations ecoreOperation="lib.ecore#//ICallable/getReturnType"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//Identification">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Identification/applicationDomain"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Identification/classification"/>
@@ -208,6 +374,20 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Identification/function"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Identification/standard"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Identification/type"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="lib.ecore#//IInterfaceElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//IInterfaceElement/isInput"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//IInterfaceElement/inputConnections"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//IInterfaceElement/outputConnections"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//IInterfaceElement/type"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//IInterfaceElement/typeName"/>
+      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getFBNetworkElement"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="lib.ecore#//INamedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//INamedElement/name"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//INamedElement/comment"/>
+      <genOperations ecoreOperation="lib.ecore#//INamedElement/getQualifiedName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//InputPrimitive"/>
     <genClasses provider="Stateful" ecoreClass="lib.ecore#//InterfaceList">
@@ -241,22 +421,63 @@
       <genOperations ecoreOperation="lib.ecore#//InterfaceList/getVisibleOutputVars"
           body="return getOutputVars().stream().filter(org.eclipse.fordiac.ide.model.libraryElement.HiddenElement::isVisible).collect(java.util.stream.Collectors.toList());"/>
     </genClasses>
+    <genClasses image="false" ecoreClass="lib.ecore#//IVarElement">
+      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//IVarElement/varDeclarations"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//LibraryElement">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/versionInfo"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/identification"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LibraryElement/typeEntry"/>
+      <genOperations ecoreOperation="lib.ecore#//LibraryElement/getTypeLibrary" body="if (null != getTypeEntry()) {&#xA;&#x9;return getTypeEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//Link">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Link/segment"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Link/device"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//LocalVariable">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStart"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStop"/>
+      <genOperations ecoreOperation="lib.ecore#//LocalVariable/getArraySize" body="return arrayStop-arrayStart+1;"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Mapping">
       <genFeatures createChild="false" ecoreFeature="ecore:EReference lib.ecore#//Mapping/from"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EReference lib.ecore#//Mapping/to"/>
       <genOperations ecoreOperation="lib.ecore#//Mapping/getAutomationSystem" body="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//MappingTarget"/>
+    <genClasses ecoreClass="lib.ecore#//Method"/>
+    <genClasses ecoreClass="lib.ecore#//Multiplexer"/>
     <genClasses ecoreClass="lib.ecore#//OtherAlgorithm">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//OtherAlgorithm/language"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//OtherMethod">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//OtherMethod/language"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//OutputPrimitive"/>
-    <genClasses ecoreClass="lib.ecore#//Attribute">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Attribute/attributeDeclaration"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Attribute/value"/>
+    <genClasses ecoreClass="lib.ecore#//Position">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Position/x"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Position/y"/>
+      <genOperations ecoreOperation="lib.ecore#//Position/asPoint" body="return new org.eclipse.draw2d.geometry.Point(getX(), getY());"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//PositionableElement">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//PositionableElement/position"/>
+      <genOperations ecoreOperation="lib.ecore#//PositionableElement/updatePosition"
+          body="final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createPosition();&#xA;pos.setX(x);&#xA;pos.setY(y);&#xA;&#xA;setPosition(pos);">
+        <genParameters ecoreParameter="lib.ecore#//PositionableElement/updatePosition/x"/>
+        <genParameters ecoreParameter="lib.ecore#//PositionableElement/updatePosition/y"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//PositionableElement/updatePosition.1"
+          body="updatePosition(newPos.x, newPos.y);">
+        <genParameters ecoreParameter="lib.ecore#//PositionableElement/updatePosition.1/newPos"/>
+      </genOperations>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Primitive">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Primitive/event"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Primitive/parameters"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Primitive/interface"/>
+      <genOperations ecoreOperation="lib.ecore#//Primitive/getServiceTransaction"
+          body="return (ServiceTransaction) this.eContainer();"/>
+      <genOperations ecoreOperation="lib.ecore#//Primitive/getService" body="return getServiceTransaction().getServiceSequence().getService();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//Resource">
       <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Resource/fBNetwork"/>
@@ -275,14 +496,26 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ResourceType/fBNetwork"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ResourceType/supportedFBTypes"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ResourceTypeFB">
+      <genOperations ecoreOperation="lib.ecore#//ResourceTypeFB/isResourceTypeFB"
+          body="return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB();"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//Segment">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Segment/width"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Segment/varDeclarations"/>
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Segment/outConnections"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//Segment/communication"/>
       <genOperations ecoreOperation="lib.ecore#//Segment/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xD;&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xD;&#xA;if(type instanceof SegmentType){&#xD;&#xA;&#x9;return (SegmentType) type; &#xD;&#xA;}&#xD;&#xA;return null;"/>
       <genOperations ecoreOperation="lib.ecore#//Segment/getAutomationSystem" body="return org.eclipse.fordiac.ide.model.annotations.SegmentAnnotations.getAutomationSystem(this);"/>
       <genOperations ecoreOperation="lib.ecore#//Segment/getSystemConfiguration" body="return org.eclipse.fordiac.ide.model.annotations.SegmentAnnotations.getSystemConfiguration(this); "/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//SegmentType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SegmentType/varDeclaration"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Service">
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/rightInterface"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/leftInterface"/>
+      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/serviceSequence"/>
+      <genOperations ecoreOperation="lib.ecore#//Service/getFBType" body="return (FBType) this.eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceSequence">
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ServiceSequence/serviceTransaction"/>
@@ -296,50 +529,73 @@
       <genOperations ecoreOperation="lib.ecore#//ServiceTransaction/getServiceSequence"
           body="return (ServiceSequence) this.eContainer();"/>
     </genClasses>
+    <genClasses ecoreClass="lib.ecore#//ServiceInterface">
+      <genOperations ecoreOperation="lib.ecore#//ServiceInterface/getService" body="return (Service) this.eContainer();"/>
+      <genOperations ecoreOperation="lib.ecore#//ServiceInterface/isLeftInterface"
+          body="return this.equals(getService().getLeftInterface());"/>
+    </genClasses>
     <genClasses ecoreClass="lib.ecore#//ServiceInterfaceFBType"/>
+    <genClasses ecoreClass="lib.ecore#//SimpleFBType"/>
     <genClasses ecoreClass="lib.ecore#//STAlgorithm"/>
-    <genClasses ecoreClass="lib.ecore#//FBNetwork">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetwork/networkElements"/>
-      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetwork/dataConnections"/>
-      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetwork/eventConnections"/>
-      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//FBNetwork/adapterConnections"/>
-      <genOperations ecoreOperation="lib.ecore#//FBNetwork/addConnection" body="org.eclipse.fordiac.ide.model.Annotations.addConnection(this, connection);">
-        <genParameters ecoreParameter="lib.ecore#//FBNetwork/addConnection/connection"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//FBNetwork/removeConnection" body="org.eclipse.fordiac.ide.model.Annotations.removeConnection(this, connection);">
-        <genParameters ecoreParameter="lib.ecore#//FBNetwork/removeConnection/connection"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//FBNetwork/isApplicationNetwork" body="return org.eclipse.fordiac.ide.model.Annotations.isApplicationNetwork(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//FBNetwork/isSubApplicationNetwork"
-          body="return org.eclipse.fordiac.ide.model.Annotations.isSubApplicationNetwork(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//FBNetwork/isResourceNetwork" body="return org.eclipse.fordiac.ide.model.Annotations.isResourceNetwork(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//FBNetwork/isCFBTypeNetwork" body="return org.eclipse.fordiac.ide.model.Annotations.isCFBTypeNetwork(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//FBNetwork/getAutomationSystem" body="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//FBNetwork/getApplication" body="return org.eclipse.fordiac.ide.model.Annotations.getApplication(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//FBNetwork/getFBNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getFBNamed(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//FBNetwork/getFBNamed/name"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//FBNetwork/getSubAppNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getSubAppNamed(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//FBNetwork/getSubAppNamed/name"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//FBNetwork/getElementNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getElementNamed(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//FBNetwork/getElementNamed/name"/>
+    <genClasses ecoreClass="lib.ecore#//STMethod"/>
+    <genClasses ecoreClass="lib.ecore#//SubApp">
+      <genFeatures notify="false" children="true" createChild="false" propertySortChoices="true"
+          ecoreFeature="ecore:EReference lib.ecore#//SubApp/subAppNetwork"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//SubApp/width"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//SubApp/height"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xD;&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xD;&#xA;if(type instanceof SubAppType){&#xD;&#xA;   return (SubAppType) type; &#xD;&#xA;}&#xD;&#xA;return null;"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/isUnfolded" body="org.eclipse.fordiac.ide.model.libraryElement.Attribute attr = this.getAttribute(org.eclipse.fordiac.ide.model.LibraryElementTags.SUBAPP_REPRESENTATION_ATTRIBUTE);&#xA;return (attr != null) &amp;&amp; &quot;true&quot;.equals(attr.getValue()); //$NON-NLS-1$&#xA;"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/isTyped" body="return (getType() != null);"/>
+      <genOperations ecoreOperation="lib.ecore#//SubApp/loadSubAppNetwork" body="return org.eclipse.fordiac.ide.model.annotations.SubAppAnnotations.loadSubAppNetwork(this);"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//StructManipulator">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//StructManipulator/structType"/>
+      <genOperations ecoreOperation="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface"
+          body="org.eclipse.fordiac.ide.model.StructManipulation.setStructTypeElementsAtInterface(this, newStruct);">
+        <genParameters ecoreParameter="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface/newStruct"/>
       </genOperations>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//SubAppType"/>
-    <genClasses ecoreClass="lib.ecore#//AutomationSystem">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/application"/>
-      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/mapping"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//AutomationSystem/systemConfiguration"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AutomationSystem/commandStack"/>
-      <genOperations ecoreOperation="lib.ecore#//AutomationSystem/getDeviceNamed"
+    <genClasses ecoreClass="lib.ecore#//SystemConfiguration">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SystemConfiguration/devices"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SystemConfiguration/segments"/>
+      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SystemConfiguration/links"/>
+      <genOperations ecoreOperation="lib.ecore#//SystemConfiguration/getAutomationSystem"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//SystemConfiguration/getSegmentNamed"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getSegmentNamed(this, name);">
+        <genParameters ecoreParameter="lib.ecore#//SystemConfiguration/getSegmentNamed/name"/>
+      </genOperations>
+      <genOperations ecoreOperation="lib.ecore#//SystemConfiguration/getDeviceNamed"
           body="return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//AutomationSystem/getDeviceNamed/name"/>
+        <genParameters ecoreParameter="lib.ecore#//SystemConfiguration/getDeviceNamed/name"/>
       </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//AutomationSystem/getApplicationNamed"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getApplicationNamed(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//AutomationSystem/getApplicationNamed/name"/>
-      </genOperations>
+    </genClasses>
+    <genClasses image="false" ecoreClass="lib.ecore#//TextAlgorithm">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TextAlgorithm/text"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="lib.ecore#//TextMethod">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/inputParameters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/outputParameters"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/inOutParameters"/>
+      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/returnType"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TextMethod/text"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//TypedConfigureableObject">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TypedConfigureableObject/typeEntry"/>
+      <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getTypeName"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getTypeName(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getType"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getType(this);"/>
+      <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getTypeLibrary"
+          body="return org.eclipse.fordiac.ide.model.Annotations.getTypeLibrary(this);"/>
+    </genClasses>
+    <genClasses image="false" ecoreClass="lib.ecore#//TypedElement">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TypedElement/type"/>
+    </genClasses>
+    <genClasses ecoreClass="lib.ecore#//Value">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Value/value"/>
+      <genOperations ecoreOperation="lib.ecore#//Value/getParentIE" body="return (IInterfaceElement) eContainer();"/>
     </genClasses>
     <genClasses ecoreClass="lib.ecore#//VarDeclaration">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//VarDeclaration/arraySize"/>
@@ -361,255 +617,6 @@
     <genClasses ecoreClass="lib.ecore#//With">
       <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//With/variables"/>
     </genClasses>
-    <genClasses ecoreClass="lib.ecore#//LibraryElement">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/versionInfo"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//LibraryElement/identification"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LibraryElement/typeEntry"/>
-      <genOperations ecoreOperation="lib.ecore#//LibraryElement/getTypeLibrary" body="if (null != getTypeEntry()) {&#xA;&#x9;return getTypeEntry().getTypeLibrary();&#xA;}&#xA;return null;"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//CompilableType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompilableType/compilerInfo"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//ConfigurableObject">
-      <genFeatures property="None" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//ConfigurableObject/attributes"/>
-      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/setAttribute"
-          body="org.eclipse.fordiac.ide.model.Annotations.setAttribute(this, attributeName, type, value, comment);">
-        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/attributeName"/>
-        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/type"/>
-        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/value"/>
-        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/setAttribute/comment"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/getAttribute"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getAttribute(this, attributeName);">
-        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/getAttribute/attributeName"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/getAttributeValue"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getAttributeValue(this, attributeName);">
-        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/getAttributeValue/attributeName"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//ConfigurableObject/deleteAttribute"
-          body="return org.eclipse.fordiac.ide.model.Annotations.deleteAttribute(this, attributeName);">
-        <genParameters ecoreParameter="lib.ecore#//ConfigurableObject/deleteAttribute/attributeName"/>
-      </genOperations>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//CompositeFBType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CompositeFBType/fBNetwork"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="lib.ecore#//TextAlgorithm">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TextAlgorithm/text"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//DataConnection">
-      <genOperations ecoreOperation="lib.ecore#//DataConnection/getDataSource" body="return org.eclipse.fordiac.ide.model.Annotations.getDataSource(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//DataConnection/getDataDestination"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getDataDestination(this);"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//EventConnection">
-      <genOperations ecoreOperation="lib.ecore#//EventConnection/getEventSource" body="return org.eclipse.fordiac.ide.model.Annotations.getEventSource(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//EventConnection/getEventDestination"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getEventDestination(this);"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//AdapterConnection">
-      <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterSource"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getAdapterSource(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//AdapterConnection/getAdapterDestination"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getAdapterDestination(this);"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//ServiceInterface">
-      <genOperations ecoreOperation="lib.ecore#//ServiceInterface/getService" body="return (Service) this.eContainer();"/>
-      <genOperations ecoreOperation="lib.ecore#//ServiceInterface/isLeftInterface"
-          body="return this.equals(getService().getLeftInterface());"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="lib.ecore#//IInterfaceElement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//IInterfaceElement/isInput"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//IInterfaceElement/inputConnections"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//IInterfaceElement/outputConnections"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//IInterfaceElement/type"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//IInterfaceElement/typeName"/>
-      <genOperations ecoreOperation="lib.ecore#//IInterfaceElement/getFBNetworkElement"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getFBNetworkElement(this);"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//Value">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Value/value"/>
-      <genOperations ecoreOperation="lib.ecore#//Value/getParentIE" body="return (IInterfaceElement) eContainer();"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//SystemConfiguration">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SystemConfiguration/devices"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SystemConfiguration/segments"/>
-      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SystemConfiguration/links"/>
-      <genOperations ecoreOperation="lib.ecore#//SystemConfiguration/getAutomationSystem"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getAutomationSystem(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//SystemConfiguration/getSegmentNamed"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getSegmentNamed(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//SystemConfiguration/getSegmentNamed/name"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//SystemConfiguration/getDeviceNamed"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getDeviceNamed(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//SystemConfiguration/getDeviceNamed/name"/>
-      </genOperations>
-    </genClasses>
-    <genClasses image="false" ecoreClass="lib.ecore#//INamedElement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//INamedElement/name"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//INamedElement/comment"/>
-      <genOperations ecoreOperation="lib.ecore#//INamedElement/getQualifiedName" body="return org.eclipse.fordiac.ide.model.libraryElement.impl.NamedElementAnnotations.getQualifiedName(this);"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//ResourceTypeFB">
-      <genOperations ecoreOperation="lib.ecore#//ResourceTypeFB/isResourceTypeFB"
-          body="return org.eclipse.fordiac.ide.model.Annotations.isResourceTypeFB();"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//SegmentType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//SegmentType/varDeclaration"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//AdapterFBType">
-      <genOperations ecoreOperation="lib.ecore#//AdapterFBType/getAdapterType" body="return (AdapterType)eContainer();"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//Service">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/rightInterface"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/leftInterface"/>
-      <genFeatures children="true" createChild="true" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Service/serviceSequence"/>
-      <genOperations ecoreOperation="lib.ecore#//Service/getFBType" body="return (FBType) this.eContainer();"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//TypedConfigureableObject">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TypedConfigureableObject/typeEntry"/>
-      <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getTypeName"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getTypeName(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getType"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getType(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//TypedConfigureableObject/getTypeLibrary"
-          body="return org.eclipse.fordiac.ide.model.Annotations.getTypeLibrary(this);"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//AdapterFB">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//AdapterFB/adapterDecl"/>
-      <genOperations ecoreOperation="lib.ecore#//AdapterFB/isSocket" body="return org.eclipse.fordiac.ide.model.Annotations.isSocket(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//AdapterFB/getType" body="return org.eclipse.fordiac.ide.model.Annotations.getType(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//AdapterFB/isPlug" body="return org.eclipse.fordiac.ide.model.Annotations.isPlug(this);"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//Primitive">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Primitive/event"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Primitive/parameters"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Primitive/interface"/>
-      <genOperations ecoreOperation="lib.ecore#//Primitive/getServiceTransaction"
-          body="return (ServiceTransaction) this.eContainer();"/>
-      <genOperations ecoreOperation="lib.ecore#//Primitive/getService" body="return getServiceTransaction().getServiceSequence().getService();"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//PositionableElement">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//PositionableElement/position"/>
-      <genOperations ecoreOperation="lib.ecore#//PositionableElement/updatePosition"
-          body="final Position pos = org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory.eINSTANCE.createPosition();&#xA;pos.setX(x);&#xA;pos.setY(y);&#xA;&#xA;setPosition(pos);">
-        <genParameters ecoreParameter="lib.ecore#//PositionableElement/updatePosition/x"/>
-        <genParameters ecoreParameter="lib.ecore#//PositionableElement/updatePosition/y"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//PositionableElement/updatePosition.1"
-          body="updatePosition(newPos.x, newPos.y);">
-        <genParameters ecoreParameter="lib.ecore#//PositionableElement/updatePosition.1/newPos"/>
-      </genOperations>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//Position">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Position/x"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Position/y"/>
-      <genOperations ecoreOperation="lib.ecore#//Position/asPoint" body="return new org.eclipse.draw2d.geometry.Point(getX(), getY());"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//Color">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Color/red"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Color/green"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Color/blue"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//ColorizableElement">
-      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ColorizableElement/color"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="lib.ecore#//IVarElement">
-      <genFeatures property="None" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//IVarElement/varDeclarations"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//AttributeDeclaration">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//AttributeDeclaration/initialValue"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="lib.ecore#//TypedElement">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TypedElement/type"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//SimpleFBType"/>
-    <genClasses ecoreClass="lib.ecore#//BaseFBType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalVars"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalConstVars"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/internalFbs"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/algorithm"
-          get="return org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeAnnotations.getAlgorithm(this);"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/methods"
-          get="return org.eclipse.fordiac.ide.model.libraryElement.impl.BaseFBTypeAnnotations.getMethods(this);"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//BaseFBType/callables"/>
-      <genOperations ecoreOperation="lib.ecore#//BaseFBType/getAlgorithmNamed" body="return org.eclipse.fordiac.ide.model.Annotations.getAlgorithmNamed(this, name);">
-        <genParameters ecoreParameter="lib.ecore#//BaseFBType/getAlgorithmNamed/name"/>
-      </genOperations>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//StructManipulator">
-      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference lib.ecore#//StructManipulator/structType"/>
-      <genOperations ecoreOperation="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface"
-          body="org.eclipse.fordiac.ide.model.StructManipulation.setStructTypeElementsAtInterface(this, newStruct);">
-        <genParameters ecoreParameter="lib.ecore#//StructManipulator/setStructTypeElementsAtInterface/newStruct"/>
-      </genOperations>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//Demultiplexer"/>
-    <genClasses ecoreClass="lib.ecore#//Multiplexer"/>
-    <genClasses ecoreClass="lib.ecore#//LocalVariable">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStart"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//LocalVariable/arrayStop"/>
-      <genOperations ecoreOperation="lib.ecore#//LocalVariable/getArraySize" body="return arrayStop-arrayStart+1;"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//ErrorMarkerFBNElement">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerFBNElement/repairedElement"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//ErrorMarkerDataType"/>
-    <genClasses ecoreClass="lib.ecore#//ErrorMarkerInterface">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerInterface/repairedEndpoint"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//ErrorMarkerInterface/value"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//CFBInstance">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//CFBInstance/cfbNetwork"/>
-      <genOperations ecoreOperation="lib.ecore#//CFBInstance/loadCFBNetwork" body="return org.eclipse.fordiac.ide.model.annotations.FBAnnotations.loadCFBNetwork(this);"/>
-      <genOperations ecoreOperation="lib.ecore#//CFBInstance/getType" body="//this cannot be moved to the annotation class because there we don't have the super access!!!&#xA;org.eclipse.fordiac.ide.model.libraryElement.LibraryElement type = super.getType();&#xA;if(type instanceof CompositeFBType){&#xA;   return (CompositeFBType) type; &#xA;}&#xA;return null;"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//ErrorMarkerRef">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//ErrorMarkerRef/errorMessage"/>
-      <genOperations ecoreOperation="lib.ecore#//ErrorMarkerRef/hasError" body="return getErrorMessage() != null &amp;&amp; !getErrorMessage().isBlank();"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//Group">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//Group/groupElements"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/width"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//Group/height"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="lib.ecore#//ICallable">
-      <genOperations ecoreOperation="lib.ecore#//ICallable/getInputParameters"/>
-      <genOperations ecoreOperation="lib.ecore#//ICallable/getOutputParameters"/>
-      <genOperations ecoreOperation="lib.ecore#//ICallable/getInOutParameters"/>
-      <genOperations ecoreOperation="lib.ecore#//ICallable/getReturnType"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//Method"/>
-    <genClasses image="false" ecoreClass="lib.ecore#//TextMethod">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/inputParameters"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/outputParameters"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/inOutParameters"/>
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//TextMethod/returnType"/>
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//TextMethod/text"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//OtherMethod">
-      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute lib.ecore#//OtherMethod/language"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//STMethod"/>
-    <genClasses ecoreClass="lib.ecore#//HiddenElement">
-      <genOperations ecoreOperation="lib.ecore#//HiddenElement/setVisible" body="org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.setVisible(this,visible);">
-        <genParameters ecoreParameter="lib.ecore#//HiddenElement/setVisible/visible"/>
-      </genOperations>
-      <genOperations ecoreOperation="lib.ecore#//HiddenElement/isVisible" body="return org.eclipse.fordiac.ide.model.annotations.HiddenElementAnnotations.isVisible(this);"/>
-    </genClasses>
-    <genClasses image="false" ecoreClass="lib.ecore#//CommunicationConfiguration">
-      <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getSegment"
-          body="return (Segment) eContainer();"/>
-      <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getId"/>
-      <genOperations ecoreOperation="lib.ecore#//CommunicationConfiguration/getMappingTargets"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//MappingTarget"/>
-    <genClasses ecoreClass="lib.ecore#//CommunicationMappingTarget">
-      <genFeatures notify="false" createChild="false" propertySortChoices="true" ecoreFeature="ecore:EReference lib.ecore#//CommunicationMappingTarget/mappedElements"/>
-    </genClasses>
-    <genClasses ecoreClass="lib.ecore#//CommunicationChannel"/>
   </genPackages>
   <genPackages prefix="Data" basePackage="org.eclipse.fordiac.ide.model" disposableProviderFactory="true"
       ecorePackage="data.ecore#/">

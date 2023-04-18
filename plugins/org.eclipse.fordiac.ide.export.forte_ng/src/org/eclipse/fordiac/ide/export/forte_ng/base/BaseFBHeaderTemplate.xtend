@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 - 2023 Martin Erich Jobst
- *               2022 Primetals Technologies Austria GmbH
+ *               2022, 2023 Primetals Technologies Austria GmbH
  * 
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -10,7 +10,8 @@
  * 
  * Contributors:
  *   Martin Jobst - initial API and implementation and/or initial documentation
- *   Martin Melik Merkumians - Adjustments for changed FORTE implementation
+ *   Martin Melik Merkumians - Adjustments for changed FORTE implementation,
+ *     add export for local constants
  *******************************************************************************/
 package org.eclipse.fordiac.ide.export.forte_ng.base
 
@@ -57,8 +58,12 @@ abstract class BaseFBHeaderTemplate<T extends BaseFBType> extends ForteFBTemplat
 		  	
 		  «ENDIF»
 		  «IF !type.internalVars.isEmpty»
-		  	«generateInternalVarDelcaration(type)»
+		  	«generateInternalVarDeclaration(type)»
 		  	
+		  «ENDIF»
+		  «IF !type.internalConstVars.isEmpty»
+		    «generateInternalConstsDeclaration(type)»
+		    
 		  «ENDIF»
 		  «IF !(type.interfaceList.inputVars + type.interfaceList.outputVars + type.internalVars).empty»
 		  	«generateInitialValueAssignmentDeclaration»

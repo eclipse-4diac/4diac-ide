@@ -21,6 +21,7 @@ import org.eclipse.fordiac.ide.model.NameRepository;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
+import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
 import org.eclipse.fordiac.ide.model.typelibrary.SegmentTypeEntry;
 import org.eclipse.fordiac.ide.util.ColorHelper;
 import org.eclipse.gef.commands.Command;
@@ -49,6 +50,12 @@ public class SegmentCreateCommand extends Command {
 		segment = LibraryElementFactory.eINSTANCE.createSegment();
 		segment.setColor(ColorHelper.createRandomColor());
 		segment.setTypeEntry(type);
+		final CommunicationConfigurationDetails commConfig=CommunicationConfigurationDetails
+				.getCommConfigUiFromExtensionPoint(type.getTypeName(),
+						CommunicationConfigurationDetails.COMM_EXT_ATT_ID);
+		if (commConfig != null) {
+			segment.setCommunication(commConfig.createModel(segment.getVarDeclarations()));
+		}
 		segment.getVarDeclarations().addAll(EcoreUtil.copyAll(type.getType().getVarDeclaration()));
 		segment.updatePosition(bounds.getTopLeft());
 		segment.setWidth((-1 != bounds.width) ? bounds.width : 300);

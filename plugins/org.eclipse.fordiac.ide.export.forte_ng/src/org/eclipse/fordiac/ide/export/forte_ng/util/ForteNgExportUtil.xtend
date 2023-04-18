@@ -23,6 +23,8 @@ import org.eclipse.fordiac.ide.model.data.LtodType
 import org.eclipse.fordiac.ide.model.data.TimeOfDayType
 import org.eclipse.fordiac.ide.model.data.TimeType
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
+import org.eclipse.fordiac.ide.model.data.StringType
+import org.eclipse.fordiac.ide.model.data.WstringType
 
 final class ForteNgExportUtil {
 	private new() {
@@ -44,6 +46,8 @@ final class ForteNgExportUtil {
 			DateAndTimeType: "DATE_AND_TIME"
 			LdtType: "LDATE_AND_TIME"
 			ArrayType: "ARRAY"
+			StringType: "STRING"
+			WstringType: "WSTRING"
 			default: type.name
 		}
 	}

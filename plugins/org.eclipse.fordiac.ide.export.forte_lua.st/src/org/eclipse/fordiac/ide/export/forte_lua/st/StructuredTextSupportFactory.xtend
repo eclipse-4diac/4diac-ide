@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.export.forte_lua.st
 
 import org.eclipse.fordiac.ide.export.language.ILanguageSupportFactory
+import org.eclipse.fordiac.ide.model.libraryElement.ECTransition
 import org.eclipse.fordiac.ide.model.libraryElement.STAlgorithm
 import org.eclipse.fordiac.ide.model.libraryElement.STMethod
 import org.eclipse.fordiac.ide.structuredtextfunctioneditor.stfunction.STFunctionSource
@@ -23,6 +24,8 @@ class StructuredTextSupportFactory implements ILanguageSupportFactory {
 	override createLanguageSupport(Object source) {
 		if (source instanceof STAlgorithm) {
 			new STAlgorithmSupport(source)
+		} else if (source instanceof ECTransition) {
+			new ECTransitionSupport(source)
 		} else if (source instanceof STMethod) {
 			new STMethodSupport(source)
 		} else if (source instanceof STFunctionSource) {
@@ -33,6 +36,7 @@ class StructuredTextSupportFactory implements ILanguageSupportFactory {
 	def static void register() {
 		val factory = new StructuredTextSupportFactory
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_lua", STAlgorithm, factory)
+		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_lua", ECTransition, factory)
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_lua", STMethod, factory)
 		ILanguageSupportFactory.Registry.INSTANCE.registerFactory("forte_lua", STFunctionSource, factory)
 	}

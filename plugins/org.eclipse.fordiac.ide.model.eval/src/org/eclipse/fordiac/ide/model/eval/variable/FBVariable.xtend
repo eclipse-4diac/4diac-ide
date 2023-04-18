@@ -36,6 +36,11 @@ class FBVariable extends AbstractVariable<FBValue> {
 		this(name, type, emptySet)
 	}
 
+	new(String name, FBType type, String value) {
+		this(name, type)
+		if(!value.nullOrEmpty) this.value = value
+	}
+
 	new(String name, FBType type, Value value) {
 		this(name, type)
 		if(value !== null) this.value = value
@@ -47,6 +52,7 @@ class FBVariable extends AbstractVariable<FBValue> {
 		(type.interfaceList.inputVars + type.interfaceList.outputVars).forEach[initializeMember(members)]
 		(type.interfaceList.sockets + type.interfaceList.plugs).forEach[adapterFB.initializeMember(members)]
 		if (type instanceof BaseFBType) {
+			type.internalConstVars.forEach[initializeMember(members)]
 			type.internalVars.forEach[initializeMember(members)]
 			type.internalFbs.forEach[initializeMember(members)]
 		}

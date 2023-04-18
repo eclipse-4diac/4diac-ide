@@ -38,6 +38,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.CFBInstance;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.Comment;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
@@ -172,6 +173,17 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	@Override
 	protected T doSwitch(int classifierID, EObject theEObject) {
 		switch (classifierID) {
+			case LibraryElementPackage.ADAPTER_CONNECTION: {
+				AdapterConnection adapterConnection = (AdapterConnection)theEObject;
+				T result = caseAdapterConnection(adapterConnection);
+				if (result == null) result = caseConnection(adapterConnection);
+				if (result == null) result = caseINamedElement(adapterConnection);
+				if (result == null) result = caseErrorMarkerRef(adapterConnection);
+				if (result == null) result = caseHiddenElement(adapterConnection);
+				if (result == null) result = caseConfigurableObject(adapterConnection);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.ADAPTER_DECLARATION: {
 				AdapterDeclaration adapterDeclaration = (AdapterDeclaration)theEObject;
 				T result = caseAdapterDeclaration(adapterDeclaration);
@@ -179,6 +191,31 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseINamedElement(adapterDeclaration);
 				if (result == null) result = caseHiddenElement(adapterDeclaration);
 				if (result == null) result = caseConfigurableObject(adapterDeclaration);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ADAPTER_FB: {
+				AdapterFB adapterFB = (AdapterFB)theEObject;
+				T result = caseAdapterFB(adapterFB);
+				if (result == null) result = caseFB(adapterFB);
+				if (result == null) result = caseFBNetworkElement(adapterFB);
+				if (result == null) result = caseICallable(adapterFB);
+				if (result == null) result = caseTypedConfigureableObject(adapterFB);
+				if (result == null) result = casePositionableElement(adapterFB);
+				if (result == null) result = caseINamedElement(adapterFB);
+				if (result == null) result = caseConfigurableObject(adapterFB);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ADAPTER_FB_TYPE: {
+				AdapterFBType adapterFBType = (AdapterFBType)theEObject;
+				T result = caseAdapterFBType(adapterFBType);
+				if (result == null) result = caseFBType(adapterFBType);
+				if (result == null) result = caseCompilableType(adapterFBType);
+				if (result == null) result = caseICallable(adapterFBType);
+				if (result == null) result = caseLibraryElement(adapterFBType);
+				if (result == null) result = caseConfigurableObject(adapterFBType);
+				if (result == null) result = caseINamedElement(adapterFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -207,6 +244,34 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.ATTRIBUTE: {
+				Attribute attribute = (Attribute)theEObject;
+				T result = caseAttribute(attribute);
+				if (result == null) result = caseINamedElement(attribute);
+				if (result == null) result = caseTypedElement(attribute);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ATTRIBUTE_DECLARATION: {
+				AttributeDeclaration attributeDeclaration = (AttributeDeclaration)theEObject;
+				T result = caseAttributeDeclaration(attributeDeclaration);
+				if (result == null) result = caseINamedElement(attributeDeclaration);
+				if (result == null) result = caseTypedElement(attributeDeclaration);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.BASE_FB_TYPE: {
+				BaseFBType baseFBType = (BaseFBType)theEObject;
+				T result = caseBaseFBType(baseFBType);
+				if (result == null) result = caseFBType(baseFBType);
+				if (result == null) result = caseCompilableType(baseFBType);
+				if (result == null) result = caseICallable(baseFBType);
+				if (result == null) result = caseLibraryElement(baseFBType);
+				if (result == null) result = caseConfigurableObject(baseFBType);
+				if (result == null) result = caseINamedElement(baseFBType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.BASIC_FB_TYPE: {
 				BasicFBType basicFBType = (BasicFBType)theEObject;
 				T result = caseBasicFBType(basicFBType);
@@ -220,15 +285,114 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryElementPackage.COMPILER_INFO: {
-				CompilerInfo compilerInfo = (CompilerInfo)theEObject;
-				T result = caseCompilerInfo(compilerInfo);
+			case LibraryElementPackage.AUTOMATION_SYSTEM: {
+				AutomationSystem automationSystem = (AutomationSystem)theEObject;
+				T result = caseAutomationSystem(automationSystem);
+				if (result == null) result = caseLibraryElement(automationSystem);
+				if (result == null) result = caseConfigurableObject(automationSystem);
+				if (result == null) result = caseINamedElement(automationSystem);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.CFB_INSTANCE: {
+				CFBInstance cfbInstance = (CFBInstance)theEObject;
+				T result = caseCFBInstance(cfbInstance);
+				if (result == null) result = caseFB(cfbInstance);
+				if (result == null) result = caseFBNetworkElement(cfbInstance);
+				if (result == null) result = caseICallable(cfbInstance);
+				if (result == null) result = caseTypedConfigureableObject(cfbInstance);
+				if (result == null) result = casePositionableElement(cfbInstance);
+				if (result == null) result = caseINamedElement(cfbInstance);
+				if (result == null) result = caseConfigurableObject(cfbInstance);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.COLOR: {
+				Color color = (Color)theEObject;
+				T result = caseColor(color);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.COLORIZABLE_ELEMENT: {
+				ColorizableElement colorizableElement = (ColorizableElement)theEObject;
+				T result = caseColorizableElement(colorizableElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.COMMENT: {
+				Comment comment = (Comment)theEObject;
+				T result = caseComment(comment);
+				if (result == null) result = caseFBNetworkElement(comment);
+				if (result == null) result = caseTypedConfigureableObject(comment);
+				if (result == null) result = casePositionableElement(comment);
+				if (result == null) result = caseINamedElement(comment);
+				if (result == null) result = caseConfigurableObject(comment);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.COMMUNICATION_CHANNEL: {
+				CommunicationChannel communicationChannel = (CommunicationChannel)theEObject;
+				T result = caseCommunicationChannel(communicationChannel);
+				if (result == null) result = caseFB(communicationChannel);
+				if (result == null) result = caseFBNetworkElement(communicationChannel);
+				if (result == null) result = caseICallable(communicationChannel);
+				if (result == null) result = caseTypedConfigureableObject(communicationChannel);
+				if (result == null) result = casePositionableElement(communicationChannel);
+				if (result == null) result = caseINamedElement(communicationChannel);
+				if (result == null) result = caseConfigurableObject(communicationChannel);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.COMMUNICATION_CONFIGURATION: {
+				CommunicationConfiguration communicationConfiguration = (CommunicationConfiguration)theEObject;
+				T result = caseCommunicationConfiguration(communicationConfiguration);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.COMMUNICATION_MAPPING_TARGET: {
+				CommunicationMappingTarget communicationMappingTarget = (CommunicationMappingTarget)theEObject;
+				T result = caseCommunicationMappingTarget(communicationMappingTarget);
+				if (result == null) result = caseMappingTarget(communicationMappingTarget);
+				if (result == null) result = caseINamedElement(communicationMappingTarget);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.COMPILABLE_TYPE: {
+				CompilableType compilableType = (CompilableType)theEObject;
+				T result = caseCompilableType(compilableType);
+				if (result == null) result = caseLibraryElement(compilableType);
+				if (result == null) result = caseConfigurableObject(compilableType);
+				if (result == null) result = caseINamedElement(compilableType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
 			case LibraryElementPackage.COMPILER: {
 				org.eclipse.fordiac.ide.model.libraryElement.Compiler compiler = (org.eclipse.fordiac.ide.model.libraryElement.Compiler)theEObject;
 				T result = caseCompiler(compiler);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.COMPILER_INFO: {
+				CompilerInfo compilerInfo = (CompilerInfo)theEObject;
+				T result = caseCompilerInfo(compilerInfo);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.COMPOSITE_FB_TYPE: {
+				CompositeFBType compositeFBType = (CompositeFBType)theEObject;
+				T result = caseCompositeFBType(compositeFBType);
+				if (result == null) result = caseFBType(compositeFBType);
+				if (result == null) result = caseCompilableType(compositeFBType);
+				if (result == null) result = caseICallable(compositeFBType);
+				if (result == null) result = caseLibraryElement(compositeFBType);
+				if (result == null) result = caseConfigurableObject(compositeFBType);
+				if (result == null) result = caseINamedElement(compositeFBType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.CONFIGURABLE_OBJECT: {
+				ConfigurableObject configurableObject = (ConfigurableObject)theEObject;
+				T result = caseConfigurableObject(configurableObject);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -245,6 +409,31 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 			case LibraryElementPackage.CONNECTION_ROUTING_DATA: {
 				ConnectionRoutingData connectionRoutingData = (ConnectionRoutingData)theEObject;
 				T result = caseConnectionRoutingData(connectionRoutingData);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.DATA_CONNECTION: {
+				DataConnection dataConnection = (DataConnection)theEObject;
+				T result = caseDataConnection(dataConnection);
+				if (result == null) result = caseConnection(dataConnection);
+				if (result == null) result = caseINamedElement(dataConnection);
+				if (result == null) result = caseErrorMarkerRef(dataConnection);
+				if (result == null) result = caseHiddenElement(dataConnection);
+				if (result == null) result = caseConfigurableObject(dataConnection);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.DEMULTIPLEXER: {
+				Demultiplexer demultiplexer = (Demultiplexer)theEObject;
+				T result = caseDemultiplexer(demultiplexer);
+				if (result == null) result = caseStructManipulator(demultiplexer);
+				if (result == null) result = caseFB(demultiplexer);
+				if (result == null) result = caseFBNetworkElement(demultiplexer);
+				if (result == null) result = caseICallable(demultiplexer);
+				if (result == null) result = caseTypedConfigureableObject(demultiplexer);
+				if (result == null) result = casePositionableElement(demultiplexer);
+				if (result == null) result = caseINamedElement(demultiplexer);
+				if (result == null) result = caseConfigurableObject(demultiplexer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -297,6 +486,45 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.ERROR_MARKER_DATA_TYPE: {
+				ErrorMarkerDataType errorMarkerDataType = (ErrorMarkerDataType)theEObject;
+				T result = caseErrorMarkerDataType(errorMarkerDataType);
+				if (result == null) result = caseDataType(errorMarkerDataType);
+				if (result == null) result = caseErrorMarkerRef(errorMarkerDataType);
+				if (result == null) result = caseLibraryElement(errorMarkerDataType);
+				if (result == null) result = caseINamedElement(errorMarkerDataType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT: {
+				ErrorMarkerFBNElement errorMarkerFBNElement = (ErrorMarkerFBNElement)theEObject;
+				T result = caseErrorMarkerFBNElement(errorMarkerFBNElement);
+				if (result == null) result = caseFBNetworkElement(errorMarkerFBNElement);
+				if (result == null) result = caseErrorMarkerRef(errorMarkerFBNElement);
+				if (result == null) result = caseTypedConfigureableObject(errorMarkerFBNElement);
+				if (result == null) result = casePositionableElement(errorMarkerFBNElement);
+				if (result == null) result = caseINamedElement(errorMarkerFBNElement);
+				if (result == null) result = caseConfigurableObject(errorMarkerFBNElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ERROR_MARKER_INTERFACE: {
+				ErrorMarkerInterface errorMarkerInterface = (ErrorMarkerInterface)theEObject;
+				T result = caseErrorMarkerInterface(errorMarkerInterface);
+				if (result == null) result = caseIInterfaceElement(errorMarkerInterface);
+				if (result == null) result = caseErrorMarkerRef(errorMarkerInterface);
+				if (result == null) result = caseINamedElement(errorMarkerInterface);
+				if (result == null) result = caseHiddenElement(errorMarkerInterface);
+				if (result == null) result = caseConfigurableObject(errorMarkerInterface);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ERROR_MARKER_REF: {
+				ErrorMarkerRef errorMarkerRef = (ErrorMarkerRef)theEObject;
+				T result = caseErrorMarkerRef(errorMarkerRef);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.EVENT: {
 				Event event = (Event)theEObject;
 				T result = caseEvent(event);
@@ -305,6 +533,17 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseINamedElement(event);
 				if (result == null) result = caseHiddenElement(event);
 				if (result == null) result = caseConfigurableObject(event);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.EVENT_CONNECTION: {
+				EventConnection eventConnection = (EventConnection)theEObject;
+				T result = caseEventConnection(eventConnection);
+				if (result == null) result = caseConnection(eventConnection);
+				if (result == null) result = caseINamedElement(eventConnection);
+				if (result == null) result = caseErrorMarkerRef(eventConnection);
+				if (result == null) result = caseHiddenElement(eventConnection);
+				if (result == null) result = caseConfigurableObject(eventConnection);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -320,6 +559,12 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.FB_NETWORK: {
+				FBNetwork fbNetwork = (FBNetwork)theEObject;
+				T result = caseFBNetwork(fbNetwork);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.FB_NETWORK_ELEMENT: {
 				FBNetworkElement fbNetworkElement = (FBNetworkElement)theEObject;
 				T result = caseFBNetworkElement(fbNetworkElement);
@@ -327,17 +572,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = casePositionableElement(fbNetworkElement);
 				if (result == null) result = caseINamedElement(fbNetworkElement);
 				if (result == null) result = caseConfigurableObject(fbNetworkElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.SUB_APP: {
-				SubApp subApp = (SubApp)theEObject;
-				T result = caseSubApp(subApp);
-				if (result == null) result = caseFBNetworkElement(subApp);
-				if (result == null) result = caseTypedConfigureableObject(subApp);
-				if (result == null) result = casePositionableElement(subApp);
-				if (result == null) result = caseINamedElement(subApp);
-				if (result == null) result = caseConfigurableObject(subApp);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -352,9 +586,49 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.GROUP: {
+				Group group = (Group)theEObject;
+				T result = caseGroup(group);
+				if (result == null) result = caseFBNetworkElement(group);
+				if (result == null) result = caseTypedConfigureableObject(group);
+				if (result == null) result = casePositionableElement(group);
+				if (result == null) result = caseINamedElement(group);
+				if (result == null) result = caseConfigurableObject(group);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.HIDDEN_ELEMENT: {
+				HiddenElement hiddenElement = (HiddenElement)theEObject;
+				T result = caseHiddenElement(hiddenElement);
+				if (result == null) result = caseConfigurableObject(hiddenElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.ICALLABLE: {
+				ICallable iCallable = (ICallable)theEObject;
+				T result = caseICallable(iCallable);
+				if (result == null) result = caseINamedElement(iCallable);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.IDENTIFICATION: {
 				Identification identification = (Identification)theEObject;
 				T result = caseIdentification(identification);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.IINTERFACE_ELEMENT: {
+				IInterfaceElement iInterfaceElement = (IInterfaceElement)theEObject;
+				T result = caseIInterfaceElement(iInterfaceElement);
+				if (result == null) result = caseINamedElement(iInterfaceElement);
+				if (result == null) result = caseHiddenElement(iInterfaceElement);
+				if (result == null) result = caseConfigurableObject(iInterfaceElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.INAMED_ELEMENT: {
+				INamedElement iNamedElement = (INamedElement)theEObject;
+				T result = caseINamedElement(iNamedElement);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -371,6 +645,19 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.IVAR_ELEMENT: {
+				IVarElement iVarElement = (IVarElement)theEObject;
+				T result = caseIVarElement(iVarElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.LIBRARY_ELEMENT: {
+				LibraryElement libraryElement = (LibraryElement)theEObject;
+				T result = caseLibraryElement(libraryElement);
+				if (result == null) result = caseINamedElement(libraryElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.LINK: {
 				Link link = (Link)theEObject;
 				T result = caseLink(link);
@@ -379,9 +666,49 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.LOCAL_VARIABLE: {
+				LocalVariable localVariable = (LocalVariable)theEObject;
+				T result = caseLocalVariable(localVariable);
+				if (result == null) result = caseVarDeclaration(localVariable);
+				if (result == null) result = caseIInterfaceElement(localVariable);
+				if (result == null) result = caseINamedElement(localVariable);
+				if (result == null) result = caseHiddenElement(localVariable);
+				if (result == null) result = caseConfigurableObject(localVariable);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.MAPPING: {
 				Mapping mapping = (Mapping)theEObject;
 				T result = caseMapping(mapping);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.MAPPING_TARGET: {
+				MappingTarget mappingTarget = (MappingTarget)theEObject;
+				T result = caseMappingTarget(mappingTarget);
+				if (result == null) result = caseINamedElement(mappingTarget);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.METHOD: {
+				Method method = (Method)theEObject;
+				T result = caseMethod(method);
+				if (result == null) result = caseICallable(method);
+				if (result == null) result = caseINamedElement(method);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.MULTIPLEXER: {
+				Multiplexer multiplexer = (Multiplexer)theEObject;
+				T result = caseMultiplexer(multiplexer);
+				if (result == null) result = caseStructManipulator(multiplexer);
+				if (result == null) result = caseFB(multiplexer);
+				if (result == null) result = caseFBNetworkElement(multiplexer);
+				if (result == null) result = caseICallable(multiplexer);
+				if (result == null) result = caseTypedConfigureableObject(multiplexer);
+				if (result == null) result = casePositionableElement(multiplexer);
+				if (result == null) result = caseINamedElement(multiplexer);
+				if (result == null) result = caseConfigurableObject(multiplexer);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -395,6 +722,16 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.OTHER_METHOD: {
+				OtherMethod otherMethod = (OtherMethod)theEObject;
+				T result = caseOtherMethod(otherMethod);
+				if (result == null) result = caseTextMethod(otherMethod);
+				if (result == null) result = caseMethod(otherMethod);
+				if (result == null) result = caseICallable(otherMethod);
+				if (result == null) result = caseINamedElement(otherMethod);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.OUTPUT_PRIMITIVE: {
 				OutputPrimitive outputPrimitive = (OutputPrimitive)theEObject;
 				T result = caseOutputPrimitive(outputPrimitive);
@@ -402,11 +739,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryElementPackage.ATTRIBUTE: {
-				Attribute attribute = (Attribute)theEObject;
-				T result = caseAttribute(attribute);
-				if (result == null) result = caseINamedElement(attribute);
-				if (result == null) result = caseTypedElement(attribute);
+			case LibraryElementPackage.POSITION: {
+				Position position = (Position)theEObject;
+				T result = casePosition(position);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.POSITIONABLE_ELEMENT: {
+				PositionableElement positionableElement = (PositionableElement)theEObject;
+				T result = casePositionableElement(positionableElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.PRIMITIVE: {
+				Primitive primitive = (Primitive)theEObject;
+				T result = casePrimitive(primitive);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -437,14 +784,44 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.RESOURCE_TYPE_FB: {
+				ResourceTypeFB resourceTypeFB = (ResourceTypeFB)theEObject;
+				T result = caseResourceTypeFB(resourceTypeFB);
+				if (result == null) result = caseFB(resourceTypeFB);
+				if (result == null) result = caseFBNetworkElement(resourceTypeFB);
+				if (result == null) result = caseICallable(resourceTypeFB);
+				if (result == null) result = caseTypedConfigureableObject(resourceTypeFB);
+				if (result == null) result = casePositionableElement(resourceTypeFB);
+				if (result == null) result = caseINamedElement(resourceTypeFB);
+				if (result == null) result = caseConfigurableObject(resourceTypeFB);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.SEGMENT: {
 				Segment segment = (Segment)theEObject;
 				T result = caseSegment(segment);
 				if (result == null) result = caseTypedConfigureableObject(segment);
 				if (result == null) result = casePositionableElement(segment);
 				if (result == null) result = caseColorizableElement(segment);
+				if (result == null) result = caseIVarElement(segment);
 				if (result == null) result = caseINamedElement(segment);
 				if (result == null) result = caseConfigurableObject(segment);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.SEGMENT_TYPE: {
+				SegmentType segmentType = (SegmentType)theEObject;
+				T result = caseSegmentType(segmentType);
+				if (result == null) result = caseCompilableType(segmentType);
+				if (result == null) result = caseLibraryElement(segmentType);
+				if (result == null) result = caseConfigurableObject(segmentType);
+				if (result == null) result = caseINamedElement(segmentType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.SERVICE: {
+				Service service = (Service)theEObject;
+				T result = caseService(service);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -462,6 +839,13 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case LibraryElementPackage.SERVICE_INTERFACE: {
+				ServiceInterface serviceInterface = (ServiceInterface)theEObject;
+				T result = caseServiceInterface(serviceInterface);
+				if (result == null) result = caseINamedElement(serviceInterface);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			case LibraryElementPackage.SERVICE_INTERFACE_FB_TYPE: {
 				ServiceInterfaceFBType serviceInterfaceFBType = (ServiceInterfaceFBType)theEObject;
 				T result = caseServiceInterfaceFBType(serviceInterfaceFBType);
@@ -471,6 +855,19 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = caseLibraryElement(serviceInterfaceFBType);
 				if (result == null) result = caseConfigurableObject(serviceInterfaceFBType);
 				if (result == null) result = caseINamedElement(serviceInterfaceFBType);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.SIMPLE_FB_TYPE: {
+				SimpleFBType simpleFBType = (SimpleFBType)theEObject;
+				T result = caseSimpleFBType(simpleFBType);
+				if (result == null) result = caseBaseFBType(simpleFBType);
+				if (result == null) result = caseFBType(simpleFBType);
+				if (result == null) result = caseCompilableType(simpleFBType);
+				if (result == null) result = caseICallable(simpleFBType);
+				if (result == null) result = caseLibraryElement(simpleFBType);
+				if (result == null) result = caseConfigurableObject(simpleFBType);
+				if (result == null) result = caseINamedElement(simpleFBType);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -484,9 +881,37 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryElementPackage.FB_NETWORK: {
-				FBNetwork fbNetwork = (FBNetwork)theEObject;
-				T result = caseFBNetwork(fbNetwork);
+			case LibraryElementPackage.ST_METHOD: {
+				STMethod stMethod = (STMethod)theEObject;
+				T result = caseSTMethod(stMethod);
+				if (result == null) result = caseTextMethod(stMethod);
+				if (result == null) result = caseMethod(stMethod);
+				if (result == null) result = caseICallable(stMethod);
+				if (result == null) result = caseINamedElement(stMethod);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.SUB_APP: {
+				SubApp subApp = (SubApp)theEObject;
+				T result = caseSubApp(subApp);
+				if (result == null) result = caseFBNetworkElement(subApp);
+				if (result == null) result = caseTypedConfigureableObject(subApp);
+				if (result == null) result = casePositionableElement(subApp);
+				if (result == null) result = caseINamedElement(subApp);
+				if (result == null) result = caseConfigurableObject(subApp);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.STRUCT_MANIPULATOR: {
+				StructManipulator structManipulator = (StructManipulator)theEObject;
+				T result = caseStructManipulator(structManipulator);
+				if (result == null) result = caseFB(structManipulator);
+				if (result == null) result = caseFBNetworkElement(structManipulator);
+				if (result == null) result = caseICallable(structManipulator);
+				if (result == null) result = caseTypedConfigureableObject(structManipulator);
+				if (result == null) result = casePositionableElement(structManipulator);
+				if (result == null) result = caseINamedElement(structManipulator);
+				if (result == null) result = caseConfigurableObject(structManipulator);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -503,12 +928,48 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryElementPackage.AUTOMATION_SYSTEM: {
-				AutomationSystem automationSystem = (AutomationSystem)theEObject;
-				T result = caseAutomationSystem(automationSystem);
-				if (result == null) result = caseLibraryElement(automationSystem);
-				if (result == null) result = caseConfigurableObject(automationSystem);
-				if (result == null) result = caseINamedElement(automationSystem);
+			case LibraryElementPackage.SYSTEM_CONFIGURATION: {
+				SystemConfiguration systemConfiguration = (SystemConfiguration)theEObject;
+				T result = caseSystemConfiguration(systemConfiguration);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.TEXT_ALGORITHM: {
+				TextAlgorithm textAlgorithm = (TextAlgorithm)theEObject;
+				T result = caseTextAlgorithm(textAlgorithm);
+				if (result == null) result = caseAlgorithm(textAlgorithm);
+				if (result == null) result = caseICallable(textAlgorithm);
+				if (result == null) result = caseINamedElement(textAlgorithm);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.TEXT_METHOD: {
+				TextMethod textMethod = (TextMethod)theEObject;
+				T result = caseTextMethod(textMethod);
+				if (result == null) result = caseMethod(textMethod);
+				if (result == null) result = caseICallable(textMethod);
+				if (result == null) result = caseINamedElement(textMethod);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT: {
+				TypedConfigureableObject typedConfigureableObject = (TypedConfigureableObject)theEObject;
+				T result = caseTypedConfigureableObject(typedConfigureableObject);
+				if (result == null) result = caseINamedElement(typedConfigureableObject);
+				if (result == null) result = caseConfigurableObject(typedConfigureableObject);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.TYPED_ELEMENT: {
+				TypedElement typedElement = (TypedElement)theEObject;
+				T result = caseTypedElement(typedElement);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
+			case LibraryElementPackage.VALUE: {
+				Value value = (Value)theEObject;
+				T result = caseValue(value);
+				if (result == null) result = caseErrorMarkerRef(value);
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
@@ -534,456 +995,23 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
-			case LibraryElementPackage.LIBRARY_ELEMENT: {
-				LibraryElement libraryElement = (LibraryElement)theEObject;
-				T result = caseLibraryElement(libraryElement);
-				if (result == null) result = caseINamedElement(libraryElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.COMPILABLE_TYPE: {
-				CompilableType compilableType = (CompilableType)theEObject;
-				T result = caseCompilableType(compilableType);
-				if (result == null) result = caseLibraryElement(compilableType);
-				if (result == null) result = caseConfigurableObject(compilableType);
-				if (result == null) result = caseINamedElement(compilableType);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.CONFIGURABLE_OBJECT: {
-				ConfigurableObject configurableObject = (ConfigurableObject)theEObject;
-				T result = caseConfigurableObject(configurableObject);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.COMPOSITE_FB_TYPE: {
-				CompositeFBType compositeFBType = (CompositeFBType)theEObject;
-				T result = caseCompositeFBType(compositeFBType);
-				if (result == null) result = caseFBType(compositeFBType);
-				if (result == null) result = caseCompilableType(compositeFBType);
-				if (result == null) result = caseICallable(compositeFBType);
-				if (result == null) result = caseLibraryElement(compositeFBType);
-				if (result == null) result = caseConfigurableObject(compositeFBType);
-				if (result == null) result = caseINamedElement(compositeFBType);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.TEXT_ALGORITHM: {
-				TextAlgorithm textAlgorithm = (TextAlgorithm)theEObject;
-				T result = caseTextAlgorithm(textAlgorithm);
-				if (result == null) result = caseAlgorithm(textAlgorithm);
-				if (result == null) result = caseICallable(textAlgorithm);
-				if (result == null) result = caseINamedElement(textAlgorithm);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.DATA_CONNECTION: {
-				DataConnection dataConnection = (DataConnection)theEObject;
-				T result = caseDataConnection(dataConnection);
-				if (result == null) result = caseConnection(dataConnection);
-				if (result == null) result = caseINamedElement(dataConnection);
-				if (result == null) result = caseErrorMarkerRef(dataConnection);
-				if (result == null) result = caseHiddenElement(dataConnection);
-				if (result == null) result = caseConfigurableObject(dataConnection);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.EVENT_CONNECTION: {
-				EventConnection eventConnection = (EventConnection)theEObject;
-				T result = caseEventConnection(eventConnection);
-				if (result == null) result = caseConnection(eventConnection);
-				if (result == null) result = caseINamedElement(eventConnection);
-				if (result == null) result = caseErrorMarkerRef(eventConnection);
-				if (result == null) result = caseHiddenElement(eventConnection);
-				if (result == null) result = caseConfigurableObject(eventConnection);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.ADAPTER_CONNECTION: {
-				AdapterConnection adapterConnection = (AdapterConnection)theEObject;
-				T result = caseAdapterConnection(adapterConnection);
-				if (result == null) result = caseConnection(adapterConnection);
-				if (result == null) result = caseINamedElement(adapterConnection);
-				if (result == null) result = caseErrorMarkerRef(adapterConnection);
-				if (result == null) result = caseHiddenElement(adapterConnection);
-				if (result == null) result = caseConfigurableObject(adapterConnection);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.SERVICE_INTERFACE: {
-				ServiceInterface serviceInterface = (ServiceInterface)theEObject;
-				T result = caseServiceInterface(serviceInterface);
-				if (result == null) result = caseINamedElement(serviceInterface);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.IINTERFACE_ELEMENT: {
-				IInterfaceElement iInterfaceElement = (IInterfaceElement)theEObject;
-				T result = caseIInterfaceElement(iInterfaceElement);
-				if (result == null) result = caseINamedElement(iInterfaceElement);
-				if (result == null) result = caseHiddenElement(iInterfaceElement);
-				if (result == null) result = caseConfigurableObject(iInterfaceElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.VALUE: {
-				Value value = (Value)theEObject;
-				T result = caseValue(value);
-				if (result == null) result = caseErrorMarkerRef(value);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.SYSTEM_CONFIGURATION: {
-				SystemConfiguration systemConfiguration = (SystemConfiguration)theEObject;
-				T result = caseSystemConfiguration(systemConfiguration);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.INAMED_ELEMENT: {
-				INamedElement iNamedElement = (INamedElement)theEObject;
-				T result = caseINamedElement(iNamedElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.RESOURCE_TYPE_FB: {
-				ResourceTypeFB resourceTypeFB = (ResourceTypeFB)theEObject;
-				T result = caseResourceTypeFB(resourceTypeFB);
-				if (result == null) result = caseFB(resourceTypeFB);
-				if (result == null) result = caseFBNetworkElement(resourceTypeFB);
-				if (result == null) result = caseICallable(resourceTypeFB);
-				if (result == null) result = caseTypedConfigureableObject(resourceTypeFB);
-				if (result == null) result = casePositionableElement(resourceTypeFB);
-				if (result == null) result = caseINamedElement(resourceTypeFB);
-				if (result == null) result = caseConfigurableObject(resourceTypeFB);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.SEGMENT_TYPE: {
-				SegmentType segmentType = (SegmentType)theEObject;
-				T result = caseSegmentType(segmentType);
-				if (result == null) result = caseCompilableType(segmentType);
-				if (result == null) result = caseLibraryElement(segmentType);
-				if (result == null) result = caseConfigurableObject(segmentType);
-				if (result == null) result = caseINamedElement(segmentType);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.ADAPTER_FB_TYPE: {
-				AdapterFBType adapterFBType = (AdapterFBType)theEObject;
-				T result = caseAdapterFBType(adapterFBType);
-				if (result == null) result = caseFBType(adapterFBType);
-				if (result == null) result = caseCompilableType(adapterFBType);
-				if (result == null) result = caseICallable(adapterFBType);
-				if (result == null) result = caseLibraryElement(adapterFBType);
-				if (result == null) result = caseConfigurableObject(adapterFBType);
-				if (result == null) result = caseINamedElement(adapterFBType);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.SERVICE: {
-				Service service = (Service)theEObject;
-				T result = caseService(service);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.TYPED_CONFIGUREABLE_OBJECT: {
-				TypedConfigureableObject typedConfigureableObject = (TypedConfigureableObject)theEObject;
-				T result = caseTypedConfigureableObject(typedConfigureableObject);
-				if (result == null) result = caseINamedElement(typedConfigureableObject);
-				if (result == null) result = caseConfigurableObject(typedConfigureableObject);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.ADAPTER_FB: {
-				AdapterFB adapterFB = (AdapterFB)theEObject;
-				T result = caseAdapterFB(adapterFB);
-				if (result == null) result = caseFB(adapterFB);
-				if (result == null) result = caseFBNetworkElement(adapterFB);
-				if (result == null) result = caseICallable(adapterFB);
-				if (result == null) result = caseTypedConfigureableObject(adapterFB);
-				if (result == null) result = casePositionableElement(adapterFB);
-				if (result == null) result = caseINamedElement(adapterFB);
-				if (result == null) result = caseConfigurableObject(adapterFB);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.PRIMITIVE: {
-				Primitive primitive = (Primitive)theEObject;
-				T result = casePrimitive(primitive);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.POSITIONABLE_ELEMENT: {
-				PositionableElement positionableElement = (PositionableElement)theEObject;
-				T result = casePositionableElement(positionableElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.POSITION: {
-				Position position = (Position)theEObject;
-				T result = casePosition(position);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.COLOR: {
-				Color color = (Color)theEObject;
-				T result = caseColor(color);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.COLORIZABLE_ELEMENT: {
-				ColorizableElement colorizableElement = (ColorizableElement)theEObject;
-				T result = caseColorizableElement(colorizableElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.IVAR_ELEMENT: {
-				IVarElement iVarElement = (IVarElement)theEObject;
-				T result = caseIVarElement(iVarElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.ATTRIBUTE_DECLARATION: {
-				AttributeDeclaration attributeDeclaration = (AttributeDeclaration)theEObject;
-				T result = caseAttributeDeclaration(attributeDeclaration);
-				if (result == null) result = caseINamedElement(attributeDeclaration);
-				if (result == null) result = caseTypedElement(attributeDeclaration);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.TYPED_ELEMENT: {
-				TypedElement typedElement = (TypedElement)theEObject;
-				T result = caseTypedElement(typedElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.SIMPLE_FB_TYPE: {
-				SimpleFBType simpleFBType = (SimpleFBType)theEObject;
-				T result = caseSimpleFBType(simpleFBType);
-				if (result == null) result = caseBaseFBType(simpleFBType);
-				if (result == null) result = caseFBType(simpleFBType);
-				if (result == null) result = caseCompilableType(simpleFBType);
-				if (result == null) result = caseICallable(simpleFBType);
-				if (result == null) result = caseLibraryElement(simpleFBType);
-				if (result == null) result = caseConfigurableObject(simpleFBType);
-				if (result == null) result = caseINamedElement(simpleFBType);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.BASE_FB_TYPE: {
-				BaseFBType baseFBType = (BaseFBType)theEObject;
-				T result = caseBaseFBType(baseFBType);
-				if (result == null) result = caseFBType(baseFBType);
-				if (result == null) result = caseCompilableType(baseFBType);
-				if (result == null) result = caseICallable(baseFBType);
-				if (result == null) result = caseLibraryElement(baseFBType);
-				if (result == null) result = caseConfigurableObject(baseFBType);
-				if (result == null) result = caseINamedElement(baseFBType);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.STRUCT_MANIPULATOR: {
-				StructManipulator structManipulator = (StructManipulator)theEObject;
-				T result = caseStructManipulator(structManipulator);
-				if (result == null) result = caseFB(structManipulator);
-				if (result == null) result = caseFBNetworkElement(structManipulator);
-				if (result == null) result = caseICallable(structManipulator);
-				if (result == null) result = caseTypedConfigureableObject(structManipulator);
-				if (result == null) result = casePositionableElement(structManipulator);
-				if (result == null) result = caseINamedElement(structManipulator);
-				if (result == null) result = caseConfigurableObject(structManipulator);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.DEMULTIPLEXER: {
-				Demultiplexer demultiplexer = (Demultiplexer)theEObject;
-				T result = caseDemultiplexer(demultiplexer);
-				if (result == null) result = caseStructManipulator(demultiplexer);
-				if (result == null) result = caseFB(demultiplexer);
-				if (result == null) result = caseFBNetworkElement(demultiplexer);
-				if (result == null) result = caseICallable(demultiplexer);
-				if (result == null) result = caseTypedConfigureableObject(demultiplexer);
-				if (result == null) result = casePositionableElement(demultiplexer);
-				if (result == null) result = caseINamedElement(demultiplexer);
-				if (result == null) result = caseConfigurableObject(demultiplexer);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.MULTIPLEXER: {
-				Multiplexer multiplexer = (Multiplexer)theEObject;
-				T result = caseMultiplexer(multiplexer);
-				if (result == null) result = caseStructManipulator(multiplexer);
-				if (result == null) result = caseFB(multiplexer);
-				if (result == null) result = caseFBNetworkElement(multiplexer);
-				if (result == null) result = caseICallable(multiplexer);
-				if (result == null) result = caseTypedConfigureableObject(multiplexer);
-				if (result == null) result = casePositionableElement(multiplexer);
-				if (result == null) result = caseINamedElement(multiplexer);
-				if (result == null) result = caseConfigurableObject(multiplexer);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.LOCAL_VARIABLE: {
-				LocalVariable localVariable = (LocalVariable)theEObject;
-				T result = caseLocalVariable(localVariable);
-				if (result == null) result = caseVarDeclaration(localVariable);
-				if (result == null) result = caseIInterfaceElement(localVariable);
-				if (result == null) result = caseINamedElement(localVariable);
-				if (result == null) result = caseHiddenElement(localVariable);
-				if (result == null) result = caseConfigurableObject(localVariable);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.ERROR_MARKER_FBN_ELEMENT: {
-				ErrorMarkerFBNElement errorMarkerFBNElement = (ErrorMarkerFBNElement)theEObject;
-				T result = caseErrorMarkerFBNElement(errorMarkerFBNElement);
-				if (result == null) result = caseFBNetworkElement(errorMarkerFBNElement);
-				if (result == null) result = caseErrorMarkerRef(errorMarkerFBNElement);
-				if (result == null) result = caseTypedConfigureableObject(errorMarkerFBNElement);
-				if (result == null) result = casePositionableElement(errorMarkerFBNElement);
-				if (result == null) result = caseINamedElement(errorMarkerFBNElement);
-				if (result == null) result = caseConfigurableObject(errorMarkerFBNElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.ERROR_MARKER_DATA_TYPE: {
-				ErrorMarkerDataType errorMarkerDataType = (ErrorMarkerDataType)theEObject;
-				T result = caseErrorMarkerDataType(errorMarkerDataType);
-				if (result == null) result = caseDataType(errorMarkerDataType);
-				if (result == null) result = caseErrorMarkerRef(errorMarkerDataType);
-				if (result == null) result = caseLibraryElement(errorMarkerDataType);
-				if (result == null) result = caseINamedElement(errorMarkerDataType);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.ERROR_MARKER_INTERFACE: {
-				ErrorMarkerInterface errorMarkerInterface = (ErrorMarkerInterface)theEObject;
-				T result = caseErrorMarkerInterface(errorMarkerInterface);
-				if (result == null) result = caseIInterfaceElement(errorMarkerInterface);
-				if (result == null) result = caseErrorMarkerRef(errorMarkerInterface);
-				if (result == null) result = caseINamedElement(errorMarkerInterface);
-				if (result == null) result = caseHiddenElement(errorMarkerInterface);
-				if (result == null) result = caseConfigurableObject(errorMarkerInterface);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.CFB_INSTANCE: {
-				CFBInstance cfbInstance = (CFBInstance)theEObject;
-				T result = caseCFBInstance(cfbInstance);
-				if (result == null) result = caseFB(cfbInstance);
-				if (result == null) result = caseFBNetworkElement(cfbInstance);
-				if (result == null) result = caseICallable(cfbInstance);
-				if (result == null) result = caseTypedConfigureableObject(cfbInstance);
-				if (result == null) result = casePositionableElement(cfbInstance);
-				if (result == null) result = caseINamedElement(cfbInstance);
-				if (result == null) result = caseConfigurableObject(cfbInstance);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.ERROR_MARKER_REF: {
-				ErrorMarkerRef errorMarkerRef = (ErrorMarkerRef)theEObject;
-				T result = caseErrorMarkerRef(errorMarkerRef);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.GROUP: {
-				Group group = (Group)theEObject;
-				T result = caseGroup(group);
-				if (result == null) result = caseFBNetworkElement(group);
-				if (result == null) result = caseTypedConfigureableObject(group);
-				if (result == null) result = casePositionableElement(group);
-				if (result == null) result = caseINamedElement(group);
-				if (result == null) result = caseConfigurableObject(group);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.ICALLABLE: {
-				ICallable iCallable = (ICallable)theEObject;
-				T result = caseICallable(iCallable);
-				if (result == null) result = caseINamedElement(iCallable);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.METHOD: {
-				Method method = (Method)theEObject;
-				T result = caseMethod(method);
-				if (result == null) result = caseICallable(method);
-				if (result == null) result = caseINamedElement(method);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.TEXT_METHOD: {
-				TextMethod textMethod = (TextMethod)theEObject;
-				T result = caseTextMethod(textMethod);
-				if (result == null) result = caseMethod(textMethod);
-				if (result == null) result = caseICallable(textMethod);
-				if (result == null) result = caseINamedElement(textMethod);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.OTHER_METHOD: {
-				OtherMethod otherMethod = (OtherMethod)theEObject;
-				T result = caseOtherMethod(otherMethod);
-				if (result == null) result = caseTextMethod(otherMethod);
-				if (result == null) result = caseMethod(otherMethod);
-				if (result == null) result = caseICallable(otherMethod);
-				if (result == null) result = caseINamedElement(otherMethod);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.ST_METHOD: {
-				STMethod stMethod = (STMethod)theEObject;
-				T result = caseSTMethod(stMethod);
-				if (result == null) result = caseTextMethod(stMethod);
-				if (result == null) result = caseMethod(stMethod);
-				if (result == null) result = caseICallable(stMethod);
-				if (result == null) result = caseINamedElement(stMethod);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.HIDDEN_ELEMENT: {
-				HiddenElement hiddenElement = (HiddenElement)theEObject;
-				T result = caseHiddenElement(hiddenElement);
-				if (result == null) result = caseConfigurableObject(hiddenElement);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.COMMUNICATION_CONFIGURATION: {
-				CommunicationConfiguration communicationConfiguration = (CommunicationConfiguration)theEObject;
-				T result = caseCommunicationConfiguration(communicationConfiguration);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.MAPPING_TARGET: {
-				MappingTarget mappingTarget = (MappingTarget)theEObject;
-				T result = caseMappingTarget(mappingTarget);
-				if (result == null) result = caseINamedElement(mappingTarget);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.COMMUNICATION_MAPPING_TARGET: {
-				CommunicationMappingTarget communicationMappingTarget = (CommunicationMappingTarget)theEObject;
-				T result = caseCommunicationMappingTarget(communicationMappingTarget);
-				if (result == null) result = caseMappingTarget(communicationMappingTarget);
-				if (result == null) result = caseINamedElement(communicationMappingTarget);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
-			case LibraryElementPackage.COMMUNICATION_CHANNEL: {
-				CommunicationChannel communicationChannel = (CommunicationChannel)theEObject;
-				T result = caseCommunicationChannel(communicationChannel);
-				if (result == null) result = caseFB(communicationChannel);
-				if (result == null) result = caseFBNetworkElement(communicationChannel);
-				if (result == null) result = caseICallable(communicationChannel);
-				if (result == null) result = caseTypedConfigureableObject(communicationChannel);
-				if (result == null) result = casePositionableElement(communicationChannel);
-				if (result == null) result = caseINamedElement(communicationChannel);
-				if (result == null) result = caseConfigurableObject(communicationChannel);
-				if (result == null) result = defaultCase(theEObject);
-				return result;
-			}
 			default: return defaultCase(theEObject);
 		}
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Adapter Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Adapter Connection</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAdapterConnection(AdapterConnection object) {
+		return null;
 	}
 
 	/**
@@ -998,6 +1026,36 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseAdapterDeclaration(AdapterDeclaration object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Adapter FB</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Adapter FB</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAdapterFB(AdapterFB object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Adapter FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Adapter FB Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAdapterFBType(AdapterFBType object) {
 		return null;
 	}
 
@@ -1047,6 +1105,51 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Attribute</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Attribute</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAttribute(Attribute object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Attribute Declaration</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Attribute Declaration</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAttributeDeclaration(AttributeDeclaration object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Base FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Base FB Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseBaseFBType(BaseFBType object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Basic FB Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -1058,6 +1161,156 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseBasicFBType(BasicFBType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Automation System</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Automation System</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseAutomationSystem(AutomationSystem object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>CFB Instance</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>CFB Instance</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCFBInstance(CFBInstance object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Color</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Color</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseColor(Color object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Colorizable Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Colorizable Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseColorizableElement(ColorizableElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Comment</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Comment</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseComment(Comment object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Communication Channel</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Communication Channel</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCommunicationChannel(CommunicationChannel object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Communication Configuration</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Communication Configuration</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCommunicationConfiguration(CommunicationConfiguration object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Communication Mapping Target</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Communication Mapping Target</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCommunicationMappingTarget(CommunicationMappingTarget object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Compilable Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Compilable Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCompilableType(CompilableType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Compiler</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Compiler</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseCompiler(org.eclipse.fordiac.ide.model.libraryElement.Compiler object) {
 		return null;
 	}
 
@@ -1077,17 +1330,32 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Compiler</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Composite FB Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Compiler</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Composite FB Type</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseCompiler(org.eclipse.fordiac.ide.model.libraryElement.Compiler object) {
+	public T caseCompositeFBType(CompositeFBType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Configurable Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Configurable Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseConfigurableObject(ConfigurableObject object) {
 		return null;
 	}
 
@@ -1118,6 +1386,36 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseConnectionRoutingData(ConnectionRoutingData object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Data Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Data Connection</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDataConnection(DataConnection object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Demultiplexer</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Demultiplexer</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDemultiplexer(Demultiplexer object) {
 		return null;
 	}
 
@@ -1212,6 +1510,66 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Marker Data Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Marker Data Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorMarkerDataType(ErrorMarkerDataType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Marker FBN Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Marker FBN Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorMarkerFBNElement(ErrorMarkerFBNElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Marker Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Marker Interface</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorMarkerInterface(ErrorMarkerInterface object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Error Marker Ref</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Error Marker Ref</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseErrorMarkerRef(ErrorMarkerRef object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Event</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -1223,6 +1581,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseEvent(Event object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Event Connection</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Event Connection</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseEventConnection(EventConnection object) {
 		return null;
 	}
 
@@ -1242,6 +1615,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>FB Network</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>FB Network</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseFBNetwork(FBNetwork object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>FB Network Element</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -1253,21 +1641,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseFBNetworkElement(FBNetworkElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Sub App</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Sub App</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseSubApp(SubApp object) {
 		return null;
 	}
 
@@ -1287,6 +1660,51 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Group</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Group</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseGroup(Group object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Hidden Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Hidden Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseHiddenElement(HiddenElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>ICallable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>ICallable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseICallable(ICallable object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Identification</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -1298,6 +1716,36 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseIdentification(Identification object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IInterface Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IInterface Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIInterfaceElement(IInterfaceElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>INamed Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>INamed Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseINamedElement(INamedElement object) {
 		return null;
 	}
 
@@ -1332,6 +1780,36 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>IVar Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>IVar Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseIVarElement(IVarElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Library Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Library Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLibraryElement(LibraryElement object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Link</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -1343,6 +1821,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseLink(Link object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Local Variable</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Local Variable</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseLocalVariable(LocalVariable object) {
 		return null;
 	}
 
@@ -1362,6 +1855,51 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Mapping Target</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Mapping Target</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMappingTarget(MappingTarget object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Method</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Method</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMethod(Method object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Multiplexer</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Multiplexer</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseMultiplexer(Multiplexer object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Other Algorithm</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -1373,6 +1911,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseOtherAlgorithm(OtherAlgorithm object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Other Method</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Other Method</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseOtherMethod(OtherMethod object) {
 		return null;
 	}
 
@@ -1392,17 +1945,47 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Attribute</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>Position</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Attribute</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>Position</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAttribute(Attribute object) {
+	public T casePosition(Position object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Positionable Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Positionable Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePositionableElement(PositionableElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Primitive</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Primitive</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T casePrimitive(Primitive object) {
 		return null;
 	}
 
@@ -1452,6 +2035,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Resource Type FB</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Resource Type FB</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseResourceTypeFB(ResourceTypeFB object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Segment</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -1463,6 +2061,36 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseSegment(Segment object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Segment Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Segment Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSegmentType(SegmentType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Service</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Service</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseService(Service object) {
 		return null;
 	}
 
@@ -1497,6 +2125,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Service Interface</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Service Interface</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseServiceInterface(ServiceInterface object) {
+		return null;
+	}
+
+	/**
 	 * Returns the result of interpreting the object as an instance of '<em>Service Interface FB Type</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
@@ -1508,6 +2151,21 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseServiceInterfaceFBType(ServiceInterfaceFBType object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Simple FB Type</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Simple FB Type</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSimpleFBType(SimpleFBType object) {
 		return null;
 	}
 
@@ -1527,17 +2185,47 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>FB Network</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>ST Method</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>FB Network</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>ST Method</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseFBNetwork(FBNetwork object) {
+	public T caseSTMethod(STMethod object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Sub App</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Sub App</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseSubApp(SubApp object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Struct Manipulator</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Struct Manipulator</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseStructManipulator(StructManipulator object) {
 		return null;
 	}
 
@@ -1557,17 +2245,92 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	}
 
 	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Automation System</em>'.
+	 * Returns the result of interpreting the object as an instance of '<em>System Configuration</em>'.
 	 * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
 	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Automation System</em>'.
+	 * @return the result of interpreting the object as an instance of '<em>System Configuration</em>'.
 	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
 	 * @generated
 	 */
-	public T caseAutomationSystem(AutomationSystem object) {
+	public T caseSystemConfiguration(SystemConfiguration object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Text Algorithm</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Text Algorithm</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTextAlgorithm(TextAlgorithm object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Text Method</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Text Method</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTextMethod(TextMethod object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Typed Configureable Object</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Typed Configureable Object</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTypedConfigureableObject(TypedConfigureableObject object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Typed Element</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Typed Element</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseTypedElement(TypedElement object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Value</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Value</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseValue(Value object) {
 		return null;
 	}
 
@@ -1613,741 +2376,6 @@ public class LibraryElementSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseWith(With object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Library Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Library Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseLibraryElement(LibraryElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Compilable Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Compilable Type</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCompilableType(CompilableType object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Configurable Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Configurable Object</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseConfigurableObject(ConfigurableObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Composite FB Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Composite FB Type</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCompositeFBType(CompositeFBType object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Text Algorithm</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Text Algorithm</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseTextAlgorithm(TextAlgorithm object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Data Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Data Connection</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseDataConnection(DataConnection object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Event Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Event Connection</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseEventConnection(EventConnection object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Adapter Connection</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Adapter Connection</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAdapterConnection(AdapterConnection object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Service Interface</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Service Interface</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseServiceInterface(ServiceInterface object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>IInterface Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>IInterface Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseIInterfaceElement(IInterfaceElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Value</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Value</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseValue(Value object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>System Configuration</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>System Configuration</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseSystemConfiguration(SystemConfiguration object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>INamed Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>INamed Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseINamedElement(INamedElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Resource Type FB</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Resource Type FB</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseResourceTypeFB(ResourceTypeFB object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Segment Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Segment Type</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseSegmentType(SegmentType object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Adapter FB Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Adapter FB Type</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAdapterFBType(AdapterFBType object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Service</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Service</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseService(Service object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Typed Configureable Object</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Typed Configureable Object</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseTypedConfigureableObject(TypedConfigureableObject object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Adapter FB</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Adapter FB</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAdapterFB(AdapterFB object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Primitive</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Primitive</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T casePrimitive(Primitive object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Positionable Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Positionable Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T casePositionableElement(PositionableElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Position</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Position</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T casePosition(Position object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Color</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Color</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseColor(Color object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Colorizable Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Colorizable Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseColorizableElement(ColorizableElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>IVar Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>IVar Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseIVarElement(IVarElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Attribute Declaration</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Attribute Declaration</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseAttributeDeclaration(AttributeDeclaration object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Typed Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Typed Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseTypedElement(TypedElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Simple FB Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Simple FB Type</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseSimpleFBType(SimpleFBType object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Base FB Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Base FB Type</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseBaseFBType(BaseFBType object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Struct Manipulator</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Struct Manipulator</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseStructManipulator(StructManipulator object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Demultiplexer</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Demultiplexer</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseDemultiplexer(Demultiplexer object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Multiplexer</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Multiplexer</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseMultiplexer(Multiplexer object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Local Variable</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Local Variable</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseLocalVariable(LocalVariable object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Error Marker FBN Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Error Marker FBN Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseErrorMarkerFBNElement(ErrorMarkerFBNElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Error Marker Data Type</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Error Marker Data Type</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseErrorMarkerDataType(ErrorMarkerDataType object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Error Marker Interface</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Error Marker Interface</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseErrorMarkerInterface(ErrorMarkerInterface object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>CFB Instance</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>CFB Instance</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCFBInstance(CFBInstance object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Error Marker Ref</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Error Marker Ref</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseErrorMarkerRef(ErrorMarkerRef object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Group</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Group</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseGroup(Group object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ICallable</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ICallable</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseICallable(ICallable object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Method</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Method</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseMethod(Method object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Text Method</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Text Method</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseTextMethod(TextMethod object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Other Method</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Other Method</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseOtherMethod(OtherMethod object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>ST Method</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>ST Method</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseSTMethod(STMethod object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Hidden Element</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Hidden Element</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseHiddenElement(HiddenElement object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Communication Configuration</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Communication Configuration</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCommunicationConfiguration(CommunicationConfiguration object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Mapping Target</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Mapping Target</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseMappingTarget(MappingTarget object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Communication Mapping Target</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Communication Mapping Target</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCommunicationMappingTarget(CommunicationMappingTarget object) {
-		return null;
-	}
-
-	/**
-	 * Returns the result of interpreting the object as an instance of '<em>Communication Channel</em>'.
-	 * <!-- begin-user-doc -->
-	 * This implementation returns null;
-	 * returning a non-null result will terminate the switch.
-	 * <!-- end-user-doc -->
-	 * @param object the target of the switch.
-	 * @return the result of interpreting the object as an instance of '<em>Communication Channel</em>'.
-	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
-	 * @generated
-	 */
-	public T caseCommunicationChannel(CommunicationChannel object) {
 		return null;
 	}
 

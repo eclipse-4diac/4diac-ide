@@ -206,6 +206,14 @@ public final class Messages extends NLS {
 
 	public static String ToggleSubAppRepresentation_Expand;
 
+	public static String ToggleConnections_Show;
+
+	public static String ToggleConnections_Hide;
+
+	public static String ToggleConnections_Singular_Hide;
+
+	public static String ToggleConnections_Singular_Show;
+
 	public static String VarConfigurationSection_VarConfigs;
 
 	static {

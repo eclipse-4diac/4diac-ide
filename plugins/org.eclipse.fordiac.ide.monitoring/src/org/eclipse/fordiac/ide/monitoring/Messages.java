@@ -17,6 +17,7 @@ import org.eclipse.osgi.util.NLS;
 @SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
 	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.monitoring.messages"; //$NON-NLS-1$
+	public static String MonitoringManager_InvalidValue;
 	public static String MonitoringManagerUtils_NoSubappAnchor;
 	public static String MonitoringManagerUtils_SelectionFilteringActive;
 	public static String MonitoringManagerUtils_SelectionFilteringForce;

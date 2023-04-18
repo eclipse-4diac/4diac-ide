@@ -25,6 +25,7 @@ import org.eclipse.fordiac.ide.elk.connection.ConnectionLayoutMapping;
 import org.eclipse.fordiac.ide.elk.connection.ConnectionLayoutRunner;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.handlers.HandlerUtil;
 
@@ -42,7 +43,16 @@ public class ConnectionLayoutHandler extends AbstractLayoutHandler {
 				ConnectionLayoutRunner.runGroups(part, normalMapping, data);
 				ConnectionLayoutRunner.runSubapps(normalMapping, data);
 
-				part.getAdapter(CommandStack.class).execute(new ConnectionLayoutCommand(data));
+				final ConnectionLayoutCommand cmd = new ConnectionLayoutCommand(data);
+				if (event.getTrigger() instanceof Event && ((Event) event.getTrigger()).widget == null) {
+					// widget is in case of manual activation the menu item
+					// the automatic execution is programmatic and does therefore not have a widget
+
+					// passes the cmd back to the editor to be handled there
+					((Event) event.getTrigger()).data = cmd;
+				} else {
+					part.getAdapter(CommandStack.class).execute(cmd);
+				}
 			} catch (final LibavoidServerException e) {
 				MessageDialog.openWarning(HandlerUtil.getActiveShell(event),
 						Messages.ConnectionLayout_TimeoutTitle, Messages.ConnectionLayout_TimeoutMessage);

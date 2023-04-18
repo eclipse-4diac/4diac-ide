@@ -277,6 +277,31 @@ class STFunctionEvaluatorTest {
 		'''.evaluateFunction(emptyList))
 	}
 
+	@Test
+	def void testCallArrayVariableBounds() {
+		21.toIntValue.assertEquals('''
+			FUNCTION TEST : INT
+			VAR_TEMP
+				X: ARRAY [4..17] OF INT;
+			END_VAR
+			TEST := TEST_CALL(X);
+			END_FUNCTION
+			
+			FUNCTION TEST_CALL : INT
+			VAR_INPUT
+				X: ARRAY [*] OF INT;
+			END_VAR
+			VAR_TEMP
+				LOWER: INT;
+				UPPER: INT;
+			END_VAR;
+			LOWER := LOWER_BOUND(X, 1);
+			UPPER := UPPER_BOUND(X, 1);
+			TEST_CALL := LOWER + UPPER;
+			END_FUNCTION
+		'''.evaluateFunction(emptyList))
+	}
+
 	def static evaluateFunction(CharSequence text, Iterable<Variable<?>> variables) {
 		val errors = newArrayList
 		val source = text.toString.parse("anonymous", errors, null, null)

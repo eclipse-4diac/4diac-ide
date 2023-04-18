@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<FBType Name="E_CTU" Comment="Event driven up counter">
+	<Identification Standard="61499-1 Annex 2" Description="&lt;p&gt;Copyright (c) 2017 fortiss GmbH This program and the accompanying materials are made available under the terms of the Eclipse Public License 2.0 which is available at https://www.eclipse.org/legal/epl-2.0/ SPDX-License-Identifier: EPL-2.0&lt;/p&gt;&#10;" >
+	</Identification>
+	<VersionInfo Organization="fortiss GmbH" Version="1.0" Author="Alois Zoitl" Date="2017-09-21" Remarks="initial API and implementation and/or initial documentation">
+	</VersionInfo>
+	<InterfaceList>
+		<EventInputs>
+			<Event Name="CU" Type="Event" Comment="Count up">
+				<With Var="PV"/>
+			</Event>
+			<Event Name="R" Type="Event" Comment="Reset">
+			</Event>
+		</EventInputs>
+		<EventOutputs>
+			<Event Name="CUO" Type="Event" Comment="Count up output">
+				<With Var="Q"/>
+				<With Var="CV"/>
+			</Event>
+			<Event Name="RO" Type="Event" Comment="Reset output">
+				<With Var="Q"/>
+				<With Var="CV"/>
+			</Event>
+		</EventOutputs>
+		<InputVars>
+			<VarDeclaration Name="PV" Type="UINT" Comment="Process Value"/>
+		</InputVars>
+		<OutputVars>
+			<VarDeclaration Name="Q" Type="BOOL" Comment="True if CV &amp;gt;= PV"/>
+			<VarDeclaration Name="CV" Type="UINT" Comment="Counter Value"/>
+		</OutputVars>
+	</InterfaceList>
+	<BasicFB>
+		<ECC>
+			<ECState Name="START" Comment="Initial State" x="546.6666666666667" y="420.0">
+			</ECState>
+			<ECState Name="CU" Comment="" x="1566.6666666666667" y="160.0">
+				<ECAction Algorithm="CU" Output="CUO"/>
+			</ECState>
+			<ECState Name="R" Comment="" x="900.0" y="1000.0">
+				<ECAction Algorithm="R" Output="RO"/>
+			</ECState>
+			<ECTransition Source="START" Destination="CU" Condition="CU[CV &lt; 65535]" Comment="" x="966.6666666666667" y="206.66666666666669"/>
+			<ECTransition Source="CU" Destination="START" Condition="1" Comment="" x="1280.0" y="506.6666666666667"/>
+			<ECTransition Source="START" Destination="R" Condition="R" Comment="" x="840.0" y="766.6666666666667"/>
+			<ECTransition Source="R" Destination="START" Condition="1" Comment="" x="540.0" y="1046.6666666666667"/>
+		</ECC>
+		<Algorithm Name="R" Comment="">
+			<ST><![CDATA[ALGORITHM R
+CV := 0;
+Q := FALSE;
+END_ALGORITHM]]></ST>
+		</Algorithm>
+		<Algorithm Name="CU" Comment="">
+			<ST><![CDATA[
+
+ALGORITHM CU
+CV := CV + 1;
+Q  := (CV >= PV);
+END_ALGORITHM
+
+]]></ST>
+		</Algorithm>
+	</BasicFB>
+	<Service RightInterface="right interface" LeftInterface="left interface" Comment="Event driven up counter">
+		<ServiceSequence Name="Service Sequence" Comment="">
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters="CV:=0"/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="CV:=1"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="Service Sequence" Comment="">
+			<Attribute Name="StartState" Type="STRING" Value="START"/>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters=""/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="Q:=BOOL#TRUE; CV:=UINT#1; "/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters=""/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="Q:=BOOL#TRUE; CV:=UINT#2; "/>
+			</ServiceTransaction>
+		</ServiceSequence>
+		<ServiceSequence Name="Service Sequence" Comment="">
+			<Attribute Name="StartState" Type="STRING" Value="START"/>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters=""/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="Q:=BOOL#TRUE;
+CV:=UINT#1;
+"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters=""/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="Q:=BOOL#TRUE;
+CV:=UINT#1;
+"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters=""/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="Q:=BOOL#TRUE;
+CV:=UINT#1;
+"/>
+			</ServiceTransaction>
+			<ServiceTransaction>
+				<InputPrimitive Interface="left interface" Event="CU" Parameters=""/>
+				<OutputPrimitive Interface="left interface" Event="CUO" Parameters="Q:=BOOL#TRUE;
+CV:=UINT#1;
+"/>
+			</ServiceTransaction>
+		</ServiceSequence>
+	</Service>
+</FBType>

@@ -17,7 +17,7 @@
       <programArgs>-nl en
 --launcher.appendVmargs
       </programArgs>
-      <vmArgs>-Dosgi.requiredJavaVersion=1.11
+      <vmArgs>-Dosgi.requiredJavaVersion=1.17
 -Dosgi.instance.area.default=@user.home/4diacIDE-workspace
 -XX:+UseG1GC
 -XX:+UseStringDeduplication
@@ -108,6 +108,7 @@
       <feature id="org.eclipse.emf.compare.ide.ui"/>
       <feature id="org.eclipse.emf.compare.rcp.ui"/>
       <feature id="org.eclipse.nebula.widgets.nattable.core.feature"/>
+      <feature id="org.eclipse.emf.compare.egit" installMode="root"/>
    </features>
 
    <configurations>

@@ -17,6 +17,9 @@ import org.eclipse.xtext.ui.editor.contentassist.ICompletionProposalAcceptor;
  */
 public abstract class AbstractGlobalConstantsProposalProvider extends STCoreProposalProvider {
 
+	public void completeSTGlobalConstsSource_Elements(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		completeRuleCall(((RuleCall)assignment.getTerminal()), context, acceptor);
+	}
 	public void completeSTVarGlobalDeclarationBlock_Constant(EObject model, Assignment assignment, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		// subclasses may override
 	}
@@ -24,6 +27,9 @@ public abstract class AbstractGlobalConstantsProposalProvider extends STCoreProp
 		completeRuleCall(((RuleCall)assignment.getTerminal()), context, acceptor);
 	}
 
+	public void complete_STGlobalConstsSource(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
+		// subclasses may override
+	}
 	public void complete_STVarGlobalDeclarationBlock(EObject model, RuleCall ruleCall, ContentAssistContext context, ICompletionProposalAcceptor acceptor) {
 		// subclasses may override
 	}

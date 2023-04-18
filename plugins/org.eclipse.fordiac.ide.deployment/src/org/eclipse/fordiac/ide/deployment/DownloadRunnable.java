@@ -191,7 +191,7 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 		if (!devData.getSelectedDevParams().isEmpty()) {
 			final Device device = devData.getDevice();
 			for (final VarDeclaration devVar : devData.getSelectedDevParams()) {
-				final String value = DeploymentHelper.getVariableValue(devVar, device.getAutomationSystem());
+				final String value = DeploymentHelper.getVariableValue(devVar);
 				if (null != value) {
 					executor.writeDeviceParameter(device, devVar.getName(), value);
 				}
@@ -207,7 +207,7 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 			final Shell shell = Display.getDefault().getActiveShell();
 			MessageDialog.openError(shell, Messages.DownloadRunnable_MajorDownloadError,
 					MessageFormat.format(Messages.DownloadRunnable_DownloadErrorDetails, device.getName(),
-							DeploymentHelper.getMgrID(device), e.getMessage()));
+							DeploymentHelper.getMgrIDSafe(device), e.getMessage()));
 		});
 	}
 
@@ -258,7 +258,7 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 			executor.createResource(res);
 			curMonitor.worked(1);
 			for (final VarDeclaration varDecl : res.getVarDeclarations()) {
-				final String val = DeploymentHelper.getVariableValue(varDecl, res.getAutomationSystem());
+				final String val = DeploymentHelper.getVariableValue(varDecl);
 				if (null != val) {
 					executor.writeResourceParameter(res, varDecl.getName(), val);
 					curMonitor.worked(1);
@@ -301,7 +301,7 @@ class DownloadRunnable implements IRunnableWithProgress, IDeploymentListener {
 				final InterfaceList interfaceList = fbDepData.getFb().getInterface();
 				if (interfaceList != null) {
 					for (final VarDeclaration varDecl : interfaceList.getInputVars()) {
-						final String val = DeploymentHelper.getVariableValue(varDecl, res.getAutomationSystem());
+						final String val = DeploymentHelper.getVariableValue(varDecl);
 						if (null != val) {
 							executor.writeFBParameter(res, val, fbDepData, varDecl);
 							curMonitor.worked(1);

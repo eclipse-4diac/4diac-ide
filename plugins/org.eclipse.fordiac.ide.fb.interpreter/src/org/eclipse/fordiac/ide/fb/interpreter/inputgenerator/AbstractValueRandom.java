@@ -14,6 +14,7 @@
 package org.eclipse.fordiac.ide.fb.interpreter.inputgenerator;
 
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.model.data.BoolType;
 import org.eclipse.fordiac.ide.model.data.ByteType;
@@ -27,6 +28,7 @@ import org.eclipse.fordiac.ide.model.data.LrealType;
 import org.eclipse.fordiac.ide.model.data.LwordType;
 import org.eclipse.fordiac.ide.model.data.RealType;
 import org.eclipse.fordiac.ide.model.data.SintType;
+import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.data.UdintType;
 import org.eclipse.fordiac.ide.model.data.UintType;
 import org.eclipse.fordiac.ide.model.data.UlintType;
@@ -48,6 +50,8 @@ public abstract class AbstractValueRandom {
 	protected static final String LREAL = "LREAL#"; //$NON-NLS-1$
 
 	protected static final class LocalRandom extends Random {
+		private static final long serialVersionUID = 136710794835658751L;
+
 		int nextbits(final int bits) {
 			return super.next(bits);
 		}
@@ -125,6 +129,9 @@ public abstract class AbstractValueRandom {
 		if (dataType instanceof LrealType) {
 			return nextLreal();
 		}
+		if (dataType instanceof StructuredType) {
+			return genStruct((StructuredType) dataType);
+		}
 		throw new UnsupportedOperationException();
 
 	}
@@ -156,6 +163,12 @@ public abstract class AbstractValueRandom {
 		}
 		return ""; //$NON-NLS-1$
 
+	}
+
+	protected String genStruct(final StructuredType structType) {
+		return "(" + structType.getMemberVariables().stream().map(x -> x.getName() + ":=" + getRandom(x.getType())) //$NON-NLS-1$ //$NON-NLS-2$
+				.collect(Collectors.joining(",")) //$NON-NLS-1$
+				+ ")"; //$NON-NLS-1$
 	}
 
 }

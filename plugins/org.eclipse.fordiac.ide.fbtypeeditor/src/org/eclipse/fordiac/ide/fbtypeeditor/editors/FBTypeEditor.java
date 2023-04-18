@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.SafeRunner;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
@@ -117,7 +118,7 @@ ITabbedPropertySheetPageContributor, IGotoMarker, IEditorFileChangeListener, INa
 		if ((null != typeEntry) && (checkTypeSaveAble())) {
 			performPresaveHooks();
 			// allow each editor to save back changes before saving to file
-			editors.forEach(editorPart -> editorPart.doSave(monitor));
+			editors.forEach(editorPart -> SafeRunner.run(() -> editorPart.doSave(monitor)));
 			getCommandStack().markSaveLocation();
 			typeEntry.save();
 			firePropertyChange(IEditorPart.PROP_DIRTY);

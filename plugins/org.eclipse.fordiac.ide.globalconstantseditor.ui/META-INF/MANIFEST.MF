@@ -11,9 +11,6 @@ Require-Bundle: org.eclipse.fordiac.ide.globalconstantseditor,
  org.eclipse.xtext.ui,
  org.eclipse.xtext.ui.shared,
  org.eclipse.xtext.ui.codetemplates.ui,
- org.eclipse.ui.editors;bundle-version="3.5.0",
- org.eclipse.ui.ide;bundle-version="3.5.0",
- org.eclipse.ui,
  org.eclipse.compare,
  org.eclipse.xtext.builder,
  org.eclipse.fordiac.ide.structuredtextcore,
@@ -22,7 +19,7 @@ Require-Bundle: org.eclipse.fordiac.ide.globalconstantseditor,
  org.eclipse.fordiac.ide.structuredtextcore.ide
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.ui.codemining;resolution:=optional
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.fordiac.ide.globalconstantseditor.ui.contentassist,
  org.eclipse.fordiac.ide.globalconstantseditor.ui.quickfix,
  org.eclipse.fordiac.ide.globalconstantseditor.ui.internal

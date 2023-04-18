@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.xtext.xbase.lib,
  org.eclipse.emf.ecore,
  org.eclipse.emf.common,
  org.eclipse.fordiac.ide.model
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: 
  org.eclipse.fordiac.ide.structuredtextcore.stcore,
  org.eclipse.fordiac.ide.structuredtextcore.stcore.impl,

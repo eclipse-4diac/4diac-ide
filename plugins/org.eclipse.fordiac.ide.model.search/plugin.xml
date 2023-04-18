@@ -23,4 +23,39 @@
 			class="org.eclipse.fordiac.ide.model.search.ModelSearchPage">
 		</page>
 	</extension>
+ <extension
+       point="org.eclipse.ui.commands">
+    <command
+          categoryId="org.eclipse.fordiac.ide.commands.category"
+          defaultHandler="org.eclipse.fordiac.ide.model.search.handlers.OpenModelSearchPageHandler"
+          id="org.eclipse.fordiac.ide.model.search.openModelSearchPage"
+          name="IEC 61499 Model... ">
+    </command>
+ </extension>
+ <extension
+       point="org.eclipse.ui.menus">
+       
+       <!-- Note: The menu (re-) definition has to be here due to bug: -->
+       <!--       See https://bugs.eclipse.org/bugs/show_bug.cgi?id=213385 for details-->
+       <menuContribution locationURI="menu:org.eclipse.ui.main.menu?after=navigate">
+        <menu label="Search"
+              mnemonic="a"
+              id="org.eclipse.search.menu">
+           <separator name="internalDialogGroup" visible="false" />
+           <separator name="dialogGroup" visible="false" />
+           <separator name="fileSearchContextMenuActionsGroup"
+                      visible="true" />
+           <separator name="contextMenuActionsGroup" visible="true" />
+           <separator name="occurencesActionsGroup" visible="true" />
+           <separator name="extraSearchGroup" visible="true" />
+        </menu>
+     </menuContribution>
+       
+       
+    <menuContribution
+          locationURI="menu:org.eclipse.search.menu?after=dialogGroup">
+       <command commandId="org.eclipse.fordiac.ide.model.search.openModelSearchPage" />          
+    </menuContribution>
+ </extension>
+	
 </plugin>

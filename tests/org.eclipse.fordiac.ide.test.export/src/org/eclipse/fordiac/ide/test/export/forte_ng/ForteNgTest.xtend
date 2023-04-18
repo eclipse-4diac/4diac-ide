@@ -29,7 +29,7 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 	@Test
 	def emptyExpression() {
 		var generatedCode = generateExpression(functionBlock, "", errors) // $NON-NLS-1$
-		assertErrors(errors) // Expression can not be empty
+		assertNoErrors(errors) // Expression can be empty
 		assertNull(generatedCode)
 	}
 
@@ -60,10 +60,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 	def functionSQRTExpression() {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''SQRT(«VARIABLE_NAME»)''', errors) // $NON-NLS-1$
-		assertNoErrors(errors) // Expression can not be an assignment
+		var generatedCode = generateExpression(functionBlock, '''SQRT(«VARIABLE_NAME») = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
 		assertNotNull(generatedCode)
-		assertEquals('''func_SQRT(«EXPORTED_VARIABLE_NAME»())'''.toString(), generatedCode.toString()) // $NON-NLS-1$
+		assertEquals('''func_EQ(func_SQRT(«EXPORTED_VARIABLE_NAME»()), CIEC_SINT(0))'''.toString(), generatedCode.toString()) // $NON-NLS-1$
 	}
 
 	@Test
@@ -71,10 +71,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» ** «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
-		assertNoErrors(errors); // Expression can not be an assignment
-		assertNotNull(generatedCode);
-		assertEquals('''func_EXPT<CIEC_REAL>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» ** «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals('''func_EQ(func_EXPT<CIEC_REAL>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»()), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 
@@ -144,10 +144,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» + «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
-		assertNoErrors(errors); // Expression can not be an assignment
-		assertNotNull(generatedCode);
-		assertEquals('''func_ADD<CIEC_REAL>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» + «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals('''func_EQ(func_ADD<CIEC_REAL>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»()), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 
@@ -156,10 +156,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» - «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
-		assertNoErrors(errors); // Expression can not be an assignment
-		assertNotNull(generatedCode);
-		assertEquals('''func_SUB<CIEC_REAL>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» - «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals('''func_EQ(func_SUB<CIEC_REAL>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»()), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 
@@ -168,10 +168,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» / «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
-		assertNoErrors(errors); // Expression can not be an assignment
-		assertNotNull(generatedCode);
-		assertEquals('''func_DIV<CIEC_REAL>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» / «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals('''func_EQ(func_DIV<CIEC_REAL>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»()), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 
@@ -180,10 +180,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, REAL))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
-		assertNoErrors(errors); // Expression can not be an assignment
-		assertNotNull(generatedCode);
-		assertEquals('''func_MUL<CIEC_REAL>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals('''func_EQ(func_MUL<CIEC_REAL>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»()), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 	
@@ -192,10 +192,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, TIME))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, REAL))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
-		assertNoErrors(errors); // Expression can not be an assignment
-		assertNotNull(generatedCode);
-		assertEquals('''func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals('''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»()), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 	
@@ -204,10 +204,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE_NAME, TIME))
 		functionBlock.getInterfaceList().getInputVars().add(createVarDeclaration(VARIABLE2_NAME, LINT))
 
-		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME»''', errors) // $NON-NLS-1$
-		assertNoErrors(errors); // Expression can not be an assignment
-		assertNotNull(generatedCode);
-		assertEquals('''func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»())'''.toString(), // $NON-NLS-1$
+		var generatedCode = generateExpression(functionBlock, '''«VARIABLE_NAME» * «VARIABLE2_NAME» = 0''', errors) // $NON-NLS-1$
+		assertNoErrors(errors)
+		assertNotNull(generatedCode)
+		assertEquals('''func_EQ(func_MUL<CIEC_TIME>(«EXPORTED_VARIABLE_NAME»(), «EXPORTED_VARIABLE2_NAME»()), CIEC_SINT(0))'''.toString(), // $NON-NLS-1$
 		generatedCode.toString())
 	}
 
@@ -217,10 +217,10 @@ class ForteNgTest extends ExporterTestBasicFBTypeBase {
 
 		functionBlock.callables.add(createOtherAlgorithm(ALGORITHM_NAME, ALGORITHM_TEXT, "C++"))
 
-		val exports = generateFunctionBlock(functionBlock);
+		val exports = generateFunctionBlock(functionBlock)
 
-		var headerfileFound = false;
-		var cppfileFound = false;
+		var headerfileFound = false
+		var cppfileFound = false
 
 		for (export : exports) {
 			switch export.getName() {

@@ -14,11 +14,11 @@
 package org.eclipse.fordiac.ide.test.fb.interpreter.basicfb;
 
 import static org.eclipse.fordiac.ide.fb.interpreter.api.TransactionFactory.addTransaction;
-import static org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils.setVariable;
+import static org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils.setVariable;
 
 import org.eclipse.fordiac.ide.fb.interpreter.api.FBTransactionBuilder;
 import org.eclipse.fordiac.ide.fb.interpreter.api.ServiceFactory;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
 import org.eclipse.fordiac.ide.model.libraryElement.BasicFBType;
 import org.eclipse.fordiac.ide.model.libraryElement.ServiceSequence;
 import org.eclipse.fordiac.ide.test.fb.interpreter.infra.AbstractInterpreterTest;

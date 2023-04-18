@@ -25,9 +25,9 @@ import org.eclipse.fordiac.ide.model.typelibrary.DataTypeLibrary
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
-	static String var_a = "st_lv_a"
-	static String var_b = "st_lv_b"
-	static String var_c = "st_lv_c"
+	static String var_a = "ENV.st_lv_a"
+	static String var_b = "ENV.st_lv_b"
+	static String var_c = "ENV.st_lv_c"
 
 	@BeforeAll
 	def static void setup() {
@@ -52,7 +52,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
+			local ENV = {}
+			«var_a» = 0
 			
 			«var_a» = 1
 			«var_a» = («var_a» + 1)
@@ -75,7 +76,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
+			local ENV = {}
+			«var_a» = 0
 			
 			«var_a» = 1
 			«var_a» = («var_a» - 1)
@@ -98,7 +100,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
+			local ENV = {}
+			«var_a» = 0
 			
 			«var_a» = 1
 			«var_a» = («var_a» * 1)
@@ -121,10 +124,11 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
+			local ENV = {}
+			«var_a» = 0
 			
 			«var_a» = 1
-			«var_a» = («var_a» // 1)
+			«var_a» = math.floor(«var_a» / 1)
 		'''.toString(), result.toString())
 	}
 
@@ -144,7 +148,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
+			local ENV = {}
+			«var_a» = 0
 			
 			«var_a» = 1.0
 			«var_a» = («var_a» / 1.0)
@@ -167,7 +172,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
+			local ENV = {}
+			«var_a» = 0
 			
 			«var_a» = 1
 			«var_a» = («var_a» % 1)
@@ -190,7 +196,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
+			local ENV = {}
+			«var_a» = 0
 			
 			«var_a» = 1.0
 			«var_a» = («var_a»^1.0)
@@ -214,8 +221,9 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
-			local «var_b»
+			local ENV = {}
+			«var_a» = 0
+			«var_b» = false
 			
 			«var_a» = 1.0
 			«var_b» = («var_a» > 1.0)
@@ -239,8 +247,9 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
-			local «var_b»
+			local ENV = {}
+			«var_a» = 0
+			«var_b» = false
 			
 			«var_a» = 1.0
 			«var_b» = («var_a» <= 1.0)
@@ -264,8 +273,9 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
-			local «var_b»
+			local ENV = {}
+			«var_a» = 0
+			«var_b» = false
 			
 			«var_a» = 1.0
 			«var_b» = («var_a» == 1.0)
@@ -289,8 +299,9 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
-			local «var_b»
+			local ENV = {}
+			«var_a» = 0
+			«var_b» = false
 			
 			«var_a» = 1.0
 			«var_b» = («var_a» ~= 1.0)
@@ -314,7 +325,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
+			local ENV = {}
+			«var_a» = false
 			
 			«var_a» = true
 			«var_a» = («var_a» and false)
@@ -338,7 +350,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
+			local ENV = {}
+			«var_a» = false
 			
 			«var_a» = true
 			«var_a» = («var_a» or false)
@@ -361,7 +374,8 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
+			local ENV = {}
+			«var_a» = false
 			
 			«var_a» = true
 			«var_a» = («var_a» ~= false)
@@ -386,8 +400,9 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
-			local «var_b»
+			local ENV = {}
+			«var_a» = false
+			«var_b» = false
 			
 			«var_a» = true
 			«var_b» = false
@@ -413,8 +428,9 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
-			local «var_b»
+			local ENV = {}
+			«var_a» = false
+			«var_b» = false
 			
 			«var_a» = true
 			«var_b» = false
@@ -444,14 +460,15 @@ class ForteLuaStOperatorTest extends ExporterTestBasicFBTypeBase {
 		val lang = ILanguageSupportFactory.createLanguageSupport("forte_lua", algorithm)
 		val result = lang.generate(emptyMap)
 		assertEquals('''
-			local «var_a»
-			local «var_b»
-			local «var_c»
+			local ENV = {}
+			«var_a» = 0
+			«var_b» = 0
+			«var_c» = 0
 			
 			«var_a» = 1.1
 			«var_b» = 5
 			«var_c» = 2
-			«var_a» = («var_a» * («var_b» // -«var_c»))
+			«var_a» = («var_a» * math.floor(«var_b» / -«var_c»))
 			«var_a» = ((«var_a» * «var_b») / «var_c»)
 			«var_a» = ((«var_a» * «var_b») + «var_c»)
 		'''.toString(), result.toString())

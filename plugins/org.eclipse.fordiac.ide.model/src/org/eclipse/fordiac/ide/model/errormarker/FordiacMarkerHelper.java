@@ -20,7 +20,7 @@ package org.eclipse.fordiac.ide.model.errormarker;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.function.BiConsumer;
 
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IResource;
@@ -42,8 +42,8 @@ public final class FordiacMarkerHelper {
 
 	public static String getLocation(EObject object) {
 		while (object != null) {
-			if (object instanceof INamedElement) {
-				return ((INamedElement) object).getQualifiedName();
+			if (object instanceof final INamedElement namedElement) {
+				return namedElement.getQualifiedName();
 			}
 			object = object.eContainer();
 		}
@@ -99,11 +99,21 @@ public final class FordiacMarkerHelper {
 		return result;
 	}
 
-	public static String findPersistedErrorMessage(final IResource resource, final EObject value,
-			final String markerType) {
-		return FordiacMarkerHelper.findMarkers(resource, value, markerType).stream()
-				.filter(marker -> marker.getAttribute(IMarker.SEVERITY, 0) == IMarker.SEVERITY_ERROR)
-				.map(marker -> marker.getAttribute(IMarker.MESSAGE, "unknown")).collect(Collectors.joining(", ")); //$NON-NLS-1$ //$NON-NLS-2$
+	public static void findAllMarkers(final IResource resource, final EObject root, final String type,
+			final BiConsumer<EObject, IMarker> consumer) {
+		if (resource != null && resource.isAccessible() && root != null) {
+			try {
+				final IMarker[] markers = resource.findMarkers(type, true, IResource.DEPTH_INFINITE);
+				for (final var marker : markers) {
+					final EObject target = FordiacErrorMarker.getTargetRelative(marker, root);
+					if (target != null) {
+						consumer.accept(target, marker);
+					}
+				}
+			} catch (final CoreException e) {
+				FordiacLogHelper.logError("Could not find all error markers", e); //$NON-NLS-1$
+			}
+		}
 	}
 
 	public static void createMarkers(final IResource resource, final List<ErrorMarkerBuilder> builders) {

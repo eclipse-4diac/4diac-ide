@@ -52,7 +52,7 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command impl
 
 	@Override
 	public void execute() {
-		element.setInterface(getTypeInterfaceList().copy());
+		element.setInterface(createInterfaceList());
 		element.updatePosition(x, y);
 		insertFBNetworkElement();
 		checkName();
@@ -80,7 +80,8 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command impl
 		return element.getTypeName();
 	}
 
-	protected abstract InterfaceList getTypeInterfaceList();
+	/** Create the interfaceList to be inserted into the FBNtworkElement */
+	protected abstract InterfaceList createInterfaceList();
 
 	public FBNetwork getFBNetwork() {
 		return fbNetwork;
@@ -88,11 +89,11 @@ public abstract class AbstractCreateFBNetworkElementCommand extends Command impl
 
 	public static AbstractCreateFBNetworkElementCommand createCreateCommand(final TypeEntry typeEntry,
 			final FBNetwork fbNetwork, final int x, final int y) {
-		if (typeEntry instanceof FBTypeEntry) {
-			return new FBCreateCommand((FBTypeEntry) typeEntry, fbNetwork, x, y);
+		if (typeEntry instanceof final FBTypeEntry fbEntry) {
+			return new FBCreateCommand(fbEntry, fbNetwork, x, y);
 		}
-		if (typeEntry instanceof SubAppTypeEntry) {
-			return new CreateSubAppInstanceCommand((SubAppTypeEntry) typeEntry, fbNetwork, x, y);
+		if (typeEntry instanceof final SubAppTypeEntry subAppEntry) {
+			return new CreateSubAppInstanceCommand(subAppEntry, fbNetwork, x, y);
 		}
 		return null;
 	}

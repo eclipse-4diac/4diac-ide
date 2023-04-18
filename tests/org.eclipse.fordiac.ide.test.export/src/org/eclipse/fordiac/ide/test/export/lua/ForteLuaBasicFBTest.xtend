@@ -14,22 +14,13 @@
 
 package org.eclipse.fordiac.ide.test.export.lua
 
-import org.eclipse.fordiac.ide.model.structuredtext.StructuredTextStandaloneSetup
-import org.eclipse.fordiac.ide.model.xtext.fbt.FBTypeStandaloneSetup
 import org.eclipse.fordiac.ide.test.export.ExporterTestBasicFBTypeAdvanced
-import org.junit.jupiter.api.BeforeAll
 import org.junit.jupiter.api.Test
 
 import static org.junit.jupiter.api.Assertions.assertEquals
 
 //see org.eclipse.fordiac.ide.util.ColorHelperTest.java for information on implementing tests
 class ForteLuaBasicFBTest extends ExporterTestBasicFBTypeAdvanced {
-
-	@BeforeAll
-	def static void doSetup() {
-		FBTypeStandaloneSetup.doSetup();
-		StructuredTextStandaloneSetup.doSetup();
-	}
 
 	@Test
 	def exportValidBasicFB() {
@@ -56,12 +47,14 @@ class ForteLuaBasicFBTest extends ExporterTestBasicFBTypeAdvanced {
 			local ADO_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_OUTPUT_NAME» = 167772160
 			local ADI_«ADAPTER_PLUG_NAME»_«ADAPTER_DATA_INPUT_NAME» = 201326592
 			
+			
 			local function alg_ALG1(fb)
-			  local fb_var_«DATA_INPUT_NAME» = fb[DI_«DATA_INPUT_NAME»]
-			  local fb_var_«DATA_OUTPUT_NAME» = fb[DO_«DATA_OUTPUT_NAME»]
+			  local ENV = {}
+			  ENV.fb_var_«DATA_INPUT_NAME» = fb[DI_«DATA_INPUT_NAME»]
+			  ENV.fb_var_«DATA_OUTPUT_NAME» = fb[DO_«DATA_OUTPUT_NAME»]
 			  
-			  fb_var_«DATA_OUTPUT_NAME» = 42
-			  fb[DO_«DATA_OUTPUT_NAME»] = fb_var_«DATA_OUTPUT_NAME»
+			  ENV.fb_var_«DATA_OUTPUT_NAME» = 42
+			  fb[DO_«DATA_OUTPUT_NAME»] = ENV.fb_var_«DATA_OUTPUT_NAME»
 			end
 			
 			

@@ -37,18 +37,14 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionFactory;
 
-/**
- * The Class CopyEditPartsAction.
- */
+/** The Class CopyEditPartsAction. */
 public class CopyEditPartsAction extends SelectionAction {
 
 	/** The templates. */
 
-	/**
-	 * Instantiates a new copy edit parts action.
+	/** Instantiates a new copy edit parts action.
 	 *
-	 * @param editor the editor
-	 */
+	 * @param editor the editor */
 	public CopyEditPartsAction(final IEditorPart editor) {
 		super(editor);
 		setId(ActionFactory.COPY.getId());
@@ -61,11 +57,8 @@ public class CopyEditPartsAction extends SelectionAction {
 	@Override
 	protected boolean calculateEnabled() {
 		for (final Object obj : getSelectedObjects()) {
-			if (obj instanceof EditPart) {
-				final Object model = ((EditPart) obj).getModel();
-				if (model instanceof FBNetworkElement) {
-					return true;
-				}
+			if ((obj instanceof final EditPart ep) && (ep.getModel() instanceof FBNetworkElement)) {
+				return true;
 			}
 		}
 		return false;
@@ -83,12 +76,9 @@ public class CopyEditPartsAction extends SelectionAction {
 		final Set<Connection> connectionSet = new HashSet<>();
 		final List<Object> templates = new ArrayList<>();
 		for (final Object obj : getSelectedObjects()) {
-			if (obj instanceof EditPart) {
-				final Object model = ((EditPart) obj).getModel();
-				if (model instanceof FBNetworkElement) {
-					templates.add(model);
-					templates.addAll(getAllFBNElementConnections((FBNetworkElement) model, connectionSet));
-				}
+			if ((obj instanceof final EditPart ep) && (ep.getModel() instanceof final FBNetworkElement fbne)) {
+				templates.add(fbne);
+				templates.addAll(getAllFBNElementConnections(fbne, connectionSet));
 			}
 		}
 		return templates;
@@ -97,7 +87,6 @@ public class CopyEditPartsAction extends SelectionAction {
 	private static Collection<ConnectionReference> getAllFBNElementConnections(final FBNetworkElement model,
 			final Set<Connection> connectionSet) {
 		final List<ConnectionReference> connections = new ArrayList<>();
-
 		for (final IInterfaceElement elem : model.getInterface().getAllInterfaceElements()) {
 			getConnectionList(elem).stream().filter(conn -> !connectionSet.contains(conn)).forEach(conn -> {
 				connectionSet.add(conn);

@@ -46,6 +46,10 @@
                    id="org.eclipse.fordiac.ide.application.propertyDemultiplexerTab"
                    label="Struct Handling">
       </propertyTab>
+      <propertyTab category="FB"
+                   id="org.eclipse.fordiac.ide.application.propertyCommentTab"
+                   label="Comment">
+      </propertyTab>
       <propertyTab category="Resource"
                    id="org.eclipse.fordiac.ide.application.propertyResourceInterfaceTab"
                    label="Instance">
@@ -103,10 +107,6 @@
                    id="org.eclipse.fordiac.ide.application.propertyAppearanceTab"
                    label="Appearance">
       </propertyTab>
-      <propertyTab category="FB"
-                   id="org.eclipse.fordiac.ide.application.VirtualDNSTab"
-                   label="VirtualDNS">
-      </propertyTab>
       <propertyTab category="Connection"
                    id="org.eclipse.fordiac.ide.application.propertyConnectionTab"
                    label="Connection">
@@ -140,7 +140,7 @@
   <extension point="org.eclipse.ui.views.properties.tabbed.propertySections">
     <propertySections contributorId="org.eclipse.fordiac.ide.application.editors.DiagramEditor">
       <propertySection
-            class="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
+            class="org.eclipse.fordiac.ide.application.properties.InstancePropertySection"
             filter="org.eclipse.fordiac.ide.application.properties.InstanceSectionFilter"
             id="org.eclipse.fordiac.ide.application.properties.InterfaceSection"
             tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
@@ -150,6 +150,12 @@
             filter="org.eclipse.fordiac.ide.application.properties.GroupSectionFilter"
             id="org.eclipse.fordiac.ide.application.properties.GroupPropertySection"
             tab="org.eclipse.fordiac.ide.application.propertyInterfaceTab">
+      </propertySection>
+      <propertySection
+            class="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
+            filter="org.eclipse.fordiac.ide.application.properties.CommentSectionFilter"
+            id="org.eclipse.fordiac.ide.application.properties.CommentPropertySection"
+            tab="org.eclipse.fordiac.ide.application.propertyCommentTab">
       </propertySection>
       <propertySection class="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
                        id="org.eclipse.fordiac.ide.application.properties.DemultiplexerSection"
@@ -294,6 +300,11 @@
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.NewGroupHandler"
              id="org.eclipse.fordiac.ide.application.commands.newGroup"
              name="Group">
+    </command>
+    <command categoryId="org.eclipse.fordiac.ide.commands.category"
+             defaultHandler="org.eclipse.fordiac.ide.application.handlers.NewCommentHandler"
+             id="org.eclipse.fordiac.ide.application.commands.newComment"
+             name="New Comment">
     </command>
     <command categoryId="org.eclipse.fordiac.ide.commands.category"
              defaultHandler="org.eclipse.fordiac.ide.application.handlers.UngroupHandler"
@@ -845,6 +856,10 @@
                label="Group"
                tooltip="Create a new group">
       </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
+               label="Comment"
+               tooltip="Create a new comment">
+      </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.ungroup"
                label="Ungroup"
                tooltip="Remove group">
@@ -980,7 +995,7 @@
         </visibleWhen>
       </command>
       <command commandId="org.eclipse.fordiac.ide.application.commands.newGroup"
-               label="New group"
+               label="New Group"
                tooltip="Create a new group">
         <visibleWhen checkEnabled="false">
           <and>
@@ -1002,6 +1017,17 @@
                   <instanceof value="org.eclipse.fordiac.ide.subapptypeeditor.editparts.TypedSubAppNetworkEditPart"/>
                 </or>
               </iterate>
+            </with>
+          </and>
+        </visibleWhen>
+      </command>
+      <command commandId="org.eclipse.fordiac.ide.application.commands.newComment"
+               label="New Comment"
+               tooltip="Create a new Comment">
+        <visibleWhen checkEnabled="false">
+          <and>
+            <with variable="activeEditor">
+              <adapt type="org.eclipse.fordiac.ide.model.libraryElement.FBNetwork" />
             </with>
           </and>
         </visibleWhen>

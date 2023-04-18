@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.deployment.data.DeviceDeploymentData;
 import org.eclipse.fordiac.ide.deployment.data.ResourceDeploymentData;
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.interactors.IDeviceManagementInteractor;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.deployment.util.IDeploymentListener;
@@ -71,12 +72,12 @@ public final class DeploymentCoordinator {
 			final IDeviceManagementCommunicationHandler overrideDevMgmCommHandler, final String profile) {
 		final IDeploymentListener outputView = (IDeploymentListener) PlatformUI.getWorkbench().getActiveWorkbenchWindow()
 				.getActivePage().findView(OUTPUT_VIEW_ID);
-		final DownloadRunnable download = new DownloadRunnable(createDeploymentdata(selection), overrideDevMgmCommHandler,
-				outputView, profile);
 		final Shell shell = Display.getDefault().getActiveShell();
 		try {
+			final DownloadRunnable download = new DownloadRunnable(createDeploymentdata(selection),
+					overrideDevMgmCommHandler, outputView, profile);
 			new ProgressMonitorDialog(shell).run(true, true, download);
-		} catch (final InvocationTargetException ex) {
+		} catch (final DeploymentException | InvocationTargetException ex) {
 			MessageDialog.openError(shell, Messages.DeploymentCoordinator_DepoymentError, ex.getMessage());
 		} catch (final InterruptedException ex) {
 			Thread.currentThread().interrupt();  // mark interruption
@@ -112,7 +113,7 @@ public final class DeploymentCoordinator {
 		}
 	}
 
-	public static List<DeviceDeploymentData> createDeploymentdata(final Object[] selection) {
+	public static List<DeviceDeploymentData> createDeploymentdata(final Object[] selection) throws DeploymentException {
 		final List<DeviceDeploymentData> data = new ArrayList<>();
 		for (final Object object : selection) {
 			if (object instanceof Resource) {

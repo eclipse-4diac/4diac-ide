@@ -22,37 +22,29 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.EventOccurrence;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBRuntimeAbstract;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.OperationalSemanticsPackage;
 
-/**
- * <!-- begin-user-doc --> An implementation of the model object '<em><b>FB
- * Runtime Abstract</b></em>'. <!-- end-user-doc -->
+/** <!-- begin-user-doc --> An implementation of the model object '<em><b>FB Runtime Abstract</b></em>'. <!--
+ * end-user-doc -->
  *
- * @generated
- */
+ * @generated */
 public abstract class FBRuntimeAbstractImpl extends MinimalEObjectImpl.Container implements FBRuntimeAbstract {
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	protected FBRuntimeAbstractImpl() {
 		super();
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	protected EClass eStaticClass() {
 		return OperationalSemanticsPackage.Literals.FB_RUNTIME_ABSTRACT;
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EList<EventOccurrence> run() {
 		if (this.eContainer instanceof EventOccurrence) {
@@ -62,11 +54,9 @@ public abstract class FBRuntimeAbstractImpl extends MinimalEObjectImpl.Container
 
 	}
 
-	/**
-	 * <!-- begin-user-doc --> <!-- end-user-doc -->
+	/** <!-- begin-user-doc --> <!-- end-user-doc -->
 	 *
-	 * @generated
-	 */
+	 * @generated */
 	@Override
 	public EObject getModel() {
 		return null;

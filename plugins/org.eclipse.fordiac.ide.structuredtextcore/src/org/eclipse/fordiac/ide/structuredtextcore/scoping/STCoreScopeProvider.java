@@ -23,7 +23,6 @@
 package org.eclipse.fordiac.ide.structuredtextcore.scoping;
 
 import java.util.List;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
@@ -58,14 +57,18 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import com.google.inject.Inject;
 
-/** This class contains custom scoping description.
+/**
+ * This class contains custom scoping description.
  *
- * See https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#scoping on how and when to use it. */
+ * See
+ * https://www.eclipse.org/Xtext/documentation/303_runtime_concepts.html#scoping
+ * on how and when to use it.
+ */
 public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 	protected static final EObjectDescription[] ADDITIONAL_LITERAL_TYPES = {
 			descriptionForType("D", ElementaryTypes.DATE), //$NON-NLS-1$
 			descriptionForType("LD", ElementaryTypes.LDATE), //$NON-NLS-1$
-			descriptionForType("T", ElementaryTypes.TIME),  //$NON-NLS-1$
+			descriptionForType("T", ElementaryTypes.TIME), //$NON-NLS-1$
 			descriptionForType("LT", ElementaryTypes.LTIME) //$NON-NLS-1$
 	};
 
@@ -87,61 +90,58 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 			final IScope globalScope = super.getScope(context, reference);
 			return scopeFor(DataTypeLibrary.getNonUserDefinedDataTypes(),
 					filterScope(globalScope, this::isApplicableForVariableType));
-		} else if (isAnyElementaryLiteral(reference)) {
+		}
+		if (isAnyElementaryLiteral(reference)) {
 			return new SimpleScope(Stream.concat(
 					StreamSupport.stream(Scopes.scopedElementsFor(DataTypeLibrary.getNonUserDefinedDataTypes(),
 							QualifiedName.wrapper(SimpleAttributeResolver.NAME_RESOLVER)).spliterator(), false),
-					Stream.of(ADDITIONAL_LITERAL_TYPES)).collect(Collectors.toList()), true);
-		} else if (reference == STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE) {
+					Stream.of(ADDITIONAL_LITERAL_TYPES)).toList(), true);
+		}
+		if (reference == STCorePackage.Literals.ST_FEATURE_EXPRESSION__FEATURE) {
 			final var receiver = getReceiver(context);
 			// if there is a receiver, which is not the same EObject as the context
 			if (receiver != null && receiver != context) {
 				final var receiverType = receiver.getResultType();
 				if (receiverType != null) {
-					if (receiverType instanceof StructuredType) {
-						final var structuredVarType = (StructuredType) receiverType;
+					if (receiverType instanceof final StructuredType structuredVarType) {
 						return scopeFor(structuredVarType.getMemberVariables());
-					} else if (receiverType instanceof FBType) {
-						final var fbType = (FBType) receiverType;
+					}
+					if (receiverType instanceof final FBType fbType) {
 						final var interfaceList = fbType.getInterfaceList();
 						return scopeFor(Iterables.concat(interfaceList.getInputVars(), interfaceList.getOutputVars(),
 								interfaceList.getEventInputs()));
 					}
 				}
 				return IScope.NULLSCOPE;
-			} else if (context instanceof STFeatureExpression) {
-				final STFeatureExpression expression = (STFeatureExpression) context;
-				if (expression.isCall()) {
-					final List<DataType> argumentTypes = expression.getParameters().stream()
-							.map(STCallArgument::getResultType).map(DataType.class::cast).collect(Collectors.toList());
-					final Iterable<STStandardFunction> standardFunctions = standardFunctionProvider.get(argumentTypes);
-					return scopeFor(standardFunctions,
-							filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference));
-				}
+			}
+			if (context instanceof final STFeatureExpression expression && expression.isCall()) {
+				final List<DataType> argumentTypes = expression.getParameters().stream()
+						.map(STCallArgument::getResultType).map(DataType.class::cast).toList();
+				final Iterable<STStandardFunction> standardFunctions = standardFunctionProvider.get(argumentTypes);
+				return scopeFor(standardFunctions,
+						filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference));
 			}
 			final Iterable<STStandardFunction> standardFunctions = standardFunctionProvider.get();
 			return scopeFor(standardFunctions,
 					filterScope(super.getScope(context, reference), this::isApplicableForFeatureReference));
-		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER) {
+		}
+		if (reference == STCorePackage.Literals.ST_CALL_NAMED_INPUT_ARGUMENT__PARAMETER) {
 			final var feature = getFeature(context);
-			if (feature instanceof ICallable) {
-				final ICallable callable = (ICallable) feature;
+			if (feature instanceof final ICallable callable) {
 				return Scopes.scopeFor(Iterables.concat(callable.getInputParameters(), callable.getInOutParameters()));
 			}
 		} else if (reference == STCorePackage.Literals.ST_CALL_NAMED_OUTPUT_ARGUMENT__PARAMETER) {
 			final var feature = getFeature(context);
-			if (feature instanceof ICallable) {
-				return Scopes.scopeFor(((ICallable) feature).getOutputParameters());
+			if (feature instanceof final ICallable callable) {
+				return Scopes.scopeFor(callable.getOutputParameters());
 			}
 		} else if (reference == STCorePackage.Literals.ST_FOR_STATEMENT__VARIABLE) {
 			return filterScope(super.getScope(context, reference), this::isApplicableForVariableReference);
 		} else if (reference == STCorePackage.Literals.ST_STRUCT_INIT_ELEMENT__VARIABLE) {
 			final var container = context.eContainer();
-			if (container instanceof STStructInitializerExpression) {
-				final var initializerType = ((STStructInitializerExpression) container).getResultType();
-				if (initializerType instanceof StructuredType) {
-					return scopeFor(((StructuredType) initializerType).getMemberVariables());
-				}
+			if (container instanceof final STStructInitializerExpression structInitializerExpression
+					&& structInitializerExpression.getResultType() instanceof final StructuredType structType) {
+				return scopeFor(structType.getMemberVariables());
 			}
 		}
 		return IScope.NULLSCOPE;
@@ -172,7 +172,8 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 	}
 
 	protected boolean isApplicableForFeatureReference(final IEObjectDescription description) {
-		// mirror changes here in ExpressionAnnotations.getResultType(STFeatureExpression)
+		// mirror changes here in
+		// ExpressionAnnotations.getResultType(STFeatureExpression)
 		final var clazz = description.getEClass();
 		return STCorePackage.eINSTANCE.getSTVarDeclaration().isSuperTypeOf(clazz)
 				|| LibraryElementPackage.eINSTANCE.getVarDeclaration().isSuperTypeOf(clazz)
@@ -186,8 +187,9 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 	protected static STExpression getReceiver(final EObject context) {
 		if (context instanceof STFeatureExpression) {
 			return getReceiver(context.eContainer());
-		} else if (context instanceof STMemberAccessExpression) {
-			return ((STMemberAccessExpression) context).getReceiver();
+		}
+		if (context instanceof final STMemberAccessExpression memberAccessExpression) {
+			return memberAccessExpression.getReceiver();
 		}
 		return null;
 	}
@@ -195,8 +197,9 @@ public class STCoreScopeProvider extends AbstractSTCoreScopeProvider {
 	protected static INamedElement getFeature(final EObject context) {
 		if (context instanceof STCallArgument) {
 			return getFeature(context.eContainer());
-		} else if (context instanceof STFeatureExpression) {
-			return ((STFeatureExpression) context).getFeature();
+		}
+		if (context instanceof final STFeatureExpression featureExpression) {
+			return featureExpression.getFeature();
 		}
 		return null;
 	}

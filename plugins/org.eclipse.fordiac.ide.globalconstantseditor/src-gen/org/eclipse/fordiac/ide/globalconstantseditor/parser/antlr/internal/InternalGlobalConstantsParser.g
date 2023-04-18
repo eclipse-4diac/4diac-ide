@@ -37,7 +37,7 @@ import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGra
 
     @Override
     protected String getFirstRuleName() {
-    	return "STVarGlobalDeclarationBlock";
+    	return "STGlobalConstsSource";
    	}
 
    	@Override
@@ -53,6 +53,51 @@ import org.eclipse.fordiac.ide.globalconstantseditor.services.GlobalConstantsGra
         appendSkippedTokens();
     }
 }
+
+// Entry rule entryRuleSTGlobalConstsSource
+entryRuleSTGlobalConstsSource returns [EObject current=null]:
+	{ newCompositeNode(grammarAccess.getSTGlobalConstsSourceRule()); }
+	iv_ruleSTGlobalConstsSource=ruleSTGlobalConstsSource
+	{ $current=$iv_ruleSTGlobalConstsSource.current; }
+	EOF;
+
+// Rule STGlobalConstsSource
+ruleSTGlobalConstsSource returns [EObject current=null]
+@init {
+	enterRule();
+}
+@after {
+	leaveRule();
+}:
+	(
+		(
+			{
+				$current = forceCreateModelElement(
+					grammarAccess.getSTGlobalConstsSourceAccess().getSTGlobalConstsSourceAction_0(),
+					$current);
+			}
+		)
+		(
+			(
+				{
+					newCompositeNode(grammarAccess.getSTGlobalConstsSourceAccess().getElementsSTVarGlobalDeclarationBlockParserRuleCall_1_0());
+				}
+				lv_elements_1_0=ruleSTVarGlobalDeclarationBlock
+				{
+					if ($current==null) {
+						$current = createModelElementForParent(grammarAccess.getSTGlobalConstsSourceRule());
+					}
+					add(
+						$current,
+						"elements",
+						lv_elements_1_0,
+						"org.eclipse.fordiac.ide.globalconstantseditor.GlobalConstants.STVarGlobalDeclarationBlock");
+					afterParserOrEnumRuleCall();
+				}
+			)
+		)*
+	)
+;
 
 // Entry rule entryRuleSTVarGlobalDeclarationBlock
 entryRuleSTVarGlobalDeclarationBlock returns [EObject current=null]:

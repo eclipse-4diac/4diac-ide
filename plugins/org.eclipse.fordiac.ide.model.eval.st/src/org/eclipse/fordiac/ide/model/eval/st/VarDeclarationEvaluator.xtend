@@ -12,7 +12,6 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.model.eval.st
 
-import java.util.regex.Pattern
 import org.eclipse.fordiac.ide.model.eval.Evaluator
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
@@ -27,15 +26,13 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator {
 
 	STInitializerExpressionSource parseResult
 
-	static final Pattern VIRTUAL_DNS_PATTERN = Pattern.compile("(?:%[^%]+%)+")
-
 	new(VarDeclaration varDeclaration, Variable<?> context, Iterable<Variable<?>> variables, Evaluator parent) {
 		super(varDeclaration.name, context, variables, parent)
 		this.varDeclaration = varDeclaration
 	}
 
 	override prepare() {
-		if (parseResult === null && !VIRTUAL_DNS_PATTERN.matcher(varDeclaration.initialValue ?: "").matches) {
+		if (parseResult === null) {
 			val errors = newArrayList
 			val warnings = newArrayList
 			val infos = newArrayList
@@ -59,7 +56,7 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator {
 
 	override evaluate() {
 		prepare
-		val result = newVariable(varDeclaration.name, varDeclaration.actualType)
+		val result = newVariable(varDeclaration.name, parseResult?.initializerExpression?.resultType ?: varDeclaration.actualType)
 		if (parseResult?.initializerExpression !== null) {
 			result.evaluateInitializerExpression(parseResult.initializerExpression)
 		}

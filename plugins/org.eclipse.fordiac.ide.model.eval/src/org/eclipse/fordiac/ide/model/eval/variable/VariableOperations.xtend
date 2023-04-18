@@ -13,7 +13,7 @@
 package org.eclipse.fordiac.ide.model.eval.variable
 
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl
-import org.eclipse.fordiac.ide.model.data.AnyElementaryType
+import org.eclipse.fordiac.ide.model.data.AnyType
 import org.eclipse.fordiac.ide.model.data.ArrayType
 import org.eclipse.fordiac.ide.model.data.DataType
 import org.eclipse.fordiac.ide.model.data.StructuredType
@@ -33,9 +33,9 @@ final class VariableOperations {
 
 	def static Variable<?> newVariable(String name, INamedElement type) {
 		switch (type) {
-			AnyElementaryType: new ElementaryVariable(name, type)
 			ArrayType: new ArrayVariable(name, type)
 			StructuredType: new StructVariable(name, type)
+			AnyType: new ElementaryVariable(name, type)
 			FBType: new FBVariable(name, type)
 			default: throw new UnsupportedOperationException('''Cannot instanciate variable «name» of type «type.name»''')
 		}
@@ -43,18 +43,19 @@ final class VariableOperations {
 
 	def static Variable<?> newVariable(String name, INamedElement type, String value) {
 		switch (type) {
-			AnyElementaryType: new ElementaryVariable(name, type, value)
 			ArrayType: new ArrayVariable(name, type, value)
 			StructuredType: new StructVariable(name, type, value)
+			AnyType: new ElementaryVariable(name, type, value)
+			FBType: new FBVariable(name, type, value)
 			default: throw new UnsupportedOperationException('''Cannot instanciate variable «name» of type «type.name»''')
 		}
 	}
 
 	def static Variable<?> newVariable(String name, INamedElement type, Value value) {
 		switch (type) {
-			AnyElementaryType: new ElementaryVariable(name, type, value)
 			ArrayType: new ArrayVariable(name, type, value)
 			StructuredType: new StructVariable(name, type, value)
+			AnyType: new ElementaryVariable(name, type, value)
 			FBType: new FBVariable(name, type, value)
 			default: throw new UnsupportedOperationException('''Cannot instanciate variable «name» of type «type.name»''')
 		}
@@ -73,7 +74,7 @@ final class VariableOperations {
 	}
 
 	def static Variable<?> newVariable(VarDeclaration decl, Value value) {
-		newVariable(decl.name, value)
+		newVariable(decl.name, decl.actualType, value)
 	}
 
 	def static Variable<?> newVariable(FB fb) {
@@ -100,6 +101,14 @@ final class VariableOperations {
 			type = dataType
 			value = LibraryElementFactory.eINSTANCE.createValue => [value = initialValue]
 		]).validateValue
+	}
+
+	def static Value evaluateValue(DataType dataType, String initialValue) {
+		(LibraryElementFactory.eINSTANCE.createVarDeclaration => [
+			name = "dummy"
+			type = dataType
+			value = LibraryElementFactory.eINSTANCE.createValue => [value = initialValue]
+		]).newVariable.value
 	}
 
 	def static String getInitialValue(VarDeclaration decl) {

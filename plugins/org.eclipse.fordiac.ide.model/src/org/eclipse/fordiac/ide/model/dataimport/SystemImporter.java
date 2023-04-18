@@ -20,6 +20,7 @@ package org.eclipse.fordiac.ide.model.dataimport;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Deque;
+import java.util.Optional;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -32,6 +33,9 @@ import org.eclipse.fordiac.ide.model.libraryElement.Application;
 import org.eclipse.fordiac.ide.model.libraryElement.AutomationSystem;
 import org.eclipse.fordiac.ide.model.libraryElement.Color;
 import org.eclipse.fordiac.ide.model.libraryElement.ColorizableElement;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationChannel;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationConfiguration;
+import org.eclipse.fordiac.ide.model.libraryElement.CommunicationMappingTarget;
 import org.eclipse.fordiac.ide.model.libraryElement.Device;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetwork;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
@@ -44,8 +48,10 @@ import org.eclipse.fordiac.ide.model.libraryElement.Segment;
 import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.SystemConfiguration;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
+import org.eclipse.fordiac.ide.model.systemconfiguration.CommunicationConfigurationDetails;
 import org.eclipse.fordiac.ide.model.typelibrary.DeviceTypeEntry;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeEntry;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.gef.commands.CommandStack;
 
 public class SystemImporter extends CommonElementImporter {
@@ -57,6 +63,14 @@ public class SystemImporter extends CommonElementImporter {
 	@Override
 	public AutomationSystem getElement() {
 		return (AutomationSystem) super.getElement();
+	}
+
+	@Override
+	public void loadElement() {
+		final long start = System.nanoTime();
+		super.loadElement();
+		final long elapsed = System.nanoTime() - start;
+		FordiacLogHelper.logInfo("System \"" + getElement().getName() + "\" load time: " + elapsed / 1_000_000 + "ms"); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Override
@@ -140,6 +154,7 @@ public class SystemImporter extends CommonElementImporter {
 		}
 
 		parseSegmentNodeChildren(segment);
+		parseCommunication(segment);
 		return segment;
 	}
 
@@ -148,22 +163,27 @@ public class SystemImporter extends CommonElementImporter {
 			if (LibraryElementTags.ATTRIBUTE_ELEMENT.equals(name)) {
 				if (isColorAttributeNode()) {
 					parseColor(segment);
-				} else if (isCommunicationAttributeNode()) {
-					parseCommunication(segment);
 				} else {
 					parseGenericAttributeNode(segment);
 				}
 				proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
+				return true;
+			} else if (LibraryElementTags.PARAMETER_ELEMENT.equals(name)) {
+				segment.getVarDeclarations().add(parseParameter());
+				proceedToEndElementNamed(LibraryElementTags.PARAMETER_ELEMENT);
 				return true;
 			}
 			return false;
 		});
 	}
 
-	private void parseCommunication(final Segment segment) {
-		final String value = getAttributeValue(LibraryElementTags.VALUE_ATTRIBUTE);
-		if (null != value) {
-			segment.setCommunication(null); // TODO load file based on information
+	private static void parseCommunication(final Segment segment) {
+		final String typeName = segment.getTypeName();
+		final CommunicationConfigurationDetails commConfig = CommunicationConfigurationDetails
+				.getCommConfigUiFromExtensionPoint(typeName, CommunicationConfigurationDetails.COMM_EXT_ATT_ID);
+		if (commConfig != null) {
+			final CommunicationConfiguration config = commConfig.createModel(segment.getVarDeclarations());
+			segment.setCommunication(config);
 		}
 	}
 
@@ -202,7 +222,7 @@ public class SystemImporter extends CommonElementImporter {
 			final DeviceTypeEntry entry = getTypeLibrary().getDeviceTypeEntry(typeName);
 			if (null != entry) {
 				device.setTypeEntry(entry);
-				createParamters(device);
+				createParameters(device);
 			}
 		}
 	}
@@ -211,8 +231,9 @@ public class SystemImporter extends CommonElementImporter {
 		final String fromValue = getAttributeValue(LibraryElementTags.MAPPING_FROM_ATTRIBUTE);
 		final String toValue = getAttributeValue(LibraryElementTags.MAPPING_TO_ATTRIBUTE);
 		final FBNetworkElement fromElement = findMappingTargetFromName(fromValue);
-		final FBNetworkElement toElement = findMappingTargetFromName(toValue);
-
+		final FBNetworkElement toElement = (fromElement instanceof CommunicationChannel)
+				? findMappingTargetFromName(toValue, fromElement)
+						: findMappingTargetFromName(toValue);
 		if (fromElement instanceof SubApp) {
 			FBNetworkHelper.loadSubappNetwork(fromElement);
 		}
@@ -234,7 +255,8 @@ public class SystemImporter extends CommonElementImporter {
 		return mapping;
 	}
 
-	private FBNetworkElement findMappingTargetFromName(final String targetName) {
+	private FBNetworkElement findMappingTargetFromName(final String targetName,
+			final FBNetworkElement copyCommunication) {
 		FBNetworkElement element = null;
 		if (null != targetName) {
 			Deque<String> parts = new ArrayDeque<>(Arrays.asList(targetName.split("\\."))); ////$NON-NLS-1$
@@ -244,6 +266,7 @@ public class SystemImporter extends CommonElementImporter {
 				// get the appropriate starting fbnetwork
 				final Device dev = getElement().getDeviceNamed(parts.getFirst());
 				final Application application = getElement().getApplicationNamed(parts.getFirst());
+				final Segment segment = getElement().getSystemConfiguration().getSegmentNamed(parts.getFirst());
 				if (null != dev) {
 					parts.pollFirst();
 					final Resource res = dev.getResourceNamed(parts.pollFirst());
@@ -258,9 +281,31 @@ public class SystemImporter extends CommonElementImporter {
 					nw = application.getFBNetwork();
 					element = findMappingTargetInFBNetwork(nw, parts);
 				}
+				if ((null == dev) && (null == application) && (null != segment)) {
+
+					parts.pollFirst();
+					final String windowName = parts.pollFirst();
+					final Optional<CommunicationMappingTarget> findWindow = segment.getCommunication()
+							.getMappingTargets().stream().filter(c -> c.getName().equals(windowName)).findFirst();
+					final CommunicationMappingTarget channel = findWindow.isPresent() ? findWindow.get() : null;
+					if (channel != null) {
+						final CommunicationChannel comm = LibraryElementFactory.eINSTANCE.createCommunicationChannel();
+						comm.setName(copyCommunication.getName());
+						comm.updatePosition(copyCommunication.getPosition().getX(),
+								copyCommunication.getPosition().getY());
+						comm.setTypeEntry(copyCommunication.getTypeEntry());
+						comm.setInterface(copyCommunication.getType().getInterfaceList().copy());
+						channel.getMappedElements().add(comm);
+						element = comm;
+					}
+				}
 			}
 		}
 		return element;
+	}
+
+	private FBNetworkElement findMappingTargetFromName(final String targetName) {
+		return findMappingTargetFromName(targetName, null);
 	}
 
 	private static FBNetworkElement findMappingTargetInFBNetwork(final FBNetwork nw, final Deque<String> parts) {
@@ -318,11 +363,6 @@ public class SystemImporter extends CommonElementImporter {
 			parseGenericAttributeNode(device);
 		}
 		proceedToEndElementNamed(LibraryElementTags.ATTRIBUTE_ELEMENT);
-	}
-
-	private boolean isCommunicationAttributeNode() {
-		final String name = getAttributeValue(LibraryElementTags.NAME_ATTRIBUTE);
-		return (null != name) && LibraryElementTags.SEGMENT_COMMUNICATION_CONFIG.equals(name);
 	}
 
 	private boolean isColorAttributeNode() {

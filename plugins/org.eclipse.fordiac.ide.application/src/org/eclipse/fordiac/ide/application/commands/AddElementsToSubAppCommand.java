@@ -131,8 +131,8 @@ public class AddElementsToSubAppCommand extends Command {
 
 	private static void addToNetwork(final EList<FBNetworkElement> fbNetwork, final FBNetworkElement element) {
 		fbNetwork.add(element);
-		if (element instanceof Group) {
-			((Group) element).getGroupElements().forEach(fbNetwork::add);
+		if (element instanceof final Group group) {
+			group.getGroupElements().forEach(fbNetwork::add);
 		}
 	}
 
@@ -152,18 +152,18 @@ public class AddElementsToSubAppCommand extends Command {
 			cmd.execute();
 			setUniqueName.add(cmd);
 		}
-		if (element instanceof Group) {
-			((Group) element).getGroupElements().forEach(this::ensureUniqueName);
+		if (element instanceof final Group group) {
+			group.getGroupElements().forEach(this::ensureUniqueName);
 		}
 	}
 
 	private void fillElementList(final List<?> selection) {
 		for (final Object fbNetworkElement : selection) {
-			if ((fbNetworkElement instanceof EditPart)
-					&& (((EditPart) fbNetworkElement).getModel() instanceof FBNetworkElement)) {
-				addElement((FBNetworkElement) ((EditPart) fbNetworkElement).getModel());
-			} else if (fbNetworkElement instanceof FBNetworkElement) {
-				addElement((FBNetworkElement) fbNetworkElement);
+			if ((fbNetworkElement instanceof final EditPart ep)
+					&& (ep.getModel() instanceof final FBNetworkElement fbel)) {
+				addElement(fbel);
+			} else if (fbNetworkElement instanceof final FBNetworkElement fbel) {
+				addElement(fbel);
 			}
 		}
 	}
@@ -177,8 +177,8 @@ public class AddElementsToSubAppCommand extends Command {
 		if (element.isMapped()) {
 			unmappingCmds.add(new UnmapCommand(element));
 		}
-		if (element instanceof Group) {
-			((Group) element).getGroupElements().forEach(this::checkMapping);
+		if (element instanceof final Group group) {
+			group.getGroupElements().forEach(this::checkMapping);
 		}
 	}
 
@@ -194,8 +194,8 @@ public class AddElementsToSubAppCommand extends Command {
 				}
 			}
 		}
-		if (element instanceof Group) {
-			((Group) element).getGroupElements().forEach(this::checkElementConnections);
+		if (element instanceof final Group group) {
+			group.getGroupElements().forEach(this::checkElementConnections);
 		}
 	}
 

@@ -18,7 +18,6 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.handler;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -34,9 +33,9 @@ import org.eclipse.fordiac.ide.fb.interpreter.OpSem.FBTransaction;
 import org.eclipse.fordiac.ide.fb.interpreter.OpSem.Transaction;
 import org.eclipse.fordiac.ide.fb.interpreter.api.EventManagerFactory;
 import org.eclipse.fordiac.ide.fb.interpreter.inputgenerator.InputGenerator;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.EventManagerUtils;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.ServiceSequenceUtils;
-import org.eclipse.fordiac.ide.fb.interpreter.mm.utils.VariableUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.EventManagerUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.ServiceSequenceUtils;
+import org.eclipse.fordiac.ide.fb.interpreter.mm.VariableUtils;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.Messages;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.commands.CreateServiceSequenceCommand;
 import org.eclipse.fordiac.ide.fbtypeeditor.servicesequence.editparts.SequenceRootEditPart;
@@ -134,10 +133,10 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 		}
 	}
 
-	private static void setParameters(final FBType fbType, final List<String> parameters) {
+	static void setParameters(final FBType fbType, final List<String> parameters) {
 		// parameter: format "VarName:=Value"
 		for (final String param : parameters) {
-			final String[] paramValues = param.split(":="); //$NON-NLS-1$
+			final String[] paramValues = param.split(":=", 2); //$NON-NLS-1$
 			if (paramValues.length == 2) {
 				VariableUtils.setVariable(fbType, paramValues[0], paramValues[1]);
 			}
@@ -284,22 +283,18 @@ public class RecordServiceSequenceHandler extends AbstractHandler {
 			final int selectedStartState = inputStartStateCombo.getSelectionIndex();
 			if (selectedStartState == -1) { // nothing selected
 				startState = "START"; //$NON-NLS-1$
+			} else {
+				startState = inputStartStateCombo.getItem(selectedStartState);
 			}
-			startState = inputStartStateCombo.getItem(selectedStartState);
 			super.buttonPressed(buttonId);
 		}
 
 		private List<String> getEvents() {
-			return splitAndCleanList(inputEventText.getText());
-		}
-
-		private List<String> splitAndCleanList(final String text) {
-			return Arrays.asList(text.split(";", 0)).stream().filter(s -> !s.isBlank()) //$NON-NLS-1$
-					.map(String::strip).collect(Collectors.toList());
+			return ServiceSequenceUtils.splitAndCleanList(inputEventText.getText(), ";"); //$NON-NLS-1$
 		}
 
 		private List<String> getParameters() {
-			return splitAndCleanList(inputParameterText.getText());
+			return ServiceSequenceUtils.splitAndCleanList(inputParameterText.getText(), ";"); //$NON-NLS-1$
 		}
 
 		private String getCountText() {

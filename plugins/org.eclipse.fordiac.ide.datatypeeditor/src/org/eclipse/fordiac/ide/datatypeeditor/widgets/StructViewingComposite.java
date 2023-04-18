@@ -195,7 +195,6 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 
 	public void reload() {
 		structMemberProvider.setInput(getType().getMemberVariables());
-
 	}
 
 	@Override
@@ -259,7 +258,7 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	}
 
 	public void refresh() {
-		reload();
+		natTable.refresh();
 	}
 
 	@Override
@@ -275,5 +274,12 @@ public class StructViewingComposite extends Composite implements CommandExecutor
 	@Override
 	public void setSelection(final ISelection selection) {
 		// currently nothing to be done here
+	}
+
+	@Override
+	public void removeEntry(final Object entry, final CompoundCommand cmd) {
+		if (entry instanceof VarDeclaration) {
+			cmd.add(new DeleteMemberVariableCommand(getType(), (VarDeclaration) entry));
+		}
 	}
 }

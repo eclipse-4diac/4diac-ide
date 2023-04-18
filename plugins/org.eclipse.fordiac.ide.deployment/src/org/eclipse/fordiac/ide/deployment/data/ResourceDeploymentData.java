@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import org.eclipse.fordiac.ide.deployment.exceptions.DeploymentException;
 import org.eclipse.fordiac.ide.deployment.util.DeploymentHelper;
 import org.eclipse.fordiac.ide.model.libraryElement.Connection;
 import org.eclipse.fordiac.ide.model.libraryElement.FB;
@@ -96,12 +97,13 @@ public class ResourceDeploymentData {
 		params.add(param);
 	}
 
-	public ResourceDeploymentData(final Resource res) {
+	public ResourceDeploymentData(final Resource res) throws DeploymentException {
 		this.res = res;
 		addFBNetworkElements(new ArrayDeque<>(), res.getFBNetwork(), ""); //$NON-NLS-1$
 	}
 
-	private void addFBNetworkElements(final Deque<SubApp> subAppHierarchy, final FBNetwork fbNetwork, final String prefix) {
+	private void addFBNetworkElements(final Deque<SubApp> subAppHierarchy, final FBNetwork fbNetwork,
+			final String prefix) throws DeploymentException {
 		for (final FBNetworkElement fbnElement : fbNetwork.getNetworkElements()) {
 			if (fbnElement instanceof FB) {
 				fbs.add(new FBDeploymentData(prefix, fbnElement));
@@ -128,9 +130,10 @@ public class ResourceDeploymentData {
 
 	}
 
-	private void addSubAppParams(final SubApp subApp, final Deque<SubApp> subAppHierarchy, final String prefix) {
+	private void addSubAppParams(final SubApp subApp, final Deque<SubApp> subAppHierarchy, final String prefix)
+			throws DeploymentException {
 		for (final VarDeclaration dataInput : subApp.getInterface().getInputVars()) {
-			final String val = DeploymentHelper.getVariableValue(dataInput, res.getAutomationSystem());
+			final String val = DeploymentHelper.getVariableValue(dataInput);
 			if (null != val) {
 				for (final ConDeploymentDest destData : getSubappInterfaceconnections(subAppHierarchy, prefix, dataInput)) {
 					params.add(new ParameterData(val, destData.prefix, (VarDeclaration) destData.destination));

@@ -8,40 +8,62 @@
 			<unit id="org.eclipse.elk.feature.feature.group" version="0.8.1"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/nebula/releases/2.5.0/"/>
-			<unit id="org.eclipse.nebula.feature.feature.group" version="2.5.0.202106201019"/>
-		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="http://download.eclipse.org/nattable/releases/2.0.3/repository/"/>
-			<unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="2.0.3.202208090440"/>
-			<unit id="org.eclipse.nebula.widgets.nattable.core.source.feature.feature.group" version="2.0.3.202208090440"/>
-		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/modeling/emf/compare/updates/releases/3.3/R202209051432/"/>
-			<unit id="org.eclipse.emf.compare.feature.group" version="3.3.19.202209051432"/>
-			<unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="3.3.19.202209051432"/>
-			<unit id="org.eclipse.emf.compare.ide.ui.source.feature.group" version="3.3.19.202209051432"/>
-			<unit id="org.eclipse.emf.compare.rcp.ui.feature.group" version="3.3.19.202209051432"/>
-			<unit id="org.eclipse.emf.compare.rcp.ui.source.feature.group" version="3.3.19.202209051432"/>
-			<unit id="org.eclipse.emf.compare.source.feature.group" version="3.3.19.202209051432"/>
-		</location>
-		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
 			<repository location="https://download.eclipse.org/elk/updates/nightly"/>
 			<unit id="org.eclipse.elk.libavoid.feature.feature.group" version="0.0.0"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/eclipse/updates/4.26"/>
-			<unit id="org.eclipse.jdt.feature.group" version="3.18.1400.v20221123-1800"/>
-			<unit id="org.eclipse.pde.feature.group" version="3.14.1400.v20221123-1800"/>
-			<unit id="org.eclipse.platform.sdk" version="4.26.0.I20221123-1800"/>
+			<repository location="http://download.eclipse.org/nattable/releases/2.0.5/repository/"/>
+			<unit id="org.eclipse.nebula.widgets.nattable.core.feature.feature.group" version="2.0.5.202212201525"/>
+			<unit id="org.eclipse.nebula.widgets.nattable.core.source.feature.feature.group" version="2.0.5.202212201525"/>
 		</location>
 		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-			<repository location="https://download.eclipse.org/releases/2022-12"/>
-			<unit id="org.eclipse.egit.feature.group" version="6.4.0.202211300538-r"/>
-			<unit id="org.eclipse.emf.sdk.feature.group" version="2.32.0.v20221121-1400"/>
+			<repository location="https://download.eclipse.org/eclipse/updates/4.27"/>
+			<unit id="org.eclipse.jdt.feature.group" version="3.19.0.v20230302-0300"/>
+			<unit id="org.eclipse.pde.feature.group" version="3.14.1500.v20230302-0300"/>
+			<unit id="org.eclipse.platform.sdk" version="4.27.0.I20230302-0300"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://download.eclipse.org/releases/2023-03"/>
+			<unit id="org.eclipse.egit.feature.group" version="6.5.0.202303070854-r"/>
+			<unit id="org.eclipse.emf.sdk.feature.group" version="2.33.0.v20230226-0921"/>
 			<unit id="org.eclipse.gef.sdk.feature.group" version="3.15.0.202211301913"/>
-			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.18.0.v20221121-1436"/>
-			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.29.0.v20221121-1054"/>
+			<unit id="org.eclipse.ocl.all.sdk.feature.group" version="5.18.0.v20221201-0557"/>
+			<unit id="org.eclipse.xtext.sdk.feature.group" version="2.30.0.v20230227-1344"/>
+			<unit id="org.eclipse.sirius.properties.feature.feature.group" version="7.0.7.202301170754"/>
+			<unit id="org.eclipse.sirius.samples.feature.group" version="7.0.7.202301170754"/>
+			<unit id="org.eclipse.sirius.specifier.feature.group" version="7.0.7.202301170754"/>
+			<unit id="org.eclipse.sirius.specifier.properties.feature.feature.group" version="7.0.7.202301170754"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://download.eclipse.org/nebula/releases/3.0.0/"/>
+			<unit id="org.eclipse.nebula.feature.feature.group" version="3.0.0.202303072132"/>
+		</location>
+		<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+			<repository location="https://download.eclipse.org/modeling/emf/compare/updates/releases/3.3/R202212280858/"/>
+			<unit id="org.eclipse.emf.compare.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.ide.ui.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.ide.ui.source.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.rcp.ui.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.rcp.ui.source.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.source.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.egit.feature.group" version="3.3.21.202212280858"/>
+			<unit id="org.eclipse.emf.compare.egit.source.feature.group" version="3.3.21.202212280858"/>
+		</location>
+		<location includeDependencyDepth="infinite" includeDependencyScopes="compile,provided,runtime,test,system,import" includeSource="true" missingManifest="generate" type="Maven">
+			<dependencies>
+				<dependency>
+					<groupId>org.gitlab4j</groupId>
+					<artifactId>gitlab4j-api</artifactId>
+					<version>5.0.1</version>
+					<type>jar</type>
+				</dependency>
+				<dependency>
+					<groupId>org.glassfish.jersey.core</groupId>
+					<artifactId>jersey-server</artifactId>
+					<version>2.35</version>
+					<type>jar</type>
+				</dependency>
+			</dependencies>
 		</location>
 	</locations>
 </target>

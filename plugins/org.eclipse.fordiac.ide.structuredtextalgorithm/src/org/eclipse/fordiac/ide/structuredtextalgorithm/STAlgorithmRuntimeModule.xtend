@@ -21,7 +21,7 @@ import org.eclipse.xtext.Constants
 import org.eclipse.xtext.scoping.IScopeProvider
 import org.eclipse.xtext.scoping.impl.AbstractDeclarativeScopeProvider
 import org.eclipse.xtext.parsetree.reconstr.ICommentAssociater
-import org.eclipse.fordiac.ide.structuredtextcore.util.STCoreExportCommentAssociater
+import org.eclipse.fordiac.ide.structuredtextcore.parsetree.reconstr.STCoreCommentAssociater
 
 /**
  * Use this class to register components to be used at runtime / without the Equinox extension registry.
@@ -46,7 +46,7 @@ class STAlgorithmRuntimeModule extends AbstractSTAlgorithmRuntimeModule {
 		}
 	}
 
-	def Class<? extends ICommentAssociater> bind() {
-		return STCoreExportCommentAssociater
+	def Class<? extends ICommentAssociater> bindICommentAssociater() {
+		return STCoreCommentAssociater
 	}
 }

@@ -1,6 +1,6 @@
 /*******************************************************************************
  * Copyright (c) 2022 Primetals Technologies Austria GmbH,
- *               2023 Jonannes Kepler University, Linz
+ *               2023 Johannes Kepler University, Linz
  *
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
@@ -63,7 +63,6 @@ public class PasteDataIntoTableAction implements IKeyAction {
 
 	private static void pasteClipboardCellsContents(final NatTable natTable, final Object contents) {
 		final String[][] cellsContent = parseContent(contents);
-
 		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
 
 		final List<Rectangle> ranges = selectionLayer.getSelectionModel().getSelections().stream().distinct()

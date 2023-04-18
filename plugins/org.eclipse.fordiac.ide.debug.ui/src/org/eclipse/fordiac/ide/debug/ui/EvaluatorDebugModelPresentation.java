@@ -16,6 +16,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.debug.core.DebugException;
 import org.eclipse.debug.core.model.IValue;
 import org.eclipse.debug.ui.IDebugModelPresentation;
 import org.eclipse.debug.ui.IValueDetailListener;
@@ -26,10 +27,14 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.ui.util.EditUIUtil;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
+import org.eclipse.fordiac.ide.typemanagement.FBTypeEditorInput;
+import org.eclipse.fordiac.ide.ui.FordiacLogHelper;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.IEditorDescriptor;
 import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.FileEditorInput;
 
@@ -37,21 +42,23 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 
 	@Override
 	public IEditorInput getEditorInput(final Object element) {
-		if (element instanceof EObject) {
-			final EObject root = EcoreUtil.getRootContainer((EObject) element);
-			if (root instanceof FBType) {
-				final FBType fbType = (FBType) root;
-				return new FileEditorInput(fbType.getTypeEntry().getFile());
+		if (element instanceof final EObject object) {
+			final EObject root = EcoreUtil.getRootContainer(object);
+			if (root instanceof final FBType fbType) {
+				return new FBTypeEditorInput(fbType, fbType.getTypeEntry());
 			}
 			return getEditorInput(((EObject) element).eResource());
-		} else if (element instanceof Resource) {
-			final Resource resource = (Resource) element;
+		} else if (element instanceof final Resource resource) {
 			final URI uri = resource.getURI();
 			if (uri.isPlatformResource()) {
 				final String path = uri.toPlatformString(true);
 				final IResource workspaceResource = ResourcesPlugin.getWorkspace().getRoot().findMember(new Path(path));
-				if (workspaceResource instanceof IFile) {
-					return new FileEditorInput((IFile) workspaceResource);
+				if (workspaceResource instanceof final IFile file) {
+					final var typeEntry = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
+					if (typeEntry != null && typeEntry.getTypeEditable() instanceof final FBType fbType) {
+						return new FBTypeEditorInput(fbType, typeEntry);
+					}
+					return new FileEditorInput(file);
 				}
 			} else {
 				return new URIEditorInput(uri);
@@ -62,15 +69,15 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 
 	@Override
 	public String getEditorId(final IEditorInput input, final Object element) {
-		if (input instanceof FileEditorInput) {
-			final String fileName = ((FileEditorInput) input).getFile().getName();
+		if (input instanceof final IFileEditorInput fileEditorInput) {
+			final String fileName = fileEditorInput.getFile().getName();
 			final IEditorDescriptor editorDescriptor = PlatformUI.getWorkbench().getEditorRegistry()
 					.getDefaultEditor(fileName);
 			if (editorDescriptor != null) {
 				return editorDescriptor.getId();
 			}
-		} else if (input instanceof URIEditorInput) {
-			final URI uri = ((URIEditorInput) input).getURI();
+		} else if (input instanceof final URIEditorInput uriEditorInput) {
+			final URI uri = uriEditorInput.getURI();
 			final IEditorDescriptor editorDescriptor = EditUIUtil.getDefaultEditor(uri, null);
 			if (editorDescriptor != null) {
 				return editorDescriptor.getId();
@@ -81,6 +88,7 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 
 	@Override
 	public void setAttribute(final String attribute, final Object value) {
+		// not needed
 	}
 
 	@Override
@@ -95,6 +103,11 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 
 	@Override
 	public void computeDetail(final IValue value, final IValueDetailListener listener) {
+		try {
+			listener.detailComputed(value, value.getValueString());
+		} catch (final DebugException e) {
+			FordiacLogHelper.logWarning("Cannot compute value detail", e); //$NON-NLS-1$
+		}
 	}
 
 	@Override
@@ -104,13 +117,16 @@ public class EvaluatorDebugModelPresentation implements IDebugModelPresentation 
 
 	@Override
 	public void addListener(final ILabelProviderListener listener) {
+		// not needed
 	}
 
 	@Override
 	public void removeListener(final ILabelProviderListener listener) {
+		// not needed
 	}
 
 	@Override
 	public void dispose() {
+		// not needed
 	}
 }

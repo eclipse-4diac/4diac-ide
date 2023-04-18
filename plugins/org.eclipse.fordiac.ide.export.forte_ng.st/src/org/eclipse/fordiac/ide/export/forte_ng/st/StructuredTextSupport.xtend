@@ -407,8 +407,17 @@ abstract class StructuredTextSupport implements ILanguageSupport {
 		""
 	}
 
-	def protected dispatch CharSequence generateFeatureName(VarDeclaration feature) //
-	'''«IF feature.rootContainer instanceof BaseFBType»st_«ENDIF»«feature.name»()'''
+	def protected dispatch CharSequence generateFeatureName(VarDeclaration feature) {
+		if(feature.rootContainer instanceof BaseFBType) {
+			val fbType = feature.rootContainer as BaseFBType
+			if(fbType.internalConstVars.contains(feature)) 
+				'''st_const_«feature.name»'''
+			else
+				'''st_«feature.name»()'''
+		} else {
+			'''«feature.name»()'''
+		}
+	}
 
 	def protected dispatch CharSequence generateFeatureName(STVarDeclaration feature) {
 		switch (feature.eContainer) {

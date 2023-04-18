@@ -44,9 +44,10 @@ class STAlgorithmSupport extends StructuredTextSupport {
 		if (algorithm.rootContainer instanceof BaseFBType) {
 			val container = algorithm.rootContainer as BaseFBType
 			return '''
+				local ENV = {}
 				«container.interfaceList.generateFBVariablePrefix»
 				«container.internalVars.generateInternalVariablePrefix»
-				«alg.body.varTempDeclarations.generateLocalVariables(true)»
+				«alg.body.varTempDeclarations.generateLocalVariables»
 				
 				«alg.body.statements.generateStatementList»
 				«container.internalVars.generateInternalVariableSuffix»
@@ -54,7 +55,8 @@ class STAlgorithmSupport extends StructuredTextSupport {
 			'''
 		} else {
 			return '''
-				«alg.body.varTempDeclarations.generateLocalVariables(true)»
+				local ENV = {}
+				«alg.body.varTempDeclarations.generateLocalVariables»
 				
 				«alg.body.statements.generateStatementList»
 			'''

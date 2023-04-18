@@ -26,23 +26,23 @@ public class CopyDataFromTableAction implements IKeyAction {
 	@Override
 	public void run(final NatTable natTable, final KeyEvent event) {
 		final SelectionLayer selectionLayer = NatTableWidgetFactory.getSelectionLayer(natTable);
-		final boolean isHeaderSelected = selectionLayer.getSelectionModel().getSelections().stream()
-				.anyMatch(rec -> rec.width == Integer.MAX_VALUE);
-		final int[] rows = selectionLayer.getFullySelectedRowPositions();
+		if (selectionLayer != null) {
+			final int[] rows = selectionLayer.getFullySelectedRowPositions();
 
-		if (isHeaderSelected && rows.length > 0) {
-			final ListDataProvider<?> provider = (ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(natTable)
-					.getDataProvider();
+			if (rows.length > 0) {
+				final ListDataProvider<?> provider = (ListDataProvider<?>) NatTableWidgetFactory.getDataLayer(natTable)
+						.getDataProvider();
 
-			int i = 0;
-			final Object[] objects = new Object[rows.length];
-			for (final int row : rows) {
-				objects[i++] = provider.getRowObject(row);
+				int i = 0;
+				final Object[] objects = new Object[rows.length];
+				for (final int row : rows) {
+					objects[i++] = provider.getRowObject(row);
+				}
+
+				Clipboard.getDefault().setContents(objects);
+			} else {
+				new CopyDataAction().run(natTable, event);
 			}
-
-			Clipboard.getDefault().setContents(objects);
-		} else {
-			new CopyDataAction().run(natTable, event);
 		}
 	}
 }

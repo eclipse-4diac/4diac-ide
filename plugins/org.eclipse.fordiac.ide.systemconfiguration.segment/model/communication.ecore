@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="Communication" nsURI="http://Communication/1.0" nsPrefix="comm">
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="communication" nsURI="http://Communication/1.0" nsPrefix="comm">
   <eClassifiers xsi:type="ecore:EClass" name="TsnConfiguration" eSuperTypes="../../org.eclipse.fordiac.ide.model/model/lib.ecore#//CommunicationConfiguration">
-    <eOperations name="getId" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2003/XMLType#//String">
-      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
-        <details key="body" value="return &quot;tsnConfig&quot;;"/>
-      </eAnnotations>
-    </eOperations>
     <eOperations name="getMappingTargets" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//CommunicationMappingTarget">
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="body" value="return ECollections.toEList(windows);"/>
+      </eAnnotations>
+    </eOperations>
+    <eOperations name="getParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return Annotations.getParameters(windows,cycleTime);"/>
       </eAnnotations>
     </eOperations>
     <eStructuralFeatures xsi:type="ecore:EAttribute" name="cycleTime" lowerBound="1"
@@ -37,7 +37,13 @@
         <details key="body" value="return ECollections.asEList(target);"/>
       </eAnnotations>
     </eOperations>
+    <eOperations name="getParameters" upperBound="-1" eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//VarDeclaration">
+      <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
+        <details key="body" value="return ECollections.emptyEList();"/>
+      </eAnnotations>
+    </eOperations>
     <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
-        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//CommunicationMappingTarget"/>
+        eType="ecore:EClass ../../org.eclipse.fordiac.ide.model/model/lib.ecore#//CommunicationMappingTarget"
+        containment="true"/>
   </eClassifiers>
 </ecore:EPackage>

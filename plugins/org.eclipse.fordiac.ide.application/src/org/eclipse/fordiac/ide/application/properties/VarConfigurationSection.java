@@ -336,7 +336,7 @@ public class VarConfigurationSection extends AbstractSection {
 				break;
 			case VISIBLE_COL_ID:
 				if ((rowObject.isIsInput() && rowObject.getInputConnections().isEmpty())
-						|| !rowObject.isIsInput() && rowObject.getOutputConnections().isEmpty()) {
+						&& !InstancePropertySection.isExpandedSubAppPinAndConnected(rowObject)) {
 					cmd = new HidePinCommand(rowObject, ((Boolean) newValue).booleanValue());
 				}
 				break;
@@ -349,6 +349,8 @@ public class VarConfigurationSection extends AbstractSection {
 			}
 			getSection().executeCommand(cmd);
 		}
+
+
 	}
 
 	public static class VarConfigColumnDataProvider implements IDataProvider {

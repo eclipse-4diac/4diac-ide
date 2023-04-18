@@ -15,7 +15,7 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.fordiac.ide.deployment,
  org.eclipse.fordiac.ide.deployment.iec61499
 Bundle-ActivationPolicy: lazy
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Bundle-Vendor: Eclipse 4diac
 Export-Package: org.eclipse.fordiac.ide.fbtester.model.testdata,
  org.eclipse.fordiac.ide.fbtester.model.testdata.impl,

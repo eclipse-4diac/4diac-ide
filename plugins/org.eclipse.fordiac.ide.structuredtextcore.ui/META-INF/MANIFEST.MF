@@ -19,16 +19,18 @@ Require-Bundle: org.eclipse.fordiac.ide.model,
  org.eclipse.ui,
  org.eclipse.compare,
  org.eclipse.xtext.builder,
+ org.eclipse.ltk.ui.refactoring,
  org.eclipse.fordiac.ide.model,
  org.eclipse.fordiac.ide.structuredtextfunctioneditor.model,
  org.eclipse.fordiac.ide.structuredtextalgorithm.model
 Import-Package: org.apache.log4j,
  org.eclipse.xtext.ui.codemining;resolution:=optional
-Bundle-RequiredExecutionEnvironment: JavaSE-11
+Bundle-RequiredExecutionEnvironment: JavaSE-17
 Export-Package: org.eclipse.fordiac.ide.structuredtextcore.ui,
  org.eclipse.fordiac.ide.structuredtextcore.ui.codemining,
  org.eclipse.fordiac.ide.structuredtextcore.ui.contentassist,
  org.eclipse.fordiac.ide.structuredtextcore.ui.document,
+ org.eclipse.fordiac.ide.structuredtextcore.ui.editor,
  org.eclipse.fordiac.ide.structuredtextcore.ui.editor.occurrences,
  org.eclipse.fordiac.ide.structuredtextcore.ui.hovering,
  org.eclipse.fordiac.ide.structuredtextcore.ui.internal,
