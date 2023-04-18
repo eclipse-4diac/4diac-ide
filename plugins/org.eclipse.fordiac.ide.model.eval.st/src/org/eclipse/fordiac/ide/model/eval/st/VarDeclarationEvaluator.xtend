@@ -13,7 +13,9 @@
 package org.eclipse.fordiac.ide.model.eval.st
 
 import org.eclipse.fordiac.ide.model.eval.Evaluator
+import org.eclipse.fordiac.ide.model.eval.EvaluatorException
 import org.eclipse.fordiac.ide.model.eval.variable.Variable
+import org.eclipse.fordiac.ide.model.eval.variable.VariableEvaluator
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration
 import org.eclipse.fordiac.ide.structuredtextcore.stcore.STInitializerExpressionSource
 
@@ -21,7 +23,7 @@ import static extension org.eclipse.fordiac.ide.model.eval.variable.VariableOper
 import static extension org.eclipse.fordiac.ide.structuredtextalgorithm.util.StructuredTextParseUtil.*
 import static extension org.eclipse.fordiac.ide.structuredtextcore.stcore.util.STCoreUtil.*
 
-class VarDeclarationEvaluator extends StructuredTextEvaluator {
+class VarDeclarationEvaluator extends StructuredTextEvaluator implements VariableEvaluator {
 	final VarDeclaration varDeclaration
 
 	STInitializerExpressionSource parseResult
@@ -56,12 +58,23 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator {
 
 	override evaluate() {
 		prepare
-		val result = newVariable(varDeclaration.name, parseResult?.initializerExpression?.resultType ?: varDeclaration.actualType)
+		val result = newVariable(varDeclaration.name,
+			parseResult?.initializerExpression?.resultType ?: varDeclaration.actualType)
 		if (parseResult?.initializerExpression !== null) {
 			result.evaluateInitializerExpression(parseResult.initializerExpression)
 		}
 		result.value
 	}
 
+	override evaluateVariable() throws EvaluatorException, InterruptedException {
+		prepare
+		val result = newVariable(varDeclaration.name, varDeclaration.actualType)
+		if (parseResult?.initializerExpression !== null) {
+			result.evaluateInitializerExpression(parseResult.initializerExpression)
+		}
+		result
+	}
+
 	override getSourceElement() { varDeclaration }
+
 }
