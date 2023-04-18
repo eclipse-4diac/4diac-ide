@@ -66,7 +66,10 @@ final class VariableOperations {
 	}
 
 	def static Variable<?> newVariable(VarDeclaration decl) {
-		newVariable(decl.name, decl.actualType, decl.createEvaluator(VarDeclaration, null, emptySet, null)?.evaluate)
+		if(decl.initialValue !== null)
+			newVariable(decl.name, decl.actualType, decl.createEvaluator(VarDeclaration, null, emptySet, null)?.evaluate)
+		else
+			newVariable(decl.name, decl.actualType)
 	}
 
 	def static Variable<?> newVariable(VarDeclaration decl, String initialValue) {

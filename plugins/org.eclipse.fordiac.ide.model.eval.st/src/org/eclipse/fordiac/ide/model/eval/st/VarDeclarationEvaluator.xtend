@@ -32,11 +32,11 @@ class VarDeclarationEvaluator extends StructuredTextEvaluator {
 	}
 
 	override prepare() {
-		if (parseResult === null) {
+		if (parseResult === null && varDeclaration.initialValue !== null) {
 			val errors = newArrayList
 			val warnings = newArrayList
 			val infos = newArrayList
-			parseResult = (varDeclaration.initialValue ?: "").parse(
+			parseResult = varDeclaration.initialValue.parse(
 				varDeclaration?.eResource?.URI,
 				varDeclaration.featureType,
 				null,
