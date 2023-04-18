@@ -27,10 +27,10 @@ import org.gitlab4j.api.models.Project;
 public class GLTreeContentProvider implements ITreeContentProvider {
 
 	private Map<Project, List<Package>> projectsAndPackages;
-	private Map<String, List<String>> packagesAndVersions;
+	private Map<String, List<LeafNode>> packagesAndLeaves;
 	
-	public GLTreeContentProvider(Map<String, List<String>> packagesAndVersions) {
-		this.packagesAndVersions = packagesAndVersions;
+	public GLTreeContentProvider(Map<String, List<LeafNode>> packagesAndLeaves) {
+		this.packagesAndLeaves = packagesAndLeaves;
 	}
 
 	@Override
@@ -49,8 +49,8 @@ public class GLTreeContentProvider implements ITreeContentProvider {
 					.stream()
 					.filter(distinctByPackageName(Package::getName))
 					.toArray();
-		} else if (parentElement instanceof Package) {
-			return packagesAndVersions.get(((Package) parentElement).getName()).toArray();
+		} else if (parentElement instanceof Package pack) {
+			return packagesAndLeaves.get(pack.getName()).toArray();
 		}
 		return new String[0] ;
  	}
@@ -65,14 +65,16 @@ public class GLTreeContentProvider implements ITreeContentProvider {
 				}
 			});
 			return parent[0];
+		} else if (element instanceof LeafNode leafNode) {
+			return leafNode.getPackage();
 		}
 		return null;
 	}
 
 	@Override
 	public boolean hasChildren(Object element) {
-		return (element instanceof Project && !projectsAndPackages.get((Project) element).isEmpty()) || 
-				(element instanceof Package && !packagesAndVersions.get(((Package)element).getName()).isEmpty());
+		return (element instanceof Project && !projectsAndPackages.get(element).isEmpty()) || 
+				(element instanceof Package pack && !packagesAndLeaves.get(pack.getName()).isEmpty());
 	}
 	
 	// Needed to filter the packages based on names instead their equals()
