@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="hierachyPackage" nsURI="org.eclipse.fordiac.ide.hierachymanager"
+    nsPrefix="hierachyPackage">
+  <eClassifiers xsi:type="ecore:EClass" name="Level" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" lowerBound="1" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/XMLType.ecore#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="comment" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/XMLType.ecore#//String"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="children" eType="#//Node"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="RootLevel">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="levels" upperBound="-1"
+        eType="#//Level" containment="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="Node"/>
+  <eClassifiers xsi:type="ecore:EClass" name="Leaf" eSuperTypes="#//Node">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="ref" eType="ecore:EDataType platform:/plugin/org.eclipse.emf.ecore/model/XMLType.ecore#//String"/>
+  </eClassifiers>
+</ecore:EPackage>
