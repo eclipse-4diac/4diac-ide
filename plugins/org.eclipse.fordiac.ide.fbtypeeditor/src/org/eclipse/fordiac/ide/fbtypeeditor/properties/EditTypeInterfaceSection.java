@@ -30,6 +30,7 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.model.ui.widgets.DataTypeSelectionButton;
 import org.eclipse.fordiac.ide.ui.widget.CheckBoxConfigurationNebula;
@@ -105,6 +106,11 @@ public class EditTypeInterfaceSection extends AbstractEditInterfaceDataSection {
 	@Override
 	public boolean isEditable() {
 		return true;
+	}
+
+	@Override
+	protected InterfaceList getInterface() {
+		return (getType() != null) ? getType().getInterfaceList() : null;
 	}
 
 }

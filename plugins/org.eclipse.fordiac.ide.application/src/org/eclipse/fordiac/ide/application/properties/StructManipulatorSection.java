@@ -79,22 +79,22 @@ public class StructManipulatorSection extends AbstractSection implements Command
 
 	@Override
 	protected FBNetworkElement getInputType(final Object input) {
-		if (input instanceof StructManipulatorEditPart) {
-			return ((StructManipulatorEditPart) input).getModel();
+		if (input instanceof final StructManipulatorEditPart structManEP) {
+			return structManEP.getModel();
 		}
-		if (input instanceof StructManipulator) {
-			return ((StructManipulator) input);
+		if (input instanceof final StructManipulator structMan) {
+			return structMan;
 		}
-		if(input instanceof StructInterfaceEditPart) {
-			return ((StructInterfaceEditPart) input).getModel().getFBNetworkElement();
+		if (input instanceof final StructInterfaceEditPart structIEEP) {
+			return structIEEP.getModel().getFBNetworkElement();
 		}
 		return null;
 	}
 
 	@Override
 	protected StructManipulator getType() {
-		if (type instanceof StructManipulator) {
-			return (StructManipulator) type;
+		if (type instanceof final StructManipulator structMan) {
+			return structMan;
 		}
 		return null;
 	}
@@ -162,6 +162,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 		createContextMenu(memberVarViewer.getControl());
 	}
 
+	@SuppressWarnings("static-method")  // allow subclasses to provide different treeviewers
 	protected TreeViewer createTreeViewer(final Composite parent) {
 		return new TreeViewer(parent);
 	}
@@ -205,8 +206,8 @@ public class StructManipulatorSection extends AbstractSection implements Command
 		if (!selection.isEmpty()) {
 			final AbstractStructTreeNode selected = (AbstractStructTreeNode) selection.getFirstElement();
 			final VarDeclaration varDecl = selected.getVariable();
-			if (varDecl.getType() instanceof StructuredType) {
-				return (StructuredType) varDecl.getType();
+			if (varDecl.getType() instanceof final StructuredType structType) {
+				return structType;
 			}
 		}
 		return null;
@@ -287,8 +288,7 @@ public class StructManipulatorSection extends AbstractSection implements Command
 	public void stackChanged(final CommandStackEvent event) {
 		if (event.getDetail() == CommandStack.POST_UNDO || event.getDetail() == CommandStack.POST_REDO) {
 			final Command command = event.getCommand();
-			if (command instanceof ChangeStructCommand) {
-				final ChangeStructCommand cmd = (ChangeStructCommand) command;
+			if (command instanceof final ChangeStructCommand cmd) {
 				if (cmd.getOldMux() == getType() || cmd.getNewMux() == getType()) {
 					if (event.getDetail() == CommandStack.POST_UNDO) {
 						updateStructManipulatorFB(cmd.getOldMux());

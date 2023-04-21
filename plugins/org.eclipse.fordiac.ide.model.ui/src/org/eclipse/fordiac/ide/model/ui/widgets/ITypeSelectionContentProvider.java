@@ -28,10 +28,10 @@ import org.eclipse.fordiac.ide.model.ui.editors.DataTypeDropdown;
 public interface ITypeSelectionContentProvider {
 	/**
 	 * Returns the elements to display in the DataTypeDropdown
-	 * and to select in TypeSelectionWidget 
+	 * and to select in TypeSelectionWidget
 	 * The result is not modified by the viewer.
 	 *
 	 * @return a list of DataTypes to display in the viewer
 	 */
-	public List<DataType> getTypes();
+	List<DataType> getTypes();
 }

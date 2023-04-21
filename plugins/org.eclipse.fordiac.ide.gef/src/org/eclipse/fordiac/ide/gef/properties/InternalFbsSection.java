@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.fordiac.ide.gef.nat.FBColumnAccessor;
 import org.eclipse.fordiac.ide.gef.nat.FBColumnProvider;
@@ -123,8 +122,8 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 
 	@Override
 	public void addEntry(final Object entry, final boolean isInput, final int index, final CompoundCommand cmd) {
-		if (entry instanceof FB) {
-			cmd.add(new InsertFBCommand(getType().getInternalFbs(), (FB) entry, index));
+		if (entry instanceof final FB fb) {
+			cmd.add(new InsertFBCommand(getType().getInternalFbs(), fb, index));
 		}
 
 	}
@@ -173,13 +172,13 @@ public class InternalFbsSection extends AbstractSection implements I4diacNatTabl
 
 	private void initTypeSelection(final TypeLibrary typeLib) {
 		typeSelection.put("FB Types", typeLib.getFbTypes().values().stream() //$NON-NLS-1$
-				.map(FBTypeEntry::getTypeName).collect(Collectors.toList()));
+				.map(FBTypeEntry::getTypeName).toList());
 	}
 
 	@Override
 	public void removeEntry(final Object entry, final CompoundCommand cmd) {
-		if (entry instanceof FB) {
-			cmd.add(new DeleteInternalFBCommand(getType(), (FB) entry));
+		if (entry instanceof final FB fb) {
+			cmd.add(new DeleteInternalFBCommand(getType(), fb));
 		}
 	}
 }

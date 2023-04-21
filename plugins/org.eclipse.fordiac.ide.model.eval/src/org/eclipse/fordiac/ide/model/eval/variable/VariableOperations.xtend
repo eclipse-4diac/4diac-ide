@@ -66,7 +66,14 @@ final class VariableOperations {
 	}
 
 	def static Variable<?> newVariable(VarDeclaration decl) {
-		newVariable(decl.name, decl.actualType, decl.createEvaluator(VarDeclaration, null, emptySet, null)?.evaluate)
+		if (decl.initialValue !== null) {
+			val evaluator = decl.createEvaluator(VarDeclaration, null, emptySet, null)
+			if (evaluator instanceof VariableEvaluator) {
+				evaluator.evaluateVariable
+			} else
+				throw new UnsupportedOperationException("No suitable evaluator for VarDeclaration found")
+		} else
+			newVariable(decl.name, decl.actualType)
 	}
 
 	def static Variable<?> newVariable(VarDeclaration decl, String initialValue) {
@@ -131,7 +138,7 @@ final class VariableOperations {
 		else
 			decl.type
 	}
-	
+
 	def private static withValue(VarDeclaration decl, String valueString) {
 		val copy = LibraryElementFactory.eINSTANCE.createVarDeclaration => [
 			name = decl.name
@@ -139,7 +146,7 @@ final class VariableOperations {
 			arraySize = decl.arraySize
 			value = LibraryElementFactory.eINSTANCE.createValue => [value = valueString]
 		]
-		if(decl.eResource !== null) {
+		if (decl.eResource !== null) {
 			new ResourceImpl(decl.eResource.URI).contents.add(copy)
 		}
 		copy

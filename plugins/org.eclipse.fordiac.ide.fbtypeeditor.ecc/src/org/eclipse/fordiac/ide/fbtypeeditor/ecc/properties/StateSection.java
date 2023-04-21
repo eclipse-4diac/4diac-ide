@@ -22,13 +22,13 @@
 package org.eclipse.fordiac.ide.fbtypeeditor.ecc.properties;
 
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.Messages;
-import org.eclipse.fordiac.ide.fbtypeeditor.ecc.editparts.ECStateEditPart;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets.ActionEditingComposite;
 import org.eclipse.fordiac.ide.fbtypeeditor.ecc.widgets.TransitionEditingComposite;
 import org.eclipse.fordiac.ide.gef.properties.AbstractSection;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCommentCommand;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeNameCommand;
 import org.eclipse.fordiac.ide.model.libraryElement.ECState;
+import org.eclipse.gef.EditPart;
 import org.eclipse.gef.commands.CommandStack;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -50,11 +50,10 @@ public class StateSection extends AbstractSection {
 
 	@Override
 	protected Object getInputType(final Object input) {
-		if (input instanceof ECStateEditPart) {
-			return ((ECStateEditPart) input).getModel();
-		}
-		if (input instanceof ECState) {
-			return input;
+		final Object obToCheck = (input instanceof final EditPart ep) ? ep.getModel() : input;
+
+		if (obToCheck instanceof ECState) {
+			return obToCheck;
 		}
 		return null;
 	}

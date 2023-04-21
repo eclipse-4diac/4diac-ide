@@ -21,7 +21,11 @@ package org.eclipse.fordiac.ide.application.properties;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.application.Messages;
 import org.eclipse.fordiac.ide.application.commands.ResizeGroupOrSubappCommand;
 import org.eclipse.fordiac.ide.application.editparts.SubAppForFBNetworkEditPart;
@@ -192,7 +196,7 @@ public class InstancePropertySection extends AbstractSection {
 		configureColumns(configLabels, columnPosition, rowItem, defaultComment);
 	}
 
-	private String getDefaultComment(final INamedElement type, final int rowPosition,
+	private static String getDefaultComment(final INamedElement type, final int rowPosition,
 			final EList<VarDeclaration> varDeclarations) {
 		if (type instanceof final StructManipulator structManipulator) {
 			final List<VarDeclaration> variableList = structManipulator.getStructType().getMemberVariables();
@@ -205,11 +209,12 @@ public class InstancePropertySection extends AbstractSection {
 		return null;
 	}
 
-	private void configureColumns(final LabelStack configLabels, final int columnPosition, final VarDeclaration rowItem,
+	private static void configureColumns(final LabelStack configLabels, final int columnPosition,
+			final VarDeclaration rowItem,
 			final String defaultComment) {
 		if (columnPosition == INITIAL_VALUE_COL_ID && !InitialValueHelper.hasInitalValue(rowItem)
 				|| columnPosition == COMMENT_COL_ID && defaultComment != null
-						&& rowItem.getComment().equals(defaultComment)) {
+				&& rowItem.getComment().equals(defaultComment)) {
 			configLabels.addLabelOnTop(NatTableWidgetFactory.DEFAULT_CELL);
 		}
 		if (columnPosition == NAME_COL_ID || columnPosition == COMMENT_COL_ID) {
@@ -236,9 +241,7 @@ public class InstancePropertySection extends AbstractSection {
 		nameText = createGroupText(fbInfoGroup, true);
 		nameText.addModifyListener(e -> {
 			removeContentAdapter();
-			if (getType() instanceof final FBNetworkElement fbNetworkElement) {
-				executeCommand(new ChangeFBNetworkElementName(fbNetworkElement, nameText.getText()));
-			}
+			executeCommand(new ChangeFBNetworkElementName(getType(), nameText.getText()));
 			addContentAdapter();
 		});
 
@@ -247,7 +250,7 @@ public class InstancePropertySection extends AbstractSection {
 
 		commentText = createGroupText(fbInfoGroup, true, SWT.BORDER | SWT.MULTI | SWT.V_SCROLL);
 		GridDataFactory.fillDefaults().align(SWT.FILL, SWT.TOP).grab(true, false)
-				.hint(SWT.DEFAULT, 3 * commentText.getLineHeight()).applyTo(commentText);
+		.hint(SWT.DEFAULT, 3 * commentText.getLineHeight()).applyTo(commentText);
 		commentText.addModifyListener(e -> {
 			removeContentAdapter();
 			final Command cmd = createChangeCommentCommand();
@@ -313,7 +316,7 @@ public class InstancePropertySection extends AbstractSection {
 	}
 
 	@Override
-	protected INamedElement getType() {
+	protected FBNetworkElement getType() {
 		if (type instanceof final FBNetworkElement fbNetworkElement) {
 			return fbNetworkElement;
 		}
@@ -332,6 +335,40 @@ public class InstancePropertySection extends AbstractSection {
 
 		inputTable.refresh();
 		outputTable.refresh();
+	}
+
+	private final Adapter interfaceAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			notifiyRefresh();
+		}
+	};
+
+	private final Adapter fbnElementAdapter = new AdapterImpl() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			notifiyRefresh();
+		}
+	};
+
+	@Override
+	protected void addContentAdapter() {
+		// for performance reasons (we could have many children) do not call super here.
+		if (getType() != null) {
+			getType().eAdapters().add(fbnElementAdapter);
+			getType().getInterface().eAdapters().add(interfaceAdapter);
+		}
+	}
+
+	@Override
+	protected void removeContentAdapter() {
+		// for performance reasons (we could have many children) do not call super here.
+		if (getType() != null) {
+			getType().eAdapters().remove(fbnElementAdapter);
+			getType().getInterface().eAdapters().remove(interfaceAdapter);
+		}
 	}
 
 	protected static boolean isExpandedSubAppPinAndConnected(final VarDeclaration rowObject) {

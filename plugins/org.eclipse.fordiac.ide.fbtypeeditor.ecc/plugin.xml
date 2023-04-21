@@ -54,19 +54,19 @@
                afterTab="property.tab.algorithms"
                category="ecc"
                id="property.tab.ivars"
-               label="Internal Vars">
+               label="Variables">
          </propertyTab>
          <propertyTab
                afterTab="property.tab.ivars"
                category="ecc"
                id="property.tab.icvars"
-               label="Internal Const Vars">
+               label="Constants">
          </propertyTab>
          <propertyTab
                afterTab="property.tab.icvars"
                category="ecc"
                id="property.tab.ifbs"
-               label="Internal FBs">
+               label="Function Blocks">
          </propertyTab>
       </propertyTabs>
    </extension>

@@ -16,6 +16,9 @@
  *******************************************************************************/
 package org.eclipse.fordiac.ide.gef.properties;
 
+import org.eclipse.emf.common.notify.Adapter;
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.fordiac.ide.gef.provider.CompilerContentProvider;
 import org.eclipse.fordiac.ide.gef.provider.CompilerLabelProvider;
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCompilerInfoClassdefCommand;
@@ -26,7 +29,9 @@ import org.eclipse.fordiac.ide.model.commands.change.ChangeCompilerVendorCommand
 import org.eclipse.fordiac.ide.model.commands.change.ChangeCompilerVersionCommand;
 import org.eclipse.fordiac.ide.model.commands.create.AddNewCompilerCommand;
 import org.eclipse.fordiac.ide.model.commands.delete.DeleteCompilerCommand;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilableType;
 import org.eclipse.fordiac.ide.model.libraryElement.Compiler;
+import org.eclipse.fordiac.ide.model.libraryElement.CompilerInfo;
 import org.eclipse.fordiac.ide.model.libraryElement.FBType;
 import org.eclipse.fordiac.ide.model.libraryElement.Language;
 import org.eclipse.fordiac.ide.ui.FordiacMessages;
@@ -234,19 +239,47 @@ public abstract class CompilableTypeInfoSection extends TypeInfoSection {
 	}
 
 	@Override
+	protected CompilableType getType() {
+		return (CompilableType) super.getType();
+	}
+
+	@Override
 	public void refresh() {
 		super.refresh();
 		final CommandStack commandStackBuffer = commandStack;
 		commandStack = null;
-		if ((type instanceof FBType) && (null != ((FBType) type).getCompilerInfo())) {
-			headerText.setText(null != ((FBType) type).getCompilerInfo().getHeader()
-					? ((FBType) type).getCompilerInfo().getHeader()
-							: ""); //$NON-NLS-1$
-			classdefText.setText(null != ((FBType) type).getCompilerInfo().getClassdef()
-					? ((FBType) type).getCompilerInfo().getClassdef()
-							: ""); //$NON-NLS-1$
+		if ((getType() != null) && (null != getType().getCompilerInfo())) {
+			final CompilerInfo compilerInfo = getType().getCompilerInfo();
+			headerText.setText(null != compilerInfo.getHeader() ? compilerInfo.getHeader()
+					: ""); //$NON-NLS-1$
+			classdefText.setText(null != compilerInfo.getClassdef() ? compilerInfo.getClassdef()
+					: ""); //$NON-NLS-1$
 			compilerViewer.setInput(type);
 		}
 		commandStack = commandStackBuffer;
+	}
+
+	private final Adapter typeInfoAdapter = new EContentAdapter() {
+		@Override
+		public void notifyChanged(final Notification notification) {
+			super.notifyChanged(notification);
+			notifiyRefresh();
+		}
+	};
+
+	@Override
+	protected void addContentAdapter() {
+		super.addContentAdapter();
+		if (getType() != null && getType().getCompilerInfo() != null) {
+			getType().getCompilerInfo().eAdapters().add(typeInfoAdapter);
+		}
+	}
+
+	@Override
+	protected void removeContentAdapter() {
+		super.removeContentAdapter();
+		if (getType() != null && getType().getCompilerInfo() != null) {
+			getType().getCompilerInfo().eAdapters().remove(typeInfoAdapter);
+		}
 	}
 }

@@ -23,17 +23,22 @@ import org.eclipse.fordiac.ide.model.commands.delete.DeleteInterfaceCommand;
 import org.eclipse.fordiac.ide.model.data.DataType;
 import org.eclipse.fordiac.ide.model.libraryElement.FBNetworkElement;
 import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
+import org.eclipse.fordiac.ide.model.libraryElement.InterfaceList;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.gef.EditPart;
 
 public class ShowInterfaceAdapterSection extends AbstractEditInterfaceAdapterSection {
 	@Override
 	protected FBNetworkElement getInputType(final Object input) {
+		return getFBNetworkElementFromInput(input);
+	}
+
+	public static FBNetworkElement getFBNetworkElementFromInput(final Object input) {
 		if ((input instanceof SubAppForFBNetworkEditPart) || (input instanceof AbstractFBNElementEditPart)) {
 			return (FBNetworkElement) ((EditPart) input).getModel();
 		}
-		if (input instanceof FBNetworkElement) {
-			return (FBNetworkElement) input;
+		if (input instanceof final FBNetworkElement fbne) {
+			return fbne;
 		}
 		return null;
 	}
@@ -75,6 +80,10 @@ public class ShowInterfaceAdapterSection extends AbstractEditInterfaceAdapterSec
 		return false;
 	}
 
+	@Override
+	protected InterfaceList getInterface() {
+		return getType().getInterface();
+	}
 
 
 }
