@@ -16,13 +16,23 @@ package org.eclipse.fordiac.ide.structuredtextalgorithm;
 
 import org.eclipse.osgi.util.NLS;
 
-@SuppressWarnings("squid:S3008")  // tell sonar the java naming convention does not make sense for this class
+@SuppressWarnings("squid:S3008") // tell sonar the java naming convention does not make sense for this class
 public final class Messages extends NLS {
-	private static final String BUNDLE_NAME = "org.eclipse.fordiac.ide.structuredtextalgorithm.messages"; //$NON-NLS-1$
-	public static String STAlgorithmValidator_Duplicate_Method_Or_Algorithm_Name;
-	public static String STAlgorithmValidator_No_algorithm_for_input_event;
-	public static String STAlgorithmValidator_Unqualified_Method_Or_Algorithm_Shadowing_Function;
-	public static String STAlgorithmValidator_Unused_algorithm;
+	private static final String BUNDLE_NAME = Messages.class.getPackageName() + ".messages"; //$NON-NLS-1$
+
+	public static String STAlgorithmValidator_DuplicateMethodOrAlgorithmName;
+	public static String STAlgorithmValidator_NoAlgorithmForInputEvent;
+	public static String STAlgorithmValidator_UnqualifiedMethodOrAlgorithmShadowingFunction;
+	public static String STAlgorithmValidator_UnusedAlgorithm;
+	public static String STAlgorithmValidator_NameUsedAsEventInput;
+	public static String STAlgorithmValidator_NameUsedAsDataInput;
+	public static String STAlgorithmValidator_NameUsedAsEventOutput;
+	public static String STAlgorithmValidator_NameUsedAsDataOutput;
+	public static String STAlgorithmValidator_NameUsedAsVariable;
+	public static String STAlgorithmValidator_NameUsedAsConstant;
+	public static String STAlgorithmValidator_NameUsedAsFunctionBlockVariable;
+	public static String STAlgorithmValidator_NameUsedAsAlgorithm;
+	public static String STAlgorithmValidator_NameUsedAsMethod;
 
 	static {
 		// initialize resource bundle
