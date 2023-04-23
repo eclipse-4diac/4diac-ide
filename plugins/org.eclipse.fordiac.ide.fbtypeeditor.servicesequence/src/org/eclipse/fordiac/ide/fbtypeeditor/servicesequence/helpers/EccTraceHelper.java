@@ -126,6 +126,19 @@ public class EccTraceHelper {
 		return new ArrayList<>();
 	}
 
+	public List<ECState> getAllPossibleEndStates() {
+		final List<ECState> allPossibleStates = getAllPossibleStates();
+		for(final ECState state : allPossibleStates) {
+			for (final ECTransition trans : state.getOutTransitions()) {
+				if (trans.getConditionEvent() == null && trans.getConditionExpression().equals("1")) {
+					allPossibleStates.remove(state);
+					break;
+				}
+			}
+		}
+		return allPossibleStates;
+	}
+
 	public List<ArrayList<String>> getAllPossiblePaths() {
 		final List<ArrayList<String>> allPossiblePaths = new ArrayList<>();
 
