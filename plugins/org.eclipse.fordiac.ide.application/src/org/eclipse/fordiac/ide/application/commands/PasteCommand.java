@@ -42,6 +42,7 @@ import org.eclipse.fordiac.ide.model.libraryElement.IInterfaceElement;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElementFactory;
 import org.eclipse.fordiac.ide.model.libraryElement.Position;
 import org.eclipse.fordiac.ide.model.libraryElement.StructManipulator;
+import org.eclipse.fordiac.ide.model.libraryElement.SubApp;
 import org.eclipse.fordiac.ide.model.libraryElement.VarDeclaration;
 import org.eclipse.fordiac.ide.ui.errormessages.ErrorMessenger;
 import org.eclipse.gef.commands.Command;
@@ -95,6 +96,7 @@ public class PasteCommand extends Command {
 		if (dstFBNetwork != null) {
 			ErrorMessenger.pauseMessages();
 			updateDelta();
+			removeDuplicateElements();
 			copyPasteData.elements().forEach(this::copyAndCreateFB);
 			copyConnections();
 			ElementSelector.selectViewObjects(copiedElements.values());
@@ -115,6 +117,13 @@ public class PasteCommand extends Command {
 		dstFBNetwork.getNetworkElements().addAll(copiedElements.values());
 		connCreateCmds.redo();
 		ElementSelector.selectViewObjects(copiedElements.values());
+	}
+
+	// remove elements, if they are already inside a selected top-level subapp.
+	private void removeDuplicateElements() {
+		copyPasteData.elements().removeIf(element -> copyPasteData.elements().stream()
+				.filter(SubApp.class::isInstance).map(SubApp.class::cast)
+				.anyMatch(subapp -> subapp.getSubAppNetwork().getNetworkElements().contains(element)));
 	}
 
 	private void updateDelta() {
@@ -317,7 +326,6 @@ public class PasteCommand extends Command {
 		pastePos.setY(outermostPos.getY() + yDelta);
 		return pastePos;
 	}
-
 
 	public Collection<FBNetworkElement> getCopiedFBs() {
 		return copiedElements.values();
