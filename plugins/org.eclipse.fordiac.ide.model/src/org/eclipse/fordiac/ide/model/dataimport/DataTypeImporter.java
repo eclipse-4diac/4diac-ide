@@ -12,6 +12,7 @@
  ********************************************************************************/
 package org.eclipse.fordiac.ide.model.dataimport;
 
+import java.io.InputStream;
 import java.text.MessageFormat;
 
 import javax.xml.stream.XMLStreamException;
@@ -23,6 +24,7 @@ import org.eclipse.fordiac.ide.model.data.AnyDerivedType;
 import org.eclipse.fordiac.ide.model.data.DataFactory;
 import org.eclipse.fordiac.ide.model.data.StructuredType;
 import org.eclipse.fordiac.ide.model.dataimport.exceptions.TypeImportException;
+import org.eclipse.fordiac.ide.model.typelibrary.TypeLibrary;
 
 /**
  * Managing class for importing *.dtp files
@@ -38,6 +40,10 @@ public class DataTypeImporter extends TypeImporter {
 
 	public DataTypeImporter(final IFile typeFile) {
 		super(typeFile);
+	}
+
+	public DataTypeImporter(final InputStream inputStream, final TypeLibrary typeLibrary) {
+		super(inputStream, typeLibrary);
 	}
 
 	@Override
