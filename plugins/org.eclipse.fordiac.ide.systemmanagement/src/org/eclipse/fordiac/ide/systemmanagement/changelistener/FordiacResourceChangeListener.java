@@ -24,7 +24,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -85,7 +84,8 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	/** The instance. */
+	private static final Pattern TYPE_NAME_PATTERN = Pattern.compile("Name=\\\"(\\w*)\\\""); //$NON-NLS-1$
+
 	private final SystemManager systemManager;
 	private final Collection<TypeEntry> changedFiles;
 	private final Collection<FileToRenameEntry> filesToRename;
@@ -121,7 +121,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			final List<IEditorPart> changedOpenedDirtyEditors = collectOpenedEditors(changedFiles);
 			final List<IEditorFileChangeListener> editorListener = changedOpenedDirtyEditors.stream()
 					.filter(IEditorFileChangeListener.class::isInstance).map(IEditorFileChangeListener.class::cast)
-					.collect(Collectors.toList());
+					.toList();
 			changedFiles.clear();
 			handleFileRefreshWIzards(editorListener);
 		});
@@ -177,14 +177,15 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		return dialog.open();
 	}
 
-	public static List<IEditorPart> collectOpenedEditors(final Collection<TypeEntry> changedFiles) {
+	public static List<IEditorPart> collectOpenedEditors(final Iterable<TypeEntry> changedFiles) {
 		final List<IEditorPart> changedOpenedDirtyEditors = new ArrayList<>();
 		IEditorPart activeEditor = null;
 
 		for (final TypeEntry entry : changedFiles) {
 			final IEditorPart findEditor = EditorUtils
-					.findEditor((final IEditorPart editor) -> editor.getEditorInput() instanceof FileEditorInput
-							&& ((FileEditorInput) editor.getEditorInput()).getFile().equals(entry.getFile()));
+					.findEditor((final IEditorPart editor) -> editor
+							.getEditorInput() instanceof final FileEditorInput fileEditorInput
+							&& fileEditorInput.getFile().equals(entry.getFile()));
 
 			if (findEditor != null) {
 				if (findEditor == EditorUtils.getCurrentActiveEditor()) {
@@ -228,23 +229,19 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	}
 
 	private boolean handleResourceChanged(final IResourceDelta delta) {
-
 		if (isFileChange(delta)) {
 			collectTypeEntries(delta);
 		} else if (IResourceDelta.OPEN == delta.getFlags()) {
 			// project is opened oder closed
 			if (0 != delta.getAffectedChildren(IResourceDelta.ADDED).length) {
-				systemManager.notifyListeners();
+				handleProjectAdd(delta);
 			} else if (0 != delta.getAffectedChildren(IResourceDelta.REMOVED).length) {
 				handleProjectRemove(delta);
-				return false;
 			}
+			return false;
 		} else if (delta.getResource().getType() == IResource.PROJECT) {
 			return checkForErrorMarkerChanges(delta);
 		}
-
-
-
 		return true;
 	}
 
@@ -314,7 +311,8 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			// if a folder has been moved we need to update the IFile of the children
 			return true;
 		case IResource.PROJECT:
-			return true;
+			handleProjectAdd(delta);
+			break;
 		default:
 			break;
 		}
@@ -359,7 +357,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				final TypeEntry typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(file);
 				if (typeEntryForFile == null) {
 					final TypeEntry entry = typeLib.createTypeEntry(file);
-					if (null != entry) {
+					if (null != entry && containedTypeNameIsDifferent(file)) {
+						// we only need to update the type entry if the file content is different from the file name
+						// this happens when a type is copied into a new project or when a project is opened or imported
 						updateTypeEntry(file, entry);
 					}
 				} else if (!file.equals(typeEntryForFile.getFile())) {
@@ -372,7 +372,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		}
 	}
 
-	protected static void autoRenameExistingType(final FileToRenameEntry entry) {
+	private static void autoRenameExistingType(final FileToRenameEntry entry) {
 
 		final WorkspaceJob job = new WorkspaceJob(
 				Messages.FordiacResourceChangeListener_4 + entry.getFile().getName()) {
@@ -524,8 +524,13 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 			type.setName(newTypeName);
 			entry.save();
 		}
+	}
 
-
+	private void handleProjectAdd(final IResourceDelta delta) {
+		final IProject project = delta.getResource().getProject();
+		// load and populate the typelib
+		TypeLibraryManager.INSTANCE.getTypeLibrary(project);
+		systemManager.notifyListeners();
 	}
 
 	private void handleProjectRemove(final IResourceDelta delta) {
@@ -537,12 +542,12 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 	private static void closeAllProjectRelatedEditors(final IProject project) {
 		Display.getDefault().asyncExec(() -> EditorUtils.closeEditorsFiltered((final IEditorPart editor) -> {
 			final IEditorInput input = editor.getEditorInput();
-			if ((input instanceof FileEditorInput)
-					&& (project.equals(((FileEditorInput) input).getFile().getProject()))) {
+			if ((input instanceof final FileEditorInput fileEditorInput)
+					&& (project.equals(fileEditorInput.getFile().getProject()))) {
 				return true;
 			}
-			if (editor instanceof ISystemEditor) {
-				final AutomationSystem system = ((ISystemEditor) editor).getSystem();
+			if (editor instanceof final ISystemEditor systemEditor) {
+				final AutomationSystem system = systemEditor.getSystem();
 				return project.equals(system.getTypeLibrary().getProject());
 			}
 			return false;
@@ -553,7 +558,7 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 		// display related stuff needs to run in a display thread
 		Display.getDefault().asyncExec(() -> EditorUtils.closeEditorsFiltered((final IEditorPart editor) -> {
 			final IEditorInput input = editor.getEditorInput();
-			return (input instanceof FileEditorInput) && (file.equals(((FileEditorInput) input).getFile()));
+			return (input instanceof final FileEditorInput fileEditorInput) && (file.equals(fileEditorInput.getFile()));
 		}));
 	}
 
@@ -569,8 +574,9 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				if (null != editor) {
 					//the editor is loaded check if it is ours and if yes update it
 					final IEditorInput input = editor.getEditorInput();
-					if((src.equals(((FileEditorInput) input).getFile()) && editor instanceof IEditorFileChangeListener)) {
-						((IEditorFileChangeListener)editor).updateEditorInput(new FileEditorInput(dst));
+					if ((src.equals(((FileEditorInput) input).getFile())
+							&& editor instanceof final IEditorFileChangeListener editorFileChangeListener)) {
+						editorFileChangeListener.updateEditorInput(new FileEditorInput(dst));
 					}
 				} else {
 					// the editor is not yet loaded check if it may be ours. We can not load it as the file it is referring
@@ -582,6 +588,19 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 				}
 			}
 		});
+	}
+
+	private static boolean containedTypeNameIsDifferent(final IFile file) {
+		try (Scanner scanner = new Scanner(file.getContents())) {
+			if (scanner.findWithinHorizon(TYPE_NAME_PATTERN, 0) != null) {
+				final String name = scanner.match().group(1);
+				final String typeName = TypeEntry.getTypeNameFromFile(file);
+				return !typeName.equals(name);
+			}
+		} catch (final Exception e) {
+			FordiacLogHelper.logError(e.getMessage(), e);
+		}
+		return true;
 	}
 
 }
