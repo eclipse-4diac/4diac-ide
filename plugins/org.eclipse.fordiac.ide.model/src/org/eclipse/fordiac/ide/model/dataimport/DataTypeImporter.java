@@ -43,7 +43,7 @@ public class DataTypeImporter extends TypeImporter {
 	@Override
 	public void loadElement() {
 		super.loadElement();
-		if (!(getElement() instanceof StructuredType)) {
+		if (!(getElement() instanceof StructuredType) && getFile() != null) {
 			createErrorMarker(
 					MessageFormat.format(Messages.DataTypeImporter_UNSUPPORTED_DATATYPE_IN_FILE, getFile().getName()));
 		}

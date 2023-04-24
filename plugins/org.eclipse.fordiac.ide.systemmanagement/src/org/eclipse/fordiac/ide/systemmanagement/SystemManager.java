@@ -140,7 +140,8 @@ public enum SystemManager {
 		if (entry == null) {
 			entry = (SystemEntry) typeLibrary.createTypeEntry(systemFile);
 		}
-		entry.setType(SystemImporter.createAutomationSystem(systemFile));
+		entry.setType(SystemImporter.createAutomationSystem());
+		entry.getSystem().setName(name);
 		saveSystem(entry.getSystem());
 		return entry.getSystem();
 	}

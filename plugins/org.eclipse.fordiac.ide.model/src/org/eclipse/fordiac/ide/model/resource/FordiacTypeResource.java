@@ -32,6 +32,7 @@ import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.impl.ResourceImpl;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.fordiac.ide.model.dataexport.AbstractTypeExporter;
+import org.eclipse.fordiac.ide.model.dataimport.SystemImporter;
 import org.eclipse.fordiac.ide.model.libraryElement.LibraryElement;
 import org.eclipse.fordiac.ide.model.typelibrary.TypeLibraryManager;
 
@@ -46,14 +47,16 @@ public class FordiacTypeResource extends ResourceImpl {
 		if (!uri.isPlatformResource()) {
 			throw new IOException("Cannot load type from non-workspace URI " + uri.toString()); //$NON-NLS-1$
 		}
+
 		try {
 			final IFile fbtFile = ResourcesPlugin.getWorkspace().getRoot()
 					.getFile(new Path(this.uri.toPlatformString(true)));
-			final var typeEntryForFile = TypeLibraryManager.INSTANCE.getTypeEntryForFile(fbtFile);
-			// Load the Type
-			final var lib = EcoreUtil.copy(typeEntryForFile.getType());
-			// Do not modify any fordiac element
-			getContents().add(lib);
+
+			final SystemImporter systemImporter = new SystemImporter(inputStream,
+					TypeLibraryManager.INSTANCE.getTypeLibrary(fbtFile.getProject()));
+			systemImporter.loadElement();
+
+			getContents().add(systemImporter.getElement());
 		} catch (final Exception e) {
 			throw new IOWrappedException(e);
 		}
