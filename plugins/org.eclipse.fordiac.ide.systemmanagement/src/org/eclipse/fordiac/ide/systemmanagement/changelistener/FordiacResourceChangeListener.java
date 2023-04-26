@@ -483,9 +483,29 @@ public class FordiacResourceChangeListener implements IResourceChangeListener {
 
 	private void handleProjectAdd(final IResourceDelta delta) {
 		final IProject project = delta.getResource().getProject();
-		// load and populate the typelib
-		TypeLibraryManager.INSTANCE.getTypeLibrary(project);
-		systemManager.notifyListeners();
+		ResourcesPlugin.getWorkspace().removeResourceChangeListener(this);
+
+		final WorkspaceJob job = new WorkspaceJob(MessageFormat
+				.format(Messages.FordiacResourceChangeListener_UpdateTypeLibForNewProject, project.getName())) {
+			@Override
+			public IStatus runInWorkspace(final IProgressMonitor monitor) {
+				try {
+					// ensure dirty workspaces are cleaned before any type library is loaded
+					project.refreshLocal(IResource.DEPTH_INFINITE, monitor);
+				} catch (final CoreException e) {
+					FordiacLogHelper.logError(e.getMessage(), e);
+				}
+				TypeLibraryManager.INSTANCE.getTypeLibrary(project).reload();
+				systemManager.notifyListeners();
+				ResourcesPlugin.getWorkspace().addResourceChangeListener(FordiacResourceChangeListener.this);
+				return Status.OK_STATUS;
+			}
+		};
+		job.setUser(false);
+		job.setSystem(true);
+		job.setPriority(Job.INTERACTIVE);  // give this job the highest possible priority
+		job.setRule(project);
+		job.schedule();
 	}
 
 	private void handleProjectRemove(final IResourceDelta delta) {

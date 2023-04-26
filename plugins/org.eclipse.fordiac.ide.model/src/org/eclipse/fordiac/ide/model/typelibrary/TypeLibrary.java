@@ -29,7 +29,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
@@ -70,8 +69,7 @@ public final class TypeLibrary {
 
 	public List<AdapterTypeEntry> getAdapterTypesSorted() {
 		return getAdapterTypes().values().stream()
-				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getTypeName(), o2.getTypeName()))
-				.collect(Collectors.toList());
+				.sorted((o1, o2) -> Collator.getInstance().compare(o1.getTypeName(), o2.getTypeName())).toList();
 	}
 
 	public Map<String, DeviceTypeEntry> getDeviceTypes() {
@@ -100,8 +98,7 @@ public final class TypeLibrary {
 
 	public List<CompositeFBType> getCompositeFBTypes() {
 		return getFbTypes().values().stream().filter(e -> e.getTypeEditable() instanceof CompositeFBType)
-				.map(e -> (CompositeFBType) e.getTypeEditable())
-				.collect(Collectors.toList());
+				.map(e -> (CompositeFBType) e.getTypeEditable()).toList();
 	}
 
 	public AdapterTypeEntry getAdapterTypeEntry(final String typeName) {
@@ -141,6 +138,18 @@ public final class TypeLibrary {
 			return typeEntryList.get(TypeEntry.getTypeNameFromFile(typeFile));
 		}
 		return null;
+	}
+
+	public void reload() {
+		getAdapterTypes().clear();
+		getDeviceTypes().clear();
+		getFbTypes().clear();
+		getResourceTypes().clear();
+		getSegmentTypes().clear();
+		getSubAppTypes().clear();
+		getSystems().clear();
+		dataTypeLib.getDerivedDataTypes().clear();
+		checkAdditions(project);
 	}
 
 	private static boolean isDataTypeFile(final IFile typeFile) {
@@ -233,16 +242,16 @@ public final class TypeLibrary {
 			removeErrorTypeEntry(errorEntry);
 		}
 		entry.setTypeLibrary(this);
-		if (entry instanceof DataTypeEntry) {
-			dataTypeLib.addTypeEntry((DataTypeEntry) entry);
+		if (entry instanceof final DataTypeEntry dtEntry) {
+			dataTypeLib.addTypeEntry(dtEntry);
 		} else {
 			addBlockTypeEntry(entry);
 		}
 	}
 
 	public void removeTypeEntry(final TypeEntry entry) {
-		if (entry instanceof DataTypeEntry) {
-			dataTypeLib.removeTypeEntry((DataTypeEntry) entry);
+		if (entry instanceof final DataTypeEntry dtEntry) {
+			dataTypeLib.removeTypeEntry(dtEntry);
 		} else {
 			removeBlockTypeEntry(entry);
 		}
@@ -279,12 +288,12 @@ public final class TypeLibrary {
 			final IResource[] members = container.members();
 
 			for (final IResource resource : members) {
-				if (resource instanceof IFolder) {
-					checkAdditions((IFolder) resource);
+				if (resource instanceof final IFolder folder) {
+					checkAdditions(folder);
 				}
-				if ((resource instanceof IFile) && (!containsType((IFile) resource))) {
+				if ((resource instanceof final IFile file) && (!containsType(file))) {
 					// only add new entry if it does not exist
-					createTypeEntry((IFile) resource);
+					createTypeEntry(file);
 				}
 			}
 		} catch (final CoreException e) {
@@ -317,20 +326,20 @@ public final class TypeLibrary {
 	}
 
 	private void addBlockTypeEntry(final TypeEntry entry) {
-		if (entry instanceof AdapterTypeEntry) {
-			getAdapterTypes().put(entry.getTypeName(), (AdapterTypeEntry) entry);
-		} else if (entry instanceof DeviceTypeEntry) {
-			getDeviceTypes().put(entry.getTypeName(), (DeviceTypeEntry) entry);
-		} else if (entry instanceof FBTypeEntry) {
-			getFbTypes().put(entry.getTypeName(), (FBTypeEntry) entry);
-		} else if (entry instanceof ResourceTypeEntry) {
-			getResourceTypes().put(entry.getTypeName(), (ResourceTypeEntry) entry);
-		} else if (entry instanceof SegmentTypeEntry) {
-			getSegmentTypes().put(entry.getTypeName(), (SegmentTypeEntry) entry);
-		} else if (entry instanceof SubAppTypeEntry) {
-			getSubAppTypes().put(entry.getTypeName(), (SubAppTypeEntry) entry);
-		} else if (entry instanceof SystemEntry) {
-			getSystems().put(entry.getTypeName(), (SystemEntry) entry);
+		if (entry instanceof final AdapterTypeEntry adpEntry) {
+			getAdapterTypes().put(entry.getTypeName(), adpEntry);
+		} else if (entry instanceof final DeviceTypeEntry devEntry) {
+			getDeviceTypes().put(entry.getTypeName(), devEntry);
+		} else if (entry instanceof final FBTypeEntry fbtEntry) {
+			getFbTypes().put(entry.getTypeName(), fbtEntry);
+		} else if (entry instanceof final ResourceTypeEntry resEntry) {
+			getResourceTypes().put(entry.getTypeName(), resEntry);
+		} else if (entry instanceof final SegmentTypeEntry segEntry) {
+			getSegmentTypes().put(entry.getTypeName(), segEntry);
+		} else if (entry instanceof final SubAppTypeEntry subAppEntry) {
+			getSubAppTypes().put(entry.getTypeName(), subAppEntry);
+		} else if (entry instanceof final SystemEntry sysEntry) {
+			getSystems().put(entry.getTypeName(), sysEntry);
 		} else {
 			FordiacLogHelper.logError("Unknown type entry to be added to library: " + entry.getClass().getName()); //$NON-NLS-1$
 		}
